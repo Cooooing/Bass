@@ -1,6 +1,9 @@
-name: Docker Build and Push for Go App
+name: Docker Build and Push for User Service
 
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:

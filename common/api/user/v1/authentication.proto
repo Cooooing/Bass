@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "/user/v1;v1";
+
+// Authentication 服务
+service Authentication {
+
+  // -- 账号注册
+
+  // 邮箱注册
+  rpc RegisterEmail (RegisterEmailRequest) returns (RegisterEmailReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/register/email"
+      body: "*"
+    };
+  }
+  // 邮箱注册验证码验证
+  rpc RegisterEmailVerify (RegisterEmailVerifyRequest) returns (RegisterEmailVerifyReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/register/email/verify"
+      body: "*"
+    };
+  }
+
+  // -- 账号信息查询
+
+  // 邮箱是否存在
+  rpc ExistEmail (ExistEmailRequest) returns (ExistEmailReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/exist/email"
+      body: "*"
+    };
+  }
+  // 手机号是否存在
+  rpc ExistPhone (ExistPhoneRequest) returns (ExistPhoneReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/exist/phone"
+      body: "*"
+    };
+  }
+  // 用户名是否存在
+  rpc ExistUsername (ExistUsernameRequest) returns (ExistUsernameReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/exist/username"
+      body: "*"
+    };
+  }
+
+  // -- 账号登录
+
+  // 账号登录（用户名/邮箱）
+  rpc LoginAccount (LoginAccountRequest) returns (LoginAccountReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/login/account"
+      body: "*"
+    };
+  }
+}
+
+message RegisterEmailRequest {
+  string email = 1[
+    (validate.rules) = {
+      string: {
+        min_len: 5,
+        max_len: 320,
+        email: true
+      }
+    }
+  ]; // 邮箱
+  string password = 2[
+    (validate.rules) = {
+      string: {
+        min_len: 6,
+        max_len: 64,
+        pattern: "^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$" // 6-64 位支持大小写字母、数字、特殊符号，至少包含一个字母、一个数字
+      }
+    }
+  ]; // 密码
+  string name = 3[
+    (validate.rules) = {
+      string: {
+        min_len: 4,
+        max_len: 32,
+        pattern: "^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$" // 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
+      }
+    }
+  ]; // 用户名
+  string nickname = 4 [
+    (validate.rules) = {
+      string: {
+        min_len: 2,
+        max_len: 32,
+        pattern: "^[0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*[\\p{L}\\p{M}\\p{So}\\p{Sk}\\p{Cf}_-][0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*$" // 至少一个非数字，允许字母/数字/文字/emoji/下划线/连字符
+      }
+    }
+  ]; // 昵称
+}
+message RegisterEmailReply {
+  string codeToken = 1; // 验证码令牌
+  string code = 2; // 验证码（仅供调试使用）
+}
+
+message RegisterEmailVerifyRequest {
+  string code = 1 [
+    (validate.rules) = {
+      string: {
+        min_len: 6,
+        max_len: 6,
+        pattern: "^[A-Za-z0-9]+$"  // 6 位验证码
+      }
+    }
+  ]; // 验证码
+  string codeToken = 2; // 验证码令牌
+}
+message RegisterEmailVerifyReply {}
+
+message ExistEmailRequest {
+  string email = 1[
+    (validate.rules) = {
+      string: {
+        min_len: 5,
+        max_len: 320,
+        email: true
+      }
+    }
+  ]; // 邮箱
+}
+message ExistEmailReply {
+  optional bool exist = 1; // 是否存在
+}
+
+message ExistUsernameRequest {
+  string username = 1[
+    (validate.rules) = {
+      string: {
+        min_len: 2,
+        max_len: 32,
+        pattern: "^[0-9A-Za-z_\\p{L}\\p{M}-]*[^0-9][0-9A-Za-z_\\p{L}\\p{M}-]*$" // 至少一个非数字，允许字母/数字/文字/emoji/下划线/连字符
+      }
+    }
+  ]; // 用户名
+}
+message ExistUsernameReply {
+  optional bool exist = 1; // 是否存在
+}
+
+message ExistPhoneRequest {
+  string phone = 1[
+    (validate.rules) = {
+      string: {
+        min_len: 11,
+        max_len: 11,
+        pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$" // 11 位国内手机号
+      }
+    }
+  ]; // 手机号
+}
+message ExistPhoneReply {
+  optional bool exist = 1;
+}
+
+
+message LoginAccountRequest {
+  string account = 1; // 账号（用户名/邮箱）
+  string password = 2;
+}
+message LoginAccountReply {
+  string token = 1;
+}

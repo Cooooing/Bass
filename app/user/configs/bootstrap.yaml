@@ -1,0 +1,18 @@
+name: user-service
+version: 1.0.1
+mode: dev
+
+registry:
+  etcd:
+    endpoints:
+      - "192.168.1.6:2379"
+    username: "root"
+    password: "123456"
+    timeout: 5s
+
+config:
+  etcd: "/config/user/config.yaml"
+
+log:
+  level: debug
+  file: logs/user-service.log

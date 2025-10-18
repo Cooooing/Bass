@@ -1,0 +1,124 @@
+package biz
+
+import (
+	"common/pkg/util"
+	"context"
+	"errors"
+	"user/internal/biz/model"
+	"user/internal/biz/repo"
+)
+
+type AuthenticationDomain struct {
+	*BaseDomain
+	userRepo     repo.UserRepo
+	tokenRepo    repo.TokenRepo
+	tokenService *TokenService
+}
+
+func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo repo.TokenRepo, tokenService *TokenService) *AuthenticationDomain {
+	return &AuthenticationDomain{
+		BaseDomain:   base,
+		userRepo:     userRepo,
+		tokenRepo:    tokenRepo,
+		tokenService: tokenService,
+	}
+}
+
+func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User) (code string, token string, err error) {
+	// 验证数据
+	exist, err := s.userRepo.ConstantAccount(ctx, u.Email)
+	if exist {
+		err = errors.New("email already exists")
+	}
+	if err != nil {
+		return
+	}
+	exist, err = s.userRepo.ConstantAccount(ctx, u.Nickname)
+	if exist {
+		err = errors.New("nickname already exists")
+	}
+	if err != nil {
+		return
+	}
+
+	// 生成 code
+	code = util.RandStr(6, true, true, true, false)
+	token, err = s.tokenService.EmailTokenGen.Generate(model.TokenEmail{
+		Email: u.Email,
+	})
+	if err != nil {
+		return
+	}
+	// Todo 发送邮件
+
+	// 保存 code 到缓存
+	err = s.tokenRepo.SaveEmailToken(ctx, token, code, &model.User{
+		Name:     u.Name,
+		Nickname: u.Nickname,
+		Email:    u.Email,
+		Password: u.Password,
+	})
+	if err != nil {
+		return
+	}
+
+	return code, token, nil
+}
+
+func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToken string, code string) (err error) {
+	// 通过 token 获取 code
+	emailCode, user, err := s.tokenRepo.GetEmailToken(ctx, codeToken)
+	if err != nil {
+		return
+	}
+	// 验证 code
+	if emailCode != code {
+		err = errors.New("email code invalid")
+		return
+	}
+	// 保存用户信息
+	err = user.PasswordEncrypt()
+	if err != nil {
+		return
+	}
+	_, err = s.userRepo.Save(ctx, user)
+	if err != nil {
+		return
+	}
+
+	// 删除 code 缓存
+	err = s.tokenRepo.DelEmailToken(ctx, codeToken)
+	if err != nil {
+		return
+	}
+	return nil
+}
+
+func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string, password string) (token string, err error) {
+	// 获取用户信息
+	user, err := s.userRepo.GetUserByAccount(ctx, account)
+	if err != nil {
+		return
+	}
+	// 验证密码
+	if !user.PasswordVerify(password) {
+		err = errors.New("password invalid")
+		return
+	}
+	user.Password = ""
+	// 生成 token
+	token, err = s.tokenService.TokenGen.Generate(model.Token{
+		User:     user,
+		IsOnline: true,
+	})
+	if err != nil {
+		return
+	}
+	// 保存 token 到缓存
+	err = s.tokenRepo.SaveToken(ctx, token, user)
+	if err != nil {
+		return
+	}
+
+	return token, nil
+}

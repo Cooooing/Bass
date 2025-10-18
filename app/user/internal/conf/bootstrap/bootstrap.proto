@@ -1,0 +1,35 @@
+syntax = "proto3";
+package kratos.api.bootstrap;
+
+option go_package = "user/internal/conf/bootstrap;bootstrap";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  string name = 1;
+  string version = 2;
+  string mode = 3;
+
+  Registry registry = 4;
+  Config config = 5;
+  Log log = 6;
+}
+
+message Registry {
+  message Etcd {
+    repeated string endpoints = 1;
+    string username = 2;
+    string password = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+  Etcd etcd = 1;
+}
+
+message Config {
+  string etcd = 1;
+}
+
+message Log {
+  string level = 1; // debug, info, warn, error, fatal, panic
+  string file = 2;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common.v1;
+
+option go_package = "common/v1;v1";
+
+import "google/api/annotations.proto";
+
+// System 服务
+service System {
+  // 健康检查
+  rpc Health (HealthRequest) returns (HealthReply) {
+    option (google.api.http) = {
+      get: "/v1/system/health"
+    };
+  }
+}
+
+message HealthRequest {
+}
+
+message HealthReply {
+  // 响应消息
+  string message = 1;
+}

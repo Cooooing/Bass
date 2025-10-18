@@ -1,0 +1,218 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /v1/authentication/exist/email:
+        post:
+            tags:
+                - Authentication
+            description: 邮箱是否存在
+            operationId: Authentication_ExistEmail
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user.v1.ExistEmailRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.ExistEmailReply'
+    /v1/authentication/exist/phone:
+        post:
+            tags:
+                - Authentication
+            description: 手机号是否存在
+            operationId: Authentication_ExistPhone
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user.v1.ExistPhoneRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.ExistPhoneReply'
+    /v1/authentication/exist/username:
+        post:
+            tags:
+                - Authentication
+            description: 用户名是否存在
+            operationId: Authentication_ExistUsername
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user.v1.ExistUsernameRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.ExistUsernameReply'
+    /v1/authentication/login/account:
+        post:
+            tags:
+                - Authentication
+            description: 账号登录（用户名/邮箱）
+            operationId: Authentication_LoginAccount
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user.v1.LoginAccountRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.LoginAccountReply'
+    /v1/authentication/register/email:
+        post:
+            tags:
+                - Authentication
+            description: 邮箱注册
+            operationId: Authentication_RegisterEmail
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user.v1.RegisterEmailRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.RegisterEmailReply'
+    /v1/authentication/register/email/verify:
+        post:
+            tags:
+                - Authentication
+            description: 邮箱注册验证码验证
+            operationId: Authentication_RegisterEmailVerify
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user.v1.RegisterEmailVerifyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.RegisterEmailVerifyReply'
+    /v1/system/health:
+        get:
+            tags:
+                - System
+            description: 健康检查
+            operationId: System_Health
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.v1.HealthReply'
+components:
+    schemas:
+        common.v1.HealthReply:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: 响应消息
+        user.v1.ExistEmailReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        user.v1.ExistEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+        user.v1.ExistPhoneReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        user.v1.ExistPhoneRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+        user.v1.ExistUsernameReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        user.v1.ExistUsernameRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+        user.v1.LoginAccountReply:
+            type: object
+            properties:
+                token:
+                    type: string
+        user.v1.LoginAccountRequest:
+            type: object
+            properties:
+                account:
+                    type: string
+                password:
+                    type: string
+        user.v1.RegisterEmailReply:
+            type: object
+            properties:
+                codeToken:
+                    type: string
+                code:
+                    type: string
+        user.v1.RegisterEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                password:
+                    type: string
+                name:
+                    type: string
+                nickname:
+                    type: string
+        user.v1.RegisterEmailVerifyReply:
+            type: object
+            properties: {}
+        user.v1.RegisterEmailVerifyRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                codeToken:
+                    type: string
+tags:
+    - name: Authentication
+      description: Authentication 服务
+    - name: System
+      description: System 服务

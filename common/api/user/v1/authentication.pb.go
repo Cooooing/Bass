@@ -612,9 +612,9 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\"6\n" +
 	"\x0fExistEmailReply\x12\x19\n" +
 	"\x05exist\x18\x01 \x01(\bH\x00R\x05exist\x88\x01\x01B\b\n" +
-	"\x06_exist\"w\n" +
-	"\x14ExistUsernameRequest\x12_\n" +
-	"\busername\x18\x01 \x01(\tBC\xfaB@r>\x10\x02\x18 28^[0-9A-Za-z_\\p{L}\\p{M}-]*[^0-9][0-9A-Za-z_\\p{L}\\p{M}-]*$R\busername\"9\n" +
+	"\x06_exist\"_\n" +
+	"\x14ExistUsernameRequest\x12G\n" +
+	"\busername\x18\x01 \x01(\tB+\xfaB(r&\x10\x02\x18 2 ^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$R\busername\"9\n" +
 	"\x12ExistUsernameReply\x12\x19\n" +
 	"\x05exist\x18\x01 \x01(\bH\x00R\x05exist\x88\x01\x01B\b\n" +
 	"\x06_exist\"\x82\x01\n" +

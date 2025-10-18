@@ -1,11 +1,11 @@
 package client
 
 import (
+	"common/pkg/model"
 	"context"
 	"fmt"
 	"sync"
 	"time"
-	"user/internal/conf"
 
 	etcdregistry "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,12 +16,12 @@ import (
 )
 
 type EtcdClient struct {
-	conf  *conf.Bootstrap
+	conf  *model.EtcdConf
 	log   *log.Helper
 	conns sync.Map // map[string]*grpc.ClientConn
 }
 
-func NewEtcdClient(conf *conf.Bootstrap, log *log.Helper) (*EtcdClient, func(), error) {
+func NewEtcdClient(log *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(), error) {
 	etcdServer := &EtcdClient{
 		conf: conf,
 		log:  log,
@@ -37,7 +37,7 @@ func NewEtcdClient(conf *conf.Bootstrap, log *log.Helper) (*EtcdClient, func(), 
 	if err != nil {
 		log.Errorf(fmt.Errorf("etcd ping failed:%w", err).Error())
 	} else {
-		log.Infof("etcd: connected to %+v", conf.Registry.Etcd.Endpoints)
+		log.Infof("etcd: connected to %+v", conf.Endpoints)
 	}
 	defer func(conn *clientv3.Client) {
 		err := conn.Close()
@@ -51,10 +51,10 @@ func NewEtcdClient(conf *conf.Bootstrap, log *log.Helper) (*EtcdClient, func(), 
 
 func (c *EtcdClient) NewConn() (*clientv3.Client, error) {
 	client, err := clientv3.New(clientv3.Config{
-		Endpoints:   c.conf.Registry.Etcd.Endpoints,
-		Username:    c.conf.Registry.Etcd.Username,
-		Password:    c.conf.Registry.Etcd.Password,
-		DialTimeout: c.conf.Registry.Etcd.Timeout.AsDuration(),
+		Endpoints:   c.conf.Endpoints,
+		Username:    c.conf.Username,
+		Password:    c.conf.Password,
+		DialTimeout: c.conf.Timeout.AsDuration(),
 	})
 	if err != nil {
 		log.Errorf("new etcd client error: %v", err)
@@ -87,7 +87,7 @@ func (c *EtcdClient) Discoverer(name string) *grpc.ClientConn {
 		context.Background(),
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", name)),
 		kgrpc.WithDiscovery(dis),
-		kgrpc.WithTimeout(5*time.Second),
+		kgrpc.WithTimeout(c.conf.Timeout.AsDuration()),
 	)
 	if err != nil {
 		log.Fatalf("failed to dial: %v", err)

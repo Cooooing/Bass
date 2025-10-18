@@ -11,7 +11,6 @@ import (
 
 	"user/internal/data/ent/gen/migrate"
 
-	"user/internal/data/ent/gen/aaa"
 	"user/internal/data/ent/gen/user"
 
 	"entgo.io/ent"
@@ -24,8 +23,6 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// AAA is the client for interacting with the AAA builders.
-	AAA *AAAClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -39,7 +36,6 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.AAA = NewAAAClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -133,7 +129,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
-		AAA:    NewAAAClient(cfg),
 		User:   NewUserClient(cfg),
 	}, nil
 }
@@ -154,7 +149,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
-		AAA:    NewAAAClient(cfg),
 		User:   NewUserClient(cfg),
 	}, nil
 }
@@ -162,7 +156,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		AAA.
+//		User.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -184,159 +178,22 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.AAA.Use(hooks...)
 	c.User.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.AAA.Intercept(interceptors...)
 	c.User.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *AAAMutation:
-		return c.AAA.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("gen: unknown mutation type %T", m)
-	}
-}
-
-// AAAClient is a client for the AAA schema.
-type AAAClient struct {
-	config
-}
-
-// NewAAAClient returns a client for the AAA from the given config.
-func NewAAAClient(c config) *AAAClient {
-	return &AAAClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `aaa.Hooks(f(g(h())))`.
-func (c *AAAClient) Use(hooks ...Hook) {
-	c.hooks.AAA = append(c.hooks.AAA, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `aaa.Intercept(f(g(h())))`.
-func (c *AAAClient) Intercept(interceptors ...Interceptor) {
-	c.inters.AAA = append(c.inters.AAA, interceptors...)
-}
-
-// Create returns a builder for creating a AAA entity.
-func (c *AAAClient) Create() *AAACreate {
-	mutation := newAAAMutation(c.config, OpCreate)
-	return &AAACreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of AAA entities.
-func (c *AAAClient) CreateBulk(builders ...*AAACreate) *AAACreateBulk {
-	return &AAACreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *AAAClient) MapCreateBulk(slice any, setFunc func(*AAACreate, int)) *AAACreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &AAACreateBulk{err: fmt.Errorf("calling to AAAClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*AAACreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &AAACreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for AAA.
-func (c *AAAClient) Update() *AAAUpdate {
-	mutation := newAAAMutation(c.config, OpUpdate)
-	return &AAAUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *AAAClient) UpdateOne(_m *AAA) *AAAUpdateOne {
-	mutation := newAAAMutation(c.config, OpUpdateOne, withAAA(_m))
-	return &AAAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *AAAClient) UpdateOneID(id int) *AAAUpdateOne {
-	mutation := newAAAMutation(c.config, OpUpdateOne, withAAAID(id))
-	return &AAAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for AAA.
-func (c *AAAClient) Delete() *AAADelete {
-	mutation := newAAAMutation(c.config, OpDelete)
-	return &AAADelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *AAAClient) DeleteOne(_m *AAA) *AAADeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AAAClient) DeleteOneID(id int) *AAADeleteOne {
-	builder := c.Delete().Where(aaa.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &AAADeleteOne{builder}
-}
-
-// Query returns a query builder for AAA.
-func (c *AAAClient) Query() *AAAQuery {
-	return &AAAQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeAAA},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a AAA entity by its id.
-func (c *AAAClient) Get(ctx context.Context, id int) (*AAA, error) {
-	return c.Query().Where(aaa.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *AAAClient) GetX(ctx context.Context, id int) *AAA {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *AAAClient) Hooks() []Hook {
-	return c.hooks.AAA
-}
-
-// Interceptors returns the client interceptors.
-func (c *AAAClient) Interceptors() []Interceptor {
-	return c.inters.AAA
-}
-
-func (c *AAAClient) mutate(ctx context.Context, m *AAAMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&AAACreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&AAAUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&AAAUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&AAADelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("gen: unknown AAA mutation op: %q", m.Op())
 	}
 }
 
@@ -476,9 +333,9 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		AAA, User []ent.Hook
+		User []ent.Hook
 	}
 	inters struct {
-		AAA, User []ent.Interceptor
+		User []ent.Interceptor
 	}
 )

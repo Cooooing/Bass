@@ -2,13 +2,13 @@ package main
 
 import (
 	"common/pkg"
+	"common/pkg/client"
 	"flag"
 	"fmt"
 	"os"
 	"time"
 	"user/internal/conf"
 	"user/internal/conf/bootstrap"
-	"user/internal/data/client"
 	"user/internal/server"
 
 	"github.com/go-kratos/kratos/contrib/config/etcd/v2"

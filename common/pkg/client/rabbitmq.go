@@ -1,8 +1,8 @@
 package client
 
 import (
+	"common/pkg/model"
 	"fmt"
-	"user/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -10,16 +10,16 @@ import (
 
 type RabbitMQClient struct {
 	log      *log.Helper
-	conf     *conf.Bootstrap
+	conf     *model.RabbitmqConf
 	conn     *amqp.Connection
 	channels map[string]*amqp.Channel
 }
 
 // NewRabbitMQClient 初始化 RabbitMQ 单机客户端
-func NewRabbitMQClient(log *log.Helper, conf *conf.Bootstrap) (*RabbitMQClient, func(), error) {
-	conn, err := amqp.DialConfig(conf.Data.Rabbitmq.Url, amqp.Config{
-		Heartbeat: conf.Data.Rabbitmq.Heartbeat.AsDuration(),
-		Dial:      amqp.DefaultDial(conf.Data.Rabbitmq.DialTimeout.AsDuration()),
+func NewRabbitMQClient(log *log.Helper, conf *model.RabbitmqConf) (*RabbitMQClient, func(), error) {
+	conn, err := amqp.DialConfig(conf.Url, amqp.Config{
+		Heartbeat: conf.Heartbeat.AsDuration(),
+		Dial:      amqp.DefaultDial(conf.DialTimeout.AsDuration()),
 	})
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to connect to RabbitMQ: %w", err)
@@ -63,7 +63,7 @@ func (r *RabbitMQClient) GetChannel(name string) (*amqp.Channel, error) {
 	}
 
 	// 设置 QoS
-	if err := ch.Qos(int(r.conf.Data.Rabbitmq.PrefetchCount), 0, r.conf.Data.Rabbitmq.PrefetchGlobal); err != nil {
+	if err := ch.Qos(int(r.conf.PrefetchCount), 0, r.conf.PrefetchGlobal); err != nil {
 		return nil, fmt.Errorf("failed to set Qos for channel [%s]: %w", name, err)
 	}
 
@@ -94,7 +94,7 @@ func (r *RabbitMQClient) Publish(channelName, exchange, routingKey string, body 
 		amqp.Publishing{
 			ContentType:  "text/plain",
 			Body:         body,
-			DeliveryMode: uint8(r.conf.Data.Rabbitmq.DeliveryMode), // 消息持久化
+			DeliveryMode: uint8(r.conf.DeliveryMode), // 消息持久化
 		},
 	)
 }
@@ -114,7 +114,7 @@ func (r *RabbitMQClient) Consume(channelName, queue string) (<-chan amqp.Deliver
 	msgs, err := ch.Consume(
 		queue,
 		consumerTag,
-		r.conf.Data.Rabbitmq.AutoAck,
+		r.conf.AutoAck,
 		false, // exclusive
 		false, // noLocal
 		false, // noWait

@@ -7,6 +7,7 @@
 package main
 
 import (
+	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"user/internal/biz"
@@ -21,7 +22,7 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdClient, cleanup, err := client.NewEtcdClient(bootstrap, helper)
+	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -32,23 +33,23 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	redisClient, cleanup3, err := client.NewRedisClient(helper, bootstrap)
+	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	rabbitMQClient, cleanup4, err := client.NewRabbitMQClient(helper, bootstrap)
+	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
 	if err != nil {
 		cleanup3()
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	baseRepo := data.NewBaseRepo(bootstrap, helper, etcdClient, databaseClient, redisClient, rabbitMQClient)
+	baseRepo := data.NewBaseRepo(bootstrap, helper, databaseClient, etcdClient, redisClient, rabbitMQClient)
 	genClient := client.NewDefault(databaseClient)
 	userRepo := data.NewUserRepo(baseRepo, genClient)
-	tokenRepo := data.NewTokenRepo(baseRepo)
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
 	authenticationDomain := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
 	authenticationService := service.NewAuthenticationService(baseService, authenticationDomain, userRepo)

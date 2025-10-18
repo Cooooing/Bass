@@ -8,18 +8,6 @@ import (
 )
 
 var (
-	// AaAsColumns holds the columns for the "aa_as" table.
-	AaAsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "nickname", Type: field.TypeString, Nullable: true},
-	}
-	// AaAsTable holds the schema information for the "aa_as" table.
-	AaAsTable = &schema.Table{
-		Name:       "aa_as",
-		Columns:    AaAsColumns,
-		PrimaryKey: []*schema.Column{AaAsColumns[0]},
-	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -86,7 +74,6 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		AaAsTable,
 		UsersTable,
 	}
 )

@@ -934,7 +934,7 @@ func (m *ExistUsernameRequest) validate(all bool) error {
 	if !_ExistUsernameRequest_Username_Pattern.MatchString(m.GetUsername()) {
 		err := ExistUsernameRequestValidationError{
 			field:  "Username",
-			reason: "value does not match regex pattern \"^[0-9A-Za-z_\\\\p{L}\\\\p{M}-]*[^0-9][0-9A-Za-z_\\\\p{L}\\\\p{M}-]*$\"",
+			reason: "value does not match regex pattern \"^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$\"",
 		}
 		if !all {
 			return err
@@ -1022,7 +1022,7 @@ var _ interface {
 	ErrorName() string
 } = ExistUsernameRequestValidationError{}
 
-var _ExistUsernameRequest_Username_Pattern = regexp.MustCompile("^[0-9A-Za-z_\\p{L}\\p{M}-]*[^0-9][0-9A-Za-z_\\p{L}\\p{M}-]*$")
+var _ExistUsernameRequest_Username_Pattern = regexp.MustCompile("^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$")
 
 // Validate checks the field values on ExistUsernameReply with the rules
 // defined in the proto definition for this message. If any rules are

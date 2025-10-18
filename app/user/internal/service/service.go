@@ -1,8 +1,8 @@
 package service
 
 import (
+	"common/pkg/client"
 	"user/internal/conf"
-	"user/internal/data/client"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"

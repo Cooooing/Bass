@@ -8,18 +8,6 @@ import (
 	"user/internal/data/ent/gen"
 )
 
-// The AAAFunc type is an adapter to allow the use of ordinary
-// function as AAA mutator.
-type AAAFunc func(context.Context, *gen.AAAMutation) (gen.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f AAAFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
-	if mv, ok := m.(*gen.AAAMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.AAAMutation", m)
-}
-
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *gen.UserMutation) (gen.Value, error)

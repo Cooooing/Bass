@@ -1,19 +1,26 @@
-package data
+package util
 
 import (
+	"common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/model"
 	"context"
 	"encoding/json"
-	"user/internal/biz/model"
-	"user/internal/biz/repo"
+	"time"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type TokenRepo struct {
-	*BaseRepo
+	log   *log.Helper
+	redis *client.RedisClient
 }
 
-func NewTokenRepo(baseRepo *BaseRepo) repo.TokenRepo {
-	return &TokenRepo{BaseRepo: baseRepo}
+func NewTokenRepo(log *log.Helper, redis *client.RedisClient) *TokenRepo {
+	return &TokenRepo{
+		log:   log,
+		redis: redis,
+	}
 }
 
 type emailTokenData struct {
@@ -21,7 +28,7 @@ type emailTokenData struct {
 	User *model.User `json:"user"`
 }
 
-func (r *TokenRepo) SaveEmailToken(ctx context.Context, token string, code string, user *model.User) error {
+func (r *TokenRepo) SaveEmailToken(ctx context.Context, token string, code string, user *model.User, expires time.Duration) error {
 	value, err := json.Marshal(&emailTokenData{
 		Code: code,
 		User: user,
@@ -29,7 +36,7 @@ func (r *TokenRepo) SaveEmailToken(ctx context.Context, token string, code strin
 	if err != nil {
 		return err
 	}
-	return r.redis.Client.Set(ctx, constant.GetKeyTokenEmailCode(token), value, r.conf.Jwt.EmailExpire.AsDuration()).Err()
+	return r.redis.Client.Set(ctx, constant.GetKeyTokenEmailCode(token), value, expires).Err()
 }
 
 func (r *TokenRepo) GetEmailToken(ctx context.Context, token string) (string, *model.User, error) {
@@ -48,12 +55,12 @@ func (r *TokenRepo) DelEmailToken(ctx context.Context, token string) error {
 	return r.redis.Client.Del(ctx, constant.GetKeyTokenEmailCode(token)).Err()
 }
 
-func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.User) error {
+func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.User, expires time.Duration) error {
 	value, err := json.Marshal(user)
 	if err != nil {
 		return err
 	}
-	return r.redis.Client.Set(ctx, constant.GetKeyToken(token), value, r.conf.Jwt.Expires.AsDuration()).Err()
+	return r.redis.Client.Set(ctx, constant.GetKeyToken(token), value, expires).Err()
 }
 
 func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, error) {

@@ -4,7 +4,6 @@ package gen
 
 import (
 	"time"
-	"user/internal/data/ent/gen/aaa"
 	"user/internal/data/ent/gen/user"
 	"user/internal/data/ent/schema"
 )
@@ -13,12 +12,6 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	aaaFields := schema.AAA{}.Fields()
-	_ = aaaFields
-	// aaaDescName is the schema descriptor for name field.
-	aaaDescName := aaaFields[0].Descriptor()
-	// aaa.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	aaa.NameValidator = aaaDescName.Validators[0].(func(string) error)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.

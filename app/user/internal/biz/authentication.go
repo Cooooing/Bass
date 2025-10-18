@@ -1,21 +1,24 @@
 package biz
 
 import (
+	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"errors"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+
+	"github.com/jinzhu/copier"
 )
 
 type AuthenticationDomain struct {
 	*BaseDomain
 	userRepo     repo.UserRepo
-	tokenRepo    repo.TokenRepo
+	tokenRepo    *util.TokenRepo
 	tokenService *TokenService
 }
 
-func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo repo.TokenRepo, tokenService *TokenService) *AuthenticationDomain {
+func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo *util.TokenRepo, tokenService *TokenService) *AuthenticationDomain {
 	return &AuthenticationDomain{
 		BaseDomain:   base,
 		userRepo:     userRepo,
@@ -52,12 +55,12 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	// Todo 发送邮件
 
 	// 保存 code 到缓存
-	err = s.tokenRepo.SaveEmailToken(ctx, token, code, &model.User{
-		Name:     u.Name,
-		Nickname: u.Nickname,
-		Email:    u.Email,
-		Password: u.Password,
-	})
+	saveUser := &commonModel.User{}
+	err = copier.Copy(saveUser, u)
+	if err != nil {
+		return
+	}
+	err = s.tokenRepo.SaveEmailToken(ctx, token, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -67,7 +70,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 
 func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToken string, code string) (err error) {
 	// 通过 token 获取 code
-	emailCode, user, err := s.tokenRepo.GetEmailToken(ctx, codeToken)
+	emailCode, saveUser, err := s.tokenRepo.GetEmailToken(ctx, codeToken)
 	if err != nil {
 		return
 	}
@@ -77,6 +80,11 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		return
 	}
 	// 保存用户信息
+	user := &model.User{}
+	err = copier.Copy(user, saveUser)
+	if err != nil {
+		return
+	}
 	err = user.PasswordEncrypt()
 	if err != nil {
 		return
@@ -115,7 +123,12 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 		return
 	}
 	// 保存 token 到缓存
-	err = s.tokenRepo.SaveToken(ctx, token, user)
+	saveUser := &commonModel.User{}
+	err = copier.Copy(user, saveUser)
+	if err != nil {
+		return
+	}
+	err = s.tokenRepo.SaveToken(ctx, token, saveUser, s.conf.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}

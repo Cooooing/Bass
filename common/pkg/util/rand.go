@@ -1,22 +1,17 @@
 package util
 
 import (
+	"strings"
+
 	"github.com/bytedance/gopkg/lang/fastrand"
 	"github.com/sony/sonyflake/v2"
-	"strings"
 )
 
-var SF *sonyflake.Sonyflake
-
-func init() {
-	var err error
-	SF, err = sonyflake.New(sonyflake.Settings{})
-	if err != nil {
-		panic(err)
-	}
+func NewSonyflake() (*sonyflake.Sonyflake, error) {
+	return sonyflake.New(sonyflake.Settings{})
 }
 
-func RandStr(length int, useLower, useUpper, useDigit, useUnderscore bool) string {
+func RandStr(sf *sonyflake.Sonyflake, length int, useLower, useUpper, useDigit, useUnderscore bool) string {
 	// 构建字符集
 	var charset string
 	if useDigit {
@@ -42,7 +37,7 @@ func RandStr(length int, useLower, useUpper, useDigit, useUnderscore bool) strin
 	var n int64
 	for sb.Len() < length {
 		if n <= 0 {
-			n, _ = SF.NextID()
+			n, _ = sf.NextID()
 		}
 		sb.WriteByte(charset[n%base])
 		n /= base

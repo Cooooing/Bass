@@ -7,7 +7,9 @@
 package main
 
 import (
+	"content/internal/biz"
 	"content/internal/conf"
+	"content/internal/data"
 	"content/internal/data/client"
 	"content/internal/server"
 	"content/internal/service"
@@ -19,17 +21,51 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdCient, cleanup, err := client.NewEtcdClient(bootstrap, helper)
+	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdCient)
+	baseService := service.NewBaseService(bootstrap, helper, etcdClient)
 	systemService := service.NewSystemService(baseService)
-	v := service.ProvideServices(systemService)
+	baseDomain := biz.NewBaseDomain(bootstrap, helper)
+	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
+	if err != nil {
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	domain := data.NewDomainRepo(baseRepo, genClient)
+	articleDomain, err := biz.NewArticleDomain(baseDomain, domain)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	articleService := service.NewArticleService(baseService, articleDomain)
+	domainService := service.NewDomainService(baseService)
+	v := service.ProvideServices(systemService, articleService, domainService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v)
-	app := newApp(logger, grpcServer, httpServer, etcdCient)
+	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {
+		cleanup4()
+		cleanup3()
+		cleanup2()
 		cleanup()
 	}, nil
 }

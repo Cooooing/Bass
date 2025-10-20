@@ -10,13 +10,23 @@ server:
     timeout: 1s
 data:
   database:
-    default:
-      driver: "postgres"
-      source: "postgresql://root:123456@192.168.1.6:5432/test?sslmode=disable" # postgresql://<user>:<pass>@<host>/<database>
+    driver: "postgres"
+    source: "postgresql://root:123456@192.168.1.6:5432/test?sslmode=disable" # postgresql://<user>:<pass>@<host>/<database>
+    merge: false # 是否同步表到数据库
   redis:
     addr: 192.168.1.6:6379
-    read_timeout: 0.2s
-    write_timeout: 0.2s
+    password: "123456"
+    db: 0
+    read_timeout: 1s
+    write_timeout: 1s
+  rabbitmq:
+    url: "amqp://root:123456@192.168.1.6:5672/admin_vhost"
+    heartbeat: 10s            # 心跳，秒
+    dial_timeout: 5s          # 连接超时，秒
+    prefetch_count: 10        # Qos，未确认消息最大数量
+    prefetch_global: false    # Qos 是否全局
+    delivery_mode: 2          # 消息持久化 1: transient, 2: persistent
+    auto_ack: false           # 是否自动确认消息
 
 registry:
   etcd:

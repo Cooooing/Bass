@@ -28,7 +28,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseService := service.NewBaseService(bootstrap, helper, etcdClient)
 	baseDomain := biz.NewBaseDomain(bootstrap, helper)
-	databaseClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
+	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -46,12 +46,18 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseRepo := data.NewBaseRepo(bootstrap, helper, databaseClient, etcdClient, redisClient, rabbitMQClient)
-	genClient := client.NewDefault(databaseClient)
+	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	userRepo := data.NewUserRepo(baseRepo, genClient)
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
-	authenticationDomain := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
+	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
 	authenticationService := service.NewAuthenticationService(baseService, authenticationDomain, userRepo)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(authenticationService, systemService)

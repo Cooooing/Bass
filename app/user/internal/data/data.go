@@ -6,6 +6,7 @@ import (
 	"common/pkg/util"
 	"user/internal/conf"
 	"user/internal/data/client"
+	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -17,7 +18,6 @@ var DataProviderSet = wire.NewSet(
 	NewBaseRepo,
 
 	client.NewDataBaseClient,
-	client.NewDefault,
 	NewEtcdClient,
 	NewRedisClient,
 	NewRabbitMQClient,
@@ -29,13 +29,13 @@ var DataProviderSet = wire.NewSet(
 type BaseRepo struct {
 	conf     *conf.Bootstrap
 	log      *log.Helper
-	db       *client.DatabaseClient
+	db       *gen.Client
 	etcd     *commonClient.EtcdClient
 	redis    *commonClient.RedisClient
 	rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseRepo(conf *conf.Bootstrap, log *log.Helper, db *client.DatabaseClient, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseRepo {
+func NewBaseRepo(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseRepo {
 	return &BaseRepo{
 		conf:     conf,
 		log:      log,

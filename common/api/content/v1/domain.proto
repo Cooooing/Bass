@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package content.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "/content/v1;v1";
+
+// 领域服务
+service DomainService {
+  // 新增领域
+  rpc Add (AddDomainRequest) returns (AddDomainReply) {
+    option (google.api.http) = {
+      post: "/v1/domain/add"
+      body: "*"
+    };
+  }
+
+  // 查询领域
+  rpc Get (GetDomainRequest) returns (GetDomainReply) {
+    option (google.api.http) = {
+      post: "/v1/domain/get"
+      body: "*"
+    };
+  }
+
+  // 修改领域信息
+  rpc Update (UpdateDomainRequest) returns (UpdateDomainReply) {
+    option (google.api.http) = {
+      post: "/v1/domain/update"
+      body: "*"
+    };
+  }
+}
+
+message AddDomainRequest {}
+message AddDomainReply {}
+
+message GetDomainRequest {}
+message GetDomainReply {}
+
+ message UpdateDomainRequest {}
+ message UpdateDomainReply {}

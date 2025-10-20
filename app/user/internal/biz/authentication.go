@@ -9,6 +9,7 @@ import (
 	"user/internal/biz/repo"
 
 	"github.com/jinzhu/copier"
+	"github.com/sony/sonyflake/v2"
 )
 
 type AuthenticationDomain struct {
@@ -16,15 +17,22 @@ type AuthenticationDomain struct {
 	userRepo     repo.UserRepo
 	tokenRepo    *util.TokenRepo
 	tokenService *TokenService
+
+	sf *sonyflake.Sonyflake
 }
 
-func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo *util.TokenRepo, tokenService *TokenService) *AuthenticationDomain {
+func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo *util.TokenRepo, tokenService *TokenService) (*AuthenticationDomain, error) {
+	sf, err := util.NewSonyflake()
+	if err != nil {
+		return nil, err
+	}
 	return &AuthenticationDomain{
 		BaseDomain:   base,
 		userRepo:     userRepo,
 		tokenRepo:    tokenRepo,
 		tokenService: tokenService,
-	}
+		sf:           sf,
+	}, nil
 }
 
 func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User) (code string, token string, err error) {
@@ -45,7 +53,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 
 	// 生成 code
-	code = util.RandStr(6, true, true, true, false)
+	code = util.RandStr(s.sf, 6, true, true, true, false)
 	token, err = s.tokenService.EmailTokenGen.Generate(model.TokenEmail{
 		Email: u.Email,
 	})
@@ -113,7 +121,6 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 		err = errors.New("password invalid")
 		return
 	}
-	user.Password = ""
 	// 生成 token
 	token, err = s.tokenService.TokenGen.Generate(model.Token{
 		User:     user,

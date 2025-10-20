@@ -22,7 +22,7 @@ type User struct {
 	// 昵称
 	Nickname string `json:"nickname,omitempty"`
 	// 密码
-	Password string `json:"password,omitempty"`
+	Password string `json:"-"`
 	// 邮箱
 	Email string `json:"email,omitempty"`
 	// 手机号
@@ -37,8 +37,8 @@ type User struct {
 	Mbti string `json:"mbti,omitempty"`
 	// 用户状态：0-正常，1-封禁，2-注销
 	Status int `json:"status,omitempty"`
-	// 用户角色
-	Role string `json:"role,omitempty"`
+	// 用户组名称
+	GroupName string `json:"group_name,omitempty"`
 	// 关注数
 	FollowCount int `json:"follow_count,omitempty"`
 	// 粉丝数
@@ -103,7 +103,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case user.FieldID, user.FieldStatus, user.FieldFollowCount, user.FieldFollowerCount, user.FieldOnlineMinutes, user.FieldCurrentCheckinStreak, user.FieldLongestCheckinStreak:
 			values[i] = new(sql.NullInt64)
-		case user.FieldName, user.FieldNickname, user.FieldPassword, user.FieldEmail, user.FieldPhone, user.FieldURL, user.FieldAvatarURL, user.FieldIntroduction, user.FieldMbti, user.FieldRole, user.FieldLastLoginIP, user.FieldLanguage, user.FieldTimezone, user.FieldTheme, user.FieldMobileTheme, user.FieldCountry, user.FieldProvince, user.FieldCity, user.FieldTwofaSecret:
+		case user.FieldName, user.FieldNickname, user.FieldPassword, user.FieldEmail, user.FieldPhone, user.FieldURL, user.FieldAvatarURL, user.FieldIntroduction, user.FieldMbti, user.FieldGroupName, user.FieldLastLoginIP, user.FieldLanguage, user.FieldTimezone, user.FieldTheme, user.FieldMobileTheme, user.FieldCountry, user.FieldProvince, user.FieldCity, user.FieldTwofaSecret:
 			values[i] = new(sql.NullString)
 		case user.FieldLastLoginTime, user.FieldLastCheckinTime, user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -188,11 +188,11 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = int(value.Int64)
 			}
-		case user.FieldRole:
+		case user.FieldGroupName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field role", values[i])
+				return fmt.Errorf("unexpected type %T for field group_name", values[i])
 			} else if value.Valid {
-				_m.Role = value.String
+				_m.GroupName = value.String
 			}
 		case user.FieldFollowCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -396,8 +396,7 @@ func (_m *User) String() string {
 	builder.WriteString("nickname=")
 	builder.WriteString(_m.Nickname)
 	builder.WriteString(", ")
-	builder.WriteString("password=")
-	builder.WriteString(_m.Password)
+	builder.WriteString("password=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)
@@ -420,8 +419,8 @@ func (_m *User) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
-	builder.WriteString("role=")
-	builder.WriteString(_m.Role)
+	builder.WriteString("group_name=")
+	builder.WriteString(_m.GroupName)
 	builder.WriteString(", ")
 	builder.WriteString("follow_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FollowCount))

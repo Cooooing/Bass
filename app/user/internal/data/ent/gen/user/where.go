@@ -104,9 +104,9 @@ func Status(v int) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldStatus, v))
 }
 
-// Role applies equality check predicate on the "role" field. It's identical to RoleEQ.
-func Role(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldRole, v))
+// GroupName applies equality check predicate on the "group_name" field. It's identical to GroupNameEQ.
+func GroupName(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldGroupName, v))
 }
 
 // FollowCount applies equality check predicate on the "follow_count" field. It's identical to FollowCountEQ.
@@ -934,69 +934,79 @@ func StatusLTE(v int) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldStatus, v))
 }
 
-// RoleEQ applies the EQ predicate on the "role" field.
-func RoleEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldRole, v))
+// GroupNameEQ applies the EQ predicate on the "group_name" field.
+func GroupNameEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldGroupName, v))
 }
 
-// RoleNEQ applies the NEQ predicate on the "role" field.
-func RoleNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldRole, v))
+// GroupNameNEQ applies the NEQ predicate on the "group_name" field.
+func GroupNameNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldGroupName, v))
 }
 
-// RoleIn applies the In predicate on the "role" field.
-func RoleIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldRole, vs...))
+// GroupNameIn applies the In predicate on the "group_name" field.
+func GroupNameIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldGroupName, vs...))
 }
 
-// RoleNotIn applies the NotIn predicate on the "role" field.
-func RoleNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldRole, vs...))
+// GroupNameNotIn applies the NotIn predicate on the "group_name" field.
+func GroupNameNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldGroupName, vs...))
 }
 
-// RoleGT applies the GT predicate on the "role" field.
-func RoleGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldRole, v))
+// GroupNameGT applies the GT predicate on the "group_name" field.
+func GroupNameGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldGroupName, v))
 }
 
-// RoleGTE applies the GTE predicate on the "role" field.
-func RoleGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldRole, v))
+// GroupNameGTE applies the GTE predicate on the "group_name" field.
+func GroupNameGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldGroupName, v))
 }
 
-// RoleLT applies the LT predicate on the "role" field.
-func RoleLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldRole, v))
+// GroupNameLT applies the LT predicate on the "group_name" field.
+func GroupNameLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldGroupName, v))
 }
 
-// RoleLTE applies the LTE predicate on the "role" field.
-func RoleLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldRole, v))
+// GroupNameLTE applies the LTE predicate on the "group_name" field.
+func GroupNameLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldGroupName, v))
 }
 
-// RoleContains applies the Contains predicate on the "role" field.
-func RoleContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldRole, v))
+// GroupNameContains applies the Contains predicate on the "group_name" field.
+func GroupNameContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldGroupName, v))
 }
 
-// RoleHasPrefix applies the HasPrefix predicate on the "role" field.
-func RoleHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldRole, v))
+// GroupNameHasPrefix applies the HasPrefix predicate on the "group_name" field.
+func GroupNameHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldGroupName, v))
 }
 
-// RoleHasSuffix applies the HasSuffix predicate on the "role" field.
-func RoleHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldRole, v))
+// GroupNameHasSuffix applies the HasSuffix predicate on the "group_name" field.
+func GroupNameHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldGroupName, v))
 }
 
-// RoleEqualFold applies the EqualFold predicate on the "role" field.
-func RoleEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldRole, v))
+// GroupNameIsNil applies the IsNil predicate on the "group_name" field.
+func GroupNameIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldGroupName))
 }
 
-// RoleContainsFold applies the ContainsFold predicate on the "role" field.
-func RoleContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldRole, v))
+// GroupNameNotNil applies the NotNil predicate on the "group_name" field.
+func GroupNameNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldGroupName))
+}
+
+// GroupNameEqualFold applies the EqualFold predicate on the "group_name" field.
+func GroupNameEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldGroupName, v))
+}
+
+// GroupNameContainsFold applies the ContainsFold predicate on the "group_name" field.
+func GroupNameContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldGroupName, v))
 }
 
 // FollowCountEQ applies the EQ predicate on the "follow_count" field.

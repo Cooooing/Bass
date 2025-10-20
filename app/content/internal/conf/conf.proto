@@ -32,19 +32,31 @@ message Server {
 }
 
 message Data {
-  message Connections {
+  message Database {
     string driver = 1;
     string source = 2;
+    bool merge = 3;
   }
   message Redis {
-    string network = 1;
-    string addr = 2;
-    google.protobuf.Duration read_timeout = 3;
-    google.protobuf.Duration write_timeout = 4;
+    string addr = 1;
+    string password = 2;
+    int32 db = 3;
+    google.protobuf.Duration read_timeout = 4;
+    google.protobuf.Duration write_timeout = 5;
+  }
+  message RabbitMQ {
+    string url = 1;
+    google.protobuf.Duration heartbeat = 2;
+    google.protobuf.Duration dial_timeout = 3;
+    int32 prefetch_count = 4;
+    bool prefetch_global = 5;
+    int32 delivery_mode = 6;
+    bool auto_ack = 7;
   }
   // 配置多数据源
-  map<string, Connections> database = 1;
+  Database database = 1;
   Redis redis = 2;
+  RabbitMQ rabbitmq = 3;
 }
 
 message Registry {

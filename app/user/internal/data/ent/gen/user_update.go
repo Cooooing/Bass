@@ -217,17 +217,23 @@ func (_u *UserUpdate) AddStatus(v int) *UserUpdate {
 	return _u
 }
 
-// SetRole sets the "role" field.
-func (_u *UserUpdate) SetRole(v string) *UserUpdate {
-	_u.mutation.SetRole(v)
+// SetGroupName sets the "group_name" field.
+func (_u *UserUpdate) SetGroupName(v string) *UserUpdate {
+	_u.mutation.SetGroupName(v)
 	return _u
 }
 
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableRole(v *string) *UserUpdate {
+// SetNillableGroupName sets the "group_name" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableGroupName(v *string) *UserUpdate {
 	if v != nil {
-		_u.SetRole(*v)
+		_u.SetGroupName(*v)
 	}
+	return _u
+}
+
+// ClearGroupName clears the value of the "group_name" field.
+func (_u *UserUpdate) ClearGroupName() *UserUpdate {
+	_u.mutation.ClearGroupName()
 	return _u
 }
 
@@ -785,8 +791,11 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(user.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(user.FieldRole, field.TypeString, value)
+	if value, ok := _u.mutation.GroupName(); ok {
+		_spec.SetField(user.FieldGroupName, field.TypeString, value)
+	}
+	if _u.mutation.GroupNameCleared() {
+		_spec.ClearField(user.FieldGroupName, field.TypeString)
 	}
 	if value, ok := _u.mutation.FollowCount(); ok {
 		_spec.SetField(user.FieldFollowCount, field.TypeInt, value)
@@ -1111,17 +1120,23 @@ func (_u *UserUpdateOne) AddStatus(v int) *UserUpdateOne {
 	return _u
 }
 
-// SetRole sets the "role" field.
-func (_u *UserUpdateOne) SetRole(v string) *UserUpdateOne {
-	_u.mutation.SetRole(v)
+// SetGroupName sets the "group_name" field.
+func (_u *UserUpdateOne) SetGroupName(v string) *UserUpdateOne {
+	_u.mutation.SetGroupName(v)
 	return _u
 }
 
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableRole(v *string) *UserUpdateOne {
+// SetNillableGroupName sets the "group_name" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableGroupName(v *string) *UserUpdateOne {
 	if v != nil {
-		_u.SetRole(*v)
+		_u.SetGroupName(*v)
 	}
+	return _u
+}
+
+// ClearGroupName clears the value of the "group_name" field.
+func (_u *UserUpdateOne) ClearGroupName() *UserUpdateOne {
+	_u.mutation.ClearGroupName()
 	return _u
 }
 
@@ -1709,8 +1724,11 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(user.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(user.FieldRole, field.TypeString, value)
+	if value, ok := _u.mutation.GroupName(); ok {
+		_spec.SetField(user.FieldGroupName, field.TypeString, value)
+	}
+	if _u.mutation.GroupNameCleared() {
+		_spec.ClearField(user.FieldGroupName, field.TypeString)
 	}
 	if value, ok := _u.mutation.FollowCount(); ok {
 		_spec.SetField(user.FieldFollowCount, field.TypeInt, value)

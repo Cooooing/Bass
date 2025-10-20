@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package content.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "/content/v1;v1";
+
+// Article 服务
+service ArticleService {
+
+  // 新增文章
+  rpc Add (AddArticleRequest) returns (AddArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/add"
+      body: "*"
+    };
+  }
+
+  // 修改文章
+  rpc Update (UpdateArticleRequest) returns (UpdateArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/update"
+      body: "*"
+    };
+  }
+
+  // 删除文章（仅草稿）
+  rpc Delete (DeleteArticleRequest) returns (DeleteArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/delete"
+      body: "*"
+    };
+  }
+
+  // 查询文章
+  rpc Get (GetArticleRequest) returns (GetArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/get"
+      body: "*"
+    };
+  }
+
+  // 添加附言
+  rpc AddPostscript (AddPostscriptArticleRequest) returns (AddPostscriptArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/addPostscript"
+      body: "*"
+    };
+  }
+
+  // 打赏文章
+  rpc Reward (RewardArticleRequest) returns (RewardArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/reward"
+      body: "*"
+    };
+  }
+
+  // 感谢文章
+  rpc Thank (ThankArticleRequest) returns (ThankArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/thank"
+      body: "*"
+    };
+  }
+
+  // 点赞/踩文章
+  rpc Like (LikeArticleRequest) returns (LikeArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/like"
+      body: "*"
+    };
+  }
+
+  // 收藏文章
+  rpc Collect (CollectArticleRequest) returns (CollectArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/collect"
+      body: "*"
+    };
+  }
+
+  // 关注文章
+  rpc Watch (WatchArticleRequest) returns (WatchArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/watch"
+      body: "*"
+    };
+  }
+
+  // 采纳评论
+  rpc AcceptAnswer (AcceptAnswerArticleRequest) returns (AcceptAnswerArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/acceptAnswer"
+      body: "*"
+    };
+  }
+
+  // 修改文章状态
+  rpc UpdateStatus (UpdateStatusArticleRequest) returns (UpdateStatusArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/updateStatus"
+      body: "*"
+    };
+  }
+
+}
+
+
+message AddArticleRequest {}
+message AddArticleReply {}
+
+message UpdateArticleRequest {}
+message UpdateArticleReply {}
+
+message DeleteArticleRequest {}
+message DeleteArticleReply {}
+
+message GetArticleRequest {}
+message GetArticleReply {}
+
+message AddPostscriptArticleRequest {}
+message AddPostscriptArticleReply {}
+
+message RewardArticleRequest {}
+message RewardArticleReply {}
+
+message ThankArticleRequest {}
+message ThankArticleReply {}
+
+message LikeArticleRequest {}
+message LikeArticleReply {}
+
+message CollectArticleRequest {}
+message CollectArticleReply {}
+
+message WatchArticleRequest {}
+message WatchArticleReply {}
+
+message AcceptAnswerArticleRequest {}
+message AcceptAnswerArticleReply {}
+
+message UpdateStatusArticleRequest {}
+message UpdateStatusArticleReply {}

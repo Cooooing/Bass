@@ -144,16 +144,16 @@ func (_c *UserCreate) SetNillableStatus(v *int) *UserCreate {
 	return _c
 }
 
-// SetRole sets the "role" field.
-func (_c *UserCreate) SetRole(v string) *UserCreate {
-	_c.mutation.SetRole(v)
+// SetGroupName sets the "group_name" field.
+func (_c *UserCreate) SetGroupName(v string) *UserCreate {
+	_c.mutation.SetGroupName(v)
 	return _c
 }
 
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_c *UserCreate) SetNillableRole(v *string) *UserCreate {
+// SetNillableGroupName sets the "group_name" field if the given value is not nil.
+func (_c *UserCreate) SetNillableGroupName(v *string) *UserCreate {
 	if v != nil {
-		_c.SetRole(*v)
+		_c.SetGroupName(*v)
 	}
 	return _c
 }
@@ -561,10 +561,6 @@ func (_c *UserCreate) defaults() {
 		v := user.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.Role(); !ok {
-		v := user.DefaultRole
-		_c.mutation.SetRole(v)
-	}
 	if _, ok := _c.mutation.FollowCount(); !ok {
 		v := user.DefaultFollowCount
 		_c.mutation.SetFollowCount(v)
@@ -663,9 +659,6 @@ func (_c *UserCreate) check() error {
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "User.status"`)}
-	}
-	if _, ok := _c.mutation.Role(); !ok {
-		return &ValidationError{Name: "role", err: errors.New(`gen: missing required field "User.role"`)}
 	}
 	if _, ok := _c.mutation.FollowCount(); !ok {
 		return &ValidationError{Name: "follow_count", err: errors.New(`gen: missing required field "User.follow_count"`)}
@@ -790,9 +783,9 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldStatus, field.TypeInt, value)
 		_node.Status = value
 	}
-	if value, ok := _c.mutation.Role(); ok {
-		_spec.SetField(user.FieldRole, field.TypeString, value)
-		_node.Role = value
+	if value, ok := _c.mutation.GroupName(); ok {
+		_spec.SetField(user.FieldGroupName, field.TypeString, value)
+		_node.GroupName = value
 	}
 	if value, ok := _c.mutation.FollowCount(); ok {
 		_spec.SetField(user.FieldFollowCount, field.TypeInt, value)

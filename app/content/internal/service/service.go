@@ -1,8 +1,9 @@
 package service
 
 import (
+	"common/pkg/client"
 	"content/internal/conf"
-	"content/internal/data/client"
+	"content/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -13,18 +14,22 @@ import (
 // ServiceProviderSet is service providers.
 var ServiceProviderSet = wire.NewSet(
 	NewBaseService,
+
 	NewSystemService,
+	NewArticleService,
+	NewDomainService,
+
 	ProvideServices,
 )
 
 type BaseService struct {
 	conf *conf.Bootstrap
 	log  *log.Helper
-	etcd *client.EtcdCient
-	db   *client.DatabaseClient
+	etcd *client.EtcdClient
+	db   *gen.Client
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, etcd *client.EtcdCient) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, etcd *client.EtcdClient) *BaseService {
 	return &BaseService{
 		conf: conf,
 		log:  logger,
@@ -40,8 +45,12 @@ type Service interface {
 
 func ProvideServices(
 	systemService *SystemService,
+	articleService *ArticleService,
+	domainService *DomainService,
 ) []Service {
 	return []Service{
 		systemService,
+		articleService,
+		domainService,
 	}
 }

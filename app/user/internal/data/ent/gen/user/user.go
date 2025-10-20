@@ -33,8 +33,8 @@ const (
 	FieldMbti = "mbti"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldRole holds the string denoting the role field in the database.
-	FieldRole = "role"
+	// FieldGroupName holds the string denoting the group_name field in the database.
+	FieldGroupName = "group_name"
 	// FieldFollowCount holds the string denoting the follow_count field in the database.
 	FieldFollowCount = "follow_count"
 	// FieldFollowerCount holds the string denoting the follower_count field in the database.
@@ -104,7 +104,7 @@ var Columns = []string{
 	FieldIntroduction,
 	FieldMbti,
 	FieldStatus,
-	FieldRole,
+	FieldGroupName,
 	FieldFollowCount,
 	FieldFollowerCount,
 	FieldLastLoginTime,
@@ -150,8 +150,6 @@ var (
 	PasswordValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int
-	// DefaultRole holds the default value on creation for the "role" field.
-	DefaultRole string
 	// DefaultFollowCount holds the default value on creation for the "follow_count" field.
 	DefaultFollowCount int
 	// DefaultFollowerCount holds the default value on creation for the "follower_count" field.
@@ -250,9 +248,9 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByRole orders the results by the role field.
-func ByRole(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRole, opts...).ToFunc()
+// ByGroupName orders the results by the group_name field.
+func ByGroupName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGroupName, opts...).ToFunc()
 }
 
 // ByFollowCount orders the results by the follow_count field.

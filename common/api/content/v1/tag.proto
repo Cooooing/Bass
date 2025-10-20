@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package content.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "/content/v1;v1";
+
+// 标签服务
+service TagService {
+  rpc Get (GetTagRequest) returns (GetTagReply) {
+    option (google.api.http) = {
+      post: "/api/v1/tag/get"
+      body: "*"
+    };
+  }
+}
+
+message GetTagRequest {}
+message GetTagReply {}

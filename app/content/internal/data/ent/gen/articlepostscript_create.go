@@ -124,12 +124,6 @@ func (_c *ArticlePostscriptCreate) check() error {
 			return &ValidationError{Name: "content", err: fmt.Errorf(`gen: validator failed for field "ArticlePostscript.content": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "ArticlePostscript.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "ArticlePostscript.updated_at"`)}
-	}
 	if len(_c.mutation.ArticleIDs()) == 0 {
 		return &ValidationError{Name: "article", err: errors.New(`gen: missing required edge "ArticlePostscript.article"`)}
 	}

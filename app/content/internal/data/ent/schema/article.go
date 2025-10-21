@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-// Comment 文章实体定义
+// Article 文章实体定义
 type Article struct {
 	ent.Schema
 }
@@ -23,7 +23,7 @@ func (Article) Fields() []ent.Field {
 		field.Text("reward_content").Comment("打赏区内容").Optional(),
 		field.Int("reward_points").Comment("打赏积分").Default(0),
 
-		field.Int("status").Comment("状态 0-正常 1-封禁 2-锁定 3-草稿 4-删除").Default(0),
+		field.Int("status").Comment("状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除").Default(0),
 		field.Int("type").Comment("类型 0-普通 1-问答 2-投票 3-抽奖").Default(0),
 		field.Bool("commentable").Comment("是否允许评论").Default(true),
 		field.Bool("anonymous").Comment("是否允许评论").Default(true),

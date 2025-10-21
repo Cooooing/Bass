@@ -262,7 +262,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/user.v1.ExistEmailRequest'
+                            $ref: '#/components/schemas/common.api.common.user.v1.ExistEmailRequest'
                 required: true
             responses:
                 "200":
@@ -270,7 +270,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/user.v1.ExistEmailReply'
+                                $ref: '#/components/schemas/common.api.common.user.v1.ExistEmailReply'
     /v1/authentication/exist/phone:
         post:
             tags:
@@ -281,7 +281,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/user.v1.ExistPhoneRequest'
+                            $ref: '#/components/schemas/common.api.common.user.v1.ExistPhoneRequest'
                 required: true
             responses:
                 "200":
@@ -289,7 +289,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/user.v1.ExistPhoneReply'
+                                $ref: '#/components/schemas/common.api.common.user.v1.ExistPhoneReply'
     /v1/authentication/exist/username:
         post:
             tags:
@@ -300,7 +300,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/user.v1.ExistUsernameRequest'
+                            $ref: '#/components/schemas/common.api.common.user.v1.ExistUsernameRequest'
                 required: true
             responses:
                 "200":
@@ -308,7 +308,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/user.v1.ExistUsernameReply'
+                                $ref: '#/components/schemas/common.api.common.user.v1.ExistUsernameReply'
     /v1/authentication/login/account:
         post:
             tags:
@@ -319,7 +319,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/user.v1.LoginAccountRequest'
+                            $ref: '#/components/schemas/common.api.common.user.v1.LoginAccountRequest'
                 required: true
             responses:
                 "200":
@@ -327,7 +327,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/user.v1.LoginAccountReply'
+                                $ref: '#/components/schemas/common.api.common.user.v1.LoginAccountReply'
     /v1/authentication/register/email:
         post:
             tags:
@@ -338,7 +338,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/user.v1.RegisterEmailRequest'
+                            $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailRequest'
                 required: true
             responses:
                 "200":
@@ -346,7 +346,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/user.v1.RegisterEmailReply'
+                                $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailReply'
     /v1/authentication/register/email/verify:
         post:
             tags:
@@ -357,7 +357,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/user.v1.RegisterEmailVerifyRequest'
+                            $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailVerifyRequest'
                 required: true
             responses:
                 "200":
@@ -365,7 +365,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/user.v1.RegisterEmailVerifyReply'
+                                $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailVerifyReply'
     /v1/comment/add:
         post:
             tags:
@@ -465,7 +465,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/content.v1.AddDomainRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.AddDomainRequest'
                 required: true
             responses:
                 "200":
@@ -473,7 +473,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/content.v1.AddDomainReply'
+                                $ref: '#/components/schemas/common.api.content.v1.AddDomainReply'
     /v1/domain/get:
         post:
             tags:
@@ -484,7 +484,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/content.v1.GetDomainRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.GetDomainRequest'
                 required: true
             responses:
                 "200":
@@ -492,7 +492,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/content.v1.GetDomainReply'
+                                $ref: '#/components/schemas/common.api.content.v1.GetDomainReply'
     /v1/domain/update:
         post:
             tags:
@@ -503,7 +503,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/content.v1.UpdateDomainRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.UpdateDomainRequest'
                 required: true
             responses:
                 "200":
@@ -511,7 +511,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/content.v1.UpdateDomainReply'
+                                $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
     /v1/system/health:
         get:
             tags:
@@ -527,6 +527,192 @@ paths:
                                 $ref: '#/components/schemas/common.v1.HealthReply'
 components:
     schemas:
+        common.api.common.user.v1.ExistEmailReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        common.api.common.user.v1.ExistEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+        common.api.common.user.v1.ExistPhoneReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        common.api.common.user.v1.ExistPhoneRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+        common.api.common.user.v1.ExistUsernameReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        common.api.common.user.v1.ExistUsernameRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+        common.api.common.user.v1.LoginAccountReply:
+            type: object
+            properties:
+                token:
+                    type: string
+        common.api.common.user.v1.LoginAccountRequest:
+            type: object
+            properties:
+                account:
+                    type: string
+                password:
+                    type: string
+        common.api.common.user.v1.RegisterEmailReply:
+            type: object
+            properties:
+                codeToken:
+                    type: string
+                code:
+                    type: string
+        common.api.common.user.v1.RegisterEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                password:
+                    type: string
+                name:
+                    type: string
+                nickname:
+                    type: string
+        common.api.common.user.v1.RegisterEmailVerifyReply:
+            type: object
+            properties: {}
+        common.api.common.user.v1.RegisterEmailVerifyRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                codeToken:
+                    type: string
+        common.api.common.v1.PageReply:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: uint32
+                page:
+                    type: integer
+                    format: uint32
+                size:
+                    type: integer
+                    format: uint32
+        common.api.common.v1.PageRequest:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    format: uint32
+                size:
+                    type: integer
+                    format: uint32
+        common.api.content.v1.AddDomainReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        common.api.content.v1.AddDomainRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                isNav:
+                    type: boolean
+        common.api.content.v1.Domain:
+            type: object
+            properties:
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                tagCount:
+                    type: string
+                isNav:
+                    type: boolean
+        common.api.content.v1.GetDomainReply:
+            type: object
+            properties:
+                page:
+                    $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Domain'
+        common.api.content.v1.GetDomainRequest:
+            type: object
+            properties:
+                page:
+                    $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                isNav:
+                    type: boolean
+        common.api.content.v1.UpdateDomainReply:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        common.api.content.v1.UpdateDomainRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                isNav:
+                    type: boolean
         common.v1.HealthReply:
             type: object
             properties:
@@ -549,12 +735,6 @@ components:
             type: object
             properties: {}
         content.v1.AddCommentRequest:
-            type: object
-            properties: {}
-        content.v1.AddDomainReply:
-            type: object
-            properties: {}
-        content.v1.AddDomainRequest:
             type: object
             properties: {}
         content.v1.AddPostscriptArticleReply:
@@ -582,12 +762,6 @@ components:
             type: object
             properties: {}
         content.v1.GetCommentReply:
-            type: object
-            properties: {}
-        content.v1.GetDomainReply:
-            type: object
-            properties: {}
-        content.v1.GetDomainRequest:
             type: object
             properties: {}
         content.v1.GetTagReply:
@@ -632,12 +806,6 @@ components:
         content.v1.UpdateArticleRequest:
             type: object
             properties: {}
-        content.v1.UpdateDomainReply:
-            type: object
-            properties: {}
-        content.v1.UpdateDomainRequest:
-            type: object
-            properties: {}
         content.v1.UpdateStatusArticleReply:
             type: object
             properties: {}
@@ -656,76 +824,6 @@ components:
         content.v1.WatchArticleRequest:
             type: object
             properties: {}
-        user.v1.ExistEmailReply:
-            type: object
-            properties:
-                exist:
-                    type: boolean
-        user.v1.ExistEmailRequest:
-            type: object
-            properties:
-                email:
-                    type: string
-        user.v1.ExistPhoneReply:
-            type: object
-            properties:
-                exist:
-                    type: boolean
-        user.v1.ExistPhoneRequest:
-            type: object
-            properties:
-                phone:
-                    type: string
-        user.v1.ExistUsernameReply:
-            type: object
-            properties:
-                exist:
-                    type: boolean
-        user.v1.ExistUsernameRequest:
-            type: object
-            properties:
-                username:
-                    type: string
-        user.v1.LoginAccountReply:
-            type: object
-            properties:
-                token:
-                    type: string
-        user.v1.LoginAccountRequest:
-            type: object
-            properties:
-                account:
-                    type: string
-                password:
-                    type: string
-        user.v1.RegisterEmailReply:
-            type: object
-            properties:
-                codeToken:
-                    type: string
-                code:
-                    type: string
-        user.v1.RegisterEmailRequest:
-            type: object
-            properties:
-                email:
-                    type: string
-                password:
-                    type: string
-                name:
-                    type: string
-                nickname:
-                    type: string
-        user.v1.RegisterEmailVerifyReply:
-            type: object
-            properties: {}
-        user.v1.RegisterEmailVerifyRequest:
-            type: object
-            properties:
-                code:
-                    type: string
-                codeToken:
-                    type: string
 tags:
     - name: ArticleService
       description: Article 服务

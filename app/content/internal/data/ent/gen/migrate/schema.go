@@ -31,8 +31,8 @@ var (
 		{Name: "vote_total", Type: field.TypeInt, Default: 0},
 		{Name: "lottery_participant_count", Type: field.TypeInt, Default: 0},
 		{Name: "lottery_winner_count", Type: field.TypeInt, Default: 0},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
 	// ArticlesTable holds the schema information for the "articles" table.
 	ArticlesTable = &schema.Table{
@@ -47,8 +47,8 @@ var (
 		{Name: "start_at", Type: field.TypeTime, Nullable: true},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "status", Type: field.TypeInt, Default: 0},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt},
 	}
 	// ArticleLotteriesTable holds the schema information for the "article_lotteries" table.
@@ -69,8 +69,8 @@ var (
 	ArticleLotteryParticipantsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "user_id", Type: field.TypeInt},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "lottery_id", Type: field.TypeInt},
 	}
 	// ArticleLotteryParticipantsTable holds the schema information for the "article_lottery_participants" table.
@@ -92,8 +92,8 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "user_id", Type: field.TypeInt},
 		{Name: "prize", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "lottery_id", Type: field.TypeInt},
 	}
 	// ArticleLotteryWinnersTable holds the schema information for the "article_lottery_winners" table.
@@ -114,8 +114,8 @@ var (
 	ArticlePostscriptsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt},
 	}
 	// ArticlePostscriptsTable holds the schema information for the "article_postscripts" table.
@@ -141,8 +141,8 @@ var (
 		{Name: "vote_anonymous", Type: field.TypeBool, Default: true},
 		{Name: "total_count", Type: field.TypeInt, Default: 0},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt},
 	}
 	// ArticleVotesTable holds the schema information for the "article_votes" table.
@@ -165,8 +165,8 @@ var (
 		{Name: "user_id", Type: field.TypeInt},
 		{Name: "option_index", Type: field.TypeInt},
 		{Name: "anonymous", Type: field.TypeBool, Default: false},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "vote_id", Type: field.TypeInt},
 	}
 	// ArticleVoteRecordsTable holds the schema information for the "article_vote_records" table.
@@ -194,8 +194,8 @@ var (
 		{Name: "like_count", Type: field.TypeInt, Default: 0},
 		{Name: "dislike_count", Type: field.TypeInt, Default: 0},
 		{Name: "collect_count", Type: field.TypeInt, Default: 0},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt},
 		{Name: "parent_id", Type: field.TypeInt, Nullable: true, Default: 0},
 	}
@@ -231,13 +231,13 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString},
-		{Name: "status", Type: field.TypeInt},
-		{Name: "url", Type: field.TypeString},
-		{Name: "icon", Type: field.TypeString},
+		{Name: "status", Type: field.TypeInt, Default: 0},
+		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "tag_count", Type: field.TypeInt, Default: 0},
 		{Name: "is_nav", Type: field.TypeBool, Default: false},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
 	// DomainsTable holds the schema information for the "domains" table.
 	DomainsTable = &schema.Table{
@@ -250,10 +250,10 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "user_id", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeInt},
+		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "article_count", Type: field.TypeInt, Default: 0},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "domain_id", Type: field.TypeInt, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.

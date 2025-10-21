@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package common.v1;
+
+option go_package = "common/v1;v1";
+
+
+// -- content module
+
+enum DomainStatus {
+  DomainNormal = 0; // 正常
+  DomainDisabled = 1; // 禁用
+}
+
+enum TagStatus {
+  TagNormal = 0; // 正常
+  TagDisabled = 1; // 禁用
+}
+
+enum CommentStatus {
+  CommentNormal = 0; // 正常
+  CommentHidden = 1; // 隐藏
+}
+
+enum ArticleLotteryStatus {
+  ArticleLotteryNotStarted = 0; // 未开始
+  ArticleLotteryInProgress = 1; // 进行中
+  ArticleLotteryFinished = 2; // 已结束
+}
+
+enum ArticleStatus {
+  ArticleNormal = 0; // 正常
+  ArticleHidden = 1; // 隐藏
+  ArticleLocked = 2; // 锁定
+  ArticleDrafts = 3; // 草稿
+  ArticleDeleted = 4; // 删除
+}
+
+enum ArticleType {
+  ArticleTypeNormal = 0; // 普通文章
+  ArticleTypeQA = 1; // 问答
+  ArticleTypeVote = 2; // 投票
+  ArticleTypeLottery = 3; // 抽奖
+}

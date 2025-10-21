@@ -92,6 +92,12 @@ func (_u *ArticleLotteryWinnerUpdate) SetNillableCreatedAt(v *time.Time) *Articl
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *ArticleLotteryWinnerUpdate) ClearCreatedAt() *ArticleLotteryWinnerUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ArticleLotteryWinnerUpdate) SetUpdatedAt(v time.Time) *ArticleLotteryWinnerUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -103,6 +109,12 @@ func (_u *ArticleLotteryWinnerUpdate) SetNillableUpdatedAt(v *time.Time) *Articl
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *ArticleLotteryWinnerUpdate) ClearUpdatedAt() *ArticleLotteryWinnerUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -186,8 +198,14 @@ func (_u *ArticleLotteryWinnerUpdate) sqlSave(ctx context.Context) (_node int, e
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlelotterywinner.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(articlelotterywinner.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(articlelotterywinner.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(articlelotterywinner.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.LotteryCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -301,6 +319,12 @@ func (_u *ArticleLotteryWinnerUpdateOne) SetNillableCreatedAt(v *time.Time) *Art
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *ArticleLotteryWinnerUpdateOne) ClearCreatedAt() *ArticleLotteryWinnerUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ArticleLotteryWinnerUpdateOne) SetUpdatedAt(v time.Time) *ArticleLotteryWinnerUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -312,6 +336,12 @@ func (_u *ArticleLotteryWinnerUpdateOne) SetNillableUpdatedAt(v *time.Time) *Art
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *ArticleLotteryWinnerUpdateOne) ClearUpdatedAt() *ArticleLotteryWinnerUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -425,8 +455,14 @@ func (_u *ArticleLotteryWinnerUpdateOne) sqlSave(ctx context.Context) (_node *Ar
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlelotterywinner.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(articlelotterywinner.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(articlelotterywinner.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(articlelotterywinner.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.LotteryCleared() {
 		edge := &sqlgraph.EdgeSpec{

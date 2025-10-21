@@ -133,12 +133,6 @@ func (_c *ArticleLotteryWinnerCreate) check() error {
 			return &ValidationError{Name: "prize", err: fmt.Errorf(`gen: validator failed for field "ArticleLotteryWinner.prize": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "ArticleLotteryWinner.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "ArticleLotteryWinner.updated_at"`)}
-	}
 	if len(_c.mutation.LotteryIDs()) == 0 {
 		return &ValidationError{Name: "lottery", err: errors.New(`gen: missing required edge "ArticleLotteryWinner.lottery"`)}
 	}

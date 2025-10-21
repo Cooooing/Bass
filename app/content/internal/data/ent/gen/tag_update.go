@@ -141,6 +141,12 @@ func (_u *TagUpdate) SetNillableCreatedAt(v *time.Time) *TagUpdate {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *TagUpdate) ClearCreatedAt() *TagUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *TagUpdate) SetUpdatedAt(v time.Time) *TagUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -152,6 +158,12 @@ func (_u *TagUpdate) SetNillableUpdatedAt(v *time.Time) *TagUpdate {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *TagUpdate) ClearUpdatedAt() *TagUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -280,8 +292,14 @@ func (_u *TagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(tag.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(tag.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(tag.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(tag.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -488,6 +506,12 @@ func (_u *TagUpdateOne) SetNillableCreatedAt(v *time.Time) *TagUpdateOne {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *TagUpdateOne) ClearCreatedAt() *TagUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *TagUpdateOne) SetUpdatedAt(v time.Time) *TagUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -499,6 +523,12 @@ func (_u *TagUpdateOne) SetNillableUpdatedAt(v *time.Time) *TagUpdateOne {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *TagUpdateOne) ClearUpdatedAt() *TagUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -657,8 +687,14 @@ func (_u *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(tag.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(tag.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(tag.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(tag.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{

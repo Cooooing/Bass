@@ -24,9 +24,9 @@ type Domain struct {
 	// 状态 0-正常，1-禁用
 	Status int `json:"status,omitempty"`
 	// 领域地址
-	URL string `json:"url,omitempty"`
+	URL *string `json:"url,omitempty"`
 	// 图标
-	Icon string `json:"icon,omitempty"`
+	Icon *string `json:"icon,omitempty"`
 	// 标签数
 	TagCount int `json:"tag_count,omitempty"`
 	// 是否导航
@@ -115,13 +115,15 @@ func (_m *Domain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
 			} else if value.Valid {
-				_m.URL = value.String
+				_m.URL = new(string)
+				*_m.URL = value.String
 			}
 		case domain.FieldIcon:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field icon", values[i])
 			} else if value.Valid {
-				_m.Icon = value.String
+				_m.Icon = new(string)
+				*_m.Icon = value.String
 			}
 		case domain.FieldTagCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -199,11 +201,15 @@ func (_m *Domain) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
-	builder.WriteString("url=")
-	builder.WriteString(_m.URL)
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("icon=")
-	builder.WriteString(_m.Icon)
+	if v := _m.Icon; v != nil {
+		builder.WriteString("icon=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("tag_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.TagCount))

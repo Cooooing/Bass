@@ -119,12 +119,6 @@ func (_c *ArticleLotteryParticipantCreate) check() error {
 	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`gen: missing required field "ArticleLotteryParticipant.user_id"`)}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "ArticleLotteryParticipant.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "ArticleLotteryParticipant.updated_at"`)}
-	}
 	if len(_c.mutation.LotteryIDs()) == 0 {
 		return &ValidationError{Name: "lottery", err: errors.New(`gen: missing required edge "ArticleLotteryParticipant.lottery"`)}
 	}

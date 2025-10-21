@@ -430,6 +430,12 @@ func (_u *ArticleUpdate) SetNillableCreatedAt(v *time.Time) *ArticleUpdate {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *ArticleUpdate) ClearCreatedAt() *ArticleUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ArticleUpdate) SetUpdatedAt(v time.Time) *ArticleUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -441,6 +447,12 @@ func (_u *ArticleUpdate) SetNillableUpdatedAt(v *time.Time) *ArticleUpdate {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *ArticleUpdate) ClearUpdatedAt() *ArticleUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -796,8 +808,14 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(article.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(article.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(article.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(article.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.PostscriptsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1441,6 +1459,12 @@ func (_u *ArticleUpdateOne) SetNillableCreatedAt(v *time.Time) *ArticleUpdateOne
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *ArticleUpdateOne) ClearCreatedAt() *ArticleUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ArticleUpdateOne) SetUpdatedAt(v time.Time) *ArticleUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -1452,6 +1476,12 @@ func (_u *ArticleUpdateOne) SetNillableUpdatedAt(v *time.Time) *ArticleUpdateOne
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *ArticleUpdateOne) ClearUpdatedAt() *ArticleUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -1837,8 +1867,14 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(article.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(article.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(article.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(article.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.PostscriptsCleared() {
 		edge := &sqlgraph.EdgeSpec{

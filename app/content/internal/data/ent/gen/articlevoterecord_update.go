@@ -113,6 +113,12 @@ func (_u *ArticleVoteRecordUpdate) SetNillableCreatedAt(v *time.Time) *ArticleVo
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *ArticleVoteRecordUpdate) ClearCreatedAt() *ArticleVoteRecordUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ArticleVoteRecordUpdate) SetUpdatedAt(v time.Time) *ArticleVoteRecordUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -124,6 +130,12 @@ func (_u *ArticleVoteRecordUpdate) SetNillableUpdatedAt(v *time.Time) *ArticleVo
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *ArticleVoteRecordUpdate) ClearUpdatedAt() *ArticleVoteRecordUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -208,8 +220,14 @@ func (_u *ArticleVoteRecordUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlevoterecord.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(articlevoterecord.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(articlevoterecord.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(articlevoterecord.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.VoteCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -344,6 +362,12 @@ func (_u *ArticleVoteRecordUpdateOne) SetNillableCreatedAt(v *time.Time) *Articl
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *ArticleVoteRecordUpdateOne) ClearCreatedAt() *ArticleVoteRecordUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ArticleVoteRecordUpdateOne) SetUpdatedAt(v time.Time) *ArticleVoteRecordUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -355,6 +379,12 @@ func (_u *ArticleVoteRecordUpdateOne) SetNillableUpdatedAt(v *time.Time) *Articl
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *ArticleVoteRecordUpdateOne) ClearUpdatedAt() *ArticleVoteRecordUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -469,8 +499,14 @@ func (_u *ArticleVoteRecordUpdateOne) sqlSave(ctx context.Context) (_node *Artic
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlevoterecord.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(articlevoterecord.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(articlevoterecord.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(articlevoterecord.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.VoteCleared() {
 		edge := &sqlgraph.EdgeSpec{

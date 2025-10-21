@@ -149,12 +149,6 @@ func (_c *ArticleVoteRecordCreate) check() error {
 	if _, ok := _c.mutation.Anonymous(); !ok {
 		return &ValidationError{Name: "anonymous", err: errors.New(`gen: missing required field "ArticleVoteRecord.anonymous"`)}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "ArticleVoteRecord.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "ArticleVoteRecord.updated_at"`)}
-	}
 	if len(_c.mutation.VoteIDs()) == 0 {
 		return &ValidationError{Name: "vote", err: errors.New(`gen: missing required edge "ArticleVoteRecord.vote"`)}
 	}

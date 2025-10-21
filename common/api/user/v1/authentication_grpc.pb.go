@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Authentication_RegisterEmail_FullMethodName       = "/user.v1.Authentication/RegisterEmail"
-	Authentication_RegisterEmailVerify_FullMethodName = "/user.v1.Authentication/RegisterEmailVerify"
-	Authentication_ExistEmail_FullMethodName          = "/user.v1.Authentication/ExistEmail"
-	Authentication_ExistPhone_FullMethodName          = "/user.v1.Authentication/ExistPhone"
-	Authentication_ExistUsername_FullMethodName       = "/user.v1.Authentication/ExistUsername"
-	Authentication_LoginAccount_FullMethodName        = "/user.v1.Authentication/LoginAccount"
+	Authentication_RegisterEmail_FullMethodName       = "/common.api.common.user.v1.Authentication/RegisterEmail"
+	Authentication_RegisterEmailVerify_FullMethodName = "/common.api.common.user.v1.Authentication/RegisterEmailVerify"
+	Authentication_ExistEmail_FullMethodName          = "/common.api.common.user.v1.Authentication/ExistEmail"
+	Authentication_ExistPhone_FullMethodName          = "/common.api.common.user.v1.Authentication/ExistPhone"
+	Authentication_ExistUsername_FullMethodName       = "/common.api.common.user.v1.Authentication/ExistUsername"
+	Authentication_LoginAccount_FullMethodName        = "/common.api.common.user.v1.Authentication/LoginAccount"
 )
 
 // AuthenticationClient is the client API for Authentication service.
@@ -294,7 +294,7 @@ func _Authentication_LoginAccount_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Authentication_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.v1.Authentication",
+	ServiceName: "common.api.common.user.v1.Authentication",
 	HandlerType: (*AuthenticationServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

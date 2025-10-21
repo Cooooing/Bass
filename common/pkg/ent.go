@@ -17,8 +17,8 @@ type TimeAuditSetter interface {
 
 func TimeAuditFields() []ent.Field {
 	return []ent.Field{
-		field.Time("created_at").Comment("创建时间").Default(time.Now).Nillable(),
-		field.Time("updated_at").Comment("更新时间").Default(time.Now).Nillable(),
+		field.Time("created_at").Comment("创建时间").Default(time.Now).Nillable().Optional(),
+		field.Time("updated_at").Comment("更新时间").Default(time.Now).Nillable().Optional(),
 	}
 }
 
@@ -31,8 +31,8 @@ type UserAuditSetter interface {
 
 func UserAuditFields() []ent.Field {
 	return []ent.Field{
-		field.Int("create_by").Comment("创建人ID").Optional(),
-		field.Int("update_by").Comment("更新人ID").Optional(),
+		field.Int("create_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int("update_by").Comment("更新人ID").Nillable().Optional(),
 	}
 }
 

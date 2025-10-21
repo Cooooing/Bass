@@ -239,6 +239,10 @@ func init() {
 	domainDescDescription := domainFields[1].Descriptor()
 	// domain.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
 	domain.DescriptionValidator = domainDescDescription.Validators[0].(func(string) error)
+	// domainDescStatus is the schema descriptor for status field.
+	domainDescStatus := domainFields[2].Descriptor()
+	// domain.DefaultStatus holds the default value on creation for the status field.
+	domain.DefaultStatus = domainDescStatus.Default.(int)
 	// domainDescTagCount is the schema descriptor for tag_count field.
 	domainDescTagCount := domainFields[5].Descriptor()
 	// domain.DefaultTagCount holds the default value on creation for the tag_count field.
@@ -261,6 +265,10 @@ func init() {
 	tagDescName := tagFields[1].Descriptor()
 	// tag.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	tag.NameValidator = tagDescName.Validators[0].(func(string) error)
+	// tagDescStatus is the schema descriptor for status field.
+	tagDescStatus := tagFields[3].Descriptor()
+	// tag.DefaultStatus holds the default value on creation for the status field.
+	tag.DefaultStatus = tagDescStatus.Default.(int)
 	// tagDescArticleCount is the schema descriptor for article_count field.
 	tagDescArticleCount := tagFields[4].Descriptor()
 	// tag.DefaultArticleCount holds the default value on creation for the article_count field.

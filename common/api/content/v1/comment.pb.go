@@ -478,7 +478,7 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"\x03Get\x12\x1d.content.v1.GetCommentRequest\x1a\x1b.content.v1.GetCommentReply\"\x17\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/comment/get\x12a\n" +
 	"\x04Like\x12\x1e.content.v1.LikeCommentRequest\x1a\x1c.content.v1.LikeCommentReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/comment/like\x12e\n" +
 	"\x05Thank\x12\x1f.content.v1.ThankCommentRequest\x1a\x1d.content.v1.ThankCommentReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/comment/thank\x12\x81\x01\n" +
-	"\fUpdateStatus\x12&.content.v1.UpdateStatusCommentRequest\x1a$.content.v1.UpdateStatusCommentReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/comment/updateStatusB\x10Z\x0e/content/v1;v1b\x06proto3"
+	"\fUpdateStatus\x12&.content.v1.UpdateStatusCommentRequest\x1a$.content.v1.UpdateStatusCommentReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/comment/updateStatusB\x0fZ\rcontent/v1;v1b\x06proto3"
 
 var (
 	file_content_v1_comment_proto_rawDescOnce sync.Once

@@ -560,12 +560,6 @@ func (_c *ArticleCreate) check() error {
 	if _, ok := _c.mutation.LotteryWinnerCount(); !ok {
 		return &ValidationError{Name: "lottery_winner_count", err: errors.New(`gen: missing required field "Article.lottery_winner_count"`)}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "Article.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "Article.updated_at"`)}
-	}
 	return nil
 }
 

@@ -29,7 +29,7 @@ type Article struct {
 	RewardContent string `json:"reward_content,omitempty"`
 	// 打赏积分
 	RewardPoints int `json:"reward_points,omitempty"`
-	// 状态 0-正常 1-封禁 2-锁定 3-草稿 4-删除
+	// 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
 	Status int `json:"status,omitempty"`
 	// 类型 0-普通 1-问答 2-投票 3-抽奖
 	Type int `json:"type,omitempty"`

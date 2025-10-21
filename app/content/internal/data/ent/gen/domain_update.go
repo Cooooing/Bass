@@ -92,6 +92,12 @@ func (_u *DomainUpdate) SetNillableURL(v *string) *DomainUpdate {
 	return _u
 }
 
+// ClearURL clears the value of the "url" field.
+func (_u *DomainUpdate) ClearURL() *DomainUpdate {
+	_u.mutation.ClearURL()
+	return _u
+}
+
 // SetIcon sets the "icon" field.
 func (_u *DomainUpdate) SetIcon(v string) *DomainUpdate {
 	_u.mutation.SetIcon(v)
@@ -103,6 +109,12 @@ func (_u *DomainUpdate) SetNillableIcon(v *string) *DomainUpdate {
 	if v != nil {
 		_u.SetIcon(*v)
 	}
+	return _u
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (_u *DomainUpdate) ClearIcon() *DomainUpdate {
+	_u.mutation.ClearIcon()
 	return _u
 }
 
@@ -155,6 +167,12 @@ func (_u *DomainUpdate) SetNillableCreatedAt(v *time.Time) *DomainUpdate {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *DomainUpdate) ClearCreatedAt() *DomainUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *DomainUpdate) SetUpdatedAt(v time.Time) *DomainUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -166,6 +184,12 @@ func (_u *DomainUpdate) SetNillableUpdatedAt(v *time.Time) *DomainUpdate {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *DomainUpdate) ClearUpdatedAt() *DomainUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -279,8 +303,14 @@ func (_u *DomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(domain.FieldURL, field.TypeString, value)
 	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(domain.FieldURL, field.TypeString)
+	}
 	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(domain.FieldIcon, field.TypeString, value)
+	}
+	if _u.mutation.IconCleared() {
+		_spec.ClearField(domain.FieldIcon, field.TypeString)
 	}
 	if value, ok := _u.mutation.TagCount(); ok {
 		_spec.SetField(domain.FieldTagCount, field.TypeInt, value)
@@ -294,8 +324,14 @@ func (_u *DomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(domain.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(domain.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(domain.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -425,6 +461,12 @@ func (_u *DomainUpdateOne) SetNillableURL(v *string) *DomainUpdateOne {
 	return _u
 }
 
+// ClearURL clears the value of the "url" field.
+func (_u *DomainUpdateOne) ClearURL() *DomainUpdateOne {
+	_u.mutation.ClearURL()
+	return _u
+}
+
 // SetIcon sets the "icon" field.
 func (_u *DomainUpdateOne) SetIcon(v string) *DomainUpdateOne {
 	_u.mutation.SetIcon(v)
@@ -436,6 +478,12 @@ func (_u *DomainUpdateOne) SetNillableIcon(v *string) *DomainUpdateOne {
 	if v != nil {
 		_u.SetIcon(*v)
 	}
+	return _u
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (_u *DomainUpdateOne) ClearIcon() *DomainUpdateOne {
+	_u.mutation.ClearIcon()
 	return _u
 }
 
@@ -488,6 +536,12 @@ func (_u *DomainUpdateOne) SetNillableCreatedAt(v *time.Time) *DomainUpdateOne {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *DomainUpdateOne) ClearCreatedAt() *DomainUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *DomainUpdateOne) SetUpdatedAt(v time.Time) *DomainUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -499,6 +553,12 @@ func (_u *DomainUpdateOne) SetNillableUpdatedAt(v *time.Time) *DomainUpdateOne {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *DomainUpdateOne) ClearUpdatedAt() *DomainUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -642,8 +702,14 @@ func (_u *DomainUpdateOne) sqlSave(ctx context.Context) (_node *Domain, err erro
 	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(domain.FieldURL, field.TypeString, value)
 	}
+	if _u.mutation.URLCleared() {
+		_spec.ClearField(domain.FieldURL, field.TypeString)
+	}
 	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(domain.FieldIcon, field.TypeString, value)
+	}
+	if _u.mutation.IconCleared() {
+		_spec.ClearField(domain.FieldIcon, field.TypeString)
 	}
 	if value, ok := _u.mutation.TagCount(); ok {
 		_spec.SetField(domain.FieldTagCount, field.TypeInt, value)
@@ -657,8 +723,14 @@ func (_u *DomainUpdateOne) sqlSave(ctx context.Context) (_node *Domain, err erro
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(domain.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(domain.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(domain.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{

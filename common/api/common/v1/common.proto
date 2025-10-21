@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common.api.common.v1;
+
+option go_package = "common/api/common/v1;v1";
+
+message PageRequest {
+  uint32 page = 1;
+  uint32 size = 2;
+}
+
+message PageReply {
+  uint32 total = 1;
+  uint32 page = 2;
+  uint32 size = 3;
+}

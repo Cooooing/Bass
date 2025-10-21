@@ -39,15 +39,39 @@ func (_c *DomainCreate) SetStatus(v int) *DomainCreate {
 	return _c
 }
 
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *DomainCreate) SetNillableStatus(v *int) *DomainCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
 // SetURL sets the "url" field.
 func (_c *DomainCreate) SetURL(v string) *DomainCreate {
 	_c.mutation.SetURL(v)
 	return _c
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (_c *DomainCreate) SetNillableURL(v *string) *DomainCreate {
+	if v != nil {
+		_c.SetURL(*v)
+	}
+	return _c
+}
+
 // SetIcon sets the "icon" field.
 func (_c *DomainCreate) SetIcon(v string) *DomainCreate {
 	_c.mutation.SetIcon(v)
+	return _c
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_c *DomainCreate) SetNillableIcon(v *string) *DomainCreate {
+	if v != nil {
+		_c.SetIcon(*v)
+	}
 	return _c
 }
 
@@ -157,6 +181,10 @@ func (_c *DomainCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *DomainCreate) defaults() {
+	if _, ok := _c.mutation.Status(); !ok {
+		v := domain.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.TagCount(); !ok {
 		v := domain.DefaultTagCount
 		_c.mutation.SetTagCount(v)
@@ -196,23 +224,11 @@ func (_c *DomainCreate) check() error {
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Domain.status"`)}
 	}
-	if _, ok := _c.mutation.URL(); !ok {
-		return &ValidationError{Name: "url", err: errors.New(`gen: missing required field "Domain.url"`)}
-	}
-	if _, ok := _c.mutation.Icon(); !ok {
-		return &ValidationError{Name: "icon", err: errors.New(`gen: missing required field "Domain.icon"`)}
-	}
 	if _, ok := _c.mutation.TagCount(); !ok {
 		return &ValidationError{Name: "tag_count", err: errors.New(`gen: missing required field "Domain.tag_count"`)}
 	}
 	if _, ok := _c.mutation.IsNav(); !ok {
 		return &ValidationError{Name: "is_nav", err: errors.New(`gen: missing required field "Domain.is_nav"`)}
-	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "Domain.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "Domain.updated_at"`)}
 	}
 	return nil
 }
@@ -254,11 +270,11 @@ func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(domain.FieldURL, field.TypeString, value)
-		_node.URL = value
+		_node.URL = &value
 	}
 	if value, ok := _c.mutation.Icon(); ok {
 		_spec.SetField(domain.FieldIcon, field.TypeString, value)
-		_node.Icon = value
+		_node.Icon = &value
 	}
 	if value, ok := _c.mutation.TagCount(); ok {
 		_spec.SetField(domain.FieldTagCount, field.TypeInt, value)

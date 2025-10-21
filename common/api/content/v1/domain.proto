@@ -1,11 +1,13 @@
 syntax = "proto3";
 
-package content.v1;
+package common.api.content.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
 
-option go_package = "/content/v1;v1";
+option go_package = "common/api/content/v1;v1";
 
 // 领域服务
 service DomainService {
@@ -34,11 +36,53 @@ service DomainService {
   }
 }
 
-message AddDomainRequest {}
-message AddDomainReply {}
+message Domain {
+  google.protobuf.Timestamp created_at = 1;
+  google.protobuf.Timestamp updated_at = 2;
+  int64 id = 3;
+  string name = 4;
+  string description = 5;
+  int32 status = 6;
+  string url = 7;
+  string icon = 8;
+  int64 tagCount = 9;
+  bool isNav = 10;
+}
 
-message GetDomainRequest {}
-message GetDomainReply {}
+message AddDomainRequest {
+  string name = 1;
+  string description = 2;
+  int32 status = 3;
+  string url = 4;
+  string icon = 5;
+  bool isNav = 6;
+}
+message AddDomainReply {
+  bool success = 1;
+}
 
- message UpdateDomainRequest {}
- message UpdateDomainReply {}
+message GetDomainRequest {
+  optional common.v1.PageRequest page = 1;
+  string name = 2;
+  string description = 3;
+  int32 status = 4;
+  string url = 5;
+  string icon = 6;
+  bool isNav = 7;
+}
+message GetDomainReply {
+  optional common.v1.PageReply page = 1;
+  repeated Domain data = 2;
+}
+
+message UpdateDomainRequest {
+  string name = 1;
+  string description = 2;
+  int32 status = 3;
+  string url = 4;
+  string icon = 5;
+  bool isNav = 6;
+}
+message UpdateDomainReply {
+  bool success = 1;
+}

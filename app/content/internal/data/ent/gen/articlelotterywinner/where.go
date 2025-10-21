@@ -245,6 +245,16 @@ func CreatedAtLTE(v time.Time) predicate.ArticleLotteryWinner {
 	return predicate.ArticleLotteryWinner(sql.FieldLTE(FieldCreatedAt, v))
 }
 
+// CreatedAtIsNil applies the IsNil predicate on the "created_at" field.
+func CreatedAtIsNil() predicate.ArticleLotteryWinner {
+	return predicate.ArticleLotteryWinner(sql.FieldIsNull(FieldCreatedAt))
+}
+
+// CreatedAtNotNil applies the NotNil predicate on the "created_at" field.
+func CreatedAtNotNil() predicate.ArticleLotteryWinner {
+	return predicate.ArticleLotteryWinner(sql.FieldNotNull(FieldCreatedAt))
+}
+
 // UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
 func UpdatedAtEQ(v time.Time) predicate.ArticleLotteryWinner {
 	return predicate.ArticleLotteryWinner(sql.FieldEQ(FieldUpdatedAt, v))
@@ -283,6 +293,16 @@ func UpdatedAtLT(v time.Time) predicate.ArticleLotteryWinner {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.ArticleLotteryWinner {
 	return predicate.ArticleLotteryWinner(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIsNil applies the IsNil predicate on the "updated_at" field.
+func UpdatedAtIsNil() predicate.ArticleLotteryWinner {
+	return predicate.ArticleLotteryWinner(sql.FieldIsNull(FieldUpdatedAt))
+}
+
+// UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
+func UpdatedAtNotNil() predicate.ArticleLotteryWinner {
+	return predicate.ArticleLotteryWinner(sql.FieldNotNull(FieldUpdatedAt))
 }
 
 // HasLottery applies the HasEdge predicate on the "lottery" edge.

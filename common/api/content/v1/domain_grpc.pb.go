@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DomainService_Add_FullMethodName    = "/content.v1.DomainService/Add"
-	DomainService_Get_FullMethodName    = "/content.v1.DomainService/Get"
-	DomainService_Update_FullMethodName = "/content.v1.DomainService/Update"
+	DomainService_Add_FullMethodName    = "/common.api.content.v1.DomainService/Add"
+	DomainService_Get_FullMethodName    = "/common.api.content.v1.DomainService/Get"
+	DomainService_Update_FullMethodName = "/common.api.content.v1.DomainService/Update"
 )
 
 // DomainServiceClient is the client API for DomainService service.
@@ -186,7 +186,7 @@ func _DomainService_Update_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "content.v1.DomainService",
+	ServiceName: "common.api.content.v1.DomainService",
 	HandlerType: (*DomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

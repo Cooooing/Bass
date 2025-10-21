@@ -1,11 +1,12 @@
 syntax = "proto3";
 
-package user.v1;
+package common.api.common.user.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "common/v1/common.proto";
 
-option go_package = "/user/v1;v1";
+option go_package = "user/v1;v1";
 
 // Authentication 服务
 service Authentication {

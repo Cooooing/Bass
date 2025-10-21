@@ -54,6 +54,14 @@ func (_c *TagCreate) SetStatus(v int) *TagCreate {
 	return _c
 }
 
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *TagCreate) SetNillableStatus(v *int) *TagCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
 // SetArticleCount sets the "article_count" field.
 func (_c *TagCreate) SetArticleCount(v int) *TagCreate {
 	_c.mutation.SetArticleCount(v)
@@ -151,6 +159,10 @@ func (_c *TagCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *TagCreate) defaults() {
+	if _, ok := _c.mutation.Status(); !ok {
+		v := tag.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.ArticleCount(); !ok {
 		v := tag.DefaultArticleCount
 		_c.mutation.SetArticleCount(v)
@@ -183,12 +195,6 @@ func (_c *TagCreate) check() error {
 	}
 	if _, ok := _c.mutation.ArticleCount(); !ok {
 		return &ValidationError{Name: "article_count", err: errors.New(`gen: missing required field "Tag.article_count"`)}
-	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "Tag.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "Tag.updated_at"`)}
 	}
 	return nil
 }

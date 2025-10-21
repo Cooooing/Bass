@@ -19,9 +19,9 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationDomainServiceAdd = "/content.v1.DomainService/Add"
-const OperationDomainServiceGet = "/content.v1.DomainService/Get"
-const OperationDomainServiceUpdate = "/content.v1.DomainService/Update"
+const OperationDomainServiceAdd = "/common.api.content.v1.DomainService/Add"
+const OperationDomainServiceGet = "/common.api.content.v1.DomainService/Get"
+const OperationDomainServiceUpdate = "/common.api.content.v1.DomainService/Update"
 
 type DomainServiceHTTPServer interface {
 	// Add 新增领域

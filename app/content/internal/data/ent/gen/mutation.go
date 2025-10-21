@@ -1243,9 +1243,22 @@ func (m *ArticleMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err e
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticleMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[article.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticleMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[article.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticleMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, article.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1279,9 +1292,22 @@ func (m *ArticleMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err e
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticleMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[article.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticleMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[article.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticleMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, article.FieldUpdatedAt)
 }
 
 // AddPostscriptIDs adds the "postscripts" edge to the ArticlePostscript entity by ids.
@@ -2118,6 +2144,12 @@ func (m *ArticleMutation) ClearedFields() []string {
 	if m.FieldCleared(article.FieldAcceptedAnswerID) {
 		fields = append(fields, article.FieldAcceptedAnswerID)
 	}
+	if m.FieldCleared(article.FieldCreatedAt) {
+		fields = append(fields, article.FieldCreatedAt)
+	}
+	if m.FieldCleared(article.FieldUpdatedAt) {
+		fields = append(fields, article.FieldUpdatedAt)
+	}
 	return fields
 }
 
@@ -2137,6 +2169,12 @@ func (m *ArticleMutation) ClearField(name string) error {
 		return nil
 	case article.FieldAcceptedAnswerID:
 		m.ClearAcceptedAnswerID()
+		return nil
+	case article.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case article.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Article nullable field %s", name)
@@ -2816,9 +2854,22 @@ func (m *ArticleLotteryMutation) OldCreatedAt(ctx context.Context) (v *time.Time
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticleLotteryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[articlelottery.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticleLotteryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[articlelottery.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticleLotteryMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, articlelottery.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -2852,9 +2903,22 @@ func (m *ArticleLotteryMutation) OldUpdatedAt(ctx context.Context) (v *time.Time
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticleLotteryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[articlelottery.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticleLotteryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[articlelottery.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticleLotteryMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, articlelottery.FieldUpdatedAt)
 }
 
 // ClearArticle clears the "article" edge to the Article entity.
@@ -3205,6 +3269,12 @@ func (m *ArticleLotteryMutation) ClearedFields() []string {
 	if m.FieldCleared(articlelottery.FieldEndAt) {
 		fields = append(fields, articlelottery.FieldEndAt)
 	}
+	if m.FieldCleared(articlelottery.FieldCreatedAt) {
+		fields = append(fields, articlelottery.FieldCreatedAt)
+	}
+	if m.FieldCleared(articlelottery.FieldUpdatedAt) {
+		fields = append(fields, articlelottery.FieldUpdatedAt)
+	}
 	return fields
 }
 
@@ -3227,6 +3297,12 @@ func (m *ArticleLotteryMutation) ClearField(name string) error {
 		return nil
 	case articlelottery.FieldEndAt:
 		m.ClearEndAt()
+		return nil
+	case articlelottery.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case articlelottery.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown ArticleLottery nullable field %s", name)
@@ -3628,9 +3704,22 @@ func (m *ArticleLotteryParticipantMutation) OldCreatedAt(ctx context.Context) (v
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticleLotteryParticipantMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[articlelotteryparticipant.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticleLotteryParticipantMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[articlelotteryparticipant.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticleLotteryParticipantMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, articlelotteryparticipant.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -3664,9 +3753,22 @@ func (m *ArticleLotteryParticipantMutation) OldUpdatedAt(ctx context.Context) (v
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticleLotteryParticipantMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[articlelotteryparticipant.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticleLotteryParticipantMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[articlelotteryparticipant.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticleLotteryParticipantMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, articlelotteryparticipant.FieldUpdatedAt)
 }
 
 // ClearLottery clears the "lottery" edge to the ArticleLottery entity.
@@ -3857,7 +3959,14 @@ func (m *ArticleLotteryParticipantMutation) AddField(name string, value ent.Valu
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArticleLotteryParticipantMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(articlelotteryparticipant.FieldCreatedAt) {
+		fields = append(fields, articlelotteryparticipant.FieldCreatedAt)
+	}
+	if m.FieldCleared(articlelotteryparticipant.FieldUpdatedAt) {
+		fields = append(fields, articlelotteryparticipant.FieldUpdatedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3870,6 +3979,14 @@ func (m *ArticleLotteryParticipantMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArticleLotteryParticipantMutation) ClearField(name string) error {
+	switch name {
+	case articlelotteryparticipant.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case articlelotteryparticipant.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown ArticleLotteryParticipant nullable field %s", name)
 }
 
@@ -4243,9 +4360,22 @@ func (m *ArticleLotteryWinnerMutation) OldCreatedAt(ctx context.Context) (v *tim
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticleLotteryWinnerMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[articlelotterywinner.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticleLotteryWinnerMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[articlelotterywinner.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticleLotteryWinnerMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, articlelotterywinner.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -4279,9 +4409,22 @@ func (m *ArticleLotteryWinnerMutation) OldUpdatedAt(ctx context.Context) (v *tim
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticleLotteryWinnerMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[articlelotterywinner.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticleLotteryWinnerMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[articlelotterywinner.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticleLotteryWinnerMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, articlelotterywinner.FieldUpdatedAt)
 }
 
 // ClearLottery clears the "lottery" edge to the ArticleLottery entity.
@@ -4486,7 +4629,14 @@ func (m *ArticleLotteryWinnerMutation) AddField(name string, value ent.Value) er
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArticleLotteryWinnerMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(articlelotterywinner.FieldCreatedAt) {
+		fields = append(fields, articlelotterywinner.FieldCreatedAt)
+	}
+	if m.FieldCleared(articlelotterywinner.FieldUpdatedAt) {
+		fields = append(fields, articlelotterywinner.FieldUpdatedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -4499,6 +4649,14 @@ func (m *ArticleLotteryWinnerMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArticleLotteryWinnerMutation) ClearField(name string) error {
+	switch name {
+	case articlelotterywinner.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case articlelotterywinner.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown ArticleLotteryWinner nullable field %s", name)
 }
 
@@ -4817,9 +4975,22 @@ func (m *ArticlePostscriptMutation) OldCreatedAt(ctx context.Context) (v *time.T
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticlePostscriptMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[articlepostscript.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticlePostscriptMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[articlepostscript.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticlePostscriptMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, articlepostscript.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -4853,9 +5024,22 @@ func (m *ArticlePostscriptMutation) OldUpdatedAt(ctx context.Context) (v *time.T
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticlePostscriptMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[articlepostscript.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticlePostscriptMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[articlepostscript.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticlePostscriptMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, articlepostscript.FieldUpdatedAt)
 }
 
 // ClearArticle clears the "article" edge to the Article entity.
@@ -5034,7 +5218,14 @@ func (m *ArticlePostscriptMutation) AddField(name string, value ent.Value) error
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArticlePostscriptMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(articlepostscript.FieldCreatedAt) {
+		fields = append(fields, articlepostscript.FieldCreatedAt)
+	}
+	if m.FieldCleared(articlepostscript.FieldUpdatedAt) {
+		fields = append(fields, articlepostscript.FieldUpdatedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -5047,6 +5238,14 @@ func (m *ArticlePostscriptMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArticlePostscriptMutation) ClearField(name string) error {
+	switch name {
+	case articlepostscript.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case articlepostscript.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown ArticlePostscript nullable field %s", name)
 }
 
@@ -5644,9 +5843,22 @@ func (m *ArticleVoteMutation) OldCreatedAt(ctx context.Context) (v *time.Time, e
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticleVoteMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[articlevote.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticleVoteMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[articlevote.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticleVoteMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, articlevote.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -5680,9 +5892,22 @@ func (m *ArticleVoteMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, e
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticleVoteMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[articlevote.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticleVoteMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[articlevote.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticleVoteMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, articlevote.FieldUpdatedAt)
 }
 
 // ClearArticle clears the "article" edge to the Article entity.
@@ -6007,6 +6232,12 @@ func (m *ArticleVoteMutation) ClearedFields() []string {
 	if m.FieldCleared(articlevote.FieldEndAt) {
 		fields = append(fields, articlevote.FieldEndAt)
 	}
+	if m.FieldCleared(articlevote.FieldCreatedAt) {
+		fields = append(fields, articlevote.FieldCreatedAt)
+	}
+	if m.FieldCleared(articlevote.FieldUpdatedAt) {
+		fields = append(fields, articlevote.FieldUpdatedAt)
+	}
 	return fields
 }
 
@@ -6029,6 +6260,12 @@ func (m *ArticleVoteMutation) ClearField(name string) error {
 		return nil
 	case articlevote.FieldEndAt:
 		m.ClearEndAt()
+		return nil
+	case articlevote.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case articlevote.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown ArticleVote nullable field %s", name)
@@ -6505,9 +6742,22 @@ func (m *ArticleVoteRecordMutation) OldCreatedAt(ctx context.Context) (v *time.T
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ArticleVoteRecordMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[articlevoterecord.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ArticleVoteRecordMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[articlevoterecord.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *ArticleVoteRecordMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, articlevoterecord.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -6541,9 +6791,22 @@ func (m *ArticleVoteRecordMutation) OldUpdatedAt(ctx context.Context) (v *time.T
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ArticleVoteRecordMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[articlevoterecord.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ArticleVoteRecordMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[articlevoterecord.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *ArticleVoteRecordMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, articlevoterecord.FieldUpdatedAt)
 }
 
 // ClearVote clears the "vote" edge to the ArticleVote entity.
@@ -6774,7 +7037,14 @@ func (m *ArticleVoteRecordMutation) AddField(name string, value ent.Value) error
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ArticleVoteRecordMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(articlevoterecord.FieldCreatedAt) {
+		fields = append(fields, articlevoterecord.FieldCreatedAt)
+	}
+	if m.FieldCleared(articlevoterecord.FieldUpdatedAt) {
+		fields = append(fields, articlevoterecord.FieldUpdatedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -6787,6 +7057,14 @@ func (m *ArticleVoteRecordMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ArticleVoteRecordMutation) ClearField(name string) error {
+	switch name {
+	case articlevoterecord.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case articlevoterecord.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown ArticleVoteRecord nullable field %s", name)
 }
 
@@ -7568,9 +7846,22 @@ func (m *CommentMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err e
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *CommentMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[comment.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *CommentMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[comment.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *CommentMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, comment.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -7604,9 +7895,22 @@ func (m *CommentMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err e
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *CommentMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[comment.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *CommentMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[comment.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *CommentMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, comment.FieldUpdatedAt)
 }
 
 // ClearArticle clears the "article" edge to the Article entity.
@@ -8066,6 +8370,12 @@ func (m *CommentMutation) ClearedFields() []string {
 	if m.FieldCleared(comment.FieldParentID) {
 		fields = append(fields, comment.FieldParentID)
 	}
+	if m.FieldCleared(comment.FieldCreatedAt) {
+		fields = append(fields, comment.FieldCreatedAt)
+	}
+	if m.FieldCleared(comment.FieldUpdatedAt) {
+		fields = append(fields, comment.FieldUpdatedAt)
+	}
 	return fields
 }
 
@@ -8082,6 +8392,12 @@ func (m *CommentMutation) ClearField(name string) error {
 	switch name {
 	case comment.FieldParentID:
 		m.ClearParentID()
+		return nil
+	case comment.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case comment.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Comment nullable field %s", name)
@@ -8520,7 +8836,7 @@ func (m *DomainMutation) URL() (r string, exists bool) {
 // OldURL returns the old "url" field's value of the Domain entity.
 // If the Domain object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DomainMutation) OldURL(ctx context.Context) (v string, err error) {
+func (m *DomainMutation) OldURL(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldURL is only allowed on UpdateOne operations")
 	}
@@ -8534,9 +8850,22 @@ func (m *DomainMutation) OldURL(ctx context.Context) (v string, err error) {
 	return oldValue.URL, nil
 }
 
+// ClearURL clears the value of the "url" field.
+func (m *DomainMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[domain.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *DomainMutation) URLCleared() bool {
+	_, ok := m.clearedFields[domain.FieldURL]
+	return ok
+}
+
 // ResetURL resets all changes to the "url" field.
 func (m *DomainMutation) ResetURL() {
 	m.url = nil
+	delete(m.clearedFields, domain.FieldURL)
 }
 
 // SetIcon sets the "icon" field.
@@ -8556,7 +8885,7 @@ func (m *DomainMutation) Icon() (r string, exists bool) {
 // OldIcon returns the old "icon" field's value of the Domain entity.
 // If the Domain object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DomainMutation) OldIcon(ctx context.Context) (v string, err error) {
+func (m *DomainMutation) OldIcon(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIcon is only allowed on UpdateOne operations")
 	}
@@ -8570,9 +8899,22 @@ func (m *DomainMutation) OldIcon(ctx context.Context) (v string, err error) {
 	return oldValue.Icon, nil
 }
 
+// ClearIcon clears the value of the "icon" field.
+func (m *DomainMutation) ClearIcon() {
+	m.icon = nil
+	m.clearedFields[domain.FieldIcon] = struct{}{}
+}
+
+// IconCleared returns if the "icon" field was cleared in this mutation.
+func (m *DomainMutation) IconCleared() bool {
+	_, ok := m.clearedFields[domain.FieldIcon]
+	return ok
+}
+
 // ResetIcon resets all changes to the "icon" field.
 func (m *DomainMutation) ResetIcon() {
 	m.icon = nil
+	delete(m.clearedFields, domain.FieldIcon)
 }
 
 // SetTagCount sets the "tag_count" field.
@@ -8698,9 +9040,22 @@ func (m *DomainMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err er
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *DomainMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[domain.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *DomainMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[domain.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *DomainMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, domain.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -8734,9 +9089,22 @@ func (m *DomainMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err er
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *DomainMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[domain.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *DomainMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[domain.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *DomainMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, domain.FieldUpdatedAt)
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
@@ -9036,7 +9404,20 @@ func (m *DomainMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *DomainMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(domain.FieldURL) {
+		fields = append(fields, domain.FieldURL)
+	}
+	if m.FieldCleared(domain.FieldIcon) {
+		fields = append(fields, domain.FieldIcon)
+	}
+	if m.FieldCleared(domain.FieldCreatedAt) {
+		fields = append(fields, domain.FieldCreatedAt)
+	}
+	if m.FieldCleared(domain.FieldUpdatedAt) {
+		fields = append(fields, domain.FieldUpdatedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -9049,6 +9430,20 @@ func (m *DomainMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *DomainMutation) ClearField(name string) error {
+	switch name {
+	case domain.FieldURL:
+		m.ClearURL()
+		return nil
+	case domain.FieldIcon:
+		m.ClearIcon()
+		return nil
+	case domain.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case domain.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown Domain nullable field %s", name)
 }
 
@@ -9579,9 +9974,22 @@ func (m *TagMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err error
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *TagMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[tag.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *TagMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[tag.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *TagMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, tag.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -9615,9 +10023,22 @@ func (m *TagMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err error
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *TagMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[tag.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *TagMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[tag.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *TagMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, tag.FieldUpdatedAt)
 }
 
 // AddArticleIDs adds the "article" edge to the Article entity by ids.
@@ -9932,6 +10353,12 @@ func (m *TagMutation) ClearedFields() []string {
 	if m.FieldCleared(tag.FieldDomainID) {
 		fields = append(fields, tag.FieldDomainID)
 	}
+	if m.FieldCleared(tag.FieldCreatedAt) {
+		fields = append(fields, tag.FieldCreatedAt)
+	}
+	if m.FieldCleared(tag.FieldUpdatedAt) {
+		fields = append(fields, tag.FieldUpdatedAt)
+	}
 	return fields
 }
 
@@ -9948,6 +10375,12 @@ func (m *TagMutation) ClearField(name string) error {
 	switch name {
 	case tag.FieldDomainID:
 		m.ClearDomainID()
+		return nil
+	case tag.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case tag.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Tag nullable field %s", name)

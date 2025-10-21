@@ -238,6 +238,12 @@ func (_u *CommentUpdate) SetNillableCreatedAt(v *time.Time) *CommentUpdate {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *CommentUpdate) ClearCreatedAt() *CommentUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *CommentUpdate) SetUpdatedAt(v time.Time) *CommentUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -249,6 +255,12 @@ func (_u *CommentUpdate) SetNillableUpdatedAt(v *time.Time) *CommentUpdate {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *CommentUpdate) ClearUpdatedAt() *CommentUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -415,8 +427,14 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(comment.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(comment.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(comment.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(comment.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -750,6 +768,12 @@ func (_u *CommentUpdateOne) SetNillableCreatedAt(v *time.Time) *CommentUpdateOne
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *CommentUpdateOne) ClearCreatedAt() *CommentUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *CommentUpdateOne) SetUpdatedAt(v time.Time) *CommentUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -761,6 +785,12 @@ func (_u *CommentUpdateOne) SetNillableUpdatedAt(v *time.Time) *CommentUpdateOne
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *CommentUpdateOne) ClearUpdatedAt() *CommentUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -957,8 +987,14 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(comment.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(comment.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(comment.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(comment.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{

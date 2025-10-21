@@ -215,12 +215,6 @@ func (_c *ArticleVoteCreate) check() error {
 	if _, ok := _c.mutation.TotalCount(); !ok {
 		return &ValidationError{Name: "total_count", err: errors.New(`gen: missing required field "ArticleVote.total_count"`)}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "ArticleVote.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "ArticleVote.updated_at"`)}
-	}
 	if len(_c.mutation.ArticleIDs()) == 0 {
 		return &ValidationError{Name: "article", err: errors.New(`gen: missing required edge "ArticleVote.article"`)}
 	}

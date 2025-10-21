@@ -930,7 +930,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\aCollect\x12!.content.v1.CollectArticleRequest\x1a\x1f.content.v1.CollectArticleReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/article/collect\x12e\n" +
 	"\x05Watch\x12\x1f.content.v1.WatchArticleRequest\x1a\x1d.content.v1.WatchArticleReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/article/watch\x12\x81\x01\n" +
 	"\fAcceptAnswer\x12&.content.v1.AcceptAnswerArticleRequest\x1a$.content.v1.AcceptAnswerArticleReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/article/acceptAnswer\x12\x81\x01\n" +
-	"\fUpdateStatus\x12&.content.v1.UpdateStatusArticleRequest\x1a$.content.v1.UpdateStatusArticleReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/article/updateStatusB\x10Z\x0e/content/v1;v1b\x06proto3"
+	"\fUpdateStatus\x12&.content.v1.UpdateStatusArticleRequest\x1a$.content.v1.UpdateStatusArticleReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/article/updateStatusB\x0fZ\rcontent/v1;v1b\x06proto3"
 
 var (
 	file_content_v1_article_proto_rawDescOnce sync.Once

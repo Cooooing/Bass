@@ -36,12 +36,12 @@ func (User) Fields() []ent.Field {
 		field.Int("follower_count").Comment("粉丝数").Default(0),
 
 		// --- 登录信息 ---
-		field.Time("last_login_time").Comment("最近登录时间").Optional().Nillable(),
+		field.Time("last_login_time").Comment("最近登录时间").Optional(),
 		field.String("last_login_ip").Comment("最近登录IP").Optional(),
 
 		// --- 行为统计 ---
 		field.Int("online_minutes").Comment("在线总时长（分钟）").Default(0),
-		field.Time("last_checkin_time").Comment("最近签到时间").Optional().Nillable(),
+		field.Time("last_checkin_time").Comment("最近签到时间").Optional(),
 		field.Int("current_checkin_streak").Comment("当前连续签到天数").Default(0),
 		field.Int("longest_checkin_streak").Comment("最长连续签到天数").Default(0),
 

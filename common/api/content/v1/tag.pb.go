@@ -105,7 +105,7 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\vGetTagReply2c\n" +
 	"\n" +
 	"TagService\x12U\n" +
-	"\x03Get\x12\x19.content.v1.GetTagRequest\x1a\x17.content.v1.GetTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/getB\x10Z\x0e/content/v1;v1b\x06proto3"
+	"\x03Get\x12\x19.content.v1.GetTagRequest\x1a\x17.content.v1.GetTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/getB\x0fZ\rcontent/v1;v1b\x06proto3"
 
 var (
 	file_content_v1_tag_proto_rawDescOnce sync.Once

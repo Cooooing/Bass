@@ -197,12 +197,6 @@ func (_c *ArticleLotteryCreate) check() error {
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "ArticleLottery.status"`)}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "ArticleLottery.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "ArticleLottery.updated_at"`)}
-	}
 	if len(_c.mutation.ArticleIDs()) == 0 {
 		return &ValidationError{Name: "article", err: errors.New(`gen: missing required edge "ArticleLottery.article"`)}
 	}

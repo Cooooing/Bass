@@ -325,6 +325,16 @@ func URLHasSuffix(v string) predicate.Domain {
 	return predicate.Domain(sql.FieldHasSuffix(FieldURL, v))
 }
 
+// URLIsNil applies the IsNil predicate on the "url" field.
+func URLIsNil() predicate.Domain {
+	return predicate.Domain(sql.FieldIsNull(FieldURL))
+}
+
+// URLNotNil applies the NotNil predicate on the "url" field.
+func URLNotNil() predicate.Domain {
+	return predicate.Domain(sql.FieldNotNull(FieldURL))
+}
+
 // URLEqualFold applies the EqualFold predicate on the "url" field.
 func URLEqualFold(v string) predicate.Domain {
 	return predicate.Domain(sql.FieldEqualFold(FieldURL, v))
@@ -388,6 +398,16 @@ func IconHasPrefix(v string) predicate.Domain {
 // IconHasSuffix applies the HasSuffix predicate on the "icon" field.
 func IconHasSuffix(v string) predicate.Domain {
 	return predicate.Domain(sql.FieldHasSuffix(FieldIcon, v))
+}
+
+// IconIsNil applies the IsNil predicate on the "icon" field.
+func IconIsNil() predicate.Domain {
+	return predicate.Domain(sql.FieldIsNull(FieldIcon))
+}
+
+// IconNotNil applies the NotNil predicate on the "icon" field.
+func IconNotNil() predicate.Domain {
+	return predicate.Domain(sql.FieldNotNull(FieldIcon))
 }
 
 // IconEqualFold applies the EqualFold predicate on the "icon" field.
@@ -490,6 +510,16 @@ func CreatedAtLTE(v time.Time) predicate.Domain {
 	return predicate.Domain(sql.FieldLTE(FieldCreatedAt, v))
 }
 
+// CreatedAtIsNil applies the IsNil predicate on the "created_at" field.
+func CreatedAtIsNil() predicate.Domain {
+	return predicate.Domain(sql.FieldIsNull(FieldCreatedAt))
+}
+
+// CreatedAtNotNil applies the NotNil predicate on the "created_at" field.
+func CreatedAtNotNil() predicate.Domain {
+	return predicate.Domain(sql.FieldNotNull(FieldCreatedAt))
+}
+
 // UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
 func UpdatedAtEQ(v time.Time) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldUpdatedAt, v))
@@ -528,6 +558,16 @@ func UpdatedAtLT(v time.Time) predicate.Domain {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.Domain {
 	return predicate.Domain(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIsNil applies the IsNil predicate on the "updated_at" field.
+func UpdatedAtIsNil() predicate.Domain {
+	return predicate.Domain(sql.FieldIsNull(FieldUpdatedAt))
+}
+
+// UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
+func UpdatedAtNotNil() predicate.Domain {
+	return predicate.Domain(sql.FieldNotNull(FieldUpdatedAt))
 }
 
 // HasTags applies the HasEdge predicate on the "tags" edge.

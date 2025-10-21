@@ -74,6 +74,8 @@ var (
 	NameValidator func(string) error
 	// DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
 	DescriptionValidator func(string) error
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int
 	// DefaultTagCount holds the default value on creation for the "tag_count" field.
 	DefaultTagCount int
 	// DefaultIsNav holds the default value on creation for the "is_nav" field.

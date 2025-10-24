@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	ArticleService_Add_FullMethodName           = "/content.v1.ArticleService/Add"
+	ArticleService_Publish_FullMethodName       = "/content.v1.ArticleService/Publish"
 	ArticleService_Update_FullMethodName        = "/content.v1.ArticleService/Update"
 	ArticleService_Delete_FullMethodName        = "/content.v1.ArticleService/Delete"
 	ArticleService_Get_FullMethodName           = "/content.v1.ArticleService/Get"
@@ -30,7 +31,6 @@ const (
 	ArticleService_Collect_FullMethodName       = "/content.v1.ArticleService/Collect"
 	ArticleService_Watch_FullMethodName         = "/content.v1.ArticleService/Watch"
 	ArticleService_AcceptAnswer_FullMethodName  = "/content.v1.ArticleService/AcceptAnswer"
-	ArticleService_UpdateStatus_FullMethodName  = "/content.v1.ArticleService/UpdateStatus"
 )
 
 // ArticleServiceClient is the client API for ArticleService service.
@@ -41,7 +41,9 @@ const (
 type ArticleServiceClient interface {
 	// 新增文章
 	Add(ctx context.Context, in *AddArticleRequest, opts ...grpc.CallOption) (*AddArticleReply, error)
-	// 修改文章
+	// 发布文章（从草稿发布）
+	Publish(ctx context.Context, in *PublishArticleRequest, opts ...grpc.CallOption) (*PublishArticleReply, error)
+	// 修改文章（管理员使用）
 	Update(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*UpdateArticleReply, error)
 	// 删除文章（仅草稿）
 	Delete(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleReply, error)
@@ -53,7 +55,7 @@ type ArticleServiceClient interface {
 	Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error)
 	// 感谢文章
 	Thank(ctx context.Context, in *ThankArticleRequest, opts ...grpc.CallOption) (*ThankArticleReply, error)
-	// 点赞/踩文章
+	// 点赞文章
 	Like(ctx context.Context, in *LikeArticleRequest, opts ...grpc.CallOption) (*LikeArticleReply, error)
 	// 收藏文章
 	Collect(ctx context.Context, in *CollectArticleRequest, opts ...grpc.CallOption) (*CollectArticleReply, error)
@@ -61,8 +63,6 @@ type ArticleServiceClient interface {
 	Watch(ctx context.Context, in *WatchArticleRequest, opts ...grpc.CallOption) (*WatchArticleReply, error)
 	// 采纳评论
 	AcceptAnswer(ctx context.Context, in *AcceptAnswerArticleRequest, opts ...grpc.CallOption) (*AcceptAnswerArticleReply, error)
-	// 修改文章状态
-	UpdateStatus(ctx context.Context, in *UpdateStatusArticleRequest, opts ...grpc.CallOption) (*UpdateStatusArticleReply, error)
 }
 
 type articleServiceClient struct {
@@ -77,6 +77,16 @@ func (c *articleServiceClient) Add(ctx context.Context, in *AddArticleRequest, o
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddArticleReply)
 	err := c.cc.Invoke(ctx, ArticleService_Add_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) Publish(ctx context.Context, in *PublishArticleRequest, opts ...grpc.CallOption) (*PublishArticleReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PublishArticleReply)
+	err := c.cc.Invoke(ctx, ArticleService_Publish_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -183,16 +193,6 @@ func (c *articleServiceClient) AcceptAnswer(ctx context.Context, in *AcceptAnswe
 	return out, nil
 }
 
-func (c *articleServiceClient) UpdateStatus(ctx context.Context, in *UpdateStatusArticleRequest, opts ...grpc.CallOption) (*UpdateStatusArticleReply, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateStatusArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_UpdateStatus_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ArticleServiceServer is the server API for ArticleService service.
 // All implementations must embed UnimplementedArticleServiceServer
 // for forward compatibility.
@@ -201,7 +201,9 @@ func (c *articleServiceClient) UpdateStatus(ctx context.Context, in *UpdateStatu
 type ArticleServiceServer interface {
 	// 新增文章
 	Add(context.Context, *AddArticleRequest) (*AddArticleReply, error)
-	// 修改文章
+	// 发布文章（从草稿发布）
+	Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error)
+	// 修改文章（管理员使用）
 	Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error)
 	// 删除文章（仅草稿）
 	Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error)
@@ -213,7 +215,7 @@ type ArticleServiceServer interface {
 	Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error)
 	// 感谢文章
 	Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error)
-	// 点赞/踩文章
+	// 点赞文章
 	Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error)
 	// 收藏文章
 	Collect(context.Context, *CollectArticleRequest) (*CollectArticleReply, error)
@@ -221,8 +223,6 @@ type ArticleServiceServer interface {
 	Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error)
 	// 采纳评论
 	AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error)
-	// 修改文章状态
-	UpdateStatus(context.Context, *UpdateStatusArticleRequest) (*UpdateStatusArticleReply, error)
 	mustEmbedUnimplementedArticleServiceServer()
 }
 
@@ -235,6 +235,9 @@ type UnimplementedArticleServiceServer struct{}
 
 func (UnimplementedArticleServiceServer) Add(context.Context, *AddArticleRequest) (*AddArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (UnimplementedArticleServiceServer) Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Publish not implemented")
 }
 func (UnimplementedArticleServiceServer) Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
@@ -265,9 +268,6 @@ func (UnimplementedArticleServiceServer) Watch(context.Context, *WatchArticleReq
 }
 func (UnimplementedArticleServiceServer) AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AcceptAnswer not implemented")
-}
-func (UnimplementedArticleServiceServer) UpdateStatus(context.Context, *UpdateStatusArticleRequest) (*UpdateStatusArticleReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatus not implemented")
 }
 func (UnimplementedArticleServiceServer) mustEmbedUnimplementedArticleServiceServer() {}
 func (UnimplementedArticleServiceServer) testEmbeddedByValue()                        {}
@@ -304,6 +304,24 @@ func _ArticleService_Add_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).Add(ctx, req.(*AddArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_Publish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).Publish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArticleService_Publish_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).Publish(ctx, req.(*PublishArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -488,24 +506,6 @@ func _ArticleService_AcceptAnswer_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_UpdateStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateStatusArticleRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ArticleServiceServer).UpdateStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ArticleService_UpdateStatus_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).UpdateStatus(ctx, req.(*UpdateStatusArticleRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // ArticleService_ServiceDesc is the grpc.ServiceDesc for ArticleService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -516,6 +516,10 @@ var ArticleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Add",
 			Handler:    _ArticleService_Add_Handler,
+		},
+		{
+			MethodName: "Publish",
+			Handler:    _ArticleService_Publish_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -556,10 +560,6 @@ var ArticleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AcceptAnswer",
 			Handler:    _ArticleService_AcceptAnswer_Handler,
-		},
-		{
-			MethodName: "UpdateStatus",
-			Handler:    _ArticleService_UpdateStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

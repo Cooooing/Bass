@@ -22,6 +22,9 @@ var DataProviderSet = wire.NewSet(
 	NewRedisClient,
 	NewRabbitMQClient,
 
+	NewArticleRepo,
+	NewArticlePostscriptRepo,
+	NewArticleActionRecordRepo,
 	NewDomainRepo,
 
 	util.NewTokenRepo,

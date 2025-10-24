@@ -20,8 +20,8 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	DomainService_Add_FullMethodName    = "/common.api.content.v1.DomainService/Add"
-	DomainService_Get_FullMethodName    = "/common.api.content.v1.DomainService/Get"
 	DomainService_Update_FullMethodName = "/common.api.content.v1.DomainService/Update"
+	DomainService_Get_FullMethodName    = "/common.api.content.v1.DomainService/Get"
 )
 
 // DomainServiceClient is the client API for DomainService service.
@@ -32,10 +32,10 @@ const (
 type DomainServiceClient interface {
 	// 新增领域
 	Add(ctx context.Context, in *AddDomainRequest, opts ...grpc.CallOption) (*AddDomainReply, error)
-	// 查询领域
-	Get(ctx context.Context, in *GetDomainRequest, opts ...grpc.CallOption) (*GetDomainReply, error)
 	// 修改领域信息
 	Update(ctx context.Context, in *UpdateDomainRequest, opts ...grpc.CallOption) (*UpdateDomainReply, error)
+	// 查询领域
+	Get(ctx context.Context, in *GetDomainRequest, opts ...grpc.CallOption) (*GetDomainReply, error)
 }
 
 type domainServiceClient struct {
@@ -56,20 +56,20 @@ func (c *domainServiceClient) Add(ctx context.Context, in *AddDomainRequest, opt
 	return out, nil
 }
 
-func (c *domainServiceClient) Get(ctx context.Context, in *GetDomainRequest, opts ...grpc.CallOption) (*GetDomainReply, error) {
+func (c *domainServiceClient) Update(ctx context.Context, in *UpdateDomainRequest, opts ...grpc.CallOption) (*UpdateDomainReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetDomainReply)
-	err := c.cc.Invoke(ctx, DomainService_Get_FullMethodName, in, out, cOpts...)
+	out := new(UpdateDomainReply)
+	err := c.cc.Invoke(ctx, DomainService_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *domainServiceClient) Update(ctx context.Context, in *UpdateDomainRequest, opts ...grpc.CallOption) (*UpdateDomainReply, error) {
+func (c *domainServiceClient) Get(ctx context.Context, in *GetDomainRequest, opts ...grpc.CallOption) (*GetDomainReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateDomainReply)
-	err := c.cc.Invoke(ctx, DomainService_Update_FullMethodName, in, out, cOpts...)
+	out := new(GetDomainReply)
+	err := c.cc.Invoke(ctx, DomainService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,10 +84,10 @@ func (c *domainServiceClient) Update(ctx context.Context, in *UpdateDomainReques
 type DomainServiceServer interface {
 	// 新增领域
 	Add(context.Context, *AddDomainRequest) (*AddDomainReply, error)
-	// 查询领域
-	Get(context.Context, *GetDomainRequest) (*GetDomainReply, error)
 	// 修改领域信息
 	Update(context.Context, *UpdateDomainRequest) (*UpdateDomainReply, error)
+	// 查询领域
+	Get(context.Context, *GetDomainRequest) (*GetDomainReply, error)
 	mustEmbedUnimplementedDomainServiceServer()
 }
 
@@ -101,11 +101,11 @@ type UnimplementedDomainServiceServer struct{}
 func (UnimplementedDomainServiceServer) Add(context.Context, *AddDomainRequest) (*AddDomainReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedDomainServiceServer) Get(context.Context, *GetDomainRequest) (*GetDomainReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
-}
 func (UnimplementedDomainServiceServer) Update(context.Context, *UpdateDomainRequest) (*UpdateDomainReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedDomainServiceServer) Get(context.Context, *GetDomainRequest) (*GetDomainReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedDomainServiceServer) mustEmbedUnimplementedDomainServiceServer() {}
 func (UnimplementedDomainServiceServer) testEmbeddedByValue()                       {}
@@ -146,24 +146,6 @@ func _DomainService_Add_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DomainService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDomainRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DomainServiceServer).Get(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: DomainService_Get_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DomainServiceServer).Get(ctx, req.(*GetDomainRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _DomainService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateDomainRequest)
 	if err := dec(in); err != nil {
@@ -182,6 +164,24 @@ func _DomainService_Update_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DomainService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDomainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DomainServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DomainService_Get_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DomainServiceServer).Get(ctx, req.(*GetDomainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DomainService_ServiceDesc is the grpc.ServiceDesc for DomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -194,12 +194,12 @@ var DomainService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DomainService_Add_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _DomainService_Get_Handler,
-		},
-		{
 			MethodName: "Update",
 			Handler:    _DomainService_Update_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _DomainService_Get_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

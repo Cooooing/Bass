@@ -110,6 +110,12 @@ func (_u *GroupUpdate) SetNillableCreatedAt(v *time.Time) *GroupUpdate {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *GroupUpdate) ClearCreatedAt() *GroupUpdate {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *GroupUpdate) SetUpdatedAt(v time.Time) *GroupUpdate {
 	_u.mutation.SetUpdatedAt(v)
@@ -121,6 +127,12 @@ func (_u *GroupUpdate) SetNillableUpdatedAt(v *time.Time) *GroupUpdate {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *GroupUpdate) ClearUpdatedAt() *GroupUpdate {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -204,8 +216,14 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(group.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(group.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(group.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -309,6 +327,12 @@ func (_u *GroupUpdateOne) SetNillableCreatedAt(v *time.Time) *GroupUpdateOne {
 	return _u
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (_u *GroupUpdateOne) ClearCreatedAt() *GroupUpdateOne {
+	_u.mutation.ClearCreatedAt()
+	return _u
+}
+
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *GroupUpdateOne) SetUpdatedAt(v time.Time) *GroupUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
@@ -320,6 +344,12 @@ func (_u *GroupUpdateOne) SetNillableUpdatedAt(v *time.Time) *GroupUpdateOne {
 	if v != nil {
 		_u.SetUpdatedAt(*v)
 	}
+	return _u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (_u *GroupUpdateOne) ClearUpdatedAt() *GroupUpdateOne {
+	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
@@ -433,8 +463,14 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(group.FieldCreatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.CreatedAtCleared() {
+		_spec.ClearField(group.FieldCreatedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(group.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UpdatedAtCleared() {
+		_spec.ClearField(group.FieldUpdatedAt, field.TypeTime)
 	}
 	_node = &Group{config: _u.config}
 	_spec.Assign = _node.assignValues

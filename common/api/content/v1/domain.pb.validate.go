@@ -341,8 +341,6 @@ func (m *AddDomainReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Success
-
 	if len(errors) > 0 {
 		return AddDomainReplyMultiError(errors)
 	}
@@ -420,6 +418,222 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = AddDomainReplyValidationError{}
+
+// Validate checks the field values on UpdateDomainRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateDomainRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateDomainRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateDomainRequestMultiError, or nil if none found.
+func (m *UpdateDomainRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateDomainRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Description
+
+	// no validation rules for Status
+
+	// no validation rules for Url
+
+	// no validation rules for Icon
+
+	// no validation rules for IsNav
+
+	if len(errors) > 0 {
+		return UpdateDomainRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateDomainRequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateDomainRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateDomainRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDomainRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDomainRequestMultiError) AllErrors() []error { return m }
+
+// UpdateDomainRequestValidationError is the validation error returned by
+// UpdateDomainRequest.Validate if the designated constraints aren't met.
+type UpdateDomainRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDomainRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateDomainRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateDomainRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateDomainRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDomainRequestValidationError) ErrorName() string {
+	return "UpdateDomainRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDomainRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDomainRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDomainRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDomainRequestValidationError{}
+
+// Validate checks the field values on UpdateDomainReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *UpdateDomainReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateDomainReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateDomainReplyMultiError, or nil if none found.
+func (m *UpdateDomainReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateDomainReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return UpdateDomainReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateDomainReplyMultiError is an error wrapping multiple validation errors
+// returned by UpdateDomainReply.ValidateAll() if the designated constraints
+// aren't met.
+type UpdateDomainReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateDomainReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateDomainReplyMultiError) AllErrors() []error { return m }
+
+// UpdateDomainReplyValidationError is the validation error returned by
+// UpdateDomainReply.Validate if the designated constraints aren't met.
+type UpdateDomainReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDomainReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateDomainReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateDomainReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateDomainReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDomainReplyValidationError) ErrorName() string {
+	return "UpdateDomainReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDomainReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDomainReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDomainReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDomainReplyValidationError{}
 
 // Validate checks the field values on GetDomainRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -732,221 +946,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetDomainReplyValidationError{}
-
-// Validate checks the field values on UpdateDomainRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *UpdateDomainRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on UpdateDomainRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// UpdateDomainRequestMultiError, or nil if none found.
-func (m *UpdateDomainRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *UpdateDomainRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Name
-
-	// no validation rules for Description
-
-	// no validation rules for Status
-
-	// no validation rules for Url
-
-	// no validation rules for Icon
-
-	// no validation rules for IsNav
-
-	if len(errors) > 0 {
-		return UpdateDomainRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// UpdateDomainRequestMultiError is an error wrapping multiple validation
-// errors returned by UpdateDomainRequest.ValidateAll() if the designated
-// constraints aren't met.
-type UpdateDomainRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m UpdateDomainRequestMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m UpdateDomainRequestMultiError) AllErrors() []error { return m }
-
-// UpdateDomainRequestValidationError is the validation error returned by
-// UpdateDomainRequest.Validate if the designated constraints aren't met.
-type UpdateDomainRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e UpdateDomainRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e UpdateDomainRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e UpdateDomainRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e UpdateDomainRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e UpdateDomainRequestValidationError) ErrorName() string {
-	return "UpdateDomainRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e UpdateDomainRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sUpdateDomainRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = UpdateDomainRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = UpdateDomainRequestValidationError{}
-
-// Validate checks the field values on UpdateDomainReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *UpdateDomainReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on UpdateDomainReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// UpdateDomainReplyMultiError, or nil if none found.
-func (m *UpdateDomainReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *UpdateDomainReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Success
-
-	if len(errors) > 0 {
-		return UpdateDomainReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// UpdateDomainReplyMultiError is an error wrapping multiple validation errors
-// returned by UpdateDomainReply.ValidateAll() if the designated constraints
-// aren't met.
-type UpdateDomainReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m UpdateDomainReplyMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m UpdateDomainReplyMultiError) AllErrors() []error { return m }
-
-// UpdateDomainReplyValidationError is the validation error returned by
-// UpdateDomainReply.Validate if the designated constraints aren't met.
-type UpdateDomainReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e UpdateDomainReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e UpdateDomainReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e UpdateDomainReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e UpdateDomainReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e UpdateDomainReplyValidationError) ErrorName() string {
-	return "UpdateDomainReplyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e UpdateDomainReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sUpdateDomainReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = UpdateDomainReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = UpdateDomainReplyValidationError{}

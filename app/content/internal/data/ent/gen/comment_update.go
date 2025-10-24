@@ -182,27 +182,6 @@ func (_u *CommentUpdate) AddLikeCount(v int) *CommentUpdate {
 	return _u
 }
 
-// SetDislikeCount sets the "dislike_count" field.
-func (_u *CommentUpdate) SetDislikeCount(v int) *CommentUpdate {
-	_u.mutation.ResetDislikeCount()
-	_u.mutation.SetDislikeCount(v)
-	return _u
-}
-
-// SetNillableDislikeCount sets the "dislike_count" field if the given value is not nil.
-func (_u *CommentUpdate) SetNillableDislikeCount(v *int) *CommentUpdate {
-	if v != nil {
-		_u.SetDislikeCount(*v)
-	}
-	return _u
-}
-
-// AddDislikeCount adds value to the "dislike_count" field.
-func (_u *CommentUpdate) AddDislikeCount(v int) *CommentUpdate {
-	_u.mutation.AddDislikeCount(v)
-	return _u
-}
-
 // SetCollectCount sets the "collect_count" field.
 func (_u *CommentUpdate) SetCollectCount(v int) *CommentUpdate {
 	_u.mutation.ResetCollectCount()
@@ -411,12 +390,6 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedLikeCount(); ok {
 		_spec.AddField(comment.FieldLikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.DislikeCount(); ok {
-		_spec.SetField(comment.FieldDislikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedDislikeCount(); ok {
-		_spec.AddField(comment.FieldDislikeCount, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.CollectCount(); ok {
 		_spec.SetField(comment.FieldCollectCount, field.TypeInt, value)
@@ -712,27 +685,6 @@ func (_u *CommentUpdateOne) AddLikeCount(v int) *CommentUpdateOne {
 	return _u
 }
 
-// SetDislikeCount sets the "dislike_count" field.
-func (_u *CommentUpdateOne) SetDislikeCount(v int) *CommentUpdateOne {
-	_u.mutation.ResetDislikeCount()
-	_u.mutation.SetDislikeCount(v)
-	return _u
-}
-
-// SetNillableDislikeCount sets the "dislike_count" field if the given value is not nil.
-func (_u *CommentUpdateOne) SetNillableDislikeCount(v *int) *CommentUpdateOne {
-	if v != nil {
-		_u.SetDislikeCount(*v)
-	}
-	return _u
-}
-
-// AddDislikeCount adds value to the "dislike_count" field.
-func (_u *CommentUpdateOne) AddDislikeCount(v int) *CommentUpdateOne {
-	_u.mutation.AddDislikeCount(v)
-	return _u
-}
-
 // SetCollectCount sets the "collect_count" field.
 func (_u *CommentUpdateOne) SetCollectCount(v int) *CommentUpdateOne {
 	_u.mutation.ResetCollectCount()
@@ -971,12 +923,6 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 	}
 	if value, ok := _u.mutation.AddedLikeCount(); ok {
 		_spec.AddField(comment.FieldLikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.DislikeCount(); ok {
-		_spec.SetField(comment.FieldDislikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedDislikeCount(); ok {
-		_spec.AddField(comment.FieldDislikeCount, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.CollectCount(); ok {
 		_spec.SetField(comment.FieldCollectCount, field.TypeInt, value)

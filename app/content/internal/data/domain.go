@@ -11,7 +11,7 @@ type DomainRepo struct {
 	*BaseRepo
 }
 
-func NewDomainRepo(baseRepo *BaseRepo) repo.Domain {
+func NewDomainRepo(baseRepo *BaseRepo) repo.DomainRepo {
 	return &DomainRepo{
 		BaseRepo: baseRepo,
 	}
@@ -21,6 +21,7 @@ func (r *DomainRepo) Save(ctx context.Context, db *gen.Client, domain *model.Dom
 	create := db.Domain.Create().
 		SetName(domain.Name).
 		SetDescription(domain.Description).
+		SetStatus(domain.Status).
 		SetNillableURL(domain.URL).
 		SetNillableIcon(domain.Icon).
 		SetIsNav(domain.IsNav)
@@ -46,12 +47,26 @@ func (r *DomainRepo) Update(ctx context.Context, db *gen.Client, domain *model.D
 	return (*model.Domain)(save), nil
 }
 
-func (r *DomainRepo) AddTagCount(ctx context.Context, db *gen.Client, id int) (*model.Domain, error) {
+func (r *DomainRepo) AddTagCount(ctx context.Context, db *gen.Client, id int, num int) (*model.Domain, error) {
 	domain, err := db.Domain.UpdateOneID(id).
-		AddTagCount(1).
+		AddTagCount(num).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return (*model.Domain)(domain), nil
+}
+
+func (r *DomainRepo) Get(ctx context.Context, db *gen.Client) ([]*model.Domain, error) {
+	query := db.Domain.Query()
+
+	domains, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	res := make([]*model.Domain, len(domains))
+	for i, domain := range domains {
+		res[i] = (*model.Domain)(domain)
+	}
+	return res, nil
 }

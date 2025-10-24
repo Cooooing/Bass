@@ -151,12 +151,6 @@ func (_c *GroupCreate) check() error {
 			return &ValidationError{Name: "endpoint", err: fmt.Errorf(`gen: validator failed for field "Group.endpoint": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "Group.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "Group.updated_at"`)}
-	}
 	return nil
 }
 

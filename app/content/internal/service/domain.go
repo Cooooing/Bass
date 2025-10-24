@@ -4,7 +4,6 @@ import (
 	v1 "common/api/content/v1"
 	"content/internal/biz"
 	"content/internal/biz/model"
-	"content/internal/data/ent/gen"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -33,13 +32,17 @@ func NewDomainService(baseService *BaseService, domainDomain *biz.DomainDomain) 
 }
 
 func (s *DomainService) Add(ctx context.Context, req *v1.AddDomainRequest) (*v1.AddDomainReply, error) {
-	s.domainDomain.AddDomain(ctx, &model.Domain{
+	_, err := s.domainDomain.AddDomain(ctx, &model.Domain{
 		Name:        req.Name,
-		Description: "",
-		URL:         nil,
-		Icon:        nil,
-		IsNav:       false,
+		Description: req.Description,
+		URL:         &req.Url,
+		Icon:        &req.Icon,
+		IsNav:       req.IsNav,
 	})
+	if err != nil {
+		return nil, err
+	}
+	return &v1.AddDomainReply{}, nil
 }
 
 func (s *DomainService) Get(ctx context.Context, req *v1.GetDomainRequest) (*v1.GetDomainReply, error) {

@@ -78,6 +78,12 @@ func (_u *DomainUpdate) AddStatus(v int) *DomainUpdate {
 	return _u
 }
 
+// ClearStatus clears the value of the "status" field.
+func (_u *DomainUpdate) ClearStatus() *DomainUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetURL sets the "url" field.
 func (_u *DomainUpdate) SetURL(v string) *DomainUpdate {
 	_u.mutation.SetURL(v)
@@ -150,6 +156,12 @@ func (_u *DomainUpdate) SetNillableIsNav(v *bool) *DomainUpdate {
 	if v != nil {
 		_u.SetIsNav(*v)
 	}
+	return _u
+}
+
+// ClearIsNav clears the value of the "is_nav" field.
+func (_u *DomainUpdate) ClearIsNav() *DomainUpdate {
+	_u.mutation.ClearIsNav()
 	return _u
 }
 
@@ -300,6 +312,9 @@ func (_u *DomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(domain.FieldStatus, field.TypeInt, value)
 	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(domain.FieldStatus, field.TypeInt)
+	}
 	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(domain.FieldURL, field.TypeString, value)
 	}
@@ -320,6 +335,9 @@ func (_u *DomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.IsNav(); ok {
 		_spec.SetField(domain.FieldIsNav, field.TypeBool, value)
+	}
+	if _u.mutation.IsNavCleared() {
+		_spec.ClearField(domain.FieldIsNav, field.TypeBool)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)
@@ -447,6 +465,12 @@ func (_u *DomainUpdateOne) AddStatus(v int) *DomainUpdateOne {
 	return _u
 }
 
+// ClearStatus clears the value of the "status" field.
+func (_u *DomainUpdateOne) ClearStatus() *DomainUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetURL sets the "url" field.
 func (_u *DomainUpdateOne) SetURL(v string) *DomainUpdateOne {
 	_u.mutation.SetURL(v)
@@ -519,6 +543,12 @@ func (_u *DomainUpdateOne) SetNillableIsNav(v *bool) *DomainUpdateOne {
 	if v != nil {
 		_u.SetIsNav(*v)
 	}
+	return _u
+}
+
+// ClearIsNav clears the value of the "is_nav" field.
+func (_u *DomainUpdateOne) ClearIsNav() *DomainUpdateOne {
+	_u.mutation.ClearIsNav()
 	return _u
 }
 
@@ -699,6 +729,9 @@ func (_u *DomainUpdateOne) sqlSave(ctx context.Context) (_node *Domain, err erro
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(domain.FieldStatus, field.TypeInt, value)
 	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(domain.FieldStatus, field.TypeInt)
+	}
 	if value, ok := _u.mutation.URL(); ok {
 		_spec.SetField(domain.FieldURL, field.TypeString, value)
 	}
@@ -719,6 +752,9 @@ func (_u *DomainUpdateOne) sqlSave(ctx context.Context) (_node *Domain, err erro
 	}
 	if value, ok := _u.mutation.IsNav(); ok {
 		_spec.SetField(domain.FieldIsNav, field.TypeBool, value)
+	}
+	if _u.mutation.IsNavCleared() {
+		_spec.ClearField(domain.FieldIsNav, field.TypeBool)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)

@@ -18,7 +18,7 @@ type Article struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// 作者ID
-	UserID string `json:"user_id,omitempty"`
+	UserID int `json:"user_id,omitempty"`
 	// 标题
 	Title string `json:"title,omitempty"`
 	// 正文内容
@@ -26,7 +26,7 @@ type Article struct {
 	// 是否有附言
 	HasPostscript bool `json:"has_postscript,omitempty"`
 	// 打赏区内容
-	RewardContent string `json:"reward_content,omitempty"`
+	RewardContent *string `json:"reward_content,omitempty"`
 	// 打赏积分
 	RewardPoints int `json:"reward_points,omitempty"`
 	// 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
@@ -35,14 +35,12 @@ type Article struct {
 	Type int `json:"type,omitempty"`
 	// 是否允许评论
 	Commentable bool `json:"commentable,omitempty"`
-	// 是否允许评论
+	// 是否匿名
 	Anonymous bool `json:"anonymous,omitempty"`
 	// 帖子感谢数
 	ThankCount int `json:"thank_count,omitempty"`
 	// 点赞数
 	LikeCount int `json:"like_count,omitempty"`
-	// 点踩数
-	DislikeCount int `json:"dislike_count,omitempty"`
 	// 收藏数
 	CollectCount int `json:"collect_count,omitempty"`
 	// 关注数
@@ -79,9 +77,11 @@ type ArticleEdges struct {
 	Comments []*Comment `json:"comments,omitempty"`
 	// Tags holds the value of the tags edge.
 	Tags []*Tag `json:"tags,omitempty"`
+	// ActionRecords holds the value of the action_records edge.
+	ActionRecords []*ArticleActionRecord `json:"action_records,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 }
 
 // PostscriptsOrErr returns the Postscripts value or an error if the edge
@@ -129,6 +129,15 @@ func (e ArticleEdges) TagsOrErr() ([]*Tag, error) {
 	return nil, &NotLoadedError{edge: "tags"}
 }
 
+// ActionRecordsOrErr returns the ActionRecords value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArticleEdges) ActionRecordsOrErr() ([]*ArticleActionRecord, error) {
+	if e.loadedTypes[5] {
+		return e.ActionRecords, nil
+	}
+	return nil, &NotLoadedError{edge: "action_records"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Article) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -136,9 +145,9 @@ func (*Article) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous:
 			values[i] = new(sql.NullBool)
-		case article.FieldID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldDislikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount:
+		case article.FieldID, article.FieldUserID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount:
 			values[i] = new(sql.NullInt64)
-		case article.FieldUserID, article.FieldTitle, article.FieldContent, article.FieldRewardContent:
+		case article.FieldTitle, article.FieldContent, article.FieldRewardContent:
 			values[i] = new(sql.NullString)
 		case article.FieldCreatedAt, article.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -164,10 +173,10 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			}
 			_m.ID = int(value.Int64)
 		case article.FieldUserID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = value.String
+				_m.UserID = int(value.Int64)
 			}
 		case article.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -191,7 +200,8 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reward_content", values[i])
 			} else if value.Valid {
-				_m.RewardContent = value.String
+				_m.RewardContent = new(string)
+				*_m.RewardContent = value.String
 			}
 		case article.FieldRewardPoints:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -234,12 +244,6 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field like_count", values[i])
 			} else if value.Valid {
 				_m.LikeCount = int(value.Int64)
-			}
-		case article.FieldDislikeCount:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dislike_count", values[i])
-			} else if value.Valid {
-				_m.DislikeCount = int(value.Int64)
 			}
 		case article.FieldCollectCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -335,6 +339,11 @@ func (_m *Article) QueryTags() *TagQuery {
 	return NewArticleClient(_m.config).QueryTags(_m)
 }
 
+// QueryActionRecords queries the "action_records" edge of the Article entity.
+func (_m *Article) QueryActionRecords() *ArticleActionRecordQuery {
+	return NewArticleClient(_m.config).QueryActionRecords(_m)
+}
+
 // Update returns a builder for updating this Article.
 // Note that you need to call Article.Unwrap() before calling this method if this Article
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -359,7 +368,7 @@ func (_m *Article) String() string {
 	builder.WriteString("Article(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("user_id=")
-	builder.WriteString(_m.UserID)
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
@@ -370,8 +379,10 @@ func (_m *Article) String() string {
 	builder.WriteString("has_postscript=")
 	builder.WriteString(fmt.Sprintf("%v", _m.HasPostscript))
 	builder.WriteString(", ")
-	builder.WriteString("reward_content=")
-	builder.WriteString(_m.RewardContent)
+	if v := _m.RewardContent; v != nil {
+		builder.WriteString("reward_content=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("reward_points=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RewardPoints))
@@ -393,9 +404,6 @@ func (_m *Article) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("like_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.LikeCount))
-	builder.WriteString(", ")
-	builder.WriteString("dislike_count=")
-	builder.WriteString(fmt.Sprintf("%v", _m.DislikeCount))
 	builder.WriteString(", ")
 	builder.WriteString("collect_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CollectCount))

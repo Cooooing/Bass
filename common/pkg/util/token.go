@@ -75,3 +75,8 @@ func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, er
 func (r *TokenRepo) DelToken(ctx context.Context, token string) error {
 	return r.redis.Client.Del(ctx, constant.GetKeyToken(token)).Err()
 }
+
+func (r *TokenRepo) GetUserInfo(ctx context.Context) (*model.User, error) {
+	value := ctx.Value(constant.UserInfo)
+	return value.(*model.User), nil
+}

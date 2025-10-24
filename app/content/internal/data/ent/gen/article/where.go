@@ -56,7 +56,7 @@ func IDLTE(id int) predicate.Article {
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v string) predicate.Article {
+func UserID(v int) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldUserID, v))
 }
 
@@ -115,11 +115,6 @@ func LikeCount(v int) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLikeCount, v))
 }
 
-// DislikeCount applies equality check predicate on the "dislike_count" field. It's identical to DislikeCountEQ.
-func DislikeCount(v int) predicate.Article {
-	return predicate.Article(sql.FieldEQ(FieldDislikeCount, v))
-}
-
 // CollectCount applies equality check predicate on the "collect_count" field. It's identical to CollectCountEQ.
 func CollectCount(v int) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldCollectCount, v))
@@ -166,68 +161,43 @@ func UpdatedAt(v time.Time) predicate.Article {
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v string) predicate.Article {
+func UserIDEQ(v int) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v string) predicate.Article {
+func UserIDNEQ(v int) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...string) predicate.Article {
+func UserIDIn(vs ...int) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...string) predicate.Article {
+func UserIDNotIn(vs ...int) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v string) predicate.Article {
+func UserIDGT(v int) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v string) predicate.Article {
+func UserIDGTE(v int) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v string) predicate.Article {
+func UserIDLT(v int) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v string) predicate.Article {
+func UserIDLTE(v int) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldUserID, v))
-}
-
-// UserIDContains applies the Contains predicate on the "user_id" field.
-func UserIDContains(v string) predicate.Article {
-	return predicate.Article(sql.FieldContains(FieldUserID, v))
-}
-
-// UserIDHasPrefix applies the HasPrefix predicate on the "user_id" field.
-func UserIDHasPrefix(v string) predicate.Article {
-	return predicate.Article(sql.FieldHasPrefix(FieldUserID, v))
-}
-
-// UserIDHasSuffix applies the HasSuffix predicate on the "user_id" field.
-func UserIDHasSuffix(v string) predicate.Article {
-	return predicate.Article(sql.FieldHasSuffix(FieldUserID, v))
-}
-
-// UserIDEqualFold applies the EqualFold predicate on the "user_id" field.
-func UserIDEqualFold(v string) predicate.Article {
-	return predicate.Article(sql.FieldEqualFold(FieldUserID, v))
-}
-
-// UserIDContainsFold applies the ContainsFold predicate on the "user_id" field.
-func UserIDContainsFold(v string) predicate.Article {
-	return predicate.Article(sql.FieldContainsFold(FieldUserID, v))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.
@@ -663,46 +633,6 @@ func LikeCountLT(v int) predicate.Article {
 // LikeCountLTE applies the LTE predicate on the "like_count" field.
 func LikeCountLTE(v int) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldLikeCount, v))
-}
-
-// DislikeCountEQ applies the EQ predicate on the "dislike_count" field.
-func DislikeCountEQ(v int) predicate.Article {
-	return predicate.Article(sql.FieldEQ(FieldDislikeCount, v))
-}
-
-// DislikeCountNEQ applies the NEQ predicate on the "dislike_count" field.
-func DislikeCountNEQ(v int) predicate.Article {
-	return predicate.Article(sql.FieldNEQ(FieldDislikeCount, v))
-}
-
-// DislikeCountIn applies the In predicate on the "dislike_count" field.
-func DislikeCountIn(vs ...int) predicate.Article {
-	return predicate.Article(sql.FieldIn(FieldDislikeCount, vs...))
-}
-
-// DislikeCountNotIn applies the NotIn predicate on the "dislike_count" field.
-func DislikeCountNotIn(vs ...int) predicate.Article {
-	return predicate.Article(sql.FieldNotIn(FieldDislikeCount, vs...))
-}
-
-// DislikeCountGT applies the GT predicate on the "dislike_count" field.
-func DislikeCountGT(v int) predicate.Article {
-	return predicate.Article(sql.FieldGT(FieldDislikeCount, v))
-}
-
-// DislikeCountGTE applies the GTE predicate on the "dislike_count" field.
-func DislikeCountGTE(v int) predicate.Article {
-	return predicate.Article(sql.FieldGTE(FieldDislikeCount, v))
-}
-
-// DislikeCountLT applies the LT predicate on the "dislike_count" field.
-func DislikeCountLT(v int) predicate.Article {
-	return predicate.Article(sql.FieldLT(FieldDislikeCount, v))
-}
-
-// DislikeCountLTE applies the LTE predicate on the "dislike_count" field.
-func DislikeCountLTE(v int) predicate.Article {
-	return predicate.Article(sql.FieldLTE(FieldDislikeCount, v))
 }
 
 // CollectCountEQ applies the EQ predicate on the "collect_count" field.
@@ -1202,6 +1132,29 @@ func HasTags() predicate.Article {
 func HasTagsWith(preds ...predicate.Tag) predicate.Article {
 	return predicate.Article(func(s *sql.Selector) {
 		step := newTagsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasActionRecords applies the HasEdge predicate on the "action_records" edge.
+func HasActionRecords() predicate.Article {
+	return predicate.Article(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ActionRecordsTable, ActionRecordsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionRecordsWith applies the HasEdge predicate on the "action_records" edge with a given conditions (other predicates).
+func HasActionRecordsWith(preds ...predicate.ArticleActionRecord) predicate.Article {
+	return predicate.Article(func(s *sql.Selector) {
+		step := newActionRecordsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

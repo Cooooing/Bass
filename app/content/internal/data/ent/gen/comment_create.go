@@ -101,20 +101,6 @@ func (_c *CommentCreate) SetNillableLikeCount(v *int) *CommentCreate {
 	return _c
 }
 
-// SetDislikeCount sets the "dislike_count" field.
-func (_c *CommentCreate) SetDislikeCount(v int) *CommentCreate {
-	_c.mutation.SetDislikeCount(v)
-	return _c
-}
-
-// SetNillableDislikeCount sets the "dislike_count" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableDislikeCount(v *int) *CommentCreate {
-	if v != nil {
-		_c.SetDislikeCount(*v)
-	}
-	return _c
-}
-
 // SetCollectCount sets the "collect_count" field.
 func (_c *CommentCreate) SetCollectCount(v int) *CommentCreate {
 	_c.mutation.SetCollectCount(v)
@@ -233,10 +219,6 @@ func (_c *CommentCreate) defaults() {
 		v := comment.DefaultLikeCount
 		_c.mutation.SetLikeCount(v)
 	}
-	if _, ok := _c.mutation.DislikeCount(); !ok {
-		v := comment.DefaultDislikeCount
-		_c.mutation.SetDislikeCount(v)
-	}
 	if _, ok := _c.mutation.CollectCount(); !ok {
 		v := comment.DefaultCollectCount
 		_c.mutation.SetCollectCount(v)
@@ -278,9 +260,6 @@ func (_c *CommentCreate) check() error {
 	}
 	if _, ok := _c.mutation.LikeCount(); !ok {
 		return &ValidationError{Name: "like_count", err: errors.New(`gen: missing required field "Comment.like_count"`)}
-	}
-	if _, ok := _c.mutation.DislikeCount(); !ok {
-		return &ValidationError{Name: "dislike_count", err: errors.New(`gen: missing required field "Comment.dislike_count"`)}
 	}
 	if _, ok := _c.mutation.CollectCount(); !ok {
 		return &ValidationError{Name: "collect_count", err: errors.New(`gen: missing required field "Comment.collect_count"`)}
@@ -337,10 +316,6 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LikeCount(); ok {
 		_spec.SetField(comment.FieldLikeCount, field.TypeInt, value)
 		_node.LikeCount = value
-	}
-	if value, ok := _c.mutation.DislikeCount(); ok {
-		_spec.SetField(comment.FieldDislikeCount, field.TypeInt, value)
-		_node.DislikeCount = value
 	}
 	if value, ok := _c.mutation.CollectCount(); ok {
 		_spec.SetField(comment.FieldCollectCount, field.TypeInt, value)

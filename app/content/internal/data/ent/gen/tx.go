@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Article is the client for interacting with the Article builders.
 	Article *ArticleClient
+	// ArticleActionRecord is the client for interacting with the ArticleActionRecord builders.
+	ArticleActionRecord *ArticleActionRecordClient
 	// ArticleLottery is the client for interacting with the ArticleLottery builders.
 	ArticleLottery *ArticleLotteryClient
 	// ArticleLotteryParticipant is the client for interacting with the ArticleLotteryParticipant builders.
@@ -164,6 +166,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Article = NewArticleClient(tx.config)
+	tx.ArticleActionRecord = NewArticleActionRecordClient(tx.config)
 	tx.ArticleLottery = NewArticleLotteryClient(tx.config)
 	tx.ArticleLotteryParticipant = NewArticleLotteryParticipantClient(tx.config)
 	tx.ArticleLotteryWinner = NewArticleLotteryWinnerClient(tx.config)

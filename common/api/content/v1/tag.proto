@@ -9,6 +9,21 @@ option go_package = "content/v1;v1";
 
 // 标签服务
 service TagService {
+
+  rpc Add (AddTagRequest) returns (AddTagReply) {
+    option (google.api.http) = {
+      post: "/api/v1/tag/add"
+      body: "*"
+    };
+  }
+
+  rpc Update (UpdateTagRequest) returns (UpdateTagReply) {
+    option (google.api.http) = {
+      post: "/api/v1/tag/update"
+      body: "*"
+    };
+  }
+
   rpc Get (GetTagRequest) returns (GetTagReply) {
     option (google.api.http) = {
       post: "/api/v1/tag/get"
@@ -16,6 +31,16 @@ service TagService {
     };
   }
 }
+
+message AddTagRequest {
+  string name = 1;
+}
+message AddTagReply {}
+
+message UpdateTagRequest {
+  string name = 1;
+}
+message UpdateTagReply {}
 
 message GetTagRequest {}
 message GetTagReply {}

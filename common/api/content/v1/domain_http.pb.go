@@ -35,8 +35,8 @@ type DomainServiceHTTPServer interface {
 func RegisterDomainServiceHTTPServer(s *http.Server, srv DomainServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/domain/add", _DomainService_Add2_HTTP_Handler(srv))
-	r.POST("/v1/domain/get", _DomainService_Get2_HTTP_Handler(srv))
 	r.POST("/v1/domain/update", _DomainService_Update1_HTTP_Handler(srv))
+	r.POST("/v1/domain/get", _DomainService_Get2_HTTP_Handler(srv))
 }
 
 func _DomainService_Add2_HTTP_Handler(srv DomainServiceHTTPServer) func(ctx http.Context) error {
@@ -61,28 +61,6 @@ func _DomainService_Add2_HTTP_Handler(srv DomainServiceHTTPServer) func(ctx http
 	}
 }
 
-func _DomainService_Get2_HTTP_Handler(srv DomainServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetDomainRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationDomainServiceGet)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*GetDomainRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetDomainReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 func _DomainService_Update1_HTTP_Handler(srv DomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateDomainRequest
@@ -101,6 +79,28 @@ func _DomainService_Update1_HTTP_Handler(srv DomainServiceHTTPServer) func(ctx h
 			return err
 		}
 		reply := out.(*UpdateDomainReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _DomainService_Get2_HTTP_Handler(srv DomainServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetDomainRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDomainServiceGet)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Get(ctx, req.(*GetDomainRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetDomainReply)
 		return ctx.Result(200, reply)
 	}
 }

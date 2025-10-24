@@ -38,8 +38,6 @@ const (
 	FieldThankCount = "thank_count"
 	// FieldLikeCount holds the string denoting the like_count field in the database.
 	FieldLikeCount = "like_count"
-	// FieldDislikeCount holds the string denoting the dislike_count field in the database.
-	FieldDislikeCount = "dislike_count"
 	// FieldCollectCount holds the string denoting the collect_count field in the database.
 	FieldCollectCount = "collect_count"
 	// FieldWatchCount holds the string denoting the watch_count field in the database.
@@ -68,6 +66,8 @@ const (
 	EdgeComments = "comments"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
+	// EdgeActionRecords holds the string denoting the action_records edge name in mutations.
+	EdgeActionRecords = "action_records"
 	// Table holds the table name of the article in the database.
 	Table = "articles"
 	// PostscriptsTable is the table that holds the postscripts relation/edge.
@@ -103,6 +103,13 @@ const (
 	// TagsInverseTable is the table name for the Tag entity.
 	// It exists in this package in order to avoid circular dependency with the "tag" package.
 	TagsInverseTable = "tags"
+	// ActionRecordsTable is the table that holds the action_records relation/edge.
+	ActionRecordsTable = "article_action_records"
+	// ActionRecordsInverseTable is the table name for the ArticleActionRecord entity.
+	// It exists in this package in order to avoid circular dependency with the "articleactionrecord" package.
+	ActionRecordsInverseTable = "article_action_records"
+	// ActionRecordsColumn is the table column denoting the action_records relation/edge.
+	ActionRecordsColumn = "article_id"
 )
 
 // Columns holds all SQL columns for article fields.
@@ -120,7 +127,6 @@ var Columns = []string{
 	FieldAnonymous,
 	FieldThankCount,
 	FieldLikeCount,
-	FieldDislikeCount,
 	FieldCollectCount,
 	FieldWatchCount,
 	FieldBountyPoints,
@@ -149,8 +155,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
-	UserIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// ContentValidator is a validator for the "content" field. It is called by the builders before save.
@@ -171,8 +175,6 @@ var (
 	DefaultThankCount int
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
 	DefaultLikeCount int
-	// DefaultDislikeCount holds the default value on creation for the "dislike_count" field.
-	DefaultDislikeCount int
 	// DefaultCollectCount holds the default value on creation for the "collect_count" field.
 	DefaultCollectCount int
 	// DefaultWatchCount holds the default value on creation for the "watch_count" field.
@@ -257,11 +259,6 @@ func ByThankCount(opts ...sql.OrderTermOption) OrderOption {
 // ByLikeCount orders the results by the like_count field.
 func ByLikeCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLikeCount, opts...).ToFunc()
-}
-
-// ByDislikeCount orders the results by the dislike_count field.
-func ByDislikeCount(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDislikeCount, opts...).ToFunc()
 }
 
 // ByCollectCount orders the results by the collect_count field.
@@ -378,6 +375,20 @@ func ByTags(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByActionRecordsCount orders the results by action_records count.
+func ByActionRecordsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionRecordsStep(), opts...)
+	}
+}
+
+// ByActionRecords orders the results by action_records terms.
+func ByActionRecords(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionRecordsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newPostscriptsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -411,5 +422,12 @@ func newTagsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TagsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TagsTable, TagsPrimaryKey...),
+	)
+}
+func newActionRecordsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionRecordsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ActionRecordsTable, ActionRecordsColumn),
 	)
 }

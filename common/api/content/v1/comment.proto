@@ -25,7 +25,7 @@ service CommentService {
     };
   }
 
-  // 点赞/踩评论
+  // 点赞评论
   rpc Like (LikeCommentRequest) returns (LikeCommentReply) {
     option (google.api.http) = {
       post: "/v1/comment/like"

@@ -12,6 +12,7 @@ import (
 	"content/internal/data/ent/gen/migrate"
 
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlelottery"
 	"content/internal/data/ent/gen/articlelotteryparticipant"
 	"content/internal/data/ent/gen/articlelotterywinner"
@@ -35,6 +36,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Article is the client for interacting with the Article builders.
 	Article *ArticleClient
+	// ArticleActionRecord is the client for interacting with the ArticleActionRecord builders.
+	ArticleActionRecord *ArticleActionRecordClient
 	// ArticleLottery is the client for interacting with the ArticleLottery builders.
 	ArticleLottery *ArticleLotteryClient
 	// ArticleLotteryParticipant is the client for interacting with the ArticleLotteryParticipant builders.
@@ -65,6 +68,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Article = NewArticleClient(c.config)
+	c.ArticleActionRecord = NewArticleActionRecordClient(c.config)
 	c.ArticleLottery = NewArticleLotteryClient(c.config)
 	c.ArticleLotteryParticipant = NewArticleLotteryParticipantClient(c.config)
 	c.ArticleLotteryWinner = NewArticleLotteryWinnerClient(c.config)
@@ -167,6 +171,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                       ctx,
 		config:                    cfg,
 		Article:                   NewArticleClient(cfg),
+		ArticleActionRecord:       NewArticleActionRecordClient(cfg),
 		ArticleLottery:            NewArticleLotteryClient(cfg),
 		ArticleLotteryParticipant: NewArticleLotteryParticipantClient(cfg),
 		ArticleLotteryWinner:      NewArticleLotteryWinnerClient(cfg),
@@ -196,6 +201,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                       ctx,
 		config:                    cfg,
 		Article:                   NewArticleClient(cfg),
+		ArticleActionRecord:       NewArticleActionRecordClient(cfg),
 		ArticleLottery:            NewArticleLotteryClient(cfg),
 		ArticleLotteryParticipant: NewArticleLotteryParticipantClient(cfg),
 		ArticleLotteryWinner:      NewArticleLotteryWinnerClient(cfg),
@@ -234,7 +240,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Article, c.ArticleLottery, c.ArticleLotteryParticipant,
+		c.Article, c.ArticleActionRecord, c.ArticleLottery, c.ArticleLotteryParticipant,
 		c.ArticleLotteryWinner, c.ArticlePostscript, c.ArticleVote,
 		c.ArticleVoteRecord, c.Comment, c.Domain, c.Tag,
 	} {
@@ -246,7 +252,7 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Article, c.ArticleLottery, c.ArticleLotteryParticipant,
+		c.Article, c.ArticleActionRecord, c.ArticleLottery, c.ArticleLotteryParticipant,
 		c.ArticleLotteryWinner, c.ArticlePostscript, c.ArticleVote,
 		c.ArticleVoteRecord, c.Comment, c.Domain, c.Tag,
 	} {
@@ -259,6 +265,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *ArticleMutation:
 		return c.Article.mutate(ctx, m)
+	case *ArticleActionRecordMutation:
+		return c.ArticleActionRecord.mutate(ctx, m)
 	case *ArticleLotteryMutation:
 		return c.ArticleLottery.mutate(ctx, m)
 	case *ArticleLotteryParticipantMutation:
@@ -470,6 +478,22 @@ func (c *ArticleClient) QueryTags(_m *Article) *TagQuery {
 	return query
 }
 
+// QueryActionRecords queries the action_records edge of a Article.
+func (c *ArticleClient) QueryActionRecords(_m *Article) *ArticleActionRecordQuery {
+	query := (&ArticleActionRecordClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(article.Table, article.FieldID, id),
+			sqlgraph.To(articleactionrecord.Table, articleactionrecord.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, article.ActionRecordsTable, article.ActionRecordsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ArticleClient) Hooks() []Hook {
 	return c.hooks.Article
@@ -492,6 +516,155 @@ func (c *ArticleClient) mutate(ctx context.Context, m *ArticleMutation) (Value, 
 		return (&ArticleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("gen: unknown Article mutation op: %q", m.Op())
+	}
+}
+
+// ArticleActionRecordClient is a client for the ArticleActionRecord schema.
+type ArticleActionRecordClient struct {
+	config
+}
+
+// NewArticleActionRecordClient returns a client for the ArticleActionRecord from the given config.
+func NewArticleActionRecordClient(c config) *ArticleActionRecordClient {
+	return &ArticleActionRecordClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `articleactionrecord.Hooks(f(g(h())))`.
+func (c *ArticleActionRecordClient) Use(hooks ...Hook) {
+	c.hooks.ArticleActionRecord = append(c.hooks.ArticleActionRecord, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `articleactionrecord.Intercept(f(g(h())))`.
+func (c *ArticleActionRecordClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ArticleActionRecord = append(c.inters.ArticleActionRecord, interceptors...)
+}
+
+// Create returns a builder for creating a ArticleActionRecord entity.
+func (c *ArticleActionRecordClient) Create() *ArticleActionRecordCreate {
+	mutation := newArticleActionRecordMutation(c.config, OpCreate)
+	return &ArticleActionRecordCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ArticleActionRecord entities.
+func (c *ArticleActionRecordClient) CreateBulk(builders ...*ArticleActionRecordCreate) *ArticleActionRecordCreateBulk {
+	return &ArticleActionRecordCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ArticleActionRecordClient) MapCreateBulk(slice any, setFunc func(*ArticleActionRecordCreate, int)) *ArticleActionRecordCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ArticleActionRecordCreateBulk{err: fmt.Errorf("calling to ArticleActionRecordClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ArticleActionRecordCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ArticleActionRecordCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ArticleActionRecord.
+func (c *ArticleActionRecordClient) Update() *ArticleActionRecordUpdate {
+	mutation := newArticleActionRecordMutation(c.config, OpUpdate)
+	return &ArticleActionRecordUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ArticleActionRecordClient) UpdateOne(_m *ArticleActionRecord) *ArticleActionRecordUpdateOne {
+	mutation := newArticleActionRecordMutation(c.config, OpUpdateOne, withArticleActionRecord(_m))
+	return &ArticleActionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ArticleActionRecordClient) UpdateOneID(id int) *ArticleActionRecordUpdateOne {
+	mutation := newArticleActionRecordMutation(c.config, OpUpdateOne, withArticleActionRecordID(id))
+	return &ArticleActionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ArticleActionRecord.
+func (c *ArticleActionRecordClient) Delete() *ArticleActionRecordDelete {
+	mutation := newArticleActionRecordMutation(c.config, OpDelete)
+	return &ArticleActionRecordDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ArticleActionRecordClient) DeleteOne(_m *ArticleActionRecord) *ArticleActionRecordDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ArticleActionRecordClient) DeleteOneID(id int) *ArticleActionRecordDeleteOne {
+	builder := c.Delete().Where(articleactionrecord.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ArticleActionRecordDeleteOne{builder}
+}
+
+// Query returns a query builder for ArticleActionRecord.
+func (c *ArticleActionRecordClient) Query() *ArticleActionRecordQuery {
+	return &ArticleActionRecordQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeArticleActionRecord},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ArticleActionRecord entity by its id.
+func (c *ArticleActionRecordClient) Get(ctx context.Context, id int) (*ArticleActionRecord, error) {
+	return c.Query().Where(articleactionrecord.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ArticleActionRecordClient) GetX(ctx context.Context, id int) *ArticleActionRecord {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryArticle queries the article edge of a ArticleActionRecord.
+func (c *ArticleActionRecordClient) QueryArticle(_m *ArticleActionRecord) *ArticleQuery {
+	query := (&ArticleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(articleactionrecord.Table, articleactionrecord.FieldID, id),
+			sqlgraph.To(article.Table, article.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, articleactionrecord.ArticleTable, articleactionrecord.ArticleColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ArticleActionRecordClient) Hooks() []Hook {
+	return c.hooks.ArticleActionRecord
+}
+
+// Interceptors returns the client interceptors.
+func (c *ArticleActionRecordClient) Interceptors() []Interceptor {
+	return c.inters.ArticleActionRecord
+}
+
+func (c *ArticleActionRecordClient) mutate(ctx context.Context, m *ArticleActionRecordMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ArticleActionRecordCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ArticleActionRecordUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ArticleActionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ArticleActionRecordDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("gen: unknown ArticleActionRecord mutation op: %q", m.Op())
 	}
 }
 
@@ -1935,13 +2108,13 @@ func (c *TagClient) mutate(ctx context.Context, m *TagMutation) (Value, error) {
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Article, ArticleLottery, ArticleLotteryParticipant, ArticleLotteryWinner,
-		ArticlePostscript, ArticleVote, ArticleVoteRecord, Comment, Domain,
-		Tag []ent.Hook
+		Article, ArticleActionRecord, ArticleLottery, ArticleLotteryParticipant,
+		ArticleLotteryWinner, ArticlePostscript, ArticleVote, ArticleVoteRecord,
+		Comment, Domain, Tag []ent.Hook
 	}
 	inters struct {
-		Article, ArticleLottery, ArticleLotteryParticipant, ArticleLotteryWinner,
-		ArticlePostscript, ArticleVote, ArticleVoteRecord, Comment, Domain,
-		Tag []ent.Interceptor
+		Article, ArticleActionRecord, ArticleLottery, ArticleLotteryParticipant,
+		ArticleLotteryWinner, ArticlePostscript, ArticleVote, ArticleVoteRecord,
+		Comment, Domain, Tag []ent.Interceptor
 	}
 )

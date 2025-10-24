@@ -23,6 +23,166 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AddTagRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddTagRequest) Reset() {
+	*x = AddTagRequest{}
+	mi := &file_content_v1_tag_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddTagRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddTagRequest) ProtoMessage() {}
+
+func (x *AddTagRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_tag_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddTagRequest.ProtoReflect.Descriptor instead.
+func (*AddTagRequest) Descriptor() ([]byte, []int) {
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AddTagRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type AddTagReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddTagReply) Reset() {
+	*x = AddTagReply{}
+	mi := &file_content_v1_tag_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddTagReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddTagReply) ProtoMessage() {}
+
+func (x *AddTagReply) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_tag_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddTagReply.ProtoReflect.Descriptor instead.
+func (*AddTagReply) Descriptor() ([]byte, []int) {
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{1}
+}
+
+type UpdateTagRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateTagRequest) Reset() {
+	*x = UpdateTagRequest{}
+	mi := &file_content_v1_tag_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateTagRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateTagRequest) ProtoMessage() {}
+
+func (x *UpdateTagRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_tag_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateTagRequest.ProtoReflect.Descriptor instead.
+func (*UpdateTagRequest) Descriptor() ([]byte, []int) {
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *UpdateTagRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type UpdateTagReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateTagReply) Reset() {
+	*x = UpdateTagReply{}
+	mi := &file_content_v1_tag_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateTagReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateTagReply) ProtoMessage() {}
+
+func (x *UpdateTagReply) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_tag_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateTagReply.ProtoReflect.Descriptor instead.
+func (*UpdateTagReply) Descriptor() ([]byte, []int) {
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{3}
+}
+
 type GetTagRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -31,7 +191,7 @@ type GetTagRequest struct {
 
 func (x *GetTagRequest) Reset() {
 	*x = GetTagRequest{}
-	mi := &file_content_v1_tag_proto_msgTypes[0]
+	mi := &file_content_v1_tag_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +203,7 @@ func (x *GetTagRequest) String() string {
 func (*GetTagRequest) ProtoMessage() {}
 
 func (x *GetTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[0]
+	mi := &file_content_v1_tag_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +216,7 @@ func (x *GetTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagRequest.ProtoReflect.Descriptor instead.
 func (*GetTagRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{0}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{4}
 }
 
 type GetTagReply struct {
@@ -67,7 +227,7 @@ type GetTagReply struct {
 
 func (x *GetTagReply) Reset() {
 	*x = GetTagReply{}
-	mi := &file_content_v1_tag_proto_msgTypes[1]
+	mi := &file_content_v1_tag_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -79,7 +239,7 @@ func (x *GetTagReply) String() string {
 func (*GetTagReply) ProtoMessage() {}
 
 func (x *GetTagReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[1]
+	mi := &file_content_v1_tag_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -92,7 +252,7 @@ func (x *GetTagReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagReply.ProtoReflect.Descriptor instead.
 func (*GetTagReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{1}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{5}
 }
 
 var File_content_v1_tag_proto protoreflect.FileDescriptor
@@ -100,11 +260,19 @@ var File_content_v1_tag_proto protoreflect.FileDescriptor
 const file_content_v1_tag_proto_rawDesc = "" +
 	"\n" +
 	"\x14content/v1/tag.proto\x12\n" +
-	"content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\x0f\n" +
+	"content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"#\n" +
+	"\rAddTagRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"\r\n" +
+	"\vAddTagReply\"&\n" +
+	"\x10UpdateTagRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"\x10\n" +
+	"\x0eUpdateTagReply\"\x0f\n" +
 	"\rGetTagRequest\"\r\n" +
-	"\vGetTagReply2c\n" +
+	"\vGetTagReply2\x9d\x02\n" +
 	"\n" +
 	"TagService\x12U\n" +
+	"\x03Add\x12\x19.content.v1.AddTagRequest\x1a\x17.content.v1.AddTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/add\x12a\n" +
+	"\x06Update\x12\x1c.content.v1.UpdateTagRequest\x1a\x1a.content.v1.UpdateTagReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/tag/update\x12U\n" +
 	"\x03Get\x12\x19.content.v1.GetTagRequest\x1a\x17.content.v1.GetTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/getB\x0fZ\rcontent/v1;v1b\x06proto3"
 
 var (
@@ -119,16 +287,24 @@ func file_content_v1_tag_proto_rawDescGZIP() []byte {
 	return file_content_v1_tag_proto_rawDescData
 }
 
-var file_content_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_content_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_content_v1_tag_proto_goTypes = []any{
-	(*GetTagRequest)(nil), // 0: content.v1.GetTagRequest
-	(*GetTagReply)(nil),   // 1: content.v1.GetTagReply
+	(*AddTagRequest)(nil),    // 0: content.v1.AddTagRequest
+	(*AddTagReply)(nil),      // 1: content.v1.AddTagReply
+	(*UpdateTagRequest)(nil), // 2: content.v1.UpdateTagRequest
+	(*UpdateTagReply)(nil),   // 3: content.v1.UpdateTagReply
+	(*GetTagRequest)(nil),    // 4: content.v1.GetTagRequest
+	(*GetTagReply)(nil),      // 5: content.v1.GetTagReply
 }
 var file_content_v1_tag_proto_depIdxs = []int32{
-	0, // 0: content.v1.TagService.Get:input_type -> content.v1.GetTagRequest
-	1, // 1: content.v1.TagService.Get:output_type -> content.v1.GetTagReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: content.v1.TagService.Add:input_type -> content.v1.AddTagRequest
+	2, // 1: content.v1.TagService.Update:input_type -> content.v1.UpdateTagRequest
+	4, // 2: content.v1.TagService.Get:input_type -> content.v1.GetTagRequest
+	1, // 3: content.v1.TagService.Add:output_type -> content.v1.AddTagReply
+	3, // 4: content.v1.TagService.Update:output_type -> content.v1.UpdateTagReply
+	5, // 5: content.v1.TagService.Get:output_type -> content.v1.GetTagReply
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -145,7 +321,7 @@ func file_content_v1_tag_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_v1_tag_proto_rawDesc), len(file_content_v1_tag_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

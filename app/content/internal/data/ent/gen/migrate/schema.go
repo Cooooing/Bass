@@ -11,7 +11,7 @@ var (
 	// ArticlesColumns holds the columns for the "articles" table.
 	ArticlesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeInt},
 		{Name: "title", Type: field.TypeString},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "has_postscript", Type: field.TypeBool, Default: false},
@@ -20,10 +20,9 @@ var (
 		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "type", Type: field.TypeInt, Default: 0},
 		{Name: "commentable", Type: field.TypeBool, Default: true},
-		{Name: "anonymous", Type: field.TypeBool, Default: true},
+		{Name: "anonymous", Type: field.TypeBool, Default: false},
 		{Name: "thank_count", Type: field.TypeInt, Default: 0},
 		{Name: "like_count", Type: field.TypeInt, Default: 0},
-		{Name: "dislike_count", Type: field.TypeInt, Default: 0},
 		{Name: "collect_count", Type: field.TypeInt, Default: 0},
 		{Name: "watch_count", Type: field.TypeInt, Default: 0},
 		{Name: "bounty_points", Type: field.TypeInt, Default: 0},
@@ -39,6 +38,44 @@ var (
 		Name:       "articles",
 		Columns:    ArticlesColumns,
 		PrimaryKey: []*schema.Column{ArticlesColumns[0]},
+	}
+	// ArticleActionRecordsColumns holds the columns for the "article_action_records" table.
+	ArticleActionRecordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "user_id", Type: field.TypeInt},
+		{Name: "type", Type: field.TypeInt},
+		{Name: "article_id", Type: field.TypeInt},
+	}
+	// ArticleActionRecordsTable holds the schema information for the "article_action_records" table.
+	ArticleActionRecordsTable = &schema.Table{
+		Name:       "article_action_records",
+		Columns:    ArticleActionRecordsColumns,
+		PrimaryKey: []*schema.Column{ArticleActionRecordsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "article_action_records_articles_action_records",
+				Columns:    []*schema.Column{ArticleActionRecordsColumns[3]},
+				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "articleactionrecord_article_id_user_id_type",
+				Unique:  true,
+				Columns: []*schema.Column{ArticleActionRecordsColumns[3], ArticleActionRecordsColumns[1], ArticleActionRecordsColumns[2]},
+			},
+			{
+				Name:    "articleactionrecord_article_id",
+				Unique:  false,
+				Columns: []*schema.Column{ArticleActionRecordsColumns[3]},
+			},
+			{
+				Name:    "articleactionrecord_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{ArticleActionRecordsColumns[1]},
+			},
+		},
 	}
 	// ArticleLotteriesColumns holds the columns for the "article_lotteries" table.
 	ArticleLotteriesColumns = []*schema.Column{
@@ -192,7 +229,6 @@ var (
 		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "reply_count", Type: field.TypeInt, Default: 0},
 		{Name: "like_count", Type: field.TypeInt, Default: 0},
-		{Name: "dislike_count", Type: field.TypeInt, Default: 0},
 		{Name: "collect_count", Type: field.TypeInt, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
@@ -207,13 +243,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "comments_articles_comments",
-				Columns:    []*schema.Column{CommentsColumns[11]},
+				Columns:    []*schema.Column{CommentsColumns[10]},
 				RefColumns: []*schema.Column{ArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "comments_comments_replies",
-				Columns:    []*schema.Column{CommentsColumns[12]},
+				Columns:    []*schema.Column{CommentsColumns[11]},
 				RefColumns: []*schema.Column{CommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -222,7 +258,7 @@ var (
 			{
 				Name:    "comment_article_id_parent_id_status",
 				Unique:  false,
-				Columns: []*schema.Column{CommentsColumns[11], CommentsColumns[12], CommentsColumns[4]},
+				Columns: []*schema.Column{CommentsColumns[10], CommentsColumns[11], CommentsColumns[4]},
 			},
 		},
 	}
@@ -231,11 +267,11 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString},
-		{Name: "status", Type: field.TypeInt, Default: 0},
+		{Name: "status", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "tag_count", Type: field.TypeInt, Default: 0},
-		{Name: "is_nav", Type: field.TypeBool, Default: false},
+		{Name: "is_nav", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
@@ -298,6 +334,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ArticlesTable,
+		ArticleActionRecordsTable,
 		ArticleLotteriesTable,
 		ArticleLotteryParticipantsTable,
 		ArticleLotteryWinnersTable,
@@ -312,6 +349,7 @@ var (
 )
 
 func init() {
+	ArticleActionRecordsTable.ForeignKeys[0].RefTable = ArticlesTable
 	ArticleLotteriesTable.ForeignKeys[0].RefTable = ArticlesTable
 	ArticleLotteryParticipantsTable.ForeignKeys[0].RefTable = ArticleLotteriesTable
 	ArticleLotteryWinnersTable.ForeignKeys[0].RefTable = ArticleLotteriesTable

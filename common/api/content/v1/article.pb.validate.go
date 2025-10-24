@@ -57,6 +57,65 @@ func (m *AddArticleRequest) validate(all bool) error {
 
 	var errors []error
 
+	if l := utf8.RuneCountInString(m.GetTitle()); l < 1 || l > 100 {
+		err := AddArticleRequestValidationError{
+			field:  "Title",
+			reason: "value length must be between 1 and 100 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetContent()) < 1 {
+		err := AddArticleRequestValidationError{
+			field:  "Content",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetRewardContent()) < 1 {
+		err := AddArticleRequestValidationError{
+			field:  "RewardContent",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetRewardPoints() <= 0 {
+		err := AddArticleRequestValidationError{
+			field:  "RewardPoints",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Status
+
+	// no validation rules for Type
+
+	if m.GetBountyPoints() <= 0 {
+		err := AddArticleRequestValidationError{
+			field:  "BountyPoints",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return AddArticleRequestMultiError(errors)
 	}
@@ -237,6 +296,212 @@ var _ interface {
 	ErrorName() string
 } = AddArticleReplyValidationError{}
 
+// Validate checks the field values on PublishArticleRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PublishArticleRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PublishArticleRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PublishArticleRequestMultiError, or nil if none found.
+func (m *PublishArticleRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PublishArticleRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ArticleId
+
+	if len(errors) > 0 {
+		return PublishArticleRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// PublishArticleRequestMultiError is an error wrapping multiple validation
+// errors returned by PublishArticleRequest.ValidateAll() if the designated
+// constraints aren't met.
+type PublishArticleRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PublishArticleRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PublishArticleRequestMultiError) AllErrors() []error { return m }
+
+// PublishArticleRequestValidationError is the validation error returned by
+// PublishArticleRequest.Validate if the designated constraints aren't met.
+type PublishArticleRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PublishArticleRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PublishArticleRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PublishArticleRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PublishArticleRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PublishArticleRequestValidationError) ErrorName() string {
+	return "PublishArticleRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PublishArticleRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPublishArticleRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PublishArticleRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PublishArticleRequestValidationError{}
+
+// Validate checks the field values on PublishArticleReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PublishArticleReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PublishArticleReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PublishArticleReplyMultiError, or nil if none found.
+func (m *PublishArticleReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PublishArticleReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return PublishArticleReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// PublishArticleReplyMultiError is an error wrapping multiple validation
+// errors returned by PublishArticleReply.ValidateAll() if the designated
+// constraints aren't met.
+type PublishArticleReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PublishArticleReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PublishArticleReplyMultiError) AllErrors() []error { return m }
+
+// PublishArticleReplyValidationError is the validation error returned by
+// PublishArticleReply.Validate if the designated constraints aren't met.
+type PublishArticleReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PublishArticleReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PublishArticleReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PublishArticleReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PublishArticleReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PublishArticleReplyValidationError) ErrorName() string {
+	return "PublishArticleReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PublishArticleReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPublishArticleReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PublishArticleReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PublishArticleReplyValidationError{}
+
 // Validate checks the field values on UpdateArticleRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -258,6 +523,14 @@ func (m *UpdateArticleRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Status
+
+	// no validation rules for Commentable
+
+	// no validation rules for Anonymous
 
 	if len(errors) > 0 {
 		return UpdateArticleRequestMultiError(errors)
@@ -462,6 +735,8 @@ func (m *DeleteArticleRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for ArticleId
 
 	if len(errors) > 0 {
 		return DeleteArticleRequestMultiError(errors)
@@ -869,6 +1144,19 @@ func (m *AddPostscriptArticleRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for ArticleId
+
+	if utf8.RuneCountInString(m.GetContent()) < 1 {
+		err := AddPostscriptArticleRequestValidationError{
+			field:  "Content",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return AddPostscriptArticleRequestMultiError(errors)
 	}
@@ -1074,6 +1362,8 @@ func (m *RewardArticleRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for ArticleId
+
 	if len(errors) > 0 {
 		return RewardArticleRequestMultiError(errors)
 	}
@@ -1277,6 +1567,10 @@ func (m *ThankArticleRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Active
 
 	if len(errors) > 0 {
 		return ThankArticleRequestMultiError(errors)
@@ -1482,6 +1776,10 @@ func (m *LikeArticleRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for ArticleId
+
+	// no validation rules for Active
+
 	if len(errors) > 0 {
 		return LikeArticleRequestMultiError(errors)
 	}
@@ -1683,6 +1981,10 @@ func (m *CollectArticleRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Active
 
 	if len(errors) > 0 {
 		return CollectArticleRequestMultiError(errors)
@@ -1888,6 +2190,10 @@ func (m *WatchArticleRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for ArticleId
+
+	// no validation rules for Active
+
 	if len(errors) > 0 {
 		return WatchArticleRequestMultiError(errors)
 	}
@@ -2091,6 +2397,10 @@ func (m *AcceptAnswerArticleRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for ArticleId
+
+	// no validation rules for CommentId
 
 	if len(errors) > 0 {
 		return AcceptAnswerArticleRequestMultiError(errors)

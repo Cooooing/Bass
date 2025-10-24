@@ -20,6 +20,18 @@ func (f ArticleFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.ArticleMutation", m)
 }
 
+// The ArticleActionRecordFunc type is an adapter to allow the use of ordinary
+// function as ArticleActionRecord mutator.
+type ArticleActionRecordFunc func(context.Context, *gen.ArticleActionRecordMutation) (gen.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ArticleActionRecordFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
+	if mv, ok := m.(*gen.ArticleActionRecordMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.ArticleActionRecordMutation", m)
+}
+
 // The ArticleLotteryFunc type is an adapter to allow the use of ordinary
 // function as ArticleLottery mutator.
 type ArticleLotteryFunc func(context.Context, *gen.ArticleLotteryMutation) (gen.Value, error)

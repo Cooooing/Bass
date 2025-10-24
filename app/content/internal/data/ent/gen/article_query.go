@@ -4,6 +4,7 @@ package gen
 
 import (
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlelottery"
 	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/articlevote"
@@ -24,15 +25,16 @@ import (
 // ArticleQuery is the builder for querying Article entities.
 type ArticleQuery struct {
 	config
-	ctx             *QueryContext
-	order           []article.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.Article
-	withPostscripts *ArticlePostscriptQuery
-	withVotes       *ArticleVoteQuery
-	withLotteries   *ArticleLotteryQuery
-	withComments    *CommentQuery
-	withTags        *TagQuery
+	ctx               *QueryContext
+	order             []article.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Article
+	withPostscripts   *ArticlePostscriptQuery
+	withVotes         *ArticleVoteQuery
+	withLotteries     *ArticleLotteryQuery
+	withComments      *CommentQuery
+	withTags          *TagQuery
+	withActionRecords *ArticleActionRecordQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -172,6 +174,28 @@ func (_q *ArticleQuery) QueryTags() *TagQuery {
 			sqlgraph.From(article.Table, article.FieldID, selector),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, article.TagsTable, article.TagsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionRecords chains the current query on the "action_records" edge.
+func (_q *ArticleQuery) QueryActionRecords() *ArticleActionRecordQuery {
+	query := (&ArticleActionRecordClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(article.Table, article.FieldID, selector),
+			sqlgraph.To(articleactionrecord.Table, articleactionrecord.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, article.ActionRecordsTable, article.ActionRecordsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -366,16 +390,17 @@ func (_q *ArticleQuery) Clone() *ArticleQuery {
 		return nil
 	}
 	return &ArticleQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]article.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.Article{}, _q.predicates...),
-		withPostscripts: _q.withPostscripts.Clone(),
-		withVotes:       _q.withVotes.Clone(),
-		withLotteries:   _q.withLotteries.Clone(),
-		withComments:    _q.withComments.Clone(),
-		withTags:        _q.withTags.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]article.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.Article{}, _q.predicates...),
+		withPostscripts:   _q.withPostscripts.Clone(),
+		withVotes:         _q.withVotes.Clone(),
+		withLotteries:     _q.withLotteries.Clone(),
+		withComments:      _q.withComments.Clone(),
+		withTags:          _q.withTags.Clone(),
+		withActionRecords: _q.withActionRecords.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
@@ -437,13 +462,24 @@ func (_q *ArticleQuery) WithTags(opts ...func(*TagQuery)) *ArticleQuery {
 	return _q
 }
 
+// WithActionRecords tells the query-builder to eager-load the nodes that are connected to
+// the "action_records" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ArticleQuery) WithActionRecords(opts ...func(*ArticleActionRecordQuery)) *ArticleQuery {
+	query := (&ArticleActionRecordClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withActionRecords = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
 // Example:
 //
 //	var v []struct {
-//		UserID string `json:"user_id,omitempty"`
+//		UserID int `json:"user_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -466,7 +502,7 @@ func (_q *ArticleQuery) GroupBy(field string, fields ...string) *ArticleGroupBy 
 // Example:
 //
 //	var v []struct {
-//		UserID string `json:"user_id,omitempty"`
+//		UserID int `json:"user_id,omitempty"`
 //	}
 //
 //	client.Article.Query().
@@ -515,12 +551,13 @@ func (_q *ArticleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Arti
 	var (
 		nodes       = []*Article{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withPostscripts != nil,
 			_q.withVotes != nil,
 			_q.withLotteries != nil,
 			_q.withComments != nil,
 			_q.withTags != nil,
+			_q.withActionRecords != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -573,6 +610,13 @@ func (_q *ArticleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Arti
 		if err := _q.loadTags(ctx, query, nodes,
 			func(n *Article) { n.Edges.Tags = []*Tag{} },
 			func(n *Article, e *Tag) { n.Edges.Tags = append(n.Edges.Tags, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withActionRecords; query != nil {
+		if err := _q.loadActionRecords(ctx, query, nodes,
+			func(n *Article) { n.Edges.ActionRecords = []*ArticleActionRecord{} },
+			func(n *Article, e *ArticleActionRecord) { n.Edges.ActionRecords = append(n.Edges.ActionRecords, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -757,6 +801,36 @@ func (_q *ArticleQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *ArticleQuery) loadActionRecords(ctx context.Context, query *ArticleActionRecordQuery, nodes []*Article, init func(*Article), assign func(*Article, *ArticleActionRecord)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Article)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(articleactionrecord.FieldArticleID)
+	}
+	query.Where(predicate.ArticleActionRecord(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(article.ActionRecordsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ArticleID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "article_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

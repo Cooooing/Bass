@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TagService_Get_FullMethodName = "/content.v1.TagService/Get"
+	TagService_Add_FullMethodName    = "/content.v1.TagService/Add"
+	TagService_Update_FullMethodName = "/content.v1.TagService/Update"
+	TagService_Get_FullMethodName    = "/content.v1.TagService/Get"
 )
 
 // TagServiceClient is the client API for TagService service.
@@ -28,6 +30,8 @@ const (
 //
 // 标签服务
 type TagServiceClient interface {
+	Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error)
+	Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*UpdateTagReply, error)
 	Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error)
 }
 
@@ -37,6 +41,26 @@ type tagServiceClient struct {
 
 func NewTagServiceClient(cc grpc.ClientConnInterface) TagServiceClient {
 	return &tagServiceClient{cc}
+}
+
+func (c *tagServiceClient) Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddTagReply)
+	err := c.cc.Invoke(ctx, TagService_Add_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*UpdateTagReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateTagReply)
+	err := c.cc.Invoke(ctx, TagService_Update_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *tagServiceClient) Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error) {
@@ -55,6 +79,8 @@ func (c *tagServiceClient) Get(ctx context.Context, in *GetTagRequest, opts ...g
 //
 // 标签服务
 type TagServiceServer interface {
+	Add(context.Context, *AddTagRequest) (*AddTagReply, error)
+	Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error)
 	Get(context.Context, *GetTagRequest) (*GetTagReply, error)
 	mustEmbedUnimplementedTagServiceServer()
 }
@@ -66,6 +92,12 @@ type TagServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedTagServiceServer struct{}
 
+func (UnimplementedTagServiceServer) Add(context.Context, *AddTagRequest) (*AddTagReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (UnimplementedTagServiceServer) Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
 func (UnimplementedTagServiceServer) Get(context.Context, *GetTagRequest) (*GetTagReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
@@ -88,6 +120,42 @@ func RegisterTagServiceServer(s grpc.ServiceRegistrar, srv TagServiceServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&TagService_ServiceDesc, srv)
+}
+
+func _TagService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).Add(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_Add_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).Add(ctx, req.(*AddTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).Update(ctx, req.(*UpdateTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _TagService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -115,6 +183,14 @@ var TagService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "content.v1.TagService",
 	HandlerType: (*TagServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Add",
+			Handler:    _TagService_Add_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _TagService_Update_Handler,
+		},
 		{
 			MethodName: "Get",
 			Handler:    _TagService_Get_Handler,

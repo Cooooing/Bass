@@ -7,6 +7,7 @@
 package main
 
 import (
+	"common/pkg/util"
 	"content/internal/biz"
 	"content/internal/conf"
 	"content/internal/data"
@@ -25,9 +26,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdClient)
-	systemService := service.NewSystemService(baseService)
-	baseDomain := biz.NewBaseDomain(bootstrap, helper)
 	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
@@ -39,6 +37,10 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
+	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient, tokenRepo)
+	systemService := service.NewSystemService(baseService)
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient)
 	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
 	if err != nil {
 		cleanup3()
@@ -47,8 +49,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	domain := data.NewDomainRepo(baseRepo, genClient)
-	articleDomain, err := biz.NewArticleDomain(baseDomain, domain)
+	articleRepo := data.NewArticleRepo(baseRepo, genClient)
+	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
+	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
+	domainRepo := data.NewDomainRepo(baseRepo)
+	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, domainRepo)
 	if err != nil {
 		cleanup4()
 		cleanup3()
@@ -56,8 +61,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	articleService := service.NewArticleService(baseService, articleDomain)
-	domainService := service.NewDomainService(baseService)
+	articleService := service.NewArticleService(baseService, articleDomain, articleRepo)
+	domainDomain := biz.NewDomainDomain(baseDomain, domainRepo)
+	domainService := service.NewDomainService(baseService, domainDomain)
 	v := service.ProvideServices(systemService, articleService, domainService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v)

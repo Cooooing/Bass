@@ -4,6 +4,7 @@ package gen
 
 import (
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlelottery"
 	"content/internal/data/ent/gen/articlelotteryparticipant"
 	"content/internal/data/ent/gen/articlelotterywinner"
@@ -83,6 +84,7 @@ func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			article.Table:                   article.ValidColumn,
+			articleactionrecord.Table:       articleactionrecord.ValidColumn,
 			articlelottery.Table:            articlelottery.ValidColumn,
 			articlelotteryparticipant.Table: articlelotteryparticipant.ValidColumn,
 			articlelotterywinner.Table:      articlelotterywinner.ValidColumn,

@@ -95,11 +95,6 @@ func LikeCount(v int) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldLikeCount, v))
 }
 
-// DislikeCount applies equality check predicate on the "dislike_count" field. It's identical to DislikeCountEQ.
-func DislikeCount(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldEQ(FieldDislikeCount, v))
-}
-
 // CollectCount applies equality check predicate on the "collect_count" field. It's identical to CollectCountEQ.
 func CollectCount(v int) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldCollectCount, v))
@@ -428,46 +423,6 @@ func LikeCountLT(v int) predicate.Comment {
 // LikeCountLTE applies the LTE predicate on the "like_count" field.
 func LikeCountLTE(v int) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldLikeCount, v))
-}
-
-// DislikeCountEQ applies the EQ predicate on the "dislike_count" field.
-func DislikeCountEQ(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldEQ(FieldDislikeCount, v))
-}
-
-// DislikeCountNEQ applies the NEQ predicate on the "dislike_count" field.
-func DislikeCountNEQ(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldNEQ(FieldDislikeCount, v))
-}
-
-// DislikeCountIn applies the In predicate on the "dislike_count" field.
-func DislikeCountIn(vs ...int) predicate.Comment {
-	return predicate.Comment(sql.FieldIn(FieldDislikeCount, vs...))
-}
-
-// DislikeCountNotIn applies the NotIn predicate on the "dislike_count" field.
-func DislikeCountNotIn(vs ...int) predicate.Comment {
-	return predicate.Comment(sql.FieldNotIn(FieldDislikeCount, vs...))
-}
-
-// DislikeCountGT applies the GT predicate on the "dislike_count" field.
-func DislikeCountGT(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldGT(FieldDislikeCount, v))
-}
-
-// DislikeCountGTE applies the GTE predicate on the "dislike_count" field.
-func DislikeCountGTE(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldGTE(FieldDislikeCount, v))
-}
-
-// DislikeCountLT applies the LT predicate on the "dislike_count" field.
-func DislikeCountLT(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldLT(FieldDislikeCount, v))
-}
-
-// DislikeCountLTE applies the LTE predicate on the "dislike_count" field.
-func DislikeCountLTE(v int) predicate.Comment {
-	return predicate.Comment(sql.FieldLTE(FieldDislikeCount, v))
 }
 
 // CollectCountEQ applies the EQ predicate on the "collect_count" field.

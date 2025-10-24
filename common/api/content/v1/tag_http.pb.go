@@ -19,15 +19,65 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationTagServiceAdd = "/content.v1.TagService/Add"
 const OperationTagServiceGet = "/content.v1.TagService/Get"
+const OperationTagServiceUpdate = "/content.v1.TagService/Update"
 
 type TagServiceHTTPServer interface {
+	Add(context.Context, *AddTagRequest) (*AddTagReply, error)
 	Get(context.Context, *GetTagRequest) (*GetTagReply, error)
+	Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error)
 }
 
 func RegisterTagServiceHTTPServer(s *http.Server, srv TagServiceHTTPServer) {
 	r := s.Route("/")
+	r.POST("/api/v1/tag/add", _TagService_Add3_HTTP_Handler(srv))
+	r.POST("/api/v1/tag/update", _TagService_Update2_HTTP_Handler(srv))
 	r.POST("/api/v1/tag/get", _TagService_Get3_HTTP_Handler(srv))
+}
+
+func _TagService_Add3_HTTP_Handler(srv TagServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AddTagRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationTagServiceAdd)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Add(ctx, req.(*AddTagRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AddTagReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _TagService_Update2_HTTP_Handler(srv TagServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateTagRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationTagServiceUpdate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Update(ctx, req.(*UpdateTagRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateTagReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _TagService_Get3_HTTP_Handler(srv TagServiceHTTPServer) func(ctx http.Context) error {
@@ -53,7 +103,9 @@ func _TagService_Get3_HTTP_Handler(srv TagServiceHTTPServer) func(ctx http.Conte
 }
 
 type TagServiceHTTPClient interface {
+	Add(ctx context.Context, req *AddTagRequest, opts ...http.CallOption) (rsp *AddTagReply, err error)
 	Get(ctx context.Context, req *GetTagRequest, opts ...http.CallOption) (rsp *GetTagReply, err error)
+	Update(ctx context.Context, req *UpdateTagRequest, opts ...http.CallOption) (rsp *UpdateTagReply, err error)
 }
 
 type TagServiceHTTPClientImpl struct {
@@ -64,11 +116,37 @@ func NewTagServiceHTTPClient(client *http.Client) TagServiceHTTPClient {
 	return &TagServiceHTTPClientImpl{client}
 }
 
+func (c *TagServiceHTTPClientImpl) Add(ctx context.Context, in *AddTagRequest, opts ...http.CallOption) (*AddTagReply, error) {
+	var out AddTagReply
+	pattern := "/api/v1/tag/add"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationTagServiceAdd))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 func (c *TagServiceHTTPClientImpl) Get(ctx context.Context, in *GetTagRequest, opts ...http.CallOption) (*GetTagReply, error) {
 	var out GetTagReply
 	pattern := "/api/v1/tag/get"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationTagServiceGet))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *TagServiceHTTPClientImpl) Update(ctx context.Context, in *UpdateTagRequest, opts ...http.CallOption) (*UpdateTagReply, error) {
+	var out UpdateTagReply
+	pattern := "/api/v1/tag/update"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationTagServiceUpdate))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

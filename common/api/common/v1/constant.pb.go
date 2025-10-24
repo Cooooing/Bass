@@ -315,6 +315,59 @@ func (ArticleType) EnumDescriptor() ([]byte, []int) {
 	return file_common_v1_constant_proto_rawDescGZIP(), []int{5}
 }
 
+// 文章行为类型
+type ArticleAction int32
+
+const (
+	ArticleAction_ArticleActionLike    ArticleAction = 0 // 点赞
+	ArticleAction_ArticleActionThank   ArticleAction = 1 // 感谢
+	ArticleAction_ArticleActionCollect ArticleAction = 2 // 收藏
+	ArticleAction_ArticleActionWatch   ArticleAction = 3 // 关注
+)
+
+// Enum value maps for ArticleAction.
+var (
+	ArticleAction_name = map[int32]string{
+		0: "ArticleActionLike",
+		1: "ArticleActionThank",
+		2: "ArticleActionCollect",
+		3: "ArticleActionWatch",
+	}
+	ArticleAction_value = map[string]int32{
+		"ArticleActionLike":    0,
+		"ArticleActionThank":   1,
+		"ArticleActionCollect": 2,
+		"ArticleActionWatch":   3,
+	}
+)
+
+func (x ArticleAction) Enum() *ArticleAction {
+	p := new(ArticleAction)
+	*p = x
+	return p
+}
+
+func (x ArticleAction) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ArticleAction) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_v1_constant_proto_enumTypes[6].Descriptor()
+}
+
+func (ArticleAction) Type() protoreflect.EnumType {
+	return &file_common_v1_constant_proto_enumTypes[6]
+}
+
+func (x ArticleAction) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ArticleAction.Descriptor instead.
+func (ArticleAction) EnumDescriptor() ([]byte, []int) {
+	return file_common_v1_constant_proto_rawDescGZIP(), []int{6}
+}
+
 var File_common_v1_constant_proto protoreflect.FileDescriptor
 
 const file_common_v1_constant_proto_rawDesc = "" +
@@ -343,7 +396,12 @@ const file_common_v1_constant_proto_rawDesc = "" +
 	"\x11ArticleTypeNormal\x10\x00\x12\x11\n" +
 	"\rArticleTypeQA\x10\x01\x12\x13\n" +
 	"\x0fArticleTypeVote\x10\x02\x12\x16\n" +
-	"\x12ArticleTypeLottery\x10\x03B\x0eZ\fcommon/v1;v1b\x06proto3"
+	"\x12ArticleTypeLottery\x10\x03*p\n" +
+	"\rArticleAction\x12\x15\n" +
+	"\x11ArticleActionLike\x10\x00\x12\x16\n" +
+	"\x12ArticleActionThank\x10\x01\x12\x18\n" +
+	"\x14ArticleActionCollect\x10\x02\x12\x16\n" +
+	"\x12ArticleActionWatch\x10\x03B\x0eZ\fcommon/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_constant_proto_rawDescOnce sync.Once
@@ -357,7 +415,7 @@ func file_common_v1_constant_proto_rawDescGZIP() []byte {
 	return file_common_v1_constant_proto_rawDescData
 }
 
-var file_common_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
+var file_common_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
 var file_common_v1_constant_proto_goTypes = []any{
 	(DomainStatus)(0),         // 0: common.v1.DomainStatus
 	(TagStatus)(0),            // 1: common.v1.TagStatus
@@ -365,6 +423,7 @@ var file_common_v1_constant_proto_goTypes = []any{
 	(ArticleLotteryStatus)(0), // 3: common.v1.ArticleLotteryStatus
 	(ArticleStatus)(0),        // 4: common.v1.ArticleStatus
 	(ArticleType)(0),          // 5: common.v1.ArticleType
+	(ArticleAction)(0),        // 6: common.v1.ArticleAction
 }
 var file_common_v1_constant_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -384,7 +443,7 @@ func file_common_v1_constant_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_v1_constant_proto_rawDesc), len(file_common_v1_constant_proto_rawDesc)),
-			NumEnums:      6,
+			NumEnums:      7,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

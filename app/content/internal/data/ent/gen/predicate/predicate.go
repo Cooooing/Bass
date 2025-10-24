@@ -9,6 +9,9 @@ import (
 // Article is the predicate function for article builders.
 type Article func(*sql.Selector)
 
+// ArticleActionRecord is the predicate function for articleactionrecord builders.
+type ArticleActionRecord func(*sql.Selector)
+
 // ArticleLottery is the predicate function for articlelottery builders.
 type ArticleLottery func(*sql.Selector)
 

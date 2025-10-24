@@ -270,6 +270,16 @@ func StatusLTE(v int) predicate.Domain {
 	return predicate.Domain(sql.FieldLTE(FieldStatus, v))
 }
 
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Domain {
+	return predicate.Domain(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Domain {
+	return predicate.Domain(sql.FieldNotNull(FieldStatus))
+}
+
 // URLEQ applies the EQ predicate on the "url" field.
 func URLEQ(v string) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldURL, v))
@@ -468,6 +478,16 @@ func IsNavEQ(v bool) predicate.Domain {
 // IsNavNEQ applies the NEQ predicate on the "is_nav" field.
 func IsNavNEQ(v bool) predicate.Domain {
 	return predicate.Domain(sql.FieldNEQ(FieldIsNav, v))
+}
+
+// IsNavIsNil applies the IsNil predicate on the "is_nav" field.
+func IsNavIsNil() predicate.Domain {
+	return predicate.Domain(sql.FieldIsNull(FieldIsNav))
+}
+
+// IsNavNotNil applies the NotNil predicate on the "is_nav" field.
+func IsNavNotNil() predicate.Domain {
+	return predicate.Domain(sql.FieldNotNull(FieldIsNav))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

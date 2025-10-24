@@ -44,13 +44,13 @@ type User struct {
 	// 粉丝数
 	FollowerCount int `json:"follower_count,omitempty"`
 	// 最近登录时间
-	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
+	LastLoginTime time.Time `json:"last_login_time,omitempty"`
 	// 最近登录IP
 	LastLoginIP string `json:"last_login_ip,omitempty"`
 	// 在线总时长（分钟）
 	OnlineMinutes int `json:"online_minutes,omitempty"`
 	// 最近签到时间
-	LastCheckinTime *time.Time `json:"last_checkin_time,omitempty"`
+	LastCheckinTime time.Time `json:"last_checkin_time,omitempty"`
 	// 当前连续签到天数
 	CurrentCheckinStreak int `json:"current_checkin_streak,omitempty"`
 	// 最长连续签到天数
@@ -210,8 +210,7 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_time", values[i])
 			} else if value.Valid {
-				_m.LastLoginTime = new(time.Time)
-				*_m.LastLoginTime = value.Time
+				_m.LastLoginTime = value.Time
 			}
 		case user.FieldLastLoginIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -229,8 +228,7 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_checkin_time", values[i])
 			} else if value.Valid {
-				_m.LastCheckinTime = new(time.Time)
-				*_m.LastCheckinTime = value.Time
+				_m.LastCheckinTime = value.Time
 			}
 		case user.FieldCurrentCheckinStreak:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -428,10 +426,8 @@ func (_m *User) String() string {
 	builder.WriteString("follower_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FollowerCount))
 	builder.WriteString(", ")
-	if v := _m.LastLoginTime; v != nil {
-		builder.WriteString("last_login_time=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("last_login_time=")
+	builder.WriteString(_m.LastLoginTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("last_login_ip=")
 	builder.WriteString(_m.LastLoginIP)
@@ -439,10 +435,8 @@ func (_m *User) String() string {
 	builder.WriteString("online_minutes=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OnlineMinutes))
 	builder.WriteString(", ")
-	if v := _m.LastCheckinTime; v != nil {
-		builder.WriteString("last_checkin_time=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("last_checkin_time=")
+	builder.WriteString(_m.LastCheckinTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("current_checkin_streak=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CurrentCheckinStreak))

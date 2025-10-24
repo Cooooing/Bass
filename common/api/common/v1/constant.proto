@@ -4,6 +4,8 @@ package common.v1;
 
 option go_package = "common/v1;v1";
 
+// -- mq
+
 
 // -- content module
 
@@ -41,4 +43,12 @@ enum ArticleType {
   ArticleTypeQA = 1; // 问答
   ArticleTypeVote = 2; // 投票
   ArticleTypeLottery = 3; // 抽奖
+}
+
+// 文章行为类型
+enum ArticleAction {
+  ArticleActionLike = 0; // 点赞
+  ArticleActionThank = 1; // 感谢
+  ArticleActionCollect = 2; // 收藏
+  ArticleActionWatch = 3; // 关注
 }

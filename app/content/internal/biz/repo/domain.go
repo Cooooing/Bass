@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-type Domain interface {
+type DomainRepo interface {
 	Save(ctx context.Context, client *gen.Client, domain *model.Domain) (*model.Domain, error)
 	Update(ctx context.Context, client *gen.Client, domain *model.Domain) (*model.Domain, error)
 }

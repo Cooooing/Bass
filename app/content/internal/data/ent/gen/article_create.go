@@ -4,6 +4,7 @@ package gen
 
 import (
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlelottery"
 	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/articlevote"
@@ -26,7 +27,7 @@ type ArticleCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *ArticleCreate) SetUserID(v string) *ArticleCreate {
+func (_c *ArticleCreate) SetUserID(v int) *ArticleCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
@@ -165,20 +166,6 @@ func (_c *ArticleCreate) SetLikeCount(v int) *ArticleCreate {
 func (_c *ArticleCreate) SetNillableLikeCount(v *int) *ArticleCreate {
 	if v != nil {
 		_c.SetLikeCount(*v)
-	}
-	return _c
-}
-
-// SetDislikeCount sets the "dislike_count" field.
-func (_c *ArticleCreate) SetDislikeCount(v int) *ArticleCreate {
-	_c.mutation.SetDislikeCount(v)
-	return _c
-}
-
-// SetNillableDislikeCount sets the "dislike_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableDislikeCount(v *int) *ArticleCreate {
-	if v != nil {
-		_c.SetDislikeCount(*v)
 	}
 	return _c
 }
@@ -384,6 +371,21 @@ func (_c *ArticleCreate) AddTags(v ...*Tag) *ArticleCreate {
 	return _c.AddTagIDs(ids...)
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the ArticleActionRecord entity by IDs.
+func (_c *ArticleCreate) AddActionRecordIDs(ids ...int) *ArticleCreate {
+	_c.mutation.AddActionRecordIDs(ids...)
+	return _c
+}
+
+// AddActionRecords adds the "action_records" edges to the ArticleActionRecord entity.
+func (_c *ArticleCreate) AddActionRecords(v ...*ArticleActionRecord) *ArticleCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionRecordIDs(ids...)
+}
+
 // Mutation returns the ArticleMutation object of the builder.
 func (_c *ArticleCreate) Mutation() *ArticleMutation {
 	return _c.mutation
@@ -451,10 +453,6 @@ func (_c *ArticleCreate) defaults() {
 		v := article.DefaultLikeCount
 		_c.mutation.SetLikeCount(v)
 	}
-	if _, ok := _c.mutation.DislikeCount(); !ok {
-		v := article.DefaultDislikeCount
-		_c.mutation.SetDislikeCount(v)
-	}
 	if _, ok := _c.mutation.CollectCount(); !ok {
 		v := article.DefaultCollectCount
 		_c.mutation.SetCollectCount(v)
@@ -493,11 +491,6 @@ func (_c *ArticleCreate) defaults() {
 func (_c *ArticleCreate) check() error {
 	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`gen: missing required field "Article.user_id"`)}
-	}
-	if v, ok := _c.mutation.UserID(); ok {
-		if err := article.UserIDValidator(v); err != nil {
-			return &ValidationError{Name: "user_id", err: fmt.Errorf(`gen: validator failed for field "Article.user_id": %w`, err)}
-		}
 	}
 	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`gen: missing required field "Article.title"`)}
@@ -538,9 +531,6 @@ func (_c *ArticleCreate) check() error {
 	}
 	if _, ok := _c.mutation.LikeCount(); !ok {
 		return &ValidationError{Name: "like_count", err: errors.New(`gen: missing required field "Article.like_count"`)}
-	}
-	if _, ok := _c.mutation.DislikeCount(); !ok {
-		return &ValidationError{Name: "dislike_count", err: errors.New(`gen: missing required field "Article.dislike_count"`)}
 	}
 	if _, ok := _c.mutation.CollectCount(); !ok {
 		return &ValidationError{Name: "collect_count", err: errors.New(`gen: missing required field "Article.collect_count"`)}
@@ -587,7 +577,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 		_spec = sqlgraph.NewCreateSpec(article.Table, sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt))
 	)
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeString, value)
+		_spec.SetField(article.FieldUserID, field.TypeInt, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
@@ -604,7 +594,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.RewardContent(); ok {
 		_spec.SetField(article.FieldRewardContent, field.TypeString, value)
-		_node.RewardContent = value
+		_node.RewardContent = &value
 	}
 	if value, ok := _c.mutation.RewardPoints(); ok {
 		_spec.SetField(article.FieldRewardPoints, field.TypeInt, value)
@@ -633,10 +623,6 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LikeCount(); ok {
 		_spec.SetField(article.FieldLikeCount, field.TypeInt, value)
 		_node.LikeCount = value
-	}
-	if value, ok := _c.mutation.DislikeCount(); ok {
-		_spec.SetField(article.FieldDislikeCount, field.TypeInt, value)
-		_node.DislikeCount = value
 	}
 	if value, ok := _c.mutation.CollectCount(); ok {
 		_spec.SetField(article.FieldCollectCount, field.TypeInt, value)
@@ -747,6 +733,22 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionRecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

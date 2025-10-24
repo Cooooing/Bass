@@ -221,14 +221,8 @@ func (_c *DomainCreate) check() error {
 			return &ValidationError{Name: "description", err: fmt.Errorf(`gen: validator failed for field "Domain.description": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Domain.status"`)}
-	}
 	if _, ok := _c.mutation.TagCount(); !ok {
 		return &ValidationError{Name: "tag_count", err: errors.New(`gen: missing required field "Domain.tag_count"`)}
-	}
-	if _, ok := _c.mutation.IsNav(); !ok {
-		return &ValidationError{Name: "is_nav", err: errors.New(`gen: missing required field "Domain.is_nav"`)}
 	}
 	return nil
 }

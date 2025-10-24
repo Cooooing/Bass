@@ -6,6 +6,24 @@ info:
     title: ""
     version: 0.0.1
 paths:
+    /api/v1/tag/add:
+        post:
+            tags:
+                - TagService
+            operationId: TagService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.AddTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.AddTagReply'
     /api/v1/tag/get:
         post:
             tags:
@@ -24,6 +42,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/content.v1.GetTagReply'
+    /api/v1/tag/update:
+        post:
+            tags:
+                - TagService
+            operationId: TagService_Update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.UpdateTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.UpdateTagReply'
     /v1/article/acceptAnswer:
         post:
             tags:
@@ -142,7 +178,7 @@ paths:
         post:
             tags:
                 - ArticleService
-            description: 点赞/踩文章
+            description: 点赞文章
             operationId: ArticleService_Like
             requestBody:
                 content:
@@ -157,6 +193,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/content.v1.LikeArticleReply'
+    /v1/article/publish:
+        post:
+            tags:
+                - ArticleService
+            description: 发布文章（从草稿发布）
+            operationId: ArticleService_Publish
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.PublishArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.PublishArticleReply'
     /v1/article/reward:
         post:
             tags:
@@ -199,7 +254,7 @@ paths:
         post:
             tags:
                 - ArticleService
-            description: 修改文章
+            description: 修改文章（管理员使用）
             operationId: ArticleService_Update
             requestBody:
                 content:
@@ -214,25 +269,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/content.v1.UpdateArticleReply'
-    /v1/article/updateStatus:
-        post:
-            tags:
-                - ArticleService
-            description: 修改文章状态
-            operationId: ArticleService_UpdateStatus
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/content.v1.UpdateStatusArticleRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/content.v1.UpdateStatusArticleReply'
     /v1/article/watch:
         post:
             tags:
@@ -402,7 +438,7 @@ paths:
         post:
             tags:
                 - CommentService
-            description: 点赞/踩评论
+            description: 点赞评论
             operationId: CommentService_Like
             requestBody:
                 content:
@@ -620,9 +656,7 @@ components:
                     format: uint32
         common.api.content.v1.AddDomainReply:
             type: object
-            properties:
-                success:
-                    type: boolean
+            properties: {}
         common.api.content.v1.AddDomainRequest:
             type: object
             properties:
@@ -694,9 +728,7 @@ components:
                     type: boolean
         common.api.content.v1.UpdateDomainReply:
             type: object
-            properties:
-                success:
-                    type: boolean
+            properties: {}
         common.api.content.v1.UpdateDomainRequest:
             type: object
             properties:
@@ -724,13 +756,37 @@ components:
             properties: {}
         content.v1.AcceptAnswerArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                commentId:
+                    type: integer
+                    format: int32
         content.v1.AddArticleReply:
             type: object
             properties: {}
         content.v1.AddArticleRequest:
             type: object
-            properties: {}
+            properties:
+                title:
+                    type: string
+                content:
+                    type: string
+                rewardContent:
+                    type: string
+                rewardPoints:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                type:
+                    type: integer
+                    format: int32
+                bountyPoints:
+                    type: integer
+                    format: int32
         content.v1.AddCommentReply:
             type: object
             properties: {}
@@ -742,19 +798,40 @@ components:
             properties: {}
         content.v1.AddPostscriptArticleRequest:
             type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                content:
+                    type: string
+        content.v1.AddTagReply:
+            type: object
             properties: {}
+        content.v1.AddTagRequest:
+            type: object
+            properties:
+                name:
+                    type: string
         content.v1.CollectArticleReply:
             type: object
             properties: {}
         content.v1.CollectArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
         content.v1.DeleteArticleReply:
             type: object
             properties: {}
         content.v1.DeleteArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
         content.v1.GetArticleReply:
             type: object
             properties: {}
@@ -775,25 +852,47 @@ components:
             properties: {}
         content.v1.LikeArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
         content.v1.LikeCommentReply:
             type: object
             properties: {}
         content.v1.LikeCommentRequest:
             type: object
             properties: {}
+        content.v1.PublishArticleReply:
+            type: object
+            properties: {}
+        content.v1.PublishArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
         content.v1.RewardArticleReply:
             type: object
             properties: {}
         content.v1.RewardArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
         content.v1.ThankArticleReply:
             type: object
             properties: {}
         content.v1.ThankArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
         content.v1.ThankCommentReply:
             type: object
             properties: {}
@@ -805,25 +904,42 @@ components:
             properties: {}
         content.v1.UpdateArticleRequest:
             type: object
-            properties: {}
-        content.v1.UpdateStatusArticleReply:
-            type: object
-            properties: {}
-        content.v1.UpdateStatusArticleRequest:
-            type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                commentable:
+                    type: boolean
+                anonymous:
+                    type: boolean
         content.v1.UpdateStatusCommentReply:
             type: object
             properties: {}
         content.v1.UpdateStatusCommentRequest:
             type: object
             properties: {}
+        content.v1.UpdateTagReply:
+            type: object
+            properties: {}
+        content.v1.UpdateTagRequest:
+            type: object
+            properties:
+                name:
+                    type: string
         content.v1.WatchArticleReply:
             type: object
             properties: {}
         content.v1.WatchArticleRequest:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
 tags:
     - name: ArticleService
       description: Article 服务

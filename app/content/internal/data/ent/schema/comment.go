@@ -25,7 +25,6 @@ func (Comment) Fields() []ent.Field {
 
 		field.Int("reply_count").Comment("回复数").Default(0),
 		field.Int("like_count").Comment("点赞数").Default(0),
-		field.Int("dislike_count").Comment("点踩数").Default(0),
 		field.Int("collect_count").Comment("收藏数").Default(0),
 	}, pkg.TimeAuditFields()...)
 }

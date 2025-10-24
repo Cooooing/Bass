@@ -18,7 +18,15 @@ service ArticleService {
     };
   }
 
-  // 修改文章
+  // 发布文章（从草稿发布）
+  rpc Publish (PublishArticleRequest) returns (PublishArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/publish"
+      body: "*"
+    };
+  }
+
+  // 修改文章（管理员使用）
   rpc Update (UpdateArticleRequest) returns (UpdateArticleReply) {
     option (google.api.http) = {
       post: "/v1/article/update"
@@ -66,7 +74,7 @@ service ArticleService {
     };
   }
 
-  // 点赞/踩文章
+  // 点赞文章
   rpc Like (LikeArticleRequest) returns (LikeArticleReply) {
     option (google.api.http) = {
       post: "/v1/article/like"
@@ -98,48 +106,80 @@ service ArticleService {
     };
   }
 
-  // 修改文章状态
-  rpc UpdateStatus (UpdateStatusArticleRequest) returns (UpdateStatusArticleReply) {
-    option (google.api.http) = {
-      post: "/v1/article/updateStatus"
-      body: "*"
-    };
-  }
-
 }
 
 
-message AddArticleRequest {}
+message AddArticleRequest {
+  string title = 1 [(validate.rules).string = {min_len: 1, max_len: 100}];
+  string content = 2 [(validate.rules).string = {min_len: 1}];
+  string reward_content = 3 [(validate.rules).string = {min_len: 1}];
+  int32 reward_points = 4 [(validate.rules).int32 = {gt: 0}];
+  int32 status = 5;
+  int32 type = 6;
+  int32 bounty_points = 7 [(validate.rules).int32 = {gt: 0}];
+}
 message AddArticleReply {}
 
-message UpdateArticleRequest {}
+message PublishArticleRequest {
+  int32 article_id = 1;
+}
+message PublishArticleReply {}
+
+message UpdateArticleRequest {
+  int32 article_id = 1;
+  int32 status = 2;
+  bool commentable = 3;
+  bool anonymous = 4;
+}
 message UpdateArticleReply {}
 
-message DeleteArticleRequest {}
+message DeleteArticleRequest {
+  int32 article_id = 1;
+}
 message DeleteArticleReply {}
 
 message GetArticleRequest {}
 message GetArticleReply {}
 
-message AddPostscriptArticleRequest {}
+message AddPostscriptArticleRequest {
+  int32 article_id = 1;
+  string content = 2 [(validate.rules).string = {min_len: 1}];
+}
 message AddPostscriptArticleReply {}
 
-message RewardArticleRequest {}
+message RewardArticleRequest {
+  int32 article_id = 1;
+}
 message RewardArticleReply {}
 
-message ThankArticleRequest {}
+message ThankArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
 message ThankArticleReply {}
 
-message LikeArticleRequest {}
+message LikeArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
 message LikeArticleReply {}
 
-message CollectArticleRequest {}
+message CollectArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
 message CollectArticleReply {}
 
-message WatchArticleRequest {}
+message WatchArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
 message WatchArticleReply {}
 
-message AcceptAnswerArticleRequest {}
+message AcceptAnswerArticleRequest {
+  int32 article_id = 1;
+  int32 comment_id = 2;
+}
 message AcceptAnswerArticleReply {}
 
 message UpdateStatusArticleRequest {}

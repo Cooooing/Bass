@@ -30,7 +30,7 @@ type CommentServiceHTTPServer interface {
 	Add(context.Context, *AddCommentRequest) (*AddCommentReply, error)
 	// Get 查询评论
 	Get(context.Context, *GetCommentRequest) (*GetCommentReply, error)
-	// Like 点赞/踩评论
+	// Like 点赞评论
 	Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error)
 	// Thank 感谢评论
 	Thank(context.Context, *ThankCommentRequest) (*ThankCommentReply, error)
@@ -44,7 +44,7 @@ func RegisterCommentServiceHTTPServer(s *http.Server, srv CommentServiceHTTPServ
 	r.GET("/v1/comment/get", _CommentService_Get1_HTTP_Handler(srv))
 	r.POST("/v1/comment/like", _CommentService_Like1_HTTP_Handler(srv))
 	r.POST("/v1/comment/thank", _CommentService_Thank1_HTTP_Handler(srv))
-	r.POST("/v1/comment/updateStatus", _CommentService_UpdateStatus1_HTTP_Handler(srv))
+	r.POST("/v1/comment/updateStatus", _CommentService_UpdateStatus0_HTTP_Handler(srv))
 }
 
 func _CommentService_Add1_HTTP_Handler(srv CommentServiceHTTPServer) func(ctx http.Context) error {
@@ -132,7 +132,7 @@ func _CommentService_Thank1_HTTP_Handler(srv CommentServiceHTTPServer) func(ctx 
 	}
 }
 
-func _CommentService_UpdateStatus1_HTTP_Handler(srv CommentServiceHTTPServer) func(ctx http.Context) error {
+func _CommentService_UpdateStatus0_HTTP_Handler(srv CommentServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateStatusCommentRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -159,7 +159,7 @@ type CommentServiceHTTPClient interface {
 	Add(ctx context.Context, req *AddCommentRequest, opts ...http.CallOption) (rsp *AddCommentReply, err error)
 	// Get 查询评论
 	Get(ctx context.Context, req *GetCommentRequest, opts ...http.CallOption) (rsp *GetCommentReply, err error)
-	// Like 点赞/踩评论
+	// Like 点赞评论
 	Like(ctx context.Context, req *LikeCommentRequest, opts ...http.CallOption) (rsp *LikeCommentReply, err error)
 	// Thank 感谢评论
 	Thank(ctx context.Context, req *ThankCommentRequest, opts ...http.CallOption) (rsp *ThankCommentReply, err error)
@@ -203,7 +203,7 @@ func (c *CommentServiceHTTPClientImpl) Get(ctx context.Context, in *GetCommentRe
 	return &out, nil
 }
 
-// Like 点赞/踩评论
+// Like 点赞评论
 func (c *CommentServiceHTTPClientImpl) Like(ctx context.Context, in *LikeCommentRequest, opts ...http.CallOption) (*LikeCommentReply, error) {
 	var out LikeCommentReply
 	pattern := "/v1/comment/like"

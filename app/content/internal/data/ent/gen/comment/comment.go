@@ -30,8 +30,6 @@ const (
 	FieldReplyCount = "reply_count"
 	// FieldLikeCount holds the string denoting the like_count field in the database.
 	FieldLikeCount = "like_count"
-	// FieldDislikeCount holds the string denoting the dislike_count field in the database.
-	FieldDislikeCount = "dislike_count"
 	// FieldCollectCount holds the string denoting the collect_count field in the database.
 	FieldCollectCount = "collect_count"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -74,7 +72,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldReplyCount,
 	FieldLikeCount,
-	FieldDislikeCount,
 	FieldCollectCount,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -101,8 +98,6 @@ var (
 	DefaultReplyCount int
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
 	DefaultLikeCount int
-	// DefaultDislikeCount holds the default value on creation for the "dislike_count" field.
-	DefaultDislikeCount int
 	// DefaultCollectCount holds the default value on creation for the "collect_count" field.
 	DefaultCollectCount int
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -157,11 +152,6 @@ func ByReplyCount(opts ...sql.OrderTermOption) OrderOption {
 // ByLikeCount orders the results by the like_count field.
 func ByLikeCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLikeCount, opts...).ToFunc()
-}
-
-// ByDislikeCount orders the results by the dislike_count field.
-func ByDislikeCount(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDislikeCount, opts...).ToFunc()
 }
 
 // ByCollectCount orders the results by the collect_count field.

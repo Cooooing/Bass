@@ -2,6 +2,7 @@ package service
 
 import (
 	"common/pkg/client"
+	"common/pkg/util"
 	"content/internal/conf"
 	"content/internal/data/ent/gen"
 
@@ -23,17 +24,20 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 type BaseService struct {
-	conf *conf.Bootstrap
-	log  *log.Helper
-	etcd *client.EtcdClient
-	db   *gen.Client
+	conf      *conf.Bootstrap
+	log       *log.Helper
+	etcd      *client.EtcdClient
+	db        *gen.Client
+	tokenRepo *util.TokenRepo
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, etcd *client.EtcdClient) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, etcd *client.EtcdClient, db *gen.Client, tokenRepo *util.TokenRepo) *BaseService {
 	return &BaseService{
-		conf: conf,
-		log:  logger,
-		etcd: etcd,
+		conf:      conf,
+		log:       logger,
+		etcd:      etcd,
+		db:        db,
+		tokenRepo: tokenRepo,
 	}
 }
 

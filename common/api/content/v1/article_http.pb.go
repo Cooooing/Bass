@@ -26,10 +26,10 @@ const OperationArticleServiceCollect = "/content.v1.ArticleService/Collect"
 const OperationArticleServiceDelete = "/content.v1.ArticleService/Delete"
 const OperationArticleServiceGet = "/content.v1.ArticleService/Get"
 const OperationArticleServiceLike = "/content.v1.ArticleService/Like"
+const OperationArticleServicePublish = "/content.v1.ArticleService/Publish"
 const OperationArticleServiceReward = "/content.v1.ArticleService/Reward"
 const OperationArticleServiceThank = "/content.v1.ArticleService/Thank"
 const OperationArticleServiceUpdate = "/content.v1.ArticleService/Update"
-const OperationArticleServiceUpdateStatus = "/content.v1.ArticleService/UpdateStatus"
 const OperationArticleServiceWatch = "/content.v1.ArticleService/Watch"
 
 type ArticleServiceHTTPServer interface {
@@ -45,16 +45,16 @@ type ArticleServiceHTTPServer interface {
 	Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error)
 	// Get 查询文章
 	Get(context.Context, *GetArticleRequest) (*GetArticleReply, error)
-	// Like 点赞/踩文章
+	// Like 点赞文章
 	Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error)
+	// Publish 发布文章（从草稿发布）
+	Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error)
 	// Reward 打赏文章
 	Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error)
 	// Thank 感谢文章
 	Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error)
-	// Update 修改文章
+	// Update 修改文章（管理员使用）
 	Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error)
-	// UpdateStatus 修改文章状态
-	UpdateStatus(context.Context, *UpdateStatusArticleRequest) (*UpdateStatusArticleReply, error)
 	// Watch 关注文章
 	Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error)
 }
@@ -62,6 +62,7 @@ type ArticleServiceHTTPServer interface {
 func RegisterArticleServiceHTTPServer(s *http.Server, srv ArticleServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/article/add", _ArticleService_Add0_HTTP_Handler(srv))
+	r.POST("/v1/article/publish", _ArticleService_Publish0_HTTP_Handler(srv))
 	r.POST("/v1/article/update", _ArticleService_Update0_HTTP_Handler(srv))
 	r.POST("/v1/article/delete", _ArticleService_Delete0_HTTP_Handler(srv))
 	r.POST("/v1/article/get", _ArticleService_Get0_HTTP_Handler(srv))
@@ -72,7 +73,6 @@ func RegisterArticleServiceHTTPServer(s *http.Server, srv ArticleServiceHTTPServ
 	r.POST("/v1/article/collect", _ArticleService_Collect0_HTTP_Handler(srv))
 	r.POST("/v1/article/watch", _ArticleService_Watch0_HTTP_Handler(srv))
 	r.POST("/v1/article/acceptAnswer", _ArticleService_AcceptAnswer0_HTTP_Handler(srv))
-	r.POST("/v1/article/updateStatus", _ArticleService_UpdateStatus0_HTTP_Handler(srv))
 }
 
 func _ArticleService_Add0_HTTP_Handler(srv ArticleServiceHTTPServer) func(ctx http.Context) error {
@@ -93,6 +93,28 @@ func _ArticleService_Add0_HTTP_Handler(srv ArticleServiceHTTPServer) func(ctx ht
 			return err
 		}
 		reply := out.(*AddArticleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ArticleService_Publish0_HTTP_Handler(srv ArticleServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PublishArticleRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationArticleServicePublish)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Publish(ctx, req.(*PublishArticleRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*PublishArticleReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -317,28 +339,6 @@ func _ArticleService_AcceptAnswer0_HTTP_Handler(srv ArticleServiceHTTPServer) fu
 	}
 }
 
-func _ArticleService_UpdateStatus0_HTTP_Handler(srv ArticleServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in UpdateStatusArticleRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationArticleServiceUpdateStatus)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateStatus(ctx, req.(*UpdateStatusArticleRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*UpdateStatusArticleReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 type ArticleServiceHTTPClient interface {
 	// AcceptAnswer 采纳评论
 	AcceptAnswer(ctx context.Context, req *AcceptAnswerArticleRequest, opts ...http.CallOption) (rsp *AcceptAnswerArticleReply, err error)
@@ -352,16 +352,16 @@ type ArticleServiceHTTPClient interface {
 	Delete(ctx context.Context, req *DeleteArticleRequest, opts ...http.CallOption) (rsp *DeleteArticleReply, err error)
 	// Get 查询文章
 	Get(ctx context.Context, req *GetArticleRequest, opts ...http.CallOption) (rsp *GetArticleReply, err error)
-	// Like 点赞/踩文章
+	// Like 点赞文章
 	Like(ctx context.Context, req *LikeArticleRequest, opts ...http.CallOption) (rsp *LikeArticleReply, err error)
+	// Publish 发布文章（从草稿发布）
+	Publish(ctx context.Context, req *PublishArticleRequest, opts ...http.CallOption) (rsp *PublishArticleReply, err error)
 	// Reward 打赏文章
 	Reward(ctx context.Context, req *RewardArticleRequest, opts ...http.CallOption) (rsp *RewardArticleReply, err error)
 	// Thank 感谢文章
 	Thank(ctx context.Context, req *ThankArticleRequest, opts ...http.CallOption) (rsp *ThankArticleReply, err error)
-	// Update 修改文章
+	// Update 修改文章（管理员使用）
 	Update(ctx context.Context, req *UpdateArticleRequest, opts ...http.CallOption) (rsp *UpdateArticleReply, err error)
-	// UpdateStatus 修改文章状态
-	UpdateStatus(ctx context.Context, req *UpdateStatusArticleRequest, opts ...http.CallOption) (rsp *UpdateStatusArticleReply, err error)
 	// Watch 关注文章
 	Watch(ctx context.Context, req *WatchArticleRequest, opts ...http.CallOption) (rsp *WatchArticleReply, err error)
 }
@@ -458,12 +458,26 @@ func (c *ArticleServiceHTTPClientImpl) Get(ctx context.Context, in *GetArticleRe
 	return &out, nil
 }
 
-// Like 点赞/踩文章
+// Like 点赞文章
 func (c *ArticleServiceHTTPClientImpl) Like(ctx context.Context, in *LikeArticleRequest, opts ...http.CallOption) (*LikeArticleReply, error) {
 	var out LikeArticleReply
 	pattern := "/v1/article/like"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationArticleServiceLike))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Publish 发布文章（从草稿发布）
+func (c *ArticleServiceHTTPClientImpl) Publish(ctx context.Context, in *PublishArticleRequest, opts ...http.CallOption) (*PublishArticleReply, error) {
+	var out PublishArticleReply
+	pattern := "/v1/article/publish"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationArticleServicePublish))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -500,26 +514,12 @@ func (c *ArticleServiceHTTPClientImpl) Thank(ctx context.Context, in *ThankArtic
 	return &out, nil
 }
 
-// Update 修改文章
+// Update 修改文章（管理员使用）
 func (c *ArticleServiceHTTPClientImpl) Update(ctx context.Context, in *UpdateArticleRequest, opts ...http.CallOption) (*UpdateArticleReply, error) {
 	var out UpdateArticleReply
 	pattern := "/v1/article/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationArticleServiceUpdate))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-// UpdateStatus 修改文章状态
-func (c *ArticleServiceHTTPClientImpl) UpdateStatus(ctx context.Context, in *UpdateStatusArticleRequest, opts ...http.CallOption) (*UpdateStatusArticleReply, error) {
-	var out UpdateStatusArticleReply
-	pattern := "/v1/article/updateStatus"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationArticleServiceUpdateStatus))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

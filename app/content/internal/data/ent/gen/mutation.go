@@ -4,6 +4,7 @@ package gen
 
 import (
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlelottery"
 	"content/internal/data/ent/gen/articlelotteryparticipant"
 	"content/internal/data/ent/gen/articlelotterywinner"
@@ -34,6 +35,7 @@ const (
 
 	// Node types.
 	TypeArticle                   = "Article"
+	TypeArticleActionRecord       = "ArticleActionRecord"
 	TypeArticleLottery            = "ArticleLottery"
 	TypeArticleLotteryParticipant = "ArticleLotteryParticipant"
 	TypeArticleLotteryWinner      = "ArticleLotteryWinner"
@@ -51,7 +53,8 @@ type ArticleMutation struct {
 	op                           Op
 	typ                          string
 	id                           *int
-	user_id                      *string
+	user_id                      *int
+	adduser_id                   *int
 	title                        *string
 	content                      *string
 	has_postscript               *bool
@@ -68,8 +71,6 @@ type ArticleMutation struct {
 	addthank_count               *int
 	like_count                   *int
 	addlike_count                *int
-	dislike_count                *int
-	adddislike_count             *int
 	collect_count                *int
 	addcollect_count             *int
 	watch_count                  *int
@@ -102,6 +103,9 @@ type ArticleMutation struct {
 	tags                         map[int]struct{}
 	removedtags                  map[int]struct{}
 	clearedtags                  bool
+	action_records               map[int]struct{}
+	removedaction_records        map[int]struct{}
+	clearedaction_records        bool
 	done                         bool
 	oldValue                     func(context.Context) (*Article, error)
 	predicates                   []predicate.Article
@@ -206,12 +210,13 @@ func (m *ArticleMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *ArticleMutation) SetUserID(s string) {
-	m.user_id = &s
+func (m *ArticleMutation) SetUserID(i int) {
+	m.user_id = &i
+	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleMutation) UserID() (r string, exists bool) {
+func (m *ArticleMutation) UserID() (r int, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -222,7 +227,7 @@ func (m *ArticleMutation) UserID() (r string, exists bool) {
 // OldUserID returns the old "user_id" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldUserID(ctx context.Context) (v string, err error) {
+func (m *ArticleMutation) OldUserID(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -236,9 +241,28 @@ func (m *ArticleMutation) OldUserID(ctx context.Context) (v string, err error) {
 	return oldValue.UserID, nil
 }
 
+// AddUserID adds i to the "user_id" field.
+func (m *ArticleMutation) AddUserID(i int) {
+	if m.adduser_id != nil {
+		*m.adduser_id += i
+	} else {
+		m.adduser_id = &i
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *ArticleMutation) AddedUserID() (r int, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetUserID resets all changes to the "user_id" field.
 func (m *ArticleMutation) ResetUserID() {
 	m.user_id = nil
+	m.adduser_id = nil
 }
 
 // SetTitle sets the "title" field.
@@ -366,7 +390,7 @@ func (m *ArticleMutation) RewardContent() (r string, exists bool) {
 // OldRewardContent returns the old "reward_content" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldRewardContent(ctx context.Context) (v string, err error) {
+func (m *ArticleMutation) OldRewardContent(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRewardContent is only allowed on UpdateOne operations")
 	}
@@ -748,62 +772,6 @@ func (m *ArticleMutation) AddedLikeCount() (r int, exists bool) {
 func (m *ArticleMutation) ResetLikeCount() {
 	m.like_count = nil
 	m.addlike_count = nil
-}
-
-// SetDislikeCount sets the "dislike_count" field.
-func (m *ArticleMutation) SetDislikeCount(i int) {
-	m.dislike_count = &i
-	m.adddislike_count = nil
-}
-
-// DislikeCount returns the value of the "dislike_count" field in the mutation.
-func (m *ArticleMutation) DislikeCount() (r int, exists bool) {
-	v := m.dislike_count
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDislikeCount returns the old "dislike_count" field's value of the Article entity.
-// If the Article object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldDislikeCount(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDislikeCount is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDislikeCount requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDislikeCount: %w", err)
-	}
-	return oldValue.DislikeCount, nil
-}
-
-// AddDislikeCount adds i to the "dislike_count" field.
-func (m *ArticleMutation) AddDislikeCount(i int) {
-	if m.adddislike_count != nil {
-		*m.adddislike_count += i
-	} else {
-		m.adddislike_count = &i
-	}
-}
-
-// AddedDislikeCount returns the value that was added to the "dislike_count" field in this mutation.
-func (m *ArticleMutation) AddedDislikeCount() (r int, exists bool) {
-	v := m.adddislike_count
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetDislikeCount resets all changes to the "dislike_count" field.
-func (m *ArticleMutation) ResetDislikeCount() {
-	m.dislike_count = nil
-	m.adddislike_count = nil
 }
 
 // SetCollectCount sets the "collect_count" field.
@@ -1580,6 +1548,60 @@ func (m *ArticleMutation) ResetTags() {
 	m.removedtags = nil
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the ArticleActionRecord entity by ids.
+func (m *ArticleMutation) AddActionRecordIDs(ids ...int) {
+	if m.action_records == nil {
+		m.action_records = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.action_records[ids[i]] = struct{}{}
+	}
+}
+
+// ClearActionRecords clears the "action_records" edge to the ArticleActionRecord entity.
+func (m *ArticleMutation) ClearActionRecords() {
+	m.clearedaction_records = true
+}
+
+// ActionRecordsCleared reports if the "action_records" edge to the ArticleActionRecord entity was cleared.
+func (m *ArticleMutation) ActionRecordsCleared() bool {
+	return m.clearedaction_records
+}
+
+// RemoveActionRecordIDs removes the "action_records" edge to the ArticleActionRecord entity by IDs.
+func (m *ArticleMutation) RemoveActionRecordIDs(ids ...int) {
+	if m.removedaction_records == nil {
+		m.removedaction_records = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.action_records, ids[i])
+		m.removedaction_records[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedActionRecords returns the removed IDs of the "action_records" edge to the ArticleActionRecord entity.
+func (m *ArticleMutation) RemovedActionRecordsIDs() (ids []int) {
+	for id := range m.removedaction_records {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ActionRecordsIDs returns the "action_records" edge IDs in the mutation.
+func (m *ArticleMutation) ActionRecordsIDs() (ids []int) {
+	for id := range m.action_records {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetActionRecords resets all changes to the "action_records" edge.
+func (m *ArticleMutation) ResetActionRecords() {
+	m.action_records = nil
+	m.clearedaction_records = false
+	m.removedaction_records = nil
+}
+
 // Where appends a list predicates to the ArticleMutation builder.
 func (m *ArticleMutation) Where(ps ...predicate.Article) {
 	m.predicates = append(m.predicates, ps...)
@@ -1614,7 +1636,7 @@ func (m *ArticleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticleMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 21)
 	if m.user_id != nil {
 		fields = append(fields, article.FieldUserID)
 	}
@@ -1650,9 +1672,6 @@ func (m *ArticleMutation) Fields() []string {
 	}
 	if m.like_count != nil {
 		fields = append(fields, article.FieldLikeCount)
-	}
-	if m.dislike_count != nil {
-		fields = append(fields, article.FieldDislikeCount)
 	}
 	if m.collect_count != nil {
 		fields = append(fields, article.FieldCollectCount)
@@ -1713,8 +1732,6 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 		return m.ThankCount()
 	case article.FieldLikeCount:
 		return m.LikeCount()
-	case article.FieldDislikeCount:
-		return m.DislikeCount()
 	case article.FieldCollectCount:
 		return m.CollectCount()
 	case article.FieldWatchCount:
@@ -1766,8 +1783,6 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldThankCount(ctx)
 	case article.FieldLikeCount:
 		return m.OldLikeCount(ctx)
-	case article.FieldDislikeCount:
-		return m.OldDislikeCount(ctx)
 	case article.FieldCollectCount:
 		return m.OldCollectCount(ctx)
 	case article.FieldWatchCount:
@@ -1796,7 +1811,7 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case article.FieldUserID:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1879,13 +1894,6 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLikeCount(v)
 		return nil
-	case article.FieldDislikeCount:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDislikeCount(v)
-		return nil
 	case article.FieldCollectCount:
 		v, ok := value.(int)
 		if !ok {
@@ -1957,6 +1965,9 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ArticleMutation) AddedFields() []string {
 	var fields []string
+	if m.adduser_id != nil {
+		fields = append(fields, article.FieldUserID)
+	}
 	if m.addreward_points != nil {
 		fields = append(fields, article.FieldRewardPoints)
 	}
@@ -1971,9 +1982,6 @@ func (m *ArticleMutation) AddedFields() []string {
 	}
 	if m.addlike_count != nil {
 		fields = append(fields, article.FieldLikeCount)
-	}
-	if m.adddislike_count != nil {
-		fields = append(fields, article.FieldDislikeCount)
 	}
 	if m.addcollect_count != nil {
 		fields = append(fields, article.FieldCollectCount)
@@ -2004,6 +2012,8 @@ func (m *ArticleMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case article.FieldUserID:
+		return m.AddedUserID()
 	case article.FieldRewardPoints:
 		return m.AddedRewardPoints()
 	case article.FieldStatus:
@@ -2014,8 +2024,6 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedThankCount()
 	case article.FieldLikeCount:
 		return m.AddedLikeCount()
-	case article.FieldDislikeCount:
-		return m.AddedDislikeCount()
 	case article.FieldCollectCount:
 		return m.AddedCollectCount()
 	case article.FieldWatchCount:
@@ -2039,6 +2047,13 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case article.FieldUserID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
 	case article.FieldRewardPoints:
 		v, ok := value.(int)
 		if !ok {
@@ -2073,13 +2088,6 @@ func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLikeCount(v)
-		return nil
-	case article.FieldDislikeCount:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddDislikeCount(v)
 		return nil
 	case article.FieldCollectCount:
 		v, ok := value.(int)
@@ -2220,9 +2228,6 @@ func (m *ArticleMutation) ResetField(name string) error {
 	case article.FieldLikeCount:
 		m.ResetLikeCount()
 		return nil
-	case article.FieldDislikeCount:
-		m.ResetDislikeCount()
-		return nil
 	case article.FieldCollectCount:
 		m.ResetCollectCount()
 		return nil
@@ -2256,7 +2261,7 @@ func (m *ArticleMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArticleMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.postscripts != nil {
 		edges = append(edges, article.EdgePostscripts)
 	}
@@ -2271,6 +2276,9 @@ func (m *ArticleMutation) AddedEdges() []string {
 	}
 	if m.tags != nil {
 		edges = append(edges, article.EdgeTags)
+	}
+	if m.action_records != nil {
+		edges = append(edges, article.EdgeActionRecords)
 	}
 	return edges
 }
@@ -2309,13 +2317,19 @@ func (m *ArticleMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case article.EdgeActionRecords:
+		ids := make([]ent.Value, 0, len(m.action_records))
+		for id := range m.action_records {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArticleMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedpostscripts != nil {
 		edges = append(edges, article.EdgePostscripts)
 	}
@@ -2330,6 +2344,9 @@ func (m *ArticleMutation) RemovedEdges() []string {
 	}
 	if m.removedtags != nil {
 		edges = append(edges, article.EdgeTags)
+	}
+	if m.removedaction_records != nil {
+		edges = append(edges, article.EdgeActionRecords)
 	}
 	return edges
 }
@@ -2368,13 +2385,19 @@ func (m *ArticleMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case article.EdgeActionRecords:
+		ids := make([]ent.Value, 0, len(m.removedaction_records))
+		for id := range m.removedaction_records {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArticleMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedpostscripts {
 		edges = append(edges, article.EdgePostscripts)
 	}
@@ -2389,6 +2412,9 @@ func (m *ArticleMutation) ClearedEdges() []string {
 	}
 	if m.clearedtags {
 		edges = append(edges, article.EdgeTags)
+	}
+	if m.clearedaction_records {
+		edges = append(edges, article.EdgeActionRecords)
 	}
 	return edges
 }
@@ -2407,6 +2433,8 @@ func (m *ArticleMutation) EdgeCleared(name string) bool {
 		return m.clearedcomments
 	case article.EdgeTags:
 		return m.clearedtags
+	case article.EdgeActionRecords:
+		return m.clearedaction_records
 	}
 	return false
 }
@@ -2438,8 +2466,568 @@ func (m *ArticleMutation) ResetEdge(name string) error {
 	case article.EdgeTags:
 		m.ResetTags()
 		return nil
+	case article.EdgeActionRecords:
+		m.ResetActionRecords()
+		return nil
 	}
 	return fmt.Errorf("unknown Article edge %s", name)
+}
+
+// ArticleActionRecordMutation represents an operation that mutates the ArticleActionRecord nodes in the graph.
+type ArticleActionRecordMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	user_id        *int
+	adduser_id     *int
+	_type          *int
+	add_type       *int
+	clearedFields  map[string]struct{}
+	article        *int
+	clearedarticle bool
+	done           bool
+	oldValue       func(context.Context) (*ArticleActionRecord, error)
+	predicates     []predicate.ArticleActionRecord
+}
+
+var _ ent.Mutation = (*ArticleActionRecordMutation)(nil)
+
+// articleactionrecordOption allows management of the mutation configuration using functional options.
+type articleactionrecordOption func(*ArticleActionRecordMutation)
+
+// newArticleActionRecordMutation creates new mutation for the ArticleActionRecord entity.
+func newArticleActionRecordMutation(c config, op Op, opts ...articleactionrecordOption) *ArticleActionRecordMutation {
+	m := &ArticleActionRecordMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeArticleActionRecord,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withArticleActionRecordID sets the ID field of the mutation.
+func withArticleActionRecordID(id int) articleactionrecordOption {
+	return func(m *ArticleActionRecordMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ArticleActionRecord
+		)
+		m.oldValue = func(ctx context.Context) (*ArticleActionRecord, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ArticleActionRecord.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withArticleActionRecord sets the old ArticleActionRecord of the mutation.
+func withArticleActionRecord(node *ArticleActionRecord) articleactionrecordOption {
+	return func(m *ArticleActionRecordMutation) {
+		m.oldValue = func(context.Context) (*ArticleActionRecord, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ArticleActionRecordMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ArticleActionRecordMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("gen: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ArticleActionRecordMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ArticleActionRecordMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ArticleActionRecord.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetArticleID sets the "article_id" field.
+func (m *ArticleActionRecordMutation) SetArticleID(i int) {
+	m.article = &i
+}
+
+// ArticleID returns the value of the "article_id" field in the mutation.
+func (m *ArticleActionRecordMutation) ArticleID() (r int, exists bool) {
+	v := m.article
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArticleID returns the old "article_id" field's value of the ArticleActionRecord entity.
+// If the ArticleActionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleActionRecordMutation) OldArticleID(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArticleID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArticleID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArticleID: %w", err)
+	}
+	return oldValue.ArticleID, nil
+}
+
+// ResetArticleID resets all changes to the "article_id" field.
+func (m *ArticleActionRecordMutation) ResetArticleID() {
+	m.article = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ArticleActionRecordMutation) SetUserID(i int) {
+	m.user_id = &i
+	m.adduser_id = nil
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ArticleActionRecordMutation) UserID() (r int, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the ArticleActionRecord entity.
+// If the ArticleActionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleActionRecordMutation) OldUserID(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// AddUserID adds i to the "user_id" field.
+func (m *ArticleActionRecordMutation) AddUserID(i int) {
+	if m.adduser_id != nil {
+		*m.adduser_id += i
+	} else {
+		m.adduser_id = &i
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *ArticleActionRecordMutation) AddedUserID() (r int, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ArticleActionRecordMutation) ResetUserID() {
+	m.user_id = nil
+	m.adduser_id = nil
+}
+
+// SetType sets the "type" field.
+func (m *ArticleActionRecordMutation) SetType(i int) {
+	m._type = &i
+	m.add_type = nil
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ArticleActionRecordMutation) GetType() (r int, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the ArticleActionRecord entity.
+// If the ArticleActionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleActionRecordMutation) OldType(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// AddType adds i to the "type" field.
+func (m *ArticleActionRecordMutation) AddType(i int) {
+	if m.add_type != nil {
+		*m.add_type += i
+	} else {
+		m.add_type = &i
+	}
+}
+
+// AddedType returns the value that was added to the "type" field in this mutation.
+func (m *ArticleActionRecordMutation) AddedType() (r int, exists bool) {
+	v := m.add_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ArticleActionRecordMutation) ResetType() {
+	m._type = nil
+	m.add_type = nil
+}
+
+// ClearArticle clears the "article" edge to the Article entity.
+func (m *ArticleActionRecordMutation) ClearArticle() {
+	m.clearedarticle = true
+	m.clearedFields[articleactionrecord.FieldArticleID] = struct{}{}
+}
+
+// ArticleCleared reports if the "article" edge to the Article entity was cleared.
+func (m *ArticleActionRecordMutation) ArticleCleared() bool {
+	return m.clearedarticle
+}
+
+// ArticleIDs returns the "article" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ArticleID instead. It exists only for internal usage by the builders.
+func (m *ArticleActionRecordMutation) ArticleIDs() (ids []int) {
+	if id := m.article; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetArticle resets all changes to the "article" edge.
+func (m *ArticleActionRecordMutation) ResetArticle() {
+	m.article = nil
+	m.clearedarticle = false
+}
+
+// Where appends a list predicates to the ArticleActionRecordMutation builder.
+func (m *ArticleActionRecordMutation) Where(ps ...predicate.ArticleActionRecord) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ArticleActionRecordMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ArticleActionRecordMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ArticleActionRecord, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ArticleActionRecordMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ArticleActionRecordMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ArticleActionRecord).
+func (m *ArticleActionRecordMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ArticleActionRecordMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.article != nil {
+		fields = append(fields, articleactionrecord.FieldArticleID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, articleactionrecord.FieldUserID)
+	}
+	if m._type != nil {
+		fields = append(fields, articleactionrecord.FieldType)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ArticleActionRecordMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case articleactionrecord.FieldArticleID:
+		return m.ArticleID()
+	case articleactionrecord.FieldUserID:
+		return m.UserID()
+	case articleactionrecord.FieldType:
+		return m.GetType()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ArticleActionRecordMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case articleactionrecord.FieldArticleID:
+		return m.OldArticleID(ctx)
+	case articleactionrecord.FieldUserID:
+		return m.OldUserID(ctx)
+	case articleactionrecord.FieldType:
+		return m.OldType(ctx)
+	}
+	return nil, fmt.Errorf("unknown ArticleActionRecord field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ArticleActionRecordMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case articleactionrecord.FieldArticleID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArticleID(v)
+		return nil
+	case articleactionrecord.FieldUserID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case articleactionrecord.FieldType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ArticleActionRecord field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ArticleActionRecordMutation) AddedFields() []string {
+	var fields []string
+	if m.adduser_id != nil {
+		fields = append(fields, articleactionrecord.FieldUserID)
+	}
+	if m.add_type != nil {
+		fields = append(fields, articleactionrecord.FieldType)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ArticleActionRecordMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case articleactionrecord.FieldUserID:
+		return m.AddedUserID()
+	case articleactionrecord.FieldType:
+		return m.AddedType()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ArticleActionRecordMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case articleactionrecord.FieldUserID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
+	case articleactionrecord.FieldType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ArticleActionRecord numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ArticleActionRecordMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ArticleActionRecordMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ArticleActionRecordMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ArticleActionRecord nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ArticleActionRecordMutation) ResetField(name string) error {
+	switch name {
+	case articleactionrecord.FieldArticleID:
+		m.ResetArticleID()
+		return nil
+	case articleactionrecord.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case articleactionrecord.FieldType:
+		m.ResetType()
+		return nil
+	}
+	return fmt.Errorf("unknown ArticleActionRecord field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ArticleActionRecordMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.article != nil {
+		edges = append(edges, articleactionrecord.EdgeArticle)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ArticleActionRecordMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case articleactionrecord.EdgeArticle:
+		if id := m.article; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ArticleActionRecordMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ArticleActionRecordMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ArticleActionRecordMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedarticle {
+		edges = append(edges, articleactionrecord.EdgeArticle)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ArticleActionRecordMutation) EdgeCleared(name string) bool {
+	switch name {
+	case articleactionrecord.EdgeArticle:
+		return m.clearedarticle
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ArticleActionRecordMutation) ClearEdge(name string) error {
+	switch name {
+	case articleactionrecord.EdgeArticle:
+		m.ClearArticle()
+		return nil
+	}
+	return fmt.Errorf("unknown ArticleActionRecord unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ArticleActionRecordMutation) ResetEdge(name string) error {
+	switch name {
+	case articleactionrecord.EdgeArticle:
+		m.ResetArticle()
+		return nil
+	}
+	return fmt.Errorf("unknown ArticleActionRecord edge %s", name)
 }
 
 // ArticleLotteryMutation represents an operation that mutates the ArticleLottery nodes in the graph.
@@ -7185,8 +7773,6 @@ type CommentMutation struct {
 	addreply_count   *int
 	like_count       *int
 	addlike_count    *int
-	dislike_count    *int
-	adddislike_count *int
 	collect_count    *int
 	addcollect_count *int
 	created_at       *time.Time
@@ -7703,62 +8289,6 @@ func (m *CommentMutation) ResetLikeCount() {
 	m.addlike_count = nil
 }
 
-// SetDislikeCount sets the "dislike_count" field.
-func (m *CommentMutation) SetDislikeCount(i int) {
-	m.dislike_count = &i
-	m.adddislike_count = nil
-}
-
-// DislikeCount returns the value of the "dislike_count" field in the mutation.
-func (m *CommentMutation) DislikeCount() (r int, exists bool) {
-	v := m.dislike_count
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDislikeCount returns the old "dislike_count" field's value of the Comment entity.
-// If the Comment object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldDislikeCount(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDislikeCount is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDislikeCount requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDislikeCount: %w", err)
-	}
-	return oldValue.DislikeCount, nil
-}
-
-// AddDislikeCount adds i to the "dislike_count" field.
-func (m *CommentMutation) AddDislikeCount(i int) {
-	if m.adddislike_count != nil {
-		*m.adddislike_count += i
-	} else {
-		m.adddislike_count = &i
-	}
-}
-
-// AddedDislikeCount returns the value that was added to the "dislike_count" field in this mutation.
-func (m *CommentMutation) AddedDislikeCount() (r int, exists bool) {
-	v := m.adddislike_count
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetDislikeCount resets all changes to the "dislike_count" field.
-func (m *CommentMutation) ResetDislikeCount() {
-	m.dislike_count = nil
-	m.adddislike_count = nil
-}
-
 // SetCollectCount sets the "collect_count" field.
 func (m *CommentMutation) SetCollectCount(i int) {
 	m.collect_count = &i
@@ -8055,7 +8585,7 @@ func (m *CommentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CommentMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 11)
 	if m.article != nil {
 		fields = append(fields, comment.FieldArticleID)
 	}
@@ -8079,9 +8609,6 @@ func (m *CommentMutation) Fields() []string {
 	}
 	if m.like_count != nil {
 		fields = append(fields, comment.FieldLikeCount)
-	}
-	if m.dislike_count != nil {
-		fields = append(fields, comment.FieldDislikeCount)
 	}
 	if m.collect_count != nil {
 		fields = append(fields, comment.FieldCollectCount)
@@ -8116,8 +8643,6 @@ func (m *CommentMutation) Field(name string) (ent.Value, bool) {
 		return m.ReplyCount()
 	case comment.FieldLikeCount:
 		return m.LikeCount()
-	case comment.FieldDislikeCount:
-		return m.DislikeCount()
 	case comment.FieldCollectCount:
 		return m.CollectCount()
 	case comment.FieldCreatedAt:
@@ -8149,8 +8674,6 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldReplyCount(ctx)
 	case comment.FieldLikeCount:
 		return m.OldLikeCount(ctx)
-	case comment.FieldDislikeCount:
-		return m.OldDislikeCount(ctx)
 	case comment.FieldCollectCount:
 		return m.OldCollectCount(ctx)
 	case comment.FieldCreatedAt:
@@ -8222,13 +8745,6 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLikeCount(v)
 		return nil
-	case comment.FieldDislikeCount:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDislikeCount(v)
-		return nil
 	case comment.FieldCollectCount:
 		v, ok := value.(int)
 		if !ok {
@@ -8273,9 +8789,6 @@ func (m *CommentMutation) AddedFields() []string {
 	if m.addlike_count != nil {
 		fields = append(fields, comment.FieldLikeCount)
 	}
-	if m.adddislike_count != nil {
-		fields = append(fields, comment.FieldDislikeCount)
-	}
 	if m.addcollect_count != nil {
 		fields = append(fields, comment.FieldCollectCount)
 	}
@@ -8297,8 +8810,6 @@ func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedReplyCount()
 	case comment.FieldLikeCount:
 		return m.AddedLikeCount()
-	case comment.FieldDislikeCount:
-		return m.AddedDislikeCount()
 	case comment.FieldCollectCount:
 		return m.AddedCollectCount()
 	}
@@ -8344,13 +8855,6 @@ func (m *CommentMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLikeCount(v)
-		return nil
-	case comment.FieldDislikeCount:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddDislikeCount(v)
 		return nil
 	case comment.FieldCollectCount:
 		v, ok := value.(int)
@@ -8430,9 +8934,6 @@ func (m *CommentMutation) ResetField(name string) error {
 		return nil
 	case comment.FieldLikeCount:
 		m.ResetLikeCount()
-		return nil
-	case comment.FieldDislikeCount:
-		m.ResetDislikeCount()
 		return nil
 	case comment.FieldCollectCount:
 		m.ResetCollectCount()
@@ -8813,10 +9314,24 @@ func (m *DomainMutation) AddedStatus() (r int, exists bool) {
 	return *v, true
 }
 
+// ClearStatus clears the value of the "status" field.
+func (m *DomainMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[domain.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *DomainMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[domain.FieldStatus]
+	return ok
+}
+
 // ResetStatus resets all changes to the "status" field.
 func (m *DomainMutation) ResetStatus() {
 	m.status = nil
 	m.addstatus = nil
+	delete(m.clearedFields, domain.FieldStatus)
 }
 
 // SetURL sets the "url" field.
@@ -9004,9 +9519,22 @@ func (m *DomainMutation) OldIsNav(ctx context.Context) (v bool, err error) {
 	return oldValue.IsNav, nil
 }
 
+// ClearIsNav clears the value of the "is_nav" field.
+func (m *DomainMutation) ClearIsNav() {
+	m.is_nav = nil
+	m.clearedFields[domain.FieldIsNav] = struct{}{}
+}
+
+// IsNavCleared returns if the "is_nav" field was cleared in this mutation.
+func (m *DomainMutation) IsNavCleared() bool {
+	_, ok := m.clearedFields[domain.FieldIsNav]
+	return ok
+}
+
 // ResetIsNav resets all changes to the "is_nav" field.
 func (m *DomainMutation) ResetIsNav() {
 	m.is_nav = nil
+	delete(m.clearedFields, domain.FieldIsNav)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -9405,11 +9933,17 @@ func (m *DomainMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *DomainMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(domain.FieldStatus) {
+		fields = append(fields, domain.FieldStatus)
+	}
 	if m.FieldCleared(domain.FieldURL) {
 		fields = append(fields, domain.FieldURL)
 	}
 	if m.FieldCleared(domain.FieldIcon) {
 		fields = append(fields, domain.FieldIcon)
+	}
+	if m.FieldCleared(domain.FieldIsNav) {
+		fields = append(fields, domain.FieldIsNav)
 	}
 	if m.FieldCleared(domain.FieldCreatedAt) {
 		fields = append(fields, domain.FieldCreatedAt)
@@ -9431,11 +9965,17 @@ func (m *DomainMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *DomainMutation) ClearField(name string) error {
 	switch name {
+	case domain.FieldStatus:
+		m.ClearStatus()
+		return nil
 	case domain.FieldURL:
 		m.ClearURL()
 		return nil
 	case domain.FieldIcon:
 		m.ClearIcon()
+		return nil
+	case domain.FieldIsNav:
+		m.ClearIsNav()
 		return nil
 	case domain.FieldCreatedAt:
 		m.ClearCreatedAt()

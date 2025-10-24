@@ -711,12 +711,6 @@ func (_c *UserCreate) check() error {
 	if _, ok := _c.mutation.PublicLocation(); !ok {
 		return &ValidationError{Name: "public_location", err: errors.New(`gen: missing required field "User.public_location"`)}
 	}
-	if _, ok := _c.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`gen: missing required field "User.created_at"`)}
-	}
-	if _, ok := _c.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`gen: missing required field "User.updated_at"`)}
-	}
 	return nil
 }
 
@@ -797,7 +791,7 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
-		_node.LastLoginTime = &value
+		_node.LastLoginTime = value
 	}
 	if value, ok := _c.mutation.LastLoginIP(); ok {
 		_spec.SetField(user.FieldLastLoginIP, field.TypeString, value)
@@ -809,7 +803,7 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.LastCheckinTime(); ok {
 		_spec.SetField(user.FieldLastCheckinTime, field.TypeTime, value)
-		_node.LastCheckinTime = &value
+		_node.LastCheckinTime = value
 	}
 	if value, ok := _c.mutation.CurrentCheckinStreak(); ok {
 		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt, value)

@@ -8,10 +8,10 @@ import (
 
 type DomainDomain struct {
 	*BaseDomain
-	domainRepo repo.Domain
+	domainRepo repo.DomainRepo
 }
 
-func NewDomainDomain(baseDomain *BaseDomain, domainRepo repo.Domain) *DomainDomain {
+func NewDomainDomain(baseDomain *BaseDomain, domainRepo repo.DomainRepo) *DomainDomain {
 	return &DomainDomain{
 		BaseDomain: baseDomain,
 		domainRepo: domainRepo,
@@ -19,9 +19,9 @@ func NewDomainDomain(baseDomain *BaseDomain, domainRepo repo.Domain) *DomainDoma
 }
 
 func (d *DomainDomain) AddDomain(ctx context.Context, domain *model.Domain) (*model.Domain, error) {
-	return d.domainRepo.Save(ctx, domain)
+	return d.domainRepo.Save(ctx, d.db, domain)
 }
 
 func (d *DomainDomain) UpdateDomain(ctx context.Context, domain *model.Domain) (*model.Domain, error) {
-	return d.domainRepo.Update(ctx, domain)
+	return d.domainRepo.Update(ctx, d.db, domain)
 }

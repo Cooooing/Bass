@@ -36,7 +36,7 @@ type CommentServiceClient interface {
 	Add(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*AddCommentReply, error)
 	// 查询评论
 	Get(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentReply, error)
-	// 点赞/踩评论
+	// 点赞评论
 	Like(ctx context.Context, in *LikeCommentRequest, opts ...grpc.CallOption) (*LikeCommentReply, error)
 	// 感谢评论
 	Thank(ctx context.Context, in *ThankCommentRequest, opts ...grpc.CallOption) (*ThankCommentReply, error)
@@ -112,7 +112,7 @@ type CommentServiceServer interface {
 	Add(context.Context, *AddCommentRequest) (*AddCommentReply, error)
 	// 查询评论
 	Get(context.Context, *GetCommentRequest) (*GetCommentReply, error)
-	// 点赞/踩评论
+	// 点赞评论
 	Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error)
 	// 感谢评论
 	Thank(context.Context, *ThankCommentRequest) (*ThankCommentReply, error)

@@ -19,18 +19,18 @@ service DomainService {
     };
   }
 
-  // 查询领域
-  rpc Get (GetDomainRequest) returns (GetDomainReply) {
-    option (google.api.http) = {
-      post: "/v1/domain/get"
-      body: "*"
-    };
-  }
-
   // 修改领域信息
   rpc Update (UpdateDomainRequest) returns (UpdateDomainReply) {
     option (google.api.http) = {
       post: "/v1/domain/update"
+      body: "*"
+    };
+  }
+
+  // 查询领域
+  rpc Get (GetDomainRequest) returns (GetDomainReply) {
+    option (google.api.http) = {
+      post: "/v1/domain/get"
       body: "*"
     };
   }
@@ -58,7 +58,17 @@ message AddDomainRequest {
   bool isNav = 6;
 }
 message AddDomainReply {
-  bool success = 1;
+}
+
+message UpdateDomainRequest {
+  string name = 1;
+  string description = 2;
+  int32 status = 3;
+  string url = 4;
+  string icon = 5;
+  bool isNav = 6;
+}
+message UpdateDomainReply {
 }
 
 message GetDomainRequest {
@@ -73,16 +83,4 @@ message GetDomainRequest {
 message GetDomainReply {
   optional common.v1.PageReply page = 1;
   repeated Domain data = 2;
-}
-
-message UpdateDomainRequest {
-  string name = 1;
-  string description = 2;
-  int32 status = 3;
-  string url = 4;
-  string icon = 5;
-  bool isNav = 6;
-}
-message UpdateDomainReply {
-  bool success = 1;
 }

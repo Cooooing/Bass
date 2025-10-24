@@ -34,8 +34,6 @@ type Comment struct {
 	ReplyCount int `json:"reply_count,omitempty"`
 	// 点赞数
 	LikeCount int `json:"like_count,omitempty"`
-	// 点踩数
-	DislikeCount int `json:"dislike_count,omitempty"`
 	// 收藏数
 	CollectCount int `json:"collect_count,omitempty"`
 	// 创建时间
@@ -97,7 +95,7 @@ func (*Comment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldDislikeCount, comment.FieldCollectCount:
+		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount:
 			values[i] = new(sql.NullInt64)
 		case comment.FieldContent:
 			values[i] = new(sql.NullString)
@@ -171,12 +169,6 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field like_count", values[i])
 			} else if value.Valid {
 				_m.LikeCount = int(value.Int64)
-			}
-		case comment.FieldDislikeCount:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dislike_count", values[i])
-			} else if value.Valid {
-				_m.DislikeCount = int(value.Int64)
 			}
 		case comment.FieldCollectCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -272,9 +264,6 @@ func (_m *Comment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("like_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.LikeCount))
-	builder.WriteString(", ")
-	builder.WriteString("dislike_count=")
-	builder.WriteString(fmt.Sprintf("%v", _m.DislikeCount))
 	builder.WriteString(", ")
 	builder.WriteString("collect_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CollectCount))

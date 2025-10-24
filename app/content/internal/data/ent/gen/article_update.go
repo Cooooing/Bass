@@ -4,6 +4,7 @@ package gen
 
 import (
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlelottery"
 	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/articlevote"
@@ -34,16 +35,23 @@ func (_u *ArticleUpdate) Where(ps ...predicate.Article) *ArticleUpdate {
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *ArticleUpdate) SetUserID(v string) *ArticleUpdate {
+func (_u *ArticleUpdate) SetUserID(v int) *ArticleUpdate {
+	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleUpdate) SetNillableUserID(v *string) *ArticleUpdate {
+func (_u *ArticleUpdate) SetNillableUserID(v *int) *ArticleUpdate {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
+	return _u
+}
+
+// AddUserID adds value to the "user_id" field.
+func (_u *ArticleUpdate) AddUserID(v int) *ArticleUpdate {
+	_u.mutation.AddUserID(v)
 	return _u
 }
 
@@ -239,27 +247,6 @@ func (_u *ArticleUpdate) SetNillableLikeCount(v *int) *ArticleUpdate {
 // AddLikeCount adds value to the "like_count" field.
 func (_u *ArticleUpdate) AddLikeCount(v int) *ArticleUpdate {
 	_u.mutation.AddLikeCount(v)
-	return _u
-}
-
-// SetDislikeCount sets the "dislike_count" field.
-func (_u *ArticleUpdate) SetDislikeCount(v int) *ArticleUpdate {
-	_u.mutation.ResetDislikeCount()
-	_u.mutation.SetDislikeCount(v)
-	return _u
-}
-
-// SetNillableDislikeCount sets the "dislike_count" field if the given value is not nil.
-func (_u *ArticleUpdate) SetNillableDislikeCount(v *int) *ArticleUpdate {
-	if v != nil {
-		_u.SetDislikeCount(*v)
-	}
-	return _u
-}
-
-// AddDislikeCount adds value to the "dislike_count" field.
-func (_u *ArticleUpdate) AddDislikeCount(v int) *ArticleUpdate {
-	_u.mutation.AddDislikeCount(v)
 	return _u
 }
 
@@ -531,6 +518,21 @@ func (_u *ArticleUpdate) AddTags(v ...*Tag) *ArticleUpdate {
 	return _u.AddTagIDs(ids...)
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the ArticleActionRecord entity by IDs.
+func (_u *ArticleUpdate) AddActionRecordIDs(ids ...int) *ArticleUpdate {
+	_u.mutation.AddActionRecordIDs(ids...)
+	return _u
+}
+
+// AddActionRecords adds the "action_records" edges to the ArticleActionRecord entity.
+func (_u *ArticleUpdate) AddActionRecords(v ...*ArticleActionRecord) *ArticleUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionRecordIDs(ids...)
+}
+
 // Mutation returns the ArticleMutation object of the builder.
 func (_u *ArticleUpdate) Mutation() *ArticleMutation {
 	return _u.mutation
@@ -641,6 +643,27 @@ func (_u *ArticleUpdate) RemoveTags(v ...*Tag) *ArticleUpdate {
 	return _u.RemoveTagIDs(ids...)
 }
 
+// ClearActionRecords clears all "action_records" edges to the ArticleActionRecord entity.
+func (_u *ArticleUpdate) ClearActionRecords() *ArticleUpdate {
+	_u.mutation.ClearActionRecords()
+	return _u
+}
+
+// RemoveActionRecordIDs removes the "action_records" edge to ArticleActionRecord entities by IDs.
+func (_u *ArticleUpdate) RemoveActionRecordIDs(ids ...int) *ArticleUpdate {
+	_u.mutation.RemoveActionRecordIDs(ids...)
+	return _u
+}
+
+// RemoveActionRecords removes "action_records" edges to ArticleActionRecord entities.
+func (_u *ArticleUpdate) RemoveActionRecords(v ...*ArticleActionRecord) *ArticleUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionRecordIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *ArticleUpdate) Save(ctx context.Context) (int, error) {
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
@@ -670,11 +693,6 @@ func (_u *ArticleUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ArticleUpdate) check() error {
-	if v, ok := _u.mutation.UserID(); ok {
-		if err := article.UserIDValidator(v); err != nil {
-			return &ValidationError{Name: "user_id", err: fmt.Errorf(`gen: validator failed for field "Article.user_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := article.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`gen: validator failed for field "Article.title": %w`, err)}
@@ -701,7 +719,10 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeString, value)
+		_spec.SetField(article.FieldUserID, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedUserID(); ok {
+		_spec.AddField(article.FieldUserID, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(article.FieldTitle, field.TypeString, value)
@@ -753,12 +774,6 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedLikeCount(); ok {
 		_spec.AddField(article.FieldLikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.DislikeCount(); ok {
-		_spec.SetField(article.FieldDislikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedDislikeCount(); ok {
-		_spec.AddField(article.FieldDislikeCount, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.CollectCount(); ok {
 		_spec.SetField(article.FieldCollectCount, field.TypeInt, value)
@@ -1042,6 +1057,51 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionRecordsIDs(); len(nodes) > 0 && !_u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionRecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{article.Label}
@@ -1063,16 +1123,23 @@ type ArticleUpdateOne struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *ArticleUpdateOne) SetUserID(v string) *ArticleUpdateOne {
+func (_u *ArticleUpdateOne) SetUserID(v int) *ArticleUpdateOne {
+	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleUpdateOne) SetNillableUserID(v *string) *ArticleUpdateOne {
+func (_u *ArticleUpdateOne) SetNillableUserID(v *int) *ArticleUpdateOne {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
+	return _u
+}
+
+// AddUserID adds value to the "user_id" field.
+func (_u *ArticleUpdateOne) AddUserID(v int) *ArticleUpdateOne {
+	_u.mutation.AddUserID(v)
 	return _u
 }
 
@@ -1268,27 +1335,6 @@ func (_u *ArticleUpdateOne) SetNillableLikeCount(v *int) *ArticleUpdateOne {
 // AddLikeCount adds value to the "like_count" field.
 func (_u *ArticleUpdateOne) AddLikeCount(v int) *ArticleUpdateOne {
 	_u.mutation.AddLikeCount(v)
-	return _u
-}
-
-// SetDislikeCount sets the "dislike_count" field.
-func (_u *ArticleUpdateOne) SetDislikeCount(v int) *ArticleUpdateOne {
-	_u.mutation.ResetDislikeCount()
-	_u.mutation.SetDislikeCount(v)
-	return _u
-}
-
-// SetNillableDislikeCount sets the "dislike_count" field if the given value is not nil.
-func (_u *ArticleUpdateOne) SetNillableDislikeCount(v *int) *ArticleUpdateOne {
-	if v != nil {
-		_u.SetDislikeCount(*v)
-	}
-	return _u
-}
-
-// AddDislikeCount adds value to the "dislike_count" field.
-func (_u *ArticleUpdateOne) AddDislikeCount(v int) *ArticleUpdateOne {
-	_u.mutation.AddDislikeCount(v)
 	return _u
 }
 
@@ -1560,6 +1606,21 @@ func (_u *ArticleUpdateOne) AddTags(v ...*Tag) *ArticleUpdateOne {
 	return _u.AddTagIDs(ids...)
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the ArticleActionRecord entity by IDs.
+func (_u *ArticleUpdateOne) AddActionRecordIDs(ids ...int) *ArticleUpdateOne {
+	_u.mutation.AddActionRecordIDs(ids...)
+	return _u
+}
+
+// AddActionRecords adds the "action_records" edges to the ArticleActionRecord entity.
+func (_u *ArticleUpdateOne) AddActionRecords(v ...*ArticleActionRecord) *ArticleUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionRecordIDs(ids...)
+}
+
 // Mutation returns the ArticleMutation object of the builder.
 func (_u *ArticleUpdateOne) Mutation() *ArticleMutation {
 	return _u.mutation
@@ -1670,6 +1731,27 @@ func (_u *ArticleUpdateOne) RemoveTags(v ...*Tag) *ArticleUpdateOne {
 	return _u.RemoveTagIDs(ids...)
 }
 
+// ClearActionRecords clears all "action_records" edges to the ArticleActionRecord entity.
+func (_u *ArticleUpdateOne) ClearActionRecords() *ArticleUpdateOne {
+	_u.mutation.ClearActionRecords()
+	return _u
+}
+
+// RemoveActionRecordIDs removes the "action_records" edge to ArticleActionRecord entities by IDs.
+func (_u *ArticleUpdateOne) RemoveActionRecordIDs(ids ...int) *ArticleUpdateOne {
+	_u.mutation.RemoveActionRecordIDs(ids...)
+	return _u
+}
+
+// RemoveActionRecords removes "action_records" edges to ArticleActionRecord entities.
+func (_u *ArticleUpdateOne) RemoveActionRecords(v ...*ArticleActionRecord) *ArticleUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionRecordIDs(ids...)
+}
+
 // Where appends a list predicates to the ArticleUpdate builder.
 func (_u *ArticleUpdateOne) Where(ps ...predicate.Article) *ArticleUpdateOne {
 	_u.mutation.Where(ps...)
@@ -1712,11 +1794,6 @@ func (_u *ArticleUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ArticleUpdateOne) check() error {
-	if v, ok := _u.mutation.UserID(); ok {
-		if err := article.UserIDValidator(v); err != nil {
-			return &ValidationError{Name: "user_id", err: fmt.Errorf(`gen: validator failed for field "Article.user_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := article.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`gen: validator failed for field "Article.title": %w`, err)}
@@ -1760,7 +1837,10 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeString, value)
+		_spec.SetField(article.FieldUserID, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedUserID(); ok {
+		_spec.AddField(article.FieldUserID, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(article.FieldTitle, field.TypeString, value)
@@ -1812,12 +1892,6 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	}
 	if value, ok := _u.mutation.AddedLikeCount(); ok {
 		_spec.AddField(article.FieldLikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.DislikeCount(); ok {
-		_spec.SetField(article.FieldDislikeCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedDislikeCount(); ok {
-		_spec.AddField(article.FieldDislikeCount, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.CollectCount(); ok {
 		_spec.SetField(article.FieldCollectCount, field.TypeInt, value)
@@ -2094,6 +2168,51 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionRecordsIDs(); len(nodes) > 0 && !_u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionRecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   article.ActionRecordsTable,
+			Columns: []string{article.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

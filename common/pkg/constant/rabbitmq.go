@@ -82,8 +82,15 @@ const (
 
 // 路由键枚举
 const (
-	RoutingKeyArticleCreate        RoutingKey = "content.article.create"
-	RoutingKeyArticleCommentCreate RoutingKey = "content.article.comment.create"
+	RoutingKeyArticle        RoutingKey = "content.article.*"
+	RoutingKeyArticleCreate  RoutingKey = "content.article.create"
+	RoutingKeyArticleThank   RoutingKey = "content.article.thank"
+	RoutingKeyArticleLike    RoutingKey = "content.article.like"
+	RoutingKeyArticleCollect RoutingKey = "content.article.collect"
+	RoutingKeyArticleWatch   RoutingKey = "content.article.watch"
+
+	RoutingKeyComment       RoutingKey = "content.comment.*"
+	RoutingKeyCommentCreate RoutingKey = "content.comment.create"
 )
 
 // 配置映射表
@@ -91,6 +98,7 @@ const (
 // ExchangeMap 交换机配置
 var ExchangeMap = map[ExchangeName]ExchangeDeclare{
 	ExchangeUser:       {Name: ExchangeUser, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
+	ExchangeUserDlx:    {Name: ExchangeUserDlx, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
 	ExchangeContent:    {Name: ExchangeContent, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
 	ExchangeContentDlx: {Name: ExchangeContentDlx, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
 }
@@ -103,6 +111,6 @@ var QueueMap = map[QueueName]QueueDeclare{
 
 // QueueBindMap 队列绑定配置
 var QueueBindMap = map[QueueBindName]QueueBind{
-	QueueBindUserArticleEvents:    {Name: QueueUserArticleEvent, Key: "content.article.*", Exchange: ExchangeContent},
+	QueueBindUserArticleEvents:    {Name: QueueUserArticleEvent, Key: RoutingKeyArticle, Exchange: ExchangeContent},
 	QueueBindEconomyArticleEvents: {Name: QueueEconomyArticleEvent, Key: "content.article.create", Exchange: ExchangeContent},
 }

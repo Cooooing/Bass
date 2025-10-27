@@ -116,6 +116,18 @@ func (f CommentFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.CommentMutation", m)
 }
 
+// The CommentActionRecordFunc type is an adapter to allow the use of ordinary
+// function as CommentActionRecord mutator.
+type CommentActionRecordFunc func(context.Context, *gen.CommentActionRecordMutation) (gen.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CommentActionRecordFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
+	if mv, ok := m.(*gen.CommentActionRecordMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.CommentActionRecordMutation", m)
+}
+
 // The DomainFunc type is an adapter to allow the use of ordinary
 // function as Domain mutator.
 type DomainFunc func(context.Context, *gen.DomainMutation) (gen.Value, error)

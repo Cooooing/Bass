@@ -12,6 +12,7 @@ import (
 	"content/internal/data/ent/gen/articlevote"
 	"content/internal/data/ent/gen/articlevoterecord"
 	"content/internal/data/ent/gen/comment"
+	"content/internal/data/ent/gen/commentactionrecord"
 	"content/internal/data/ent/gen/domain"
 	"content/internal/data/ent/gen/tag"
 	"context"
@@ -92,6 +93,7 @@ func checkColumn(t, c string) error {
 			articlevote.Table:               articlevote.ValidColumn,
 			articlevoterecord.Table:         articlevoterecord.ValidColumn,
 			comment.Table:                   comment.ValidColumn,
+			commentactionrecord.Table:       commentactionrecord.ValidColumn,
 			domain.Table:                    domain.ValidColumn,
 			tag.Table:                       tag.ValidColumn,
 		})

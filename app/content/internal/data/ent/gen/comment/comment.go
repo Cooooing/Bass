@@ -42,6 +42,8 @@ const (
 	EdgeParent = "parent"
 	// EdgeReplies holds the string denoting the replies edge name in mutations.
 	EdgeReplies = "replies"
+	// EdgeActionRecords holds the string denoting the action_records edge name in mutations.
+	EdgeActionRecords = "action_records"
 	// Table holds the table name of the comment in the database.
 	Table = "comments"
 	// ArticleTable is the table that holds the article relation/edge.
@@ -59,6 +61,13 @@ const (
 	RepliesTable = "comments"
 	// RepliesColumn is the table column denoting the replies relation/edge.
 	RepliesColumn = "parent_id"
+	// ActionRecordsTable is the table that holds the action_records relation/edge.
+	ActionRecordsTable = "comment_action_records"
+	// ActionRecordsInverseTable is the table name for the CommentActionRecord entity.
+	// It exists in this package in order to avoid circular dependency with the "commentactionrecord" package.
+	ActionRecordsInverseTable = "comment_action_records"
+	// ActionRecordsColumn is the table column denoting the action_records relation/edge.
+	ActionRecordsColumn = "comment_id"
 )
 
 // Columns holds all SQL columns for comment fields.
@@ -196,6 +205,20 @@ func ByReplies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRepliesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByActionRecordsCount orders the results by action_records count.
+func ByActionRecordsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionRecordsStep(), opts...)
+	}
+}
+
+// ByActionRecords orders the results by action_records terms.
+func ByActionRecords(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionRecordsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArticleStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -215,5 +238,12 @@ func newRepliesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(Table, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RepliesTable, RepliesColumn),
+	)
+}
+func newActionRecordsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionRecordsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ActionRecordsTable, ActionRecordsColumn),
 	)
 }

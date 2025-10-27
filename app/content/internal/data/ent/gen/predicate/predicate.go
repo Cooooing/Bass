@@ -33,6 +33,9 @@ type ArticleVoteRecord func(*sql.Selector)
 // Comment is the predicate function for comment builders.
 type Comment func(*sql.Selector)
 
+// CommentActionRecord is the predicate function for commentactionrecord builders.
+type CommentActionRecord func(*sql.Selector)
+
 // Domain is the predicate function for domain builders.
 type Domain func(*sql.Selector)
 

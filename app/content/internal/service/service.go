@@ -18,6 +18,7 @@ var ServiceProviderSet = wire.NewSet(
 
 	NewSystemService,
 	NewArticleService,
+	NewCommentService,
 	NewDomainService,
 
 	ProvideServices,

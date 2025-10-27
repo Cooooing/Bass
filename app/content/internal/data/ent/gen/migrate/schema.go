@@ -262,6 +262,44 @@ var (
 			},
 		},
 	}
+	// CommentActionRecordsColumns holds the columns for the "comment_action_records" table.
+	CommentActionRecordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "user_id", Type: field.TypeInt},
+		{Name: "type", Type: field.TypeInt},
+		{Name: "comment_id", Type: field.TypeInt},
+	}
+	// CommentActionRecordsTable holds the schema information for the "comment_action_records" table.
+	CommentActionRecordsTable = &schema.Table{
+		Name:       "comment_action_records",
+		Columns:    CommentActionRecordsColumns,
+		PrimaryKey: []*schema.Column{CommentActionRecordsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "comment_action_records_comments_action_records",
+				Columns:    []*schema.Column{CommentActionRecordsColumns[3]},
+				RefColumns: []*schema.Column{CommentsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "commentactionrecord_comment_id_user_id_type",
+				Unique:  true,
+				Columns: []*schema.Column{CommentActionRecordsColumns[3], CommentActionRecordsColumns[1], CommentActionRecordsColumns[2]},
+			},
+			{
+				Name:    "commentactionrecord_comment_id",
+				Unique:  false,
+				Columns: []*schema.Column{CommentActionRecordsColumns[3]},
+			},
+			{
+				Name:    "commentactionrecord_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{CommentActionRecordsColumns[1]},
+			},
+		},
+	}
 	// DomainsColumns holds the columns for the "domains" table.
 	DomainsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -342,6 +380,7 @@ var (
 		ArticleVotesTable,
 		ArticleVoteRecordsTable,
 		CommentsTable,
+		CommentActionRecordsTable,
 		DomainsTable,
 		TagsTable,
 		ArticleTagsTable,
@@ -358,6 +397,7 @@ func init() {
 	ArticleVoteRecordsTable.ForeignKeys[0].RefTable = ArticleVotesTable
 	CommentsTable.ForeignKeys[0].RefTable = ArticlesTable
 	CommentsTable.ForeignKeys[1].RefTable = CommentsTable
+	CommentActionRecordsTable.ForeignKeys[0].RefTable = CommentsTable
 	TagsTable.ForeignKeys[0].RefTable = DomainsTable
 	ArticleTagsTable.ForeignKeys[0].RefTable = ArticlesTable
 	ArticleTagsTable.ForeignKeys[1].RefTable = TagsTable

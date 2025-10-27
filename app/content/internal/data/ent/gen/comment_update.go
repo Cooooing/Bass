@@ -5,6 +5,7 @@ package gen
 import (
 	"content/internal/data/ent/gen/article"
 	"content/internal/data/ent/gen/comment"
+	"content/internal/data/ent/gen/commentactionrecord"
 	"content/internal/data/ent/gen/predicate"
 	"context"
 	"errors"
@@ -268,6 +269,21 @@ func (_u *CommentUpdate) AddReplies(v ...*Comment) *CommentUpdate {
 	return _u.AddReplyIDs(ids...)
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the CommentActionRecord entity by IDs.
+func (_u *CommentUpdate) AddActionRecordIDs(ids ...int) *CommentUpdate {
+	_u.mutation.AddActionRecordIDs(ids...)
+	return _u
+}
+
+// AddActionRecords adds the "action_records" edges to the CommentActionRecord entity.
+func (_u *CommentUpdate) AddActionRecords(v ...*CommentActionRecord) *CommentUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionRecordIDs(ids...)
+}
+
 // Mutation returns the CommentMutation object of the builder.
 func (_u *CommentUpdate) Mutation() *CommentMutation {
 	return _u.mutation
@@ -304,6 +320,27 @@ func (_u *CommentUpdate) RemoveReplies(v ...*Comment) *CommentUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveReplyIDs(ids...)
+}
+
+// ClearActionRecords clears all "action_records" edges to the CommentActionRecord entity.
+func (_u *CommentUpdate) ClearActionRecords() *CommentUpdate {
+	_u.mutation.ClearActionRecords()
+	return _u
+}
+
+// RemoveActionRecordIDs removes the "action_records" edge to CommentActionRecord entities by IDs.
+func (_u *CommentUpdate) RemoveActionRecordIDs(ids ...int) *CommentUpdate {
+	_u.mutation.RemoveActionRecordIDs(ids...)
+	return _u
+}
+
+// RemoveActionRecords removes "action_records" edges to CommentActionRecord entities.
+func (_u *CommentUpdate) RemoveActionRecords(v ...*CommentActionRecord) *CommentUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionRecordIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -505,6 +542,51 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionRecordsIDs(); len(nodes) > 0 && !_u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionRecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -771,6 +853,21 @@ func (_u *CommentUpdateOne) AddReplies(v ...*Comment) *CommentUpdateOne {
 	return _u.AddReplyIDs(ids...)
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the CommentActionRecord entity by IDs.
+func (_u *CommentUpdateOne) AddActionRecordIDs(ids ...int) *CommentUpdateOne {
+	_u.mutation.AddActionRecordIDs(ids...)
+	return _u
+}
+
+// AddActionRecords adds the "action_records" edges to the CommentActionRecord entity.
+func (_u *CommentUpdateOne) AddActionRecords(v ...*CommentActionRecord) *CommentUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionRecordIDs(ids...)
+}
+
 // Mutation returns the CommentMutation object of the builder.
 func (_u *CommentUpdateOne) Mutation() *CommentMutation {
 	return _u.mutation
@@ -807,6 +904,27 @@ func (_u *CommentUpdateOne) RemoveReplies(v ...*Comment) *CommentUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveReplyIDs(ids...)
+}
+
+// ClearActionRecords clears all "action_records" edges to the CommentActionRecord entity.
+func (_u *CommentUpdateOne) ClearActionRecords() *CommentUpdateOne {
+	_u.mutation.ClearActionRecords()
+	return _u
+}
+
+// RemoveActionRecordIDs removes the "action_records" edge to CommentActionRecord entities by IDs.
+func (_u *CommentUpdateOne) RemoveActionRecordIDs(ids ...int) *CommentUpdateOne {
+	_u.mutation.RemoveActionRecordIDs(ids...)
+	return _u
+}
+
+// RemoveActionRecords removes "action_records" edges to CommentActionRecord entities.
+func (_u *CommentUpdateOne) RemoveActionRecords(v ...*CommentActionRecord) *CommentUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionRecordIDs(ids...)
 }
 
 // Where appends a list predicates to the CommentUpdate builder.
@@ -1038,6 +1156,51 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionRecordsIDs(); len(nodes) > 0 && !_u.mutation.ActionRecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionRecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -37,11 +37,24 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 }
 
 func (d *ArticleDomain) Add(ctx context.Context, article *model.Article) (*model.Article, error) {
-	save, err := d.articleRepo.Save(ctx, d.db, article)
-	if err != nil {
-		return nil, err
-	}
-	// Todo 广播发帖事件
+	var (
+		save *model.Article
+		err  error
+	)
+	err = ent.WithTx(ctx, d.db, func(client *gen.Client) error {
+		save, err = d.articleRepo.Save(ctx, d.db, article)
+		if err != nil {
+			return err
+		}
+		// 不是草稿则进行发布
+		if save.Status != int(v1.ArticleStatus_value[v1.ArticleStatus_ArticleDrafts.String()]) {
+			err = d.articleRepo.Publish(ctx, d.db, save.ID)
+			if err != nil {
+				return err
+			}
+		}
+		return err
+	})
 	return save, err
 }
 
@@ -62,7 +75,7 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int, conten
 	return err
 }
 
-func (d *ArticleDomain) Action(ctx context.Context, action v1.ArticleAction, articleId int, userId int, active bool) error {
+func (d *ArticleDomain) Action(ctx context.Context, articleId int, userId int, action v1.ArticleAction, active bool) error {
 	err := ent.WithTx(ctx, d.db, func(client *gen.Client) error {
 		var err error
 		if active {
@@ -70,7 +83,7 @@ func (d *ArticleDomain) Action(ctx context.Context, action v1.ArticleAction, art
 			if err != nil {
 				return err
 			}
-			_, err = d.actionRecordRepo.Save(ctx, client, &model.ActionRecord{
+			_, err = d.actionRecordRepo.Save(ctx, client, &model.ArticleActionRecord{
 				ArticleID: articleId,
 				UserID:    userId,
 				Type:      int(action),
@@ -92,4 +105,18 @@ func (d *ArticleDomain) Action(ctx context.Context, action v1.ArticleAction, art
 	})
 	// Todo 广播行为事件
 	return err
+}
+
+func (d *ArticleDomain) Publish(ctx context.Context, articleId int) error {
+	return ent.WithTx(ctx, d.db, func(client *gen.Client) error {
+		err := d.articleRepo.UpdateStatus(ctx, client, articleId, v1.ArticleStatus_ArticleNormal)
+		if err != nil {
+			return err
+		}
+		err = d.articleRepo.Publish(ctx, client, articleId)
+		if err != nil {
+			return err
+		}
+		return err
+	})
 }

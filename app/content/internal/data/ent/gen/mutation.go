@@ -12,6 +12,7 @@ import (
 	"content/internal/data/ent/gen/articlevote"
 	"content/internal/data/ent/gen/articlevoterecord"
 	"content/internal/data/ent/gen/comment"
+	"content/internal/data/ent/gen/commentactionrecord"
 	"content/internal/data/ent/gen/domain"
 	"content/internal/data/ent/gen/predicate"
 	"content/internal/data/ent/gen/tag"
@@ -43,6 +44,7 @@ const (
 	TypeArticleVote               = "ArticleVote"
 	TypeArticleVoteRecord         = "ArticleVoteRecord"
 	TypeComment                   = "Comment"
+	TypeCommentActionRecord       = "CommentActionRecord"
 	TypeDomain                    = "Domain"
 	TypeTag                       = "Tag"
 )
@@ -7759,35 +7761,38 @@ func (m *ArticleVoteRecordMutation) ResetEdge(name string) error {
 // CommentMutation represents an operation that mutates the Comment nodes in the graph.
 type CommentMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	user_id          *int
-	adduser_id       *int
-	content          *string
-	level            *int
-	addlevel         *int
-	status           *int
-	addstatus        *int
-	reply_count      *int
-	addreply_count   *int
-	like_count       *int
-	addlike_count    *int
-	collect_count    *int
-	addcollect_count *int
-	created_at       *time.Time
-	updated_at       *time.Time
-	clearedFields    map[string]struct{}
-	article          *int
-	clearedarticle   bool
-	parent           *int
-	clearedparent    bool
-	replies          map[int]struct{}
-	removedreplies   map[int]struct{}
-	clearedreplies   bool
-	done             bool
-	oldValue         func(context.Context) (*Comment, error)
-	predicates       []predicate.Comment
+	op                    Op
+	typ                   string
+	id                    *int
+	user_id               *int
+	adduser_id            *int
+	content               *string
+	level                 *int
+	addlevel              *int
+	status                *int
+	addstatus             *int
+	reply_count           *int
+	addreply_count        *int
+	like_count            *int
+	addlike_count         *int
+	collect_count         *int
+	addcollect_count      *int
+	created_at            *time.Time
+	updated_at            *time.Time
+	clearedFields         map[string]struct{}
+	article               *int
+	clearedarticle        bool
+	parent                *int
+	clearedparent         bool
+	replies               map[int]struct{}
+	removedreplies        map[int]struct{}
+	clearedreplies        bool
+	action_records        map[int]struct{}
+	removedaction_records map[int]struct{}
+	clearedaction_records bool
+	done                  bool
+	oldValue              func(context.Context) (*Comment, error)
+	predicates            []predicate.Comment
 }
 
 var _ ent.Mutation = (*CommentMutation)(nil)
@@ -8551,6 +8556,60 @@ func (m *CommentMutation) ResetReplies() {
 	m.removedreplies = nil
 }
 
+// AddActionRecordIDs adds the "action_records" edge to the CommentActionRecord entity by ids.
+func (m *CommentMutation) AddActionRecordIDs(ids ...int) {
+	if m.action_records == nil {
+		m.action_records = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.action_records[ids[i]] = struct{}{}
+	}
+}
+
+// ClearActionRecords clears the "action_records" edge to the CommentActionRecord entity.
+func (m *CommentMutation) ClearActionRecords() {
+	m.clearedaction_records = true
+}
+
+// ActionRecordsCleared reports if the "action_records" edge to the CommentActionRecord entity was cleared.
+func (m *CommentMutation) ActionRecordsCleared() bool {
+	return m.clearedaction_records
+}
+
+// RemoveActionRecordIDs removes the "action_records" edge to the CommentActionRecord entity by IDs.
+func (m *CommentMutation) RemoveActionRecordIDs(ids ...int) {
+	if m.removedaction_records == nil {
+		m.removedaction_records = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.action_records, ids[i])
+		m.removedaction_records[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedActionRecords returns the removed IDs of the "action_records" edge to the CommentActionRecord entity.
+func (m *CommentMutation) RemovedActionRecordsIDs() (ids []int) {
+	for id := range m.removedaction_records {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ActionRecordsIDs returns the "action_records" edge IDs in the mutation.
+func (m *CommentMutation) ActionRecordsIDs() (ids []int) {
+	for id := range m.action_records {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetActionRecords resets all changes to the "action_records" edge.
+func (m *CommentMutation) ResetActionRecords() {
+	m.action_records = nil
+	m.clearedaction_records = false
+	m.removedaction_records = nil
+}
+
 // Where appends a list predicates to the CommentMutation builder.
 func (m *CommentMutation) Where(ps ...predicate.Comment) {
 	m.predicates = append(m.predicates, ps...)
@@ -8950,7 +9009,7 @@ func (m *CommentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CommentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.article != nil {
 		edges = append(edges, comment.EdgeArticle)
 	}
@@ -8959,6 +9018,9 @@ func (m *CommentMutation) AddedEdges() []string {
 	}
 	if m.replies != nil {
 		edges = append(edges, comment.EdgeReplies)
+	}
+	if m.action_records != nil {
+		edges = append(edges, comment.EdgeActionRecords)
 	}
 	return edges
 }
@@ -8981,15 +9043,24 @@ func (m *CommentMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case comment.EdgeActionRecords:
+		ids := make([]ent.Value, 0, len(m.action_records))
+		for id := range m.action_records {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CommentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedreplies != nil {
 		edges = append(edges, comment.EdgeReplies)
+	}
+	if m.removedaction_records != nil {
+		edges = append(edges, comment.EdgeActionRecords)
 	}
 	return edges
 }
@@ -9004,13 +9075,19 @@ func (m *CommentMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case comment.EdgeActionRecords:
+		ids := make([]ent.Value, 0, len(m.removedaction_records))
+		for id := range m.removedaction_records {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CommentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedarticle {
 		edges = append(edges, comment.EdgeArticle)
 	}
@@ -9019,6 +9096,9 @@ func (m *CommentMutation) ClearedEdges() []string {
 	}
 	if m.clearedreplies {
 		edges = append(edges, comment.EdgeReplies)
+	}
+	if m.clearedaction_records {
+		edges = append(edges, comment.EdgeActionRecords)
 	}
 	return edges
 }
@@ -9033,6 +9113,8 @@ func (m *CommentMutation) EdgeCleared(name string) bool {
 		return m.clearedparent
 	case comment.EdgeReplies:
 		return m.clearedreplies
+	case comment.EdgeActionRecords:
+		return m.clearedaction_records
 	}
 	return false
 }
@@ -9064,8 +9146,568 @@ func (m *CommentMutation) ResetEdge(name string) error {
 	case comment.EdgeReplies:
 		m.ResetReplies()
 		return nil
+	case comment.EdgeActionRecords:
+		m.ResetActionRecords()
+		return nil
 	}
 	return fmt.Errorf("unknown Comment edge %s", name)
+}
+
+// CommentActionRecordMutation represents an operation that mutates the CommentActionRecord nodes in the graph.
+type CommentActionRecordMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	user_id        *int
+	adduser_id     *int
+	_type          *int
+	add_type       *int
+	clearedFields  map[string]struct{}
+	comment        *int
+	clearedcomment bool
+	done           bool
+	oldValue       func(context.Context) (*CommentActionRecord, error)
+	predicates     []predicate.CommentActionRecord
+}
+
+var _ ent.Mutation = (*CommentActionRecordMutation)(nil)
+
+// commentactionrecordOption allows management of the mutation configuration using functional options.
+type commentactionrecordOption func(*CommentActionRecordMutation)
+
+// newCommentActionRecordMutation creates new mutation for the CommentActionRecord entity.
+func newCommentActionRecordMutation(c config, op Op, opts ...commentactionrecordOption) *CommentActionRecordMutation {
+	m := &CommentActionRecordMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeCommentActionRecord,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withCommentActionRecordID sets the ID field of the mutation.
+func withCommentActionRecordID(id int) commentactionrecordOption {
+	return func(m *CommentActionRecordMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *CommentActionRecord
+		)
+		m.oldValue = func(ctx context.Context) (*CommentActionRecord, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().CommentActionRecord.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withCommentActionRecord sets the old CommentActionRecord of the mutation.
+func withCommentActionRecord(node *CommentActionRecord) commentactionrecordOption {
+	return func(m *CommentActionRecordMutation) {
+		m.oldValue = func(context.Context) (*CommentActionRecord, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m CommentActionRecordMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m CommentActionRecordMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("gen: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *CommentActionRecordMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *CommentActionRecordMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().CommentActionRecord.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCommentID sets the "comment_id" field.
+func (m *CommentActionRecordMutation) SetCommentID(i int) {
+	m.comment = &i
+}
+
+// CommentID returns the value of the "comment_id" field in the mutation.
+func (m *CommentActionRecordMutation) CommentID() (r int, exists bool) {
+	v := m.comment
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCommentID returns the old "comment_id" field's value of the CommentActionRecord entity.
+// If the CommentActionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentActionRecordMutation) OldCommentID(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCommentID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCommentID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCommentID: %w", err)
+	}
+	return oldValue.CommentID, nil
+}
+
+// ResetCommentID resets all changes to the "comment_id" field.
+func (m *CommentActionRecordMutation) ResetCommentID() {
+	m.comment = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *CommentActionRecordMutation) SetUserID(i int) {
+	m.user_id = &i
+	m.adduser_id = nil
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *CommentActionRecordMutation) UserID() (r int, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the CommentActionRecord entity.
+// If the CommentActionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentActionRecordMutation) OldUserID(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// AddUserID adds i to the "user_id" field.
+func (m *CommentActionRecordMutation) AddUserID(i int) {
+	if m.adduser_id != nil {
+		*m.adduser_id += i
+	} else {
+		m.adduser_id = &i
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *CommentActionRecordMutation) AddedUserID() (r int, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *CommentActionRecordMutation) ResetUserID() {
+	m.user_id = nil
+	m.adduser_id = nil
+}
+
+// SetType sets the "type" field.
+func (m *CommentActionRecordMutation) SetType(i int) {
+	m._type = &i
+	m.add_type = nil
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *CommentActionRecordMutation) GetType() (r int, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the CommentActionRecord entity.
+// If the CommentActionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentActionRecordMutation) OldType(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// AddType adds i to the "type" field.
+func (m *CommentActionRecordMutation) AddType(i int) {
+	if m.add_type != nil {
+		*m.add_type += i
+	} else {
+		m.add_type = &i
+	}
+}
+
+// AddedType returns the value that was added to the "type" field in this mutation.
+func (m *CommentActionRecordMutation) AddedType() (r int, exists bool) {
+	v := m.add_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *CommentActionRecordMutation) ResetType() {
+	m._type = nil
+	m.add_type = nil
+}
+
+// ClearComment clears the "comment" edge to the Comment entity.
+func (m *CommentActionRecordMutation) ClearComment() {
+	m.clearedcomment = true
+	m.clearedFields[commentactionrecord.FieldCommentID] = struct{}{}
+}
+
+// CommentCleared reports if the "comment" edge to the Comment entity was cleared.
+func (m *CommentActionRecordMutation) CommentCleared() bool {
+	return m.clearedcomment
+}
+
+// CommentIDs returns the "comment" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CommentID instead. It exists only for internal usage by the builders.
+func (m *CommentActionRecordMutation) CommentIDs() (ids []int) {
+	if id := m.comment; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetComment resets all changes to the "comment" edge.
+func (m *CommentActionRecordMutation) ResetComment() {
+	m.comment = nil
+	m.clearedcomment = false
+}
+
+// Where appends a list predicates to the CommentActionRecordMutation builder.
+func (m *CommentActionRecordMutation) Where(ps ...predicate.CommentActionRecord) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the CommentActionRecordMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *CommentActionRecordMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.CommentActionRecord, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *CommentActionRecordMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *CommentActionRecordMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (CommentActionRecord).
+func (m *CommentActionRecordMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *CommentActionRecordMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.comment != nil {
+		fields = append(fields, commentactionrecord.FieldCommentID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, commentactionrecord.FieldUserID)
+	}
+	if m._type != nil {
+		fields = append(fields, commentactionrecord.FieldType)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *CommentActionRecordMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case commentactionrecord.FieldCommentID:
+		return m.CommentID()
+	case commentactionrecord.FieldUserID:
+		return m.UserID()
+	case commentactionrecord.FieldType:
+		return m.GetType()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *CommentActionRecordMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case commentactionrecord.FieldCommentID:
+		return m.OldCommentID(ctx)
+	case commentactionrecord.FieldUserID:
+		return m.OldUserID(ctx)
+	case commentactionrecord.FieldType:
+		return m.OldType(ctx)
+	}
+	return nil, fmt.Errorf("unknown CommentActionRecord field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *CommentActionRecordMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case commentactionrecord.FieldCommentID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCommentID(v)
+		return nil
+	case commentactionrecord.FieldUserID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case commentactionrecord.FieldType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown CommentActionRecord field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *CommentActionRecordMutation) AddedFields() []string {
+	var fields []string
+	if m.adduser_id != nil {
+		fields = append(fields, commentactionrecord.FieldUserID)
+	}
+	if m.add_type != nil {
+		fields = append(fields, commentactionrecord.FieldType)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *CommentActionRecordMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case commentactionrecord.FieldUserID:
+		return m.AddedUserID()
+	case commentactionrecord.FieldType:
+		return m.AddedType()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *CommentActionRecordMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case commentactionrecord.FieldUserID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
+	case commentactionrecord.FieldType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown CommentActionRecord numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *CommentActionRecordMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *CommentActionRecordMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *CommentActionRecordMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown CommentActionRecord nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *CommentActionRecordMutation) ResetField(name string) error {
+	switch name {
+	case commentactionrecord.FieldCommentID:
+		m.ResetCommentID()
+		return nil
+	case commentactionrecord.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case commentactionrecord.FieldType:
+		m.ResetType()
+		return nil
+	}
+	return fmt.Errorf("unknown CommentActionRecord field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *CommentActionRecordMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.comment != nil {
+		edges = append(edges, commentactionrecord.EdgeComment)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *CommentActionRecordMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case commentactionrecord.EdgeComment:
+		if id := m.comment; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *CommentActionRecordMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *CommentActionRecordMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *CommentActionRecordMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedcomment {
+		edges = append(edges, commentactionrecord.EdgeComment)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *CommentActionRecordMutation) EdgeCleared(name string) bool {
+	switch name {
+	case commentactionrecord.EdgeComment:
+		return m.clearedcomment
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *CommentActionRecordMutation) ClearEdge(name string) error {
+	switch name {
+	case commentactionrecord.EdgeComment:
+		m.ClearComment()
+		return nil
+	}
+	return fmt.Errorf("unknown CommentActionRecord unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *CommentActionRecordMutation) ResetEdge(name string) error {
+	switch name {
+	case commentactionrecord.EdgeComment:
+		m.ResetComment()
+		return nil
+	}
+	return fmt.Errorf("unknown CommentActionRecord edge %s", name)
 }
 
 // DomainMutation represents an operation that mutates the Domain nodes in the graph.

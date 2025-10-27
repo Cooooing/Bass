@@ -20,7 +20,7 @@ func NewArticleActionRecordRepo(baseRepo *BaseRepo, client *gen.Client) repo.Art
 	}
 }
 
-func (a ArticleActionRecordRepo) Save(ctx context.Context, client *gen.Client, record *model.ActionRecord) (*model.ActionRecord, error) {
+func (a ArticleActionRecordRepo) Save(ctx context.Context, client *gen.Client, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error) {
 	// TODO implement me
 	panic("implement me")
 }

@@ -37,6 +37,8 @@ func (Comment) Edges() []ent.Edge {
 		edge.From("parent", Comment.Type).Ref("replies").Field("parent_id").Unique(),
 		// 关联子评论 一对多
 		edge.To("replies", Comment.Type),
+		// 关联操作 一对多
+		edge.To("action_records", CommentActionRecord.Type),
 	}
 }
 

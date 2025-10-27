@@ -54,9 +54,11 @@ type CommentEdges struct {
 	Parent *Comment `json:"parent,omitempty"`
 	// Replies holds the value of the replies edge.
 	Replies []*Comment `json:"replies,omitempty"`
+	// ActionRecords holds the value of the action_records edge.
+	ActionRecords []*CommentActionRecord `json:"action_records,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // ArticleOrErr returns the Article value or an error if the edge
@@ -88,6 +90,15 @@ func (e CommentEdges) RepliesOrErr() ([]*Comment, error) {
 		return e.Replies, nil
 	}
 	return nil, &NotLoadedError{edge: "replies"}
+}
+
+// ActionRecordsOrErr returns the ActionRecords value or an error if the edge
+// was not loaded in eager-loading.
+func (e CommentEdges) ActionRecordsOrErr() ([]*CommentActionRecord, error) {
+	if e.loadedTypes[3] {
+		return e.ActionRecords, nil
+	}
+	return nil, &NotLoadedError{edge: "action_records"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -216,6 +227,11 @@ func (_m *Comment) QueryParent() *CommentQuery {
 // QueryReplies queries the "replies" edge of the Comment entity.
 func (_m *Comment) QueryReplies() *CommentQuery {
 	return NewCommentClient(_m.config).QueryReplies(_m)
+}
+
+// QueryActionRecords queries the "action_records" edge of the Comment entity.
+func (_m *Comment) QueryActionRecords() *CommentActionRecordQuery {
+	return NewCommentClient(_m.config).QueryActionRecords(_m)
 }
 
 // Update returns a builder for updating this Comment.

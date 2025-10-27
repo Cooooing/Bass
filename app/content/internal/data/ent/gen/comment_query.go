@@ -5,6 +5,7 @@ package gen
 import (
 	"content/internal/data/ent/gen/article"
 	"content/internal/data/ent/gen/comment"
+	"content/internal/data/ent/gen/commentactionrecord"
 	"content/internal/data/ent/gen/predicate"
 	"context"
 	"database/sql/driver"
@@ -20,13 +21,14 @@ import (
 // CommentQuery is the builder for querying Comment entities.
 type CommentQuery struct {
 	config
-	ctx         *QueryContext
-	order       []comment.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.Comment
-	withArticle *ArticleQuery
-	withParent  *CommentQuery
-	withReplies *CommentQuery
+	ctx               *QueryContext
+	order             []comment.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.Comment
+	withArticle       *ArticleQuery
+	withParent        *CommentQuery
+	withReplies       *CommentQuery
+	withActionRecords *CommentActionRecordQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -122,6 +124,28 @@ func (_q *CommentQuery) QueryReplies() *CommentQuery {
 			sqlgraph.From(comment.Table, comment.FieldID, selector),
 			sqlgraph.To(comment.Table, comment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, comment.RepliesTable, comment.RepliesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionRecords chains the current query on the "action_records" edge.
+func (_q *CommentQuery) QueryActionRecords() *CommentActionRecordQuery {
+	query := (&CommentActionRecordClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(comment.Table, comment.FieldID, selector),
+			sqlgraph.To(commentactionrecord.Table, commentactionrecord.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, comment.ActionRecordsTable, comment.ActionRecordsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -316,14 +340,15 @@ func (_q *CommentQuery) Clone() *CommentQuery {
 		return nil
 	}
 	return &CommentQuery{
-		config:      _q.config,
-		ctx:         _q.ctx.Clone(),
-		order:       append([]comment.OrderOption{}, _q.order...),
-		inters:      append([]Interceptor{}, _q.inters...),
-		predicates:  append([]predicate.Comment{}, _q.predicates...),
-		withArticle: _q.withArticle.Clone(),
-		withParent:  _q.withParent.Clone(),
-		withReplies: _q.withReplies.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]comment.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.Comment{}, _q.predicates...),
+		withArticle:       _q.withArticle.Clone(),
+		withParent:        _q.withParent.Clone(),
+		withReplies:       _q.withReplies.Clone(),
+		withActionRecords: _q.withActionRecords.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
@@ -360,6 +385,17 @@ func (_q *CommentQuery) WithReplies(opts ...func(*CommentQuery)) *CommentQuery {
 		opt(query)
 	}
 	_q.withReplies = query
+	return _q
+}
+
+// WithActionRecords tells the query-builder to eager-load the nodes that are connected to
+// the "action_records" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CommentQuery) WithActionRecords(opts ...func(*CommentActionRecordQuery)) *CommentQuery {
+	query := (&CommentActionRecordClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withActionRecords = query
 	return _q
 }
 
@@ -441,10 +477,11 @@ func (_q *CommentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Comm
 	var (
 		nodes       = []*Comment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withArticle != nil,
 			_q.withParent != nil,
 			_q.withReplies != nil,
+			_q.withActionRecords != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -481,6 +518,13 @@ func (_q *CommentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Comm
 		if err := _q.loadReplies(ctx, query, nodes,
 			func(n *Comment) { n.Edges.Replies = []*Comment{} },
 			func(n *Comment, e *Comment) { n.Edges.Replies = append(n.Edges.Replies, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withActionRecords; query != nil {
+		if err := _q.loadActionRecords(ctx, query, nodes,
+			func(n *Comment) { n.Edges.ActionRecords = []*CommentActionRecord{} },
+			func(n *Comment, e *CommentActionRecord) { n.Edges.ActionRecords = append(n.Edges.ActionRecords, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -570,6 +614,36 @@ func (_q *CommentQuery) loadReplies(ctx context.Context, query *CommentQuery, no
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "parent_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *CommentQuery) loadActionRecords(ctx context.Context, query *CommentActionRecordQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *CommentActionRecord)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Comment)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(commentactionrecord.FieldCommentID)
+	}
+	query.Where(predicate.CommentActionRecord(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(comment.ActionRecordsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.CommentID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "comment_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

@@ -30,6 +30,8 @@ type Tx struct {
 	ArticleVoteRecord *ArticleVoteRecordClient
 	// Comment is the client for interacting with the Comment builders.
 	Comment *CommentClient
+	// CommentActionRecord is the client for interacting with the CommentActionRecord builders.
+	CommentActionRecord *CommentActionRecordClient
 	// Domain is the client for interacting with the Domain builders.
 	Domain *DomainClient
 	// Tag is the client for interacting with the Tag builders.
@@ -174,6 +176,7 @@ func (tx *Tx) init() {
 	tx.ArticleVote = NewArticleVoteClient(tx.config)
 	tx.ArticleVoteRecord = NewArticleVoteRecordClient(tx.config)
 	tx.Comment = NewCommentClient(tx.config)
+	tx.CommentActionRecord = NewCommentActionRecordClient(tx.config)
 	tx.Domain = NewDomainClient(tx.config)
 	tx.Tag = NewTagClient(tx.config)
 }

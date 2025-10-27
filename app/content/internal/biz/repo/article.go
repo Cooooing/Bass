@@ -9,12 +9,16 @@ import (
 
 type ArticleRepo interface {
 	Save(ctx context.Context, client *gen.Client, article *model.Article) (*model.Article, error)
+	UpdateContent(ctx context.Context, client *gen.Client, articleId int, content string) error
+	UpdateStatus(ctx context.Context, client *gen.Client, articleId int, status v1.ArticleStatus) error
 	UpdateHasPostscript(ctx context.Context, client *gen.Client, articleId int, hasPostscript bool) error
 	UpdateStat(ctx context.Context, client *gen.Client, articleId int, action v1.ArticleAction, num int) error
 
 	Delete(ctx context.Context, articleId int) error
 
 	GetArticleById(ctx context.Context, client *gen.Client, id int) (*model.Article, error)
+
+	Publish(ctx context.Context, client *gen.Client, articleId int) error
 }
 
 type ArticlePostscriptRepo interface {
@@ -22,6 +26,6 @@ type ArticlePostscriptRepo interface {
 }
 
 type ArticleActionRecordRepo interface {
-	Save(ctx context.Context, client *gen.Client, record *model.ActionRecord) (*model.ActionRecord, error)
+	Save(ctx context.Context, client *gen.Client, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error)
 	Delete(ctx context.Context, client *gen.Client, articleId int, userId int, action v1.ArticleAction) error
 }

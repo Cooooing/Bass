@@ -1167,6 +1167,114 @@ func (*UpdateStatusArticleReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_article_proto_rawDescGZIP(), []int{25}
 }
 
+type ArticleEventPublish struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ArticleId     int32                  `protobuf:"varint,1,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
+	UserId        int32                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	RewardContent string                 `protobuf:"bytes,5,opt,name=reward_content,json=rewardContent,proto3" json:"reward_content,omitempty"`
+	RewardPoints  int32                  `protobuf:"varint,6,opt,name=reward_points,json=rewardPoints,proto3" json:"reward_points,omitempty"`
+	Status        int32                  `protobuf:"varint,7,opt,name=status,proto3" json:"status,omitempty"`
+	Type          int32                  `protobuf:"varint,8,opt,name=type,proto3" json:"type,omitempty"`
+	BountyPoints  int32                  `protobuf:"varint,9,opt,name=bounty_points,json=bountyPoints,proto3" json:"bounty_points,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ArticleEventPublish) Reset() {
+	*x = ArticleEventPublish{}
+	mi := &file_content_v1_article_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ArticleEventPublish) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ArticleEventPublish) ProtoMessage() {}
+
+func (x *ArticleEventPublish) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_article_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ArticleEventPublish.ProtoReflect.Descriptor instead.
+func (*ArticleEventPublish) Descriptor() ([]byte, []int) {
+	return file_content_v1_article_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ArticleEventPublish) GetArticleId() int32 {
+	if x != nil {
+		return x.ArticleId
+	}
+	return 0
+}
+
+func (x *ArticleEventPublish) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ArticleEventPublish) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *ArticleEventPublish) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *ArticleEventPublish) GetRewardContent() string {
+	if x != nil {
+		return x.RewardContent
+	}
+	return ""
+}
+
+func (x *ArticleEventPublish) GetRewardPoints() int32 {
+	if x != nil {
+		return x.RewardPoints
+	}
+	return 0
+}
+
+func (x *ArticleEventPublish) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *ArticleEventPublish) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *ArticleEventPublish) GetBountyPoints() int32 {
+	if x != nil {
+		return x.BountyPoints
+	}
+	return 0
+}
+
 var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
@@ -1235,7 +1343,18 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"comment_id\x18\x02 \x01(\x05R\tcommentId\"\x1a\n" +
 	"\x18AcceptAnswerArticleReply\"\x1c\n" +
 	"\x1aUpdateStatusArticleRequest\"\x1a\n" +
-	"\x18UpdateStatusArticleReply2\xaa\n" +
+	"\x18UpdateStatusArticleReply\"\x9a\x02\n" +
+	"\x13ArticleEventPublish\x12\x1d\n" +
+	"\n" +
+	"article_id\x18\x01 \x01(\x05R\tarticleId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x05R\x06userId\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
+	"\x0ereward_content\x18\x05 \x01(\tR\rrewardContent\x12#\n" +
+	"\rreward_points\x18\x06 \x01(\x05R\frewardPoints\x12\x16\n" +
+	"\x06status\x18\a \x01(\x05R\x06status\x12\x12\n" +
+	"\x04type\x18\b \x01(\x05R\x04type\x12#\n" +
+	"\rbounty_points\x18\t \x01(\x05R\fbountyPoints2\xaa\n" +
 	"\n" +
 	"\x0eArticleService\x12]\n" +
 	"\x03Add\x12\x1d.content.v1.AddArticleRequest\x1a\x1b.content.v1.AddArticleReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/article/add\x12m\n" +
@@ -1263,7 +1382,7 @@ func file_content_v1_article_proto_rawDescGZIP() []byte {
 	return file_content_v1_article_proto_rawDescData
 }
 
-var file_content_v1_article_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_content_v1_article_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_content_v1_article_proto_goTypes = []any{
 	(*AddArticleRequest)(nil),           // 0: content.v1.AddArticleRequest
 	(*AddArticleReply)(nil),             // 1: content.v1.AddArticleReply
@@ -1291,6 +1410,7 @@ var file_content_v1_article_proto_goTypes = []any{
 	(*AcceptAnswerArticleReply)(nil),    // 23: content.v1.AcceptAnswerArticleReply
 	(*UpdateStatusArticleRequest)(nil),  // 24: content.v1.UpdateStatusArticleRequest
 	(*UpdateStatusArticleReply)(nil),    // 25: content.v1.UpdateStatusArticleReply
+	(*ArticleEventPublish)(nil),         // 26: content.v1.ArticleEventPublish
 }
 var file_content_v1_article_proto_depIdxs = []int32{
 	0,  // 0: content.v1.ArticleService.Add:input_type -> content.v1.AddArticleRequest
@@ -1335,7 +1455,7 @@ func file_content_v1_article_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_v1_article_proto_rawDesc), len(file_content_v1_article_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

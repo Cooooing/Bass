@@ -40,7 +40,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient, tokenRepo)
 	systemService := service.NewSystemService(baseService)
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient)
 	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
 	if err != nil {
 		cleanup3()
@@ -48,6 +47,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, rabbitMQClient)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	articleRepo := data.NewArticleRepo(baseRepo, genClient)
 	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)

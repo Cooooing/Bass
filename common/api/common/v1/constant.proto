@@ -52,3 +52,9 @@ enum ArticleAction {
   ArticleActionCollect = 2; // 收藏
   ArticleActionWatch = 3; // 关注
 }
+
+// 评论行为类型
+enum CommentAction {
+  CommentActionLike = 0; // 点赞
+  CommentActionCollect = 1; // 收藏
+}

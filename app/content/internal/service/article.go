@@ -88,7 +88,7 @@ func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequ
 	if err != nil {
 		return nil, err
 	}
-	err = s.articleDomain.Action(ctx, cv1.ArticleAction_ArticleActionCollect, int(req.ArticleId), user.ID, req.Active)
+	err = s.articleDomain.Action(ctx, int(req.ArticleId), user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
 	return &v1.CollectArticleReply{}, err
 }
 
@@ -114,28 +114,45 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 }
 
 func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticleRequest) (rsp *v1.GetArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	return &v1.GetArticleReply{}, nil
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	user, err := s.tokenRepo.GetUserInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = s.articleDomain.Action(ctx, int(req.ArticleId), user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
+	return &v1.LikeArticleReply{}, err
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	user, err := s.tokenRepo.GetUserInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	article, err := s.articleRepo.GetArticleById(ctx, s.db, int(req.ArticleId))
+	if err != nil {
+		return nil, err
+	}
+	// 只能发布草稿
+	if article.Status != int(cv1.ArticleStatus_ArticleDrafts) {
+		return nil, errors.New("only drafts can be publish")
+	}
+	// 只有作者可以发布草稿
+	if article.UserID != user.ID {
+		return nil, errors.New("you are not the author")
+	}
+	err = s.articleDomain.Publish(ctx, int(req.ArticleId))
+	return &v1.PublishArticleReply{}, err
 }
 
 func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticleRequest) (rsp *v1.RewardArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	return &v1.RewardArticleReply{}, nil
 }
 
 func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest) (rsp *v1.ThankArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	return &v1.ThankArticleReply{}, nil
 }
 
 func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleRequest) (rsp *v1.UpdateArticleReply, err error) {

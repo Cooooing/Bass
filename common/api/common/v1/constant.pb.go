@@ -368,6 +368,53 @@ func (ArticleAction) EnumDescriptor() ([]byte, []int) {
 	return file_common_v1_constant_proto_rawDescGZIP(), []int{6}
 }
 
+// 评论行为类型
+type CommentAction int32
+
+const (
+	CommentAction_CommentActionLike    CommentAction = 0 // 点赞
+	CommentAction_CommentActionCollect CommentAction = 1 // 收藏
+)
+
+// Enum value maps for CommentAction.
+var (
+	CommentAction_name = map[int32]string{
+		0: "CommentActionLike",
+		1: "CommentActionCollect",
+	}
+	CommentAction_value = map[string]int32{
+		"CommentActionLike":    0,
+		"CommentActionCollect": 1,
+	}
+)
+
+func (x CommentAction) Enum() *CommentAction {
+	p := new(CommentAction)
+	*p = x
+	return p
+}
+
+func (x CommentAction) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CommentAction) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_v1_constant_proto_enumTypes[7].Descriptor()
+}
+
+func (CommentAction) Type() protoreflect.EnumType {
+	return &file_common_v1_constant_proto_enumTypes[7]
+}
+
+func (x CommentAction) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CommentAction.Descriptor instead.
+func (CommentAction) EnumDescriptor() ([]byte, []int) {
+	return file_common_v1_constant_proto_rawDescGZIP(), []int{7}
+}
+
 var File_common_v1_constant_proto protoreflect.FileDescriptor
 
 const file_common_v1_constant_proto_rawDesc = "" +
@@ -401,7 +448,10 @@ const file_common_v1_constant_proto_rawDesc = "" +
 	"\x11ArticleActionLike\x10\x00\x12\x16\n" +
 	"\x12ArticleActionThank\x10\x01\x12\x18\n" +
 	"\x14ArticleActionCollect\x10\x02\x12\x16\n" +
-	"\x12ArticleActionWatch\x10\x03B\x0eZ\fcommon/v1;v1b\x06proto3"
+	"\x12ArticleActionWatch\x10\x03*@\n" +
+	"\rCommentAction\x12\x15\n" +
+	"\x11CommentActionLike\x10\x00\x12\x18\n" +
+	"\x14CommentActionCollect\x10\x01B\x0eZ\fcommon/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_constant_proto_rawDescOnce sync.Once
@@ -415,7 +465,7 @@ func file_common_v1_constant_proto_rawDescGZIP() []byte {
 	return file_common_v1_constant_proto_rawDescData
 }
 
-var file_common_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
+var file_common_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
 var file_common_v1_constant_proto_goTypes = []any{
 	(DomainStatus)(0),         // 0: common.v1.DomainStatus
 	(TagStatus)(0),            // 1: common.v1.TagStatus
@@ -424,6 +474,7 @@ var file_common_v1_constant_proto_goTypes = []any{
 	(ArticleStatus)(0),        // 4: common.v1.ArticleStatus
 	(ArticleType)(0),          // 5: common.v1.ArticleType
 	(ArticleAction)(0),        // 6: common.v1.ArticleAction
+	(CommentAction)(0),        // 7: common.v1.CommentAction
 }
 var file_common_v1_constant_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -443,7 +494,7 @@ func file_common_v1_constant_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_v1_constant_proto_rawDesc), len(file_common_v1_constant_proto_rawDesc)),
-			NumEnums:      7,
+			NumEnums:      8,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

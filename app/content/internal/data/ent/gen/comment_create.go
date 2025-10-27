@@ -5,6 +5,7 @@ package gen
 import (
 	"content/internal/data/ent/gen/article"
 	"content/internal/data/ent/gen/comment"
+	"content/internal/data/ent/gen/commentactionrecord"
 	"context"
 	"errors"
 	"fmt"
@@ -166,6 +167,21 @@ func (_c *CommentCreate) AddReplies(v ...*Comment) *CommentCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddReplyIDs(ids...)
+}
+
+// AddActionRecordIDs adds the "action_records" edge to the CommentActionRecord entity by IDs.
+func (_c *CommentCreate) AddActionRecordIDs(ids ...int) *CommentCreate {
+	_c.mutation.AddActionRecordIDs(ids...)
+	return _c
+}
+
+// AddActionRecords adds the "action_records" edges to the CommentActionRecord entity.
+func (_c *CommentCreate) AddActionRecords(v ...*CommentActionRecord) *CommentCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionRecordIDs(ids...)
 }
 
 // Mutation returns the CommentMutation object of the builder.
@@ -372,6 +388,22 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionRecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ActionRecordsTable,
+			Columns: []string{comment.ActionRecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

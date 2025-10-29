@@ -6,6 +6,8 @@ import (
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/data/ent"
+	"content/internal/data/ent/gen"
 	"context"
 	"errors"
 
@@ -46,10 +48,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 	if req.Status != int32(cv1.ArticleStatus_ArticleNormal) || req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, errors.New("status only be 0(normal) or 3(drafts)")
 	}
-	user, err := s.tokenRepo.GetUserInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := s.tokenRepo.GetUserInfo(ctx)
 	_, err = s.articleDomain.Add(ctx, &model.Article{
 		UserID:        user.ID,
 		Title:         req.Title,
@@ -67,10 +66,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
-	user, err := s.tokenRepo.GetUserInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := s.tokenRepo.GetUserInfo(ctx)
 	// 只有作者可以添加附言
 	if article, err := s.articleRepo.GetArticleById(ctx, s.db, int(req.ArticleId)); err != nil || article.UserID != user.ID {
 		if err != nil {
@@ -84,32 +80,29 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
-	user, err := s.tokenRepo.GetUserInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := s.tokenRepo.GetUserInfo(ctx)
 	err = s.articleDomain.Action(ctx, int(req.ArticleId), user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
 	return &v1.CollectArticleReply{}, err
 }
 
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
-	user, err := s.tokenRepo.GetUserInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
-	article, err := s.articleRepo.GetArticleById(ctx, s.db, int(req.ArticleId))
-	if err != nil {
-		return nil, err
-	}
-	// 只能删除草稿
-	if article.Status != int(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, errors.New("only drafts can be deleted")
-	}
-	// 只有作者可以删除草稿
-	if article.UserID != user.ID {
-		return nil, errors.New("you are not the author")
-	}
-	err = s.articleRepo.Delete(ctx, int(req.ArticleId))
+	user := s.tokenRepo.GetUserInfo(ctx)
+	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
+		article, err := s.articleRepo.GetArticleById(ctx, s.db, int(req.ArticleId))
+		if err != nil {
+			return err
+		}
+		// 只能删除草稿
+		if article.Status != int(cv1.ArticleStatus_ArticleDrafts) {
+			return errors.New("only drafts can be deleted")
+		}
+		// 只有作者可以删除草稿
+		if article.UserID != user.ID {
+			return errors.New("you are not the author")
+		}
+		err = s.articleRepo.Delete(ctx, s.db, int(req.ArticleId))
+		return err
+	})
 	return &v1.DeleteArticleReply{}, err
 }
 
@@ -118,19 +111,13 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticleRequest) (rs
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
-	user, err := s.tokenRepo.GetUserInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := s.tokenRepo.GetUserInfo(ctx)
 	err = s.articleDomain.Action(ctx, int(req.ArticleId), user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
 	return &v1.LikeArticleReply{}, err
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
-	user, err := s.tokenRepo.GetUserInfo(ctx)
-	if err != nil {
-		return nil, err
-	}
+	user := s.tokenRepo.GetUserInfo(ctx)
 	article, err := s.articleRepo.GetArticleById(ctx, s.db, int(req.ArticleId))
 	if err != nil {
 		return nil, err

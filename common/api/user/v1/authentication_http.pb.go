@@ -19,12 +19,12 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationAuthenticationExistEmail = "/common.api.common.user.v1.Authentication/ExistEmail"
-const OperationAuthenticationExistPhone = "/common.api.common.user.v1.Authentication/ExistPhone"
-const OperationAuthenticationExistUsername = "/common.api.common.user.v1.Authentication/ExistUsername"
-const OperationAuthenticationLoginAccount = "/common.api.common.user.v1.Authentication/LoginAccount"
-const OperationAuthenticationRegisterEmail = "/common.api.common.user.v1.Authentication/RegisterEmail"
-const OperationAuthenticationRegisterEmailVerify = "/common.api.common.user.v1.Authentication/RegisterEmailVerify"
+const OperationAuthenticationExistEmail = "/user.v1.Authentication/ExistEmail"
+const OperationAuthenticationExistPhone = "/user.v1.Authentication/ExistPhone"
+const OperationAuthenticationExistUsername = "/user.v1.Authentication/ExistUsername"
+const OperationAuthenticationLoginAccount = "/user.v1.Authentication/LoginAccount"
+const OperationAuthenticationRegisterEmail = "/user.v1.Authentication/RegisterEmail"
+const OperationAuthenticationRegisterEmailVerify = "/user.v1.Authentication/RegisterEmailVerify"
 
 type AuthenticationHTTPServer interface {
 	// ExistEmail 邮箱是否存在

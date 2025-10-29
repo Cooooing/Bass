@@ -67,9 +67,8 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articl
 	return updateOne.Exec(ctx)
 }
 
-func (r *ArticleRepo) Delete(ctx context.Context, articleId int) error {
-	// TODO implement me
-	panic("implement me")
+func (r *ArticleRepo) Delete(ctx context.Context, client *gen.Client, articleId int) error {
+	return client.Article.UpdateOneID(articleId).SetStatus(int(cv1.ArticleStatus_ArticleDeleted)).Exec(ctx)
 }
 
 func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id int) (*model.Article, error) {

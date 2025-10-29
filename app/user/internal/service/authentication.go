@@ -1,6 +1,7 @@
 package service
 
 import (
+	cv1 "common/api/common/v1"
 	v1 "common/api/user/v1"
 	"context"
 	"user/internal/biz"
@@ -51,6 +52,9 @@ func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.Exist
 
 func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginAccountRequest) (rsp *v1.LoginAccountReply, err error) {
 	token, err := s.authenticationDomain.LoginAccount(ctx, req.Account, req.Password)
+	if err != nil {
+		return nil, cv1.ErrorUnauthorized("account not exist or password is incorrect").WithCause(err)
+	}
 	return &v1.LoginAccountReply{Token: token}, err
 }
 

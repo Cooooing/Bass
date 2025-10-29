@@ -3,26 +3,39 @@ package ent
 import (
 	"content/internal/data/ent/gen"
 	"context"
+	"errors"
+	"fmt"
 )
 
-func WithTx(ctx context.Context, client *gen.Client, fn func(tx *gen.Client) error) (err error) {
+func WithTx(ctx context.Context, client *gen.Client, fn func(tx *gen.Client) error) error {
 	tx, err := client.Tx(ctx)
 	if err != nil {
-		return err
+		return errors.Join(err, fmt.Errorf("create tx failed"))
 	}
-	txClient := tx.Client()
 
 	defer func() {
 		if p := recover(); p != nil {
-			_ = tx.Rollback() // 尝试回滚
-			panic(p)          // 继续抛出 panic
-		} else if err != nil {
-			_ = tx.Rollback() // 出错时回滚
-		} else {
-			err = tx.Commit() // 成功时提交
+			// 如果发生 panic，尝试回滚并继续抛出
+			if rbErr := tx.Rollback(); rbErr != nil {
+				panic(errors.Join(rbErr, fmt.Errorf("tx panic: %v", p)))
+			}
+			panic(p)
 		}
 	}()
 
-	err = fn(txClient)
-	return err
+	// 执行业务逻辑
+	if err := fn(tx.Client()); err != nil {
+		// 出错时回滚
+		if rbErr := tx.Rollback(); rbErr != nil {
+			return errors.Join(rbErr, fmt.Errorf("tx commit failed: %v", err))
+		}
+		return err
+	}
+
+	// 正常提交
+	if err := tx.Commit(); err != nil {
+		return errors.Join(err, fmt.Errorf("tx commit failed"))
+	}
+
+	return nil
 }

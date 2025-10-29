@@ -1,6 +1,7 @@
 package util
 
 import (
+	v1 "common/api/common/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
@@ -66,7 +67,7 @@ func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.Use
 func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, error) {
 	value, err := r.redis.Client.Get(ctx, constant.GetKeyToken(token)).Result()
 	if err != nil {
-		return nil, err
+		return nil, v1.ErrorUnauthorized("token is invalid")
 	}
 	var user model.User
 	return &user, json.Unmarshal([]byte(value), &user)
@@ -76,7 +77,7 @@ func (r *TokenRepo) DelToken(ctx context.Context, token string) error {
 	return r.redis.Client.Del(ctx, constant.GetKeyToken(token)).Err()
 }
 
-func (r *TokenRepo) GetUserInfo(ctx context.Context) (*model.User, error) {
+func (r *TokenRepo) GetUserInfo(ctx context.Context) *model.User {
 	value := ctx.Value(constant.UserInfo)
-	return value.(*model.User), nil
+	return value.(*model.User)
 }

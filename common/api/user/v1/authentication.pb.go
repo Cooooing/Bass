@@ -596,7 +596,7 @@ var File_user_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/v1/authentication.proto\x12\x19common.api.common.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x84\x03\n" +
+	"\x1cuser/v1/authentication.proto\x12\auser.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x84\x03\n" +
 	"\x14RegisterEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12Y\n" +
 	"\bpassword\x18\x02 \x01(\tB=\xfaB:r8\x10\x06\x18@22^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$R\bpassword\x12?\n" +
@@ -628,16 +628,16 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\aaccount\x18\x01 \x01(\tR\aaccount\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\")\n" +
 	"\x11LoginAccountReply\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token2\xcd\a\n" +
-	"\x0eAuthentication\x12\x9d\x01\n" +
-	"\rRegisterEmail\x12/.common.api.common.user.v1.RegisterEmailRequest\x1a-.common.api.common.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\xb6\x01\n" +
-	"\x13RegisterEmailVerify\x125.common.api.common.user.v1.RegisterEmailVerifyRequest\x1a3.common.api.common.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12\x91\x01\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token2\xf0\x05\n" +
+	"\x0eAuthentication\x12y\n" +
+	"\rRegisterEmail\x12\x1d.user.v1.RegisterEmailRequest\x1a\x1b.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\x92\x01\n" +
+	"\x13RegisterEmailVerify\x12#.user.v1.RegisterEmailVerifyRequest\x1a!.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12m\n" +
 	"\n" +
-	"ExistEmail\x12,.common.api.common.user.v1.ExistEmailRequest\x1a*.common.api.common.user.v1.ExistEmailReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/email\x12\x91\x01\n" +
+	"ExistEmail\x12\x1a.user.v1.ExistEmailRequest\x1a\x18.user.v1.ExistEmailReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/email\x12m\n" +
 	"\n" +
-	"ExistPhone\x12,.common.api.common.user.v1.ExistPhoneRequest\x1a*.common.api.common.user.v1.ExistPhoneReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/phone\x12\x9d\x01\n" +
-	"\rExistUsername\x12/.common.api.common.user.v1.ExistUsernameRequest\x1a-.common.api.common.user.v1.ExistUsernameReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/exist/username\x12\x99\x01\n" +
-	"\fLoginAccount\x12..common.api.common.user.v1.LoginAccountRequest\x1a,.common.api.common.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\fZ\n" +
+	"ExistPhone\x12\x1a.user.v1.ExistPhoneRequest\x1a\x18.user.v1.ExistPhoneReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/phone\x12y\n" +
+	"\rExistUsername\x12\x1d.user.v1.ExistUsernameRequest\x1a\x1b.user.v1.ExistUsernameReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/exist/username\x12u\n" +
+	"\fLoginAccount\x12\x1c.user.v1.LoginAccountRequest\x1a\x1a.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\fZ\n" +
 	"user/v1;v1b\x06proto3"
 
 var (
@@ -654,32 +654,32 @@ func file_user_v1_authentication_proto_rawDescGZIP() []byte {
 
 var file_user_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_user_v1_authentication_proto_goTypes = []any{
-	(*RegisterEmailRequest)(nil),       // 0: common.api.common.user.v1.RegisterEmailRequest
-	(*RegisterEmailReply)(nil),         // 1: common.api.common.user.v1.RegisterEmailReply
-	(*RegisterEmailVerifyRequest)(nil), // 2: common.api.common.user.v1.RegisterEmailVerifyRequest
-	(*RegisterEmailVerifyReply)(nil),   // 3: common.api.common.user.v1.RegisterEmailVerifyReply
-	(*ExistEmailRequest)(nil),          // 4: common.api.common.user.v1.ExistEmailRequest
-	(*ExistEmailReply)(nil),            // 5: common.api.common.user.v1.ExistEmailReply
-	(*ExistUsernameRequest)(nil),       // 6: common.api.common.user.v1.ExistUsernameRequest
-	(*ExistUsernameReply)(nil),         // 7: common.api.common.user.v1.ExistUsernameReply
-	(*ExistPhoneRequest)(nil),          // 8: common.api.common.user.v1.ExistPhoneRequest
-	(*ExistPhoneReply)(nil),            // 9: common.api.common.user.v1.ExistPhoneReply
-	(*LoginAccountRequest)(nil),        // 10: common.api.common.user.v1.LoginAccountRequest
-	(*LoginAccountReply)(nil),          // 11: common.api.common.user.v1.LoginAccountReply
+	(*RegisterEmailRequest)(nil),       // 0: user.v1.RegisterEmailRequest
+	(*RegisterEmailReply)(nil),         // 1: user.v1.RegisterEmailReply
+	(*RegisterEmailVerifyRequest)(nil), // 2: user.v1.RegisterEmailVerifyRequest
+	(*RegisterEmailVerifyReply)(nil),   // 3: user.v1.RegisterEmailVerifyReply
+	(*ExistEmailRequest)(nil),          // 4: user.v1.ExistEmailRequest
+	(*ExistEmailReply)(nil),            // 5: user.v1.ExistEmailReply
+	(*ExistUsernameRequest)(nil),       // 6: user.v1.ExistUsernameRequest
+	(*ExistUsernameReply)(nil),         // 7: user.v1.ExistUsernameReply
+	(*ExistPhoneRequest)(nil),          // 8: user.v1.ExistPhoneRequest
+	(*ExistPhoneReply)(nil),            // 9: user.v1.ExistPhoneReply
+	(*LoginAccountRequest)(nil),        // 10: user.v1.LoginAccountRequest
+	(*LoginAccountReply)(nil),          // 11: user.v1.LoginAccountReply
 }
 var file_user_v1_authentication_proto_depIdxs = []int32{
-	0,  // 0: common.api.common.user.v1.Authentication.RegisterEmail:input_type -> common.api.common.user.v1.RegisterEmailRequest
-	2,  // 1: common.api.common.user.v1.Authentication.RegisterEmailVerify:input_type -> common.api.common.user.v1.RegisterEmailVerifyRequest
-	4,  // 2: common.api.common.user.v1.Authentication.ExistEmail:input_type -> common.api.common.user.v1.ExistEmailRequest
-	8,  // 3: common.api.common.user.v1.Authentication.ExistPhone:input_type -> common.api.common.user.v1.ExistPhoneRequest
-	6,  // 4: common.api.common.user.v1.Authentication.ExistUsername:input_type -> common.api.common.user.v1.ExistUsernameRequest
-	10, // 5: common.api.common.user.v1.Authentication.LoginAccount:input_type -> common.api.common.user.v1.LoginAccountRequest
-	1,  // 6: common.api.common.user.v1.Authentication.RegisterEmail:output_type -> common.api.common.user.v1.RegisterEmailReply
-	3,  // 7: common.api.common.user.v1.Authentication.RegisterEmailVerify:output_type -> common.api.common.user.v1.RegisterEmailVerifyReply
-	5,  // 8: common.api.common.user.v1.Authentication.ExistEmail:output_type -> common.api.common.user.v1.ExistEmailReply
-	9,  // 9: common.api.common.user.v1.Authentication.ExistPhone:output_type -> common.api.common.user.v1.ExistPhoneReply
-	7,  // 10: common.api.common.user.v1.Authentication.ExistUsername:output_type -> common.api.common.user.v1.ExistUsernameReply
-	11, // 11: common.api.common.user.v1.Authentication.LoginAccount:output_type -> common.api.common.user.v1.LoginAccountReply
+	0,  // 0: user.v1.Authentication.RegisterEmail:input_type -> user.v1.RegisterEmailRequest
+	2,  // 1: user.v1.Authentication.RegisterEmailVerify:input_type -> user.v1.RegisterEmailVerifyRequest
+	4,  // 2: user.v1.Authentication.ExistEmail:input_type -> user.v1.ExistEmailRequest
+	8,  // 3: user.v1.Authentication.ExistPhone:input_type -> user.v1.ExistPhoneRequest
+	6,  // 4: user.v1.Authentication.ExistUsername:input_type -> user.v1.ExistUsernameRequest
+	10, // 5: user.v1.Authentication.LoginAccount:input_type -> user.v1.LoginAccountRequest
+	1,  // 6: user.v1.Authentication.RegisterEmail:output_type -> user.v1.RegisterEmailReply
+	3,  // 7: user.v1.Authentication.RegisterEmailVerify:output_type -> user.v1.RegisterEmailVerifyReply
+	5,  // 8: user.v1.Authentication.ExistEmail:output_type -> user.v1.ExistEmailReply
+	9,  // 9: user.v1.Authentication.ExistPhone:output_type -> user.v1.ExistPhoneReply
+	7,  // 10: user.v1.Authentication.ExistUsername:output_type -> user.v1.ExistUsernameReply
+	11, // 11: user.v1.Authentication.LoginAccount:output_type -> user.v1.LoginAccountReply
 	6,  // [6:12] is the sub-list for method output_type
 	0,  // [0:6] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name

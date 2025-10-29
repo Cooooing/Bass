@@ -298,7 +298,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.common.user.v1.ExistEmailRequest'
+                            $ref: '#/components/schemas/user.v1.ExistEmailRequest'
                 required: true
             responses:
                 "200":
@@ -306,7 +306,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.common.user.v1.ExistEmailReply'
+                                $ref: '#/components/schemas/user.v1.ExistEmailReply'
     /v1/authentication/exist/phone:
         post:
             tags:
@@ -317,7 +317,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.common.user.v1.ExistPhoneRequest'
+                            $ref: '#/components/schemas/user.v1.ExistPhoneRequest'
                 required: true
             responses:
                 "200":
@@ -325,7 +325,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.common.user.v1.ExistPhoneReply'
+                                $ref: '#/components/schemas/user.v1.ExistPhoneReply'
     /v1/authentication/exist/username:
         post:
             tags:
@@ -336,7 +336,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.common.user.v1.ExistUsernameRequest'
+                            $ref: '#/components/schemas/user.v1.ExistUsernameRequest'
                 required: true
             responses:
                 "200":
@@ -344,7 +344,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.common.user.v1.ExistUsernameReply'
+                                $ref: '#/components/schemas/user.v1.ExistUsernameReply'
     /v1/authentication/login/account:
         post:
             tags:
@@ -355,7 +355,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.common.user.v1.LoginAccountRequest'
+                            $ref: '#/components/schemas/user.v1.LoginAccountRequest'
                 required: true
             responses:
                 "200":
@@ -363,7 +363,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.common.user.v1.LoginAccountReply'
+                                $ref: '#/components/schemas/user.v1.LoginAccountReply'
     /v1/authentication/register/email:
         post:
             tags:
@@ -374,7 +374,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailRequest'
+                            $ref: '#/components/schemas/user.v1.RegisterEmailRequest'
                 required: true
             responses:
                 "200":
@@ -382,7 +382,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailReply'
+                                $ref: '#/components/schemas/user.v1.RegisterEmailReply'
     /v1/authentication/register/email/verify:
         post:
             tags:
@@ -393,7 +393,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailVerifyRequest'
+                            $ref: '#/components/schemas/user.v1.RegisterEmailVerifyRequest'
                 required: true
             responses:
                 "200":
@@ -401,7 +401,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.common.user.v1.RegisterEmailVerifyReply'
+                                $ref: '#/components/schemas/user.v1.RegisterEmailVerifyReply'
     /v1/comment/add:
         post:
             tags:
@@ -563,76 +563,6 @@ paths:
                                 $ref: '#/components/schemas/common.v1.HealthReply'
 components:
     schemas:
-        common.api.common.user.v1.ExistEmailReply:
-            type: object
-            properties:
-                exist:
-                    type: boolean
-        common.api.common.user.v1.ExistEmailRequest:
-            type: object
-            properties:
-                email:
-                    type: string
-        common.api.common.user.v1.ExistPhoneReply:
-            type: object
-            properties:
-                exist:
-                    type: boolean
-        common.api.common.user.v1.ExistPhoneRequest:
-            type: object
-            properties:
-                phone:
-                    type: string
-        common.api.common.user.v1.ExistUsernameReply:
-            type: object
-            properties:
-                exist:
-                    type: boolean
-        common.api.common.user.v1.ExistUsernameRequest:
-            type: object
-            properties:
-                username:
-                    type: string
-        common.api.common.user.v1.LoginAccountReply:
-            type: object
-            properties:
-                token:
-                    type: string
-        common.api.common.user.v1.LoginAccountRequest:
-            type: object
-            properties:
-                account:
-                    type: string
-                password:
-                    type: string
-        common.api.common.user.v1.RegisterEmailReply:
-            type: object
-            properties:
-                codeToken:
-                    type: string
-                code:
-                    type: string
-        common.api.common.user.v1.RegisterEmailRequest:
-            type: object
-            properties:
-                email:
-                    type: string
-                password:
-                    type: string
-                name:
-                    type: string
-                nickname:
-                    type: string
-        common.api.common.user.v1.RegisterEmailVerifyReply:
-            type: object
-            properties: {}
-        common.api.common.user.v1.RegisterEmailVerifyRequest:
-            type: object
-            properties:
-                code:
-                    type: string
-                codeToken:
-                    type: string
         common.api.common.v1.PageReply:
             type: object
             properties:
@@ -940,6 +870,76 @@ components:
                     format: int32
                 active:
                     type: boolean
+        user.v1.ExistEmailReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        user.v1.ExistEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+        user.v1.ExistPhoneReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        user.v1.ExistPhoneRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+        user.v1.ExistUsernameReply:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+        user.v1.ExistUsernameRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+        user.v1.LoginAccountReply:
+            type: object
+            properties:
+                token:
+                    type: string
+        user.v1.LoginAccountRequest:
+            type: object
+            properties:
+                account:
+                    type: string
+                password:
+                    type: string
+        user.v1.RegisterEmailReply:
+            type: object
+            properties:
+                codeToken:
+                    type: string
+                code:
+                    type: string
+        user.v1.RegisterEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                password:
+                    type: string
+                name:
+                    type: string
+                nickname:
+                    type: string
+        user.v1.RegisterEmailVerifyReply:
+            type: object
+            properties: {}
+        user.v1.RegisterEmailVerifyRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                codeToken:
+                    type: string
 tags:
     - name: ArticleService
       description: Article 服务

@@ -118,8 +118,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	}
 	// 验证密码
 	if !user.PasswordVerify(password) {
-		err = errors.New("password invalid")
-		return
+		return token, errors.New("password invalid")
 	}
 	// 生成 token
 	token, err = s.tokenService.TokenGen.Generate(model.Token{

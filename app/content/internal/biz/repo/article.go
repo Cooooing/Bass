@@ -14,7 +14,7 @@ type ArticleRepo interface {
 	UpdateHasPostscript(ctx context.Context, client *gen.Client, articleId int, hasPostscript bool) error
 	UpdateStat(ctx context.Context, client *gen.Client, articleId int, action v1.ArticleAction, num int) error
 
-	Delete(ctx context.Context, articleId int) error
+	Delete(ctx context.Context, client *gen.Client, articleId int) error
 
 	GetArticleById(ctx context.Context, client *gen.Client, id int) (*model.Article, error)
 

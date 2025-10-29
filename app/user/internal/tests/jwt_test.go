@@ -21,8 +21,7 @@ var c = &conf.Bootstrap{
 func TestJwt(t *testing.T) {
 	service := biz.NewTokenService(c)
 	token, err := service.EmailTokenGen.Generate(model.TokenEmail{
-		UserId: 1,
-		Email:  "2222",
+		Email: "2222",
 	})
 	if err != nil {
 		t.Error(err)

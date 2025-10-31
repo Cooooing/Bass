@@ -49,6 +49,7 @@ wire:
 ent:
 	@echo "Generating go ent..."
 	@cd $(USER_DIR) && \
+	go mod tidy && \
 	go run entgo.io/ent/cmd/ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
 
 # ============ Compile API Proto ============

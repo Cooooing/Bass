@@ -27,12 +27,12 @@ init:
 	go install github.com/envoyproxy/protoc-gen-validate@latest
 	go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
 	go install github.com/google/wire/cmd/wire@latest
+	go install entgo.io/ent/cmd/ent@latest
 
 # ============ Compile config Proto ============
 .PHONY: config
 config:
 	@echo "Generating internal proto files..."
-	@cd $(USER_DIR) && \
 	protoc -I $(INTERNAL_DIR) \
 	       --go_out=paths=source_relative:$(INTERNAL_DIR) \
 	       $(INTERNAL_PROTO_FILES)
@@ -42,21 +42,19 @@ config:
 wire:
 	@echo "Generating go wire..."
 	@cd $(USER_DIR)/cmd && \
-	go run github.com/google/wire/cmd/wire
+	wire
 
 # ============ Generate Ent Code ============
 .PHONY: ent
 ent:
 	@echo "Generating go ent..."
 	@cd $(USER_DIR) && \
-	go mod tidy && \
-	go run entgo.io/ent/cmd/ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
+	ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
 
 # ============ Compile API Proto ============
 .PHONY: api
 api:
 	@echo "Generating API proto files..."
-	@cd $(USER_DIR) && \
 	protoc -I $(API_DIR) -I $(THIRD_PARTY_DIR) \
 	       --go_out=paths=source_relative:$(API_DIR) \
 	       --go-grpc_out=paths=source_relative:$(API_DIR) \

@@ -180,17 +180,6 @@ func loadEtcdConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, *clientv3.Client,
 	if err := c.Scan(&etcdConf); err != nil {
 		return nil, nil, fmt.Errorf("scan etcd config fail: %w", err)
 	}
-	err = c.Watch("watch_name", func(s string, value config.Value) {
-		s2, _ := value.String()
-		log.Infof("watch name: %s, value: %s", s, s2)
-
-		if err := c.Scan(&etcdConf); err != nil {
-			log.Errorf(fmt.Errorf("scan etcd config fail: %w", err).Error())
-		}
-	})
-	if err != nil {
-		return nil, nil, fmt.Errorf("watch etcd config fail: %w", err)
-	}
 
 	etcdConf.Server.Name = bc.Name
 	etcdConf.Server.Version = bc.Version

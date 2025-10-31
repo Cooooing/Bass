@@ -86,7 +86,7 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, error) {
 		return nil, nil, err
 	}
 	var c *conf.Bootstrap
-	if bc.Mode == "dev" || bc.Mode == "prod" {
+	if bc.Mode == "dev" {
 		c, err := loadLocalConfig(bc)
 		return c, bc, err
 	} else {
@@ -179,15 +179,6 @@ func loadEtcdConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, *clientv3.Client,
 	var etcdConf conf.Bootstrap
 	if err := c.Scan(&etcdConf); err != nil {
 		return nil, nil, fmt.Errorf("scan etcd config fail: %w", err)
-	}
-
-	err = c.Watch("watch", func(s string, value config.Value) {
-		if err := c.Scan(&etcdConf); err != nil {
-			log.Errorf(fmt.Errorf("scan etcd config fail: %w", err).Error())
-		}
-	})
-	if err != nil {
-		return nil, nil, fmt.Errorf("watch etcd config fail: %w", err)
 	}
 
 	etcdConf.Server.Name = bc.Name

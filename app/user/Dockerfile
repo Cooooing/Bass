@@ -1,5 +1,5 @@
 # ===================== 第一阶段：构建 Go 应用 =====================
-FROM golang:1.24 AS builder
+FROM golang:1.25 AS builder
 
 # 设置工作目录
 WORKDIR /build

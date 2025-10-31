@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package content.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "content/v1;v1";
+
+// 评论服务
+service CommentService {
+
+  // 新增评论
+  rpc Add (AddCommentRequest) returns (AddCommentReply) {
+    option (google.api.http) = {
+      post: "/v1/comment/add"
+      body: "*"
+    };
+  }
+
+  // 查询评论
+  rpc Get (GetCommentRequest) returns (GetCommentReply) {
+    option (google.api.http) = {
+      get: "/v1/comment/get"
+    };
+  }
+
+  // 点赞评论
+  rpc Like (LikeCommentRequest) returns (LikeCommentReply) {
+    option (google.api.http) = {
+      post: "/v1/comment/like"
+      body: "*"
+    };
+  }
+
+  // 感谢评论
+  rpc Thank (ThankCommentRequest) returns (ThankCommentReply) {
+    option (google.api.http) = {
+      post: "/v1/comment/thank"
+      body: "*"
+    };
+  }
+
+  // 修改评论状态
+  rpc UpdateStatus (UpdateStatusCommentRequest) returns (UpdateStatusCommentReply) {
+    option (google.api.http) = {
+      post: "/v1/comment/updateStatus"
+      body: "*"
+    };
+  }
+
+}
+
+message AddCommentRequest {}
+message AddCommentReply {}
+
+message GetCommentRequest {}
+message GetCommentReply {}
+
+message DeleteCommentRequest {}
+message DeleteCommentReply {}
+
+message LikeCommentRequest {}
+message LikeCommentReply {}
+
+message ThankCommentRequest {}
+message ThankCommentReply {}
+
+message UpdateStatusCommentRequest {}
+message UpdateStatusCommentReply {}

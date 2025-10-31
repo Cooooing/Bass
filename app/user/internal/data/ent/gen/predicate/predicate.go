@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// AAA is the predicate function for aaa builders.
-type AAA func(*sql.Selector)
+// Group is the predicate function for group builders.
+type Group func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

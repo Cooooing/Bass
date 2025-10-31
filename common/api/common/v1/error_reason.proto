@@ -4,7 +4,88 @@ package common.v1;
 
 option go_package = "common/v1;v1";
 
+import "errors/errors.proto";
+
+
 enum ErrorReason {
-  GREETER_UNSPECIFIED = 0;
-  USER_NOT_FOUND = 1;
+  // 默认错误码（未定义的错误情况）
+  option (errors.default_code) = 500;
+
+  // ===== 通用错误 =====
+
+  UnknownError = 0 [(errors.code) = 500];              // 未知错误
+
+//  // ===== 1xx 信息性响应 =====
+//  Continue = 100 [(errors.code) = 100];             // 临时响应，客户端应继续请求，如果已完成则忽略
+//  SwitchingProtocols = 101 [(errors.code) = 101];   // 响应客户端的 Upgrade 请求，服务器将切换协议
+//  Processing = 102 [(errors.code) = 102];           // WebDAV：服务器已收到请求，正在处理，无响应可用
+//  EarlyHints = 103 [(errors.code) = 103];           // 允许用户代理在服务器准备响应阶段预加载资源
+//
+//  // ===== 2xx 成功 =====
+//  OK = 200 [(errors.code) = 200];                  // 请求成功
+//  Created = 201 [(errors.code) = 201];             // 请求成功，创建新资源
+//  Accepted = 202 [(errors.code) = 202];            // 请求已接受，但尚未处理
+//  NonAuthoritativeInformation = 203 [(errors.code) = 203]; // 响应头部信息非权威，可能来自第三方
+//  NoContent = 204 [(errors.code) = 204];           // 请求成功，但无内容返回
+//  ResetContent = 205 [(errors.code) = 205];        // 告诉客户端重置请求文档
+//  PartialContent = 206 [(errors.code) = 206];      // 客户端请求了部分资源
+//  MultiStatus = 207 [(errors.code) = 207];         // WebDAV：多个状态码，返回多个资源信息
+//  AlreadyReported = 208 [(errors.code) = 208];     // WebDAV：已报告，避免重复
+//  IMUsed = 226 [(errors.code) = 226];              // HTTP Delta encoding，响应应用一个或多个实例操作
+//
+//  // ===== 3xx 重定向 =====
+//  MultipleChoices = 300 [(errors.code) = 300];     // 请求有多个可能响应，用户可选择
+//  MovedPermanently = 301 [(errors.code) = 301];    // 资源 URL 已永久更改
+//  Found = 302 [(errors.code) = 302];               // 资源 URI 暂时更改
+//  SeeOther = 303 [(errors.code) = 303];            // 客户端应使用 GET 请求另一个 URI 获取资源
+//  NotModified = 304 [(errors.code) = 304];         // 缓存资源未修改，客户端可继续使用
+//  UseProxy = 305 [(errors.code) = 305];            // 已弃用，响应必须通过代理访问
+//  TemporaryRedirect = 307 [(errors.code) = 307];   // 临时重定向，方法不变
+//  PermanentRedirect = 308 [(errors.code) = 308];   // 永久重定向，方法不变
+
+  // ===== 4xx 客户端错误 =====
+
+  BadRequest = 400 [(errors.code) = 400];                     // 请求语法错误、参数错误
+  Unauthorized = 401 [(errors.code) = 401];                   // 未认证，需身份验证
+  PaymentRequired = 402 [(errors.code) = 402];                // 保留，支付相关
+  Forbidden = 403 [(errors.code) = 403];                      // 已认证但无权限访问
+  NotFound = 404 [(errors.code) = 404];                       // 请求资源不存在
+  MethodNotAllowed = 405 [(errors.code) = 405];               // 请求方法不被允许
+  NotAcceptable = 406 [(errors.code) = 406];                  // 无可接受的内容
+  ProxyAuthenticationRequired = 407 [(errors.code) = 407];    // 代理认证
+  RequestTimeout = 408 [(errors.code) = 408];                 // 请求超时
+  Conflict = 409 [(errors.code) = 409];                       // 请求与服务器状态冲突
+  Gone = 410 [(errors.code) = 410];                           // 资源永久删除
+  LengthRequired = 411 [(errors.code) = 411];                 // 需 Content-Length 头
+  PreconditionFailed = 412 [(errors.code) = 412];             // 前置条件失败
+  PayloadTooLarge = 413 [(errors.code) = 413];                // 请求实体过大
+  URITooLong = 414 [(errors.code) = 414];                     // URI 过长
+  UnsupportedMediaType = 415 [(errors.code) = 415];           // 不支持的媒体类型
+  RangeNotSatisfiable = 416 [(errors.code) = 416];            // Range 请求不可满足
+  ExpectationFailed = 417 [(errors.code) = 417];              // Expect 请求无法满足
+  ImATeapot = 418 [(errors.code) = 418];                      // 玩笑：茶壶不能煮咖啡
+  MisdirectedRequest = 421 [(errors.code) = 421];             // 请求被错误路由
+  UnprocessableEntity = 422 [(errors.code) = 422];           // WebDAV：语义错误无法处理
+  Locked = 423 [(errors.code) = 423];                          // WebDAV：资源锁定
+  FailedDependency = 424 [(errors.code) = 424];               // WebDAV：前置请求失败
+  TooEarly = 425 [(errors.code) = 425];                        // 实验性：请求过早
+  UpgradeRequired = 426 [(errors.code) = 426];                 // 需升级协议
+  PreconditionRequired = 428 [(errors.code) = 428];           // 需前置条件，防止丢失更新
+  TooManyRequests = 429 [(errors.code) = 429];                 // 请求过多，限流
+  RequestHeaderFieldsTooLarge = 431 [(errors.code) = 431];    // 请求头字段过大
+  UnavailableForLegalReasons = 451 [(errors.code) = 451];     // 法律原因不可用
+
+  // ===== 5xx 服务器错误 =====
+  
+  InternalServerError = 500 [(errors.code) = 500];             // 服务器内部错误
+  NotImplemented = 501 [(errors.code) = 501];                  // 功能未实现
+  BadGateway = 502 [(errors.code) = 502];                      // 上游网关错误
+  ServiceUnavailable = 503 [(errors.code) = 503];              // 服务暂不可用
+  GatewayTimeout = 504 [(errors.code) = 504];                  // 上游网关超时
+  HTTPVersionNotSupported = 505 [(errors.code) = 505];         // HTTP 版本不支持
+  VariantAlsoNegotiates = 506 [(errors.code) = 506];           // 内部配置错误
+  InsufficientStorage = 507 [(errors.code) = 507];             // WebDAV：存储不足
+  LoopDetected = 508 [(errors.code) = 508];                    // WebDAV：循环检测
+  NotExtended = 510 [(errors.code) = 510];                     // 请求需扩展才能完成
+  NetworkAuthenticationRequired = 511 [(errors.code) = 511];  // 网络认证要求
 }

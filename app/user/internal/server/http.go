@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"path"
+	"strings"
 	"user/internal/biz"
 	"user/internal/conf"
 	"user/internal/service"
@@ -77,7 +78,7 @@ func AuthMiddleware(tokenService *biz.TokenService) middleware.Middleware {
 			}
 
 			// 获取 token
-			token := tr.RequestHeader().Get(constant.Authentication)
+			token := strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), "Bearer ")
 
 			// 验证 token
 			userInfo, err := tokenService.TokenGen.Parse(token)

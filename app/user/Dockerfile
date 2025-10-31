@@ -29,7 +29,7 @@ RUN make all
 FROM debian:stable-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates netbase && \
+    ca-certificates netbase curl && \
     rm -rf /var/lib/apt/lists/*
 
 # 设置工作目录

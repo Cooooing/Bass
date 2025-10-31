@@ -36,3 +36,4 @@ bin/
 *.swp
 
 *.iml
+/deploy/prod*/

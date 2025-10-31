@@ -7,7 +7,10 @@
 package main
 
 import (
+	"common/pkg/util"
+	"content/internal/biz"
 	"content/internal/conf"
+	"content/internal/data"
 	"content/internal/data/client"
 	"content/internal/server"
 	"content/internal/service"
@@ -19,17 +22,56 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdCient, cleanup, err := client.NewEtcdClient(bootstrap, helper)
+	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdCient)
+	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
+	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient, tokenRepo)
 	systemService := service.NewSystemService(baseService)
-	v := service.ProvideServices(systemService)
+	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
+	if err != nil {
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, rabbitMQClient)
+	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	articleRepo := data.NewArticleRepo(baseRepo, genClient)
+	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
+	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
+	domainRepo := data.NewDomainRepo(baseRepo)
+	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, domainRepo)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	articleService := service.NewArticleService(baseService, articleDomain, articleRepo)
+	domainDomain := biz.NewDomainDomain(baseDomain, domainRepo)
+	domainService := service.NewDomainService(baseService, domainDomain)
+	v := service.ProvideServices(systemService, articleService, domainService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v)
-	app := newApp(logger, grpcServer, httpServer, etcdCient)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
+	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {
+		cleanup4()
+		cleanup3()
+		cleanup2()
 		cleanup()
 	}, nil
 }

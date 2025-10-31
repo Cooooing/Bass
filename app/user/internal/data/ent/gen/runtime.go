@@ -4,7 +4,7 @@ package gen
 
 import (
 	"time"
-	"user/internal/data/ent/gen/aaa"
+	"user/internal/data/ent/gen/group"
 	"user/internal/data/ent/gen/user"
 	"user/internal/data/ent/schema"
 )
@@ -13,12 +13,24 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	aaaFields := schema.AAA{}.Fields()
-	_ = aaaFields
-	// aaaDescName is the schema descriptor for name field.
-	aaaDescName := aaaFields[0].Descriptor()
-	// aaa.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	aaa.NameValidator = aaaDescName.Validators[0].(func(string) error)
+	groupFields := schema.Group{}.Fields()
+	_ = groupFields
+	// groupDescName is the schema descriptor for name field.
+	groupDescName := groupFields[0].Descriptor()
+	// group.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	group.NameValidator = groupDescName.Validators[0].(func(string) error)
+	// groupDescEndpoint is the schema descriptor for endpoint field.
+	groupDescEndpoint := groupFields[1].Descriptor()
+	// group.EndpointValidator is a validator for the "endpoint" field. It is called by the builders before save.
+	group.EndpointValidator = groupDescEndpoint.Validators[0].(func(string) error)
+	// groupDescCreatedAt is the schema descriptor for created_at field.
+	groupDescCreatedAt := groupFields[4].Descriptor()
+	// group.DefaultCreatedAt holds the default value on creation for the created_at field.
+	group.DefaultCreatedAt = groupDescCreatedAt.Default.(func() time.Time)
+	// groupDescUpdatedAt is the schema descriptor for updated_at field.
+	groupDescUpdatedAt := groupFields[5].Descriptor()
+	// group.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	group.DefaultUpdatedAt = groupDescUpdatedAt.Default.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.
@@ -33,10 +45,6 @@ func init() {
 	userDescStatus := userFields[9].Descriptor()
 	// user.DefaultStatus holds the default value on creation for the status field.
 	user.DefaultStatus = userDescStatus.Default.(int)
-	// userDescRole is the schema descriptor for role field.
-	userDescRole := userFields[10].Descriptor()
-	// user.DefaultRole holds the default value on creation for the role field.
-	user.DefaultRole = userDescRole.Default.(string)
 	// userDescFollowCount is the schema descriptor for follow_count field.
 	userDescFollowCount := userFields[11].Descriptor()
 	// user.DefaultFollowCount holds the default value on creation for the follow_count field.

@@ -7,6 +7,7 @@
 package v1
 
 import (
+	_ "github.com/go-kratos/kratos/v2/errors"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -24,19 +25,136 @@ const (
 type ErrorReason int32
 
 const (
-	ErrorReason_GREETER_UNSPECIFIED ErrorReason = 0
-	ErrorReason_USER_NOT_FOUND      ErrorReason = 1
+	ErrorReason_UnknownError                  ErrorReason = 0   // 未知错误
+	ErrorReason_BadRequest                    ErrorReason = 400 // 请求语法错误、参数错误
+	ErrorReason_Unauthorized                  ErrorReason = 401 // 未认证，需身份验证
+	ErrorReason_PaymentRequired               ErrorReason = 402 // 保留，支付相关
+	ErrorReason_Forbidden                     ErrorReason = 403 // 已认证但无权限访问
+	ErrorReason_NotFound                      ErrorReason = 404 // 请求资源不存在
+	ErrorReason_MethodNotAllowed              ErrorReason = 405 // 请求方法不被允许
+	ErrorReason_NotAcceptable                 ErrorReason = 406 // 无可接受的内容
+	ErrorReason_ProxyAuthenticationRequired   ErrorReason = 407 // 代理认证
+	ErrorReason_RequestTimeout                ErrorReason = 408 // 请求超时
+	ErrorReason_Conflict                      ErrorReason = 409 // 请求与服务器状态冲突
+	ErrorReason_Gone                          ErrorReason = 410 // 资源永久删除
+	ErrorReason_LengthRequired                ErrorReason = 411 // 需 Content-Length 头
+	ErrorReason_PreconditionFailed            ErrorReason = 412 // 前置条件失败
+	ErrorReason_PayloadTooLarge               ErrorReason = 413 // 请求实体过大
+	ErrorReason_URITooLong                    ErrorReason = 414 // URI 过长
+	ErrorReason_UnsupportedMediaType          ErrorReason = 415 // 不支持的媒体类型
+	ErrorReason_RangeNotSatisfiable           ErrorReason = 416 // Range 请求不可满足
+	ErrorReason_ExpectationFailed             ErrorReason = 417 // Expect 请求无法满足
+	ErrorReason_ImATeapot                     ErrorReason = 418 // 玩笑：茶壶不能煮咖啡
+	ErrorReason_MisdirectedRequest            ErrorReason = 421 // 请求被错误路由
+	ErrorReason_UnprocessableEntity           ErrorReason = 422 // WebDAV：语义错误无法处理
+	ErrorReason_Locked                        ErrorReason = 423 // WebDAV：资源锁定
+	ErrorReason_FailedDependency              ErrorReason = 424 // WebDAV：前置请求失败
+	ErrorReason_TooEarly                      ErrorReason = 425 // 实验性：请求过早
+	ErrorReason_UpgradeRequired               ErrorReason = 426 // 需升级协议
+	ErrorReason_PreconditionRequired          ErrorReason = 428 // 需前置条件，防止丢失更新
+	ErrorReason_TooManyRequests               ErrorReason = 429 // 请求过多，限流
+	ErrorReason_RequestHeaderFieldsTooLarge   ErrorReason = 431 // 请求头字段过大
+	ErrorReason_UnavailableForLegalReasons    ErrorReason = 451 // 法律原因不可用
+	ErrorReason_InternalServerError           ErrorReason = 500 // 服务器内部错误
+	ErrorReason_NotImplemented                ErrorReason = 501 // 功能未实现
+	ErrorReason_BadGateway                    ErrorReason = 502 // 上游网关错误
+	ErrorReason_ServiceUnavailable            ErrorReason = 503 // 服务暂不可用
+	ErrorReason_GatewayTimeout                ErrorReason = 504 // 上游网关超时
+	ErrorReason_HTTPVersionNotSupported       ErrorReason = 505 // HTTP 版本不支持
+	ErrorReason_VariantAlsoNegotiates         ErrorReason = 506 // 内部配置错误
+	ErrorReason_InsufficientStorage           ErrorReason = 507 // WebDAV：存储不足
+	ErrorReason_LoopDetected                  ErrorReason = 508 // WebDAV：循环检测
+	ErrorReason_NotExtended                   ErrorReason = 510 // 请求需扩展才能完成
+	ErrorReason_NetworkAuthenticationRequired ErrorReason = 511 // 网络认证要求
 )
 
 // Enum value maps for ErrorReason.
 var (
 	ErrorReason_name = map[int32]string{
-		0: "GREETER_UNSPECIFIED",
-		1: "USER_NOT_FOUND",
+		0:   "UnknownError",
+		400: "BadRequest",
+		401: "Unauthorized",
+		402: "PaymentRequired",
+		403: "Forbidden",
+		404: "NotFound",
+		405: "MethodNotAllowed",
+		406: "NotAcceptable",
+		407: "ProxyAuthenticationRequired",
+		408: "RequestTimeout",
+		409: "Conflict",
+		410: "Gone",
+		411: "LengthRequired",
+		412: "PreconditionFailed",
+		413: "PayloadTooLarge",
+		414: "URITooLong",
+		415: "UnsupportedMediaType",
+		416: "RangeNotSatisfiable",
+		417: "ExpectationFailed",
+		418: "ImATeapot",
+		421: "MisdirectedRequest",
+		422: "UnprocessableEntity",
+		423: "Locked",
+		424: "FailedDependency",
+		425: "TooEarly",
+		426: "UpgradeRequired",
+		428: "PreconditionRequired",
+		429: "TooManyRequests",
+		431: "RequestHeaderFieldsTooLarge",
+		451: "UnavailableForLegalReasons",
+		500: "InternalServerError",
+		501: "NotImplemented",
+		502: "BadGateway",
+		503: "ServiceUnavailable",
+		504: "GatewayTimeout",
+		505: "HTTPVersionNotSupported",
+		506: "VariantAlsoNegotiates",
+		507: "InsufficientStorage",
+		508: "LoopDetected",
+		510: "NotExtended",
+		511: "NetworkAuthenticationRequired",
 	}
 	ErrorReason_value = map[string]int32{
-		"GREETER_UNSPECIFIED": 0,
-		"USER_NOT_FOUND":      1,
+		"UnknownError":                  0,
+		"BadRequest":                    400,
+		"Unauthorized":                  401,
+		"PaymentRequired":               402,
+		"Forbidden":                     403,
+		"NotFound":                      404,
+		"MethodNotAllowed":              405,
+		"NotAcceptable":                 406,
+		"ProxyAuthenticationRequired":   407,
+		"RequestTimeout":                408,
+		"Conflict":                      409,
+		"Gone":                          410,
+		"LengthRequired":                411,
+		"PreconditionFailed":            412,
+		"PayloadTooLarge":               413,
+		"URITooLong":                    414,
+		"UnsupportedMediaType":          415,
+		"RangeNotSatisfiable":           416,
+		"ExpectationFailed":             417,
+		"ImATeapot":                     418,
+		"MisdirectedRequest":            421,
+		"UnprocessableEntity":           422,
+		"Locked":                        423,
+		"FailedDependency":              424,
+		"TooEarly":                      425,
+		"UpgradeRequired":               426,
+		"PreconditionRequired":          428,
+		"TooManyRequests":               429,
+		"RequestHeaderFieldsTooLarge":   431,
+		"UnavailableForLegalReasons":    451,
+		"InternalServerError":           500,
+		"NotImplemented":                501,
+		"BadGateway":                    502,
+		"ServiceUnavailable":            503,
+		"GatewayTimeout":                504,
+		"HTTPVersionNotSupported":       505,
+		"VariantAlsoNegotiates":         506,
+		"InsufficientStorage":           507,
+		"LoopDetected":                  508,
+		"NotExtended":                   510,
+		"NetworkAuthenticationRequired": 511,
 	}
 )
 
@@ -71,10 +189,52 @@ var File_common_v1_error_reason_proto protoreflect.FileDescriptor
 
 const file_common_v1_error_reason_proto_rawDesc = "" +
 	"\n" +
-	"\x1ccommon/v1/error_reason.proto\x12\tcommon.v1*:\n" +
-	"\vErrorReason\x12\x17\n" +
-	"\x13GREETER_UNSPECIFIED\x10\x00\x12\x12\n" +
-	"\x0eUSER_NOT_FOUND\x10\x01B\x0eZ\fcommon/v1;v1b\x06proto3"
+	"\x1ccommon/v1/error_reason.proto\x12\tcommon.v1\x1a\x13errors/errors.proto*\x9d\t\n" +
+	"\vErrorReason\x12\x16\n" +
+	"\fUnknownError\x10\x00\x1a\x04\xa8E\xf4\x03\x12\x15\n" +
+	"\n" +
+	"BadRequest\x10\x90\x03\x1a\x04\xa8E\x90\x03\x12\x17\n" +
+	"\fUnauthorized\x10\x91\x03\x1a\x04\xa8E\x91\x03\x12\x1a\n" +
+	"\x0fPaymentRequired\x10\x92\x03\x1a\x04\xa8E\x92\x03\x12\x14\n" +
+	"\tForbidden\x10\x93\x03\x1a\x04\xa8E\x93\x03\x12\x13\n" +
+	"\bNotFound\x10\x94\x03\x1a\x04\xa8E\x94\x03\x12\x1b\n" +
+	"\x10MethodNotAllowed\x10\x95\x03\x1a\x04\xa8E\x95\x03\x12\x18\n" +
+	"\rNotAcceptable\x10\x96\x03\x1a\x04\xa8E\x96\x03\x12&\n" +
+	"\x1bProxyAuthenticationRequired\x10\x97\x03\x1a\x04\xa8E\x97\x03\x12\x19\n" +
+	"\x0eRequestTimeout\x10\x98\x03\x1a\x04\xa8E\x98\x03\x12\x13\n" +
+	"\bConflict\x10\x99\x03\x1a\x04\xa8E\x99\x03\x12\x0f\n" +
+	"\x04Gone\x10\x9a\x03\x1a\x04\xa8E\x9a\x03\x12\x19\n" +
+	"\x0eLengthRequired\x10\x9b\x03\x1a\x04\xa8E\x9b\x03\x12\x1d\n" +
+	"\x12PreconditionFailed\x10\x9c\x03\x1a\x04\xa8E\x9c\x03\x12\x1a\n" +
+	"\x0fPayloadTooLarge\x10\x9d\x03\x1a\x04\xa8E\x9d\x03\x12\x15\n" +
+	"\n" +
+	"URITooLong\x10\x9e\x03\x1a\x04\xa8E\x9e\x03\x12\x1f\n" +
+	"\x14UnsupportedMediaType\x10\x9f\x03\x1a\x04\xa8E\x9f\x03\x12\x1e\n" +
+	"\x13RangeNotSatisfiable\x10\xa0\x03\x1a\x04\xa8E\xa0\x03\x12\x1c\n" +
+	"\x11ExpectationFailed\x10\xa1\x03\x1a\x04\xa8E\xa1\x03\x12\x14\n" +
+	"\tImATeapot\x10\xa2\x03\x1a\x04\xa8E\xa2\x03\x12\x1d\n" +
+	"\x12MisdirectedRequest\x10\xa5\x03\x1a\x04\xa8E\xa5\x03\x12\x1e\n" +
+	"\x13UnprocessableEntity\x10\xa6\x03\x1a\x04\xa8E\xa6\x03\x12\x11\n" +
+	"\x06Locked\x10\xa7\x03\x1a\x04\xa8E\xa7\x03\x12\x1b\n" +
+	"\x10FailedDependency\x10\xa8\x03\x1a\x04\xa8E\xa8\x03\x12\x13\n" +
+	"\bTooEarly\x10\xa9\x03\x1a\x04\xa8E\xa9\x03\x12\x1a\n" +
+	"\x0fUpgradeRequired\x10\xaa\x03\x1a\x04\xa8E\xaa\x03\x12\x1f\n" +
+	"\x14PreconditionRequired\x10\xac\x03\x1a\x04\xa8E\xac\x03\x12\x1a\n" +
+	"\x0fTooManyRequests\x10\xad\x03\x1a\x04\xa8E\xad\x03\x12&\n" +
+	"\x1bRequestHeaderFieldsTooLarge\x10\xaf\x03\x1a\x04\xa8E\xaf\x03\x12%\n" +
+	"\x1aUnavailableForLegalReasons\x10\xc3\x03\x1a\x04\xa8E\xc3\x03\x12\x1e\n" +
+	"\x13InternalServerError\x10\xf4\x03\x1a\x04\xa8E\xf4\x03\x12\x19\n" +
+	"\x0eNotImplemented\x10\xf5\x03\x1a\x04\xa8E\xf5\x03\x12\x15\n" +
+	"\n" +
+	"BadGateway\x10\xf6\x03\x1a\x04\xa8E\xf6\x03\x12\x1d\n" +
+	"\x12ServiceUnavailable\x10\xf7\x03\x1a\x04\xa8E\xf7\x03\x12\x19\n" +
+	"\x0eGatewayTimeout\x10\xf8\x03\x1a\x04\xa8E\xf8\x03\x12\"\n" +
+	"\x17HTTPVersionNotSupported\x10\xf9\x03\x1a\x04\xa8E\xf9\x03\x12 \n" +
+	"\x15VariantAlsoNegotiates\x10\xfa\x03\x1a\x04\xa8E\xfa\x03\x12\x1e\n" +
+	"\x13InsufficientStorage\x10\xfb\x03\x1a\x04\xa8E\xfb\x03\x12\x17\n" +
+	"\fLoopDetected\x10\xfc\x03\x1a\x04\xa8E\xfc\x03\x12\x16\n" +
+	"\vNotExtended\x10\xfe\x03\x1a\x04\xa8E\xfe\x03\x12(\n" +
+	"\x1dNetworkAuthenticationRequired\x10\xff\x03\x1a\x04\xa8E\xff\x03\x1a\x04\xa0E\xf4\x03B\x0eZ\fcommon/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_error_reason_proto_rawDescOnce sync.Once

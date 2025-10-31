@@ -2,13 +2,13 @@ package main
 
 import (
 	"common/pkg"
+	commonClient "common/pkg/client"
 	"flag"
 	"fmt"
 	"os"
 	"time"
 	"user/internal/conf"
 	"user/internal/conf/bootstrap"
-	"user/internal/data/client"
 	"user/internal/server"
 
 	"github.com/go-kratos/kratos/contrib/config/etcd/v2"
@@ -38,7 +38,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server, es *client.EtcdClient) *kratos.App {
+func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server, es *commonClient.EtcdClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)

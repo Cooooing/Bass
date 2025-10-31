@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	"user/internal/data/ent/gen/aaa"
+	"user/internal/data/ent/gen/group"
 	"user/internal/data/ent/gen/predicate"
 	"user/internal/data/ent/gen/user"
 
@@ -25,35 +25,39 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAAA  = "AAA"
-	TypeUser = "User"
+	TypeGroup = "Group"
+	TypeUser  = "User"
 )
 
-// AAAMutation represents an operation that mutates the AAA nodes in the graph.
-type AAAMutation struct {
+// GroupMutation represents an operation that mutates the Group nodes in the graph.
+type GroupMutation struct {
 	config
 	op            Op
 	typ           string
 	id            *int
 	name          *string
-	nickname      *string
+	endpoint      *string
+	description   *string
+	module        *string
+	created_at    *time.Time
+	updated_at    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*AAA, error)
-	predicates    []predicate.AAA
+	oldValue      func(context.Context) (*Group, error)
+	predicates    []predicate.Group
 }
 
-var _ ent.Mutation = (*AAAMutation)(nil)
+var _ ent.Mutation = (*GroupMutation)(nil)
 
-// aaaOption allows management of the mutation configuration using functional options.
-type aaaOption func(*AAAMutation)
+// groupOption allows management of the mutation configuration using functional options.
+type groupOption func(*GroupMutation)
 
-// newAAAMutation creates new mutation for the AAA entity.
-func newAAAMutation(c config, op Op, opts ...aaaOption) *AAAMutation {
-	m := &AAAMutation{
+// newGroupMutation creates new mutation for the Group entity.
+func newGroupMutation(c config, op Op, opts ...groupOption) *GroupMutation {
+	m := &GroupMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeAAA,
+		typ:           TypeGroup,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -62,20 +66,20 @@ func newAAAMutation(c config, op Op, opts ...aaaOption) *AAAMutation {
 	return m
 }
 
-// withAAAID sets the ID field of the mutation.
-func withAAAID(id int) aaaOption {
-	return func(m *AAAMutation) {
+// withGroupID sets the ID field of the mutation.
+func withGroupID(id int) groupOption {
+	return func(m *GroupMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *AAA
+			value *Group
 		)
-		m.oldValue = func(ctx context.Context) (*AAA, error) {
+		m.oldValue = func(ctx context.Context) (*Group, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().AAA.Get(ctx, id)
+					value, err = m.Client().Group.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -84,10 +88,10 @@ func withAAAID(id int) aaaOption {
 	}
 }
 
-// withAAA sets the old AAA of the mutation.
-func withAAA(node *AAA) aaaOption {
-	return func(m *AAAMutation) {
-		m.oldValue = func(context.Context) (*AAA, error) {
+// withGroup sets the old Group of the mutation.
+func withGroup(node *Group) groupOption {
+	return func(m *GroupMutation) {
+		m.oldValue = func(context.Context) (*Group, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -96,7 +100,7 @@ func withAAA(node *AAA) aaaOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m AAAMutation) Client() *Client {
+func (m GroupMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -104,7 +108,7 @@ func (m AAAMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m AAAMutation) Tx() (*Tx, error) {
+func (m GroupMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("gen: mutation is not running in a transaction")
 	}
@@ -115,7 +119,7 @@ func (m AAAMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *AAAMutation) ID() (id int, exists bool) {
+func (m *GroupMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -126,7 +130,7 @@ func (m *AAAMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *AAAMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *GroupMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -135,19 +139,19 @@ func (m *AAAMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().AAA.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().Group.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetName sets the "name" field.
-func (m *AAAMutation) SetName(s string) {
+func (m *GroupMutation) SetName(s string) {
 	m.name = &s
 }
 
 // Name returns the value of the "name" field in the mutation.
-func (m *AAAMutation) Name() (r string, exists bool) {
+func (m *GroupMutation) Name() (r string, exists bool) {
 	v := m.name
 	if v == nil {
 		return
@@ -155,10 +159,10 @@ func (m *AAAMutation) Name() (r string, exists bool) {
 	return *v, true
 }
 
-// OldName returns the old "name" field's value of the AAA entity.
-// If the AAA object wasn't provided to the builder, the object is fetched from the database.
+// OldName returns the old "name" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AAAMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *GroupMutation) OldName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldName is only allowed on UpdateOne operations")
 	}
@@ -173,68 +177,251 @@ func (m *AAAMutation) OldName(ctx context.Context) (v string, err error) {
 }
 
 // ResetName resets all changes to the "name" field.
-func (m *AAAMutation) ResetName() {
+func (m *GroupMutation) ResetName() {
 	m.name = nil
 }
 
-// SetNickname sets the "nickname" field.
-func (m *AAAMutation) SetNickname(s string) {
-	m.nickname = &s
+// SetEndpoint sets the "endpoint" field.
+func (m *GroupMutation) SetEndpoint(s string) {
+	m.endpoint = &s
 }
 
-// Nickname returns the value of the "nickname" field in the mutation.
-func (m *AAAMutation) Nickname() (r string, exists bool) {
-	v := m.nickname
+// Endpoint returns the value of the "endpoint" field in the mutation.
+func (m *GroupMutation) Endpoint() (r string, exists bool) {
+	v := m.endpoint
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldNickname returns the old "nickname" field's value of the AAA entity.
-// If the AAA object wasn't provided to the builder, the object is fetched from the database.
+// OldEndpoint returns the old "endpoint" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AAAMutation) OldNickname(ctx context.Context) (v string, err error) {
+func (m *GroupMutation) OldEndpoint(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNickname is only allowed on UpdateOne operations")
+		return v, errors.New("OldEndpoint is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNickname requires an ID field in the mutation")
+		return v, errors.New("OldEndpoint requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNickname: %w", err)
+		return v, fmt.Errorf("querying old value for OldEndpoint: %w", err)
 	}
-	return oldValue.Nickname, nil
+	return oldValue.Endpoint, nil
 }
 
-// ClearNickname clears the value of the "nickname" field.
-func (m *AAAMutation) ClearNickname() {
-	m.nickname = nil
-	m.clearedFields[aaa.FieldNickname] = struct{}{}
+// ResetEndpoint resets all changes to the "endpoint" field.
+func (m *GroupMutation) ResetEndpoint() {
+	m.endpoint = nil
 }
 
-// NicknameCleared returns if the "nickname" field was cleared in this mutation.
-func (m *AAAMutation) NicknameCleared() bool {
-	_, ok := m.clearedFields[aaa.FieldNickname]
+// SetDescription sets the "description" field.
+func (m *GroupMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *GroupMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *GroupMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[group.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *GroupMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[group.FieldDescription]
 	return ok
 }
 
-// ResetNickname resets all changes to the "nickname" field.
-func (m *AAAMutation) ResetNickname() {
-	m.nickname = nil
-	delete(m.clearedFields, aaa.FieldNickname)
+// ResetDescription resets all changes to the "description" field.
+func (m *GroupMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, group.FieldDescription)
 }
 
-// Where appends a list predicates to the AAAMutation builder.
-func (m *AAAMutation) Where(ps ...predicate.AAA) {
+// SetModule sets the "module" field.
+func (m *GroupMutation) SetModule(s string) {
+	m.module = &s
+}
+
+// Module returns the value of the "module" field in the mutation.
+func (m *GroupMutation) Module() (r string, exists bool) {
+	v := m.module
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModule returns the old "module" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldModule(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModule is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModule requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModule: %w", err)
+	}
+	return oldValue.Module, nil
+}
+
+// ClearModule clears the value of the "module" field.
+func (m *GroupMutation) ClearModule() {
+	m.module = nil
+	m.clearedFields[group.FieldModule] = struct{}{}
+}
+
+// ModuleCleared returns if the "module" field was cleared in this mutation.
+func (m *GroupMutation) ModuleCleared() bool {
+	_, ok := m.clearedFields[group.FieldModule]
+	return ok
+}
+
+// ResetModule resets all changes to the "module" field.
+func (m *GroupMutation) ResetModule() {
+	m.module = nil
+	delete(m.clearedFields, group.FieldModule)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *GroupMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *GroupMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *GroupMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[group.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *GroupMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[group.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *GroupMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, group.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *GroupMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *GroupMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *GroupMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[group.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *GroupMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[group.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *GroupMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, group.FieldUpdatedAt)
+}
+
+// Where appends a list predicates to the GroupMutation builder.
+func (m *GroupMutation) Where(ps ...predicate.Group) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the AAAMutation builder. Using this method,
+// WhereP appends storage-level predicates to the GroupMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *AAAMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.AAA, len(ps))
+func (m *GroupMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Group, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -242,30 +429,42 @@ func (m *AAAMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *AAAMutation) Op() Op {
+func (m *GroupMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *AAAMutation) SetOp(op Op) {
+func (m *GroupMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (AAA).
-func (m *AAAMutation) Type() string {
+// Type returns the node type of this mutation (Group).
+func (m *GroupMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *AAAMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+func (m *GroupMutation) Fields() []string {
+	fields := make([]string, 0, 6)
 	if m.name != nil {
-		fields = append(fields, aaa.FieldName)
+		fields = append(fields, group.FieldName)
 	}
-	if m.nickname != nil {
-		fields = append(fields, aaa.FieldNickname)
+	if m.endpoint != nil {
+		fields = append(fields, group.FieldEndpoint)
+	}
+	if m.description != nil {
+		fields = append(fields, group.FieldDescription)
+	}
+	if m.module != nil {
+		fields = append(fields, group.FieldModule)
+	}
+	if m.created_at != nil {
+		fields = append(fields, group.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, group.FieldUpdatedAt)
 	}
 	return fields
 }
@@ -273,12 +472,20 @@ func (m *AAAMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *AAAMutation) Field(name string) (ent.Value, bool) {
+func (m *GroupMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case aaa.FieldName:
+	case group.FieldName:
 		return m.Name()
-	case aaa.FieldNickname:
-		return m.Nickname()
+	case group.FieldEndpoint:
+		return m.Endpoint()
+	case group.FieldDescription:
+		return m.Description()
+	case group.FieldModule:
+		return m.Module()
+	case group.FieldCreatedAt:
+		return m.CreatedAt()
+	case group.FieldUpdatedAt:
+		return m.UpdatedAt()
 	}
 	return nil, false
 }
@@ -286,149 +493,215 @@ func (m *AAAMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *AAAMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *GroupMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case aaa.FieldName:
+	case group.FieldName:
 		return m.OldName(ctx)
-	case aaa.FieldNickname:
-		return m.OldNickname(ctx)
+	case group.FieldEndpoint:
+		return m.OldEndpoint(ctx)
+	case group.FieldDescription:
+		return m.OldDescription(ctx)
+	case group.FieldModule:
+		return m.OldModule(ctx)
+	case group.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case group.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown AAA field %s", name)
+	return nil, fmt.Errorf("unknown Group field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *AAAMutation) SetField(name string, value ent.Value) error {
+func (m *GroupMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case aaa.FieldName:
+	case group.FieldName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
 		return nil
-	case aaa.FieldNickname:
+	case group.FieldEndpoint:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetNickname(v)
+		m.SetEndpoint(v)
+		return nil
+	case group.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case group.FieldModule:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModule(v)
+		return nil
+	case group.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case group.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown AAA field %s", name)
+	return fmt.Errorf("unknown Group field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *AAAMutation) AddedFields() []string {
+func (m *GroupMutation) AddedFields() []string {
 	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *AAAMutation) AddedField(name string) (ent.Value, bool) {
+func (m *GroupMutation) AddedField(name string) (ent.Value, bool) {
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *AAAMutation) AddField(name string, value ent.Value) error {
+func (m *GroupMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown AAA numeric field %s", name)
+	return fmt.Errorf("unknown Group numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *AAAMutation) ClearedFields() []string {
+func (m *GroupMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(aaa.FieldNickname) {
-		fields = append(fields, aaa.FieldNickname)
+	if m.FieldCleared(group.FieldDescription) {
+		fields = append(fields, group.FieldDescription)
+	}
+	if m.FieldCleared(group.FieldModule) {
+		fields = append(fields, group.FieldModule)
+	}
+	if m.FieldCleared(group.FieldCreatedAt) {
+		fields = append(fields, group.FieldCreatedAt)
+	}
+	if m.FieldCleared(group.FieldUpdatedAt) {
+		fields = append(fields, group.FieldUpdatedAt)
 	}
 	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *AAAMutation) FieldCleared(name string) bool {
+func (m *GroupMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *AAAMutation) ClearField(name string) error {
+func (m *GroupMutation) ClearField(name string) error {
 	switch name {
-	case aaa.FieldNickname:
-		m.ClearNickname()
+	case group.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case group.FieldModule:
+		m.ClearModule()
+		return nil
+	case group.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case group.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown AAA nullable field %s", name)
+	return fmt.Errorf("unknown Group nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *AAAMutation) ResetField(name string) error {
+func (m *GroupMutation) ResetField(name string) error {
 	switch name {
-	case aaa.FieldName:
+	case group.FieldName:
 		m.ResetName()
 		return nil
-	case aaa.FieldNickname:
-		m.ResetNickname()
+	case group.FieldEndpoint:
+		m.ResetEndpoint()
+		return nil
+	case group.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case group.FieldModule:
+		m.ResetModule()
+		return nil
+	case group.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case group.FieldUpdatedAt:
+		m.ResetUpdatedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown AAA field %s", name)
+	return fmt.Errorf("unknown Group field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *AAAMutation) AddedEdges() []string {
+func (m *GroupMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *AAAMutation) AddedIDs(name string) []ent.Value {
+func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *AAAMutation) RemovedEdges() []string {
+func (m *GroupMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *AAAMutation) RemovedIDs(name string) []ent.Value {
+func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *AAAMutation) ClearedEdges() []string {
+func (m *GroupMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *AAAMutation) EdgeCleared(name string) bool {
+func (m *GroupMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *AAAMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown AAA unique edge %s", name)
+func (m *GroupMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Group unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *AAAMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown AAA edge %s", name)
+func (m *GroupMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Group edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.
@@ -448,7 +721,7 @@ type UserMutation struct {
 	mbti                      *string
 	status                    *int
 	addstatus                 *int
-	role                      *string
+	group_name                *string
 	follow_count              *int
 	addfollow_count           *int
 	follower_count            *int
@@ -1055,40 +1328,53 @@ func (m *UserMutation) ResetStatus() {
 	m.addstatus = nil
 }
 
-// SetRole sets the "role" field.
-func (m *UserMutation) SetRole(s string) {
-	m.role = &s
+// SetGroupName sets the "group_name" field.
+func (m *UserMutation) SetGroupName(s string) {
+	m.group_name = &s
 }
 
-// Role returns the value of the "role" field in the mutation.
-func (m *UserMutation) Role() (r string, exists bool) {
-	v := m.role
+// GroupName returns the value of the "group_name" field in the mutation.
+func (m *UserMutation) GroupName() (r string, exists bool) {
+	v := m.group_name
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldRole returns the old "role" field's value of the User entity.
+// OldGroupName returns the old "group_name" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldRole(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldGroupName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRole is only allowed on UpdateOne operations")
+		return v, errors.New("OldGroupName is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRole requires an ID field in the mutation")
+		return v, errors.New("OldGroupName requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRole: %w", err)
+		return v, fmt.Errorf("querying old value for OldGroupName: %w", err)
 	}
-	return oldValue.Role, nil
+	return oldValue.GroupName, nil
 }
 
-// ResetRole resets all changes to the "role" field.
-func (m *UserMutation) ResetRole() {
-	m.role = nil
+// ClearGroupName clears the value of the "group_name" field.
+func (m *UserMutation) ClearGroupName() {
+	m.group_name = nil
+	m.clearedFields[user.FieldGroupName] = struct{}{}
+}
+
+// GroupNameCleared returns if the "group_name" field was cleared in this mutation.
+func (m *UserMutation) GroupNameCleared() bool {
+	_, ok := m.clearedFields[user.FieldGroupName]
+	return ok
+}
+
+// ResetGroupName resets all changes to the "group_name" field.
+func (m *UserMutation) ResetGroupName() {
+	m.group_name = nil
+	delete(m.clearedFields, user.FieldGroupName)
 }
 
 // SetFollowCount sets the "follow_count" field.
@@ -1220,7 +1506,7 @@ func (m *UserMutation) LastLoginTime() (r time.Time, exists bool) {
 // OldLastLoginTime returns the old "last_login_time" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldLastLoginTime(ctx context.Context) (v *time.Time, err error) {
+func (m *UserMutation) OldLastLoginTime(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLastLoginTime is only allowed on UpdateOne operations")
 	}
@@ -1374,7 +1660,7 @@ func (m *UserMutation) LastCheckinTime() (r time.Time, exists bool) {
 // OldLastCheckinTime returns the old "last_checkin_time" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldLastCheckinTime(ctx context.Context) (v *time.Time, err error) {
+func (m *UserMutation) OldLastCheckinTime(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLastCheckinTime is only allowed on UpdateOne operations")
 	}
@@ -2177,9 +2463,22 @@ func (m *UserMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err erro
 	return oldValue.CreatedAt, nil
 }
 
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *UserMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[user.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *UserMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[user.FieldCreatedAt]
+	return ok
+}
+
 // ResetCreatedAt resets all changes to the "created_at" field.
 func (m *UserMutation) ResetCreatedAt() {
 	m.created_at = nil
+	delete(m.clearedFields, user.FieldCreatedAt)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -2213,9 +2512,22 @@ func (m *UserMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err erro
 	return oldValue.UpdatedAt, nil
 }
 
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *UserMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[user.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *UserMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[user.FieldUpdatedAt]
+	return ok
+}
+
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *UserMutation) ResetUpdatedAt() {
 	m.updated_at = nil
+	delete(m.clearedFields, user.FieldUpdatedAt)
 }
 
 // Where appends a list predicates to the UserMutation builder.
@@ -2283,8 +2595,8 @@ func (m *UserMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, user.FieldStatus)
 	}
-	if m.role != nil {
-		fields = append(fields, user.FieldRole)
+	if m.group_name != nil {
+		fields = append(fields, user.FieldGroupName)
 	}
 	if m.follow_count != nil {
 		fields = append(fields, user.FieldFollowCount)
@@ -2392,8 +2704,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Mbti()
 	case user.FieldStatus:
 		return m.Status()
-	case user.FieldRole:
-		return m.Role()
+	case user.FieldGroupName:
+		return m.GroupName()
 	case user.FieldFollowCount:
 		return m.FollowCount()
 	case user.FieldFollowerCount:
@@ -2475,8 +2787,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldMbti(ctx)
 	case user.FieldStatus:
 		return m.OldStatus(ctx)
-	case user.FieldRole:
-		return m.OldRole(ctx)
+	case user.FieldGroupName:
+		return m.OldGroupName(ctx)
 	case user.FieldFollowCount:
 		return m.OldFollowCount(ctx)
 	case user.FieldFollowerCount:
@@ -2608,12 +2920,12 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case user.FieldRole:
+	case user.FieldGroupName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetRole(v)
+		m.SetGroupName(v)
 		return nil
 	case user.FieldFollowCount:
 		v, ok := value.(int)
@@ -2923,6 +3235,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldMbti) {
 		fields = append(fields, user.FieldMbti)
 	}
+	if m.FieldCleared(user.FieldGroupName) {
+		fields = append(fields, user.FieldGroupName)
+	}
 	if m.FieldCleared(user.FieldLastLoginTime) {
 		fields = append(fields, user.FieldLastLoginTime)
 	}
@@ -2943,6 +3258,12 @@ func (m *UserMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(user.FieldTwofaSecret) {
 		fields = append(fields, user.FieldTwofaSecret)
+	}
+	if m.FieldCleared(user.FieldCreatedAt) {
+		fields = append(fields, user.FieldCreatedAt)
+	}
+	if m.FieldCleared(user.FieldUpdatedAt) {
+		fields = append(fields, user.FieldUpdatedAt)
 	}
 	return fields
 }
@@ -2979,6 +3300,9 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldMbti:
 		m.ClearMbti()
 		return nil
+	case user.FieldGroupName:
+		m.ClearGroupName()
+		return nil
 	case user.FieldLastLoginTime:
 		m.ClearLastLoginTime()
 		return nil
@@ -2999,6 +3323,12 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldTwofaSecret:
 		m.ClearTwofaSecret()
+		return nil
+	case user.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case user.FieldUpdatedAt:
+		m.ClearUpdatedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -3038,8 +3368,8 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case user.FieldRole:
-		m.ResetRole()
+	case user.FieldGroupName:
+		m.ResetGroupName()
 		return nil
 	case user.FieldFollowCount:
 		m.ResetFollowCount()

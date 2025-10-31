@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// User 实体定义
+// User 用户实体定义
 type User struct {
 	ent.Schema
 }
@@ -19,7 +19,7 @@ func (User) Fields() []ent.Field {
 		// --- 基础信息 ---
 		field.String("name").Comment("用户名").NotEmpty(),
 		field.String("nickname").Comment("昵称").Optional(),
-		field.String("password").Comment("密码").NotEmpty(),
+		field.String("password").Comment("密码").NotEmpty().Sensitive(),
 		field.String("email").Comment("邮箱").Optional(),
 		field.String("phone").Comment("手机号").Optional(),
 		field.String("url").Comment("用户个人主页链接").Optional(),
@@ -29,19 +29,19 @@ func (User) Fields() []ent.Field {
 
 		// --- 状态 ---
 		field.Int("status").Comment("用户状态：0-正常，1-封禁，2-注销").Default(0),
-		field.String("role").Comment("用户角色").Default("user"),
+		field.String("group_name").Comment("用户组名称").Optional(),
 
 		// --- 社交信息 ---
 		field.Int("follow_count").Comment("关注数").Default(0),
 		field.Int("follower_count").Comment("粉丝数").Default(0),
 
 		// --- 登录信息 ---
-		field.Time("last_login_time").Comment("最近登录时间").Optional().Nillable(),
+		field.Time("last_login_time").Comment("最近登录时间").Optional(),
 		field.String("last_login_ip").Comment("最近登录IP").Optional(),
 
 		// --- 行为统计 ---
 		field.Int("online_minutes").Comment("在线总时长（分钟）").Default(0),
-		field.Time("last_checkin_time").Comment("最近签到时间").Optional().Nillable(),
+		field.Time("last_checkin_time").Comment("最近签到时间").Optional(),
 		field.Int("current_checkin_streak").Comment("当前连续签到天数").Default(0),
 		field.Int("longest_checkin_streak").Comment("最长连续签到天数").Default(0),
 

@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package content.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "content/v1;v1";
+
+// Article 服务
+service ArticleService {
+
+  // 新增文章
+  rpc Add (AddArticleRequest) returns (AddArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/add"
+      body: "*"
+    };
+  }
+
+  // 发布文章（从草稿发布）
+  rpc Publish (PublishArticleRequest) returns (PublishArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/publish"
+      body: "*"
+    };
+  }
+
+  // 修改文章（管理员使用）
+  rpc Update (UpdateArticleRequest) returns (UpdateArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/update"
+      body: "*"
+    };
+  }
+
+  // 删除文章（仅草稿）
+  rpc Delete (DeleteArticleRequest) returns (DeleteArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/delete"
+      body: "*"
+    };
+  }
+
+  // 查询文章
+  rpc Get (GetArticleRequest) returns (GetArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/get"
+      body: "*"
+    };
+  }
+
+  // 添加附言
+  rpc AddPostscript (AddPostscriptArticleRequest) returns (AddPostscriptArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/addPostscript"
+      body: "*"
+    };
+  }
+
+  // 打赏文章
+  rpc Reward (RewardArticleRequest) returns (RewardArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/reward"
+      body: "*"
+    };
+  }
+
+  // 感谢文章
+  rpc Thank (ThankArticleRequest) returns (ThankArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/thank"
+      body: "*"
+    };
+  }
+
+  // 点赞文章
+  rpc Like (LikeArticleRequest) returns (LikeArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/like"
+      body: "*"
+    };
+  }
+
+  // 收藏文章
+  rpc Collect (CollectArticleRequest) returns (CollectArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/collect"
+      body: "*"
+    };
+  }
+
+  // 关注文章
+  rpc Watch (WatchArticleRequest) returns (WatchArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/watch"
+      body: "*"
+    };
+  }
+
+  // 采纳评论
+  rpc AcceptAnswer (AcceptAnswerArticleRequest) returns (AcceptAnswerArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/acceptAnswer"
+      body: "*"
+    };
+  }
+
+}
+
+
+message AddArticleRequest {
+  string title = 1 [(validate.rules).string = {min_len: 1, max_len: 100}];
+  string content = 2 [(validate.rules).string = {min_len: 1}];
+  string reward_content = 3 [(validate.rules).string = {min_len: 1}];
+  int32 reward_points = 4 [(validate.rules).int32 = {gt: 0}];
+  int32 status = 5;
+  int32 type = 6;
+  int32 bounty_points = 7 [(validate.rules).int32 = {gt: 0}];
+}
+message AddArticleReply {}
+
+message PublishArticleRequest {
+  int32 article_id = 1;
+}
+message PublishArticleReply {}
+
+message UpdateArticleRequest {
+  int32 article_id = 1;
+  int32 status = 2;
+  bool commentable = 3;
+  bool anonymous = 4;
+}
+message UpdateArticleReply {}
+
+message DeleteArticleRequest {
+  int32 article_id = 1;
+}
+message DeleteArticleReply {}
+
+message GetArticleRequest {}
+message GetArticleReply {}
+
+message AddPostscriptArticleRequest {
+  int32 article_id = 1;
+  string content = 2 [(validate.rules).string = {min_len: 1}];
+}
+message AddPostscriptArticleReply {}
+
+message RewardArticleRequest {
+  int32 article_id = 1;
+}
+message RewardArticleReply {}
+
+message ThankArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
+message ThankArticleReply {}
+
+message LikeArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
+message LikeArticleReply {}
+
+message CollectArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
+message CollectArticleReply {}
+
+message WatchArticleRequest {
+  int32 article_id = 1;
+  bool active = 2;
+}
+message WatchArticleReply {}
+
+message AcceptAnswerArticleRequest {
+  int32 article_id = 1;
+  int32 comment_id = 2;
+}
+message AcceptAnswerArticleReply {}
+
+message UpdateStatusArticleRequest {}
+message UpdateStatusArticleReply {}
+
+
+// 文章事件模型
+
+message ArticleEventPublish {
+  int32 article_id = 1;
+  int32 user_id = 2;
+  string title = 3;
+  string content = 4;
+  string reward_content = 5;
+  int32 reward_points = 6;
+  int32 status = 7;
+  int32 type = 8;
+  int32 bounty_points = 9;
+}

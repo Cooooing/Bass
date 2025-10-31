@@ -44,7 +44,7 @@ wire:
 .PHONY: ent
 ent:
 	@echo "Generating go ent..."
-	@cd $(USER_DIR)/internal/data/ent && go run entgo.io/ent/cmd/ent generate ./schema
+	@cd $(USER_DIR) && go run entgo.io/ent/cmd/ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
 
 # ============ Compile API Proto ============
 .PHONY: api
@@ -54,13 +54,14 @@ api:
 	       --go_out=paths=source_relative:$(API_DIR) \
 	       --go-grpc_out=paths=source_relative:$(API_DIR) \
 	       --go-http_out=paths=source_relative:$(API_DIR) \
+	       --go-errors_out=paths=source_relative:$(API_DIR) \
 	       --openapi_out=fq_schema_naming=true,default_response=false:$(API_DIR) \
 	       --validate_out=lang=go,paths=source_relative:$(API_DIR) \
 	       $(API_PROTO_FILES)
 
-
+# ============ Generate All Code ============
 .PHONY: gen
-gen: config wire ent api
+gen: config ent wire api
 
 # ============ Build Service ============
 .PHONY: build

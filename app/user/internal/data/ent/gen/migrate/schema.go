@@ -8,17 +8,28 @@ import (
 )
 
 var (
-	// AaAsColumns holds the columns for the "aa_as" table.
-	AaAsColumns = []*schema.Column{
+	// GroupsColumns holds the columns for the "groups" table.
+	GroupsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "nickname", Type: field.TypeString, Nullable: true},
+		{Name: "endpoint", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "module", Type: field.TypeString, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
-	// AaAsTable holds the schema information for the "aa_as" table.
-	AaAsTable = &schema.Table{
-		Name:       "aa_as",
-		Columns:    AaAsColumns,
-		PrimaryKey: []*schema.Column{AaAsColumns[0]},
+	// GroupsTable holds the schema information for the "groups" table.
+	GroupsTable = &schema.Table{
+		Name:       "groups",
+		Columns:    GroupsColumns,
+		PrimaryKey: []*schema.Column{GroupsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "group_name_endpoint",
+				Unique:  true,
+				Columns: []*schema.Column{GroupsColumns[1], GroupsColumns[2]},
+			},
+		},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
@@ -33,7 +44,7 @@ var (
 		{Name: "introduction", Type: field.TypeString, Nullable: true},
 		{Name: "mbti", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeInt, Default: 0},
-		{Name: "role", Type: field.TypeString, Default: "user"},
+		{Name: "group_name", Type: field.TypeString, Nullable: true},
 		{Name: "follow_count", Type: field.TypeInt, Default: 0},
 		{Name: "follower_count", Type: field.TypeInt, Default: 0},
 		{Name: "last_login_time", Type: field.TypeTime, Nullable: true},
@@ -58,8 +69,8 @@ var (
 		{Name: "city", Type: field.TypeString, Nullable: true},
 		{Name: "public_location", Type: field.TypeBool, Default: true},
 		{Name: "twofa_secret", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -86,7 +97,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		AaAsTable,
+		GroupsTable,
 		UsersTable,
 	}
 )

@@ -32,7 +32,7 @@ message Server {
 }
 
 message Data {
-  message Connections {
+  message Database {
     string driver = 1;
     string source = 2;
     bool merge = 3;
@@ -54,7 +54,7 @@ message Data {
     bool auto_ack = 7;
   }
   // 配置多数据源
-  map<string, Connections> database = 1;
+  Database database = 1;
   Redis redis = 2;
   RabbitMQ rabbitmq = 3;
 }

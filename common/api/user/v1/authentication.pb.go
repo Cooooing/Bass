@@ -7,6 +7,7 @@
 package v1
 
 import (
+	_ "common/api/common/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -595,7 +596,7 @@ var File_user_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/v1/authentication.proto\x12\auser.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\x84\x03\n" +
+	"\x1cuser/v1/authentication.proto\x12\auser.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x84\x03\n" +
 	"\x14RegisterEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12Y\n" +
 	"\bpassword\x18\x02 \x01(\tB=\xfaB:r8\x10\x06\x18@22^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$R\bpassword\x12?\n" +
@@ -612,9 +613,9 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\"6\n" +
 	"\x0fExistEmailReply\x12\x19\n" +
 	"\x05exist\x18\x01 \x01(\bH\x00R\x05exist\x88\x01\x01B\b\n" +
-	"\x06_exist\"w\n" +
-	"\x14ExistUsernameRequest\x12_\n" +
-	"\busername\x18\x01 \x01(\tBC\xfaB@r>\x10\x02\x18 28^[0-9A-Za-z_\\p{L}\\p{M}-]*[^0-9][0-9A-Za-z_\\p{L}\\p{M}-]*$R\busername\"9\n" +
+	"\x06_exist\"_\n" +
+	"\x14ExistUsernameRequest\x12G\n" +
+	"\busername\x18\x01 \x01(\tB+\xfaB(r&\x10\x02\x18 2 ^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$R\busername\"9\n" +
 	"\x12ExistUsernameReply\x12\x19\n" +
 	"\x05exist\x18\x01 \x01(\bH\x00R\x05exist\x88\x01\x01B\b\n" +
 	"\x06_exist\"\x82\x01\n" +
@@ -636,7 +637,8 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
 	"ExistPhone\x12\x1a.user.v1.ExistPhoneRequest\x1a\x18.user.v1.ExistPhoneReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/phone\x12y\n" +
 	"\rExistUsername\x12\x1d.user.v1.ExistUsernameRequest\x1a\x1b.user.v1.ExistUsernameReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/exist/username\x12u\n" +
-	"\fLoginAccount\x12\x1c.user.v1.LoginAccountRequest\x1a\x1a.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\rZ\v/user/v1;v1b\x06proto3"
+	"\fLoginAccount\x12\x1c.user.v1.LoginAccountRequest\x1a\x1a.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\fZ\n" +
+	"user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_authentication_proto_rawDescOnce sync.Once

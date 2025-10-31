@@ -6,6 +6,288 @@ info:
     title: ""
     version: 0.0.1
 paths:
+    /api/v1/tag/add:
+        post:
+            tags:
+                - TagService
+            operationId: TagService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.AddTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.AddTagReply'
+    /api/v1/tag/get:
+        post:
+            tags:
+                - TagService
+            operationId: TagService_Get
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.GetTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.GetTagReply'
+    /api/v1/tag/update:
+        post:
+            tags:
+                - TagService
+            operationId: TagService_Update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.UpdateTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.UpdateTagReply'
+    /v1/article/acceptAnswer:
+        post:
+            tags:
+                - ArticleService
+            description: 采纳评论
+            operationId: ArticleService_AcceptAnswer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.AcceptAnswerArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.AcceptAnswerArticleReply'
+    /v1/article/add:
+        post:
+            tags:
+                - ArticleService
+            description: 新增文章
+            operationId: ArticleService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.AddArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.AddArticleReply'
+    /v1/article/addPostscript:
+        post:
+            tags:
+                - ArticleService
+            description: 添加附言
+            operationId: ArticleService_AddPostscript
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.AddPostscriptArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.AddPostscriptArticleReply'
+    /v1/article/collect:
+        post:
+            tags:
+                - ArticleService
+            description: 收藏文章
+            operationId: ArticleService_Collect
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.CollectArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.CollectArticleReply'
+    /v1/article/delete:
+        post:
+            tags:
+                - ArticleService
+            description: 删除文章（仅草稿）
+            operationId: ArticleService_Delete
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.DeleteArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.DeleteArticleReply'
+    /v1/article/get:
+        post:
+            tags:
+                - ArticleService
+            description: 查询文章
+            operationId: ArticleService_Get
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.GetArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.GetArticleReply'
+    /v1/article/like:
+        post:
+            tags:
+                - ArticleService
+            description: 点赞文章
+            operationId: ArticleService_Like
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.LikeArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.LikeArticleReply'
+    /v1/article/publish:
+        post:
+            tags:
+                - ArticleService
+            description: 发布文章（从草稿发布）
+            operationId: ArticleService_Publish
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.PublishArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.PublishArticleReply'
+    /v1/article/reward:
+        post:
+            tags:
+                - ArticleService
+            description: 打赏文章
+            operationId: ArticleService_Reward
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.RewardArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.RewardArticleReply'
+    /v1/article/thank:
+        post:
+            tags:
+                - ArticleService
+            description: 感谢文章
+            operationId: ArticleService_Thank
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.ThankArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.ThankArticleReply'
+    /v1/article/update:
+        post:
+            tags:
+                - ArticleService
+            description: 修改文章（管理员使用）
+            operationId: ArticleService_Update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.UpdateArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.UpdateArticleReply'
+    /v1/article/watch:
+        post:
+            tags:
+                - ArticleService
+            description: 关注文章
+            operationId: ArticleService_Watch
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.WatchArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.WatchArticleReply'
     /v1/authentication/exist/email:
         post:
             tags:
@@ -120,6 +402,152 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/user.v1.RegisterEmailVerifyReply'
+    /v1/comment/add:
+        post:
+            tags:
+                - CommentService
+            description: 新增评论
+            operationId: CommentService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.AddCommentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.AddCommentReply'
+    /v1/comment/get:
+        get:
+            tags:
+                - CommentService
+            description: 查询评论
+            operationId: CommentService_Get
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.GetCommentReply'
+    /v1/comment/like:
+        post:
+            tags:
+                - CommentService
+            description: 点赞评论
+            operationId: CommentService_Like
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.LikeCommentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.LikeCommentReply'
+    /v1/comment/thank:
+        post:
+            tags:
+                - CommentService
+            description: 感谢评论
+            operationId: CommentService_Thank
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.ThankCommentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.ThankCommentReply'
+    /v1/comment/updateStatus:
+        post:
+            tags:
+                - CommentService
+            description: 修改评论状态
+            operationId: CommentService_UpdateStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/content.v1.UpdateStatusCommentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/content.v1.UpdateStatusCommentReply'
+    /v1/domain/add:
+        post:
+            tags:
+                - DomainService
+            description: 新增领域
+            operationId: DomainService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.AddDomainRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.AddDomainReply'
+    /v1/domain/get:
+        post:
+            tags:
+                - DomainService
+            description: 查询领域
+            operationId: DomainService_Get
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.GetDomainRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.GetDomainReply'
+    /v1/domain/update:
+        post:
+            tags:
+                - DomainService
+            description: 修改领域信息
+            operationId: DomainService_Update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.UpdateDomainRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
     /v1/system/health:
         get:
             tags:
@@ -135,12 +563,313 @@ paths:
                                 $ref: '#/components/schemas/common.v1.HealthReply'
 components:
     schemas:
+        common.api.common.v1.PageReply:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: uint32
+                page:
+                    type: integer
+                    format: uint32
+                size:
+                    type: integer
+                    format: uint32
+        common.api.common.v1.PageRequest:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    format: uint32
+                size:
+                    type: integer
+                    format: uint32
+        common.api.content.v1.AddDomainReply:
+            type: object
+            properties: {}
+        common.api.content.v1.AddDomainRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                isNav:
+                    type: boolean
+        common.api.content.v1.Domain:
+            type: object
+            properties:
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                tagCount:
+                    type: string
+                isNav:
+                    type: boolean
+        common.api.content.v1.GetDomainReply:
+            type: object
+            properties:
+                page:
+                    $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Domain'
+        common.api.content.v1.GetDomainRequest:
+            type: object
+            properties:
+                page:
+                    $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                isNav:
+                    type: boolean
+        common.api.content.v1.UpdateDomainReply:
+            type: object
+            properties: {}
+        common.api.content.v1.UpdateDomainRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                url:
+                    type: string
+                icon:
+                    type: string
+                isNav:
+                    type: boolean
         common.v1.HealthReply:
             type: object
             properties:
                 message:
                     type: string
                     description: 响应消息
+        content.v1.AcceptAnswerArticleReply:
+            type: object
+            properties: {}
+        content.v1.AcceptAnswerArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                commentId:
+                    type: integer
+                    format: int32
+        content.v1.AddArticleReply:
+            type: object
+            properties: {}
+        content.v1.AddArticleRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                content:
+                    type: string
+                rewardContent:
+                    type: string
+                rewardPoints:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                type:
+                    type: integer
+                    format: int32
+                bountyPoints:
+                    type: integer
+                    format: int32
+        content.v1.AddCommentReply:
+            type: object
+            properties: {}
+        content.v1.AddCommentRequest:
+            type: object
+            properties: {}
+        content.v1.AddPostscriptArticleReply:
+            type: object
+            properties: {}
+        content.v1.AddPostscriptArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                content:
+                    type: string
+        content.v1.AddTagReply:
+            type: object
+            properties: {}
+        content.v1.AddTagRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+        content.v1.CollectArticleReply:
+            type: object
+            properties: {}
+        content.v1.CollectArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
+        content.v1.DeleteArticleReply:
+            type: object
+            properties: {}
+        content.v1.DeleteArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+        content.v1.GetArticleReply:
+            type: object
+            properties: {}
+        content.v1.GetArticleRequest:
+            type: object
+            properties: {}
+        content.v1.GetCommentReply:
+            type: object
+            properties: {}
+        content.v1.GetTagReply:
+            type: object
+            properties: {}
+        content.v1.GetTagRequest:
+            type: object
+            properties: {}
+        content.v1.LikeArticleReply:
+            type: object
+            properties: {}
+        content.v1.LikeArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
+        content.v1.LikeCommentReply:
+            type: object
+            properties: {}
+        content.v1.LikeCommentRequest:
+            type: object
+            properties: {}
+        content.v1.PublishArticleReply:
+            type: object
+            properties: {}
+        content.v1.PublishArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+        content.v1.RewardArticleReply:
+            type: object
+            properties: {}
+        content.v1.RewardArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+        content.v1.ThankArticleReply:
+            type: object
+            properties: {}
+        content.v1.ThankArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
+        content.v1.ThankCommentReply:
+            type: object
+            properties: {}
+        content.v1.ThankCommentRequest:
+            type: object
+            properties: {}
+        content.v1.UpdateArticleReply:
+            type: object
+            properties: {}
+        content.v1.UpdateArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                commentable:
+                    type: boolean
+                anonymous:
+                    type: boolean
+        content.v1.UpdateStatusCommentReply:
+            type: object
+            properties: {}
+        content.v1.UpdateStatusCommentRequest:
+            type: object
+            properties: {}
+        content.v1.UpdateTagReply:
+            type: object
+            properties: {}
+        content.v1.UpdateTagRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+        content.v1.WatchArticleReply:
+            type: object
+            properties: {}
+        content.v1.WatchArticleRequest:
+            type: object
+            properties:
+                articleId:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
         user.v1.ExistEmailReply:
             type: object
             properties:
@@ -212,7 +941,15 @@ components:
                 codeToken:
                     type: string
 tags:
+    - name: ArticleService
+      description: Article 服务
     - name: Authentication
       description: Authentication 服务
+    - name: CommentService
+      description: 评论服务
+    - name: DomainService
+      description: 领域服务
     - name: System
       description: System 服务
+    - name: TagService
+      description: 标签服务

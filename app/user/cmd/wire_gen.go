@@ -7,6 +7,7 @@
 package main
 
 import (
+	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"user/internal/biz"
@@ -21,36 +22,42 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdClient, cleanup, err := client.NewEtcdClient(bootstrap, helper)
+	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
 	baseService := service.NewBaseService(bootstrap, helper, etcdClient)
 	baseDomain := biz.NewBaseDomain(bootstrap, helper)
-	databaseClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
+	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	redisClient, cleanup3, err := client.NewRedisClient(helper, bootstrap)
+	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	rabbitMQClient, cleanup4, err := client.NewRabbitMQClient(helper, bootstrap)
+	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
 	if err != nil {
 		cleanup3()
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	baseRepo := data.NewBaseRepo(bootstrap, helper, etcdClient, databaseClient, redisClient, rabbitMQClient)
-	genClient := client.NewDefault(databaseClient)
+	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	userRepo := data.NewUserRepo(baseRepo, genClient)
-	tokenRepo := data.NewTokenRepo(baseRepo)
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
-	authenticationDomain := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
+	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
 	authenticationService := service.NewAuthenticationService(baseService, authenticationDomain, userRepo)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(authenticationService, systemService)

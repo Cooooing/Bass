@@ -18,7 +18,7 @@
 ### 项目结构约定
 
 ~~~bash
-BBS/                                         # 项目根目录
+Bass/                                        # 项目根目录
 ├─ app                                       # 项目子模块：各个微服务
 │  ├─ module                                 # 子模块
 │  │  ├─ cmd                                 # 启动文件目录（main.go、wire.go、wire_gen.go）

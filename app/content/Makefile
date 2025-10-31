@@ -18,6 +18,8 @@ API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DI
 .PHONY: init
 init:
 	@echo "Installing required tools..."
+	@cd $(USER_DIR) && \
+	go mod tidy
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
@@ -30,6 +32,7 @@ init:
 .PHONY: config
 config:
 	@echo "Generating internal proto files..."
+	@cd $(USER_DIR) && \
 	protoc -I $(INTERNAL_DIR) \
 	       --go_out=paths=source_relative:$(INTERNAL_DIR) \
 	       $(INTERNAL_PROTO_FILES)
@@ -38,18 +41,21 @@ config:
 .PHONY: wire
 wire:
 	@echo "Generating go wire..."
-	@cd $(USER_DIR)/cmd && go run github.com/google/wire/cmd/wire
+	@cd $(USER_DIR)/cmd && \
+	go run github.com/google/wire/cmd/wire
 
 # ============ Generate Ent Code ============
 .PHONY: ent
 ent:
 	@echo "Generating go ent..."
-	@cd $(USER_DIR) && go run entgo.io/ent/cmd/ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
+	@cd $(USER_DIR) && \
+	go run entgo.io/ent/cmd/ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
 
 # ============ Compile API Proto ============
 .PHONY: api
 api:
 	@echo "Generating API proto files..."
+	@cd $(USER_DIR) && \
 	protoc -I $(API_DIR) -I $(THIRD_PARTY_DIR) \
 	       --go_out=paths=source_relative:$(API_DIR) \
 	       --go-grpc_out=paths=source_relative:$(API_DIR) \

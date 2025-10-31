@@ -60,10 +60,11 @@ func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server
 func main() {
 	flag.Parse()
 
-	c, bc, err := loadConfig()
+	c, bc, confCleanup, err := loadConfig()
 	if err != nil {
 		panic(err)
 	}
+	defer confCleanup()
 
 	server.InitMetrics(Name)
 
@@ -80,30 +81,31 @@ func main() {
 	}
 }
 
-func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, error) {
+func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 	bc, err := loadBootstrap()
+	var cleanup func()
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, cleanup, err
 	}
 	var c *conf.Bootstrap
 	if bc.Mode == "dev" {
 		c, err := loadLocalConfig(bc)
-		return c, bc, err
+		return c, bc, cleanup, err
 	} else {
 		c, cli, err := loadEtcdConfig(bc)
 		if err != nil {
 			panic(err)
 		}
-		defer func(cli *clientv3.Client) {
+		cleanup = func() {
 			err := cli.Close()
 			if err != nil {
 				panic(err)
 			}
-		}(cli)
-		return c, bc, nil
+		}
+		return c, bc, cleanup, nil
 	}
 
-	return c, bc, nil
+	return c, bc, cleanup, nil
 }
 
 func loadBootstrap() (*bootstrap.Bootstrap, error) {

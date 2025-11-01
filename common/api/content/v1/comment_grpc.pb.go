@@ -19,22 +19,22 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CommentService_Add_FullMethodName          = "/content.v1.CommentService/Add"
-	CommentService_Get_FullMethodName          = "/content.v1.CommentService/Get"
-	CommentService_Like_FullMethodName         = "/content.v1.CommentService/Like"
-	CommentService_Thank_FullMethodName        = "/content.v1.CommentService/Thank"
-	CommentService_UpdateStatus_FullMethodName = "/content.v1.CommentService/UpdateStatus"
+	ContentCommentService_Add_FullMethodName          = "/common.api.content.v1.ContentCommentService/Add"
+	ContentCommentService_Get_FullMethodName          = "/common.api.content.v1.ContentCommentService/Get"
+	ContentCommentService_Like_FullMethodName         = "/common.api.content.v1.ContentCommentService/Like"
+	ContentCommentService_Thank_FullMethodName        = "/common.api.content.v1.ContentCommentService/Thank"
+	ContentCommentService_UpdateStatus_FullMethodName = "/common.api.content.v1.ContentCommentService/UpdateStatus"
 )
 
-// CommentServiceClient is the client API for CommentService service.
+// ContentCommentServiceClient is the client API for ContentCommentService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // 评论服务
-type CommentServiceClient interface {
+type ContentCommentServiceClient interface {
 	// 新增评论
 	Add(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*AddCommentReply, error)
-	// 查询评论
+	// 查询评论列表
 	Get(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentReply, error)
 	// 点赞评论
 	Like(ctx context.Context, in *LikeCommentRequest, opts ...grpc.CallOption) (*LikeCommentReply, error)
@@ -44,73 +44,73 @@ type CommentServiceClient interface {
 	UpdateStatus(ctx context.Context, in *UpdateStatusCommentRequest, opts ...grpc.CallOption) (*UpdateStatusCommentReply, error)
 }
 
-type commentServiceClient struct {
+type contentCommentServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCommentServiceClient(cc grpc.ClientConnInterface) CommentServiceClient {
-	return &commentServiceClient{cc}
+func NewContentCommentServiceClient(cc grpc.ClientConnInterface) ContentCommentServiceClient {
+	return &contentCommentServiceClient{cc}
 }
 
-func (c *commentServiceClient) Add(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*AddCommentReply, error) {
+func (c *contentCommentServiceClient) Add(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*AddCommentReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddCommentReply)
-	err := c.cc.Invoke(ctx, CommentService_Add_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentCommentService_Add_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) Get(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentReply, error) {
+func (c *contentCommentServiceClient) Get(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetCommentReply)
-	err := c.cc.Invoke(ctx, CommentService_Get_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentCommentService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) Like(ctx context.Context, in *LikeCommentRequest, opts ...grpc.CallOption) (*LikeCommentReply, error) {
+func (c *contentCommentServiceClient) Like(ctx context.Context, in *LikeCommentRequest, opts ...grpc.CallOption) (*LikeCommentReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LikeCommentReply)
-	err := c.cc.Invoke(ctx, CommentService_Like_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentCommentService_Like_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) Thank(ctx context.Context, in *ThankCommentRequest, opts ...grpc.CallOption) (*ThankCommentReply, error) {
+func (c *contentCommentServiceClient) Thank(ctx context.Context, in *ThankCommentRequest, opts ...grpc.CallOption) (*ThankCommentReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ThankCommentReply)
-	err := c.cc.Invoke(ctx, CommentService_Thank_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentCommentService_Thank_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *commentServiceClient) UpdateStatus(ctx context.Context, in *UpdateStatusCommentRequest, opts ...grpc.CallOption) (*UpdateStatusCommentReply, error) {
+func (c *contentCommentServiceClient) UpdateStatus(ctx context.Context, in *UpdateStatusCommentRequest, opts ...grpc.CallOption) (*UpdateStatusCommentReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateStatusCommentReply)
-	err := c.cc.Invoke(ctx, CommentService_UpdateStatus_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentCommentService_UpdateStatus_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CommentServiceServer is the server API for CommentService service.
-// All implementations must embed UnimplementedCommentServiceServer
+// ContentCommentServiceServer is the server API for ContentCommentService service.
+// All implementations must embed UnimplementedContentCommentServiceServer
 // for forward compatibility.
 //
 // 评论服务
-type CommentServiceServer interface {
+type ContentCommentServiceServer interface {
 	// 新增评论
 	Add(context.Context, *AddCommentRequest) (*AddCommentReply, error)
-	// 查询评论
+	// 查询评论列表
 	Get(context.Context, *GetCommentRequest) (*GetCommentReply, error)
 	// 点赞评论
 	Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error)
@@ -118,168 +118,168 @@ type CommentServiceServer interface {
 	Thank(context.Context, *ThankCommentRequest) (*ThankCommentReply, error)
 	// 修改评论状态
 	UpdateStatus(context.Context, *UpdateStatusCommentRequest) (*UpdateStatusCommentReply, error)
-	mustEmbedUnimplementedCommentServiceServer()
+	mustEmbedUnimplementedContentCommentServiceServer()
 }
 
-// UnimplementedCommentServiceServer must be embedded to have
+// UnimplementedContentCommentServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedCommentServiceServer struct{}
+type UnimplementedContentCommentServiceServer struct{}
 
-func (UnimplementedCommentServiceServer) Add(context.Context, *AddCommentRequest) (*AddCommentReply, error) {
+func (UnimplementedContentCommentServiceServer) Add(context.Context, *AddCommentRequest) (*AddCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedCommentServiceServer) Get(context.Context, *GetCommentRequest) (*GetCommentReply, error) {
+func (UnimplementedContentCommentServiceServer) Get(context.Context, *GetCommentRequest) (*GetCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCommentServiceServer) Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error) {
+func (UnimplementedContentCommentServiceServer) Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Like not implemented")
 }
-func (UnimplementedCommentServiceServer) Thank(context.Context, *ThankCommentRequest) (*ThankCommentReply, error) {
+func (UnimplementedContentCommentServiceServer) Thank(context.Context, *ThankCommentRequest) (*ThankCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Thank not implemented")
 }
-func (UnimplementedCommentServiceServer) UpdateStatus(context.Context, *UpdateStatusCommentRequest) (*UpdateStatusCommentReply, error) {
+func (UnimplementedContentCommentServiceServer) UpdateStatus(context.Context, *UpdateStatusCommentRequest) (*UpdateStatusCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatus not implemented")
 }
-func (UnimplementedCommentServiceServer) mustEmbedUnimplementedCommentServiceServer() {}
-func (UnimplementedCommentServiceServer) testEmbeddedByValue()                        {}
+func (UnimplementedContentCommentServiceServer) mustEmbedUnimplementedContentCommentServiceServer() {}
+func (UnimplementedContentCommentServiceServer) testEmbeddedByValue()                               {}
 
-// UnsafeCommentServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CommentServiceServer will
+// UnsafeContentCommentServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ContentCommentServiceServer will
 // result in compilation errors.
-type UnsafeCommentServiceServer interface {
-	mustEmbedUnimplementedCommentServiceServer()
+type UnsafeContentCommentServiceServer interface {
+	mustEmbedUnimplementedContentCommentServiceServer()
 }
 
-func RegisterCommentServiceServer(s grpc.ServiceRegistrar, srv CommentServiceServer) {
-	// If the following call pancis, it indicates UnimplementedCommentServiceServer was
+func RegisterContentCommentServiceServer(s grpc.ServiceRegistrar, srv ContentCommentServiceServer) {
+	// If the following call pancis, it indicates UnimplementedContentCommentServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&CommentService_ServiceDesc, srv)
+	s.RegisterService(&ContentCommentService_ServiceDesc, srv)
 }
 
-func _CommentService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentCommentService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).Add(ctx, in)
+		return srv.(ContentCommentServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CommentService_Add_FullMethodName,
+		FullMethod: ContentCommentService_Add_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).Add(ctx, req.(*AddCommentRequest))
+		return srv.(ContentCommentServiceServer).Add(ctx, req.(*AddCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentCommentService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).Get(ctx, in)
+		return srv.(ContentCommentServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CommentService_Get_FullMethodName,
+		FullMethod: ContentCommentService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).Get(ctx, req.(*GetCommentRequest))
+		return srv.(ContentCommentServiceServer).Get(ctx, req.(*GetCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentCommentService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LikeCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).Like(ctx, in)
+		return srv.(ContentCommentServiceServer).Like(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CommentService_Like_FullMethodName,
+		FullMethod: ContentCommentService_Like_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).Like(ctx, req.(*LikeCommentRequest))
+		return srv.(ContentCommentServiceServer).Like(ctx, req.(*LikeCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_Thank_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentCommentService_Thank_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ThankCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).Thank(ctx, in)
+		return srv.(ContentCommentServiceServer).Thank(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CommentService_Thank_FullMethodName,
+		FullMethod: ContentCommentService_Thank_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).Thank(ctx, req.(*ThankCommentRequest))
+		return srv.(ContentCommentServiceServer).Thank(ctx, req.(*ThankCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommentService_UpdateStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentCommentService_UpdateStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateStatusCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServiceServer).UpdateStatus(ctx, in)
+		return srv.(ContentCommentServiceServer).UpdateStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CommentService_UpdateStatus_FullMethodName,
+		FullMethod: ContentCommentService_UpdateStatus_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServiceServer).UpdateStatus(ctx, req.(*UpdateStatusCommentRequest))
+		return srv.(ContentCommentServiceServer).UpdateStatus(ctx, req.(*UpdateStatusCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CommentService_ServiceDesc is the grpc.ServiceDesc for CommentService service.
+// ContentCommentService_ServiceDesc is the grpc.ServiceDesc for ContentCommentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CommentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "content.v1.CommentService",
-	HandlerType: (*CommentServiceServer)(nil),
+var ContentCommentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "common.api.content.v1.ContentCommentService",
+	HandlerType: (*ContentCommentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Add",
-			Handler:    _CommentService_Add_Handler,
+			Handler:    _ContentCommentService_Add_Handler,
 		},
 		{
 			MethodName: "Get",
-			Handler:    _CommentService_Get_Handler,
+			Handler:    _ContentCommentService_Get_Handler,
 		},
 		{
 			MethodName: "Like",
-			Handler:    _CommentService_Like_Handler,
+			Handler:    _ContentCommentService_Like_Handler,
 		},
 		{
 			MethodName: "Thank",
-			Handler:    _CommentService_Thank_Handler,
+			Handler:    _ContentCommentService_Thank_Handler,
 		},
 		{
 			MethodName: "UpdateStatus",
-			Handler:    _CommentService_UpdateStatus_Handler,
+			Handler:    _ContentCommentService_UpdateStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

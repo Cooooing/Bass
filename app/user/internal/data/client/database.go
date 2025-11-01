@@ -1,6 +1,7 @@
 package client
 
 import (
+	"common/pkg"
 	"context"
 	"fmt"
 	"user/internal/conf"
@@ -29,6 +30,9 @@ func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func
 			return nil, nil, fmt.Errorf("failed creating schema resources: %w", err)
 		}
 	}
+
+	// 注册审计 Hook
+	client.Use(pkg.AuditHook())
 
 	cleanup := func() {
 		err := client.Close()

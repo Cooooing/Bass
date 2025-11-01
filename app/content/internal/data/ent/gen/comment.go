@@ -17,25 +17,27 @@ import (
 type Comment struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 所属文章ID
-	ArticleID int `json:"article_id,omitempty"`
+	ArticleID int64 `json:"article_id,omitempty"`
 	// 用户ID
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 评论内容
 	Content string `json:"content,omitempty"`
 	// 评论层级
-	Level int `json:"level,omitempty"`
+	Level int32 `json:"level,omitempty"`
 	// 父级评论ID
-	ParentID int `json:"parent_id,omitempty"`
+	ParentID *int64 `json:"parent_id,omitempty"`
+	// 回复评论ID
+	ReplyID *int64 `json:"reply_id,omitempty"`
 	// 状态 0-正常 1-隐藏
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 回复数
-	ReplyCount int `json:"reply_count,omitempty"`
+	ReplyCount int32 `json:"reply_count,omitempty"`
 	// 点赞数
-	LikeCount int `json:"like_count,omitempty"`
+	LikeCount int32 `json:"like_count,omitempty"`
 	// 收藏数
-	CollectCount int `json:"collect_count,omitempty"`
+	CollectCount int32 `json:"collect_count,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -52,13 +54,17 @@ type CommentEdges struct {
 	Article *Article `json:"article,omitempty"`
 	// Parent holds the value of the parent edge.
 	Parent *Comment `json:"parent,omitempty"`
-	// Replies holds the value of the replies edge.
-	Replies []*Comment `json:"replies,omitempty"`
+	// ParentReplies holds the value of the parent_replies edge.
+	ParentReplies []*Comment `json:"parent_replies,omitempty"`
+	// Reply holds the value of the reply edge.
+	Reply *Comment `json:"reply,omitempty"`
+	// ReplyReplies holds the value of the reply_replies edge.
+	ReplyReplies []*Comment `json:"reply_replies,omitempty"`
 	// ActionRecords holds the value of the action_records edge.
 	ActionRecords []*CommentActionRecord `json:"action_records,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 }
 
 // ArticleOrErr returns the Article value or an error if the edge
@@ -83,19 +89,39 @@ func (e CommentEdges) ParentOrErr() (*Comment, error) {
 	return nil, &NotLoadedError{edge: "parent"}
 }
 
-// RepliesOrErr returns the Replies value or an error if the edge
+// ParentRepliesOrErr returns the ParentReplies value or an error if the edge
 // was not loaded in eager-loading.
-func (e CommentEdges) RepliesOrErr() ([]*Comment, error) {
+func (e CommentEdges) ParentRepliesOrErr() ([]*Comment, error) {
 	if e.loadedTypes[2] {
-		return e.Replies, nil
+		return e.ParentReplies, nil
 	}
-	return nil, &NotLoadedError{edge: "replies"}
+	return nil, &NotLoadedError{edge: "parent_replies"}
+}
+
+// ReplyOrErr returns the Reply value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CommentEdges) ReplyOrErr() (*Comment, error) {
+	if e.Reply != nil {
+		return e.Reply, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: comment.Label}
+	}
+	return nil, &NotLoadedError{edge: "reply"}
+}
+
+// ReplyRepliesOrErr returns the ReplyReplies value or an error if the edge
+// was not loaded in eager-loading.
+func (e CommentEdges) ReplyRepliesOrErr() ([]*Comment, error) {
+	if e.loadedTypes[4] {
+		return e.ReplyReplies, nil
+	}
+	return nil, &NotLoadedError{edge: "reply_replies"}
 }
 
 // ActionRecordsOrErr returns the ActionRecords value or an error if the edge
 // was not loaded in eager-loading.
 func (e CommentEdges) ActionRecordsOrErr() ([]*CommentActionRecord, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.ActionRecords, nil
 	}
 	return nil, &NotLoadedError{edge: "action_records"}
@@ -106,7 +132,7 @@ func (*Comment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount:
+		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount:
 			values[i] = new(sql.NullInt64)
 		case comment.FieldContent:
 			values[i] = new(sql.NullString)
@@ -132,18 +158,18 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case comment.FieldArticleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field article_id", values[i])
 			} else if value.Valid {
-				_m.ArticleID = int(value.Int64)
+				_m.ArticleID = value.Int64
 			}
 		case comment.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case comment.FieldContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -155,37 +181,45 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field level", values[i])
 			} else if value.Valid {
-				_m.Level = int(value.Int64)
+				_m.Level = int32(value.Int64)
 			}
 		case comment.FieldParentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
 			} else if value.Valid {
-				_m.ParentID = int(value.Int64)
+				_m.ParentID = new(int64)
+				*_m.ParentID = value.Int64
+			}
+		case comment.FieldReplyID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field reply_id", values[i])
+			} else if value.Valid {
+				_m.ReplyID = new(int64)
+				*_m.ReplyID = value.Int64
 			}
 		case comment.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int(value.Int64)
+				_m.Status = int32(value.Int64)
 			}
 		case comment.FieldReplyCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field reply_count", values[i])
 			} else if value.Valid {
-				_m.ReplyCount = int(value.Int64)
+				_m.ReplyCount = int32(value.Int64)
 			}
 		case comment.FieldLikeCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field like_count", values[i])
 			} else if value.Valid {
-				_m.LikeCount = int(value.Int64)
+				_m.LikeCount = int32(value.Int64)
 			}
 		case comment.FieldCollectCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field collect_count", values[i])
 			} else if value.Valid {
-				_m.CollectCount = int(value.Int64)
+				_m.CollectCount = int32(value.Int64)
 			}
 		case comment.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -224,9 +258,19 @@ func (_m *Comment) QueryParent() *CommentQuery {
 	return NewCommentClient(_m.config).QueryParent(_m)
 }
 
-// QueryReplies queries the "replies" edge of the Comment entity.
-func (_m *Comment) QueryReplies() *CommentQuery {
-	return NewCommentClient(_m.config).QueryReplies(_m)
+// QueryParentReplies queries the "parent_replies" edge of the Comment entity.
+func (_m *Comment) QueryParentReplies() *CommentQuery {
+	return NewCommentClient(_m.config).QueryParentReplies(_m)
+}
+
+// QueryReply queries the "reply" edge of the Comment entity.
+func (_m *Comment) QueryReply() *CommentQuery {
+	return NewCommentClient(_m.config).QueryReply(_m)
+}
+
+// QueryReplyReplies queries the "reply_replies" edge of the Comment entity.
+func (_m *Comment) QueryReplyReplies() *CommentQuery {
+	return NewCommentClient(_m.config).QueryReplyReplies(_m)
 }
 
 // QueryActionRecords queries the "action_records" edge of the Comment entity.
@@ -269,8 +313,15 @@ func (_m *Comment) String() string {
 	builder.WriteString("level=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Level))
 	builder.WriteString(", ")
-	builder.WriteString("parent_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ParentID))
+	if v := _m.ParentID; v != nil {
+		builder.WriteString("parent_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ReplyID; v != nil {
+		builder.WriteString("reply_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

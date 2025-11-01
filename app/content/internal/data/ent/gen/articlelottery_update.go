@@ -33,13 +33,13 @@ func (_u *ArticleLotteryUpdate) Where(ps ...predicate.ArticleLottery) *ArticleLo
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticleLotteryUpdate) SetArticleID(v int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) SetArticleID(v int64) *ArticleLotteryUpdate {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticleLotteryUpdate) SetNillableArticleID(v *int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) SetNillableArticleID(v *int64) *ArticleLotteryUpdate {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -105,14 +105,14 @@ func (_u *ArticleLotteryUpdate) ClearEndAt() *ArticleLotteryUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *ArticleLotteryUpdate) SetStatus(v int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) SetStatus(v int32) *ArticleLotteryUpdate {
 	_u.mutation.ResetStatus()
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ArticleLotteryUpdate) SetNillableStatus(v *int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) SetNillableStatus(v *int32) *ArticleLotteryUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -120,7 +120,7 @@ func (_u *ArticleLotteryUpdate) SetNillableStatus(v *int) *ArticleLotteryUpdate 
 }
 
 // AddStatus adds value to the "status" field.
-func (_u *ArticleLotteryUpdate) AddStatus(v int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) AddStatus(v int32) *ArticleLotteryUpdate {
 	_u.mutation.AddStatus(v)
 	return _u
 }
@@ -171,14 +171,14 @@ func (_u *ArticleLotteryUpdate) SetArticle(v *Article) *ArticleLotteryUpdate {
 }
 
 // AddParticipantIDs adds the "participants" edge to the ArticleLotteryParticipant entity by IDs.
-func (_u *ArticleLotteryUpdate) AddParticipantIDs(ids ...int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) AddParticipantIDs(ids ...int64) *ArticleLotteryUpdate {
 	_u.mutation.AddParticipantIDs(ids...)
 	return _u
 }
 
 // AddParticipants adds the "participants" edges to the ArticleLotteryParticipant entity.
 func (_u *ArticleLotteryUpdate) AddParticipants(v ...*ArticleLotteryParticipant) *ArticleLotteryUpdate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -186,14 +186,14 @@ func (_u *ArticleLotteryUpdate) AddParticipants(v ...*ArticleLotteryParticipant)
 }
 
 // AddWinnerIDs adds the "winners" edge to the ArticleLotteryWinner entity by IDs.
-func (_u *ArticleLotteryUpdate) AddWinnerIDs(ids ...int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) AddWinnerIDs(ids ...int64) *ArticleLotteryUpdate {
 	_u.mutation.AddWinnerIDs(ids...)
 	return _u
 }
 
 // AddWinners adds the "winners" edges to the ArticleLotteryWinner entity.
 func (_u *ArticleLotteryUpdate) AddWinners(v ...*ArticleLotteryWinner) *ArticleLotteryUpdate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -218,14 +218,14 @@ func (_u *ArticleLotteryUpdate) ClearParticipants() *ArticleLotteryUpdate {
 }
 
 // RemoveParticipantIDs removes the "participants" edge to ArticleLotteryParticipant entities by IDs.
-func (_u *ArticleLotteryUpdate) RemoveParticipantIDs(ids ...int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) RemoveParticipantIDs(ids ...int64) *ArticleLotteryUpdate {
 	_u.mutation.RemoveParticipantIDs(ids...)
 	return _u
 }
 
 // RemoveParticipants removes "participants" edges to ArticleLotteryParticipant entities.
 func (_u *ArticleLotteryUpdate) RemoveParticipants(v ...*ArticleLotteryParticipant) *ArticleLotteryUpdate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -239,14 +239,14 @@ func (_u *ArticleLotteryUpdate) ClearWinners() *ArticleLotteryUpdate {
 }
 
 // RemoveWinnerIDs removes the "winners" edge to ArticleLotteryWinner entities by IDs.
-func (_u *ArticleLotteryUpdate) RemoveWinnerIDs(ids ...int) *ArticleLotteryUpdate {
+func (_u *ArticleLotteryUpdate) RemoveWinnerIDs(ids ...int64) *ArticleLotteryUpdate {
 	_u.mutation.RemoveWinnerIDs(ids...)
 	return _u
 }
 
 // RemoveWinners removes "winners" edges to ArticleLotteryWinner entities.
 func (_u *ArticleLotteryUpdate) RemoveWinners(v ...*ArticleLotteryWinner) *ArticleLotteryUpdate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -292,7 +292,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlelottery.Table, articlelottery.Columns, sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlelottery.Table, articlelottery.Columns, sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -324,10 +324,10 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 		_spec.ClearField(articlelottery.FieldEndAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(articlelottery.FieldStatus, field.TypeInt, value)
+		_spec.SetField(articlelottery.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
-		_spec.AddField(articlelottery.FieldStatus, field.TypeInt, value)
+		_spec.AddField(articlelottery.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlelottery.FieldCreatedAt, field.TypeTime, value)
@@ -349,7 +349,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -362,7 +362,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -378,7 +378,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.ParticipantsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -391,7 +391,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.ParticipantsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -407,7 +407,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.ParticipantsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -423,7 +423,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.WinnersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -436,7 +436,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.WinnersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -452,7 +452,7 @@ func (_u *ArticleLotteryUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Columns: []string{articlelottery.WinnersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -481,13 +481,13 @@ type ArticleLotteryUpdateOne struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticleLotteryUpdateOne) SetArticleID(v int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) SetArticleID(v int64) *ArticleLotteryUpdateOne {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticleLotteryUpdateOne) SetNillableArticleID(v *int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) SetNillableArticleID(v *int64) *ArticleLotteryUpdateOne {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -553,14 +553,14 @@ func (_u *ArticleLotteryUpdateOne) ClearEndAt() *ArticleLotteryUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (_u *ArticleLotteryUpdateOne) SetStatus(v int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) SetStatus(v int32) *ArticleLotteryUpdateOne {
 	_u.mutation.ResetStatus()
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ArticleLotteryUpdateOne) SetNillableStatus(v *int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) SetNillableStatus(v *int32) *ArticleLotteryUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -568,7 +568,7 @@ func (_u *ArticleLotteryUpdateOne) SetNillableStatus(v *int) *ArticleLotteryUpda
 }
 
 // AddStatus adds value to the "status" field.
-func (_u *ArticleLotteryUpdateOne) AddStatus(v int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) AddStatus(v int32) *ArticleLotteryUpdateOne {
 	_u.mutation.AddStatus(v)
 	return _u
 }
@@ -619,14 +619,14 @@ func (_u *ArticleLotteryUpdateOne) SetArticle(v *Article) *ArticleLotteryUpdateO
 }
 
 // AddParticipantIDs adds the "participants" edge to the ArticleLotteryParticipant entity by IDs.
-func (_u *ArticleLotteryUpdateOne) AddParticipantIDs(ids ...int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) AddParticipantIDs(ids ...int64) *ArticleLotteryUpdateOne {
 	_u.mutation.AddParticipantIDs(ids...)
 	return _u
 }
 
 // AddParticipants adds the "participants" edges to the ArticleLotteryParticipant entity.
 func (_u *ArticleLotteryUpdateOne) AddParticipants(v ...*ArticleLotteryParticipant) *ArticleLotteryUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -634,14 +634,14 @@ func (_u *ArticleLotteryUpdateOne) AddParticipants(v ...*ArticleLotteryParticipa
 }
 
 // AddWinnerIDs adds the "winners" edge to the ArticleLotteryWinner entity by IDs.
-func (_u *ArticleLotteryUpdateOne) AddWinnerIDs(ids ...int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) AddWinnerIDs(ids ...int64) *ArticleLotteryUpdateOne {
 	_u.mutation.AddWinnerIDs(ids...)
 	return _u
 }
 
 // AddWinners adds the "winners" edges to the ArticleLotteryWinner entity.
 func (_u *ArticleLotteryUpdateOne) AddWinners(v ...*ArticleLotteryWinner) *ArticleLotteryUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -666,14 +666,14 @@ func (_u *ArticleLotteryUpdateOne) ClearParticipants() *ArticleLotteryUpdateOne 
 }
 
 // RemoveParticipantIDs removes the "participants" edge to ArticleLotteryParticipant entities by IDs.
-func (_u *ArticleLotteryUpdateOne) RemoveParticipantIDs(ids ...int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) RemoveParticipantIDs(ids ...int64) *ArticleLotteryUpdateOne {
 	_u.mutation.RemoveParticipantIDs(ids...)
 	return _u
 }
 
 // RemoveParticipants removes "participants" edges to ArticleLotteryParticipant entities.
 func (_u *ArticleLotteryUpdateOne) RemoveParticipants(v ...*ArticleLotteryParticipant) *ArticleLotteryUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -687,14 +687,14 @@ func (_u *ArticleLotteryUpdateOne) ClearWinners() *ArticleLotteryUpdateOne {
 }
 
 // RemoveWinnerIDs removes the "winners" edge to ArticleLotteryWinner entities by IDs.
-func (_u *ArticleLotteryUpdateOne) RemoveWinnerIDs(ids ...int) *ArticleLotteryUpdateOne {
+func (_u *ArticleLotteryUpdateOne) RemoveWinnerIDs(ids ...int64) *ArticleLotteryUpdateOne {
 	_u.mutation.RemoveWinnerIDs(ids...)
 	return _u
 }
 
 // RemoveWinners removes "winners" edges to ArticleLotteryWinner entities.
 func (_u *ArticleLotteryUpdateOne) RemoveWinners(v ...*ArticleLotteryWinner) *ArticleLotteryUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -753,7 +753,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlelottery.Table, articlelottery.Columns, sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlelottery.Table, articlelottery.Columns, sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "ArticleLottery.id" for update`)}
@@ -802,10 +802,10 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 		_spec.ClearField(articlelottery.FieldEndAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(articlelottery.FieldStatus, field.TypeInt, value)
+		_spec.SetField(articlelottery.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
-		_spec.AddField(articlelottery.FieldStatus, field.TypeInt, value)
+		_spec.AddField(articlelottery.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlelottery.FieldCreatedAt, field.TypeTime, value)
@@ -827,7 +827,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -840,7 +840,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -856,7 +856,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.ParticipantsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -869,7 +869,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.ParticipantsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -885,7 +885,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.ParticipantsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -901,7 +901,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.WinnersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -914,7 +914,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.WinnersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -930,7 +930,7 @@ func (_u *ArticleLotteryUpdateOne) sqlSave(ctx context.Context) (_node *ArticleL
 			Columns: []string{articlelottery.WinnersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

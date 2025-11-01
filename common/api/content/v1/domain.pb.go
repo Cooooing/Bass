@@ -26,17 +26,27 @@ const (
 )
 
 type Domain struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	Id            int64                  `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Status        int32                  `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
-	Url           string                 `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`
-	Icon          string                 `protobuf:"bytes,8,opt,name=icon,proto3" json:"icon,omitempty"`
-	TagCount      int64                  `protobuf:"varint,9,opt,name=tagCount,proto3" json:"tagCount,omitempty"`
-	IsNav         bool                   `protobuf:"varint,10,opt,name=isNav,proto3" json:"isNav,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// 主键
+	Id int64 `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
+	// 领域名称
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// 描述
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	// 状态 0-正常，1-禁用
+	Status int64 `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
+	// 链接
+	Url string `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`
+	// 图标
+	Icon string `protobuf:"bytes,8,opt,name=icon,proto3" json:"icon,omitempty"`
+	// 标签数量
+	TagCount int64 `protobuf:"varint,9,opt,name=tagCount,proto3" json:"tagCount,omitempty"`
+	// 是否导航
+	IsNav         bool `protobuf:"varint,10,opt,name=isNav,proto3" json:"isNav,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -106,7 +116,7 @@ func (x *Domain) GetDescription() string {
 	return ""
 }
 
-func (x *Domain) GetStatus() int32 {
+func (x *Domain) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -142,13 +152,19 @@ func (x *Domain) GetIsNav() bool {
 }
 
 type AddDomainRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
-	Url           string                 `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
-	Icon          string                 `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty"`
-	IsNav         bool                   `protobuf:"varint,6,opt,name=isNav,proto3" json:"isNav,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 领域名称
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// 描述
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// 状态 0-正常，1-禁用
+	Status int64 `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
+	// 链接
+	Url string `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
+	// 图标
+	Icon string `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty"`
+	// 是否导航
+	IsNav         bool `protobuf:"varint,6,opt,name=isNav,proto3" json:"isNav,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -197,7 +213,7 @@ func (x *AddDomainRequest) GetDescription() string {
 	return ""
 }
 
-func (x *AddDomainRequest) GetStatus() int32 {
+func (x *AddDomainRequest) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -262,13 +278,19 @@ func (*AddDomainReply) Descriptor() ([]byte, []int) {
 }
 
 type UpdateDomainRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
-	Url           string                 `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
-	Icon          string                 `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty"`
-	IsNav         bool                   `protobuf:"varint,6,opt,name=isNav,proto3" json:"isNav,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 领域名称
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// 描述
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// 状态 0-正常，1-禁用
+	Status int64 `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
+	// 链接
+	Url string `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
+	// 图标
+	Icon string `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty"`
+	// 是否导航
+	IsNav         bool `protobuf:"varint,6,opt,name=isNav,proto3" json:"isNav,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -317,7 +339,7 @@ func (x *UpdateDomainRequest) GetDescription() string {
 	return ""
 }
 
-func (x *UpdateDomainRequest) GetStatus() int32 {
+func (x *UpdateDomainRequest) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -382,14 +404,21 @@ func (*UpdateDomainReply) Descriptor() ([]byte, []int) {
 }
 
 type GetDomainRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          *v1.PageRequest        `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Status        int32                  `protobuf:"varint,4,opt,name=status,proto3" json:"status,omitempty"`
-	Url           string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
-	Icon          string                 `protobuf:"bytes,6,opt,name=icon,proto3" json:"icon,omitempty"`
-	IsNav         bool                   `protobuf:"varint,7,opt,name=isNav,proto3" json:"isNav,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页参数
+	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	// 领域名称
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// 描述
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// 状态 0-正常，1-禁用
+	Status int64 `protobuf:"varint,4,opt,name=status,proto3" json:"status,omitempty"`
+	// 链接
+	Url string `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
+	// 图标
+	Icon string `protobuf:"bytes,6,opt,name=icon,proto3" json:"icon,omitempty"`
+	// 是否导航
+	IsNav         bool `protobuf:"varint,7,opt,name=isNav,proto3" json:"isNav,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -445,7 +474,7 @@ func (x *GetDomainRequest) GetDescription() string {
 	return ""
 }
 
-func (x *GetDomainRequest) GetStatus() int32 {
+func (x *GetDomainRequest) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -474,9 +503,11 @@ func (x *GetDomainRequest) GetIsNav() bool {
 }
 
 type GetDomainReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          *v1.PageReply          `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
-	Data          []*Domain              `protobuf:"bytes,2,rep,name=data,proto3" json:"data,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页信息
+	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	// 数据
+	Data          []*Domain `protobuf:"bytes,2,rep,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -538,7 +569,7 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x02id\x18\x03 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x05 \x01(\tR\vdescription\x12\x16\n" +
-	"\x06status\x18\x06 \x01(\x05R\x06status\x12\x10\n" +
+	"\x06status\x18\x06 \x01(\x03R\x06status\x12\x10\n" +
 	"\x03url\x18\a \x01(\tR\x03url\x12\x12\n" +
 	"\x04icon\x18\b \x01(\tR\x04icon\x12\x1a\n" +
 	"\btagCount\x18\t \x01(\x03R\btagCount\x12\x14\n" +
@@ -547,7 +578,7 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x10AddDomainRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\x05R\x06status\x12\x10\n" +
+	"\x06status\x18\x03 \x01(\x03R\x06status\x12\x10\n" +
 	"\x03url\x18\x04 \x01(\tR\x03url\x12\x12\n" +
 	"\x04icon\x18\x05 \x01(\tR\x04icon\x12\x14\n" +
 	"\x05isNav\x18\x06 \x01(\bR\x05isNav\"\x10\n" +
@@ -555,7 +586,7 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x13UpdateDomainRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\x05R\x06status\x12\x10\n" +
+	"\x06status\x18\x03 \x01(\x03R\x06status\x12\x10\n" +
 	"\x03url\x18\x04 \x01(\tR\x03url\x12\x12\n" +
 	"\x04icon\x18\x05 \x01(\tR\x04icon\x12\x14\n" +
 	"\x05isNav\x18\x06 \x01(\bR\x05isNav\"\x13\n" +
@@ -564,7 +595,7 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x16\n" +
-	"\x06status\x18\x04 \x01(\x05R\x06status\x12\x10\n" +
+	"\x06status\x18\x04 \x01(\x03R\x06status\x12\x10\n" +
 	"\x03url\x18\x05 \x01(\tR\x03url\x12\x12\n" +
 	"\x04icon\x18\x06 \x01(\tR\x04icon\x12\x14\n" +
 	"\x05isNav\x18\a \x01(\bR\x05isNavB\a\n" +
@@ -572,8 +603,8 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x0eGetDomainReply\x128\n" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyH\x00R\x04page\x88\x01\x01\x121\n" +
 	"\x04data\x18\x02 \x03(\v2\x1d.common.api.content.v1.DomainR\x04dataB\a\n" +
-	"\x05_page2\xf1\x02\n" +
-	"\rDomainService\x12p\n" +
+	"\x05_page2\xf8\x02\n" +
+	"\x14ContentDomainService\x12p\n" +
 	"\x03Add\x12'.common.api.content.v1.AddDomainRequest\x1a%.common.api.content.v1.AddDomainReply\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/domain/add\x12|\n" +
 	"\x06Update\x12*.common.api.content.v1.UpdateDomainRequest\x1a(.common.api.content.v1.UpdateDomainReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/domain/update\x12p\n" +
 	"\x03Get\x12'.common.api.content.v1.GetDomainRequest\x1a%.common.api.content.v1.GetDomainReply\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/domain/getB\x1aZ\x18common/api/content/v1;v1b\x06proto3"
@@ -609,12 +640,12 @@ var file_content_v1_domain_proto_depIdxs = []int32{
 	8, // 2: common.api.content.v1.GetDomainRequest.page:type_name -> common.api.common.v1.PageRequest
 	9, // 3: common.api.content.v1.GetDomainReply.page:type_name -> common.api.common.v1.PageReply
 	0, // 4: common.api.content.v1.GetDomainReply.data:type_name -> common.api.content.v1.Domain
-	1, // 5: common.api.content.v1.DomainService.Add:input_type -> common.api.content.v1.AddDomainRequest
-	3, // 6: common.api.content.v1.DomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
-	5, // 7: common.api.content.v1.DomainService.Get:input_type -> common.api.content.v1.GetDomainRequest
-	2, // 8: common.api.content.v1.DomainService.Add:output_type -> common.api.content.v1.AddDomainReply
-	4, // 9: common.api.content.v1.DomainService.Update:output_type -> common.api.content.v1.UpdateDomainReply
-	6, // 10: common.api.content.v1.DomainService.Get:output_type -> common.api.content.v1.GetDomainReply
+	1, // 5: common.api.content.v1.ContentDomainService.Add:input_type -> common.api.content.v1.AddDomainRequest
+	3, // 6: common.api.content.v1.ContentDomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
+	5, // 7: common.api.content.v1.ContentDomainService.Get:input_type -> common.api.content.v1.GetDomainRequest
+	2, // 8: common.api.content.v1.ContentDomainService.Add:output_type -> common.api.content.v1.AddDomainReply
+	4, // 9: common.api.content.v1.ContentDomainService.Update:output_type -> common.api.content.v1.UpdateDomainReply
+	6, // 10: common.api.content.v1.ContentDomainService.Get:output_type -> common.api.content.v1.GetDomainReply
 	8, // [8:11] is the sub-list for method output_type
 	5, // [5:8] is the sub-list for method input_type
 	5, // [5:5] is the sub-list for extension type_name

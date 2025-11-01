@@ -14,7 +14,7 @@ type TokenService struct {
 
 func NewTokenService(conf *conf.Bootstrap) *TokenService {
 	emailTokenGen := util.NewTokenGenerator[model.TokenEmail](conf.Jwt.Secret, conf.Jwt.EmailExpire.AsDuration())
-	tokenGen := util.NewTokenGenerator[model.Token](conf.Jwt.Secret, conf.Jwt.EmailExpire.AsDuration())
+	tokenGen := util.NewTokenGenerator[model.Token](conf.Jwt.Secret, conf.Jwt.Expires.AsDuration())
 	return &TokenService{
 		conf:          conf,
 		EmailTokenGen: emailTokenGen,

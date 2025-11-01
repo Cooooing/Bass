@@ -15,9 +15,10 @@ type ArticleVoteRecord struct {
 
 func (ArticleVoteRecord) Fields() []ent.Field {
 	return append([]ent.Field{
-		field.Int("vote_id").Comment("所属投票ID"),
-		field.Int("user_id").Comment("投票用户ID"),
-		field.Int("option_index").Comment("投票选项索引"),
+		field.Int64("id").Immutable().Unique(),
+		field.Int64("vote_id").Comment("所属投票ID"),
+		field.Int64("user_id").Comment("投票用户ID"),
+		field.Int32("option_index").Comment("投票选项索引"),
 		field.Bool("anonymous").Comment("是否匿名").Default(false),
 	}, pkg.TimeAuditFields()...)
 }

@@ -197,14 +197,14 @@ func (_u *UserUpdate) ClearMbti() *UserUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *UserUpdate) SetStatus(v int) *UserUpdate {
+func (_u *UserUpdate) SetStatus(v int32) *UserUpdate {
 	_u.mutation.ResetStatus()
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableStatus(v *int) *UserUpdate {
+func (_u *UserUpdate) SetNillableStatus(v *int32) *UserUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -212,7 +212,7 @@ func (_u *UserUpdate) SetNillableStatus(v *int) *UserUpdate {
 }
 
 // AddStatus adds value to the "status" field.
-func (_u *UserUpdate) AddStatus(v int) *UserUpdate {
+func (_u *UserUpdate) AddStatus(v int32) *UserUpdate {
 	_u.mutation.AddStatus(v)
 	return _u
 }
@@ -238,14 +238,14 @@ func (_u *UserUpdate) ClearGroupName() *UserUpdate {
 }
 
 // SetFollowCount sets the "follow_count" field.
-func (_u *UserUpdate) SetFollowCount(v int) *UserUpdate {
+func (_u *UserUpdate) SetFollowCount(v int32) *UserUpdate {
 	_u.mutation.ResetFollowCount()
 	_u.mutation.SetFollowCount(v)
 	return _u
 }
 
 // SetNillableFollowCount sets the "follow_count" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableFollowCount(v *int) *UserUpdate {
+func (_u *UserUpdate) SetNillableFollowCount(v *int32) *UserUpdate {
 	if v != nil {
 		_u.SetFollowCount(*v)
 	}
@@ -253,20 +253,20 @@ func (_u *UserUpdate) SetNillableFollowCount(v *int) *UserUpdate {
 }
 
 // AddFollowCount adds value to the "follow_count" field.
-func (_u *UserUpdate) AddFollowCount(v int) *UserUpdate {
+func (_u *UserUpdate) AddFollowCount(v int32) *UserUpdate {
 	_u.mutation.AddFollowCount(v)
 	return _u
 }
 
 // SetFollowerCount sets the "follower_count" field.
-func (_u *UserUpdate) SetFollowerCount(v int) *UserUpdate {
+func (_u *UserUpdate) SetFollowerCount(v int32) *UserUpdate {
 	_u.mutation.ResetFollowerCount()
 	_u.mutation.SetFollowerCount(v)
 	return _u
 }
 
 // SetNillableFollowerCount sets the "follower_count" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableFollowerCount(v *int) *UserUpdate {
+func (_u *UserUpdate) SetNillableFollowerCount(v *int32) *UserUpdate {
 	if v != nil {
 		_u.SetFollowerCount(*v)
 	}
@@ -274,7 +274,7 @@ func (_u *UserUpdate) SetNillableFollowerCount(v *int) *UserUpdate {
 }
 
 // AddFollowerCount adds value to the "follower_count" field.
-func (_u *UserUpdate) AddFollowerCount(v int) *UserUpdate {
+func (_u *UserUpdate) AddFollowerCount(v int32) *UserUpdate {
 	_u.mutation.AddFollowerCount(v)
 	return _u
 }
@@ -320,14 +320,14 @@ func (_u *UserUpdate) ClearLastLoginIP() *UserUpdate {
 }
 
 // SetOnlineMinutes sets the "online_minutes" field.
-func (_u *UserUpdate) SetOnlineMinutes(v int) *UserUpdate {
+func (_u *UserUpdate) SetOnlineMinutes(v int32) *UserUpdate {
 	_u.mutation.ResetOnlineMinutes()
 	_u.mutation.SetOnlineMinutes(v)
 	return _u
 }
 
 // SetNillableOnlineMinutes sets the "online_minutes" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableOnlineMinutes(v *int) *UserUpdate {
+func (_u *UserUpdate) SetNillableOnlineMinutes(v *int32) *UserUpdate {
 	if v != nil {
 		_u.SetOnlineMinutes(*v)
 	}
@@ -335,7 +335,7 @@ func (_u *UserUpdate) SetNillableOnlineMinutes(v *int) *UserUpdate {
 }
 
 // AddOnlineMinutes adds value to the "online_minutes" field.
-func (_u *UserUpdate) AddOnlineMinutes(v int) *UserUpdate {
+func (_u *UserUpdate) AddOnlineMinutes(v int32) *UserUpdate {
 	_u.mutation.AddOnlineMinutes(v)
 	return _u
 }
@@ -361,14 +361,14 @@ func (_u *UserUpdate) ClearLastCheckinTime() *UserUpdate {
 }
 
 // SetCurrentCheckinStreak sets the "current_checkin_streak" field.
-func (_u *UserUpdate) SetCurrentCheckinStreak(v int) *UserUpdate {
+func (_u *UserUpdate) SetCurrentCheckinStreak(v int32) *UserUpdate {
 	_u.mutation.ResetCurrentCheckinStreak()
 	_u.mutation.SetCurrentCheckinStreak(v)
 	return _u
 }
 
 // SetNillableCurrentCheckinStreak sets the "current_checkin_streak" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableCurrentCheckinStreak(v *int) *UserUpdate {
+func (_u *UserUpdate) SetNillableCurrentCheckinStreak(v *int32) *UserUpdate {
 	if v != nil {
 		_u.SetCurrentCheckinStreak(*v)
 	}
@@ -376,20 +376,20 @@ func (_u *UserUpdate) SetNillableCurrentCheckinStreak(v *int) *UserUpdate {
 }
 
 // AddCurrentCheckinStreak adds value to the "current_checkin_streak" field.
-func (_u *UserUpdate) AddCurrentCheckinStreak(v int) *UserUpdate {
+func (_u *UserUpdate) AddCurrentCheckinStreak(v int32) *UserUpdate {
 	_u.mutation.AddCurrentCheckinStreak(v)
 	return _u
 }
 
 // SetLongestCheckinStreak sets the "longest_checkin_streak" field.
-func (_u *UserUpdate) SetLongestCheckinStreak(v int) *UserUpdate {
+func (_u *UserUpdate) SetLongestCheckinStreak(v int32) *UserUpdate {
 	_u.mutation.ResetLongestCheckinStreak()
 	_u.mutation.SetLongestCheckinStreak(v)
 	return _u
 }
 
 // SetNillableLongestCheckinStreak sets the "longest_checkin_streak" field if the given value is not nil.
-func (_u *UserUpdate) SetNillableLongestCheckinStreak(v *int) *UserUpdate {
+func (_u *UserUpdate) SetNillableLongestCheckinStreak(v *int32) *UserUpdate {
 	if v != nil {
 		_u.SetLongestCheckinStreak(*v)
 	}
@@ -397,7 +397,7 @@ func (_u *UserUpdate) SetNillableLongestCheckinStreak(v *int) *UserUpdate {
 }
 
 // AddLongestCheckinStreak adds value to the "longest_checkin_streak" field.
-func (_u *UserUpdate) AddLongestCheckinStreak(v int) *UserUpdate {
+func (_u *UserUpdate) AddLongestCheckinStreak(v int32) *UserUpdate {
 	_u.mutation.AddLongestCheckinStreak(v)
 	return _u
 }
@@ -741,7 +741,7 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -798,10 +798,10 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.ClearField(user.FieldMbti, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
-		_spec.AddField(user.FieldStatus, field.TypeInt, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.GroupName(); ok {
 		_spec.SetField(user.FieldGroupName, field.TypeString, value)
@@ -810,16 +810,16 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.ClearField(user.FieldGroupName, field.TypeString)
 	}
 	if value, ok := _u.mutation.FollowCount(); ok {
-		_spec.SetField(user.FieldFollowCount, field.TypeInt, value)
+		_spec.SetField(user.FieldFollowCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedFollowCount(); ok {
-		_spec.AddField(user.FieldFollowCount, field.TypeInt, value)
+		_spec.AddField(user.FieldFollowCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.FollowerCount(); ok {
-		_spec.SetField(user.FieldFollowerCount, field.TypeInt, value)
+		_spec.SetField(user.FieldFollowerCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedFollowerCount(); ok {
-		_spec.AddField(user.FieldFollowerCount, field.TypeInt, value)
+		_spec.AddField(user.FieldFollowerCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
@@ -834,10 +834,10 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.ClearField(user.FieldLastLoginIP, field.TypeString)
 	}
 	if value, ok := _u.mutation.OnlineMinutes(); ok {
-		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt, value)
+		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedOnlineMinutes(); ok {
-		_spec.AddField(user.FieldOnlineMinutes, field.TypeInt, value)
+		_spec.AddField(user.FieldOnlineMinutes, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LastCheckinTime(); ok {
 		_spec.SetField(user.FieldLastCheckinTime, field.TypeTime, value)
@@ -846,16 +846,16 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.ClearField(user.FieldLastCheckinTime, field.TypeTime)
 	}
 	if value, ok := _u.mutation.CurrentCheckinStreak(); ok {
-		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt, value)
+		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedCurrentCheckinStreak(); ok {
-		_spec.AddField(user.FieldCurrentCheckinStreak, field.TypeInt, value)
+		_spec.AddField(user.FieldCurrentCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LongestCheckinStreak(); ok {
-		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt, value)
+		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedLongestCheckinStreak(); ok {
-		_spec.AddField(user.FieldLongestCheckinStreak, field.TypeInt, value)
+		_spec.AddField(user.FieldLongestCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(user.FieldLanguage, field.TypeString, value)
@@ -1118,14 +1118,14 @@ func (_u *UserUpdateOne) ClearMbti() *UserUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (_u *UserUpdateOne) SetStatus(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetStatus(v int32) *UserUpdateOne {
 	_u.mutation.ResetStatus()
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableStatus(v *int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetNillableStatus(v *int32) *UserUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -1133,7 +1133,7 @@ func (_u *UserUpdateOne) SetNillableStatus(v *int) *UserUpdateOne {
 }
 
 // AddStatus adds value to the "status" field.
-func (_u *UserUpdateOne) AddStatus(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) AddStatus(v int32) *UserUpdateOne {
 	_u.mutation.AddStatus(v)
 	return _u
 }
@@ -1159,14 +1159,14 @@ func (_u *UserUpdateOne) ClearGroupName() *UserUpdateOne {
 }
 
 // SetFollowCount sets the "follow_count" field.
-func (_u *UserUpdateOne) SetFollowCount(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetFollowCount(v int32) *UserUpdateOne {
 	_u.mutation.ResetFollowCount()
 	_u.mutation.SetFollowCount(v)
 	return _u
 }
 
 // SetNillableFollowCount sets the "follow_count" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableFollowCount(v *int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetNillableFollowCount(v *int32) *UserUpdateOne {
 	if v != nil {
 		_u.SetFollowCount(*v)
 	}
@@ -1174,20 +1174,20 @@ func (_u *UserUpdateOne) SetNillableFollowCount(v *int) *UserUpdateOne {
 }
 
 // AddFollowCount adds value to the "follow_count" field.
-func (_u *UserUpdateOne) AddFollowCount(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) AddFollowCount(v int32) *UserUpdateOne {
 	_u.mutation.AddFollowCount(v)
 	return _u
 }
 
 // SetFollowerCount sets the "follower_count" field.
-func (_u *UserUpdateOne) SetFollowerCount(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetFollowerCount(v int32) *UserUpdateOne {
 	_u.mutation.ResetFollowerCount()
 	_u.mutation.SetFollowerCount(v)
 	return _u
 }
 
 // SetNillableFollowerCount sets the "follower_count" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableFollowerCount(v *int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetNillableFollowerCount(v *int32) *UserUpdateOne {
 	if v != nil {
 		_u.SetFollowerCount(*v)
 	}
@@ -1195,7 +1195,7 @@ func (_u *UserUpdateOne) SetNillableFollowerCount(v *int) *UserUpdateOne {
 }
 
 // AddFollowerCount adds value to the "follower_count" field.
-func (_u *UserUpdateOne) AddFollowerCount(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) AddFollowerCount(v int32) *UserUpdateOne {
 	_u.mutation.AddFollowerCount(v)
 	return _u
 }
@@ -1241,14 +1241,14 @@ func (_u *UserUpdateOne) ClearLastLoginIP() *UserUpdateOne {
 }
 
 // SetOnlineMinutes sets the "online_minutes" field.
-func (_u *UserUpdateOne) SetOnlineMinutes(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetOnlineMinutes(v int32) *UserUpdateOne {
 	_u.mutation.ResetOnlineMinutes()
 	_u.mutation.SetOnlineMinutes(v)
 	return _u
 }
 
 // SetNillableOnlineMinutes sets the "online_minutes" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableOnlineMinutes(v *int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetNillableOnlineMinutes(v *int32) *UserUpdateOne {
 	if v != nil {
 		_u.SetOnlineMinutes(*v)
 	}
@@ -1256,7 +1256,7 @@ func (_u *UserUpdateOne) SetNillableOnlineMinutes(v *int) *UserUpdateOne {
 }
 
 // AddOnlineMinutes adds value to the "online_minutes" field.
-func (_u *UserUpdateOne) AddOnlineMinutes(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) AddOnlineMinutes(v int32) *UserUpdateOne {
 	_u.mutation.AddOnlineMinutes(v)
 	return _u
 }
@@ -1282,14 +1282,14 @@ func (_u *UserUpdateOne) ClearLastCheckinTime() *UserUpdateOne {
 }
 
 // SetCurrentCheckinStreak sets the "current_checkin_streak" field.
-func (_u *UserUpdateOne) SetCurrentCheckinStreak(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetCurrentCheckinStreak(v int32) *UserUpdateOne {
 	_u.mutation.ResetCurrentCheckinStreak()
 	_u.mutation.SetCurrentCheckinStreak(v)
 	return _u
 }
 
 // SetNillableCurrentCheckinStreak sets the "current_checkin_streak" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableCurrentCheckinStreak(v *int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetNillableCurrentCheckinStreak(v *int32) *UserUpdateOne {
 	if v != nil {
 		_u.SetCurrentCheckinStreak(*v)
 	}
@@ -1297,20 +1297,20 @@ func (_u *UserUpdateOne) SetNillableCurrentCheckinStreak(v *int) *UserUpdateOne 
 }
 
 // AddCurrentCheckinStreak adds value to the "current_checkin_streak" field.
-func (_u *UserUpdateOne) AddCurrentCheckinStreak(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) AddCurrentCheckinStreak(v int32) *UserUpdateOne {
 	_u.mutation.AddCurrentCheckinStreak(v)
 	return _u
 }
 
 // SetLongestCheckinStreak sets the "longest_checkin_streak" field.
-func (_u *UserUpdateOne) SetLongestCheckinStreak(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetLongestCheckinStreak(v int32) *UserUpdateOne {
 	_u.mutation.ResetLongestCheckinStreak()
 	_u.mutation.SetLongestCheckinStreak(v)
 	return _u
 }
 
 // SetNillableLongestCheckinStreak sets the "longest_checkin_streak" field if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableLongestCheckinStreak(v *int) *UserUpdateOne {
+func (_u *UserUpdateOne) SetNillableLongestCheckinStreak(v *int32) *UserUpdateOne {
 	if v != nil {
 		_u.SetLongestCheckinStreak(*v)
 	}
@@ -1318,7 +1318,7 @@ func (_u *UserUpdateOne) SetNillableLongestCheckinStreak(v *int) *UserUpdateOne 
 }
 
 // AddLongestCheckinStreak adds value to the "longest_checkin_streak" field.
-func (_u *UserUpdateOne) AddLongestCheckinStreak(v int) *UserUpdateOne {
+func (_u *UserUpdateOne) AddLongestCheckinStreak(v int32) *UserUpdateOne {
 	_u.mutation.AddLongestCheckinStreak(v)
 	return _u
 }
@@ -1675,7 +1675,7 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "User.id" for update`)}
@@ -1749,10 +1749,10 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		_spec.ClearField(user.FieldMbti, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
-		_spec.AddField(user.FieldStatus, field.TypeInt, value)
+		_spec.AddField(user.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.GroupName(); ok {
 		_spec.SetField(user.FieldGroupName, field.TypeString, value)
@@ -1761,16 +1761,16 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		_spec.ClearField(user.FieldGroupName, field.TypeString)
 	}
 	if value, ok := _u.mutation.FollowCount(); ok {
-		_spec.SetField(user.FieldFollowCount, field.TypeInt, value)
+		_spec.SetField(user.FieldFollowCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedFollowCount(); ok {
-		_spec.AddField(user.FieldFollowCount, field.TypeInt, value)
+		_spec.AddField(user.FieldFollowCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.FollowerCount(); ok {
-		_spec.SetField(user.FieldFollowerCount, field.TypeInt, value)
+		_spec.SetField(user.FieldFollowerCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedFollowerCount(); ok {
-		_spec.AddField(user.FieldFollowerCount, field.TypeInt, value)
+		_spec.AddField(user.FieldFollowerCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
@@ -1785,10 +1785,10 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		_spec.ClearField(user.FieldLastLoginIP, field.TypeString)
 	}
 	if value, ok := _u.mutation.OnlineMinutes(); ok {
-		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt, value)
+		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedOnlineMinutes(); ok {
-		_spec.AddField(user.FieldOnlineMinutes, field.TypeInt, value)
+		_spec.AddField(user.FieldOnlineMinutes, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LastCheckinTime(); ok {
 		_spec.SetField(user.FieldLastCheckinTime, field.TypeTime, value)
@@ -1797,16 +1797,16 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		_spec.ClearField(user.FieldLastCheckinTime, field.TypeTime)
 	}
 	if value, ok := _u.mutation.CurrentCheckinStreak(); ok {
-		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt, value)
+		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedCurrentCheckinStreak(); ok {
-		_spec.AddField(user.FieldCurrentCheckinStreak, field.TypeInt, value)
+		_spec.AddField(user.FieldCurrentCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LongestCheckinStreak(); ok {
-		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt, value)
+		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedLongestCheckinStreak(); ok {
-		_spec.AddField(user.FieldLongestCheckinStreak, field.TypeInt, value)
+		_spec.AddField(user.FieldLongestCheckinStreak, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(user.FieldLanguage, field.TypeString, value)

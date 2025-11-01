@@ -106,8 +106,8 @@ func (_q *ArticleLotteryWinnerQuery) FirstX(ctx context.Context) *ArticleLottery
 
 // FirstID returns the first ArticleLotteryWinner ID from the query.
 // Returns a *NotFoundError when no ArticleLotteryWinner ID was found.
-func (_q *ArticleLotteryWinnerQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleLotteryWinnerQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (_q *ArticleLotteryWinnerQuery) FirstID(ctx context.Context) (id int, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ArticleLotteryWinnerQuery) FirstIDX(ctx context.Context) int {
+func (_q *ArticleLotteryWinnerQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +157,8 @@ func (_q *ArticleLotteryWinnerQuery) OnlyX(ctx context.Context) *ArticleLotteryW
 // OnlyID is like Only, but returns the only ArticleLotteryWinner ID in the query.
 // Returns a *NotSingularError when more than one ArticleLotteryWinner ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ArticleLotteryWinnerQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleLotteryWinnerQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -174,7 +174,7 @@ func (_q *ArticleLotteryWinnerQuery) OnlyID(ctx context.Context) (id int, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ArticleLotteryWinnerQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ArticleLotteryWinnerQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (_q *ArticleLotteryWinnerQuery) AllX(ctx context.Context) []*ArticleLottery
 }
 
 // IDs executes the query and returns a list of ArticleLotteryWinner IDs.
-func (_q *ArticleLotteryWinnerQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ArticleLotteryWinnerQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -214,7 +214,7 @@ func (_q *ArticleLotteryWinnerQuery) IDs(ctx context.Context) (ids []int, err er
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ArticleLotteryWinnerQuery) IDsX(ctx context.Context) []int {
+func (_q *ArticleLotteryWinnerQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -298,7 +298,7 @@ func (_q *ArticleLotteryWinnerQuery) WithLottery(opts ...func(*ArticleLotteryQue
 // Example:
 //
 //	var v []struct {
-//		LotteryID int `json:"lottery_id,omitempty"`
+//		LotteryID int64 `json:"lottery_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -321,7 +321,7 @@ func (_q *ArticleLotteryWinnerQuery) GroupBy(field string, fields ...string) *Ar
 // Example:
 //
 //	var v []struct {
-//		LotteryID int `json:"lottery_id,omitempty"`
+//		LotteryID int64 `json:"lottery_id,omitempty"`
 //	}
 //
 //	client.ArticleLotteryWinner.Query().
@@ -402,8 +402,8 @@ func (_q *ArticleLotteryWinnerQuery) sqlAll(ctx context.Context, hooks ...queryH
 }
 
 func (_q *ArticleLotteryWinnerQuery) loadLottery(ctx context.Context, query *ArticleLotteryQuery, nodes []*ArticleLotteryWinner, init func(*ArticleLotteryWinner), assign func(*ArticleLotteryWinner, *ArticleLottery)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*ArticleLotteryWinner)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*ArticleLotteryWinner)
 	for i := range nodes {
 		fk := nodes[i].LotteryID
 		if _, ok := nodeids[fk]; !ok {
@@ -441,7 +441,7 @@ func (_q *ArticleLotteryWinnerQuery) sqlCount(ctx context.Context) (int, error) 
 }
 
 func (_q *ArticleLotteryWinnerQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(articlelotterywinner.Table, articlelotterywinner.Columns, sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(articlelotterywinner.Table, articlelotterywinner.Columns, sqlgraph.NewFieldSpec(articlelotterywinner.FieldID, field.TypeInt64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -80,9 +80,9 @@ var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
+	DefaultStatus int32
 	// DefaultArticleCount holds the default value on creation for the "article_count" field.
-	DefaultArticleCount int
+	DefaultArticleCount int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

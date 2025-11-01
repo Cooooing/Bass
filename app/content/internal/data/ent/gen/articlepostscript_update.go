@@ -30,13 +30,13 @@ func (_u *ArticlePostscriptUpdate) Where(ps ...predicate.ArticlePostscript) *Art
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticlePostscriptUpdate) SetArticleID(v int) *ArticlePostscriptUpdate {
+func (_u *ArticlePostscriptUpdate) SetArticleID(v int64) *ArticlePostscriptUpdate {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticlePostscriptUpdate) SetNillableArticleID(v *int) *ArticlePostscriptUpdate {
+func (_u *ArticlePostscriptUpdate) SetNillableArticleID(v *int64) *ArticlePostscriptUpdate {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -157,7 +157,7 @@ func (_u *ArticlePostscriptUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlepostscript.Table, articlepostscript.Columns, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlepostscript.Table, articlepostscript.Columns, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -188,7 +188,7 @@ func (_u *ArticlePostscriptUpdate) sqlSave(ctx context.Context) (_node int, err 
 			Columns: []string{articlepostscript.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -201,7 +201,7 @@ func (_u *ArticlePostscriptUpdate) sqlSave(ctx context.Context) (_node int, err 
 			Columns: []string{articlepostscript.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -230,13 +230,13 @@ type ArticlePostscriptUpdateOne struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticlePostscriptUpdateOne) SetArticleID(v int) *ArticlePostscriptUpdateOne {
+func (_u *ArticlePostscriptUpdateOne) SetArticleID(v int64) *ArticlePostscriptUpdateOne {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticlePostscriptUpdateOne) SetNillableArticleID(v *int) *ArticlePostscriptUpdateOne {
+func (_u *ArticlePostscriptUpdateOne) SetNillableArticleID(v *int64) *ArticlePostscriptUpdateOne {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -370,7 +370,7 @@ func (_u *ArticlePostscriptUpdateOne) sqlSave(ctx context.Context) (_node *Artic
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlepostscript.Table, articlepostscript.Columns, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlepostscript.Table, articlepostscript.Columns, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "ArticlePostscript.id" for update`)}
@@ -418,7 +418,7 @@ func (_u *ArticlePostscriptUpdateOne) sqlSave(ctx context.Context) (_node *Artic
 			Columns: []string{articlepostscript.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -431,7 +431,7 @@ func (_u *ArticlePostscriptUpdateOne) sqlSave(ctx context.Context) (_node *Artic
 			Columns: []string{articlepostscript.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

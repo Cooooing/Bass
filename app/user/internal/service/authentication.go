@@ -13,7 +13,7 @@ import (
 )
 
 type AuthenticationService struct {
-	v1.UnimplementedAuthenticationServer
+	v1.UnimplementedUserAuthenticationServiceServer
 	*BaseService
 	authenticationDomain *biz.AuthenticationDomain
 	userRepo             repo.UserRepo
@@ -28,25 +28,25 @@ func NewAuthenticationService(baseService *BaseService, authenticationDomain *bi
 }
 
 func (s *AuthenticationService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterAuthenticationServer(gs, s)
+	v1.RegisterUserAuthenticationServiceServer(gs, s)
 }
 
 func (s *AuthenticationService) RegisterHttp(hs *http.Server) {
-	v1.RegisterAuthenticationHTTPServer(hs, s)
+	v1.RegisterUserAuthenticationServiceHTTPServer(hs, s)
 }
 
 func (s *AuthenticationService) ExistEmail(ctx context.Context, req *v1.ExistEmailRequest) (rsp *v1.ExistEmailReply, err error) {
-	exist, err := s.userRepo.ConstantAccount(ctx, req.Email)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.db, req.Email)
 	return &v1.ExistEmailReply{Exist: &exist}, err
 }
 
 func (s *AuthenticationService) ExistPhone(ctx context.Context, req *v1.ExistPhoneRequest) (rsp *v1.ExistPhoneReply, err error) {
-	exist, err := s.userRepo.ConstantAccount(ctx, req.Phone)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.db, req.Phone)
 	return &v1.ExistPhoneReply{Exist: &exist}, err
 }
 
 func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.ExistUsernameRequest) (rsp *v1.ExistUsernameReply, err error) {
-	exist, err := s.userRepo.ConstantAccount(ctx, req.Username)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.db, req.Username)
 	return &v1.ExistUsernameReply{Exist: &exist}, err
 }
 

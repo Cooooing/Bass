@@ -1,14 +1,52 @@
 syntax = "proto3";
 
-package content.v1;
+package common.api.content.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "common/v1/common.proto";
+import "user/v1/user.proto";
 
-option go_package = "content/v1;v1";
+option go_package = "common/api/content/v1;v1";
+
+message Comment {
+  // 评论ID
+  int64 id = 1;
+  // 文章ID
+  int64 article_id = 2;
+  // 用户ID
+  int64 user_id = 3;
+  // 评论内容
+  string content = 4;
+  // 评论层级
+  int64 level = 5;
+  // 父级评论ID
+  int64 parent_id = 6;
+  // 回复评论ID
+  int64 reply_id = 7;
+  // 状态
+  int64 status = 8;
+  // 子评论数量
+  int64 reply_count = 9;
+  // 点赞数量
+  int64 like_count = 10;
+  // 收藏数量
+  int64 collect_count = 11;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 12;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 13;
+
+  // 子评论
+  repeated Comment comments = 14;
+  // 用户信息
+  user.v1.User user = 15;
+}
 
 // 评论服务
-service CommentService {
+service ContentCommentService {
 
   // 新增评论
   rpc Add (AddCommentRequest) returns (AddCommentReply) {
@@ -18,10 +56,11 @@ service CommentService {
     };
   }
 
-  // 查询评论
+  // 查询评论列表
   rpc Get (GetCommentRequest) returns (GetCommentReply) {
     option (google.api.http) = {
-      get: "/v1/comment/get"
+      post: "/v1/comment/get"
+      body: "*"
     };
   }
 
@@ -51,20 +90,55 @@ service CommentService {
 
 }
 
-message AddCommentRequest {}
+message AddCommentRequest {
+  // 文章ID
+  int64 article_id = 2;
+  // 评论内容
+  string content = 4;
+  // 回复评论ID
+  int64 reply_id = 6;
+}
 message AddCommentReply {}
 
-message GetCommentRequest {}
-message GetCommentReply {}
+message GetCommentRequest {
+  // 分页
+  optional common.v1.PageRequest page = 1;
+  // 评论ID
+  int64 id = 2;
+  // 文章ID
+  int64 article_id = 3;
+  // 排序 0-最新 1-最热
+  int64 order = 4;
+  // 用户ID
+  int64 user_id = 5;
+}
+message GetCommentReply {
+  // 分页
+  common.v1.PageReply page = 1;
+  // 评论列表
+  repeated Comment comments = 2;
+}
 
-message DeleteCommentRequest {}
-message DeleteCommentReply {}
-
-message LikeCommentRequest {}
+message LikeCommentRequest {
+  // 评论ID
+  int64 id = 1;
+  // 是否点赞
+  bool active = 2;
+}
 message LikeCommentReply {}
 
-message ThankCommentRequest {}
+message ThankCommentRequest {
+  // 评论ID
+  int64 id = 1;
+  // 是否感谢
+  bool active = 2;
+}
 message ThankCommentReply {}
 
-message UpdateStatusCommentRequest {}
+message UpdateStatusCommentRequest {
+  // 评论ID
+  int64 id = 1;
+  // 状态
+  int64 status = 2;
+}
 message UpdateStatusCommentReply {}

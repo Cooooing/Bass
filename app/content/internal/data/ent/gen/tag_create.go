@@ -23,7 +23,7 @@ type TagCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *TagCreate) SetUserID(v int) *TagCreate {
+func (_c *TagCreate) SetUserID(v int64) *TagCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
@@ -35,13 +35,13 @@ func (_c *TagCreate) SetName(v string) *TagCreate {
 }
 
 // SetDomainID sets the "domain_id" field.
-func (_c *TagCreate) SetDomainID(v int) *TagCreate {
+func (_c *TagCreate) SetDomainID(v int64) *TagCreate {
 	_c.mutation.SetDomainID(v)
 	return _c
 }
 
 // SetNillableDomainID sets the "domain_id" field if the given value is not nil.
-func (_c *TagCreate) SetNillableDomainID(v *int) *TagCreate {
+func (_c *TagCreate) SetNillableDomainID(v *int64) *TagCreate {
 	if v != nil {
 		_c.SetDomainID(*v)
 	}
@@ -49,13 +49,13 @@ func (_c *TagCreate) SetNillableDomainID(v *int) *TagCreate {
 }
 
 // SetStatus sets the "status" field.
-func (_c *TagCreate) SetStatus(v int) *TagCreate {
+func (_c *TagCreate) SetStatus(v int32) *TagCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *TagCreate) SetNillableStatus(v *int) *TagCreate {
+func (_c *TagCreate) SetNillableStatus(v *int32) *TagCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -63,13 +63,13 @@ func (_c *TagCreate) SetNillableStatus(v *int) *TagCreate {
 }
 
 // SetArticleCount sets the "article_count" field.
-func (_c *TagCreate) SetArticleCount(v int) *TagCreate {
+func (_c *TagCreate) SetArticleCount(v int32) *TagCreate {
 	_c.mutation.SetArticleCount(v)
 	return _c
 }
 
 // SetNillableArticleCount sets the "article_count" field if the given value is not nil.
-func (_c *TagCreate) SetNillableArticleCount(v *int) *TagCreate {
+func (_c *TagCreate) SetNillableArticleCount(v *int32) *TagCreate {
 	if v != nil {
 		_c.SetArticleCount(*v)
 	}
@@ -104,15 +104,21 @@ func (_c *TagCreate) SetNillableUpdatedAt(v *time.Time) *TagCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *TagCreate) SetID(v int64) *TagCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
 // AddArticleIDs adds the "article" edge to the Article entity by IDs.
-func (_c *TagCreate) AddArticleIDs(ids ...int) *TagCreate {
+func (_c *TagCreate) AddArticleIDs(ids ...int64) *TagCreate {
 	_c.mutation.AddArticleIDs(ids...)
 	return _c
 }
 
 // AddArticle adds the "article" edges to the Article entity.
 func (_c *TagCreate) AddArticle(v ...*Article) *TagCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -210,8 +216,10 @@ func (_c *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -220,10 +228,14 @@ func (_c *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
 func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Tag{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(tag.Table, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(tag.Table, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(tag.FieldUserID, field.TypeInt, value)
+		_spec.SetField(tag.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
@@ -231,11 +243,11 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		_node.Name = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(tag.FieldStatus, field.TypeInt, value)
+		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.ArticleCount(); ok {
-		_spec.SetField(tag.FieldArticleCount, field.TypeInt, value)
+		_spec.SetField(tag.FieldArticleCount, field.TypeInt32, value)
 		_node.ArticleCount = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
@@ -254,7 +266,7 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 			Columns: tag.ArticlePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -270,7 +282,7 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 			Columns: []string{tag.DomainColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(domain.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(domain.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -327,9 +339,9 @@ func (_c *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

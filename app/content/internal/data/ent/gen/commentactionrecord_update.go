@@ -29,13 +29,13 @@ func (_u *CommentActionRecordUpdate) Where(ps ...predicate.CommentActionRecord) 
 }
 
 // SetCommentID sets the "comment_id" field.
-func (_u *CommentActionRecordUpdate) SetCommentID(v int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) SetCommentID(v int64) *CommentActionRecordUpdate {
 	_u.mutation.SetCommentID(v)
 	return _u
 }
 
 // SetNillableCommentID sets the "comment_id" field if the given value is not nil.
-func (_u *CommentActionRecordUpdate) SetNillableCommentID(v *int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) SetNillableCommentID(v *int64) *CommentActionRecordUpdate {
 	if v != nil {
 		_u.SetCommentID(*v)
 	}
@@ -43,14 +43,14 @@ func (_u *CommentActionRecordUpdate) SetNillableCommentID(v *int) *CommentAction
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *CommentActionRecordUpdate) SetUserID(v int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) SetUserID(v int64) *CommentActionRecordUpdate {
 	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *CommentActionRecordUpdate) SetNillableUserID(v *int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) SetNillableUserID(v *int64) *CommentActionRecordUpdate {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
@@ -58,20 +58,20 @@ func (_u *CommentActionRecordUpdate) SetNillableUserID(v *int) *CommentActionRec
 }
 
 // AddUserID adds value to the "user_id" field.
-func (_u *CommentActionRecordUpdate) AddUserID(v int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) AddUserID(v int64) *CommentActionRecordUpdate {
 	_u.mutation.AddUserID(v)
 	return _u
 }
 
 // SetType sets the "type" field.
-func (_u *CommentActionRecordUpdate) SetType(v int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) SetType(v int32) *CommentActionRecordUpdate {
 	_u.mutation.ResetType()
 	_u.mutation.SetType(v)
 	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_u *CommentActionRecordUpdate) SetNillableType(v *int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) SetNillableType(v *int32) *CommentActionRecordUpdate {
 	if v != nil {
 		_u.SetType(*v)
 	}
@@ -79,7 +79,7 @@ func (_u *CommentActionRecordUpdate) SetNillableType(v *int) *CommentActionRecor
 }
 
 // AddType adds value to the "type" field.
-func (_u *CommentActionRecordUpdate) AddType(v int) *CommentActionRecordUpdate {
+func (_u *CommentActionRecordUpdate) AddType(v int32) *CommentActionRecordUpdate {
 	_u.mutation.AddType(v)
 	return _u
 }
@@ -139,7 +139,7 @@ func (_u *CommentActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(commentactionrecord.Table, commentactionrecord.Columns, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(commentactionrecord.Table, commentactionrecord.Columns, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -148,16 +148,16 @@ func (_u *CommentActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(commentactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(commentactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(commentactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.AddField(commentactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
-		_spec.SetField(commentactionrecord.FieldType, field.TypeInt, value)
+		_spec.SetField(commentactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedType(); ok {
-		_spec.AddField(commentactionrecord.FieldType, field.TypeInt, value)
+		_spec.AddField(commentactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if _u.mutation.CommentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -167,7 +167,7 @@ func (_u *CommentActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 			Columns: []string{commentactionrecord.CommentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -180,7 +180,7 @@ func (_u *CommentActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 			Columns: []string{commentactionrecord.CommentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -209,13 +209,13 @@ type CommentActionRecordUpdateOne struct {
 }
 
 // SetCommentID sets the "comment_id" field.
-func (_u *CommentActionRecordUpdateOne) SetCommentID(v int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) SetCommentID(v int64) *CommentActionRecordUpdateOne {
 	_u.mutation.SetCommentID(v)
 	return _u
 }
 
 // SetNillableCommentID sets the "comment_id" field if the given value is not nil.
-func (_u *CommentActionRecordUpdateOne) SetNillableCommentID(v *int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) SetNillableCommentID(v *int64) *CommentActionRecordUpdateOne {
 	if v != nil {
 		_u.SetCommentID(*v)
 	}
@@ -223,14 +223,14 @@ func (_u *CommentActionRecordUpdateOne) SetNillableCommentID(v *int) *CommentAct
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *CommentActionRecordUpdateOne) SetUserID(v int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) SetUserID(v int64) *CommentActionRecordUpdateOne {
 	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *CommentActionRecordUpdateOne) SetNillableUserID(v *int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) SetNillableUserID(v *int64) *CommentActionRecordUpdateOne {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
@@ -238,20 +238,20 @@ func (_u *CommentActionRecordUpdateOne) SetNillableUserID(v *int) *CommentAction
 }
 
 // AddUserID adds value to the "user_id" field.
-func (_u *CommentActionRecordUpdateOne) AddUserID(v int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) AddUserID(v int64) *CommentActionRecordUpdateOne {
 	_u.mutation.AddUserID(v)
 	return _u
 }
 
 // SetType sets the "type" field.
-func (_u *CommentActionRecordUpdateOne) SetType(v int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) SetType(v int32) *CommentActionRecordUpdateOne {
 	_u.mutation.ResetType()
 	_u.mutation.SetType(v)
 	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_u *CommentActionRecordUpdateOne) SetNillableType(v *int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) SetNillableType(v *int32) *CommentActionRecordUpdateOne {
 	if v != nil {
 		_u.SetType(*v)
 	}
@@ -259,7 +259,7 @@ func (_u *CommentActionRecordUpdateOne) SetNillableType(v *int) *CommentActionRe
 }
 
 // AddType adds value to the "type" field.
-func (_u *CommentActionRecordUpdateOne) AddType(v int) *CommentActionRecordUpdateOne {
+func (_u *CommentActionRecordUpdateOne) AddType(v int32) *CommentActionRecordUpdateOne {
 	_u.mutation.AddType(v)
 	return _u
 }
@@ -332,7 +332,7 @@ func (_u *CommentActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Com
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(commentactionrecord.Table, commentactionrecord.Columns, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(commentactionrecord.Table, commentactionrecord.Columns, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "CommentActionRecord.id" for update`)}
@@ -358,16 +358,16 @@ func (_u *CommentActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Com
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(commentactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(commentactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(commentactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.AddField(commentactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
-		_spec.SetField(commentactionrecord.FieldType, field.TypeInt, value)
+		_spec.SetField(commentactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedType(); ok {
-		_spec.AddField(commentactionrecord.FieldType, field.TypeInt, value)
+		_spec.AddField(commentactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if _u.mutation.CommentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -377,7 +377,7 @@ func (_u *CommentActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Com
 			Columns: []string{commentactionrecord.CommentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -390,7 +390,7 @@ func (_u *CommentActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Com
 			Columns: []string{commentactionrecord.CommentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

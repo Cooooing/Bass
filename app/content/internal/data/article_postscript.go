@@ -18,7 +18,7 @@ func NewArticlePostscriptRepo(baseRepo *BaseRepo, client *gen.Client) repo.Artic
 	}
 }
 
-func (a ArticlePostscriptRepo) AddPostscript(ctx context.Context, client *gen.Client, articleId int, content string) error {
+func (a ArticlePostscriptRepo) AddPostscript(ctx context.Context, client *gen.Client, articleId int64, content string) error {
 	return client.ArticlePostscript.Create().
 		SetArticleID(articleId).
 		SetContent(content).

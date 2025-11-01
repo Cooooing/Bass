@@ -16,9 +16,9 @@ import (
 type Article struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 作者ID
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 标题
 	Title string `json:"title,omitempty"`
 	// 正文内容
@@ -28,33 +28,33 @@ type Article struct {
 	// 打赏区内容
 	RewardContent *string `json:"reward_content,omitempty"`
 	// 打赏积分
-	RewardPoints int `json:"reward_points,omitempty"`
+	RewardPoints int32 `json:"reward_points,omitempty"`
 	// 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 类型 0-普通 1-问答 2-投票 3-抽奖
-	Type int `json:"type,omitempty"`
+	Type int32 `json:"type,omitempty"`
 	// 是否允许评论
 	Commentable bool `json:"commentable,omitempty"`
 	// 是否匿名
 	Anonymous bool `json:"anonymous,omitempty"`
 	// 帖子感谢数
-	ThankCount int `json:"thank_count,omitempty"`
+	ThankCount int32 `json:"thank_count,omitempty"`
 	// 点赞数
-	LikeCount int `json:"like_count,omitempty"`
+	LikeCount int32 `json:"like_count,omitempty"`
 	// 收藏数
-	CollectCount int `json:"collect_count,omitempty"`
+	CollectCount int32 `json:"collect_count,omitempty"`
 	// 关注数
-	WatchCount int `json:"watch_count,omitempty"`
+	WatchCount int32 `json:"watch_count,omitempty"`
 	// 悬赏积分
-	BountyPoints int `json:"bounty_points,omitempty"`
+	BountyPoints int32 `json:"bounty_points,omitempty"`
 	// 采纳评论ID
-	AcceptedAnswerID int `json:"accepted_answer_id,omitempty"`
+	AcceptedAnswerID int64 `json:"accepted_answer_id,omitempty"`
 	// 总投票数
-	VoteTotal int `json:"vote_total,omitempty"`
+	VoteTotal int32 `json:"vote_total,omitempty"`
 	// 抽奖参与人数
-	LotteryParticipantCount int `json:"lottery_participant_count,omitempty"`
+	LotteryParticipantCount int32 `json:"lottery_participant_count,omitempty"`
 	// 抽奖获奖人数
-	LotteryWinnerCount int `json:"lottery_winner_count,omitempty"`
+	LotteryWinnerCount int32 `json:"lottery_winner_count,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -171,12 +171,12 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case article.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case article.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -207,19 +207,19 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field reward_points", values[i])
 			} else if value.Valid {
-				_m.RewardPoints = int(value.Int64)
+				_m.RewardPoints = int32(value.Int64)
 			}
 		case article.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int(value.Int64)
+				_m.Status = int32(value.Int64)
 			}
 		case article.FieldType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				_m.Type = int(value.Int64)
+				_m.Type = int32(value.Int64)
 			}
 		case article.FieldCommentable:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -237,55 +237,55 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field thank_count", values[i])
 			} else if value.Valid {
-				_m.ThankCount = int(value.Int64)
+				_m.ThankCount = int32(value.Int64)
 			}
 		case article.FieldLikeCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field like_count", values[i])
 			} else if value.Valid {
-				_m.LikeCount = int(value.Int64)
+				_m.LikeCount = int32(value.Int64)
 			}
 		case article.FieldCollectCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field collect_count", values[i])
 			} else if value.Valid {
-				_m.CollectCount = int(value.Int64)
+				_m.CollectCount = int32(value.Int64)
 			}
 		case article.FieldWatchCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field watch_count", values[i])
 			} else if value.Valid {
-				_m.WatchCount = int(value.Int64)
+				_m.WatchCount = int32(value.Int64)
 			}
 		case article.FieldBountyPoints:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field bounty_points", values[i])
 			} else if value.Valid {
-				_m.BountyPoints = int(value.Int64)
+				_m.BountyPoints = int32(value.Int64)
 			}
 		case article.FieldAcceptedAnswerID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field accepted_answer_id", values[i])
 			} else if value.Valid {
-				_m.AcceptedAnswerID = int(value.Int64)
+				_m.AcceptedAnswerID = value.Int64
 			}
 		case article.FieldVoteTotal:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field vote_total", values[i])
 			} else if value.Valid {
-				_m.VoteTotal = int(value.Int64)
+				_m.VoteTotal = int32(value.Int64)
 			}
 		case article.FieldLotteryParticipantCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field lottery_participant_count", values[i])
 			} else if value.Valid {
-				_m.LotteryParticipantCount = int(value.Int64)
+				_m.LotteryParticipantCount = int32(value.Int64)
 			}
 		case article.FieldLotteryWinnerCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field lottery_winner_count", values[i])
 			} else if value.Valid {
-				_m.LotteryWinnerCount = int(value.Int64)
+				_m.LotteryWinnerCount = int32(value.Int64)
 			}
 		case article.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {

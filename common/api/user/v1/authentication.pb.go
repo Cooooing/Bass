@@ -12,6 +12,7 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	_ "google.golang.org/protobuf/types/known/durationpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -25,11 +26,15 @@ const (
 )
 
 type RegisterEmailRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`       // 邮箱
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"` // 密码
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`         // 用户名
-	Nickname      string                 `protobuf:"bytes,4,opt,name=nickname,proto3" json:"nickname,omitempty"` // 昵称
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 邮箱
+	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	// 密码
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	// 用户名
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// 昵称
+	Nickname      string `protobuf:"bytes,4,opt,name=nickname,proto3" json:"nickname,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -93,9 +98,11 @@ func (x *RegisterEmailRequest) GetNickname() string {
 }
 
 type RegisterEmailReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CodeToken     string                 `protobuf:"bytes,1,opt,name=codeToken,proto3" json:"codeToken,omitempty"` // 验证码令牌
-	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`           // 验证码（仅供调试使用）
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 验证码令牌
+	CodeToken string `protobuf:"bytes,1,opt,name=codeToken,proto3" json:"codeToken,omitempty"`
+	// 验证码（仅供调试使用）
+	Code          string `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -145,9 +152,11 @@ func (x *RegisterEmailReply) GetCode() string {
 }
 
 type RegisterEmailVerifyRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`           // 验证码
-	CodeToken     string                 `protobuf:"bytes,2,opt,name=codeToken,proto3" json:"codeToken,omitempty"` // 验证码令牌
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 验证码
+	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	// 验证码令牌
+	CodeToken     string `protobuf:"bytes,2,opt,name=codeToken,proto3" json:"codeToken,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -233,8 +242,9 @@ func (*RegisterEmailVerifyReply) Descriptor() ([]byte, []int) {
 }
 
 type ExistEmailRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"` // 邮箱
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 邮箱
+	Email         string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -277,8 +287,9 @@ func (x *ExistEmailRequest) GetEmail() string {
 }
 
 type ExistEmailReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Exist         *bool                  `protobuf:"varint,1,opt,name=exist,proto3,oneof" json:"exist,omitempty"` // 是否存在
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 是否存在
+	Exist         *bool `protobuf:"varint,1,opt,name=exist,proto3,oneof" json:"exist,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -321,8 +332,9 @@ func (x *ExistEmailReply) GetExist() bool {
 }
 
 type ExistUsernameRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"` // 用户名
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户名
+	Username      string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -365,8 +377,9 @@ func (x *ExistUsernameRequest) GetUsername() string {
 }
 
 type ExistUsernameReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Exist         *bool                  `protobuf:"varint,1,opt,name=exist,proto3,oneof" json:"exist,omitempty"` // 是否存在
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 是否存在
+	Exist         *bool `protobuf:"varint,1,opt,name=exist,proto3,oneof" json:"exist,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -409,8 +422,9 @@ func (x *ExistUsernameReply) GetExist() bool {
 }
 
 type ExistPhoneRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Phone         string                 `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"` // 手机号
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 手机号
+	Phone         string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -453,8 +467,9 @@ func (x *ExistPhoneRequest) GetPhone() string {
 }
 
 type ExistPhoneReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Exist         *bool                  `protobuf:"varint,1,opt,name=exist,proto3,oneof" json:"exist,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 是否存在
+	Exist         *bool `protobuf:"varint,1,opt,name=exist,proto3,oneof" json:"exist,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -497,9 +512,11 @@ func (x *ExistPhoneReply) GetExist() bool {
 }
 
 type LoginAccountRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Account       string                 `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"` // 账号（用户名/邮箱）
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 账号（用户名/邮箱）
+	Account string `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	// 密码
+	Password      string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -549,8 +566,9 @@ func (x *LoginAccountRequest) GetPassword() string {
 }
 
 type LoginAccountReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 登录令牌
+	Token         string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -596,7 +614,7 @@ var File_user_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/v1/authentication.proto\x12\auser.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x84\x03\n" +
+	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x84\x03\n" +
 	"\x14RegisterEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12Y\n" +
 	"\bpassword\x18\x02 \x01(\tB=\xfaB:r8\x10\x06\x18@22^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$R\bpassword\x12?\n" +
@@ -628,17 +646,16 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\aaccount\x18\x01 \x01(\tR\aaccount\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\")\n" +
 	"\x11LoginAccountReply\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token2\xf0\x05\n" +
-	"\x0eAuthentication\x12y\n" +
-	"\rRegisterEmail\x12\x1d.user.v1.RegisterEmailRequest\x1a\x1b.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\x92\x01\n" +
-	"\x13RegisterEmailVerify\x12#.user.v1.RegisterEmailVerifyRequest\x1a!.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12m\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token2\x84\a\n" +
+	"\x19UserAuthenticationService\x12\x8f\x01\n" +
+	"\rRegisterEmail\x12(.common.api.user.v1.RegisterEmailRequest\x1a&.common.api.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\xa8\x01\n" +
+	"\x13RegisterEmailVerify\x12..common.api.user.v1.RegisterEmailVerifyRequest\x1a,.common.api.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12\x83\x01\n" +
 	"\n" +
-	"ExistEmail\x12\x1a.user.v1.ExistEmailRequest\x1a\x18.user.v1.ExistEmailReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/email\x12m\n" +
+	"ExistEmail\x12%.common.api.user.v1.ExistEmailRequest\x1a#.common.api.user.v1.ExistEmailReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/email\x12\x83\x01\n" +
 	"\n" +
-	"ExistPhone\x12\x1a.user.v1.ExistPhoneRequest\x1a\x18.user.v1.ExistPhoneReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/phone\x12y\n" +
-	"\rExistUsername\x12\x1d.user.v1.ExistUsernameRequest\x1a\x1b.user.v1.ExistUsernameReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/exist/username\x12u\n" +
-	"\fLoginAccount\x12\x1c.user.v1.LoginAccountRequest\x1a\x1a.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\fZ\n" +
-	"user/v1;v1b\x06proto3"
+	"ExistPhone\x12%.common.api.user.v1.ExistPhoneRequest\x1a#.common.api.user.v1.ExistPhoneReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/phone\x12\x8f\x01\n" +
+	"\rExistUsername\x12(.common.api.user.v1.ExistUsernameRequest\x1a&.common.api.user.v1.ExistUsernameReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/exist/username\x12\x8b\x01\n" +
+	"\fLoginAccount\x12'.common.api.user.v1.LoginAccountRequest\x1a%.common.api.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_authentication_proto_rawDescOnce sync.Once
@@ -654,32 +671,32 @@ func file_user_v1_authentication_proto_rawDescGZIP() []byte {
 
 var file_user_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_user_v1_authentication_proto_goTypes = []any{
-	(*RegisterEmailRequest)(nil),       // 0: user.v1.RegisterEmailRequest
-	(*RegisterEmailReply)(nil),         // 1: user.v1.RegisterEmailReply
-	(*RegisterEmailVerifyRequest)(nil), // 2: user.v1.RegisterEmailVerifyRequest
-	(*RegisterEmailVerifyReply)(nil),   // 3: user.v1.RegisterEmailVerifyReply
-	(*ExistEmailRequest)(nil),          // 4: user.v1.ExistEmailRequest
-	(*ExistEmailReply)(nil),            // 5: user.v1.ExistEmailReply
-	(*ExistUsernameRequest)(nil),       // 6: user.v1.ExistUsernameRequest
-	(*ExistUsernameReply)(nil),         // 7: user.v1.ExistUsernameReply
-	(*ExistPhoneRequest)(nil),          // 8: user.v1.ExistPhoneRequest
-	(*ExistPhoneReply)(nil),            // 9: user.v1.ExistPhoneReply
-	(*LoginAccountRequest)(nil),        // 10: user.v1.LoginAccountRequest
-	(*LoginAccountReply)(nil),          // 11: user.v1.LoginAccountReply
+	(*RegisterEmailRequest)(nil),       // 0: common.api.user.v1.RegisterEmailRequest
+	(*RegisterEmailReply)(nil),         // 1: common.api.user.v1.RegisterEmailReply
+	(*RegisterEmailVerifyRequest)(nil), // 2: common.api.user.v1.RegisterEmailVerifyRequest
+	(*RegisterEmailVerifyReply)(nil),   // 3: common.api.user.v1.RegisterEmailVerifyReply
+	(*ExistEmailRequest)(nil),          // 4: common.api.user.v1.ExistEmailRequest
+	(*ExistEmailReply)(nil),            // 5: common.api.user.v1.ExistEmailReply
+	(*ExistUsernameRequest)(nil),       // 6: common.api.user.v1.ExistUsernameRequest
+	(*ExistUsernameReply)(nil),         // 7: common.api.user.v1.ExistUsernameReply
+	(*ExistPhoneRequest)(nil),          // 8: common.api.user.v1.ExistPhoneRequest
+	(*ExistPhoneReply)(nil),            // 9: common.api.user.v1.ExistPhoneReply
+	(*LoginAccountRequest)(nil),        // 10: common.api.user.v1.LoginAccountRequest
+	(*LoginAccountReply)(nil),          // 11: common.api.user.v1.LoginAccountReply
 }
 var file_user_v1_authentication_proto_depIdxs = []int32{
-	0,  // 0: user.v1.Authentication.RegisterEmail:input_type -> user.v1.RegisterEmailRequest
-	2,  // 1: user.v1.Authentication.RegisterEmailVerify:input_type -> user.v1.RegisterEmailVerifyRequest
-	4,  // 2: user.v1.Authentication.ExistEmail:input_type -> user.v1.ExistEmailRequest
-	8,  // 3: user.v1.Authentication.ExistPhone:input_type -> user.v1.ExistPhoneRequest
-	6,  // 4: user.v1.Authentication.ExistUsername:input_type -> user.v1.ExistUsernameRequest
-	10, // 5: user.v1.Authentication.LoginAccount:input_type -> user.v1.LoginAccountRequest
-	1,  // 6: user.v1.Authentication.RegisterEmail:output_type -> user.v1.RegisterEmailReply
-	3,  // 7: user.v1.Authentication.RegisterEmailVerify:output_type -> user.v1.RegisterEmailVerifyReply
-	5,  // 8: user.v1.Authentication.ExistEmail:output_type -> user.v1.ExistEmailReply
-	9,  // 9: user.v1.Authentication.ExistPhone:output_type -> user.v1.ExistPhoneReply
-	7,  // 10: user.v1.Authentication.ExistUsername:output_type -> user.v1.ExistUsernameReply
-	11, // 11: user.v1.Authentication.LoginAccount:output_type -> user.v1.LoginAccountReply
+	0,  // 0: common.api.user.v1.UserAuthenticationService.RegisterEmail:input_type -> common.api.user.v1.RegisterEmailRequest
+	2,  // 1: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:input_type -> common.api.user.v1.RegisterEmailVerifyRequest
+	4,  // 2: common.api.user.v1.UserAuthenticationService.ExistEmail:input_type -> common.api.user.v1.ExistEmailRequest
+	8,  // 3: common.api.user.v1.UserAuthenticationService.ExistPhone:input_type -> common.api.user.v1.ExistPhoneRequest
+	6,  // 4: common.api.user.v1.UserAuthenticationService.ExistUsername:input_type -> common.api.user.v1.ExistUsernameRequest
+	10, // 5: common.api.user.v1.UserAuthenticationService.LoginAccount:input_type -> common.api.user.v1.LoginAccountRequest
+	1,  // 6: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
+	3,  // 7: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
+	5,  // 8: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
+	9,  // 9: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
+	7,  // 10: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
+	11, // 11: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
 	6,  // [6:12] is the sub-list for method output_type
 	0,  // [0:6] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name

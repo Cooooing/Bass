@@ -27,7 +27,9 @@ type CommentQuery struct {
 	predicates        []predicate.Comment
 	withArticle       *ArticleQuery
 	withParent        *CommentQuery
-	withReplies       *CommentQuery
+	withParentReplies *CommentQuery
+	withReply         *CommentQuery
+	withReplyReplies  *CommentQuery
 	withActionRecords *CommentActionRecordQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -109,8 +111,8 @@ func (_q *CommentQuery) QueryParent() *CommentQuery {
 	return query
 }
 
-// QueryReplies chains the current query on the "replies" edge.
-func (_q *CommentQuery) QueryReplies() *CommentQuery {
+// QueryParentReplies chains the current query on the "parent_replies" edge.
+func (_q *CommentQuery) QueryParentReplies() *CommentQuery {
 	query := (&CommentClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -123,7 +125,51 @@ func (_q *CommentQuery) QueryReplies() *CommentQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(comment.Table, comment.FieldID, selector),
 			sqlgraph.To(comment.Table, comment.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, comment.RepliesTable, comment.RepliesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, comment.ParentRepliesTable, comment.ParentRepliesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReply chains the current query on the "reply" edge.
+func (_q *CommentQuery) QueryReply() *CommentQuery {
+	query := (&CommentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(comment.Table, comment.FieldID, selector),
+			sqlgraph.To(comment.Table, comment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, comment.ReplyTable, comment.ReplyColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReplyReplies chains the current query on the "reply_replies" edge.
+func (_q *CommentQuery) QueryReplyReplies() *CommentQuery {
+	query := (&CommentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(comment.Table, comment.FieldID, selector),
+			sqlgraph.To(comment.Table, comment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, comment.ReplyRepliesTable, comment.ReplyRepliesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -177,8 +223,8 @@ func (_q *CommentQuery) FirstX(ctx context.Context) *Comment {
 
 // FirstID returns the first Comment ID from the query.
 // Returns a *NotFoundError when no Comment ID was found.
-func (_q *CommentQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *CommentQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -190,7 +236,7 @@ func (_q *CommentQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *CommentQuery) FirstIDX(ctx context.Context) int {
+func (_q *CommentQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -228,8 +274,8 @@ func (_q *CommentQuery) OnlyX(ctx context.Context) *Comment {
 // OnlyID is like Only, but returns the only Comment ID in the query.
 // Returns a *NotSingularError when more than one Comment ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *CommentQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *CommentQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -245,7 +291,7 @@ func (_q *CommentQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *CommentQuery) OnlyIDX(ctx context.Context) int {
+func (_q *CommentQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -273,7 +319,7 @@ func (_q *CommentQuery) AllX(ctx context.Context) []*Comment {
 }
 
 // IDs executes the query and returns a list of Comment IDs.
-func (_q *CommentQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *CommentQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -285,7 +331,7 @@ func (_q *CommentQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *CommentQuery) IDsX(ctx context.Context) []int {
+func (_q *CommentQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -347,7 +393,9 @@ func (_q *CommentQuery) Clone() *CommentQuery {
 		predicates:        append([]predicate.Comment{}, _q.predicates...),
 		withArticle:       _q.withArticle.Clone(),
 		withParent:        _q.withParent.Clone(),
-		withReplies:       _q.withReplies.Clone(),
+		withParentReplies: _q.withParentReplies.Clone(),
+		withReply:         _q.withReply.Clone(),
+		withReplyReplies:  _q.withReplyReplies.Clone(),
 		withActionRecords: _q.withActionRecords.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
@@ -377,14 +425,36 @@ func (_q *CommentQuery) WithParent(opts ...func(*CommentQuery)) *CommentQuery {
 	return _q
 }
 
-// WithReplies tells the query-builder to eager-load the nodes that are connected to
-// the "replies" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *CommentQuery) WithReplies(opts ...func(*CommentQuery)) *CommentQuery {
+// WithParentReplies tells the query-builder to eager-load the nodes that are connected to
+// the "parent_replies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CommentQuery) WithParentReplies(opts ...func(*CommentQuery)) *CommentQuery {
 	query := (&CommentClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withReplies = query
+	_q.withParentReplies = query
+	return _q
+}
+
+// WithReply tells the query-builder to eager-load the nodes that are connected to
+// the "reply" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CommentQuery) WithReply(opts ...func(*CommentQuery)) *CommentQuery {
+	query := (&CommentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReply = query
+	return _q
+}
+
+// WithReplyReplies tells the query-builder to eager-load the nodes that are connected to
+// the "reply_replies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CommentQuery) WithReplyReplies(opts ...func(*CommentQuery)) *CommentQuery {
+	query := (&CommentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReplyReplies = query
 	return _q
 }
 
@@ -405,7 +475,7 @@ func (_q *CommentQuery) WithActionRecords(opts ...func(*CommentActionRecordQuery
 // Example:
 //
 //	var v []struct {
-//		ArticleID int `json:"article_id,omitempty"`
+//		ArticleID int64 `json:"article_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -428,7 +498,7 @@ func (_q *CommentQuery) GroupBy(field string, fields ...string) *CommentGroupBy 
 // Example:
 //
 //	var v []struct {
-//		ArticleID int `json:"article_id,omitempty"`
+//		ArticleID int64 `json:"article_id,omitempty"`
 //	}
 //
 //	client.Comment.Query().
@@ -477,10 +547,12 @@ func (_q *CommentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Comm
 	var (
 		nodes       = []*Comment{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			_q.withArticle != nil,
 			_q.withParent != nil,
-			_q.withReplies != nil,
+			_q.withParentReplies != nil,
+			_q.withReply != nil,
+			_q.withReplyReplies != nil,
 			_q.withActionRecords != nil,
 		}
 	)
@@ -514,10 +586,23 @@ func (_q *CommentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Comm
 			return nil, err
 		}
 	}
-	if query := _q.withReplies; query != nil {
-		if err := _q.loadReplies(ctx, query, nodes,
-			func(n *Comment) { n.Edges.Replies = []*Comment{} },
-			func(n *Comment, e *Comment) { n.Edges.Replies = append(n.Edges.Replies, e) }); err != nil {
+	if query := _q.withParentReplies; query != nil {
+		if err := _q.loadParentReplies(ctx, query, nodes,
+			func(n *Comment) { n.Edges.ParentReplies = []*Comment{} },
+			func(n *Comment, e *Comment) { n.Edges.ParentReplies = append(n.Edges.ParentReplies, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReply; query != nil {
+		if err := _q.loadReply(ctx, query, nodes, nil,
+			func(n *Comment, e *Comment) { n.Edges.Reply = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReplyReplies; query != nil {
+		if err := _q.loadReplyReplies(ctx, query, nodes,
+			func(n *Comment) { n.Edges.ReplyReplies = []*Comment{} },
+			func(n *Comment, e *Comment) { n.Edges.ReplyReplies = append(n.Edges.ReplyReplies, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -532,8 +617,8 @@ func (_q *CommentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Comm
 }
 
 func (_q *CommentQuery) loadArticle(ctx context.Context, query *ArticleQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *Article)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Comment)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*Comment)
 	for i := range nodes {
 		fk := nodes[i].ArticleID
 		if _, ok := nodeids[fk]; !ok {
@@ -561,10 +646,13 @@ func (_q *CommentQuery) loadArticle(ctx context.Context, query *ArticleQuery, no
 	return nil
 }
 func (_q *CommentQuery) loadParent(ctx context.Context, query *CommentQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *Comment)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Comment)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*Comment)
 	for i := range nodes {
-		fk := nodes[i].ParentID
+		if nodes[i].ParentID == nil {
+			continue
+		}
+		fk := *nodes[i].ParentID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -589,9 +677,9 @@ func (_q *CommentQuery) loadParent(ctx context.Context, query *CommentQuery, nod
 	}
 	return nil
 }
-func (_q *CommentQuery) loadReplies(ctx context.Context, query *CommentQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *Comment)) error {
+func (_q *CommentQuery) loadParentReplies(ctx context.Context, query *CommentQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *Comment)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Comment)
+	nodeids := make(map[int64]*Comment)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -603,7 +691,7 @@ func (_q *CommentQuery) loadReplies(ctx context.Context, query *CommentQuery, no
 		query.ctx.AppendFieldOnce(comment.FieldParentID)
 	}
 	query.Where(predicate.Comment(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(comment.RepliesColumn), fks...))
+		s.Where(sql.InValues(s.C(comment.ParentRepliesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -611,9 +699,77 @@ func (_q *CommentQuery) loadReplies(ctx context.Context, query *CommentQuery, no
 	}
 	for _, n := range neighbors {
 		fk := n.ParentID
-		node, ok := nodeids[fk]
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "parent_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "parent_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "parent_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *CommentQuery) loadReply(ctx context.Context, query *CommentQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *Comment)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*Comment)
+	for i := range nodes {
+		if nodes[i].ReplyID == nil {
+			continue
+		}
+		fk := *nodes[i].ReplyID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(comment.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reply_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *CommentQuery) loadReplyReplies(ctx context.Context, query *CommentQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *Comment)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Comment)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(comment.FieldReplyID)
+	}
+	query.Where(predicate.Comment(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(comment.ReplyRepliesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ReplyID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "reply_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "reply_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -621,7 +777,7 @@ func (_q *CommentQuery) loadReplies(ctx context.Context, query *CommentQuery, no
 }
 func (_q *CommentQuery) loadActionRecords(ctx context.Context, query *CommentActionRecordQuery, nodes []*Comment, init func(*Comment), assign func(*Comment, *CommentActionRecord)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Comment)
+	nodeids := make(map[int64]*Comment)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -660,7 +816,7 @@ func (_q *CommentQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *CommentQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(comment.Table, comment.Columns, sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(comment.Table, comment.Columns, sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
@@ -680,6 +836,9 @@ func (_q *CommentQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withParent != nil {
 			_spec.Node.AddColumnOnce(comment.FieldParentID)
+		}
+		if _q.withReply != nil {
+			_spec.Node.AddColumnOnce(comment.FieldReplyID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

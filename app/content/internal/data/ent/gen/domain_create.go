@@ -34,13 +34,13 @@ func (_c *DomainCreate) SetDescription(v string) *DomainCreate {
 }
 
 // SetStatus sets the "status" field.
-func (_c *DomainCreate) SetStatus(v int) *DomainCreate {
+func (_c *DomainCreate) SetStatus(v int32) *DomainCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *DomainCreate) SetNillableStatus(v *int) *DomainCreate {
+func (_c *DomainCreate) SetNillableStatus(v *int32) *DomainCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -76,13 +76,13 @@ func (_c *DomainCreate) SetNillableIcon(v *string) *DomainCreate {
 }
 
 // SetTagCount sets the "tag_count" field.
-func (_c *DomainCreate) SetTagCount(v int) *DomainCreate {
+func (_c *DomainCreate) SetTagCount(v int32) *DomainCreate {
 	_c.mutation.SetTagCount(v)
 	return _c
 }
 
 // SetNillableTagCount sets the "tag_count" field if the given value is not nil.
-func (_c *DomainCreate) SetNillableTagCount(v *int) *DomainCreate {
+func (_c *DomainCreate) SetNillableTagCount(v *int32) *DomainCreate {
 	if v != nil {
 		_c.SetTagCount(*v)
 	}
@@ -131,15 +131,21 @@ func (_c *DomainCreate) SetNillableUpdatedAt(v *time.Time) *DomainCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *DomainCreate) SetID(v int64) *DomainCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (_c *DomainCreate) AddTagIDs(ids ...int) *DomainCreate {
+func (_c *DomainCreate) AddTagIDs(ids ...int64) *DomainCreate {
 	_c.mutation.AddTagIDs(ids...)
 	return _c
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
 func (_c *DomainCreate) AddTags(v ...*Tag) *DomainCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -238,8 +244,10 @@ func (_c *DomainCreate) sqlSave(ctx context.Context) (*Domain, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -248,8 +256,12 @@ func (_c *DomainCreate) sqlSave(ctx context.Context) (*Domain, error) {
 func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Domain{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(domain.Table, sqlgraph.NewFieldSpec(domain.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(domain.Table, sqlgraph.NewFieldSpec(domain.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(domain.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -259,7 +271,7 @@ func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 		_node.Description = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(domain.FieldStatus, field.TypeInt, value)
+		_spec.SetField(domain.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.URL(); ok {
@@ -271,7 +283,7 @@ func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 		_node.Icon = &value
 	}
 	if value, ok := _c.mutation.TagCount(); ok {
-		_spec.SetField(domain.FieldTagCount, field.TypeInt, value)
+		_spec.SetField(domain.FieldTagCount, field.TypeInt32, value)
 		_node.TagCount = value
 	}
 	if value, ok := _c.mutation.IsNav(); ok {
@@ -294,7 +306,7 @@ func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 			Columns: []string{domain.TagsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -350,9 +362,9 @@ func (_c *DomainCreateBulk) Save(ctx context.Context) ([]*Domain, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

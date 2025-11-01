@@ -24,6 +24,8 @@ const (
 	FieldLevel = "level"
 	// FieldParentID holds the string denoting the parent_id field in the database.
 	FieldParentID = "parent_id"
+	// FieldReplyID holds the string denoting the reply_id field in the database.
+	FieldReplyID = "reply_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldReplyCount holds the string denoting the reply_count field in the database.
@@ -40,8 +42,12 @@ const (
 	EdgeArticle = "article"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
-	// EdgeReplies holds the string denoting the replies edge name in mutations.
-	EdgeReplies = "replies"
+	// EdgeParentReplies holds the string denoting the parent_replies edge name in mutations.
+	EdgeParentReplies = "parent_replies"
+	// EdgeReply holds the string denoting the reply edge name in mutations.
+	EdgeReply = "reply"
+	// EdgeReplyReplies holds the string denoting the reply_replies edge name in mutations.
+	EdgeReplyReplies = "reply_replies"
 	// EdgeActionRecords holds the string denoting the action_records edge name in mutations.
 	EdgeActionRecords = "action_records"
 	// Table holds the table name of the comment in the database.
@@ -57,10 +63,18 @@ const (
 	ParentTable = "comments"
 	// ParentColumn is the table column denoting the parent relation/edge.
 	ParentColumn = "parent_id"
-	// RepliesTable is the table that holds the replies relation/edge.
-	RepliesTable = "comments"
-	// RepliesColumn is the table column denoting the replies relation/edge.
-	RepliesColumn = "parent_id"
+	// ParentRepliesTable is the table that holds the parent_replies relation/edge.
+	ParentRepliesTable = "comments"
+	// ParentRepliesColumn is the table column denoting the parent_replies relation/edge.
+	ParentRepliesColumn = "parent_id"
+	// ReplyTable is the table that holds the reply relation/edge.
+	ReplyTable = "comments"
+	// ReplyColumn is the table column denoting the reply relation/edge.
+	ReplyColumn = "reply_id"
+	// ReplyRepliesTable is the table that holds the reply_replies relation/edge.
+	ReplyRepliesTable = "comments"
+	// ReplyRepliesColumn is the table column denoting the reply_replies relation/edge.
+	ReplyRepliesColumn = "reply_id"
 	// ActionRecordsTable is the table that holds the action_records relation/edge.
 	ActionRecordsTable = "comment_action_records"
 	// ActionRecordsInverseTable is the table name for the CommentActionRecord entity.
@@ -78,6 +92,7 @@ var Columns = []string{
 	FieldContent,
 	FieldLevel,
 	FieldParentID,
+	FieldReplyID,
 	FieldStatus,
 	FieldReplyCount,
 	FieldLikeCount,
@@ -99,16 +114,14 @@ func ValidColumn(column string) bool {
 var (
 	// ContentValidator is a validator for the "content" field. It is called by the builders before save.
 	ContentValidator func(string) error
-	// DefaultParentID holds the default value on creation for the "parent_id" field.
-	DefaultParentID int
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
+	DefaultStatus int32
 	// DefaultReplyCount holds the default value on creation for the "reply_count" field.
-	DefaultReplyCount int
+	DefaultReplyCount int32
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
-	DefaultLikeCount int
+	DefaultLikeCount int32
 	// DefaultCollectCount holds the default value on creation for the "collect_count" field.
-	DefaultCollectCount int
+	DefaultCollectCount int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -146,6 +159,11 @@ func ByLevel(opts ...sql.OrderTermOption) OrderOption {
 // ByParentID orders the results by the parent_id field.
 func ByParentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldParentID, opts...).ToFunc()
+}
+
+// ByReplyID orders the results by the reply_id field.
+func ByReplyID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReplyID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.
@@ -192,17 +210,38 @@ func ByParentField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByRepliesCount orders the results by replies count.
-func ByRepliesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByParentRepliesCount orders the results by parent_replies count.
+func ByParentRepliesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newRepliesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newParentRepliesStep(), opts...)
 	}
 }
 
-// ByReplies orders the results by replies terms.
-func ByReplies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByParentReplies orders the results by parent_replies terms.
+func ByParentReplies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newRepliesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newParentRepliesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReplyField orders the results by reply field.
+func ByReplyField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReplyStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReplyRepliesCount orders the results by reply_replies count.
+func ByReplyRepliesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReplyRepliesStep(), opts...)
+	}
+}
+
+// ByReplyReplies orders the results by reply_replies terms.
+func ByReplyReplies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReplyRepliesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -233,11 +272,25 @@ func newParentStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, ParentTable, ParentColumn),
 	)
 }
-func newRepliesStep() *sqlgraph.Step {
+func newParentRepliesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(Table, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RepliesTable, RepliesColumn),
+		sqlgraph.Edge(sqlgraph.O2M, false, ParentRepliesTable, ParentRepliesColumn),
+	)
+}
+func newReplyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ReplyTable, ReplyColumn),
+	)
+}
+func newReplyRepliesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ReplyRepliesTable, ReplyRepliesColumn),
 	)
 }
 func newActionRecordsStep() *sqlgraph.Step {

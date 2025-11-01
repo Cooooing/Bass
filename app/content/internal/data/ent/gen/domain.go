@@ -16,19 +16,19 @@ import (
 type Domain struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 域名名称
 	Name string `json:"name,omitempty"`
 	// 域名描述
 	Description string `json:"description,omitempty"`
 	// 状态 0-正常，1-禁用
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 领域地址
 	URL *string `json:"url,omitempty"`
 	// 图标
 	Icon *string `json:"icon,omitempty"`
 	// 标签数
-	TagCount int `json:"tag_count,omitempty"`
+	TagCount int32 `json:"tag_count,omitempty"`
 	// 是否导航
 	IsNav bool `json:"is_nav,omitempty"`
 	// 创建时间
@@ -92,7 +92,7 @@ func (_m *Domain) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case domain.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -109,7 +109,7 @@ func (_m *Domain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int(value.Int64)
+				_m.Status = int32(value.Int64)
 			}
 		case domain.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -129,7 +129,7 @@ func (_m *Domain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_count", values[i])
 			} else if value.Valid {
-				_m.TagCount = int(value.Int64)
+				_m.TagCount = int32(value.Int64)
 			}
 		case domain.FieldIsNav:
 			if value, ok := values[i].(*sql.NullBool); !ok {

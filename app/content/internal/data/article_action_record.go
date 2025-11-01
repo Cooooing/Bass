@@ -25,7 +25,7 @@ func (a ArticleActionRecordRepo) Save(ctx context.Context, client *gen.Client, r
 	panic("implement me")
 }
 
-func (a ArticleActionRecordRepo) Delete(ctx context.Context, client *gen.Client, articleId int, userId int, action v1.ArticleAction) error {
+func (a ArticleActionRecordRepo) Delete(ctx context.Context, client *gen.Client, articleId int64, userId int64, action v1.ArticleAction) error {
 	// TODO implement me
 	panic("implement me")
 }

@@ -83,7 +83,7 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
+	DefaultStatus int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

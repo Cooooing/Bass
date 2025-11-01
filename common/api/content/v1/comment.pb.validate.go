@@ -35,6 +35,247 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Comment with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Comment) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Comment with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in CommentMultiError, or nil if none found.
+func (m *Comment) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Comment) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for ArticleId
+
+	// no validation rules for UserId
+
+	// no validation rules for Content
+
+	// no validation rules for Level
+
+	// no validation rules for ParentId
+
+	// no validation rules for ReplyId
+
+	// no validation rules for Status
+
+	// no validation rules for ReplyCount
+
+	// no validation rules for LikeCount
+
+	// no validation rules for CollectCount
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CommentValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CommentValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetComments() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CommentValidationError{
+						field:  fmt.Sprintf("Comments[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CommentValidationError{
+						field:  fmt.Sprintf("Comments[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CommentValidationError{
+					field:  fmt.Sprintf("Comments[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if all {
+		switch v := interface{}(m.GetUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CommentValidationError{
+				field:  "User",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CommentMultiError(errors)
+	}
+
+	return nil
+}
+
+// CommentMultiError is an error wrapping multiple validation errors returned
+// by Comment.ValidateAll() if the designated constraints aren't met.
+type CommentMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CommentMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CommentMultiError) AllErrors() []error { return m }
+
+// CommentValidationError is the validation error returned by Comment.Validate
+// if the designated constraints aren't met.
+type CommentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CommentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CommentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CommentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CommentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CommentValidationError) ErrorName() string { return "CommentValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CommentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sComment.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CommentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CommentValidationError{}
+
 // Validate checks the field values on AddCommentRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -56,6 +297,12 @@ func (m *AddCommentRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Content
+
+	// no validation rules for ReplyId
 
 	if len(errors) > 0 {
 		return AddCommentRequestMultiError(errors)
@@ -259,6 +506,47 @@ func (m *GetCommentRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Order
+
+	// no validation rules for UserId
+
+	if m.Page != nil {
+
+		if all {
+			switch v := interface{}(m.GetPage()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetCommentRequestValidationError{
+						field:  "Page",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetCommentRequestValidationError{
+						field:  "Page",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetCommentRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return GetCommentRequestMultiError(errors)
 	}
@@ -361,6 +649,69 @@ func (m *GetCommentReply) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetCommentReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetCommentReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetCommentReplyValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetComments() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetCommentReplyValidationError{
+						field:  fmt.Sprintf("Comments[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetCommentReplyValidationError{
+						field:  fmt.Sprintf("Comments[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetCommentReplyValidationError{
+					field:  fmt.Sprintf("Comments[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return GetCommentReplyMultiError(errors)
 	}
@@ -439,210 +790,6 @@ var _ interface {
 	ErrorName() string
 } = GetCommentReplyValidationError{}
 
-// Validate checks the field values on DeleteCommentRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *DeleteCommentRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on DeleteCommentRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// DeleteCommentRequestMultiError, or nil if none found.
-func (m *DeleteCommentRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *DeleteCommentRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return DeleteCommentRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// DeleteCommentRequestMultiError is an error wrapping multiple validation
-// errors returned by DeleteCommentRequest.ValidateAll() if the designated
-// constraints aren't met.
-type DeleteCommentRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DeleteCommentRequestMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DeleteCommentRequestMultiError) AllErrors() []error { return m }
-
-// DeleteCommentRequestValidationError is the validation error returned by
-// DeleteCommentRequest.Validate if the designated constraints aren't met.
-type DeleteCommentRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DeleteCommentRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DeleteCommentRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DeleteCommentRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DeleteCommentRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DeleteCommentRequestValidationError) ErrorName() string {
-	return "DeleteCommentRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e DeleteCommentRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDeleteCommentRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DeleteCommentRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DeleteCommentRequestValidationError{}
-
-// Validate checks the field values on DeleteCommentReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *DeleteCommentReply) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on DeleteCommentReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// DeleteCommentReplyMultiError, or nil if none found.
-func (m *DeleteCommentReply) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *DeleteCommentReply) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return DeleteCommentReplyMultiError(errors)
-	}
-
-	return nil
-}
-
-// DeleteCommentReplyMultiError is an error wrapping multiple validation errors
-// returned by DeleteCommentReply.ValidateAll() if the designated constraints
-// aren't met.
-type DeleteCommentReplyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DeleteCommentReplyMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DeleteCommentReplyMultiError) AllErrors() []error { return m }
-
-// DeleteCommentReplyValidationError is the validation error returned by
-// DeleteCommentReply.Validate if the designated constraints aren't met.
-type DeleteCommentReplyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DeleteCommentReplyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DeleteCommentReplyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DeleteCommentReplyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DeleteCommentReplyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DeleteCommentReplyValidationError) ErrorName() string {
-	return "DeleteCommentReplyValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e DeleteCommentReplyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDeleteCommentReply.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DeleteCommentReplyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DeleteCommentReplyValidationError{}
-
 // Validate checks the field values on LikeCommentRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -664,6 +811,10 @@ func (m *LikeCommentRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Active
 
 	if len(errors) > 0 {
 		return LikeCommentRequestMultiError(errors)
@@ -866,6 +1017,10 @@ func (m *ThankCommentRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Active
 
 	if len(errors) > 0 {
 		return ThankCommentRequestMultiError(errors)
@@ -1070,6 +1225,10 @@ func (m *UpdateStatusCommentRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Status
 
 	if len(errors) > 0 {
 		return UpdateStatusCommentRequestMultiError(errors)

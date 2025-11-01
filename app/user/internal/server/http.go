@@ -97,5 +97,5 @@ func AuthMiddleware(tokenService *biz.TokenService) middleware.Middleware {
 }
 
 var NoAuthEndpoints = map[string]struct{}{
-	"/user.v1.Authentication/*": {},
+	"/common.api.user.v1.UserAuthenticationService/*": {},
 }

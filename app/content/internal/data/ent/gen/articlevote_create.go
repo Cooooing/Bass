@@ -23,7 +23,7 @@ type ArticleVoteCreate struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_c *ArticleVoteCreate) SetArticleID(v int) *ArticleVoteCreate {
+func (_c *ArticleVoteCreate) SetArticleID(v int64) *ArticleVoteCreate {
 	_c.mutation.SetArticleID(v)
 	return _c
 }
@@ -69,13 +69,13 @@ func (_c *ArticleVoteCreate) SetNillableVoteAnonymous(v *bool) *ArticleVoteCreat
 }
 
 // SetTotalCount sets the "total_count" field.
-func (_c *ArticleVoteCreate) SetTotalCount(v int) *ArticleVoteCreate {
+func (_c *ArticleVoteCreate) SetTotalCount(v int32) *ArticleVoteCreate {
 	_c.mutation.SetTotalCount(v)
 	return _c
 }
 
 // SetNillableTotalCount sets the "total_count" field if the given value is not nil.
-func (_c *ArticleVoteCreate) SetNillableTotalCount(v *int) *ArticleVoteCreate {
+func (_c *ArticleVoteCreate) SetNillableTotalCount(v *int32) *ArticleVoteCreate {
 	if v != nil {
 		_c.SetTotalCount(*v)
 	}
@@ -124,20 +124,26 @@ func (_c *ArticleVoteCreate) SetNillableUpdatedAt(v *time.Time) *ArticleVoteCrea
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *ArticleVoteCreate) SetID(v int64) *ArticleVoteCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
 // SetArticle sets the "article" edge to the Article entity.
 func (_c *ArticleVoteCreate) SetArticle(v *Article) *ArticleVoteCreate {
 	return _c.SetArticleID(v.ID)
 }
 
 // AddRecordIDs adds the "records" edge to the ArticleVoteRecord entity by IDs.
-func (_c *ArticleVoteCreate) AddRecordIDs(ids ...int) *ArticleVoteCreate {
+func (_c *ArticleVoteCreate) AddRecordIDs(ids ...int64) *ArticleVoteCreate {
 	_c.mutation.AddRecordIDs(ids...)
 	return _c
 }
 
 // AddRecords adds the "records" edges to the ArticleVoteRecord entity.
 func (_c *ArticleVoteCreate) AddRecords(v ...*ArticleVoteRecord) *ArticleVoteCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -232,8 +238,10 @@ func (_c *ArticleVoteCreate) sqlSave(ctx context.Context) (*ArticleVote, error) 
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -242,8 +250,12 @@ func (_c *ArticleVoteCreate) sqlSave(ctx context.Context) (*ArticleVote, error) 
 func (_c *ArticleVoteCreate) createSpec() (*ArticleVote, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ArticleVote{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(articlevote.Table, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(articlevote.Table, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.VoteOptions(); ok {
 		_spec.SetField(articlevote.FieldVoteOptions, field.TypeJSON, value)
 		_node.VoteOptions = value
@@ -261,7 +273,7 @@ func (_c *ArticleVoteCreate) createSpec() (*ArticleVote, *sqlgraph.CreateSpec) {
 		_node.VoteAnonymous = value
 	}
 	if value, ok := _c.mutation.TotalCount(); ok {
-		_spec.SetField(articlevote.FieldTotalCount, field.TypeInt, value)
+		_spec.SetField(articlevote.FieldTotalCount, field.TypeInt32, value)
 		_node.TotalCount = value
 	}
 	if value, ok := _c.mutation.EndAt(); ok {
@@ -284,7 +296,7 @@ func (_c *ArticleVoteCreate) createSpec() (*ArticleVote, *sqlgraph.CreateSpec) {
 			Columns: []string{articlevote.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -301,7 +313,7 @@ func (_c *ArticleVoteCreate) createSpec() (*ArticleVote, *sqlgraph.CreateSpec) {
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -357,9 +369,9 @@ func (_c *ArticleVoteCreateBulk) Save(ctx context.Context) ([]*ArticleVote, erro
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

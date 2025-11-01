@@ -28,6 +28,7 @@ func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client) repo.ArticleRepo {
 
 func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *model.Article) (*model.Article, error) {
 	save, err := client.Article.Create().
+		SetUserID(article.UserID).
 		SetTitle(article.Title).
 		SetContent(article.Content).
 		SetAcceptedAnswerID(article.AcceptedAnswerID).
@@ -35,24 +36,24 @@ func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *mod
 	return (*model.Article)(save), err
 }
 
-func (r *ArticleRepo) UpdateContent(ctx context.Context, client *gen.Client, articleId int, content string) error {
+func (r *ArticleRepo) UpdateContent(ctx context.Context, client *gen.Client, articleId int64, content string) error {
 	return client.Article.UpdateOneID(articleId).
 		SetContent(content).
 		Exec(ctx)
 }
-func (r *ArticleRepo) UpdateStatus(ctx context.Context, client *gen.Client, articleId int, status cv1.ArticleStatus) error {
+func (r *ArticleRepo) UpdateStatus(ctx context.Context, client *gen.Client, articleId int64, status cv1.ArticleStatus) error {
 	return client.Article.UpdateOneID(articleId).
-		SetStatus(int(status)).
+		SetStatus(int32(status)).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, client *gen.Client, articleId int, hasPostscript bool) error {
+func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, client *gen.Client, articleId int64, hasPostscript bool) error {
 	return client.Article.UpdateOneID(articleId).
 		SetHasPostscript(hasPostscript).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articleId int, action cv1.ArticleAction, num int) error {
+func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articleId int64, action cv1.ArticleAction, num int32) error {
 	updateOne := client.Article.UpdateOneID(articleId)
 	switch action {
 	case cv1.ArticleAction_ArticleActionLike:
@@ -67,11 +68,18 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articl
 	return updateOne.Exec(ctx)
 }
 
-func (r *ArticleRepo) Delete(ctx context.Context, client *gen.Client, articleId int) error {
-	return client.Article.UpdateOneID(articleId).SetStatus(int(cv1.ArticleStatus_ArticleDeleted)).Exec(ctx)
+func (r *ArticleRepo) Delete(ctx context.Context, client *gen.Client, articleId int64) error {
+	return client.Article.UpdateOneID(articleId).SetStatus(int32(cv1.ArticleStatus_ArticleDeleted)).Exec(ctx)
 }
 
-func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id int) (*model.Article, error) {
+func (r *ArticleRepo) Exist(ctx context.Context, client *gen.Client, id int64, status cv1.ArticleStatus) (bool, error) {
+	return client.Article.Query().
+		Where(article.IDEQ(id)).
+		Where(article.StatusEQ(int32(status))).
+		Exist(ctx)
+}
+
+func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id int64) (*model.Article, error) {
 	query, err := client.Article.Query().
 		Where(article.IDEQ(id)).
 		WithPostscripts().
@@ -81,7 +89,7 @@ func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id
 	return (*model.Article)(query), err
 }
 
-func (r *ArticleRepo) Publish(ctx context.Context, client *gen.Client, articleId int) error {
+func (r *ArticleRepo) Publish(ctx context.Context, client *gen.Client, articleId int64) error {
 	first, err := r.GetArticleById(ctx, client, articleId)
 	if err != nil {
 		return err

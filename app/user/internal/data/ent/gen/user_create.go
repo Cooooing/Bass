@@ -131,13 +131,13 @@ func (_c *UserCreate) SetNillableMbti(v *string) *UserCreate {
 }
 
 // SetStatus sets the "status" field.
-func (_c *UserCreate) SetStatus(v int) *UserCreate {
+func (_c *UserCreate) SetStatus(v int32) *UserCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *UserCreate) SetNillableStatus(v *int) *UserCreate {
+func (_c *UserCreate) SetNillableStatus(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -159,13 +159,13 @@ func (_c *UserCreate) SetNillableGroupName(v *string) *UserCreate {
 }
 
 // SetFollowCount sets the "follow_count" field.
-func (_c *UserCreate) SetFollowCount(v int) *UserCreate {
+func (_c *UserCreate) SetFollowCount(v int32) *UserCreate {
 	_c.mutation.SetFollowCount(v)
 	return _c
 }
 
 // SetNillableFollowCount sets the "follow_count" field if the given value is not nil.
-func (_c *UserCreate) SetNillableFollowCount(v *int) *UserCreate {
+func (_c *UserCreate) SetNillableFollowCount(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetFollowCount(*v)
 	}
@@ -173,13 +173,13 @@ func (_c *UserCreate) SetNillableFollowCount(v *int) *UserCreate {
 }
 
 // SetFollowerCount sets the "follower_count" field.
-func (_c *UserCreate) SetFollowerCount(v int) *UserCreate {
+func (_c *UserCreate) SetFollowerCount(v int32) *UserCreate {
 	_c.mutation.SetFollowerCount(v)
 	return _c
 }
 
 // SetNillableFollowerCount sets the "follower_count" field if the given value is not nil.
-func (_c *UserCreate) SetNillableFollowerCount(v *int) *UserCreate {
+func (_c *UserCreate) SetNillableFollowerCount(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetFollowerCount(*v)
 	}
@@ -215,13 +215,13 @@ func (_c *UserCreate) SetNillableLastLoginIP(v *string) *UserCreate {
 }
 
 // SetOnlineMinutes sets the "online_minutes" field.
-func (_c *UserCreate) SetOnlineMinutes(v int) *UserCreate {
+func (_c *UserCreate) SetOnlineMinutes(v int32) *UserCreate {
 	_c.mutation.SetOnlineMinutes(v)
 	return _c
 }
 
 // SetNillableOnlineMinutes sets the "online_minutes" field if the given value is not nil.
-func (_c *UserCreate) SetNillableOnlineMinutes(v *int) *UserCreate {
+func (_c *UserCreate) SetNillableOnlineMinutes(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetOnlineMinutes(*v)
 	}
@@ -243,13 +243,13 @@ func (_c *UserCreate) SetNillableLastCheckinTime(v *time.Time) *UserCreate {
 }
 
 // SetCurrentCheckinStreak sets the "current_checkin_streak" field.
-func (_c *UserCreate) SetCurrentCheckinStreak(v int) *UserCreate {
+func (_c *UserCreate) SetCurrentCheckinStreak(v int32) *UserCreate {
 	_c.mutation.SetCurrentCheckinStreak(v)
 	return _c
 }
 
 // SetNillableCurrentCheckinStreak sets the "current_checkin_streak" field if the given value is not nil.
-func (_c *UserCreate) SetNillableCurrentCheckinStreak(v *int) *UserCreate {
+func (_c *UserCreate) SetNillableCurrentCheckinStreak(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetCurrentCheckinStreak(*v)
 	}
@@ -257,13 +257,13 @@ func (_c *UserCreate) SetNillableCurrentCheckinStreak(v *int) *UserCreate {
 }
 
 // SetLongestCheckinStreak sets the "longest_checkin_streak" field.
-func (_c *UserCreate) SetLongestCheckinStreak(v int) *UserCreate {
+func (_c *UserCreate) SetLongestCheckinStreak(v int32) *UserCreate {
 	_c.mutation.SetLongestCheckinStreak(v)
 	return _c
 }
 
 // SetNillableLongestCheckinStreak sets the "longest_checkin_streak" field if the given value is not nil.
-func (_c *UserCreate) SetNillableLongestCheckinStreak(v *int) *UserCreate {
+func (_c *UserCreate) SetNillableLongestCheckinStreak(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetLongestCheckinStreak(*v)
 	}
@@ -522,6 +522,12 @@ func (_c *UserCreate) SetNillableUpdatedAt(v *time.Time) *UserCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *UserCreate) SetID(v int64) *UserCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_c *UserCreate) Mutation() *UserMutation {
 	return _c.mutation
@@ -725,8 +731,10 @@ func (_c *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -735,8 +743,12 @@ func (_c *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	var (
 		_node = &User{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(user.Table, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -774,7 +786,7 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.Mbti = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(user.FieldStatus, field.TypeInt, value)
+		_spec.SetField(user.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.GroupName(); ok {
@@ -782,35 +794,35 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.GroupName = value
 	}
 	if value, ok := _c.mutation.FollowCount(); ok {
-		_spec.SetField(user.FieldFollowCount, field.TypeInt, value)
+		_spec.SetField(user.FieldFollowCount, field.TypeInt32, value)
 		_node.FollowCount = value
 	}
 	if value, ok := _c.mutation.FollowerCount(); ok {
-		_spec.SetField(user.FieldFollowerCount, field.TypeInt, value)
+		_spec.SetField(user.FieldFollowerCount, field.TypeInt32, value)
 		_node.FollowerCount = value
 	}
 	if value, ok := _c.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
-		_node.LastLoginTime = value
+		_node.LastLoginTime = &value
 	}
 	if value, ok := _c.mutation.LastLoginIP(); ok {
 		_spec.SetField(user.FieldLastLoginIP, field.TypeString, value)
 		_node.LastLoginIP = value
 	}
 	if value, ok := _c.mutation.OnlineMinutes(); ok {
-		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt, value)
+		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt32, value)
 		_node.OnlineMinutes = value
 	}
 	if value, ok := _c.mutation.LastCheckinTime(); ok {
 		_spec.SetField(user.FieldLastCheckinTime, field.TypeTime, value)
-		_node.LastCheckinTime = value
+		_node.LastCheckinTime = &value
 	}
 	if value, ok := _c.mutation.CurrentCheckinStreak(); ok {
-		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt, value)
+		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt32, value)
 		_node.CurrentCheckinStreak = value
 	}
 	if value, ok := _c.mutation.LongestCheckinStreak(); ok {
-		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt, value)
+		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt32, value)
 		_node.LongestCheckinStreak = value
 	}
 	if value, ok := _c.mutation.Language(); ok {
@@ -933,9 +945,9 @@ func (_c *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

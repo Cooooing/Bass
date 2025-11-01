@@ -359,7 +359,7 @@ func (c *ArticleClient) UpdateOne(_m *Article) *ArticleUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleClient) UpdateOneID(id int) *ArticleUpdateOne {
+func (c *ArticleClient) UpdateOneID(id int64) *ArticleUpdateOne {
 	mutation := newArticleMutation(c.config, OpUpdateOne, withArticleID(id))
 	return &ArticleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -376,7 +376,7 @@ func (c *ArticleClient) DeleteOne(_m *Article) *ArticleDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleClient) DeleteOneID(id int) *ArticleDeleteOne {
+func (c *ArticleClient) DeleteOneID(id int64) *ArticleDeleteOne {
 	builder := c.Delete().Where(article.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -393,12 +393,12 @@ func (c *ArticleClient) Query() *ArticleQuery {
 }
 
 // Get returns a Article entity by its id.
-func (c *ArticleClient) Get(ctx context.Context, id int) (*Article, error) {
+func (c *ArticleClient) Get(ctx context.Context, id int64) (*Article, error) {
 	return c.Query().Where(article.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleClient) GetX(ctx context.Context, id int) *Article {
+func (c *ArticleClient) GetX(ctx context.Context, id int64) *Article {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -588,7 +588,7 @@ func (c *ArticleActionRecordClient) UpdateOne(_m *ArticleActionRecord) *ArticleA
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleActionRecordClient) UpdateOneID(id int) *ArticleActionRecordUpdateOne {
+func (c *ArticleActionRecordClient) UpdateOneID(id int64) *ArticleActionRecordUpdateOne {
 	mutation := newArticleActionRecordMutation(c.config, OpUpdateOne, withArticleActionRecordID(id))
 	return &ArticleActionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -605,7 +605,7 @@ func (c *ArticleActionRecordClient) DeleteOne(_m *ArticleActionRecord) *ArticleA
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleActionRecordClient) DeleteOneID(id int) *ArticleActionRecordDeleteOne {
+func (c *ArticleActionRecordClient) DeleteOneID(id int64) *ArticleActionRecordDeleteOne {
 	builder := c.Delete().Where(articleactionrecord.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -622,12 +622,12 @@ func (c *ArticleActionRecordClient) Query() *ArticleActionRecordQuery {
 }
 
 // Get returns a ArticleActionRecord entity by its id.
-func (c *ArticleActionRecordClient) Get(ctx context.Context, id int) (*ArticleActionRecord, error) {
+func (c *ArticleActionRecordClient) Get(ctx context.Context, id int64) (*ArticleActionRecord, error) {
 	return c.Query().Where(articleactionrecord.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleActionRecordClient) GetX(ctx context.Context, id int) *ArticleActionRecord {
+func (c *ArticleActionRecordClient) GetX(ctx context.Context, id int64) *ArticleActionRecord {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -737,7 +737,7 @@ func (c *ArticleLotteryClient) UpdateOne(_m *ArticleLottery) *ArticleLotteryUpda
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleLotteryClient) UpdateOneID(id int) *ArticleLotteryUpdateOne {
+func (c *ArticleLotteryClient) UpdateOneID(id int64) *ArticleLotteryUpdateOne {
 	mutation := newArticleLotteryMutation(c.config, OpUpdateOne, withArticleLotteryID(id))
 	return &ArticleLotteryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -754,7 +754,7 @@ func (c *ArticleLotteryClient) DeleteOne(_m *ArticleLottery) *ArticleLotteryDele
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleLotteryClient) DeleteOneID(id int) *ArticleLotteryDeleteOne {
+func (c *ArticleLotteryClient) DeleteOneID(id int64) *ArticleLotteryDeleteOne {
 	builder := c.Delete().Where(articlelottery.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -771,12 +771,12 @@ func (c *ArticleLotteryClient) Query() *ArticleLotteryQuery {
 }
 
 // Get returns a ArticleLottery entity by its id.
-func (c *ArticleLotteryClient) Get(ctx context.Context, id int) (*ArticleLottery, error) {
+func (c *ArticleLotteryClient) Get(ctx context.Context, id int64) (*ArticleLottery, error) {
 	return c.Query().Where(articlelottery.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleLotteryClient) GetX(ctx context.Context, id int) *ArticleLottery {
+func (c *ArticleLotteryClient) GetX(ctx context.Context, id int64) *ArticleLottery {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -918,7 +918,7 @@ func (c *ArticleLotteryParticipantClient) UpdateOne(_m *ArticleLotteryParticipan
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleLotteryParticipantClient) UpdateOneID(id int) *ArticleLotteryParticipantUpdateOne {
+func (c *ArticleLotteryParticipantClient) UpdateOneID(id int64) *ArticleLotteryParticipantUpdateOne {
 	mutation := newArticleLotteryParticipantMutation(c.config, OpUpdateOne, withArticleLotteryParticipantID(id))
 	return &ArticleLotteryParticipantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -935,7 +935,7 @@ func (c *ArticleLotteryParticipantClient) DeleteOne(_m *ArticleLotteryParticipan
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleLotteryParticipantClient) DeleteOneID(id int) *ArticleLotteryParticipantDeleteOne {
+func (c *ArticleLotteryParticipantClient) DeleteOneID(id int64) *ArticleLotteryParticipantDeleteOne {
 	builder := c.Delete().Where(articlelotteryparticipant.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -952,12 +952,12 @@ func (c *ArticleLotteryParticipantClient) Query() *ArticleLotteryParticipantQuer
 }
 
 // Get returns a ArticleLotteryParticipant entity by its id.
-func (c *ArticleLotteryParticipantClient) Get(ctx context.Context, id int) (*ArticleLotteryParticipant, error) {
+func (c *ArticleLotteryParticipantClient) Get(ctx context.Context, id int64) (*ArticleLotteryParticipant, error) {
 	return c.Query().Where(articlelotteryparticipant.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleLotteryParticipantClient) GetX(ctx context.Context, id int) *ArticleLotteryParticipant {
+func (c *ArticleLotteryParticipantClient) GetX(ctx context.Context, id int64) *ArticleLotteryParticipant {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1067,7 +1067,7 @@ func (c *ArticleLotteryWinnerClient) UpdateOne(_m *ArticleLotteryWinner) *Articl
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleLotteryWinnerClient) UpdateOneID(id int) *ArticleLotteryWinnerUpdateOne {
+func (c *ArticleLotteryWinnerClient) UpdateOneID(id int64) *ArticleLotteryWinnerUpdateOne {
 	mutation := newArticleLotteryWinnerMutation(c.config, OpUpdateOne, withArticleLotteryWinnerID(id))
 	return &ArticleLotteryWinnerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1084,7 +1084,7 @@ func (c *ArticleLotteryWinnerClient) DeleteOne(_m *ArticleLotteryWinner) *Articl
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleLotteryWinnerClient) DeleteOneID(id int) *ArticleLotteryWinnerDeleteOne {
+func (c *ArticleLotteryWinnerClient) DeleteOneID(id int64) *ArticleLotteryWinnerDeleteOne {
 	builder := c.Delete().Where(articlelotterywinner.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1101,12 +1101,12 @@ func (c *ArticleLotteryWinnerClient) Query() *ArticleLotteryWinnerQuery {
 }
 
 // Get returns a ArticleLotteryWinner entity by its id.
-func (c *ArticleLotteryWinnerClient) Get(ctx context.Context, id int) (*ArticleLotteryWinner, error) {
+func (c *ArticleLotteryWinnerClient) Get(ctx context.Context, id int64) (*ArticleLotteryWinner, error) {
 	return c.Query().Where(articlelotterywinner.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleLotteryWinnerClient) GetX(ctx context.Context, id int) *ArticleLotteryWinner {
+func (c *ArticleLotteryWinnerClient) GetX(ctx context.Context, id int64) *ArticleLotteryWinner {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1216,7 +1216,7 @@ func (c *ArticlePostscriptClient) UpdateOne(_m *ArticlePostscript) *ArticlePosts
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticlePostscriptClient) UpdateOneID(id int) *ArticlePostscriptUpdateOne {
+func (c *ArticlePostscriptClient) UpdateOneID(id int64) *ArticlePostscriptUpdateOne {
 	mutation := newArticlePostscriptMutation(c.config, OpUpdateOne, withArticlePostscriptID(id))
 	return &ArticlePostscriptUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1233,7 +1233,7 @@ func (c *ArticlePostscriptClient) DeleteOne(_m *ArticlePostscript) *ArticlePosts
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticlePostscriptClient) DeleteOneID(id int) *ArticlePostscriptDeleteOne {
+func (c *ArticlePostscriptClient) DeleteOneID(id int64) *ArticlePostscriptDeleteOne {
 	builder := c.Delete().Where(articlepostscript.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1250,12 +1250,12 @@ func (c *ArticlePostscriptClient) Query() *ArticlePostscriptQuery {
 }
 
 // Get returns a ArticlePostscript entity by its id.
-func (c *ArticlePostscriptClient) Get(ctx context.Context, id int) (*ArticlePostscript, error) {
+func (c *ArticlePostscriptClient) Get(ctx context.Context, id int64) (*ArticlePostscript, error) {
 	return c.Query().Where(articlepostscript.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticlePostscriptClient) GetX(ctx context.Context, id int) *ArticlePostscript {
+func (c *ArticlePostscriptClient) GetX(ctx context.Context, id int64) *ArticlePostscript {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1365,7 +1365,7 @@ func (c *ArticleVoteClient) UpdateOne(_m *ArticleVote) *ArticleVoteUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleVoteClient) UpdateOneID(id int) *ArticleVoteUpdateOne {
+func (c *ArticleVoteClient) UpdateOneID(id int64) *ArticleVoteUpdateOne {
 	mutation := newArticleVoteMutation(c.config, OpUpdateOne, withArticleVoteID(id))
 	return &ArticleVoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1382,7 +1382,7 @@ func (c *ArticleVoteClient) DeleteOne(_m *ArticleVote) *ArticleVoteDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleVoteClient) DeleteOneID(id int) *ArticleVoteDeleteOne {
+func (c *ArticleVoteClient) DeleteOneID(id int64) *ArticleVoteDeleteOne {
 	builder := c.Delete().Where(articlevote.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1399,12 +1399,12 @@ func (c *ArticleVoteClient) Query() *ArticleVoteQuery {
 }
 
 // Get returns a ArticleVote entity by its id.
-func (c *ArticleVoteClient) Get(ctx context.Context, id int) (*ArticleVote, error) {
+func (c *ArticleVoteClient) Get(ctx context.Context, id int64) (*ArticleVote, error) {
 	return c.Query().Where(articlevote.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleVoteClient) GetX(ctx context.Context, id int) *ArticleVote {
+func (c *ArticleVoteClient) GetX(ctx context.Context, id int64) *ArticleVote {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1530,7 +1530,7 @@ func (c *ArticleVoteRecordClient) UpdateOne(_m *ArticleVoteRecord) *ArticleVoteR
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ArticleVoteRecordClient) UpdateOneID(id int) *ArticleVoteRecordUpdateOne {
+func (c *ArticleVoteRecordClient) UpdateOneID(id int64) *ArticleVoteRecordUpdateOne {
 	mutation := newArticleVoteRecordMutation(c.config, OpUpdateOne, withArticleVoteRecordID(id))
 	return &ArticleVoteRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1547,7 +1547,7 @@ func (c *ArticleVoteRecordClient) DeleteOne(_m *ArticleVoteRecord) *ArticleVoteR
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ArticleVoteRecordClient) DeleteOneID(id int) *ArticleVoteRecordDeleteOne {
+func (c *ArticleVoteRecordClient) DeleteOneID(id int64) *ArticleVoteRecordDeleteOne {
 	builder := c.Delete().Where(articlevoterecord.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1564,12 +1564,12 @@ func (c *ArticleVoteRecordClient) Query() *ArticleVoteRecordQuery {
 }
 
 // Get returns a ArticleVoteRecord entity by its id.
-func (c *ArticleVoteRecordClient) Get(ctx context.Context, id int) (*ArticleVoteRecord, error) {
+func (c *ArticleVoteRecordClient) Get(ctx context.Context, id int64) (*ArticleVoteRecord, error) {
 	return c.Query().Where(articlevoterecord.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ArticleVoteRecordClient) GetX(ctx context.Context, id int) *ArticleVoteRecord {
+func (c *ArticleVoteRecordClient) GetX(ctx context.Context, id int64) *ArticleVoteRecord {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1679,7 +1679,7 @@ func (c *CommentClient) UpdateOne(_m *Comment) *CommentUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CommentClient) UpdateOneID(id int) *CommentUpdateOne {
+func (c *CommentClient) UpdateOneID(id int64) *CommentUpdateOne {
 	mutation := newCommentMutation(c.config, OpUpdateOne, withCommentID(id))
 	return &CommentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1696,7 +1696,7 @@ func (c *CommentClient) DeleteOne(_m *Comment) *CommentDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CommentClient) DeleteOneID(id int) *CommentDeleteOne {
+func (c *CommentClient) DeleteOneID(id int64) *CommentDeleteOne {
 	builder := c.Delete().Where(comment.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1713,12 +1713,12 @@ func (c *CommentClient) Query() *CommentQuery {
 }
 
 // Get returns a Comment entity by its id.
-func (c *CommentClient) Get(ctx context.Context, id int) (*Comment, error) {
+func (c *CommentClient) Get(ctx context.Context, id int64) (*Comment, error) {
 	return c.Query().Where(comment.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CommentClient) GetX(ctx context.Context, id int) *Comment {
+func (c *CommentClient) GetX(ctx context.Context, id int64) *Comment {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1758,15 +1758,47 @@ func (c *CommentClient) QueryParent(_m *Comment) *CommentQuery {
 	return query
 }
 
-// QueryReplies queries the replies edge of a Comment.
-func (c *CommentClient) QueryReplies(_m *Comment) *CommentQuery {
+// QueryParentReplies queries the parent_replies edge of a Comment.
+func (c *CommentClient) QueryParentReplies(_m *Comment) *CommentQuery {
 	query := (&CommentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(comment.Table, comment.FieldID, id),
 			sqlgraph.To(comment.Table, comment.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, comment.RepliesTable, comment.RepliesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, comment.ParentRepliesTable, comment.ParentRepliesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReply queries the reply edge of a Comment.
+func (c *CommentClient) QueryReply(_m *Comment) *CommentQuery {
+	query := (&CommentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(comment.Table, comment.FieldID, id),
+			sqlgraph.To(comment.Table, comment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, comment.ReplyTable, comment.ReplyColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReplyReplies queries the reply_replies edge of a Comment.
+func (c *CommentClient) QueryReplyReplies(_m *Comment) *CommentQuery {
+	query := (&CommentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(comment.Table, comment.FieldID, id),
+			sqlgraph.To(comment.Table, comment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, comment.ReplyRepliesTable, comment.ReplyRepliesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -1876,7 +1908,7 @@ func (c *CommentActionRecordClient) UpdateOne(_m *CommentActionRecord) *CommentA
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CommentActionRecordClient) UpdateOneID(id int) *CommentActionRecordUpdateOne {
+func (c *CommentActionRecordClient) UpdateOneID(id int64) *CommentActionRecordUpdateOne {
 	mutation := newCommentActionRecordMutation(c.config, OpUpdateOne, withCommentActionRecordID(id))
 	return &CommentActionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1893,7 +1925,7 @@ func (c *CommentActionRecordClient) DeleteOne(_m *CommentActionRecord) *CommentA
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CommentActionRecordClient) DeleteOneID(id int) *CommentActionRecordDeleteOne {
+func (c *CommentActionRecordClient) DeleteOneID(id int64) *CommentActionRecordDeleteOne {
 	builder := c.Delete().Where(commentactionrecord.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1910,12 +1942,12 @@ func (c *CommentActionRecordClient) Query() *CommentActionRecordQuery {
 }
 
 // Get returns a CommentActionRecord entity by its id.
-func (c *CommentActionRecordClient) Get(ctx context.Context, id int) (*CommentActionRecord, error) {
+func (c *CommentActionRecordClient) Get(ctx context.Context, id int64) (*CommentActionRecord, error) {
 	return c.Query().Where(commentactionrecord.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CommentActionRecordClient) GetX(ctx context.Context, id int) *CommentActionRecord {
+func (c *CommentActionRecordClient) GetX(ctx context.Context, id int64) *CommentActionRecord {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -2025,7 +2057,7 @@ func (c *DomainClient) UpdateOne(_m *Domain) *DomainUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *DomainClient) UpdateOneID(id int) *DomainUpdateOne {
+func (c *DomainClient) UpdateOneID(id int64) *DomainUpdateOne {
 	mutation := newDomainMutation(c.config, OpUpdateOne, withDomainID(id))
 	return &DomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -2042,7 +2074,7 @@ func (c *DomainClient) DeleteOne(_m *Domain) *DomainDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *DomainClient) DeleteOneID(id int) *DomainDeleteOne {
+func (c *DomainClient) DeleteOneID(id int64) *DomainDeleteOne {
 	builder := c.Delete().Where(domain.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -2059,12 +2091,12 @@ func (c *DomainClient) Query() *DomainQuery {
 }
 
 // Get returns a Domain entity by its id.
-func (c *DomainClient) Get(ctx context.Context, id int) (*Domain, error) {
+func (c *DomainClient) Get(ctx context.Context, id int64) (*Domain, error) {
 	return c.Query().Where(domain.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *DomainClient) GetX(ctx context.Context, id int) *Domain {
+func (c *DomainClient) GetX(ctx context.Context, id int64) *Domain {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -2174,7 +2206,7 @@ func (c *TagClient) UpdateOne(_m *Tag) *TagUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *TagClient) UpdateOneID(id int) *TagUpdateOne {
+func (c *TagClient) UpdateOneID(id int64) *TagUpdateOne {
 	mutation := newTagMutation(c.config, OpUpdateOne, withTagID(id))
 	return &TagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -2191,7 +2223,7 @@ func (c *TagClient) DeleteOne(_m *Tag) *TagDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *TagClient) DeleteOneID(id int) *TagDeleteOne {
+func (c *TagClient) DeleteOneID(id int64) *TagDeleteOne {
 	builder := c.Delete().Where(tag.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -2208,12 +2240,12 @@ func (c *TagClient) Query() *TagQuery {
 }
 
 // Get returns a Tag entity by its id.
-func (c *TagClient) Get(ctx context.Context, id int) (*Tag, error) {
+func (c *TagClient) Get(ctx context.Context, id int64) (*Tag, error) {
 	return c.Query().Where(tag.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *TagClient) GetX(ctx context.Context, id int) *Tag {
+func (c *TagClient) GetX(ctx context.Context, id int64) *Tag {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

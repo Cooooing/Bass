@@ -58,3 +58,9 @@ enum CommentAction {
   CommentActionLike = 0; // 点赞
   CommentActionCollect = 1; // 收藏
 }
+
+// 评论查询排序
+enum CommentSort {
+  CommentSortNewest = 0; // 最新
+  CommentSortHottest = 1; // 最热
+}

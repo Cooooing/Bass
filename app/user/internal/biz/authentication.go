@@ -7,6 +7,8 @@ import (
 	"errors"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/data/ent"
+	"user/internal/data/ent/gen"
 
 	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
@@ -37,14 +39,14 @@ func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo
 
 func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User) (code string, token string, err error) {
 	// 验证数据
-	exist, err := s.userRepo.ConstantAccount(ctx, u.Email)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.db, u.Email)
 	if exist {
 		err = errors.New("email already exists")
 	}
 	if err != nil {
 		return
 	}
-	exist, err = s.userRepo.ConstantAccount(ctx, u.Nickname)
+	exist, err = s.userRepo.ConstantAccount(ctx, s.db, u.Nickname)
 	if exist {
 		err = errors.New("nickname already exists")
 	}
@@ -87,32 +89,39 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		err = errors.New("email code invalid")
 		return
 	}
-	// 保存用户信息
-	user := &model.User{}
-	err = copier.Copy(user, saveUser)
-	if err != nil {
-		return
-	}
-	err = user.PasswordEncrypt()
-	if err != nil {
-		return
-	}
-	_, err = s.userRepo.Save(ctx, user)
-	if err != nil {
-		return
-	}
 
-	// 删除 code 缓存
-	err = s.tokenRepo.DelEmailToken(ctx, codeToken)
+	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
+		// 保存用户信息
+		user := &model.User{}
+		err = copier.Copy(user, saveUser)
+		if err != nil {
+			return err
+		}
+		err = user.PasswordEncrypt()
+		if err != nil {
+			return err
+		}
+		_, err = s.userRepo.Save(ctx, s.db, user)
+		if err != nil {
+			return err
+		}
+
+		// 删除 code 缓存
+		err = s.tokenRepo.DelEmailToken(ctx, codeToken)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
 	if err != nil {
 		return
 	}
-	return nil
+	return
 }
 
 func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string, password string) (token string, err error) {
 	// 获取用户信息
-	user, err := s.userRepo.GetUserByAccount(ctx, account)
+	user, err := s.userRepo.GetUserByAccount(ctx, s.db, account)
 	if err != nil {
 		return
 	}
@@ -130,7 +139,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	}
 	// 保存 token 到缓存
 	saveUser := &commonModel.User{}
-	err = copier.Copy(user, saveUser)
+	err = copier.Copy(saveUser, user)
 	if err != nil {
 		return
 	}

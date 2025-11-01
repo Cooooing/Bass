@@ -17,13 +17,13 @@ import (
 type ArticleVoteRecord struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 所属投票ID
-	VoteID int `json:"vote_id,omitempty"`
+	VoteID int64 `json:"vote_id,omitempty"`
 	// 投票用户ID
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 投票选项索引
-	OptionIndex int `json:"option_index,omitempty"`
+	OptionIndex int32 `json:"option_index,omitempty"`
 	// 是否匿名
 	Anonymous bool `json:"anonymous,omitempty"`
 	// 创建时间
@@ -87,24 +87,24 @@ func (_m *ArticleVoteRecord) assignValues(columns []string, values []any) error 
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case articlevoterecord.FieldVoteID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field vote_id", values[i])
 			} else if value.Valid {
-				_m.VoteID = int(value.Int64)
+				_m.VoteID = value.Int64
 			}
 		case articlevoterecord.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case articlevoterecord.FieldOptionIndex:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field option_index", values[i])
 			} else if value.Valid {
-				_m.OptionIndex = int(value.Int64)
+				_m.OptionIndex = int32(value.Int64)
 			}
 		case articlevoterecord.FieldAnonymous:
 			if value, ok := values[i].(*sql.NullBool); !ok {

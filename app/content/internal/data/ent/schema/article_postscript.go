@@ -15,7 +15,8 @@ type ArticlePostscript struct {
 
 func (ArticlePostscript) Fields() []ent.Field {
 	return append([]ent.Field{
-		field.Int("article_id").Comment("所属文章ID"),
+		field.Int64("id").Immutable().Unique(),
+		field.Int64("article_id").Comment("所属文章ID"),
 		field.Text("content").Comment("附言内容").NotEmpty(),
 	}, pkg.TimeAuditFields()...)
 }

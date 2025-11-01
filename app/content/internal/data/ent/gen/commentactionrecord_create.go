@@ -21,20 +21,26 @@ type CommentActionRecordCreate struct {
 }
 
 // SetCommentID sets the "comment_id" field.
-func (_c *CommentActionRecordCreate) SetCommentID(v int) *CommentActionRecordCreate {
+func (_c *CommentActionRecordCreate) SetCommentID(v int64) *CommentActionRecordCreate {
 	_c.mutation.SetCommentID(v)
 	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *CommentActionRecordCreate) SetUserID(v int) *CommentActionRecordCreate {
+func (_c *CommentActionRecordCreate) SetUserID(v int64) *CommentActionRecordCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
 
 // SetType sets the "type" field.
-func (_c *CommentActionRecordCreate) SetType(v int) *CommentActionRecordCreate {
+func (_c *CommentActionRecordCreate) SetType(v int32) *CommentActionRecordCreate {
 	_c.mutation.SetType(v)
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *CommentActionRecordCreate) SetID(v int64) *CommentActionRecordCreate {
+	_c.mutation.SetID(v)
 	return _c
 }
 
@@ -103,8 +109,10 @@ func (_c *CommentActionRecordCreate) sqlSave(ctx context.Context) (*CommentActio
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -113,14 +121,18 @@ func (_c *CommentActionRecordCreate) sqlSave(ctx context.Context) (*CommentActio
 func (_c *CommentActionRecordCreate) createSpec() (*CommentActionRecord, *sqlgraph.CreateSpec) {
 	var (
 		_node = &CommentActionRecord{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(commentactionrecord.Table, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(commentactionrecord.Table, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(commentactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(commentactionrecord.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.GetType(); ok {
-		_spec.SetField(commentactionrecord.FieldType, field.TypeInt, value)
+		_spec.SetField(commentactionrecord.FieldType, field.TypeInt32, value)
 		_node.Type = value
 	}
 	if nodes := _c.mutation.CommentIDs(); len(nodes) > 0 {
@@ -131,7 +143,7 @@ func (_c *CommentActionRecordCreate) createSpec() (*CommentActionRecord, *sqlgra
 			Columns: []string{commentactionrecord.CommentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -187,9 +199,9 @@ func (_c *CommentActionRecordCreateBulk) Save(ctx context.Context) ([]*CommentAc
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

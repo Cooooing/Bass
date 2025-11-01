@@ -23,13 +23,13 @@ type CommentCreate struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_c *CommentCreate) SetArticleID(v int) *CommentCreate {
+func (_c *CommentCreate) SetArticleID(v int64) *CommentCreate {
 	_c.mutation.SetArticleID(v)
 	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *CommentCreate) SetUserID(v int) *CommentCreate {
+func (_c *CommentCreate) SetUserID(v int64) *CommentCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
@@ -41,33 +41,47 @@ func (_c *CommentCreate) SetContent(v string) *CommentCreate {
 }
 
 // SetLevel sets the "level" field.
-func (_c *CommentCreate) SetLevel(v int) *CommentCreate {
+func (_c *CommentCreate) SetLevel(v int32) *CommentCreate {
 	_c.mutation.SetLevel(v)
 	return _c
 }
 
 // SetParentID sets the "parent_id" field.
-func (_c *CommentCreate) SetParentID(v int) *CommentCreate {
+func (_c *CommentCreate) SetParentID(v int64) *CommentCreate {
 	_c.mutation.SetParentID(v)
 	return _c
 }
 
 // SetNillableParentID sets the "parent_id" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableParentID(v *int) *CommentCreate {
+func (_c *CommentCreate) SetNillableParentID(v *int64) *CommentCreate {
 	if v != nil {
 		_c.SetParentID(*v)
 	}
 	return _c
 }
 
+// SetReplyID sets the "reply_id" field.
+func (_c *CommentCreate) SetReplyID(v int64) *CommentCreate {
+	_c.mutation.SetReplyID(v)
+	return _c
+}
+
+// SetNillableReplyID sets the "reply_id" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableReplyID(v *int64) *CommentCreate {
+	if v != nil {
+		_c.SetReplyID(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
-func (_c *CommentCreate) SetStatus(v int) *CommentCreate {
+func (_c *CommentCreate) SetStatus(v int32) *CommentCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableStatus(v *int) *CommentCreate {
+func (_c *CommentCreate) SetNillableStatus(v *int32) *CommentCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -75,13 +89,13 @@ func (_c *CommentCreate) SetNillableStatus(v *int) *CommentCreate {
 }
 
 // SetReplyCount sets the "reply_count" field.
-func (_c *CommentCreate) SetReplyCount(v int) *CommentCreate {
+func (_c *CommentCreate) SetReplyCount(v int32) *CommentCreate {
 	_c.mutation.SetReplyCount(v)
 	return _c
 }
 
 // SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableReplyCount(v *int) *CommentCreate {
+func (_c *CommentCreate) SetNillableReplyCount(v *int32) *CommentCreate {
 	if v != nil {
 		_c.SetReplyCount(*v)
 	}
@@ -89,13 +103,13 @@ func (_c *CommentCreate) SetNillableReplyCount(v *int) *CommentCreate {
 }
 
 // SetLikeCount sets the "like_count" field.
-func (_c *CommentCreate) SetLikeCount(v int) *CommentCreate {
+func (_c *CommentCreate) SetLikeCount(v int32) *CommentCreate {
 	_c.mutation.SetLikeCount(v)
 	return _c
 }
 
 // SetNillableLikeCount sets the "like_count" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableLikeCount(v *int) *CommentCreate {
+func (_c *CommentCreate) SetNillableLikeCount(v *int32) *CommentCreate {
 	if v != nil {
 		_c.SetLikeCount(*v)
 	}
@@ -103,13 +117,13 @@ func (_c *CommentCreate) SetNillableLikeCount(v *int) *CommentCreate {
 }
 
 // SetCollectCount sets the "collect_count" field.
-func (_c *CommentCreate) SetCollectCount(v int) *CommentCreate {
+func (_c *CommentCreate) SetCollectCount(v int32) *CommentCreate {
 	_c.mutation.SetCollectCount(v)
 	return _c
 }
 
 // SetNillableCollectCount sets the "collect_count" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableCollectCount(v *int) *CommentCreate {
+func (_c *CommentCreate) SetNillableCollectCount(v *int32) *CommentCreate {
 	if v != nil {
 		_c.SetCollectCount(*v)
 	}
@@ -144,6 +158,12 @@ func (_c *CommentCreate) SetNillableUpdatedAt(v *time.Time) *CommentCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *CommentCreate) SetID(v int64) *CommentCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
 // SetArticle sets the "article" edge to the Article entity.
 func (_c *CommentCreate) SetArticle(v *Article) *CommentCreate {
 	return _c.SetArticleID(v.ID)
@@ -154,30 +174,50 @@ func (_c *CommentCreate) SetParent(v *Comment) *CommentCreate {
 	return _c.SetParentID(v.ID)
 }
 
-// AddReplyIDs adds the "replies" edge to the Comment entity by IDs.
-func (_c *CommentCreate) AddReplyIDs(ids ...int) *CommentCreate {
-	_c.mutation.AddReplyIDs(ids...)
+// AddParentReplyIDs adds the "parent_replies" edge to the Comment entity by IDs.
+func (_c *CommentCreate) AddParentReplyIDs(ids ...int64) *CommentCreate {
+	_c.mutation.AddParentReplyIDs(ids...)
 	return _c
 }
 
-// AddReplies adds the "replies" edges to the Comment entity.
-func (_c *CommentCreate) AddReplies(v ...*Comment) *CommentCreate {
-	ids := make([]int, len(v))
+// AddParentReplies adds the "parent_replies" edges to the Comment entity.
+func (_c *CommentCreate) AddParentReplies(v ...*Comment) *CommentCreate {
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddReplyIDs(ids...)
+	return _c.AddParentReplyIDs(ids...)
+}
+
+// SetReply sets the "reply" edge to the Comment entity.
+func (_c *CommentCreate) SetReply(v *Comment) *CommentCreate {
+	return _c.SetReplyID(v.ID)
+}
+
+// AddReplyReplyIDs adds the "reply_replies" edge to the Comment entity by IDs.
+func (_c *CommentCreate) AddReplyReplyIDs(ids ...int64) *CommentCreate {
+	_c.mutation.AddReplyReplyIDs(ids...)
+	return _c
+}
+
+// AddReplyReplies adds the "reply_replies" edges to the Comment entity.
+func (_c *CommentCreate) AddReplyReplies(v ...*Comment) *CommentCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReplyReplyIDs(ids...)
 }
 
 // AddActionRecordIDs adds the "action_records" edge to the CommentActionRecord entity by IDs.
-func (_c *CommentCreate) AddActionRecordIDs(ids ...int) *CommentCreate {
+func (_c *CommentCreate) AddActionRecordIDs(ids ...int64) *CommentCreate {
 	_c.mutation.AddActionRecordIDs(ids...)
 	return _c
 }
 
 // AddActionRecords adds the "action_records" edges to the CommentActionRecord entity.
 func (_c *CommentCreate) AddActionRecords(v ...*CommentActionRecord) *CommentCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -219,10 +259,6 @@ func (_c *CommentCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *CommentCreate) defaults() {
-	if _, ok := _c.mutation.ParentID(); !ok {
-		v := comment.DefaultParentID
-		_c.mutation.SetParentID(v)
-	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := comment.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -297,8 +333,10 @@ func (_c *CommentCreate) sqlSave(ctx context.Context) (*Comment, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -307,10 +345,14 @@ func (_c *CommentCreate) sqlSave(ctx context.Context) (*Comment, error) {
 func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Comment{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(comment.Table, sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(comment.Table, sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(comment.FieldUserID, field.TypeInt, value)
+		_spec.SetField(comment.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.Content(); ok {
@@ -318,23 +360,23 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 		_node.Content = value
 	}
 	if value, ok := _c.mutation.Level(); ok {
-		_spec.SetField(comment.FieldLevel, field.TypeInt, value)
+		_spec.SetField(comment.FieldLevel, field.TypeInt32, value)
 		_node.Level = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(comment.FieldStatus, field.TypeInt, value)
+		_spec.SetField(comment.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.ReplyCount(); ok {
-		_spec.SetField(comment.FieldReplyCount, field.TypeInt, value)
+		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
 		_node.ReplyCount = value
 	}
 	if value, ok := _c.mutation.LikeCount(); ok {
-		_spec.SetField(comment.FieldLikeCount, field.TypeInt, value)
+		_spec.SetField(comment.FieldLikeCount, field.TypeInt32, value)
 		_node.LikeCount = value
 	}
 	if value, ok := _c.mutation.CollectCount(); ok {
-		_spec.SetField(comment.FieldCollectCount, field.TypeInt, value)
+		_spec.SetField(comment.FieldCollectCount, field.TypeInt32, value)
 		_node.CollectCount = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
@@ -353,7 +395,7 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 			Columns: []string{comment.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -370,24 +412,57 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 			Columns: []string{comment.ParentColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.ParentID = nodes[0]
+		_node.ParentID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.RepliesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ParentRepliesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   comment.RepliesTable,
-			Columns: []string{comment.RepliesColumn},
+			Table:   comment.ParentRepliesTable,
+			Columns: []string{comment.ParentRepliesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReplyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   comment.ReplyTable,
+			Columns: []string{comment.ReplyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReplyID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReplyRepliesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   comment.ReplyRepliesTable,
+			Columns: []string{comment.ReplyRepliesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -403,7 +478,7 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 			Columns: []string{comment.ActionRecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -459,9 +534,9 @@ func (_c *CommentCreateBulk) Save(ctx context.Context) ([]*Comment, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

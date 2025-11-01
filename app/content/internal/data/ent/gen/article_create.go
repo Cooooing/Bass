@@ -27,7 +27,7 @@ type ArticleCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *ArticleCreate) SetUserID(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetUserID(v int64) *ArticleCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
@@ -73,13 +73,13 @@ func (_c *ArticleCreate) SetNillableRewardContent(v *string) *ArticleCreate {
 }
 
 // SetRewardPoints sets the "reward_points" field.
-func (_c *ArticleCreate) SetRewardPoints(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetRewardPoints(v int32) *ArticleCreate {
 	_c.mutation.SetRewardPoints(v)
 	return _c
 }
 
 // SetNillableRewardPoints sets the "reward_points" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableRewardPoints(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableRewardPoints(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetRewardPoints(*v)
 	}
@@ -87,13 +87,13 @@ func (_c *ArticleCreate) SetNillableRewardPoints(v *int) *ArticleCreate {
 }
 
 // SetStatus sets the "status" field.
-func (_c *ArticleCreate) SetStatus(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetStatus(v int32) *ArticleCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableStatus(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableStatus(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -101,13 +101,13 @@ func (_c *ArticleCreate) SetNillableStatus(v *int) *ArticleCreate {
 }
 
 // SetType sets the "type" field.
-func (_c *ArticleCreate) SetType(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetType(v int32) *ArticleCreate {
 	_c.mutation.SetType(v)
 	return _c
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableType(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableType(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetType(*v)
 	}
@@ -143,13 +143,13 @@ func (_c *ArticleCreate) SetNillableAnonymous(v *bool) *ArticleCreate {
 }
 
 // SetThankCount sets the "thank_count" field.
-func (_c *ArticleCreate) SetThankCount(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetThankCount(v int32) *ArticleCreate {
 	_c.mutation.SetThankCount(v)
 	return _c
 }
 
 // SetNillableThankCount sets the "thank_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableThankCount(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableThankCount(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetThankCount(*v)
 	}
@@ -157,13 +157,13 @@ func (_c *ArticleCreate) SetNillableThankCount(v *int) *ArticleCreate {
 }
 
 // SetLikeCount sets the "like_count" field.
-func (_c *ArticleCreate) SetLikeCount(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetLikeCount(v int32) *ArticleCreate {
 	_c.mutation.SetLikeCount(v)
 	return _c
 }
 
 // SetNillableLikeCount sets the "like_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableLikeCount(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableLikeCount(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetLikeCount(*v)
 	}
@@ -171,13 +171,13 @@ func (_c *ArticleCreate) SetNillableLikeCount(v *int) *ArticleCreate {
 }
 
 // SetCollectCount sets the "collect_count" field.
-func (_c *ArticleCreate) SetCollectCount(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetCollectCount(v int32) *ArticleCreate {
 	_c.mutation.SetCollectCount(v)
 	return _c
 }
 
 // SetNillableCollectCount sets the "collect_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableCollectCount(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableCollectCount(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetCollectCount(*v)
 	}
@@ -185,13 +185,13 @@ func (_c *ArticleCreate) SetNillableCollectCount(v *int) *ArticleCreate {
 }
 
 // SetWatchCount sets the "watch_count" field.
-func (_c *ArticleCreate) SetWatchCount(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetWatchCount(v int32) *ArticleCreate {
 	_c.mutation.SetWatchCount(v)
 	return _c
 }
 
 // SetNillableWatchCount sets the "watch_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableWatchCount(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableWatchCount(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetWatchCount(*v)
 	}
@@ -199,13 +199,13 @@ func (_c *ArticleCreate) SetNillableWatchCount(v *int) *ArticleCreate {
 }
 
 // SetBountyPoints sets the "bounty_points" field.
-func (_c *ArticleCreate) SetBountyPoints(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetBountyPoints(v int32) *ArticleCreate {
 	_c.mutation.SetBountyPoints(v)
 	return _c
 }
 
 // SetNillableBountyPoints sets the "bounty_points" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableBountyPoints(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableBountyPoints(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetBountyPoints(*v)
 	}
@@ -213,13 +213,13 @@ func (_c *ArticleCreate) SetNillableBountyPoints(v *int) *ArticleCreate {
 }
 
 // SetAcceptedAnswerID sets the "accepted_answer_id" field.
-func (_c *ArticleCreate) SetAcceptedAnswerID(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetAcceptedAnswerID(v int64) *ArticleCreate {
 	_c.mutation.SetAcceptedAnswerID(v)
 	return _c
 }
 
 // SetNillableAcceptedAnswerID sets the "accepted_answer_id" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableAcceptedAnswerID(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableAcceptedAnswerID(v *int64) *ArticleCreate {
 	if v != nil {
 		_c.SetAcceptedAnswerID(*v)
 	}
@@ -227,13 +227,13 @@ func (_c *ArticleCreate) SetNillableAcceptedAnswerID(v *int) *ArticleCreate {
 }
 
 // SetVoteTotal sets the "vote_total" field.
-func (_c *ArticleCreate) SetVoteTotal(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetVoteTotal(v int32) *ArticleCreate {
 	_c.mutation.SetVoteTotal(v)
 	return _c
 }
 
 // SetNillableVoteTotal sets the "vote_total" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableVoteTotal(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableVoteTotal(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetVoteTotal(*v)
 	}
@@ -241,13 +241,13 @@ func (_c *ArticleCreate) SetNillableVoteTotal(v *int) *ArticleCreate {
 }
 
 // SetLotteryParticipantCount sets the "lottery_participant_count" field.
-func (_c *ArticleCreate) SetLotteryParticipantCount(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetLotteryParticipantCount(v int32) *ArticleCreate {
 	_c.mutation.SetLotteryParticipantCount(v)
 	return _c
 }
 
 // SetNillableLotteryParticipantCount sets the "lottery_participant_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableLotteryParticipantCount(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableLotteryParticipantCount(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetLotteryParticipantCount(*v)
 	}
@@ -255,13 +255,13 @@ func (_c *ArticleCreate) SetNillableLotteryParticipantCount(v *int) *ArticleCrea
 }
 
 // SetLotteryWinnerCount sets the "lottery_winner_count" field.
-func (_c *ArticleCreate) SetLotteryWinnerCount(v int) *ArticleCreate {
+func (_c *ArticleCreate) SetLotteryWinnerCount(v int32) *ArticleCreate {
 	_c.mutation.SetLotteryWinnerCount(v)
 	return _c
 }
 
 // SetNillableLotteryWinnerCount sets the "lottery_winner_count" field if the given value is not nil.
-func (_c *ArticleCreate) SetNillableLotteryWinnerCount(v *int) *ArticleCreate {
+func (_c *ArticleCreate) SetNillableLotteryWinnerCount(v *int32) *ArticleCreate {
 	if v != nil {
 		_c.SetLotteryWinnerCount(*v)
 	}
@@ -296,15 +296,21 @@ func (_c *ArticleCreate) SetNillableUpdatedAt(v *time.Time) *ArticleCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *ArticleCreate) SetID(v int64) *ArticleCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
 // AddPostscriptIDs adds the "postscripts" edge to the ArticlePostscript entity by IDs.
-func (_c *ArticleCreate) AddPostscriptIDs(ids ...int) *ArticleCreate {
+func (_c *ArticleCreate) AddPostscriptIDs(ids ...int64) *ArticleCreate {
 	_c.mutation.AddPostscriptIDs(ids...)
 	return _c
 }
 
 // AddPostscripts adds the "postscripts" edges to the ArticlePostscript entity.
 func (_c *ArticleCreate) AddPostscripts(v ...*ArticlePostscript) *ArticleCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -312,14 +318,14 @@ func (_c *ArticleCreate) AddPostscripts(v ...*ArticlePostscript) *ArticleCreate 
 }
 
 // AddVoteIDs adds the "votes" edge to the ArticleVote entity by IDs.
-func (_c *ArticleCreate) AddVoteIDs(ids ...int) *ArticleCreate {
+func (_c *ArticleCreate) AddVoteIDs(ids ...int64) *ArticleCreate {
 	_c.mutation.AddVoteIDs(ids...)
 	return _c
 }
 
 // AddVotes adds the "votes" edges to the ArticleVote entity.
 func (_c *ArticleCreate) AddVotes(v ...*ArticleVote) *ArticleCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -327,14 +333,14 @@ func (_c *ArticleCreate) AddVotes(v ...*ArticleVote) *ArticleCreate {
 }
 
 // AddLotteryIDs adds the "lotteries" edge to the ArticleLottery entity by IDs.
-func (_c *ArticleCreate) AddLotteryIDs(ids ...int) *ArticleCreate {
+func (_c *ArticleCreate) AddLotteryIDs(ids ...int64) *ArticleCreate {
 	_c.mutation.AddLotteryIDs(ids...)
 	return _c
 }
 
 // AddLotteries adds the "lotteries" edges to the ArticleLottery entity.
 func (_c *ArticleCreate) AddLotteries(v ...*ArticleLottery) *ArticleCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -342,14 +348,14 @@ func (_c *ArticleCreate) AddLotteries(v ...*ArticleLottery) *ArticleCreate {
 }
 
 // AddCommentIDs adds the "comments" edge to the Comment entity by IDs.
-func (_c *ArticleCreate) AddCommentIDs(ids ...int) *ArticleCreate {
+func (_c *ArticleCreate) AddCommentIDs(ids ...int64) *ArticleCreate {
 	_c.mutation.AddCommentIDs(ids...)
 	return _c
 }
 
 // AddComments adds the "comments" edges to the Comment entity.
 func (_c *ArticleCreate) AddComments(v ...*Comment) *ArticleCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -357,14 +363,14 @@ func (_c *ArticleCreate) AddComments(v ...*Comment) *ArticleCreate {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (_c *ArticleCreate) AddTagIDs(ids ...int) *ArticleCreate {
+func (_c *ArticleCreate) AddTagIDs(ids ...int64) *ArticleCreate {
 	_c.mutation.AddTagIDs(ids...)
 	return _c
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
 func (_c *ArticleCreate) AddTags(v ...*Tag) *ArticleCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -372,14 +378,14 @@ func (_c *ArticleCreate) AddTags(v ...*Tag) *ArticleCreate {
 }
 
 // AddActionRecordIDs adds the "action_records" edge to the ArticleActionRecord entity by IDs.
-func (_c *ArticleCreate) AddActionRecordIDs(ids ...int) *ArticleCreate {
+func (_c *ArticleCreate) AddActionRecordIDs(ids ...int64) *ArticleCreate {
 	_c.mutation.AddActionRecordIDs(ids...)
 	return _c
 }
 
 // AddActionRecords adds the "action_records" edges to the ArticleActionRecord entity.
 func (_c *ArticleCreate) AddActionRecords(v ...*ArticleActionRecord) *ArticleCreate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -564,8 +570,10 @@ func (_c *ArticleCreate) sqlSave(ctx context.Context) (*Article, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -574,10 +582,14 @@ func (_c *ArticleCreate) sqlSave(ctx context.Context) (*Article, error) {
 func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Article{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(article.Table, sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(article.Table, sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeInt, value)
+		_spec.SetField(article.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
@@ -597,15 +609,15 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 		_node.RewardContent = &value
 	}
 	if value, ok := _c.mutation.RewardPoints(); ok {
-		_spec.SetField(article.FieldRewardPoints, field.TypeInt, value)
+		_spec.SetField(article.FieldRewardPoints, field.TypeInt32, value)
 		_node.RewardPoints = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(article.FieldStatus, field.TypeInt, value)
+		_spec.SetField(article.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.GetType(); ok {
-		_spec.SetField(article.FieldType, field.TypeInt, value)
+		_spec.SetField(article.FieldType, field.TypeInt32, value)
 		_node.Type = value
 	}
 	if value, ok := _c.mutation.Commentable(); ok {
@@ -617,39 +629,39 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 		_node.Anonymous = value
 	}
 	if value, ok := _c.mutation.ThankCount(); ok {
-		_spec.SetField(article.FieldThankCount, field.TypeInt, value)
+		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
 		_node.ThankCount = value
 	}
 	if value, ok := _c.mutation.LikeCount(); ok {
-		_spec.SetField(article.FieldLikeCount, field.TypeInt, value)
+		_spec.SetField(article.FieldLikeCount, field.TypeInt32, value)
 		_node.LikeCount = value
 	}
 	if value, ok := _c.mutation.CollectCount(); ok {
-		_spec.SetField(article.FieldCollectCount, field.TypeInt, value)
+		_spec.SetField(article.FieldCollectCount, field.TypeInt32, value)
 		_node.CollectCount = value
 	}
 	if value, ok := _c.mutation.WatchCount(); ok {
-		_spec.SetField(article.FieldWatchCount, field.TypeInt, value)
+		_spec.SetField(article.FieldWatchCount, field.TypeInt32, value)
 		_node.WatchCount = value
 	}
 	if value, ok := _c.mutation.BountyPoints(); ok {
-		_spec.SetField(article.FieldBountyPoints, field.TypeInt, value)
+		_spec.SetField(article.FieldBountyPoints, field.TypeInt32, value)
 		_node.BountyPoints = value
 	}
 	if value, ok := _c.mutation.AcceptedAnswerID(); ok {
-		_spec.SetField(article.FieldAcceptedAnswerID, field.TypeInt, value)
+		_spec.SetField(article.FieldAcceptedAnswerID, field.TypeInt64, value)
 		_node.AcceptedAnswerID = value
 	}
 	if value, ok := _c.mutation.VoteTotal(); ok {
-		_spec.SetField(article.FieldVoteTotal, field.TypeInt, value)
+		_spec.SetField(article.FieldVoteTotal, field.TypeInt32, value)
 		_node.VoteTotal = value
 	}
 	if value, ok := _c.mutation.LotteryParticipantCount(); ok {
-		_spec.SetField(article.FieldLotteryParticipantCount, field.TypeInt, value)
+		_spec.SetField(article.FieldLotteryParticipantCount, field.TypeInt32, value)
 		_node.LotteryParticipantCount = value
 	}
 	if value, ok := _c.mutation.LotteryWinnerCount(); ok {
-		_spec.SetField(article.FieldLotteryWinnerCount, field.TypeInt, value)
+		_spec.SetField(article.FieldLotteryWinnerCount, field.TypeInt32, value)
 		_node.LotteryWinnerCount = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
@@ -668,7 +680,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Columns: []string{article.PostscriptsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -684,7 +696,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Columns: []string{article.VotesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -700,7 +712,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Columns: []string{article.LotteriesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -716,7 +728,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Columns: []string{article.CommentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(comment.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -732,7 +744,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Columns: article.TagsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -748,7 +760,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 			Columns: []string{article.ActionRecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -804,9 +816,9 @@ func (_c *ArticleCreateBulk) Save(ctx context.Context) ([]*Article, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

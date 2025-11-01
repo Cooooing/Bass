@@ -22,9 +22,11 @@ const (
 )
 
 type PageRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          uint32                 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	Size          uint32                 `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 页码
+	Page uint32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
+	// 页大小
+	Size          uint32 `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,10 +76,13 @@ func (x *PageRequest) GetSize() uint32 {
 }
 
 type PageReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Page          uint32                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	Size          uint32                 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 总数
+	Total uint32 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	// 页码
+	Page uint32 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	// 页大小
+	Size          uint32 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

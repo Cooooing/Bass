@@ -17,11 +17,11 @@ import (
 type ArticleLotteryWinner struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 所属抽奖ID
-	LotteryID int `json:"lottery_id,omitempty"`
+	LotteryID int64 `json:"lottery_id,omitempty"`
 	// 获奖用户ID
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 奖品名称
 	Prize string `json:"prize,omitempty"`
 	// 创建时间
@@ -85,18 +85,18 @@ func (_m *ArticleLotteryWinner) assignValues(columns []string, values []any) err
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case articlelotterywinner.FieldLotteryID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field lottery_id", values[i])
 			} else if value.Valid {
-				_m.LotteryID = int(value.Int64)
+				_m.LotteryID = value.Int64
 			}
 		case articlelotterywinner.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case articlelotterywinner.FieldPrize:
 			if value, ok := values[i].(*sql.NullString); !ok {

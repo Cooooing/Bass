@@ -19,20 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Authentication_RegisterEmail_FullMethodName       = "/user.v1.Authentication/RegisterEmail"
-	Authentication_RegisterEmailVerify_FullMethodName = "/user.v1.Authentication/RegisterEmailVerify"
-	Authentication_ExistEmail_FullMethodName          = "/user.v1.Authentication/ExistEmail"
-	Authentication_ExistPhone_FullMethodName          = "/user.v1.Authentication/ExistPhone"
-	Authentication_ExistUsername_FullMethodName       = "/user.v1.Authentication/ExistUsername"
-	Authentication_LoginAccount_FullMethodName        = "/user.v1.Authentication/LoginAccount"
+	UserAuthenticationService_RegisterEmail_FullMethodName       = "/common.api.user.v1.UserAuthenticationService/RegisterEmail"
+	UserAuthenticationService_RegisterEmailVerify_FullMethodName = "/common.api.user.v1.UserAuthenticationService/RegisterEmailVerify"
+	UserAuthenticationService_ExistEmail_FullMethodName          = "/common.api.user.v1.UserAuthenticationService/ExistEmail"
+	UserAuthenticationService_ExistPhone_FullMethodName          = "/common.api.user.v1.UserAuthenticationService/ExistPhone"
+	UserAuthenticationService_ExistUsername_FullMethodName       = "/common.api.user.v1.UserAuthenticationService/ExistUsername"
+	UserAuthenticationService_LoginAccount_FullMethodName        = "/common.api.user.v1.UserAuthenticationService/LoginAccount"
 )
 
-// AuthenticationClient is the client API for Authentication service.
+// UserAuthenticationServiceClient is the client API for UserAuthenticationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // Authentication 服务
-type AuthenticationClient interface {
+type UserAuthenticationServiceClient interface {
 	// 邮箱注册
 	RegisterEmail(ctx context.Context, in *RegisterEmailRequest, opts ...grpc.CallOption) (*RegisterEmailReply, error)
 	// 邮箱注册验证码验证
@@ -47,80 +47,80 @@ type AuthenticationClient interface {
 	LoginAccount(ctx context.Context, in *LoginAccountRequest, opts ...grpc.CallOption) (*LoginAccountReply, error)
 }
 
-type authenticationClient struct {
+type userAuthenticationServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAuthenticationClient(cc grpc.ClientConnInterface) AuthenticationClient {
-	return &authenticationClient{cc}
+func NewUserAuthenticationServiceClient(cc grpc.ClientConnInterface) UserAuthenticationServiceClient {
+	return &userAuthenticationServiceClient{cc}
 }
 
-func (c *authenticationClient) RegisterEmail(ctx context.Context, in *RegisterEmailRequest, opts ...grpc.CallOption) (*RegisterEmailReply, error) {
+func (c *userAuthenticationServiceClient) RegisterEmail(ctx context.Context, in *RegisterEmailRequest, opts ...grpc.CallOption) (*RegisterEmailReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RegisterEmailReply)
-	err := c.cc.Invoke(ctx, Authentication_RegisterEmail_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_RegisterEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authenticationClient) RegisterEmailVerify(ctx context.Context, in *RegisterEmailVerifyRequest, opts ...grpc.CallOption) (*RegisterEmailVerifyReply, error) {
+func (c *userAuthenticationServiceClient) RegisterEmailVerify(ctx context.Context, in *RegisterEmailVerifyRequest, opts ...grpc.CallOption) (*RegisterEmailVerifyReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RegisterEmailVerifyReply)
-	err := c.cc.Invoke(ctx, Authentication_RegisterEmailVerify_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_RegisterEmailVerify_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authenticationClient) ExistEmail(ctx context.Context, in *ExistEmailRequest, opts ...grpc.CallOption) (*ExistEmailReply, error) {
+func (c *userAuthenticationServiceClient) ExistEmail(ctx context.Context, in *ExistEmailRequest, opts ...grpc.CallOption) (*ExistEmailReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ExistEmailReply)
-	err := c.cc.Invoke(ctx, Authentication_ExistEmail_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_ExistEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authenticationClient) ExistPhone(ctx context.Context, in *ExistPhoneRequest, opts ...grpc.CallOption) (*ExistPhoneReply, error) {
+func (c *userAuthenticationServiceClient) ExistPhone(ctx context.Context, in *ExistPhoneRequest, opts ...grpc.CallOption) (*ExistPhoneReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ExistPhoneReply)
-	err := c.cc.Invoke(ctx, Authentication_ExistPhone_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_ExistPhone_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authenticationClient) ExistUsername(ctx context.Context, in *ExistUsernameRequest, opts ...grpc.CallOption) (*ExistUsernameReply, error) {
+func (c *userAuthenticationServiceClient) ExistUsername(ctx context.Context, in *ExistUsernameRequest, opts ...grpc.CallOption) (*ExistUsernameReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ExistUsernameReply)
-	err := c.cc.Invoke(ctx, Authentication_ExistUsername_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_ExistUsername_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authenticationClient) LoginAccount(ctx context.Context, in *LoginAccountRequest, opts ...grpc.CallOption) (*LoginAccountReply, error) {
+func (c *userAuthenticationServiceClient) LoginAccount(ctx context.Context, in *LoginAccountRequest, opts ...grpc.CallOption) (*LoginAccountReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LoginAccountReply)
-	err := c.cc.Invoke(ctx, Authentication_LoginAccount_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_LoginAccount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AuthenticationServer is the server API for Authentication service.
-// All implementations must embed UnimplementedAuthenticationServer
+// UserAuthenticationServiceServer is the server API for UserAuthenticationService service.
+// All implementations must embed UnimplementedUserAuthenticationServiceServer
 // for forward compatibility.
 //
 // Authentication 服务
-type AuthenticationServer interface {
+type UserAuthenticationServiceServer interface {
 	// 邮箱注册
 	RegisterEmail(context.Context, *RegisterEmailRequest) (*RegisterEmailReply, error)
 	// 邮箱注册验证码验证
@@ -133,193 +133,194 @@ type AuthenticationServer interface {
 	ExistUsername(context.Context, *ExistUsernameRequest) (*ExistUsernameReply, error)
 	// 账号登录（用户名/邮箱）
 	LoginAccount(context.Context, *LoginAccountRequest) (*LoginAccountReply, error)
-	mustEmbedUnimplementedAuthenticationServer()
+	mustEmbedUnimplementedUserAuthenticationServiceServer()
 }
 
-// UnimplementedAuthenticationServer must be embedded to have
+// UnimplementedUserAuthenticationServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedAuthenticationServer struct{}
+type UnimplementedUserAuthenticationServiceServer struct{}
 
-func (UnimplementedAuthenticationServer) RegisterEmail(context.Context, *RegisterEmailRequest) (*RegisterEmailReply, error) {
+func (UnimplementedUserAuthenticationServiceServer) RegisterEmail(context.Context, *RegisterEmailRequest) (*RegisterEmailReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEmail not implemented")
 }
-func (UnimplementedAuthenticationServer) RegisterEmailVerify(context.Context, *RegisterEmailVerifyRequest) (*RegisterEmailVerifyReply, error) {
+func (UnimplementedUserAuthenticationServiceServer) RegisterEmailVerify(context.Context, *RegisterEmailVerifyRequest) (*RegisterEmailVerifyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEmailVerify not implemented")
 }
-func (UnimplementedAuthenticationServer) ExistEmail(context.Context, *ExistEmailRequest) (*ExistEmailReply, error) {
+func (UnimplementedUserAuthenticationServiceServer) ExistEmail(context.Context, *ExistEmailRequest) (*ExistEmailReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistEmail not implemented")
 }
-func (UnimplementedAuthenticationServer) ExistPhone(context.Context, *ExistPhoneRequest) (*ExistPhoneReply, error) {
+func (UnimplementedUserAuthenticationServiceServer) ExistPhone(context.Context, *ExistPhoneRequest) (*ExistPhoneReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistPhone not implemented")
 }
-func (UnimplementedAuthenticationServer) ExistUsername(context.Context, *ExistUsernameRequest) (*ExistUsernameReply, error) {
+func (UnimplementedUserAuthenticationServiceServer) ExistUsername(context.Context, *ExistUsernameRequest) (*ExistUsernameReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistUsername not implemented")
 }
-func (UnimplementedAuthenticationServer) LoginAccount(context.Context, *LoginAccountRequest) (*LoginAccountReply, error) {
+func (UnimplementedUserAuthenticationServiceServer) LoginAccount(context.Context, *LoginAccountRequest) (*LoginAccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginAccount not implemented")
 }
-func (UnimplementedAuthenticationServer) mustEmbedUnimplementedAuthenticationServer() {}
-func (UnimplementedAuthenticationServer) testEmbeddedByValue()                        {}
+func (UnimplementedUserAuthenticationServiceServer) mustEmbedUnimplementedUserAuthenticationServiceServer() {
+}
+func (UnimplementedUserAuthenticationServiceServer) testEmbeddedByValue() {}
 
-// UnsafeAuthenticationServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AuthenticationServer will
+// UnsafeUserAuthenticationServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserAuthenticationServiceServer will
 // result in compilation errors.
-type UnsafeAuthenticationServer interface {
-	mustEmbedUnimplementedAuthenticationServer()
+type UnsafeUserAuthenticationServiceServer interface {
+	mustEmbedUnimplementedUserAuthenticationServiceServer()
 }
 
-func RegisterAuthenticationServer(s grpc.ServiceRegistrar, srv AuthenticationServer) {
-	// If the following call pancis, it indicates UnimplementedAuthenticationServer was
+func RegisterUserAuthenticationServiceServer(s grpc.ServiceRegistrar, srv UserAuthenticationServiceServer) {
+	// If the following call pancis, it indicates UnimplementedUserAuthenticationServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Authentication_ServiceDesc, srv)
+	s.RegisterService(&UserAuthenticationService_ServiceDesc, srv)
 }
 
-func _Authentication_RegisterEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAuthenticationService_RegisterEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServer).RegisterEmail(ctx, in)
+		return srv.(UserAuthenticationServiceServer).RegisterEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Authentication_RegisterEmail_FullMethodName,
+		FullMethod: UserAuthenticationService_RegisterEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServer).RegisterEmail(ctx, req.(*RegisterEmailRequest))
+		return srv.(UserAuthenticationServiceServer).RegisterEmail(ctx, req.(*RegisterEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Authentication_RegisterEmailVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAuthenticationService_RegisterEmailVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterEmailVerifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServer).RegisterEmailVerify(ctx, in)
+		return srv.(UserAuthenticationServiceServer).RegisterEmailVerify(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Authentication_RegisterEmailVerify_FullMethodName,
+		FullMethod: UserAuthenticationService_RegisterEmailVerify_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServer).RegisterEmailVerify(ctx, req.(*RegisterEmailVerifyRequest))
+		return srv.(UserAuthenticationServiceServer).RegisterEmailVerify(ctx, req.(*RegisterEmailVerifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Authentication_ExistEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAuthenticationService_ExistEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExistEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServer).ExistEmail(ctx, in)
+		return srv.(UserAuthenticationServiceServer).ExistEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Authentication_ExistEmail_FullMethodName,
+		FullMethod: UserAuthenticationService_ExistEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServer).ExistEmail(ctx, req.(*ExistEmailRequest))
+		return srv.(UserAuthenticationServiceServer).ExistEmail(ctx, req.(*ExistEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Authentication_ExistPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAuthenticationService_ExistPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExistPhoneRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServer).ExistPhone(ctx, in)
+		return srv.(UserAuthenticationServiceServer).ExistPhone(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Authentication_ExistPhone_FullMethodName,
+		FullMethod: UserAuthenticationService_ExistPhone_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServer).ExistPhone(ctx, req.(*ExistPhoneRequest))
+		return srv.(UserAuthenticationServiceServer).ExistPhone(ctx, req.(*ExistPhoneRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Authentication_ExistUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAuthenticationService_ExistUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExistUsernameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServer).ExistUsername(ctx, in)
+		return srv.(UserAuthenticationServiceServer).ExistUsername(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Authentication_ExistUsername_FullMethodName,
+		FullMethod: UserAuthenticationService_ExistUsername_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServer).ExistUsername(ctx, req.(*ExistUsernameRequest))
+		return srv.(UserAuthenticationServiceServer).ExistUsername(ctx, req.(*ExistUsernameRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Authentication_LoginAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserAuthenticationService_LoginAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginAccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServer).LoginAccount(ctx, in)
+		return srv.(UserAuthenticationServiceServer).LoginAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Authentication_LoginAccount_FullMethodName,
+		FullMethod: UserAuthenticationService_LoginAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServer).LoginAccount(ctx, req.(*LoginAccountRequest))
+		return srv.(UserAuthenticationServiceServer).LoginAccount(ctx, req.(*LoginAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Authentication_ServiceDesc is the grpc.ServiceDesc for Authentication service.
+// UserAuthenticationService_ServiceDesc is the grpc.ServiceDesc for UserAuthenticationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Authentication_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.v1.Authentication",
-	HandlerType: (*AuthenticationServer)(nil),
+var UserAuthenticationService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "common.api.user.v1.UserAuthenticationService",
+	HandlerType: (*UserAuthenticationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "RegisterEmail",
-			Handler:    _Authentication_RegisterEmail_Handler,
+			Handler:    _UserAuthenticationService_RegisterEmail_Handler,
 		},
 		{
 			MethodName: "RegisterEmailVerify",
-			Handler:    _Authentication_RegisterEmailVerify_Handler,
+			Handler:    _UserAuthenticationService_RegisterEmailVerify_Handler,
 		},
 		{
 			MethodName: "ExistEmail",
-			Handler:    _Authentication_ExistEmail_Handler,
+			Handler:    _UserAuthenticationService_ExistEmail_Handler,
 		},
 		{
 			MethodName: "ExistPhone",
-			Handler:    _Authentication_ExistPhone_Handler,
+			Handler:    _UserAuthenticationService_ExistPhone_Handler,
 		},
 		{
 			MethodName: "ExistUsername",
-			Handler:    _Authentication_ExistUsername_Handler,
+			Handler:    _UserAuthenticationService_ExistUsername_Handler,
 		},
 		{
 			MethodName: "LoginAccount",
-			Handler:    _Authentication_LoginAccount_Handler,
+			Handler:    _UserAuthenticationService_LoginAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

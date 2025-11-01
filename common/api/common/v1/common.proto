@@ -5,12 +5,17 @@ package common.api.common.v1;
 option go_package = "common/api/common/v1;v1";
 
 message PageRequest {
+  // 页码
   uint32 page = 1;
+  // 页大小
   uint32 size = 2;
 }
 
 message PageReply {
+  // 总数
   uint32 total = 1;
+  // 页码
   uint32 page = 2;
+  // 页大小
   uint32 size = 3;
 }

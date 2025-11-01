@@ -52,10 +52,12 @@ func ProvideServices(
 	systemService *SystemService,
 	articleService *ArticleService,
 	domainService *DomainService,
+	commentService *CommentService,
 ) []Service {
 	return []Service{
 		systemService,
 		articleService,
 		domainService,
+		commentService,
 	}
 }

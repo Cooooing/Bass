@@ -10,7 +10,7 @@ import "common/v1/common.proto";
 option go_package = "common/api/content/v1;v1";
 
 // 领域服务
-service DomainService {
+service ContentDomainService {
   // 新增领域
   rpc Add (AddDomainRequest) returns (AddDomainReply) {
     option (google.api.http) = {
@@ -37,50 +37,81 @@ service DomainService {
 }
 
 message Domain {
+  // 创建时间
   google.protobuf.Timestamp created_at = 1;
+  // 更新时间
   google.protobuf.Timestamp updated_at = 2;
+  // 主键
   int64 id = 3;
+  // 领域名称
   string name = 4;
+  // 描述
   string description = 5;
-  int32 status = 6;
+  // 状态 0-正常，1-禁用
+  int64 status = 6;
+  // 链接
   string url = 7;
+  // 图标
   string icon = 8;
+  // 标签数量
   int64 tagCount = 9;
+  // 是否导航
   bool isNav = 10;
 }
 
 message AddDomainRequest {
+  // 领域名称
   string name = 1;
+  // 描述
   string description = 2;
-  int32 status = 3;
+  // 状态 0-正常，1-禁用
+  int64 status = 3;
+  // 链接
   string url = 4;
+  // 图标
   string icon = 5;
+  // 是否导航
   bool isNav = 6;
 }
 message AddDomainReply {
 }
 
 message UpdateDomainRequest {
+  // 领域名称
   string name = 1;
+  // 描述
   string description = 2;
-  int32 status = 3;
+  // 状态 0-正常，1-禁用
+  int64 status = 3;
+  // 链接
   string url = 4;
+  // 图标
   string icon = 5;
+  // 是否导航
   bool isNav = 6;
 }
 message UpdateDomainReply {
 }
 
 message GetDomainRequest {
+  // 分页参数
   optional common.v1.PageRequest page = 1;
+  // 领域名称
   string name = 2;
+  // 描述
   string description = 3;
-  int32 status = 4;
+  // 状态 0-正常，1-禁用
+  int64 status = 4;
+  // 链接
   string url = 5;
+  // 图标
   string icon = 6;
+  // 是否导航
   bool isNav = 7;
 }
 message GetDomainReply {
+  // 分页信息
   optional common.v1.PageReply page = 1;
+  // 数据
   repeated Domain data = 2;
 }

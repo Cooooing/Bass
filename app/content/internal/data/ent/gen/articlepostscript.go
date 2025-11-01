@@ -17,9 +17,9 @@ import (
 type ArticlePostscript struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 所属文章ID
-	ArticleID int `json:"article_id,omitempty"`
+	ArticleID int64 `json:"article_id,omitempty"`
 	// 附言内容
 	Content string `json:"content,omitempty"`
 	// 创建时间
@@ -83,12 +83,12 @@ func (_m *ArticlePostscript) assignValues(columns []string, values []any) error 
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case articlepostscript.FieldArticleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field article_id", values[i])
 			} else if value.Valid {
-				_m.ArticleID = int(value.Int64)
+				_m.ArticleID = value.Int64
 			}
 		case articlepostscript.FieldContent:
 			if value, ok := values[i].(*sql.NullString); !ok {

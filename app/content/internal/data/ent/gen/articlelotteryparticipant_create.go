@@ -22,13 +22,13 @@ type ArticleLotteryParticipantCreate struct {
 }
 
 // SetLotteryID sets the "lottery_id" field.
-func (_c *ArticleLotteryParticipantCreate) SetLotteryID(v int) *ArticleLotteryParticipantCreate {
+func (_c *ArticleLotteryParticipantCreate) SetLotteryID(v int64) *ArticleLotteryParticipantCreate {
 	_c.mutation.SetLotteryID(v)
 	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *ArticleLotteryParticipantCreate) SetUserID(v int) *ArticleLotteryParticipantCreate {
+func (_c *ArticleLotteryParticipantCreate) SetUserID(v int64) *ArticleLotteryParticipantCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
@@ -58,6 +58,12 @@ func (_c *ArticleLotteryParticipantCreate) SetNillableUpdatedAt(v *time.Time) *A
 	if v != nil {
 		_c.SetUpdatedAt(*v)
 	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ArticleLotteryParticipantCreate) SetID(v int64) *ArticleLotteryParticipantCreate {
+	_c.mutation.SetID(v)
 	return _c
 }
 
@@ -136,8 +142,10 @@ func (_c *ArticleLotteryParticipantCreate) sqlSave(ctx context.Context) (*Articl
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -146,10 +154,14 @@ func (_c *ArticleLotteryParticipantCreate) sqlSave(ctx context.Context) (*Articl
 func (_c *ArticleLotteryParticipantCreate) createSpec() (*ArticleLotteryParticipant, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ArticleLotteryParticipant{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(articlelotteryparticipant.Table, sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(articlelotteryparticipant.Table, sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(articlelotteryparticipant.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articlelotteryparticipant.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
@@ -168,7 +180,7 @@ func (_c *ArticleLotteryParticipantCreate) createSpec() (*ArticleLotteryParticip
 			Columns: []string{articlelotteryparticipant.LotteryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -225,9 +237,9 @@ func (_c *ArticleLotteryParticipantCreateBulk) Save(ctx context.Context) ([]*Art
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

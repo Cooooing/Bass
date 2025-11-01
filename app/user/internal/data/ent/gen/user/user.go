@@ -149,17 +149,17 @@ var (
 	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	PasswordValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
+	DefaultStatus int32
 	// DefaultFollowCount holds the default value on creation for the "follow_count" field.
-	DefaultFollowCount int
+	DefaultFollowCount int32
 	// DefaultFollowerCount holds the default value on creation for the "follower_count" field.
-	DefaultFollowerCount int
+	DefaultFollowerCount int32
 	// DefaultOnlineMinutes holds the default value on creation for the "online_minutes" field.
-	DefaultOnlineMinutes int
+	DefaultOnlineMinutes int32
 	// DefaultCurrentCheckinStreak holds the default value on creation for the "current_checkin_streak" field.
-	DefaultCurrentCheckinStreak int
+	DefaultCurrentCheckinStreak int32
 	// DefaultLongestCheckinStreak holds the default value on creation for the "longest_checkin_streak" field.
-	DefaultLongestCheckinStreak int
+	DefaultLongestCheckinStreak int32
 	// DefaultLanguage holds the default value on creation for the "language" field.
 	DefaultLanguage string
 	// DefaultTimezone holds the default value on creation for the "timezone" field.

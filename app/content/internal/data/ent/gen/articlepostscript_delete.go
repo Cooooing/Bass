@@ -40,7 +40,7 @@ func (_d *ArticlePostscriptDelete) ExecX(ctx context.Context) int {
 }
 
 func (_d *ArticlePostscriptDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(articlepostscript.Table, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(articlepostscript.Table, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt64))
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

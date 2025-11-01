@@ -11,57 +11,57 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ArticleLotteryParticipant {
+func ID(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ArticleLotteryParticipant {
+func IDEQ(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ArticleLotteryParticipant {
+func IDNEQ(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ArticleLotteryParticipant {
+func IDIn(ids ...int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ArticleLotteryParticipant {
+func IDNotIn(ids ...int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ArticleLotteryParticipant {
+func IDGT(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ArticleLotteryParticipant {
+func IDGTE(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ArticleLotteryParticipant {
+func IDLT(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ArticleLotteryParticipant {
+func IDLTE(id int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldLTE(FieldID, id))
 }
 
 // LotteryID applies equality check predicate on the "lottery_id" field. It's identical to LotteryIDEQ.
-func LotteryID(v int) predicate.ArticleLotteryParticipant {
+func LotteryID(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldEQ(FieldLotteryID, v))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.ArticleLotteryParticipant {
+func UserID(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldEQ(FieldUserID, v))
 }
 
@@ -76,62 +76,62 @@ func UpdatedAt(v time.Time) predicate.ArticleLotteryParticipant {
 }
 
 // LotteryIDEQ applies the EQ predicate on the "lottery_id" field.
-func LotteryIDEQ(v int) predicate.ArticleLotteryParticipant {
+func LotteryIDEQ(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldEQ(FieldLotteryID, v))
 }
 
 // LotteryIDNEQ applies the NEQ predicate on the "lottery_id" field.
-func LotteryIDNEQ(v int) predicate.ArticleLotteryParticipant {
+func LotteryIDNEQ(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldNEQ(FieldLotteryID, v))
 }
 
 // LotteryIDIn applies the In predicate on the "lottery_id" field.
-func LotteryIDIn(vs ...int) predicate.ArticleLotteryParticipant {
+func LotteryIDIn(vs ...int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldIn(FieldLotteryID, vs...))
 }
 
 // LotteryIDNotIn applies the NotIn predicate on the "lottery_id" field.
-func LotteryIDNotIn(vs ...int) predicate.ArticleLotteryParticipant {
+func LotteryIDNotIn(vs ...int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldNotIn(FieldLotteryID, vs...))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.ArticleLotteryParticipant {
+func UserIDEQ(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.ArticleLotteryParticipant {
+func UserIDNEQ(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.ArticleLotteryParticipant {
+func UserIDIn(vs ...int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.ArticleLotteryParticipant {
+func UserIDNotIn(vs ...int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.ArticleLotteryParticipant {
+func UserIDGT(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.ArticleLotteryParticipant {
+func UserIDGTE(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.ArticleLotteryParticipant {
+func UserIDLT(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.ArticleLotteryParticipant {
+func UserIDLTE(v int64) predicate.ArticleLotteryParticipant {
 	return predicate.ArticleLotteryParticipant(sql.FieldLTE(FieldUserID, v))
 }
 

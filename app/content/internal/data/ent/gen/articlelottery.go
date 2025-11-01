@@ -18,9 +18,9 @@ import (
 type ArticleLottery struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 所属文章ID
-	ArticleID int `json:"article_id,omitempty"`
+	ArticleID int64 `json:"article_id,omitempty"`
 	// 奖品列表
 	Prizes []string `json:"prizes,omitempty"`
 	// 抽奖开始时间
@@ -28,7 +28,7 @@ type ArticleLottery struct {
 	// 抽奖结束时间
 	EndAt time.Time `json:"end_at,omitempty"`
 	// 状态 0-未开始 1-进行中 2-已结束
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -112,12 +112,12 @@ func (_m *ArticleLottery) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case articlelottery.FieldArticleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field article_id", values[i])
 			} else if value.Valid {
-				_m.ArticleID = int(value.Int64)
+				_m.ArticleID = value.Int64
 			}
 		case articlelottery.FieldPrizes:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -143,7 +143,7 @@ func (_m *ArticleLottery) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int(value.Int64)
+				_m.Status = int32(value.Int64)
 			}
 		case articlelottery.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {

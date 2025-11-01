@@ -26,13 +26,14 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdClient)
-	baseDomain := biz.NewBaseDomain(bootstrap, helper)
 	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
+	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient)
+	systemService := service.NewSystemService(baseService)
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient)
 	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
 		cleanup2()
@@ -59,8 +60,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	authenticationService := service.NewAuthenticationService(baseService, authenticationDomain, userRepo)
-	systemService := service.NewSystemService(baseService)
-	v := service.ProvideServices(authenticationService, systemService)
+	userService := service.NewUserService(baseService, authenticationDomain, userRepo)
+	v := service.ProvideServices(systemService, authenticationService, userService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenService)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)

@@ -19,26 +19,27 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ArticleService_Add_FullMethodName           = "/content.v1.ArticleService/Add"
-	ArticleService_Publish_FullMethodName       = "/content.v1.ArticleService/Publish"
-	ArticleService_Update_FullMethodName        = "/content.v1.ArticleService/Update"
-	ArticleService_Delete_FullMethodName        = "/content.v1.ArticleService/Delete"
-	ArticleService_Get_FullMethodName           = "/content.v1.ArticleService/Get"
-	ArticleService_AddPostscript_FullMethodName = "/content.v1.ArticleService/AddPostscript"
-	ArticleService_Reward_FullMethodName        = "/content.v1.ArticleService/Reward"
-	ArticleService_Thank_FullMethodName         = "/content.v1.ArticleService/Thank"
-	ArticleService_Like_FullMethodName          = "/content.v1.ArticleService/Like"
-	ArticleService_Collect_FullMethodName       = "/content.v1.ArticleService/Collect"
-	ArticleService_Watch_FullMethodName         = "/content.v1.ArticleService/Watch"
-	ArticleService_AcceptAnswer_FullMethodName  = "/content.v1.ArticleService/AcceptAnswer"
+	ContentArticleService_Add_FullMethodName           = "/common.api.content.v1.ContentArticleService/Add"
+	ContentArticleService_Publish_FullMethodName       = "/common.api.content.v1.ContentArticleService/Publish"
+	ContentArticleService_Update_FullMethodName        = "/common.api.content.v1.ContentArticleService/Update"
+	ContentArticleService_Delete_FullMethodName        = "/common.api.content.v1.ContentArticleService/Delete"
+	ContentArticleService_Get_FullMethodName           = "/common.api.content.v1.ContentArticleService/Get"
+	ContentArticleService_GetOne_FullMethodName        = "/common.api.content.v1.ContentArticleService/GetOne"
+	ContentArticleService_AddPostscript_FullMethodName = "/common.api.content.v1.ContentArticleService/AddPostscript"
+	ContentArticleService_Reward_FullMethodName        = "/common.api.content.v1.ContentArticleService/Reward"
+	ContentArticleService_Thank_FullMethodName         = "/common.api.content.v1.ContentArticleService/Thank"
+	ContentArticleService_Like_FullMethodName          = "/common.api.content.v1.ContentArticleService/Like"
+	ContentArticleService_Collect_FullMethodName       = "/common.api.content.v1.ContentArticleService/Collect"
+	ContentArticleService_Watch_FullMethodName         = "/common.api.content.v1.ContentArticleService/Watch"
+	ContentArticleService_AcceptAnswer_FullMethodName  = "/common.api.content.v1.ContentArticleService/AcceptAnswer"
 )
 
-// ArticleServiceClient is the client API for ArticleService service.
+// ContentArticleServiceClient is the client API for ContentArticleService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // Article 服务
-type ArticleServiceClient interface {
+type ContentArticleServiceClient interface {
 	// 新增文章
 	Add(ctx context.Context, in *AddArticleRequest, opts ...grpc.CallOption) (*AddArticleReply, error)
 	// 发布文章（从草稿发布）
@@ -49,6 +50,8 @@ type ArticleServiceClient interface {
 	Delete(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleReply, error)
 	// 查询文章
 	Get(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleReply, error)
+	// 查询单篇文章
+	GetOne(ctx context.Context, in *GetArticleOneRequest, opts ...grpc.CallOption) (*GetArticleOneReply, error)
 	// 添加附言
 	AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error)
 	// 打赏文章
@@ -65,140 +68,150 @@ type ArticleServiceClient interface {
 	AcceptAnswer(ctx context.Context, in *AcceptAnswerArticleRequest, opts ...grpc.CallOption) (*AcceptAnswerArticleReply, error)
 }
 
-type articleServiceClient struct {
+type contentArticleServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
-	return &articleServiceClient{cc}
+func NewContentArticleServiceClient(cc grpc.ClientConnInterface) ContentArticleServiceClient {
+	return &contentArticleServiceClient{cc}
 }
 
-func (c *articleServiceClient) Add(ctx context.Context, in *AddArticleRequest, opts ...grpc.CallOption) (*AddArticleReply, error) {
+func (c *contentArticleServiceClient) Add(ctx context.Context, in *AddArticleRequest, opts ...grpc.CallOption) (*AddArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Add_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Add_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Publish(ctx context.Context, in *PublishArticleRequest, opts ...grpc.CallOption) (*PublishArticleReply, error) {
+func (c *contentArticleServiceClient) Publish(ctx context.Context, in *PublishArticleRequest, opts ...grpc.CallOption) (*PublishArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PublishArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Publish_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Publish_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Update(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*UpdateArticleReply, error) {
+func (c *contentArticleServiceClient) Update(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*UpdateArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Update_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Delete(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleReply, error) {
+func (c *contentArticleServiceClient) Delete(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Delete_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Delete_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Get(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleReply, error) {
+func (c *contentArticleServiceClient) Get(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Get_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error) {
+func (c *contentArticleServiceClient) GetOne(ctx context.Context, in *GetArticleOneRequest, opts ...grpc.CallOption) (*GetArticleOneReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetArticleOneReply)
+	err := c.cc.Invoke(ctx, ContentArticleService_GetOne_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *contentArticleServiceClient) AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddPostscriptArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_AddPostscript_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_AddPostscript_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error) {
+func (c *contentArticleServiceClient) Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RewardArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Reward_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Reward_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Thank(ctx context.Context, in *ThankArticleRequest, opts ...grpc.CallOption) (*ThankArticleReply, error) {
+func (c *contentArticleServiceClient) Thank(ctx context.Context, in *ThankArticleRequest, opts ...grpc.CallOption) (*ThankArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ThankArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Thank_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Thank_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Like(ctx context.Context, in *LikeArticleRequest, opts ...grpc.CallOption) (*LikeArticleReply, error) {
+func (c *contentArticleServiceClient) Like(ctx context.Context, in *LikeArticleRequest, opts ...grpc.CallOption) (*LikeArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LikeArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Like_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Like_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Collect(ctx context.Context, in *CollectArticleRequest, opts ...grpc.CallOption) (*CollectArticleReply, error) {
+func (c *contentArticleServiceClient) Collect(ctx context.Context, in *CollectArticleRequest, opts ...grpc.CallOption) (*CollectArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CollectArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Collect_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Collect_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) Watch(ctx context.Context, in *WatchArticleRequest, opts ...grpc.CallOption) (*WatchArticleReply, error) {
+func (c *contentArticleServiceClient) Watch(ctx context.Context, in *WatchArticleRequest, opts ...grpc.CallOption) (*WatchArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(WatchArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_Watch_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_Watch_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleServiceClient) AcceptAnswer(ctx context.Context, in *AcceptAnswerArticleRequest, opts ...grpc.CallOption) (*AcceptAnswerArticleReply, error) {
+func (c *contentArticleServiceClient) AcceptAnswer(ctx context.Context, in *AcceptAnswerArticleRequest, opts ...grpc.CallOption) (*AcceptAnswerArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AcceptAnswerArticleReply)
-	err := c.cc.Invoke(ctx, ArticleService_AcceptAnswer_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentArticleService_AcceptAnswer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ArticleServiceServer is the server API for ArticleService service.
-// All implementations must embed UnimplementedArticleServiceServer
+// ContentArticleServiceServer is the server API for ContentArticleService service.
+// All implementations must embed UnimplementedContentArticleServiceServer
 // for forward compatibility.
 //
 // Article 服务
-type ArticleServiceServer interface {
+type ContentArticleServiceServer interface {
 	// 新增文章
 	Add(context.Context, *AddArticleRequest) (*AddArticleReply, error)
 	// 发布文章（从草稿发布）
@@ -209,6 +222,8 @@ type ArticleServiceServer interface {
 	Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error)
 	// 查询文章
 	Get(context.Context, *GetArticleRequest) (*GetArticleReply, error)
+	// 查询单篇文章
+	GetOne(context.Context, *GetArticleOneRequest) (*GetArticleOneReply, error)
 	// 添加附言
 	AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error)
 	// 打赏文章
@@ -223,343 +238,368 @@ type ArticleServiceServer interface {
 	Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error)
 	// 采纳评论
 	AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error)
-	mustEmbedUnimplementedArticleServiceServer()
+	mustEmbedUnimplementedContentArticleServiceServer()
 }
 
-// UnimplementedArticleServiceServer must be embedded to have
+// UnimplementedContentArticleServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedArticleServiceServer struct{}
+type UnimplementedContentArticleServiceServer struct{}
 
-func (UnimplementedArticleServiceServer) Add(context.Context, *AddArticleRequest) (*AddArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Add(context.Context, *AddArticleRequest) (*AddArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedArticleServiceServer) Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Publish not implemented")
 }
-func (UnimplementedArticleServiceServer) Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedArticleServiceServer) Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedArticleServiceServer) Get(context.Context, *GetArticleRequest) (*GetArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Get(context.Context, *GetArticleRequest) (*GetArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedArticleServiceServer) AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) GetOne(context.Context, *GetArticleOneRequest) (*GetArticleOneReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOne not implemented")
+}
+func (UnimplementedContentArticleServiceServer) AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPostscript not implemented")
 }
-func (UnimplementedArticleServiceServer) Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reward not implemented")
 }
-func (UnimplementedArticleServiceServer) Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Thank not implemented")
 }
-func (UnimplementedArticleServiceServer) Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Like not implemented")
 }
-func (UnimplementedArticleServiceServer) Collect(context.Context, *CollectArticleRequest) (*CollectArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Collect(context.Context, *CollectArticleRequest) (*CollectArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Collect not implemented")
 }
-func (UnimplementedArticleServiceServer) Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Watch not implemented")
 }
-func (UnimplementedArticleServiceServer) AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error) {
+func (UnimplementedContentArticleServiceServer) AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AcceptAnswer not implemented")
 }
-func (UnimplementedArticleServiceServer) mustEmbedUnimplementedArticleServiceServer() {}
-func (UnimplementedArticleServiceServer) testEmbeddedByValue()                        {}
+func (UnimplementedContentArticleServiceServer) mustEmbedUnimplementedContentArticleServiceServer() {}
+func (UnimplementedContentArticleServiceServer) testEmbeddedByValue()                               {}
 
-// UnsafeArticleServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ArticleServiceServer will
+// UnsafeContentArticleServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ContentArticleServiceServer will
 // result in compilation errors.
-type UnsafeArticleServiceServer interface {
-	mustEmbedUnimplementedArticleServiceServer()
+type UnsafeContentArticleServiceServer interface {
+	mustEmbedUnimplementedContentArticleServiceServer()
 }
 
-func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceServer) {
-	// If the following call pancis, it indicates UnimplementedArticleServiceServer was
+func RegisterContentArticleServiceServer(s grpc.ServiceRegistrar, srv ContentArticleServiceServer) {
+	// If the following call pancis, it indicates UnimplementedContentArticleServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&ArticleService_ServiceDesc, srv)
+	s.RegisterService(&ContentArticleService_ServiceDesc, srv)
 }
 
-func _ArticleService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Add(ctx, in)
+		return srv.(ContentArticleServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Add_FullMethodName,
+		FullMethod: ContentArticleService_Add_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Add(ctx, req.(*AddArticleRequest))
+		return srv.(ContentArticleServiceServer).Add(ctx, req.(*AddArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Publish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Publish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PublishArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Publish(ctx, in)
+		return srv.(ContentArticleServiceServer).Publish(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Publish_FullMethodName,
+		FullMethod: ContentArticleService_Publish_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Publish(ctx, req.(*PublishArticleRequest))
+		return srv.(ContentArticleServiceServer).Publish(ctx, req.(*PublishArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Update(ctx, in)
+		return srv.(ContentArticleServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Update_FullMethodName,
+		FullMethod: ContentArticleService_Update_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Update(ctx, req.(*UpdateArticleRequest))
+		return srv.(ContentArticleServiceServer).Update(ctx, req.(*UpdateArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Delete(ctx, in)
+		return srv.(ContentArticleServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Delete_FullMethodName,
+		FullMethod: ContentArticleService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Delete(ctx, req.(*DeleteArticleRequest))
+		return srv.(ContentArticleServiceServer).Delete(ctx, req.(*DeleteArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Get(ctx, in)
+		return srv.(ContentArticleServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Get_FullMethodName,
+		FullMethod: ContentArticleService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Get(ctx, req.(*GetArticleRequest))
+		return srv.(ContentArticleServiceServer).Get(ctx, req.(*GetArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_AddPostscript_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_GetOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetArticleOneRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentArticleServiceServer).GetOne(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ContentArticleService_GetOne_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentArticleServiceServer).GetOne(ctx, req.(*GetArticleOneRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ContentArticleService_AddPostscript_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddPostscriptArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).AddPostscript(ctx, in)
+		return srv.(ContentArticleServiceServer).AddPostscript(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_AddPostscript_FullMethodName,
+		FullMethod: ContentArticleService_AddPostscript_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).AddPostscript(ctx, req.(*AddPostscriptArticleRequest))
+		return srv.(ContentArticleServiceServer).AddPostscript(ctx, req.(*AddPostscriptArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Reward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Reward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RewardArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Reward(ctx, in)
+		return srv.(ContentArticleServiceServer).Reward(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Reward_FullMethodName,
+		FullMethod: ContentArticleService_Reward_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Reward(ctx, req.(*RewardArticleRequest))
+		return srv.(ContentArticleServiceServer).Reward(ctx, req.(*RewardArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Thank_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Thank_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ThankArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Thank(ctx, in)
+		return srv.(ContentArticleServiceServer).Thank(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Thank_FullMethodName,
+		FullMethod: ContentArticleService_Thank_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Thank(ctx, req.(*ThankArticleRequest))
+		return srv.(ContentArticleServiceServer).Thank(ctx, req.(*ThankArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LikeArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Like(ctx, in)
+		return srv.(ContentArticleServiceServer).Like(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Like_FullMethodName,
+		FullMethod: ContentArticleService_Like_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Like(ctx, req.(*LikeArticleRequest))
+		return srv.(ContentArticleServiceServer).Like(ctx, req.(*LikeArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Collect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Collect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CollectArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Collect(ctx, in)
+		return srv.(ContentArticleServiceServer).Collect(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Collect_FullMethodName,
+		FullMethod: ContentArticleService_Collect_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Collect(ctx, req.(*CollectArticleRequest))
+		return srv.(ContentArticleServiceServer).Collect(ctx, req.(*CollectArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_Watch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_Watch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WatchArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).Watch(ctx, in)
+		return srv.(ContentArticleServiceServer).Watch(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_Watch_FullMethodName,
+		FullMethod: ContentArticleService_Watch_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).Watch(ctx, req.(*WatchArticleRequest))
+		return srv.(ContentArticleServiceServer).Watch(ctx, req.(*WatchArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleService_AcceptAnswer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentArticleService_AcceptAnswer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AcceptAnswerArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).AcceptAnswer(ctx, in)
+		return srv.(ContentArticleServiceServer).AcceptAnswer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_AcceptAnswer_FullMethodName,
+		FullMethod: ContentArticleService_AcceptAnswer_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).AcceptAnswer(ctx, req.(*AcceptAnswerArticleRequest))
+		return srv.(ContentArticleServiceServer).AcceptAnswer(ctx, req.(*AcceptAnswerArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ArticleService_ServiceDesc is the grpc.ServiceDesc for ArticleService service.
+// ContentArticleService_ServiceDesc is the grpc.ServiceDesc for ContentArticleService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ArticleService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "content.v1.ArticleService",
-	HandlerType: (*ArticleServiceServer)(nil),
+var ContentArticleService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "common.api.content.v1.ContentArticleService",
+	HandlerType: (*ContentArticleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Add",
-			Handler:    _ArticleService_Add_Handler,
+			Handler:    _ContentArticleService_Add_Handler,
 		},
 		{
 			MethodName: "Publish",
-			Handler:    _ArticleService_Publish_Handler,
+			Handler:    _ContentArticleService_Publish_Handler,
 		},
 		{
 			MethodName: "Update",
-			Handler:    _ArticleService_Update_Handler,
+			Handler:    _ContentArticleService_Update_Handler,
 		},
 		{
 			MethodName: "Delete",
-			Handler:    _ArticleService_Delete_Handler,
+			Handler:    _ContentArticleService_Delete_Handler,
 		},
 		{
 			MethodName: "Get",
-			Handler:    _ArticleService_Get_Handler,
+			Handler:    _ContentArticleService_Get_Handler,
+		},
+		{
+			MethodName: "GetOne",
+			Handler:    _ContentArticleService_GetOne_Handler,
 		},
 		{
 			MethodName: "AddPostscript",
-			Handler:    _ArticleService_AddPostscript_Handler,
+			Handler:    _ContentArticleService_AddPostscript_Handler,
 		},
 		{
 			MethodName: "Reward",
-			Handler:    _ArticleService_Reward_Handler,
+			Handler:    _ContentArticleService_Reward_Handler,
 		},
 		{
 			MethodName: "Thank",
-			Handler:    _ArticleService_Thank_Handler,
+			Handler:    _ContentArticleService_Thank_Handler,
 		},
 		{
 			MethodName: "Like",
-			Handler:    _ArticleService_Like_Handler,
+			Handler:    _ContentArticleService_Like_Handler,
 		},
 		{
 			MethodName: "Collect",
-			Handler:    _ArticleService_Collect_Handler,
+			Handler:    _ContentArticleService_Collect_Handler,
 		},
 		{
 			MethodName: "Watch",
-			Handler:    _ArticleService_Watch_Handler,
+			Handler:    _ContentArticleService_Watch_Handler,
 		},
 		{
 			MethodName: "AcceptAnswer",
-			Handler:    _ArticleService_AcceptAnswer_Handler,
+			Handler:    _ContentArticleService_AcceptAnswer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

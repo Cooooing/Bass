@@ -9,6 +9,7 @@ require (
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20251015020953-cdff24709025
 	github.com/go-kratos/kratos/v2 v2.9.1
 	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/jinzhu/copier v0.4.0
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/sony/sonyflake/v2 v2.2.0

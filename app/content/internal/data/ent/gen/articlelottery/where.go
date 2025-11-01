@@ -11,52 +11,52 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ArticleLottery {
+func ID(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ArticleLottery {
+func IDEQ(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ArticleLottery {
+func IDNEQ(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ArticleLottery {
+func IDIn(ids ...int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ArticleLottery {
+func IDNotIn(ids ...int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ArticleLottery {
+func IDGT(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ArticleLottery {
+func IDGTE(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ArticleLottery {
+func IDLT(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ArticleLottery {
+func IDLTE(id int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldLTE(FieldID, id))
 }
 
 // ArticleID applies equality check predicate on the "article_id" field. It's identical to ArticleIDEQ.
-func ArticleID(v int) predicate.ArticleLottery {
+func ArticleID(v int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldEQ(FieldArticleID, v))
 }
 
@@ -71,7 +71,7 @@ func EndAt(v time.Time) predicate.ArticleLottery {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int) predicate.ArticleLottery {
+func Status(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldEQ(FieldStatus, v))
 }
 
@@ -86,22 +86,22 @@ func UpdatedAt(v time.Time) predicate.ArticleLottery {
 }
 
 // ArticleIDEQ applies the EQ predicate on the "article_id" field.
-func ArticleIDEQ(v int) predicate.ArticleLottery {
+func ArticleIDEQ(v int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldEQ(FieldArticleID, v))
 }
 
 // ArticleIDNEQ applies the NEQ predicate on the "article_id" field.
-func ArticleIDNEQ(v int) predicate.ArticleLottery {
+func ArticleIDNEQ(v int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldNEQ(FieldArticleID, v))
 }
 
 // ArticleIDIn applies the In predicate on the "article_id" field.
-func ArticleIDIn(vs ...int) predicate.ArticleLottery {
+func ArticleIDIn(vs ...int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldIn(FieldArticleID, vs...))
 }
 
 // ArticleIDNotIn applies the NotIn predicate on the "article_id" field.
-func ArticleIDNotIn(vs ...int) predicate.ArticleLottery {
+func ArticleIDNotIn(vs ...int64) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldNotIn(FieldArticleID, vs...))
 }
 
@@ -216,42 +216,42 @@ func EndAtNotNil() predicate.ArticleLottery {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int) predicate.ArticleLottery {
+func StatusEQ(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int) predicate.ArticleLottery {
+func StatusNEQ(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int) predicate.ArticleLottery {
+func StatusIn(vs ...int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int) predicate.ArticleLottery {
+func StatusNotIn(vs ...int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int) predicate.ArticleLottery {
+func StatusGT(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int) predicate.ArticleLottery {
+func StatusGTE(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int) predicate.ArticleLottery {
+func StatusLT(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int) predicate.ArticleLottery {
+func StatusLTE(v int32) predicate.ArticleLottery {
 	return predicate.ArticleLottery(sql.FieldLTE(FieldStatus, v))
 }
 

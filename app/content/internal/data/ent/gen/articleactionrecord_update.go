@@ -29,13 +29,13 @@ func (_u *ArticleActionRecordUpdate) Where(ps ...predicate.ArticleActionRecord) 
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticleActionRecordUpdate) SetArticleID(v int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) SetArticleID(v int64) *ArticleActionRecordUpdate {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticleActionRecordUpdate) SetNillableArticleID(v *int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) SetNillableArticleID(v *int64) *ArticleActionRecordUpdate {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -43,14 +43,14 @@ func (_u *ArticleActionRecordUpdate) SetNillableArticleID(v *int) *ArticleAction
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *ArticleActionRecordUpdate) SetUserID(v int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) SetUserID(v int64) *ArticleActionRecordUpdate {
 	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleActionRecordUpdate) SetNillableUserID(v *int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) SetNillableUserID(v *int64) *ArticleActionRecordUpdate {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
@@ -58,20 +58,20 @@ func (_u *ArticleActionRecordUpdate) SetNillableUserID(v *int) *ArticleActionRec
 }
 
 // AddUserID adds value to the "user_id" field.
-func (_u *ArticleActionRecordUpdate) AddUserID(v int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) AddUserID(v int64) *ArticleActionRecordUpdate {
 	_u.mutation.AddUserID(v)
 	return _u
 }
 
 // SetType sets the "type" field.
-func (_u *ArticleActionRecordUpdate) SetType(v int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) SetType(v int32) *ArticleActionRecordUpdate {
 	_u.mutation.ResetType()
 	_u.mutation.SetType(v)
 	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_u *ArticleActionRecordUpdate) SetNillableType(v *int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) SetNillableType(v *int32) *ArticleActionRecordUpdate {
 	if v != nil {
 		_u.SetType(*v)
 	}
@@ -79,7 +79,7 @@ func (_u *ArticleActionRecordUpdate) SetNillableType(v *int) *ArticleActionRecor
 }
 
 // AddType adds value to the "type" field.
-func (_u *ArticleActionRecordUpdate) AddType(v int) *ArticleActionRecordUpdate {
+func (_u *ArticleActionRecordUpdate) AddType(v int32) *ArticleActionRecordUpdate {
 	_u.mutation.AddType(v)
 	return _u
 }
@@ -139,7 +139,7 @@ func (_u *ArticleActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articleactionrecord.Table, articleactionrecord.Columns, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articleactionrecord.Table, articleactionrecord.Columns, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -148,16 +148,16 @@ func (_u *ArticleActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(articleactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articleactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(articleactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.AddField(articleactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
-		_spec.SetField(articleactionrecord.FieldType, field.TypeInt, value)
+		_spec.SetField(articleactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedType(); ok {
-		_spec.AddField(articleactionrecord.FieldType, field.TypeInt, value)
+		_spec.AddField(articleactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -167,7 +167,7 @@ func (_u *ArticleActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 			Columns: []string{articleactionrecord.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -180,7 +180,7 @@ func (_u *ArticleActionRecordUpdate) sqlSave(ctx context.Context) (_node int, er
 			Columns: []string{articleactionrecord.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -209,13 +209,13 @@ type ArticleActionRecordUpdateOne struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticleActionRecordUpdateOne) SetArticleID(v int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) SetArticleID(v int64) *ArticleActionRecordUpdateOne {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticleActionRecordUpdateOne) SetNillableArticleID(v *int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) SetNillableArticleID(v *int64) *ArticleActionRecordUpdateOne {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -223,14 +223,14 @@ func (_u *ArticleActionRecordUpdateOne) SetNillableArticleID(v *int) *ArticleAct
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *ArticleActionRecordUpdateOne) SetUserID(v int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) SetUserID(v int64) *ArticleActionRecordUpdateOne {
 	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleActionRecordUpdateOne) SetNillableUserID(v *int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) SetNillableUserID(v *int64) *ArticleActionRecordUpdateOne {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
@@ -238,20 +238,20 @@ func (_u *ArticleActionRecordUpdateOne) SetNillableUserID(v *int) *ArticleAction
 }
 
 // AddUserID adds value to the "user_id" field.
-func (_u *ArticleActionRecordUpdateOne) AddUserID(v int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) AddUserID(v int64) *ArticleActionRecordUpdateOne {
 	_u.mutation.AddUserID(v)
 	return _u
 }
 
 // SetType sets the "type" field.
-func (_u *ArticleActionRecordUpdateOne) SetType(v int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) SetType(v int32) *ArticleActionRecordUpdateOne {
 	_u.mutation.ResetType()
 	_u.mutation.SetType(v)
 	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (_u *ArticleActionRecordUpdateOne) SetNillableType(v *int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) SetNillableType(v *int32) *ArticleActionRecordUpdateOne {
 	if v != nil {
 		_u.SetType(*v)
 	}
@@ -259,7 +259,7 @@ func (_u *ArticleActionRecordUpdateOne) SetNillableType(v *int) *ArticleActionRe
 }
 
 // AddType adds value to the "type" field.
-func (_u *ArticleActionRecordUpdateOne) AddType(v int) *ArticleActionRecordUpdateOne {
+func (_u *ArticleActionRecordUpdateOne) AddType(v int32) *ArticleActionRecordUpdateOne {
 	_u.mutation.AddType(v)
 	return _u
 }
@@ -332,7 +332,7 @@ func (_u *ArticleActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Art
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articleactionrecord.Table, articleactionrecord.Columns, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articleactionrecord.Table, articleactionrecord.Columns, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "ArticleActionRecord.id" for update`)}
@@ -358,16 +358,16 @@ func (_u *ArticleActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Art
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(articleactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articleactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(articleactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.AddField(articleactionrecord.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
-		_spec.SetField(articleactionrecord.FieldType, field.TypeInt, value)
+		_spec.SetField(articleactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedType(); ok {
-		_spec.AddField(articleactionrecord.FieldType, field.TypeInt, value)
+		_spec.AddField(articleactionrecord.FieldType, field.TypeInt32, value)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -377,7 +377,7 @@ func (_u *ArticleActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Art
 			Columns: []string{articleactionrecord.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -390,7 +390,7 @@ func (_u *ArticleActionRecordUpdateOne) sqlSave(ctx context.Context) (_node *Art
 			Columns: []string{articleactionrecord.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

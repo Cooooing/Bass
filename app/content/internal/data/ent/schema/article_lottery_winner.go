@@ -15,8 +15,9 @@ type ArticleLotteryWinner struct {
 
 func (ArticleLotteryWinner) Fields() []ent.Field {
 	return append([]ent.Field{
-		field.Int("lottery_id").Comment("所属抽奖ID"),
-		field.Int("user_id").Comment("获奖用户ID"),
+		field.Int64("id").Immutable().Unique(),
+		field.Int64("lottery_id").Comment("所属抽奖ID"),
+		field.Int64("user_id").Comment("获奖用户ID"),
 		field.String("prize").Comment("奖品名称").NotEmpty(),
 	}, pkg.TimeAuditFields()...)
 }

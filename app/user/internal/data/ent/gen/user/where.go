@@ -10,47 +10,47 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.User {
+func ID(id int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.User {
+func IDEQ(id int64) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.User {
+func IDNEQ(id int64) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.User {
+func IDIn(ids ...int64) predicate.User {
 	return predicate.User(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.User {
+func IDNotIn(ids ...int64) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.User {
+func IDGT(id int64) predicate.User {
 	return predicate.User(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.User {
+func IDGTE(id int64) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.User {
+func IDLT(id int64) predicate.User {
 	return predicate.User(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.User {
+func IDLTE(id int64) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldID, id))
 }
 
@@ -100,7 +100,7 @@ func Mbti(v string) predicate.User {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int) predicate.User {
+func Status(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldStatus, v))
 }
 
@@ -110,12 +110,12 @@ func GroupName(v string) predicate.User {
 }
 
 // FollowCount applies equality check predicate on the "follow_count" field. It's identical to FollowCountEQ.
-func FollowCount(v int) predicate.User {
+func FollowCount(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFollowCount, v))
 }
 
 // FollowerCount applies equality check predicate on the "follower_count" field. It's identical to FollowerCountEQ.
-func FollowerCount(v int) predicate.User {
+func FollowerCount(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFollowerCount, v))
 }
 
@@ -130,7 +130,7 @@ func LastLoginIP(v string) predicate.User {
 }
 
 // OnlineMinutes applies equality check predicate on the "online_minutes" field. It's identical to OnlineMinutesEQ.
-func OnlineMinutes(v int) predicate.User {
+func OnlineMinutes(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldOnlineMinutes, v))
 }
 
@@ -140,12 +140,12 @@ func LastCheckinTime(v time.Time) predicate.User {
 }
 
 // CurrentCheckinStreak applies equality check predicate on the "current_checkin_streak" field. It's identical to CurrentCheckinStreakEQ.
-func CurrentCheckinStreak(v int) predicate.User {
+func CurrentCheckinStreak(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCurrentCheckinStreak, v))
 }
 
 // LongestCheckinStreak applies equality check predicate on the "longest_checkin_streak" field. It's identical to LongestCheckinStreakEQ.
-func LongestCheckinStreak(v int) predicate.User {
+func LongestCheckinStreak(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldLongestCheckinStreak, v))
 }
 
@@ -895,42 +895,42 @@ func MbtiContainsFold(v string) predicate.User {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int) predicate.User {
+func StatusEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int) predicate.User {
+func StatusNEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int) predicate.User {
+func StatusIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int) predicate.User {
+func StatusNotIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int) predicate.User {
+func StatusGT(v int32) predicate.User {
 	return predicate.User(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int) predicate.User {
+func StatusGTE(v int32) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int) predicate.User {
+func StatusLT(v int32) predicate.User {
 	return predicate.User(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int) predicate.User {
+func StatusLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldStatus, v))
 }
 
@@ -1010,82 +1010,82 @@ func GroupNameContainsFold(v string) predicate.User {
 }
 
 // FollowCountEQ applies the EQ predicate on the "follow_count" field.
-func FollowCountEQ(v int) predicate.User {
+func FollowCountEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFollowCount, v))
 }
 
 // FollowCountNEQ applies the NEQ predicate on the "follow_count" field.
-func FollowCountNEQ(v int) predicate.User {
+func FollowCountNEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldFollowCount, v))
 }
 
 // FollowCountIn applies the In predicate on the "follow_count" field.
-func FollowCountIn(vs ...int) predicate.User {
+func FollowCountIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldIn(FieldFollowCount, vs...))
 }
 
 // FollowCountNotIn applies the NotIn predicate on the "follow_count" field.
-func FollowCountNotIn(vs ...int) predicate.User {
+func FollowCountNotIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldFollowCount, vs...))
 }
 
 // FollowCountGT applies the GT predicate on the "follow_count" field.
-func FollowCountGT(v int) predicate.User {
+func FollowCountGT(v int32) predicate.User {
 	return predicate.User(sql.FieldGT(FieldFollowCount, v))
 }
 
 // FollowCountGTE applies the GTE predicate on the "follow_count" field.
-func FollowCountGTE(v int) predicate.User {
+func FollowCountGTE(v int32) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldFollowCount, v))
 }
 
 // FollowCountLT applies the LT predicate on the "follow_count" field.
-func FollowCountLT(v int) predicate.User {
+func FollowCountLT(v int32) predicate.User {
 	return predicate.User(sql.FieldLT(FieldFollowCount, v))
 }
 
 // FollowCountLTE applies the LTE predicate on the "follow_count" field.
-func FollowCountLTE(v int) predicate.User {
+func FollowCountLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldFollowCount, v))
 }
 
 // FollowerCountEQ applies the EQ predicate on the "follower_count" field.
-func FollowerCountEQ(v int) predicate.User {
+func FollowerCountEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFollowerCount, v))
 }
 
 // FollowerCountNEQ applies the NEQ predicate on the "follower_count" field.
-func FollowerCountNEQ(v int) predicate.User {
+func FollowerCountNEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldFollowerCount, v))
 }
 
 // FollowerCountIn applies the In predicate on the "follower_count" field.
-func FollowerCountIn(vs ...int) predicate.User {
+func FollowerCountIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldIn(FieldFollowerCount, vs...))
 }
 
 // FollowerCountNotIn applies the NotIn predicate on the "follower_count" field.
-func FollowerCountNotIn(vs ...int) predicate.User {
+func FollowerCountNotIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldFollowerCount, vs...))
 }
 
 // FollowerCountGT applies the GT predicate on the "follower_count" field.
-func FollowerCountGT(v int) predicate.User {
+func FollowerCountGT(v int32) predicate.User {
 	return predicate.User(sql.FieldGT(FieldFollowerCount, v))
 }
 
 // FollowerCountGTE applies the GTE predicate on the "follower_count" field.
-func FollowerCountGTE(v int) predicate.User {
+func FollowerCountGTE(v int32) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldFollowerCount, v))
 }
 
 // FollowerCountLT applies the LT predicate on the "follower_count" field.
-func FollowerCountLT(v int) predicate.User {
+func FollowerCountLT(v int32) predicate.User {
 	return predicate.User(sql.FieldLT(FieldFollowerCount, v))
 }
 
 // FollowerCountLTE applies the LTE predicate on the "follower_count" field.
-func FollowerCountLTE(v int) predicate.User {
+func FollowerCountLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldFollowerCount, v))
 }
 
@@ -1215,42 +1215,42 @@ func LastLoginIPContainsFold(v string) predicate.User {
 }
 
 // OnlineMinutesEQ applies the EQ predicate on the "online_minutes" field.
-func OnlineMinutesEQ(v int) predicate.User {
+func OnlineMinutesEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldOnlineMinutes, v))
 }
 
 // OnlineMinutesNEQ applies the NEQ predicate on the "online_minutes" field.
-func OnlineMinutesNEQ(v int) predicate.User {
+func OnlineMinutesNEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldOnlineMinutes, v))
 }
 
 // OnlineMinutesIn applies the In predicate on the "online_minutes" field.
-func OnlineMinutesIn(vs ...int) predicate.User {
+func OnlineMinutesIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldIn(FieldOnlineMinutes, vs...))
 }
 
 // OnlineMinutesNotIn applies the NotIn predicate on the "online_minutes" field.
-func OnlineMinutesNotIn(vs ...int) predicate.User {
+func OnlineMinutesNotIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldOnlineMinutes, vs...))
 }
 
 // OnlineMinutesGT applies the GT predicate on the "online_minutes" field.
-func OnlineMinutesGT(v int) predicate.User {
+func OnlineMinutesGT(v int32) predicate.User {
 	return predicate.User(sql.FieldGT(FieldOnlineMinutes, v))
 }
 
 // OnlineMinutesGTE applies the GTE predicate on the "online_minutes" field.
-func OnlineMinutesGTE(v int) predicate.User {
+func OnlineMinutesGTE(v int32) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldOnlineMinutes, v))
 }
 
 // OnlineMinutesLT applies the LT predicate on the "online_minutes" field.
-func OnlineMinutesLT(v int) predicate.User {
+func OnlineMinutesLT(v int32) predicate.User {
 	return predicate.User(sql.FieldLT(FieldOnlineMinutes, v))
 }
 
 // OnlineMinutesLTE applies the LTE predicate on the "online_minutes" field.
-func OnlineMinutesLTE(v int) predicate.User {
+func OnlineMinutesLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldOnlineMinutes, v))
 }
 
@@ -1305,82 +1305,82 @@ func LastCheckinTimeNotNil() predicate.User {
 }
 
 // CurrentCheckinStreakEQ applies the EQ predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakEQ(v int) predicate.User {
+func CurrentCheckinStreakEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCurrentCheckinStreak, v))
 }
 
 // CurrentCheckinStreakNEQ applies the NEQ predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakNEQ(v int) predicate.User {
+func CurrentCheckinStreakNEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldCurrentCheckinStreak, v))
 }
 
 // CurrentCheckinStreakIn applies the In predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakIn(vs ...int) predicate.User {
+func CurrentCheckinStreakIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldIn(FieldCurrentCheckinStreak, vs...))
 }
 
 // CurrentCheckinStreakNotIn applies the NotIn predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakNotIn(vs ...int) predicate.User {
+func CurrentCheckinStreakNotIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldCurrentCheckinStreak, vs...))
 }
 
 // CurrentCheckinStreakGT applies the GT predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakGT(v int) predicate.User {
+func CurrentCheckinStreakGT(v int32) predicate.User {
 	return predicate.User(sql.FieldGT(FieldCurrentCheckinStreak, v))
 }
 
 // CurrentCheckinStreakGTE applies the GTE predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakGTE(v int) predicate.User {
+func CurrentCheckinStreakGTE(v int32) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldCurrentCheckinStreak, v))
 }
 
 // CurrentCheckinStreakLT applies the LT predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakLT(v int) predicate.User {
+func CurrentCheckinStreakLT(v int32) predicate.User {
 	return predicate.User(sql.FieldLT(FieldCurrentCheckinStreak, v))
 }
 
 // CurrentCheckinStreakLTE applies the LTE predicate on the "current_checkin_streak" field.
-func CurrentCheckinStreakLTE(v int) predicate.User {
+func CurrentCheckinStreakLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldCurrentCheckinStreak, v))
 }
 
 // LongestCheckinStreakEQ applies the EQ predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakEQ(v int) predicate.User {
+func LongestCheckinStreakEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldLongestCheckinStreak, v))
 }
 
 // LongestCheckinStreakNEQ applies the NEQ predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakNEQ(v int) predicate.User {
+func LongestCheckinStreakNEQ(v int32) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldLongestCheckinStreak, v))
 }
 
 // LongestCheckinStreakIn applies the In predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakIn(vs ...int) predicate.User {
+func LongestCheckinStreakIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldIn(FieldLongestCheckinStreak, vs...))
 }
 
 // LongestCheckinStreakNotIn applies the NotIn predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakNotIn(vs ...int) predicate.User {
+func LongestCheckinStreakNotIn(vs ...int32) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldLongestCheckinStreak, vs...))
 }
 
 // LongestCheckinStreakGT applies the GT predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakGT(v int) predicate.User {
+func LongestCheckinStreakGT(v int32) predicate.User {
 	return predicate.User(sql.FieldGT(FieldLongestCheckinStreak, v))
 }
 
 // LongestCheckinStreakGTE applies the GTE predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakGTE(v int) predicate.User {
+func LongestCheckinStreakGTE(v int32) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldLongestCheckinStreak, v))
 }
 
 // LongestCheckinStreakLT applies the LT predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakLT(v int) predicate.User {
+func LongestCheckinStreakLT(v int32) predicate.User {
 	return predicate.User(sql.FieldLT(FieldLongestCheckinStreak, v))
 }
 
 // LongestCheckinStreakLTE applies the LTE predicate on the "longest_checkin_streak" field.
-func LongestCheckinStreakLTE(v int) predicate.User {
+func LongestCheckinStreakLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldLongestCheckinStreak, v))
 }
 

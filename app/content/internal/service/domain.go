@@ -11,17 +11,17 @@ import (
 )
 
 type DomainService struct {
-	v1.UnimplementedDomainServiceServer
+	v1.UnimplementedContentDomainServiceServer
 	*BaseService
 	domainDomain *biz.DomainDomain
 }
 
 func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterDomainServiceServer(gs, s)
+	v1.RegisterContentDomainServiceServer(gs, s)
 }
 
 func (s *DomainService) RegisterHttp(hs *http.Server) {
-	v1.RegisterDomainServiceHTTPServer(hs, s)
+	v1.RegisterContentDomainServiceHTTPServer(hs, s)
 }
 
 func NewDomainService(baseService *BaseService, domainDomain *biz.DomainDomain) *DomainService {

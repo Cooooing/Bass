@@ -16,7 +16,7 @@ import (
 type User struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 用户名
 	Name string `json:"name,omitempty"`
 	// 昵称
@@ -36,25 +36,25 @@ type User struct {
 	// 用户 MBTI 类型
 	Mbti string `json:"mbti,omitempty"`
 	// 用户状态：0-正常，1-封禁，2-注销
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 用户组名称
 	GroupName string `json:"group_name,omitempty"`
 	// 关注数
-	FollowCount int `json:"follow_count,omitempty"`
+	FollowCount int32 `json:"follow_count,omitempty"`
 	// 粉丝数
-	FollowerCount int `json:"follower_count,omitempty"`
+	FollowerCount int32 `json:"follower_count,omitempty"`
 	// 最近登录时间
-	LastLoginTime time.Time `json:"last_login_time,omitempty"`
+	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
 	// 最近登录IP
 	LastLoginIP string `json:"last_login_ip,omitempty"`
 	// 在线总时长（分钟）
-	OnlineMinutes int `json:"online_minutes,omitempty"`
+	OnlineMinutes int32 `json:"online_minutes,omitempty"`
 	// 最近签到时间
-	LastCheckinTime time.Time `json:"last_checkin_time,omitempty"`
+	LastCheckinTime *time.Time `json:"last_checkin_time,omitempty"`
 	// 当前连续签到天数
-	CurrentCheckinStreak int `json:"current_checkin_streak,omitempty"`
+	CurrentCheckinStreak int32 `json:"current_checkin_streak,omitempty"`
 	// 最长连续签到天数
-	LongestCheckinStreak int `json:"longest_checkin_streak,omitempty"`
+	LongestCheckinStreak int32 `json:"longest_checkin_streak,omitempty"`
 	// 用户语言
 	Language string `json:"language,omitempty"`
 	// 时区
@@ -127,7 +127,7 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case user.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -186,7 +186,7 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int(value.Int64)
+				_m.Status = int32(value.Int64)
 			}
 		case user.FieldGroupName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -198,19 +198,20 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field follow_count", values[i])
 			} else if value.Valid {
-				_m.FollowCount = int(value.Int64)
+				_m.FollowCount = int32(value.Int64)
 			}
 		case user.FieldFollowerCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field follower_count", values[i])
 			} else if value.Valid {
-				_m.FollowerCount = int(value.Int64)
+				_m.FollowerCount = int32(value.Int64)
 			}
 		case user.FieldLastLoginTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_time", values[i])
 			} else if value.Valid {
-				_m.LastLoginTime = value.Time
+				_m.LastLoginTime = new(time.Time)
+				*_m.LastLoginTime = value.Time
 			}
 		case user.FieldLastLoginIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -222,25 +223,26 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field online_minutes", values[i])
 			} else if value.Valid {
-				_m.OnlineMinutes = int(value.Int64)
+				_m.OnlineMinutes = int32(value.Int64)
 			}
 		case user.FieldLastCheckinTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_checkin_time", values[i])
 			} else if value.Valid {
-				_m.LastCheckinTime = value.Time
+				_m.LastCheckinTime = new(time.Time)
+				*_m.LastCheckinTime = value.Time
 			}
 		case user.FieldCurrentCheckinStreak:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field current_checkin_streak", values[i])
 			} else if value.Valid {
-				_m.CurrentCheckinStreak = int(value.Int64)
+				_m.CurrentCheckinStreak = int32(value.Int64)
 			}
 		case user.FieldLongestCheckinStreak:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field longest_checkin_streak", values[i])
 			} else if value.Valid {
-				_m.LongestCheckinStreak = int(value.Int64)
+				_m.LongestCheckinStreak = int32(value.Int64)
 			}
 		case user.FieldLanguage:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -426,8 +428,10 @@ func (_m *User) String() string {
 	builder.WriteString("follower_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.FollowerCount))
 	builder.WriteString(", ")
-	builder.WriteString("last_login_time=")
-	builder.WriteString(_m.LastLoginTime.Format(time.ANSIC))
+	if v := _m.LastLoginTime; v != nil {
+		builder.WriteString("last_login_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("last_login_ip=")
 	builder.WriteString(_m.LastLoginIP)
@@ -435,8 +439,10 @@ func (_m *User) String() string {
 	builder.WriteString("online_minutes=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OnlineMinutes))
 	builder.WriteString(", ")
-	builder.WriteString("last_checkin_time=")
-	builder.WriteString(_m.LastCheckinTime.Format(time.ANSIC))
+	if v := _m.LastCheckinTime; v != nil {
+		builder.WriteString("last_checkin_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("current_checkin_streak=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CurrentCheckinStreak))

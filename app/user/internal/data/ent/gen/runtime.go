@@ -4,7 +4,6 @@ package gen
 
 import (
 	"time"
-	"user/internal/data/ent/gen/group"
 	"user/internal/data/ent/gen/user"
 	"user/internal/data/ent/schema"
 )
@@ -13,112 +12,94 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	groupFields := schema.Group{}.Fields()
-	_ = groupFields
-	// groupDescName is the schema descriptor for name field.
-	groupDescName := groupFields[0].Descriptor()
-	// group.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	group.NameValidator = groupDescName.Validators[0].(func(string) error)
-	// groupDescEndpoint is the schema descriptor for endpoint field.
-	groupDescEndpoint := groupFields[1].Descriptor()
-	// group.EndpointValidator is a validator for the "endpoint" field. It is called by the builders before save.
-	group.EndpointValidator = groupDescEndpoint.Validators[0].(func(string) error)
-	// groupDescCreatedAt is the schema descriptor for created_at field.
-	groupDescCreatedAt := groupFields[4].Descriptor()
-	// group.DefaultCreatedAt holds the default value on creation for the created_at field.
-	group.DefaultCreatedAt = groupDescCreatedAt.Default.(func() time.Time)
-	// groupDescUpdatedAt is the schema descriptor for updated_at field.
-	groupDescUpdatedAt := groupFields[5].Descriptor()
-	// group.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	group.DefaultUpdatedAt = groupDescUpdatedAt.Default.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.
-	userDescName := userFields[0].Descriptor()
+	userDescName := userFields[1].Descriptor()
 	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	user.NameValidator = userDescName.Validators[0].(func(string) error)
 	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[2].Descriptor()
+	userDescPassword := userFields[3].Descriptor()
 	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	user.PasswordValidator = userDescPassword.Validators[0].(func(string) error)
 	// userDescStatus is the schema descriptor for status field.
-	userDescStatus := userFields[9].Descriptor()
+	userDescStatus := userFields[10].Descriptor()
 	// user.DefaultStatus holds the default value on creation for the status field.
-	user.DefaultStatus = userDescStatus.Default.(int)
+	user.DefaultStatus = userDescStatus.Default.(int32)
 	// userDescFollowCount is the schema descriptor for follow_count field.
-	userDescFollowCount := userFields[11].Descriptor()
+	userDescFollowCount := userFields[12].Descriptor()
 	// user.DefaultFollowCount holds the default value on creation for the follow_count field.
-	user.DefaultFollowCount = userDescFollowCount.Default.(int)
+	user.DefaultFollowCount = userDescFollowCount.Default.(int32)
 	// userDescFollowerCount is the schema descriptor for follower_count field.
-	userDescFollowerCount := userFields[12].Descriptor()
+	userDescFollowerCount := userFields[13].Descriptor()
 	// user.DefaultFollowerCount holds the default value on creation for the follower_count field.
-	user.DefaultFollowerCount = userDescFollowerCount.Default.(int)
+	user.DefaultFollowerCount = userDescFollowerCount.Default.(int32)
 	// userDescOnlineMinutes is the schema descriptor for online_minutes field.
-	userDescOnlineMinutes := userFields[15].Descriptor()
+	userDescOnlineMinutes := userFields[16].Descriptor()
 	// user.DefaultOnlineMinutes holds the default value on creation for the online_minutes field.
-	user.DefaultOnlineMinutes = userDescOnlineMinutes.Default.(int)
+	user.DefaultOnlineMinutes = userDescOnlineMinutes.Default.(int32)
 	// userDescCurrentCheckinStreak is the schema descriptor for current_checkin_streak field.
-	userDescCurrentCheckinStreak := userFields[17].Descriptor()
+	userDescCurrentCheckinStreak := userFields[18].Descriptor()
 	// user.DefaultCurrentCheckinStreak holds the default value on creation for the current_checkin_streak field.
-	user.DefaultCurrentCheckinStreak = userDescCurrentCheckinStreak.Default.(int)
+	user.DefaultCurrentCheckinStreak = userDescCurrentCheckinStreak.Default.(int32)
 	// userDescLongestCheckinStreak is the schema descriptor for longest_checkin_streak field.
-	userDescLongestCheckinStreak := userFields[18].Descriptor()
+	userDescLongestCheckinStreak := userFields[19].Descriptor()
 	// user.DefaultLongestCheckinStreak holds the default value on creation for the longest_checkin_streak field.
-	user.DefaultLongestCheckinStreak = userDescLongestCheckinStreak.Default.(int)
+	user.DefaultLongestCheckinStreak = userDescLongestCheckinStreak.Default.(int32)
 	// userDescLanguage is the schema descriptor for language field.
-	userDescLanguage := userFields[19].Descriptor()
+	userDescLanguage := userFields[20].Descriptor()
 	// user.DefaultLanguage holds the default value on creation for the language field.
 	user.DefaultLanguage = userDescLanguage.Default.(string)
 	// userDescTimezone is the schema descriptor for timezone field.
-	userDescTimezone := userFields[20].Descriptor()
+	userDescTimezone := userFields[21].Descriptor()
 	// user.DefaultTimezone holds the default value on creation for the timezone field.
 	user.DefaultTimezone = userDescTimezone.Default.(string)
 	// userDescTheme is the schema descriptor for theme field.
-	userDescTheme := userFields[21].Descriptor()
+	userDescTheme := userFields[22].Descriptor()
 	// user.DefaultTheme holds the default value on creation for the theme field.
 	user.DefaultTheme = userDescTheme.Default.(string)
 	// userDescMobileTheme is the schema descriptor for mobile_theme field.
-	userDescMobileTheme := userFields[22].Descriptor()
+	userDescMobileTheme := userFields[23].Descriptor()
 	// user.DefaultMobileTheme holds the default value on creation for the mobile_theme field.
 	user.DefaultMobileTheme = userDescMobileTheme.Default.(string)
 	// userDescEnableWebNotify is the schema descriptor for enable_web_notify field.
-	userDescEnableWebNotify := userFields[23].Descriptor()
+	userDescEnableWebNotify := userFields[24].Descriptor()
 	// user.DefaultEnableWebNotify holds the default value on creation for the enable_web_notify field.
 	user.DefaultEnableWebNotify = userDescEnableWebNotify.Default.(bool)
 	// userDescEnableEmailSubscribe is the schema descriptor for enable_email_subscribe field.
-	userDescEnableEmailSubscribe := userFields[24].Descriptor()
+	userDescEnableEmailSubscribe := userFields[25].Descriptor()
 	// user.DefaultEnableEmailSubscribe holds the default value on creation for the enable_email_subscribe field.
 	user.DefaultEnableEmailSubscribe = userDescEnableEmailSubscribe.Default.(bool)
 	// userDescPublicPoints is the schema descriptor for public_points field.
-	userDescPublicPoints := userFields[25].Descriptor()
+	userDescPublicPoints := userFields[26].Descriptor()
 	// user.DefaultPublicPoints holds the default value on creation for the public_points field.
 	user.DefaultPublicPoints = userDescPublicPoints.Default.(bool)
 	// userDescPublicFollowers is the schema descriptor for public_followers field.
-	userDescPublicFollowers := userFields[26].Descriptor()
+	userDescPublicFollowers := userFields[27].Descriptor()
 	// user.DefaultPublicFollowers holds the default value on creation for the public_followers field.
 	user.DefaultPublicFollowers = userDescPublicFollowers.Default.(bool)
 	// userDescPublicArticles is the schema descriptor for public_articles field.
-	userDescPublicArticles := userFields[27].Descriptor()
+	userDescPublicArticles := userFields[28].Descriptor()
 	// user.DefaultPublicArticles holds the default value on creation for the public_articles field.
 	user.DefaultPublicArticles = userDescPublicArticles.Default.(bool)
 	// userDescPublicComments is the schema descriptor for public_comments field.
-	userDescPublicComments := userFields[28].Descriptor()
+	userDescPublicComments := userFields[29].Descriptor()
 	// user.DefaultPublicComments holds the default value on creation for the public_comments field.
 	user.DefaultPublicComments = userDescPublicComments.Default.(bool)
 	// userDescPublicOnlineStatus is the schema descriptor for public_online_status field.
-	userDescPublicOnlineStatus := userFields[29].Descriptor()
+	userDescPublicOnlineStatus := userFields[30].Descriptor()
 	// user.DefaultPublicOnlineStatus holds the default value on creation for the public_online_status field.
 	user.DefaultPublicOnlineStatus = userDescPublicOnlineStatus.Default.(bool)
 	// userDescPublicLocation is the schema descriptor for public_location field.
-	userDescPublicLocation := userFields[33].Descriptor()
+	userDescPublicLocation := userFields[34].Descriptor()
 	// user.DefaultPublicLocation holds the default value on creation for the public_location field.
 	user.DefaultPublicLocation = userDescPublicLocation.Default.(bool)
 	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userFields[35].Descriptor()
+	userDescCreatedAt := userFields[36].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
 	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
 	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userFields[36].Descriptor()
+	userDescUpdatedAt := userFields[37].Descriptor()
 	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 }

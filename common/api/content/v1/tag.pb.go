@@ -259,8 +259,7 @@ var File_content_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_v1_tag_proto_rawDesc = "" +
 	"\n" +
-	"\x14content/v1/tag.proto\x12\n" +
-	"content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"#\n" +
+	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"#\n" +
 	"\rAddTagRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"\r\n" +
 	"\vAddTagReply\"&\n" +
@@ -268,12 +267,11 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"\x10\n" +
 	"\x0eUpdateTagReply\"\x0f\n" +
 	"\rGetTagRequest\"\r\n" +
-	"\vGetTagReply2\x9d\x02\n" +
-	"\n" +
-	"TagService\x12U\n" +
-	"\x03Add\x12\x19.content.v1.AddTagRequest\x1a\x17.content.v1.AddTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/add\x12a\n" +
-	"\x06Update\x12\x1c.content.v1.UpdateTagRequest\x1a\x1a.content.v1.UpdateTagReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/tag/update\x12U\n" +
-	"\x03Get\x12\x19.content.v1.GetTagRequest\x1a\x17.content.v1.GetTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/getB\x0fZ\rcontent/v1;v1b\x06proto3"
+	"\vGetTagReply2\xe6\x02\n" +
+	"\x11ContentTagService\x12k\n" +
+	"\x03Add\x12$.common.api.content.v1.AddTagRequest\x1a\".common.api.content.v1.AddTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/add\x12w\n" +
+	"\x06Update\x12'.common.api.content.v1.UpdateTagRequest\x1a%.common.api.content.v1.UpdateTagReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/tag/update\x12k\n" +
+	"\x03Get\x12$.common.api.content.v1.GetTagRequest\x1a\".common.api.content.v1.GetTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/getB\x1aZ\x18common/api/content/v1;v1b\x06proto3"
 
 var (
 	file_content_v1_tag_proto_rawDescOnce sync.Once
@@ -289,20 +287,20 @@ func file_content_v1_tag_proto_rawDescGZIP() []byte {
 
 var file_content_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_content_v1_tag_proto_goTypes = []any{
-	(*AddTagRequest)(nil),    // 0: content.v1.AddTagRequest
-	(*AddTagReply)(nil),      // 1: content.v1.AddTagReply
-	(*UpdateTagRequest)(nil), // 2: content.v1.UpdateTagRequest
-	(*UpdateTagReply)(nil),   // 3: content.v1.UpdateTagReply
-	(*GetTagRequest)(nil),    // 4: content.v1.GetTagRequest
-	(*GetTagReply)(nil),      // 5: content.v1.GetTagReply
+	(*AddTagRequest)(nil),    // 0: common.api.content.v1.AddTagRequest
+	(*AddTagReply)(nil),      // 1: common.api.content.v1.AddTagReply
+	(*UpdateTagRequest)(nil), // 2: common.api.content.v1.UpdateTagRequest
+	(*UpdateTagReply)(nil),   // 3: common.api.content.v1.UpdateTagReply
+	(*GetTagRequest)(nil),    // 4: common.api.content.v1.GetTagRequest
+	(*GetTagReply)(nil),      // 5: common.api.content.v1.GetTagReply
 }
 var file_content_v1_tag_proto_depIdxs = []int32{
-	0, // 0: content.v1.TagService.Add:input_type -> content.v1.AddTagRequest
-	2, // 1: content.v1.TagService.Update:input_type -> content.v1.UpdateTagRequest
-	4, // 2: content.v1.TagService.Get:input_type -> content.v1.GetTagRequest
-	1, // 3: content.v1.TagService.Add:output_type -> content.v1.AddTagReply
-	3, // 4: content.v1.TagService.Update:output_type -> content.v1.UpdateTagReply
-	5, // 5: content.v1.TagService.Get:output_type -> content.v1.GetTagReply
+	0, // 0: common.api.content.v1.ContentTagService.Add:input_type -> common.api.content.v1.AddTagRequest
+	2, // 1: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
+	4, // 2: common.api.content.v1.ContentTagService.Get:input_type -> common.api.content.v1.GetTagRequest
+	1, // 3: common.api.content.v1.ContentTagService.Add:output_type -> common.api.content.v1.AddTagReply
+	3, // 4: common.api.content.v1.ContentTagService.Update:output_type -> common.api.content.v1.UpdateTagReply
+	5, // 5: common.api.content.v1.ContentTagService.Get:output_type -> common.api.content.v1.GetTagReply
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

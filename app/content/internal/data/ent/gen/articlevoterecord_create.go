@@ -22,19 +22,19 @@ type ArticleVoteRecordCreate struct {
 }
 
 // SetVoteID sets the "vote_id" field.
-func (_c *ArticleVoteRecordCreate) SetVoteID(v int) *ArticleVoteRecordCreate {
+func (_c *ArticleVoteRecordCreate) SetVoteID(v int64) *ArticleVoteRecordCreate {
 	_c.mutation.SetVoteID(v)
 	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *ArticleVoteRecordCreate) SetUserID(v int) *ArticleVoteRecordCreate {
+func (_c *ArticleVoteRecordCreate) SetUserID(v int64) *ArticleVoteRecordCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
 
 // SetOptionIndex sets the "option_index" field.
-func (_c *ArticleVoteRecordCreate) SetOptionIndex(v int) *ArticleVoteRecordCreate {
+func (_c *ArticleVoteRecordCreate) SetOptionIndex(v int32) *ArticleVoteRecordCreate {
 	_c.mutation.SetOptionIndex(v)
 	return _c
 }
@@ -78,6 +78,12 @@ func (_c *ArticleVoteRecordCreate) SetNillableUpdatedAt(v *time.Time) *ArticleVo
 	if v != nil {
 		_c.SetUpdatedAt(*v)
 	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ArticleVoteRecordCreate) SetID(v int64) *ArticleVoteRecordCreate {
+	_c.mutation.SetID(v)
 	return _c
 }
 
@@ -166,8 +172,10 @@ func (_c *ArticleVoteRecordCreate) sqlSave(ctx context.Context) (*ArticleVoteRec
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -176,14 +184,18 @@ func (_c *ArticleVoteRecordCreate) sqlSave(ctx context.Context) (*ArticleVoteRec
 func (_c *ArticleVoteRecordCreate) createSpec() (*ArticleVoteRecord, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ArticleVoteRecord{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(articlevoterecord.Table, sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(articlevoterecord.Table, sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(articlevoterecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articlevoterecord.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.OptionIndex(); ok {
-		_spec.SetField(articlevoterecord.FieldOptionIndex, field.TypeInt, value)
+		_spec.SetField(articlevoterecord.FieldOptionIndex, field.TypeInt32, value)
 		_node.OptionIndex = value
 	}
 	if value, ok := _c.mutation.Anonymous(); ok {
@@ -206,7 +218,7 @@ func (_c *ArticleVoteRecordCreate) createSpec() (*ArticleVoteRecord, *sqlgraph.C
 			Columns: []string{articlevoterecord.VoteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -263,9 +275,9 @@ func (_c *ArticleVoteRecordCreateBulk) Save(ctx context.Context) ([]*ArticleVote
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

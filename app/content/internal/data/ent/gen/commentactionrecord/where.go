@@ -10,162 +10,162 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.CommentActionRecord {
+func ID(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.CommentActionRecord {
+func IDEQ(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.CommentActionRecord {
+func IDNEQ(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.CommentActionRecord {
+func IDIn(ids ...int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.CommentActionRecord {
+func IDNotIn(ids ...int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.CommentActionRecord {
+func IDGT(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.CommentActionRecord {
+func IDGTE(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.CommentActionRecord {
+func IDLT(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.CommentActionRecord {
+func IDLTE(id int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldLTE(FieldID, id))
 }
 
 // CommentID applies equality check predicate on the "comment_id" field. It's identical to CommentIDEQ.
-func CommentID(v int) predicate.CommentActionRecord {
+func CommentID(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldCommentID, v))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.CommentActionRecord {
+func UserID(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldUserID, v))
 }
 
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
-func Type(v int) predicate.CommentActionRecord {
+func Type(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldType, v))
 }
 
 // CommentIDEQ applies the EQ predicate on the "comment_id" field.
-func CommentIDEQ(v int) predicate.CommentActionRecord {
+func CommentIDEQ(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldCommentID, v))
 }
 
 // CommentIDNEQ applies the NEQ predicate on the "comment_id" field.
-func CommentIDNEQ(v int) predicate.CommentActionRecord {
+func CommentIDNEQ(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNEQ(FieldCommentID, v))
 }
 
 // CommentIDIn applies the In predicate on the "comment_id" field.
-func CommentIDIn(vs ...int) predicate.CommentActionRecord {
+func CommentIDIn(vs ...int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldIn(FieldCommentID, vs...))
 }
 
 // CommentIDNotIn applies the NotIn predicate on the "comment_id" field.
-func CommentIDNotIn(vs ...int) predicate.CommentActionRecord {
+func CommentIDNotIn(vs ...int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNotIn(FieldCommentID, vs...))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.CommentActionRecord {
+func UserIDEQ(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.CommentActionRecord {
+func UserIDNEQ(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.CommentActionRecord {
+func UserIDIn(vs ...int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.CommentActionRecord {
+func UserIDNotIn(vs ...int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.CommentActionRecord {
+func UserIDGT(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.CommentActionRecord {
+func UserIDGTE(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.CommentActionRecord {
+func UserIDLT(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.CommentActionRecord {
+func UserIDLTE(v int64) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldLTE(FieldUserID, v))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v int) predicate.CommentActionRecord {
+func TypeEQ(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldEQ(FieldType, v))
 }
 
 // TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v int) predicate.CommentActionRecord {
+func TypeNEQ(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNEQ(FieldType, v))
 }
 
 // TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...int) predicate.CommentActionRecord {
+func TypeIn(vs ...int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldIn(FieldType, vs...))
 }
 
 // TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...int) predicate.CommentActionRecord {
+func TypeNotIn(vs ...int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldNotIn(FieldType, vs...))
 }
 
 // TypeGT applies the GT predicate on the "type" field.
-func TypeGT(v int) predicate.CommentActionRecord {
+func TypeGT(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldGT(FieldType, v))
 }
 
 // TypeGTE applies the GTE predicate on the "type" field.
-func TypeGTE(v int) predicate.CommentActionRecord {
+func TypeGTE(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldGTE(FieldType, v))
 }
 
 // TypeLT applies the LT predicate on the "type" field.
-func TypeLT(v int) predicate.CommentActionRecord {
+func TypeLT(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldLT(FieldType, v))
 }
 
 // TypeLTE applies the LTE predicate on the "type" field.
-func TypeLTE(v int) predicate.CommentActionRecord {
+func TypeLTE(v int32) predicate.CommentActionRecord {
 	return predicate.CommentActionRecord(sql.FieldLTE(FieldType, v))
 }
 

@@ -10,162 +10,162 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ArticleActionRecord {
+func ID(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ArticleActionRecord {
+func IDEQ(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ArticleActionRecord {
+func IDNEQ(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ArticleActionRecord {
+func IDIn(ids ...int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ArticleActionRecord {
+func IDNotIn(ids ...int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ArticleActionRecord {
+func IDGT(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ArticleActionRecord {
+func IDGTE(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ArticleActionRecord {
+func IDLT(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ArticleActionRecord {
+func IDLTE(id int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldLTE(FieldID, id))
 }
 
 // ArticleID applies equality check predicate on the "article_id" field. It's identical to ArticleIDEQ.
-func ArticleID(v int) predicate.ArticleActionRecord {
+func ArticleID(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldArticleID, v))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.ArticleActionRecord {
+func UserID(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldUserID, v))
 }
 
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
-func Type(v int) predicate.ArticleActionRecord {
+func Type(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldType, v))
 }
 
 // ArticleIDEQ applies the EQ predicate on the "article_id" field.
-func ArticleIDEQ(v int) predicate.ArticleActionRecord {
+func ArticleIDEQ(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldArticleID, v))
 }
 
 // ArticleIDNEQ applies the NEQ predicate on the "article_id" field.
-func ArticleIDNEQ(v int) predicate.ArticleActionRecord {
+func ArticleIDNEQ(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNEQ(FieldArticleID, v))
 }
 
 // ArticleIDIn applies the In predicate on the "article_id" field.
-func ArticleIDIn(vs ...int) predicate.ArticleActionRecord {
+func ArticleIDIn(vs ...int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldIn(FieldArticleID, vs...))
 }
 
 // ArticleIDNotIn applies the NotIn predicate on the "article_id" field.
-func ArticleIDNotIn(vs ...int) predicate.ArticleActionRecord {
+func ArticleIDNotIn(vs ...int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNotIn(FieldArticleID, vs...))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.ArticleActionRecord {
+func UserIDEQ(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.ArticleActionRecord {
+func UserIDNEQ(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.ArticleActionRecord {
+func UserIDIn(vs ...int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.ArticleActionRecord {
+func UserIDNotIn(vs ...int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.ArticleActionRecord {
+func UserIDGT(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.ArticleActionRecord {
+func UserIDGTE(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.ArticleActionRecord {
+func UserIDLT(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.ArticleActionRecord {
+func UserIDLTE(v int64) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldLTE(FieldUserID, v))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v int) predicate.ArticleActionRecord {
+func TypeEQ(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldEQ(FieldType, v))
 }
 
 // TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v int) predicate.ArticleActionRecord {
+func TypeNEQ(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNEQ(FieldType, v))
 }
 
 // TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...int) predicate.ArticleActionRecord {
+func TypeIn(vs ...int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldIn(FieldType, vs...))
 }
 
 // TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...int) predicate.ArticleActionRecord {
+func TypeNotIn(vs ...int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldNotIn(FieldType, vs...))
 }
 
 // TypeGT applies the GT predicate on the "type" field.
-func TypeGT(v int) predicate.ArticleActionRecord {
+func TypeGT(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldGT(FieldType, v))
 }
 
 // TypeGTE applies the GTE predicate on the "type" field.
-func TypeGTE(v int) predicate.ArticleActionRecord {
+func TypeGTE(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldGTE(FieldType, v))
 }
 
 // TypeLT applies the LT predicate on the "type" field.
-func TypeLT(v int) predicate.ArticleActionRecord {
+func TypeLT(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldLT(FieldType, v))
 }
 
 // TypeLTE applies the LTE predicate on the "type" field.
-func TypeLTE(v int) predicate.ArticleActionRecord {
+func TypeLTE(v int32) predicate.ArticleActionRecord {
 	return predicate.ArticleActionRecord(sql.FieldLTE(FieldType, v))
 }
 

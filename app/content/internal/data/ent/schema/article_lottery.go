@@ -15,11 +15,12 @@ type ArticleLottery struct {
 
 func (ArticleLottery) Fields() []ent.Field {
 	return append([]ent.Field{
-		field.Int("article_id").Comment("所属文章ID"),
+		field.Int64("id").Immutable().Unique(),
+		field.Int64("article_id").Comment("所属文章ID"),
 		field.JSON("prizes", []string{}).Comment("奖品列表").Optional(),
 		field.Time("start_at").Comment("抽奖开始时间").Optional(),
 		field.Time("end_at").Comment("抽奖结束时间").Optional(),
-		field.Int("status").Comment("状态 0-未开始 1-进行中 2-已结束").Default(0),
+		field.Int32("status").Comment("状态 0-未开始 1-进行中 2-已结束").Default(0),
 	}, pkg.TimeAuditFields()...)
 }
 

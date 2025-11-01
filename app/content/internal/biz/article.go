@@ -47,7 +47,7 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article) (*model
 			return err
 		}
 		// 不是草稿则进行发布
-		if save.Status != int(v1.ArticleStatus_value[v1.ArticleStatus_ArticleDrafts.String()]) {
+		if save.Status != int32(v1.ArticleStatus_ArticleDrafts) {
 			err = d.articleRepo.Publish(ctx, d.db, save.ID)
 			if err != nil {
 				return err
@@ -58,7 +58,7 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article) (*model
 	return save, err
 }
 
-func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int, content string) error {
+func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, content string) error {
 	err := ent.WithTx(ctx, d.db, func(client *gen.Client) error {
 		var err error
 		err = d.postscriptRepo.AddPostscript(ctx, client, articleId, content)
@@ -75,7 +75,7 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int, conten
 	return err
 }
 
-func (d *ArticleDomain) Action(ctx context.Context, articleId int, userId int, action v1.ArticleAction, active bool) error {
+func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
 	err := ent.WithTx(ctx, d.db, func(client *gen.Client) error {
 		var err error
 		if active {
@@ -86,7 +86,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int, userId int, a
 			_, err = d.actionRecordRepo.Save(ctx, client, &model.ArticleActionRecord{
 				ArticleID: articleId,
 				UserID:    userId,
-				Type:      int(action),
+				Type:      int32(action),
 			})
 			if err != nil {
 				return err
@@ -107,7 +107,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int, userId int, a
 	return err
 }
 
-func (d *ArticleDomain) Publish(ctx context.Context, articleId int) error {
+func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
 	return ent.WithTx(ctx, d.db, func(client *gen.Client) error {
 		err := d.articleRepo.UpdateStatus(ctx, client, articleId, v1.ArticleStatus_ArticleNormal)
 		if err != nil {

@@ -22,7 +22,7 @@ type ArticlePostscriptCreate struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_c *ArticlePostscriptCreate) SetArticleID(v int) *ArticlePostscriptCreate {
+func (_c *ArticlePostscriptCreate) SetArticleID(v int64) *ArticlePostscriptCreate {
 	_c.mutation.SetArticleID(v)
 	return _c
 }
@@ -58,6 +58,12 @@ func (_c *ArticlePostscriptCreate) SetNillableUpdatedAt(v *time.Time) *ArticlePo
 	if v != nil {
 		_c.SetUpdatedAt(*v)
 	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ArticlePostscriptCreate) SetID(v int64) *ArticlePostscriptCreate {
+	_c.mutation.SetID(v)
 	return _c
 }
 
@@ -141,8 +147,10 @@ func (_c *ArticlePostscriptCreate) sqlSave(ctx context.Context) (*ArticlePostscr
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -151,8 +159,12 @@ func (_c *ArticlePostscriptCreate) sqlSave(ctx context.Context) (*ArticlePostscr
 func (_c *ArticlePostscriptCreate) createSpec() (*ArticlePostscript, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ArticlePostscript{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(articlepostscript.Table, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(articlepostscript.Table, sqlgraph.NewFieldSpec(articlepostscript.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.Content(); ok {
 		_spec.SetField(articlepostscript.FieldContent, field.TypeString, value)
 		_node.Content = value
@@ -173,7 +185,7 @@ func (_c *ArticlePostscriptCreate) createSpec() (*ArticlePostscript, *sqlgraph.C
 			Columns: []string{articlepostscript.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -230,9 +242,9 @@ func (_c *ArticlePostscriptCreateBulk) Save(ctx context.Context) ([]*ArticlePost
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

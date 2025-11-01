@@ -84,7 +84,7 @@ var (
 	// DefaultVoteAnonymous holds the default value on creation for the "vote_anonymous" field.
 	DefaultVoteAnonymous bool
 	// DefaultTotalCount holds the default value on creation for the "total_count" field.
-	DefaultTotalCount int
+	DefaultTotalCount int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

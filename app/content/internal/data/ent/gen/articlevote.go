@@ -18,9 +18,9 @@ import (
 type ArticleVote struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 所属文章ID
-	ArticleID int `json:"article_id,omitempty"`
+	ArticleID int64 `json:"article_id,omitempty"`
 	// 投票选项
 	VoteOptions []string `json:"vote_options,omitempty"`
 	// 各选项票数
@@ -30,7 +30,7 @@ type ArticleVote struct {
 	// 是否匿名投票
 	VoteAnonymous bool `json:"vote_anonymous,omitempty"`
 	// 总投票数
-	TotalCount int `json:"total_count,omitempty"`
+	TotalCount int32 `json:"total_count,omitempty"`
 	// 投票截止时间
 	EndAt time.Time `json:"end_at,omitempty"`
 	// 创建时间
@@ -107,12 +107,12 @@ func (_m *ArticleVote) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case articlevote.FieldArticleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field article_id", values[i])
 			} else if value.Valid {
-				_m.ArticleID = int(value.Int64)
+				_m.ArticleID = value.Int64
 			}
 		case articlevote.FieldVoteOptions:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -146,7 +146,7 @@ func (_m *ArticleVote) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_count", values[i])
 			} else if value.Valid {
-				_m.TotalCount = int(value.Int64)
+				_m.TotalCount = int32(value.Int64)
 			}
 		case articlevote.FieldEndAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {

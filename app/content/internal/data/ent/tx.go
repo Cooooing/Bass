@@ -9,6 +9,10 @@ import (
 
 func WithTx(ctx context.Context, client *gen.Client, fn func(tx *gen.Client) error) error {
 	tx, err := client.Tx(ctx)
+	// 如果已经存在事务，则直接使用传入的client执行
+	if errors.Is(err, gen.ErrTxStarted) {
+		return fn(client)
+	}
 	if err != nil {
 		return errors.Join(err, fmt.Errorf("create tx failed"))
 	}

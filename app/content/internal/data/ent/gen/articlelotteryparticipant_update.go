@@ -30,13 +30,13 @@ func (_u *ArticleLotteryParticipantUpdate) Where(ps ...predicate.ArticleLotteryP
 }
 
 // SetLotteryID sets the "lottery_id" field.
-func (_u *ArticleLotteryParticipantUpdate) SetLotteryID(v int) *ArticleLotteryParticipantUpdate {
+func (_u *ArticleLotteryParticipantUpdate) SetLotteryID(v int64) *ArticleLotteryParticipantUpdate {
 	_u.mutation.SetLotteryID(v)
 	return _u
 }
 
 // SetNillableLotteryID sets the "lottery_id" field if the given value is not nil.
-func (_u *ArticleLotteryParticipantUpdate) SetNillableLotteryID(v *int) *ArticleLotteryParticipantUpdate {
+func (_u *ArticleLotteryParticipantUpdate) SetNillableLotteryID(v *int64) *ArticleLotteryParticipantUpdate {
 	if v != nil {
 		_u.SetLotteryID(*v)
 	}
@@ -44,14 +44,14 @@ func (_u *ArticleLotteryParticipantUpdate) SetNillableLotteryID(v *int) *Article
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *ArticleLotteryParticipantUpdate) SetUserID(v int) *ArticleLotteryParticipantUpdate {
+func (_u *ArticleLotteryParticipantUpdate) SetUserID(v int64) *ArticleLotteryParticipantUpdate {
 	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleLotteryParticipantUpdate) SetNillableUserID(v *int) *ArticleLotteryParticipantUpdate {
+func (_u *ArticleLotteryParticipantUpdate) SetNillableUserID(v *int64) *ArticleLotteryParticipantUpdate {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
@@ -59,7 +59,7 @@ func (_u *ArticleLotteryParticipantUpdate) SetNillableUserID(v *int) *ArticleLot
 }
 
 // AddUserID adds value to the "user_id" field.
-func (_u *ArticleLotteryParticipantUpdate) AddUserID(v int) *ArticleLotteryParticipantUpdate {
+func (_u *ArticleLotteryParticipantUpdate) AddUserID(v int64) *ArticleLotteryParticipantUpdate {
 	_u.mutation.AddUserID(v)
 	return _u
 }
@@ -159,7 +159,7 @@ func (_u *ArticleLotteryParticipantUpdate) sqlSave(ctx context.Context) (_node i
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlelotteryparticipant.Table, articlelotteryparticipant.Columns, sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlelotteryparticipant.Table, articlelotteryparticipant.Columns, sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -168,10 +168,10 @@ func (_u *ArticleLotteryParticipantUpdate) sqlSave(ctx context.Context) (_node i
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(articlelotteryparticipant.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articlelotteryparticipant.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(articlelotteryparticipant.FieldUserID, field.TypeInt, value)
+		_spec.AddField(articlelotteryparticipant.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlelotteryparticipant.FieldCreatedAt, field.TypeTime, value)
@@ -193,7 +193,7 @@ func (_u *ArticleLotteryParticipantUpdate) sqlSave(ctx context.Context) (_node i
 			Columns: []string{articlelotteryparticipant.LotteryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -206,7 +206,7 @@ func (_u *ArticleLotteryParticipantUpdate) sqlSave(ctx context.Context) (_node i
 			Columns: []string{articlelotteryparticipant.LotteryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -235,13 +235,13 @@ type ArticleLotteryParticipantUpdateOne struct {
 }
 
 // SetLotteryID sets the "lottery_id" field.
-func (_u *ArticleLotteryParticipantUpdateOne) SetLotteryID(v int) *ArticleLotteryParticipantUpdateOne {
+func (_u *ArticleLotteryParticipantUpdateOne) SetLotteryID(v int64) *ArticleLotteryParticipantUpdateOne {
 	_u.mutation.SetLotteryID(v)
 	return _u
 }
 
 // SetNillableLotteryID sets the "lottery_id" field if the given value is not nil.
-func (_u *ArticleLotteryParticipantUpdateOne) SetNillableLotteryID(v *int) *ArticleLotteryParticipantUpdateOne {
+func (_u *ArticleLotteryParticipantUpdateOne) SetNillableLotteryID(v *int64) *ArticleLotteryParticipantUpdateOne {
 	if v != nil {
 		_u.SetLotteryID(*v)
 	}
@@ -249,14 +249,14 @@ func (_u *ArticleLotteryParticipantUpdateOne) SetNillableLotteryID(v *int) *Arti
 }
 
 // SetUserID sets the "user_id" field.
-func (_u *ArticleLotteryParticipantUpdateOne) SetUserID(v int) *ArticleLotteryParticipantUpdateOne {
+func (_u *ArticleLotteryParticipantUpdateOne) SetUserID(v int64) *ArticleLotteryParticipantUpdateOne {
 	_u.mutation.ResetUserID()
 	_u.mutation.SetUserID(v)
 	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleLotteryParticipantUpdateOne) SetNillableUserID(v *int) *ArticleLotteryParticipantUpdateOne {
+func (_u *ArticleLotteryParticipantUpdateOne) SetNillableUserID(v *int64) *ArticleLotteryParticipantUpdateOne {
 	if v != nil {
 		_u.SetUserID(*v)
 	}
@@ -264,7 +264,7 @@ func (_u *ArticleLotteryParticipantUpdateOne) SetNillableUserID(v *int) *Article
 }
 
 // AddUserID adds value to the "user_id" field.
-func (_u *ArticleLotteryParticipantUpdateOne) AddUserID(v int) *ArticleLotteryParticipantUpdateOne {
+func (_u *ArticleLotteryParticipantUpdateOne) AddUserID(v int64) *ArticleLotteryParticipantUpdateOne {
 	_u.mutation.AddUserID(v)
 	return _u
 }
@@ -377,7 +377,7 @@ func (_u *ArticleLotteryParticipantUpdateOne) sqlSave(ctx context.Context) (_nod
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlelotteryparticipant.Table, articlelotteryparticipant.Columns, sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlelotteryparticipant.Table, articlelotteryparticipant.Columns, sqlgraph.NewFieldSpec(articlelotteryparticipant.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "ArticleLotteryParticipant.id" for update`)}
@@ -403,10 +403,10 @@ func (_u *ArticleLotteryParticipantUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 	}
 	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(articlelotteryparticipant.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articlelotteryparticipant.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(articlelotteryparticipant.FieldUserID, field.TypeInt, value)
+		_spec.AddField(articlelotteryparticipant.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlelotteryparticipant.FieldCreatedAt, field.TypeTime, value)
@@ -428,7 +428,7 @@ func (_u *ArticleLotteryParticipantUpdateOne) sqlSave(ctx context.Context) (_nod
 			Columns: []string{articlelotteryparticipant.LotteryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -441,7 +441,7 @@ func (_u *ArticleLotteryParticipantUpdateOne) sqlSave(ctx context.Context) (_nod
 			Columns: []string{articlelotteryparticipant.LotteryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlelottery.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

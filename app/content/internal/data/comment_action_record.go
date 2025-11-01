@@ -25,7 +25,7 @@ func (a CommentActionRecordRepo) Save(ctx context.Context, client *gen.Client, r
 	panic("implement me")
 }
 
-func (a CommentActionRecordRepo) Delete(ctx context.Context, client *gen.Client, commentId int, userId int, action v1.CommentAction) error {
+func (a CommentActionRecordRepo) Delete(ctx context.Context, client *gen.Client, commentId int64, userId int64, action v1.CommentAction) error {
 	// TODO implement me
 	panic("implement me")
 }

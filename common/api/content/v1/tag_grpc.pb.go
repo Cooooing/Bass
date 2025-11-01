@@ -19,181 +19,181 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TagService_Add_FullMethodName    = "/content.v1.TagService/Add"
-	TagService_Update_FullMethodName = "/content.v1.TagService/Update"
-	TagService_Get_FullMethodName    = "/content.v1.TagService/Get"
+	ContentTagService_Add_FullMethodName    = "/common.api.content.v1.ContentTagService/Add"
+	ContentTagService_Update_FullMethodName = "/common.api.content.v1.ContentTagService/Update"
+	ContentTagService_Get_FullMethodName    = "/common.api.content.v1.ContentTagService/Get"
 )
 
-// TagServiceClient is the client API for TagService service.
+// ContentTagServiceClient is the client API for ContentTagService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // 标签服务
-type TagServiceClient interface {
+type ContentTagServiceClient interface {
 	Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error)
 	Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*UpdateTagReply, error)
 	Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error)
 }
 
-type tagServiceClient struct {
+type contentTagServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTagServiceClient(cc grpc.ClientConnInterface) TagServiceClient {
-	return &tagServiceClient{cc}
+func NewContentTagServiceClient(cc grpc.ClientConnInterface) ContentTagServiceClient {
+	return &contentTagServiceClient{cc}
 }
 
-func (c *tagServiceClient) Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error) {
+func (c *contentTagServiceClient) Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddTagReply)
-	err := c.cc.Invoke(ctx, TagService_Add_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentTagService_Add_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tagServiceClient) Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*UpdateTagReply, error) {
+func (c *contentTagServiceClient) Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*UpdateTagReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateTagReply)
-	err := c.cc.Invoke(ctx, TagService_Update_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentTagService_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tagServiceClient) Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error) {
+func (c *contentTagServiceClient) Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetTagReply)
-	err := c.cc.Invoke(ctx, TagService_Get_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentTagService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TagServiceServer is the server API for TagService service.
-// All implementations must embed UnimplementedTagServiceServer
+// ContentTagServiceServer is the server API for ContentTagService service.
+// All implementations must embed UnimplementedContentTagServiceServer
 // for forward compatibility.
 //
 // 标签服务
-type TagServiceServer interface {
+type ContentTagServiceServer interface {
 	Add(context.Context, *AddTagRequest) (*AddTagReply, error)
 	Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error)
 	Get(context.Context, *GetTagRequest) (*GetTagReply, error)
-	mustEmbedUnimplementedTagServiceServer()
+	mustEmbedUnimplementedContentTagServiceServer()
 }
 
-// UnimplementedTagServiceServer must be embedded to have
+// UnimplementedContentTagServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedTagServiceServer struct{}
+type UnimplementedContentTagServiceServer struct{}
 
-func (UnimplementedTagServiceServer) Add(context.Context, *AddTagRequest) (*AddTagReply, error) {
+func (UnimplementedContentTagServiceServer) Add(context.Context, *AddTagRequest) (*AddTagReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedTagServiceServer) Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error) {
+func (UnimplementedContentTagServiceServer) Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedTagServiceServer) Get(context.Context, *GetTagRequest) (*GetTagReply, error) {
+func (UnimplementedContentTagServiceServer) Get(context.Context, *GetTagRequest) (*GetTagReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedTagServiceServer) mustEmbedUnimplementedTagServiceServer() {}
-func (UnimplementedTagServiceServer) testEmbeddedByValue()                    {}
+func (UnimplementedContentTagServiceServer) mustEmbedUnimplementedContentTagServiceServer() {}
+func (UnimplementedContentTagServiceServer) testEmbeddedByValue()                           {}
 
-// UnsafeTagServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TagServiceServer will
+// UnsafeContentTagServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ContentTagServiceServer will
 // result in compilation errors.
-type UnsafeTagServiceServer interface {
-	mustEmbedUnimplementedTagServiceServer()
+type UnsafeContentTagServiceServer interface {
+	mustEmbedUnimplementedContentTagServiceServer()
 }
 
-func RegisterTagServiceServer(s grpc.ServiceRegistrar, srv TagServiceServer) {
-	// If the following call pancis, it indicates UnimplementedTagServiceServer was
+func RegisterContentTagServiceServer(s grpc.ServiceRegistrar, srv ContentTagServiceServer) {
+	// If the following call pancis, it indicates UnimplementedContentTagServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&TagService_ServiceDesc, srv)
+	s.RegisterService(&ContentTagService_ServiceDesc, srv)
 }
 
-func _TagService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentTagService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddTagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServiceServer).Add(ctx, in)
+		return srv.(ContentTagServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TagService_Add_FullMethodName,
+		FullMethod: ContentTagService_Add_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServiceServer).Add(ctx, req.(*AddTagRequest))
+		return srv.(ContentTagServiceServer).Add(ctx, req.(*AddTagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TagService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentTagService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServiceServer).Update(ctx, in)
+		return srv.(ContentTagServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TagService_Update_FullMethodName,
+		FullMethod: ContentTagService_Update_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServiceServer).Update(ctx, req.(*UpdateTagRequest))
+		return srv.(ContentTagServiceServer).Update(ctx, req.(*UpdateTagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TagService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentTagService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetTagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TagServiceServer).Get(ctx, in)
+		return srv.(ContentTagServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TagService_Get_FullMethodName,
+		FullMethod: ContentTagService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TagServiceServer).Get(ctx, req.(*GetTagRequest))
+		return srv.(ContentTagServiceServer).Get(ctx, req.(*GetTagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// TagService_ServiceDesc is the grpc.ServiceDesc for TagService service.
+// ContentTagService_ServiceDesc is the grpc.ServiceDesc for ContentTagService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TagService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "content.v1.TagService",
-	HandlerType: (*TagServiceServer)(nil),
+var ContentTagService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "common.api.content.v1.ContentTagService",
+	HandlerType: (*ContentTagServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Add",
-			Handler:    _TagService_Add_Handler,
+			Handler:    _ContentTagService_Add_Handler,
 		},
 		{
 			MethodName: "Update",
-			Handler:    _TagService_Update_Handler,
+			Handler:    _ContentTagService_Update_Handler,
 		},
 		{
 			MethodName: "Get",
-			Handler:    _TagService_Get_Handler,
+			Handler:    _ContentTagService_Get_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

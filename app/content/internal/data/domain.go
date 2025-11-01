@@ -47,7 +47,7 @@ func (r *DomainRepo) Update(ctx context.Context, db *gen.Client, domain *model.D
 	return (*model.Domain)(save), nil
 }
 
-func (r *DomainRepo) AddTagCount(ctx context.Context, db *gen.Client, id int, num int) (*model.Domain, error) {
+func (r *DomainRepo) AddTagCount(ctx context.Context, db *gen.Client, id int64, num int32) (*model.Domain, error) {
 	domain, err := db.Domain.UpdateOneID(id).
 		AddTagCount(num).
 		Save(ctx)

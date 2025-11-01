@@ -21,20 +21,26 @@ type ArticleActionRecordCreate struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_c *ArticleActionRecordCreate) SetArticleID(v int) *ArticleActionRecordCreate {
+func (_c *ArticleActionRecordCreate) SetArticleID(v int64) *ArticleActionRecordCreate {
 	_c.mutation.SetArticleID(v)
 	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (_c *ArticleActionRecordCreate) SetUserID(v int) *ArticleActionRecordCreate {
+func (_c *ArticleActionRecordCreate) SetUserID(v int64) *ArticleActionRecordCreate {
 	_c.mutation.SetUserID(v)
 	return _c
 }
 
 // SetType sets the "type" field.
-func (_c *ArticleActionRecordCreate) SetType(v int) *ArticleActionRecordCreate {
+func (_c *ArticleActionRecordCreate) SetType(v int32) *ArticleActionRecordCreate {
 	_c.mutation.SetType(v)
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ArticleActionRecordCreate) SetID(v int64) *ArticleActionRecordCreate {
+	_c.mutation.SetID(v)
 	return _c
 }
 
@@ -103,8 +109,10 @@ func (_c *ArticleActionRecordCreate) sqlSave(ctx context.Context) (*ArticleActio
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -113,14 +121,18 @@ func (_c *ArticleActionRecordCreate) sqlSave(ctx context.Context) (*ArticleActio
 func (_c *ArticleActionRecordCreate) createSpec() (*ArticleActionRecord, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ArticleActionRecord{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(articleactionrecord.Table, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(articleactionrecord.Table, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt64))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(articleactionrecord.FieldUserID, field.TypeInt, value)
+		_spec.SetField(articleactionrecord.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
 	if value, ok := _c.mutation.GetType(); ok {
-		_spec.SetField(articleactionrecord.FieldType, field.TypeInt, value)
+		_spec.SetField(articleactionrecord.FieldType, field.TypeInt32, value)
 		_node.Type = value
 	}
 	if nodes := _c.mutation.ArticleIDs(); len(nodes) > 0 {
@@ -131,7 +143,7 @@ func (_c *ArticleActionRecordCreate) createSpec() (*ArticleActionRecord, *sqlgra
 			Columns: []string{articleactionrecord.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -187,9 +199,9 @@ func (_c *ArticleActionRecordCreateBulk) Save(ctx context.Context) ([]*ArticleAc
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

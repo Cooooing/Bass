@@ -32,13 +32,13 @@ func (_u *ArticleVoteUpdate) Where(ps ...predicate.ArticleVote) *ArticleVoteUpda
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticleVoteUpdate) SetArticleID(v int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) SetArticleID(v int64) *ArticleVoteUpdate {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticleVoteUpdate) SetNillableArticleID(v *int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) SetNillableArticleID(v *int64) *ArticleVoteUpdate {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -110,14 +110,14 @@ func (_u *ArticleVoteUpdate) SetNillableVoteAnonymous(v *bool) *ArticleVoteUpdat
 }
 
 // SetTotalCount sets the "total_count" field.
-func (_u *ArticleVoteUpdate) SetTotalCount(v int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) SetTotalCount(v int32) *ArticleVoteUpdate {
 	_u.mutation.ResetTotalCount()
 	_u.mutation.SetTotalCount(v)
 	return _u
 }
 
 // SetNillableTotalCount sets the "total_count" field if the given value is not nil.
-func (_u *ArticleVoteUpdate) SetNillableTotalCount(v *int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) SetNillableTotalCount(v *int32) *ArticleVoteUpdate {
 	if v != nil {
 		_u.SetTotalCount(*v)
 	}
@@ -125,7 +125,7 @@ func (_u *ArticleVoteUpdate) SetNillableTotalCount(v *int) *ArticleVoteUpdate {
 }
 
 // AddTotalCount adds value to the "total_count" field.
-func (_u *ArticleVoteUpdate) AddTotalCount(v int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) AddTotalCount(v int32) *ArticleVoteUpdate {
 	_u.mutation.AddTotalCount(v)
 	return _u
 }
@@ -196,14 +196,14 @@ func (_u *ArticleVoteUpdate) SetArticle(v *Article) *ArticleVoteUpdate {
 }
 
 // AddRecordIDs adds the "records" edge to the ArticleVoteRecord entity by IDs.
-func (_u *ArticleVoteUpdate) AddRecordIDs(ids ...int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) AddRecordIDs(ids ...int64) *ArticleVoteUpdate {
 	_u.mutation.AddRecordIDs(ids...)
 	return _u
 }
 
 // AddRecords adds the "records" edges to the ArticleVoteRecord entity.
 func (_u *ArticleVoteUpdate) AddRecords(v ...*ArticleVoteRecord) *ArticleVoteUpdate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -228,14 +228,14 @@ func (_u *ArticleVoteUpdate) ClearRecords() *ArticleVoteUpdate {
 }
 
 // RemoveRecordIDs removes the "records" edge to ArticleVoteRecord entities by IDs.
-func (_u *ArticleVoteUpdate) RemoveRecordIDs(ids ...int) *ArticleVoteUpdate {
+func (_u *ArticleVoteUpdate) RemoveRecordIDs(ids ...int64) *ArticleVoteUpdate {
 	_u.mutation.RemoveRecordIDs(ids...)
 	return _u
 }
 
 // RemoveRecords removes "records" edges to ArticleVoteRecord entities.
 func (_u *ArticleVoteUpdate) RemoveRecords(v ...*ArticleVoteRecord) *ArticleVoteUpdate {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -281,7 +281,7 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlevote.Table, articlevote.Columns, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlevote.Table, articlevote.Columns, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt64))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -318,10 +318,10 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		_spec.SetField(articlevote.FieldVoteAnonymous, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.TotalCount(); ok {
-		_spec.SetField(articlevote.FieldTotalCount, field.TypeInt, value)
+		_spec.SetField(articlevote.FieldTotalCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedTotalCount(); ok {
-		_spec.AddField(articlevote.FieldTotalCount, field.TypeInt, value)
+		_spec.AddField(articlevote.FieldTotalCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.EndAt(); ok {
 		_spec.SetField(articlevote.FieldEndAt, field.TypeTime, value)
@@ -349,7 +349,7 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Columns: []string{articlevote.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -362,7 +362,7 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Columns: []string{articlevote.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -378,7 +378,7 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -391,7 +391,7 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -407,7 +407,7 @@ func (_u *ArticleVoteUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -436,13 +436,13 @@ type ArticleVoteUpdateOne struct {
 }
 
 // SetArticleID sets the "article_id" field.
-func (_u *ArticleVoteUpdateOne) SetArticleID(v int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) SetArticleID(v int64) *ArticleVoteUpdateOne {
 	_u.mutation.SetArticleID(v)
 	return _u
 }
 
 // SetNillableArticleID sets the "article_id" field if the given value is not nil.
-func (_u *ArticleVoteUpdateOne) SetNillableArticleID(v *int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) SetNillableArticleID(v *int64) *ArticleVoteUpdateOne {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
@@ -514,14 +514,14 @@ func (_u *ArticleVoteUpdateOne) SetNillableVoteAnonymous(v *bool) *ArticleVoteUp
 }
 
 // SetTotalCount sets the "total_count" field.
-func (_u *ArticleVoteUpdateOne) SetTotalCount(v int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) SetTotalCount(v int32) *ArticleVoteUpdateOne {
 	_u.mutation.ResetTotalCount()
 	_u.mutation.SetTotalCount(v)
 	return _u
 }
 
 // SetNillableTotalCount sets the "total_count" field if the given value is not nil.
-func (_u *ArticleVoteUpdateOne) SetNillableTotalCount(v *int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) SetNillableTotalCount(v *int32) *ArticleVoteUpdateOne {
 	if v != nil {
 		_u.SetTotalCount(*v)
 	}
@@ -529,7 +529,7 @@ func (_u *ArticleVoteUpdateOne) SetNillableTotalCount(v *int) *ArticleVoteUpdate
 }
 
 // AddTotalCount adds value to the "total_count" field.
-func (_u *ArticleVoteUpdateOne) AddTotalCount(v int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) AddTotalCount(v int32) *ArticleVoteUpdateOne {
 	_u.mutation.AddTotalCount(v)
 	return _u
 }
@@ -600,14 +600,14 @@ func (_u *ArticleVoteUpdateOne) SetArticle(v *Article) *ArticleVoteUpdateOne {
 }
 
 // AddRecordIDs adds the "records" edge to the ArticleVoteRecord entity by IDs.
-func (_u *ArticleVoteUpdateOne) AddRecordIDs(ids ...int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) AddRecordIDs(ids ...int64) *ArticleVoteUpdateOne {
 	_u.mutation.AddRecordIDs(ids...)
 	return _u
 }
 
 // AddRecords adds the "records" edges to the ArticleVoteRecord entity.
 func (_u *ArticleVoteUpdateOne) AddRecords(v ...*ArticleVoteRecord) *ArticleVoteUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -632,14 +632,14 @@ func (_u *ArticleVoteUpdateOne) ClearRecords() *ArticleVoteUpdateOne {
 }
 
 // RemoveRecordIDs removes the "records" edge to ArticleVoteRecord entities by IDs.
-func (_u *ArticleVoteUpdateOne) RemoveRecordIDs(ids ...int) *ArticleVoteUpdateOne {
+func (_u *ArticleVoteUpdateOne) RemoveRecordIDs(ids ...int64) *ArticleVoteUpdateOne {
 	_u.mutation.RemoveRecordIDs(ids...)
 	return _u
 }
 
 // RemoveRecords removes "records" edges to ArticleVoteRecord entities.
 func (_u *ArticleVoteUpdateOne) RemoveRecords(v ...*ArticleVoteRecord) *ArticleVoteUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -698,7 +698,7 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(articlevote.Table, articlevote.Columns, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(articlevote.Table, articlevote.Columns, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt64))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`gen: missing "ArticleVote.id" for update`)}
@@ -752,10 +752,10 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 		_spec.SetField(articlevote.FieldVoteAnonymous, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.TotalCount(); ok {
-		_spec.SetField(articlevote.FieldTotalCount, field.TypeInt, value)
+		_spec.SetField(articlevote.FieldTotalCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.AddedTotalCount(); ok {
-		_spec.AddField(articlevote.FieldTotalCount, field.TypeInt, value)
+		_spec.AddField(articlevote.FieldTotalCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.EndAt(); ok {
 		_spec.SetField(articlevote.FieldEndAt, field.TypeTime, value)
@@ -783,7 +783,7 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 			Columns: []string{articlevote.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -796,7 +796,7 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 			Columns: []string{articlevote.ArticleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -812,7 +812,7 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -825,7 +825,7 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -841,7 +841,7 @@ func (_u *ArticleVoteUpdateOne) sqlSave(ctx context.Context) (_node *ArticleVote
 			Columns: []string{articlevote.RecordsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(articlevoterecord.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

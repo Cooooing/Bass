@@ -19,14 +19,14 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationAuthenticationExistEmail = "/user.v1.Authentication/ExistEmail"
-const OperationAuthenticationExistPhone = "/user.v1.Authentication/ExistPhone"
-const OperationAuthenticationExistUsername = "/user.v1.Authentication/ExistUsername"
-const OperationAuthenticationLoginAccount = "/user.v1.Authentication/LoginAccount"
-const OperationAuthenticationRegisterEmail = "/user.v1.Authentication/RegisterEmail"
-const OperationAuthenticationRegisterEmailVerify = "/user.v1.Authentication/RegisterEmailVerify"
+const OperationUserAuthenticationServiceExistEmail = "/common.api.user.v1.UserAuthenticationService/ExistEmail"
+const OperationUserAuthenticationServiceExistPhone = "/common.api.user.v1.UserAuthenticationService/ExistPhone"
+const OperationUserAuthenticationServiceExistUsername = "/common.api.user.v1.UserAuthenticationService/ExistUsername"
+const OperationUserAuthenticationServiceLoginAccount = "/common.api.user.v1.UserAuthenticationService/LoginAccount"
+const OperationUserAuthenticationServiceRegisterEmail = "/common.api.user.v1.UserAuthenticationService/RegisterEmail"
+const OperationUserAuthenticationServiceRegisterEmailVerify = "/common.api.user.v1.UserAuthenticationService/RegisterEmailVerify"
 
-type AuthenticationHTTPServer interface {
+type UserAuthenticationServiceHTTPServer interface {
 	// ExistEmail 邮箱是否存在
 	ExistEmail(context.Context, *ExistEmailRequest) (*ExistEmailReply, error)
 	// ExistPhone 手机号是否存在
@@ -41,17 +41,17 @@ type AuthenticationHTTPServer interface {
 	RegisterEmailVerify(context.Context, *RegisterEmailVerifyRequest) (*RegisterEmailVerifyReply, error)
 }
 
-func RegisterAuthenticationHTTPServer(s *http.Server, srv AuthenticationHTTPServer) {
+func RegisterUserAuthenticationServiceHTTPServer(s *http.Server, srv UserAuthenticationServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/authentication/register/email", _Authentication_RegisterEmail0_HTTP_Handler(srv))
-	r.POST("/v1/authentication/register/email/verify", _Authentication_RegisterEmailVerify0_HTTP_Handler(srv))
-	r.POST("/v1/authentication/exist/email", _Authentication_ExistEmail0_HTTP_Handler(srv))
-	r.POST("/v1/authentication/exist/phone", _Authentication_ExistPhone0_HTTP_Handler(srv))
-	r.POST("/v1/authentication/exist/username", _Authentication_ExistUsername0_HTTP_Handler(srv))
-	r.POST("/v1/authentication/login/account", _Authentication_LoginAccount0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/register/email", _UserAuthenticationService_RegisterEmail0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/register/email/verify", _UserAuthenticationService_RegisterEmailVerify0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/exist/email", _UserAuthenticationService_ExistEmail0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/exist/phone", _UserAuthenticationService_ExistPhone0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/exist/username", _UserAuthenticationService_ExistUsername0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/login/account", _UserAuthenticationService_LoginAccount0_HTTP_Handler(srv))
 }
 
-func _Authentication_RegisterEmail0_HTTP_Handler(srv AuthenticationHTTPServer) func(ctx http.Context) error {
+func _UserAuthenticationService_RegisterEmail0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in RegisterEmailRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -60,7 +60,7 @@ func _Authentication_RegisterEmail0_HTTP_Handler(srv AuthenticationHTTPServer) f
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthenticationRegisterEmail)
+		http.SetOperation(ctx, OperationUserAuthenticationServiceRegisterEmail)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.RegisterEmail(ctx, req.(*RegisterEmailRequest))
 		})
@@ -73,7 +73,7 @@ func _Authentication_RegisterEmail0_HTTP_Handler(srv AuthenticationHTTPServer) f
 	}
 }
 
-func _Authentication_RegisterEmailVerify0_HTTP_Handler(srv AuthenticationHTTPServer) func(ctx http.Context) error {
+func _UserAuthenticationService_RegisterEmailVerify0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in RegisterEmailVerifyRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -82,7 +82,7 @@ func _Authentication_RegisterEmailVerify0_HTTP_Handler(srv AuthenticationHTTPSer
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthenticationRegisterEmailVerify)
+		http.SetOperation(ctx, OperationUserAuthenticationServiceRegisterEmailVerify)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.RegisterEmailVerify(ctx, req.(*RegisterEmailVerifyRequest))
 		})
@@ -95,7 +95,7 @@ func _Authentication_RegisterEmailVerify0_HTTP_Handler(srv AuthenticationHTTPSer
 	}
 }
 
-func _Authentication_ExistEmail0_HTTP_Handler(srv AuthenticationHTTPServer) func(ctx http.Context) error {
+func _UserAuthenticationService_ExistEmail0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExistEmailRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -104,7 +104,7 @@ func _Authentication_ExistEmail0_HTTP_Handler(srv AuthenticationHTTPServer) func
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthenticationExistEmail)
+		http.SetOperation(ctx, OperationUserAuthenticationServiceExistEmail)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ExistEmail(ctx, req.(*ExistEmailRequest))
 		})
@@ -117,7 +117,7 @@ func _Authentication_ExistEmail0_HTTP_Handler(srv AuthenticationHTTPServer) func
 	}
 }
 
-func _Authentication_ExistPhone0_HTTP_Handler(srv AuthenticationHTTPServer) func(ctx http.Context) error {
+func _UserAuthenticationService_ExistPhone0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExistPhoneRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -126,7 +126,7 @@ func _Authentication_ExistPhone0_HTTP_Handler(srv AuthenticationHTTPServer) func
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthenticationExistPhone)
+		http.SetOperation(ctx, OperationUserAuthenticationServiceExistPhone)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ExistPhone(ctx, req.(*ExistPhoneRequest))
 		})
@@ -139,7 +139,7 @@ func _Authentication_ExistPhone0_HTTP_Handler(srv AuthenticationHTTPServer) func
 	}
 }
 
-func _Authentication_ExistUsername0_HTTP_Handler(srv AuthenticationHTTPServer) func(ctx http.Context) error {
+func _UserAuthenticationService_ExistUsername0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ExistUsernameRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -148,7 +148,7 @@ func _Authentication_ExistUsername0_HTTP_Handler(srv AuthenticationHTTPServer) f
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthenticationExistUsername)
+		http.SetOperation(ctx, OperationUserAuthenticationServiceExistUsername)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ExistUsername(ctx, req.(*ExistUsernameRequest))
 		})
@@ -161,7 +161,7 @@ func _Authentication_ExistUsername0_HTTP_Handler(srv AuthenticationHTTPServer) f
 	}
 }
 
-func _Authentication_LoginAccount0_HTTP_Handler(srv AuthenticationHTTPServer) func(ctx http.Context) error {
+func _UserAuthenticationService_LoginAccount0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LoginAccountRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -170,7 +170,7 @@ func _Authentication_LoginAccount0_HTTP_Handler(srv AuthenticationHTTPServer) fu
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthenticationLoginAccount)
+		http.SetOperation(ctx, OperationUserAuthenticationServiceLoginAccount)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.LoginAccount(ctx, req.(*LoginAccountRequest))
 		})
@@ -183,7 +183,7 @@ func _Authentication_LoginAccount0_HTTP_Handler(srv AuthenticationHTTPServer) fu
 	}
 }
 
-type AuthenticationHTTPClient interface {
+type UserAuthenticationServiceHTTPClient interface {
 	// ExistEmail 邮箱是否存在
 	ExistEmail(ctx context.Context, req *ExistEmailRequest, opts ...http.CallOption) (rsp *ExistEmailReply, err error)
 	// ExistPhone 手机号是否存在
@@ -198,20 +198,20 @@ type AuthenticationHTTPClient interface {
 	RegisterEmailVerify(ctx context.Context, req *RegisterEmailVerifyRequest, opts ...http.CallOption) (rsp *RegisterEmailVerifyReply, err error)
 }
 
-type AuthenticationHTTPClientImpl struct {
+type UserAuthenticationServiceHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewAuthenticationHTTPClient(client *http.Client) AuthenticationHTTPClient {
-	return &AuthenticationHTTPClientImpl{client}
+func NewUserAuthenticationServiceHTTPClient(client *http.Client) UserAuthenticationServiceHTTPClient {
+	return &UserAuthenticationServiceHTTPClientImpl{client}
 }
 
 // ExistEmail 邮箱是否存在
-func (c *AuthenticationHTTPClientImpl) ExistEmail(ctx context.Context, in *ExistEmailRequest, opts ...http.CallOption) (*ExistEmailReply, error) {
+func (c *UserAuthenticationServiceHTTPClientImpl) ExistEmail(ctx context.Context, in *ExistEmailRequest, opts ...http.CallOption) (*ExistEmailReply, error) {
 	var out ExistEmailReply
 	pattern := "/v1/authentication/exist/email"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthenticationExistEmail))
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceExistEmail))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -221,11 +221,11 @@ func (c *AuthenticationHTTPClientImpl) ExistEmail(ctx context.Context, in *Exist
 }
 
 // ExistPhone 手机号是否存在
-func (c *AuthenticationHTTPClientImpl) ExistPhone(ctx context.Context, in *ExistPhoneRequest, opts ...http.CallOption) (*ExistPhoneReply, error) {
+func (c *UserAuthenticationServiceHTTPClientImpl) ExistPhone(ctx context.Context, in *ExistPhoneRequest, opts ...http.CallOption) (*ExistPhoneReply, error) {
 	var out ExistPhoneReply
 	pattern := "/v1/authentication/exist/phone"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthenticationExistPhone))
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceExistPhone))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -235,11 +235,11 @@ func (c *AuthenticationHTTPClientImpl) ExistPhone(ctx context.Context, in *Exist
 }
 
 // ExistUsername 用户名是否存在
-func (c *AuthenticationHTTPClientImpl) ExistUsername(ctx context.Context, in *ExistUsernameRequest, opts ...http.CallOption) (*ExistUsernameReply, error) {
+func (c *UserAuthenticationServiceHTTPClientImpl) ExistUsername(ctx context.Context, in *ExistUsernameRequest, opts ...http.CallOption) (*ExistUsernameReply, error) {
 	var out ExistUsernameReply
 	pattern := "/v1/authentication/exist/username"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthenticationExistUsername))
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceExistUsername))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -249,11 +249,11 @@ func (c *AuthenticationHTTPClientImpl) ExistUsername(ctx context.Context, in *Ex
 }
 
 // LoginAccount 账号登录（用户名/邮箱）
-func (c *AuthenticationHTTPClientImpl) LoginAccount(ctx context.Context, in *LoginAccountRequest, opts ...http.CallOption) (*LoginAccountReply, error) {
+func (c *UserAuthenticationServiceHTTPClientImpl) LoginAccount(ctx context.Context, in *LoginAccountRequest, opts ...http.CallOption) (*LoginAccountReply, error) {
 	var out LoginAccountReply
 	pattern := "/v1/authentication/login/account"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthenticationLoginAccount))
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceLoginAccount))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -263,11 +263,11 @@ func (c *AuthenticationHTTPClientImpl) LoginAccount(ctx context.Context, in *Log
 }
 
 // RegisterEmail 邮箱注册
-func (c *AuthenticationHTTPClientImpl) RegisterEmail(ctx context.Context, in *RegisterEmailRequest, opts ...http.CallOption) (*RegisterEmailReply, error) {
+func (c *UserAuthenticationServiceHTTPClientImpl) RegisterEmail(ctx context.Context, in *RegisterEmailRequest, opts ...http.CallOption) (*RegisterEmailReply, error) {
 	var out RegisterEmailReply
 	pattern := "/v1/authentication/register/email"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthenticationRegisterEmail))
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceRegisterEmail))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -277,11 +277,11 @@ func (c *AuthenticationHTTPClientImpl) RegisterEmail(ctx context.Context, in *Re
 }
 
 // RegisterEmailVerify 邮箱注册验证码验证
-func (c *AuthenticationHTTPClientImpl) RegisterEmailVerify(ctx context.Context, in *RegisterEmailVerifyRequest, opts ...http.CallOption) (*RegisterEmailVerifyReply, error) {
+func (c *UserAuthenticationServiceHTTPClientImpl) RegisterEmailVerify(ctx context.Context, in *RegisterEmailVerifyRequest, opts ...http.CallOption) (*RegisterEmailVerifyReply, error) {
 	var out RegisterEmailVerifyReply
 	pattern := "/v1/authentication/register/email/verify"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthenticationRegisterEmailVerify))
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceRegisterEmailVerify))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

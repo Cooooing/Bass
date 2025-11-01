@@ -1,11 +1,13 @@
 package client
 
 import (
-	"common/pkg/model"
 	"context"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"time"
+
+	"common/pkg/model"
 
 	etcdregistry "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -15,97 +17,137 @@ import (
 	"google.golang.org/grpc"
 )
 
+// ConnPool 是 gRPC 客户端连接池
+type ConnPool struct {
+	conns []*grpc.ClientConn
+	next  uint32
+}
+
+// Get 返回一个轮询的 gRPC 连接
+func (p *ConnPool) Get() *grpc.ClientConn {
+	if len(p.conns) == 0 {
+		return nil
+	}
+	// 使用原子操作保证并发安全轮询
+	n := atomic.AddUint32(&p.next, 1)
+	return p.conns[int(n%uint32(len(p.conns)))]
+}
+
+// EtcdClient 封装 Etcd 和 gRPC 连接池
 type EtcdClient struct {
 	conf  *model.EtcdConf
 	log   *log.Helper
-	conns sync.Map // map[string]*grpc.ClientConn
+	pools sync.Map         // key=serviceName, value=*ConnPool
+	cli   *clientv3.Client // 持久化 Etcd 客户端
 }
 
+// NewEtcdClient 创建 EtcdClient 实例
 func NewEtcdClient(log *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(), error) {
-	etcdServer := &EtcdClient{
-		conf: conf,
-		log:  log,
-	}
-	conn, err := etcdServer.NewConn()
-	if err != nil {
-		return nil, nil, err
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
-	_, err = conn.Get(ctx, "ping_key_not_exist")
-	if err != nil {
-		log.Errorf(fmt.Errorf("etcd ping failed:%w", err).Error())
-	} else {
-		log.Infof("etcd: connected to %+v", conf.Endpoints)
-	}
-	defer func(conn *clientv3.Client) {
-		err := conn.Close()
-		if err != nil {
-			log.Errorf("close etcd conn error: %v", err)
-		}
-	}(conn)
-
-	return etcdServer, etcdServer.CleanUp, nil
-}
-
-func (c *EtcdClient) NewConn() (*clientv3.Client, error) {
-	client, err := clientv3.New(clientv3.Config{
-		Endpoints:   c.conf.Endpoints,
-		Username:    c.conf.Username,
-		Password:    c.conf.Password,
-		DialTimeout: c.conf.Timeout.AsDuration(),
+	// 初始化 Etcd 客户端
+	cli, err := clientv3.New(clientv3.Config{
+		Endpoints:   conf.Endpoints,
+		Username:    conf.Username,
+		Password:    conf.Password,
+		DialTimeout: conf.Timeout.AsDuration(),
 	})
 	if err != nil {
-		log.Errorf("new etcd client error: %v", err)
+		return nil, nil, fmt.Errorf("create etcd client failed: %w", err)
 	}
-	return client, err
+
+	c := &EtcdClient{
+		conf: conf,
+		log:  log,
+		cli:  cli,
+	}
+
+	// 测试 Etcd 是否可用
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	if _, err := cli.Get(ctx, "ping_key_not_exist"); err != nil {
+		c.log.Errorf("etcd ping failed: %v", err)
+	} else {
+		c.log.Infof("etcd connected successfully: %+v", conf.Endpoints)
+	}
+
+	return c, c.CleanUp, nil
 }
 
+// Registrar 返回 Etcd 服务注册器
 func (c *EtcdClient) Registrar() registry.Registrar {
-	cli, err := c.NewConn()
-	if err != nil {
-		log.Errorf("new etcd client error: %v", err)
-	}
-	return etcdregistry.New(cli)
+	return etcdregistry.New(c.cli)
 }
 
-func (c *EtcdClient) Discoverer(name string) *grpc.ClientConn {
-	if v, ok := c.conns.Load(name); ok {
-		if conn, ok := v.(*grpc.ClientConn); ok {
-			return conn
-		}
-	}
-
-	cli, err := c.NewConn()
-	if err != nil {
-		log.Errorf("new etcd client error: %v", err)
-	}
-
-	dis := etcdregistry.New(cli)
-	conn, err := kgrpc.DialInsecure(
+// newGrpcConn 创建 gRPC 连接
+func (c *EtcdClient) newGrpcConn(service string) (*grpc.ClientConn, error) {
+	dis := etcdregistry.New(c.cli)
+	return kgrpc.DialInsecure(
 		context.Background(),
-		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", name)),
+		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		kgrpc.WithDiscovery(dis),
 		kgrpc.WithTimeout(c.conf.Timeout.AsDuration()),
 	)
-	if err != nil {
-		log.Fatalf("failed to dial: %v", err)
-	}
-
-	c.conns.Store(name, conn)
-	return conn
 }
 
-func (c *EtcdClient) CleanUp() {
-	c.conns.Range(func(key, value interface{}) bool {
-		if conn, ok := value.(*grpc.ClientConn); ok {
-			err := conn.Close()
+// getConnFromPool 获取 gRPC 连接池中的连接，如果池不存在则初始化
+func (c *EtcdClient) getConnFromPool(service string, poolSize int) (*grpc.ClientConn, error) {
+	// LoadOrStore 保证并发下只创建一个池
+	val, _ := c.pools.LoadOrStore(service, &ConnPool{})
+	pool := val.(*ConnPool)
+
+	// 使用 sync.Once 初始化池中的连接
+	var once sync.Once
+	var initErr error
+	once.Do(func() {
+		for i := 0; i < poolSize; i++ {
+			conn, err := c.newGrpcConn(service)
 			if err != nil {
-				c.log.Errorf("close etcd conn error: %v", err)
+				c.log.Errorf("failed to create grpc conn for %s: %v", service, err)
+				initErr = err
+				continue
+			}
+			pool.conns = append(pool.conns, conn)
+		}
+		if len(pool.conns) > 0 {
+			c.log.Infof("created connection pool for service %s (size=%d)", service, len(pool.conns))
+		} else {
+			initErr = fmt.Errorf("no grpc connections available for service %s", service)
+		}
+	})
+	if initErr != nil {
+		return nil, initErr
+	}
+
+	return pool.Get(), nil
+}
+
+// CleanUp 关闭所有 gRPC 连接和 Etcd 客户端
+func (c *EtcdClient) CleanUp() {
+	// 遍历关闭 gRPC 连接池
+	c.pools.Range(func(key, value any) bool {
+		pool := value.(*ConnPool)
+		for _, conn := range pool.conns {
+			if err := conn.Close(); err != nil {
+				c.log.Warnf("close grpc conn failed (%v): %v", key, err)
 			}
 		}
 		return true
 	})
-	c.log.Infof("etcd connections closed")
+	// 清空连接池
+	c.pools = sync.Map{}
+	// 关闭 Etcd 客户端
+	if c.cli != nil {
+		_ = c.cli.Close()
+	}
+	c.log.Info("all grpc connections and etcd client closed")
+}
+
+// GetServiceClient 泛型客户端工厂，从池中获取连接并返回客户端
+func GetServiceClient[T any](ctx context.Context, etcd *EtcdClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
+	const poolSize = 3 // 连接池大小，可改为配置
+	conn, err := etcd.getConnFromPool(service, poolSize)
+	if err != nil {
+		var zero T
+		return zero, fmt.Errorf("get client conn failed: %w", err)
+	}
+	return newClient(conn), nil
 }

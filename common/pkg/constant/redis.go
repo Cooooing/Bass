@@ -2,8 +2,8 @@ package constant
 
 import "fmt"
 
-var Authentication = "Authentication" // token 请求头名称
-var UserInfo = "UserInfo"             // 上下文用户信息 key
+var Authentication = "Authorization" // token 请求头名称
+var UserInfo = "UserInfo"            // 上下文用户信息 key
 
 // Redis key
 var (

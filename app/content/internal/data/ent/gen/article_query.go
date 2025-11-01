@@ -227,8 +227,8 @@ func (_q *ArticleQuery) FirstX(ctx context.Context) *Article {
 
 // FirstID returns the first Article ID from the query.
 // Returns a *NotFoundError when no Article ID was found.
-func (_q *ArticleQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -240,7 +240,7 @@ func (_q *ArticleQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ArticleQuery) FirstIDX(ctx context.Context) int {
+func (_q *ArticleQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -278,8 +278,8 @@ func (_q *ArticleQuery) OnlyX(ctx context.Context) *Article {
 // OnlyID is like Only, but returns the only Article ID in the query.
 // Returns a *NotSingularError when more than one Article ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ArticleQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -295,7 +295,7 @@ func (_q *ArticleQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ArticleQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ArticleQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -323,7 +323,7 @@ func (_q *ArticleQuery) AllX(ctx context.Context) []*Article {
 }
 
 // IDs executes the query and returns a list of Article IDs.
-func (_q *ArticleQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ArticleQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -335,7 +335,7 @@ func (_q *ArticleQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ArticleQuery) IDsX(ctx context.Context) []int {
+func (_q *ArticleQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -479,7 +479,7 @@ func (_q *ArticleQuery) WithActionRecords(opts ...func(*ArticleActionRecordQuery
 // Example:
 //
 //	var v []struct {
-//		UserID int `json:"user_id,omitempty"`
+//		UserID int64 `json:"user_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -502,7 +502,7 @@ func (_q *ArticleQuery) GroupBy(field string, fields ...string) *ArticleGroupBy 
 // Example:
 //
 //	var v []struct {
-//		UserID int `json:"user_id,omitempty"`
+//		UserID int64 `json:"user_id,omitempty"`
 //	}
 //
 //	client.Article.Query().
@@ -625,7 +625,7 @@ func (_q *ArticleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Arti
 
 func (_q *ArticleQuery) loadPostscripts(ctx context.Context, query *ArticlePostscriptQuery, nodes []*Article, init func(*Article), assign func(*Article, *ArticlePostscript)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Article)
+	nodeids := make(map[int64]*Article)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -655,7 +655,7 @@ func (_q *ArticleQuery) loadPostscripts(ctx context.Context, query *ArticlePosts
 }
 func (_q *ArticleQuery) loadVotes(ctx context.Context, query *ArticleVoteQuery, nodes []*Article, init func(*Article), assign func(*Article, *ArticleVote)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Article)
+	nodeids := make(map[int64]*Article)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -685,7 +685,7 @@ func (_q *ArticleQuery) loadVotes(ctx context.Context, query *ArticleVoteQuery, 
 }
 func (_q *ArticleQuery) loadLotteries(ctx context.Context, query *ArticleLotteryQuery, nodes []*Article, init func(*Article), assign func(*Article, *ArticleLottery)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Article)
+	nodeids := make(map[int64]*Article)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -715,7 +715,7 @@ func (_q *ArticleQuery) loadLotteries(ctx context.Context, query *ArticleLottery
 }
 func (_q *ArticleQuery) loadComments(ctx context.Context, query *CommentQuery, nodes []*Article, init func(*Article), assign func(*Article, *Comment)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Article)
+	nodeids := make(map[int64]*Article)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -745,8 +745,8 @@ func (_q *ArticleQuery) loadComments(ctx context.Context, query *CommentQuery, n
 }
 func (_q *ArticleQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*Article, init func(*Article), assign func(*Article, *Tag)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Article)
-	nids := make(map[int]map[*Article]struct{})
+	byID := make(map[int64]*Article)
+	nids := make(map[int64]map[*Article]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -778,8 +778,8 @@ func (_q *ArticleQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*
 				return append([]any{new(sql.NullInt64)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
+				outValue := values[0].(*sql.NullInt64).Int64
+				inValue := values[1].(*sql.NullInt64).Int64
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Article]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])
@@ -806,7 +806,7 @@ func (_q *ArticleQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*
 }
 func (_q *ArticleQuery) loadActionRecords(ctx context.Context, query *ArticleActionRecordQuery, nodes []*Article, init func(*Article), assign func(*Article, *ArticleActionRecord)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Article)
+	nodeids := make(map[int64]*Article)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -845,7 +845,7 @@ func (_q *ArticleQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ArticleQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(article.Table, article.Columns, sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(article.Table, article.Columns, sqlgraph.NewFieldSpec(article.FieldID, field.TypeInt64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

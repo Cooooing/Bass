@@ -17,17 +17,17 @@ import (
 type Tag struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 创建用户id
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 标签名称
 	Name string `json:"name,omitempty"`
 	// 所属领域id
-	DomainID int `json:"domain_id,omitempty"`
+	DomainID int64 `json:"domain_id,omitempty"`
 	// 标签状态：0-正常，1-禁用
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 文章数
-	ArticleCount int `json:"article_count,omitempty"`
+	ArticleCount int32 `json:"article_count,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -100,12 +100,12 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case tag.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case tag.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -117,19 +117,19 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field domain_id", values[i])
 			} else if value.Valid {
-				_m.DomainID = int(value.Int64)
+				_m.DomainID = value.Int64
 			}
 		case tag.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int(value.Int64)
+				_m.Status = int32(value.Int64)
 			}
 		case tag.FieldArticleCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field article_count", values[i])
 			} else if value.Valid {
-				_m.ArticleCount = int(value.Int64)
+				_m.ArticleCount = int32(value.Int64)
 			}
 		case tag.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {

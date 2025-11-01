@@ -11,57 +11,57 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Comment {
+func ID(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Comment {
+func IDEQ(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Comment {
+func IDNEQ(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Comment {
+func IDIn(ids ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Comment {
+func IDNotIn(ids ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Comment {
+func IDGT(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Comment {
+func IDGTE(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Comment {
+func IDLT(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Comment {
+func IDLTE(id int64) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldID, id))
 }
 
 // ArticleID applies equality check predicate on the "article_id" field. It's identical to ArticleIDEQ.
-func ArticleID(v int) predicate.Comment {
+func ArticleID(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldArticleID, v))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.Comment {
+func UserID(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldUserID, v))
 }
 
@@ -71,32 +71,37 @@ func Content(v string) predicate.Comment {
 }
 
 // Level applies equality check predicate on the "level" field. It's identical to LevelEQ.
-func Level(v int) predicate.Comment {
+func Level(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldLevel, v))
 }
 
 // ParentID applies equality check predicate on the "parent_id" field. It's identical to ParentIDEQ.
-func ParentID(v int) predicate.Comment {
+func ParentID(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldParentID, v))
 }
 
+// ReplyID applies equality check predicate on the "reply_id" field. It's identical to ReplyIDEQ.
+func ReplyID(v int64) predicate.Comment {
+	return predicate.Comment(sql.FieldEQ(FieldReplyID, v))
+}
+
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int) predicate.Comment {
+func Status(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldStatus, v))
 }
 
 // ReplyCount applies equality check predicate on the "reply_count" field. It's identical to ReplyCountEQ.
-func ReplyCount(v int) predicate.Comment {
+func ReplyCount(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldReplyCount, v))
 }
 
 // LikeCount applies equality check predicate on the "like_count" field. It's identical to LikeCountEQ.
-func LikeCount(v int) predicate.Comment {
+func LikeCount(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldLikeCount, v))
 }
 
 // CollectCount applies equality check predicate on the "collect_count" field. It's identical to CollectCountEQ.
-func CollectCount(v int) predicate.Comment {
+func CollectCount(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldCollectCount, v))
 }
 
@@ -111,62 +116,62 @@ func UpdatedAt(v time.Time) predicate.Comment {
 }
 
 // ArticleIDEQ applies the EQ predicate on the "article_id" field.
-func ArticleIDEQ(v int) predicate.Comment {
+func ArticleIDEQ(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldArticleID, v))
 }
 
 // ArticleIDNEQ applies the NEQ predicate on the "article_id" field.
-func ArticleIDNEQ(v int) predicate.Comment {
+func ArticleIDNEQ(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldArticleID, v))
 }
 
 // ArticleIDIn applies the In predicate on the "article_id" field.
-func ArticleIDIn(vs ...int) predicate.Comment {
+func ArticleIDIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldArticleID, vs...))
 }
 
 // ArticleIDNotIn applies the NotIn predicate on the "article_id" field.
-func ArticleIDNotIn(vs ...int) predicate.Comment {
+func ArticleIDNotIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldArticleID, vs...))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.Comment {
+func UserIDEQ(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.Comment {
+func UserIDNEQ(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.Comment {
+func UserIDIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.Comment {
+func UserIDNotIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.Comment {
+func UserIDGT(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.Comment {
+func UserIDGTE(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.Comment {
+func UserIDLT(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.Comment {
+func UserIDLTE(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldUserID, v))
 }
 
@@ -236,62 +241,62 @@ func ContentContainsFold(v string) predicate.Comment {
 }
 
 // LevelEQ applies the EQ predicate on the "level" field.
-func LevelEQ(v int) predicate.Comment {
+func LevelEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldLevel, v))
 }
 
 // LevelNEQ applies the NEQ predicate on the "level" field.
-func LevelNEQ(v int) predicate.Comment {
+func LevelNEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldLevel, v))
 }
 
 // LevelIn applies the In predicate on the "level" field.
-func LevelIn(vs ...int) predicate.Comment {
+func LevelIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldLevel, vs...))
 }
 
 // LevelNotIn applies the NotIn predicate on the "level" field.
-func LevelNotIn(vs ...int) predicate.Comment {
+func LevelNotIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldLevel, vs...))
 }
 
 // LevelGT applies the GT predicate on the "level" field.
-func LevelGT(v int) predicate.Comment {
+func LevelGT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldLevel, v))
 }
 
 // LevelGTE applies the GTE predicate on the "level" field.
-func LevelGTE(v int) predicate.Comment {
+func LevelGTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldLevel, v))
 }
 
 // LevelLT applies the LT predicate on the "level" field.
-func LevelLT(v int) predicate.Comment {
+func LevelLT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldLevel, v))
 }
 
 // LevelLTE applies the LTE predicate on the "level" field.
-func LevelLTE(v int) predicate.Comment {
+func LevelLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldLevel, v))
 }
 
 // ParentIDEQ applies the EQ predicate on the "parent_id" field.
-func ParentIDEQ(v int) predicate.Comment {
+func ParentIDEQ(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldParentID, v))
 }
 
 // ParentIDNEQ applies the NEQ predicate on the "parent_id" field.
-func ParentIDNEQ(v int) predicate.Comment {
+func ParentIDNEQ(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldParentID, v))
 }
 
 // ParentIDIn applies the In predicate on the "parent_id" field.
-func ParentIDIn(vs ...int) predicate.Comment {
+func ParentIDIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldParentID, vs...))
 }
 
 // ParentIDNotIn applies the NotIn predicate on the "parent_id" field.
-func ParentIDNotIn(vs ...int) predicate.Comment {
+func ParentIDNotIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldParentID, vs...))
 }
 
@@ -305,163 +310,193 @@ func ParentIDNotNil() predicate.Comment {
 	return predicate.Comment(sql.FieldNotNull(FieldParentID))
 }
 
+// ReplyIDEQ applies the EQ predicate on the "reply_id" field.
+func ReplyIDEQ(v int64) predicate.Comment {
+	return predicate.Comment(sql.FieldEQ(FieldReplyID, v))
+}
+
+// ReplyIDNEQ applies the NEQ predicate on the "reply_id" field.
+func ReplyIDNEQ(v int64) predicate.Comment {
+	return predicate.Comment(sql.FieldNEQ(FieldReplyID, v))
+}
+
+// ReplyIDIn applies the In predicate on the "reply_id" field.
+func ReplyIDIn(vs ...int64) predicate.Comment {
+	return predicate.Comment(sql.FieldIn(FieldReplyID, vs...))
+}
+
+// ReplyIDNotIn applies the NotIn predicate on the "reply_id" field.
+func ReplyIDNotIn(vs ...int64) predicate.Comment {
+	return predicate.Comment(sql.FieldNotIn(FieldReplyID, vs...))
+}
+
+// ReplyIDIsNil applies the IsNil predicate on the "reply_id" field.
+func ReplyIDIsNil() predicate.Comment {
+	return predicate.Comment(sql.FieldIsNull(FieldReplyID))
+}
+
+// ReplyIDNotNil applies the NotNil predicate on the "reply_id" field.
+func ReplyIDNotNil() predicate.Comment {
+	return predicate.Comment(sql.FieldNotNull(FieldReplyID))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int) predicate.Comment {
+func StatusEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int) predicate.Comment {
+func StatusNEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int) predicate.Comment {
+func StatusIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int) predicate.Comment {
+func StatusNotIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int) predicate.Comment {
+func StatusGT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int) predicate.Comment {
+func StatusGTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int) predicate.Comment {
+func StatusLT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int) predicate.Comment {
+func StatusLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldStatus, v))
 }
 
 // ReplyCountEQ applies the EQ predicate on the "reply_count" field.
-func ReplyCountEQ(v int) predicate.Comment {
+func ReplyCountEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldReplyCount, v))
 }
 
 // ReplyCountNEQ applies the NEQ predicate on the "reply_count" field.
-func ReplyCountNEQ(v int) predicate.Comment {
+func ReplyCountNEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldReplyCount, v))
 }
 
 // ReplyCountIn applies the In predicate on the "reply_count" field.
-func ReplyCountIn(vs ...int) predicate.Comment {
+func ReplyCountIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldReplyCount, vs...))
 }
 
 // ReplyCountNotIn applies the NotIn predicate on the "reply_count" field.
-func ReplyCountNotIn(vs ...int) predicate.Comment {
+func ReplyCountNotIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldReplyCount, vs...))
 }
 
 // ReplyCountGT applies the GT predicate on the "reply_count" field.
-func ReplyCountGT(v int) predicate.Comment {
+func ReplyCountGT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldReplyCount, v))
 }
 
 // ReplyCountGTE applies the GTE predicate on the "reply_count" field.
-func ReplyCountGTE(v int) predicate.Comment {
+func ReplyCountGTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldReplyCount, v))
 }
 
 // ReplyCountLT applies the LT predicate on the "reply_count" field.
-func ReplyCountLT(v int) predicate.Comment {
+func ReplyCountLT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldReplyCount, v))
 }
 
 // ReplyCountLTE applies the LTE predicate on the "reply_count" field.
-func ReplyCountLTE(v int) predicate.Comment {
+func ReplyCountLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldReplyCount, v))
 }
 
 // LikeCountEQ applies the EQ predicate on the "like_count" field.
-func LikeCountEQ(v int) predicate.Comment {
+func LikeCountEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldLikeCount, v))
 }
 
 // LikeCountNEQ applies the NEQ predicate on the "like_count" field.
-func LikeCountNEQ(v int) predicate.Comment {
+func LikeCountNEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldLikeCount, v))
 }
 
 // LikeCountIn applies the In predicate on the "like_count" field.
-func LikeCountIn(vs ...int) predicate.Comment {
+func LikeCountIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldLikeCount, vs...))
 }
 
 // LikeCountNotIn applies the NotIn predicate on the "like_count" field.
-func LikeCountNotIn(vs ...int) predicate.Comment {
+func LikeCountNotIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldLikeCount, vs...))
 }
 
 // LikeCountGT applies the GT predicate on the "like_count" field.
-func LikeCountGT(v int) predicate.Comment {
+func LikeCountGT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldLikeCount, v))
 }
 
 // LikeCountGTE applies the GTE predicate on the "like_count" field.
-func LikeCountGTE(v int) predicate.Comment {
+func LikeCountGTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldLikeCount, v))
 }
 
 // LikeCountLT applies the LT predicate on the "like_count" field.
-func LikeCountLT(v int) predicate.Comment {
+func LikeCountLT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldLikeCount, v))
 }
 
 // LikeCountLTE applies the LTE predicate on the "like_count" field.
-func LikeCountLTE(v int) predicate.Comment {
+func LikeCountLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldLikeCount, v))
 }
 
 // CollectCountEQ applies the EQ predicate on the "collect_count" field.
-func CollectCountEQ(v int) predicate.Comment {
+func CollectCountEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldCollectCount, v))
 }
 
 // CollectCountNEQ applies the NEQ predicate on the "collect_count" field.
-func CollectCountNEQ(v int) predicate.Comment {
+func CollectCountNEQ(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNEQ(FieldCollectCount, v))
 }
 
 // CollectCountIn applies the In predicate on the "collect_count" field.
-func CollectCountIn(vs ...int) predicate.Comment {
+func CollectCountIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldIn(FieldCollectCount, vs...))
 }
 
 // CollectCountNotIn applies the NotIn predicate on the "collect_count" field.
-func CollectCountNotIn(vs ...int) predicate.Comment {
+func CollectCountNotIn(vs ...int32) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldCollectCount, vs...))
 }
 
 // CollectCountGT applies the GT predicate on the "collect_count" field.
-func CollectCountGT(v int) predicate.Comment {
+func CollectCountGT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGT(FieldCollectCount, v))
 }
 
 // CollectCountGTE applies the GTE predicate on the "collect_count" field.
-func CollectCountGTE(v int) predicate.Comment {
+func CollectCountGTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldGTE(FieldCollectCount, v))
 }
 
 // CollectCountLT applies the LT predicate on the "collect_count" field.
-func CollectCountLT(v int) predicate.Comment {
+func CollectCountLT(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLT(FieldCollectCount, v))
 }
 
 // CollectCountLTE applies the LTE predicate on the "collect_count" field.
-func CollectCountLTE(v int) predicate.Comment {
+func CollectCountLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldCollectCount, v))
 }
 
@@ -611,21 +646,67 @@ func HasParentWith(preds ...predicate.Comment) predicate.Comment {
 	})
 }
 
-// HasReplies applies the HasEdge predicate on the "replies" edge.
-func HasReplies() predicate.Comment {
+// HasParentReplies applies the HasEdge predicate on the "parent_replies" edge.
+func HasParentReplies() predicate.Comment {
 	return predicate.Comment(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, RepliesTable, RepliesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ParentRepliesTable, ParentRepliesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasRepliesWith applies the HasEdge predicate on the "replies" edge with a given conditions (other predicates).
-func HasRepliesWith(preds ...predicate.Comment) predicate.Comment {
+// HasParentRepliesWith applies the HasEdge predicate on the "parent_replies" edge with a given conditions (other predicates).
+func HasParentRepliesWith(preds ...predicate.Comment) predicate.Comment {
 	return predicate.Comment(func(s *sql.Selector) {
-		step := newRepliesStep()
+		step := newParentRepliesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReply applies the HasEdge predicate on the "reply" edge.
+func HasReply() predicate.Comment {
+	return predicate.Comment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ReplyTable, ReplyColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReplyWith applies the HasEdge predicate on the "reply" edge with a given conditions (other predicates).
+func HasReplyWith(preds ...predicate.Comment) predicate.Comment {
+	return predicate.Comment(func(s *sql.Selector) {
+		step := newReplyStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReplyReplies applies the HasEdge predicate on the "reply_replies" edge.
+func HasReplyReplies() predicate.Comment {
+	return predicate.Comment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReplyRepliesTable, ReplyRepliesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReplyRepliesWith applies the HasEdge predicate on the "reply_replies" edge with a given conditions (other predicates).
+func HasReplyRepliesWith(preds ...predicate.Comment) predicate.Comment {
+	return predicate.Comment(func(s *sql.Selector) {
+		step := newReplyRepliesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

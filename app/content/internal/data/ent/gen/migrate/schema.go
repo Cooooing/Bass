@@ -10,26 +10,26 @@ import (
 var (
 	// ArticlesColumns holds the columns for the "articles" table.
 	ArticlesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "title", Type: field.TypeString},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "has_postscript", Type: field.TypeBool, Default: false},
 		{Name: "reward_content", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "reward_points", Type: field.TypeInt, Default: 0},
-		{Name: "status", Type: field.TypeInt, Default: 0},
-		{Name: "type", Type: field.TypeInt, Default: 0},
+		{Name: "reward_points", Type: field.TypeInt32, Default: 0},
+		{Name: "status", Type: field.TypeInt32, Default: 0},
+		{Name: "type", Type: field.TypeInt32, Default: 0},
 		{Name: "commentable", Type: field.TypeBool, Default: true},
 		{Name: "anonymous", Type: field.TypeBool, Default: false},
-		{Name: "thank_count", Type: field.TypeInt, Default: 0},
-		{Name: "like_count", Type: field.TypeInt, Default: 0},
-		{Name: "collect_count", Type: field.TypeInt, Default: 0},
-		{Name: "watch_count", Type: field.TypeInt, Default: 0},
-		{Name: "bounty_points", Type: field.TypeInt, Default: 0},
-		{Name: "accepted_answer_id", Type: field.TypeInt, Nullable: true},
-		{Name: "vote_total", Type: field.TypeInt, Default: 0},
-		{Name: "lottery_participant_count", Type: field.TypeInt, Default: 0},
-		{Name: "lottery_winner_count", Type: field.TypeInt, Default: 0},
+		{Name: "thank_count", Type: field.TypeInt32, Default: 0},
+		{Name: "like_count", Type: field.TypeInt32, Default: 0},
+		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
+		{Name: "watch_count", Type: field.TypeInt32, Default: 0},
+		{Name: "bounty_points", Type: field.TypeInt32, Default: 0},
+		{Name: "accepted_answer_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "vote_total", Type: field.TypeInt32, Default: 0},
+		{Name: "lottery_participant_count", Type: field.TypeInt32, Default: 0},
+		{Name: "lottery_winner_count", Type: field.TypeInt32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
@@ -41,10 +41,10 @@ var (
 	}
 	// ArticleActionRecordsColumns holds the columns for the "article_action_records" table.
 	ArticleActionRecordsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
-		{Name: "type", Type: field.TypeInt},
-		{Name: "article_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "type", Type: field.TypeInt32},
+		{Name: "article_id", Type: field.TypeInt64},
 	}
 	// ArticleActionRecordsTable holds the schema information for the "article_action_records" table.
 	ArticleActionRecordsTable = &schema.Table{
@@ -79,14 +79,14 @@ var (
 	}
 	// ArticleLotteriesColumns holds the columns for the "article_lotteries" table.
 	ArticleLotteriesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "prizes", Type: field.TypeJSON, Nullable: true},
 		{Name: "start_at", Type: field.TypeTime, Nullable: true},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true},
-		{Name: "status", Type: field.TypeInt, Default: 0},
+		{Name: "status", Type: field.TypeInt32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt},
+		{Name: "article_id", Type: field.TypeInt64},
 	}
 	// ArticleLotteriesTable holds the schema information for the "article_lotteries" table.
 	ArticleLotteriesTable = &schema.Table{
@@ -104,11 +104,11 @@ var (
 	}
 	// ArticleLotteryParticipantsColumns holds the columns for the "article_lottery_participants" table.
 	ArticleLotteryParticipantsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "lottery_id", Type: field.TypeInt},
+		{Name: "lottery_id", Type: field.TypeInt64},
 	}
 	// ArticleLotteryParticipantsTable holds the schema information for the "article_lottery_participants" table.
 	ArticleLotteryParticipantsTable = &schema.Table{
@@ -126,12 +126,12 @@ var (
 	}
 	// ArticleLotteryWinnersColumns holds the columns for the "article_lottery_winners" table.
 	ArticleLotteryWinnersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "prize", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "lottery_id", Type: field.TypeInt},
+		{Name: "lottery_id", Type: field.TypeInt64},
 	}
 	// ArticleLotteryWinnersTable holds the schema information for the "article_lottery_winners" table.
 	ArticleLotteryWinnersTable = &schema.Table{
@@ -149,11 +149,11 @@ var (
 	}
 	// ArticlePostscriptsColumns holds the columns for the "article_postscripts" table.
 	ArticlePostscriptsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt},
+		{Name: "article_id", Type: field.TypeInt64},
 	}
 	// ArticlePostscriptsTable holds the schema information for the "article_postscripts" table.
 	ArticlePostscriptsTable = &schema.Table{
@@ -171,16 +171,16 @@ var (
 	}
 	// ArticleVotesColumns holds the columns for the "article_votes" table.
 	ArticleVotesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "vote_options", Type: field.TypeJSON, Nullable: true},
 		{Name: "vote_counts", Type: field.TypeJSON, Nullable: true},
 		{Name: "vote_multiple", Type: field.TypeBool, Default: false},
 		{Name: "vote_anonymous", Type: field.TypeBool, Default: true},
-		{Name: "total_count", Type: field.TypeInt, Default: 0},
+		{Name: "total_count", Type: field.TypeInt32, Default: 0},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt},
+		{Name: "article_id", Type: field.TypeInt64},
 	}
 	// ArticleVotesTable holds the schema information for the "article_votes" table.
 	ArticleVotesTable = &schema.Table{
@@ -198,13 +198,13 @@ var (
 	}
 	// ArticleVoteRecordsColumns holds the columns for the "article_vote_records" table.
 	ArticleVoteRecordsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
-		{Name: "option_index", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "option_index", Type: field.TypeInt32},
 		{Name: "anonymous", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "vote_id", Type: field.TypeInt},
+		{Name: "vote_id", Type: field.TypeInt64},
 	}
 	// ArticleVoteRecordsTable holds the schema information for the "article_vote_records" table.
 	ArticleVoteRecordsTable = &schema.Table{
@@ -222,18 +222,19 @@ var (
 	}
 	// CommentsColumns holds the columns for the "comments" table.
 	CommentsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
-		{Name: "level", Type: field.TypeInt},
-		{Name: "status", Type: field.TypeInt, Default: 0},
-		{Name: "reply_count", Type: field.TypeInt, Default: 0},
-		{Name: "like_count", Type: field.TypeInt, Default: 0},
-		{Name: "collect_count", Type: field.TypeInt, Default: 0},
+		{Name: "level", Type: field.TypeInt32},
+		{Name: "status", Type: field.TypeInt32, Default: 0},
+		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
+		{Name: "like_count", Type: field.TypeInt32, Default: 0},
+		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt},
-		{Name: "parent_id", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "article_id", Type: field.TypeInt64},
+		{Name: "parent_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "reply_id", Type: field.TypeInt64, Nullable: true},
 	}
 	// CommentsTable holds the schema information for the "comments" table.
 	CommentsTable = &schema.Table{
@@ -248,8 +249,14 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "comments_comments_replies",
+				Symbol:     "comments_comments_parent_replies",
 				Columns:    []*schema.Column{CommentsColumns[11]},
+				RefColumns: []*schema.Column{CommentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "comments_comments_reply_replies",
+				Columns:    []*schema.Column{CommentsColumns[12]},
 				RefColumns: []*schema.Column{CommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -264,10 +271,10 @@ var (
 	}
 	// CommentActionRecordsColumns holds the columns for the "comment_action_records" table.
 	CommentActionRecordsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
-		{Name: "type", Type: field.TypeInt},
-		{Name: "comment_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
+		{Name: "type", Type: field.TypeInt32},
+		{Name: "comment_id", Type: field.TypeInt64},
 	}
 	// CommentActionRecordsTable holds the schema information for the "comment_action_records" table.
 	CommentActionRecordsTable = &schema.Table{
@@ -302,13 +309,13 @@ var (
 	}
 	// DomainsColumns holds the columns for the "domains" table.
 	DomainsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString},
-		{Name: "status", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "status", Type: field.TypeInt32, Nullable: true, Default: 0},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
-		{Name: "tag_count", Type: field.TypeInt, Default: 0},
+		{Name: "tag_count", Type: field.TypeInt32, Default: 0},
 		{Name: "is_nav", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
@@ -321,14 +328,14 @@ var (
 	}
 	// TagsColumns holds the columns for the "tags" table.
 	TagsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeInt, Default: 0},
-		{Name: "article_count", Type: field.TypeInt, Default: 0},
+		{Name: "status", Type: field.TypeInt32, Default: 0},
+		{Name: "article_count", Type: field.TypeInt32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "domain_id", Type: field.TypeInt, Nullable: true},
+		{Name: "domain_id", Type: field.TypeInt64, Nullable: true},
 	}
 	// TagsTable holds the schema information for the "tags" table.
 	TagsTable = &schema.Table{
@@ -346,8 +353,8 @@ var (
 	}
 	// ArticleTagsColumns holds the columns for the "article_tags" table.
 	ArticleTagsColumns = []*schema.Column{
-		{Name: "article_id", Type: field.TypeInt},
-		{Name: "tag_id", Type: field.TypeInt},
+		{Name: "article_id", Type: field.TypeInt64},
+		{Name: "tag_id", Type: field.TypeInt64},
 	}
 	// ArticleTagsTable holds the schema information for the "article_tags" table.
 	ArticleTagsTable = &schema.Table{
@@ -397,6 +404,7 @@ func init() {
 	ArticleVoteRecordsTable.ForeignKeys[0].RefTable = ArticleVotesTable
 	CommentsTable.ForeignKeys[0].RefTable = ArticlesTable
 	CommentsTable.ForeignKeys[1].RefTable = CommentsTable
+	CommentsTable.ForeignKeys[2].RefTable = CommentsTable
 	CommentActionRecordsTable.ForeignKeys[0].RefTable = CommentsTable
 	TagsTable.ForeignKeys[0].RefTable = DomainsTable
 	ArticleTagsTable.ForeignKeys[0].RefTable = ArticlesTable

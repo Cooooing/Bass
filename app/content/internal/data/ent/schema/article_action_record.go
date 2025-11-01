@@ -15,9 +15,10 @@ type ArticleActionRecord struct {
 // Fields 定义表字段
 func (ArticleActionRecord) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("article_id").Comment("关联的文章ID"),
-		field.Int("user_id").Comment("执行行为的用户ID"),
-		field.Int("type").Comment("行为类型 0-点赞 1-感谢 2-收藏 3-关注"),
+		field.Int64("id").Immutable().Unique(),
+		field.Int64("article_id").Comment("关联的文章ID"),
+		field.Int64("user_id").Comment("执行行为的用户ID"),
+		field.Int32("type").Comment("行为类型 0-点赞 1-感谢 2-收藏 3-关注"),
 	}
 }
 

@@ -79,21 +79,12 @@ func (m *AddArticleRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetRewardContent()) < 1 {
-		err := AddArticleRequestValidationError{
-			field:  "RewardContent",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for RewardContent
 
-	if m.GetRewardPoints() <= 0 {
+	if m.GetRewardPoints() < 0 {
 		err := AddArticleRequestValidationError{
 			field:  "RewardPoints",
-			reason: "value must be greater than 0",
+			reason: "value must be greater than or equal to 0",
 		}
 		if !all {
 			return err
@@ -105,10 +96,10 @@ func (m *AddArticleRequest) validate(all bool) error {
 
 	// no validation rules for Type
 
-	if m.GetBountyPoints() <= 0 {
+	if m.GetBountyPoints() < 0 {
 		err := AddArticleRequestValidationError{
 			field:  "BountyPoints",
-			reason: "value must be greater than 0",
+			reason: "value must be greater than or equal to 0",
 		}
 		if !all {
 			return err
@@ -1121,6 +1112,214 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetArticleReplyValidationError{}
+
+// Validate checks the field values on GetArticleOneRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetArticleOneRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetArticleOneRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetArticleOneRequestMultiError, or nil if none found.
+func (m *GetArticleOneRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetArticleOneRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ArticleId
+
+	if len(errors) > 0 {
+		return GetArticleOneRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetArticleOneRequestMultiError is an error wrapping multiple validation
+// errors returned by GetArticleOneRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetArticleOneRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetArticleOneRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetArticleOneRequestMultiError) AllErrors() []error { return m }
+
+// GetArticleOneRequestValidationError is the validation error returned by
+// GetArticleOneRequest.Validate if the designated constraints aren't met.
+type GetArticleOneRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetArticleOneRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetArticleOneRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetArticleOneRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetArticleOneRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetArticleOneRequestValidationError) ErrorName() string {
+	return "GetArticleOneRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetArticleOneRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetArticleOneRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetArticleOneRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetArticleOneRequestValidationError{}
+
+// Validate checks the field values on GetArticleOneReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetArticleOneReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetArticleOneReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetArticleOneReplyMultiError, or nil if none found.
+func (m *GetArticleOneReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetArticleOneReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ArticleId
+
+	if len(errors) > 0 {
+		return GetArticleOneReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetArticleOneReplyMultiError is an error wrapping multiple validation errors
+// returned by GetArticleOneReply.ValidateAll() if the designated constraints
+// aren't met.
+type GetArticleOneReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetArticleOneReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetArticleOneReplyMultiError) AllErrors() []error { return m }
+
+// GetArticleOneReplyValidationError is the validation error returned by
+// GetArticleOneReply.Validate if the designated constraints aren't met.
+type GetArticleOneReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetArticleOneReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetArticleOneReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetArticleOneReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetArticleOneReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetArticleOneReplyValidationError) ErrorName() string {
+	return "GetArticleOneReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetArticleOneReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetArticleOneReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetArticleOneReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetArticleOneReplyValidationError{}
 
 // Validate checks the field values on AddPostscriptArticleRequest with the
 // rules defined in the proto definition for this message. If any rules are

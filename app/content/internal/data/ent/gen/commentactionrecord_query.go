@@ -106,8 +106,8 @@ func (_q *CommentActionRecordQuery) FirstX(ctx context.Context) *CommentActionRe
 
 // FirstID returns the first CommentActionRecord ID from the query.
 // Returns a *NotFoundError when no CommentActionRecord ID was found.
-func (_q *CommentActionRecordQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *CommentActionRecordQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (_q *CommentActionRecordQuery) FirstID(ctx context.Context) (id int, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *CommentActionRecordQuery) FirstIDX(ctx context.Context) int {
+func (_q *CommentActionRecordQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +157,8 @@ func (_q *CommentActionRecordQuery) OnlyX(ctx context.Context) *CommentActionRec
 // OnlyID is like Only, but returns the only CommentActionRecord ID in the query.
 // Returns a *NotSingularError when more than one CommentActionRecord ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *CommentActionRecordQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *CommentActionRecordQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -174,7 +174,7 @@ func (_q *CommentActionRecordQuery) OnlyID(ctx context.Context) (id int, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *CommentActionRecordQuery) OnlyIDX(ctx context.Context) int {
+func (_q *CommentActionRecordQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (_q *CommentActionRecordQuery) AllX(ctx context.Context) []*CommentActionRe
 }
 
 // IDs executes the query and returns a list of CommentActionRecord IDs.
-func (_q *CommentActionRecordQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *CommentActionRecordQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -214,7 +214,7 @@ func (_q *CommentActionRecordQuery) IDs(ctx context.Context) (ids []int, err err
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *CommentActionRecordQuery) IDsX(ctx context.Context) []int {
+func (_q *CommentActionRecordQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -298,7 +298,7 @@ func (_q *CommentActionRecordQuery) WithComment(opts ...func(*CommentQuery)) *Co
 // Example:
 //
 //	var v []struct {
-//		CommentID int `json:"comment_id,omitempty"`
+//		CommentID int64 `json:"comment_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -321,7 +321,7 @@ func (_q *CommentActionRecordQuery) GroupBy(field string, fields ...string) *Com
 // Example:
 //
 //	var v []struct {
-//		CommentID int `json:"comment_id,omitempty"`
+//		CommentID int64 `json:"comment_id,omitempty"`
 //	}
 //
 //	client.CommentActionRecord.Query().
@@ -402,8 +402,8 @@ func (_q *CommentActionRecordQuery) sqlAll(ctx context.Context, hooks ...queryHo
 }
 
 func (_q *CommentActionRecordQuery) loadComment(ctx context.Context, query *CommentQuery, nodes []*CommentActionRecord, init func(*CommentActionRecord), assign func(*CommentActionRecord, *Comment)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*CommentActionRecord)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*CommentActionRecord)
 	for i := range nodes {
 		fk := nodes[i].CommentID
 		if _, ok := nodeids[fk]; !ok {
@@ -441,7 +441,7 @@ func (_q *CommentActionRecordQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *CommentActionRecordQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(commentactionrecord.Table, commentactionrecord.Columns, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(commentactionrecord.Table, commentactionrecord.Columns, sqlgraph.NewFieldSpec(commentactionrecord.FieldID, field.TypeInt64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -106,8 +106,8 @@ func (_q *ArticleActionRecordQuery) FirstX(ctx context.Context) *ArticleActionRe
 
 // FirstID returns the first ArticleActionRecord ID from the query.
 // Returns a *NotFoundError when no ArticleActionRecord ID was found.
-func (_q *ArticleActionRecordQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleActionRecordQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (_q *ArticleActionRecordQuery) FirstID(ctx context.Context) (id int, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ArticleActionRecordQuery) FirstIDX(ctx context.Context) int {
+func (_q *ArticleActionRecordQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +157,8 @@ func (_q *ArticleActionRecordQuery) OnlyX(ctx context.Context) *ArticleActionRec
 // OnlyID is like Only, but returns the only ArticleActionRecord ID in the query.
 // Returns a *NotSingularError when more than one ArticleActionRecord ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ArticleActionRecordQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleActionRecordQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -174,7 +174,7 @@ func (_q *ArticleActionRecordQuery) OnlyID(ctx context.Context) (id int, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ArticleActionRecordQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ArticleActionRecordQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (_q *ArticleActionRecordQuery) AllX(ctx context.Context) []*ArticleActionRe
 }
 
 // IDs executes the query and returns a list of ArticleActionRecord IDs.
-func (_q *ArticleActionRecordQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ArticleActionRecordQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -214,7 +214,7 @@ func (_q *ArticleActionRecordQuery) IDs(ctx context.Context) (ids []int, err err
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ArticleActionRecordQuery) IDsX(ctx context.Context) []int {
+func (_q *ArticleActionRecordQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -298,7 +298,7 @@ func (_q *ArticleActionRecordQuery) WithArticle(opts ...func(*ArticleQuery)) *Ar
 // Example:
 //
 //	var v []struct {
-//		ArticleID int `json:"article_id,omitempty"`
+//		ArticleID int64 `json:"article_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -321,7 +321,7 @@ func (_q *ArticleActionRecordQuery) GroupBy(field string, fields ...string) *Art
 // Example:
 //
 //	var v []struct {
-//		ArticleID int `json:"article_id,omitempty"`
+//		ArticleID int64 `json:"article_id,omitempty"`
 //	}
 //
 //	client.ArticleActionRecord.Query().
@@ -402,8 +402,8 @@ func (_q *ArticleActionRecordQuery) sqlAll(ctx context.Context, hooks ...queryHo
 }
 
 func (_q *ArticleActionRecordQuery) loadArticle(ctx context.Context, query *ArticleQuery, nodes []*ArticleActionRecord, init func(*ArticleActionRecord), assign func(*ArticleActionRecord, *Article)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*ArticleActionRecord)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*ArticleActionRecord)
 	for i := range nodes {
 		fk := nodes[i].ArticleID
 		if _, ok := nodeids[fk]; !ok {
@@ -441,7 +441,7 @@ func (_q *ArticleActionRecordQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ArticleActionRecordQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(articleactionrecord.Table, articleactionrecord.Columns, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(articleactionrecord.Table, articleactionrecord.Columns, sqlgraph.NewFieldSpec(articleactionrecord.FieldID, field.TypeInt64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

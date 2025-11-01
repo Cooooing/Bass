@@ -11,52 +11,52 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ArticlePostscript {
+func ID(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ArticlePostscript {
+func IDEQ(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ArticlePostscript {
+func IDNEQ(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ArticlePostscript {
+func IDIn(ids ...int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ArticlePostscript {
+func IDNotIn(ids ...int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ArticlePostscript {
+func IDGT(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ArticlePostscript {
+func IDGTE(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ArticlePostscript {
+func IDLT(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ArticlePostscript {
+func IDLTE(id int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldLTE(FieldID, id))
 }
 
 // ArticleID applies equality check predicate on the "article_id" field. It's identical to ArticleIDEQ.
-func ArticleID(v int) predicate.ArticlePostscript {
+func ArticleID(v int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldArticleID, v))
 }
 
@@ -76,22 +76,22 @@ func UpdatedAt(v time.Time) predicate.ArticlePostscript {
 }
 
 // ArticleIDEQ applies the EQ predicate on the "article_id" field.
-func ArticleIDEQ(v int) predicate.ArticlePostscript {
+func ArticleIDEQ(v int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldArticleID, v))
 }
 
 // ArticleIDNEQ applies the NEQ predicate on the "article_id" field.
-func ArticleIDNEQ(v int) predicate.ArticlePostscript {
+func ArticleIDNEQ(v int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldNEQ(FieldArticleID, v))
 }
 
 // ArticleIDIn applies the In predicate on the "article_id" field.
-func ArticleIDIn(vs ...int) predicate.ArticlePostscript {
+func ArticleIDIn(vs ...int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldIn(FieldArticleID, vs...))
 }
 
 // ArticleIDNotIn applies the NotIn predicate on the "article_id" field.
-func ArticleIDNotIn(vs ...int) predicate.ArticlePostscript {
+func ArticleIDNotIn(vs ...int64) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldNotIn(FieldArticleID, vs...))
 }
 

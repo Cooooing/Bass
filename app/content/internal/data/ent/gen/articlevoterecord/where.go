@@ -11,62 +11,62 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ArticleVoteRecord {
+func ID(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ArticleVoteRecord {
+func IDEQ(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ArticleVoteRecord {
+func IDNEQ(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ArticleVoteRecord {
+func IDIn(ids ...int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ArticleVoteRecord {
+func IDNotIn(ids ...int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ArticleVoteRecord {
+func IDGT(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ArticleVoteRecord {
+func IDGTE(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ArticleVoteRecord {
+func IDLT(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ArticleVoteRecord {
+func IDLTE(id int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldLTE(FieldID, id))
 }
 
 // VoteID applies equality check predicate on the "vote_id" field. It's identical to VoteIDEQ.
-func VoteID(v int) predicate.ArticleVoteRecord {
+func VoteID(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldVoteID, v))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.ArticleVoteRecord {
+func UserID(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldUserID, v))
 }
 
 // OptionIndex applies equality check predicate on the "option_index" field. It's identical to OptionIndexEQ.
-func OptionIndex(v int) predicate.ArticleVoteRecord {
+func OptionIndex(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldOptionIndex, v))
 }
 
@@ -86,102 +86,102 @@ func UpdatedAt(v time.Time) predicate.ArticleVoteRecord {
 }
 
 // VoteIDEQ applies the EQ predicate on the "vote_id" field.
-func VoteIDEQ(v int) predicate.ArticleVoteRecord {
+func VoteIDEQ(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldVoteID, v))
 }
 
 // VoteIDNEQ applies the NEQ predicate on the "vote_id" field.
-func VoteIDNEQ(v int) predicate.ArticleVoteRecord {
+func VoteIDNEQ(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNEQ(FieldVoteID, v))
 }
 
 // VoteIDIn applies the In predicate on the "vote_id" field.
-func VoteIDIn(vs ...int) predicate.ArticleVoteRecord {
+func VoteIDIn(vs ...int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldIn(FieldVoteID, vs...))
 }
 
 // VoteIDNotIn applies the NotIn predicate on the "vote_id" field.
-func VoteIDNotIn(vs ...int) predicate.ArticleVoteRecord {
+func VoteIDNotIn(vs ...int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNotIn(FieldVoteID, vs...))
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.ArticleVoteRecord {
+func UserIDEQ(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.ArticleVoteRecord {
+func UserIDNEQ(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.ArticleVoteRecord {
+func UserIDIn(vs ...int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.ArticleVoteRecord {
+func UserIDNotIn(vs ...int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.ArticleVoteRecord {
+func UserIDGT(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.ArticleVoteRecord {
+func UserIDGTE(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.ArticleVoteRecord {
+func UserIDLT(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.ArticleVoteRecord {
+func UserIDLTE(v int64) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldLTE(FieldUserID, v))
 }
 
 // OptionIndexEQ applies the EQ predicate on the "option_index" field.
-func OptionIndexEQ(v int) predicate.ArticleVoteRecord {
+func OptionIndexEQ(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldEQ(FieldOptionIndex, v))
 }
 
 // OptionIndexNEQ applies the NEQ predicate on the "option_index" field.
-func OptionIndexNEQ(v int) predicate.ArticleVoteRecord {
+func OptionIndexNEQ(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNEQ(FieldOptionIndex, v))
 }
 
 // OptionIndexIn applies the In predicate on the "option_index" field.
-func OptionIndexIn(vs ...int) predicate.ArticleVoteRecord {
+func OptionIndexIn(vs ...int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldIn(FieldOptionIndex, vs...))
 }
 
 // OptionIndexNotIn applies the NotIn predicate on the "option_index" field.
-func OptionIndexNotIn(vs ...int) predicate.ArticleVoteRecord {
+func OptionIndexNotIn(vs ...int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldNotIn(FieldOptionIndex, vs...))
 }
 
 // OptionIndexGT applies the GT predicate on the "option_index" field.
-func OptionIndexGT(v int) predicate.ArticleVoteRecord {
+func OptionIndexGT(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldGT(FieldOptionIndex, v))
 }
 
 // OptionIndexGTE applies the GTE predicate on the "option_index" field.
-func OptionIndexGTE(v int) predicate.ArticleVoteRecord {
+func OptionIndexGTE(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldGTE(FieldOptionIndex, v))
 }
 
 // OptionIndexLT applies the LT predicate on the "option_index" field.
-func OptionIndexLT(v int) predicate.ArticleVoteRecord {
+func OptionIndexLT(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldLT(FieldOptionIndex, v))
 }
 
 // OptionIndexLTE applies the LTE predicate on the "option_index" field.
-func OptionIndexLTE(v int) predicate.ArticleVoteRecord {
+func OptionIndexLTE(v int32) predicate.ArticleVoteRecord {
 	return predicate.ArticleVoteRecord(sql.FieldLTE(FieldOptionIndex, v))
 }
 

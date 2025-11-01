@@ -54,59 +54,59 @@ type ArticleMutation struct {
 	config
 	op                           Op
 	typ                          string
-	id                           *int
-	user_id                      *int
-	adduser_id                   *int
+	id                           *int64
+	user_id                      *int64
+	adduser_id                   *int64
 	title                        *string
 	content                      *string
 	has_postscript               *bool
 	reward_content               *string
-	reward_points                *int
-	addreward_points             *int
-	status                       *int
-	addstatus                    *int
-	_type                        *int
-	add_type                     *int
+	reward_points                *int32
+	addreward_points             *int32
+	status                       *int32
+	addstatus                    *int32
+	_type                        *int32
+	add_type                     *int32
 	commentable                  *bool
 	anonymous                    *bool
-	thank_count                  *int
-	addthank_count               *int
-	like_count                   *int
-	addlike_count                *int
-	collect_count                *int
-	addcollect_count             *int
-	watch_count                  *int
-	addwatch_count               *int
-	bounty_points                *int
-	addbounty_points             *int
-	accepted_answer_id           *int
-	addaccepted_answer_id        *int
-	vote_total                   *int
-	addvote_total                *int
-	lottery_participant_count    *int
-	addlottery_participant_count *int
-	lottery_winner_count         *int
-	addlottery_winner_count      *int
+	thank_count                  *int32
+	addthank_count               *int32
+	like_count                   *int32
+	addlike_count                *int32
+	collect_count                *int32
+	addcollect_count             *int32
+	watch_count                  *int32
+	addwatch_count               *int32
+	bounty_points                *int32
+	addbounty_points             *int32
+	accepted_answer_id           *int64
+	addaccepted_answer_id        *int64
+	vote_total                   *int32
+	addvote_total                *int32
+	lottery_participant_count    *int32
+	addlottery_participant_count *int32
+	lottery_winner_count         *int32
+	addlottery_winner_count      *int32
 	created_at                   *time.Time
 	updated_at                   *time.Time
 	clearedFields                map[string]struct{}
-	postscripts                  map[int]struct{}
-	removedpostscripts           map[int]struct{}
+	postscripts                  map[int64]struct{}
+	removedpostscripts           map[int64]struct{}
 	clearedpostscripts           bool
-	votes                        map[int]struct{}
-	removedvotes                 map[int]struct{}
+	votes                        map[int64]struct{}
+	removedvotes                 map[int64]struct{}
 	clearedvotes                 bool
-	lotteries                    map[int]struct{}
-	removedlotteries             map[int]struct{}
+	lotteries                    map[int64]struct{}
+	removedlotteries             map[int64]struct{}
 	clearedlotteries             bool
-	comments                     map[int]struct{}
-	removedcomments              map[int]struct{}
+	comments                     map[int64]struct{}
+	removedcomments              map[int64]struct{}
 	clearedcomments              bool
-	tags                         map[int]struct{}
-	removedtags                  map[int]struct{}
+	tags                         map[int64]struct{}
+	removedtags                  map[int64]struct{}
 	clearedtags                  bool
-	action_records               map[int]struct{}
-	removedaction_records        map[int]struct{}
+	action_records               map[int64]struct{}
+	removedaction_records        map[int64]struct{}
 	clearedaction_records        bool
 	done                         bool
 	oldValue                     func(context.Context) (*Article, error)
@@ -133,7 +133,7 @@ func newArticleMutation(c config, op Op, opts ...articleOption) *ArticleMutation
 }
 
 // withArticleID sets the ID field of the mutation.
-func withArticleID(id int) articleOption {
+func withArticleID(id int64) articleOption {
 	return func(m *ArticleMutation) {
 		var (
 			err   error
@@ -183,9 +183,15 @@ func (m ArticleMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Article entities.
+func (m *ArticleMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleMutation) ID() (id int, exists bool) {
+func (m *ArticleMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -196,12 +202,12 @@ func (m *ArticleMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -212,13 +218,13 @@ func (m *ArticleMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *ArticleMutation) SetUserID(i int) {
+func (m *ArticleMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleMutation) UserID() (r int, exists bool) {
+func (m *ArticleMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -229,7 +235,7 @@ func (m *ArticleMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -244,7 +250,7 @@ func (m *ArticleMutation) OldUserID(ctx context.Context) (v int, err error) {
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *ArticleMutation) AddUserID(i int) {
+func (m *ArticleMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -253,7 +259,7 @@ func (m *ArticleMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *ArticleMutation) AddedUserID() (r int, exists bool) {
+func (m *ArticleMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -425,13 +431,13 @@ func (m *ArticleMutation) ResetRewardContent() {
 }
 
 // SetRewardPoints sets the "reward_points" field.
-func (m *ArticleMutation) SetRewardPoints(i int) {
+func (m *ArticleMutation) SetRewardPoints(i int32) {
 	m.reward_points = &i
 	m.addreward_points = nil
 }
 
 // RewardPoints returns the value of the "reward_points" field in the mutation.
-func (m *ArticleMutation) RewardPoints() (r int, exists bool) {
+func (m *ArticleMutation) RewardPoints() (r int32, exists bool) {
 	v := m.reward_points
 	if v == nil {
 		return
@@ -442,7 +448,7 @@ func (m *ArticleMutation) RewardPoints() (r int, exists bool) {
 // OldRewardPoints returns the old "reward_points" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldRewardPoints(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldRewardPoints(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRewardPoints is only allowed on UpdateOne operations")
 	}
@@ -457,7 +463,7 @@ func (m *ArticleMutation) OldRewardPoints(ctx context.Context) (v int, err error
 }
 
 // AddRewardPoints adds i to the "reward_points" field.
-func (m *ArticleMutation) AddRewardPoints(i int) {
+func (m *ArticleMutation) AddRewardPoints(i int32) {
 	if m.addreward_points != nil {
 		*m.addreward_points += i
 	} else {
@@ -466,7 +472,7 @@ func (m *ArticleMutation) AddRewardPoints(i int) {
 }
 
 // AddedRewardPoints returns the value that was added to the "reward_points" field in this mutation.
-func (m *ArticleMutation) AddedRewardPoints() (r int, exists bool) {
+func (m *ArticleMutation) AddedRewardPoints() (r int32, exists bool) {
 	v := m.addreward_points
 	if v == nil {
 		return
@@ -481,13 +487,13 @@ func (m *ArticleMutation) ResetRewardPoints() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ArticleMutation) SetStatus(i int) {
+func (m *ArticleMutation) SetStatus(i int32) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *ArticleMutation) Status() (r int, exists bool) {
+func (m *ArticleMutation) Status() (r int32, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -498,7 +504,7 @@ func (m *ArticleMutation) Status() (r int, exists bool) {
 // OldStatus returns the old "status" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldStatus(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldStatus(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -513,7 +519,7 @@ func (m *ArticleMutation) OldStatus(ctx context.Context) (v int, err error) {
 }
 
 // AddStatus adds i to the "status" field.
-func (m *ArticleMutation) AddStatus(i int) {
+func (m *ArticleMutation) AddStatus(i int32) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -522,7 +528,7 @@ func (m *ArticleMutation) AddStatus(i int) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *ArticleMutation) AddedStatus() (r int, exists bool) {
+func (m *ArticleMutation) AddedStatus() (r int32, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -537,13 +543,13 @@ func (m *ArticleMutation) ResetStatus() {
 }
 
 // SetType sets the "type" field.
-func (m *ArticleMutation) SetType(i int) {
+func (m *ArticleMutation) SetType(i int32) {
 	m._type = &i
 	m.add_type = nil
 }
 
 // GetType returns the value of the "type" field in the mutation.
-func (m *ArticleMutation) GetType() (r int, exists bool) {
+func (m *ArticleMutation) GetType() (r int32, exists bool) {
 	v := m._type
 	if v == nil {
 		return
@@ -554,7 +560,7 @@ func (m *ArticleMutation) GetType() (r int, exists bool) {
 // OldType returns the old "type" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldType(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldType(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldType is only allowed on UpdateOne operations")
 	}
@@ -569,7 +575,7 @@ func (m *ArticleMutation) OldType(ctx context.Context) (v int, err error) {
 }
 
 // AddType adds i to the "type" field.
-func (m *ArticleMutation) AddType(i int) {
+func (m *ArticleMutation) AddType(i int32) {
 	if m.add_type != nil {
 		*m.add_type += i
 	} else {
@@ -578,7 +584,7 @@ func (m *ArticleMutation) AddType(i int) {
 }
 
 // AddedType returns the value that was added to the "type" field in this mutation.
-func (m *ArticleMutation) AddedType() (r int, exists bool) {
+func (m *ArticleMutation) AddedType() (r int32, exists bool) {
 	v := m.add_type
 	if v == nil {
 		return
@@ -665,13 +671,13 @@ func (m *ArticleMutation) ResetAnonymous() {
 }
 
 // SetThankCount sets the "thank_count" field.
-func (m *ArticleMutation) SetThankCount(i int) {
+func (m *ArticleMutation) SetThankCount(i int32) {
 	m.thank_count = &i
 	m.addthank_count = nil
 }
 
 // ThankCount returns the value of the "thank_count" field in the mutation.
-func (m *ArticleMutation) ThankCount() (r int, exists bool) {
+func (m *ArticleMutation) ThankCount() (r int32, exists bool) {
 	v := m.thank_count
 	if v == nil {
 		return
@@ -682,7 +688,7 @@ func (m *ArticleMutation) ThankCount() (r int, exists bool) {
 // OldThankCount returns the old "thank_count" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldThankCount(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldThankCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldThankCount is only allowed on UpdateOne operations")
 	}
@@ -697,7 +703,7 @@ func (m *ArticleMutation) OldThankCount(ctx context.Context) (v int, err error) 
 }
 
 // AddThankCount adds i to the "thank_count" field.
-func (m *ArticleMutation) AddThankCount(i int) {
+func (m *ArticleMutation) AddThankCount(i int32) {
 	if m.addthank_count != nil {
 		*m.addthank_count += i
 	} else {
@@ -706,7 +712,7 @@ func (m *ArticleMutation) AddThankCount(i int) {
 }
 
 // AddedThankCount returns the value that was added to the "thank_count" field in this mutation.
-func (m *ArticleMutation) AddedThankCount() (r int, exists bool) {
+func (m *ArticleMutation) AddedThankCount() (r int32, exists bool) {
 	v := m.addthank_count
 	if v == nil {
 		return
@@ -721,13 +727,13 @@ func (m *ArticleMutation) ResetThankCount() {
 }
 
 // SetLikeCount sets the "like_count" field.
-func (m *ArticleMutation) SetLikeCount(i int) {
+func (m *ArticleMutation) SetLikeCount(i int32) {
 	m.like_count = &i
 	m.addlike_count = nil
 }
 
 // LikeCount returns the value of the "like_count" field in the mutation.
-func (m *ArticleMutation) LikeCount() (r int, exists bool) {
+func (m *ArticleMutation) LikeCount() (r int32, exists bool) {
 	v := m.like_count
 	if v == nil {
 		return
@@ -738,7 +744,7 @@ func (m *ArticleMutation) LikeCount() (r int, exists bool) {
 // OldLikeCount returns the old "like_count" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldLikeCount(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldLikeCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLikeCount is only allowed on UpdateOne operations")
 	}
@@ -753,7 +759,7 @@ func (m *ArticleMutation) OldLikeCount(ctx context.Context) (v int, err error) {
 }
 
 // AddLikeCount adds i to the "like_count" field.
-func (m *ArticleMutation) AddLikeCount(i int) {
+func (m *ArticleMutation) AddLikeCount(i int32) {
 	if m.addlike_count != nil {
 		*m.addlike_count += i
 	} else {
@@ -762,7 +768,7 @@ func (m *ArticleMutation) AddLikeCount(i int) {
 }
 
 // AddedLikeCount returns the value that was added to the "like_count" field in this mutation.
-func (m *ArticleMutation) AddedLikeCount() (r int, exists bool) {
+func (m *ArticleMutation) AddedLikeCount() (r int32, exists bool) {
 	v := m.addlike_count
 	if v == nil {
 		return
@@ -777,13 +783,13 @@ func (m *ArticleMutation) ResetLikeCount() {
 }
 
 // SetCollectCount sets the "collect_count" field.
-func (m *ArticleMutation) SetCollectCount(i int) {
+func (m *ArticleMutation) SetCollectCount(i int32) {
 	m.collect_count = &i
 	m.addcollect_count = nil
 }
 
 // CollectCount returns the value of the "collect_count" field in the mutation.
-func (m *ArticleMutation) CollectCount() (r int, exists bool) {
+func (m *ArticleMutation) CollectCount() (r int32, exists bool) {
 	v := m.collect_count
 	if v == nil {
 		return
@@ -794,7 +800,7 @@ func (m *ArticleMutation) CollectCount() (r int, exists bool) {
 // OldCollectCount returns the old "collect_count" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldCollectCount(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldCollectCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCollectCount is only allowed on UpdateOne operations")
 	}
@@ -809,7 +815,7 @@ func (m *ArticleMutation) OldCollectCount(ctx context.Context) (v int, err error
 }
 
 // AddCollectCount adds i to the "collect_count" field.
-func (m *ArticleMutation) AddCollectCount(i int) {
+func (m *ArticleMutation) AddCollectCount(i int32) {
 	if m.addcollect_count != nil {
 		*m.addcollect_count += i
 	} else {
@@ -818,7 +824,7 @@ func (m *ArticleMutation) AddCollectCount(i int) {
 }
 
 // AddedCollectCount returns the value that was added to the "collect_count" field in this mutation.
-func (m *ArticleMutation) AddedCollectCount() (r int, exists bool) {
+func (m *ArticleMutation) AddedCollectCount() (r int32, exists bool) {
 	v := m.addcollect_count
 	if v == nil {
 		return
@@ -833,13 +839,13 @@ func (m *ArticleMutation) ResetCollectCount() {
 }
 
 // SetWatchCount sets the "watch_count" field.
-func (m *ArticleMutation) SetWatchCount(i int) {
+func (m *ArticleMutation) SetWatchCount(i int32) {
 	m.watch_count = &i
 	m.addwatch_count = nil
 }
 
 // WatchCount returns the value of the "watch_count" field in the mutation.
-func (m *ArticleMutation) WatchCount() (r int, exists bool) {
+func (m *ArticleMutation) WatchCount() (r int32, exists bool) {
 	v := m.watch_count
 	if v == nil {
 		return
@@ -850,7 +856,7 @@ func (m *ArticleMutation) WatchCount() (r int, exists bool) {
 // OldWatchCount returns the old "watch_count" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldWatchCount(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldWatchCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldWatchCount is only allowed on UpdateOne operations")
 	}
@@ -865,7 +871,7 @@ func (m *ArticleMutation) OldWatchCount(ctx context.Context) (v int, err error) 
 }
 
 // AddWatchCount adds i to the "watch_count" field.
-func (m *ArticleMutation) AddWatchCount(i int) {
+func (m *ArticleMutation) AddWatchCount(i int32) {
 	if m.addwatch_count != nil {
 		*m.addwatch_count += i
 	} else {
@@ -874,7 +880,7 @@ func (m *ArticleMutation) AddWatchCount(i int) {
 }
 
 // AddedWatchCount returns the value that was added to the "watch_count" field in this mutation.
-func (m *ArticleMutation) AddedWatchCount() (r int, exists bool) {
+func (m *ArticleMutation) AddedWatchCount() (r int32, exists bool) {
 	v := m.addwatch_count
 	if v == nil {
 		return
@@ -889,13 +895,13 @@ func (m *ArticleMutation) ResetWatchCount() {
 }
 
 // SetBountyPoints sets the "bounty_points" field.
-func (m *ArticleMutation) SetBountyPoints(i int) {
+func (m *ArticleMutation) SetBountyPoints(i int32) {
 	m.bounty_points = &i
 	m.addbounty_points = nil
 }
 
 // BountyPoints returns the value of the "bounty_points" field in the mutation.
-func (m *ArticleMutation) BountyPoints() (r int, exists bool) {
+func (m *ArticleMutation) BountyPoints() (r int32, exists bool) {
 	v := m.bounty_points
 	if v == nil {
 		return
@@ -906,7 +912,7 @@ func (m *ArticleMutation) BountyPoints() (r int, exists bool) {
 // OldBountyPoints returns the old "bounty_points" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldBountyPoints(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldBountyPoints(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldBountyPoints is only allowed on UpdateOne operations")
 	}
@@ -921,7 +927,7 @@ func (m *ArticleMutation) OldBountyPoints(ctx context.Context) (v int, err error
 }
 
 // AddBountyPoints adds i to the "bounty_points" field.
-func (m *ArticleMutation) AddBountyPoints(i int) {
+func (m *ArticleMutation) AddBountyPoints(i int32) {
 	if m.addbounty_points != nil {
 		*m.addbounty_points += i
 	} else {
@@ -930,7 +936,7 @@ func (m *ArticleMutation) AddBountyPoints(i int) {
 }
 
 // AddedBountyPoints returns the value that was added to the "bounty_points" field in this mutation.
-func (m *ArticleMutation) AddedBountyPoints() (r int, exists bool) {
+func (m *ArticleMutation) AddedBountyPoints() (r int32, exists bool) {
 	v := m.addbounty_points
 	if v == nil {
 		return
@@ -945,13 +951,13 @@ func (m *ArticleMutation) ResetBountyPoints() {
 }
 
 // SetAcceptedAnswerID sets the "accepted_answer_id" field.
-func (m *ArticleMutation) SetAcceptedAnswerID(i int) {
+func (m *ArticleMutation) SetAcceptedAnswerID(i int64) {
 	m.accepted_answer_id = &i
 	m.addaccepted_answer_id = nil
 }
 
 // AcceptedAnswerID returns the value of the "accepted_answer_id" field in the mutation.
-func (m *ArticleMutation) AcceptedAnswerID() (r int, exists bool) {
+func (m *ArticleMutation) AcceptedAnswerID() (r int64, exists bool) {
 	v := m.accepted_answer_id
 	if v == nil {
 		return
@@ -962,7 +968,7 @@ func (m *ArticleMutation) AcceptedAnswerID() (r int, exists bool) {
 // OldAcceptedAnswerID returns the old "accepted_answer_id" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldAcceptedAnswerID(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldAcceptedAnswerID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAcceptedAnswerID is only allowed on UpdateOne operations")
 	}
@@ -977,7 +983,7 @@ func (m *ArticleMutation) OldAcceptedAnswerID(ctx context.Context) (v int, err e
 }
 
 // AddAcceptedAnswerID adds i to the "accepted_answer_id" field.
-func (m *ArticleMutation) AddAcceptedAnswerID(i int) {
+func (m *ArticleMutation) AddAcceptedAnswerID(i int64) {
 	if m.addaccepted_answer_id != nil {
 		*m.addaccepted_answer_id += i
 	} else {
@@ -986,7 +992,7 @@ func (m *ArticleMutation) AddAcceptedAnswerID(i int) {
 }
 
 // AddedAcceptedAnswerID returns the value that was added to the "accepted_answer_id" field in this mutation.
-func (m *ArticleMutation) AddedAcceptedAnswerID() (r int, exists bool) {
+func (m *ArticleMutation) AddedAcceptedAnswerID() (r int64, exists bool) {
 	v := m.addaccepted_answer_id
 	if v == nil {
 		return
@@ -1015,13 +1021,13 @@ func (m *ArticleMutation) ResetAcceptedAnswerID() {
 }
 
 // SetVoteTotal sets the "vote_total" field.
-func (m *ArticleMutation) SetVoteTotal(i int) {
+func (m *ArticleMutation) SetVoteTotal(i int32) {
 	m.vote_total = &i
 	m.addvote_total = nil
 }
 
 // VoteTotal returns the value of the "vote_total" field in the mutation.
-func (m *ArticleMutation) VoteTotal() (r int, exists bool) {
+func (m *ArticleMutation) VoteTotal() (r int32, exists bool) {
 	v := m.vote_total
 	if v == nil {
 		return
@@ -1032,7 +1038,7 @@ func (m *ArticleMutation) VoteTotal() (r int, exists bool) {
 // OldVoteTotal returns the old "vote_total" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldVoteTotal(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldVoteTotal(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldVoteTotal is only allowed on UpdateOne operations")
 	}
@@ -1047,7 +1053,7 @@ func (m *ArticleMutation) OldVoteTotal(ctx context.Context) (v int, err error) {
 }
 
 // AddVoteTotal adds i to the "vote_total" field.
-func (m *ArticleMutation) AddVoteTotal(i int) {
+func (m *ArticleMutation) AddVoteTotal(i int32) {
 	if m.addvote_total != nil {
 		*m.addvote_total += i
 	} else {
@@ -1056,7 +1062,7 @@ func (m *ArticleMutation) AddVoteTotal(i int) {
 }
 
 // AddedVoteTotal returns the value that was added to the "vote_total" field in this mutation.
-func (m *ArticleMutation) AddedVoteTotal() (r int, exists bool) {
+func (m *ArticleMutation) AddedVoteTotal() (r int32, exists bool) {
 	v := m.addvote_total
 	if v == nil {
 		return
@@ -1071,13 +1077,13 @@ func (m *ArticleMutation) ResetVoteTotal() {
 }
 
 // SetLotteryParticipantCount sets the "lottery_participant_count" field.
-func (m *ArticleMutation) SetLotteryParticipantCount(i int) {
+func (m *ArticleMutation) SetLotteryParticipantCount(i int32) {
 	m.lottery_participant_count = &i
 	m.addlottery_participant_count = nil
 }
 
 // LotteryParticipantCount returns the value of the "lottery_participant_count" field in the mutation.
-func (m *ArticleMutation) LotteryParticipantCount() (r int, exists bool) {
+func (m *ArticleMutation) LotteryParticipantCount() (r int32, exists bool) {
 	v := m.lottery_participant_count
 	if v == nil {
 		return
@@ -1088,7 +1094,7 @@ func (m *ArticleMutation) LotteryParticipantCount() (r int, exists bool) {
 // OldLotteryParticipantCount returns the old "lottery_participant_count" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldLotteryParticipantCount(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldLotteryParticipantCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLotteryParticipantCount is only allowed on UpdateOne operations")
 	}
@@ -1103,7 +1109,7 @@ func (m *ArticleMutation) OldLotteryParticipantCount(ctx context.Context) (v int
 }
 
 // AddLotteryParticipantCount adds i to the "lottery_participant_count" field.
-func (m *ArticleMutation) AddLotteryParticipantCount(i int) {
+func (m *ArticleMutation) AddLotteryParticipantCount(i int32) {
 	if m.addlottery_participant_count != nil {
 		*m.addlottery_participant_count += i
 	} else {
@@ -1112,7 +1118,7 @@ func (m *ArticleMutation) AddLotteryParticipantCount(i int) {
 }
 
 // AddedLotteryParticipantCount returns the value that was added to the "lottery_participant_count" field in this mutation.
-func (m *ArticleMutation) AddedLotteryParticipantCount() (r int, exists bool) {
+func (m *ArticleMutation) AddedLotteryParticipantCount() (r int32, exists bool) {
 	v := m.addlottery_participant_count
 	if v == nil {
 		return
@@ -1127,13 +1133,13 @@ func (m *ArticleMutation) ResetLotteryParticipantCount() {
 }
 
 // SetLotteryWinnerCount sets the "lottery_winner_count" field.
-func (m *ArticleMutation) SetLotteryWinnerCount(i int) {
+func (m *ArticleMutation) SetLotteryWinnerCount(i int32) {
 	m.lottery_winner_count = &i
 	m.addlottery_winner_count = nil
 }
 
 // LotteryWinnerCount returns the value of the "lottery_winner_count" field in the mutation.
-func (m *ArticleMutation) LotteryWinnerCount() (r int, exists bool) {
+func (m *ArticleMutation) LotteryWinnerCount() (r int32, exists bool) {
 	v := m.lottery_winner_count
 	if v == nil {
 		return
@@ -1144,7 +1150,7 @@ func (m *ArticleMutation) LotteryWinnerCount() (r int, exists bool) {
 // OldLotteryWinnerCount returns the old "lottery_winner_count" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldLotteryWinnerCount(ctx context.Context) (v int, err error) {
+func (m *ArticleMutation) OldLotteryWinnerCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLotteryWinnerCount is only allowed on UpdateOne operations")
 	}
@@ -1159,7 +1165,7 @@ func (m *ArticleMutation) OldLotteryWinnerCount(ctx context.Context) (v int, err
 }
 
 // AddLotteryWinnerCount adds i to the "lottery_winner_count" field.
-func (m *ArticleMutation) AddLotteryWinnerCount(i int) {
+func (m *ArticleMutation) AddLotteryWinnerCount(i int32) {
 	if m.addlottery_winner_count != nil {
 		*m.addlottery_winner_count += i
 	} else {
@@ -1168,7 +1174,7 @@ func (m *ArticleMutation) AddLotteryWinnerCount(i int) {
 }
 
 // AddedLotteryWinnerCount returns the value that was added to the "lottery_winner_count" field in this mutation.
-func (m *ArticleMutation) AddedLotteryWinnerCount() (r int, exists bool) {
+func (m *ArticleMutation) AddedLotteryWinnerCount() (r int32, exists bool) {
 	v := m.addlottery_winner_count
 	if v == nil {
 		return
@@ -1281,9 +1287,9 @@ func (m *ArticleMutation) ResetUpdatedAt() {
 }
 
 // AddPostscriptIDs adds the "postscripts" edge to the ArticlePostscript entity by ids.
-func (m *ArticleMutation) AddPostscriptIDs(ids ...int) {
+func (m *ArticleMutation) AddPostscriptIDs(ids ...int64) {
 	if m.postscripts == nil {
-		m.postscripts = make(map[int]struct{})
+		m.postscripts = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.postscripts[ids[i]] = struct{}{}
@@ -1301,9 +1307,9 @@ func (m *ArticleMutation) PostscriptsCleared() bool {
 }
 
 // RemovePostscriptIDs removes the "postscripts" edge to the ArticlePostscript entity by IDs.
-func (m *ArticleMutation) RemovePostscriptIDs(ids ...int) {
+func (m *ArticleMutation) RemovePostscriptIDs(ids ...int64) {
 	if m.removedpostscripts == nil {
-		m.removedpostscripts = make(map[int]struct{})
+		m.removedpostscripts = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.postscripts, ids[i])
@@ -1312,7 +1318,7 @@ func (m *ArticleMutation) RemovePostscriptIDs(ids ...int) {
 }
 
 // RemovedPostscripts returns the removed IDs of the "postscripts" edge to the ArticlePostscript entity.
-func (m *ArticleMutation) RemovedPostscriptsIDs() (ids []int) {
+func (m *ArticleMutation) RemovedPostscriptsIDs() (ids []int64) {
 	for id := range m.removedpostscripts {
 		ids = append(ids, id)
 	}
@@ -1320,7 +1326,7 @@ func (m *ArticleMutation) RemovedPostscriptsIDs() (ids []int) {
 }
 
 // PostscriptsIDs returns the "postscripts" edge IDs in the mutation.
-func (m *ArticleMutation) PostscriptsIDs() (ids []int) {
+func (m *ArticleMutation) PostscriptsIDs() (ids []int64) {
 	for id := range m.postscripts {
 		ids = append(ids, id)
 	}
@@ -1335,9 +1341,9 @@ func (m *ArticleMutation) ResetPostscripts() {
 }
 
 // AddVoteIDs adds the "votes" edge to the ArticleVote entity by ids.
-func (m *ArticleMutation) AddVoteIDs(ids ...int) {
+func (m *ArticleMutation) AddVoteIDs(ids ...int64) {
 	if m.votes == nil {
-		m.votes = make(map[int]struct{})
+		m.votes = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.votes[ids[i]] = struct{}{}
@@ -1355,9 +1361,9 @@ func (m *ArticleMutation) VotesCleared() bool {
 }
 
 // RemoveVoteIDs removes the "votes" edge to the ArticleVote entity by IDs.
-func (m *ArticleMutation) RemoveVoteIDs(ids ...int) {
+func (m *ArticleMutation) RemoveVoteIDs(ids ...int64) {
 	if m.removedvotes == nil {
-		m.removedvotes = make(map[int]struct{})
+		m.removedvotes = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.votes, ids[i])
@@ -1366,7 +1372,7 @@ func (m *ArticleMutation) RemoveVoteIDs(ids ...int) {
 }
 
 // RemovedVotes returns the removed IDs of the "votes" edge to the ArticleVote entity.
-func (m *ArticleMutation) RemovedVotesIDs() (ids []int) {
+func (m *ArticleMutation) RemovedVotesIDs() (ids []int64) {
 	for id := range m.removedvotes {
 		ids = append(ids, id)
 	}
@@ -1374,7 +1380,7 @@ func (m *ArticleMutation) RemovedVotesIDs() (ids []int) {
 }
 
 // VotesIDs returns the "votes" edge IDs in the mutation.
-func (m *ArticleMutation) VotesIDs() (ids []int) {
+func (m *ArticleMutation) VotesIDs() (ids []int64) {
 	for id := range m.votes {
 		ids = append(ids, id)
 	}
@@ -1389,9 +1395,9 @@ func (m *ArticleMutation) ResetVotes() {
 }
 
 // AddLotteryIDs adds the "lotteries" edge to the ArticleLottery entity by ids.
-func (m *ArticleMutation) AddLotteryIDs(ids ...int) {
+func (m *ArticleMutation) AddLotteryIDs(ids ...int64) {
 	if m.lotteries == nil {
-		m.lotteries = make(map[int]struct{})
+		m.lotteries = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.lotteries[ids[i]] = struct{}{}
@@ -1409,9 +1415,9 @@ func (m *ArticleMutation) LotteriesCleared() bool {
 }
 
 // RemoveLotteryIDs removes the "lotteries" edge to the ArticleLottery entity by IDs.
-func (m *ArticleMutation) RemoveLotteryIDs(ids ...int) {
+func (m *ArticleMutation) RemoveLotteryIDs(ids ...int64) {
 	if m.removedlotteries == nil {
-		m.removedlotteries = make(map[int]struct{})
+		m.removedlotteries = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.lotteries, ids[i])
@@ -1420,7 +1426,7 @@ func (m *ArticleMutation) RemoveLotteryIDs(ids ...int) {
 }
 
 // RemovedLotteries returns the removed IDs of the "lotteries" edge to the ArticleLottery entity.
-func (m *ArticleMutation) RemovedLotteriesIDs() (ids []int) {
+func (m *ArticleMutation) RemovedLotteriesIDs() (ids []int64) {
 	for id := range m.removedlotteries {
 		ids = append(ids, id)
 	}
@@ -1428,7 +1434,7 @@ func (m *ArticleMutation) RemovedLotteriesIDs() (ids []int) {
 }
 
 // LotteriesIDs returns the "lotteries" edge IDs in the mutation.
-func (m *ArticleMutation) LotteriesIDs() (ids []int) {
+func (m *ArticleMutation) LotteriesIDs() (ids []int64) {
 	for id := range m.lotteries {
 		ids = append(ids, id)
 	}
@@ -1443,9 +1449,9 @@ func (m *ArticleMutation) ResetLotteries() {
 }
 
 // AddCommentIDs adds the "comments" edge to the Comment entity by ids.
-func (m *ArticleMutation) AddCommentIDs(ids ...int) {
+func (m *ArticleMutation) AddCommentIDs(ids ...int64) {
 	if m.comments == nil {
-		m.comments = make(map[int]struct{})
+		m.comments = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.comments[ids[i]] = struct{}{}
@@ -1463,9 +1469,9 @@ func (m *ArticleMutation) CommentsCleared() bool {
 }
 
 // RemoveCommentIDs removes the "comments" edge to the Comment entity by IDs.
-func (m *ArticleMutation) RemoveCommentIDs(ids ...int) {
+func (m *ArticleMutation) RemoveCommentIDs(ids ...int64) {
 	if m.removedcomments == nil {
-		m.removedcomments = make(map[int]struct{})
+		m.removedcomments = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.comments, ids[i])
@@ -1474,7 +1480,7 @@ func (m *ArticleMutation) RemoveCommentIDs(ids ...int) {
 }
 
 // RemovedComments returns the removed IDs of the "comments" edge to the Comment entity.
-func (m *ArticleMutation) RemovedCommentsIDs() (ids []int) {
+func (m *ArticleMutation) RemovedCommentsIDs() (ids []int64) {
 	for id := range m.removedcomments {
 		ids = append(ids, id)
 	}
@@ -1482,7 +1488,7 @@ func (m *ArticleMutation) RemovedCommentsIDs() (ids []int) {
 }
 
 // CommentsIDs returns the "comments" edge IDs in the mutation.
-func (m *ArticleMutation) CommentsIDs() (ids []int) {
+func (m *ArticleMutation) CommentsIDs() (ids []int64) {
 	for id := range m.comments {
 		ids = append(ids, id)
 	}
@@ -1497,9 +1503,9 @@ func (m *ArticleMutation) ResetComments() {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
-func (m *ArticleMutation) AddTagIDs(ids ...int) {
+func (m *ArticleMutation) AddTagIDs(ids ...int64) {
 	if m.tags == nil {
-		m.tags = make(map[int]struct{})
+		m.tags = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.tags[ids[i]] = struct{}{}
@@ -1517,9 +1523,9 @@ func (m *ArticleMutation) TagsCleared() bool {
 }
 
 // RemoveTagIDs removes the "tags" edge to the Tag entity by IDs.
-func (m *ArticleMutation) RemoveTagIDs(ids ...int) {
+func (m *ArticleMutation) RemoveTagIDs(ids ...int64) {
 	if m.removedtags == nil {
-		m.removedtags = make(map[int]struct{})
+		m.removedtags = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.tags, ids[i])
@@ -1528,7 +1534,7 @@ func (m *ArticleMutation) RemoveTagIDs(ids ...int) {
 }
 
 // RemovedTags returns the removed IDs of the "tags" edge to the Tag entity.
-func (m *ArticleMutation) RemovedTagsIDs() (ids []int) {
+func (m *ArticleMutation) RemovedTagsIDs() (ids []int64) {
 	for id := range m.removedtags {
 		ids = append(ids, id)
 	}
@@ -1536,7 +1542,7 @@ func (m *ArticleMutation) RemovedTagsIDs() (ids []int) {
 }
 
 // TagsIDs returns the "tags" edge IDs in the mutation.
-func (m *ArticleMutation) TagsIDs() (ids []int) {
+func (m *ArticleMutation) TagsIDs() (ids []int64) {
 	for id := range m.tags {
 		ids = append(ids, id)
 	}
@@ -1551,9 +1557,9 @@ func (m *ArticleMutation) ResetTags() {
 }
 
 // AddActionRecordIDs adds the "action_records" edge to the ArticleActionRecord entity by ids.
-func (m *ArticleMutation) AddActionRecordIDs(ids ...int) {
+func (m *ArticleMutation) AddActionRecordIDs(ids ...int64) {
 	if m.action_records == nil {
-		m.action_records = make(map[int]struct{})
+		m.action_records = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.action_records[ids[i]] = struct{}{}
@@ -1571,9 +1577,9 @@ func (m *ArticleMutation) ActionRecordsCleared() bool {
 }
 
 // RemoveActionRecordIDs removes the "action_records" edge to the ArticleActionRecord entity by IDs.
-func (m *ArticleMutation) RemoveActionRecordIDs(ids ...int) {
+func (m *ArticleMutation) RemoveActionRecordIDs(ids ...int64) {
 	if m.removedaction_records == nil {
-		m.removedaction_records = make(map[int]struct{})
+		m.removedaction_records = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.action_records, ids[i])
@@ -1582,7 +1588,7 @@ func (m *ArticleMutation) RemoveActionRecordIDs(ids ...int) {
 }
 
 // RemovedActionRecords returns the removed IDs of the "action_records" edge to the ArticleActionRecord entity.
-func (m *ArticleMutation) RemovedActionRecordsIDs() (ids []int) {
+func (m *ArticleMutation) RemovedActionRecordsIDs() (ids []int64) {
 	for id := range m.removedaction_records {
 		ids = append(ids, id)
 	}
@@ -1590,7 +1596,7 @@ func (m *ArticleMutation) RemovedActionRecordsIDs() (ids []int) {
 }
 
 // ActionRecordsIDs returns the "action_records" edge IDs in the mutation.
-func (m *ArticleMutation) ActionRecordsIDs() (ids []int) {
+func (m *ArticleMutation) ActionRecordsIDs() (ids []int64) {
 	for id := range m.action_records {
 		ids = append(ids, id)
 	}
@@ -1813,7 +1819,7 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case article.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1848,21 +1854,21 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		m.SetRewardContent(v)
 		return nil
 	case article.FieldRewardPoints:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRewardPoints(v)
 		return nil
 	case article.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
 		return nil
 	case article.FieldType:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1883,63 +1889,63 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		m.SetAnonymous(v)
 		return nil
 	case article.FieldThankCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetThankCount(v)
 		return nil
 	case article.FieldLikeCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLikeCount(v)
 		return nil
 	case article.FieldCollectCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCollectCount(v)
 		return nil
 	case article.FieldWatchCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetWatchCount(v)
 		return nil
 	case article.FieldBountyPoints:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBountyPoints(v)
 		return nil
 	case article.FieldAcceptedAnswerID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAcceptedAnswerID(v)
 		return nil
 	case article.FieldVoteTotal:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVoteTotal(v)
 		return nil
 	case article.FieldLotteryParticipantCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLotteryParticipantCount(v)
 		return nil
 	case article.FieldLotteryWinnerCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2050,91 +2056,91 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case article.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUserID(v)
 		return nil
 	case article.FieldRewardPoints:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddRewardPoints(v)
 		return nil
 	case article.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
 		return nil
 	case article.FieldType:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddType(v)
 		return nil
 	case article.FieldThankCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddThankCount(v)
 		return nil
 	case article.FieldLikeCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLikeCount(v)
 		return nil
 	case article.FieldCollectCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCollectCount(v)
 		return nil
 	case article.FieldWatchCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddWatchCount(v)
 		return nil
 	case article.FieldBountyPoints:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddBountyPoints(v)
 		return nil
 	case article.FieldAcceptedAnswerID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAcceptedAnswerID(v)
 		return nil
 	case article.FieldVoteTotal:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddVoteTotal(v)
 		return nil
 	case article.FieldLotteryParticipantCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLotteryParticipantCount(v)
 		return nil
 	case article.FieldLotteryWinnerCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2480,13 +2486,13 @@ type ArticleActionRecordMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *int
-	user_id        *int
-	adduser_id     *int
-	_type          *int
-	add_type       *int
+	id             *int64
+	user_id        *int64
+	adduser_id     *int64
+	_type          *int32
+	add_type       *int32
 	clearedFields  map[string]struct{}
-	article        *int
+	article        *int64
 	clearedarticle bool
 	done           bool
 	oldValue       func(context.Context) (*ArticleActionRecord, error)
@@ -2513,7 +2519,7 @@ func newArticleActionRecordMutation(c config, op Op, opts ...articleactionrecord
 }
 
 // withArticleActionRecordID sets the ID field of the mutation.
-func withArticleActionRecordID(id int) articleactionrecordOption {
+func withArticleActionRecordID(id int64) articleactionrecordOption {
 	return func(m *ArticleActionRecordMutation) {
 		var (
 			err   error
@@ -2563,9 +2569,15 @@ func (m ArticleActionRecordMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticleActionRecord entities.
+func (m *ArticleActionRecordMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleActionRecordMutation) ID() (id int, exists bool) {
+func (m *ArticleActionRecordMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2576,12 +2588,12 @@ func (m *ArticleActionRecordMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleActionRecordMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleActionRecordMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2592,12 +2604,12 @@ func (m *ArticleActionRecordMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetArticleID sets the "article_id" field.
-func (m *ArticleActionRecordMutation) SetArticleID(i int) {
+func (m *ArticleActionRecordMutation) SetArticleID(i int64) {
 	m.article = &i
 }
 
 // ArticleID returns the value of the "article_id" field in the mutation.
-func (m *ArticleActionRecordMutation) ArticleID() (r int, exists bool) {
+func (m *ArticleActionRecordMutation) ArticleID() (r int64, exists bool) {
 	v := m.article
 	if v == nil {
 		return
@@ -2608,7 +2620,7 @@ func (m *ArticleActionRecordMutation) ArticleID() (r int, exists bool) {
 // OldArticleID returns the old "article_id" field's value of the ArticleActionRecord entity.
 // If the ArticleActionRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleActionRecordMutation) OldArticleID(ctx context.Context) (v int, err error) {
+func (m *ArticleActionRecordMutation) OldArticleID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldArticleID is only allowed on UpdateOne operations")
 	}
@@ -2628,13 +2640,13 @@ func (m *ArticleActionRecordMutation) ResetArticleID() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *ArticleActionRecordMutation) SetUserID(i int) {
+func (m *ArticleActionRecordMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleActionRecordMutation) UserID() (r int, exists bool) {
+func (m *ArticleActionRecordMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -2645,7 +2657,7 @@ func (m *ArticleActionRecordMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the ArticleActionRecord entity.
 // If the ArticleActionRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleActionRecordMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *ArticleActionRecordMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -2660,7 +2672,7 @@ func (m *ArticleActionRecordMutation) OldUserID(ctx context.Context) (v int, err
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *ArticleActionRecordMutation) AddUserID(i int) {
+func (m *ArticleActionRecordMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -2669,7 +2681,7 @@ func (m *ArticleActionRecordMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *ArticleActionRecordMutation) AddedUserID() (r int, exists bool) {
+func (m *ArticleActionRecordMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -2684,13 +2696,13 @@ func (m *ArticleActionRecordMutation) ResetUserID() {
 }
 
 // SetType sets the "type" field.
-func (m *ArticleActionRecordMutation) SetType(i int) {
+func (m *ArticleActionRecordMutation) SetType(i int32) {
 	m._type = &i
 	m.add_type = nil
 }
 
 // GetType returns the value of the "type" field in the mutation.
-func (m *ArticleActionRecordMutation) GetType() (r int, exists bool) {
+func (m *ArticleActionRecordMutation) GetType() (r int32, exists bool) {
 	v := m._type
 	if v == nil {
 		return
@@ -2701,7 +2713,7 @@ func (m *ArticleActionRecordMutation) GetType() (r int, exists bool) {
 // OldType returns the old "type" field's value of the ArticleActionRecord entity.
 // If the ArticleActionRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleActionRecordMutation) OldType(ctx context.Context) (v int, err error) {
+func (m *ArticleActionRecordMutation) OldType(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldType is only allowed on UpdateOne operations")
 	}
@@ -2716,7 +2728,7 @@ func (m *ArticleActionRecordMutation) OldType(ctx context.Context) (v int, err e
 }
 
 // AddType adds i to the "type" field.
-func (m *ArticleActionRecordMutation) AddType(i int) {
+func (m *ArticleActionRecordMutation) AddType(i int32) {
 	if m.add_type != nil {
 		*m.add_type += i
 	} else {
@@ -2725,7 +2737,7 @@ func (m *ArticleActionRecordMutation) AddType(i int) {
 }
 
 // AddedType returns the value that was added to the "type" field in this mutation.
-func (m *ArticleActionRecordMutation) AddedType() (r int, exists bool) {
+func (m *ArticleActionRecordMutation) AddedType() (r int32, exists bool) {
 	v := m.add_type
 	if v == nil {
 		return
@@ -2753,7 +2765,7 @@ func (m *ArticleActionRecordMutation) ArticleCleared() bool {
 // ArticleIDs returns the "article" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ArticleID instead. It exists only for internal usage by the builders.
-func (m *ArticleActionRecordMutation) ArticleIDs() (ids []int) {
+func (m *ArticleActionRecordMutation) ArticleIDs() (ids []int64) {
 	if id := m.article; id != nil {
 		ids = append(ids, *id)
 	}
@@ -2849,21 +2861,21 @@ func (m *ArticleActionRecordMutation) OldField(ctx context.Context, name string)
 func (m *ArticleActionRecordMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articleactionrecord.FieldArticleID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetArticleID(v)
 		return nil
 	case articleactionrecord.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
 		return nil
 	case articleactionrecord.FieldType:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2905,14 +2917,14 @@ func (m *ArticleActionRecordMutation) AddedField(name string) (ent.Value, bool) 
 func (m *ArticleActionRecordMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case articleactionrecord.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUserID(v)
 		return nil
 	case articleactionrecord.FieldType:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3037,23 +3049,23 @@ type ArticleLotteryMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *int
+	id                  *int64
 	prizes              *[]string
 	appendprizes        []string
 	start_at            *time.Time
 	end_at              *time.Time
-	status              *int
-	addstatus           *int
+	status              *int32
+	addstatus           *int32
 	created_at          *time.Time
 	updated_at          *time.Time
 	clearedFields       map[string]struct{}
-	article             *int
+	article             *int64
 	clearedarticle      bool
-	participants        map[int]struct{}
-	removedparticipants map[int]struct{}
+	participants        map[int64]struct{}
+	removedparticipants map[int64]struct{}
 	clearedparticipants bool
-	winners             map[int]struct{}
-	removedwinners      map[int]struct{}
+	winners             map[int64]struct{}
+	removedwinners      map[int64]struct{}
 	clearedwinners      bool
 	done                bool
 	oldValue            func(context.Context) (*ArticleLottery, error)
@@ -3080,7 +3092,7 @@ func newArticleLotteryMutation(c config, op Op, opts ...articlelotteryOption) *A
 }
 
 // withArticleLotteryID sets the ID field of the mutation.
-func withArticleLotteryID(id int) articlelotteryOption {
+func withArticleLotteryID(id int64) articlelotteryOption {
 	return func(m *ArticleLotteryMutation) {
 		var (
 			err   error
@@ -3130,9 +3142,15 @@ func (m ArticleLotteryMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticleLottery entities.
+func (m *ArticleLotteryMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleLotteryMutation) ID() (id int, exists bool) {
+func (m *ArticleLotteryMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3143,12 +3161,12 @@ func (m *ArticleLotteryMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleLotteryMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleLotteryMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3159,12 +3177,12 @@ func (m *ArticleLotteryMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetArticleID sets the "article_id" field.
-func (m *ArticleLotteryMutation) SetArticleID(i int) {
+func (m *ArticleLotteryMutation) SetArticleID(i int64) {
 	m.article = &i
 }
 
 // ArticleID returns the value of the "article_id" field in the mutation.
-func (m *ArticleLotteryMutation) ArticleID() (r int, exists bool) {
+func (m *ArticleLotteryMutation) ArticleID() (r int64, exists bool) {
 	v := m.article
 	if v == nil {
 		return
@@ -3175,7 +3193,7 @@ func (m *ArticleLotteryMutation) ArticleID() (r int, exists bool) {
 // OldArticleID returns the old "article_id" field's value of the ArticleLottery entity.
 // If the ArticleLottery object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleLotteryMutation) OldArticleID(ctx context.Context) (v int, err error) {
+func (m *ArticleLotteryMutation) OldArticleID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldArticleID is only allowed on UpdateOne operations")
 	}
@@ -3358,13 +3376,13 @@ func (m *ArticleLotteryMutation) ResetEndAt() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ArticleLotteryMutation) SetStatus(i int) {
+func (m *ArticleLotteryMutation) SetStatus(i int32) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *ArticleLotteryMutation) Status() (r int, exists bool) {
+func (m *ArticleLotteryMutation) Status() (r int32, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -3375,7 +3393,7 @@ func (m *ArticleLotteryMutation) Status() (r int, exists bool) {
 // OldStatus returns the old "status" field's value of the ArticleLottery entity.
 // If the ArticleLottery object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleLotteryMutation) OldStatus(ctx context.Context) (v int, err error) {
+func (m *ArticleLotteryMutation) OldStatus(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -3390,7 +3408,7 @@ func (m *ArticleLotteryMutation) OldStatus(ctx context.Context) (v int, err erro
 }
 
 // AddStatus adds i to the "status" field.
-func (m *ArticleLotteryMutation) AddStatus(i int) {
+func (m *ArticleLotteryMutation) AddStatus(i int32) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -3399,7 +3417,7 @@ func (m *ArticleLotteryMutation) AddStatus(i int) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *ArticleLotteryMutation) AddedStatus() (r int, exists bool) {
+func (m *ArticleLotteryMutation) AddedStatus() (r int32, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -3525,7 +3543,7 @@ func (m *ArticleLotteryMutation) ArticleCleared() bool {
 // ArticleIDs returns the "article" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ArticleID instead. It exists only for internal usage by the builders.
-func (m *ArticleLotteryMutation) ArticleIDs() (ids []int) {
+func (m *ArticleLotteryMutation) ArticleIDs() (ids []int64) {
 	if id := m.article; id != nil {
 		ids = append(ids, *id)
 	}
@@ -3539,9 +3557,9 @@ func (m *ArticleLotteryMutation) ResetArticle() {
 }
 
 // AddParticipantIDs adds the "participants" edge to the ArticleLotteryParticipant entity by ids.
-func (m *ArticleLotteryMutation) AddParticipantIDs(ids ...int) {
+func (m *ArticleLotteryMutation) AddParticipantIDs(ids ...int64) {
 	if m.participants == nil {
-		m.participants = make(map[int]struct{})
+		m.participants = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.participants[ids[i]] = struct{}{}
@@ -3559,9 +3577,9 @@ func (m *ArticleLotteryMutation) ParticipantsCleared() bool {
 }
 
 // RemoveParticipantIDs removes the "participants" edge to the ArticleLotteryParticipant entity by IDs.
-func (m *ArticleLotteryMutation) RemoveParticipantIDs(ids ...int) {
+func (m *ArticleLotteryMutation) RemoveParticipantIDs(ids ...int64) {
 	if m.removedparticipants == nil {
-		m.removedparticipants = make(map[int]struct{})
+		m.removedparticipants = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.participants, ids[i])
@@ -3570,7 +3588,7 @@ func (m *ArticleLotteryMutation) RemoveParticipantIDs(ids ...int) {
 }
 
 // RemovedParticipants returns the removed IDs of the "participants" edge to the ArticleLotteryParticipant entity.
-func (m *ArticleLotteryMutation) RemovedParticipantsIDs() (ids []int) {
+func (m *ArticleLotteryMutation) RemovedParticipantsIDs() (ids []int64) {
 	for id := range m.removedparticipants {
 		ids = append(ids, id)
 	}
@@ -3578,7 +3596,7 @@ func (m *ArticleLotteryMutation) RemovedParticipantsIDs() (ids []int) {
 }
 
 // ParticipantsIDs returns the "participants" edge IDs in the mutation.
-func (m *ArticleLotteryMutation) ParticipantsIDs() (ids []int) {
+func (m *ArticleLotteryMutation) ParticipantsIDs() (ids []int64) {
 	for id := range m.participants {
 		ids = append(ids, id)
 	}
@@ -3593,9 +3611,9 @@ func (m *ArticleLotteryMutation) ResetParticipants() {
 }
 
 // AddWinnerIDs adds the "winners" edge to the ArticleLotteryWinner entity by ids.
-func (m *ArticleLotteryMutation) AddWinnerIDs(ids ...int) {
+func (m *ArticleLotteryMutation) AddWinnerIDs(ids ...int64) {
 	if m.winners == nil {
-		m.winners = make(map[int]struct{})
+		m.winners = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.winners[ids[i]] = struct{}{}
@@ -3613,9 +3631,9 @@ func (m *ArticleLotteryMutation) WinnersCleared() bool {
 }
 
 // RemoveWinnerIDs removes the "winners" edge to the ArticleLotteryWinner entity by IDs.
-func (m *ArticleLotteryMutation) RemoveWinnerIDs(ids ...int) {
+func (m *ArticleLotteryMutation) RemoveWinnerIDs(ids ...int64) {
 	if m.removedwinners == nil {
-		m.removedwinners = make(map[int]struct{})
+		m.removedwinners = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.winners, ids[i])
@@ -3624,7 +3642,7 @@ func (m *ArticleLotteryMutation) RemoveWinnerIDs(ids ...int) {
 }
 
 // RemovedWinners returns the removed IDs of the "winners" edge to the ArticleLotteryWinner entity.
-func (m *ArticleLotteryMutation) RemovedWinnersIDs() (ids []int) {
+func (m *ArticleLotteryMutation) RemovedWinnersIDs() (ids []int64) {
 	for id := range m.removedwinners {
 		ids = append(ids, id)
 	}
@@ -3632,7 +3650,7 @@ func (m *ArticleLotteryMutation) RemovedWinnersIDs() (ids []int) {
 }
 
 // WinnersIDs returns the "winners" edge IDs in the mutation.
-func (m *ArticleLotteryMutation) WinnersIDs() (ids []int) {
+func (m *ArticleLotteryMutation) WinnersIDs() (ids []int64) {
 	for id := range m.winners {
 		ids = append(ids, id)
 	}
@@ -3757,7 +3775,7 @@ func (m *ArticleLotteryMutation) OldField(ctx context.Context, name string) (ent
 func (m *ArticleLotteryMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articlelottery.FieldArticleID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3785,7 +3803,7 @@ func (m *ArticleLotteryMutation) SetField(name string, value ent.Value) error {
 		m.SetEndAt(v)
 		return nil
 	case articlelottery.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3836,7 +3854,7 @@ func (m *ArticleLotteryMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ArticleLotteryMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case articlelottery.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4060,13 +4078,13 @@ type ArticleLotteryParticipantMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *int
-	user_id        *int
-	adduser_id     *int
+	id             *int64
+	user_id        *int64
+	adduser_id     *int64
 	created_at     *time.Time
 	updated_at     *time.Time
 	clearedFields  map[string]struct{}
-	lottery        *int
+	lottery        *int64
 	clearedlottery bool
 	done           bool
 	oldValue       func(context.Context) (*ArticleLotteryParticipant, error)
@@ -4093,7 +4111,7 @@ func newArticleLotteryParticipantMutation(c config, op Op, opts ...articlelotter
 }
 
 // withArticleLotteryParticipantID sets the ID field of the mutation.
-func withArticleLotteryParticipantID(id int) articlelotteryparticipantOption {
+func withArticleLotteryParticipantID(id int64) articlelotteryparticipantOption {
 	return func(m *ArticleLotteryParticipantMutation) {
 		var (
 			err   error
@@ -4143,9 +4161,15 @@ func (m ArticleLotteryParticipantMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticleLotteryParticipant entities.
+func (m *ArticleLotteryParticipantMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleLotteryParticipantMutation) ID() (id int, exists bool) {
+func (m *ArticleLotteryParticipantMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -4156,12 +4180,12 @@ func (m *ArticleLotteryParticipantMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleLotteryParticipantMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleLotteryParticipantMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4172,12 +4196,12 @@ func (m *ArticleLotteryParticipantMutation) IDs(ctx context.Context) ([]int, err
 }
 
 // SetLotteryID sets the "lottery_id" field.
-func (m *ArticleLotteryParticipantMutation) SetLotteryID(i int) {
+func (m *ArticleLotteryParticipantMutation) SetLotteryID(i int64) {
 	m.lottery = &i
 }
 
 // LotteryID returns the value of the "lottery_id" field in the mutation.
-func (m *ArticleLotteryParticipantMutation) LotteryID() (r int, exists bool) {
+func (m *ArticleLotteryParticipantMutation) LotteryID() (r int64, exists bool) {
 	v := m.lottery
 	if v == nil {
 		return
@@ -4188,7 +4212,7 @@ func (m *ArticleLotteryParticipantMutation) LotteryID() (r int, exists bool) {
 // OldLotteryID returns the old "lottery_id" field's value of the ArticleLotteryParticipant entity.
 // If the ArticleLotteryParticipant object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleLotteryParticipantMutation) OldLotteryID(ctx context.Context) (v int, err error) {
+func (m *ArticleLotteryParticipantMutation) OldLotteryID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLotteryID is only allowed on UpdateOne operations")
 	}
@@ -4208,13 +4232,13 @@ func (m *ArticleLotteryParticipantMutation) ResetLotteryID() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *ArticleLotteryParticipantMutation) SetUserID(i int) {
+func (m *ArticleLotteryParticipantMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleLotteryParticipantMutation) UserID() (r int, exists bool) {
+func (m *ArticleLotteryParticipantMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -4225,7 +4249,7 @@ func (m *ArticleLotteryParticipantMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the ArticleLotteryParticipant entity.
 // If the ArticleLotteryParticipant object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleLotteryParticipantMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *ArticleLotteryParticipantMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -4240,7 +4264,7 @@ func (m *ArticleLotteryParticipantMutation) OldUserID(ctx context.Context) (v in
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *ArticleLotteryParticipantMutation) AddUserID(i int) {
+func (m *ArticleLotteryParticipantMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -4249,7 +4273,7 @@ func (m *ArticleLotteryParticipantMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *ArticleLotteryParticipantMutation) AddedUserID() (r int, exists bool) {
+func (m *ArticleLotteryParticipantMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -4375,7 +4399,7 @@ func (m *ArticleLotteryParticipantMutation) LotteryCleared() bool {
 // LotteryIDs returns the "lottery" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // LotteryID instead. It exists only for internal usage by the builders.
-func (m *ArticleLotteryParticipantMutation) LotteryIDs() (ids []int) {
+func (m *ArticleLotteryParticipantMutation) LotteryIDs() (ids []int64) {
 	if id := m.lottery; id != nil {
 		ids = append(ids, *id)
 	}
@@ -4478,14 +4502,14 @@ func (m *ArticleLotteryParticipantMutation) OldField(ctx context.Context, name s
 func (m *ArticleLotteryParticipantMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articlelotteryparticipant.FieldLotteryID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLotteryID(v)
 		return nil
 	case articlelotteryparticipant.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4536,7 +4560,7 @@ func (m *ArticleLotteryParticipantMutation) AddedField(name string) (ent.Value, 
 func (m *ArticleLotteryParticipantMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case articlelotteryparticipant.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4679,14 +4703,14 @@ type ArticleLotteryWinnerMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *int
-	user_id        *int
-	adduser_id     *int
+	id             *int64
+	user_id        *int64
+	adduser_id     *int64
 	prize          *string
 	created_at     *time.Time
 	updated_at     *time.Time
 	clearedFields  map[string]struct{}
-	lottery        *int
+	lottery        *int64
 	clearedlottery bool
 	done           bool
 	oldValue       func(context.Context) (*ArticleLotteryWinner, error)
@@ -4713,7 +4737,7 @@ func newArticleLotteryWinnerMutation(c config, op Op, opts ...articlelotterywinn
 }
 
 // withArticleLotteryWinnerID sets the ID field of the mutation.
-func withArticleLotteryWinnerID(id int) articlelotterywinnerOption {
+func withArticleLotteryWinnerID(id int64) articlelotterywinnerOption {
 	return func(m *ArticleLotteryWinnerMutation) {
 		var (
 			err   error
@@ -4763,9 +4787,15 @@ func (m ArticleLotteryWinnerMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticleLotteryWinner entities.
+func (m *ArticleLotteryWinnerMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleLotteryWinnerMutation) ID() (id int, exists bool) {
+func (m *ArticleLotteryWinnerMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -4776,12 +4806,12 @@ func (m *ArticleLotteryWinnerMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleLotteryWinnerMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleLotteryWinnerMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4792,12 +4822,12 @@ func (m *ArticleLotteryWinnerMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetLotteryID sets the "lottery_id" field.
-func (m *ArticleLotteryWinnerMutation) SetLotteryID(i int) {
+func (m *ArticleLotteryWinnerMutation) SetLotteryID(i int64) {
 	m.lottery = &i
 }
 
 // LotteryID returns the value of the "lottery_id" field in the mutation.
-func (m *ArticleLotteryWinnerMutation) LotteryID() (r int, exists bool) {
+func (m *ArticleLotteryWinnerMutation) LotteryID() (r int64, exists bool) {
 	v := m.lottery
 	if v == nil {
 		return
@@ -4808,7 +4838,7 @@ func (m *ArticleLotteryWinnerMutation) LotteryID() (r int, exists bool) {
 // OldLotteryID returns the old "lottery_id" field's value of the ArticleLotteryWinner entity.
 // If the ArticleLotteryWinner object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleLotteryWinnerMutation) OldLotteryID(ctx context.Context) (v int, err error) {
+func (m *ArticleLotteryWinnerMutation) OldLotteryID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLotteryID is only allowed on UpdateOne operations")
 	}
@@ -4828,13 +4858,13 @@ func (m *ArticleLotteryWinnerMutation) ResetLotteryID() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *ArticleLotteryWinnerMutation) SetUserID(i int) {
+func (m *ArticleLotteryWinnerMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleLotteryWinnerMutation) UserID() (r int, exists bool) {
+func (m *ArticleLotteryWinnerMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -4845,7 +4875,7 @@ func (m *ArticleLotteryWinnerMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the ArticleLotteryWinner entity.
 // If the ArticleLotteryWinner object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleLotteryWinnerMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *ArticleLotteryWinnerMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -4860,7 +4890,7 @@ func (m *ArticleLotteryWinnerMutation) OldUserID(ctx context.Context) (v int, er
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *ArticleLotteryWinnerMutation) AddUserID(i int) {
+func (m *ArticleLotteryWinnerMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -4869,7 +4899,7 @@ func (m *ArticleLotteryWinnerMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *ArticleLotteryWinnerMutation) AddedUserID() (r int, exists bool) {
+func (m *ArticleLotteryWinnerMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -5031,7 +5061,7 @@ func (m *ArticleLotteryWinnerMutation) LotteryCleared() bool {
 // LotteryIDs returns the "lottery" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // LotteryID instead. It exists only for internal usage by the builders.
-func (m *ArticleLotteryWinnerMutation) LotteryIDs() (ids []int) {
+func (m *ArticleLotteryWinnerMutation) LotteryIDs() (ids []int64) {
 	if id := m.lottery; id != nil {
 		ids = append(ids, *id)
 	}
@@ -5141,14 +5171,14 @@ func (m *ArticleLotteryWinnerMutation) OldField(ctx context.Context, name string
 func (m *ArticleLotteryWinnerMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articlelotterywinner.FieldLotteryID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLotteryID(v)
 		return nil
 	case articlelotterywinner.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5206,7 +5236,7 @@ func (m *ArticleLotteryWinnerMutation) AddedField(name string) (ent.Value, bool)
 func (m *ArticleLotteryWinnerMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case articlelotterywinner.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5352,12 +5382,12 @@ type ArticlePostscriptMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *int
+	id             *int64
 	content        *string
 	created_at     *time.Time
 	updated_at     *time.Time
 	clearedFields  map[string]struct{}
-	article        *int
+	article        *int64
 	clearedarticle bool
 	done           bool
 	oldValue       func(context.Context) (*ArticlePostscript, error)
@@ -5384,7 +5414,7 @@ func newArticlePostscriptMutation(c config, op Op, opts ...articlepostscriptOpti
 }
 
 // withArticlePostscriptID sets the ID field of the mutation.
-func withArticlePostscriptID(id int) articlepostscriptOption {
+func withArticlePostscriptID(id int64) articlepostscriptOption {
 	return func(m *ArticlePostscriptMutation) {
 		var (
 			err   error
@@ -5434,9 +5464,15 @@ func (m ArticlePostscriptMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticlePostscript entities.
+func (m *ArticlePostscriptMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticlePostscriptMutation) ID() (id int, exists bool) {
+func (m *ArticlePostscriptMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -5447,12 +5483,12 @@ func (m *ArticlePostscriptMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticlePostscriptMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticlePostscriptMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -5463,12 +5499,12 @@ func (m *ArticlePostscriptMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetArticleID sets the "article_id" field.
-func (m *ArticlePostscriptMutation) SetArticleID(i int) {
+func (m *ArticlePostscriptMutation) SetArticleID(i int64) {
 	m.article = &i
 }
 
 // ArticleID returns the value of the "article_id" field in the mutation.
-func (m *ArticlePostscriptMutation) ArticleID() (r int, exists bool) {
+func (m *ArticlePostscriptMutation) ArticleID() (r int64, exists bool) {
 	v := m.article
 	if v == nil {
 		return
@@ -5479,7 +5515,7 @@ func (m *ArticlePostscriptMutation) ArticleID() (r int, exists bool) {
 // OldArticleID returns the old "article_id" field's value of the ArticlePostscript entity.
 // If the ArticlePostscript object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticlePostscriptMutation) OldArticleID(ctx context.Context) (v int, err error) {
+func (m *ArticlePostscriptMutation) OldArticleID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldArticleID is only allowed on UpdateOne operations")
 	}
@@ -5646,7 +5682,7 @@ func (m *ArticlePostscriptMutation) ArticleCleared() bool {
 // ArticleIDs returns the "article" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ArticleID instead. It exists only for internal usage by the builders.
-func (m *ArticlePostscriptMutation) ArticleIDs() (ids []int) {
+func (m *ArticlePostscriptMutation) ArticleIDs() (ids []int64) {
 	if id := m.article; id != nil {
 		ids = append(ids, *id)
 	}
@@ -5749,7 +5785,7 @@ func (m *ArticlePostscriptMutation) OldField(ctx context.Context, name string) (
 func (m *ArticlePostscriptMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articlepostscript.FieldArticleID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5938,23 +5974,23 @@ type ArticleVoteMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *int64
 	vote_options       *[]string
 	appendvote_options []string
 	vote_counts        *[]int
 	appendvote_counts  []int
 	vote_multiple      *bool
 	vote_anonymous     *bool
-	total_count        *int
-	addtotal_count     *int
+	total_count        *int32
+	addtotal_count     *int32
 	end_at             *time.Time
 	created_at         *time.Time
 	updated_at         *time.Time
 	clearedFields      map[string]struct{}
-	article            *int
+	article            *int64
 	clearedarticle     bool
-	records            map[int]struct{}
-	removedrecords     map[int]struct{}
+	records            map[int64]struct{}
+	removedrecords     map[int64]struct{}
 	clearedrecords     bool
 	done               bool
 	oldValue           func(context.Context) (*ArticleVote, error)
@@ -5981,7 +6017,7 @@ func newArticleVoteMutation(c config, op Op, opts ...articlevoteOption) *Article
 }
 
 // withArticleVoteID sets the ID field of the mutation.
-func withArticleVoteID(id int) articlevoteOption {
+func withArticleVoteID(id int64) articlevoteOption {
 	return func(m *ArticleVoteMutation) {
 		var (
 			err   error
@@ -6031,9 +6067,15 @@ func (m ArticleVoteMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticleVote entities.
+func (m *ArticleVoteMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleVoteMutation) ID() (id int, exists bool) {
+func (m *ArticleVoteMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -6044,12 +6086,12 @@ func (m *ArticleVoteMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleVoteMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleVoteMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -6060,12 +6102,12 @@ func (m *ArticleVoteMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetArticleID sets the "article_id" field.
-func (m *ArticleVoteMutation) SetArticleID(i int) {
+func (m *ArticleVoteMutation) SetArticleID(i int64) {
 	m.article = &i
 }
 
 // ArticleID returns the value of the "article_id" field in the mutation.
-func (m *ArticleVoteMutation) ArticleID() (r int, exists bool) {
+func (m *ArticleVoteMutation) ArticleID() (r int64, exists bool) {
 	v := m.article
 	if v == nil {
 		return
@@ -6076,7 +6118,7 @@ func (m *ArticleVoteMutation) ArticleID() (r int, exists bool) {
 // OldArticleID returns the old "article_id" field's value of the ArticleVote entity.
 // If the ArticleVote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleVoteMutation) OldArticleID(ctx context.Context) (v int, err error) {
+func (m *ArticleVoteMutation) OldArticleID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldArticleID is only allowed on UpdateOne operations")
 	}
@@ -6298,13 +6340,13 @@ func (m *ArticleVoteMutation) ResetVoteAnonymous() {
 }
 
 // SetTotalCount sets the "total_count" field.
-func (m *ArticleVoteMutation) SetTotalCount(i int) {
+func (m *ArticleVoteMutation) SetTotalCount(i int32) {
 	m.total_count = &i
 	m.addtotal_count = nil
 }
 
 // TotalCount returns the value of the "total_count" field in the mutation.
-func (m *ArticleVoteMutation) TotalCount() (r int, exists bool) {
+func (m *ArticleVoteMutation) TotalCount() (r int32, exists bool) {
 	v := m.total_count
 	if v == nil {
 		return
@@ -6315,7 +6357,7 @@ func (m *ArticleVoteMutation) TotalCount() (r int, exists bool) {
 // OldTotalCount returns the old "total_count" field's value of the ArticleVote entity.
 // If the ArticleVote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleVoteMutation) OldTotalCount(ctx context.Context) (v int, err error) {
+func (m *ArticleVoteMutation) OldTotalCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTotalCount is only allowed on UpdateOne operations")
 	}
@@ -6330,7 +6372,7 @@ func (m *ArticleVoteMutation) OldTotalCount(ctx context.Context) (v int, err err
 }
 
 // AddTotalCount adds i to the "total_count" field.
-func (m *ArticleVoteMutation) AddTotalCount(i int) {
+func (m *ArticleVoteMutation) AddTotalCount(i int32) {
 	if m.addtotal_count != nil {
 		*m.addtotal_count += i
 	} else {
@@ -6339,7 +6381,7 @@ func (m *ArticleVoteMutation) AddTotalCount(i int) {
 }
 
 // AddedTotalCount returns the value that was added to the "total_count" field in this mutation.
-func (m *ArticleVoteMutation) AddedTotalCount() (r int, exists bool) {
+func (m *ArticleVoteMutation) AddedTotalCount() (r int32, exists bool) {
 	v := m.addtotal_count
 	if v == nil {
 		return
@@ -6514,7 +6556,7 @@ func (m *ArticleVoteMutation) ArticleCleared() bool {
 // ArticleIDs returns the "article" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ArticleID instead. It exists only for internal usage by the builders.
-func (m *ArticleVoteMutation) ArticleIDs() (ids []int) {
+func (m *ArticleVoteMutation) ArticleIDs() (ids []int64) {
 	if id := m.article; id != nil {
 		ids = append(ids, *id)
 	}
@@ -6528,9 +6570,9 @@ func (m *ArticleVoteMutation) ResetArticle() {
 }
 
 // AddRecordIDs adds the "records" edge to the ArticleVoteRecord entity by ids.
-func (m *ArticleVoteMutation) AddRecordIDs(ids ...int) {
+func (m *ArticleVoteMutation) AddRecordIDs(ids ...int64) {
 	if m.records == nil {
-		m.records = make(map[int]struct{})
+		m.records = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.records[ids[i]] = struct{}{}
@@ -6548,9 +6590,9 @@ func (m *ArticleVoteMutation) RecordsCleared() bool {
 }
 
 // RemoveRecordIDs removes the "records" edge to the ArticleVoteRecord entity by IDs.
-func (m *ArticleVoteMutation) RemoveRecordIDs(ids ...int) {
+func (m *ArticleVoteMutation) RemoveRecordIDs(ids ...int64) {
 	if m.removedrecords == nil {
-		m.removedrecords = make(map[int]struct{})
+		m.removedrecords = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.records, ids[i])
@@ -6559,7 +6601,7 @@ func (m *ArticleVoteMutation) RemoveRecordIDs(ids ...int) {
 }
 
 // RemovedRecords returns the removed IDs of the "records" edge to the ArticleVoteRecord entity.
-func (m *ArticleVoteMutation) RemovedRecordsIDs() (ids []int) {
+func (m *ArticleVoteMutation) RemovedRecordsIDs() (ids []int64) {
 	for id := range m.removedrecords {
 		ids = append(ids, id)
 	}
@@ -6567,7 +6609,7 @@ func (m *ArticleVoteMutation) RemovedRecordsIDs() (ids []int) {
 }
 
 // RecordsIDs returns the "records" edge IDs in the mutation.
-func (m *ArticleVoteMutation) RecordsIDs() (ids []int) {
+func (m *ArticleVoteMutation) RecordsIDs() (ids []int64) {
 	for id := range m.records {
 		ids = append(ids, id)
 	}
@@ -6706,7 +6748,7 @@ func (m *ArticleVoteMutation) OldField(ctx context.Context, name string) (ent.Va
 func (m *ArticleVoteMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articlevote.FieldArticleID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6741,7 +6783,7 @@ func (m *ArticleVoteMutation) SetField(name string, value ent.Value) error {
 		m.SetVoteAnonymous(v)
 		return nil
 	case articlevote.FieldTotalCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6799,7 +6841,7 @@ func (m *ArticleVoteMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ArticleVoteMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case articlevote.FieldTotalCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -7003,16 +7045,16 @@ type ArticleVoteRecordMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *int
-	user_id         *int
-	adduser_id      *int
-	option_index    *int
-	addoption_index *int
+	id              *int64
+	user_id         *int64
+	adduser_id      *int64
+	option_index    *int32
+	addoption_index *int32
 	anonymous       *bool
 	created_at      *time.Time
 	updated_at      *time.Time
 	clearedFields   map[string]struct{}
-	vote            *int
+	vote            *int64
 	clearedvote     bool
 	done            bool
 	oldValue        func(context.Context) (*ArticleVoteRecord, error)
@@ -7039,7 +7081,7 @@ func newArticleVoteRecordMutation(c config, op Op, opts ...articlevoterecordOpti
 }
 
 // withArticleVoteRecordID sets the ID field of the mutation.
-func withArticleVoteRecordID(id int) articlevoterecordOption {
+func withArticleVoteRecordID(id int64) articlevoterecordOption {
 	return func(m *ArticleVoteRecordMutation) {
 		var (
 			err   error
@@ -7089,9 +7131,15 @@ func (m ArticleVoteRecordMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ArticleVoteRecord entities.
+func (m *ArticleVoteRecordMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ArticleVoteRecordMutation) ID() (id int, exists bool) {
+func (m *ArticleVoteRecordMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -7102,12 +7150,12 @@ func (m *ArticleVoteRecordMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ArticleVoteRecordMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ArticleVoteRecordMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -7118,12 +7166,12 @@ func (m *ArticleVoteRecordMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetVoteID sets the "vote_id" field.
-func (m *ArticleVoteRecordMutation) SetVoteID(i int) {
+func (m *ArticleVoteRecordMutation) SetVoteID(i int64) {
 	m.vote = &i
 }
 
 // VoteID returns the value of the "vote_id" field in the mutation.
-func (m *ArticleVoteRecordMutation) VoteID() (r int, exists bool) {
+func (m *ArticleVoteRecordMutation) VoteID() (r int64, exists bool) {
 	v := m.vote
 	if v == nil {
 		return
@@ -7134,7 +7182,7 @@ func (m *ArticleVoteRecordMutation) VoteID() (r int, exists bool) {
 // OldVoteID returns the old "vote_id" field's value of the ArticleVoteRecord entity.
 // If the ArticleVoteRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleVoteRecordMutation) OldVoteID(ctx context.Context) (v int, err error) {
+func (m *ArticleVoteRecordMutation) OldVoteID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldVoteID is only allowed on UpdateOne operations")
 	}
@@ -7154,13 +7202,13 @@ func (m *ArticleVoteRecordMutation) ResetVoteID() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *ArticleVoteRecordMutation) SetUserID(i int) {
+func (m *ArticleVoteRecordMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleVoteRecordMutation) UserID() (r int, exists bool) {
+func (m *ArticleVoteRecordMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -7171,7 +7219,7 @@ func (m *ArticleVoteRecordMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the ArticleVoteRecord entity.
 // If the ArticleVoteRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleVoteRecordMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *ArticleVoteRecordMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -7186,7 +7234,7 @@ func (m *ArticleVoteRecordMutation) OldUserID(ctx context.Context) (v int, err e
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *ArticleVoteRecordMutation) AddUserID(i int) {
+func (m *ArticleVoteRecordMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -7195,7 +7243,7 @@ func (m *ArticleVoteRecordMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *ArticleVoteRecordMutation) AddedUserID() (r int, exists bool) {
+func (m *ArticleVoteRecordMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -7210,13 +7258,13 @@ func (m *ArticleVoteRecordMutation) ResetUserID() {
 }
 
 // SetOptionIndex sets the "option_index" field.
-func (m *ArticleVoteRecordMutation) SetOptionIndex(i int) {
+func (m *ArticleVoteRecordMutation) SetOptionIndex(i int32) {
 	m.option_index = &i
 	m.addoption_index = nil
 }
 
 // OptionIndex returns the value of the "option_index" field in the mutation.
-func (m *ArticleVoteRecordMutation) OptionIndex() (r int, exists bool) {
+func (m *ArticleVoteRecordMutation) OptionIndex() (r int32, exists bool) {
 	v := m.option_index
 	if v == nil {
 		return
@@ -7227,7 +7275,7 @@ func (m *ArticleVoteRecordMutation) OptionIndex() (r int, exists bool) {
 // OldOptionIndex returns the old "option_index" field's value of the ArticleVoteRecord entity.
 // If the ArticleVoteRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleVoteRecordMutation) OldOptionIndex(ctx context.Context) (v int, err error) {
+func (m *ArticleVoteRecordMutation) OldOptionIndex(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOptionIndex is only allowed on UpdateOne operations")
 	}
@@ -7242,7 +7290,7 @@ func (m *ArticleVoteRecordMutation) OldOptionIndex(ctx context.Context) (v int, 
 }
 
 // AddOptionIndex adds i to the "option_index" field.
-func (m *ArticleVoteRecordMutation) AddOptionIndex(i int) {
+func (m *ArticleVoteRecordMutation) AddOptionIndex(i int32) {
 	if m.addoption_index != nil {
 		*m.addoption_index += i
 	} else {
@@ -7251,7 +7299,7 @@ func (m *ArticleVoteRecordMutation) AddOptionIndex(i int) {
 }
 
 // AddedOptionIndex returns the value that was added to the "option_index" field in this mutation.
-func (m *ArticleVoteRecordMutation) AddedOptionIndex() (r int, exists bool) {
+func (m *ArticleVoteRecordMutation) AddedOptionIndex() (r int32, exists bool) {
 	v := m.addoption_index
 	if v == nil {
 		return
@@ -7413,7 +7461,7 @@ func (m *ArticleVoteRecordMutation) VoteCleared() bool {
 // VoteIDs returns the "vote" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // VoteID instead. It exists only for internal usage by the builders.
-func (m *ArticleVoteRecordMutation) VoteIDs() (ids []int) {
+func (m *ArticleVoteRecordMutation) VoteIDs() (ids []int64) {
 	if id := m.vote; id != nil {
 		ids = append(ids, *id)
 	}
@@ -7530,21 +7578,21 @@ func (m *ArticleVoteRecordMutation) OldField(ctx context.Context, name string) (
 func (m *ArticleVoteRecordMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case articlevoterecord.FieldVoteID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVoteID(v)
 		return nil
 	case articlevoterecord.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
 		return nil
 	case articlevoterecord.FieldOptionIndex:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -7607,14 +7655,14 @@ func (m *ArticleVoteRecordMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ArticleVoteRecordMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case articlevoterecord.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUserID(v)
 		return nil
 	case articlevoterecord.FieldOptionIndex:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -7763,32 +7811,37 @@ type CommentMutation struct {
 	config
 	op                    Op
 	typ                   string
-	id                    *int
-	user_id               *int
-	adduser_id            *int
+	id                    *int64
+	user_id               *int64
+	adduser_id            *int64
 	content               *string
-	level                 *int
-	addlevel              *int
-	status                *int
-	addstatus             *int
-	reply_count           *int
-	addreply_count        *int
-	like_count            *int
-	addlike_count         *int
-	collect_count         *int
-	addcollect_count      *int
+	level                 *int32
+	addlevel              *int32
+	status                *int32
+	addstatus             *int32
+	reply_count           *int32
+	addreply_count        *int32
+	like_count            *int32
+	addlike_count         *int32
+	collect_count         *int32
+	addcollect_count      *int32
 	created_at            *time.Time
 	updated_at            *time.Time
 	clearedFields         map[string]struct{}
-	article               *int
+	article               *int64
 	clearedarticle        bool
-	parent                *int
+	parent                *int64
 	clearedparent         bool
-	replies               map[int]struct{}
-	removedreplies        map[int]struct{}
-	clearedreplies        bool
-	action_records        map[int]struct{}
-	removedaction_records map[int]struct{}
+	parent_replies        map[int64]struct{}
+	removedparent_replies map[int64]struct{}
+	clearedparent_replies bool
+	reply                 *int64
+	clearedreply          bool
+	reply_replies         map[int64]struct{}
+	removedreply_replies  map[int64]struct{}
+	clearedreply_replies  bool
+	action_records        map[int64]struct{}
+	removedaction_records map[int64]struct{}
 	clearedaction_records bool
 	done                  bool
 	oldValue              func(context.Context) (*Comment, error)
@@ -7815,7 +7868,7 @@ func newCommentMutation(c config, op Op, opts ...commentOption) *CommentMutation
 }
 
 // withCommentID sets the ID field of the mutation.
-func withCommentID(id int) commentOption {
+func withCommentID(id int64) commentOption {
 	return func(m *CommentMutation) {
 		var (
 			err   error
@@ -7865,9 +7918,15 @@ func (m CommentMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Comment entities.
+func (m *CommentMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CommentMutation) ID() (id int, exists bool) {
+func (m *CommentMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -7878,12 +7937,12 @@ func (m *CommentMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CommentMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *CommentMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -7894,12 +7953,12 @@ func (m *CommentMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetArticleID sets the "article_id" field.
-func (m *CommentMutation) SetArticleID(i int) {
+func (m *CommentMutation) SetArticleID(i int64) {
 	m.article = &i
 }
 
 // ArticleID returns the value of the "article_id" field in the mutation.
-func (m *CommentMutation) ArticleID() (r int, exists bool) {
+func (m *CommentMutation) ArticleID() (r int64, exists bool) {
 	v := m.article
 	if v == nil {
 		return
@@ -7910,7 +7969,7 @@ func (m *CommentMutation) ArticleID() (r int, exists bool) {
 // OldArticleID returns the old "article_id" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldArticleID(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldArticleID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldArticleID is only allowed on UpdateOne operations")
 	}
@@ -7930,13 +7989,13 @@ func (m *CommentMutation) ResetArticleID() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *CommentMutation) SetUserID(i int) {
+func (m *CommentMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *CommentMutation) UserID() (r int, exists bool) {
+func (m *CommentMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -7947,7 +8006,7 @@ func (m *CommentMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -7962,7 +8021,7 @@ func (m *CommentMutation) OldUserID(ctx context.Context) (v int, err error) {
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *CommentMutation) AddUserID(i int) {
+func (m *CommentMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -7971,7 +8030,7 @@ func (m *CommentMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *CommentMutation) AddedUserID() (r int, exists bool) {
+func (m *CommentMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -8022,13 +8081,13 @@ func (m *CommentMutation) ResetContent() {
 }
 
 // SetLevel sets the "level" field.
-func (m *CommentMutation) SetLevel(i int) {
+func (m *CommentMutation) SetLevel(i int32) {
 	m.level = &i
 	m.addlevel = nil
 }
 
 // Level returns the value of the "level" field in the mutation.
-func (m *CommentMutation) Level() (r int, exists bool) {
+func (m *CommentMutation) Level() (r int32, exists bool) {
 	v := m.level
 	if v == nil {
 		return
@@ -8039,7 +8098,7 @@ func (m *CommentMutation) Level() (r int, exists bool) {
 // OldLevel returns the old "level" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldLevel(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldLevel(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLevel is only allowed on UpdateOne operations")
 	}
@@ -8054,7 +8113,7 @@ func (m *CommentMutation) OldLevel(ctx context.Context) (v int, err error) {
 }
 
 // AddLevel adds i to the "level" field.
-func (m *CommentMutation) AddLevel(i int) {
+func (m *CommentMutation) AddLevel(i int32) {
 	if m.addlevel != nil {
 		*m.addlevel += i
 	} else {
@@ -8063,7 +8122,7 @@ func (m *CommentMutation) AddLevel(i int) {
 }
 
 // AddedLevel returns the value that was added to the "level" field in this mutation.
-func (m *CommentMutation) AddedLevel() (r int, exists bool) {
+func (m *CommentMutation) AddedLevel() (r int32, exists bool) {
 	v := m.addlevel
 	if v == nil {
 		return
@@ -8078,12 +8137,12 @@ func (m *CommentMutation) ResetLevel() {
 }
 
 // SetParentID sets the "parent_id" field.
-func (m *CommentMutation) SetParentID(i int) {
+func (m *CommentMutation) SetParentID(i int64) {
 	m.parent = &i
 }
 
 // ParentID returns the value of the "parent_id" field in the mutation.
-func (m *CommentMutation) ParentID() (r int, exists bool) {
+func (m *CommentMutation) ParentID() (r int64, exists bool) {
 	v := m.parent
 	if v == nil {
 		return
@@ -8094,7 +8153,7 @@ func (m *CommentMutation) ParentID() (r int, exists bool) {
 // OldParentID returns the old "parent_id" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldParentID(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldParentID(ctx context.Context) (v *int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldParentID is only allowed on UpdateOne operations")
 	}
@@ -8126,14 +8185,63 @@ func (m *CommentMutation) ResetParentID() {
 	delete(m.clearedFields, comment.FieldParentID)
 }
 
+// SetReplyID sets the "reply_id" field.
+func (m *CommentMutation) SetReplyID(i int64) {
+	m.reply = &i
+}
+
+// ReplyID returns the value of the "reply_id" field in the mutation.
+func (m *CommentMutation) ReplyID() (r int64, exists bool) {
+	v := m.reply
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReplyID returns the old "reply_id" field's value of the Comment entity.
+// If the Comment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentMutation) OldReplyID(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReplyID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReplyID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReplyID: %w", err)
+	}
+	return oldValue.ReplyID, nil
+}
+
+// ClearReplyID clears the value of the "reply_id" field.
+func (m *CommentMutation) ClearReplyID() {
+	m.reply = nil
+	m.clearedFields[comment.FieldReplyID] = struct{}{}
+}
+
+// ReplyIDCleared returns if the "reply_id" field was cleared in this mutation.
+func (m *CommentMutation) ReplyIDCleared() bool {
+	_, ok := m.clearedFields[comment.FieldReplyID]
+	return ok
+}
+
+// ResetReplyID resets all changes to the "reply_id" field.
+func (m *CommentMutation) ResetReplyID() {
+	m.reply = nil
+	delete(m.clearedFields, comment.FieldReplyID)
+}
+
 // SetStatus sets the "status" field.
-func (m *CommentMutation) SetStatus(i int) {
+func (m *CommentMutation) SetStatus(i int32) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *CommentMutation) Status() (r int, exists bool) {
+func (m *CommentMutation) Status() (r int32, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -8144,7 +8252,7 @@ func (m *CommentMutation) Status() (r int, exists bool) {
 // OldStatus returns the old "status" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldStatus(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldStatus(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -8159,7 +8267,7 @@ func (m *CommentMutation) OldStatus(ctx context.Context) (v int, err error) {
 }
 
 // AddStatus adds i to the "status" field.
-func (m *CommentMutation) AddStatus(i int) {
+func (m *CommentMutation) AddStatus(i int32) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -8168,7 +8276,7 @@ func (m *CommentMutation) AddStatus(i int) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *CommentMutation) AddedStatus() (r int, exists bool) {
+func (m *CommentMutation) AddedStatus() (r int32, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -8183,13 +8291,13 @@ func (m *CommentMutation) ResetStatus() {
 }
 
 // SetReplyCount sets the "reply_count" field.
-func (m *CommentMutation) SetReplyCount(i int) {
+func (m *CommentMutation) SetReplyCount(i int32) {
 	m.reply_count = &i
 	m.addreply_count = nil
 }
 
 // ReplyCount returns the value of the "reply_count" field in the mutation.
-func (m *CommentMutation) ReplyCount() (r int, exists bool) {
+func (m *CommentMutation) ReplyCount() (r int32, exists bool) {
 	v := m.reply_count
 	if v == nil {
 		return
@@ -8200,7 +8308,7 @@ func (m *CommentMutation) ReplyCount() (r int, exists bool) {
 // OldReplyCount returns the old "reply_count" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldReplyCount(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldReplyCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldReplyCount is only allowed on UpdateOne operations")
 	}
@@ -8215,7 +8323,7 @@ func (m *CommentMutation) OldReplyCount(ctx context.Context) (v int, err error) 
 }
 
 // AddReplyCount adds i to the "reply_count" field.
-func (m *CommentMutation) AddReplyCount(i int) {
+func (m *CommentMutation) AddReplyCount(i int32) {
 	if m.addreply_count != nil {
 		*m.addreply_count += i
 	} else {
@@ -8224,7 +8332,7 @@ func (m *CommentMutation) AddReplyCount(i int) {
 }
 
 // AddedReplyCount returns the value that was added to the "reply_count" field in this mutation.
-func (m *CommentMutation) AddedReplyCount() (r int, exists bool) {
+func (m *CommentMutation) AddedReplyCount() (r int32, exists bool) {
 	v := m.addreply_count
 	if v == nil {
 		return
@@ -8239,13 +8347,13 @@ func (m *CommentMutation) ResetReplyCount() {
 }
 
 // SetLikeCount sets the "like_count" field.
-func (m *CommentMutation) SetLikeCount(i int) {
+func (m *CommentMutation) SetLikeCount(i int32) {
 	m.like_count = &i
 	m.addlike_count = nil
 }
 
 // LikeCount returns the value of the "like_count" field in the mutation.
-func (m *CommentMutation) LikeCount() (r int, exists bool) {
+func (m *CommentMutation) LikeCount() (r int32, exists bool) {
 	v := m.like_count
 	if v == nil {
 		return
@@ -8256,7 +8364,7 @@ func (m *CommentMutation) LikeCount() (r int, exists bool) {
 // OldLikeCount returns the old "like_count" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldLikeCount(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldLikeCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLikeCount is only allowed on UpdateOne operations")
 	}
@@ -8271,7 +8379,7 @@ func (m *CommentMutation) OldLikeCount(ctx context.Context) (v int, err error) {
 }
 
 // AddLikeCount adds i to the "like_count" field.
-func (m *CommentMutation) AddLikeCount(i int) {
+func (m *CommentMutation) AddLikeCount(i int32) {
 	if m.addlike_count != nil {
 		*m.addlike_count += i
 	} else {
@@ -8280,7 +8388,7 @@ func (m *CommentMutation) AddLikeCount(i int) {
 }
 
 // AddedLikeCount returns the value that was added to the "like_count" field in this mutation.
-func (m *CommentMutation) AddedLikeCount() (r int, exists bool) {
+func (m *CommentMutation) AddedLikeCount() (r int32, exists bool) {
 	v := m.addlike_count
 	if v == nil {
 		return
@@ -8295,13 +8403,13 @@ func (m *CommentMutation) ResetLikeCount() {
 }
 
 // SetCollectCount sets the "collect_count" field.
-func (m *CommentMutation) SetCollectCount(i int) {
+func (m *CommentMutation) SetCollectCount(i int32) {
 	m.collect_count = &i
 	m.addcollect_count = nil
 }
 
 // CollectCount returns the value of the "collect_count" field in the mutation.
-func (m *CommentMutation) CollectCount() (r int, exists bool) {
+func (m *CommentMutation) CollectCount() (r int32, exists bool) {
 	v := m.collect_count
 	if v == nil {
 		return
@@ -8312,7 +8420,7 @@ func (m *CommentMutation) CollectCount() (r int, exists bool) {
 // OldCollectCount returns the old "collect_count" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldCollectCount(ctx context.Context) (v int, err error) {
+func (m *CommentMutation) OldCollectCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCollectCount is only allowed on UpdateOne operations")
 	}
@@ -8327,7 +8435,7 @@ func (m *CommentMutation) OldCollectCount(ctx context.Context) (v int, err error
 }
 
 // AddCollectCount adds i to the "collect_count" field.
-func (m *CommentMutation) AddCollectCount(i int) {
+func (m *CommentMutation) AddCollectCount(i int32) {
 	if m.addcollect_count != nil {
 		*m.addcollect_count += i
 	} else {
@@ -8336,7 +8444,7 @@ func (m *CommentMutation) AddCollectCount(i int) {
 }
 
 // AddedCollectCount returns the value that was added to the "collect_count" field in this mutation.
-func (m *CommentMutation) AddedCollectCount() (r int, exists bool) {
+func (m *CommentMutation) AddedCollectCount() (r int32, exists bool) {
 	v := m.addcollect_count
 	if v == nil {
 		return
@@ -8462,7 +8570,7 @@ func (m *CommentMutation) ArticleCleared() bool {
 // ArticleIDs returns the "article" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ArticleID instead. It exists only for internal usage by the builders.
-func (m *CommentMutation) ArticleIDs() (ids []int) {
+func (m *CommentMutation) ArticleIDs() (ids []int64) {
 	if id := m.article; id != nil {
 		ids = append(ids, *id)
 	}
@@ -8489,7 +8597,7 @@ func (m *CommentMutation) ParentCleared() bool {
 // ParentIDs returns the "parent" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ParentID instead. It exists only for internal usage by the builders.
-func (m *CommentMutation) ParentIDs() (ids []int) {
+func (m *CommentMutation) ParentIDs() (ids []int64) {
 	if id := m.parent; id != nil {
 		ids = append(ids, *id)
 	}
@@ -8502,64 +8610,145 @@ func (m *CommentMutation) ResetParent() {
 	m.clearedparent = false
 }
 
-// AddReplyIDs adds the "replies" edge to the Comment entity by ids.
-func (m *CommentMutation) AddReplyIDs(ids ...int) {
-	if m.replies == nil {
-		m.replies = make(map[int]struct{})
+// AddParentReplyIDs adds the "parent_replies" edge to the Comment entity by ids.
+func (m *CommentMutation) AddParentReplyIDs(ids ...int64) {
+	if m.parent_replies == nil {
+		m.parent_replies = make(map[int64]struct{})
 	}
 	for i := range ids {
-		m.replies[ids[i]] = struct{}{}
+		m.parent_replies[ids[i]] = struct{}{}
 	}
 }
 
-// ClearReplies clears the "replies" edge to the Comment entity.
-func (m *CommentMutation) ClearReplies() {
-	m.clearedreplies = true
+// ClearParentReplies clears the "parent_replies" edge to the Comment entity.
+func (m *CommentMutation) ClearParentReplies() {
+	m.clearedparent_replies = true
 }
 
-// RepliesCleared reports if the "replies" edge to the Comment entity was cleared.
-func (m *CommentMutation) RepliesCleared() bool {
-	return m.clearedreplies
+// ParentRepliesCleared reports if the "parent_replies" edge to the Comment entity was cleared.
+func (m *CommentMutation) ParentRepliesCleared() bool {
+	return m.clearedparent_replies
 }
 
-// RemoveReplyIDs removes the "replies" edge to the Comment entity by IDs.
-func (m *CommentMutation) RemoveReplyIDs(ids ...int) {
-	if m.removedreplies == nil {
-		m.removedreplies = make(map[int]struct{})
+// RemoveParentReplyIDs removes the "parent_replies" edge to the Comment entity by IDs.
+func (m *CommentMutation) RemoveParentReplyIDs(ids ...int64) {
+	if m.removedparent_replies == nil {
+		m.removedparent_replies = make(map[int64]struct{})
 	}
 	for i := range ids {
-		delete(m.replies, ids[i])
-		m.removedreplies[ids[i]] = struct{}{}
+		delete(m.parent_replies, ids[i])
+		m.removedparent_replies[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedReplies returns the removed IDs of the "replies" edge to the Comment entity.
-func (m *CommentMutation) RemovedRepliesIDs() (ids []int) {
-	for id := range m.removedreplies {
+// RemovedParentReplies returns the removed IDs of the "parent_replies" edge to the Comment entity.
+func (m *CommentMutation) RemovedParentRepliesIDs() (ids []int64) {
+	for id := range m.removedparent_replies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// RepliesIDs returns the "replies" edge IDs in the mutation.
-func (m *CommentMutation) RepliesIDs() (ids []int) {
-	for id := range m.replies {
+// ParentRepliesIDs returns the "parent_replies" edge IDs in the mutation.
+func (m *CommentMutation) ParentRepliesIDs() (ids []int64) {
+	for id := range m.parent_replies {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetReplies resets all changes to the "replies" edge.
-func (m *CommentMutation) ResetReplies() {
-	m.replies = nil
-	m.clearedreplies = false
-	m.removedreplies = nil
+// ResetParentReplies resets all changes to the "parent_replies" edge.
+func (m *CommentMutation) ResetParentReplies() {
+	m.parent_replies = nil
+	m.clearedparent_replies = false
+	m.removedparent_replies = nil
+}
+
+// ClearReply clears the "reply" edge to the Comment entity.
+func (m *CommentMutation) ClearReply() {
+	m.clearedreply = true
+	m.clearedFields[comment.FieldReplyID] = struct{}{}
+}
+
+// ReplyCleared reports if the "reply" edge to the Comment entity was cleared.
+func (m *CommentMutation) ReplyCleared() bool {
+	return m.ReplyIDCleared() || m.clearedreply
+}
+
+// ReplyIDs returns the "reply" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReplyID instead. It exists only for internal usage by the builders.
+func (m *CommentMutation) ReplyIDs() (ids []int64) {
+	if id := m.reply; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetReply resets all changes to the "reply" edge.
+func (m *CommentMutation) ResetReply() {
+	m.reply = nil
+	m.clearedreply = false
+}
+
+// AddReplyReplyIDs adds the "reply_replies" edge to the Comment entity by ids.
+func (m *CommentMutation) AddReplyReplyIDs(ids ...int64) {
+	if m.reply_replies == nil {
+		m.reply_replies = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.reply_replies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearReplyReplies clears the "reply_replies" edge to the Comment entity.
+func (m *CommentMutation) ClearReplyReplies() {
+	m.clearedreply_replies = true
+}
+
+// ReplyRepliesCleared reports if the "reply_replies" edge to the Comment entity was cleared.
+func (m *CommentMutation) ReplyRepliesCleared() bool {
+	return m.clearedreply_replies
+}
+
+// RemoveReplyReplyIDs removes the "reply_replies" edge to the Comment entity by IDs.
+func (m *CommentMutation) RemoveReplyReplyIDs(ids ...int64) {
+	if m.removedreply_replies == nil {
+		m.removedreply_replies = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.reply_replies, ids[i])
+		m.removedreply_replies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedReplyReplies returns the removed IDs of the "reply_replies" edge to the Comment entity.
+func (m *CommentMutation) RemovedReplyRepliesIDs() (ids []int64) {
+	for id := range m.removedreply_replies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ReplyRepliesIDs returns the "reply_replies" edge IDs in the mutation.
+func (m *CommentMutation) ReplyRepliesIDs() (ids []int64) {
+	for id := range m.reply_replies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetReplyReplies resets all changes to the "reply_replies" edge.
+func (m *CommentMutation) ResetReplyReplies() {
+	m.reply_replies = nil
+	m.clearedreply_replies = false
+	m.removedreply_replies = nil
 }
 
 // AddActionRecordIDs adds the "action_records" edge to the CommentActionRecord entity by ids.
-func (m *CommentMutation) AddActionRecordIDs(ids ...int) {
+func (m *CommentMutation) AddActionRecordIDs(ids ...int64) {
 	if m.action_records == nil {
-		m.action_records = make(map[int]struct{})
+		m.action_records = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.action_records[ids[i]] = struct{}{}
@@ -8577,9 +8766,9 @@ func (m *CommentMutation) ActionRecordsCleared() bool {
 }
 
 // RemoveActionRecordIDs removes the "action_records" edge to the CommentActionRecord entity by IDs.
-func (m *CommentMutation) RemoveActionRecordIDs(ids ...int) {
+func (m *CommentMutation) RemoveActionRecordIDs(ids ...int64) {
 	if m.removedaction_records == nil {
-		m.removedaction_records = make(map[int]struct{})
+		m.removedaction_records = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.action_records, ids[i])
@@ -8588,7 +8777,7 @@ func (m *CommentMutation) RemoveActionRecordIDs(ids ...int) {
 }
 
 // RemovedActionRecords returns the removed IDs of the "action_records" edge to the CommentActionRecord entity.
-func (m *CommentMutation) RemovedActionRecordsIDs() (ids []int) {
+func (m *CommentMutation) RemovedActionRecordsIDs() (ids []int64) {
 	for id := range m.removedaction_records {
 		ids = append(ids, id)
 	}
@@ -8596,7 +8785,7 @@ func (m *CommentMutation) RemovedActionRecordsIDs() (ids []int) {
 }
 
 // ActionRecordsIDs returns the "action_records" edge IDs in the mutation.
-func (m *CommentMutation) ActionRecordsIDs() (ids []int) {
+func (m *CommentMutation) ActionRecordsIDs() (ids []int64) {
 	for id := range m.action_records {
 		ids = append(ids, id)
 	}
@@ -8644,7 +8833,7 @@ func (m *CommentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CommentMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.article != nil {
 		fields = append(fields, comment.FieldArticleID)
 	}
@@ -8659,6 +8848,9 @@ func (m *CommentMutation) Fields() []string {
 	}
 	if m.parent != nil {
 		fields = append(fields, comment.FieldParentID)
+	}
+	if m.reply != nil {
+		fields = append(fields, comment.FieldReplyID)
 	}
 	if m.status != nil {
 		fields = append(fields, comment.FieldStatus)
@@ -8696,6 +8888,8 @@ func (m *CommentMutation) Field(name string) (ent.Value, bool) {
 		return m.Level()
 	case comment.FieldParentID:
 		return m.ParentID()
+	case comment.FieldReplyID:
+		return m.ReplyID()
 	case comment.FieldStatus:
 		return m.Status()
 	case comment.FieldReplyCount:
@@ -8727,6 +8921,8 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldLevel(ctx)
 	case comment.FieldParentID:
 		return m.OldParentID(ctx)
+	case comment.FieldReplyID:
+		return m.OldReplyID(ctx)
 	case comment.FieldStatus:
 		return m.OldStatus(ctx)
 	case comment.FieldReplyCount:
@@ -8749,14 +8945,14 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 func (m *CommentMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case comment.FieldArticleID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetArticleID(v)
 		return nil
 	case comment.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -8770,42 +8966,49 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 		m.SetContent(v)
 		return nil
 	case comment.FieldLevel:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLevel(v)
 		return nil
 	case comment.FieldParentID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetParentID(v)
 		return nil
+	case comment.FieldReplyID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReplyID(v)
+		return nil
 	case comment.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
 		return nil
 	case comment.FieldReplyCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetReplyCount(v)
 		return nil
 	case comment.FieldLikeCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLikeCount(v)
 		return nil
 	case comment.FieldCollectCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -8881,42 +9084,42 @@ func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
 func (m *CommentMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case comment.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUserID(v)
 		return nil
 	case comment.FieldLevel:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLevel(v)
 		return nil
 	case comment.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
 		return nil
 	case comment.FieldReplyCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddReplyCount(v)
 		return nil
 	case comment.FieldLikeCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddLikeCount(v)
 		return nil
 	case comment.FieldCollectCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -8932,6 +9135,9 @@ func (m *CommentMutation) ClearedFields() []string {
 	var fields []string
 	if m.FieldCleared(comment.FieldParentID) {
 		fields = append(fields, comment.FieldParentID)
+	}
+	if m.FieldCleared(comment.FieldReplyID) {
+		fields = append(fields, comment.FieldReplyID)
 	}
 	if m.FieldCleared(comment.FieldCreatedAt) {
 		fields = append(fields, comment.FieldCreatedAt)
@@ -8955,6 +9161,9 @@ func (m *CommentMutation) ClearField(name string) error {
 	switch name {
 	case comment.FieldParentID:
 		m.ClearParentID()
+		return nil
+	case comment.FieldReplyID:
+		m.ClearReplyID()
 		return nil
 	case comment.FieldCreatedAt:
 		m.ClearCreatedAt()
@@ -8985,6 +9194,9 @@ func (m *CommentMutation) ResetField(name string) error {
 	case comment.FieldParentID:
 		m.ResetParentID()
 		return nil
+	case comment.FieldReplyID:
+		m.ResetReplyID()
+		return nil
 	case comment.FieldStatus:
 		m.ResetStatus()
 		return nil
@@ -9009,15 +9221,21 @@ func (m *CommentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CommentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.article != nil {
 		edges = append(edges, comment.EdgeArticle)
 	}
 	if m.parent != nil {
 		edges = append(edges, comment.EdgeParent)
 	}
-	if m.replies != nil {
-		edges = append(edges, comment.EdgeReplies)
+	if m.parent_replies != nil {
+		edges = append(edges, comment.EdgeParentReplies)
+	}
+	if m.reply != nil {
+		edges = append(edges, comment.EdgeReply)
+	}
+	if m.reply_replies != nil {
+		edges = append(edges, comment.EdgeReplyReplies)
 	}
 	if m.action_records != nil {
 		edges = append(edges, comment.EdgeActionRecords)
@@ -9037,9 +9255,19 @@ func (m *CommentMutation) AddedIDs(name string) []ent.Value {
 		if id := m.parent; id != nil {
 			return []ent.Value{*id}
 		}
-	case comment.EdgeReplies:
-		ids := make([]ent.Value, 0, len(m.replies))
-		for id := range m.replies {
+	case comment.EdgeParentReplies:
+		ids := make([]ent.Value, 0, len(m.parent_replies))
+		for id := range m.parent_replies {
+			ids = append(ids, id)
+		}
+		return ids
+	case comment.EdgeReply:
+		if id := m.reply; id != nil {
+			return []ent.Value{*id}
+		}
+	case comment.EdgeReplyReplies:
+		ids := make([]ent.Value, 0, len(m.reply_replies))
+		for id := range m.reply_replies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -9055,9 +9283,12 @@ func (m *CommentMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CommentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
-	if m.removedreplies != nil {
-		edges = append(edges, comment.EdgeReplies)
+	edges := make([]string, 0, 6)
+	if m.removedparent_replies != nil {
+		edges = append(edges, comment.EdgeParentReplies)
+	}
+	if m.removedreply_replies != nil {
+		edges = append(edges, comment.EdgeReplyReplies)
 	}
 	if m.removedaction_records != nil {
 		edges = append(edges, comment.EdgeActionRecords)
@@ -9069,9 +9300,15 @@ func (m *CommentMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *CommentMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case comment.EdgeReplies:
-		ids := make([]ent.Value, 0, len(m.removedreplies))
-		for id := range m.removedreplies {
+	case comment.EdgeParentReplies:
+		ids := make([]ent.Value, 0, len(m.removedparent_replies))
+		for id := range m.removedparent_replies {
+			ids = append(ids, id)
+		}
+		return ids
+	case comment.EdgeReplyReplies:
+		ids := make([]ent.Value, 0, len(m.removedreply_replies))
+		for id := range m.removedreply_replies {
 			ids = append(ids, id)
 		}
 		return ids
@@ -9087,15 +9324,21 @@ func (m *CommentMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CommentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.clearedarticle {
 		edges = append(edges, comment.EdgeArticle)
 	}
 	if m.clearedparent {
 		edges = append(edges, comment.EdgeParent)
 	}
-	if m.clearedreplies {
-		edges = append(edges, comment.EdgeReplies)
+	if m.clearedparent_replies {
+		edges = append(edges, comment.EdgeParentReplies)
+	}
+	if m.clearedreply {
+		edges = append(edges, comment.EdgeReply)
+	}
+	if m.clearedreply_replies {
+		edges = append(edges, comment.EdgeReplyReplies)
 	}
 	if m.clearedaction_records {
 		edges = append(edges, comment.EdgeActionRecords)
@@ -9111,8 +9354,12 @@ func (m *CommentMutation) EdgeCleared(name string) bool {
 		return m.clearedarticle
 	case comment.EdgeParent:
 		return m.clearedparent
-	case comment.EdgeReplies:
-		return m.clearedreplies
+	case comment.EdgeParentReplies:
+		return m.clearedparent_replies
+	case comment.EdgeReply:
+		return m.clearedreply
+	case comment.EdgeReplyReplies:
+		return m.clearedreply_replies
 	case comment.EdgeActionRecords:
 		return m.clearedaction_records
 	}
@@ -9129,6 +9376,9 @@ func (m *CommentMutation) ClearEdge(name string) error {
 	case comment.EdgeParent:
 		m.ClearParent()
 		return nil
+	case comment.EdgeReply:
+		m.ClearReply()
+		return nil
 	}
 	return fmt.Errorf("unknown Comment unique edge %s", name)
 }
@@ -9143,8 +9393,14 @@ func (m *CommentMutation) ResetEdge(name string) error {
 	case comment.EdgeParent:
 		m.ResetParent()
 		return nil
-	case comment.EdgeReplies:
-		m.ResetReplies()
+	case comment.EdgeParentReplies:
+		m.ResetParentReplies()
+		return nil
+	case comment.EdgeReply:
+		m.ResetReply()
+		return nil
+	case comment.EdgeReplyReplies:
+		m.ResetReplyReplies()
 		return nil
 	case comment.EdgeActionRecords:
 		m.ResetActionRecords()
@@ -9158,13 +9414,13 @@ type CommentActionRecordMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *int
-	user_id        *int
-	adduser_id     *int
-	_type          *int
-	add_type       *int
+	id             *int64
+	user_id        *int64
+	adduser_id     *int64
+	_type          *int32
+	add_type       *int32
 	clearedFields  map[string]struct{}
-	comment        *int
+	comment        *int64
 	clearedcomment bool
 	done           bool
 	oldValue       func(context.Context) (*CommentActionRecord, error)
@@ -9191,7 +9447,7 @@ func newCommentActionRecordMutation(c config, op Op, opts ...commentactionrecord
 }
 
 // withCommentActionRecordID sets the ID field of the mutation.
-func withCommentActionRecordID(id int) commentactionrecordOption {
+func withCommentActionRecordID(id int64) commentactionrecordOption {
 	return func(m *CommentActionRecordMutation) {
 		var (
 			err   error
@@ -9241,9 +9497,15 @@ func (m CommentActionRecordMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of CommentActionRecord entities.
+func (m *CommentActionRecordMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CommentActionRecordMutation) ID() (id int, exists bool) {
+func (m *CommentActionRecordMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -9254,12 +9516,12 @@ func (m *CommentActionRecordMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CommentActionRecordMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *CommentActionRecordMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -9270,12 +9532,12 @@ func (m *CommentActionRecordMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetCommentID sets the "comment_id" field.
-func (m *CommentActionRecordMutation) SetCommentID(i int) {
+func (m *CommentActionRecordMutation) SetCommentID(i int64) {
 	m.comment = &i
 }
 
 // CommentID returns the value of the "comment_id" field in the mutation.
-func (m *CommentActionRecordMutation) CommentID() (r int, exists bool) {
+func (m *CommentActionRecordMutation) CommentID() (r int64, exists bool) {
 	v := m.comment
 	if v == nil {
 		return
@@ -9286,7 +9548,7 @@ func (m *CommentActionRecordMutation) CommentID() (r int, exists bool) {
 // OldCommentID returns the old "comment_id" field's value of the CommentActionRecord entity.
 // If the CommentActionRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentActionRecordMutation) OldCommentID(ctx context.Context) (v int, err error) {
+func (m *CommentActionRecordMutation) OldCommentID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCommentID is only allowed on UpdateOne operations")
 	}
@@ -9306,13 +9568,13 @@ func (m *CommentActionRecordMutation) ResetCommentID() {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *CommentActionRecordMutation) SetUserID(i int) {
+func (m *CommentActionRecordMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *CommentActionRecordMutation) UserID() (r int, exists bool) {
+func (m *CommentActionRecordMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -9323,7 +9585,7 @@ func (m *CommentActionRecordMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the CommentActionRecord entity.
 // If the CommentActionRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentActionRecordMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *CommentActionRecordMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -9338,7 +9600,7 @@ func (m *CommentActionRecordMutation) OldUserID(ctx context.Context) (v int, err
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *CommentActionRecordMutation) AddUserID(i int) {
+func (m *CommentActionRecordMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -9347,7 +9609,7 @@ func (m *CommentActionRecordMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *CommentActionRecordMutation) AddedUserID() (r int, exists bool) {
+func (m *CommentActionRecordMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -9362,13 +9624,13 @@ func (m *CommentActionRecordMutation) ResetUserID() {
 }
 
 // SetType sets the "type" field.
-func (m *CommentActionRecordMutation) SetType(i int) {
+func (m *CommentActionRecordMutation) SetType(i int32) {
 	m._type = &i
 	m.add_type = nil
 }
 
 // GetType returns the value of the "type" field in the mutation.
-func (m *CommentActionRecordMutation) GetType() (r int, exists bool) {
+func (m *CommentActionRecordMutation) GetType() (r int32, exists bool) {
 	v := m._type
 	if v == nil {
 		return
@@ -9379,7 +9641,7 @@ func (m *CommentActionRecordMutation) GetType() (r int, exists bool) {
 // OldType returns the old "type" field's value of the CommentActionRecord entity.
 // If the CommentActionRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentActionRecordMutation) OldType(ctx context.Context) (v int, err error) {
+func (m *CommentActionRecordMutation) OldType(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldType is only allowed on UpdateOne operations")
 	}
@@ -9394,7 +9656,7 @@ func (m *CommentActionRecordMutation) OldType(ctx context.Context) (v int, err e
 }
 
 // AddType adds i to the "type" field.
-func (m *CommentActionRecordMutation) AddType(i int) {
+func (m *CommentActionRecordMutation) AddType(i int32) {
 	if m.add_type != nil {
 		*m.add_type += i
 	} else {
@@ -9403,7 +9665,7 @@ func (m *CommentActionRecordMutation) AddType(i int) {
 }
 
 // AddedType returns the value that was added to the "type" field in this mutation.
-func (m *CommentActionRecordMutation) AddedType() (r int, exists bool) {
+func (m *CommentActionRecordMutation) AddedType() (r int32, exists bool) {
 	v := m.add_type
 	if v == nil {
 		return
@@ -9431,7 +9693,7 @@ func (m *CommentActionRecordMutation) CommentCleared() bool {
 // CommentIDs returns the "comment" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // CommentID instead. It exists only for internal usage by the builders.
-func (m *CommentActionRecordMutation) CommentIDs() (ids []int) {
+func (m *CommentActionRecordMutation) CommentIDs() (ids []int64) {
 	if id := m.comment; id != nil {
 		ids = append(ids, *id)
 	}
@@ -9527,21 +9789,21 @@ func (m *CommentActionRecordMutation) OldField(ctx context.Context, name string)
 func (m *CommentActionRecordMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case commentactionrecord.FieldCommentID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCommentID(v)
 		return nil
 	case commentactionrecord.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
 		return nil
 	case commentactionrecord.FieldType:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -9583,14 +9845,14 @@ func (m *CommentActionRecordMutation) AddedField(name string) (ent.Value, bool) 
 func (m *CommentActionRecordMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case commentactionrecord.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUserID(v)
 		return nil
 	case commentactionrecord.FieldType:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -9715,21 +9977,21 @@ type DomainMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *int64
 	name          *string
 	description   *string
-	status        *int
-	addstatus     *int
+	status        *int32
+	addstatus     *int32
 	url           *string
 	icon          *string
-	tag_count     *int
-	addtag_count  *int
+	tag_count     *int32
+	addtag_count  *int32
 	is_nav        *bool
 	created_at    *time.Time
 	updated_at    *time.Time
 	clearedFields map[string]struct{}
-	tags          map[int]struct{}
-	removedtags   map[int]struct{}
+	tags          map[int64]struct{}
+	removedtags   map[int64]struct{}
 	clearedtags   bool
 	done          bool
 	oldValue      func(context.Context) (*Domain, error)
@@ -9756,7 +10018,7 @@ func newDomainMutation(c config, op Op, opts ...domainOption) *DomainMutation {
 }
 
 // withDomainID sets the ID field of the mutation.
-func withDomainID(id int) domainOption {
+func withDomainID(id int64) domainOption {
 	return func(m *DomainMutation) {
 		var (
 			err   error
@@ -9806,9 +10068,15 @@ func (m DomainMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Domain entities.
+func (m *DomainMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *DomainMutation) ID() (id int, exists bool) {
+func (m *DomainMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -9819,12 +10087,12 @@ func (m *DomainMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *DomainMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *DomainMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -9907,13 +10175,13 @@ func (m *DomainMutation) ResetDescription() {
 }
 
 // SetStatus sets the "status" field.
-func (m *DomainMutation) SetStatus(i int) {
+func (m *DomainMutation) SetStatus(i int32) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *DomainMutation) Status() (r int, exists bool) {
+func (m *DomainMutation) Status() (r int32, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -9924,7 +10192,7 @@ func (m *DomainMutation) Status() (r int, exists bool) {
 // OldStatus returns the old "status" field's value of the Domain entity.
 // If the Domain object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DomainMutation) OldStatus(ctx context.Context) (v int, err error) {
+func (m *DomainMutation) OldStatus(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -9939,7 +10207,7 @@ func (m *DomainMutation) OldStatus(ctx context.Context) (v int, err error) {
 }
 
 // AddStatus adds i to the "status" field.
-func (m *DomainMutation) AddStatus(i int) {
+func (m *DomainMutation) AddStatus(i int32) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -9948,7 +10216,7 @@ func (m *DomainMutation) AddStatus(i int) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *DomainMutation) AddedStatus() (r int, exists bool) {
+func (m *DomainMutation) AddedStatus() (r int32, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -10075,13 +10343,13 @@ func (m *DomainMutation) ResetIcon() {
 }
 
 // SetTagCount sets the "tag_count" field.
-func (m *DomainMutation) SetTagCount(i int) {
+func (m *DomainMutation) SetTagCount(i int32) {
 	m.tag_count = &i
 	m.addtag_count = nil
 }
 
 // TagCount returns the value of the "tag_count" field in the mutation.
-func (m *DomainMutation) TagCount() (r int, exists bool) {
+func (m *DomainMutation) TagCount() (r int32, exists bool) {
 	v := m.tag_count
 	if v == nil {
 		return
@@ -10092,7 +10360,7 @@ func (m *DomainMutation) TagCount() (r int, exists bool) {
 // OldTagCount returns the old "tag_count" field's value of the Domain entity.
 // If the Domain object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DomainMutation) OldTagCount(ctx context.Context) (v int, err error) {
+func (m *DomainMutation) OldTagCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTagCount is only allowed on UpdateOne operations")
 	}
@@ -10107,7 +10375,7 @@ func (m *DomainMutation) OldTagCount(ctx context.Context) (v int, err error) {
 }
 
 // AddTagCount adds i to the "tag_count" field.
-func (m *DomainMutation) AddTagCount(i int) {
+func (m *DomainMutation) AddTagCount(i int32) {
 	if m.addtag_count != nil {
 		*m.addtag_count += i
 	} else {
@@ -10116,7 +10384,7 @@ func (m *DomainMutation) AddTagCount(i int) {
 }
 
 // AddedTagCount returns the value that was added to the "tag_count" field in this mutation.
-func (m *DomainMutation) AddedTagCount() (r int, exists bool) {
+func (m *DomainMutation) AddedTagCount() (r int32, exists bool) {
 	v := m.addtag_count
 	if v == nil {
 		return
@@ -10278,9 +10546,9 @@ func (m *DomainMutation) ResetUpdatedAt() {
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by ids.
-func (m *DomainMutation) AddTagIDs(ids ...int) {
+func (m *DomainMutation) AddTagIDs(ids ...int64) {
 	if m.tags == nil {
-		m.tags = make(map[int]struct{})
+		m.tags = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.tags[ids[i]] = struct{}{}
@@ -10298,9 +10566,9 @@ func (m *DomainMutation) TagsCleared() bool {
 }
 
 // RemoveTagIDs removes the "tags" edge to the Tag entity by IDs.
-func (m *DomainMutation) RemoveTagIDs(ids ...int) {
+func (m *DomainMutation) RemoveTagIDs(ids ...int64) {
 	if m.removedtags == nil {
-		m.removedtags = make(map[int]struct{})
+		m.removedtags = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.tags, ids[i])
@@ -10309,7 +10577,7 @@ func (m *DomainMutation) RemoveTagIDs(ids ...int) {
 }
 
 // RemovedTags returns the removed IDs of the "tags" edge to the Tag entity.
-func (m *DomainMutation) RemovedTagsIDs() (ids []int) {
+func (m *DomainMutation) RemovedTagsIDs() (ids []int64) {
 	for id := range m.removedtags {
 		ids = append(ids, id)
 	}
@@ -10317,7 +10585,7 @@ func (m *DomainMutation) RemovedTagsIDs() (ids []int) {
 }
 
 // TagsIDs returns the "tags" edge IDs in the mutation.
-func (m *DomainMutation) TagsIDs() (ids []int) {
+func (m *DomainMutation) TagsIDs() (ids []int64) {
 	for id := range m.tags {
 		ids = append(ids, id)
 	}
@@ -10470,7 +10738,7 @@ func (m *DomainMutation) SetField(name string, value ent.Value) error {
 		m.SetDescription(v)
 		return nil
 	case domain.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -10491,7 +10759,7 @@ func (m *DomainMutation) SetField(name string, value ent.Value) error {
 		m.SetIcon(v)
 		return nil
 	case domain.FieldTagCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -10554,14 +10822,14 @@ func (m *DomainMutation) AddedField(name string) (ent.Value, bool) {
 func (m *DomainMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case domain.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
 		return nil
 	case domain.FieldTagCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -10753,21 +11021,21 @@ type TagMutation struct {
 	config
 	op               Op
 	typ              string
-	id               *int
-	user_id          *int
-	adduser_id       *int
+	id               *int64
+	user_id          *int64
+	adduser_id       *int64
 	name             *string
-	status           *int
-	addstatus        *int
-	article_count    *int
-	addarticle_count *int
+	status           *int32
+	addstatus        *int32
+	article_count    *int32
+	addarticle_count *int32
 	created_at       *time.Time
 	updated_at       *time.Time
 	clearedFields    map[string]struct{}
-	article          map[int]struct{}
-	removedarticle   map[int]struct{}
+	article          map[int64]struct{}
+	removedarticle   map[int64]struct{}
 	clearedarticle   bool
-	domain           *int
+	domain           *int64
 	cleareddomain    bool
 	done             bool
 	oldValue         func(context.Context) (*Tag, error)
@@ -10794,7 +11062,7 @@ func newTagMutation(c config, op Op, opts ...tagOption) *TagMutation {
 }
 
 // withTagID sets the ID field of the mutation.
-func withTagID(id int) tagOption {
+func withTagID(id int64) tagOption {
 	return func(m *TagMutation) {
 		var (
 			err   error
@@ -10844,9 +11112,15 @@ func (m TagMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Tag entities.
+func (m *TagMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TagMutation) ID() (id int, exists bool) {
+func (m *TagMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -10857,12 +11131,12 @@ func (m *TagMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TagMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *TagMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -10873,13 +11147,13 @@ func (m *TagMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetUserID sets the "user_id" field.
-func (m *TagMutation) SetUserID(i int) {
+func (m *TagMutation) SetUserID(i int64) {
 	m.user_id = &i
 	m.adduser_id = nil
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
-func (m *TagMutation) UserID() (r int, exists bool) {
+func (m *TagMutation) UserID() (r int64, exists bool) {
 	v := m.user_id
 	if v == nil {
 		return
@@ -10890,7 +11164,7 @@ func (m *TagMutation) UserID() (r int, exists bool) {
 // OldUserID returns the old "user_id" field's value of the Tag entity.
 // If the Tag object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldUserID(ctx context.Context) (v int, err error) {
+func (m *TagMutation) OldUserID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
@@ -10905,7 +11179,7 @@ func (m *TagMutation) OldUserID(ctx context.Context) (v int, err error) {
 }
 
 // AddUserID adds i to the "user_id" field.
-func (m *TagMutation) AddUserID(i int) {
+func (m *TagMutation) AddUserID(i int64) {
 	if m.adduser_id != nil {
 		*m.adduser_id += i
 	} else {
@@ -10914,7 +11188,7 @@ func (m *TagMutation) AddUserID(i int) {
 }
 
 // AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *TagMutation) AddedUserID() (r int, exists bool) {
+func (m *TagMutation) AddedUserID() (r int64, exists bool) {
 	v := m.adduser_id
 	if v == nil {
 		return
@@ -10965,12 +11239,12 @@ func (m *TagMutation) ResetName() {
 }
 
 // SetDomainID sets the "domain_id" field.
-func (m *TagMutation) SetDomainID(i int) {
+func (m *TagMutation) SetDomainID(i int64) {
 	m.domain = &i
 }
 
 // DomainID returns the value of the "domain_id" field in the mutation.
-func (m *TagMutation) DomainID() (r int, exists bool) {
+func (m *TagMutation) DomainID() (r int64, exists bool) {
 	v := m.domain
 	if v == nil {
 		return
@@ -10981,7 +11255,7 @@ func (m *TagMutation) DomainID() (r int, exists bool) {
 // OldDomainID returns the old "domain_id" field's value of the Tag entity.
 // If the Tag object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldDomainID(ctx context.Context) (v int, err error) {
+func (m *TagMutation) OldDomainID(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDomainID is only allowed on UpdateOne operations")
 	}
@@ -11014,13 +11288,13 @@ func (m *TagMutation) ResetDomainID() {
 }
 
 // SetStatus sets the "status" field.
-func (m *TagMutation) SetStatus(i int) {
+func (m *TagMutation) SetStatus(i int32) {
 	m.status = &i
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *TagMutation) Status() (r int, exists bool) {
+func (m *TagMutation) Status() (r int32, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -11031,7 +11305,7 @@ func (m *TagMutation) Status() (r int, exists bool) {
 // OldStatus returns the old "status" field's value of the Tag entity.
 // If the Tag object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldStatus(ctx context.Context) (v int, err error) {
+func (m *TagMutation) OldStatus(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -11046,7 +11320,7 @@ func (m *TagMutation) OldStatus(ctx context.Context) (v int, err error) {
 }
 
 // AddStatus adds i to the "status" field.
-func (m *TagMutation) AddStatus(i int) {
+func (m *TagMutation) AddStatus(i int32) {
 	if m.addstatus != nil {
 		*m.addstatus += i
 	} else {
@@ -11055,7 +11329,7 @@ func (m *TagMutation) AddStatus(i int) {
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *TagMutation) AddedStatus() (r int, exists bool) {
+func (m *TagMutation) AddedStatus() (r int32, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -11070,13 +11344,13 @@ func (m *TagMutation) ResetStatus() {
 }
 
 // SetArticleCount sets the "article_count" field.
-func (m *TagMutation) SetArticleCount(i int) {
+func (m *TagMutation) SetArticleCount(i int32) {
 	m.article_count = &i
 	m.addarticle_count = nil
 }
 
 // ArticleCount returns the value of the "article_count" field in the mutation.
-func (m *TagMutation) ArticleCount() (r int, exists bool) {
+func (m *TagMutation) ArticleCount() (r int32, exists bool) {
 	v := m.article_count
 	if v == nil {
 		return
@@ -11087,7 +11361,7 @@ func (m *TagMutation) ArticleCount() (r int, exists bool) {
 // OldArticleCount returns the old "article_count" field's value of the Tag entity.
 // If the Tag object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldArticleCount(ctx context.Context) (v int, err error) {
+func (m *TagMutation) OldArticleCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldArticleCount is only allowed on UpdateOne operations")
 	}
@@ -11102,7 +11376,7 @@ func (m *TagMutation) OldArticleCount(ctx context.Context) (v int, err error) {
 }
 
 // AddArticleCount adds i to the "article_count" field.
-func (m *TagMutation) AddArticleCount(i int) {
+func (m *TagMutation) AddArticleCount(i int32) {
 	if m.addarticle_count != nil {
 		*m.addarticle_count += i
 	} else {
@@ -11111,7 +11385,7 @@ func (m *TagMutation) AddArticleCount(i int) {
 }
 
 // AddedArticleCount returns the value that was added to the "article_count" field in this mutation.
-func (m *TagMutation) AddedArticleCount() (r int, exists bool) {
+func (m *TagMutation) AddedArticleCount() (r int32, exists bool) {
 	v := m.addarticle_count
 	if v == nil {
 		return
@@ -11224,9 +11498,9 @@ func (m *TagMutation) ResetUpdatedAt() {
 }
 
 // AddArticleIDs adds the "article" edge to the Article entity by ids.
-func (m *TagMutation) AddArticleIDs(ids ...int) {
+func (m *TagMutation) AddArticleIDs(ids ...int64) {
 	if m.article == nil {
-		m.article = make(map[int]struct{})
+		m.article = make(map[int64]struct{})
 	}
 	for i := range ids {
 		m.article[ids[i]] = struct{}{}
@@ -11244,9 +11518,9 @@ func (m *TagMutation) ArticleCleared() bool {
 }
 
 // RemoveArticleIDs removes the "article" edge to the Article entity by IDs.
-func (m *TagMutation) RemoveArticleIDs(ids ...int) {
+func (m *TagMutation) RemoveArticleIDs(ids ...int64) {
 	if m.removedarticle == nil {
-		m.removedarticle = make(map[int]struct{})
+		m.removedarticle = make(map[int64]struct{})
 	}
 	for i := range ids {
 		delete(m.article, ids[i])
@@ -11255,7 +11529,7 @@ func (m *TagMutation) RemoveArticleIDs(ids ...int) {
 }
 
 // RemovedArticle returns the removed IDs of the "article" edge to the Article entity.
-func (m *TagMutation) RemovedArticleIDs() (ids []int) {
+func (m *TagMutation) RemovedArticleIDs() (ids []int64) {
 	for id := range m.removedarticle {
 		ids = append(ids, id)
 	}
@@ -11263,7 +11537,7 @@ func (m *TagMutation) RemovedArticleIDs() (ids []int) {
 }
 
 // ArticleIDs returns the "article" edge IDs in the mutation.
-func (m *TagMutation) ArticleIDs() (ids []int) {
+func (m *TagMutation) ArticleIDs() (ids []int64) {
 	for id := range m.article {
 		ids = append(ids, id)
 	}
@@ -11291,7 +11565,7 @@ func (m *TagMutation) DomainCleared() bool {
 // DomainIDs returns the "domain" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // DomainID instead. It exists only for internal usage by the builders.
-func (m *TagMutation) DomainIDs() (ids []int) {
+func (m *TagMutation) DomainIDs() (ids []int64) {
 	if id := m.domain; id != nil {
 		ids = append(ids, *id)
 	}
@@ -11415,7 +11689,7 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 func (m *TagMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case tag.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -11429,21 +11703,21 @@ func (m *TagMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case tag.FieldDomainID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDomainID(v)
 		return nil
 	case tag.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
 		return nil
 	case tag.FieldArticleCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -11504,21 +11778,21 @@ func (m *TagMutation) AddedField(name string) (ent.Value, bool) {
 func (m *TagMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case tag.FieldUserID:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUserID(v)
 		return nil
 	case tag.FieldStatus:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
 		return nil
 	case tag.FieldArticleCount:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

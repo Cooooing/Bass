@@ -11,47 +11,47 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Domain {
+func ID(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Domain {
+func IDEQ(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Domain {
+func IDNEQ(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Domain {
+func IDIn(ids ...int64) predicate.Domain {
 	return predicate.Domain(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Domain {
+func IDNotIn(ids ...int64) predicate.Domain {
 	return predicate.Domain(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Domain {
+func IDGT(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Domain {
+func IDGTE(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Domain {
+func IDLT(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Domain {
+func IDLTE(id int64) predicate.Domain {
 	return predicate.Domain(sql.FieldLTE(FieldID, id))
 }
 
@@ -66,7 +66,7 @@ func Description(v string) predicate.Domain {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int) predicate.Domain {
+func Status(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldStatus, v))
 }
 
@@ -81,7 +81,7 @@ func Icon(v string) predicate.Domain {
 }
 
 // TagCount applies equality check predicate on the "tag_count" field. It's identical to TagCountEQ.
-func TagCount(v int) predicate.Domain {
+func TagCount(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldTagCount, v))
 }
 
@@ -231,42 +231,42 @@ func DescriptionContainsFold(v string) predicate.Domain {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int) predicate.Domain {
+func StatusEQ(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int) predicate.Domain {
+func StatusNEQ(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int) predicate.Domain {
+func StatusIn(vs ...int32) predicate.Domain {
 	return predicate.Domain(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int) predicate.Domain {
+func StatusNotIn(vs ...int32) predicate.Domain {
 	return predicate.Domain(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int) predicate.Domain {
+func StatusGT(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int) predicate.Domain {
+func StatusGTE(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int) predicate.Domain {
+func StatusLT(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int) predicate.Domain {
+func StatusLTE(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldLTE(FieldStatus, v))
 }
 
@@ -431,42 +431,42 @@ func IconContainsFold(v string) predicate.Domain {
 }
 
 // TagCountEQ applies the EQ predicate on the "tag_count" field.
-func TagCountEQ(v int) predicate.Domain {
+func TagCountEQ(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldEQ(FieldTagCount, v))
 }
 
 // TagCountNEQ applies the NEQ predicate on the "tag_count" field.
-func TagCountNEQ(v int) predicate.Domain {
+func TagCountNEQ(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldNEQ(FieldTagCount, v))
 }
 
 // TagCountIn applies the In predicate on the "tag_count" field.
-func TagCountIn(vs ...int) predicate.Domain {
+func TagCountIn(vs ...int32) predicate.Domain {
 	return predicate.Domain(sql.FieldIn(FieldTagCount, vs...))
 }
 
 // TagCountNotIn applies the NotIn predicate on the "tag_count" field.
-func TagCountNotIn(vs ...int) predicate.Domain {
+func TagCountNotIn(vs ...int32) predicate.Domain {
 	return predicate.Domain(sql.FieldNotIn(FieldTagCount, vs...))
 }
 
 // TagCountGT applies the GT predicate on the "tag_count" field.
-func TagCountGT(v int) predicate.Domain {
+func TagCountGT(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldGT(FieldTagCount, v))
 }
 
 // TagCountGTE applies the GTE predicate on the "tag_count" field.
-func TagCountGTE(v int) predicate.Domain {
+func TagCountGTE(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldGTE(FieldTagCount, v))
 }
 
 // TagCountLT applies the LT predicate on the "tag_count" field.
-func TagCountLT(v int) predicate.Domain {
+func TagCountLT(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldLT(FieldTagCount, v))
 }
 
 // TagCountLTE applies the LTE predicate on the "tag_count" field.
-func TagCountLTE(v int) predicate.Domain {
+func TagCountLTE(v int32) predicate.Domain {
 	return predicate.Domain(sql.FieldLTE(FieldTagCount, v))
 }
 

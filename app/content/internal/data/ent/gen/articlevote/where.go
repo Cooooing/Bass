@@ -11,52 +11,52 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ArticleVote {
+func ID(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ArticleVote {
+func IDEQ(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ArticleVote {
+func IDNEQ(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ArticleVote {
+func IDIn(ids ...int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ArticleVote {
+func IDNotIn(ids ...int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ArticleVote {
+func IDGT(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ArticleVote {
+func IDGTE(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ArticleVote {
+func IDLT(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ArticleVote {
+func IDLTE(id int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldLTE(FieldID, id))
 }
 
 // ArticleID applies equality check predicate on the "article_id" field. It's identical to ArticleIDEQ.
-func ArticleID(v int) predicate.ArticleVote {
+func ArticleID(v int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldEQ(FieldArticleID, v))
 }
 
@@ -71,7 +71,7 @@ func VoteAnonymous(v bool) predicate.ArticleVote {
 }
 
 // TotalCount applies equality check predicate on the "total_count" field. It's identical to TotalCountEQ.
-func TotalCount(v int) predicate.ArticleVote {
+func TotalCount(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldEQ(FieldTotalCount, v))
 }
 
@@ -91,22 +91,22 @@ func UpdatedAt(v time.Time) predicate.ArticleVote {
 }
 
 // ArticleIDEQ applies the EQ predicate on the "article_id" field.
-func ArticleIDEQ(v int) predicate.ArticleVote {
+func ArticleIDEQ(v int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldEQ(FieldArticleID, v))
 }
 
 // ArticleIDNEQ applies the NEQ predicate on the "article_id" field.
-func ArticleIDNEQ(v int) predicate.ArticleVote {
+func ArticleIDNEQ(v int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldNEQ(FieldArticleID, v))
 }
 
 // ArticleIDIn applies the In predicate on the "article_id" field.
-func ArticleIDIn(vs ...int) predicate.ArticleVote {
+func ArticleIDIn(vs ...int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldIn(FieldArticleID, vs...))
 }
 
 // ArticleIDNotIn applies the NotIn predicate on the "article_id" field.
-func ArticleIDNotIn(vs ...int) predicate.ArticleVote {
+func ArticleIDNotIn(vs ...int64) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldNotIn(FieldArticleID, vs...))
 }
 
@@ -151,42 +151,42 @@ func VoteAnonymousNEQ(v bool) predicate.ArticleVote {
 }
 
 // TotalCountEQ applies the EQ predicate on the "total_count" field.
-func TotalCountEQ(v int) predicate.ArticleVote {
+func TotalCountEQ(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldEQ(FieldTotalCount, v))
 }
 
 // TotalCountNEQ applies the NEQ predicate on the "total_count" field.
-func TotalCountNEQ(v int) predicate.ArticleVote {
+func TotalCountNEQ(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldNEQ(FieldTotalCount, v))
 }
 
 // TotalCountIn applies the In predicate on the "total_count" field.
-func TotalCountIn(vs ...int) predicate.ArticleVote {
+func TotalCountIn(vs ...int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldIn(FieldTotalCount, vs...))
 }
 
 // TotalCountNotIn applies the NotIn predicate on the "total_count" field.
-func TotalCountNotIn(vs ...int) predicate.ArticleVote {
+func TotalCountNotIn(vs ...int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldNotIn(FieldTotalCount, vs...))
 }
 
 // TotalCountGT applies the GT predicate on the "total_count" field.
-func TotalCountGT(v int) predicate.ArticleVote {
+func TotalCountGT(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldGT(FieldTotalCount, v))
 }
 
 // TotalCountGTE applies the GTE predicate on the "total_count" field.
-func TotalCountGTE(v int) predicate.ArticleVote {
+func TotalCountGTE(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldGTE(FieldTotalCount, v))
 }
 
 // TotalCountLT applies the LT predicate on the "total_count" field.
-func TotalCountLT(v int) predicate.ArticleVote {
+func TotalCountLT(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldLT(FieldTotalCount, v))
 }
 
 // TotalCountLTE applies the LTE predicate on the "total_count" field.
-func TotalCountLTE(v int) predicate.ArticleVote {
+func TotalCountLTE(v int32) predicate.ArticleVote {
 	return predicate.ArticleVote(sql.FieldLTE(FieldTotalCount, v))
 }
 

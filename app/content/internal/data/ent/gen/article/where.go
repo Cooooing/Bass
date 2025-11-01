@@ -11,52 +11,52 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Article {
+func ID(id int64) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Article {
+func IDEQ(id int64) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Article {
+func IDNEQ(id int64) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Article {
+func IDIn(ids ...int64) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Article {
+func IDNotIn(ids ...int64) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Article {
+func IDGT(id int64) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Article {
+func IDGTE(id int64) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Article {
+func IDLT(id int64) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Article {
+func IDLTE(id int64) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldID, id))
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.Article {
+func UserID(v int64) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldUserID, v))
 }
 
@@ -81,17 +81,17 @@ func RewardContent(v string) predicate.Article {
 }
 
 // RewardPoints applies equality check predicate on the "reward_points" field. It's identical to RewardPointsEQ.
-func RewardPoints(v int) predicate.Article {
+func RewardPoints(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldRewardPoints, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int) predicate.Article {
+func Status(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldStatus, v))
 }
 
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
-func Type(v int) predicate.Article {
+func Type(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldType, v))
 }
 
@@ -106,47 +106,47 @@ func Anonymous(v bool) predicate.Article {
 }
 
 // ThankCount applies equality check predicate on the "thank_count" field. It's identical to ThankCountEQ.
-func ThankCount(v int) predicate.Article {
+func ThankCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldThankCount, v))
 }
 
 // LikeCount applies equality check predicate on the "like_count" field. It's identical to LikeCountEQ.
-func LikeCount(v int) predicate.Article {
+func LikeCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLikeCount, v))
 }
 
 // CollectCount applies equality check predicate on the "collect_count" field. It's identical to CollectCountEQ.
-func CollectCount(v int) predicate.Article {
+func CollectCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldCollectCount, v))
 }
 
 // WatchCount applies equality check predicate on the "watch_count" field. It's identical to WatchCountEQ.
-func WatchCount(v int) predicate.Article {
+func WatchCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldWatchCount, v))
 }
 
 // BountyPoints applies equality check predicate on the "bounty_points" field. It's identical to BountyPointsEQ.
-func BountyPoints(v int) predicate.Article {
+func BountyPoints(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldBountyPoints, v))
 }
 
 // AcceptedAnswerID applies equality check predicate on the "accepted_answer_id" field. It's identical to AcceptedAnswerIDEQ.
-func AcceptedAnswerID(v int) predicate.Article {
+func AcceptedAnswerID(v int64) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldAcceptedAnswerID, v))
 }
 
 // VoteTotal applies equality check predicate on the "vote_total" field. It's identical to VoteTotalEQ.
-func VoteTotal(v int) predicate.Article {
+func VoteTotal(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldVoteTotal, v))
 }
 
 // LotteryParticipantCount applies equality check predicate on the "lottery_participant_count" field. It's identical to LotteryParticipantCountEQ.
-func LotteryParticipantCount(v int) predicate.Article {
+func LotteryParticipantCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLotteryParticipantCount, v))
 }
 
 // LotteryWinnerCount applies equality check predicate on the "lottery_winner_count" field. It's identical to LotteryWinnerCountEQ.
-func LotteryWinnerCount(v int) predicate.Article {
+func LotteryWinnerCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLotteryWinnerCount, v))
 }
 
@@ -161,42 +161,42 @@ func UpdatedAt(v time.Time) predicate.Article {
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.Article {
+func UserIDEQ(v int64) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.Article {
+func UserIDNEQ(v int64) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.Article {
+func UserIDIn(vs ...int64) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.Article {
+func UserIDNotIn(vs ...int64) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.Article {
+func UserIDGT(v int64) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.Article {
+func UserIDGTE(v int64) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.Article {
+func UserIDLT(v int64) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.Article {
+func UserIDLTE(v int64) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldUserID, v))
 }
 
@@ -416,122 +416,122 @@ func RewardContentContainsFold(v string) predicate.Article {
 }
 
 // RewardPointsEQ applies the EQ predicate on the "reward_points" field.
-func RewardPointsEQ(v int) predicate.Article {
+func RewardPointsEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldRewardPoints, v))
 }
 
 // RewardPointsNEQ applies the NEQ predicate on the "reward_points" field.
-func RewardPointsNEQ(v int) predicate.Article {
+func RewardPointsNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldRewardPoints, v))
 }
 
 // RewardPointsIn applies the In predicate on the "reward_points" field.
-func RewardPointsIn(vs ...int) predicate.Article {
+func RewardPointsIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldRewardPoints, vs...))
 }
 
 // RewardPointsNotIn applies the NotIn predicate on the "reward_points" field.
-func RewardPointsNotIn(vs ...int) predicate.Article {
+func RewardPointsNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldRewardPoints, vs...))
 }
 
 // RewardPointsGT applies the GT predicate on the "reward_points" field.
-func RewardPointsGT(v int) predicate.Article {
+func RewardPointsGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldRewardPoints, v))
 }
 
 // RewardPointsGTE applies the GTE predicate on the "reward_points" field.
-func RewardPointsGTE(v int) predicate.Article {
+func RewardPointsGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldRewardPoints, v))
 }
 
 // RewardPointsLT applies the LT predicate on the "reward_points" field.
-func RewardPointsLT(v int) predicate.Article {
+func RewardPointsLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldRewardPoints, v))
 }
 
 // RewardPointsLTE applies the LTE predicate on the "reward_points" field.
-func RewardPointsLTE(v int) predicate.Article {
+func RewardPointsLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldRewardPoints, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int) predicate.Article {
+func StatusEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int) predicate.Article {
+func StatusNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int) predicate.Article {
+func StatusIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int) predicate.Article {
+func StatusNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int) predicate.Article {
+func StatusGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int) predicate.Article {
+func StatusGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int) predicate.Article {
+func StatusLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int) predicate.Article {
+func StatusLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldStatus, v))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v int) predicate.Article {
+func TypeEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldType, v))
 }
 
 // TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v int) predicate.Article {
+func TypeNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldType, v))
 }
 
 // TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...int) predicate.Article {
+func TypeIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldType, vs...))
 }
 
 // TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...int) predicate.Article {
+func TypeNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldType, vs...))
 }
 
 // TypeGT applies the GT predicate on the "type" field.
-func TypeGT(v int) predicate.Article {
+func TypeGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldType, v))
 }
 
 // TypeGTE applies the GTE predicate on the "type" field.
-func TypeGTE(v int) predicate.Article {
+func TypeGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldType, v))
 }
 
 // TypeLT applies the LT predicate on the "type" field.
-func TypeLT(v int) predicate.Article {
+func TypeLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldType, v))
 }
 
 // TypeLTE applies the LTE predicate on the "type" field.
-func TypeLTE(v int) predicate.Article {
+func TypeLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldType, v))
 }
 
@@ -556,242 +556,242 @@ func AnonymousNEQ(v bool) predicate.Article {
 }
 
 // ThankCountEQ applies the EQ predicate on the "thank_count" field.
-func ThankCountEQ(v int) predicate.Article {
+func ThankCountEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldThankCount, v))
 }
 
 // ThankCountNEQ applies the NEQ predicate on the "thank_count" field.
-func ThankCountNEQ(v int) predicate.Article {
+func ThankCountNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldThankCount, v))
 }
 
 // ThankCountIn applies the In predicate on the "thank_count" field.
-func ThankCountIn(vs ...int) predicate.Article {
+func ThankCountIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldThankCount, vs...))
 }
 
 // ThankCountNotIn applies the NotIn predicate on the "thank_count" field.
-func ThankCountNotIn(vs ...int) predicate.Article {
+func ThankCountNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldThankCount, vs...))
 }
 
 // ThankCountGT applies the GT predicate on the "thank_count" field.
-func ThankCountGT(v int) predicate.Article {
+func ThankCountGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldThankCount, v))
 }
 
 // ThankCountGTE applies the GTE predicate on the "thank_count" field.
-func ThankCountGTE(v int) predicate.Article {
+func ThankCountGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldThankCount, v))
 }
 
 // ThankCountLT applies the LT predicate on the "thank_count" field.
-func ThankCountLT(v int) predicate.Article {
+func ThankCountLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldThankCount, v))
 }
 
 // ThankCountLTE applies the LTE predicate on the "thank_count" field.
-func ThankCountLTE(v int) predicate.Article {
+func ThankCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldThankCount, v))
 }
 
 // LikeCountEQ applies the EQ predicate on the "like_count" field.
-func LikeCountEQ(v int) predicate.Article {
+func LikeCountEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLikeCount, v))
 }
 
 // LikeCountNEQ applies the NEQ predicate on the "like_count" field.
-func LikeCountNEQ(v int) predicate.Article {
+func LikeCountNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldLikeCount, v))
 }
 
 // LikeCountIn applies the In predicate on the "like_count" field.
-func LikeCountIn(vs ...int) predicate.Article {
+func LikeCountIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldLikeCount, vs...))
 }
 
 // LikeCountNotIn applies the NotIn predicate on the "like_count" field.
-func LikeCountNotIn(vs ...int) predicate.Article {
+func LikeCountNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldLikeCount, vs...))
 }
 
 // LikeCountGT applies the GT predicate on the "like_count" field.
-func LikeCountGT(v int) predicate.Article {
+func LikeCountGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldLikeCount, v))
 }
 
 // LikeCountGTE applies the GTE predicate on the "like_count" field.
-func LikeCountGTE(v int) predicate.Article {
+func LikeCountGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldLikeCount, v))
 }
 
 // LikeCountLT applies the LT predicate on the "like_count" field.
-func LikeCountLT(v int) predicate.Article {
+func LikeCountLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldLikeCount, v))
 }
 
 // LikeCountLTE applies the LTE predicate on the "like_count" field.
-func LikeCountLTE(v int) predicate.Article {
+func LikeCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldLikeCount, v))
 }
 
 // CollectCountEQ applies the EQ predicate on the "collect_count" field.
-func CollectCountEQ(v int) predicate.Article {
+func CollectCountEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldCollectCount, v))
 }
 
 // CollectCountNEQ applies the NEQ predicate on the "collect_count" field.
-func CollectCountNEQ(v int) predicate.Article {
+func CollectCountNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldCollectCount, v))
 }
 
 // CollectCountIn applies the In predicate on the "collect_count" field.
-func CollectCountIn(vs ...int) predicate.Article {
+func CollectCountIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldCollectCount, vs...))
 }
 
 // CollectCountNotIn applies the NotIn predicate on the "collect_count" field.
-func CollectCountNotIn(vs ...int) predicate.Article {
+func CollectCountNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldCollectCount, vs...))
 }
 
 // CollectCountGT applies the GT predicate on the "collect_count" field.
-func CollectCountGT(v int) predicate.Article {
+func CollectCountGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldCollectCount, v))
 }
 
 // CollectCountGTE applies the GTE predicate on the "collect_count" field.
-func CollectCountGTE(v int) predicate.Article {
+func CollectCountGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldCollectCount, v))
 }
 
 // CollectCountLT applies the LT predicate on the "collect_count" field.
-func CollectCountLT(v int) predicate.Article {
+func CollectCountLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldCollectCount, v))
 }
 
 // CollectCountLTE applies the LTE predicate on the "collect_count" field.
-func CollectCountLTE(v int) predicate.Article {
+func CollectCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldCollectCount, v))
 }
 
 // WatchCountEQ applies the EQ predicate on the "watch_count" field.
-func WatchCountEQ(v int) predicate.Article {
+func WatchCountEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldWatchCount, v))
 }
 
 // WatchCountNEQ applies the NEQ predicate on the "watch_count" field.
-func WatchCountNEQ(v int) predicate.Article {
+func WatchCountNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldWatchCount, v))
 }
 
 // WatchCountIn applies the In predicate on the "watch_count" field.
-func WatchCountIn(vs ...int) predicate.Article {
+func WatchCountIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldWatchCount, vs...))
 }
 
 // WatchCountNotIn applies the NotIn predicate on the "watch_count" field.
-func WatchCountNotIn(vs ...int) predicate.Article {
+func WatchCountNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldWatchCount, vs...))
 }
 
 // WatchCountGT applies the GT predicate on the "watch_count" field.
-func WatchCountGT(v int) predicate.Article {
+func WatchCountGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldWatchCount, v))
 }
 
 // WatchCountGTE applies the GTE predicate on the "watch_count" field.
-func WatchCountGTE(v int) predicate.Article {
+func WatchCountGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldWatchCount, v))
 }
 
 // WatchCountLT applies the LT predicate on the "watch_count" field.
-func WatchCountLT(v int) predicate.Article {
+func WatchCountLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldWatchCount, v))
 }
 
 // WatchCountLTE applies the LTE predicate on the "watch_count" field.
-func WatchCountLTE(v int) predicate.Article {
+func WatchCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldWatchCount, v))
 }
 
 // BountyPointsEQ applies the EQ predicate on the "bounty_points" field.
-func BountyPointsEQ(v int) predicate.Article {
+func BountyPointsEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldBountyPoints, v))
 }
 
 // BountyPointsNEQ applies the NEQ predicate on the "bounty_points" field.
-func BountyPointsNEQ(v int) predicate.Article {
+func BountyPointsNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldBountyPoints, v))
 }
 
 // BountyPointsIn applies the In predicate on the "bounty_points" field.
-func BountyPointsIn(vs ...int) predicate.Article {
+func BountyPointsIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldBountyPoints, vs...))
 }
 
 // BountyPointsNotIn applies the NotIn predicate on the "bounty_points" field.
-func BountyPointsNotIn(vs ...int) predicate.Article {
+func BountyPointsNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldBountyPoints, vs...))
 }
 
 // BountyPointsGT applies the GT predicate on the "bounty_points" field.
-func BountyPointsGT(v int) predicate.Article {
+func BountyPointsGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldBountyPoints, v))
 }
 
 // BountyPointsGTE applies the GTE predicate on the "bounty_points" field.
-func BountyPointsGTE(v int) predicate.Article {
+func BountyPointsGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldBountyPoints, v))
 }
 
 // BountyPointsLT applies the LT predicate on the "bounty_points" field.
-func BountyPointsLT(v int) predicate.Article {
+func BountyPointsLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldBountyPoints, v))
 }
 
 // BountyPointsLTE applies the LTE predicate on the "bounty_points" field.
-func BountyPointsLTE(v int) predicate.Article {
+func BountyPointsLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldBountyPoints, v))
 }
 
 // AcceptedAnswerIDEQ applies the EQ predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDEQ(v int) predicate.Article {
+func AcceptedAnswerIDEQ(v int64) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldAcceptedAnswerID, v))
 }
 
 // AcceptedAnswerIDNEQ applies the NEQ predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDNEQ(v int) predicate.Article {
+func AcceptedAnswerIDNEQ(v int64) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldAcceptedAnswerID, v))
 }
 
 // AcceptedAnswerIDIn applies the In predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDIn(vs ...int) predicate.Article {
+func AcceptedAnswerIDIn(vs ...int64) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldAcceptedAnswerID, vs...))
 }
 
 // AcceptedAnswerIDNotIn applies the NotIn predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDNotIn(vs ...int) predicate.Article {
+func AcceptedAnswerIDNotIn(vs ...int64) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldAcceptedAnswerID, vs...))
 }
 
 // AcceptedAnswerIDGT applies the GT predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDGT(v int) predicate.Article {
+func AcceptedAnswerIDGT(v int64) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldAcceptedAnswerID, v))
 }
 
 // AcceptedAnswerIDGTE applies the GTE predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDGTE(v int) predicate.Article {
+func AcceptedAnswerIDGTE(v int64) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldAcceptedAnswerID, v))
 }
 
 // AcceptedAnswerIDLT applies the LT predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDLT(v int) predicate.Article {
+func AcceptedAnswerIDLT(v int64) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldAcceptedAnswerID, v))
 }
 
 // AcceptedAnswerIDLTE applies the LTE predicate on the "accepted_answer_id" field.
-func AcceptedAnswerIDLTE(v int) predicate.Article {
+func AcceptedAnswerIDLTE(v int64) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldAcceptedAnswerID, v))
 }
 
@@ -806,122 +806,122 @@ func AcceptedAnswerIDNotNil() predicate.Article {
 }
 
 // VoteTotalEQ applies the EQ predicate on the "vote_total" field.
-func VoteTotalEQ(v int) predicate.Article {
+func VoteTotalEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldVoteTotal, v))
 }
 
 // VoteTotalNEQ applies the NEQ predicate on the "vote_total" field.
-func VoteTotalNEQ(v int) predicate.Article {
+func VoteTotalNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldVoteTotal, v))
 }
 
 // VoteTotalIn applies the In predicate on the "vote_total" field.
-func VoteTotalIn(vs ...int) predicate.Article {
+func VoteTotalIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldVoteTotal, vs...))
 }
 
 // VoteTotalNotIn applies the NotIn predicate on the "vote_total" field.
-func VoteTotalNotIn(vs ...int) predicate.Article {
+func VoteTotalNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldVoteTotal, vs...))
 }
 
 // VoteTotalGT applies the GT predicate on the "vote_total" field.
-func VoteTotalGT(v int) predicate.Article {
+func VoteTotalGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldVoteTotal, v))
 }
 
 // VoteTotalGTE applies the GTE predicate on the "vote_total" field.
-func VoteTotalGTE(v int) predicate.Article {
+func VoteTotalGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldVoteTotal, v))
 }
 
 // VoteTotalLT applies the LT predicate on the "vote_total" field.
-func VoteTotalLT(v int) predicate.Article {
+func VoteTotalLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldVoteTotal, v))
 }
 
 // VoteTotalLTE applies the LTE predicate on the "vote_total" field.
-func VoteTotalLTE(v int) predicate.Article {
+func VoteTotalLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldVoteTotal, v))
 }
 
 // LotteryParticipantCountEQ applies the EQ predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountEQ(v int) predicate.Article {
+func LotteryParticipantCountEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLotteryParticipantCount, v))
 }
 
 // LotteryParticipantCountNEQ applies the NEQ predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountNEQ(v int) predicate.Article {
+func LotteryParticipantCountNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldLotteryParticipantCount, v))
 }
 
 // LotteryParticipantCountIn applies the In predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountIn(vs ...int) predicate.Article {
+func LotteryParticipantCountIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldLotteryParticipantCount, vs...))
 }
 
 // LotteryParticipantCountNotIn applies the NotIn predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountNotIn(vs ...int) predicate.Article {
+func LotteryParticipantCountNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldLotteryParticipantCount, vs...))
 }
 
 // LotteryParticipantCountGT applies the GT predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountGT(v int) predicate.Article {
+func LotteryParticipantCountGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldLotteryParticipantCount, v))
 }
 
 // LotteryParticipantCountGTE applies the GTE predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountGTE(v int) predicate.Article {
+func LotteryParticipantCountGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldLotteryParticipantCount, v))
 }
 
 // LotteryParticipantCountLT applies the LT predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountLT(v int) predicate.Article {
+func LotteryParticipantCountLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldLotteryParticipantCount, v))
 }
 
 // LotteryParticipantCountLTE applies the LTE predicate on the "lottery_participant_count" field.
-func LotteryParticipantCountLTE(v int) predicate.Article {
+func LotteryParticipantCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldLotteryParticipantCount, v))
 }
 
 // LotteryWinnerCountEQ applies the EQ predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountEQ(v int) predicate.Article {
+func LotteryWinnerCountEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldLotteryWinnerCount, v))
 }
 
 // LotteryWinnerCountNEQ applies the NEQ predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountNEQ(v int) predicate.Article {
+func LotteryWinnerCountNEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldLotteryWinnerCount, v))
 }
 
 // LotteryWinnerCountIn applies the In predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountIn(vs ...int) predicate.Article {
+func LotteryWinnerCountIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldIn(FieldLotteryWinnerCount, vs...))
 }
 
 // LotteryWinnerCountNotIn applies the NotIn predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountNotIn(vs ...int) predicate.Article {
+func LotteryWinnerCountNotIn(vs ...int32) predicate.Article {
 	return predicate.Article(sql.FieldNotIn(FieldLotteryWinnerCount, vs...))
 }
 
 // LotteryWinnerCountGT applies the GT predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountGT(v int) predicate.Article {
+func LotteryWinnerCountGT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGT(FieldLotteryWinnerCount, v))
 }
 
 // LotteryWinnerCountGTE applies the GTE predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountGTE(v int) predicate.Article {
+func LotteryWinnerCountGTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldGTE(FieldLotteryWinnerCount, v))
 }
 
 // LotteryWinnerCountLT applies the LT predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountLT(v int) predicate.Article {
+func LotteryWinnerCountLT(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLT(FieldLotteryWinnerCount, v))
 }
 
 // LotteryWinnerCountLTE applies the LTE predicate on the "lottery_winner_count" field.
-func LotteryWinnerCountLTE(v int) predicate.Article {
+func LotteryWinnerCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldLotteryWinnerCount, v))
 }
 

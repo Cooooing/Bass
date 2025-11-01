@@ -8,32 +8,9 @@ import (
 )
 
 var (
-	// GroupsColumns holds the columns for the "groups" table.
-	GroupsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "endpoint", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "module", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-	}
-	// GroupsTable holds the schema information for the "groups" table.
-	GroupsTable = &schema.Table{
-		Name:       "groups",
-		Columns:    GroupsColumns,
-		PrimaryKey: []*schema.Column{GroupsColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "group_name_endpoint",
-				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[1], GroupsColumns[2]},
-			},
-		},
-	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "nickname", Type: field.TypeString, Nullable: true},
 		{Name: "password", Type: field.TypeString},
@@ -43,16 +20,16 @@ var (
 		{Name: "avatar_url", Type: field.TypeString, Nullable: true},
 		{Name: "introduction", Type: field.TypeString, Nullable: true},
 		{Name: "mbti", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeInt, Default: 0},
+		{Name: "status", Type: field.TypeInt32, Default: 0},
 		{Name: "group_name", Type: field.TypeString, Nullable: true},
-		{Name: "follow_count", Type: field.TypeInt, Default: 0},
-		{Name: "follower_count", Type: field.TypeInt, Default: 0},
+		{Name: "follow_count", Type: field.TypeInt32, Default: 0},
+		{Name: "follower_count", Type: field.TypeInt32, Default: 0},
 		{Name: "last_login_time", Type: field.TypeTime, Nullable: true},
 		{Name: "last_login_ip", Type: field.TypeString, Nullable: true},
-		{Name: "online_minutes", Type: field.TypeInt, Default: 0},
+		{Name: "online_minutes", Type: field.TypeInt32, Default: 0},
 		{Name: "last_checkin_time", Type: field.TypeTime, Nullable: true},
-		{Name: "current_checkin_streak", Type: field.TypeInt, Default: 0},
-		{Name: "longest_checkin_streak", Type: field.TypeInt, Default: 0},
+		{Name: "current_checkin_streak", Type: field.TypeInt32, Default: 0},
+		{Name: "longest_checkin_streak", Type: field.TypeInt32, Default: 0},
 		{Name: "language", Type: field.TypeString, Default: "zh-CN"},
 		{Name: "timezone", Type: field.TypeString, Default: "Asia/Shanghai"},
 		{Name: "theme", Type: field.TypeString, Default: "default"},
@@ -97,7 +74,6 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		GroupsTable,
 		UsersTable,
 	}
 )

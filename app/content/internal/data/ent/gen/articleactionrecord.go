@@ -16,13 +16,13 @@ import (
 type ArticleActionRecord struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 关联的文章ID
-	ArticleID int `json:"article_id,omitempty"`
+	ArticleID int64 `json:"article_id,omitempty"`
 	// 执行行为的用户ID
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 行为类型 0-点赞 1-感谢 2-收藏 3-关注
-	Type int `json:"type,omitempty"`
+	Type int32 `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArticleActionRecordQuery when eager-loading is set.
 	Edges        ArticleActionRecordEdges `json:"edges"`
@@ -76,24 +76,24 @@ func (_m *ArticleActionRecord) assignValues(columns []string, values []any) erro
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case articleactionrecord.FieldArticleID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field article_id", values[i])
 			} else if value.Valid {
-				_m.ArticleID = int(value.Int64)
+				_m.ArticleID = value.Int64
 			}
 		case articleactionrecord.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case articleactionrecord.FieldType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				_m.Type = int(value.Int64)
+				_m.Type = int32(value.Int64)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

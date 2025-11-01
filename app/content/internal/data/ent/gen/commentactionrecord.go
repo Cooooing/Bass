@@ -16,13 +16,13 @@ import (
 type CommentActionRecord struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 关联的文章ID
-	CommentID int `json:"comment_id,omitempty"`
+	CommentID int64 `json:"comment_id,omitempty"`
 	// 执行行为的用户ID
-	UserID int `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id,omitempty"`
 	// 行为类型 0-点赞 1收藏
-	Type int `json:"type,omitempty"`
+	Type int32 `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CommentActionRecordQuery when eager-loading is set.
 	Edges        CommentActionRecordEdges `json:"edges"`
@@ -76,24 +76,24 @@ func (_m *CommentActionRecord) assignValues(columns []string, values []any) erro
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			_m.ID = int(value.Int64)
+			_m.ID = int64(value.Int64)
 		case commentactionrecord.FieldCommentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field comment_id", values[i])
 			} else if value.Valid {
-				_m.CommentID = int(value.Int64)
+				_m.CommentID = value.Int64
 			}
 		case commentactionrecord.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				_m.UserID = int(value.Int64)
+				_m.UserID = value.Int64
 			}
 		case commentactionrecord.FieldType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				_m.Type = int(value.Int64)
+				_m.Type = int32(value.Int64)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

@@ -6,7 +6,7 @@ import (
 
 type User struct {
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 	// 用户名
 	Name string `json:"name,omitempty"`
 	// 昵称
@@ -26,25 +26,25 @@ type User struct {
 	// 用户 MBTI 类型
 	Mbti string `json:"mbti,omitempty"`
 	// 用户状态：0-正常，1-封禁，2-注销
-	Status int `json:"status,omitempty"`
+	Status int32 `json:"status,omitempty"`
 	// 用户角色
 	Role string `json:"role,omitempty"`
 	// 关注数
-	FollowCount int `json:"follow_count,omitempty"`
+	FollowCount int32 `json:"follow_count,omitempty"`
 	// 粉丝数
-	FollowerCount int `json:"follower_count,omitempty"`
+	FollowerCount int32 `json:"follower_count,omitempty"`
 	// 最近登录时间
 	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
 	// 最近登录IP
 	LastLoginIP string `json:"last_login_ip,omitempty"`
 	// 在线总时长（分钟）
-	OnlineMinutes int `json:"online_minutes,omitempty"`
+	OnlineMinutes int32 `json:"online_minutes,omitempty"`
 	// 最近签到时间
 	LastCheckinTime *time.Time `json:"last_checkin_time,omitempty"`
 	// 当前连续签到天数
-	CurrentCheckinStreak int `json:"current_checkin_streak,omitempty"`
+	CurrentCheckinStreak int32 `json:"current_checkin_streak,omitempty"`
 	// 最长连续签到天数
-	LongestCheckinStreak int `json:"longest_checkin_streak,omitempty"`
+	LongestCheckinStreak int32 `json:"longest_checkin_streak,omitempty"`
 	// 用户语言
 	Language string `json:"language,omitempty"`
 	// 时区

@@ -131,8 +131,8 @@ func (_q *ArticleVoteQuery) FirstX(ctx context.Context) *ArticleVote {
 
 // FirstID returns the first ArticleVote ID from the query.
 // Returns a *NotFoundError when no ArticleVote ID was found.
-func (_q *ArticleVoteQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleVoteQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -144,7 +144,7 @@ func (_q *ArticleVoteQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ArticleVoteQuery) FirstIDX(ctx context.Context) int {
+func (_q *ArticleVoteQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -182,8 +182,8 @@ func (_q *ArticleVoteQuery) OnlyX(ctx context.Context) *ArticleVote {
 // OnlyID is like Only, but returns the only ArticleVote ID in the query.
 // Returns a *NotSingularError when more than one ArticleVote ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ArticleVoteQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ArticleVoteQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -199,7 +199,7 @@ func (_q *ArticleVoteQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ArticleVoteQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ArticleVoteQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -227,7 +227,7 @@ func (_q *ArticleVoteQuery) AllX(ctx context.Context) []*ArticleVote {
 }
 
 // IDs executes the query and returns a list of ArticleVote IDs.
-func (_q *ArticleVoteQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ArticleVoteQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -239,7 +239,7 @@ func (_q *ArticleVoteQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ArticleVoteQuery) IDsX(ctx context.Context) []int {
+func (_q *ArticleVoteQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -335,7 +335,7 @@ func (_q *ArticleVoteQuery) WithRecords(opts ...func(*ArticleVoteRecordQuery)) *
 // Example:
 //
 //	var v []struct {
-//		ArticleID int `json:"article_id,omitempty"`
+//		ArticleID int64 `json:"article_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -358,7 +358,7 @@ func (_q *ArticleVoteQuery) GroupBy(field string, fields ...string) *ArticleVote
 // Example:
 //
 //	var v []struct {
-//		ArticleID int `json:"article_id,omitempty"`
+//		ArticleID int64 `json:"article_id,omitempty"`
 //	}
 //
 //	client.ArticleVote.Query().
@@ -447,8 +447,8 @@ func (_q *ArticleVoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 }
 
 func (_q *ArticleVoteQuery) loadArticle(ctx context.Context, query *ArticleQuery, nodes []*ArticleVote, init func(*ArticleVote), assign func(*ArticleVote, *Article)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*ArticleVote)
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*ArticleVote)
 	for i := range nodes {
 		fk := nodes[i].ArticleID
 		if _, ok := nodeids[fk]; !ok {
@@ -477,7 +477,7 @@ func (_q *ArticleVoteQuery) loadArticle(ctx context.Context, query *ArticleQuery
 }
 func (_q *ArticleVoteQuery) loadRecords(ctx context.Context, query *ArticleVoteRecordQuery, nodes []*ArticleVote, init func(*ArticleVote), assign func(*ArticleVote, *ArticleVoteRecord)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*ArticleVote)
+	nodeids := make(map[int64]*ArticleVote)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -516,7 +516,7 @@ func (_q *ArticleVoteQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ArticleVoteQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(articlevote.Table, articlevote.Columns, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(articlevote.Table, articlevote.Columns, sqlgraph.NewFieldSpec(articlevote.FieldID, field.TypeInt64))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

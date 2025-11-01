@@ -162,31 +162,31 @@ var (
 	// DefaultHasPostscript holds the default value on creation for the "has_postscript" field.
 	DefaultHasPostscript bool
 	// DefaultRewardPoints holds the default value on creation for the "reward_points" field.
-	DefaultRewardPoints int
+	DefaultRewardPoints int32
 	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
+	DefaultStatus int32
 	// DefaultType holds the default value on creation for the "type" field.
-	DefaultType int
+	DefaultType int32
 	// DefaultCommentable holds the default value on creation for the "commentable" field.
 	DefaultCommentable bool
 	// DefaultAnonymous holds the default value on creation for the "anonymous" field.
 	DefaultAnonymous bool
 	// DefaultThankCount holds the default value on creation for the "thank_count" field.
-	DefaultThankCount int
+	DefaultThankCount int32
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
-	DefaultLikeCount int
+	DefaultLikeCount int32
 	// DefaultCollectCount holds the default value on creation for the "collect_count" field.
-	DefaultCollectCount int
+	DefaultCollectCount int32
 	// DefaultWatchCount holds the default value on creation for the "watch_count" field.
-	DefaultWatchCount int
+	DefaultWatchCount int32
 	// DefaultBountyPoints holds the default value on creation for the "bounty_points" field.
-	DefaultBountyPoints int
+	DefaultBountyPoints int32
 	// DefaultVoteTotal holds the default value on creation for the "vote_total" field.
-	DefaultVoteTotal int
+	DefaultVoteTotal int32
 	// DefaultLotteryParticipantCount holds the default value on creation for the "lottery_participant_count" field.
-	DefaultLotteryParticipantCount int
+	DefaultLotteryParticipantCount int32
 	// DefaultLotteryWinnerCount holds the default value on creation for the "lottery_winner_count" field.
-	DefaultLotteryWinnerCount int
+	DefaultLotteryWinnerCount int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

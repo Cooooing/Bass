@@ -125,6 +125,11 @@ func WatchCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldWatchCount, v))
 }
 
+// ReplyCount applies equality check predicate on the "reply_count" field. It's identical to ReplyCountEQ.
+func ReplyCount(v int32) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldReplyCount, v))
+}
+
 // BountyPoints applies equality check predicate on the "bounty_points" field. It's identical to BountyPointsEQ.
 func BountyPoints(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldBountyPoints, v))
@@ -713,6 +718,46 @@ func WatchCountLT(v int32) predicate.Article {
 // WatchCountLTE applies the LTE predicate on the "watch_count" field.
 func WatchCountLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldWatchCount, v))
+}
+
+// ReplyCountEQ applies the EQ predicate on the "reply_count" field.
+func ReplyCountEQ(v int32) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldReplyCount, v))
+}
+
+// ReplyCountNEQ applies the NEQ predicate on the "reply_count" field.
+func ReplyCountNEQ(v int32) predicate.Article {
+	return predicate.Article(sql.FieldNEQ(FieldReplyCount, v))
+}
+
+// ReplyCountIn applies the In predicate on the "reply_count" field.
+func ReplyCountIn(vs ...int32) predicate.Article {
+	return predicate.Article(sql.FieldIn(FieldReplyCount, vs...))
+}
+
+// ReplyCountNotIn applies the NotIn predicate on the "reply_count" field.
+func ReplyCountNotIn(vs ...int32) predicate.Article {
+	return predicate.Article(sql.FieldNotIn(FieldReplyCount, vs...))
+}
+
+// ReplyCountGT applies the GT predicate on the "reply_count" field.
+func ReplyCountGT(v int32) predicate.Article {
+	return predicate.Article(sql.FieldGT(FieldReplyCount, v))
+}
+
+// ReplyCountGTE applies the GTE predicate on the "reply_count" field.
+func ReplyCountGTE(v int32) predicate.Article {
+	return predicate.Article(sql.FieldGTE(FieldReplyCount, v))
+}
+
+// ReplyCountLT applies the LT predicate on the "reply_count" field.
+func ReplyCountLT(v int32) predicate.Article {
+	return predicate.Article(sql.FieldLT(FieldReplyCount, v))
+}
+
+// ReplyCountLTE applies the LTE predicate on the "reply_count" field.
+func ReplyCountLTE(v int32) predicate.Article {
+	return predicate.Article(sql.FieldLTE(FieldReplyCount, v))
 }
 
 // BountyPointsEQ applies the EQ predicate on the "bounty_points" field.

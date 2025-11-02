@@ -319,10 +319,14 @@ func (ArticleType) EnumDescriptor() ([]byte, []int) {
 type ArticleAction int32
 
 const (
-	ArticleAction_ArticleActionLike    ArticleAction = 0 // 点赞
-	ArticleAction_ArticleActionThank   ArticleAction = 1 // 感谢
-	ArticleAction_ArticleActionCollect ArticleAction = 2 // 收藏
-	ArticleAction_ArticleActionWatch   ArticleAction = 3 // 关注
+	ArticleAction_ArticleActionLike          ArticleAction = 0 // 点赞
+	ArticleAction_ArticleActionThank         ArticleAction = 1 // 感谢
+	ArticleAction_ArticleActionCollect       ArticleAction = 2 // 收藏
+	ArticleAction_ArticleActionWatch         ArticleAction = 3 // 关注
+	ArticleAction_ArticleActionReply         ArticleAction = 4 // 回复
+	ArticleAction_ArticleActionVote          ArticleAction = 5 // 投票
+	ArticleAction_ArticleActionLottery       ArticleAction = 6 // 抽奖参与
+	ArticleAction_ArticleActionLotteryWinner ArticleAction = 7 // 抽奖中奖
 )
 
 // Enum value maps for ArticleAction.
@@ -332,12 +336,20 @@ var (
 		1: "ArticleActionThank",
 		2: "ArticleActionCollect",
 		3: "ArticleActionWatch",
+		4: "ArticleActionReply",
+		5: "ArticleActionVote",
+		6: "ArticleActionLottery",
+		7: "ArticleActionLotteryWinner",
 	}
 	ArticleAction_value = map[string]int32{
-		"ArticleActionLike":    0,
-		"ArticleActionThank":   1,
-		"ArticleActionCollect": 2,
-		"ArticleActionWatch":   3,
+		"ArticleActionLike":          0,
+		"ArticleActionThank":         1,
+		"ArticleActionCollect":       2,
+		"ArticleActionWatch":         3,
+		"ArticleActionReply":         4,
+		"ArticleActionVote":          5,
+		"ArticleActionLottery":       6,
+		"ArticleActionLotteryWinner": 7,
 	}
 )
 
@@ -374,6 +386,7 @@ type CommentAction int32
 const (
 	CommentAction_CommentActionLike    CommentAction = 0 // 点赞
 	CommentAction_CommentActionCollect CommentAction = 1 // 收藏
+	CommentAction_CommentActionReply   CommentAction = 2 // 回复
 )
 
 // Enum value maps for CommentAction.
@@ -381,10 +394,12 @@ var (
 	CommentAction_name = map[int32]string{
 		0: "CommentActionLike",
 		1: "CommentActionCollect",
+		2: "CommentActionReply",
 	}
 	CommentAction_value = map[string]int32{
 		"CommentActionLike":    0,
 		"CommentActionCollect": 1,
+		"CommentActionReply":   2,
 	}
 )
 
@@ -490,15 +505,20 @@ const file_common_v1_constant_proto_rawDesc = "" +
 	"\x11ArticleTypeNormal\x10\x00\x12\x11\n" +
 	"\rArticleTypeQA\x10\x01\x12\x13\n" +
 	"\x0fArticleTypeVote\x10\x02\x12\x16\n" +
-	"\x12ArticleTypeLottery\x10\x03*p\n" +
+	"\x12ArticleTypeLottery\x10\x03*\xd9\x01\n" +
 	"\rArticleAction\x12\x15\n" +
 	"\x11ArticleActionLike\x10\x00\x12\x16\n" +
 	"\x12ArticleActionThank\x10\x01\x12\x18\n" +
 	"\x14ArticleActionCollect\x10\x02\x12\x16\n" +
-	"\x12ArticleActionWatch\x10\x03*@\n" +
+	"\x12ArticleActionWatch\x10\x03\x12\x16\n" +
+	"\x12ArticleActionReply\x10\x04\x12\x15\n" +
+	"\x11ArticleActionVote\x10\x05\x12\x18\n" +
+	"\x14ArticleActionLottery\x10\x06\x12\x1e\n" +
+	"\x1aArticleActionLotteryWinner\x10\a*X\n" +
 	"\rCommentAction\x12\x15\n" +
 	"\x11CommentActionLike\x10\x00\x12\x18\n" +
-	"\x14CommentActionCollect\x10\x01*<\n" +
+	"\x14CommentActionCollect\x10\x01\x12\x16\n" +
+	"\x12CommentActionReply\x10\x02*<\n" +
 	"\vCommentSort\x12\x15\n" +
 	"\x11CommentSortNewest\x10\x00\x12\x16\n" +
 	"\x12CommentSortHottest\x10\x01B\x0eZ\fcommon/v1;v1b\x06proto3"

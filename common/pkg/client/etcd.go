@@ -21,6 +21,8 @@ import (
 type ConnPool struct {
 	conns []*grpc.ClientConn
 	next  uint32
+	once  sync.Once // 每个池自己控制只初始化一次
+	err   error
 }
 
 // Get 返回一个轮询的 gRPC 连接
@@ -90,31 +92,28 @@ func (c *EtcdClient) newGrpcConn(service string) (*grpc.ClientConn, error) {
 
 // getConnFromPool 获取 gRPC 连接池中的连接，如果池不存在则初始化
 func (c *EtcdClient) getConnFromPool(service string, poolSize int) (*grpc.ClientConn, error) {
-	// LoadOrStore 保证并发下只创建一个池
 	val, _ := c.pools.LoadOrStore(service, &ConnPool{})
 	pool := val.(*ConnPool)
 
-	// 使用 sync.Once 初始化池中的连接
-	var once sync.Once
-	var initErr error
-	once.Do(func() {
+	pool.once.Do(func() {
 		for i := 0; i < poolSize; i++ {
 			conn, err := c.newGrpcConn(service)
 			if err != nil {
 				c.log.Errorf("failed to create grpc conn for %s: %v", service, err)
-				initErr = err
+				pool.err = err
 				continue
 			}
 			pool.conns = append(pool.conns, conn)
 		}
-		if len(pool.conns) > 0 {
-			c.log.Infof("created connection pool for service %s (size=%d)", service, len(pool.conns))
+		if len(pool.conns) == 0 {
+			pool.err = fmt.Errorf("no grpc connections available for service %s", service)
 		} else {
-			initErr = fmt.Errorf("no grpc connections available for service %s", service)
+			c.log.Infof("created connection pool for service %s (size=%d)", service, len(pool.conns))
 		}
 	})
-	if initErr != nil {
-		return nil, initErr
+
+	if pool.err != nil {
+		return nil, pool.err
 	}
 
 	return pool.Get(), nil

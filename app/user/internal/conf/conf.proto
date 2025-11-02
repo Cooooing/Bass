@@ -9,8 +9,7 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Registry registry = 3;
-  Services services = 4;
-  Jwt jwt = 5;
+  Jwt jwt = 4;
 }
 
 message Server {
@@ -67,12 +66,6 @@ message Registry {
     google.protobuf.Duration timeout = 4;
   }
   Etcd etcd = 1;
-}
-
-// 配置服务发现
-message Services {
-  string user = 1;
-  string content = 2;
 }
 
 message Jwt {

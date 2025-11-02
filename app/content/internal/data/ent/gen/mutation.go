@@ -77,6 +77,8 @@ type ArticleMutation struct {
 	addcollect_count             *int32
 	watch_count                  *int32
 	addwatch_count               *int32
+	reply_count                  *int32
+	addreply_count               *int32
 	bounty_points                *int32
 	addbounty_points             *int32
 	accepted_answer_id           *int64
@@ -894,6 +896,62 @@ func (m *ArticleMutation) ResetWatchCount() {
 	m.addwatch_count = nil
 }
 
+// SetReplyCount sets the "reply_count" field.
+func (m *ArticleMutation) SetReplyCount(i int32) {
+	m.reply_count = &i
+	m.addreply_count = nil
+}
+
+// ReplyCount returns the value of the "reply_count" field in the mutation.
+func (m *ArticleMutation) ReplyCount() (r int32, exists bool) {
+	v := m.reply_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReplyCount returns the old "reply_count" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldReplyCount(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReplyCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReplyCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReplyCount: %w", err)
+	}
+	return oldValue.ReplyCount, nil
+}
+
+// AddReplyCount adds i to the "reply_count" field.
+func (m *ArticleMutation) AddReplyCount(i int32) {
+	if m.addreply_count != nil {
+		*m.addreply_count += i
+	} else {
+		m.addreply_count = &i
+	}
+}
+
+// AddedReplyCount returns the value that was added to the "reply_count" field in this mutation.
+func (m *ArticleMutation) AddedReplyCount() (r int32, exists bool) {
+	v := m.addreply_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetReplyCount resets all changes to the "reply_count" field.
+func (m *ArticleMutation) ResetReplyCount() {
+	m.reply_count = nil
+	m.addreply_count = nil
+}
+
 // SetBountyPoints sets the "bounty_points" field.
 func (m *ArticleMutation) SetBountyPoints(i int32) {
 	m.bounty_points = &i
@@ -1644,7 +1702,7 @@ func (m *ArticleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticleMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.user_id != nil {
 		fields = append(fields, article.FieldUserID)
 	}
@@ -1686,6 +1744,9 @@ func (m *ArticleMutation) Fields() []string {
 	}
 	if m.watch_count != nil {
 		fields = append(fields, article.FieldWatchCount)
+	}
+	if m.reply_count != nil {
+		fields = append(fields, article.FieldReplyCount)
 	}
 	if m.bounty_points != nil {
 		fields = append(fields, article.FieldBountyPoints)
@@ -1744,6 +1805,8 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 		return m.CollectCount()
 	case article.FieldWatchCount:
 		return m.WatchCount()
+	case article.FieldReplyCount:
+		return m.ReplyCount()
 	case article.FieldBountyPoints:
 		return m.BountyPoints()
 	case article.FieldAcceptedAnswerID:
@@ -1795,6 +1858,8 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCollectCount(ctx)
 	case article.FieldWatchCount:
 		return m.OldWatchCount(ctx)
+	case article.FieldReplyCount:
+		return m.OldReplyCount(ctx)
 	case article.FieldBountyPoints:
 		return m.OldBountyPoints(ctx)
 	case article.FieldAcceptedAnswerID:
@@ -1916,6 +1981,13 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetWatchCount(v)
 		return nil
+	case article.FieldReplyCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReplyCount(v)
+		return nil
 	case article.FieldBountyPoints:
 		v, ok := value.(int32)
 		if !ok {
@@ -1997,6 +2069,9 @@ func (m *ArticleMutation) AddedFields() []string {
 	if m.addwatch_count != nil {
 		fields = append(fields, article.FieldWatchCount)
 	}
+	if m.addreply_count != nil {
+		fields = append(fields, article.FieldReplyCount)
+	}
 	if m.addbounty_points != nil {
 		fields = append(fields, article.FieldBountyPoints)
 	}
@@ -2036,6 +2111,8 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedCollectCount()
 	case article.FieldWatchCount:
 		return m.AddedWatchCount()
+	case article.FieldReplyCount:
+		return m.AddedReplyCount()
 	case article.FieldBountyPoints:
 		return m.AddedBountyPoints()
 	case article.FieldAcceptedAnswerID:
@@ -2110,6 +2187,13 @@ func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddWatchCount(v)
+		return nil
+	case article.FieldReplyCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddReplyCount(v)
 		return nil
 	case article.FieldBountyPoints:
 		v, ok := value.(int32)
@@ -2241,6 +2325,9 @@ func (m *ArticleMutation) ResetField(name string) error {
 		return nil
 	case article.FieldWatchCount:
 		m.ResetWatchCount()
+		return nil
+	case article.FieldReplyCount:
+		m.ResetReplyCount()
 		return nil
 	case article.FieldBountyPoints:
 		m.ResetBountyPoints()

@@ -35,7 +35,3 @@ registry:
     username: "root"
     password: "123456"
     timeout: 5s
-discovery:
-  service:
-    user: user-service
-    content: content-service

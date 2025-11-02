@@ -198,6 +198,20 @@ func (_c *ArticleCreate) SetNillableWatchCount(v *int32) *ArticleCreate {
 	return _c
 }
 
+// SetReplyCount sets the "reply_count" field.
+func (_c *ArticleCreate) SetReplyCount(v int32) *ArticleCreate {
+	_c.mutation.SetReplyCount(v)
+	return _c
+}
+
+// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableReplyCount(v *int32) *ArticleCreate {
+	if v != nil {
+		_c.SetReplyCount(*v)
+	}
+	return _c
+}
+
 // SetBountyPoints sets the "bounty_points" field.
 func (_c *ArticleCreate) SetBountyPoints(v int32) *ArticleCreate {
 	_c.mutation.SetBountyPoints(v)
@@ -467,6 +481,10 @@ func (_c *ArticleCreate) defaults() {
 		v := article.DefaultWatchCount
 		_c.mutation.SetWatchCount(v)
 	}
+	if _, ok := _c.mutation.ReplyCount(); !ok {
+		v := article.DefaultReplyCount
+		_c.mutation.SetReplyCount(v)
+	}
 	if _, ok := _c.mutation.BountyPoints(); !ok {
 		v := article.DefaultBountyPoints
 		_c.mutation.SetBountyPoints(v)
@@ -543,6 +561,9 @@ func (_c *ArticleCreate) check() error {
 	}
 	if _, ok := _c.mutation.WatchCount(); !ok {
 		return &ValidationError{Name: "watch_count", err: errors.New(`gen: missing required field "Article.watch_count"`)}
+	}
+	if _, ok := _c.mutation.ReplyCount(); !ok {
+		return &ValidationError{Name: "reply_count", err: errors.New(`gen: missing required field "Article.reply_count"`)}
 	}
 	if _, ok := _c.mutation.BountyPoints(); !ok {
 		return &ValidationError{Name: "bounty_points", err: errors.New(`gen: missing required field "Article.bounty_points"`)}
@@ -643,6 +664,10 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WatchCount(); ok {
 		_spec.SetField(article.FieldWatchCount, field.TypeInt32, value)
 		_node.WatchCount = value
+	}
+	if value, ok := _c.mutation.ReplyCount(); ok {
+		_spec.SetField(article.FieldReplyCount, field.TypeInt32, value)
+		_node.ReplyCount = value
 	}
 	if value, ok := _c.mutation.BountyPoints(); ok {
 		_spec.SetField(article.FieldBountyPoints, field.TypeInt32, value)

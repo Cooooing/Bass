@@ -13,7 +13,7 @@ import (
 
 func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func(), error) {
 	logFunc := func(args ...any) {
-		text := fmt.Sprint(args[0])
+		text := fmt.Sprint(args...)
 		log.Debugf("%s", text)
 	}
 

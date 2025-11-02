@@ -51,12 +51,17 @@ enum ArticleAction {
   ArticleActionThank = 1; // 感谢
   ArticleActionCollect = 2; // 收藏
   ArticleActionWatch = 3; // 关注
+  ArticleActionReply = 4; // 回复
+  ArticleActionVote = 5; // 投票
+  ArticleActionLottery = 6; // 抽奖参与
+  ArticleActionLotteryWinner = 7; // 抽奖中奖
 }
 
 // 评论行为类型
 enum CommentAction {
   CommentActionLike = 0; // 点赞
   CommentActionCollect = 1; // 收藏
+  CommentActionReply = 2; // 回复
 }
 
 // 评论查询排序

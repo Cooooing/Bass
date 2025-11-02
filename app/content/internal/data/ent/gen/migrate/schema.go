@@ -25,6 +25,7 @@ var (
 		{Name: "like_count", Type: field.TypeInt32, Default: 0},
 		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
 		{Name: "watch_count", Type: field.TypeInt32, Default: 0},
+		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
 		{Name: "bounty_points", Type: field.TypeInt32, Default: 0},
 		{Name: "accepted_answer_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "vote_total", Type: field.TypeInt32, Default: 0},

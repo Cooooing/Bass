@@ -6,6 +6,7 @@ import (
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -55,6 +56,8 @@ func (r CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, comment
 		updateOne.AddLikeCount(num)
 	case cv1.CommentAction_CommentActionCollect:
 		updateOne.AddCollectCount(num)
+	case cv1.CommentAction_CommentActionReply:
+		updateOne.AddReplyCount(num)
 	}
 	_, err := updateOne.Save(ctx)
 	return err
@@ -86,16 +89,16 @@ func (r CommentRepo) GetCommentList(ctx context.Context, tx *gen.Client, req *v1
 		return nil, err
 	}
 
-	userIds := make([]int64, 0)
+	userIds := set.New[int64](0)
 	for _, item := range list {
-		userIds = append(userIds, item.UserID)
+		userIds.Add(item.UserID)
 	}
 
 	userService, err := client.GetServiceClient(ctx, r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 	if err != nil {
 		return nil, err
 	}
-	userMap, err := userService.GetMap(ctx, &userv1.GetMapRequest{Ids: userIds})
+	userMap, err := userService.GetMap(ctx, &userv1.GetMapRequest{Ids: userIds.ToSlice()})
 	if err != nil {
 		return nil, err
 	}

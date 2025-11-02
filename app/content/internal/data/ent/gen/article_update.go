@@ -292,6 +292,27 @@ func (_u *ArticleUpdate) AddWatchCount(v int32) *ArticleUpdate {
 	return _u
 }
 
+// SetReplyCount sets the "reply_count" field.
+func (_u *ArticleUpdate) SetReplyCount(v int32) *ArticleUpdate {
+	_u.mutation.ResetReplyCount()
+	_u.mutation.SetReplyCount(v)
+	return _u
+}
+
+// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableReplyCount(v *int32) *ArticleUpdate {
+	if v != nil {
+		_u.SetReplyCount(*v)
+	}
+	return _u
+}
+
+// AddReplyCount adds value to the "reply_count" field.
+func (_u *ArticleUpdate) AddReplyCount(v int32) *ArticleUpdate {
+	_u.mutation.AddReplyCount(v)
+	return _u
+}
+
 // SetBountyPoints sets the "bounty_points" field.
 func (_u *ArticleUpdate) SetBountyPoints(v int32) *ArticleUpdate {
 	_u.mutation.ResetBountyPoints()
@@ -786,6 +807,12 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedWatchCount(); ok {
 		_spec.AddField(article.FieldWatchCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.ReplyCount(); ok {
+		_spec.SetField(article.FieldReplyCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedReplyCount(); ok {
+		_spec.AddField(article.FieldReplyCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.BountyPoints(); ok {
 		_spec.SetField(article.FieldBountyPoints, field.TypeInt32, value)
@@ -1380,6 +1407,27 @@ func (_u *ArticleUpdateOne) AddWatchCount(v int32) *ArticleUpdateOne {
 	return _u
 }
 
+// SetReplyCount sets the "reply_count" field.
+func (_u *ArticleUpdateOne) SetReplyCount(v int32) *ArticleUpdateOne {
+	_u.mutation.ResetReplyCount()
+	_u.mutation.SetReplyCount(v)
+	return _u
+}
+
+// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableReplyCount(v *int32) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetReplyCount(*v)
+	}
+	return _u
+}
+
+// AddReplyCount adds value to the "reply_count" field.
+func (_u *ArticleUpdateOne) AddReplyCount(v int32) *ArticleUpdateOne {
+	_u.mutation.AddReplyCount(v)
+	return _u
+}
+
 // SetBountyPoints sets the "bounty_points" field.
 func (_u *ArticleUpdateOne) SetBountyPoints(v int32) *ArticleUpdateOne {
 	_u.mutation.ResetBountyPoints()
@@ -1904,6 +1952,12 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	}
 	if value, ok := _u.mutation.AddedWatchCount(); ok {
 		_spec.AddField(article.FieldWatchCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.ReplyCount(); ok {
+		_spec.SetField(article.FieldReplyCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedReplyCount(); ok {
+		_spec.AddField(article.FieldReplyCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.BountyPoints(); ok {
 		_spec.SetField(article.FieldBountyPoints, field.TypeInt32, value)

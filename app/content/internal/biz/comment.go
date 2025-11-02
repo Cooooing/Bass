@@ -3,7 +3,7 @@ package biz
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
-	"common/pkg/util"
+	"common/pkg/util/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent"
@@ -28,7 +28,7 @@ func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, arti
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *model.Comment, err error) {
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		// 回复文章
-		exist, err := d.articleRepo.GetArticleById(ctx, d.db, comment.ArticleID)
+		exist, err := d.articleRepo.GetArticleById(ctx, tx, comment.ArticleID)
 		if err != nil {
 			return err
 		}
@@ -42,7 +42,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 		// 回复评论
 		replyComment := &model.Comment{}
 		if comment.ReplyID != nil {
-			replyComment, err = d.commentRepo.GetCommentById(ctx, d.db, *comment.ReplyID)
+			replyComment, err = d.commentRepo.GetCommentById(ctx, tx, *comment.ReplyID)
 			if err != nil {
 				return err
 			}
@@ -52,6 +52,16 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			if replyComment.ArticleID != comment.ArticleID {
 				return cv1.ErrorBadRequest("reply comment not belong to this article")
 			}
+
+			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, cv1.CommentAction_CommentActionReply, 1)
+			if err != nil {
+				return err
+			}
+		}
+
+		err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, cv1.ArticleAction_ArticleActionReply, 1)
+		if err != nil {
+			return err
 		}
 
 		save := &model.Comment{
@@ -59,7 +69,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			UserID:    comment.UserID,
 			Content:   comment.Content,
 			Level:     replyComment.Level + 1,
-			ParentID:  util.If(comment.ReplyID == nil, nil, util.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
+			ParentID:  base.If(comment.ReplyID == nil, nil, base.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
 			ReplyID:   comment.ReplyID,
 		}
 

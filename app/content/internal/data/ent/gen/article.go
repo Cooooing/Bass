@@ -45,6 +45,8 @@ type Article struct {
 	CollectCount int32 `json:"collect_count,omitempty"`
 	// 关注数
 	WatchCount int32 `json:"watch_count,omitempty"`
+	// 回复数
+	ReplyCount int32 `json:"reply_count,omitempty"`
 	// 悬赏积分
 	BountyPoints int32 `json:"bounty_points,omitempty"`
 	// 采纳评论ID
@@ -145,7 +147,7 @@ func (*Article) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous:
 			values[i] = new(sql.NullBool)
-		case article.FieldID, article.FieldUserID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount:
+		case article.FieldID, article.FieldUserID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount:
 			values[i] = new(sql.NullInt64)
 		case article.FieldTitle, article.FieldContent, article.FieldRewardContent:
 			values[i] = new(sql.NullString)
@@ -256,6 +258,12 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field watch_count", values[i])
 			} else if value.Valid {
 				_m.WatchCount = int32(value.Int64)
+			}
+		case article.FieldReplyCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field reply_count", values[i])
+			} else if value.Valid {
+				_m.ReplyCount = int32(value.Int64)
 			}
 		case article.FieldBountyPoints:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -410,6 +418,9 @@ func (_m *Article) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("watch_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WatchCount))
+	builder.WriteString(", ")
+	builder.WriteString("reply_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReplyCount))
 	builder.WriteString(", ")
 	builder.WriteString("bounty_points=")
 	builder.WriteString(fmt.Sprintf("%v", _m.BountyPoints))

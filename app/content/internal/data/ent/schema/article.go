@@ -34,6 +34,7 @@ func (Article) Fields() []ent.Field {
 		field.Int32("like_count").Comment("点赞数").Default(0),
 		field.Int32("collect_count").Comment("收藏数").Default(0),
 		field.Int32("watch_count").Comment("关注数").Default(0),
+		field.Int32("reply_count").Comment("回复数").Default(0),
 
 		// 问答
 		field.Int32("bounty_points").Comment("悬赏积分").Default(0),

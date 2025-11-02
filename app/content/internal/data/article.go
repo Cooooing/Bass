@@ -64,6 +64,16 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articl
 		updateOne.AddCollectCount(num)
 	case cv1.ArticleAction_ArticleActionWatch:
 		updateOne.AddWatchCount(num)
+	case cv1.ArticleAction_ArticleActionReply:
+		updateOne.AddReplyCount(num)
+	case cv1.ArticleAction_ArticleActionVote:
+		updateOne.AddVoteTotal(num)
+	case cv1.ArticleAction_ArticleActionLottery:
+		updateOne.AddLotteryParticipantCount(num)
+	case cv1.ArticleAction_ArticleActionLotteryWinner:
+		updateOne.AddLotteryWinnerCount(num)
+	default:
+		return nil
 	}
 	return updateOne.Exec(ctx)
 }

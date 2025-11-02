@@ -2,7 +2,7 @@ package service
 
 import (
 	v1 "common/api/content/v1"
-	"common/pkg/util"
+	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -44,7 +44,7 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 		ArticleID: req.ArticleId,
 		UserID:    user.ID,
 		Content:   req.Content,
-		ReplyID:   util.If(req.ReplyId != 0, &req.ReplyId, nil),
+		ReplyID:   base.If(req.ReplyId != 0, &req.ReplyId, nil),
 	})
 	return &v1.AddCommentReply{}, err
 }

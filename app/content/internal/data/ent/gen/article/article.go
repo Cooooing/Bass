@@ -42,6 +42,8 @@ const (
 	FieldCollectCount = "collect_count"
 	// FieldWatchCount holds the string denoting the watch_count field in the database.
 	FieldWatchCount = "watch_count"
+	// FieldReplyCount holds the string denoting the reply_count field in the database.
+	FieldReplyCount = "reply_count"
 	// FieldBountyPoints holds the string denoting the bounty_points field in the database.
 	FieldBountyPoints = "bounty_points"
 	// FieldAcceptedAnswerID holds the string denoting the accepted_answer_id field in the database.
@@ -129,6 +131,7 @@ var Columns = []string{
 	FieldLikeCount,
 	FieldCollectCount,
 	FieldWatchCount,
+	FieldReplyCount,
 	FieldBountyPoints,
 	FieldAcceptedAnswerID,
 	FieldVoteTotal,
@@ -179,6 +182,8 @@ var (
 	DefaultCollectCount int32
 	// DefaultWatchCount holds the default value on creation for the "watch_count" field.
 	DefaultWatchCount int32
+	// DefaultReplyCount holds the default value on creation for the "reply_count" field.
+	DefaultReplyCount int32
 	// DefaultBountyPoints holds the default value on creation for the "bounty_points" field.
 	DefaultBountyPoints int32
 	// DefaultVoteTotal holds the default value on creation for the "vote_total" field.
@@ -269,6 +274,11 @@ func ByCollectCount(opts ...sql.OrderTermOption) OrderOption {
 // ByWatchCount orders the results by the watch_count field.
 func ByWatchCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWatchCount, opts...).ToFunc()
+}
+
+// ByReplyCount orders the results by the reply_count field.
+func ByReplyCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReplyCount, opts...).ToFunc()
 }
 
 // ByBountyPoints orders the results by the bounty_points field.

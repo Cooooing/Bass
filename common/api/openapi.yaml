@@ -778,71 +778,125 @@ components:
             properties:
                 id:
                     type: string
+                    description: 唯一ID
                 userId:
                     type: string
+                    description: 作者ID
                 title:
                     type: string
+                    description: 标题
                 content:
                     type: string
+                    description: 正文内容
                 hasPostscript:
                     type: boolean
+                    description: 是否有附言
                 rewardContent:
                     type: string
+                    description: 打赏区内容（可为空）
                 rewardPoints:
                     type: integer
+                    description: 打赏积分
                     format: int32
                 status:
                     type: integer
+                    description: '状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除'
                     format: int32
                 type:
                     type: integer
+                    description: '类型: 0-普通 1-问答 2-投票 3-抽奖'
                     format: int32
                 commentable:
                     type: boolean
+                    description: 是否允许评论
                 anonymous:
                     type: boolean
+                    description: 是否匿名
                 thankCount:
                     type: integer
+                    description: 感谢数
                     format: int32
                 likeCount:
                     type: integer
+                    description: 点赞数
                     format: int32
                 collectCount:
                     type: integer
+                    description: 收藏数
                     format: int32
                 watchCount:
                     type: integer
+                    description: 关注数
                     format: int32
                 replyCount:
                     type: integer
+                    description: 回复数
                     format: int32
                 bountyPoints:
                     type: integer
+                    description: 悬赏积分
                     format: int32
                 acceptedAnswerId:
                     type: string
+                    description: 采纳评论ID（可为空）
                 voteTotal:
                     type: integer
+                    description: 总投票数
                     format: int32
                 lotteryParticipantCount:
                     type: integer
+                    description: 抽奖参与人数
                     format: int32
                 lotteryWinnerCount:
                     type: integer
+                    description: 抽奖获奖人数
                     format: int32
                 createdAt:
                     type: string
+                    description: 创建时间
                     format: date-time
                 updatedAt:
                     type: string
+                    description: 更新时间
                     format: date-time
                 authorUser:
-                    $ref: '#/components/schemas/common.api.user.v1.User'
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 作者信息
                 replyUser:
-                    $ref: '#/components/schemas/common.api.user.v1.User'
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 最后回复用户
                 repliedAt:
                     type: string
+                    description: 最后回复时间
                     format: date-time
+                postscripts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.ArticlePostscript'
+                    description: 附言
+        common.api.content.v1.ArticlePostscript:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: 主键ID
+                articleId:
+                    type: string
+                    description: 所属文章ID
+                content:
+                    type: string
+                    description: 附言内容
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+            description: 文章附言
         common.api.content.v1.CollectArticleReply:
             type: object
             properties: {}

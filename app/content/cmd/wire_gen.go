@@ -49,11 +49,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, rabbitMQClient)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
 	commentRepo := data.NewCommentRepo(baseRepo, genClient)
 	domainRepo := data.NewDomainRepo(baseRepo)
 	tagRepo := data.NewTagRepo(baseRepo)
-	articleRepo := data.NewArticleRepo(baseRepo, genClient, commentRepo, domainRepo, tagRepo)
-	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
+	articleRepo := data.NewArticleRepo(baseRepo, genClient, articlePostscriptRepo, commentRepo, domainRepo, tagRepo)
 	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
 	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, domainRepo)
 	if err != nil {

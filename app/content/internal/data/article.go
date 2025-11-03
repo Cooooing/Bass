@@ -12,6 +12,7 @@ import (
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/tag"
 	"context"
 	"encoding/json"
@@ -23,19 +24,21 @@ import (
 
 type ArticleRepo struct {
 	*BaseRepo
-	client      *gen.Client
-	commentRepo repo.CommentRepo
-	domainRepo  repo.DomainRepo
-	tagRepo     repo.TagRepo
+	client         *gen.Client
+	postscriptRepo repo.ArticlePostscriptRepo
+	commentRepo    repo.CommentRepo
+	domainRepo     repo.DomainRepo
+	tagRepo        repo.TagRepo
 }
 
-func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo, tagRepo repo.TagRepo) repo.ArticleRepo {
+func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client, postscriptRepo repo.ArticlePostscriptRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo, tagRepo repo.TagRepo) repo.ArticleRepo {
 	return &ArticleRepo{
-		BaseRepo:    baseRepo,
-		client:      client,
-		commentRepo: commentRepo,
-		domainRepo:  domainRepo,
-		tagRepo:     tagRepo,
+		BaseRepo:       baseRepo,
+		client:         client,
+		postscriptRepo: postscriptRepo,
+		commentRepo:    commentRepo,
+		domainRepo:     domainRepo,
+		tagRepo:        tagRepo,
 	}
 }
 
@@ -127,9 +130,10 @@ func (r *ArticleRepo) Exist(ctx context.Context, client *gen.Client, id int64, s
 func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id int64) (*model.Article, error) {
 	query, err := client.Article.Query().
 		Where(article.IDEQ(id)).
-		WithPostscripts().
+		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
+			q.Order(gen.Asc(articlepostscript.FieldCreatedAt))
+		}).
 		WithTags().
-		WithComments().
 		First(ctx)
 	return (*model.Article)(query), err
 }
@@ -147,6 +151,17 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 	}
 	a.CreatedAt = timestamppb.New(*query.CreatedAt)
 	a.UpdatedAt = timestamppb.New(*query.UpdatedAt)
+	ap := make([]*v1.ArticlePostscript, 0)
+	for _, item := range (*gen.Article)(query).Edges.Postscripts {
+		ap = append(ap, &v1.ArticlePostscript{
+			Id:        item.ID,
+			ArticleId: item.ArticleID,
+			Content:   item.Content,
+			CreatedAt: timestamppb.New(*item.CreatedAt),
+			UpdatedAt: timestamppb.New(*item.UpdatedAt),
+		})
+	}
+	a.Postscripts = ap
 
 	lastComment, _ := r.commentRepo.GetArticleLastComment(ctx, tx, query.ID)
 	if lastComment != nil {
@@ -157,16 +172,24 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 	if err != nil {
 		return nil, err
 	}
-	userAuthor, err := userServiceClient.GetOne(ctx, &userv1.GetOneRequest{
-		Id: query.UserID,
+	userIds := []int64{query.UserID}
+	if lastComment != nil {
+		userIds = append(userIds, lastComment.UserID)
+	}
+	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
+		Ids: userIds,
 	})
 	if err != nil {
 		return nil, err
 	}
 
+	if lastComment != nil {
+		a.ReplyUser = userAuthorsMap.Users[lastComment.UserID]
+	}
+
 	return &v1.GetArticleOneReply{
 		Article: a,
-		User:    userAuthor.User,
+		User:    userAuthorsMap.Users[query.UserID],
 	}, nil
 }
 

@@ -27,35 +27,63 @@ const (
 )
 
 type Article struct {
-	state                   protoimpl.MessageState `protogen:"open.v1"`
-	Id                      int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                                                             // 唯一ID
-	UserId                  int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                                       // 作者ID
-	Title                   string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`                                                                        // 标题
-	Content                 string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`                                                                    // 正文内容
-	HasPostscript           bool                   `protobuf:"varint,5,opt,name=has_postscript,json=hasPostscript,proto3" json:"has_postscript,omitempty"`                                  // 是否有附言
-	RewardContent           string                 `protobuf:"bytes,6,opt,name=reward_content,json=rewardContent,proto3" json:"reward_content,omitempty"`                                   // 打赏区内容（可为空）
-	RewardPoints            int32                  `protobuf:"varint,7,opt,name=reward_points,json=rewardPoints,proto3" json:"reward_points,omitempty"`                                     // 打赏积分
-	Status                  int32                  `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`                                                                     // 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-	Type                    int32                  `protobuf:"varint,9,opt,name=type,proto3" json:"type,omitempty"`                                                                         // 类型: 0-普通 1-问答 2-投票 3-抽奖
-	Commentable             bool                   `protobuf:"varint,10,opt,name=commentable,proto3" json:"commentable,omitempty"`                                                          // 是否允许评论
-	Anonymous               bool                   `protobuf:"varint,11,opt,name=anonymous,proto3" json:"anonymous,omitempty"`                                                              // 是否匿名
-	ThankCount              int32                  `protobuf:"varint,12,opt,name=thank_count,json=thankCount,proto3" json:"thank_count,omitempty"`                                          // 感谢数
-	LikeCount               int32                  `protobuf:"varint,13,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"`                                             // 点赞数
-	CollectCount            int32                  `protobuf:"varint,14,opt,name=collect_count,json=collectCount,proto3" json:"collect_count,omitempty"`                                    // 收藏数
-	WatchCount              int32                  `protobuf:"varint,15,opt,name=watch_count,json=watchCount,proto3" json:"watch_count,omitempty"`                                          // 关注数
-	ReplyCount              int32                  `protobuf:"varint,16,opt,name=reply_count,json=replyCount,proto3" json:"reply_count,omitempty"`                                          // 回复数
-	BountyPoints            int32                  `protobuf:"varint,17,opt,name=bounty_points,json=bountyPoints,proto3" json:"bounty_points,omitempty"`                                    // 悬赏积分
-	AcceptedAnswerId        int64                  `protobuf:"varint,18,opt,name=accepted_answer_id,json=acceptedAnswerId,proto3" json:"accepted_answer_id,omitempty"`                      // 采纳评论ID（可为空）
-	VoteTotal               int32                  `protobuf:"varint,19,opt,name=vote_total,json=voteTotal,proto3" json:"vote_total,omitempty"`                                             // 总投票数
-	LotteryParticipantCount int32                  `protobuf:"varint,20,opt,name=lottery_participant_count,json=lotteryParticipantCount,proto3" json:"lottery_participant_count,omitempty"` // 抽奖参与人数
-	LotteryWinnerCount      int32                  `protobuf:"varint,21,opt,name=lottery_winner_count,json=lotteryWinnerCount,proto3" json:"lottery_winner_count,omitempty"`                // 抽奖获奖人数
-	CreatedAt               *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                              // 创建时间
-	UpdatedAt               *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                              // 更新时间
-	AuthorUser              *v1.User               `protobuf:"bytes,24,opt,name=author_user,json=authorUser,proto3" json:"author_user,omitempty"`                                           // 作者信息
-	ReplyUser               *v1.User               `protobuf:"bytes,25,opt,name=reply_user,json=replyUser,proto3" json:"reply_user,omitempty"`                                              // 最后回复用户
-	RepliedAt               *timestamppb.Timestamp `protobuf:"bytes,26,opt,name=replied_at,json=repliedAt,proto3" json:"replied_at,omitempty"`                                              // 最后回复时间
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 唯一ID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 作者ID
+	UserId int64 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// 标题
+	Title string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	// 正文内容
+	Content string `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	// 是否有附言
+	HasPostscript bool `protobuf:"varint,5,opt,name=has_postscript,json=hasPostscript,proto3" json:"has_postscript,omitempty"`
+	// 打赏区内容（可为空）
+	RewardContent string `protobuf:"bytes,6,opt,name=reward_content,json=rewardContent,proto3" json:"reward_content,omitempty"`
+	// 打赏积分
+	RewardPoints int32 `protobuf:"varint,7,opt,name=reward_points,json=rewardPoints,proto3" json:"reward_points,omitempty"`
+	// 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
+	Status int32 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`
+	// 类型: 0-普通 1-问答 2-投票 3-抽奖
+	Type int32 `protobuf:"varint,9,opt,name=type,proto3" json:"type,omitempty"`
+	// 是否允许评论
+	Commentable bool `protobuf:"varint,10,opt,name=commentable,proto3" json:"commentable,omitempty"`
+	// 是否匿名
+	Anonymous bool `protobuf:"varint,11,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
+	// 感谢数
+	ThankCount int32 `protobuf:"varint,12,opt,name=thank_count,json=thankCount,proto3" json:"thank_count,omitempty"`
+	// 点赞数
+	LikeCount int32 `protobuf:"varint,13,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"`
+	// 收藏数
+	CollectCount int32 `protobuf:"varint,14,opt,name=collect_count,json=collectCount,proto3" json:"collect_count,omitempty"`
+	// 关注数
+	WatchCount int32 `protobuf:"varint,15,opt,name=watch_count,json=watchCount,proto3" json:"watch_count,omitempty"`
+	// 回复数
+	ReplyCount int32 `protobuf:"varint,16,opt,name=reply_count,json=replyCount,proto3" json:"reply_count,omitempty"`
+	// 悬赏积分
+	BountyPoints int32 `protobuf:"varint,17,opt,name=bounty_points,json=bountyPoints,proto3" json:"bounty_points,omitempty"`
+	// 采纳评论ID（可为空）
+	AcceptedAnswerId int64 `protobuf:"varint,18,opt,name=accepted_answer_id,json=acceptedAnswerId,proto3" json:"accepted_answer_id,omitempty"`
+	// 总投票数
+	VoteTotal int32 `protobuf:"varint,19,opt,name=vote_total,json=voteTotal,proto3" json:"vote_total,omitempty"`
+	// 抽奖参与人数
+	LotteryParticipantCount int32 `protobuf:"varint,20,opt,name=lottery_participant_count,json=lotteryParticipantCount,proto3" json:"lottery_participant_count,omitempty"`
+	// 抽奖获奖人数
+	LotteryWinnerCount int32 `protobuf:"varint,21,opt,name=lottery_winner_count,json=lotteryWinnerCount,proto3" json:"lottery_winner_count,omitempty"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// 作者信息
+	AuthorUser *v1.User `protobuf:"bytes,24,opt,name=author_user,json=authorUser,proto3" json:"author_user,omitempty"`
+	// 最后回复用户
+	ReplyUser *v1.User `protobuf:"bytes,25,opt,name=reply_user,json=replyUser,proto3" json:"reply_user,omitempty"`
+	// 最后回复时间
+	RepliedAt *timestamppb.Timestamp `protobuf:"bytes,26,opt,name=replied_at,json=repliedAt,proto3" json:"replied_at,omitempty"`
+	// 附言
+	Postscripts   []*ArticlePostscript `protobuf:"bytes,27,rep,name=postscripts,proto3" json:"postscripts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Article) Reset() {
@@ -270,6 +298,95 @@ func (x *Article) GetRepliedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *Article) GetPostscripts() []*ArticlePostscript {
+	if x != nil {
+		return x.Postscripts
+	}
+	return nil
+}
+
+// 文章附言
+type ArticlePostscript struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 主键ID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 所属文章ID
+	ArticleId int64 `protobuf:"varint,2,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
+	// 附言内容
+	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ArticlePostscript) Reset() {
+	*x = ArticlePostscript{}
+	mi := &file_content_v1_article_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ArticlePostscript) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ArticlePostscript) ProtoMessage() {}
+
+func (x *ArticlePostscript) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_article_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ArticlePostscript.ProtoReflect.Descriptor instead.
+func (*ArticlePostscript) Descriptor() ([]byte, []int) {
+	return file_content_v1_article_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ArticlePostscript) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *ArticlePostscript) GetArticleId() int64 {
+	if x != nil {
+		return x.ArticleId
+	}
+	return 0
+}
+
+func (x *ArticlePostscript) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *ArticlePostscript) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *ArticlePostscript) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 type AddArticleRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 标题
@@ -292,7 +409,7 @@ type AddArticleRequest struct {
 
 func (x *AddArticleRequest) Reset() {
 	*x = AddArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[1]
+	mi := &file_content_v1_article_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -304,7 +421,7 @@ func (x *AddArticleRequest) String() string {
 func (*AddArticleRequest) ProtoMessage() {}
 
 func (x *AddArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[1]
+	mi := &file_content_v1_article_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -317,7 +434,7 @@ func (x *AddArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddArticleRequest.ProtoReflect.Descriptor instead.
 func (*AddArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{1}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *AddArticleRequest) GetTitle() string {
@@ -377,7 +494,7 @@ type AddArticleReply struct {
 
 func (x *AddArticleReply) Reset() {
 	*x = AddArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[2]
+	mi := &file_content_v1_article_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -389,7 +506,7 @@ func (x *AddArticleReply) String() string {
 func (*AddArticleReply) ProtoMessage() {}
 
 func (x *AddArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[2]
+	mi := &file_content_v1_article_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -402,7 +519,7 @@ func (x *AddArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddArticleReply.ProtoReflect.Descriptor instead.
 func (*AddArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{2}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{3}
 }
 
 type PublishArticleRequest struct {
@@ -415,7 +532,7 @@ type PublishArticleRequest struct {
 
 func (x *PublishArticleRequest) Reset() {
 	*x = PublishArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[3]
+	mi := &file_content_v1_article_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -427,7 +544,7 @@ func (x *PublishArticleRequest) String() string {
 func (*PublishArticleRequest) ProtoMessage() {}
 
 func (x *PublishArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[3]
+	mi := &file_content_v1_article_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -440,7 +557,7 @@ func (x *PublishArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishArticleRequest.ProtoReflect.Descriptor instead.
 func (*PublishArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{3}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PublishArticleRequest) GetArticleId() int64 {
@@ -458,7 +575,7 @@ type PublishArticleReply struct {
 
 func (x *PublishArticleReply) Reset() {
 	*x = PublishArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[4]
+	mi := &file_content_v1_article_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -470,7 +587,7 @@ func (x *PublishArticleReply) String() string {
 func (*PublishArticleReply) ProtoMessage() {}
 
 func (x *PublishArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[4]
+	mi := &file_content_v1_article_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -483,7 +600,7 @@ func (x *PublishArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishArticleReply.ProtoReflect.Descriptor instead.
 func (*PublishArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{4}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{5}
 }
 
 type UpdateArticleRequest struct {
@@ -502,7 +619,7 @@ type UpdateArticleRequest struct {
 
 func (x *UpdateArticleRequest) Reset() {
 	*x = UpdateArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[5]
+	mi := &file_content_v1_article_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -514,7 +631,7 @@ func (x *UpdateArticleRequest) String() string {
 func (*UpdateArticleRequest) ProtoMessage() {}
 
 func (x *UpdateArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[5]
+	mi := &file_content_v1_article_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -527,7 +644,7 @@ func (x *UpdateArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateArticleRequest.ProtoReflect.Descriptor instead.
 func (*UpdateArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{5}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateArticleRequest) GetArticleId() int64 {
@@ -566,7 +683,7 @@ type UpdateArticleReply struct {
 
 func (x *UpdateArticleReply) Reset() {
 	*x = UpdateArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[6]
+	mi := &file_content_v1_article_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -578,7 +695,7 @@ func (x *UpdateArticleReply) String() string {
 func (*UpdateArticleReply) ProtoMessage() {}
 
 func (x *UpdateArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[6]
+	mi := &file_content_v1_article_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -591,7 +708,7 @@ func (x *UpdateArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateArticleReply.ProtoReflect.Descriptor instead.
 func (*UpdateArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{6}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{7}
 }
 
 type DeleteArticleRequest struct {
@@ -604,7 +721,7 @@ type DeleteArticleRequest struct {
 
 func (x *DeleteArticleRequest) Reset() {
 	*x = DeleteArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[7]
+	mi := &file_content_v1_article_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -616,7 +733,7 @@ func (x *DeleteArticleRequest) String() string {
 func (*DeleteArticleRequest) ProtoMessage() {}
 
 func (x *DeleteArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[7]
+	mi := &file_content_v1_article_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -629,7 +746,7 @@ func (x *DeleteArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteArticleRequest.ProtoReflect.Descriptor instead.
 func (*DeleteArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{7}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteArticleRequest) GetArticleId() int64 {
@@ -647,7 +764,7 @@ type DeleteArticleReply struct {
 
 func (x *DeleteArticleReply) Reset() {
 	*x = DeleteArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[8]
+	mi := &file_content_v1_article_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -659,7 +776,7 @@ func (x *DeleteArticleReply) String() string {
 func (*DeleteArticleReply) ProtoMessage() {}
 
 func (x *DeleteArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[8]
+	mi := &file_content_v1_article_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -672,7 +789,7 @@ func (x *DeleteArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteArticleReply.ProtoReflect.Descriptor instead.
 func (*DeleteArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{8}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{9}
 }
 
 type GetArticleRequest struct {
@@ -693,7 +810,7 @@ type GetArticleRequest struct {
 
 func (x *GetArticleRequest) Reset() {
 	*x = GetArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[9]
+	mi := &file_content_v1_article_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -705,7 +822,7 @@ func (x *GetArticleRequest) String() string {
 func (*GetArticleRequest) ProtoMessage() {}
 
 func (x *GetArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[9]
+	mi := &file_content_v1_article_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -718,7 +835,7 @@ func (x *GetArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetArticleRequest.ProtoReflect.Descriptor instead.
 func (*GetArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{9}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetArticleRequest) GetPage() *v11.PageRequest {
@@ -768,7 +885,7 @@ type GetArticleReply struct {
 
 func (x *GetArticleReply) Reset() {
 	*x = GetArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[10]
+	mi := &file_content_v1_article_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -780,7 +897,7 @@ func (x *GetArticleReply) String() string {
 func (*GetArticleReply) ProtoMessage() {}
 
 func (x *GetArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[10]
+	mi := &file_content_v1_article_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -793,7 +910,7 @@ func (x *GetArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetArticleReply.ProtoReflect.Descriptor instead.
 func (*GetArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{10}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetArticleReply) GetPage() *v11.PageReply {
@@ -820,7 +937,7 @@ type GetArticleOneRequest struct {
 
 func (x *GetArticleOneRequest) Reset() {
 	*x = GetArticleOneRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[11]
+	mi := &file_content_v1_article_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -832,7 +949,7 @@ func (x *GetArticleOneRequest) String() string {
 func (*GetArticleOneRequest) ProtoMessage() {}
 
 func (x *GetArticleOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[11]
+	mi := &file_content_v1_article_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -845,7 +962,7 @@ func (x *GetArticleOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetArticleOneRequest.ProtoReflect.Descriptor instead.
 func (*GetArticleOneRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{11}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetArticleOneRequest) GetArticleId() int64 {
@@ -867,7 +984,7 @@ type GetArticleOneReply struct {
 
 func (x *GetArticleOneReply) Reset() {
 	*x = GetArticleOneReply{}
-	mi := &file_content_v1_article_proto_msgTypes[12]
+	mi := &file_content_v1_article_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -879,7 +996,7 @@ func (x *GetArticleOneReply) String() string {
 func (*GetArticleOneReply) ProtoMessage() {}
 
 func (x *GetArticleOneReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[12]
+	mi := &file_content_v1_article_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -892,7 +1009,7 @@ func (x *GetArticleOneReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetArticleOneReply.ProtoReflect.Descriptor instead.
 func (*GetArticleOneReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{12}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetArticleOneReply) GetArticle() *Article {
@@ -921,7 +1038,7 @@ type AddPostscriptArticleRequest struct {
 
 func (x *AddPostscriptArticleRequest) Reset() {
 	*x = AddPostscriptArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[13]
+	mi := &file_content_v1_article_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -933,7 +1050,7 @@ func (x *AddPostscriptArticleRequest) String() string {
 func (*AddPostscriptArticleRequest) ProtoMessage() {}
 
 func (x *AddPostscriptArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[13]
+	mi := &file_content_v1_article_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -946,7 +1063,7 @@ func (x *AddPostscriptArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddPostscriptArticleRequest.ProtoReflect.Descriptor instead.
 func (*AddPostscriptArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{13}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AddPostscriptArticleRequest) GetArticleId() int64 {
@@ -971,7 +1088,7 @@ type AddPostscriptArticleReply struct {
 
 func (x *AddPostscriptArticleReply) Reset() {
 	*x = AddPostscriptArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[14]
+	mi := &file_content_v1_article_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -983,7 +1100,7 @@ func (x *AddPostscriptArticleReply) String() string {
 func (*AddPostscriptArticleReply) ProtoMessage() {}
 
 func (x *AddPostscriptArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[14]
+	mi := &file_content_v1_article_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -996,7 +1113,7 @@ func (x *AddPostscriptArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddPostscriptArticleReply.ProtoReflect.Descriptor instead.
 func (*AddPostscriptArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{14}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{15}
 }
 
 type RewardArticleRequest struct {
@@ -1009,7 +1126,7 @@ type RewardArticleRequest struct {
 
 func (x *RewardArticleRequest) Reset() {
 	*x = RewardArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[15]
+	mi := &file_content_v1_article_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1021,7 +1138,7 @@ func (x *RewardArticleRequest) String() string {
 func (*RewardArticleRequest) ProtoMessage() {}
 
 func (x *RewardArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[15]
+	mi := &file_content_v1_article_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1034,7 +1151,7 @@ func (x *RewardArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardArticleRequest.ProtoReflect.Descriptor instead.
 func (*RewardArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{15}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RewardArticleRequest) GetArticleId() int64 {
@@ -1052,7 +1169,7 @@ type RewardArticleReply struct {
 
 func (x *RewardArticleReply) Reset() {
 	*x = RewardArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[16]
+	mi := &file_content_v1_article_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1064,7 +1181,7 @@ func (x *RewardArticleReply) String() string {
 func (*RewardArticleReply) ProtoMessage() {}
 
 func (x *RewardArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[16]
+	mi := &file_content_v1_article_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1077,7 +1194,7 @@ func (x *RewardArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardArticleReply.ProtoReflect.Descriptor instead.
 func (*RewardArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{16}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{17}
 }
 
 type ThankArticleRequest struct {
@@ -1092,7 +1209,7 @@ type ThankArticleRequest struct {
 
 func (x *ThankArticleRequest) Reset() {
 	*x = ThankArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[17]
+	mi := &file_content_v1_article_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1104,7 +1221,7 @@ func (x *ThankArticleRequest) String() string {
 func (*ThankArticleRequest) ProtoMessage() {}
 
 func (x *ThankArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[17]
+	mi := &file_content_v1_article_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1117,7 +1234,7 @@ func (x *ThankArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ThankArticleRequest.ProtoReflect.Descriptor instead.
 func (*ThankArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{17}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ThankArticleRequest) GetArticleId() int64 {
@@ -1142,7 +1259,7 @@ type ThankArticleReply struct {
 
 func (x *ThankArticleReply) Reset() {
 	*x = ThankArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[18]
+	mi := &file_content_v1_article_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1154,7 +1271,7 @@ func (x *ThankArticleReply) String() string {
 func (*ThankArticleReply) ProtoMessage() {}
 
 func (x *ThankArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[18]
+	mi := &file_content_v1_article_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1167,7 +1284,7 @@ func (x *ThankArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ThankArticleReply.ProtoReflect.Descriptor instead.
 func (*ThankArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{18}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{19}
 }
 
 type LikeArticleRequest struct {
@@ -1182,7 +1299,7 @@ type LikeArticleRequest struct {
 
 func (x *LikeArticleRequest) Reset() {
 	*x = LikeArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[19]
+	mi := &file_content_v1_article_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1194,7 +1311,7 @@ func (x *LikeArticleRequest) String() string {
 func (*LikeArticleRequest) ProtoMessage() {}
 
 func (x *LikeArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[19]
+	mi := &file_content_v1_article_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1207,7 +1324,7 @@ func (x *LikeArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LikeArticleRequest.ProtoReflect.Descriptor instead.
 func (*LikeArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{19}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *LikeArticleRequest) GetArticleId() int64 {
@@ -1232,7 +1349,7 @@ type LikeArticleReply struct {
 
 func (x *LikeArticleReply) Reset() {
 	*x = LikeArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[20]
+	mi := &file_content_v1_article_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1244,7 +1361,7 @@ func (x *LikeArticleReply) String() string {
 func (*LikeArticleReply) ProtoMessage() {}
 
 func (x *LikeArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[20]
+	mi := &file_content_v1_article_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1257,7 +1374,7 @@ func (x *LikeArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LikeArticleReply.ProtoReflect.Descriptor instead.
 func (*LikeArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{20}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{21}
 }
 
 type CollectArticleRequest struct {
@@ -1272,7 +1389,7 @@ type CollectArticleRequest struct {
 
 func (x *CollectArticleRequest) Reset() {
 	*x = CollectArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[21]
+	mi := &file_content_v1_article_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1284,7 +1401,7 @@ func (x *CollectArticleRequest) String() string {
 func (*CollectArticleRequest) ProtoMessage() {}
 
 func (x *CollectArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[21]
+	mi := &file_content_v1_article_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1297,7 +1414,7 @@ func (x *CollectArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectArticleRequest.ProtoReflect.Descriptor instead.
 func (*CollectArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{21}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *CollectArticleRequest) GetArticleId() int64 {
@@ -1322,7 +1439,7 @@ type CollectArticleReply struct {
 
 func (x *CollectArticleReply) Reset() {
 	*x = CollectArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[22]
+	mi := &file_content_v1_article_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1334,7 +1451,7 @@ func (x *CollectArticleReply) String() string {
 func (*CollectArticleReply) ProtoMessage() {}
 
 func (x *CollectArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[22]
+	mi := &file_content_v1_article_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1347,7 +1464,7 @@ func (x *CollectArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectArticleReply.ProtoReflect.Descriptor instead.
 func (*CollectArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{22}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{23}
 }
 
 type WatchArticleRequest struct {
@@ -1362,7 +1479,7 @@ type WatchArticleRequest struct {
 
 func (x *WatchArticleRequest) Reset() {
 	*x = WatchArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[23]
+	mi := &file_content_v1_article_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1374,7 +1491,7 @@ func (x *WatchArticleRequest) String() string {
 func (*WatchArticleRequest) ProtoMessage() {}
 
 func (x *WatchArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[23]
+	mi := &file_content_v1_article_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1387,7 +1504,7 @@ func (x *WatchArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WatchArticleRequest.ProtoReflect.Descriptor instead.
 func (*WatchArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{23}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *WatchArticleRequest) GetArticleId() int64 {
@@ -1412,7 +1529,7 @@ type WatchArticleReply struct {
 
 func (x *WatchArticleReply) Reset() {
 	*x = WatchArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[24]
+	mi := &file_content_v1_article_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1424,7 +1541,7 @@ func (x *WatchArticleReply) String() string {
 func (*WatchArticleReply) ProtoMessage() {}
 
 func (x *WatchArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[24]
+	mi := &file_content_v1_article_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1437,7 +1554,7 @@ func (x *WatchArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WatchArticleReply.ProtoReflect.Descriptor instead.
 func (*WatchArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{24}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{25}
 }
 
 type AcceptAnswerArticleRequest struct {
@@ -1452,7 +1569,7 @@ type AcceptAnswerArticleRequest struct {
 
 func (x *AcceptAnswerArticleRequest) Reset() {
 	*x = AcceptAnswerArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[25]
+	mi := &file_content_v1_article_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1464,7 +1581,7 @@ func (x *AcceptAnswerArticleRequest) String() string {
 func (*AcceptAnswerArticleRequest) ProtoMessage() {}
 
 func (x *AcceptAnswerArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[25]
+	mi := &file_content_v1_article_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1477,7 +1594,7 @@ func (x *AcceptAnswerArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptAnswerArticleRequest.ProtoReflect.Descriptor instead.
 func (*AcceptAnswerArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{25}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *AcceptAnswerArticleRequest) GetArticleId() int64 {
@@ -1502,7 +1619,7 @@ type AcceptAnswerArticleReply struct {
 
 func (x *AcceptAnswerArticleReply) Reset() {
 	*x = AcceptAnswerArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[26]
+	mi := &file_content_v1_article_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1514,7 +1631,7 @@ func (x *AcceptAnswerArticleReply) String() string {
 func (*AcceptAnswerArticleReply) ProtoMessage() {}
 
 func (x *AcceptAnswerArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[26]
+	mi := &file_content_v1_article_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1527,7 +1644,7 @@ func (x *AcceptAnswerArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptAnswerArticleReply.ProtoReflect.Descriptor instead.
 func (*AcceptAnswerArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{26}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{27}
 }
 
 type UpdateStatusArticleRequest struct {
@@ -1538,7 +1655,7 @@ type UpdateStatusArticleRequest struct {
 
 func (x *UpdateStatusArticleRequest) Reset() {
 	*x = UpdateStatusArticleRequest{}
-	mi := &file_content_v1_article_proto_msgTypes[27]
+	mi := &file_content_v1_article_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1550,7 +1667,7 @@ func (x *UpdateStatusArticleRequest) String() string {
 func (*UpdateStatusArticleRequest) ProtoMessage() {}
 
 func (x *UpdateStatusArticleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[27]
+	mi := &file_content_v1_article_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1563,7 +1680,7 @@ func (x *UpdateStatusArticleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatusArticleRequest.ProtoReflect.Descriptor instead.
 func (*UpdateStatusArticleRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{27}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{28}
 }
 
 type UpdateStatusArticleReply struct {
@@ -1574,7 +1691,7 @@ type UpdateStatusArticleReply struct {
 
 func (x *UpdateStatusArticleReply) Reset() {
 	*x = UpdateStatusArticleReply{}
-	mi := &file_content_v1_article_proto_msgTypes[28]
+	mi := &file_content_v1_article_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1586,7 +1703,7 @@ func (x *UpdateStatusArticleReply) String() string {
 func (*UpdateStatusArticleReply) ProtoMessage() {}
 
 func (x *UpdateStatusArticleReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[28]
+	mi := &file_content_v1_article_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1599,7 +1716,7 @@ func (x *UpdateStatusArticleReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateStatusArticleReply.ProtoReflect.Descriptor instead.
 func (*UpdateStatusArticleReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{28}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{29}
 }
 
 type ArticleEventPublish struct {
@@ -1619,7 +1736,7 @@ type ArticleEventPublish struct {
 
 func (x *ArticleEventPublish) Reset() {
 	*x = ArticleEventPublish{}
-	mi := &file_content_v1_article_proto_msgTypes[29]
+	mi := &file_content_v1_article_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1631,7 +1748,7 @@ func (x *ArticleEventPublish) String() string {
 func (*ArticleEventPublish) ProtoMessage() {}
 
 func (x *ArticleEventPublish) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[29]
+	mi := &file_content_v1_article_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1644,7 +1761,7 @@ func (x *ArticleEventPublish) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ArticleEventPublish.ProtoReflect.Descriptor instead.
 func (*ArticleEventPublish) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{29}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ArticleEventPublish) GetArticleId() int64 {
@@ -1714,7 +1831,7 @@ var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xed\a\n" +
+	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xb9\b\n" +
 	"\aArticle\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x14\n" +
@@ -1752,7 +1869,17 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
 	"reply_user\x18\x19 \x01(\v2\x18.common.api.user.v1.UserR\treplyUser\x129\n" +
 	"\n" +
-	"replied_at\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\trepliedAt\"\x86\x02\n" +
+	"replied_at\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\trepliedAt\x12J\n" +
+	"\vpostscripts\x18\x1b \x03(\v2(.common.api.content.v1.ArticlePostscriptR\vpostscripts\"\xd2\x01\n" +
+	"\x11ArticlePostscript\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
+	"\n" +
+	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x86\x02\n" +
 	"\x11AddArticleRequest\x12\x1f\n" +
 	"\x05title\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18dR\x05title\x12!\n" +
 	"\acontent\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\acontent\x12%\n" +
@@ -1871,85 +1998,89 @@ func file_content_v1_article_proto_rawDescGZIP() []byte {
 	return file_content_v1_article_proto_rawDescData
 }
 
-var file_content_v1_article_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
+var file_content_v1_article_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
 var file_content_v1_article_proto_goTypes = []any{
 	(*Article)(nil),                     // 0: common.api.content.v1.Article
-	(*AddArticleRequest)(nil),           // 1: common.api.content.v1.AddArticleRequest
-	(*AddArticleReply)(nil),             // 2: common.api.content.v1.AddArticleReply
-	(*PublishArticleRequest)(nil),       // 3: common.api.content.v1.PublishArticleRequest
-	(*PublishArticleReply)(nil),         // 4: common.api.content.v1.PublishArticleReply
-	(*UpdateArticleRequest)(nil),        // 5: common.api.content.v1.UpdateArticleRequest
-	(*UpdateArticleReply)(nil),          // 6: common.api.content.v1.UpdateArticleReply
-	(*DeleteArticleRequest)(nil),        // 7: common.api.content.v1.DeleteArticleRequest
-	(*DeleteArticleReply)(nil),          // 8: common.api.content.v1.DeleteArticleReply
-	(*GetArticleRequest)(nil),           // 9: common.api.content.v1.GetArticleRequest
-	(*GetArticleReply)(nil),             // 10: common.api.content.v1.GetArticleReply
-	(*GetArticleOneRequest)(nil),        // 11: common.api.content.v1.GetArticleOneRequest
-	(*GetArticleOneReply)(nil),          // 12: common.api.content.v1.GetArticleOneReply
-	(*AddPostscriptArticleRequest)(nil), // 13: common.api.content.v1.AddPostscriptArticleRequest
-	(*AddPostscriptArticleReply)(nil),   // 14: common.api.content.v1.AddPostscriptArticleReply
-	(*RewardArticleRequest)(nil),        // 15: common.api.content.v1.RewardArticleRequest
-	(*RewardArticleReply)(nil),          // 16: common.api.content.v1.RewardArticleReply
-	(*ThankArticleRequest)(nil),         // 17: common.api.content.v1.ThankArticleRequest
-	(*ThankArticleReply)(nil),           // 18: common.api.content.v1.ThankArticleReply
-	(*LikeArticleRequest)(nil),          // 19: common.api.content.v1.LikeArticleRequest
-	(*LikeArticleReply)(nil),            // 20: common.api.content.v1.LikeArticleReply
-	(*CollectArticleRequest)(nil),       // 21: common.api.content.v1.CollectArticleRequest
-	(*CollectArticleReply)(nil),         // 22: common.api.content.v1.CollectArticleReply
-	(*WatchArticleRequest)(nil),         // 23: common.api.content.v1.WatchArticleRequest
-	(*WatchArticleReply)(nil),           // 24: common.api.content.v1.WatchArticleReply
-	(*AcceptAnswerArticleRequest)(nil),  // 25: common.api.content.v1.AcceptAnswerArticleRequest
-	(*AcceptAnswerArticleReply)(nil),    // 26: common.api.content.v1.AcceptAnswerArticleReply
-	(*UpdateStatusArticleRequest)(nil),  // 27: common.api.content.v1.UpdateStatusArticleRequest
-	(*UpdateStatusArticleReply)(nil),    // 28: common.api.content.v1.UpdateStatusArticleReply
-	(*ArticleEventPublish)(nil),         // 29: common.api.content.v1.ArticleEventPublish
-	(*timestamppb.Timestamp)(nil),       // 30: google.protobuf.Timestamp
-	(*v1.User)(nil),                     // 31: common.api.user.v1.User
-	(*v11.PageRequest)(nil),             // 32: common.api.common.v1.PageRequest
-	(*v11.PageReply)(nil),               // 33: common.api.common.v1.PageReply
+	(*ArticlePostscript)(nil),           // 1: common.api.content.v1.ArticlePostscript
+	(*AddArticleRequest)(nil),           // 2: common.api.content.v1.AddArticleRequest
+	(*AddArticleReply)(nil),             // 3: common.api.content.v1.AddArticleReply
+	(*PublishArticleRequest)(nil),       // 4: common.api.content.v1.PublishArticleRequest
+	(*PublishArticleReply)(nil),         // 5: common.api.content.v1.PublishArticleReply
+	(*UpdateArticleRequest)(nil),        // 6: common.api.content.v1.UpdateArticleRequest
+	(*UpdateArticleReply)(nil),          // 7: common.api.content.v1.UpdateArticleReply
+	(*DeleteArticleRequest)(nil),        // 8: common.api.content.v1.DeleteArticleRequest
+	(*DeleteArticleReply)(nil),          // 9: common.api.content.v1.DeleteArticleReply
+	(*GetArticleRequest)(nil),           // 10: common.api.content.v1.GetArticleRequest
+	(*GetArticleReply)(nil),             // 11: common.api.content.v1.GetArticleReply
+	(*GetArticleOneRequest)(nil),        // 12: common.api.content.v1.GetArticleOneRequest
+	(*GetArticleOneReply)(nil),          // 13: common.api.content.v1.GetArticleOneReply
+	(*AddPostscriptArticleRequest)(nil), // 14: common.api.content.v1.AddPostscriptArticleRequest
+	(*AddPostscriptArticleReply)(nil),   // 15: common.api.content.v1.AddPostscriptArticleReply
+	(*RewardArticleRequest)(nil),        // 16: common.api.content.v1.RewardArticleRequest
+	(*RewardArticleReply)(nil),          // 17: common.api.content.v1.RewardArticleReply
+	(*ThankArticleRequest)(nil),         // 18: common.api.content.v1.ThankArticleRequest
+	(*ThankArticleReply)(nil),           // 19: common.api.content.v1.ThankArticleReply
+	(*LikeArticleRequest)(nil),          // 20: common.api.content.v1.LikeArticleRequest
+	(*LikeArticleReply)(nil),            // 21: common.api.content.v1.LikeArticleReply
+	(*CollectArticleRequest)(nil),       // 22: common.api.content.v1.CollectArticleRequest
+	(*CollectArticleReply)(nil),         // 23: common.api.content.v1.CollectArticleReply
+	(*WatchArticleRequest)(nil),         // 24: common.api.content.v1.WatchArticleRequest
+	(*WatchArticleReply)(nil),           // 25: common.api.content.v1.WatchArticleReply
+	(*AcceptAnswerArticleRequest)(nil),  // 26: common.api.content.v1.AcceptAnswerArticleRequest
+	(*AcceptAnswerArticleReply)(nil),    // 27: common.api.content.v1.AcceptAnswerArticleReply
+	(*UpdateStatusArticleRequest)(nil),  // 28: common.api.content.v1.UpdateStatusArticleRequest
+	(*UpdateStatusArticleReply)(nil),    // 29: common.api.content.v1.UpdateStatusArticleReply
+	(*ArticleEventPublish)(nil),         // 30: common.api.content.v1.ArticleEventPublish
+	(*timestamppb.Timestamp)(nil),       // 31: google.protobuf.Timestamp
+	(*v1.User)(nil),                     // 32: common.api.user.v1.User
+	(*v11.PageRequest)(nil),             // 33: common.api.common.v1.PageRequest
+	(*v11.PageReply)(nil),               // 34: common.api.common.v1.PageReply
 }
 var file_content_v1_article_proto_depIdxs = []int32{
-	30, // 0: common.api.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
-	30, // 1: common.api.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
-	31, // 2: common.api.content.v1.Article.author_user:type_name -> common.api.user.v1.User
-	31, // 3: common.api.content.v1.Article.reply_user:type_name -> common.api.user.v1.User
-	30, // 4: common.api.content.v1.Article.replied_at:type_name -> google.protobuf.Timestamp
-	32, // 5: common.api.content.v1.GetArticleRequest.page:type_name -> common.api.common.v1.PageRequest
-	33, // 6: common.api.content.v1.GetArticleReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 7: common.api.content.v1.GetArticleReply.articles:type_name -> common.api.content.v1.Article
-	0,  // 8: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
-	31, // 9: common.api.content.v1.GetArticleOneReply.user:type_name -> common.api.user.v1.User
-	1,  // 10: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
-	3,  // 11: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
-	5,  // 12: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
-	7,  // 13: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
-	9,  // 14: common.api.content.v1.ContentArticleService.Get:input_type -> common.api.content.v1.GetArticleRequest
-	11, // 15: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
-	13, // 16: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
-	15, // 17: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
-	17, // 18: common.api.content.v1.ContentArticleService.Thank:input_type -> common.api.content.v1.ThankArticleRequest
-	19, // 19: common.api.content.v1.ContentArticleService.Like:input_type -> common.api.content.v1.LikeArticleRequest
-	21, // 20: common.api.content.v1.ContentArticleService.Collect:input_type -> common.api.content.v1.CollectArticleRequest
-	23, // 21: common.api.content.v1.ContentArticleService.Watch:input_type -> common.api.content.v1.WatchArticleRequest
-	25, // 22: common.api.content.v1.ContentArticleService.AcceptAnswer:input_type -> common.api.content.v1.AcceptAnswerArticleRequest
-	2,  // 23: common.api.content.v1.ContentArticleService.Add:output_type -> common.api.content.v1.AddArticleReply
-	4,  // 24: common.api.content.v1.ContentArticleService.Publish:output_type -> common.api.content.v1.PublishArticleReply
-	6,  // 25: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
-	8,  // 26: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
-	10, // 27: common.api.content.v1.ContentArticleService.Get:output_type -> common.api.content.v1.GetArticleReply
-	12, // 28: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
-	14, // 29: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
-	16, // 30: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply
-	18, // 31: common.api.content.v1.ContentArticleService.Thank:output_type -> common.api.content.v1.ThankArticleReply
-	20, // 32: common.api.content.v1.ContentArticleService.Like:output_type -> common.api.content.v1.LikeArticleReply
-	22, // 33: common.api.content.v1.ContentArticleService.Collect:output_type -> common.api.content.v1.CollectArticleReply
-	24, // 34: common.api.content.v1.ContentArticleService.Watch:output_type -> common.api.content.v1.WatchArticleReply
-	26, // 35: common.api.content.v1.ContentArticleService.AcceptAnswer:output_type -> common.api.content.v1.AcceptAnswerArticleReply
-	23, // [23:36] is the sub-list for method output_type
-	10, // [10:23] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	31, // 0: common.api.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
+	31, // 1: common.api.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
+	32, // 2: common.api.content.v1.Article.author_user:type_name -> common.api.user.v1.User
+	32, // 3: common.api.content.v1.Article.reply_user:type_name -> common.api.user.v1.User
+	31, // 4: common.api.content.v1.Article.replied_at:type_name -> google.protobuf.Timestamp
+	1,  // 5: common.api.content.v1.Article.postscripts:type_name -> common.api.content.v1.ArticlePostscript
+	31, // 6: common.api.content.v1.ArticlePostscript.created_at:type_name -> google.protobuf.Timestamp
+	31, // 7: common.api.content.v1.ArticlePostscript.updated_at:type_name -> google.protobuf.Timestamp
+	33, // 8: common.api.content.v1.GetArticleRequest.page:type_name -> common.api.common.v1.PageRequest
+	34, // 9: common.api.content.v1.GetArticleReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 10: common.api.content.v1.GetArticleReply.articles:type_name -> common.api.content.v1.Article
+	0,  // 11: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
+	32, // 12: common.api.content.v1.GetArticleOneReply.user:type_name -> common.api.user.v1.User
+	2,  // 13: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
+	4,  // 14: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
+	6,  // 15: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
+	8,  // 16: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
+	10, // 17: common.api.content.v1.ContentArticleService.Get:input_type -> common.api.content.v1.GetArticleRequest
+	12, // 18: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
+	14, // 19: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
+	16, // 20: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
+	18, // 21: common.api.content.v1.ContentArticleService.Thank:input_type -> common.api.content.v1.ThankArticleRequest
+	20, // 22: common.api.content.v1.ContentArticleService.Like:input_type -> common.api.content.v1.LikeArticleRequest
+	22, // 23: common.api.content.v1.ContentArticleService.Collect:input_type -> common.api.content.v1.CollectArticleRequest
+	24, // 24: common.api.content.v1.ContentArticleService.Watch:input_type -> common.api.content.v1.WatchArticleRequest
+	26, // 25: common.api.content.v1.ContentArticleService.AcceptAnswer:input_type -> common.api.content.v1.AcceptAnswerArticleRequest
+	3,  // 26: common.api.content.v1.ContentArticleService.Add:output_type -> common.api.content.v1.AddArticleReply
+	5,  // 27: common.api.content.v1.ContentArticleService.Publish:output_type -> common.api.content.v1.PublishArticleReply
+	7,  // 28: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
+	9,  // 29: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
+	11, // 30: common.api.content.v1.ContentArticleService.Get:output_type -> common.api.content.v1.GetArticleReply
+	13, // 31: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
+	15, // 32: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
+	17, // 33: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply
+	19, // 34: common.api.content.v1.ContentArticleService.Thank:output_type -> common.api.content.v1.ThankArticleReply
+	21, // 35: common.api.content.v1.ContentArticleService.Like:output_type -> common.api.content.v1.LikeArticleReply
+	23, // 36: common.api.content.v1.ContentArticleService.Collect:output_type -> common.api.content.v1.CollectArticleReply
+	25, // 37: common.api.content.v1.ContentArticleService.Watch:output_type -> common.api.content.v1.WatchArticleReply
+	27, // 38: common.api.content.v1.ContentArticleService.AcceptAnswer:output_type -> common.api.content.v1.AcceptAnswerArticleReply
+	26, // [26:39] is the sub-list for method output_type
+	13, // [13:26] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_article_proto_init() }
@@ -1957,14 +2088,14 @@ func file_content_v1_article_proto_init() {
 	if File_content_v1_article_proto != nil {
 		return
 	}
-	file_content_v1_article_proto_msgTypes[9].OneofWrappers = []any{}
+	file_content_v1_article_proto_msgTypes[10].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_v1_article_proto_rawDesc), len(file_content_v1_article_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   30,
+			NumMessages:   31,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

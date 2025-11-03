@@ -11,39 +11,82 @@ import "user/v1/user.proto";
 option go_package = "common/api/content/v1;v1";
 
 message Article {
-  int64 id = 1;                        // 唯一ID
-  int64 user_id = 2;                   // 作者ID
-  string title = 3;                    // 标题
-  string content = 4;                  // 正文内容
+  // 唯一ID
+  int64 id = 1;
+  // 作者ID
+  int64 user_id = 2;
+  // 标题
+  string title = 3;
+  // 正文内容
+  string content = 4;
 
-  bool has_postscript = 5;             // 是否有附言
-  string reward_content = 6;           // 打赏区内容（可为空）
-  int32 reward_points = 7;             // 打赏积分
+  // 是否有附言
+  bool has_postscript = 5;
+  // 打赏区内容（可为空）
+  string reward_content = 6;
+  // 打赏积分
+  int32 reward_points = 7;
 
-  int32 status = 8;                    // 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-  int32 type = 9;                      // 类型: 0-普通 1-问答 2-投票 3-抽奖
-  bool commentable = 10;               // 是否允许评论
-  bool anonymous = 11;                 // 是否匿名
+  // 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
+  int32 status = 8;
+  // 类型: 0-普通 1-问答 2-投票 3-抽奖
+  int32 type = 9;
+  // 是否允许评论
+  bool commentable = 10;
+  // 是否匿名
+  bool anonymous = 11;
 
-  int32 thank_count = 12;              // 感谢数
-  int32 like_count = 13;               // 点赞数
-  int32 collect_count = 14;            // 收藏数
-  int32 watch_count = 15;              // 关注数
-  int32 reply_count = 16;              // 回复数
+  // 感谢数
+  int32 thank_count = 12;
+  // 点赞数
+  int32 like_count = 13;
+  // 收藏数
+  int32 collect_count = 14;
+  // 关注数
+  int32 watch_count = 15;
+  // 回复数
+  int32 reply_count = 16;
 
-  int32 bounty_points = 17;            // 悬赏积分
-  int64 accepted_answer_id = 18;       // 采纳评论ID（可为空）
+  // 悬赏积分
+  int32 bounty_points = 17;
+  // 采纳评论ID（可为空）
+  int64 accepted_answer_id = 18;
 
-  int32 vote_total = 19;               // 总投票数
-  int32 lottery_participant_count = 20;// 抽奖参与人数
-  int32 lottery_winner_count = 21;     // 抽奖获奖人数
+  // 总投票数
+  int32 vote_total = 19;
+  // 抽奖参与人数
+  int32 lottery_participant_count = 20;
+  // 抽奖获奖人数
+  int32 lottery_winner_count = 21;
 
-  google.protobuf.Timestamp created_at = 22; // 创建时间
-  google.protobuf.Timestamp updated_at = 23; // 更新时间
+  // 创建时间
+  google.protobuf.Timestamp created_at = 22;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 23;
 
-  user.v1.User author_user = 24; // 作者信息
-  user.v1.User reply_user = 25; // 最后回复用户
-  google.protobuf.Timestamp replied_at = 26; // 最后回复时间
+  // 作者信息
+  user.v1.User author_user = 24;
+  // 最后回复用户
+  user.v1.User reply_user = 25;
+  // 最后回复时间
+  google.protobuf.Timestamp replied_at = 26;
+
+  // 附言
+  repeated ArticlePostscript postscripts = 27;
+}
+
+// 文章附言
+message ArticlePostscript {
+  // 主键ID
+  int64 id = 1;
+  // 所属文章ID
+  int64 article_id = 2;
+  // 附言内容
+  string content = 3;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 4;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 5;
 }
 
 // Article 服务

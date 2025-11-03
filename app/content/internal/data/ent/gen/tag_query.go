@@ -511,7 +511,10 @@ func (_q *TagQuery) loadDomain(ctx context.Context, query *DomainQuery, nodes []
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*Tag)
 	for i := range nodes {
-		fk := nodes[i].DomainID
+		if nodes[i].DomainID == nil {
+			continue
+		}
+		fk := *nodes[i].DomainID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}

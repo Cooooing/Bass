@@ -42,7 +42,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 		// 回复评论
 		replyComment := &model.Comment{}
 		if comment.ReplyID != nil {
-			replyComment, err = d.commentRepo.GetCommentById(ctx, tx, *comment.ReplyID)
+			replyComment, err = d.commentRepo.GetById(ctx, tx, *comment.ReplyID)
 			if err != nil {
 				return err
 			}
@@ -85,7 +85,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 
 func (d *CommentDomain) Get(ctx context.Context, req *v1.GetCommentRequest) (rsp *v1.GetCommentReply, err error) {
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		rsp, err = d.commentRepo.GetCommentList(ctx, tx, req)
+		rsp, err = d.commentRepo.GetList(ctx, tx, req)
 		if err != nil {
 			return err
 		}

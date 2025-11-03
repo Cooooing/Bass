@@ -34,12 +34,12 @@ type UserUserServiceHTTPServer interface {
 
 func RegisterUserUserServiceHTTPServer(s *http.Server, srv UserUserServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/user/getOne", _UserUserService_GetOne1_HTTP_Handler(srv))
+	r.POST("/v1/user/getOne", _UserUserService_GetOne0_HTTP_Handler(srv))
 	r.POST("/v1/user/getList", _UserUserService_GetList0_HTTP_Handler(srv))
 	r.POST("/v1/user/getMap", _UserUserService_GetMap0_HTTP_Handler(srv))
 }
 
-func _UserUserService_GetOne1_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
+func _UserUserService_GetOne0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetOneRequest
 		if err := ctx.Bind(&in); err != nil {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/util/base"
 	"content/internal/biz"
@@ -54,8 +55,17 @@ func (s *CommentService) Get(ctx context.Context, req *v1.GetCommentRequest) (rs
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	// user := s.tokenRepo.GetUserInfo(ctx)
+	exist, err := s.commentRepo.Exist(ctx, s.db, req.Id)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, cv1.ErrorBadRequest("comment not exist")
+	}
+
+	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, cv1.CommentAction_CommentActionLike, base.If[int32](req.Active, 1, -1))
+	return &v1.LikeCommentReply{}, err
 }
 
 func (s *CommentService) Thank(ctx context.Context, req *v1.ThankCommentRequest) (rsp *v1.ThankCommentReply, err error) {

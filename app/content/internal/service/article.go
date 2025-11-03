@@ -3,6 +3,7 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -48,6 +49,10 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 	if req.Status != int32(cv1.ArticleStatus_ArticleNormal) && req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, errors.New("status only be 0(normal) or 3(drafts)")
 	}
+	if req.Type != int32(cv1.ArticleType_ArticleTypeNormal) && req.Type != int32(cv1.ArticleType_ArticleTypeQA) && req.Type != int32(cv1.ArticleType_ArticleTypeVote) && req.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
+		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+	}
+
 	user := s.tokenRepo.GetUserInfo(ctx)
 	_, err = s.articleDomain.Add(ctx, &model.Article{
 		UserID:        user.ID,
@@ -57,7 +62,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		RewardPoints:  req.RewardPoints,
 		Status:        req.Status,
 		Type:          req.Type,
-		BountyPoints:  req.BountyPoints,
+		BountyPoints:  base.If(req.Type != int32(cv1.ArticleType_ArticleTypeQA), 0, req.BountyPoints),
 	})
 	if err != nil {
 		return nil, err
@@ -107,7 +112,18 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 }
 
 func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticleRequest) (rsp *v1.GetArticleReply, err error) {
-	return &v1.GetArticleReply{}, nil
+	if req.Status != nil && *req.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+		return nil, errors.New("status only be 0(normal) or 3(drafts)")
+	}
+	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
+		rsp, err = s.articleRepo.GetList(ctx, tx, req)
+		return err
+	})
+	return rsp, err
+}
+
+func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneRequest) (rsp *v1.GetArticleOneReply, err error) {
+	return s.articleRepo.GetOne(ctx, s.db, req.ArticleId)
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {

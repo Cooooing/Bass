@@ -4,6 +4,7 @@ import (
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
+	"content/internal/data/ent/gen/domain"
 	"context"
 )
 
@@ -48,13 +49,20 @@ func (r *DomainRepo) Update(ctx context.Context, db *gen.Client, domain *model.D
 }
 
 func (r *DomainRepo) AddTagCount(ctx context.Context, db *gen.Client, id int64, num int32) (*model.Domain, error) {
-	domain, err := db.Domain.UpdateOneID(id).
+	save, err := db.Domain.UpdateOneID(id).
 		AddTagCount(num).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Domain)(domain), nil
+	return (*model.Domain)(save), nil
+}
+
+func (r *DomainRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Domain, error) {
+	query, err := tx.Domain.Query().
+		Where(domain.IDEQ(id)).
+		First(ctx)
+	return (*model.Domain)(query), err
 }
 
 func (r *DomainRepo) Get(ctx context.Context, db *gen.Client) ([]*model.Domain, error) {
@@ -65,8 +73,8 @@ func (r *DomainRepo) Get(ctx context.Context, db *gen.Client) ([]*model.Domain, 
 		return nil, err
 	}
 	res := make([]*model.Domain, len(domains))
-	for i, domain := range domains {
-		res[i] = (*model.Domain)(domain)
+	for i, item := range domains {
+		res[i] = (*model.Domain)(item)
 	}
 	return res, nil
 }

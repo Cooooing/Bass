@@ -7,6 +7,8 @@ import (
 )
 
 type DomainRepo interface {
-	Save(ctx context.Context, client *gen.Client, domain *model.Domain) (*model.Domain, error)
-	Update(ctx context.Context, client *gen.Client, domain *model.Domain) (*model.Domain, error)
+	Save(ctx context.Context, tx *gen.Client, domain *model.Domain) (*model.Domain, error)
+	Update(ctx context.Context, tx *gen.Client, domain *model.Domain) (*model.Domain, error)
+
+	GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Domain, error)
 }

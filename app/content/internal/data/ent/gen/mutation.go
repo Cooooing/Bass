@@ -11342,7 +11342,7 @@ func (m *TagMutation) DomainID() (r int64, exists bool) {
 // OldDomainID returns the old "domain_id" field's value of the Tag entity.
 // If the Tag object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldDomainID(ctx context.Context) (v int64, err error) {
+func (m *TagMutation) OldDomainID(ctx context.Context) (v *int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDomainID is only allowed on UpdateOne operations")
 	}

@@ -6,6 +6,7 @@ import (
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/util/collections/dict"
 	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -13,6 +14,7 @@ import (
 	"content/internal/data/ent/gen/comment"
 	"context"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/jinzhu/copier"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -63,13 +65,25 @@ func (r CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, comment
 	return err
 }
 
-func (r CommentRepo) GetCommentById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error) {
-	query, err := tx.Comment.Query().Where(comment.IDEQ(id)).First(ctx)
+func (r CommentRepo) Exist(ctx context.Context, tx *gen.Client, id int64) (bool, error) {
+	exist, err := tx.Comment.Query().
+		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
+		Where(comment.IDEQ(id)).
+		Exist(ctx)
+	return exist, err
+}
+
+func (r CommentRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error) {
+	query, err := tx.Comment.Query().
+		Where(comment.IDEQ(id)).
+		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
+		First(ctx)
 	return (*model.Comment)(query), err
 }
 
-func (r CommentRepo) GetCommentList(ctx context.Context, tx *gen.Client, req *v1.GetCommentRequest) (*v1.GetCommentReply, error) {
-	query := tx.Comment.Query()
+func (r CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *v1.GetCommentRequest) (*v1.GetCommentReply, error) {
+	query := tx.Comment.Query().
+		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal)))
 	if req.ArticleId != 0 {
 		query = query.Where(comment.ArticleIDEQ(req.ArticleId))
 	}
@@ -127,4 +141,50 @@ func (r CommentRepo) GetCommentList(ctx context.Context, tx *gen.Client, req *v1
 		Comments: comments,
 	}
 	return rsp, err
+}
+
+func (r CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, articleId int64) (*model.Comment, error) {
+	query, err := client.Comment.Query().
+		Where(comment.ArticleIDEQ(articleId)).
+		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
+		Order(gen.Desc(comment.FieldCreatedAt)).
+		First(ctx)
+	return (*model.Comment)(query), err
+}
+
+func (r CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, articleIds []int64) (dict.Map[int64, *model.Comment], error) {
+	articleIdsAny := make([]any, len(articleIds))
+	for i, v := range articleIds {
+		articleIdsAny[i] = v
+	}
+	comments, err := tx.Comment.Query().
+		Where(func(s *sql.Selector) {
+			// 子查询 SELECT article_id, MAX(created_at)
+			sub := sql.Select(
+				comment.FieldArticleID,
+				sql.As(sql.Max(comment.FieldCreatedAt), "latest_time"),
+			).
+				From(sql.Table(comment.Table)).
+				Where(sql.EQ(comment.FieldStatus, int32(cv1.CommentStatus_CommentNormal))).
+				Where(sql.In(comment.FieldArticleID, articleIdsAny...)).
+				GroupBy(comment.FieldArticleID)
+
+			// JOIN 子查询
+			s.Join(sub).On(
+				s.C(comment.FieldArticleID), sub.C(comment.FieldArticleID),
+			).On(
+				s.C(comment.FieldCreatedAt), sub.C("latest_time"),
+			)
+		}).
+		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
+		Where(comment.ArticleIDIn(articleIds...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	commentMap := dict.New[int64, *model.Comment](0)
+	for _, item := range comments {
+		commentMap.Set(item.ArticleID, (*model.Comment)(item))
+	}
+	return commentMap, err
 }

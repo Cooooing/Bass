@@ -71,12 +71,14 @@ const (
 // 队列枚举
 const (
 	QueueUserArticleEvent    QueueName = "user.article.event"
+	QueueUserCommentEvent    QueueName = "user.comment.event"
 	QueueEconomyArticleEvent QueueName = "economy.article.event"
 )
 
 // 队列绑定枚举
 const (
 	QueueBindUserArticleEvents    QueueBindName = "user.article.event.bind"
+	QueueBindUserCommentEvents    QueueBindName = "user.comment.event.bind"
 	QueueBindEconomyArticleEvents QueueBindName = "economy.article.event.bind"
 )
 

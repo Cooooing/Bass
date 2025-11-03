@@ -35,6 +35,291 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Article with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Article) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Article with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ArticleMultiError, or nil if none found.
+func (m *Article) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Article) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for UserId
+
+	// no validation rules for Title
+
+	// no validation rules for Content
+
+	// no validation rules for HasPostscript
+
+	// no validation rules for RewardContent
+
+	// no validation rules for RewardPoints
+
+	// no validation rules for Status
+
+	// no validation rules for Type
+
+	// no validation rules for Commentable
+
+	// no validation rules for Anonymous
+
+	// no validation rules for ThankCount
+
+	// no validation rules for LikeCount
+
+	// no validation rules for CollectCount
+
+	// no validation rules for WatchCount
+
+	// no validation rules for ReplyCount
+
+	// no validation rules for BountyPoints
+
+	// no validation rules for AcceptedAnswerId
+
+	// no validation rules for VoteTotal
+
+	// no validation rules for LotteryParticipantCount
+
+	// no validation rules for LotteryWinnerCount
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticleValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticleValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetAuthorUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "AuthorUser",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "AuthorUser",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetAuthorUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticleValidationError{
+				field:  "AuthorUser",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetReplyUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "ReplyUser",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "ReplyUser",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetReplyUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticleValidationError{
+				field:  "ReplyUser",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetRepliedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "RepliedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticleValidationError{
+					field:  "RepliedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRepliedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticleValidationError{
+				field:  "RepliedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ArticleMultiError(errors)
+	}
+
+	return nil
+}
+
+// ArticleMultiError is an error wrapping multiple validation errors returned
+// by Article.ValidateAll() if the designated constraints aren't met.
+type ArticleMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ArticleMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ArticleMultiError) AllErrors() []error { return m }
+
+// ArticleValidationError is the validation error returned by Article.Validate
+// if the designated constraints aren't met.
+type ArticleValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ArticleValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ArticleValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ArticleValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ArticleValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ArticleValidationError) ErrorName() string { return "ArticleValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ArticleValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sArticle.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ArticleValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ArticleValidationError{}
+
 // Validate checks the field values on AddArticleRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -933,6 +1218,51 @@ func (m *GetArticleRequest) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetArticleRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetArticleRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetArticleRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.TagId != nil {
+		// no validation rules for TagId
+	}
+
+	if m.DomainId != nil {
+		// no validation rules for DomainId
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
+	if m.Type != nil {
+		// no validation rules for Type
+	}
+
 	if len(errors) > 0 {
 		return GetArticleRequestMultiError(errors)
 	}
@@ -1034,6 +1364,69 @@ func (m *GetArticleReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetArticleReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetArticleReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetArticleReplyValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetArticles() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetArticleReplyValidationError{
+						field:  fmt.Sprintf("Articles[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetArticleReplyValidationError{
+						field:  fmt.Sprintf("Articles[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetArticleReplyValidationError{
+					field:  fmt.Sprintf("Articles[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	if len(errors) > 0 {
 		return GetArticleReplyMultiError(errors)
@@ -1239,7 +1632,63 @@ func (m *GetArticleOneReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ArticleId
+	if all {
+		switch v := interface{}(m.GetArticle()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetArticleOneReplyValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetArticleOneReplyValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetArticle()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetArticleOneReplyValidationError{
+				field:  "Article",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetArticleOneReplyValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetArticleOneReplyValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetArticleOneReplyValidationError{
+				field:  "User",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return GetArticleOneReplyMultiError(errors)

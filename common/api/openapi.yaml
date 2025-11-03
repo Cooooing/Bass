@@ -773,6 +773,76 @@ components:
             properties:
                 name:
                     type: string
+        common.api.content.v1.Article:
+            type: object
+            properties:
+                id:
+                    type: string
+                userId:
+                    type: string
+                title:
+                    type: string
+                content:
+                    type: string
+                hasPostscript:
+                    type: boolean
+                rewardContent:
+                    type: string
+                rewardPoints:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                type:
+                    type: integer
+                    format: int32
+                commentable:
+                    type: boolean
+                anonymous:
+                    type: boolean
+                thankCount:
+                    type: integer
+                    format: int32
+                likeCount:
+                    type: integer
+                    format: int32
+                collectCount:
+                    type: integer
+                    format: int32
+                watchCount:
+                    type: integer
+                    format: int32
+                replyCount:
+                    type: integer
+                    format: int32
+                bountyPoints:
+                    type: integer
+                    format: int32
+                acceptedAnswerId:
+                    type: string
+                voteTotal:
+                    type: integer
+                    format: int32
+                lotteryParticipantCount:
+                    type: integer
+                    format: int32
+                lotteryWinnerCount:
+                    type: integer
+                    format: int32
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                authorUser:
+                    $ref: '#/components/schemas/common.api.user.v1.User'
+                replyUser:
+                    $ref: '#/components/schemas/common.api.user.v1.User'
+                repliedAt:
+                    type: string
+                    format: date-time
         common.api.content.v1.CollectArticleReply:
             type: object
             properties: {}
@@ -885,8 +955,14 @@ components:
         common.api.content.v1.GetArticleOneReply:
             type: object
             properties:
-                articleId:
-                    type: string
+                article:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.Article'
+                    description: 文章
+                user:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 作者
         common.api.content.v1.GetArticleOneRequest:
             type: object
             properties:
@@ -895,10 +971,37 @@ components:
                     description: 文章ID
         common.api.content.v1.GetArticleReply:
             type: object
-            properties: {}
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                articles:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Article'
+                    description: 文章列表
         common.api.content.v1.GetArticleRequest:
             type: object
-            properties: {}
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页
+                tagId:
+                    type: string
+                    description: 标签
+                domainId:
+                    type: string
+                    description: 领域
+                status:
+                    type: integer
+                    description: 状态 0-正常 3-草稿
+                    format: int32
+                type:
+                    type: integer
+                    description: 类型 0-普通 1-问答 2-投票 3-抽奖
+                    format: int32
         common.api.content.v1.GetCommentReply:
             type: object
             properties:
@@ -969,10 +1072,29 @@ components:
                     description: 是否导航
         common.api.content.v1.GetTagReply:
             type: object
-            properties: {}
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Tag'
+                    description: 标签列表
         common.api.content.v1.GetTagRequest:
             type: object
-            properties: {}
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页
+                id:
+                    type: string
+                    description: 标签ID
+                domainId:
+                    type: string
+                    description: 领域ID
         common.api.content.v1.LikeArticleReply:
             type: object
             properties: {}
@@ -1015,6 +1137,37 @@ components:
                 articleId:
                     type: string
                     description: 文章ID
+        common.api.content.v1.Tag:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: 标签ID
+                userId:
+                    type: string
+                    description: 创建用户ID
+                name:
+                    type: string
+                    description: 标签名称
+                domainId:
+                    type: string
+                    description: 所属领域ID
+                status:
+                    type: integer
+                    description: 标签状态：0-正常，1-禁用
+                    format: int32
+                articleCount:
+                    type: integer
+                    description: 文章数
+                    format: int32
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
         common.api.content.v1.ThankArticleReply:
             type: object
             properties: {}

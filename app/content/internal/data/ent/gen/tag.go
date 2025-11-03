@@ -23,7 +23,7 @@ type Tag struct {
 	// 标签名称
 	Name string `json:"name,omitempty"`
 	// 所属领域id
-	DomainID int64 `json:"domain_id,omitempty"`
+	DomainID *int64 `json:"domain_id,omitempty"`
 	// 标签状态：0-正常，1-禁用
 	Status int32 `json:"status,omitempty"`
 	// 文章数
@@ -117,7 +117,8 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field domain_id", values[i])
 			} else if value.Valid {
-				_m.DomainID = value.Int64
+				_m.DomainID = new(int64)
+				*_m.DomainID = value.Int64
 			}
 		case tag.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -197,8 +198,10 @@ func (_m *Tag) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
-	builder.WriteString("domain_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.DomainID))
+	if v := _m.DomainID; v != nil {
+		builder.WriteString("domain_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

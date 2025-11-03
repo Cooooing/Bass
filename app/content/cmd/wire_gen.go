@@ -49,10 +49,12 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, rabbitMQClient)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	articleRepo := data.NewArticleRepo(baseRepo, genClient)
+	commentRepo := data.NewCommentRepo(baseRepo, genClient)
+	domainRepo := data.NewDomainRepo(baseRepo)
+	tagRepo := data.NewTagRepo(baseRepo)
+	articleRepo := data.NewArticleRepo(baseRepo, genClient, commentRepo, domainRepo, tagRepo)
 	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
 	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
-	domainRepo := data.NewDomainRepo(baseRepo)
 	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, domainRepo)
 	if err != nil {
 		cleanup4()
@@ -64,7 +66,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	articleService := service.NewArticleService(baseService, articleDomain, articleRepo)
 	domainDomain := biz.NewDomainDomain(baseDomain, domainRepo)
 	domainService := service.NewDomainService(baseService, domainDomain)
-	commentRepo := data.NewCommentRepo(baseRepo, genClient)
 	commentDomain := biz.NewCommentDomain(baseDomain, commentRepo, articleRepo)
 	commentService := service.NewCommentService(baseService, commentDomain, commentRepo, articleRepo)
 	v := service.ProvideServices(systemService, articleService, domainService, commentService)

@@ -7,10 +7,12 @@
 package v1
 
 import (
+	v1 "common/api/common/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -23,6 +25,114 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Tag struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 标签ID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 创建用户ID
+	UserId int64 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// 标签名称
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// 所属领域ID
+	DomainId int64 `protobuf:"varint,4,opt,name=domain_id,json=domainId,proto3" json:"domain_id,omitempty"`
+	// 标签状态：0-正常，1-禁用
+	Status int32 `protobuf:"varint,5,opt,name=status,proto3" json:"status,omitempty"`
+	// 文章数
+	ArticleCount int32 `protobuf:"varint,6,opt,name=article_count,json=articleCount,proto3" json:"article_count,omitempty"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Tag) Reset() {
+	*x = Tag{}
+	mi := &file_content_v1_tag_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Tag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Tag) ProtoMessage() {}
+
+func (x *Tag) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_tag_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Tag.ProtoReflect.Descriptor instead.
+func (*Tag) Descriptor() ([]byte, []int) {
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Tag) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Tag) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *Tag) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Tag) GetDomainId() int64 {
+	if x != nil {
+		return x.DomainId
+	}
+	return 0
+}
+
+func (x *Tag) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *Tag) GetArticleCount() int32 {
+	if x != nil {
+		return x.ArticleCount
+	}
+	return 0
+}
+
+func (x *Tag) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Tag) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 type AddTagRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -32,7 +142,7 @@ type AddTagRequest struct {
 
 func (x *AddTagRequest) Reset() {
 	*x = AddTagRequest{}
-	mi := &file_content_v1_tag_proto_msgTypes[0]
+	mi := &file_content_v1_tag_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +154,7 @@ func (x *AddTagRequest) String() string {
 func (*AddTagRequest) ProtoMessage() {}
 
 func (x *AddTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[0]
+	mi := &file_content_v1_tag_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +167,7 @@ func (x *AddTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddTagRequest.ProtoReflect.Descriptor instead.
 func (*AddTagRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{0}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AddTagRequest) GetName() string {
@@ -75,7 +185,7 @@ type AddTagReply struct {
 
 func (x *AddTagReply) Reset() {
 	*x = AddTagReply{}
-	mi := &file_content_v1_tag_proto_msgTypes[1]
+	mi := &file_content_v1_tag_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -87,7 +197,7 @@ func (x *AddTagReply) String() string {
 func (*AddTagReply) ProtoMessage() {}
 
 func (x *AddTagReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[1]
+	mi := &file_content_v1_tag_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -100,7 +210,7 @@ func (x *AddTagReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddTagReply.ProtoReflect.Descriptor instead.
 func (*AddTagReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{1}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{2}
 }
 
 type UpdateTagRequest struct {
@@ -112,7 +222,7 @@ type UpdateTagRequest struct {
 
 func (x *UpdateTagRequest) Reset() {
 	*x = UpdateTagRequest{}
-	mi := &file_content_v1_tag_proto_msgTypes[2]
+	mi := &file_content_v1_tag_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -124,7 +234,7 @@ func (x *UpdateTagRequest) String() string {
 func (*UpdateTagRequest) ProtoMessage() {}
 
 func (x *UpdateTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[2]
+	mi := &file_content_v1_tag_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -137,7 +247,7 @@ func (x *UpdateTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTagRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTagRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{2}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UpdateTagRequest) GetName() string {
@@ -155,7 +265,7 @@ type UpdateTagReply struct {
 
 func (x *UpdateTagReply) Reset() {
 	*x = UpdateTagReply{}
-	mi := &file_content_v1_tag_proto_msgTypes[3]
+	mi := &file_content_v1_tag_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -167,7 +277,7 @@ func (x *UpdateTagReply) String() string {
 func (*UpdateTagReply) ProtoMessage() {}
 
 func (x *UpdateTagReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[3]
+	mi := &file_content_v1_tag_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -180,18 +290,24 @@ func (x *UpdateTagReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTagReply.ProtoReflect.Descriptor instead.
 func (*UpdateTagReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{3}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{4}
 }
 
 type GetTagRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页
+	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	// 标签ID
+	Id int64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	// 领域ID
+	DomainId      int64 `protobuf:"varint,3,opt,name=domain_id,json=domainId,proto3" json:"domain_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetTagRequest) Reset() {
 	*x = GetTagRequest{}
-	mi := &file_content_v1_tag_proto_msgTypes[4]
+	mi := &file_content_v1_tag_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -203,7 +319,7 @@ func (x *GetTagRequest) String() string {
 func (*GetTagRequest) ProtoMessage() {}
 
 func (x *GetTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[4]
+	mi := &file_content_v1_tag_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -216,18 +332,43 @@ func (x *GetTagRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagRequest.ProtoReflect.Descriptor instead.
 func (*GetTagRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{4}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetTagRequest) GetPage() *v1.PageRequest {
+	if x != nil {
+		return x.Page
+	}
+	return nil
+}
+
+func (x *GetTagRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *GetTagRequest) GetDomainId() int64 {
+	if x != nil {
+		return x.DomainId
+	}
+	return 0
 }
 
 type GetTagReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页
+	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	// 标签列表
+	Tags          []*Tag `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetTagReply) Reset() {
 	*x = GetTagReply{}
-	mi := &file_content_v1_tag_proto_msgTypes[5]
+	mi := &file_content_v1_tag_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -239,7 +380,7 @@ func (x *GetTagReply) String() string {
 func (*GetTagReply) ProtoMessage() {}
 
 func (x *GetTagReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_tag_proto_msgTypes[5]
+	mi := &file_content_v1_tag_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -252,22 +393,52 @@ func (x *GetTagReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTagReply.ProtoReflect.Descriptor instead.
 func (*GetTagReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_tag_proto_rawDescGZIP(), []int{5}
+	return file_content_v1_tag_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetTagReply) GetPage() *v1.PageReply {
+	if x != nil {
+		return x.Page
+	}
+	return nil
+}
+
+func (x *GetTagReply) GetTags() []*Tag {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
 }
 
 var File_content_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_v1_tag_proto_rawDesc = "" +
 	"\n" +
-	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"#\n" +
+	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\x92\x02\n" +
+	"\x03Tag\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1b\n" +
+	"\tdomain_id\x18\x04 \x01(\x03R\bdomainId\x12\x16\n" +
+	"\x06status\x18\x05 \x01(\x05R\x06status\x12#\n" +
+	"\rarticle_count\x18\x06 \x01(\x05R\farticleCount\x129\n" +
+	"\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"#\n" +
 	"\rAddTagRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"\r\n" +
 	"\vAddTagReply\"&\n" +
 	"\x10UpdateTagRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"\x10\n" +
-	"\x0eUpdateTagReply\"\x0f\n" +
-	"\rGetTagRequest\"\r\n" +
-	"\vGetTagReply2\xe6\x02\n" +
+	"\x0eUpdateTagReply\"s\n" +
+	"\rGetTagRequest\x125\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\x12\x1b\n" +
+	"\tdomain_id\x18\x03 \x01(\x03R\bdomainId\"r\n" +
+	"\vGetTagReply\x123\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12.\n" +
+	"\x04tags\x18\x02 \x03(\v2\x1a.common.api.content.v1.TagR\x04tags2\xe6\x02\n" +
 	"\x11ContentTagService\x12k\n" +
 	"\x03Add\x12$.common.api.content.v1.AddTagRequest\x1a\".common.api.content.v1.AddTagReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/tag/add\x12w\n" +
 	"\x06Update\x12'.common.api.content.v1.UpdateTagRequest\x1a%.common.api.content.v1.UpdateTagReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/tag/update\x12k\n" +
@@ -285,27 +456,36 @@ func file_content_v1_tag_proto_rawDescGZIP() []byte {
 	return file_content_v1_tag_proto_rawDescData
 }
 
-var file_content_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_content_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_content_v1_tag_proto_goTypes = []any{
-	(*AddTagRequest)(nil),    // 0: common.api.content.v1.AddTagRequest
-	(*AddTagReply)(nil),      // 1: common.api.content.v1.AddTagReply
-	(*UpdateTagRequest)(nil), // 2: common.api.content.v1.UpdateTagRequest
-	(*UpdateTagReply)(nil),   // 3: common.api.content.v1.UpdateTagReply
-	(*GetTagRequest)(nil),    // 4: common.api.content.v1.GetTagRequest
-	(*GetTagReply)(nil),      // 5: common.api.content.v1.GetTagReply
+	(*Tag)(nil),                   // 0: common.api.content.v1.Tag
+	(*AddTagRequest)(nil),         // 1: common.api.content.v1.AddTagRequest
+	(*AddTagReply)(nil),           // 2: common.api.content.v1.AddTagReply
+	(*UpdateTagRequest)(nil),      // 3: common.api.content.v1.UpdateTagRequest
+	(*UpdateTagReply)(nil),        // 4: common.api.content.v1.UpdateTagReply
+	(*GetTagRequest)(nil),         // 5: common.api.content.v1.GetTagRequest
+	(*GetTagReply)(nil),           // 6: common.api.content.v1.GetTagReply
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+	(*v1.PageRequest)(nil),        // 8: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),          // 9: common.api.common.v1.PageReply
 }
 var file_content_v1_tag_proto_depIdxs = []int32{
-	0, // 0: common.api.content.v1.ContentTagService.Add:input_type -> common.api.content.v1.AddTagRequest
-	2, // 1: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
-	4, // 2: common.api.content.v1.ContentTagService.Get:input_type -> common.api.content.v1.GetTagRequest
-	1, // 3: common.api.content.v1.ContentTagService.Add:output_type -> common.api.content.v1.AddTagReply
-	3, // 4: common.api.content.v1.ContentTagService.Update:output_type -> common.api.content.v1.UpdateTagReply
-	5, // 5: common.api.content.v1.ContentTagService.Get:output_type -> common.api.content.v1.GetTagReply
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	7, // 0: common.api.content.v1.Tag.created_at:type_name -> google.protobuf.Timestamp
+	7, // 1: common.api.content.v1.Tag.updated_at:type_name -> google.protobuf.Timestamp
+	8, // 2: common.api.content.v1.GetTagRequest.page:type_name -> common.api.common.v1.PageRequest
+	9, // 3: common.api.content.v1.GetTagReply.page:type_name -> common.api.common.v1.PageReply
+	0, // 4: common.api.content.v1.GetTagReply.tags:type_name -> common.api.content.v1.Tag
+	1, // 5: common.api.content.v1.ContentTagService.Add:input_type -> common.api.content.v1.AddTagRequest
+	3, // 6: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
+	5, // 7: common.api.content.v1.ContentTagService.Get:input_type -> common.api.content.v1.GetTagRequest
+	2, // 8: common.api.content.v1.ContentTagService.Add:output_type -> common.api.content.v1.AddTagReply
+	4, // 9: common.api.content.v1.ContentTagService.Update:output_type -> common.api.content.v1.UpdateTagReply
+	6, // 10: common.api.content.v1.ContentTagService.Get:output_type -> common.api.content.v1.GetTagReply
+	8, // [8:11] is the sub-list for method output_type
+	5, // [5:8] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_tag_proto_init() }
@@ -319,7 +499,7 @@ func file_content_v1_tag_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_v1_tag_proto_rawDesc), len(file_content_v1_tag_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

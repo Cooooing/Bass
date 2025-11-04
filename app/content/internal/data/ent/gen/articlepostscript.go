@@ -22,6 +22,8 @@ type ArticlePostscript struct {
 	ArticleID int64 `json:"article_id,omitempty"`
 	// 附言内容
 	Content string `json:"content,omitempty"`
+	// 状态 0-正常 1-隐藏
+	Status int32 `json:"status,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -57,7 +59,7 @@ func (*ArticlePostscript) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case articlepostscript.FieldID, articlepostscript.FieldArticleID:
+		case articlepostscript.FieldID, articlepostscript.FieldArticleID, articlepostscript.FieldStatus:
 			values[i] = new(sql.NullInt64)
 		case articlepostscript.FieldContent:
 			values[i] = new(sql.NullString)
@@ -95,6 +97,12 @@ func (_m *ArticlePostscript) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field content", values[i])
 			} else if value.Valid {
 				_m.Content = value.String
+			}
+		case articlepostscript.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = int32(value.Int64)
 			}
 		case articlepostscript.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -156,6 +164,9 @@ func (_m *ArticlePostscript) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(_m.Content)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

@@ -131,7 +131,8 @@ func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id
 	query, err := client.Article.Query().
 		Where(article.IDEQ(id)).
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
-			q.Order(gen.Asc(articlepostscript.FieldCreatedAt))
+			q.Where(articlepostscript.StatusEQ(int32(cv1.ArticlePostscriptStatus_ArticlePostscriptNormal))).
+				Order(gen.Asc(articlepostscript.FieldCreatedAt))
 		}).
 		WithTags().
 		First(ctx)

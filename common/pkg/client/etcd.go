@@ -11,6 +11,7 @@ import (
 
 	etcdregistry "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	kgrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -87,6 +88,9 @@ func (c *EtcdClient) newGrpcConn(service string) (*grpc.ClientConn, error) {
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		kgrpc.WithDiscovery(dis),
 		kgrpc.WithTimeout(c.conf.Timeout.AsDuration()),
+		kgrpc.WithMiddleware(
+			tracing.Client(),
+		),
 	)
 }
 

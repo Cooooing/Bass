@@ -107,12 +107,12 @@ var File_common_v1_system_proto protoreflect.FileDescriptor
 
 const file_common_v1_system_proto_rawDesc = "" +
 	"\n" +
-	"\x16common/v1/system.proto\x12\tcommon.v1\x1a\x1cgoogle/api/annotations.proto\"\x0f\n" +
+	"\x16common/v1/system.proto\x12\x14common.api.common.v1\x1a\x1cgoogle/api/annotations.proto\"\x0f\n" +
 	"\rHealthRequest\"'\n" +
 	"\vHealthReply\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2_\n" +
-	"\x06System\x12U\n" +
-	"\x06Health\x12\x18.common.v1.HealthRequest\x1a\x16.common.v1.HealthReply\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/system/healthB\x0eZ\fcommon/v1;v1b\x06proto3"
+	"\amessage\x18\x01 \x01(\tR\amessage2u\n" +
+	"\x06System\x12k\n" +
+	"\x06Health\x12#.common.api.common.v1.HealthRequest\x1a!.common.api.common.v1.HealthReply\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/system/healthB\x19Z\x17common/api/common/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_system_proto_rawDescOnce sync.Once
@@ -128,12 +128,12 @@ func file_common_v1_system_proto_rawDescGZIP() []byte {
 
 var file_common_v1_system_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_common_v1_system_proto_goTypes = []any{
-	(*HealthRequest)(nil), // 0: common.v1.HealthRequest
-	(*HealthReply)(nil),   // 1: common.v1.HealthReply
+	(*HealthRequest)(nil), // 0: common.api.common.v1.HealthRequest
+	(*HealthReply)(nil),   // 1: common.api.common.v1.HealthReply
 }
 var file_common_v1_system_proto_depIdxs = []int32{
-	0, // 0: common.v1.System.Health:input_type -> common.v1.HealthRequest
-	1, // 1: common.v1.System.Health:output_type -> common.v1.HealthReply
+	0, // 0: common.api.common.v1.System.Health:input_type -> common.api.common.v1.HealthRequest
+	1, // 1: common.api.common.v1.System.Health:output_type -> common.api.common.v1.HealthReply
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

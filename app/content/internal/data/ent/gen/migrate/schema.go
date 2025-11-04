@@ -152,6 +152,7 @@ var (
 	ArticlePostscriptsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
+		{Name: "status", Type: field.TypeInt32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt64},
@@ -164,7 +165,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "article_postscripts_articles_postscripts",
-				Columns:    []*schema.Column{ArticlePostscriptsColumns[4]},
+				Columns:    []*schema.Column{ArticlePostscriptsColumns[5]},
 				RefColumns: []*schema.Column{ArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

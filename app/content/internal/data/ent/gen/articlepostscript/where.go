@@ -65,6 +65,11 @@ func Content(v string) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldContent, v))
 }
 
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldEQ(FieldStatus, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldCreatedAt, v))
@@ -158,6 +163,46 @@ func ContentEqualFold(v string) predicate.ArticlePostscript {
 // ContentContainsFold applies the ContainsFold predicate on the "content" field.
 func ContentContainsFold(v string) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldContainsFold(FieldContent, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v int32) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldLTE(FieldStatus, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

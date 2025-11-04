@@ -57,6 +57,27 @@ func (_u *ArticlePostscriptUpdate) SetNillableContent(v *string) *ArticlePostscr
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *ArticlePostscriptUpdate) SetStatus(v int32) *ArticlePostscriptUpdate {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ArticlePostscriptUpdate) SetNillableStatus(v *int32) *ArticlePostscriptUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// AddStatus adds value to the "status" field.
+func (_u *ArticlePostscriptUpdate) AddStatus(v int32) *ArticlePostscriptUpdate {
+	_u.mutation.AddStatus(v)
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *ArticlePostscriptUpdate) SetCreatedAt(v time.Time) *ArticlePostscriptUpdate {
 	_u.mutation.SetCreatedAt(v)
@@ -168,6 +189,12 @@ func (_u *ArticlePostscriptUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if value, ok := _u.mutation.Content(); ok {
 		_spec.SetField(articlepostscript.FieldContent, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(articlepostscript.FieldStatus, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedStatus(); ok {
+		_spec.AddField(articlepostscript.FieldStatus, field.TypeInt32, value)
+	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlepostscript.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -254,6 +281,27 @@ func (_u *ArticlePostscriptUpdateOne) SetNillableContent(v *string) *ArticlePost
 	if v != nil {
 		_u.SetContent(*v)
 	}
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *ArticlePostscriptUpdateOne) SetStatus(v int32) *ArticlePostscriptUpdateOne {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ArticlePostscriptUpdateOne) SetNillableStatus(v *int32) *ArticlePostscriptUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// AddStatus adds value to the "status" field.
+func (_u *ArticlePostscriptUpdateOne) AddStatus(v int32) *ArticlePostscriptUpdateOne {
+	_u.mutation.AddStatus(v)
 	return _u
 }
 
@@ -397,6 +445,12 @@ func (_u *ArticlePostscriptUpdateOne) sqlSave(ctx context.Context) (_node *Artic
 	}
 	if value, ok := _u.mutation.Content(); ok {
 		_spec.SetField(articlepostscript.FieldContent, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(articlepostscript.FieldStatus, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedStatus(); ok {
+		_spec.AddField(articlepostscript.FieldStatus, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlepostscript.FieldCreatedAt, field.TypeTime, value)

@@ -5471,6 +5471,8 @@ type ArticlePostscriptMutation struct {
 	typ            string
 	id             *int64
 	content        *string
+	status         *int32
+	addstatus      *int32
 	created_at     *time.Time
 	updated_at     *time.Time
 	clearedFields  map[string]struct{}
@@ -5657,6 +5659,62 @@ func (m *ArticlePostscriptMutation) ResetContent() {
 	m.content = nil
 }
 
+// SetStatus sets the "status" field.
+func (m *ArticlePostscriptMutation) SetStatus(i int32) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ArticlePostscriptMutation) Status() (r int32, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ArticlePostscript entity.
+// If the ArticlePostscript object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticlePostscriptMutation) OldStatus(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *ArticlePostscriptMutation) AddStatus(i int32) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ArticlePostscriptMutation) AddedStatus() (r int32, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ArticlePostscriptMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *ArticlePostscriptMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -5816,12 +5874,15 @@ func (m *ArticlePostscriptMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticlePostscriptMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.article != nil {
 		fields = append(fields, articlepostscript.FieldArticleID)
 	}
 	if m.content != nil {
 		fields = append(fields, articlepostscript.FieldContent)
+	}
+	if m.status != nil {
+		fields = append(fields, articlepostscript.FieldStatus)
 	}
 	if m.created_at != nil {
 		fields = append(fields, articlepostscript.FieldCreatedAt)
@@ -5841,6 +5902,8 @@ func (m *ArticlePostscriptMutation) Field(name string) (ent.Value, bool) {
 		return m.ArticleID()
 	case articlepostscript.FieldContent:
 		return m.Content()
+	case articlepostscript.FieldStatus:
+		return m.Status()
 	case articlepostscript.FieldCreatedAt:
 		return m.CreatedAt()
 	case articlepostscript.FieldUpdatedAt:
@@ -5858,6 +5921,8 @@ func (m *ArticlePostscriptMutation) OldField(ctx context.Context, name string) (
 		return m.OldArticleID(ctx)
 	case articlepostscript.FieldContent:
 		return m.OldContent(ctx)
+	case articlepostscript.FieldStatus:
+		return m.OldStatus(ctx)
 	case articlepostscript.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case articlepostscript.FieldUpdatedAt:
@@ -5885,6 +5950,13 @@ func (m *ArticlePostscriptMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetContent(v)
 		return nil
+	case articlepostscript.FieldStatus:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
 	case articlepostscript.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5907,6 +5979,9 @@ func (m *ArticlePostscriptMutation) SetField(name string, value ent.Value) error
 // this mutation.
 func (m *ArticlePostscriptMutation) AddedFields() []string {
 	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, articlepostscript.FieldStatus)
+	}
 	return fields
 }
 
@@ -5915,6 +5990,8 @@ func (m *ArticlePostscriptMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ArticlePostscriptMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case articlepostscript.FieldStatus:
+		return m.AddedStatus()
 	}
 	return nil, false
 }
@@ -5924,6 +6001,13 @@ func (m *ArticlePostscriptMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ArticlePostscriptMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case articlepostscript.FieldStatus:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ArticlePostscript numeric field %s", name)
 }
@@ -5971,6 +6055,9 @@ func (m *ArticlePostscriptMutation) ResetField(name string) error {
 		return nil
 	case articlepostscript.FieldContent:
 		m.ResetContent()
+		return nil
+	case articlepostscript.FieldStatus:
+		m.ResetStatus()
 		return nil
 	case articlepostscript.FieldCreatedAt:
 		m.ResetCreatedAt()

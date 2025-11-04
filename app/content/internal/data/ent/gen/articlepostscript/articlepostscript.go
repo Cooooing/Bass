@@ -18,6 +18,8 @@ const (
 	FieldArticleID = "article_id"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -40,6 +42,7 @@ var Columns = []string{
 	FieldID,
 	FieldArticleID,
 	FieldContent,
+	FieldStatus,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -57,6 +60,8 @@ func ValidColumn(column string) bool {
 var (
 	// ContentValidator is a validator for the "content" field. It is called by the builders before save.
 	ContentValidator func(string) error
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -79,6 +84,11 @@ func ByArticleID(opts ...sql.OrderTermOption) OrderOption {
 // ByContent orders the results by the content field.
 func ByContent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContent, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

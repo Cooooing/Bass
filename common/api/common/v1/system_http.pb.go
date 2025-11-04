@@ -19,7 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationSystemHealth = "/common.v1.System/Health"
+const OperationSystemHealth = "/common.api.common.v1.System/Health"
 
 type SystemHTTPServer interface {
 	// Health 健康检查

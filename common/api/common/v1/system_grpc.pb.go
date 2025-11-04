@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	System_Health_FullMethodName = "/common.v1.System/Health"
+	System_Health_FullMethodName = "/common.api.common.v1.System/Health"
 )
 
 // SystemClient is the client API for System service.
@@ -114,7 +114,7 @@ func _System_Health_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var System_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "common.v1.System",
+	ServiceName: "common.api.common.v1.System",
 	HandlerType: (*SystemServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

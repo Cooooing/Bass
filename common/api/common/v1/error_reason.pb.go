@@ -189,7 +189,7 @@ var File_common_v1_error_reason_proto protoreflect.FileDescriptor
 
 const file_common_v1_error_reason_proto_rawDesc = "" +
 	"\n" +
-	"\x1ccommon/v1/error_reason.proto\x12\tcommon.v1\x1a\x13errors/errors.proto*\x9d\t\n" +
+	"\x1ccommon/v1/error_reason.proto\x12\x14common.api.common.v1\x1a\x13errors/errors.proto*\x9d\t\n" +
 	"\vErrorReason\x12\x16\n" +
 	"\fUnknownError\x10\x00\x1a\x04\xa8E\xf4\x03\x12\x15\n" +
 	"\n" +
@@ -234,7 +234,7 @@ const file_common_v1_error_reason_proto_rawDesc = "" +
 	"\x13InsufficientStorage\x10\xfb\x03\x1a\x04\xa8E\xfb\x03\x12\x17\n" +
 	"\fLoopDetected\x10\xfc\x03\x1a\x04\xa8E\xfc\x03\x12\x16\n" +
 	"\vNotExtended\x10\xfe\x03\x1a\x04\xa8E\xfe\x03\x12(\n" +
-	"\x1dNetworkAuthenticationRequired\x10\xff\x03\x1a\x04\xa8E\xff\x03\x1a\x04\xa0E\xf4\x03B\x0eZ\fcommon/v1;v1b\x06proto3"
+	"\x1dNetworkAuthenticationRequired\x10\xff\x03\x1a\x04\xa8E\xff\x03\x1a\x04\xa0E\xf4\x03B\x19Z\x17common/api/common/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_error_reason_proto_rawDescOnce sync.Once
@@ -250,7 +250,7 @@ func file_common_v1_error_reason_proto_rawDescGZIP() []byte {
 
 var file_common_v1_error_reason_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_common_v1_error_reason_proto_goTypes = []any{
-	(ErrorReason)(0), // 0: common.v1.ErrorReason
+	(ErrorReason)(0), // 0: common.api.common.v1.ErrorReason
 }
 var file_common_v1_error_reason_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

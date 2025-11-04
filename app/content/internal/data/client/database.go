@@ -7,22 +7,23 @@ import (
 	"context"
 	"fmt"
 
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	_ "github.com/lib/pq"
 )
 
 func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func(), error) {
-	logFunc := func(args ...any) {
-		text := fmt.Sprint(args...)
-		log.Debugf("%s", text)
-	}
-
-	client, err := gen.Open(conf.Data.Database.Driver, conf.Data.Database.Source, gen.Log(logFunc))
+	drv, err := sql.Open(conf.Data.Database.Driver, conf.Data.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)
 	}
+	debugDrv := dialect.DebugWithContext(drv, func(ctx context.Context, args ...any) {
+		text := fmt.Sprint(args...)
+		log.WithContext(ctx).Debugf("%s", text)
+	})
+	client := gen.NewClient(gen.Driver(debugDrv))
 	log.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
-	client = client.Debug()
 	// 可选：自动迁移
 	if conf.Data.Database.Merge {
 		ctx := context.Background()

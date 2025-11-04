@@ -35,3 +35,9 @@ registry:
     username: "root"
     password: "123456"
     timeout: 5s
+
+trace:
+  enable: true
+  endpoint: "192.168.1.6:4317"  # OTel Collector 地址
+  insecure: true
+  sampler: 1  # 100% 采样率

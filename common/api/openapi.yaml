@@ -585,7 +585,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.v1.HealthReply'
+                                $ref: '#/components/schemas/common.api.common.v1.HealthReply'
     /v1/user/getList:
         post:
             tags:
@@ -645,6 +645,12 @@ paths:
                                 $ref: '#/components/schemas/common.api.user.v1.GetOneReply'
 components:
     schemas:
+        common.api.common.v1.HealthReply:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: 响应消息
         common.api.common.v1.PageReply:
             type: object
             properties:
@@ -1587,12 +1593,6 @@ components:
                     type: string
                     description: 更新时间
                     format: date-time
-        common.v1.HealthReply:
-            type: object
-            properties:
-                message:
-                    type: string
-                    description: 响应消息
 tags:
     - name: ContentArticleService
       description: Article 服务

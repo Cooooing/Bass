@@ -9,7 +9,7 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Registry registry = 3;
-  string watch_name = 4;
+  Trace trace = 4;
 }
 
 message Server {
@@ -66,4 +66,11 @@ message Registry {
     google.protobuf.Duration timeout = 4;
   }
   Etcd etcd = 1;
+}
+
+message Trace {
+  bool enable = 1;
+  string endpoint = 2;
+  bool insecure = 3;
+  double sampler = 4;
 }

@@ -143,12 +143,16 @@ func init() {
 	articlepostscriptDescContent := articlepostscriptFields[2].Descriptor()
 	// articlepostscript.ContentValidator is a validator for the "content" field. It is called by the builders before save.
 	articlepostscript.ContentValidator = articlepostscriptDescContent.Validators[0].(func(string) error)
+	// articlepostscriptDescStatus is the schema descriptor for status field.
+	articlepostscriptDescStatus := articlepostscriptFields[3].Descriptor()
+	// articlepostscript.DefaultStatus holds the default value on creation for the status field.
+	articlepostscript.DefaultStatus = articlepostscriptDescStatus.Default.(int32)
 	// articlepostscriptDescCreatedAt is the schema descriptor for created_at field.
-	articlepostscriptDescCreatedAt := articlepostscriptFields[3].Descriptor()
+	articlepostscriptDescCreatedAt := articlepostscriptFields[4].Descriptor()
 	// articlepostscript.DefaultCreatedAt holds the default value on creation for the created_at field.
 	articlepostscript.DefaultCreatedAt = articlepostscriptDescCreatedAt.Default.(func() time.Time)
 	// articlepostscriptDescUpdatedAt is the schema descriptor for updated_at field.
-	articlepostscriptDescUpdatedAt := articlepostscriptFields[4].Descriptor()
+	articlepostscriptDescUpdatedAt := articlepostscriptFields[5].Descriptor()
 	// articlepostscript.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	articlepostscript.DefaultUpdatedAt = articlepostscriptDescUpdatedAt.Default.(func() time.Time)
 	articlevoteFields := schema.ArticleVote{}.Fields()

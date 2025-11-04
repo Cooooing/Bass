@@ -3,6 +3,7 @@ package main
 import (
 	"common/pkg"
 	commonClient "common/pkg/client"
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -68,8 +69,28 @@ func main() {
 
 	server.InitMetrics(Name)
 
-	logger := pkg.Logger(c.Server.Mode, bc.Log.Level, bc.Log.File)
-	app, cleanup, err := wireApp(c, logger, log.NewHelper(logger))
+	ctx := context.Background()
+	if c.Trace.Enable {
+		shutdownTracing, err := pkg.SetupTracing(
+			ctx,
+			Name,
+			Version,
+			c.Trace.Endpoint,
+			c.Trace.Insecure,
+			c.Trace.Sampler,
+		)
+		if err != nil {
+			panic(err)
+		}
+		defer func() {
+			err := shutdownTracing(ctx)
+			if err != nil {
+				panic(err)
+			}
+		}()
+	}
+	logger := pkg.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
+	app, cleanup, err := wireApp(c, logger, log.NewHelper(logger).WithContext(ctx))
 	if err != nil {
 		panic(err)
 	}

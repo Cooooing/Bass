@@ -33,6 +33,20 @@ func (_c *ArticlePostscriptCreate) SetContent(v string) *ArticlePostscriptCreate
 	return _c
 }
 
+// SetStatus sets the "status" field.
+func (_c *ArticlePostscriptCreate) SetStatus(v int32) *ArticlePostscriptCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *ArticlePostscriptCreate) SetNillableStatus(v *int32) *ArticlePostscriptCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_c *ArticlePostscriptCreate) SetCreatedAt(v time.Time) *ArticlePostscriptCreate {
 	_c.mutation.SetCreatedAt(v)
@@ -107,6 +121,10 @@ func (_c *ArticlePostscriptCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *ArticlePostscriptCreate) defaults() {
+	if _, ok := _c.mutation.Status(); !ok {
+		v := articlepostscript.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := articlepostscript.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
@@ -129,6 +147,9 @@ func (_c *ArticlePostscriptCreate) check() error {
 		if err := articlepostscript.ContentValidator(v); err != nil {
 			return &ValidationError{Name: "content", err: fmt.Errorf(`gen: validator failed for field "ArticlePostscript.content": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "ArticlePostscript.status"`)}
 	}
 	if len(_c.mutation.ArticleIDs()) == 0 {
 		return &ValidationError{Name: "article", err: errors.New(`gen: missing required edge "ArticlePostscript.article"`)}
@@ -168,6 +189,10 @@ func (_c *ArticlePostscriptCreate) createSpec() (*ArticlePostscript, *sqlgraph.C
 	if value, ok := _c.mutation.Content(); ok {
 		_spec.SetField(articlepostscript.FieldContent, field.TypeString, value)
 		_node.Content = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(articlepostscript.FieldStatus, field.TypeInt32, value)
+		_node.Status = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(articlepostscript.FieldCreatedAt, field.TypeTime, value)

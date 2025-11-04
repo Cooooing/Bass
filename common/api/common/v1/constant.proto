@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package common.v1;
+package common.api.common.v1;
 
-option go_package = "common/v1;v1";
+option go_package = "common/api/common/v1;v1";
 
 // -- mq
 
@@ -43,6 +43,11 @@ enum ArticleType {
   ArticleTypeQA = 1; // 问答
   ArticleTypeVote = 2; // 投票
   ArticleTypeLottery = 3; // 抽奖
+}
+
+enum ArticlePostscriptStatus {
+  ArticlePostscriptNormal = 0; // 正常
+  ArticlePostscriptHidden = 1; // 隐藏
 }
 
 // 文章行为类型

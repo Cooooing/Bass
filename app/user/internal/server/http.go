@@ -17,6 +17,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -27,11 +28,12 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
-			logging.Server(logger),
+			tracing.Server(),
 			metrics.Server(
 				metrics.WithSeconds(_metricSeconds),
 				metrics.WithRequests(_metricRequests),
 			),
+			logging.Server(logger),
 			AuthMiddleware(tokenService),
 			validate.ProtoValidate(),
 		),
@@ -97,5 +99,6 @@ func AuthMiddleware(tokenService *biz.TokenService) middleware.Middleware {
 }
 
 var NoAuthEndpoints = map[string]struct{}{
+	"/common.api.common.v1.System/Health":             {},
 	"/common.api.user.v1.UserAuthenticationService/*": {},
 }

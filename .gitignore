@@ -38,3 +38,6 @@ bin/
 *.iml
 /deploy/prod*/
 /deploy/dev/.env
+
+# apps
+content

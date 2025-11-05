@@ -1,6 +1,8 @@
 package util
 
 import (
+	"hash/crc32"
+	"os"
 	"strings"
 
 	"github.com/bytedance/gopkg/lang/fastrand"
@@ -8,7 +10,17 @@ import (
 )
 
 func NewSonyflake() (*sonyflake.Sonyflake, error) {
-	return sonyflake.New(sonyflake.Settings{})
+	return sonyflake.New(sonyflake.Settings{
+		MachineID: func() (int, error) {
+			h, err := os.Hostname()
+			if err != nil {
+				return 0, err
+			}
+			sum := crc32.ChecksumIEEE([]byte(h))
+			u := sum % 65536
+			return int(u), nil
+		},
+	})
 }
 
 func RandStr(sf *sonyflake.Sonyflake, length int, useLower, useUpper, useDigit, useUnderscore bool) string {

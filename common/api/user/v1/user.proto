@@ -12,6 +12,7 @@ option go_package = "common/api/user/v1;v1";
 
 message User {
   // --- 基础信息 ---
+
   // 用户ID
   int64 id = 1;
   // 用户名
@@ -32,24 +33,28 @@ message User {
   string mbti = 10;
 
   // --- 状态 ---
+
   // 用户状态：0-正常，1-封禁，2-注销
   int64 status = 11;
   // 用户组名称
   string group_name = 12;
 
   // --- 社交信息 ---
+
   // 关注数
   int64 follow_count = 13;
   // 粉丝数
   int64 follower_count = 14;
 
   // --- 登录信息 ---
-  // 最近登录时间 (ISO8601格式)
+
+  // 最近登录时间
   google.protobuf.Timestamp last_login_time = 15;
   // 最近登录IP
   string last_login_ip = 16;
 
   // --- 行为统计 ---
+
   // 在线总时长（分钟）
   int64 online_minutes = 17;
   // 最近签到时间
@@ -60,6 +65,7 @@ message User {
   int64 longest_checkin_streak = 20;
 
   // --- 用户偏好设置 ---
+
   // 用户语言
   string language = 21;
   // 时区
@@ -74,6 +80,7 @@ message User {
   bool enable_email_subscribe = 26;
 
   // --- 隐私设置 ---
+
   // 是否公开积分榜
   bool public_points = 27;
   // 是否公开粉丝列表
@@ -86,6 +93,7 @@ message User {
   bool public_online_status = 31;
 
   // --- 地理信息 ---
+
   // 所在国家
   string country = 32;
   // 所在省份
@@ -96,10 +104,12 @@ message User {
   bool public_location = 35;
 
   // --- 其他 ---
+
   // 二步验证 Secret
   string twofa_secret = 36;
 
   // --- 审计字段 ---
+
   // 创建时间
   google.protobuf.Timestamp created_at = 37;
   // 更新时间
@@ -140,6 +150,7 @@ message GetOneRequest {
   int64 id = 1;
 }
 message GetOneReply {
+  // 用户信息
   User user = 1;
 }
 
@@ -148,6 +159,7 @@ message GetListRequest {
   repeated int64 ids = 1;
 }
 message GetListReply {
+  // 用户列表
   repeated User users = 1;
 }
 
@@ -156,5 +168,6 @@ message GetMapRequest {
   repeated int64 ids = 1;
 }
 message GetMapReply {
+  // 用户ID -> 用户信息
   map<int64, User> users = 1;
 }

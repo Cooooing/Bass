@@ -31,9 +31,9 @@ type ContentTagServiceHTTPServer interface {
 
 func RegisterContentTagServiceHTTPServer(s *http.Server, srv ContentTagServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/api/v1/tag/add", _ContentTagService_Add3_HTTP_Handler(srv))
-	r.POST("/api/v1/tag/update", _ContentTagService_Update2_HTTP_Handler(srv))
-	r.POST("/api/v1/tag/get", _ContentTagService_Get3_HTTP_Handler(srv))
+	r.POST("/v1/tag/add", _ContentTagService_Add3_HTTP_Handler(srv))
+	r.POST("/v1/tag/update", _ContentTagService_Update2_HTTP_Handler(srv))
+	r.POST("/v1/tag/get", _ContentTagService_Get3_HTTP_Handler(srv))
 }
 
 func _ContentTagService_Add3_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
@@ -118,7 +118,7 @@ func NewContentTagServiceHTTPClient(client *http.Client) ContentTagServiceHTTPCl
 
 func (c *ContentTagServiceHTTPClientImpl) Add(ctx context.Context, in *AddTagRequest, opts ...http.CallOption) (*AddTagReply, error) {
 	var out AddTagReply
-	pattern := "/api/v1/tag/add"
+	pattern := "/v1/tag/add"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationContentTagServiceAdd))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -131,7 +131,7 @@ func (c *ContentTagServiceHTTPClientImpl) Add(ctx context.Context, in *AddTagReq
 
 func (c *ContentTagServiceHTTPClientImpl) Get(ctx context.Context, in *GetTagRequest, opts ...http.CallOption) (*GetTagReply, error) {
 	var out GetTagReply
-	pattern := "/api/v1/tag/get"
+	pattern := "/v1/tag/get"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationContentTagServiceGet))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -144,7 +144,7 @@ func (c *ContentTagServiceHTTPClientImpl) Get(ctx context.Context, in *GetTagReq
 
 func (c *ContentTagServiceHTTPClientImpl) Update(ctx context.Context, in *UpdateTagRequest, opts ...http.CallOption) (*UpdateTagReply, error) {
 	var out UpdateTagReply
-	pattern := "/api/v1/tag/update"
+	pattern := "/v1/tag/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationContentTagServiceUpdate))
 	opts = append(opts, http.PathTemplate(pattern))

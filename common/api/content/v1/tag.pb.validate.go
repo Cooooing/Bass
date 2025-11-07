@@ -225,8 +225,6 @@ func (m *AddTagRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Name
-
 	if len(errors) > 0 {
 		return AddTagRequestMultiError(errors)
 	}

@@ -6,60 +6,6 @@ info:
     title: ""
     version: 0.0.1
 paths:
-    /api/v1/tag/add:
-        post:
-            tags:
-                - ContentTagService
-            operationId: ContentTagService_Add
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.content.v1.AddTagRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.content.v1.AddTagReply'
-    /api/v1/tag/get:
-        post:
-            tags:
-                - ContentTagService
-            operationId: ContentTagService_Get
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.content.v1.GetTagRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.content.v1.GetTagReply'
-    /api/v1/tag/update:
-        post:
-            tags:
-                - ContentTagService
-            operationId: ContentTagService_Update
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.content.v1.UpdateTagRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.content.v1.UpdateTagReply'
     /v1/article/acceptAnswer:
         post:
             tags:
@@ -586,6 +532,60 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.common.v1.HealthReply'
+    /v1/tag/add:
+        post:
+            tags:
+                - ContentTagService
+            operationId: ContentTagService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.AddTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.AddTagReply'
+    /v1/tag/get:
+        post:
+            tags:
+                - ContentTagService
+            operationId: ContentTagService_Get
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.GetTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.GetTagReply'
+    /v1/tag/update:
+        post:
+            tags:
+                - ContentTagService
+            operationId: ContentTagService_Update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.UpdateTagRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.UpdateTagReply'
     /v1/user/getList:
         post:
             tags:
@@ -777,8 +777,11 @@ components:
         common.api.content.v1.AddTagRequest:
             type: object
             properties:
-                name:
-                    type: string
+                names:
+                    type: array
+                    items:
+                        type: string
+                    description: 标签名称
         common.api.content.v1.Article:
             type: object
             properties:
@@ -1315,6 +1318,7 @@ components:
             properties:
                 name:
                     type: string
+                    description: 标签ID
         common.api.content.v1.WatchArticleReply:
             type: object
             properties: {}
@@ -1370,6 +1374,7 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 用户列表
         common.api.user.v1.GetListRequest:
             type: object
             properties:
@@ -1385,6 +1390,7 @@ components:
                     type: object
                     additionalProperties:
                         $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 用户ID -> 用户信息
         common.api.user.v1.GetMapRequest:
             type: object
             properties:
@@ -1397,7 +1403,9 @@ components:
             type: object
             properties:
                 user:
-                    $ref: '#/components/schemas/common.api.user.v1.User'
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 用户信息
         common.api.user.v1.GetOneRequest:
             type: object
             properties:
@@ -1460,9 +1468,7 @@ components:
             properties:
                 id:
                     type: string
-                    description: |-
-                        --- 基础信息 ---
-                         用户ID
+                    description: 用户ID
                 name:
                     type: string
                     description: 用户名
@@ -1489,34 +1495,26 @@ components:
                     description: 用户 MBTI 类型
                 status:
                     type: string
-                    description: |-
-                        --- 状态 ---
-                         用户状态：0-正常，1-封禁，2-注销
+                    description: 用户状态：0-正常，1-封禁，2-注销
                 groupName:
                     type: string
                     description: 用户组名称
                 followCount:
                     type: string
-                    description: |-
-                        --- 社交信息 ---
-                         关注数
+                    description: 关注数
                 followerCount:
                     type: string
                     description: 粉丝数
                 lastLoginTime:
                     type: string
-                    description: |-
-                        --- 登录信息 ---
-                         最近登录时间 (ISO8601格式)
+                    description: 最近登录时间
                     format: date-time
                 lastLoginIp:
                     type: string
                     description: 最近登录IP
                 onlineMinutes:
                     type: string
-                    description: |-
-                        --- 行为统计 ---
-                         在线总时长（分钟）
+                    description: 在线总时长（分钟）
                 lastCheckinTime:
                     type: string
                     description: 最近签到时间
@@ -1529,9 +1527,7 @@ components:
                     description: 最长连续签到天数
                 language:
                     type: string
-                    description: |-
-                        --- 用户偏好设置 ---
-                         用户语言
+                    description: 用户语言
                 timezone:
                     type: string
                     description: 时区
@@ -1549,9 +1545,7 @@ components:
                     description: 启用邮件订阅
                 publicPoints:
                     type: boolean
-                    description: |-
-                        --- 隐私设置 ---
-                         是否公开积分榜
+                    description: 是否公开积分榜
                 publicFollowers:
                     type: boolean
                     description: 是否公开粉丝列表
@@ -1566,9 +1560,7 @@ components:
                     description: 是否公开在线状态
                 country:
                     type: string
-                    description: |-
-                        --- 地理信息 ---
-                         所在国家
+                    description: 所在国家
                 province:
                     type: string
                     description: 所在省份
@@ -1580,14 +1572,10 @@ components:
                     description: 是否公开地理位置
                 twofaSecret:
                     type: string
-                    description: |-
-                        --- 其他 ---
-                         二步验证 Secret
+                    description: 二步验证 Secret
                 createdAt:
                     type: string
-                    description: |-
-                        --- 审计字段 ---
-                         创建时间
+                    description: 创建时间
                     format: date-time
                 updatedAt:
                     type: string

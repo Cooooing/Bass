@@ -258,19 +258,19 @@ func init() {
 	// tag.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	tag.NameValidator = tagDescName.Validators[0].(func(string) error)
 	// tagDescStatus is the schema descriptor for status field.
-	tagDescStatus := tagFields[4].Descriptor()
+	tagDescStatus := tagFields[5].Descriptor()
 	// tag.DefaultStatus holds the default value on creation for the status field.
 	tag.DefaultStatus = tagDescStatus.Default.(int32)
 	// tagDescArticleCount is the schema descriptor for article_count field.
-	tagDescArticleCount := tagFields[5].Descriptor()
+	tagDescArticleCount := tagFields[6].Descriptor()
 	// tag.DefaultArticleCount holds the default value on creation for the article_count field.
 	tag.DefaultArticleCount = tagDescArticleCount.Default.(int32)
 	// tagDescCreatedAt is the schema descriptor for created_at field.
-	tagDescCreatedAt := tagFields[6].Descriptor()
+	tagDescCreatedAt := tagFields[7].Descriptor()
 	// tag.DefaultCreatedAt holds the default value on creation for the created_at field.
 	tag.DefaultCreatedAt = tagDescCreatedAt.Default.(func() time.Time)
 	// tagDescUpdatedAt is the schema descriptor for updated_at field.
-	tagDescUpdatedAt := tagFields[7].Descriptor()
+	tagDescUpdatedAt := tagFields[8].Descriptor()
 	// tag.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	tag.DefaultUpdatedAt = tagDescUpdatedAt.Default.(func() time.Time)
 }

@@ -22,6 +22,8 @@ type Tag struct {
 	UserID int64 `json:"user_id,omitempty"`
 	// 标签名称
 	Name string `json:"name,omitempty"`
+	// 标签描述
+	Description string `json:"description,omitempty"`
 	// 所属领域id
 	DomainID *int64 `json:"domain_id,omitempty"`
 	// 标签状态：0-正常，1-禁用
@@ -76,7 +78,7 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case tag.FieldID, tag.FieldUserID, tag.FieldDomainID, tag.FieldStatus, tag.FieldArticleCount:
 			values[i] = new(sql.NullInt64)
-		case tag.FieldName:
+		case tag.FieldName, tag.FieldDescription:
 			values[i] = new(sql.NullString)
 		case tag.FieldCreatedAt, tag.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -112,6 +114,12 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				_m.Name = value.String
+			}
+		case tag.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
 			}
 		case tag.FieldDomainID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -197,6 +205,9 @@ func (_m *Tag) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	if v := _m.DomainID; v != nil {
 		builder.WriteString("domain_id=")

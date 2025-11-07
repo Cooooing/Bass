@@ -65,6 +65,20 @@ func (_u *TagUpdate) SetNillableName(v *string) *TagUpdate {
 	return _u
 }
 
+// SetDescription sets the "description" field.
+func (_u *TagUpdate) SetDescription(v string) *TagUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *TagUpdate) SetNillableDescription(v *string) *TagUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
 // SetDomainID sets the "domain_id" field.
 func (_u *TagUpdate) SetDomainID(v int64) *TagUpdate {
 	_u.mutation.SetDomainID(v)
@@ -277,6 +291,9 @@ func (_u *TagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(tag.FieldDescription, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)
 	}
@@ -426,6 +443,20 @@ func (_u *TagUpdateOne) SetName(v string) *TagUpdateOne {
 func (_u *TagUpdateOne) SetNillableName(v *string) *TagUpdateOne {
 	if v != nil {
 		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *TagUpdateOne) SetDescription(v string) *TagUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *TagUpdateOne) SetNillableDescription(v *string) *TagUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
 	return _u
 }
@@ -671,6 +702,9 @@ func (_u *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(tag.FieldDescription, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)

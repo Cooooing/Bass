@@ -16,16 +16,18 @@ message Tag {
   int64 user_id = 2;
   // 标签名称
   string name = 3;
+  // 描述
+  string description = 4;
   // 所属领域ID
-  int64 domain_id = 4;
+  int64 domain_id = 5;
   // 标签状态：0-正常，1-禁用
-  int32 status = 5;
+  int32 status = 6;
   // 文章数
-  int32 article_count = 6;
+  int32 article_count = 7;
   // 创建时间
-  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp created_at = 8;
   // 更新时间
-  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
 }
 
 // 标签服务
@@ -33,33 +35,43 @@ service ContentTagService {
 
   rpc Add (AddTagRequest) returns (AddTagReply) {
     option (google.api.http) = {
-      post: "/api/v1/tag/add"
+      post: "/v1/tag/add"
       body: "*"
     };
   }
 
   rpc Update (UpdateTagRequest) returns (UpdateTagReply) {
     option (google.api.http) = {
-      post: "/api/v1/tag/update"
+      post: "/v1/tag/update"
       body: "*"
     };
   }
 
   rpc Get (GetTagRequest) returns (GetTagReply) {
     option (google.api.http) = {
-      post: "/api/v1/tag/get"
+      post: "/v1/tag/get"
       body: "*"
     };
   }
 }
 
 message AddTagRequest {
-  string name = 1;
+  // 标签名称
+  repeated string names = 1;
 }
 message AddTagReply {}
 
 message UpdateTagRequest {
-  string name = 1;
+  // 标签ID
+  int64 id = 1;
+  // 领域ID
+  int64 domain_id = 2;
+  // 状态：0-正常，1-禁用
+  int32 status = 3;
+  // 标签名称
+  string name = 4;
+  // 标签描述
+  string description = 5;
 }
 message UpdateTagReply {}
 

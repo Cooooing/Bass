@@ -1,0 +1,44 @@
+server:
+  name: gateway-service
+  version: 1.0.0
+  mode: dev
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 5s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 5s
+data:
+  database:
+    driver: "postgres"
+    source: "postgresql://root:123456@192.168.1.6:5432/bass?sslmode=disable" # postgresql://<user>:<pass>@<host>/<database>
+    merge: true # 是否同步表到数据库
+  redis:
+    addr: 192.168.1.6:6379
+    password: "123456"
+    db: 0
+    read_timeout: 1s
+    write_timeout: 1s
+  rabbitmq:
+    url: "amqp://root:123456@192.168.1.6:5672/admin_vhost"
+    heartbeat: 10s            # 心跳，秒
+    dial_timeout: 5s          # 连接超时，秒
+    prefetch_count: 10        # Qos，未确认消息最大数量
+    prefetch_global: false    # Qos 是否全局
+    delivery_mode: 2          # 消息持久化 1: transient, 2: persistent
+    auto_ack: false           # 是否自动确认消息
+
+
+registry:
+  etcd:
+    endpoints:
+      - 192.168.1.6:2379
+    username: "root"
+    password: "123456"
+    timeout: 5s
+
+trace:
+  enable: true
+  endpoint: "192.168.1.6:4317"  # OTel Collector 地址
+  insecure: true
+  sampler: 1  # 100% 采样率

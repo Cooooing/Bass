@@ -1,0 +1,82 @@
+syntax = "proto3";
+package kratos.api.conf;
+
+option go_package = "user/internal/conf/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Registry registry = 3;
+  Trace trace = 4;
+  Jwt jwt = 5;
+}
+
+message Server {
+  string name = 1;
+  string version = 2;
+  string mode = 3;
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 4;
+  GRPC grpc = 5;
+}
+
+message Data {
+  message Database {
+    string driver = 1;
+    string source = 2;
+    bool merge = 3;
+  }
+  message Redis {
+    string addr = 1;
+    string password = 2;
+    int32 db = 3;
+    google.protobuf.Duration read_timeout = 4;
+    google.protobuf.Duration write_timeout = 5;
+  }
+  message RabbitMQ {
+    string url = 1;
+    google.protobuf.Duration heartbeat = 2;
+    google.protobuf.Duration dial_timeout = 3;
+    int32 prefetch_count = 4;
+    bool prefetch_global = 5;
+    int32 delivery_mode = 6;
+    bool auto_ack = 7;
+  }
+  Database database = 1;
+  Redis redis = 2;
+  RabbitMQ rabbitmq = 3;
+}
+
+message Registry {
+  message Etcd {
+    repeated string endpoints = 1;
+    string username = 2;
+    string password = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+  Etcd etcd = 1;
+}
+
+message Trace {
+  bool enable = 1;
+  string endpoint = 2;
+  bool insecure = 3;
+  double sampler = 4;
+}
+
+message Jwt {
+  string secret = 1;
+  google.protobuf.Duration expires = 2;
+  google.protobuf.Duration email_expire = 3;
+}

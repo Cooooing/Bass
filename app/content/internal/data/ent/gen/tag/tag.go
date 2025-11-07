@@ -18,6 +18,8 @@ const (
 	FieldUserID = "user_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
 	// FieldDomainID holds the string denoting the domain_id field in the database.
 	FieldDomainID = "domain_id"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -53,6 +55,7 @@ var Columns = []string{
 	FieldID,
 	FieldUserID,
 	FieldName,
+	FieldDescription,
 	FieldDomainID,
 	FieldStatus,
 	FieldArticleCount,
@@ -105,6 +108,11 @@ func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
 // ByDomainID orders the results by the domain_id field.

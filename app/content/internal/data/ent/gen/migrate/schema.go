@@ -333,6 +333,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString},
 		{Name: "status", Type: field.TypeInt32, Default: 0},
 		{Name: "article_count", Type: field.TypeInt32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
@@ -347,7 +348,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tags_domains_tags",
-				Columns:    []*schema.Column{TagsColumns[7]},
+				Columns:    []*schema.Column{TagsColumns[8]},
 				RefColumns: []*schema.Column{DomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

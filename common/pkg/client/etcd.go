@@ -14,6 +14,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	kgrpc "github.com/go-kratos/kratos/v2/transport/grpc"
+	khttp "github.com/go-kratos/kratos/v2/transport/http"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
 )
@@ -80,8 +81,8 @@ func (c *EtcdClient) Registrar() registry.Registrar {
 	return etcdregistry.New(c.cli)
 }
 
-// newGrpcConn 创建 gRPC 连接
-func (c *EtcdClient) newGrpcConn(service string) (*grpc.ClientConn, error) {
+// NewGrpcConn 创建 gRPC 连接
+func (c *EtcdClient) NewGrpcConn(service string) (*grpc.ClientConn, error) {
 	dis := etcdregistry.New(c.cli)
 	return kgrpc.DialInsecure(
 		context.Background(),
@@ -94,6 +95,27 @@ func (c *EtcdClient) newGrpcConn(service string) (*grpc.ClientConn, error) {
 	)
 }
 
+// NewHTTPConn 创建 HTTP 连接（支持服务发现）
+func (c *EtcdClient) NewHTTPConn(service string) (*khttp.Client, error) {
+	dis := etcdregistry.New(c.cli)
+
+	instances, err := dis.GetService(context.Background(), service)
+	if err != nil {
+		return nil, fmt.Errorf("get service instances failed: %w", err)
+	}
+	_ = instances
+
+	return khttp.NewClient(
+		context.Background(),
+		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
+		khttp.WithDiscovery(dis),
+		khttp.WithTimeout(c.conf.Timeout.AsDuration()),
+		khttp.WithMiddleware(
+			tracing.Client(),
+		),
+	)
+}
+
 // getConnFromPool 获取 gRPC 连接池中的连接，如果池不存在则初始化
 func (c *EtcdClient) getConnFromPool(service string, poolSize int) (*grpc.ClientConn, error) {
 	val, _ := c.pools.LoadOrStore(service, &ConnPool{})
@@ -101,7 +123,7 @@ func (c *EtcdClient) getConnFromPool(service string, poolSize int) (*grpc.Client
 
 	pool.once.Do(func() {
 		for i := 0; i < poolSize; i++ {
-			conn, err := c.newGrpcConn(service)
+			conn, err := c.NewGrpcConn(service)
 			if err != nil {
 				c.log.Errorf("failed to create grpc conn for %s: %v", service, err)
 				pool.err = err

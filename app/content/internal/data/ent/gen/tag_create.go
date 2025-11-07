@@ -34,6 +34,12 @@ func (_c *TagCreate) SetName(v string) *TagCreate {
 	return _c
 }
 
+// SetDescription sets the "description" field.
+func (_c *TagCreate) SetDescription(v string) *TagCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
 // SetDomainID sets the "domain_id" field.
 func (_c *TagCreate) SetDomainID(v int64) *TagCreate {
 	_c.mutation.SetDomainID(v)
@@ -196,6 +202,9 @@ func (_c *TagCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Tag.name": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Description(); !ok {
+		return &ValidationError{Name: "description", err: errors.New(`gen: missing required field "Tag.description"`)}
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Tag.status"`)}
 	}
@@ -241,6 +250,10 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(tag.FieldDescription, field.TypeString, value)
+		_node.Description = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)

@@ -175,8 +175,29 @@ func (l *ZapLogger) Log(level log.Level, keyvals ...interface{}) error {
 	return nil
 }
 
-func SetupTracing(ctx context.Context, serviceName, version, endpoint string, insecure bool, sampler float64) (func(context.Context) error, error) {
-	// 创建 Exporter
+func SetupTracing(ctx context.Context, serviceName, version, endpoint string, enableOtel bool, insecure bool, sampler float64) (func(context.Context) error, error) {
+	if !enableOtel {
+		// 创建仅本地 traceID、不上报的 TracerProvider
+		res, err := resource.New(ctx,
+			resource.WithAttributes(
+				semconv.ServiceName(serviceName),
+				semconv.ServiceVersion(version),
+			),
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		tp := sdktrace.NewTracerProvider(
+			sdktrace.WithSampler(sdktrace.AlwaysSample()),
+			sdktrace.WithResource(res),
+		)
+		otel.SetTracerProvider(tp)
+		log.Info("Tracing disabled: using local tracer (traceID preserved, no export)")
+		return func(context.Context) error { return nil }, nil
+	}
+
+	// --- enableOtel == true 的正常上报逻辑 ---
 	opts := []otlptracegrpc.Option{
 		otlptracegrpc.WithEndpoint(endpoint),
 	}
@@ -209,6 +230,6 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, in
 	)
 	otel.SetTracerProvider(tp)
 
-	log.Info("Tracing setup complete")
+	log.Info("Tracing setup complete (OTEL enabled)")
 	return tp.Shutdown, nil
 }

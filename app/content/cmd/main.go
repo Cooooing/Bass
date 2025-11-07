@@ -70,25 +70,24 @@ func main() {
 	server.InitMetrics(Name)
 
 	ctx := context.Background()
-	if c.Trace.Enable {
-		shutdownTracing, err := pkg.SetupTracing(
-			ctx,
-			Name,
-			Version,
-			c.Trace.Endpoint,
-			c.Trace.Insecure,
-			c.Trace.Sampler,
-		)
+	shutdownTracing, err := pkg.SetupTracing(
+		ctx,
+		Name,
+		Version,
+		c.Trace.Endpoint,
+		c.Trace.EnableOtel,
+		c.Trace.Insecure,
+		c.Trace.Sampler,
+	)
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		err := shutdownTracing(ctx)
 		if err != nil {
 			panic(err)
 		}
-		defer func() {
-			err := shutdownTracing(ctx)
-			if err != nil {
-				panic(err)
-			}
-		}()
-	}
+	}()
 	logger := pkg.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
 	app, cleanup, err := wireApp(c, logger, log.NewHelper(logger).WithContext(ctx))
 	if err != nil {

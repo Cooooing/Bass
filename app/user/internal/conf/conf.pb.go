@@ -280,7 +280,7 @@ func (x *Registry) GetEtcd() *Registry_Etcd {
 
 type Trace struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enable        bool                   `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`
+	EnableOtel    bool                   `protobuf:"varint,1,opt,name=enable_otel,json=enableOtel,proto3" json:"enable_otel,omitempty"`
 	Endpoint      string                 `protobuf:"bytes,2,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
 	Insecure      bool                   `protobuf:"varint,3,opt,name=insecure,proto3" json:"insecure,omitempty"`
 	Sampler       float64                `protobuf:"fixed64,4,opt,name=sampler,proto3" json:"sampler,omitempty"`
@@ -318,9 +318,9 @@ func (*Trace) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *Trace) GetEnable() bool {
+func (x *Trace) GetEnableOtel() bool {
 	if x != nil {
-		return x.Enable
+		return x.EnableOtel
 	}
 	return false
 }
@@ -875,9 +875,10 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\tendpoints\x18\x01 \x03(\tR\tendpoints\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"q\n" +
-	"\x05Trace\x12\x16\n" +
-	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\x1a\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"z\n" +
+	"\x05Trace\x12\x1f\n" +
+	"\venable_otel\x18\x01 \x01(\bR\n" +
+	"enableOtel\x12\x1a\n" +
 	"\bendpoint\x18\x02 \x01(\tR\bendpoint\x12\x1a\n" +
 	"\binsecure\x18\x03 \x01(\bR\binsecure\x12\x18\n" +
 	"\asampler\x18\x04 \x01(\x01R\asampler\"\x90\x01\n" +

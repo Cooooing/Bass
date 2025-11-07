@@ -69,7 +69,7 @@ message Registry {
 }
 
 message Trace {
-  bool enable = 1;
+  bool enable_otel = 1;
   string endpoint = 2;
   bool insecure = 3;
   double sampler = 4;

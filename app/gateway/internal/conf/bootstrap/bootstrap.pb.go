@@ -196,8 +196,9 @@ func (x *Config) GetEtcd() string {
 
 type Log struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Level         string                 `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"` // debug, info, warn, error, fatal, panic
-	File          string                 `protobuf:"bytes,2,opt,name=file,proto3" json:"file,omitempty"`
+	Enable        bool                   `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`
+	Level         string                 `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"` // debug, info, warn, error, fatal, panic
+	File          string                 `protobuf:"bytes,3,opt,name=file,proto3" json:"file,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -230,6 +231,13 @@ func (x *Log) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Log.ProtoReflect.Descriptor instead.
 func (*Log) Descriptor() ([]byte, []int) {
 	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Log) GetEnable() bool {
+	if x != nil {
+		return x.Enable
+	}
+	return false
 }
 
 func (x *Log) GetLevel() string {
@@ -334,10 +342,11 @@ const file_conf_bootstrap_bootstrap_proto_rawDesc = "" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x123\n" +
 	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\x1c\n" +
 	"\x06Config\x12\x12\n" +
-	"\x04etcd\x18\x01 \x01(\tR\x04etcd\"/\n" +
-	"\x03Log\x12\x14\n" +
-	"\x05level\x18\x01 \x01(\tR\x05level\x12\x12\n" +
-	"\x04file\x18\x02 \x01(\tR\x04fileB(Z&user/internal/conf/bootstrap;bootstrapb\x06proto3"
+	"\x04etcd\x18\x01 \x01(\tR\x04etcd\"G\n" +
+	"\x03Log\x12\x16\n" +
+	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\x14\n" +
+	"\x05level\x18\x02 \x01(\tR\x05level\x12\x12\n" +
+	"\x04file\x18\x03 \x01(\tR\x04fileB(Z&user/internal/conf/bootstrap;bootstrapb\x06proto3"
 
 var (
 	file_conf_bootstrap_bootstrap_proto_rawDescOnce sync.Once

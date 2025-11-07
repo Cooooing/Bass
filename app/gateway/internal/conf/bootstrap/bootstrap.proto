@@ -30,6 +30,7 @@ message Config {
 }
 
 message Log {
-  string level = 1; // debug, info, warn, error, fatal, panic
-  string file = 2;
+  bool enable = 1;
+  string level = 2; // debug, info, warn, error, fatal, panic
+  string file = 3;
 }

@@ -122,12 +122,19 @@ func NewZapLogger(mode string, file string, encoder zapcore.EncoderConfig, level
 		writers = append(writers, zapcore.AddSync(lumberJackLogger))
 	}
 
-	// 统一使用 JSONEncoder，便于聚合（即使 dev 模式）
-	core = zapcore.NewCore(
-		zapcore.NewJSONEncoder(encoder),
-		zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件
-		level,
-	)
+	if mode == "dev" {
+		core = zapcore.NewCore(
+			zapcore.NewConsoleEncoder(encoder),
+			zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件
+			level,
+		)
+	} else {
+		core = zapcore.NewCore(
+			zapcore.NewJSONEncoder(encoder),
+			zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件
+			level,
+		)
+	}
 
 	zapLogger := zap.New(core, opts...)
 	return &ZapLogger{

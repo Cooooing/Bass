@@ -98,18 +98,12 @@ func (c *EtcdClient) NewGrpcConn(service string) (*grpc.ClientConn, error) {
 // NewHTTPConn 创建 HTTP 连接（支持服务发现）
 func (c *EtcdClient) NewHTTPConn(service string) (*khttp.Client, error) {
 	dis := etcdregistry.New(c.cli)
-
-	instances, err := dis.GetService(context.Background(), service)
-	if err != nil {
-		return nil, fmt.Errorf("get service instances failed: %w", err)
-	}
-	_ = instances
-
 	return khttp.NewClient(
 		context.Background(),
 		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		khttp.WithDiscovery(dis),
 		khttp.WithTimeout(c.conf.Timeout.AsDuration()),
+		khttp.WithBlock(),
 		khttp.WithMiddleware(
 			tracing.Client(),
 		),

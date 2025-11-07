@@ -9,11 +9,13 @@ import (
 	"errors"
 	"gateway/internal/conf"
 	"gateway/internal/service"
+	"io"
 	"net/http"
 	"path"
 	"strings"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
+	errors2 "github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
@@ -78,51 +80,28 @@ func NewProxyHandler(etcdClient *client.EtcdClient, serviceName, prefix string, 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		conn, err := etcdClient.NewHTTPConn(serviceName)
 		r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
+		r.RequestURI = ""
 		response, err := conn.Do(r)
 
 		if err != nil {
+			var e *errors2.Error
+			if errors.As(err, &e) {
+				pkg.HttpErrorEncoder(w, r, errors2.New(int(e.Code), e.Reason, e.Message))
+				return
+			}
 			logger.Errorf("proxy error: %v", err)
-			http.Error(w, "service unavailable", http.StatusInternalServerError)
+			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
 			return
 		}
 		defer response.Body.Close()
-		err = response.Write(w)
+		w.Header().Set("Content-Type", response.Header.Get("Content-Type"))
+		w.WriteHeader(response.StatusCode)
+		_, err = io.Copy(w, response.Body)
 		if err != nil {
 			logger.Errorf("proxy error: %v", err)
-			http.Error(w, "service unavailable", http.StatusInternalServerError)
+			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
 			return
 		}
-
-		// u, err := url.Parse(node.Address())
-		// if err != nil {
-		// 	logger.Errorf("invalid node address: %v", err)
-		// 	http.Error(w, "service unavailable", http.StatusInternalServerError)
-		// 	return
-		// }
-		//
-		// targetURL := &url.URL{Scheme: u.Scheme, Host: u.Host}
-		// proxy := httputil.NewSingleHostReverseProxy(targetURL)
-		//
-		// originalDirector := proxy.Director
-		// proxy.Director = func(req *http.Request) {
-		// 	originalDirector(req)
-		// 	// 去掉前缀
-		// 	req.URL.Path = strings.TrimPrefix(req.URL.Path, prefix)
-		// 	if req.URL.Path == "" {
-		// 		req.URL.Path = "/"
-		// 	}
-		// 	// 保留原始 query
-		// 	req.URL.RawPath = req.URL.EscapedPath()
-		// 	req.Host = u.Host
-		// 	log.Infof("proxy request: %s %s %s", req.Method, req.URL.Path)
-		// }
-		//
-		// proxy.ErrorHandler = func(w http.ResponseWriter, req *http.Request, err error) {
-		// 	log.Errorf("proxy error: %v", err)
-		// 	http.Error(w, "proxy error", http.StatusBadGateway)
-		// }
-		//
-		// proxy.ServeHTTP(w, r)
 	})
 }
 

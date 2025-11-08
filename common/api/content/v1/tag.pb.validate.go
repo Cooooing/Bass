@@ -62,6 +62,8 @@ func (m *Tag) validate(all bool) error {
 
 	// no validation rules for Name
 
+	// no validation rules for Description
+
 	// no validation rules for DomainId
 
 	// no validation rules for Status
@@ -424,7 +426,15 @@ func (m *UpdateTagRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
+	// no validation rules for DomainId
+
+	// no validation rules for Status
+
 	// no validation rules for Name
+
+	// no validation rules for Description
 
 	if len(errors) > 0 {
 		return UpdateTagRequestMultiError(errors)

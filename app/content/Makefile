@@ -43,7 +43,7 @@ config:
 wire:
 	@echo "Generating go wire..."
 	@cd $(USER_DIR)/cmd && \
-	wire
+	go run github.com/google/wire/cmd/wire
 
 # ============ Generate Ent Code ============
 .PHONY: ent

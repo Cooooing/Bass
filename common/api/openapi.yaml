@@ -1212,6 +1212,9 @@ components:
                 name:
                     type: string
                     description: 标签名称
+                description:
+                    type: string
+                    description: 描述
                 domainId:
                     type: string
                     description: 所属领域ID
@@ -1316,9 +1319,22 @@ components:
         common.api.content.v1.UpdateTagRequest:
             type: object
             properties:
-                name:
+                id:
                     type: string
                     description: 标签ID
+                domainId:
+                    type: string
+                    description: 领域ID
+                status:
+                    type: integer
+                    description: 状态：0-正常，1-禁用
+                    format: int32
+                name:
+                    type: string
+                    description: 标签名称
+                description:
+                    type: string
+                    description: 标签描述
         common.api.content.v1.WatchArticleReply:
             type: object
             properties: {}

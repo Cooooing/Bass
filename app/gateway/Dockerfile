@@ -8,11 +8,11 @@ COPY . .
 
 # 下载 common 模块依赖
 WORKDIR /build/common
-RUN go mod download
+RUN go mod tidy && go mod download
 
 # 下载 gateway 模块依赖
 WORKDIR /build/app/gateway
-RUN go mod download
+RUN go mod tidy && go mod download
 
 # 安装依赖
 RUN apt-get update && apt-get install -y \

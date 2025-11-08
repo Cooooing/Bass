@@ -72,7 +72,7 @@ gen: config ent wire api
 # ============ Build Service ============
 .PHONY: build
 build:
-	@echo "Building user service..."
+	@echo "Building content service..."
 	@cd $(USER_DIR) && \
 	go mod tidy && go mod download && \
 	go build -o $(ROOT_DIR)/$(SERVER) ./cmd/...

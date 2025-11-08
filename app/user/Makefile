@@ -19,7 +19,7 @@ API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DI
 init:
 	@echo "Installing required tools..."
 	@cd $(USER_DIR) && \
-	go mod tidy
+	go mod tidy && go mod download
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
@@ -74,7 +74,7 @@ gen: config ent wire api
 build:
 	@echo "Building user service..."
 	@cd $(USER_DIR) && \
-	go mod tidy && \
+	go mod tidy && go mod download && \
 	go build -o $(ROOT_DIR)/$(SERVER) ./cmd/...
 
 # ============ Run All Steps ============

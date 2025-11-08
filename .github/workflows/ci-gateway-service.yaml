@@ -1,4 +1,4 @@
-name: User Service Build
+name: Gateway Service Build
 
 on:
   push:

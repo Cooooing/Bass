@@ -48,9 +48,9 @@ wire:
 # ============ Generate Ent Code ============
 .PHONY: ent
 ent:
-	@echo "Generating go ent..."
-	@cd $(USER_DIR) && \
-	ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
+#	@echo "Generating go ent..."
+#	@cd $(USER_DIR) && \
+#	ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
 
 # ============ Compile API Proto ============
 .PHONY: api

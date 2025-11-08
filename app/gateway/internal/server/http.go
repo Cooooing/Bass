@@ -25,23 +25,25 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	transporthttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.EtcdClient, services []service.Service, tokenRepo *util.TokenRepo) *transporthttp.Server {
 
-	var opts = []transporthttp.ServerOption{
-		transporthttp.Middleware(
-			recovery.Recovery(),
-			tracing.Server(),
-			metrics.Server(
-				metrics.WithSeconds(_metricSeconds),
-				metrics.WithRequests(_metricRequests),
-			),
-			logging.Server(logger),
-			AuthMiddleware(tokenRepo),
-			validate.ProtoValidate(),
+	middlewares := []middleware.Middleware{
+		recovery.Recovery(),
+		tracing.Server(),
+		metrics.Server(
+			metrics.WithSeconds(_metricSeconds),
+			metrics.WithRequests(_metricRequests),
 		),
+		logging.Server(logger),
+		AuthMiddleware(tokenRepo),
+		validate.ProtoValidate(),
+	}
+	var opts = []transporthttp.ServerOption{
+		transporthttp.Middleware(middlewares...),
 		transporthttp.ResponseEncoder(pkg.HttpResponseEncoder),
 		transporthttp.ErrorEncoder(pkg.HttpErrorEncoder),
 	}
@@ -56,16 +58,9 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 	}
 	srv := transporthttp.NewServer(opts...)
 	srv.Handle("/metrics", promhttp.Handler())
-	// routes := map[string]string{
-	// 	"/api/user":  "127.0.0.1:8001",
-	// 	"/api/order": "127.0.0.1:8002",
-	// }
-
 	// 代理 handler
-	srv.HandlePrefix("/api/user", NewProxyHandler(etcdClient, constant.UserServiceName.String(), "/api/user", logger))
-	srv.HandlePrefix("/api/content", NewProxyHandler(etcdClient, constant.ContentServiceName.String(), "/api/content", logger))
-
-	// srv.HandlePrefix("/api", NewProxyHandler(routes, logger))
+	srv.HandlePrefix("/user", NewProxyHandler(middlewares, etcdClient, constant.UserServiceName.String(), "/user", logger))
+	srv.HandlePrefix("/content", NewProxyHandler(middlewares, etcdClient, constant.ContentServiceName.String(), "/content", logger))
 
 	for _, s := range services {
 		s.RegisterHttp(srv)
@@ -74,10 +69,11 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 }
 
 // NewProxyHandler 实现反向代理
-func NewProxyHandler(etcdClient *client.EtcdClient, serviceName, prefix string, l log.Logger) http.Handler {
+func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.EtcdClient, serviceName, prefix string, l log.Logger) http.Handler {
 	logger := log.NewHelper(l)
-
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	propagator := propagation.TraceContext{}
+	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		logger.Infof("proxy -> %s headers: %v", serviceName, r.Header)
 		conn, err := etcdClient.NewHTTPConn(serviceName)
 		r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
 		r.RequestURI = ""
@@ -103,6 +99,15 @@ func NewProxyHandler(etcdClient *client.EtcdClient, serviceName, prefix string, 
 			return
 		}
 	})
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h := middleware.Chain(middlewares...)(func(ctx context.Context, req interface{}) (interface{}, error) {
+			// 用 middleware 提供的 ctx 注入 trace header 到下游请求头
+			propagator.Inject(ctx, propagation.HeaderCarrier(r.Header))
+			handlerFunc(w, r)
+			return nil, nil
+		})
+		_, _ = h(r.Context(), nil)
+	})
 }
 
 // AuthMiddleware 返回一个 Kratos 中间件，用于认证
@@ -114,7 +119,6 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 				return nil, errors.New("transport not found")
 			}
 
-			log.Infof(tr.Operation())
 			// 是否需要鉴权 Todo 用户组权限规则后续持久化入库
 			var allow bool
 			for pattern := range NoAuthEndpoints {

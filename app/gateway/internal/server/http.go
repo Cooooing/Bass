@@ -106,7 +106,16 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 			handlerFunc(w, r)
 			return nil, nil
 		})
-		_, _ = h(r.Context(), nil)
+		_, err := h(r.Context(), nil)
+		if err != nil {
+			// 捕获中间件错误，例如 AuthMiddleware 返回的 401
+			var e *errors2.Error
+			if errors.As(err, &e) {
+				pkg.HttpErrorEncoder(w, r, e)
+			} else {
+				pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", err.Error()))
+			}
+		}
 	})
 }
 

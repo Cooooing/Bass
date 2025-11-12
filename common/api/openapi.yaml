@@ -741,24 +741,11 @@ components:
         common.api.content.v1.AddDomainRequest:
             type: object
             properties:
-                name:
-                    type: string
-                    description: 领域名称
-                description:
-                    type: string
-                    description: 描述
-                status:
-                    type: string
-                    description: 状态 0-正常，1-禁用
-                url:
-                    type: string
-                    description: 链接
-                icon:
-                    type: string
-                    description: 图标
-                isNav:
-                    type: boolean
-                    description: 是否导航
+                domains:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.DomainSave'
+                    description: 领域信息
         common.api.content.v1.AddPostscriptArticleReply:
             type: object
             properties: {}
@@ -980,7 +967,7 @@ components:
                 articleId:
                     type: string
                     description: 文章ID
-        common.api.content.v1.Domain:
+        common.api.content.v1.DomainReply:
             type: object
             properties:
                 createdAt:
@@ -1012,6 +999,32 @@ components:
                 tagCount:
                     type: string
                     description: 标签数量
+                isNav:
+                    type: boolean
+                    description: 是否导航
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Tag'
+                    description: tags
+        common.api.content.v1.DomainSave:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: 领域名称
+                description:
+                    type: string
+                    description: 描述
+                status:
+                    type: string
+                    description: 状态 0-正常，1-禁用
+                url:
+                    type: string
+                    description: 链接
+                icon:
+                    type: string
+                    description: 图标
                 isNav:
                     type: boolean
                     description: 是否导航
@@ -1106,7 +1119,7 @@ components:
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.Domain'
+                        $ref: '#/components/schemas/common.api.content.v1.DomainReply'
                     description: 数据
         common.api.content.v1.GetDomainRequest:
             type: object

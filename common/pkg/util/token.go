@@ -7,9 +7,11 @@ import (
 	"common/pkg/model"
 	"context"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/redis/go-redis/v9"
 )
 
 type TokenRepo struct {
@@ -66,6 +68,9 @@ func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.Use
 
 func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, error) {
 	value, err := r.redis.Client.Get(ctx, constant.GetKeyToken(token)).Result()
+	if errors.Is(err, redis.Nil) {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, v1.ErrorUnauthorized("token is invalid")
 	}
@@ -79,5 +84,8 @@ func (r *TokenRepo) DelToken(ctx context.Context, token string) error {
 
 func (r *TokenRepo) GetUserInfo(ctx context.Context) *model.User {
 	value := ctx.Value(constant.UserInfo)
+	if value == nil {
+		return nil
+	}
 	return value.(*model.User)
 }

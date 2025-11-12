@@ -34,12 +34,12 @@ type ContentDomainServiceHTTPServer interface {
 
 func RegisterContentDomainServiceHTTPServer(s *http.Server, srv ContentDomainServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/domain/add", _ContentDomainService_Add2_HTTP_Handler(srv))
-	r.POST("/v1/domain/update", _ContentDomainService_Update1_HTTP_Handler(srv))
-	r.POST("/v1/domain/get", _ContentDomainService_Get2_HTTP_Handler(srv))
+	r.POST("/v1/domain/add", _ContentDomainService_Add3_HTTP_Handler(srv))
+	r.POST("/v1/domain/update", _ContentDomainService_Update2_HTTP_Handler(srv))
+	r.POST("/v1/domain/get", _ContentDomainService_Get3_HTTP_Handler(srv))
 }
 
-func _ContentDomainService_Add2_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
+func _ContentDomainService_Add3_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AddDomainRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -61,7 +61,7 @@ func _ContentDomainService_Add2_HTTP_Handler(srv ContentDomainServiceHTTPServer)
 	}
 }
 
-func _ContentDomainService_Update1_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
+func _ContentDomainService_Update2_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateDomainRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -83,7 +83,7 @@ func _ContentDomainService_Update1_HTTP_Handler(srv ContentDomainServiceHTTPServ
 	}
 }
 
-func _ContentDomainService_Get2_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
+func _ContentDomainService_Get3_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetDomainRequest
 		if err := ctx.Bind(&in); err != nil {

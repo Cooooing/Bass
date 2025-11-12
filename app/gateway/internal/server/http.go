@@ -11,7 +11,7 @@ import (
 	"gateway/internal/service"
 	"io"
 	"net/http"
-	"path"
+	"regexp"
 	"strings"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -73,7 +73,6 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 	logger := log.NewHelper(l)
 	propagator := propagation.TraceContext{}
 	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logger.Infof("proxy -> %s headers: %v", serviceName, r.Header)
 		conn, err := etcdClient.NewHTTPConn(serviceName)
 		r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
 		r.RequestURI = ""
@@ -100,13 +99,14 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 		}
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		logger.Infof("proxy -> %s headers: %v", serviceName, r.Header)
 		h := middleware.Chain(middlewares...)(func(ctx context.Context, req interface{}) (interface{}, error) {
-			// 用 middleware 提供的 ctx 注入 trace header 到下游请求头
-			propagator.Inject(ctx, propagation.HeaderCarrier(r.Header))
 			handlerFunc(w, r)
 			return nil, nil
 		})
-		_, err := h(r.Context(), nil)
+		ctx := r.Context()
+		propagator.Inject(ctx, propagation.HeaderCarrier(r.Header))
+		_, err := h(ctx, nil)
 		if err != nil {
 			// 捕获中间件错误，例如 AuthMiddleware 返回的 401
 			var e *errors2.Error
@@ -127,38 +127,45 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			if !ok {
 				return nil, errors.New("transport not found")
 			}
-
-			// 是否需要鉴权 Todo 用户组权限规则后续持久化入库
-			var allow bool
-			for pattern := range NoAuthEndpoints {
-				match, err := path.Match(pattern, tr.Operation())
-				if err == nil && match {
-					allow = true
+			// 使用请求路径重写 operation
+			if ht, ok := tr.(*transporthttp.Transport); ok {
+				uri := ht.Request().URL.Path
+				// 是否需要鉴权 Todo 用户组权限规则后续持久化入库
+				var allow bool
+				for pattern := range NoAuthEndpoints {
+					matched, err := regexp.MatchString(pattern, uri)
+					if err == nil && matched {
+						allow = true
+						break
+					}
 				}
-			}
-			if allow {
+				if allow {
+					return handler(ctx, req)
+				}
+
+				// 获取 token
+				token := strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), "Bearer ")
+
+				// 验证 token
+				userInfo, err := tokenRepo.GetToken(ctx, token)
+				if err != nil {
+					return nil, err
+				}
+
+				// 权限范围 Todo 用户组权限规则后续持久化入库
+
+				// 设置上下文
+				ctx = context.WithValue(ctx, constant.UserInfo, userInfo)
+
 				return handler(ctx, req)
+			} else {
+				return nil, errors.New("transport not http")
 			}
-
-			// 获取 token
-			token := strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), "Bearer ")
-
-			// 验证 token
-			userInfo, err := tokenRepo.GetToken(ctx, token)
-			if err != nil {
-				return nil, err
-			}
-
-			// 权限范围 Todo 用户组权限规则后续持久化入库
-
-			// 设置上下文
-			ctx = context.WithValue(ctx, constant.UserInfo, userInfo)
-
-			return handler(ctx, req)
 		}
 	}
 }
 
 var NoAuthEndpoints = map[string]struct{}{
-	"/common.api.common.v1.System/Health": {},
+	"^.*/v1/system/health$":        {},
+	"^/user/v1/authentication/.*$": {},
 }

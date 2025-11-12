@@ -26,6 +26,88 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// 文章附言
+type ArticlePostscript struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 主键ID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 所属文章ID
+	ArticleId int64 `protobuf:"varint,2,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
+	// 附言内容
+	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ArticlePostscript) Reset() {
+	*x = ArticlePostscript{}
+	mi := &file_content_v1_article_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ArticlePostscript) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ArticlePostscript) ProtoMessage() {}
+
+func (x *ArticlePostscript) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_article_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ArticlePostscript.ProtoReflect.Descriptor instead.
+func (*ArticlePostscript) Descriptor() ([]byte, []int) {
+	return file_content_v1_article_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ArticlePostscript) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *ArticlePostscript) GetArticleId() int64 {
+	if x != nil {
+		return x.ArticleId
+	}
+	return 0
+}
+
+func (x *ArticlePostscript) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *ArticlePostscript) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *ArticlePostscript) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 type Article struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 唯一ID
@@ -88,7 +170,7 @@ type Article struct {
 
 func (x *Article) Reset() {
 	*x = Article{}
-	mi := &file_content_v1_article_proto_msgTypes[0]
+	mi := &file_content_v1_article_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -100,7 +182,7 @@ func (x *Article) String() string {
 func (*Article) ProtoMessage() {}
 
 func (x *Article) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[0]
+	mi := &file_content_v1_article_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -113,7 +195,7 @@ func (x *Article) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Article.ProtoReflect.Descriptor instead.
 func (*Article) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{0}
+	return file_content_v1_article_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Article) GetId() int64 {
@@ -301,88 +383,6 @@ func (x *Article) GetRepliedAt() *timestamppb.Timestamp {
 func (x *Article) GetPostscripts() []*ArticlePostscript {
 	if x != nil {
 		return x.Postscripts
-	}
-	return nil
-}
-
-// 文章附言
-type ArticlePostscript struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 主键ID
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// 所属文章ID
-	ArticleId int64 `protobuf:"varint,2,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
-	// 附言内容
-	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
-	// 创建时间
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	// 更新时间
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ArticlePostscript) Reset() {
-	*x = ArticlePostscript{}
-	mi := &file_content_v1_article_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ArticlePostscript) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ArticlePostscript) ProtoMessage() {}
-
-func (x *ArticlePostscript) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_article_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ArticlePostscript.ProtoReflect.Descriptor instead.
-func (*ArticlePostscript) Descriptor() ([]byte, []int) {
-	return file_content_v1_article_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *ArticlePostscript) GetId() int64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *ArticlePostscript) GetArticleId() int64 {
-	if x != nil {
-		return x.ArticleId
-	}
-	return 0
-}
-
-func (x *ArticlePostscript) GetContent() string {
-	if x != nil {
-		return x.Content
-	}
-	return ""
-}
-
-func (x *ArticlePostscript) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *ArticlePostscript) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
 	}
 	return nil
 }
@@ -1831,7 +1831,16 @@ var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xb9\b\n" +
+	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xd2\x01\n" +
+	"\x11ArticlePostscript\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
+	"\n" +
+	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xb9\b\n" +
 	"\aArticle\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x14\n" +
@@ -1870,16 +1879,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"reply_user\x18\x19 \x01(\v2\x18.common.api.user.v1.UserR\treplyUser\x129\n" +
 	"\n" +
 	"replied_at\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\trepliedAt\x12J\n" +
-	"\vpostscripts\x18\x1b \x03(\v2(.common.api.content.v1.ArticlePostscriptR\vpostscripts\"\xd2\x01\n" +
-	"\x11ArticlePostscript\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
-	"\n" +
-	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\x129\n" +
-	"\n" +
-	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x86\x02\n" +
+	"\vpostscripts\x18\x1b \x03(\v2(.common.api.content.v1.ArticlePostscriptR\vpostscripts\"\x86\x02\n" +
 	"\x11AddArticleRequest\x12\x1f\n" +
 	"\x05title\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18dR\x05title\x12!\n" +
 	"\acontent\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\acontent\x12%\n" +
@@ -2000,8 +2000,8 @@ func file_content_v1_article_proto_rawDescGZIP() []byte {
 
 var file_content_v1_article_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
 var file_content_v1_article_proto_goTypes = []any{
-	(*Article)(nil),                     // 0: common.api.content.v1.Article
-	(*ArticlePostscript)(nil),           // 1: common.api.content.v1.ArticlePostscript
+	(*ArticlePostscript)(nil),           // 0: common.api.content.v1.ArticlePostscript
+	(*Article)(nil),                     // 1: common.api.content.v1.Article
 	(*AddArticleRequest)(nil),           // 2: common.api.content.v1.AddArticleRequest
 	(*AddArticleReply)(nil),             // 3: common.api.content.v1.AddArticleReply
 	(*PublishArticleRequest)(nil),       // 4: common.api.content.v1.PublishArticleRequest
@@ -2037,18 +2037,18 @@ var file_content_v1_article_proto_goTypes = []any{
 	(*v11.PageReply)(nil),               // 34: common.api.common.v1.PageReply
 }
 var file_content_v1_article_proto_depIdxs = []int32{
-	31, // 0: common.api.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
-	31, // 1: common.api.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
-	32, // 2: common.api.content.v1.Article.author_user:type_name -> common.api.user.v1.User
-	32, // 3: common.api.content.v1.Article.reply_user:type_name -> common.api.user.v1.User
-	31, // 4: common.api.content.v1.Article.replied_at:type_name -> google.protobuf.Timestamp
-	1,  // 5: common.api.content.v1.Article.postscripts:type_name -> common.api.content.v1.ArticlePostscript
-	31, // 6: common.api.content.v1.ArticlePostscript.created_at:type_name -> google.protobuf.Timestamp
-	31, // 7: common.api.content.v1.ArticlePostscript.updated_at:type_name -> google.protobuf.Timestamp
+	31, // 0: common.api.content.v1.ArticlePostscript.created_at:type_name -> google.protobuf.Timestamp
+	31, // 1: common.api.content.v1.ArticlePostscript.updated_at:type_name -> google.protobuf.Timestamp
+	31, // 2: common.api.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
+	31, // 3: common.api.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
+	32, // 4: common.api.content.v1.Article.author_user:type_name -> common.api.user.v1.User
+	32, // 5: common.api.content.v1.Article.reply_user:type_name -> common.api.user.v1.User
+	31, // 6: common.api.content.v1.Article.replied_at:type_name -> google.protobuf.Timestamp
+	0,  // 7: common.api.content.v1.Article.postscripts:type_name -> common.api.content.v1.ArticlePostscript
 	33, // 8: common.api.content.v1.GetArticleRequest.page:type_name -> common.api.common.v1.PageRequest
 	34, // 9: common.api.content.v1.GetArticleReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 10: common.api.content.v1.GetArticleReply.articles:type_name -> common.api.content.v1.Article
-	0,  // 11: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
+	1,  // 10: common.api.content.v1.GetArticleReply.articles:type_name -> common.api.content.v1.Article
+	1,  // 11: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
 	32, // 12: common.api.content.v1.GetArticleOneReply.user:type_name -> common.api.user.v1.User
 	2,  // 13: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
 	4,  // 14: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest

@@ -1,10 +1,9 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
 	v1 "common/api/user/v1"
+	"common/pkg/constant"
 	"context"
-	"math"
 	"user/internal/biz"
 	"user/internal/biz/repo"
 
@@ -41,7 +40,7 @@ func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp 
 	res := &v1.GetListReply{
 		Users: []*v1.User{},
 	}
-	list, err := s.userRepo.GetUserList(ctx, s.db, &cv1.PageRequest{Page: 1, Size: math.MaxUint32}, req.Ids)
+	list, err := s.userRepo.GetUserList(ctx, s.db, constant.GetPageMax(), req.Ids)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +67,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	res := &v1.GetMapReply{
 		Users: make(map[int64]*v1.User),
 	}
-	list, err := s.userRepo.GetUserList(ctx, s.db, &cv1.PageRequest{Page: 1, Size: math.MaxUint32}, req.Ids)
+	list, err := s.userRepo.GetUserList(ctx, s.db, constant.GetPageMax(), req.Ids)
 	if err != nil {
 		return nil, err
 	}

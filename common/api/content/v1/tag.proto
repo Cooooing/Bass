@@ -9,27 +9,6 @@ import "common/v1/common.proto";
 
 option go_package = "common/api/content/v1;v1";
 
-message Tag {
-  // 标签ID
-  int64 id = 1;
-  // 创建用户ID
-  int64 user_id = 2;
-  // 标签名称
-  string name = 3;
-  // 描述
-  string description = 4;
-  // 所属领域ID
-  int64 domain_id = 5;
-  // 标签状态：0-正常，1-禁用
-  int32 status = 6;
-  // 文章数
-  int32 article_count = 7;
-  // 创建时间
-  google.protobuf.Timestamp created_at = 8;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 9;
-}
-
 // 标签服务
 service ContentTagService {
 
@@ -53,6 +32,28 @@ service ContentTagService {
       body: "*"
     };
   }
+}
+
+
+message Tag {
+  // 标签ID
+  int64 id = 1;
+  // 创建用户ID
+  int64 user_id = 2;
+  // 标签名称
+  string name = 3;
+  // 描述
+  string description = 4;
+  // 所属领域ID
+  int64 domain_id = 5;
+  // 标签状态：0-正常，1-禁用
+  int32 status = 6;
+  // 文章数
+  int32 article_count = 7;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 8;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 9;
 }
 
 message AddTagRequest {

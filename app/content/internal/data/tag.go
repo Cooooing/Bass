@@ -2,15 +2,11 @@ package data
 
 import (
 	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/tag"
 	"context"
-
-	"github.com/jinzhu/copier"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type TagRepo struct {
@@ -33,40 +29,71 @@ func (t *TagRepo) Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*mo
 	return (*model.Tag)(save), err
 }
 
+func (t *TagRepo) Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) ([]*model.Tag, error) {
+	creates := make([]*gen.TagCreate, 0, len(tags))
+	for i := range tags {
+		creates = append(creates,
+			tx.Tag.Create().
+				SetUserID(tags[i].UserID).
+				SetName(tags[i].Name).
+				SetNillableDomainID(tags[i].DomainID).
+				SetStatus(int32(cv1.TagStatus_TagNormal)),
+		)
+	}
+	save, err := tx.Tag.CreateBulk(creates...).Save(ctx)
+	res := make([]*model.Tag, 0, len(save))
+	for _, item := range save {
+		res = append(res, (*model.Tag)(item))
+	}
+	return res, err
+}
+
 func (t *TagRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Tag, error) {
 	query, err := tx.Tag.Query().Where(tag.IDEQ(id)).First(ctx)
 	return (*model.Tag)(query), err
 }
 
-func (t *TagRepo) GetList(ctx context.Context, tx *gen.Client, req *v1.GetTagRequest) (*v1.GetTagReply, error) {
+func (t *TagRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) ([]*model.Tag, error) {
+	var (
+		tags []*model.Tag
+		err  error
+	)
 	query := tx.Tag.Query()
-	countQuery := query.Clone()
-	count, err := countQuery.Count(ctx)
-	if err != nil {
-		return nil, err
-	}
-	list, err := query.Limit(int(req.Page.Size)).Offset(int((req.Page.Page - 1) * req.Page.Size)).All(ctx)
+	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	tags := make([]*v1.Tag, 0, len(list))
 	for _, item := range list {
-		i := &v1.Tag{}
-		err = copier.Copy(i, item)
-		if err != nil {
-			return nil, err
-		}
-		i.CreatedAt = timestamppb.New(*item.CreatedAt)
-		i.UpdatedAt = timestamppb.New(*item.UpdatedAt)
-		tags = append(tags, i)
+		tags = append(tags, (*model.Tag)(item))
 	}
-	return &v1.GetTagReply{
-		Page: &cv1.PageReply{
+	return tags, nil
+}
+
+func (t *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *cv1.PageReply, error) {
+	var (
+		tags []*model.Tag
+		err  error
+	)
+	query := tx.Tag.Query()
+
+	countQuery := query.Clone()
+	count, err := countQuery.Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for _, item := range list {
+		tags = append(tags, (*model.Tag)(item))
+	}
+	return tags,
+		&cv1.PageReply{
 			Total: uint32(count),
-			Size:  req.Page.Size,
-			Page:  req.Page.Page,
-		},
-		Tags: tags,
-	}, nil
+			Size:  page.Size,
+			Page:  page.Page,
+		}, nil
 }

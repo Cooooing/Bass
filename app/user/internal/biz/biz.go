@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"common/pkg/util"
 	"user/internal/conf"
 	"user/internal/data/ent/gen"
 
@@ -12,6 +13,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
 
+	util.NewTokenRepo,
 	NewTokenService,
 
 	NewAuthenticationDomain,

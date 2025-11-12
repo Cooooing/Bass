@@ -7,6 +7,8 @@ import (
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/jinzhu/copier"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type TagService struct {
@@ -41,6 +43,15 @@ func (s *TagService) Update(ctx context.Context, in *v1.UpdateTagRequest) (*v1.U
 }
 
 func (s *TagService) Get(ctx context.Context, in *v1.GetTagRequest) (*v1.GetTagReply, error) {
-	// TODO implement me
-	panic("implement me")
+	tags := make([]*v1.Tag, 0, len(list))
+	for _, item := range list {
+		i := &v1.Tag{}
+		err = copier.Copy(i, item)
+		if err != nil {
+			return nil, nil, err
+		}
+		i.CreatedAt = timestamppb.New(*item.CreatedAt)
+		i.UpdatedAt = timestamppb.New(*item.UpdatedAt)
+		tags = append(tags, i)
+	}
 }

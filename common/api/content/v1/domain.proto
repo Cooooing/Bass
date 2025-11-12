@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
+import "content/v1/tag.proto";
 
 option go_package = "common/api/content/v1;v1";
 
@@ -36,7 +37,7 @@ service ContentDomainService {
   }
 }
 
-message Domain {
+message DomainReply {
   // 创建时间
   google.protobuf.Timestamp created_at = 1;
   // 更新时间
@@ -57,9 +58,11 @@ message Domain {
   int64 tagCount = 9;
   // 是否导航
   bool isNav = 10;
+  // tags
+  repeated Tag tags = 100;
 }
 
-message AddDomainRequest {
+message DomainSave {
   // 领域名称
   string name = 1;
   // 描述
@@ -72,23 +75,28 @@ message AddDomainRequest {
   string icon = 5;
   // 是否导航
   bool isNav = 6;
+}
+
+message AddDomainRequest {
+  // 领域信息
+  repeated DomainSave domains = 1;
 }
 message AddDomainReply {
 }
 
 message UpdateDomainRequest {
   // 领域名称
-  string name = 1;
+  optional string name = 1;
   // 描述
-  string description = 2;
+  optional string description = 2;
   // 状态 0-正常，1-禁用
-  int64 status = 3;
+  optional int64 status = 3;
   // 链接
-  string url = 4;
+  optional string url = 4;
   // 图标
-  string icon = 5;
+  optional string icon = 5;
   // 是否导航
-  bool isNav = 6;
+  optional bool isNav = 6;
 }
 message UpdateDomainReply {
 }
@@ -97,21 +105,21 @@ message GetDomainRequest {
   // 分页参数
   optional common.v1.PageRequest page = 1;
   // 领域名称
-  string name = 2;
+  optional string name = 2;
   // 描述
-  string description = 3;
+  optional string description = 3;
   // 状态 0-正常，1-禁用
-  int64 status = 4;
+  optional int64 status = 4;
   // 链接
-  string url = 5;
+  optional string url = 5;
   // 图标
-  string icon = 6;
+  optional string icon = 6;
   // 是否导航
-  bool isNav = 7;
+  optional bool isNav = 7;
 }
 message GetDomainReply {
   // 分页信息
   optional common.v1.PageReply page = 1;
   // 数据
-  repeated Domain data = 2;
+  repeated DomainReply data = 2;
 }

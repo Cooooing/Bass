@@ -3,7 +3,6 @@ package data
 import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"user/internal/conf"
 	"user/internal/data/client"
 	"user/internal/data/ent/gen"
@@ -23,7 +22,6 @@ var DataProviderSet = wire.NewSet(
 	NewRabbitMQClient,
 
 	NewUserRepo,
-	util.NewTokenRepo,
 )
 
 type BaseRepo struct {

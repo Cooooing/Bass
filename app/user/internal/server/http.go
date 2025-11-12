@@ -3,11 +3,10 @@ package server
 import (
 	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 	"context"
 	"errors"
-	"path"
 	"strings"
-	"user/internal/biz"
 	"user/internal/conf"
 	"user/internal/service"
 
@@ -24,7 +23,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenService *biz.TokenService) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -34,11 +33,11 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			AuthMiddleware(tokenService),
+			AuthMiddleware(tokenRepo),
 			validate.ProtoValidate(),
 		),
 		http.ResponseEncoder(pkg.HttpResponseEncoder),
-		http.ErrorEncoder(pkg.HttpErrorEncoder),
+		// http.ErrorEncoder(pkg.HttpErrorEncoder),
 	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, http.Network(c.Server.Http.Network))
@@ -58,7 +57,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 }
 
 // AuthMiddleware 返回一个 Kratos 中间件，用于认证
-func AuthMiddleware(tokenService *biz.TokenService) middleware.Middleware {
+func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			tr, ok := transport.FromServerContext(ctx)
@@ -66,39 +65,16 @@ func AuthMiddleware(tokenService *biz.TokenService) middleware.Middleware {
 				return nil, errors.New("transport not found")
 			}
 
-			log.Infof(tr.Operation())
-			// 是否需要鉴权 Todo 用户组权限规则后续持久化入库
-			var allow bool
-			for pattern := range NoAuthEndpoints {
-				match, err := path.Match(pattern, tr.Operation())
-				if err == nil && match {
-					allow = true
-				}
-			}
-			if allow {
-				return handler(ctx, req)
-			}
-
 			// 获取 token
 			token := strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), "Bearer ")
-
 			// 验证 token
-			userInfo, err := tokenService.TokenGen.Parse(token)
+			userInfo, err := tokenRepo.GetToken(ctx, token)
 			if err != nil {
 				return nil, err
 			}
-
-			// 权限范围 Todo 用户组权限规则后续持久化入库
-
 			// 设置上下文
 			ctx = context.WithValue(ctx, constant.UserInfo, userInfo)
-
 			return handler(ctx, req)
 		}
 	}
-}
-
-var NoAuthEndpoints = map[string]struct{}{
-	"/common.api.common.v1.System/Health":             {},
-	"/common.api.user.v1.UserAuthenticationService/*": {},
 }

@@ -6,6 +6,7 @@ import (
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/util/base"
 	"common/pkg/util/collections/dict"
 	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
@@ -16,7 +17,6 @@ import (
 	"content/internal/data/ent/gen/tag"
 	"context"
 	"encoding/json"
-	"math"
 
 	"github.com/jinzhu/copier"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -195,10 +195,11 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 }
 
 func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *v1.GetArticleRequest) (*v1.GetArticleReply, error) {
+	req.Page = base.IfNilDefault(req.Page, constant.GetPageDefault())
 	tagIds := set.New[int64](0)
 	if req.DomainId != nil {
 		tags, err := r.tagRepo.GetList(ctx, tx, &v1.GetTagRequest{
-			Page:     &cv1.PageRequest{Page: 1, Size: math.MaxInt32},
+			Page:     constant.GetPageMax(),
 			DomainId: *req.DomainId,
 		})
 		if err != nil {

@@ -78,6 +78,60 @@ func (_u *ArticlePostscriptUpdate) AddStatus(v int32) *ArticlePostscriptUpdate {
 	return _u
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_u *ArticlePostscriptUpdate) SetCreatedBy(v int64) *ArticlePostscriptUpdate {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *ArticlePostscriptUpdate) SetNillableCreatedBy(v *int64) *ArticlePostscriptUpdate {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *ArticlePostscriptUpdate) AddCreatedBy(v int64) *ArticlePostscriptUpdate {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *ArticlePostscriptUpdate) ClearCreatedBy() *ArticlePostscriptUpdate {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *ArticlePostscriptUpdate) SetUpdatedBy(v int64) *ArticlePostscriptUpdate {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *ArticlePostscriptUpdate) SetNillableUpdatedBy(v *int64) *ArticlePostscriptUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *ArticlePostscriptUpdate) AddUpdatedBy(v int64) *ArticlePostscriptUpdate {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *ArticlePostscriptUpdate) ClearUpdatedBy() *ArticlePostscriptUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *ArticlePostscriptUpdate) SetCreatedAt(v time.Time) *ArticlePostscriptUpdate {
 	_u.mutation.SetCreatedAt(v)
@@ -195,6 +249,24 @@ func (_u *ArticlePostscriptUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(articlepostscript.FieldStatus, field.TypeInt32, value)
 	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(articlepostscript.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(articlepostscript.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(articlepostscript.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(articlepostscript.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(articlepostscript.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(articlepostscript.FieldUpdatedBy, field.TypeInt64)
+	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlepostscript.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -302,6 +374,60 @@ func (_u *ArticlePostscriptUpdateOne) SetNillableStatus(v *int32) *ArticlePostsc
 // AddStatus adds value to the "status" field.
 func (_u *ArticlePostscriptUpdateOne) AddStatus(v int32) *ArticlePostscriptUpdateOne {
 	_u.mutation.AddStatus(v)
+	return _u
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_u *ArticlePostscriptUpdateOne) SetCreatedBy(v int64) *ArticlePostscriptUpdateOne {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *ArticlePostscriptUpdateOne) SetNillableCreatedBy(v *int64) *ArticlePostscriptUpdateOne {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *ArticlePostscriptUpdateOne) AddCreatedBy(v int64) *ArticlePostscriptUpdateOne {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *ArticlePostscriptUpdateOne) ClearCreatedBy() *ArticlePostscriptUpdateOne {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *ArticlePostscriptUpdateOne) SetUpdatedBy(v int64) *ArticlePostscriptUpdateOne {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *ArticlePostscriptUpdateOne) SetNillableUpdatedBy(v *int64) *ArticlePostscriptUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *ArticlePostscriptUpdateOne) AddUpdatedBy(v int64) *ArticlePostscriptUpdateOne {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *ArticlePostscriptUpdateOne) ClearUpdatedBy() *ArticlePostscriptUpdateOne {
+	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
@@ -451,6 +577,24 @@ func (_u *ArticlePostscriptUpdateOne) sqlSave(ctx context.Context) (_node *Artic
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(articlepostscript.FieldStatus, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(articlepostscript.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(articlepostscript.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(articlepostscript.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(articlepostscript.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(articlepostscript.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(articlepostscript.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(articlepostscript.FieldCreatedAt, field.TypeTime, value)

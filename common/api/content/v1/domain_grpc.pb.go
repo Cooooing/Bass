@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ContentDomainService_Add_FullMethodName    = "/common.api.content.v1.ContentDomainService/Add"
+	ContentDomainService_Adds_FullMethodName   = "/common.api.content.v1.ContentDomainService/Adds"
 	ContentDomainService_Update_FullMethodName = "/common.api.content.v1.ContentDomainService/Update"
-	ContentDomainService_Get_FullMethodName    = "/common.api.content.v1.ContentDomainService/Get"
+	ContentDomainService_Page_FullMethodName   = "/common.api.content.v1.ContentDomainService/Page"
 )
 
 // ContentDomainServiceClient is the client API for ContentDomainService service.
@@ -31,11 +31,11 @@ const (
 // 领域服务
 type ContentDomainServiceClient interface {
 	// 新增领域
-	Add(ctx context.Context, in *AddDomainRequest, opts ...grpc.CallOption) (*AddDomainReply, error)
+	Adds(ctx context.Context, in *AddDomainsRequest, opts ...grpc.CallOption) (*AddDomainsReply, error)
 	// 修改领域信息
 	Update(ctx context.Context, in *UpdateDomainRequest, opts ...grpc.CallOption) (*UpdateDomainReply, error)
 	// 查询领域
-	Get(ctx context.Context, in *GetDomainRequest, opts ...grpc.CallOption) (*GetDomainReply, error)
+	Page(ctx context.Context, in *PageDomainRequest, opts ...grpc.CallOption) (*PageDomainReply, error)
 }
 
 type contentDomainServiceClient struct {
@@ -46,10 +46,10 @@ func NewContentDomainServiceClient(cc grpc.ClientConnInterface) ContentDomainSer
 	return &contentDomainServiceClient{cc}
 }
 
-func (c *contentDomainServiceClient) Add(ctx context.Context, in *AddDomainRequest, opts ...grpc.CallOption) (*AddDomainReply, error) {
+func (c *contentDomainServiceClient) Adds(ctx context.Context, in *AddDomainsRequest, opts ...grpc.CallOption) (*AddDomainsReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddDomainReply)
-	err := c.cc.Invoke(ctx, ContentDomainService_Add_FullMethodName, in, out, cOpts...)
+	out := new(AddDomainsReply)
+	err := c.cc.Invoke(ctx, ContentDomainService_Adds_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,10 +66,10 @@ func (c *contentDomainServiceClient) Update(ctx context.Context, in *UpdateDomai
 	return out, nil
 }
 
-func (c *contentDomainServiceClient) Get(ctx context.Context, in *GetDomainRequest, opts ...grpc.CallOption) (*GetDomainReply, error) {
+func (c *contentDomainServiceClient) Page(ctx context.Context, in *PageDomainRequest, opts ...grpc.CallOption) (*PageDomainReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetDomainReply)
-	err := c.cc.Invoke(ctx, ContentDomainService_Get_FullMethodName, in, out, cOpts...)
+	out := new(PageDomainReply)
+	err := c.cc.Invoke(ctx, ContentDomainService_Page_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,11 +83,11 @@ func (c *contentDomainServiceClient) Get(ctx context.Context, in *GetDomainReque
 // 领域服务
 type ContentDomainServiceServer interface {
 	// 新增领域
-	Add(context.Context, *AddDomainRequest) (*AddDomainReply, error)
+	Adds(context.Context, *AddDomainsRequest) (*AddDomainsReply, error)
 	// 修改领域信息
 	Update(context.Context, *UpdateDomainRequest) (*UpdateDomainReply, error)
 	// 查询领域
-	Get(context.Context, *GetDomainRequest) (*GetDomainReply, error)
+	Page(context.Context, *PageDomainRequest) (*PageDomainReply, error)
 	mustEmbedUnimplementedContentDomainServiceServer()
 }
 
@@ -98,14 +98,14 @@ type ContentDomainServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedContentDomainServiceServer struct{}
 
-func (UnimplementedContentDomainServiceServer) Add(context.Context, *AddDomainRequest) (*AddDomainReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+func (UnimplementedContentDomainServiceServer) Adds(context.Context, *AddDomainsRequest) (*AddDomainsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Adds not implemented")
 }
 func (UnimplementedContentDomainServiceServer) Update(context.Context, *UpdateDomainRequest) (*UpdateDomainReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedContentDomainServiceServer) Get(context.Context, *GetDomainRequest) (*GetDomainReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedContentDomainServiceServer) Page(context.Context, *PageDomainRequest) (*PageDomainReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Page not implemented")
 }
 func (UnimplementedContentDomainServiceServer) mustEmbedUnimplementedContentDomainServiceServer() {}
 func (UnimplementedContentDomainServiceServer) testEmbeddedByValue()                              {}
@@ -128,20 +128,20 @@ func RegisterContentDomainServiceServer(s grpc.ServiceRegistrar, srv ContentDoma
 	s.RegisterService(&ContentDomainService_ServiceDesc, srv)
 }
 
-func _ContentDomainService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddDomainRequest)
+func _ContentDomainService_Adds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddDomainsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentDomainServiceServer).Add(ctx, in)
+		return srv.(ContentDomainServiceServer).Adds(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentDomainService_Add_FullMethodName,
+		FullMethod: ContentDomainService_Adds_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentDomainServiceServer).Add(ctx, req.(*AddDomainRequest))
+		return srv.(ContentDomainServiceServer).Adds(ctx, req.(*AddDomainsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -164,20 +164,20 @@ func _ContentDomainService_Update_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentDomainService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDomainRequest)
+func _ContentDomainService_Page_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PageDomainRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentDomainServiceServer).Get(ctx, in)
+		return srv.(ContentDomainServiceServer).Page(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentDomainService_Get_FullMethodName,
+		FullMethod: ContentDomainService_Page_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentDomainServiceServer).Get(ctx, req.(*GetDomainRequest))
+		return srv.(ContentDomainServiceServer).Page(ctx, req.(*PageDomainRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -190,16 +190,16 @@ var ContentDomainService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ContentDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Add",
-			Handler:    _ContentDomainService_Add_Handler,
+			MethodName: "Adds",
+			Handler:    _ContentDomainService_Adds_Handler,
 		},
 		{
 			MethodName: "Update",
 			Handler:    _ContentDomainService_Update_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _ContentDomainService_Get_Handler,
+			MethodName: "Page",
+			Handler:    _ContentDomainService_Page_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

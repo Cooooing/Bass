@@ -38,6 +38,10 @@ type Comment struct {
 	LikeCount int32 `json:"like_count,omitempty"`
 	// 收藏数
 	CollectCount int32 `json:"collect_count,omitempty"`
+	// 创建人ID
+	CreatedBy *int64 `json:"created_by,omitempty"`
+	// 更新人ID
+	UpdatedBy *int64 `json:"updated_by,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -132,7 +136,7 @@ func (*Comment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount:
+		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount, comment.FieldCreatedBy, comment.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case comment.FieldContent:
 			values[i] = new(sql.NullString)
@@ -220,6 +224,20 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field collect_count", values[i])
 			} else if value.Valid {
 				_m.CollectCount = int32(value.Int64)
+			}
+		case comment.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = new(int64)
+				*_m.CreatedBy = value.Int64
+			}
+		case comment.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = new(int64)
+				*_m.UpdatedBy = value.Int64
 			}
 		case comment.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -334,6 +352,16 @@ func (_m *Comment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("collect_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CollectCount))
+	builder.WriteString(", ")
+	if v := _m.CreatedBy; v != nil {
+		builder.WriteString("created_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

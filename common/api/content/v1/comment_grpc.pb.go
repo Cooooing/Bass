@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	ContentCommentService_Add_FullMethodName          = "/common.api.content.v1.ContentCommentService/Add"
-	ContentCommentService_Get_FullMethodName          = "/common.api.content.v1.ContentCommentService/Get"
+	ContentCommentService_Page_FullMethodName         = "/common.api.content.v1.ContentCommentService/Page"
 	ContentCommentService_Like_FullMethodName         = "/common.api.content.v1.ContentCommentService/Like"
 	ContentCommentService_Thank_FullMethodName        = "/common.api.content.v1.ContentCommentService/Thank"
 	ContentCommentService_UpdateStatus_FullMethodName = "/common.api.content.v1.ContentCommentService/UpdateStatus"
@@ -35,7 +35,7 @@ type ContentCommentServiceClient interface {
 	// 新增评论
 	Add(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*AddCommentReply, error)
 	// 查询评论列表
-	Get(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentReply, error)
+	Page(ctx context.Context, in *PageCommentRequest, opts ...grpc.CallOption) (*PageCommentReply, error)
 	// 点赞评论
 	Like(ctx context.Context, in *LikeCommentRequest, opts ...grpc.CallOption) (*LikeCommentReply, error)
 	// 感谢评论
@@ -62,10 +62,10 @@ func (c *contentCommentServiceClient) Add(ctx context.Context, in *AddCommentReq
 	return out, nil
 }
 
-func (c *contentCommentServiceClient) Get(ctx context.Context, in *GetCommentRequest, opts ...grpc.CallOption) (*GetCommentReply, error) {
+func (c *contentCommentServiceClient) Page(ctx context.Context, in *PageCommentRequest, opts ...grpc.CallOption) (*PageCommentReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetCommentReply)
-	err := c.cc.Invoke(ctx, ContentCommentService_Get_FullMethodName, in, out, cOpts...)
+	out := new(PageCommentReply)
+	err := c.cc.Invoke(ctx, ContentCommentService_Page_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ type ContentCommentServiceServer interface {
 	// 新增评论
 	Add(context.Context, *AddCommentRequest) (*AddCommentReply, error)
 	// 查询评论列表
-	Get(context.Context, *GetCommentRequest) (*GetCommentReply, error)
+	Page(context.Context, *PageCommentRequest) (*PageCommentReply, error)
 	// 点赞评论
 	Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error)
 	// 感谢评论
@@ -131,8 +131,8 @@ type UnimplementedContentCommentServiceServer struct{}
 func (UnimplementedContentCommentServiceServer) Add(context.Context, *AddCommentRequest) (*AddCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedContentCommentServiceServer) Get(context.Context, *GetCommentRequest) (*GetCommentReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedContentCommentServiceServer) Page(context.Context, *PageCommentRequest) (*PageCommentReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Page not implemented")
 }
 func (UnimplementedContentCommentServiceServer) Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Like not implemented")
@@ -182,20 +182,20 @@ func _ContentCommentService_Add_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentCommentService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCommentRequest)
+func _ContentCommentService_Page_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PageCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentCommentServiceServer).Get(ctx, in)
+		return srv.(ContentCommentServiceServer).Page(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentCommentService_Get_FullMethodName,
+		FullMethod: ContentCommentService_Page_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentCommentServiceServer).Get(ctx, req.(*GetCommentRequest))
+		return srv.(ContentCommentServiceServer).Page(ctx, req.(*PageCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -266,8 +266,8 @@ var ContentCommentService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ContentCommentService_Add_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _ContentCommentService_Get_Handler,
+			MethodName: "Page",
+			Handler:    _ContentCommentService_Page_Handler,
 		},
 		{
 			MethodName: "Like",

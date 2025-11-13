@@ -20,7 +20,7 @@ type Domain struct {
 	// 域名名称
 	Name string `json:"name,omitempty"`
 	// 域名描述
-	Description string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty"`
 	// 状态 0-正常，1-禁用
 	Status int32 `json:"status,omitempty"`
 	// 领域地址
@@ -31,6 +31,10 @@ type Domain struct {
 	TagCount int32 `json:"tag_count,omitempty"`
 	// 是否导航
 	IsNav bool `json:"is_nav,omitempty"`
+	// 创建人ID
+	CreatedBy *int64 `json:"created_by,omitempty"`
+	// 更新人ID
+	UpdatedBy *int64 `json:"updated_by,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -66,7 +70,7 @@ func (*Domain) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case domain.FieldIsNav:
 			values[i] = new(sql.NullBool)
-		case domain.FieldID, domain.FieldStatus, domain.FieldTagCount:
+		case domain.FieldID, domain.FieldStatus, domain.FieldTagCount, domain.FieldCreatedBy, domain.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case domain.FieldName, domain.FieldDescription, domain.FieldURL, domain.FieldIcon:
 			values[i] = new(sql.NullString)
@@ -103,7 +107,8 @@ func (_m *Domain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				_m.Description = value.String
+				_m.Description = new(string)
+				*_m.Description = value.String
 			}
 		case domain.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -136,6 +141,20 @@ func (_m *Domain) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_nav", values[i])
 			} else if value.Valid {
 				_m.IsNav = value.Bool
+			}
+		case domain.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = new(int64)
+				*_m.CreatedBy = value.Int64
+			}
+		case domain.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = new(int64)
+				*_m.UpdatedBy = value.Int64
 			}
 		case domain.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -195,8 +214,10 @@ func (_m *Domain) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(_m.Description)
+	if v := _m.Description; v != nil {
+		builder.WriteString("description=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
@@ -216,6 +237,16 @@ func (_m *Domain) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_nav=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsNav))
+	builder.WriteString(", ")
+	if v := _m.CreatedBy; v != nil {
+		builder.WriteString("created_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

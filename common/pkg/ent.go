@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"common/pkg/util"
 	"context"
 	"time"
 
@@ -31,28 +32,17 @@ type UserAuditSetter interface {
 
 func UserAuditFields() []ent.Field {
 	return []ent.Field{
-		field.Int("create_by").Comment("创建人ID").Nillable().Optional(),
-		field.Int("update_by").Comment("更新人ID").Nillable().Optional(),
+		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}
-}
-
-var ContextUserIDKey = "user_id"
-
-func ContextWithUserID(ctx context.Context, userID int) context.Context {
-	return context.WithValue(ctx, ContextUserIDKey, userID)
-}
-
-func ContextUserID(ctx context.Context) (int, bool) {
-	v, ok := ctx.Value(ContextUserIDKey).(int)
-	return v, ok
 }
 
 func AuditHook() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			now := time.Now()
-			userID, _ := ContextUserID(ctx)
-
+			user, userIdOk := util.GetUserInfo(ctx)
+			userID := user.ID
 			switch {
 			case m.Op().Is(ent.OpCreate):
 				// 设置 created_at / updated_at
@@ -63,11 +53,16 @@ func AuditHook() ent.Hook {
 					setter.SetUpdatedAt(now)
 				}
 				// 设置 created_by / updated_by
-				if setter, ok := m.(interface{ SetCreatedBy(int) }); ok && userID != 0 {
+				if setter, ok := m.(interface{ SetCreatedBy(int64) }); ok && userID != 0 {
+					if !userIdOk {
+						panic("can not get userId")
+					}
 					setter.SetCreatedBy(userID)
 				}
-				if setter, ok := m.(interface{ SetUpdatedBy(int) }); ok && userID != 0 {
-					setter.SetUpdatedBy(userID)
+				if setter, ok := m.(interface{ SetUpdatedBy(int64) }); ok && userID != 0 {
+					if userIdOk {
+						setter.SetUpdatedBy(userID)
+					}
 				}
 
 			case m.Op().Is(ent.OpUpdate | ent.OpUpdateOne):
@@ -75,8 +70,10 @@ func AuditHook() ent.Hook {
 				if setter, ok := m.(interface{ SetUpdatedAt(time.Time) }); ok {
 					setter.SetUpdatedAt(now)
 				}
-				if setter, ok := m.(interface{ SetUpdatedBy(int) }); ok && userID != 0 {
-					setter.SetUpdatedBy(userID)
+				if setter, ok := m.(interface{ SetUpdatedBy(int64) }); ok && userID != 0 {
+					if userIdOk {
+						setter.SetUpdatedBy(userID)
+					}
 				}
 			}
 			return next.Mutate(ctx, m)

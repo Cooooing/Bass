@@ -54,6 +54,10 @@ const (
 	FieldLotteryParticipantCount = "lottery_participant_count"
 	// FieldLotteryWinnerCount holds the string denoting the lottery_winner_count field in the database.
 	FieldLotteryWinnerCount = "lottery_winner_count"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -137,6 +141,8 @@ var Columns = []string{
 	FieldVoteTotal,
 	FieldLotteryParticipantCount,
 	FieldLotteryWinnerCount,
+	FieldCreatedBy,
+	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -304,6 +310,16 @@ func ByLotteryParticipantCount(opts ...sql.OrderTermOption) OrderOption {
 // ByLotteryWinnerCount orders the results by the lottery_winner_count field.
 func ByLotteryWinnerCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLotteryWinnerCount, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

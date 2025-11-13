@@ -30,27 +30,6 @@ func (_u *TagUpdate) Where(ps ...predicate.Tag) *TagUpdate {
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *TagUpdate) SetUserID(v int64) *TagUpdate {
-	_u.mutation.ResetUserID()
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *TagUpdate) SetNillableUserID(v *int64) *TagUpdate {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// AddUserID adds value to the "user_id" field.
-func (_u *TagUpdate) AddUserID(v int64) *TagUpdate {
-	_u.mutation.AddUserID(v)
-	return _u
-}
-
 // SetName sets the "name" field.
 func (_u *TagUpdate) SetName(v string) *TagUpdate {
 	_u.mutation.SetName(v)
@@ -76,6 +55,12 @@ func (_u *TagUpdate) SetNillableDescription(v *string) *TagUpdate {
 	if v != nil {
 		_u.SetDescription(*v)
 	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *TagUpdate) ClearDescription() *TagUpdate {
+	_u.mutation.ClearDescription()
 	return _u
 }
 
@@ -138,6 +123,60 @@ func (_u *TagUpdate) SetNillableArticleCount(v *int32) *TagUpdate {
 // AddArticleCount adds value to the "article_count" field.
 func (_u *TagUpdate) AddArticleCount(v int32) *TagUpdate {
 	_u.mutation.AddArticleCount(v)
+	return _u
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_u *TagUpdate) SetCreatedBy(v int64) *TagUpdate {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *TagUpdate) SetNillableCreatedBy(v *int64) *TagUpdate {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *TagUpdate) AddCreatedBy(v int64) *TagUpdate {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *TagUpdate) ClearCreatedBy() *TagUpdate {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *TagUpdate) SetUpdatedBy(v int64) *TagUpdate {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *TagUpdate) SetNillableUpdatedBy(v *int64) *TagUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *TagUpdate) AddUpdatedBy(v int64) *TagUpdate {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *TagUpdate) ClearUpdatedBy() *TagUpdate {
+	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
@@ -282,17 +321,14 @@ func (_u *TagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(tag.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(tag.FieldUserID, field.TypeInt64, value)
-	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(tag.FieldDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)
@@ -305,6 +341,24 @@ func (_u *TagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedArticleCount(); ok {
 		_spec.AddField(tag.FieldArticleCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(tag.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(tag.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(tag.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(tag.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(tag.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(tag.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(tag.FieldCreatedAt, field.TypeTime, value)
@@ -412,27 +466,6 @@ type TagUpdateOne struct {
 	mutation *TagMutation
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *TagUpdateOne) SetUserID(v int64) *TagUpdateOne {
-	_u.mutation.ResetUserID()
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *TagUpdateOne) SetNillableUserID(v *int64) *TagUpdateOne {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// AddUserID adds value to the "user_id" field.
-func (_u *TagUpdateOne) AddUserID(v int64) *TagUpdateOne {
-	_u.mutation.AddUserID(v)
-	return _u
-}
-
 // SetName sets the "name" field.
 func (_u *TagUpdateOne) SetName(v string) *TagUpdateOne {
 	_u.mutation.SetName(v)
@@ -458,6 +491,12 @@ func (_u *TagUpdateOne) SetNillableDescription(v *string) *TagUpdateOne {
 	if v != nil {
 		_u.SetDescription(*v)
 	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *TagUpdateOne) ClearDescription() *TagUpdateOne {
+	_u.mutation.ClearDescription()
 	return _u
 }
 
@@ -520,6 +559,60 @@ func (_u *TagUpdateOne) SetNillableArticleCount(v *int32) *TagUpdateOne {
 // AddArticleCount adds value to the "article_count" field.
 func (_u *TagUpdateOne) AddArticleCount(v int32) *TagUpdateOne {
 	_u.mutation.AddArticleCount(v)
+	return _u
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_u *TagUpdateOne) SetCreatedBy(v int64) *TagUpdateOne {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *TagUpdateOne) SetNillableCreatedBy(v *int64) *TagUpdateOne {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *TagUpdateOne) AddCreatedBy(v int64) *TagUpdateOne {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *TagUpdateOne) ClearCreatedBy() *TagUpdateOne {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *TagUpdateOne) SetUpdatedBy(v int64) *TagUpdateOne {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *TagUpdateOne) SetNillableUpdatedBy(v *int64) *TagUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *TagUpdateOne) AddUpdatedBy(v int64) *TagUpdateOne {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *TagUpdateOne) ClearUpdatedBy() *TagUpdateOne {
+	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
@@ -694,17 +787,14 @@ func (_u *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(tag.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(tag.FieldUserID, field.TypeInt64, value)
-	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(tag.FieldDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)
@@ -717,6 +807,24 @@ func (_u *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 	}
 	if value, ok := _u.mutation.AddedArticleCount(); ok {
 		_spec.AddField(tag.FieldArticleCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(tag.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(tag.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(tag.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(tag.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(tag.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(tag.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(tag.FieldCreatedAt, field.TypeTime, value)

@@ -335,12 +335,12 @@ func (_q *TagQuery) WithDomain(opts ...func(*DomainQuery)) *TagQuery {
 // Example:
 //
 //	var v []struct {
-//		UserID int64 `json:"user_id,omitempty"`
+//		Name string `json:"name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Tag.Query().
-//		GroupBy(tag.FieldUserID).
+//		GroupBy(tag.FieldName).
 //		Aggregate(gen.Count()).
 //		Scan(ctx, &v)
 func (_q *TagQuery) GroupBy(field string, fields ...string) *TagGroupBy {
@@ -358,11 +358,11 @@ func (_q *TagQuery) GroupBy(field string, fields ...string) *TagGroupBy {
 // Example:
 //
 //	var v []struct {
-//		UserID int64 `json:"user_id,omitempty"`
+//		Name string `json:"name,omitempty"`
 //	}
 //
 //	client.Tag.Query().
-//		Select(tag.FieldUserID).
+//		Select(tag.FieldName).
 //		Scan(ctx, &v)
 func (_q *TagQuery) Select(fields ...string) *TagSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

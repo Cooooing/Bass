@@ -14,7 +14,7 @@ type Article struct {
 }
 
 func (Article) Fields() []ent.Field {
-	return append([]ent.Field{
+	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("作者ID"),
 		field.String("title").Comment("标题").NotEmpty(),
@@ -44,7 +44,10 @@ func (Article) Fields() []ent.Field {
 		field.Int32("vote_total").Comment("总投票数").Default(0),
 		field.Int32("lottery_participant_count").Comment("抽奖参与人数").Default(0),
 		field.Int32("lottery_winner_count").Comment("抽奖获奖人数").Default(0),
-	}, pkg.TimeAuditFields()...)
+	}
+	fields = append(fields, pkg.UserAuditFields()...)
+	fields = append(fields, pkg.TimeAuditFields()...)
+	return fields
 }
 
 func (Article) Edges() []ent.Edge {

@@ -22,12 +22,6 @@ type TagCreate struct {
 	hooks    []Hook
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *TagCreate) SetUserID(v int64) *TagCreate {
-	_c.mutation.SetUserID(v)
-	return _c
-}
-
 // SetName sets the "name" field.
 func (_c *TagCreate) SetName(v string) *TagCreate {
 	_c.mutation.SetName(v)
@@ -37,6 +31,14 @@ func (_c *TagCreate) SetName(v string) *TagCreate {
 // SetDescription sets the "description" field.
 func (_c *TagCreate) SetDescription(v string) *TagCreate {
 	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *TagCreate) SetNillableDescription(v *string) *TagCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
 	return _c
 }
 
@@ -78,6 +80,34 @@ func (_c *TagCreate) SetArticleCount(v int32) *TagCreate {
 func (_c *TagCreate) SetNillableArticleCount(v *int32) *TagCreate {
 	if v != nil {
 		_c.SetArticleCount(*v)
+	}
+	return _c
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_c *TagCreate) SetCreatedBy(v int64) *TagCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *TagCreate) SetNillableCreatedBy(v *int64) *TagCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *TagCreate) SetUpdatedBy(v int64) *TagCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *TagCreate) SetNillableUpdatedBy(v *int64) *TagCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
 	return _c
 }
@@ -191,9 +221,6 @@ func (_c *TagCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TagCreate) check() error {
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`gen: missing required field "Tag.user_id"`)}
-	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`gen: missing required field "Tag.name"`)}
 	}
@@ -201,9 +228,6 @@ func (_c *TagCreate) check() error {
 		if err := tag.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Tag.name": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Description(); !ok {
-		return &ValidationError{Name: "description", err: errors.New(`gen: missing required field "Tag.description"`)}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Tag.status"`)}
@@ -243,17 +267,13 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(tag.FieldUserID, field.TypeInt64, value)
-		_node.UserID = value
-	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(tag.FieldDescription, field.TypeString, value)
-		_node.Description = value
+		_node.Description = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(tag.FieldStatus, field.TypeInt32, value)
@@ -262,6 +282,14 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ArticleCount(); ok {
 		_spec.SetField(tag.FieldArticleCount, field.TypeInt32, value)
 		_node.ArticleCount = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(tag.FieldCreatedBy, field.TypeInt64, value)
+		_node.CreatedBy = &value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(tag.FieldUpdatedBy, field.TypeInt64, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(tag.FieldCreatedAt, field.TypeTime, value)

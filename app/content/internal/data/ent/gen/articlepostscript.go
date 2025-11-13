@@ -24,6 +24,10 @@ type ArticlePostscript struct {
 	Content string `json:"content,omitempty"`
 	// 状态 0-正常 1-隐藏
 	Status int32 `json:"status,omitempty"`
+	// 创建人ID
+	CreatedBy *int64 `json:"created_by,omitempty"`
+	// 更新人ID
+	UpdatedBy *int64 `json:"updated_by,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -59,7 +63,7 @@ func (*ArticlePostscript) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case articlepostscript.FieldID, articlepostscript.FieldArticleID, articlepostscript.FieldStatus:
+		case articlepostscript.FieldID, articlepostscript.FieldArticleID, articlepostscript.FieldStatus, articlepostscript.FieldCreatedBy, articlepostscript.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case articlepostscript.FieldContent:
 			values[i] = new(sql.NullString)
@@ -103,6 +107,20 @@ func (_m *ArticlePostscript) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = int32(value.Int64)
+			}
+		case articlepostscript.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = new(int64)
+				*_m.CreatedBy = value.Int64
+			}
+		case articlepostscript.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = new(int64)
+				*_m.UpdatedBy = value.Int64
 			}
 		case articlepostscript.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -167,6 +185,16 @@ func (_m *ArticlePostscript) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.CreatedBy; v != nil {
+		builder.WriteString("created_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

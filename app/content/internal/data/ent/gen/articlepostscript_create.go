@@ -47,6 +47,34 @@ func (_c *ArticlePostscriptCreate) SetNillableStatus(v *int32) *ArticlePostscrip
 	return _c
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_c *ArticlePostscriptCreate) SetCreatedBy(v int64) *ArticlePostscriptCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *ArticlePostscriptCreate) SetNillableCreatedBy(v *int64) *ArticlePostscriptCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *ArticlePostscriptCreate) SetUpdatedBy(v int64) *ArticlePostscriptCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *ArticlePostscriptCreate) SetNillableUpdatedBy(v *int64) *ArticlePostscriptCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
+	}
+	return _c
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_c *ArticlePostscriptCreate) SetCreatedAt(v time.Time) *ArticlePostscriptCreate {
 	_c.mutation.SetCreatedAt(v)
@@ -193,6 +221,14 @@ func (_c *ArticlePostscriptCreate) createSpec() (*ArticlePostscript, *sqlgraph.C
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(articlepostscript.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(articlepostscript.FieldCreatedBy, field.TypeInt64, value)
+		_node.CreatedBy = &value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(articlepostscript.FieldUpdatedBy, field.TypeInt64, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(articlepostscript.FieldCreatedAt, field.TypeTime, value)

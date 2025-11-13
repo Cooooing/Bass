@@ -23,7 +23,7 @@ const (
 	ContentArticleService_Publish_FullMethodName       = "/common.api.content.v1.ContentArticleService/Publish"
 	ContentArticleService_Update_FullMethodName        = "/common.api.content.v1.ContentArticleService/Update"
 	ContentArticleService_Delete_FullMethodName        = "/common.api.content.v1.ContentArticleService/Delete"
-	ContentArticleService_Get_FullMethodName           = "/common.api.content.v1.ContentArticleService/Get"
+	ContentArticleService_Page_FullMethodName          = "/common.api.content.v1.ContentArticleService/Page"
 	ContentArticleService_GetOne_FullMethodName        = "/common.api.content.v1.ContentArticleService/GetOne"
 	ContentArticleService_AddPostscript_FullMethodName = "/common.api.content.v1.ContentArticleService/AddPostscript"
 	ContentArticleService_Reward_FullMethodName        = "/common.api.content.v1.ContentArticleService/Reward"
@@ -49,7 +49,7 @@ type ContentArticleServiceClient interface {
 	// 删除文章（仅草稿）
 	Delete(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*DeleteArticleReply, error)
 	// 查询文章
-	Get(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleReply, error)
+	Page(ctx context.Context, in *PageArticleRequest, opts ...grpc.CallOption) (*PageArticleReply, error)
 	// 查询单篇文章
 	GetOne(ctx context.Context, in *GetArticleOneRequest, opts ...grpc.CallOption) (*GetArticleOneReply, error)
 	// 添加附言
@@ -116,10 +116,10 @@ func (c *contentArticleServiceClient) Delete(ctx context.Context, in *DeleteArti
 	return out, nil
 }
 
-func (c *contentArticleServiceClient) Get(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleReply, error) {
+func (c *contentArticleServiceClient) Page(ctx context.Context, in *PageArticleRequest, opts ...grpc.CallOption) (*PageArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetArticleReply)
-	err := c.cc.Invoke(ctx, ContentArticleService_Get_FullMethodName, in, out, cOpts...)
+	out := new(PageArticleReply)
+	err := c.cc.Invoke(ctx, ContentArticleService_Page_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +221,7 @@ type ContentArticleServiceServer interface {
 	// 删除文章（仅草稿）
 	Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error)
 	// 查询文章
-	Get(context.Context, *GetArticleRequest) (*GetArticleReply, error)
+	Page(context.Context, *PageArticleRequest) (*PageArticleReply, error)
 	// 查询单篇文章
 	GetOne(context.Context, *GetArticleOneRequest) (*GetArticleOneReply, error)
 	// 添加附言
@@ -260,8 +260,8 @@ func (UnimplementedContentArticleServiceServer) Update(context.Context, *UpdateA
 func (UnimplementedContentArticleServiceServer) Delete(context.Context, *DeleteArticleRequest) (*DeleteArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedContentArticleServiceServer) Get(context.Context, *GetArticleRequest) (*GetArticleReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedContentArticleServiceServer) Page(context.Context, *PageArticleRequest) (*PageArticleReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Page not implemented")
 }
 func (UnimplementedContentArticleServiceServer) GetOne(context.Context, *GetArticleOneRequest) (*GetArticleOneReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOne not implemented")
@@ -380,20 +380,20 @@ func _ContentArticleService_Delete_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentArticleService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetArticleRequest)
+func _ContentArticleService_Page_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PageArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentArticleServiceServer).Get(ctx, in)
+		return srv.(ContentArticleServiceServer).Page(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentArticleService_Get_FullMethodName,
+		FullMethod: ContentArticleService_Page_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentArticleServiceServer).Get(ctx, req.(*GetArticleRequest))
+		return srv.(ContentArticleServiceServer).Page(ctx, req.(*PageArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -566,8 +566,8 @@ var ContentArticleService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ContentArticleService_Delete_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _ContentArticleService_Get_Handler,
+			MethodName: "Page",
+			Handler:    _ContentArticleService_Page_Handler,
 		},
 		{
 			MethodName: "GetOne",

@@ -224,6 +224,60 @@ func (_u *CommentUpdate) AddCollectCount(v int32) *CommentUpdate {
 	return _u
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_u *CommentUpdate) SetCreatedBy(v int64) *CommentUpdate {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *CommentUpdate) SetNillableCreatedBy(v *int64) *CommentUpdate {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *CommentUpdate) AddCreatedBy(v int64) *CommentUpdate {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *CommentUpdate) ClearCreatedBy() *CommentUpdate {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *CommentUpdate) SetUpdatedBy(v int64) *CommentUpdate {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *CommentUpdate) SetNillableUpdatedBy(v *int64) *CommentUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *CommentUpdate) AddUpdatedBy(v int64) *CommentUpdate {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *CommentUpdate) ClearUpdatedBy() *CommentUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *CommentUpdate) SetCreatedAt(v time.Time) *CommentUpdate {
 	_u.mutation.SetCreatedAt(v)
@@ -500,6 +554,24 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedCollectCount(); ok {
 		_spec.AddField(comment.FieldCollectCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(comment.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(comment.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(comment.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(comment.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(comment.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(comment.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(comment.FieldCreatedAt, field.TypeTime, value)
@@ -949,6 +1021,60 @@ func (_u *CommentUpdateOne) AddCollectCount(v int32) *CommentUpdateOne {
 	return _u
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_u *CommentUpdateOne) SetCreatedBy(v int64) *CommentUpdateOne {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *CommentUpdateOne) SetNillableCreatedBy(v *int64) *CommentUpdateOne {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *CommentUpdateOne) AddCreatedBy(v int64) *CommentUpdateOne {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *CommentUpdateOne) ClearCreatedBy() *CommentUpdateOne {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *CommentUpdateOne) SetUpdatedBy(v int64) *CommentUpdateOne {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *CommentUpdateOne) SetNillableUpdatedBy(v *int64) *CommentUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *CommentUpdateOne) AddUpdatedBy(v int64) *CommentUpdateOne {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *CommentUpdateOne) ClearUpdatedBy() *CommentUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *CommentUpdateOne) SetCreatedAt(v time.Time) *CommentUpdateOne {
 	_u.mutation.SetCreatedAt(v)
@@ -1255,6 +1381,24 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 	}
 	if value, ok := _u.mutation.AddedCollectCount(); ok {
 		_spec.AddField(comment.FieldCollectCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(comment.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(comment.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(comment.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(comment.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(comment.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(comment.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(comment.FieldCreatedAt, field.TypeTime, value)

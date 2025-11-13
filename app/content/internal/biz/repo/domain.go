@@ -20,8 +20,8 @@ type DomainRepo interface {
 
 type DomainGetReq struct {
 	Ids         []int64
-	Name        string
-	Description string
+	Name        *string
+	Description *string
 	Status      *cv1.DomainStatus
 	Url         *string
 	Icon        *string

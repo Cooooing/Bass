@@ -12,13 +12,15 @@ option go_package = "common/api/content/v1;v1";
 // 标签服务
 service ContentTagService {
 
-  rpc Add (AddTagRequest) returns (AddTagReply) {
+  // 批量添加标签
+  rpc Adds (AddTagsRequest) returns (AddTagsReply) {
     option (google.api.http) = {
-      post: "/v1/tag/add"
+      post: "/v1/tag/adds"
       body: "*"
     };
   }
 
+  // 更新标签
   rpc Update (UpdateTagRequest) returns (UpdateTagReply) {
     option (google.api.http) = {
       post: "/v1/tag/update"
@@ -26,7 +28,8 @@ service ContentTagService {
     };
   }
 
-  rpc Get (GetTagRequest) returns (GetTagReply) {
+  // 分页获取标签
+  rpc Page (PageTagRequest) returns (PageTagReply) {
     option (google.api.http) = {
       post: "/v1/tag/get"
       body: "*"
@@ -35,58 +38,71 @@ service ContentTagService {
 }
 
 
-message Tag {
-  // 标签ID
+message TagReply {
+  // 创建时间
+  optional google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  optional google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  optional int64 created_by = 1002;
+  // 更新人
+  optional int64 updated_by = 1003;
+  // 主键
   int64 id = 1;
-  // 创建用户ID
-  int64 user_id = 2;
   // 标签名称
   string name = 3;
   // 描述
-  string description = 4;
+  optional string description = 4;
   // 所属领域ID
-  int64 domain_id = 5;
+  optional int64 domain_id = 5;
   // 标签状态：0-正常，1-禁用
   int32 status = 6;
   // 文章数
   int32 article_count = 7;
-  // 创建时间
-  google.protobuf.Timestamp created_at = 8;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 9;
 }
 
-message AddTagRequest {
-  // 标签名称
-  repeated string names = 1;
-}
-message AddTagReply {}
-
-message UpdateTagRequest {
-  // 标签ID
+message TagSave {
+  // 主键
   int64 id = 1;
   // 领域ID
-  int64 domain_id = 2;
+  optional int64 domain_id = 2;
   // 状态：0-正常，1-禁用
   int32 status = 3;
   // 标签名称
   string name = 4;
   // 标签描述
-  string description = 5;
+  optional string description = 5;
 }
-message UpdateTagReply {}
 
-message GetTagRequest {
-  // 分页
-  common.v1.PageRequest page = 1;
-  // 标签ID
-  int64 id = 2;
-  // 领域ID
-  int64 domain_id = 3;
+message AddTagsRequest {
+  // 标签信息
+  repeated TagSave tags = 1;
 }
-message GetTagReply {
+message AddTagsReply {
+  // 添加的标签信息
+  repeated TagReply tags = 1;
+}
+
+message UpdateTagRequest {
+  // 标签信息
+  TagSave tag = 1;
+}
+message UpdateTagReply {
+  // 更新的标签信息
+  TagReply tag = 1;
+}
+
+message PageTagRequest {
+  // 分页
+  optional common.v1.PageRequest page = 1;
+  // 标签ID
+  optional int64 id = 2;
+  // 领域ID
+  optional int64 domain_id = 3;
+}
+message PageTagReply {
   // 分页
   common.v1.PageReply page = 1;
   // 标签列表
-  repeated Tag tags = 2;
+  repeated TagReply tags = 2;
 }

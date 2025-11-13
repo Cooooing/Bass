@@ -89,6 +89,10 @@ type ArticleMutation struct {
 	addlottery_participant_count *int32
 	lottery_winner_count         *int32
 	addlottery_winner_count      *int32
+	created_by                   *int64
+	addcreated_by                *int64
+	updated_by                   *int64
+	addupdated_by                *int64
 	created_at                   *time.Time
 	updated_at                   *time.Time
 	clearedFields                map[string]struct{}
@@ -1246,6 +1250,146 @@ func (m *ArticleMutation) ResetLotteryWinnerCount() {
 	m.addlottery_winner_count = nil
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (m *ArticleMutation) SetCreatedBy(i int64) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ArticleMutation) CreatedBy() (r int64, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldCreatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *ArticleMutation) AddCreatedBy(i int64) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *ArticleMutation) AddedCreatedBy() (r int64, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ArticleMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	m.clearedFields[article.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ArticleMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[article.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ArticleMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	delete(m.clearedFields, article.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ArticleMutation) SetUpdatedBy(i int64) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ArticleMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldUpdatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *ArticleMutation) AddUpdatedBy(i int64) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *ArticleMutation) AddedUpdatedBy() (r int64, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ArticleMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[article.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ArticleMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[article.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ArticleMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, article.FieldUpdatedBy)
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *ArticleMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -1702,7 +1846,7 @@ func (m *ArticleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticleMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 24)
 	if m.user_id != nil {
 		fields = append(fields, article.FieldUserID)
 	}
@@ -1763,6 +1907,12 @@ func (m *ArticleMutation) Fields() []string {
 	if m.lottery_winner_count != nil {
 		fields = append(fields, article.FieldLotteryWinnerCount)
 	}
+	if m.created_by != nil {
+		fields = append(fields, article.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, article.FieldUpdatedBy)
+	}
 	if m.created_at != nil {
 		fields = append(fields, article.FieldCreatedAt)
 	}
@@ -1817,6 +1967,10 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 		return m.LotteryParticipantCount()
 	case article.FieldLotteryWinnerCount:
 		return m.LotteryWinnerCount()
+	case article.FieldCreatedBy:
+		return m.CreatedBy()
+	case article.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case article.FieldCreatedAt:
 		return m.CreatedAt()
 	case article.FieldUpdatedAt:
@@ -1870,6 +2024,10 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldLotteryParticipantCount(ctx)
 	case article.FieldLotteryWinnerCount:
 		return m.OldLotteryWinnerCount(ctx)
+	case article.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case article.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case article.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case article.FieldUpdatedAt:
@@ -2023,6 +2181,20 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLotteryWinnerCount(v)
 		return nil
+	case article.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case article.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case article.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -2087,6 +2259,12 @@ func (m *ArticleMutation) AddedFields() []string {
 	if m.addlottery_winner_count != nil {
 		fields = append(fields, article.FieldLotteryWinnerCount)
 	}
+	if m.addcreated_by != nil {
+		fields = append(fields, article.FieldCreatedBy)
+	}
+	if m.addupdated_by != nil {
+		fields = append(fields, article.FieldUpdatedBy)
+	}
 	return fields
 }
 
@@ -2123,6 +2301,10 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedLotteryParticipantCount()
 	case article.FieldLotteryWinnerCount:
 		return m.AddedLotteryWinnerCount()
+	case article.FieldCreatedBy:
+		return m.AddedCreatedBy()
+	case article.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
 	}
 	return nil, false
 }
@@ -2230,6 +2412,20 @@ func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddLotteryWinnerCount(v)
 		return nil
+	case article.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedBy(v)
+		return nil
+	case article.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedBy(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Article numeric field %s", name)
 }
@@ -2243,6 +2439,12 @@ func (m *ArticleMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(article.FieldAcceptedAnswerID) {
 		fields = append(fields, article.FieldAcceptedAnswerID)
+	}
+	if m.FieldCleared(article.FieldCreatedBy) {
+		fields = append(fields, article.FieldCreatedBy)
+	}
+	if m.FieldCleared(article.FieldUpdatedBy) {
+		fields = append(fields, article.FieldUpdatedBy)
 	}
 	if m.FieldCleared(article.FieldCreatedAt) {
 		fields = append(fields, article.FieldCreatedAt)
@@ -2269,6 +2471,12 @@ func (m *ArticleMutation) ClearField(name string) error {
 		return nil
 	case article.FieldAcceptedAnswerID:
 		m.ClearAcceptedAnswerID()
+		return nil
+	case article.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case article.FieldUpdatedBy:
+		m.ClearUpdatedBy()
 		return nil
 	case article.FieldCreatedAt:
 		m.ClearCreatedAt()
@@ -2343,6 +2551,12 @@ func (m *ArticleMutation) ResetField(name string) error {
 		return nil
 	case article.FieldLotteryWinnerCount:
 		m.ResetLotteryWinnerCount()
+		return nil
+	case article.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case article.FieldUpdatedBy:
+		m.ResetUpdatedBy()
 		return nil
 	case article.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -5473,6 +5687,10 @@ type ArticlePostscriptMutation struct {
 	content        *string
 	status         *int32
 	addstatus      *int32
+	created_by     *int64
+	addcreated_by  *int64
+	updated_by     *int64
+	addupdated_by  *int64
 	created_at     *time.Time
 	updated_at     *time.Time
 	clearedFields  map[string]struct{}
@@ -5715,6 +5933,146 @@ func (m *ArticlePostscriptMutation) ResetStatus() {
 	m.addstatus = nil
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (m *ArticlePostscriptMutation) SetCreatedBy(i int64) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ArticlePostscriptMutation) CreatedBy() (r int64, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ArticlePostscript entity.
+// If the ArticlePostscript object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticlePostscriptMutation) OldCreatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *ArticlePostscriptMutation) AddCreatedBy(i int64) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *ArticlePostscriptMutation) AddedCreatedBy() (r int64, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ArticlePostscriptMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	m.clearedFields[articlepostscript.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ArticlePostscriptMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[articlepostscript.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ArticlePostscriptMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	delete(m.clearedFields, articlepostscript.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ArticlePostscriptMutation) SetUpdatedBy(i int64) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ArticlePostscriptMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ArticlePostscript entity.
+// If the ArticlePostscript object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticlePostscriptMutation) OldUpdatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *ArticlePostscriptMutation) AddUpdatedBy(i int64) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *ArticlePostscriptMutation) AddedUpdatedBy() (r int64, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ArticlePostscriptMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[articlepostscript.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ArticlePostscriptMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[articlepostscript.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ArticlePostscriptMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, articlepostscript.FieldUpdatedBy)
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *ArticlePostscriptMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -5874,7 +6232,7 @@ func (m *ArticlePostscriptMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticlePostscriptMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 7)
 	if m.article != nil {
 		fields = append(fields, articlepostscript.FieldArticleID)
 	}
@@ -5883,6 +6241,12 @@ func (m *ArticlePostscriptMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, articlepostscript.FieldStatus)
+	}
+	if m.created_by != nil {
+		fields = append(fields, articlepostscript.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, articlepostscript.FieldUpdatedBy)
 	}
 	if m.created_at != nil {
 		fields = append(fields, articlepostscript.FieldCreatedAt)
@@ -5904,6 +6268,10 @@ func (m *ArticlePostscriptMutation) Field(name string) (ent.Value, bool) {
 		return m.Content()
 	case articlepostscript.FieldStatus:
 		return m.Status()
+	case articlepostscript.FieldCreatedBy:
+		return m.CreatedBy()
+	case articlepostscript.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case articlepostscript.FieldCreatedAt:
 		return m.CreatedAt()
 	case articlepostscript.FieldUpdatedAt:
@@ -5923,6 +6291,10 @@ func (m *ArticlePostscriptMutation) OldField(ctx context.Context, name string) (
 		return m.OldContent(ctx)
 	case articlepostscript.FieldStatus:
 		return m.OldStatus(ctx)
+	case articlepostscript.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case articlepostscript.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case articlepostscript.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case articlepostscript.FieldUpdatedAt:
@@ -5957,6 +6329,20 @@ func (m *ArticlePostscriptMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetStatus(v)
 		return nil
+	case articlepostscript.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case articlepostscript.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case articlepostscript.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5982,6 +6368,12 @@ func (m *ArticlePostscriptMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, articlepostscript.FieldStatus)
 	}
+	if m.addcreated_by != nil {
+		fields = append(fields, articlepostscript.FieldCreatedBy)
+	}
+	if m.addupdated_by != nil {
+		fields = append(fields, articlepostscript.FieldUpdatedBy)
+	}
 	return fields
 }
 
@@ -5992,6 +6384,10 @@ func (m *ArticlePostscriptMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case articlepostscript.FieldStatus:
 		return m.AddedStatus()
+	case articlepostscript.FieldCreatedBy:
+		return m.AddedCreatedBy()
+	case articlepostscript.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
 	}
 	return nil, false
 }
@@ -6008,6 +6404,20 @@ func (m *ArticlePostscriptMutation) AddField(name string, value ent.Value) error
 		}
 		m.AddStatus(v)
 		return nil
+	case articlepostscript.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedBy(v)
+		return nil
+	case articlepostscript.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedBy(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ArticlePostscript numeric field %s", name)
 }
@@ -6016,6 +6426,12 @@ func (m *ArticlePostscriptMutation) AddField(name string, value ent.Value) error
 // mutation.
 func (m *ArticlePostscriptMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(articlepostscript.FieldCreatedBy) {
+		fields = append(fields, articlepostscript.FieldCreatedBy)
+	}
+	if m.FieldCleared(articlepostscript.FieldUpdatedBy) {
+		fields = append(fields, articlepostscript.FieldUpdatedBy)
+	}
 	if m.FieldCleared(articlepostscript.FieldCreatedAt) {
 		fields = append(fields, articlepostscript.FieldCreatedAt)
 	}
@@ -6036,6 +6452,12 @@ func (m *ArticlePostscriptMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ArticlePostscriptMutation) ClearField(name string) error {
 	switch name {
+	case articlepostscript.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case articlepostscript.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
 	case articlepostscript.FieldCreatedAt:
 		m.ClearCreatedAt()
 		return nil
@@ -6058,6 +6480,12 @@ func (m *ArticlePostscriptMutation) ResetField(name string) error {
 		return nil
 	case articlepostscript.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case articlepostscript.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case articlepostscript.FieldUpdatedBy:
+		m.ResetUpdatedBy()
 		return nil
 	case articlepostscript.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -7999,6 +8427,10 @@ type CommentMutation struct {
 	addlike_count         *int32
 	collect_count         *int32
 	addcollect_count      *int32
+	created_by            *int64
+	addcreated_by         *int64
+	updated_by            *int64
+	addupdated_by         *int64
 	created_at            *time.Time
 	updated_at            *time.Time
 	clearedFields         map[string]struct{}
@@ -8632,6 +9064,146 @@ func (m *CommentMutation) ResetCollectCount() {
 	m.addcollect_count = nil
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (m *CommentMutation) SetCreatedBy(i int64) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *CommentMutation) CreatedBy() (r int64, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Comment entity.
+// If the Comment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentMutation) OldCreatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *CommentMutation) AddCreatedBy(i int64) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *CommentMutation) AddedCreatedBy() (r int64, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *CommentMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	m.clearedFields[comment.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *CommentMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[comment.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *CommentMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	delete(m.clearedFields, comment.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *CommentMutation) SetUpdatedBy(i int64) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *CommentMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Comment entity.
+// If the Comment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentMutation) OldUpdatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *CommentMutation) AddUpdatedBy(i int64) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *CommentMutation) AddedUpdatedBy() (r int64, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *CommentMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[comment.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *CommentMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[comment.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *CommentMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, comment.FieldUpdatedBy)
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *CommentMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -9007,7 +9579,7 @@ func (m *CommentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CommentMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 14)
 	if m.article != nil {
 		fields = append(fields, comment.FieldArticleID)
 	}
@@ -9037,6 +9609,12 @@ func (m *CommentMutation) Fields() []string {
 	}
 	if m.collect_count != nil {
 		fields = append(fields, comment.FieldCollectCount)
+	}
+	if m.created_by != nil {
+		fields = append(fields, comment.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, comment.FieldUpdatedBy)
 	}
 	if m.created_at != nil {
 		fields = append(fields, comment.FieldCreatedAt)
@@ -9072,6 +9650,10 @@ func (m *CommentMutation) Field(name string) (ent.Value, bool) {
 		return m.LikeCount()
 	case comment.FieldCollectCount:
 		return m.CollectCount()
+	case comment.FieldCreatedBy:
+		return m.CreatedBy()
+	case comment.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case comment.FieldCreatedAt:
 		return m.CreatedAt()
 	case comment.FieldUpdatedAt:
@@ -9105,6 +9687,10 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldLikeCount(ctx)
 	case comment.FieldCollectCount:
 		return m.OldCollectCount(ctx)
+	case comment.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case comment.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case comment.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case comment.FieldUpdatedAt:
@@ -9188,6 +9774,20 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCollectCount(v)
 		return nil
+	case comment.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case comment.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case comment.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -9228,6 +9828,12 @@ func (m *CommentMutation) AddedFields() []string {
 	if m.addcollect_count != nil {
 		fields = append(fields, comment.FieldCollectCount)
 	}
+	if m.addcreated_by != nil {
+		fields = append(fields, comment.FieldCreatedBy)
+	}
+	if m.addupdated_by != nil {
+		fields = append(fields, comment.FieldUpdatedBy)
+	}
 	return fields
 }
 
@@ -9248,6 +9854,10 @@ func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedLikeCount()
 	case comment.FieldCollectCount:
 		return m.AddedCollectCount()
+	case comment.FieldCreatedBy:
+		return m.AddedCreatedBy()
+	case comment.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
 	}
 	return nil, false
 }
@@ -9299,6 +9909,20 @@ func (m *CommentMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddCollectCount(v)
 		return nil
+	case comment.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedBy(v)
+		return nil
+	case comment.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedBy(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Comment numeric field %s", name)
 }
@@ -9312,6 +9936,12 @@ func (m *CommentMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(comment.FieldReplyID) {
 		fields = append(fields, comment.FieldReplyID)
+	}
+	if m.FieldCleared(comment.FieldCreatedBy) {
+		fields = append(fields, comment.FieldCreatedBy)
+	}
+	if m.FieldCleared(comment.FieldUpdatedBy) {
+		fields = append(fields, comment.FieldUpdatedBy)
 	}
 	if m.FieldCleared(comment.FieldCreatedAt) {
 		fields = append(fields, comment.FieldCreatedAt)
@@ -9338,6 +9968,12 @@ func (m *CommentMutation) ClearField(name string) error {
 		return nil
 	case comment.FieldReplyID:
 		m.ClearReplyID()
+		return nil
+	case comment.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case comment.FieldUpdatedBy:
+		m.ClearUpdatedBy()
 		return nil
 	case comment.FieldCreatedAt:
 		m.ClearCreatedAt()
@@ -9382,6 +10018,12 @@ func (m *CommentMutation) ResetField(name string) error {
 		return nil
 	case comment.FieldCollectCount:
 		m.ResetCollectCount()
+		return nil
+	case comment.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case comment.FieldUpdatedBy:
+		m.ResetUpdatedBy()
 		return nil
 	case comment.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -10161,6 +10803,10 @@ type DomainMutation struct {
 	tag_count     *int32
 	addtag_count  *int32
 	is_nav        *bool
+	created_by    *int64
+	addcreated_by *int64
+	updated_by    *int64
+	addupdated_by *int64
 	created_at    *time.Time
 	updated_at    *time.Time
 	clearedFields map[string]struct{}
@@ -10329,7 +10975,7 @@ func (m *DomainMutation) Description() (r string, exists bool) {
 // OldDescription returns the old "description" field's value of the Domain entity.
 // If the Domain object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DomainMutation) OldDescription(ctx context.Context) (v string, err error) {
+func (m *DomainMutation) OldDescription(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
 	}
@@ -10343,9 +10989,22 @@ func (m *DomainMutation) OldDescription(ctx context.Context) (v string, err erro
 	return oldValue.Description, nil
 }
 
+// ClearDescription clears the value of the "description" field.
+func (m *DomainMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[domain.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *DomainMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[domain.FieldDescription]
+	return ok
+}
+
 // ResetDescription resets all changes to the "description" field.
 func (m *DomainMutation) ResetDescription() {
 	m.description = nil
+	delete(m.clearedFields, domain.FieldDescription)
 }
 
 // SetStatus sets the "status" field.
@@ -10621,6 +11280,146 @@ func (m *DomainMutation) ResetIsNav() {
 	delete(m.clearedFields, domain.FieldIsNav)
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (m *DomainMutation) SetCreatedBy(i int64) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *DomainMutation) CreatedBy() (r int64, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Domain entity.
+// If the Domain object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DomainMutation) OldCreatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *DomainMutation) AddCreatedBy(i int64) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *DomainMutation) AddedCreatedBy() (r int64, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *DomainMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	m.clearedFields[domain.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *DomainMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[domain.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *DomainMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	delete(m.clearedFields, domain.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *DomainMutation) SetUpdatedBy(i int64) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *DomainMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Domain entity.
+// If the Domain object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DomainMutation) OldUpdatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *DomainMutation) AddUpdatedBy(i int64) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *DomainMutation) AddedUpdatedBy() (r int64, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *DomainMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[domain.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *DomainMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[domain.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *DomainMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, domain.FieldUpdatedBy)
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *DomainMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -10807,7 +11606,7 @@ func (m *DomainMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DomainMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, domain.FieldName)
 	}
@@ -10828,6 +11627,12 @@ func (m *DomainMutation) Fields() []string {
 	}
 	if m.is_nav != nil {
 		fields = append(fields, domain.FieldIsNav)
+	}
+	if m.created_by != nil {
+		fields = append(fields, domain.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, domain.FieldUpdatedBy)
 	}
 	if m.created_at != nil {
 		fields = append(fields, domain.FieldCreatedAt)
@@ -10857,6 +11662,10 @@ func (m *DomainMutation) Field(name string) (ent.Value, bool) {
 		return m.TagCount()
 	case domain.FieldIsNav:
 		return m.IsNav()
+	case domain.FieldCreatedBy:
+		return m.CreatedBy()
+	case domain.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case domain.FieldCreatedAt:
 		return m.CreatedAt()
 	case domain.FieldUpdatedAt:
@@ -10884,6 +11693,10 @@ func (m *DomainMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldTagCount(ctx)
 	case domain.FieldIsNav:
 		return m.OldIsNav(ctx)
+	case domain.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case domain.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case domain.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case domain.FieldUpdatedAt:
@@ -10946,6 +11759,20 @@ func (m *DomainMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsNav(v)
 		return nil
+	case domain.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case domain.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case domain.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -10974,6 +11801,12 @@ func (m *DomainMutation) AddedFields() []string {
 	if m.addtag_count != nil {
 		fields = append(fields, domain.FieldTagCount)
 	}
+	if m.addcreated_by != nil {
+		fields = append(fields, domain.FieldCreatedBy)
+	}
+	if m.addupdated_by != nil {
+		fields = append(fields, domain.FieldUpdatedBy)
+	}
 	return fields
 }
 
@@ -10986,6 +11819,10 @@ func (m *DomainMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStatus()
 	case domain.FieldTagCount:
 		return m.AddedTagCount()
+	case domain.FieldCreatedBy:
+		return m.AddedCreatedBy()
+	case domain.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
 	}
 	return nil, false
 }
@@ -11009,6 +11846,20 @@ func (m *DomainMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddTagCount(v)
 		return nil
+	case domain.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedBy(v)
+		return nil
+	case domain.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedBy(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Domain numeric field %s", name)
 }
@@ -11017,6 +11868,9 @@ func (m *DomainMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *DomainMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(domain.FieldDescription) {
+		fields = append(fields, domain.FieldDescription)
+	}
 	if m.FieldCleared(domain.FieldStatus) {
 		fields = append(fields, domain.FieldStatus)
 	}
@@ -11028,6 +11882,12 @@ func (m *DomainMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(domain.FieldIsNav) {
 		fields = append(fields, domain.FieldIsNav)
+	}
+	if m.FieldCleared(domain.FieldCreatedBy) {
+		fields = append(fields, domain.FieldCreatedBy)
+	}
+	if m.FieldCleared(domain.FieldUpdatedBy) {
+		fields = append(fields, domain.FieldUpdatedBy)
 	}
 	if m.FieldCleared(domain.FieldCreatedAt) {
 		fields = append(fields, domain.FieldCreatedAt)
@@ -11049,6 +11909,9 @@ func (m *DomainMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *DomainMutation) ClearField(name string) error {
 	switch name {
+	case domain.FieldDescription:
+		m.ClearDescription()
+		return nil
 	case domain.FieldStatus:
 		m.ClearStatus()
 		return nil
@@ -11060,6 +11923,12 @@ func (m *DomainMutation) ClearField(name string) error {
 		return nil
 	case domain.FieldIsNav:
 		m.ClearIsNav()
+		return nil
+	case domain.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case domain.FieldUpdatedBy:
+		m.ClearUpdatedBy()
 		return nil
 	case domain.FieldCreatedAt:
 		m.ClearCreatedAt()
@@ -11095,6 +11964,12 @@ func (m *DomainMutation) ResetField(name string) error {
 		return nil
 	case domain.FieldIsNav:
 		m.ResetIsNav()
+		return nil
+	case domain.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case domain.FieldUpdatedBy:
+		m.ResetUpdatedBy()
 		return nil
 	case domain.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -11196,14 +12071,16 @@ type TagMutation struct {
 	op               Op
 	typ              string
 	id               *int64
-	user_id          *int64
-	adduser_id       *int64
 	name             *string
 	description      *string
 	status           *int32
 	addstatus        *int32
 	article_count    *int32
 	addarticle_count *int32
+	created_by       *int64
+	addcreated_by    *int64
+	updated_by       *int64
+	addupdated_by    *int64
 	created_at       *time.Time
 	updated_at       *time.Time
 	clearedFields    map[string]struct{}
@@ -11321,62 +12198,6 @@ func (m *TagMutation) IDs(ctx context.Context) ([]int64, error) {
 	}
 }
 
-// SetUserID sets the "user_id" field.
-func (m *TagMutation) SetUserID(i int64) {
-	m.user_id = &i
-	m.adduser_id = nil
-}
-
-// UserID returns the value of the "user_id" field in the mutation.
-func (m *TagMutation) UserID() (r int64, exists bool) {
-	v := m.user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUserID returns the old "user_id" field's value of the Tag entity.
-// If the Tag object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldUserID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUserID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
-	}
-	return oldValue.UserID, nil
-}
-
-// AddUserID adds i to the "user_id" field.
-func (m *TagMutation) AddUserID(i int64) {
-	if m.adduser_id != nil {
-		*m.adduser_id += i
-	} else {
-		m.adduser_id = &i
-	}
-}
-
-// AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *TagMutation) AddedUserID() (r int64, exists bool) {
-	v := m.adduser_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUserID resets all changes to the "user_id" field.
-func (m *TagMutation) ResetUserID() {
-	m.user_id = nil
-	m.adduser_id = nil
-}
-
 // SetName sets the "name" field.
 func (m *TagMutation) SetName(s string) {
 	m.name = &s
@@ -11430,7 +12251,7 @@ func (m *TagMutation) Description() (r string, exists bool) {
 // OldDescription returns the old "description" field's value of the Tag entity.
 // If the Tag object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TagMutation) OldDescription(ctx context.Context) (v string, err error) {
+func (m *TagMutation) OldDescription(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
 	}
@@ -11444,9 +12265,22 @@ func (m *TagMutation) OldDescription(ctx context.Context) (v string, err error) 
 	return oldValue.Description, nil
 }
 
+// ClearDescription clears the value of the "description" field.
+func (m *TagMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[tag.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *TagMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[tag.FieldDescription]
+	return ok
+}
+
 // ResetDescription resets all changes to the "description" field.
 func (m *TagMutation) ResetDescription() {
 	m.description = nil
+	delete(m.clearedFields, tag.FieldDescription)
 }
 
 // SetDomainID sets the "domain_id" field.
@@ -11608,6 +12442,146 @@ func (m *TagMutation) AddedArticleCount() (r int32, exists bool) {
 func (m *TagMutation) ResetArticleCount() {
 	m.article_count = nil
 	m.addarticle_count = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *TagMutation) SetCreatedBy(i int64) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *TagMutation) CreatedBy() (r int64, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Tag entity.
+// If the Tag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagMutation) OldCreatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *TagMutation) AddCreatedBy(i int64) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *TagMutation) AddedCreatedBy() (r int64, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *TagMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	m.clearedFields[tag.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *TagMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[tag.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *TagMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+	delete(m.clearedFields, tag.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *TagMutation) SetUpdatedBy(i int64) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *TagMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Tag entity.
+// If the Tag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagMutation) OldUpdatedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *TagMutation) AddUpdatedBy(i int64) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *TagMutation) AddedUpdatedBy() (r int64, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *TagMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[tag.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *TagMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[tag.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *TagMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, tag.FieldUpdatedBy)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -11823,10 +12797,7 @@ func (m *TagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TagMutation) Fields() []string {
-	fields := make([]string, 0, 8)
-	if m.user_id != nil {
-		fields = append(fields, tag.FieldUserID)
-	}
+	fields := make([]string, 0, 9)
 	if m.name != nil {
 		fields = append(fields, tag.FieldName)
 	}
@@ -11842,6 +12813,12 @@ func (m *TagMutation) Fields() []string {
 	if m.article_count != nil {
 		fields = append(fields, tag.FieldArticleCount)
 	}
+	if m.created_by != nil {
+		fields = append(fields, tag.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, tag.FieldUpdatedBy)
+	}
 	if m.created_at != nil {
 		fields = append(fields, tag.FieldCreatedAt)
 	}
@@ -11856,8 +12833,6 @@ func (m *TagMutation) Fields() []string {
 // schema.
 func (m *TagMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case tag.FieldUserID:
-		return m.UserID()
 	case tag.FieldName:
 		return m.Name()
 	case tag.FieldDescription:
@@ -11868,6 +12843,10 @@ func (m *TagMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case tag.FieldArticleCount:
 		return m.ArticleCount()
+	case tag.FieldCreatedBy:
+		return m.CreatedBy()
+	case tag.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case tag.FieldCreatedAt:
 		return m.CreatedAt()
 	case tag.FieldUpdatedAt:
@@ -11881,8 +12860,6 @@ func (m *TagMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case tag.FieldUserID:
-		return m.OldUserID(ctx)
 	case tag.FieldName:
 		return m.OldName(ctx)
 	case tag.FieldDescription:
@@ -11893,6 +12870,10 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldStatus(ctx)
 	case tag.FieldArticleCount:
 		return m.OldArticleCount(ctx)
+	case tag.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case tag.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case tag.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case tag.FieldUpdatedAt:
@@ -11906,13 +12887,6 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 // type.
 func (m *TagMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case tag.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUserID(v)
-		return nil
 	case tag.FieldName:
 		v, ok := value.(string)
 		if !ok {
@@ -11948,6 +12922,20 @@ func (m *TagMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetArticleCount(v)
 		return nil
+	case tag.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case tag.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case tag.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -11970,14 +12958,17 @@ func (m *TagMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *TagMutation) AddedFields() []string {
 	var fields []string
-	if m.adduser_id != nil {
-		fields = append(fields, tag.FieldUserID)
-	}
 	if m.addstatus != nil {
 		fields = append(fields, tag.FieldStatus)
 	}
 	if m.addarticle_count != nil {
 		fields = append(fields, tag.FieldArticleCount)
+	}
+	if m.addcreated_by != nil {
+		fields = append(fields, tag.FieldCreatedBy)
+	}
+	if m.addupdated_by != nil {
+		fields = append(fields, tag.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -11987,12 +12978,14 @@ func (m *TagMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *TagMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case tag.FieldUserID:
-		return m.AddedUserID()
 	case tag.FieldStatus:
 		return m.AddedStatus()
 	case tag.FieldArticleCount:
 		return m.AddedArticleCount()
+	case tag.FieldCreatedBy:
+		return m.AddedCreatedBy()
+	case tag.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
 	}
 	return nil, false
 }
@@ -12002,13 +12995,6 @@ func (m *TagMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TagMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case tag.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUserID(v)
-		return nil
 	case tag.FieldStatus:
 		v, ok := value.(int32)
 		if !ok {
@@ -12023,6 +13009,20 @@ func (m *TagMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddArticleCount(v)
 		return nil
+	case tag.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedBy(v)
+		return nil
+	case tag.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedBy(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Tag numeric field %s", name)
 }
@@ -12031,8 +13031,17 @@ func (m *TagMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *TagMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(tag.FieldDescription) {
+		fields = append(fields, tag.FieldDescription)
+	}
 	if m.FieldCleared(tag.FieldDomainID) {
 		fields = append(fields, tag.FieldDomainID)
+	}
+	if m.FieldCleared(tag.FieldCreatedBy) {
+		fields = append(fields, tag.FieldCreatedBy)
+	}
+	if m.FieldCleared(tag.FieldUpdatedBy) {
+		fields = append(fields, tag.FieldUpdatedBy)
 	}
 	if m.FieldCleared(tag.FieldCreatedAt) {
 		fields = append(fields, tag.FieldCreatedAt)
@@ -12054,8 +13063,17 @@ func (m *TagMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *TagMutation) ClearField(name string) error {
 	switch name {
+	case tag.FieldDescription:
+		m.ClearDescription()
+		return nil
 	case tag.FieldDomainID:
 		m.ClearDomainID()
+		return nil
+	case tag.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case tag.FieldUpdatedBy:
+		m.ClearUpdatedBy()
 		return nil
 	case tag.FieldCreatedAt:
 		m.ClearCreatedAt()
@@ -12071,9 +13089,6 @@ func (m *TagMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *TagMutation) ResetField(name string) error {
 	switch name {
-	case tag.FieldUserID:
-		m.ResetUserID()
-		return nil
 	case tag.FieldName:
 		m.ResetName()
 		return nil
@@ -12088,6 +13103,12 @@ func (m *TagMutation) ResetField(name string) error {
 		return nil
 	case tag.FieldArticleCount:
 		m.ResetArticleCount()
+		return nil
+	case tag.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case tag.FieldUpdatedBy:
+		m.ResetUpdatedBy()
 		return nil
 	case tag.FieldCreatedAt:
 		m.ResetCreatedAt()

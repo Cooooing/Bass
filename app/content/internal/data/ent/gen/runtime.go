@@ -92,11 +92,11 @@ func init() {
 	// article.DefaultLotteryWinnerCount holds the default value on creation for the lottery_winner_count field.
 	article.DefaultLotteryWinnerCount = articleDescLotteryWinnerCount.Default.(int32)
 	// articleDescCreatedAt is the schema descriptor for created_at field.
-	articleDescCreatedAt := articleFields[21].Descriptor()
+	articleDescCreatedAt := articleFields[23].Descriptor()
 	// article.DefaultCreatedAt holds the default value on creation for the created_at field.
 	article.DefaultCreatedAt = articleDescCreatedAt.Default.(func() time.Time)
 	// articleDescUpdatedAt is the schema descriptor for updated_at field.
-	articleDescUpdatedAt := articleFields[22].Descriptor()
+	articleDescUpdatedAt := articleFields[24].Descriptor()
 	// article.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	article.DefaultUpdatedAt = articleDescUpdatedAt.Default.(func() time.Time)
 	articlelotteryFields := schema.ArticleLottery{}.Fields()
@@ -148,11 +148,11 @@ func init() {
 	// articlepostscript.DefaultStatus holds the default value on creation for the status field.
 	articlepostscript.DefaultStatus = articlepostscriptDescStatus.Default.(int32)
 	// articlepostscriptDescCreatedAt is the schema descriptor for created_at field.
-	articlepostscriptDescCreatedAt := articlepostscriptFields[4].Descriptor()
+	articlepostscriptDescCreatedAt := articlepostscriptFields[6].Descriptor()
 	// articlepostscript.DefaultCreatedAt holds the default value on creation for the created_at field.
 	articlepostscript.DefaultCreatedAt = articlepostscriptDescCreatedAt.Default.(func() time.Time)
 	// articlepostscriptDescUpdatedAt is the schema descriptor for updated_at field.
-	articlepostscriptDescUpdatedAt := articlepostscriptFields[5].Descriptor()
+	articlepostscriptDescUpdatedAt := articlepostscriptFields[7].Descriptor()
 	// articlepostscript.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	articlepostscript.DefaultUpdatedAt = articlepostscriptDescUpdatedAt.Default.(func() time.Time)
 	articlevoteFields := schema.ArticleVote{}.Fields()
@@ -214,11 +214,11 @@ func init() {
 	// comment.DefaultCollectCount holds the default value on creation for the collect_count field.
 	comment.DefaultCollectCount = commentDescCollectCount.Default.(int32)
 	// commentDescCreatedAt is the schema descriptor for created_at field.
-	commentDescCreatedAt := commentFields[11].Descriptor()
+	commentDescCreatedAt := commentFields[13].Descriptor()
 	// comment.DefaultCreatedAt holds the default value on creation for the created_at field.
 	comment.DefaultCreatedAt = commentDescCreatedAt.Default.(func() time.Time)
 	// commentDescUpdatedAt is the schema descriptor for updated_at field.
-	commentDescUpdatedAt := commentFields[12].Descriptor()
+	commentDescUpdatedAt := commentFields[14].Descriptor()
 	// comment.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	comment.DefaultUpdatedAt = commentDescUpdatedAt.Default.(func() time.Time)
 	domainFields := schema.Domain{}.Fields()
@@ -227,10 +227,6 @@ func init() {
 	domainDescName := domainFields[1].Descriptor()
 	// domain.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	domain.NameValidator = domainDescName.Validators[0].(func(string) error)
-	// domainDescDescription is the schema descriptor for description field.
-	domainDescDescription := domainFields[2].Descriptor()
-	// domain.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
-	domain.DescriptionValidator = domainDescDescription.Validators[0].(func(string) error)
 	// domainDescStatus is the schema descriptor for status field.
 	domainDescStatus := domainFields[3].Descriptor()
 	// domain.DefaultStatus holds the default value on creation for the status field.
@@ -244,33 +240,33 @@ func init() {
 	// domain.DefaultIsNav holds the default value on creation for the is_nav field.
 	domain.DefaultIsNav = domainDescIsNav.Default.(bool)
 	// domainDescCreatedAt is the schema descriptor for created_at field.
-	domainDescCreatedAt := domainFields[8].Descriptor()
+	domainDescCreatedAt := domainFields[10].Descriptor()
 	// domain.DefaultCreatedAt holds the default value on creation for the created_at field.
 	domain.DefaultCreatedAt = domainDescCreatedAt.Default.(func() time.Time)
 	// domainDescUpdatedAt is the schema descriptor for updated_at field.
-	domainDescUpdatedAt := domainFields[9].Descriptor()
+	domainDescUpdatedAt := domainFields[11].Descriptor()
 	// domain.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	domain.DefaultUpdatedAt = domainDescUpdatedAt.Default.(func() time.Time)
 	tagFields := schema.Tag{}.Fields()
 	_ = tagFields
 	// tagDescName is the schema descriptor for name field.
-	tagDescName := tagFields[2].Descriptor()
+	tagDescName := tagFields[1].Descriptor()
 	// tag.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	tag.NameValidator = tagDescName.Validators[0].(func(string) error)
 	// tagDescStatus is the schema descriptor for status field.
-	tagDescStatus := tagFields[5].Descriptor()
+	tagDescStatus := tagFields[4].Descriptor()
 	// tag.DefaultStatus holds the default value on creation for the status field.
 	tag.DefaultStatus = tagDescStatus.Default.(int32)
 	// tagDescArticleCount is the schema descriptor for article_count field.
-	tagDescArticleCount := tagFields[6].Descriptor()
+	tagDescArticleCount := tagFields[5].Descriptor()
 	// tag.DefaultArticleCount holds the default value on creation for the article_count field.
 	tag.DefaultArticleCount = tagDescArticleCount.Default.(int32)
 	// tagDescCreatedAt is the schema descriptor for created_at field.
-	tagDescCreatedAt := tagFields[7].Descriptor()
+	tagDescCreatedAt := tagFields[8].Descriptor()
 	// tag.DefaultCreatedAt holds the default value on creation for the created_at field.
 	tag.DefaultCreatedAt = tagDescCreatedAt.Default.(func() time.Time)
 	// tagDescUpdatedAt is the schema descriptor for updated_at field.
-	tagDescUpdatedAt := tagFields[8].Descriptor()
+	tagDescUpdatedAt := tagFields[9].Descriptor()
 	// tag.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	tag.DefaultUpdatedAt = tagDescUpdatedAt.Default.(func() time.Time)
 }

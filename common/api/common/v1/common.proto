@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package common.api.common.v1;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "common/api/common/v1;v1";
 
 message PageRequest {
@@ -18,4 +20,18 @@ message PageReply {
   uint32 page = 2;
   // 页大小
   uint32 size = 3;
+}
+
+message TimeRange {
+  // 开始
+  google.protobuf.Timestamp start = 1;
+  // 结束
+  google.protobuf.Timestamp end = 2;
+}
+
+message Int32Range {
+  // 开始
+  optional int32 start = 1;
+  // 结束
+  optional int32 end = 2;
 }

@@ -23,9 +23,9 @@ service ContentCommentService {
   }
 
   // 查询评论列表
-  rpc Get (GetCommentRequest) returns (GetCommentReply) {
+  rpc Page (PageCommentRequest) returns (PageCommentReply) {
     option (google.api.http) = {
-      post: "/v1/comment/get"
+      post: "/v1/comment/page"
       body: "*"
     };
   }
@@ -57,12 +57,18 @@ service ContentCommentService {
 }
 
 message Comment {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  int64 created_by = 1002;
+  // 更新人
+  int64 updated_by = 1003;
   // 评论ID
   int64 id = 1;
   // 文章ID
   int64 article_id = 2;
-  // 用户ID
-  int64 user_id = 3;
   // 评论内容
   string content = 4;
   // 评论层级
@@ -79,10 +85,6 @@ message Comment {
   int64 like_count = 10;
   // 收藏数量
   int64 collect_count = 11;
-  // 创建时间
-  google.protobuf.Timestamp created_at = 12;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 13;
 
   // 子评论
   repeated Comment comments = 14;
@@ -100,19 +102,19 @@ message AddCommentRequest {
 }
 message AddCommentReply {}
 
-message GetCommentRequest {
+message PageCommentRequest {
   // 分页
   optional common.v1.PageRequest page = 1;
   // 评论ID
-  int64 id = 2;
+  optional int64 id = 2;
   // 文章ID
-  int64 article_id = 3;
+  optional int64 article_id = 3;
   // 排序 0-最新 1-最热
-  int64 order = 4;
+  optional int32 order = 4;
   // 用户ID
-  int64 user_id = 5;
+  optional int64 user_id = 5;
 }
-message GetCommentReply {
+message PageCommentReply {
   // 分页
   common.v1.PageReply page = 1;
   // 评论列表

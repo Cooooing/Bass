@@ -24,7 +24,7 @@ func NewDomainRepo(baseRepo *BaseRepo) repo.DomainRepo {
 func (r *DomainRepo) Save(ctx context.Context, tx *gen.Client, domain *model.Domain) (*model.Domain, error) {
 	save, err := tx.Domain.Create().
 		SetName(domain.Name).
-		SetDescription(domain.Description).
+		SetNillableDescription(domain.Description).
 		SetStatus(domain.Status).
 		SetNillableURL(domain.URL).
 		SetNillableIcon(domain.Icon).
@@ -43,7 +43,7 @@ func (r *DomainRepo) Saves(ctx context.Context, tx *gen.Client, domains []*model
 		creates = append(creates,
 			tx.Domain.Create().
 				SetName(domains[i].Name).
-				SetDescription(domains[i].Description).
+				SetNillableDescription(domains[i].Description).
 				SetStatus(domains[i].Status).
 				SetNillableURL(domains[i].URL).
 				SetNillableIcon(domains[i].Icon).
@@ -65,7 +65,7 @@ func (r *DomainRepo) Saves(ctx context.Context, tx *gen.Client, domains []*model
 func (r *DomainRepo) Update(ctx context.Context, tx *gen.Client, domain *model.Domain) (*model.Domain, error) {
 	update := tx.Domain.UpdateOneID(domain.ID).
 		SetName(domain.Name).
-		SetDescription(domain.Description).
+		SetNillableDescription(domain.Description).
 		SetStatus(domain.Status).
 		SetNillableURL(domain.URL).
 		SetNillableIcon(domain.Icon).
@@ -94,27 +94,13 @@ func (r *DomainRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*mo
 	return (*model.Domain)(query), err
 }
 
-func (r *DomainRepo) Get(ctx context.Context, tx *gen.Client) ([]*model.Domain, error) {
-	query := tx.Domain.Query()
-
-	domains, err := query.All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	res := make([]*model.Domain, len(domains))
-	for i, item := range domains {
-		res[i] = (*model.Domain)(item)
-	}
-	return res, nil
-}
-
 func (r *DomainRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) ([]*model.Domain, error) {
 	var (
 		domains []*model.Domain
 		err     error
 	)
-	query := tx.Domain.Query()
-
+	query := tx.Domain.Query().WithTags()
+	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
@@ -131,9 +117,9 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 		err     error
 		total   int
 	)
-	page = base.IfNilDefault(page, constant.GetPageDefault())
-	query := tx.Domain.Query()
-
+	page = base.OrDefault(page, constant.GetPageDefault())
+	query := tx.Domain.Query().WithTags()
+	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	total, err = countQuery.Count(ctx)
 	if err != nil {
@@ -153,16 +139,15 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 	}, nil
 }
 
-func (r *DomainRepo) getQuery(tx *gen.Client, req *repo.DomainGetReq) *gen.DomainQuery {
-	query := tx.Domain.Query()
+func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *gen.DomainQuery {
 	if len(req.Ids) > 0 {
 		query = query.Where(domain.IDIn(req.Ids...))
 	}
-	if req.Name != "" {
-		query = query.Where(domain.NameContains(req.Name))
+	if req.Name != nil {
+		query = query.Where(domain.NameContains(*req.Name))
 	}
-	if req.Description != "" {
-		query = query.Where(domain.DescriptionContains(req.Description))
+	if req.Description != nil {
+		query = query.Where(domain.DescriptionContains(*req.Description))
 	}
 	if req.Status != nil {
 		query = query.Where(domain.StatusEQ(int32(*req.Status)))

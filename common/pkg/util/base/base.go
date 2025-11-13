@@ -33,10 +33,26 @@ func IsNotNil(v any) bool {
 	return !IsNil(v)
 }
 
-// IfNilDefault 如果 v 是 nil，返回 defaultValue，否则返回 v
-func IfNilDefault[T any](v T, defaultValue T) T {
+// OrDefault 如果 v 为 nil，返回 defaultValue，否则返回 v
+func OrDefault[T any](v T, defaultValue T) T {
 	if IsNil(v) {
 		return defaultValue
 	}
 	return v
+}
+
+// PtrOrDefault 如果 v 为 nil，返回 defaultValue，否则返回 v 的指针
+func PtrOrDefault[T any, U *T](v T, defaultValue U) U {
+	if IsNil(v) {
+		return defaultValue
+	}
+	return Ptr(v)
+}
+
+// DerefOrDefault 如果指针 v 为 nil，返回 defaultValue，否则返回 *v
+func DerefOrDefault[T any](v *T, defaultValue T) T {
+	if v == nil {
+		return defaultValue
+	}
+	return *v
 }

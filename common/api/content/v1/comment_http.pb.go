@@ -20,18 +20,18 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationContentCommentServiceAdd = "/common.api.content.v1.ContentCommentService/Add"
-const OperationContentCommentServiceGet = "/common.api.content.v1.ContentCommentService/Get"
 const OperationContentCommentServiceLike = "/common.api.content.v1.ContentCommentService/Like"
+const OperationContentCommentServicePage = "/common.api.content.v1.ContentCommentService/Page"
 const OperationContentCommentServiceThank = "/common.api.content.v1.ContentCommentService/Thank"
 const OperationContentCommentServiceUpdateStatus = "/common.api.content.v1.ContentCommentService/UpdateStatus"
 
 type ContentCommentServiceHTTPServer interface {
 	// Add 新增评论
 	Add(context.Context, *AddCommentRequest) (*AddCommentReply, error)
-	// Get 查询评论列表
-	Get(context.Context, *GetCommentRequest) (*GetCommentReply, error)
 	// Like 点赞评论
 	Like(context.Context, *LikeCommentRequest) (*LikeCommentReply, error)
+	// Page 查询评论列表
+	Page(context.Context, *PageCommentRequest) (*PageCommentReply, error)
 	// Thank 感谢评论
 	Thank(context.Context, *ThankCommentRequest) (*ThankCommentReply, error)
 	// UpdateStatus 修改评论状态
@@ -41,7 +41,7 @@ type ContentCommentServiceHTTPServer interface {
 func RegisterContentCommentServiceHTTPServer(s *http.Server, srv ContentCommentServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/comment/add", _ContentCommentService_Add1_HTTP_Handler(srv))
-	r.POST("/v1/comment/get", _ContentCommentService_Get1_HTTP_Handler(srv))
+	r.POST("/v1/comment/page", _ContentCommentService_Page1_HTTP_Handler(srv))
 	r.POST("/v1/comment/like", _ContentCommentService_Like1_HTTP_Handler(srv))
 	r.POST("/v1/comment/thank", _ContentCommentService_Thank1_HTTP_Handler(srv))
 	r.POST("/v1/comment/updateStatus", _ContentCommentService_UpdateStatus0_HTTP_Handler(srv))
@@ -69,24 +69,24 @@ func _ContentCommentService_Add1_HTTP_Handler(srv ContentCommentServiceHTTPServe
 	}
 }
 
-func _ContentCommentService_Get1_HTTP_Handler(srv ContentCommentServiceHTTPServer) func(ctx http.Context) error {
+func _ContentCommentService_Page1_HTTP_Handler(srv ContentCommentServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetCommentRequest
+		var in PageCommentRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationContentCommentServiceGet)
+		http.SetOperation(ctx, OperationContentCommentServicePage)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*GetCommentRequest))
+			return srv.Page(ctx, req.(*PageCommentRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetCommentReply)
+		reply := out.(*PageCommentReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -160,10 +160,10 @@ func _ContentCommentService_UpdateStatus0_HTTP_Handler(srv ContentCommentService
 type ContentCommentServiceHTTPClient interface {
 	// Add 新增评论
 	Add(ctx context.Context, req *AddCommentRequest, opts ...http.CallOption) (rsp *AddCommentReply, err error)
-	// Get 查询评论列表
-	Get(ctx context.Context, req *GetCommentRequest, opts ...http.CallOption) (rsp *GetCommentReply, err error)
 	// Like 点赞评论
 	Like(ctx context.Context, req *LikeCommentRequest, opts ...http.CallOption) (rsp *LikeCommentReply, err error)
+	// Page 查询评论列表
+	Page(ctx context.Context, req *PageCommentRequest, opts ...http.CallOption) (rsp *PageCommentReply, err error)
 	// Thank 感谢评论
 	Thank(ctx context.Context, req *ThankCommentRequest, opts ...http.CallOption) (rsp *ThankCommentReply, err error)
 	// UpdateStatus 修改评论状态
@@ -192,12 +192,12 @@ func (c *ContentCommentServiceHTTPClientImpl) Add(ctx context.Context, in *AddCo
 	return &out, nil
 }
 
-// Get 查询评论列表
-func (c *ContentCommentServiceHTTPClientImpl) Get(ctx context.Context, in *GetCommentRequest, opts ...http.CallOption) (*GetCommentReply, error) {
-	var out GetCommentReply
-	pattern := "/v1/comment/get"
+// Like 点赞评论
+func (c *ContentCommentServiceHTTPClientImpl) Like(ctx context.Context, in *LikeCommentRequest, opts ...http.CallOption) (*LikeCommentReply, error) {
+	var out LikeCommentReply
+	pattern := "/v1/comment/like"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationContentCommentServiceGet))
+	opts = append(opts, http.Operation(OperationContentCommentServiceLike))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -206,12 +206,12 @@ func (c *ContentCommentServiceHTTPClientImpl) Get(ctx context.Context, in *GetCo
 	return &out, nil
 }
 
-// Like 点赞评论
-func (c *ContentCommentServiceHTTPClientImpl) Like(ctx context.Context, in *LikeCommentRequest, opts ...http.CallOption) (*LikeCommentReply, error) {
-	var out LikeCommentReply
-	pattern := "/v1/comment/like"
+// Page 查询评论列表
+func (c *ContentCommentServiceHTTPClientImpl) Page(ctx context.Context, in *PageCommentRequest, opts ...http.CallOption) (*PageCommentReply, error) {
+	var out PageCommentReply
+	pattern := "/v1/comment/page"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationContentCommentServiceLike))
+	opts = append(opts, http.Operation(OperationContentCommentServicePage))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

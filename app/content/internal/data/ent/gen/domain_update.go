@@ -57,6 +57,12 @@ func (_u *DomainUpdate) SetNillableDescription(v *string) *DomainUpdate {
 	return _u
 }
 
+// ClearDescription clears the value of the "description" field.
+func (_u *DomainUpdate) ClearDescription() *DomainUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *DomainUpdate) SetStatus(v int32) *DomainUpdate {
 	_u.mutation.ResetStatus()
@@ -162,6 +168,60 @@ func (_u *DomainUpdate) SetNillableIsNav(v *bool) *DomainUpdate {
 // ClearIsNav clears the value of the "is_nav" field.
 func (_u *DomainUpdate) ClearIsNav() *DomainUpdate {
 	_u.mutation.ClearIsNav()
+	return _u
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_u *DomainUpdate) SetCreatedBy(v int64) *DomainUpdate {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *DomainUpdate) SetNillableCreatedBy(v *int64) *DomainUpdate {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *DomainUpdate) AddCreatedBy(v int64) *DomainUpdate {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *DomainUpdate) ClearCreatedBy() *DomainUpdate {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *DomainUpdate) SetUpdatedBy(v int64) *DomainUpdate {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *DomainUpdate) SetNillableUpdatedBy(v *int64) *DomainUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *DomainUpdate) AddUpdatedBy(v int64) *DomainUpdate {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *DomainUpdate) ClearUpdatedBy() *DomainUpdate {
+	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
@@ -280,11 +340,6 @@ func (_u *DomainUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Domain.name": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Description(); ok {
-		if err := domain.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`gen: validator failed for field "Domain.description": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -305,6 +360,9 @@ func (_u *DomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(domain.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(domain.FieldDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(domain.FieldStatus, field.TypeInt32, value)
@@ -338,6 +396,24 @@ func (_u *DomainUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.IsNavCleared() {
 		_spec.ClearField(domain.FieldIsNav, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(domain.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(domain.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(domain.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(domain.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(domain.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(domain.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)
@@ -441,6 +517,12 @@ func (_u *DomainUpdateOne) SetNillableDescription(v *string) *DomainUpdateOne {
 	if v != nil {
 		_u.SetDescription(*v)
 	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *DomainUpdateOne) ClearDescription() *DomainUpdateOne {
+	_u.mutation.ClearDescription()
 	return _u
 }
 
@@ -549,6 +631,60 @@ func (_u *DomainUpdateOne) SetNillableIsNav(v *bool) *DomainUpdateOne {
 // ClearIsNav clears the value of the "is_nav" field.
 func (_u *DomainUpdateOne) ClearIsNav() *DomainUpdateOne {
 	_u.mutation.ClearIsNav()
+	return _u
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_u *DomainUpdateOne) SetCreatedBy(v int64) *DomainUpdateOne {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *DomainUpdateOne) SetNillableCreatedBy(v *int64) *DomainUpdateOne {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *DomainUpdateOne) AddCreatedBy(v int64) *DomainUpdateOne {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *DomainUpdateOne) ClearCreatedBy() *DomainUpdateOne {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *DomainUpdateOne) SetUpdatedBy(v int64) *DomainUpdateOne {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *DomainUpdateOne) SetNillableUpdatedBy(v *int64) *DomainUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *DomainUpdateOne) AddUpdatedBy(v int64) *DomainUpdateOne {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *DomainUpdateOne) ClearUpdatedBy() *DomainUpdateOne {
+	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
@@ -680,11 +816,6 @@ func (_u *DomainUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Domain.name": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Description(); ok {
-		if err := domain.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`gen: validator failed for field "Domain.description": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -723,6 +854,9 @@ func (_u *DomainUpdateOne) sqlSave(ctx context.Context) (_node *Domain, err erro
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(domain.FieldDescription, field.TypeString, value)
 	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(domain.FieldDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(domain.FieldStatus, field.TypeInt32, value)
 	}
@@ -755,6 +889,24 @@ func (_u *DomainUpdateOne) sqlSave(ctx context.Context) (_node *Domain, err erro
 	}
 	if _u.mutation.IsNavCleared() {
 		_spec.ClearField(domain.FieldIsNav, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(domain.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(domain.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(domain.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(domain.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(domain.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(domain.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)

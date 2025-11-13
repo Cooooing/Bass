@@ -12,16 +12,20 @@ option go_package = "common/api/content/v1;v1";
 
 // 文章附言
 message ArticlePostscript {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  int64 created_by = 1002;
+  // 更新人
+  int64 updated_by = 1003;
   // 主键ID
   int64 id = 1;
   // 所属文章ID
   int64 article_id = 2;
   // 附言内容
   string content = 3;
-  // 创建时间
-  google.protobuf.Timestamp created_at = 4;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 5;
 }
 
 // Article 服务
@@ -60,9 +64,9 @@ service ContentArticleService {
   }
 
   // 查询文章
-  rpc Get (GetArticleRequest) returns (GetArticleReply) {
+  rpc Page (PageArticleRequest) returns (PageArticleReply) {
     option (google.api.http) = {
-      post: "/v1/article/get"
+      post: "/v1/article/page"
       body: "*"
     };
   }
@@ -138,10 +142,17 @@ service ContentArticleService {
 
 
 message Article {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  int64 created_by = 1002;
+  // 更新人
+  int64 updated_by = 1003;
+
   // 唯一ID
   int64 id = 1;
-  // 作者ID
-  int64 user_id = 2;
   // 标题
   string title = 3;
   // 正文内容
@@ -185,11 +196,6 @@ message Article {
   int32 lottery_participant_count = 20;
   // 抽奖获奖人数
   int32 lottery_winner_count = 21;
-
-  // 创建时间
-  google.protobuf.Timestamp created_at = 22;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 23;
 
   // 作者信息
   user.v1.User author_user = 24;
@@ -245,7 +251,7 @@ message DeleteArticleRequest {
 }
 message DeleteArticleReply {}
 
-message GetArticleRequest {
+message PageArticleRequest {
   // 分页
   common.v1.PageRequest page = 1;
   // 标签
@@ -257,7 +263,7 @@ message GetArticleRequest {
   // 类型 0-普通 1-问答 2-投票 3-抽奖
   optional int32 type = 5;
 }
-message GetArticleReply {
+message PageArticleReply {
   // 分页信息
   common.v1.PageReply page = 2;
   // 文章列表

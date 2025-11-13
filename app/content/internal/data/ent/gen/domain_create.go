@@ -33,6 +33,14 @@ func (_c *DomainCreate) SetDescription(v string) *DomainCreate {
 	return _c
 }
 
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *DomainCreate) SetNillableDescription(v *string) *DomainCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *DomainCreate) SetStatus(v int32) *DomainCreate {
 	_c.mutation.SetStatus(v)
@@ -99,6 +107,34 @@ func (_c *DomainCreate) SetIsNav(v bool) *DomainCreate {
 func (_c *DomainCreate) SetNillableIsNav(v *bool) *DomainCreate {
 	if v != nil {
 		_c.SetIsNav(*v)
+	}
+	return _c
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (_c *DomainCreate) SetCreatedBy(v int64) *DomainCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *DomainCreate) SetNillableCreatedBy(v *int64) *DomainCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *DomainCreate) SetUpdatedBy(v int64) *DomainCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *DomainCreate) SetNillableUpdatedBy(v *int64) *DomainCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
 	return _c
 }
@@ -219,14 +255,6 @@ func (_c *DomainCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Domain.name": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Description(); !ok {
-		return &ValidationError{Name: "description", err: errors.New(`gen: missing required field "Domain.description"`)}
-	}
-	if v, ok := _c.mutation.Description(); ok {
-		if err := domain.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`gen: validator failed for field "Domain.description": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.TagCount(); !ok {
 		return &ValidationError{Name: "tag_count", err: errors.New(`gen: missing required field "Domain.tag_count"`)}
 	}
@@ -268,7 +296,7 @@ func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(domain.FieldDescription, field.TypeString, value)
-		_node.Description = value
+		_node.Description = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(domain.FieldStatus, field.TypeInt32, value)
@@ -289,6 +317,14 @@ func (_c *DomainCreate) createSpec() (*Domain, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IsNav(); ok {
 		_spec.SetField(domain.FieldIsNav, field.TypeBool, value)
 		_node.IsNav = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(domain.FieldCreatedBy, field.TypeInt64, value)
+		_node.CreatedBy = &value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(domain.FieldUpdatedBy, field.TypeInt64, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(domain.FieldCreatedAt, field.TypeTime, value)

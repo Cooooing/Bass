@@ -14,12 +14,15 @@ type ArticlePostscript struct {
 }
 
 func (ArticlePostscript) Fields() []ent.Field {
-	return append([]ent.Field{
+	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
 		field.Text("content").Comment("附言内容").NotEmpty(),
 		field.Int32("status").Comment("状态 0-正常 1-隐藏").Default(0),
-	}, pkg.TimeAuditFields()...)
+	}
+	fields = append(fields, pkg.UserAuditFields()...)
+	fields = append(fields, pkg.TimeAuditFields()...)
+	return fields
 }
 
 func (ArticlePostscript) Edges() []ent.Edge {

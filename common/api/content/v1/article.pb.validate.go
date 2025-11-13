@@ -57,12 +57,6 @@ func (m *ArticlePostscript) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for ArticleId
-
-	// no validation rules for Content
-
 	if all {
 		switch v := interface{}(m.GetCreatedAt()).(type) {
 		case interface{ ValidateAll() error }:
@@ -120,6 +114,16 @@ func (m *ArticlePostscript) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for CreatedBy
+
+	// no validation rules for UpdatedBy
+
+	// no validation rules for Id
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Content
 
 	if len(errors) > 0 {
 		return ArticlePostscriptMultiError(errors)
@@ -222,48 +226,6 @@ func (m *Article) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for UserId
-
-	// no validation rules for Title
-
-	// no validation rules for Content
-
-	// no validation rules for HasPostscript
-
-	// no validation rules for RewardContent
-
-	// no validation rules for RewardPoints
-
-	// no validation rules for Status
-
-	// no validation rules for Type
-
-	// no validation rules for Commentable
-
-	// no validation rules for Anonymous
-
-	// no validation rules for ThankCount
-
-	// no validation rules for LikeCount
-
-	// no validation rules for CollectCount
-
-	// no validation rules for WatchCount
-
-	// no validation rules for ReplyCount
-
-	// no validation rules for BountyPoints
-
-	// no validation rules for AcceptedAnswerId
-
-	// no validation rules for VoteTotal
-
-	// no validation rules for LotteryParticipantCount
-
-	// no validation rules for LotteryWinnerCount
-
 	if all {
 		switch v := interface{}(m.GetCreatedAt()).(type) {
 		case interface{ ValidateAll() error }:
@@ -321,6 +283,50 @@ func (m *Article) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for CreatedBy
+
+	// no validation rules for UpdatedBy
+
+	// no validation rules for Id
+
+	// no validation rules for Title
+
+	// no validation rules for Content
+
+	// no validation rules for HasPostscript
+
+	// no validation rules for RewardContent
+
+	// no validation rules for RewardPoints
+
+	// no validation rules for Status
+
+	// no validation rules for Type
+
+	// no validation rules for Commentable
+
+	// no validation rules for Anonymous
+
+	// no validation rules for ThankCount
+
+	// no validation rules for LikeCount
+
+	// no validation rules for CollectCount
+
+	// no validation rules for WatchCount
+
+	// no validation rules for ReplyCount
+
+	// no validation rules for BountyPoints
+
+	// no validation rules for AcceptedAnswerId
+
+	// no validation rules for VoteTotal
+
+	// no validation rules for LotteryParticipantCount
+
+	// no validation rules for LotteryWinnerCount
 
 	if all {
 		switch v := interface{}(m.GetAuthorUser()).(type) {
@@ -1396,22 +1402,22 @@ var _ interface {
 	ErrorName() string
 } = DeleteArticleReplyValidationError{}
 
-// Validate checks the field values on GetArticleRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *GetArticleRequest) Validate() error {
+// Validate checks the field values on PageArticleRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PageArticleRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetArticleRequest with the rules
+// ValidateAll checks the field values on PageArticleRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetArticleRequestMultiError, or nil if none found.
-func (m *GetArticleRequest) ValidateAll() error {
+// PageArticleRequestMultiError, or nil if none found.
+func (m *PageArticleRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetArticleRequest) validate(all bool) error {
+func (m *PageArticleRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1422,7 +1428,7 @@ func (m *GetArticleRequest) validate(all bool) error {
 		switch v := interface{}(m.GetPage()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetArticleRequestValidationError{
+				errors = append(errors, PageArticleRequestValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1430,7 +1436,7 @@ func (m *GetArticleRequest) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetArticleRequestValidationError{
+				errors = append(errors, PageArticleRequestValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1439,7 +1445,7 @@ func (m *GetArticleRequest) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetArticleRequestValidationError{
+			return PageArticleRequestValidationError{
 				field:  "Page",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1464,19 +1470,19 @@ func (m *GetArticleRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetArticleRequestMultiError(errors)
+		return PageArticleRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetArticleRequestMultiError is an error wrapping multiple validation errors
-// returned by GetArticleRequest.ValidateAll() if the designated constraints
+// PageArticleRequestMultiError is an error wrapping multiple validation errors
+// returned by PageArticleRequest.ValidateAll() if the designated constraints
 // aren't met.
-type GetArticleRequestMultiError []error
+type PageArticleRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetArticleRequestMultiError) Error() string {
+func (m PageArticleRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1485,11 +1491,11 @@ func (m GetArticleRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetArticleRequestMultiError) AllErrors() []error { return m }
+func (m PageArticleRequestMultiError) AllErrors() []error { return m }
 
-// GetArticleRequestValidationError is the validation error returned by
-// GetArticleRequest.Validate if the designated constraints aren't met.
-type GetArticleRequestValidationError struct {
+// PageArticleRequestValidationError is the validation error returned by
+// PageArticleRequest.Validate if the designated constraints aren't met.
+type PageArticleRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1497,24 +1503,24 @@ type GetArticleRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetArticleRequestValidationError) Field() string { return e.field }
+func (e PageArticleRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetArticleRequestValidationError) Reason() string { return e.reason }
+func (e PageArticleRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetArticleRequestValidationError) Cause() error { return e.cause }
+func (e PageArticleRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetArticleRequestValidationError) Key() bool { return e.key }
+func (e PageArticleRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetArticleRequestValidationError) ErrorName() string {
-	return "GetArticleRequestValidationError"
+func (e PageArticleRequestValidationError) ErrorName() string {
+	return "PageArticleRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetArticleRequestValidationError) Error() string {
+func (e PageArticleRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1526,14 +1532,14 @@ func (e GetArticleRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetArticleRequest.%s: %s%s",
+		"invalid %sPageArticleRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetArticleRequestValidationError{}
+var _ error = PageArticleRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -1541,24 +1547,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetArticleRequestValidationError{}
+} = PageArticleRequestValidationError{}
 
-// Validate checks the field values on GetArticleReply with the rules defined
+// Validate checks the field values on PageArticleReply with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *GetArticleReply) Validate() error {
+func (m *PageArticleReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetArticleReply with the rules
+// ValidateAll checks the field values on PageArticleReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetArticleReplyMultiError, or nil if none found.
-func (m *GetArticleReply) ValidateAll() error {
+// PageArticleReplyMultiError, or nil if none found.
+func (m *PageArticleReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetArticleReply) validate(all bool) error {
+func (m *PageArticleReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1569,7 +1575,7 @@ func (m *GetArticleReply) validate(all bool) error {
 		switch v := interface{}(m.GetPage()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetArticleReplyValidationError{
+				errors = append(errors, PageArticleReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1577,7 +1583,7 @@ func (m *GetArticleReply) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetArticleReplyValidationError{
+				errors = append(errors, PageArticleReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1586,7 +1592,7 @@ func (m *GetArticleReply) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetArticleReplyValidationError{
+			return PageArticleReplyValidationError{
 				field:  "Page",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1601,7 +1607,7 @@ func (m *GetArticleReply) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetArticleReplyValidationError{
+					errors = append(errors, PageArticleReplyValidationError{
 						field:  fmt.Sprintf("Articles[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1609,7 +1615,7 @@ func (m *GetArticleReply) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetArticleReplyValidationError{
+					errors = append(errors, PageArticleReplyValidationError{
 						field:  fmt.Sprintf("Articles[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1618,7 +1624,7 @@ func (m *GetArticleReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetArticleReplyValidationError{
+				return PageArticleReplyValidationError{
 					field:  fmt.Sprintf("Articles[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1629,19 +1635,19 @@ func (m *GetArticleReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetArticleReplyMultiError(errors)
+		return PageArticleReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetArticleReplyMultiError is an error wrapping multiple validation errors
-// returned by GetArticleReply.ValidateAll() if the designated constraints
+// PageArticleReplyMultiError is an error wrapping multiple validation errors
+// returned by PageArticleReply.ValidateAll() if the designated constraints
 // aren't met.
-type GetArticleReplyMultiError []error
+type PageArticleReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetArticleReplyMultiError) Error() string {
+func (m PageArticleReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1650,11 +1656,11 @@ func (m GetArticleReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetArticleReplyMultiError) AllErrors() []error { return m }
+func (m PageArticleReplyMultiError) AllErrors() []error { return m }
 
-// GetArticleReplyValidationError is the validation error returned by
-// GetArticleReply.Validate if the designated constraints aren't met.
-type GetArticleReplyValidationError struct {
+// PageArticleReplyValidationError is the validation error returned by
+// PageArticleReply.Validate if the designated constraints aren't met.
+type PageArticleReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1662,22 +1668,22 @@ type GetArticleReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetArticleReplyValidationError) Field() string { return e.field }
+func (e PageArticleReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetArticleReplyValidationError) Reason() string { return e.reason }
+func (e PageArticleReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetArticleReplyValidationError) Cause() error { return e.cause }
+func (e PageArticleReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetArticleReplyValidationError) Key() bool { return e.key }
+func (e PageArticleReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetArticleReplyValidationError) ErrorName() string { return "GetArticleReplyValidationError" }
+func (e PageArticleReplyValidationError) ErrorName() string { return "PageArticleReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetArticleReplyValidationError) Error() string {
+func (e PageArticleReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1689,14 +1695,14 @@ func (e GetArticleReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetArticleReply.%s: %s%s",
+		"invalid %sPageArticleReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetArticleReplyValidationError{}
+var _ error = PageArticleReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -1704,7 +1710,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetArticleReplyValidationError{}
+} = PageArticleReplyValidationError{}
 
 // Validate checks the field values on GetArticleOneRequest with the rules
 // defined in the proto definition for this message. If any rules are

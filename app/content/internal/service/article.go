@@ -3,6 +3,7 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	"common/pkg/util"
 	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
@@ -53,7 +54,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	_, err = s.articleDomain.Add(ctx, &model.Article{
 		UserID:        user.ID,
 		Title:         req.Title,
@@ -71,7 +72,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	// 只有作者可以添加附言
 	if article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId); err != nil || article.UserID != user.ID {
 		if err != nil {
@@ -85,13 +86,13 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
 	return &v1.CollectArticleReply{}, err
 }
 
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
 		article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId)
 		if err != nil {
@@ -111,14 +112,11 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 	return &v1.DeleteArticleReply{}, err
 }
 
-func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticleRequest) (rsp *v1.GetArticleReply, err error) {
+func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (rsp *v1.PageArticleReply, err error) {
 	if req.Status != nil && *req.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, errors.New("status only be 0(normal) or 3(drafts)")
 	}
-	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
-		rsp, err = s.articleRepo.GetList(ctx, tx, req)
-		return err
-	})
+	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{})
 	return rsp, err
 }
 
@@ -127,13 +125,13 @@ func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneReques
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
 	return &v1.LikeArticleReply{}, err
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId)
 	if err != nil {
 		return nil, err

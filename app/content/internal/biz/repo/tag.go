@@ -2,6 +2,7 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
+	commonModel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
 	"context"
@@ -10,6 +11,7 @@ import (
 type TagRepo interface {
 	Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*model.Tag, error)
 	Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) ([]*model.Tag, error)
+	Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*model.Tag, error)
 
 	GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Tag, error)
 	GetList(ctx context.Context, tx *gen.Client, req *TagGetReq) ([]*model.Tag, error)
@@ -17,4 +19,11 @@ type TagRepo interface {
 }
 
 type TagGetReq struct {
+	Ids          []int64
+	UserId       *int64
+	Name         *string
+	Description  *string
+	Status       *cv1.TagStatus
+	DomainId     *int64
+	ArticleCount *commonModel.Range[int32]
 }

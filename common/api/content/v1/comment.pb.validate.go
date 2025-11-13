@@ -56,28 +56,6 @@ func (m *Comment) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for ArticleId
-
-	// no validation rules for UserId
-
-	// no validation rules for Content
-
-	// no validation rules for Level
-
-	// no validation rules for ParentId
-
-	// no validation rules for ReplyId
-
-	// no validation rules for Status
-
-	// no validation rules for ReplyCount
-
-	// no validation rules for LikeCount
-
-	// no validation rules for CollectCount
-
 	if all {
 		switch v := interface{}(m.GetCreatedAt()).(type) {
 		case interface{ ValidateAll() error }:
@@ -135,6 +113,30 @@ func (m *Comment) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for CreatedBy
+
+	// no validation rules for UpdatedBy
+
+	// no validation rules for Id
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Content
+
+	// no validation rules for Level
+
+	// no validation rules for ParentId
+
+	// no validation rules for ReplyId
+
+	// no validation rules for Status
+
+	// no validation rules for ReplyCount
+
+	// no validation rules for LikeCount
+
+	// no validation rules for CollectCount
 
 	for idx, item := range m.GetComments() {
 		_, _ = idx, item
@@ -484,35 +486,27 @@ var _ interface {
 	ErrorName() string
 } = AddCommentReplyValidationError{}
 
-// Validate checks the field values on GetCommentRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *GetCommentRequest) Validate() error {
+// Validate checks the field values on PageCommentRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PageCommentRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetCommentRequest with the rules
+// ValidateAll checks the field values on PageCommentRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetCommentRequestMultiError, or nil if none found.
-func (m *GetCommentRequest) ValidateAll() error {
+// PageCommentRequestMultiError, or nil if none found.
+func (m *PageCommentRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetCommentRequest) validate(all bool) error {
+func (m *PageCommentRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
-
-	// no validation rules for Id
-
-	// no validation rules for ArticleId
-
-	// no validation rules for Order
-
-	// no validation rules for UserId
 
 	if m.Page != nil {
 
@@ -520,7 +514,7 @@ func (m *GetCommentRequest) validate(all bool) error {
 			switch v := interface{}(m.GetPage()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetCommentRequestValidationError{
+					errors = append(errors, PageCommentRequestValidationError{
 						field:  "Page",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -528,7 +522,7 @@ func (m *GetCommentRequest) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetCommentRequestValidationError{
+					errors = append(errors, PageCommentRequestValidationError{
 						field:  "Page",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -537,7 +531,7 @@ func (m *GetCommentRequest) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetCommentRequestValidationError{
+				return PageCommentRequestValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -547,20 +541,36 @@ func (m *GetCommentRequest) validate(all bool) error {
 
 	}
 
+	if m.Id != nil {
+		// no validation rules for Id
+	}
+
+	if m.ArticleId != nil {
+		// no validation rules for ArticleId
+	}
+
+	if m.Order != nil {
+		// no validation rules for Order
+	}
+
+	if m.UserId != nil {
+		// no validation rules for UserId
+	}
+
 	if len(errors) > 0 {
-		return GetCommentRequestMultiError(errors)
+		return PageCommentRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetCommentRequestMultiError is an error wrapping multiple validation errors
-// returned by GetCommentRequest.ValidateAll() if the designated constraints
+// PageCommentRequestMultiError is an error wrapping multiple validation errors
+// returned by PageCommentRequest.ValidateAll() if the designated constraints
 // aren't met.
-type GetCommentRequestMultiError []error
+type PageCommentRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetCommentRequestMultiError) Error() string {
+func (m PageCommentRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -569,11 +579,11 @@ func (m GetCommentRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetCommentRequestMultiError) AllErrors() []error { return m }
+func (m PageCommentRequestMultiError) AllErrors() []error { return m }
 
-// GetCommentRequestValidationError is the validation error returned by
-// GetCommentRequest.Validate if the designated constraints aren't met.
-type GetCommentRequestValidationError struct {
+// PageCommentRequestValidationError is the validation error returned by
+// PageCommentRequest.Validate if the designated constraints aren't met.
+type PageCommentRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -581,24 +591,24 @@ type GetCommentRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetCommentRequestValidationError) Field() string { return e.field }
+func (e PageCommentRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetCommentRequestValidationError) Reason() string { return e.reason }
+func (e PageCommentRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetCommentRequestValidationError) Cause() error { return e.cause }
+func (e PageCommentRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetCommentRequestValidationError) Key() bool { return e.key }
+func (e PageCommentRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetCommentRequestValidationError) ErrorName() string {
-	return "GetCommentRequestValidationError"
+func (e PageCommentRequestValidationError) ErrorName() string {
+	return "PageCommentRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetCommentRequestValidationError) Error() string {
+func (e PageCommentRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -610,14 +620,14 @@ func (e GetCommentRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetCommentRequest.%s: %s%s",
+		"invalid %sPageCommentRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetCommentRequestValidationError{}
+var _ error = PageCommentRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -625,24 +635,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetCommentRequestValidationError{}
+} = PageCommentRequestValidationError{}
 
-// Validate checks the field values on GetCommentReply with the rules defined
+// Validate checks the field values on PageCommentReply with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *GetCommentReply) Validate() error {
+func (m *PageCommentReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetCommentReply with the rules
+// ValidateAll checks the field values on PageCommentReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetCommentReplyMultiError, or nil if none found.
-func (m *GetCommentReply) ValidateAll() error {
+// PageCommentReplyMultiError, or nil if none found.
+func (m *PageCommentReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetCommentReply) validate(all bool) error {
+func (m *PageCommentReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -653,7 +663,7 @@ func (m *GetCommentReply) validate(all bool) error {
 		switch v := interface{}(m.GetPage()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetCommentReplyValidationError{
+				errors = append(errors, PageCommentReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -661,7 +671,7 @@ func (m *GetCommentReply) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetCommentReplyValidationError{
+				errors = append(errors, PageCommentReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -670,7 +680,7 @@ func (m *GetCommentReply) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetCommentReplyValidationError{
+			return PageCommentReplyValidationError{
 				field:  "Page",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -685,7 +695,7 @@ func (m *GetCommentReply) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetCommentReplyValidationError{
+					errors = append(errors, PageCommentReplyValidationError{
 						field:  fmt.Sprintf("Comments[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -693,7 +703,7 @@ func (m *GetCommentReply) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetCommentReplyValidationError{
+					errors = append(errors, PageCommentReplyValidationError{
 						field:  fmt.Sprintf("Comments[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -702,7 +712,7 @@ func (m *GetCommentReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetCommentReplyValidationError{
+				return PageCommentReplyValidationError{
 					field:  fmt.Sprintf("Comments[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -713,19 +723,19 @@ func (m *GetCommentReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetCommentReplyMultiError(errors)
+		return PageCommentReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetCommentReplyMultiError is an error wrapping multiple validation errors
-// returned by GetCommentReply.ValidateAll() if the designated constraints
+// PageCommentReplyMultiError is an error wrapping multiple validation errors
+// returned by PageCommentReply.ValidateAll() if the designated constraints
 // aren't met.
-type GetCommentReplyMultiError []error
+type PageCommentReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetCommentReplyMultiError) Error() string {
+func (m PageCommentReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -734,11 +744,11 @@ func (m GetCommentReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetCommentReplyMultiError) AllErrors() []error { return m }
+func (m PageCommentReplyMultiError) AllErrors() []error { return m }
 
-// GetCommentReplyValidationError is the validation error returned by
-// GetCommentReply.Validate if the designated constraints aren't met.
-type GetCommentReplyValidationError struct {
+// PageCommentReplyValidationError is the validation error returned by
+// PageCommentReply.Validate if the designated constraints aren't met.
+type PageCommentReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -746,22 +756,22 @@ type GetCommentReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetCommentReplyValidationError) Field() string { return e.field }
+func (e PageCommentReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetCommentReplyValidationError) Reason() string { return e.reason }
+func (e PageCommentReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetCommentReplyValidationError) Cause() error { return e.cause }
+func (e PageCommentReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetCommentReplyValidationError) Key() bool { return e.key }
+func (e PageCommentReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetCommentReplyValidationError) ErrorName() string { return "GetCommentReplyValidationError" }
+func (e PageCommentReplyValidationError) ErrorName() string { return "PageCommentReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetCommentReplyValidationError) Error() string {
+func (e PageCommentReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -773,14 +783,14 @@ func (e GetCommentReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetCommentReply.%s: %s%s",
+		"invalid %sPageCommentReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetCommentReplyValidationError{}
+var _ error = PageCommentReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -788,7 +798,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetCommentReplyValidationError{}
+} = PageCommentReplyValidationError{}
 
 // Validate checks the field values on LikeCommentRequest with the rules
 // defined in the proto definition for this message. If any rules are

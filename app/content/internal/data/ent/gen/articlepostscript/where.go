@@ -70,6 +70,16 @@ func Status(v int32) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldStatus, v))
 }
 
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldEQ(FieldCreatedAt, v))
@@ -203,6 +213,106 @@ func StatusLT(v int32) predicate.ArticlePostscript {
 // StatusLTE applies the LTE predicate on the "status" field.
 func StatusLTE(v int32) predicate.ArticlePostscript {
 	return predicate.ArticlePostscript(sql.FieldLTE(FieldStatus, v))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
+func CreatedByIsNil() predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldIsNull(FieldCreatedBy))
+}
+
+// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
+func CreatedByNotNil() predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNotNull(FieldCreatedBy))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v int64) predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.ArticlePostscript {
+	return predicate.ArticlePostscript(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

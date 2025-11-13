@@ -57,6 +57,10 @@ type Article struct {
 	LotteryParticipantCount int32 `json:"lottery_participant_count,omitempty"`
 	// 抽奖获奖人数
 	LotteryWinnerCount int32 `json:"lottery_winner_count,omitempty"`
+	// 创建人ID
+	CreatedBy *int64 `json:"created_by,omitempty"`
+	// 更新人ID
+	UpdatedBy *int64 `json:"updated_by,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -147,7 +151,7 @@ func (*Article) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous:
 			values[i] = new(sql.NullBool)
-		case article.FieldID, article.FieldUserID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount:
+		case article.FieldID, article.FieldUserID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount, article.FieldCreatedBy, article.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case article.FieldTitle, article.FieldContent, article.FieldRewardContent:
 			values[i] = new(sql.NullString)
@@ -295,6 +299,20 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.LotteryWinnerCount = int32(value.Int64)
 			}
+		case article.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = new(int64)
+				*_m.CreatedBy = value.Int64
+			}
+		case article.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = new(int64)
+				*_m.UpdatedBy = value.Int64
+			}
 		case article.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -436,6 +454,16 @@ func (_m *Article) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("lottery_winner_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.LotteryWinnerCount))
+	builder.WriteString(", ")
+	if v := _m.CreatedBy; v != nil {
+		builder.WriteString("created_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

@@ -29,16 +29,20 @@ const (
 // 文章附言
 type ArticlePostscript struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	// 更新人
+	UpdatedBy int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
 	// 主键ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// 所属文章ID
 	ArticleId int64 `protobuf:"varint,2,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
 	// 附言内容
-	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
-	// 创建时间
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	// 更新时间
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Content       string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -73,6 +77,34 @@ func (*ArticlePostscript) Descriptor() ([]byte, []int) {
 	return file_content_v1_article_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *ArticlePostscript) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *ArticlePostscript) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *ArticlePostscript) GetCreatedBy() int64 {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return 0
+}
+
+func (x *ArticlePostscript) GetUpdatedBy() int64 {
+	if x != nil {
+		return x.UpdatedBy
+	}
+	return 0
+}
+
 func (x *ArticlePostscript) GetId() int64 {
 	if x != nil {
 		return x.Id
@@ -94,26 +126,18 @@ func (x *ArticlePostscript) GetContent() string {
 	return ""
 }
 
-func (x *ArticlePostscript) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *ArticlePostscript) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
 type Article struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	// 更新人
+	UpdatedBy int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
 	// 唯一ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// 作者ID
-	UserId int64 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	// 标题
 	Title string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
 	// 正文内容
@@ -152,10 +176,6 @@ type Article struct {
 	LotteryParticipantCount int32 `protobuf:"varint,20,opt,name=lottery_participant_count,json=lotteryParticipantCount,proto3" json:"lottery_participant_count,omitempty"`
 	// 抽奖获奖人数
 	LotteryWinnerCount int32 `protobuf:"varint,21,opt,name=lottery_winner_count,json=lotteryWinnerCount,proto3" json:"lottery_winner_count,omitempty"`
-	// 创建时间
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	// 更新时间
-	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 作者信息
 	AuthorUser *v1.User `protobuf:"bytes,24,opt,name=author_user,json=authorUser,proto3" json:"author_user,omitempty"`
 	// 最后回复用户
@@ -198,16 +218,37 @@ func (*Article) Descriptor() ([]byte, []int) {
 	return file_content_v1_article_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Article) GetId() int64 {
+func (x *Article) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.Id
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Article) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *Article) GetCreatedBy() int64 {
+	if x != nil {
+		return x.CreatedBy
 	}
 	return 0
 }
 
-func (x *Article) GetUserId() int64 {
+func (x *Article) GetUpdatedBy() int64 {
 	if x != nil {
-		return x.UserId
+		return x.UpdatedBy
+	}
+	return 0
+}
+
+func (x *Article) GetId() int64 {
+	if x != nil {
+		return x.Id
 	}
 	return 0
 }
@@ -343,20 +384,6 @@ func (x *Article) GetLotteryWinnerCount() int32 {
 		return x.LotteryWinnerCount
 	}
 	return 0
-}
-
-func (x *Article) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *Article) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
 }
 
 func (x *Article) GetAuthorUser() *v1.User {
@@ -792,7 +819,7 @@ func (*DeleteArticleReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_article_proto_rawDescGZIP(), []int{9}
 }
 
-type GetArticleRequest struct {
+type PageArticleRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 分页
 	Page *v11.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
@@ -808,20 +835,20 @@ type GetArticleRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetArticleRequest) Reset() {
-	*x = GetArticleRequest{}
+func (x *PageArticleRequest) Reset() {
+	*x = PageArticleRequest{}
 	mi := &file_content_v1_article_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetArticleRequest) String() string {
+func (x *PageArticleRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetArticleRequest) ProtoMessage() {}
+func (*PageArticleRequest) ProtoMessage() {}
 
-func (x *GetArticleRequest) ProtoReflect() protoreflect.Message {
+func (x *PageArticleRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_content_v1_article_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -833,47 +860,47 @@ func (x *GetArticleRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetArticleRequest.ProtoReflect.Descriptor instead.
-func (*GetArticleRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PageArticleRequest.ProtoReflect.Descriptor instead.
+func (*PageArticleRequest) Descriptor() ([]byte, []int) {
 	return file_content_v1_article_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *GetArticleRequest) GetPage() *v11.PageRequest {
+func (x *PageArticleRequest) GetPage() *v11.PageRequest {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
-func (x *GetArticleRequest) GetTagId() int64 {
+func (x *PageArticleRequest) GetTagId() int64 {
 	if x != nil && x.TagId != nil {
 		return *x.TagId
 	}
 	return 0
 }
 
-func (x *GetArticleRequest) GetDomainId() int64 {
+func (x *PageArticleRequest) GetDomainId() int64 {
 	if x != nil && x.DomainId != nil {
 		return *x.DomainId
 	}
 	return 0
 }
 
-func (x *GetArticleRequest) GetStatus() int32 {
+func (x *PageArticleRequest) GetStatus() int32 {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
 	return 0
 }
 
-func (x *GetArticleRequest) GetType() int32 {
+func (x *PageArticleRequest) GetType() int32 {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
 	return 0
 }
 
-type GetArticleReply struct {
+type PageArticleReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 分页信息
 	Page *v11.PageReply `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
@@ -883,20 +910,20 @@ type GetArticleReply struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetArticleReply) Reset() {
-	*x = GetArticleReply{}
+func (x *PageArticleReply) Reset() {
+	*x = PageArticleReply{}
 	mi := &file_content_v1_article_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetArticleReply) String() string {
+func (x *PageArticleReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetArticleReply) ProtoMessage() {}
+func (*PageArticleReply) ProtoMessage() {}
 
-func (x *GetArticleReply) ProtoReflect() protoreflect.Message {
+func (x *PageArticleReply) ProtoReflect() protoreflect.Message {
 	mi := &file_content_v1_article_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -908,19 +935,19 @@ func (x *GetArticleReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetArticleReply.ProtoReflect.Descriptor instead.
-func (*GetArticleReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use PageArticleReply.ProtoReflect.Descriptor instead.
+func (*PageArticleReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_article_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *GetArticleReply) GetPage() *v11.PageReply {
+func (x *PageArticleReply) GetPage() *v11.PageReply {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
-func (x *GetArticleReply) GetArticles() []*Article {
+func (x *PageArticleReply) GetArticles() []*Article {
 	if x != nil {
 		return x.Articles
 	}
@@ -1831,19 +1858,30 @@ var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xd2\x01\n" +
-	"\x11ArticlePostscript\x12\x0e\n" +
+	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x94\x02\n" +
+	"\x11ArticlePostscript\x12:\n" +
+	"\n" +
+	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
+	"\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x1e\n" +
+	"\n" +
+	"created_by\x18\xea\a \x01(\x03R\tcreatedBy\x12\x1e\n" +
+	"\n" +
+	"updated_by\x18\xeb\a \x01(\x03R\tupdatedBy\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\x129\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\"\xe2\b\n" +
+	"\aArticle\x12:\n" +
 	"\n" +
-	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
-	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xb9\b\n" +
-	"\aArticle\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x14\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x1e\n" +
+	"\n" +
+	"created_by\x18\xea\a \x01(\x03R\tcreatedBy\x12\x1e\n" +
+	"\n" +
+	"updated_by\x18\xeb\a \x01(\x03R\tupdatedBy\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
 	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12%\n" +
@@ -1869,10 +1907,6 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"vote_total\x18\x13 \x01(\x05R\tvoteTotal\x12:\n" +
 	"\x19lottery_participant_count\x18\x14 \x01(\x05R\x17lotteryParticipantCount\x120\n" +
 	"\x14lottery_winner_count\x18\x15 \x01(\x05R\x12lotteryWinnerCount\x129\n" +
-	"\n" +
-	"created_at\x18\x16 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\x17 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\vauthor_user\x18\x18 \x01(\v2\x18.common.api.user.v1.UserR\n" +
 	"authorUser\x127\n" +
 	"\n" +
@@ -1903,8 +1937,8 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x14DeleteArticleRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x01 \x01(\x03R\tarticleId\"\x14\n" +
-	"\x12DeleteArticleReply\"\xe7\x01\n" +
-	"\x11GetArticleRequest\x125\n" +
+	"\x12DeleteArticleReply\"\xe8\x01\n" +
+	"\x12PageArticleRequest\x125\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12\x19\n" +
 	"\x05tagId\x18\x02 \x01(\x03H\x00R\x05tagId\x88\x01\x01\x12\x1f\n" +
 	"\bdomainId\x18\x03 \x01(\x03H\x01R\bdomainId\x88\x01\x01\x12\x1b\n" +
@@ -1913,8 +1947,8 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x06_tagIdB\v\n" +
 	"\t_domainIdB\t\n" +
 	"\a_statusB\a\n" +
-	"\x05_type\"\x82\x01\n" +
-	"\x0fGetArticleReply\x123\n" +
+	"\x05_type\"\x83\x01\n" +
+	"\x10PageArticleReply\x123\n" +
 	"\x04page\x18\x02 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
 	"\barticles\x18\x01 \x03(\v2\x1e.common.api.content.v1.ArticleR\barticles\"5\n" +
 	"\x14GetArticleOneRequest\x12\x1d\n" +
@@ -1970,13 +2004,13 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\rreward_points\x18\x06 \x01(\x05R\frewardPoints\x12\x16\n" +
 	"\x06status\x18\a \x01(\x05R\x06status\x12\x12\n" +
 	"\x04type\x18\b \x01(\x05R\x04type\x12#\n" +
-	"\rbounty_points\x18\t \x01(\x05R\fbountyPoints2\xbc\r\n" +
+	"\rbounty_points\x18\t \x01(\x05R\fbountyPoints2\xc0\r\n" +
 	"\x15ContentArticleService\x12s\n" +
 	"\x03Add\x12(.common.api.content.v1.AddArticleRequest\x1a&.common.api.content.v1.AddArticleReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/article/add\x12\x83\x01\n" +
 	"\aPublish\x12,.common.api.content.v1.PublishArticleRequest\x1a*.common.api.content.v1.PublishArticleReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/article/publish\x12\x7f\n" +
 	"\x06Update\x12+.common.api.content.v1.UpdateArticleRequest\x1a).common.api.content.v1.UpdateArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/update\x12\x7f\n" +
-	"\x06Delete\x12+.common.api.content.v1.DeleteArticleRequest\x1a).common.api.content.v1.DeleteArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/delete\x12s\n" +
-	"\x03Get\x12(.common.api.content.v1.GetArticleRequest\x1a&.common.api.content.v1.GetArticleReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/article/get\x12\x7f\n" +
+	"\x06Delete\x12+.common.api.content.v1.DeleteArticleRequest\x1a).common.api.content.v1.DeleteArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/delete\x12w\n" +
+	"\x04Page\x12).common.api.content.v1.PageArticleRequest\x1a'.common.api.content.v1.PageArticleReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/article/page\x12\x7f\n" +
 	"\x06GetOne\x12+.common.api.content.v1.GetArticleOneRequest\x1a).common.api.content.v1.GetArticleOneReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/getOne\x12\x9b\x01\n" +
 	"\rAddPostscript\x122.common.api.content.v1.AddPostscriptArticleRequest\x1a0.common.api.content.v1.AddPostscriptArticleReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/article/addPostscript\x12\x7f\n" +
 	"\x06Reward\x12+.common.api.content.v1.RewardArticleRequest\x1a).common.api.content.v1.RewardArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/reward\x12{\n" +
@@ -2010,8 +2044,8 @@ var file_content_v1_article_proto_goTypes = []any{
 	(*UpdateArticleReply)(nil),          // 7: common.api.content.v1.UpdateArticleReply
 	(*DeleteArticleRequest)(nil),        // 8: common.api.content.v1.DeleteArticleRequest
 	(*DeleteArticleReply)(nil),          // 9: common.api.content.v1.DeleteArticleReply
-	(*GetArticleRequest)(nil),           // 10: common.api.content.v1.GetArticleRequest
-	(*GetArticleReply)(nil),             // 11: common.api.content.v1.GetArticleReply
+	(*PageArticleRequest)(nil),          // 10: common.api.content.v1.PageArticleRequest
+	(*PageArticleReply)(nil),            // 11: common.api.content.v1.PageArticleReply
 	(*GetArticleOneRequest)(nil),        // 12: common.api.content.v1.GetArticleOneRequest
 	(*GetArticleOneReply)(nil),          // 13: common.api.content.v1.GetArticleOneReply
 	(*AddPostscriptArticleRequest)(nil), // 14: common.api.content.v1.AddPostscriptArticleRequest
@@ -2045,16 +2079,16 @@ var file_content_v1_article_proto_depIdxs = []int32{
 	32, // 5: common.api.content.v1.Article.reply_user:type_name -> common.api.user.v1.User
 	31, // 6: common.api.content.v1.Article.replied_at:type_name -> google.protobuf.Timestamp
 	0,  // 7: common.api.content.v1.Article.postscripts:type_name -> common.api.content.v1.ArticlePostscript
-	33, // 8: common.api.content.v1.GetArticleRequest.page:type_name -> common.api.common.v1.PageRequest
-	34, // 9: common.api.content.v1.GetArticleReply.page:type_name -> common.api.common.v1.PageReply
-	1,  // 10: common.api.content.v1.GetArticleReply.articles:type_name -> common.api.content.v1.Article
+	33, // 8: common.api.content.v1.PageArticleRequest.page:type_name -> common.api.common.v1.PageRequest
+	34, // 9: common.api.content.v1.PageArticleReply.page:type_name -> common.api.common.v1.PageReply
+	1,  // 10: common.api.content.v1.PageArticleReply.articles:type_name -> common.api.content.v1.Article
 	1,  // 11: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
 	32, // 12: common.api.content.v1.GetArticleOneReply.user:type_name -> common.api.user.v1.User
 	2,  // 13: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
 	4,  // 14: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
 	6,  // 15: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
 	8,  // 16: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
-	10, // 17: common.api.content.v1.ContentArticleService.Get:input_type -> common.api.content.v1.GetArticleRequest
+	10, // 17: common.api.content.v1.ContentArticleService.Page:input_type -> common.api.content.v1.PageArticleRequest
 	12, // 18: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
 	14, // 19: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
 	16, // 20: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
@@ -2067,7 +2101,7 @@ var file_content_v1_article_proto_depIdxs = []int32{
 	5,  // 27: common.api.content.v1.ContentArticleService.Publish:output_type -> common.api.content.v1.PublishArticleReply
 	7,  // 28: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
 	9,  // 29: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
-	11, // 30: common.api.content.v1.ContentArticleService.Get:output_type -> common.api.content.v1.GetArticleReply
+	11, // 30: common.api.content.v1.ContentArticleService.Page:output_type -> common.api.content.v1.PageArticleReply
 	13, // 31: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
 	15, // 32: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
 	17, // 33: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply

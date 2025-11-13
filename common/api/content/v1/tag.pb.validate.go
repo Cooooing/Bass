@@ -35,21 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Tag with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
-func (m *Tag) Validate() error {
+// Validate checks the field values on TagReply with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *TagReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Tag with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in TagMultiError, or nil if none found.
-func (m *Tag) ValidateAll() error {
+// ValidateAll checks the field values on TagReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in TagReplyMultiError, or nil
+// if none found.
+func (m *TagReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Tag) validate(all bool) error {
+func (m *TagReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -58,89 +59,107 @@ func (m *Tag) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for UserId
-
 	// no validation rules for Name
-
-	// no validation rules for Description
-
-	// no validation rules for DomainId
 
 	// no validation rules for Status
 
 	// no validation rules for ArticleCount
 
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TagValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	if m.CreatedAt != nil {
+
+		if all {
+			switch v := interface{}(m.GetCreatedAt()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, TagReplyValidationError{
+						field:  "CreatedAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, TagReplyValidationError{
+						field:  "CreatedAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, TagValidationError{
+				return TagReplyValidationError{
 					field:  "CreatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return TagValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
-	if all {
-		switch v := interface{}(m.GetUpdatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TagValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	if m.UpdatedAt != nil {
+
+		if all {
+			switch v := interface{}(m.GetUpdatedAt()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, TagReplyValidationError{
+						field:  "UpdatedAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, TagReplyValidationError{
+						field:  "UpdatedAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, TagValidationError{
+				return TagReplyValidationError{
 					field:  "UpdatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return TagValidationError{
-				field:  "UpdatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
+	}
+
+	if m.CreatedBy != nil {
+		// no validation rules for CreatedBy
+	}
+
+	if m.UpdatedBy != nil {
+		// no validation rules for UpdatedBy
+	}
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if m.DomainId != nil {
+		// no validation rules for DomainId
 	}
 
 	if len(errors) > 0 {
-		return TagMultiError(errors)
+		return TagReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// TagMultiError is an error wrapping multiple validation errors returned by
-// Tag.ValidateAll() if the designated constraints aren't met.
-type TagMultiError []error
+// TagReplyMultiError is an error wrapping multiple validation errors returned
+// by TagReply.ValidateAll() if the designated constraints aren't met.
+type TagReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m TagMultiError) Error() string {
+func (m TagReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -149,11 +168,11 @@ func (m TagMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m TagMultiError) AllErrors() []error { return m }
+func (m TagReplyMultiError) AllErrors() []error { return m }
 
-// TagValidationError is the validation error returned by Tag.Validate if the
-// designated constraints aren't met.
-type TagValidationError struct {
+// TagReplyValidationError is the validation error returned by
+// TagReply.Validate if the designated constraints aren't met.
+type TagReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -161,22 +180,22 @@ type TagValidationError struct {
 }
 
 // Field function returns field value.
-func (e TagValidationError) Field() string { return e.field }
+func (e TagReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TagValidationError) Reason() string { return e.reason }
+func (e TagReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TagValidationError) Cause() error { return e.cause }
+func (e TagReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TagValidationError) Key() bool { return e.key }
+func (e TagReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TagValidationError) ErrorName() string { return "TagValidationError" }
+func (e TagReplyValidationError) ErrorName() string { return "TagReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TagValidationError) Error() string {
+func (e TagReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -188,14 +207,14 @@ func (e TagValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTag.%s: %s%s",
+		"invalid %sTagReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TagValidationError{}
+var _ error = TagReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -203,44 +222,190 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TagValidationError{}
+} = TagReplyValidationError{}
 
-// Validate checks the field values on AddTagRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on TagSave with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *AddTagRequest) Validate() error {
+func (m *TagSave) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AddTagRequest with the rules defined
+// ValidateAll checks the field values on TagSave with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in TagSaveMultiError, or nil if none found.
+func (m *TagSave) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TagSave) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Status
+
+	// no validation rules for Name
+
+	if m.DomainId != nil {
+		// no validation rules for DomainId
+	}
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if len(errors) > 0 {
+		return TagSaveMultiError(errors)
+	}
+
+	return nil
+}
+
+// TagSaveMultiError is an error wrapping multiple validation errors returned
+// by TagSave.ValidateAll() if the designated constraints aren't met.
+type TagSaveMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TagSaveMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TagSaveMultiError) AllErrors() []error { return m }
+
+// TagSaveValidationError is the validation error returned by TagSave.Validate
+// if the designated constraints aren't met.
+type TagSaveValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TagSaveValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TagSaveValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TagSaveValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TagSaveValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TagSaveValidationError) ErrorName() string { return "TagSaveValidationError" }
+
+// Error satisfies the builtin error interface
+func (e TagSaveValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTagSave.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TagSaveValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TagSaveValidationError{}
+
+// Validate checks the field values on AddTagsRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *AddTagsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddTagsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in AddTagRequestMultiError, or
-// nil if none found.
-func (m *AddTagRequest) ValidateAll() error {
+// result is a list of violation errors wrapped in AddTagsRequestMultiError,
+// or nil if none found.
+func (m *AddTagsRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AddTagRequest) validate(all bool) error {
+func (m *AddTagsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	for idx, item := range m.GetTags() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AddTagsRequestValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AddTagsRequestValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AddTagsRequestValidationError{
+					field:  fmt.Sprintf("Tags[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
-		return AddTagRequestMultiError(errors)
+		return AddTagsRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// AddTagRequestMultiError is an error wrapping multiple validation errors
-// returned by AddTagRequest.ValidateAll() if the designated constraints
+// AddTagsRequestMultiError is an error wrapping multiple validation errors
+// returned by AddTagsRequest.ValidateAll() if the designated constraints
 // aren't met.
-type AddTagRequestMultiError []error
+type AddTagsRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AddTagRequestMultiError) Error() string {
+func (m AddTagsRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -249,11 +414,11 @@ func (m AddTagRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AddTagRequestMultiError) AllErrors() []error { return m }
+func (m AddTagsRequestMultiError) AllErrors() []error { return m }
 
-// AddTagRequestValidationError is the validation error returned by
-// AddTagRequest.Validate if the designated constraints aren't met.
-type AddTagRequestValidationError struct {
+// AddTagsRequestValidationError is the validation error returned by
+// AddTagsRequest.Validate if the designated constraints aren't met.
+type AddTagsRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -261,22 +426,22 @@ type AddTagRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e AddTagRequestValidationError) Field() string { return e.field }
+func (e AddTagsRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AddTagRequestValidationError) Reason() string { return e.reason }
+func (e AddTagsRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AddTagRequestValidationError) Cause() error { return e.cause }
+func (e AddTagsRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AddTagRequestValidationError) Key() bool { return e.key }
+func (e AddTagsRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AddTagRequestValidationError) ErrorName() string { return "AddTagRequestValidationError" }
+func (e AddTagsRequestValidationError) ErrorName() string { return "AddTagsRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AddTagRequestValidationError) Error() string {
+func (e AddTagsRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -288,14 +453,14 @@ func (e AddTagRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAddTagRequest.%s: %s%s",
+		"invalid %sAddTagsRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AddTagRequestValidationError{}
+var _ error = AddTagsRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -303,43 +468,77 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AddTagRequestValidationError{}
+} = AddTagsRequestValidationError{}
 
-// Validate checks the field values on AddTagReply with the rules defined in
+// Validate checks the field values on AddTagsReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *AddTagReply) Validate() error {
+func (m *AddTagsReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AddTagReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in AddTagReplyMultiError, or
+// ValidateAll checks the field values on AddTagsReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in AddTagsReplyMultiError, or
 // nil if none found.
-func (m *AddTagReply) ValidateAll() error {
+func (m *AddTagsReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AddTagReply) validate(all bool) error {
+func (m *AddTagsReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	for idx, item := range m.GetTags() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AddTagsReplyValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AddTagsReplyValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AddTagsReplyValidationError{
+					field:  fmt.Sprintf("Tags[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
-		return AddTagReplyMultiError(errors)
+		return AddTagsReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// AddTagReplyMultiError is an error wrapping multiple validation errors
-// returned by AddTagReply.ValidateAll() if the designated constraints aren't met.
-type AddTagReplyMultiError []error
+// AddTagsReplyMultiError is an error wrapping multiple validation errors
+// returned by AddTagsReply.ValidateAll() if the designated constraints aren't met.
+type AddTagsReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AddTagReplyMultiError) Error() string {
+func (m AddTagsReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -348,11 +547,11 @@ func (m AddTagReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AddTagReplyMultiError) AllErrors() []error { return m }
+func (m AddTagsReplyMultiError) AllErrors() []error { return m }
 
-// AddTagReplyValidationError is the validation error returned by
-// AddTagReply.Validate if the designated constraints aren't met.
-type AddTagReplyValidationError struct {
+// AddTagsReplyValidationError is the validation error returned by
+// AddTagsReply.Validate if the designated constraints aren't met.
+type AddTagsReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -360,22 +559,22 @@ type AddTagReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e AddTagReplyValidationError) Field() string { return e.field }
+func (e AddTagsReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AddTagReplyValidationError) Reason() string { return e.reason }
+func (e AddTagsReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AddTagReplyValidationError) Cause() error { return e.cause }
+func (e AddTagsReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AddTagReplyValidationError) Key() bool { return e.key }
+func (e AddTagsReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AddTagReplyValidationError) ErrorName() string { return "AddTagReplyValidationError" }
+func (e AddTagsReplyValidationError) ErrorName() string { return "AddTagsReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AddTagReplyValidationError) Error() string {
+func (e AddTagsReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -387,14 +586,14 @@ func (e AddTagReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAddTagReply.%s: %s%s",
+		"invalid %sAddTagsReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AddTagReplyValidationError{}
+var _ error = AddTagsReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -402,7 +601,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AddTagReplyValidationError{}
+} = AddTagsReplyValidationError{}
 
 // Validate checks the field values on UpdateTagRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -426,15 +625,34 @@ func (m *UpdateTagRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for DomainId
-
-	// no validation rules for Status
-
-	// no validation rules for Name
-
-	// no validation rules for Description
+	if all {
+		switch v := interface{}(m.GetTag()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateTagRequestValidationError{
+					field:  "Tag",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateTagRequestValidationError{
+					field:  "Tag",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTag()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateTagRequestValidationError{
+				field:  "Tag",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return UpdateTagRequestMultiError(errors)
@@ -536,6 +754,35 @@ func (m *UpdateTagReply) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetTag()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateTagReplyValidationError{
+					field:  "Tag",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateTagReplyValidationError{
+					field:  "Tag",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTag()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateTagReplyValidationError{
+				field:  "Tag",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return UpdateTagReplyMultiError(errors)
 	}
@@ -614,75 +861,83 @@ var _ interface {
 	ErrorName() string
 } = UpdateTagReplyValidationError{}
 
-// Validate checks the field values on GetTagRequest with the rules defined in
+// Validate checks the field values on PageTagRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *GetTagRequest) Validate() error {
+func (m *PageTagRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetTagRequest with the rules defined
+// ValidateAll checks the field values on PageTagRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in GetTagRequestMultiError, or
-// nil if none found.
-func (m *GetTagRequest) ValidateAll() error {
+// result is a list of violation errors wrapped in PageTagRequestMultiError,
+// or nil if none found.
+func (m *PageTagRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetTagRequest) validate(all bool) error {
+func (m *PageTagRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if all {
-		switch v := interface{}(m.GetPage()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetTagRequestValidationError{
-					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	if m.Page != nil {
+
+		if all {
+			switch v := interface{}(m.GetPage()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PageTagRequestValidationError{
+						field:  "Page",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PageTagRequestValidationError{
+						field:  "Page",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetTagRequestValidationError{
+				return PageTagRequestValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetTagRequestValidationError{
-				field:  "Page",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
-	// no validation rules for Id
+	if m.Id != nil {
+		// no validation rules for Id
+	}
 
-	// no validation rules for DomainId
+	if m.DomainId != nil {
+		// no validation rules for DomainId
+	}
 
 	if len(errors) > 0 {
-		return GetTagRequestMultiError(errors)
+		return PageTagRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetTagRequestMultiError is an error wrapping multiple validation errors
-// returned by GetTagRequest.ValidateAll() if the designated constraints
+// PageTagRequestMultiError is an error wrapping multiple validation errors
+// returned by PageTagRequest.ValidateAll() if the designated constraints
 // aren't met.
-type GetTagRequestMultiError []error
+type PageTagRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetTagRequestMultiError) Error() string {
+func (m PageTagRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -691,11 +946,11 @@ func (m GetTagRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetTagRequestMultiError) AllErrors() []error { return m }
+func (m PageTagRequestMultiError) AllErrors() []error { return m }
 
-// GetTagRequestValidationError is the validation error returned by
-// GetTagRequest.Validate if the designated constraints aren't met.
-type GetTagRequestValidationError struct {
+// PageTagRequestValidationError is the validation error returned by
+// PageTagRequest.Validate if the designated constraints aren't met.
+type PageTagRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -703,22 +958,22 @@ type GetTagRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetTagRequestValidationError) Field() string { return e.field }
+func (e PageTagRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetTagRequestValidationError) Reason() string { return e.reason }
+func (e PageTagRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetTagRequestValidationError) Cause() error { return e.cause }
+func (e PageTagRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetTagRequestValidationError) Key() bool { return e.key }
+func (e PageTagRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetTagRequestValidationError) ErrorName() string { return "GetTagRequestValidationError" }
+func (e PageTagRequestValidationError) ErrorName() string { return "PageTagRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetTagRequestValidationError) Error() string {
+func (e PageTagRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -730,14 +985,14 @@ func (e GetTagRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetTagRequest.%s: %s%s",
+		"invalid %sPageTagRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetTagRequestValidationError{}
+var _ error = PageTagRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -745,24 +1000,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetTagRequestValidationError{}
+} = PageTagRequestValidationError{}
 
-// Validate checks the field values on GetTagReply with the rules defined in
+// Validate checks the field values on PageTagReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *GetTagReply) Validate() error {
+func (m *PageTagReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetTagReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in GetTagReplyMultiError, or
+// ValidateAll checks the field values on PageTagReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PageTagReplyMultiError, or
 // nil if none found.
-func (m *GetTagReply) ValidateAll() error {
+func (m *PageTagReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetTagReply) validate(all bool) error {
+func (m *PageTagReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -773,7 +1028,7 @@ func (m *GetTagReply) validate(all bool) error {
 		switch v := interface{}(m.GetPage()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetTagReplyValidationError{
+				errors = append(errors, PageTagReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -781,7 +1036,7 @@ func (m *GetTagReply) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetTagReplyValidationError{
+				errors = append(errors, PageTagReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -790,7 +1045,7 @@ func (m *GetTagReply) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetTagReplyValidationError{
+			return PageTagReplyValidationError{
 				field:  "Page",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -805,7 +1060,7 @@ func (m *GetTagReply) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetTagReplyValidationError{
+					errors = append(errors, PageTagReplyValidationError{
 						field:  fmt.Sprintf("Tags[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -813,7 +1068,7 @@ func (m *GetTagReply) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetTagReplyValidationError{
+					errors = append(errors, PageTagReplyValidationError{
 						field:  fmt.Sprintf("Tags[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -822,7 +1077,7 @@ func (m *GetTagReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetTagReplyValidationError{
+				return PageTagReplyValidationError{
 					field:  fmt.Sprintf("Tags[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -833,18 +1088,18 @@ func (m *GetTagReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetTagReplyMultiError(errors)
+		return PageTagReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetTagReplyMultiError is an error wrapping multiple validation errors
-// returned by GetTagReply.ValidateAll() if the designated constraints aren't met.
-type GetTagReplyMultiError []error
+// PageTagReplyMultiError is an error wrapping multiple validation errors
+// returned by PageTagReply.ValidateAll() if the designated constraints aren't met.
+type PageTagReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetTagReplyMultiError) Error() string {
+func (m PageTagReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -853,11 +1108,11 @@ func (m GetTagReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetTagReplyMultiError) AllErrors() []error { return m }
+func (m PageTagReplyMultiError) AllErrors() []error { return m }
 
-// GetTagReplyValidationError is the validation error returned by
-// GetTagReply.Validate if the designated constraints aren't met.
-type GetTagReplyValidationError struct {
+// PageTagReplyValidationError is the validation error returned by
+// PageTagReply.Validate if the designated constraints aren't met.
+type PageTagReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -865,22 +1120,22 @@ type GetTagReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetTagReplyValidationError) Field() string { return e.field }
+func (e PageTagReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetTagReplyValidationError) Reason() string { return e.reason }
+func (e PageTagReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetTagReplyValidationError) Cause() error { return e.cause }
+func (e PageTagReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetTagReplyValidationError) Key() bool { return e.key }
+func (e PageTagReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetTagReplyValidationError) ErrorName() string { return "GetTagReplyValidationError" }
+func (e PageTagReplyValidationError) ErrorName() string { return "PageTagReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetTagReplyValidationError) Error() string {
+func (e PageTagReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -892,14 +1147,14 @@ func (e GetTagReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetTagReply.%s: %s%s",
+		"invalid %sPageTagReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetTagReplyValidationError{}
+var _ error = PageTagReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -907,4 +1162,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetTagReplyValidationError{}
+} = PageTagReplyValidationError{}

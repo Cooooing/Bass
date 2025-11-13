@@ -101,25 +101,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.DeleteArticleReply'
-    /v1/article/get:
-        post:
-            tags:
-                - ContentArticleService
-            description: 查询文章
-            operationId: ContentArticleService_Get
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.content.v1.GetArticleRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.content.v1.GetArticleReply'
     /v1/article/getOne:
         post:
             tags:
@@ -158,6 +139,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.LikeArticleReply'
+    /v1/article/page:
+        post:
+            tags:
+                - ContentArticleService
+            description: 查询文章
+            operationId: ContentArticleService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.PageArticleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.PageArticleReply'
     /v1/article/publish:
         post:
             tags:
@@ -386,25 +386,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.AddCommentReply'
-    /v1/comment/get:
-        post:
-            tags:
-                - ContentCommentService
-            description: 查询评论列表
-            operationId: ContentCommentService_Get
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.content.v1.GetCommentRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.content.v1.GetCommentReply'
     /v1/comment/like:
         post:
             tags:
@@ -424,6 +405,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.LikeCommentReply'
+    /v1/comment/page:
+        post:
+            tags:
+                - ContentCommentService
+            description: 查询评论列表
+            operationId: ContentCommentService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.PageCommentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.PageCommentReply'
     /v1/comment/thank:
         post:
             tags:
@@ -462,17 +462,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateStatusCommentReply'
-    /v1/domain/add:
+    /v1/domain/adds:
         post:
             tags:
                 - ContentDomainService
             description: 新增领域
-            operationId: ContentDomainService_Add
+            operationId: ContentDomainService_Adds
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.content.v1.AddDomainRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.AddDomainsRequest'
                 required: true
             responses:
                 "200":
@@ -480,18 +480,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.content.v1.AddDomainReply'
-    /v1/domain/get:
+                                $ref: '#/components/schemas/common.api.content.v1.AddDomainsReply'
+    /v1/domain/page:
         post:
             tags:
                 - ContentDomainService
             description: 查询领域
-            operationId: ContentDomainService_Get
+            operationId: ContentDomainService_Page
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.content.v1.GetDomainRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.PageDomainRequest'
                 required: true
             responses:
                 "200":
@@ -499,7 +499,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.content.v1.GetDomainReply'
+                                $ref: '#/components/schemas/common.api.content.v1.PageDomainReply'
     /v1/domain/update:
         post:
             tags:
@@ -532,16 +532,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.common.v1.HealthReply'
-    /v1/tag/add:
+    /v1/tag/adds:
         post:
             tags:
                 - ContentTagService
-            operationId: ContentTagService_Add
+            description: 批量添加标签
+            operationId: ContentTagService_Adds
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.content.v1.AddTagRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.AddTagsRequest'
                 required: true
             responses:
                 "200":
@@ -549,17 +550,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.content.v1.AddTagReply'
+                                $ref: '#/components/schemas/common.api.content.v1.AddTagsReply'
     /v1/tag/get:
         post:
             tags:
                 - ContentTagService
-            operationId: ContentTagService_Get
+            description: 分页获取标签
+            operationId: ContentTagService_Page
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.content.v1.GetTagRequest'
+                            $ref: '#/components/schemas/common.api.content.v1.PageTagRequest'
                 required: true
             responses:
                 "200":
@@ -567,11 +569,12 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.content.v1.GetTagReply'
+                                $ref: '#/components/schemas/common.api.content.v1.PageTagReply'
     /v1/tag/update:
         post:
             tags:
                 - ContentTagService
+            description: 更新标签
             operationId: ContentTagService_Update
             requestBody:
                 content:
@@ -651,6 +654,17 @@ components:
                 message:
                     type: string
                     description: 响应消息
+        common.api.common.v1.Int32Range:
+            type: object
+            properties:
+                start:
+                    type: integer
+                    description: 开始
+                    format: int32
+                end:
+                    type: integer
+                    description: 结束
+                    format: int32
         common.api.common.v1.PageReply:
             type: object
             properties:
@@ -735,10 +749,15 @@ components:
                 replyId:
                     type: string
                     description: 回复评论ID
-        common.api.content.v1.AddDomainReply:
+        common.api.content.v1.AddDomainsReply:
             type: object
-            properties: {}
-        common.api.content.v1.AddDomainRequest:
+            properties:
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.DomainReply'
+                    description: 添加的领域信息
+        common.api.content.v1.AddDomainsRequest:
             type: object
             properties:
                 domains:
@@ -758,26 +777,42 @@ components:
                 content:
                     type: string
                     description: 内容
-        common.api.content.v1.AddTagReply:
-            type: object
-            properties: {}
-        common.api.content.v1.AddTagRequest:
+        common.api.content.v1.AddTagsReply:
             type: object
             properties:
-                names:
+                tags:
                     type: array
                     items:
-                        type: string
-                    description: 标签名称
+                        $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                    description: 添加的标签信息
+        common.api.content.v1.AddTagsRequest:
+            type: object
+            properties:
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.TagSave'
+                    description: 标签信息
         common.api.content.v1.Article:
             type: object
             properties:
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                createdBy:
+                    type: string
+                    description: 创建人
+                updatedBy:
+                    type: string
+                    description: 更新人
                 id:
                     type: string
                     description: 唯一ID
-                userId:
-                    type: string
-                    description: 作者ID
                 title:
                     type: string
                     description: 标题
@@ -847,14 +882,6 @@ components:
                     type: integer
                     description: 抽奖获奖人数
                     format: int32
-                createdAt:
-                    type: string
-                    description: 创建时间
-                    format: date-time
-                updatedAt:
-                    type: string
-                    description: 更新时间
-                    format: date-time
                 authorUser:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
@@ -875,6 +902,20 @@ components:
         common.api.content.v1.ArticlePostscript:
             type: object
             properties:
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                createdBy:
+                    type: string
+                    description: 创建人
+                updatedBy:
+                    type: string
+                    description: 更新人
                 id:
                     type: string
                     description: 主键ID
@@ -884,14 +925,6 @@ components:
                 content:
                     type: string
                     description: 附言内容
-                createdAt:
-                    type: string
-                    description: 创建时间
-                    format: date-time
-                updatedAt:
-                    type: string
-                    description: 更新时间
-                    format: date-time
             description: 文章附言
         common.api.content.v1.CollectArticleReply:
             type: object
@@ -908,15 +941,26 @@ components:
         common.api.content.v1.Comment:
             type: object
             properties:
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                createdBy:
+                    type: string
+                    description: 创建人
+                updatedBy:
+                    type: string
+                    description: 更新人
                 id:
                     type: string
                     description: 评论ID
                 articleId:
                     type: string
                     description: 文章ID
-                userId:
-                    type: string
-                    description: 用户ID
                 content:
                     type: string
                     description: 评论内容
@@ -941,14 +985,6 @@ components:
                 collectCount:
                     type: string
                     description: 收藏数量
-                createdAt:
-                    type: string
-                    description: 创建时间
-                    format: date-time
-                updatedAt:
-                    type: string
-                    description: 更新时间
-                    format: date-time
                 comments:
                     type: array
                     items:
@@ -978,6 +1014,12 @@ components:
                     type: string
                     description: 更新时间
                     format: date-time
+                createdBy:
+                    type: string
+                    description: 创建人
+                updatedBy:
+                    type: string
+                    description: 更新人
                 id:
                     type: string
                     description: 主键
@@ -988,8 +1030,9 @@ components:
                     type: string
                     description: 描述
                 status:
-                    type: string
+                    type: integer
                     description: 状态 0-正常，1-禁用
+                    format: int32
                 url:
                     type: string
                     description: 链接
@@ -997,19 +1040,23 @@ components:
                     type: string
                     description: 图标
                 tagCount:
-                    type: string
+                    type: integer
                     description: 标签数量
+                    format: int32
                 isNav:
                     type: boolean
                     description: 是否导航
                 tags:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.Tag'
+                        $ref: '#/components/schemas/common.api.content.v1.TagReply'
                     description: tags
         common.api.content.v1.DomainSave:
             type: object
             properties:
+                id:
+                    type: string
+                    description: 主键
                 name:
                     type: string
                     description: 领域名称
@@ -1017,8 +1064,9 @@ components:
                     type: string
                     description: 描述
                 status:
-                    type: string
+                    type: integer
                     description: 状态 0-正常，1-禁用
+                    format: int32
                 url:
                     type: string
                     description: 链接
@@ -1045,132 +1093,6 @@ components:
                 articleId:
                     type: string
                     description: 文章ID
-        common.api.content.v1.GetArticleReply:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
-                    description: 分页信息
-                articles:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.content.v1.Article'
-                    description: 文章列表
-        common.api.content.v1.GetArticleRequest:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
-                    description: 分页
-                tagId:
-                    type: string
-                    description: 标签
-                domainId:
-                    type: string
-                    description: 领域
-                status:
-                    type: integer
-                    description: 状态 0-正常 3-草稿
-                    format: int32
-                type:
-                    type: integer
-                    description: 类型 0-普通 1-问答 2-投票 3-抽奖
-                    format: int32
-        common.api.content.v1.GetCommentReply:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
-                    description: 分页
-                comments:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.content.v1.Comment'
-                    description: 评论列表
-        common.api.content.v1.GetCommentRequest:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
-                    description: 分页
-                id:
-                    type: string
-                    description: 评论ID
-                articleId:
-                    type: string
-                    description: 文章ID
-                order:
-                    type: string
-                    description: 排序 0-最新 1-最热
-                userId:
-                    type: string
-                    description: 用户ID
-        common.api.content.v1.GetDomainReply:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
-                    description: 分页信息
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.content.v1.DomainReply'
-                    description: 数据
-        common.api.content.v1.GetDomainRequest:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
-                    description: 分页参数
-                name:
-                    type: string
-                    description: 领域名称
-                description:
-                    type: string
-                    description: 描述
-                status:
-                    type: string
-                    description: 状态 0-正常，1-禁用
-                url:
-                    type: string
-                    description: 链接
-                icon:
-                    type: string
-                    description: 图标
-                isNav:
-                    type: boolean
-                    description: 是否导航
-        common.api.content.v1.GetTagReply:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
-                    description: 分页
-                tags:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.content.v1.Tag'
-                    description: 标签列表
-        common.api.content.v1.GetTagRequest:
-            type: object
-            properties:
-                page:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
-                    description: 分页
-                id:
-                    type: string
-                    description: 标签ID
-                domainId:
-                    type: string
-                    description: 领域ID
         common.api.content.v1.LikeArticleReply:
             type: object
             properties: {}
@@ -1195,6 +1117,142 @@ components:
                 active:
                     type: boolean
                     description: 是否点赞
+        common.api.content.v1.PageArticleReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                articles:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Article'
+                    description: 文章列表
+        common.api.content.v1.PageArticleRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页
+                tagId:
+                    type: string
+                    description: 标签
+                domainId:
+                    type: string
+                    description: 领域
+                status:
+                    type: integer
+                    description: 状态 0-正常 3-草稿
+                    format: int32
+                type:
+                    type: integer
+                    description: 类型 0-普通 1-问答 2-投票 3-抽奖
+                    format: int32
+        common.api.content.v1.PageCommentReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页
+                comments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Comment'
+                    description: 评论列表
+        common.api.content.v1.PageCommentRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页
+                id:
+                    type: string
+                    description: 评论ID
+                articleId:
+                    type: string
+                    description: 文章ID
+                order:
+                    type: integer
+                    description: 排序 0-最新 1-最热
+                    format: int32
+                userId:
+                    type: string
+                    description: 用户ID
+        common.api.content.v1.PageDomainReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                domains:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.DomainReply'
+                    description: 领域信息
+        common.api.content.v1.PageDomainRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+                name:
+                    type: string
+                    description: 领域名称
+                description:
+                    type: string
+                    description: 描述
+                status:
+                    type: string
+                    description: 状态 0-正常，1-禁用
+                url:
+                    type: string
+                    description: 链接
+                icon:
+                    type: string
+                    description: 图标
+                isNav:
+                    type: boolean
+                    description: 是否导航
+                tagCount:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.Int32Range'
+                    description: 标签数量范围
+        common.api.content.v1.PageTagReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                    description: 标签列表
+        common.api.content.v1.PageTagRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页
+                id:
+                    type: string
+                    description: 标签ID
+                domainId:
+                    type: string
+                    description: 领域ID
         common.api.content.v1.PublishArticleReply:
             type: object
             properties: {}
@@ -1213,15 +1271,26 @@ components:
                 articleId:
                     type: string
                     description: 文章ID
-        common.api.content.v1.Tag:
+        common.api.content.v1.TagReply:
             type: object
             properties:
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                createdBy:
+                    type: string
+                    description: 创建人
+                updatedBy:
+                    type: string
+                    description: 更新人
                 id:
                     type: string
-                    description: 标签ID
-                userId:
-                    type: string
-                    description: 创建用户ID
+                    description: 主键
                 name:
                     type: string
                     description: 标签名称
@@ -1239,14 +1308,25 @@ components:
                     type: integer
                     description: 文章数
                     format: int32
-                createdAt:
+        common.api.content.v1.TagSave:
+            type: object
+            properties:
+                id:
                     type: string
-                    description: 创建时间
-                    format: date-time
-                updatedAt:
+                    description: 主键
+                domainId:
                     type: string
-                    description: 更新时间
-                    format: date-time
+                    description: 领域ID
+                status:
+                    type: integer
+                    description: 状态：0-正常，1-禁用
+                    format: int32
+                name:
+                    type: string
+                    description: 标签名称
+                description:
+                    type: string
+                    description: 标签描述
         common.api.content.v1.ThankArticleReply:
             type: object
             properties: {}
@@ -1292,28 +1372,18 @@ components:
                     description: 是否匿名
         common.api.content.v1.UpdateDomainReply:
             type: object
-            properties: {}
+            properties:
+                data:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.DomainReply'
+                    description: 修改的领域信息
         common.api.content.v1.UpdateDomainRequest:
             type: object
             properties:
-                name:
-                    type: string
-                    description: 领域名称
-                description:
-                    type: string
-                    description: 描述
-                status:
-                    type: string
-                    description: 状态 0-正常，1-禁用
-                url:
-                    type: string
-                    description: 链接
-                icon:
-                    type: string
-                    description: 图标
-                isNav:
-                    type: boolean
-                    description: 是否导航
+                domain:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.DomainSave'
+                    description: 领域信息
         common.api.content.v1.UpdateStatusCommentReply:
             type: object
             properties: {}
@@ -1328,26 +1398,18 @@ components:
                     description: 状态
         common.api.content.v1.UpdateTagReply:
             type: object
-            properties: {}
+            properties:
+                tag:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                    description: 更新的标签信息
         common.api.content.v1.UpdateTagRequest:
             type: object
             properties:
-                id:
-                    type: string
-                    description: 标签ID
-                domainId:
-                    type: string
-                    description: 领域ID
-                status:
-                    type: integer
-                    description: 状态：0-正常，1-禁用
-                    format: int32
-                name:
-                    type: string
-                    description: 标签名称
-                description:
-                    type: string
-                    description: 标签描述
+                tag:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.TagSave'
+                    description: 标签信息
         common.api.content.v1.WatchArticleReply:
             type: object
             properties: {}

@@ -31,6 +31,8 @@ var (
 		{Name: "vote_total", Type: field.TypeInt32, Default: 0},
 		{Name: "lottery_participant_count", Type: field.TypeInt32, Default: 0},
 		{Name: "lottery_winner_count", Type: field.TypeInt32, Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
@@ -153,6 +155,8 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "status", Type: field.TypeInt32, Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt64},
@@ -165,7 +169,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "article_postscripts_articles_postscripts",
-				Columns:    []*schema.Column{ArticlePostscriptsColumns[5]},
+				Columns:    []*schema.Column{ArticlePostscriptsColumns[7]},
 				RefColumns: []*schema.Column{ArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -232,6 +236,8 @@ var (
 		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
 		{Name: "like_count", Type: field.TypeInt32, Default: 0},
 		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt64},
@@ -246,19 +252,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "comments_articles_comments",
-				Columns:    []*schema.Column{CommentsColumns[10]},
+				Columns:    []*schema.Column{CommentsColumns[12]},
 				RefColumns: []*schema.Column{ArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "comments_comments_parent_replies",
-				Columns:    []*schema.Column{CommentsColumns[11]},
+				Columns:    []*schema.Column{CommentsColumns[13]},
 				RefColumns: []*schema.Column{CommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "comments_comments_reply_replies",
-				Columns:    []*schema.Column{CommentsColumns[12]},
+				Columns:    []*schema.Column{CommentsColumns[14]},
 				RefColumns: []*schema.Column{CommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -267,7 +273,7 @@ var (
 			{
 				Name:    "comment_article_id_parent_id_status",
 				Unique:  false,
-				Columns: []*schema.Column{CommentsColumns[10], CommentsColumns[11], CommentsColumns[4]},
+				Columns: []*schema.Column{CommentsColumns[12], CommentsColumns[13], CommentsColumns[4]},
 			},
 		},
 	}
@@ -313,12 +319,14 @@ var (
 	DomainsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeInt32, Nullable: true, Default: 0},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "tag_count", Type: field.TypeInt32, Default: 0},
 		{Name: "is_nav", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
@@ -331,11 +339,12 @@ var (
 	// TagsColumns holds the columns for the "tags" table.
 	TagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeInt32, Default: 0},
 		{Name: "article_count", Type: field.TypeInt32, Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "domain_id", Type: field.TypeInt64, Nullable: true},
@@ -348,7 +357,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tags_domains_tags",
-				Columns:    []*schema.Column{TagsColumns[8]},
+				Columns:    []*schema.Column{TagsColumns[9]},
 				RefColumns: []*schema.Column{DomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

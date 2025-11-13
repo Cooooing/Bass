@@ -13,9 +13,9 @@ option go_package = "common/api/content/v1;v1";
 // 领域服务
 service ContentDomainService {
   // 新增领域
-  rpc Add (AddDomainRequest) returns (AddDomainReply) {
+  rpc Adds (AddDomainsRequest) returns (AddDomainsReply) {
     option (google.api.http) = {
-      post: "/v1/domain/add"
+      post: "/v1/domain/adds"
       body: "*"
     };
   }
@@ -29,9 +29,9 @@ service ContentDomainService {
   }
 
   // 查询领域
-  rpc Get (GetDomainRequest) returns (GetDomainReply) {
+  rpc Page (PageDomainRequest) returns (PageDomainReply) {
     option (google.api.http) = {
-      post: "/v1/domain/get"
+      post: "/v1/domain/page"
       body: "*"
     };
   }
@@ -39,87 +39,91 @@ service ContentDomainService {
 
 message DomainReply {
   // 创建时间
-  google.protobuf.Timestamp created_at = 1;
+  google.protobuf.Timestamp created_at = 1000;
   // 更新时间
-  google.protobuf.Timestamp updated_at = 2;
+  google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  int64 created_by = 1002;
+  // 更新人
+  int64 updated_by = 1003;
   // 主键
   int64 id = 3;
   // 领域名称
   string name = 4;
   // 描述
-  string description = 5;
+  optional string description = 5;
   // 状态 0-正常，1-禁用
-  int64 status = 6;
+  int32 status = 6;
   // 链接
-  string url = 7;
+  optional string url = 7;
   // 图标
-  string icon = 8;
+  optional string icon = 8;
   // 标签数量
-  int64 tagCount = 9;
+  int32 tagCount = 9;
   // 是否导航
   bool isNav = 10;
   // tags
-  repeated Tag tags = 100;
+  repeated TagReply tags = 100;
 }
 
 message DomainSave {
+  // 主键
+  int64 id = 1;
   // 领域名称
-  string name = 1;
-  // 描述
-  string description = 2;
-  // 状态 0-正常，1-禁用
-  int64 status = 3;
-  // 链接
-  string url = 4;
-  // 图标
-  string icon = 5;
-  // 是否导航
-  bool isNav = 6;
-}
-
-message AddDomainRequest {
-  // 领域信息
-  repeated DomainSave domains = 1;
-}
-message AddDomainReply {
-}
-
-message UpdateDomainRequest {
-  // 领域名称
-  optional string name = 1;
-  // 描述
-  optional string description = 2;
-  // 状态 0-正常，1-禁用
-  optional int64 status = 3;
-  // 链接
-  optional string url = 4;
-  // 图标
-  optional string icon = 5;
-  // 是否导航
-  optional bool isNav = 6;
-}
-message UpdateDomainReply {
-}
-
-message GetDomainRequest {
-  // 分页参数
-  optional common.v1.PageRequest page = 1;
-  // 领域名称
-  optional string name = 2;
+  string name = 2;
   // 描述
   optional string description = 3;
   // 状态 0-正常，1-禁用
-  optional int64 status = 4;
+  optional int32 status = 4;
   // 链接
   optional string url = 5;
   // 图标
   optional string icon = 6;
   // 是否导航
-  optional bool isNav = 7;
+  bool isNav = 7;
 }
-message GetDomainReply {
+
+message AddDomainsRequest {
+  // 领域信息
+  repeated DomainSave domains = 1;
+}
+message AddDomainsReply {
+  // 添加的领域信息
+  repeated DomainReply data = 1;
+}
+
+message UpdateDomainRequest {
+  // 领域信息
+  DomainSave domain = 1;
+}
+message UpdateDomainReply {
+  // 修改的领域信息
+  DomainReply data = 1;
+}
+
+message PageDomainRequest {
+  // 分页参数
+  optional common.v1.PageRequest page = 1;
+  // 主键
+  repeated int64 ids = 2;
+  // 领域名称
+  optional string name = 3;
+  // 描述
+  optional string description = 4;
+  // 状态 0-正常，1-禁用
+  optional int64 status = 5;
+  // 链接
+  optional string url = 6;
+  // 图标
+  optional string icon = 7;
+  // 是否导航
+  optional bool isNav = 8;
+  // 标签数量范围
+  optional common.v1.Int32Range tagCount = 9;
+}
+message PageDomainReply {
   // 分页信息
   optional common.v1.PageReply page = 1;
-  // 数据
-  repeated DomainReply data = 2;
+  // 领域信息
+  repeated DomainReply domains = 2;
 }

@@ -130,6 +130,34 @@ func (_c *CommentCreate) SetNillableCollectCount(v *int32) *CommentCreate {
 	return _c
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_c *CommentCreate) SetCreatedBy(v int64) *CommentCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableCreatedBy(v *int64) *CommentCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *CommentCreate) SetUpdatedBy(v int64) *CommentCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableUpdatedBy(v *int64) *CommentCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
+	}
+	return _c
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_c *CommentCreate) SetCreatedAt(v time.Time) *CommentCreate {
 	_c.mutation.SetCreatedAt(v)
@@ -378,6 +406,14 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.CollectCount(); ok {
 		_spec.SetField(comment.FieldCollectCount, field.TypeInt32, value)
 		_node.CollectCount = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(comment.FieldCreatedBy, field.TypeInt64, value)
+		_node.CreatedBy = &value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(comment.FieldUpdatedBy, field.TypeInt64, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(comment.FieldCreatedAt, field.TypeTime, value)

@@ -29,12 +29,18 @@ const (
 
 type Comment struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	// 更新人
+	UpdatedBy int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
 	// 评论ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// 文章ID
 	ArticleId int64 `protobuf:"varint,2,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
-	// 用户ID
-	UserId int64 `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	// 评论内容
 	Content string `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
 	// 评论层级
@@ -51,10 +57,6 @@ type Comment struct {
 	LikeCount int64 `protobuf:"varint,10,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"`
 	// 收藏数量
 	CollectCount int64 `protobuf:"varint,11,opt,name=collect_count,json=collectCount,proto3" json:"collect_count,omitempty"`
-	// 创建时间
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	// 更新时间
-	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 子评论
 	Comments []*Comment `protobuf:"bytes,14,rep,name=comments,proto3" json:"comments,omitempty"`
 	// 用户信息
@@ -93,6 +95,34 @@ func (*Comment) Descriptor() ([]byte, []int) {
 	return file_content_v1_comment_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Comment) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Comment) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *Comment) GetCreatedBy() int64 {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return 0
+}
+
+func (x *Comment) GetUpdatedBy() int64 {
+	if x != nil {
+		return x.UpdatedBy
+	}
+	return 0
+}
+
 func (x *Comment) GetId() int64 {
 	if x != nil {
 		return x.Id
@@ -103,13 +133,6 @@ func (x *Comment) GetId() int64 {
 func (x *Comment) GetArticleId() int64 {
 	if x != nil {
 		return x.ArticleId
-	}
-	return 0
-}
-
-func (x *Comment) GetUserId() int64 {
-	if x != nil {
-		return x.UserId
 	}
 	return 0
 }
@@ -168,20 +191,6 @@ func (x *Comment) GetCollectCount() int64 {
 		return x.CollectCount
 	}
 	return 0
-}
-
-func (x *Comment) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *Comment) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
 }
 
 func (x *Comment) GetComments() []*Comment {
@@ -297,36 +306,36 @@ func (*AddCommentReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_comment_proto_rawDescGZIP(), []int{2}
 }
 
-type GetCommentRequest struct {
+type PageCommentRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 分页
 	Page *v11.PageRequest `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
 	// 评论ID
-	Id int64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id *int64 `protobuf:"varint,2,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	// 文章ID
-	ArticleId int64 `protobuf:"varint,3,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
+	ArticleId *int64 `protobuf:"varint,3,opt,name=article_id,json=articleId,proto3,oneof" json:"article_id,omitempty"`
 	// 排序 0-最新 1-最热
-	Order int64 `protobuf:"varint,4,opt,name=order,proto3" json:"order,omitempty"`
+	Order *int32 `protobuf:"varint,4,opt,name=order,proto3,oneof" json:"order,omitempty"`
 	// 用户ID
-	UserId        int64 `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        *int64 `protobuf:"varint,5,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetCommentRequest) Reset() {
-	*x = GetCommentRequest{}
+func (x *PageCommentRequest) Reset() {
+	*x = PageCommentRequest{}
 	mi := &file_content_v1_comment_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetCommentRequest) String() string {
+func (x *PageCommentRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetCommentRequest) ProtoMessage() {}
+func (*PageCommentRequest) ProtoMessage() {}
 
-func (x *GetCommentRequest) ProtoReflect() protoreflect.Message {
+func (x *PageCommentRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_content_v1_comment_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -338,47 +347,47 @@ func (x *GetCommentRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetCommentRequest.ProtoReflect.Descriptor instead.
-func (*GetCommentRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PageCommentRequest.ProtoReflect.Descriptor instead.
+func (*PageCommentRequest) Descriptor() ([]byte, []int) {
 	return file_content_v1_comment_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetCommentRequest) GetPage() *v11.PageRequest {
+func (x *PageCommentRequest) GetPage() *v11.PageRequest {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
-func (x *GetCommentRequest) GetId() int64 {
-	if x != nil {
-		return x.Id
+func (x *PageCommentRequest) GetId() int64 {
+	if x != nil && x.Id != nil {
+		return *x.Id
 	}
 	return 0
 }
 
-func (x *GetCommentRequest) GetArticleId() int64 {
-	if x != nil {
-		return x.ArticleId
+func (x *PageCommentRequest) GetArticleId() int64 {
+	if x != nil && x.ArticleId != nil {
+		return *x.ArticleId
 	}
 	return 0
 }
 
-func (x *GetCommentRequest) GetOrder() int64 {
-	if x != nil {
-		return x.Order
+func (x *PageCommentRequest) GetOrder() int32 {
+	if x != nil && x.Order != nil {
+		return *x.Order
 	}
 	return 0
 }
 
-func (x *GetCommentRequest) GetUserId() int64 {
-	if x != nil {
-		return x.UserId
+func (x *PageCommentRequest) GetUserId() int64 {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
 	}
 	return 0
 }
 
-type GetCommentReply struct {
+type PageCommentReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 分页
 	Page *v11.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
@@ -388,20 +397,20 @@ type GetCommentReply struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetCommentReply) Reset() {
-	*x = GetCommentReply{}
+func (x *PageCommentReply) Reset() {
+	*x = PageCommentReply{}
 	mi := &file_content_v1_comment_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetCommentReply) String() string {
+func (x *PageCommentReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetCommentReply) ProtoMessage() {}
+func (*PageCommentReply) ProtoMessage() {}
 
-func (x *GetCommentReply) ProtoReflect() protoreflect.Message {
+func (x *PageCommentReply) ProtoReflect() protoreflect.Message {
 	mi := &file_content_v1_comment_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -413,19 +422,19 @@ func (x *GetCommentReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetCommentReply.ProtoReflect.Descriptor instead.
-func (*GetCommentReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use PageCommentReply.ProtoReflect.Descriptor instead.
+func (*PageCommentReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_comment_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetCommentReply) GetPage() *v11.PageReply {
+func (x *PageCommentReply) GetPage() *v11.PageReply {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
-func (x *GetCommentReply) GetComments() []*Comment {
+func (x *PageCommentReply) GetComments() []*Comment {
 	if x != nil {
 		return x.Comments
 	}
@@ -706,12 +715,19 @@ var File_content_v1_comment_proto protoreflect.FileDescriptor
 
 const file_content_v1_comment_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x96\x04\n" +
-	"\aComment\x12\x0e\n" +
+	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xbf\x04\n" +
+	"\aComment\x12:\n" +
+	"\n" +
+	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
+	"\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x1e\n" +
+	"\n" +
+	"created_by\x18\xea\a \x01(\x03R\tcreatedBy\x12\x1e\n" +
+	"\n" +
+	"updated_by\x18\xeb\a \x01(\x03R\tupdatedBy\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
-	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\x03R\x06userId\x12\x18\n" +
+	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12\x14\n" +
 	"\x05level\x18\x05 \x01(\x03R\x05level\x12\x1b\n" +
 	"\tparent_id\x18\x06 \x01(\x03R\bparentId\x12\x19\n" +
@@ -722,11 +738,7 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"\n" +
 	"like_count\x18\n" +
 	" \x01(\x03R\tlikeCount\x12#\n" +
-	"\rcollect_count\x18\v \x01(\x03R\fcollectCount\x129\n" +
-	"\n" +
-	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12:\n" +
+	"\rcollect_count\x18\v \x01(\x03R\fcollectCount\x12:\n" +
 	"\bcomments\x18\x0e \x03(\v2\x1e.common.api.content.v1.CommentR\bcomments\x12,\n" +
 	"\x04user\x18\x0f \x01(\v2\x18.common.api.user.v1.UserR\x04user\"g\n" +
 	"\x11AddCommentRequest\x12\x1d\n" +
@@ -734,16 +746,21 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12\x19\n" +
 	"\breply_id\x18\x06 \x01(\x03R\areplyId\"\x11\n" +
-	"\x0fAddCommentReply\"\xb6\x01\n" +
-	"\x11GetCommentRequest\x12:\n" +
-	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x03R\x02id\x12\x1d\n" +
+	"\x0fAddCommentReply\"\xf7\x01\n" +
+	"\x12PageCommentRequest\x12:\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\x13\n" +
+	"\x02id\x18\x02 \x01(\x03H\x01R\x02id\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"article_id\x18\x03 \x01(\x03R\tarticleId\x12\x14\n" +
-	"\x05order\x18\x04 \x01(\x03R\x05order\x12\x17\n" +
-	"\auser_id\x18\x05 \x01(\x03R\x06userIdB\a\n" +
-	"\x05_page\"\x82\x01\n" +
-	"\x0fGetCommentReply\x123\n" +
+	"article_id\x18\x03 \x01(\x03H\x02R\tarticleId\x88\x01\x01\x12\x19\n" +
+	"\x05order\x18\x04 \x01(\x05H\x03R\x05order\x88\x01\x01\x12\x1c\n" +
+	"\auser_id\x18\x05 \x01(\x03H\x04R\x06userId\x88\x01\x01B\a\n" +
+	"\x05_pageB\x05\n" +
+	"\x03_idB\r\n" +
+	"\v_article_idB\b\n" +
+	"\x06_orderB\n" +
+	"\n" +
+	"\b_user_id\"\x83\x01\n" +
+	"\x10PageCommentReply\x123\n" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
 	"\bcomments\x18\x02 \x03(\v2\x1e.common.api.content.v1.CommentR\bcomments\"<\n" +
 	"\x12LikeCommentRequest\x12\x0e\n" +
@@ -757,10 +774,10 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"\x1aUpdateStatusCommentRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\x03R\x06status\"\x1a\n" +
-	"\x18UpdateStatusCommentReply2\x91\x05\n" +
+	"\x18UpdateStatusCommentReply2\x95\x05\n" +
 	"\x15ContentCommentService\x12s\n" +
-	"\x03Add\x12(.common.api.content.v1.AddCommentRequest\x1a&.common.api.content.v1.AddCommentReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/comment/add\x12s\n" +
-	"\x03Get\x12(.common.api.content.v1.GetCommentRequest\x1a&.common.api.content.v1.GetCommentReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/comment/get\x12w\n" +
+	"\x03Add\x12(.common.api.content.v1.AddCommentRequest\x1a&.common.api.content.v1.AddCommentReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/comment/add\x12w\n" +
+	"\x04Page\x12).common.api.content.v1.PageCommentRequest\x1a'.common.api.content.v1.PageCommentReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/comment/page\x12w\n" +
 	"\x04Like\x12).common.api.content.v1.LikeCommentRequest\x1a'.common.api.content.v1.LikeCommentReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/comment/like\x12{\n" +
 	"\x05Thank\x12*.common.api.content.v1.ThankCommentRequest\x1a(.common.api.content.v1.ThankCommentReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/comment/thank\x12\x97\x01\n" +
 	"\fUpdateStatus\x121.common.api.content.v1.UpdateStatusCommentRequest\x1a/.common.api.content.v1.UpdateStatusCommentReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/comment/updateStatusB\x1aZ\x18common/api/content/v1;v1b\x06proto3"
@@ -782,8 +799,8 @@ var file_content_v1_comment_proto_goTypes = []any{
 	(*Comment)(nil),                    // 0: common.api.content.v1.Comment
 	(*AddCommentRequest)(nil),          // 1: common.api.content.v1.AddCommentRequest
 	(*AddCommentReply)(nil),            // 2: common.api.content.v1.AddCommentReply
-	(*GetCommentRequest)(nil),          // 3: common.api.content.v1.GetCommentRequest
-	(*GetCommentReply)(nil),            // 4: common.api.content.v1.GetCommentReply
+	(*PageCommentRequest)(nil),         // 3: common.api.content.v1.PageCommentRequest
+	(*PageCommentReply)(nil),           // 4: common.api.content.v1.PageCommentReply
 	(*LikeCommentRequest)(nil),         // 5: common.api.content.v1.LikeCommentRequest
 	(*LikeCommentReply)(nil),           // 6: common.api.content.v1.LikeCommentReply
 	(*ThankCommentRequest)(nil),        // 7: common.api.content.v1.ThankCommentRequest
@@ -800,16 +817,16 @@ var file_content_v1_comment_proto_depIdxs = []int32{
 	11, // 1: common.api.content.v1.Comment.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 2: common.api.content.v1.Comment.comments:type_name -> common.api.content.v1.Comment
 	12, // 3: common.api.content.v1.Comment.user:type_name -> common.api.user.v1.User
-	13, // 4: common.api.content.v1.GetCommentRequest.page:type_name -> common.api.common.v1.PageRequest
-	14, // 5: common.api.content.v1.GetCommentReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 6: common.api.content.v1.GetCommentReply.comments:type_name -> common.api.content.v1.Comment
+	13, // 4: common.api.content.v1.PageCommentRequest.page:type_name -> common.api.common.v1.PageRequest
+	14, // 5: common.api.content.v1.PageCommentReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 6: common.api.content.v1.PageCommentReply.comments:type_name -> common.api.content.v1.Comment
 	1,  // 7: common.api.content.v1.ContentCommentService.Add:input_type -> common.api.content.v1.AddCommentRequest
-	3,  // 8: common.api.content.v1.ContentCommentService.Get:input_type -> common.api.content.v1.GetCommentRequest
+	3,  // 8: common.api.content.v1.ContentCommentService.Page:input_type -> common.api.content.v1.PageCommentRequest
 	5,  // 9: common.api.content.v1.ContentCommentService.Like:input_type -> common.api.content.v1.LikeCommentRequest
 	7,  // 10: common.api.content.v1.ContentCommentService.Thank:input_type -> common.api.content.v1.ThankCommentRequest
 	9,  // 11: common.api.content.v1.ContentCommentService.UpdateStatus:input_type -> common.api.content.v1.UpdateStatusCommentRequest
 	2,  // 12: common.api.content.v1.ContentCommentService.Add:output_type -> common.api.content.v1.AddCommentReply
-	4,  // 13: common.api.content.v1.ContentCommentService.Get:output_type -> common.api.content.v1.GetCommentReply
+	4,  // 13: common.api.content.v1.ContentCommentService.Page:output_type -> common.api.content.v1.PageCommentReply
 	6,  // 14: common.api.content.v1.ContentCommentService.Like:output_type -> common.api.content.v1.LikeCommentReply
 	8,  // 15: common.api.content.v1.ContentCommentService.Thank:output_type -> common.api.content.v1.ThankCommentReply
 	10, // 16: common.api.content.v1.ContentCommentService.UpdateStatus:output_type -> common.api.content.v1.UpdateStatusCommentReply

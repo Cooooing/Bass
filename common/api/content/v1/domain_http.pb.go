@@ -19,44 +19,44 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationContentDomainServiceAdd = "/common.api.content.v1.ContentDomainService/Add"
-const OperationContentDomainServiceGet = "/common.api.content.v1.ContentDomainService/Get"
+const OperationContentDomainServiceAdds = "/common.api.content.v1.ContentDomainService/Adds"
+const OperationContentDomainServicePage = "/common.api.content.v1.ContentDomainService/Page"
 const OperationContentDomainServiceUpdate = "/common.api.content.v1.ContentDomainService/Update"
 
 type ContentDomainServiceHTTPServer interface {
-	// Add 新增领域
-	Add(context.Context, *AddDomainRequest) (*AddDomainReply, error)
-	// Get 查询领域
-	Get(context.Context, *GetDomainRequest) (*GetDomainReply, error)
+	// Adds 新增领域
+	Adds(context.Context, *AddDomainsRequest) (*AddDomainsReply, error)
+	// Page 查询领域
+	Page(context.Context, *PageDomainRequest) (*PageDomainReply, error)
 	// Update 修改领域信息
 	Update(context.Context, *UpdateDomainRequest) (*UpdateDomainReply, error)
 }
 
 func RegisterContentDomainServiceHTTPServer(s *http.Server, srv ContentDomainServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/domain/add", _ContentDomainService_Add3_HTTP_Handler(srv))
+	r.POST("/v1/domain/adds", _ContentDomainService_Adds1_HTTP_Handler(srv))
 	r.POST("/v1/domain/update", _ContentDomainService_Update2_HTTP_Handler(srv))
-	r.POST("/v1/domain/get", _ContentDomainService_Get3_HTTP_Handler(srv))
+	r.POST("/v1/domain/page", _ContentDomainService_Page3_HTTP_Handler(srv))
 }
 
-func _ContentDomainService_Add3_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
+func _ContentDomainService_Adds1_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in AddDomainRequest
+		var in AddDomainsRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationContentDomainServiceAdd)
+		http.SetOperation(ctx, OperationContentDomainServiceAdds)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Add(ctx, req.(*AddDomainRequest))
+			return srv.Adds(ctx, req.(*AddDomainsRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*AddDomainReply)
+		reply := out.(*AddDomainsReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -83,33 +83,33 @@ func _ContentDomainService_Update2_HTTP_Handler(srv ContentDomainServiceHTTPServ
 	}
 }
 
-func _ContentDomainService_Get3_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
+func _ContentDomainService_Page3_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetDomainRequest
+		var in PageDomainRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationContentDomainServiceGet)
+		http.SetOperation(ctx, OperationContentDomainServicePage)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*GetDomainRequest))
+			return srv.Page(ctx, req.(*PageDomainRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetDomainReply)
+		reply := out.(*PageDomainReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type ContentDomainServiceHTTPClient interface {
-	// Add 新增领域
-	Add(ctx context.Context, req *AddDomainRequest, opts ...http.CallOption) (rsp *AddDomainReply, err error)
-	// Get 查询领域
-	Get(ctx context.Context, req *GetDomainRequest, opts ...http.CallOption) (rsp *GetDomainReply, err error)
+	// Adds 新增领域
+	Adds(ctx context.Context, req *AddDomainsRequest, opts ...http.CallOption) (rsp *AddDomainsReply, err error)
+	// Page 查询领域
+	Page(ctx context.Context, req *PageDomainRequest, opts ...http.CallOption) (rsp *PageDomainReply, err error)
 	// Update 修改领域信息
 	Update(ctx context.Context, req *UpdateDomainRequest, opts ...http.CallOption) (rsp *UpdateDomainReply, err error)
 }
@@ -122,12 +122,12 @@ func NewContentDomainServiceHTTPClient(client *http.Client) ContentDomainService
 	return &ContentDomainServiceHTTPClientImpl{client}
 }
 
-// Add 新增领域
-func (c *ContentDomainServiceHTTPClientImpl) Add(ctx context.Context, in *AddDomainRequest, opts ...http.CallOption) (*AddDomainReply, error) {
-	var out AddDomainReply
-	pattern := "/v1/domain/add"
+// Adds 新增领域
+func (c *ContentDomainServiceHTTPClientImpl) Adds(ctx context.Context, in *AddDomainsRequest, opts ...http.CallOption) (*AddDomainsReply, error) {
+	var out AddDomainsReply
+	pattern := "/v1/domain/adds"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationContentDomainServiceAdd))
+	opts = append(opts, http.Operation(OperationContentDomainServiceAdds))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -136,12 +136,12 @@ func (c *ContentDomainServiceHTTPClientImpl) Add(ctx context.Context, in *AddDom
 	return &out, nil
 }
 
-// Get 查询领域
-func (c *ContentDomainServiceHTTPClientImpl) Get(ctx context.Context, in *GetDomainRequest, opts ...http.CallOption) (*GetDomainReply, error) {
-	var out GetDomainReply
-	pattern := "/v1/domain/get"
+// Page 查询领域
+func (c *ContentDomainServiceHTTPClientImpl) Page(ctx context.Context, in *PageDomainRequest, opts ...http.CallOption) (*PageDomainReply, error) {
+	var out PageDomainReply
+	pattern := "/v1/domain/page"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationContentDomainServiceGet))
+	opts = append(opts, http.Operation(OperationContentDomainServicePage))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

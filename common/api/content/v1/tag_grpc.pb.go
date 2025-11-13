@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ContentTagService_Add_FullMethodName    = "/common.api.content.v1.ContentTagService/Add"
+	ContentTagService_Adds_FullMethodName   = "/common.api.content.v1.ContentTagService/Adds"
 	ContentTagService_Update_FullMethodName = "/common.api.content.v1.ContentTagService/Update"
-	ContentTagService_Get_FullMethodName    = "/common.api.content.v1.ContentTagService/Get"
+	ContentTagService_Page_FullMethodName   = "/common.api.content.v1.ContentTagService/Page"
 )
 
 // ContentTagServiceClient is the client API for ContentTagService service.
@@ -30,9 +30,12 @@ const (
 //
 // 标签服务
 type ContentTagServiceClient interface {
-	Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error)
+	// 批量添加标签
+	Adds(ctx context.Context, in *AddTagsRequest, opts ...grpc.CallOption) (*AddTagsReply, error)
+	// 更新标签
 	Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*UpdateTagReply, error)
-	Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error)
+	// 分页获取标签
+	Page(ctx context.Context, in *PageTagRequest, opts ...grpc.CallOption) (*PageTagReply, error)
 }
 
 type contentTagServiceClient struct {
@@ -43,10 +46,10 @@ func NewContentTagServiceClient(cc grpc.ClientConnInterface) ContentTagServiceCl
 	return &contentTagServiceClient{cc}
 }
 
-func (c *contentTagServiceClient) Add(ctx context.Context, in *AddTagRequest, opts ...grpc.CallOption) (*AddTagReply, error) {
+func (c *contentTagServiceClient) Adds(ctx context.Context, in *AddTagsRequest, opts ...grpc.CallOption) (*AddTagsReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddTagReply)
-	err := c.cc.Invoke(ctx, ContentTagService_Add_FullMethodName, in, out, cOpts...)
+	out := new(AddTagsReply)
+	err := c.cc.Invoke(ctx, ContentTagService_Adds_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,10 +66,10 @@ func (c *contentTagServiceClient) Update(ctx context.Context, in *UpdateTagReque
 	return out, nil
 }
 
-func (c *contentTagServiceClient) Get(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*GetTagReply, error) {
+func (c *contentTagServiceClient) Page(ctx context.Context, in *PageTagRequest, opts ...grpc.CallOption) (*PageTagReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetTagReply)
-	err := c.cc.Invoke(ctx, ContentTagService_Get_FullMethodName, in, out, cOpts...)
+	out := new(PageTagReply)
+	err := c.cc.Invoke(ctx, ContentTagService_Page_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,9 +82,12 @@ func (c *contentTagServiceClient) Get(ctx context.Context, in *GetTagRequest, op
 //
 // 标签服务
 type ContentTagServiceServer interface {
-	Add(context.Context, *AddTagRequest) (*AddTagReply, error)
+	// 批量添加标签
+	Adds(context.Context, *AddTagsRequest) (*AddTagsReply, error)
+	// 更新标签
 	Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error)
-	Get(context.Context, *GetTagRequest) (*GetTagReply, error)
+	// 分页获取标签
+	Page(context.Context, *PageTagRequest) (*PageTagReply, error)
 	mustEmbedUnimplementedContentTagServiceServer()
 }
 
@@ -92,14 +98,14 @@ type ContentTagServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedContentTagServiceServer struct{}
 
-func (UnimplementedContentTagServiceServer) Add(context.Context, *AddTagRequest) (*AddTagReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+func (UnimplementedContentTagServiceServer) Adds(context.Context, *AddTagsRequest) (*AddTagsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Adds not implemented")
 }
 func (UnimplementedContentTagServiceServer) Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedContentTagServiceServer) Get(context.Context, *GetTagRequest) (*GetTagReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedContentTagServiceServer) Page(context.Context, *PageTagRequest) (*PageTagReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Page not implemented")
 }
 func (UnimplementedContentTagServiceServer) mustEmbedUnimplementedContentTagServiceServer() {}
 func (UnimplementedContentTagServiceServer) testEmbeddedByValue()                           {}
@@ -122,20 +128,20 @@ func RegisterContentTagServiceServer(s grpc.ServiceRegistrar, srv ContentTagServ
 	s.RegisterService(&ContentTagService_ServiceDesc, srv)
 }
 
-func _ContentTagService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddTagRequest)
+func _ContentTagService_Adds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTagsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentTagServiceServer).Add(ctx, in)
+		return srv.(ContentTagServiceServer).Adds(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentTagService_Add_FullMethodName,
+		FullMethod: ContentTagService_Adds_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentTagServiceServer).Add(ctx, req.(*AddTagRequest))
+		return srv.(ContentTagServiceServer).Adds(ctx, req.(*AddTagsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -158,20 +164,20 @@ func _ContentTagService_Update_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentTagService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTagRequest)
+func _ContentTagService_Page_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PageTagRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentTagServiceServer).Get(ctx, in)
+		return srv.(ContentTagServiceServer).Page(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentTagService_Get_FullMethodName,
+		FullMethod: ContentTagService_Page_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentTagServiceServer).Get(ctx, req.(*GetTagRequest))
+		return srv.(ContentTagServiceServer).Page(ctx, req.(*PageTagRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -184,16 +190,16 @@ var ContentTagService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ContentTagServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Add",
-			Handler:    _ContentTagService_Add_Handler,
+			MethodName: "Adds",
+			Handler:    _ContentTagService_Adds_Handler,
 		},
 		{
 			MethodName: "Update",
 			Handler:    _ContentTagService_Update_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _ContentTagService_Get_Handler,
+			MethodName: "Page",
+			Handler:    _ContentTagService_Page_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

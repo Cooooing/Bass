@@ -3,6 +3,7 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	"common/pkg/util"
 	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
@@ -40,7 +41,7 @@ func NewCommentService(baseService *BaseService, commentDomain *biz.CommentDomai
 }
 
 func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rsp *v1.AddCommentReply, err error) {
-	user := s.tokenRepo.GetUserInfo(ctx)
+	user := util.MustGetUserInfo(ctx)
 	_, err = s.commentDomain.Add(ctx, &model.Comment{
 		ArticleID: req.ArticleId,
 		UserID:    user.ID,
@@ -50,8 +51,13 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 	return &v1.AddCommentReply{}, err
 }
 
-func (s *CommentService) Get(ctx context.Context, req *v1.GetCommentRequest) (rsp *v1.GetCommentReply, err error) {
-	return s.commentDomain.Get(ctx, req)
+func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (*v1.PageCommentReply, error) {
+	return s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
+		CommentId: req.Id,
+		ArticleId: req.ArticleId,
+		UserId:    req.UserId,
+		Order:     req.Order,
+	})
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {

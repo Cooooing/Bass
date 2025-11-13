@@ -28,6 +28,10 @@ const (
 	FieldTagCount = "tag_count"
 	// FieldIsNav holds the string denoting the is_nav field in the database.
 	FieldIsNav = "is_nav"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -55,6 +59,8 @@ var Columns = []string{
 	FieldIcon,
 	FieldTagCount,
 	FieldIsNav,
+	FieldCreatedBy,
+	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -72,8 +78,6 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
-	DescriptionValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int32
 	// DefaultTagCount holds the default value on creation for the "tag_count" field.
@@ -127,6 +131,16 @@ func ByTagCount(opts ...sql.OrderTermOption) OrderOption {
 // ByIsNav orders the results by the is_nav field.
 func ByIsNav(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsNav, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

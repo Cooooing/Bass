@@ -2,7 +2,6 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
 	"common/pkg/util/collections/dict"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
@@ -17,9 +16,17 @@ type CommentRepo interface {
 
 	Exist(ctx context.Context, tx *gen.Client, id int64) (bool, error)
 	GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error)
-	GetList(ctx context.Context, tx *gen.Client, req *v1.GetCommentRequest) (*v1.GetCommentReply, error)
+	GetList(ctx context.Context, tx *gen.Client, req *CommentGetReq) ([]*model.Comment, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *CommentGetReq) ([]*model.Comment, *cv1.PageReply, error)
 	GetArticleLastComment(ctx context.Context, tx *gen.Client, articleId int64) (*model.Comment, error)
 	GetArticleLastComments(ctx context.Context, tx *gen.Client, articleIds []int64) (dict.Map[int64, *model.Comment], error)
+}
+
+type CommentGetReq struct {
+	CommentId *int64
+	ArticleId *int64
+	UserId    *int64
+	Order     *int32
 }
 
 type CommentActionRecordRepo interface {

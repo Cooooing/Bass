@@ -115,17 +115,15 @@ func (m *DomainReply) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for CreatedBy
+
+	// no validation rules for UpdatedBy
+
 	// no validation rules for Id
 
 	// no validation rules for Name
 
-	// no validation rules for Description
-
 	// no validation rules for Status
-
-	// no validation rules for Url
-
-	// no validation rules for Icon
 
 	// no validation rules for TagCount
 
@@ -163,6 +161,18 @@ func (m *DomainReply) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if m.Url != nil {
+		// no validation rules for Url
+	}
+
+	if m.Icon != nil {
+		// no validation rules for Icon
 	}
 
 	if len(errors) > 0 {
@@ -264,17 +274,27 @@ func (m *DomainSave) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	// no validation rules for Name
 
-	// no validation rules for Description
-
-	// no validation rules for Status
-
-	// no validation rules for Url
-
-	// no validation rules for Icon
-
 	// no validation rules for IsNav
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
+	if m.Url != nil {
+		// no validation rules for Url
+	}
+
+	if m.Icon != nil {
+		// no validation rules for Icon
+	}
 
 	if len(errors) > 0 {
 		return DomainSaveMultiError(errors)
@@ -353,22 +373,22 @@ var _ interface {
 	ErrorName() string
 } = DomainSaveValidationError{}
 
-// Validate checks the field values on AddDomainRequest with the rules defined
+// Validate checks the field values on AddDomainsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *AddDomainRequest) Validate() error {
+func (m *AddDomainsRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AddDomainRequest with the rules
+// ValidateAll checks the field values on AddDomainsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// AddDomainRequestMultiError, or nil if none found.
-func (m *AddDomainRequest) ValidateAll() error {
+// AddDomainsRequestMultiError, or nil if none found.
+func (m *AddDomainsRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AddDomainRequest) validate(all bool) error {
+func (m *AddDomainsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -382,7 +402,7 @@ func (m *AddDomainRequest) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, AddDomainRequestValidationError{
+					errors = append(errors, AddDomainsRequestValidationError{
 						field:  fmt.Sprintf("Domains[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -390,7 +410,7 @@ func (m *AddDomainRequest) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, AddDomainRequestValidationError{
+					errors = append(errors, AddDomainsRequestValidationError{
 						field:  fmt.Sprintf("Domains[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -399,7 +419,7 @@ func (m *AddDomainRequest) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return AddDomainRequestValidationError{
+				return AddDomainsRequestValidationError{
 					field:  fmt.Sprintf("Domains[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -410,19 +430,19 @@ func (m *AddDomainRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return AddDomainRequestMultiError(errors)
+		return AddDomainsRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// AddDomainRequestMultiError is an error wrapping multiple validation errors
-// returned by AddDomainRequest.ValidateAll() if the designated constraints
+// AddDomainsRequestMultiError is an error wrapping multiple validation errors
+// returned by AddDomainsRequest.ValidateAll() if the designated constraints
 // aren't met.
-type AddDomainRequestMultiError []error
+type AddDomainsRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AddDomainRequestMultiError) Error() string {
+func (m AddDomainsRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -431,11 +451,11 @@ func (m AddDomainRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AddDomainRequestMultiError) AllErrors() []error { return m }
+func (m AddDomainsRequestMultiError) AllErrors() []error { return m }
 
-// AddDomainRequestValidationError is the validation error returned by
-// AddDomainRequest.Validate if the designated constraints aren't met.
-type AddDomainRequestValidationError struct {
+// AddDomainsRequestValidationError is the validation error returned by
+// AddDomainsRequest.Validate if the designated constraints aren't met.
+type AddDomainsRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -443,22 +463,24 @@ type AddDomainRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e AddDomainRequestValidationError) Field() string { return e.field }
+func (e AddDomainsRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AddDomainRequestValidationError) Reason() string { return e.reason }
+func (e AddDomainsRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AddDomainRequestValidationError) Cause() error { return e.cause }
+func (e AddDomainsRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AddDomainRequestValidationError) Key() bool { return e.key }
+func (e AddDomainsRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AddDomainRequestValidationError) ErrorName() string { return "AddDomainRequestValidationError" }
+func (e AddDomainsRequestValidationError) ErrorName() string {
+	return "AddDomainsRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e AddDomainRequestValidationError) Error() string {
+func (e AddDomainsRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -470,14 +492,14 @@ func (e AddDomainRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAddDomainRequest.%s: %s%s",
+		"invalid %sAddDomainsRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AddDomainRequestValidationError{}
+var _ error = AddDomainsRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -485,44 +507,78 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AddDomainRequestValidationError{}
+} = AddDomainsRequestValidationError{}
 
-// Validate checks the field values on AddDomainReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *AddDomainReply) Validate() error {
+// Validate checks the field values on AddDomainsReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *AddDomainsReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on AddDomainReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in AddDomainReplyMultiError,
-// or nil if none found.
-func (m *AddDomainReply) ValidateAll() error {
+// ValidateAll checks the field values on AddDomainsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddDomainsReplyMultiError, or nil if none found.
+func (m *AddDomainsReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *AddDomainReply) validate(all bool) error {
+func (m *AddDomainsReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	for idx, item := range m.GetData() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AddDomainsReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AddDomainsReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AddDomainsReplyValidationError{
+					field:  fmt.Sprintf("Data[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
-		return AddDomainReplyMultiError(errors)
+		return AddDomainsReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// AddDomainReplyMultiError is an error wrapping multiple validation errors
-// returned by AddDomainReply.ValidateAll() if the designated constraints
+// AddDomainsReplyMultiError is an error wrapping multiple validation errors
+// returned by AddDomainsReply.ValidateAll() if the designated constraints
 // aren't met.
-type AddDomainReplyMultiError []error
+type AddDomainsReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m AddDomainReplyMultiError) Error() string {
+func (m AddDomainsReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -531,11 +587,11 @@ func (m AddDomainReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m AddDomainReplyMultiError) AllErrors() []error { return m }
+func (m AddDomainsReplyMultiError) AllErrors() []error { return m }
 
-// AddDomainReplyValidationError is the validation error returned by
-// AddDomainReply.Validate if the designated constraints aren't met.
-type AddDomainReplyValidationError struct {
+// AddDomainsReplyValidationError is the validation error returned by
+// AddDomainsReply.Validate if the designated constraints aren't met.
+type AddDomainsReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -543,22 +599,22 @@ type AddDomainReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e AddDomainReplyValidationError) Field() string { return e.field }
+func (e AddDomainsReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AddDomainReplyValidationError) Reason() string { return e.reason }
+func (e AddDomainsReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AddDomainReplyValidationError) Cause() error { return e.cause }
+func (e AddDomainsReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AddDomainReplyValidationError) Key() bool { return e.key }
+func (e AddDomainsReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AddDomainReplyValidationError) ErrorName() string { return "AddDomainReplyValidationError" }
+func (e AddDomainsReplyValidationError) ErrorName() string { return "AddDomainsReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AddDomainReplyValidationError) Error() string {
+func (e AddDomainsReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -570,14 +626,14 @@ func (e AddDomainReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAddDomainReply.%s: %s%s",
+		"invalid %sAddDomainsReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AddDomainReplyValidationError{}
+var _ error = AddDomainsReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -585,7 +641,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AddDomainReplyValidationError{}
+} = AddDomainsReplyValidationError{}
 
 // Validate checks the field values on UpdateDomainRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -609,28 +665,33 @@ func (m *UpdateDomainRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.Name != nil {
-		// no validation rules for Name
-	}
-
-	if m.Description != nil {
-		// no validation rules for Description
-	}
-
-	if m.Status != nil {
-		// no validation rules for Status
-	}
-
-	if m.Url != nil {
-		// no validation rules for Url
-	}
-
-	if m.Icon != nil {
-		// no validation rules for Icon
-	}
-
-	if m.IsNav != nil {
-		// no validation rules for IsNav
+	if all {
+		switch v := interface{}(m.GetDomain()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateDomainRequestValidationError{
+					field:  "Domain",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateDomainRequestValidationError{
+					field:  "Domain",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDomain()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateDomainRequestValidationError{
+				field:  "Domain",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	if len(errors) > 0 {
@@ -735,6 +796,35 @@ func (m *UpdateDomainReply) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateDomainReplyValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateDomainReplyValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateDomainReplyValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return UpdateDomainReplyMultiError(errors)
 	}
@@ -815,22 +905,22 @@ var _ interface {
 	ErrorName() string
 } = UpdateDomainReplyValidationError{}
 
-// Validate checks the field values on GetDomainRequest with the rules defined
+// Validate checks the field values on PageDomainRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *GetDomainRequest) Validate() error {
+func (m *PageDomainRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetDomainRequest with the rules
+// ValidateAll checks the field values on PageDomainRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetDomainRequestMultiError, or nil if none found.
-func (m *GetDomainRequest) ValidateAll() error {
+// PageDomainRequestMultiError, or nil if none found.
+func (m *PageDomainRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetDomainRequest) validate(all bool) error {
+func (m *PageDomainRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -843,7 +933,7 @@ func (m *GetDomainRequest) validate(all bool) error {
 			switch v := interface{}(m.GetPage()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetDomainRequestValidationError{
+					errors = append(errors, PageDomainRequestValidationError{
 						field:  "Page",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -851,7 +941,7 @@ func (m *GetDomainRequest) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetDomainRequestValidationError{
+					errors = append(errors, PageDomainRequestValidationError{
 						field:  "Page",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -860,7 +950,7 @@ func (m *GetDomainRequest) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetDomainRequestValidationError{
+				return PageDomainRequestValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -894,20 +984,53 @@ func (m *GetDomainRequest) validate(all bool) error {
 		// no validation rules for IsNav
 	}
 
+	if m.TagCount != nil {
+
+		if all {
+			switch v := interface{}(m.GetTagCount()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PageDomainRequestValidationError{
+						field:  "TagCount",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PageDomainRequestValidationError{
+						field:  "TagCount",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetTagCount()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PageDomainRequestValidationError{
+					field:  "TagCount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	if len(errors) > 0 {
-		return GetDomainRequestMultiError(errors)
+		return PageDomainRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetDomainRequestMultiError is an error wrapping multiple validation errors
-// returned by GetDomainRequest.ValidateAll() if the designated constraints
+// PageDomainRequestMultiError is an error wrapping multiple validation errors
+// returned by PageDomainRequest.ValidateAll() if the designated constraints
 // aren't met.
-type GetDomainRequestMultiError []error
+type PageDomainRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetDomainRequestMultiError) Error() string {
+func (m PageDomainRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -916,11 +1039,11 @@ func (m GetDomainRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetDomainRequestMultiError) AllErrors() []error { return m }
+func (m PageDomainRequestMultiError) AllErrors() []error { return m }
 
-// GetDomainRequestValidationError is the validation error returned by
-// GetDomainRequest.Validate if the designated constraints aren't met.
-type GetDomainRequestValidationError struct {
+// PageDomainRequestValidationError is the validation error returned by
+// PageDomainRequest.Validate if the designated constraints aren't met.
+type PageDomainRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -928,22 +1051,24 @@ type GetDomainRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetDomainRequestValidationError) Field() string { return e.field }
+func (e PageDomainRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetDomainRequestValidationError) Reason() string { return e.reason }
+func (e PageDomainRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetDomainRequestValidationError) Cause() error { return e.cause }
+func (e PageDomainRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetDomainRequestValidationError) Key() bool { return e.key }
+func (e PageDomainRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetDomainRequestValidationError) ErrorName() string { return "GetDomainRequestValidationError" }
+func (e PageDomainRequestValidationError) ErrorName() string {
+	return "PageDomainRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e GetDomainRequestValidationError) Error() string {
+func (e PageDomainRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -955,14 +1080,14 @@ func (e GetDomainRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetDomainRequest.%s: %s%s",
+		"invalid %sPageDomainRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetDomainRequestValidationError{}
+var _ error = PageDomainRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -970,47 +1095,47 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetDomainRequestValidationError{}
+} = PageDomainRequestValidationError{}
 
-// Validate checks the field values on GetDomainReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *GetDomainReply) Validate() error {
+// Validate checks the field values on PageDomainReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *PageDomainReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetDomainReply with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in GetDomainReplyMultiError,
-// or nil if none found.
-func (m *GetDomainReply) ValidateAll() error {
+// ValidateAll checks the field values on PageDomainReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PageDomainReplyMultiError, or nil if none found.
+func (m *PageDomainReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetDomainReply) validate(all bool) error {
+func (m *PageDomainReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	for idx, item := range m.GetData() {
+	for idx, item := range m.GetDomains() {
 		_, _ = idx, item
 
 		if all {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetDomainReplyValidationError{
-						field:  fmt.Sprintf("Data[%v]", idx),
+					errors = append(errors, PageDomainReplyValidationError{
+						field:  fmt.Sprintf("Domains[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetDomainReplyValidationError{
-						field:  fmt.Sprintf("Data[%v]", idx),
+					errors = append(errors, PageDomainReplyValidationError{
+						field:  fmt.Sprintf("Domains[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -1018,8 +1143,8 @@ func (m *GetDomainReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetDomainReplyValidationError{
-					field:  fmt.Sprintf("Data[%v]", idx),
+				return PageDomainReplyValidationError{
+					field:  fmt.Sprintf("Domains[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -1034,7 +1159,7 @@ func (m *GetDomainReply) validate(all bool) error {
 			switch v := interface{}(m.GetPage()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, GetDomainReplyValidationError{
+					errors = append(errors, PageDomainReplyValidationError{
 						field:  "Page",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1042,7 +1167,7 @@ func (m *GetDomainReply) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, GetDomainReplyValidationError{
+					errors = append(errors, PageDomainReplyValidationError{
 						field:  "Page",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1051,7 +1176,7 @@ func (m *GetDomainReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetDomainReplyValidationError{
+				return PageDomainReplyValidationError{
 					field:  "Page",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1062,19 +1187,19 @@ func (m *GetDomainReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetDomainReplyMultiError(errors)
+		return PageDomainReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetDomainReplyMultiError is an error wrapping multiple validation errors
-// returned by GetDomainReply.ValidateAll() if the designated constraints
+// PageDomainReplyMultiError is an error wrapping multiple validation errors
+// returned by PageDomainReply.ValidateAll() if the designated constraints
 // aren't met.
-type GetDomainReplyMultiError []error
+type PageDomainReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetDomainReplyMultiError) Error() string {
+func (m PageDomainReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1083,11 +1208,11 @@ func (m GetDomainReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetDomainReplyMultiError) AllErrors() []error { return m }
+func (m PageDomainReplyMultiError) AllErrors() []error { return m }
 
-// GetDomainReplyValidationError is the validation error returned by
-// GetDomainReply.Validate if the designated constraints aren't met.
-type GetDomainReplyValidationError struct {
+// PageDomainReplyValidationError is the validation error returned by
+// PageDomainReply.Validate if the designated constraints aren't met.
+type PageDomainReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1095,22 +1220,22 @@ type GetDomainReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetDomainReplyValidationError) Field() string { return e.field }
+func (e PageDomainReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetDomainReplyValidationError) Reason() string { return e.reason }
+func (e PageDomainReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetDomainReplyValidationError) Cause() error { return e.cause }
+func (e PageDomainReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetDomainReplyValidationError) Key() bool { return e.key }
+func (e PageDomainReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetDomainReplyValidationError) ErrorName() string { return "GetDomainReplyValidationError" }
+func (e PageDomainReplyValidationError) ErrorName() string { return "PageDomainReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetDomainReplyValidationError) Error() string {
+func (e PageDomainReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1122,14 +1247,14 @@ func (e GetDomainReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetDomainReply.%s: %s%s",
+		"invalid %sPageDomainReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetDomainReplyValidationError{}
+var _ error = PageDomainReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -1137,4 +1262,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetDomainReplyValidationError{}
+} = PageDomainReplyValidationError{}

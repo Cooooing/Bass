@@ -424,6 +424,60 @@ func (_u *ArticleUpdate) AddLotteryWinnerCount(v int32) *ArticleUpdate {
 	return _u
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_u *ArticleUpdate) SetCreatedBy(v int64) *ArticleUpdate {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableCreatedBy(v *int64) *ArticleUpdate {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *ArticleUpdate) AddCreatedBy(v int64) *ArticleUpdate {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *ArticleUpdate) ClearCreatedBy() *ArticleUpdate {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *ArticleUpdate) SetUpdatedBy(v int64) *ArticleUpdate {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableUpdatedBy(v *int64) *ArticleUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *ArticleUpdate) AddUpdatedBy(v int64) *ArticleUpdate {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *ArticleUpdate) ClearUpdatedBy() *ArticleUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *ArticleUpdate) SetCreatedAt(v time.Time) *ArticleUpdate {
 	_u.mutation.SetCreatedAt(v)
@@ -846,6 +900,24 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedLotteryWinnerCount(); ok {
 		_spec.AddField(article.FieldLotteryWinnerCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(article.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(article.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(article.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(article.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(article.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(article.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(article.FieldCreatedAt, field.TypeTime, value)
@@ -1539,6 +1611,60 @@ func (_u *ArticleUpdateOne) AddLotteryWinnerCount(v int32) *ArticleUpdateOne {
 	return _u
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_u *ArticleUpdateOne) SetCreatedBy(v int64) *ArticleUpdateOne {
+	_u.mutation.ResetCreatedBy()
+	_u.mutation.SetCreatedBy(v)
+	return _u
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableCreatedBy(v *int64) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetCreatedBy(*v)
+	}
+	return _u
+}
+
+// AddCreatedBy adds value to the "created_by" field.
+func (_u *ArticleUpdateOne) AddCreatedBy(v int64) *ArticleUpdateOne {
+	_u.mutation.AddCreatedBy(v)
+	return _u
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (_u *ArticleUpdateOne) ClearCreatedBy() *ArticleUpdateOne {
+	_u.mutation.ClearCreatedBy()
+	return _u
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_u *ArticleUpdateOne) SetUpdatedBy(v int64) *ArticleUpdateOne {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableUpdatedBy(v *int64) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
+	}
+	return _u
+}
+
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *ArticleUpdateOne) AddUpdatedBy(v int64) *ArticleUpdateOne {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (_u *ArticleUpdateOne) ClearUpdatedBy() *ArticleUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *ArticleUpdateOne) SetCreatedAt(v time.Time) *ArticleUpdateOne {
 	_u.mutation.SetCreatedAt(v)
@@ -1991,6 +2117,24 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	}
 	if value, ok := _u.mutation.AddedLotteryWinnerCount(); ok {
 		_spec.AddField(article.FieldLotteryWinnerCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.CreatedBy(); ok {
+		_spec.SetField(article.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedCreatedBy(); ok {
+		_spec.AddField(article.FieldCreatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.CreatedByCleared() {
+		_spec.ClearField(article.FieldCreatedBy, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.UpdatedBy(); ok {
+		_spec.SetField(article.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(article.FieldUpdatedBy, field.TypeInt64, value)
+	}
+	if _u.mutation.UpdatedByCleared() {
+		_spec.ClearField(article.FieldUpdatedBy, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(article.FieldCreatedAt, field.TypeTime, value)

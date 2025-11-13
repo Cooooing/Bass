@@ -3,12 +3,19 @@ package biz
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	userv1 "common/api/user/v1"
+	"common/pkg/client"
+	"common/pkg/constant"
 	"common/pkg/util/base"
+	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
+
+	"github.com/jinzhu/copier"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type CommentDomain struct {
@@ -83,15 +90,52 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 	return res, err
 }
 
-func (d *CommentDomain) Get(ctx context.Context, req *v1.GetCommentRequest) (rsp *v1.GetCommentReply, err error) {
+func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.CommentGetReq) (*v1.PageCommentReply, error) {
+	var (
+		reply *v1.PageCommentReply
+		err   error
+	)
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		rsp, err = d.commentRepo.GetList(ctx, tx, req)
+		list, pageReply, err := d.commentRepo.GetPage(ctx, tx, page, req)
 		if err != nil {
 			return err
 		}
+		userIds := set.New[int64](0)
+		for _, item := range list {
+			userIds.Add(item.UserID)
+		}
+
+		userService, err := client.GetServiceClient(ctx, d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+		if err != nil {
+			return err
+		}
+		userMap, err := userService.GetMap(ctx, &userv1.GetMapRequest{Ids: userIds.ToSlice()})
+		if err != nil {
+			return err
+		}
+		users := userMap.Users
+
+		comments := make([]*v1.Comment, 0)
+		for _, item := range list {
+			elems := &v1.Comment{
+				CreatedAt: timestamppb.New(*item.CreatedAt),
+				UpdatedAt: timestamppb.New(*item.UpdatedAt),
+			}
+			err = copier.Copy(elems, item)
+			if err != nil {
+				return err
+			}
+			elems.User = users[item.UserID]
+			comments = append(comments, elems)
+		}
+
+		reply = &v1.PageCommentReply{
+			Page:     pageReply,
+			Comments: comments,
+		}
 		return nil
 	})
-	return
+	return reply, err
 }
 
 func (d *CommentDomain) UpdateStatus(ctx context.Context, commentId int64, status cv1.CommentStatus) error {

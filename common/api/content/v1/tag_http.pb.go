@@ -19,41 +19,44 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationContentTagServiceAdd = "/common.api.content.v1.ContentTagService/Add"
-const OperationContentTagServiceGet = "/common.api.content.v1.ContentTagService/Get"
+const OperationContentTagServiceAdds = "/common.api.content.v1.ContentTagService/Adds"
+const OperationContentTagServicePage = "/common.api.content.v1.ContentTagService/Page"
 const OperationContentTagServiceUpdate = "/common.api.content.v1.ContentTagService/Update"
 
 type ContentTagServiceHTTPServer interface {
-	Add(context.Context, *AddTagRequest) (*AddTagReply, error)
-	Get(context.Context, *GetTagRequest) (*GetTagReply, error)
+	// Adds 批量添加标签
+	Adds(context.Context, *AddTagsRequest) (*AddTagsReply, error)
+	// Page 分页获取标签
+	Page(context.Context, *PageTagRequest) (*PageTagReply, error)
+	// Update 更新标签
 	Update(context.Context, *UpdateTagRequest) (*UpdateTagReply, error)
 }
 
 func RegisterContentTagServiceHTTPServer(s *http.Server, srv ContentTagServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/tag/add", _ContentTagService_Add2_HTTP_Handler(srv))
+	r.POST("/v1/tag/adds", _ContentTagService_Adds0_HTTP_Handler(srv))
 	r.POST("/v1/tag/update", _ContentTagService_Update1_HTTP_Handler(srv))
-	r.POST("/v1/tag/get", _ContentTagService_Get2_HTTP_Handler(srv))
+	r.POST("/v1/tag/get", _ContentTagService_Page2_HTTP_Handler(srv))
 }
 
-func _ContentTagService_Add2_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
+func _ContentTagService_Adds0_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in AddTagRequest
+		var in AddTagsRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationContentTagServiceAdd)
+		http.SetOperation(ctx, OperationContentTagServiceAdds)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Add(ctx, req.(*AddTagRequest))
+			return srv.Adds(ctx, req.(*AddTagsRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*AddTagReply)
+		reply := out.(*AddTagsReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -80,31 +83,34 @@ func _ContentTagService_Update1_HTTP_Handler(srv ContentTagServiceHTTPServer) fu
 	}
 }
 
-func _ContentTagService_Get2_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
+func _ContentTagService_Page2_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetTagRequest
+		var in PageTagRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationContentTagServiceGet)
+		http.SetOperation(ctx, OperationContentTagServicePage)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Get(ctx, req.(*GetTagRequest))
+			return srv.Page(ctx, req.(*PageTagRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetTagReply)
+		reply := out.(*PageTagReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type ContentTagServiceHTTPClient interface {
-	Add(ctx context.Context, req *AddTagRequest, opts ...http.CallOption) (rsp *AddTagReply, err error)
-	Get(ctx context.Context, req *GetTagRequest, opts ...http.CallOption) (rsp *GetTagReply, err error)
+	// Adds 批量添加标签
+	Adds(ctx context.Context, req *AddTagsRequest, opts ...http.CallOption) (rsp *AddTagsReply, err error)
+	// Page 分页获取标签
+	Page(ctx context.Context, req *PageTagRequest, opts ...http.CallOption) (rsp *PageTagReply, err error)
+	// Update 更新标签
 	Update(ctx context.Context, req *UpdateTagRequest, opts ...http.CallOption) (rsp *UpdateTagReply, err error)
 }
 
@@ -116,11 +122,12 @@ func NewContentTagServiceHTTPClient(client *http.Client) ContentTagServiceHTTPCl
 	return &ContentTagServiceHTTPClientImpl{client}
 }
 
-func (c *ContentTagServiceHTTPClientImpl) Add(ctx context.Context, in *AddTagRequest, opts ...http.CallOption) (*AddTagReply, error) {
-	var out AddTagReply
-	pattern := "/v1/tag/add"
+// Adds 批量添加标签
+func (c *ContentTagServiceHTTPClientImpl) Adds(ctx context.Context, in *AddTagsRequest, opts ...http.CallOption) (*AddTagsReply, error) {
+	var out AddTagsReply
+	pattern := "/v1/tag/adds"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationContentTagServiceAdd))
+	opts = append(opts, http.Operation(OperationContentTagServiceAdds))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -129,11 +136,12 @@ func (c *ContentTagServiceHTTPClientImpl) Add(ctx context.Context, in *AddTagReq
 	return &out, nil
 }
 
-func (c *ContentTagServiceHTTPClientImpl) Get(ctx context.Context, in *GetTagRequest, opts ...http.CallOption) (*GetTagReply, error) {
-	var out GetTagReply
+// Page 分页获取标签
+func (c *ContentTagServiceHTTPClientImpl) Page(ctx context.Context, in *PageTagRequest, opts ...http.CallOption) (*PageTagReply, error) {
+	var out PageTagReply
 	pattern := "/v1/tag/get"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationContentTagServiceGet))
+	opts = append(opts, http.Operation(OperationContentTagServicePage))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -142,6 +150,7 @@ func (c *ContentTagServiceHTTPClientImpl) Get(ctx context.Context, in *GetTagReq
 	return &out, nil
 }
 
+// Update 更新标签
 func (c *ContentTagServiceHTTPClientImpl) Update(ctx context.Context, in *UpdateTagRequest, opts ...http.CallOption) (*UpdateTagReply, error) {
 	var out UpdateTagReply
 	pattern := "/v1/tag/update"

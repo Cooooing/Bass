@@ -9,6 +9,7 @@ package v1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -138,18 +139,135 @@ func (x *PageReply) GetSize() uint32 {
 	return 0
 }
 
+type TimeRange struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 开始
+	Start *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=start,proto3" json:"start,omitempty"`
+	// 结束
+	End           *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TimeRange) Reset() {
+	*x = TimeRange{}
+	mi := &file_common_v1_common_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TimeRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TimeRange) ProtoMessage() {}
+
+func (x *TimeRange) ProtoReflect() protoreflect.Message {
+	mi := &file_common_v1_common_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TimeRange.ProtoReflect.Descriptor instead.
+func (*TimeRange) Descriptor() ([]byte, []int) {
+	return file_common_v1_common_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *TimeRange) GetStart() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Start
+	}
+	return nil
+}
+
+func (x *TimeRange) GetEnd() *timestamppb.Timestamp {
+	if x != nil {
+		return x.End
+	}
+	return nil
+}
+
+type Int32Range struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 开始
+	Start *int32 `protobuf:"varint,1,opt,name=start,proto3,oneof" json:"start,omitempty"`
+	// 结束
+	End           *int32 `protobuf:"varint,2,opt,name=end,proto3,oneof" json:"end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Int32Range) Reset() {
+	*x = Int32Range{}
+	mi := &file_common_v1_common_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Int32Range) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Int32Range) ProtoMessage() {}
+
+func (x *Int32Range) ProtoReflect() protoreflect.Message {
+	mi := &file_common_v1_common_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Int32Range.ProtoReflect.Descriptor instead.
+func (*Int32Range) Descriptor() ([]byte, []int) {
+	return file_common_v1_common_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Int32Range) GetStart() int32 {
+	if x != nil && x.Start != nil {
+		return *x.Start
+	}
+	return 0
+}
+
+func (x *Int32Range) GetEnd() int32 {
+	if x != nil && x.End != nil {
+		return *x.End
+	}
+	return 0
+}
+
 var File_common_v1_common_proto protoreflect.FileDescriptor
 
 const file_common_v1_common_proto_rawDesc = "" +
 	"\n" +
-	"\x16common/v1/common.proto\x12\x14common.api.common.v1\"5\n" +
+	"\x16common/v1/common.proto\x12\x14common.api.common.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"5\n" +
 	"\vPageRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\rR\x04page\x12\x12\n" +
 	"\x04size\x18\x02 \x01(\rR\x04size\"I\n" +
 	"\tPageReply\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\rR\x05total\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\rR\x04page\x12\x12\n" +
-	"\x04size\x18\x03 \x01(\rR\x04sizeB\x19Z\x17common/api/common/v1;v1b\x06proto3"
+	"\x04size\x18\x03 \x01(\rR\x04size\"k\n" +
+	"\tTimeRange\x120\n" +
+	"\x05start\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x05start\x12,\n" +
+	"\x03end\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x03end\"P\n" +
+	"\n" +
+	"Int32Range\x12\x19\n" +
+	"\x05start\x18\x01 \x01(\x05H\x00R\x05start\x88\x01\x01\x12\x15\n" +
+	"\x03end\x18\x02 \x01(\x05H\x01R\x03end\x88\x01\x01B\b\n" +
+	"\x06_startB\x06\n" +
+	"\x04_endB\x19Z\x17common/api/common/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_common_proto_rawDescOnce sync.Once
@@ -163,17 +281,22 @@ func file_common_v1_common_proto_rawDescGZIP() []byte {
 	return file_common_v1_common_proto_rawDescData
 }
 
-var file_common_v1_common_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_common_v1_common_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_common_v1_common_proto_goTypes = []any{
-	(*PageRequest)(nil), // 0: common.api.common.v1.PageRequest
-	(*PageReply)(nil),   // 1: common.api.common.v1.PageReply
+	(*PageRequest)(nil),           // 0: common.api.common.v1.PageRequest
+	(*PageReply)(nil),             // 1: common.api.common.v1.PageReply
+	(*TimeRange)(nil),             // 2: common.api.common.v1.TimeRange
+	(*Int32Range)(nil),            // 3: common.api.common.v1.Int32Range
+	(*timestamppb.Timestamp)(nil), // 4: google.protobuf.Timestamp
 }
 var file_common_v1_common_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	4, // 0: common.api.common.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
+	4, // 1: common.api.common.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_common_v1_common_proto_init() }
@@ -181,13 +304,14 @@ func file_common_v1_common_proto_init() {
 	if File_common_v1_common_proto != nil {
 		return
 	}
+	file_common_v1_common_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_v1_common_proto_rawDesc), len(file_common_v1_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

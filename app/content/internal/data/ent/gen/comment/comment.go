@@ -34,6 +34,10 @@ const (
 	FieldLikeCount = "like_count"
 	// FieldCollectCount holds the string denoting the collect_count field in the database.
 	FieldCollectCount = "collect_count"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -97,6 +101,8 @@ var Columns = []string{
 	FieldReplyCount,
 	FieldLikeCount,
 	FieldCollectCount,
+	FieldCreatedBy,
+	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -184,6 +190,16 @@ func ByLikeCount(opts ...sql.OrderTermOption) OrderOption {
 // ByCollectCount orders the results by the collect_count field.
 func ByCollectCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCollectCount, opts...).ToFunc()
+}
+
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

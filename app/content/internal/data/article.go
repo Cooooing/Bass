@@ -7,14 +7,11 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/util/base"
-	"common/pkg/util/collections/dict"
-	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/article"
 	"content/internal/data/ent/gen/articlepostscript"
-	"content/internal/data/ent/gen/tag"
 	"context"
 	"encoding/json"
 
@@ -194,93 +191,50 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 	}, nil
 }
 
-func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *v1.GetArticleRequest) (*v1.GetArticleReply, error) {
-	req.Page = base.IfNilDefault(req.Page, constant.GetPageDefault())
-	tagIds := set.New[int64](0)
-	if req.DomainId != nil {
-		tags, err := r.tagRepo.GetList(ctx, tx, &v1.GetTagRequest{
-			Page:     constant.GetPageMax(),
-			DomainId: *req.DomainId,
-		})
-		if err != nil {
-			return nil, err
-		}
-		for _, item := range tags.Tags {
-			tagIds.Add(item.Id)
-		}
+func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) ([]*model.Article, error) {
+	var (
+		articles []*model.Article
+		err      error
+	)
+	query := tx.Article.Query().WithTags()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
 	}
-	if req.TagId != nil {
-		tagIds.Add(*req.TagId)
+	for i := range list {
+		articles = append(articles, (*model.Article)(list[i]))
 	}
-
-	query := tx.Article.Query()
-	if req.Status != nil {
-		query = query.Where(article.StatusEQ(*req.Status))
-	}
-	if tagIds.Len() > 0 {
-		query = query.Where(article.HasTagsWith(tag.IDIn(tagIds.ToSlice()...)))
-	}
-	// Todo 文章排序，默认最新。最热暂不实现
-	query = query.Order(gen.Desc(article.FieldCreatedAt))
+	return articles, nil
+}
+func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *cv1.PageReply, error) {
+	var (
+		articles []*model.Article
+		err      error
+		total    int
+	)
+	page = base.OrDefault(page, constant.GetPageDefault())
+	query := tx.Article.Query().WithTags()
+	query = r.getQuery(query, req)
 	countQuery := query.Clone()
-	count, err := countQuery.Count(ctx)
+	total, err = countQuery.Count(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	list, err := query.Limit(int(req.Page.Size)).Offset(int((req.Page.Page - 1) * req.Page.Size)).All(ctx)
+	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-
-	articleIds := set.New[int64](0)
-	userIds := set.New[int64](0)
-	for _, item := range list {
-		articleIds.Add(item.ID)
-		userIds.Add(item.UserID)
+	for i := range list {
+		articles = append(articles, (*model.Article)(list[i]))
 	}
-
-	lastCommentMap, _ := r.commentRepo.GetArticleLastComments(ctx, tx, articleIds.ToSlice())
-	lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
-		userIds.Add(e.Value.UserID)
-		return true
-	})
-
-	userServiceClient, err := client.GetServiceClient(ctx, r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	if err != nil {
-		return nil, err
-	}
-	userAuthors, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
-		Ids: userIds.ToSlice(),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	articles := make([]*v1.Article, 0, len(list))
-	for _, item := range list {
-		i := (*model.Article)(item)
-		i.Summary()
-		a := &v1.Article{}
-		err = copier.Copy(a, i)
-		if err != nil {
-			return nil, err
-		}
-		a.CreatedAt = timestamppb.New(*i.CreatedAt)
-		a.UpdatedAt = timestamppb.New(*i.UpdatedAt)
-		if lastReplyComment, ok := lastCommentMap.Get(item.ID); ok {
-			a.RepliedAt = timestamppb.New(*lastReplyComment.CreatedAt)
-			a.ReplyUser = userAuthors.Users[lastReplyComment.UserID]
-		}
-		a.AuthorUser = userAuthors.Users[item.UserID]
-		articles = append(articles, a)
-	}
-
-	return &v1.GetArticleReply{
-		Page: &cv1.PageReply{
-			Total: uint32(count),
-			Page:  req.Page.Page,
-			Size:  req.Page.Size,
-		},
-		Articles: articles,
+	return articles, &cv1.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
 	}, nil
+}
+
+func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq) *gen.ArticleQuery {
+	return query
 }

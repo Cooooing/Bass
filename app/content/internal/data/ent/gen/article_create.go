@@ -282,6 +282,34 @@ func (_c *ArticleCreate) SetNillableLotteryWinnerCount(v *int32) *ArticleCreate 
 	return _c
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_c *ArticleCreate) SetCreatedBy(v int64) *ArticleCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableCreatedBy(v *int64) *ArticleCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *ArticleCreate) SetUpdatedBy(v int64) *ArticleCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableUpdatedBy(v *int64) *ArticleCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
+	}
+	return _c
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_c *ArticleCreate) SetCreatedAt(v time.Time) *ArticleCreate {
 	_c.mutation.SetCreatedAt(v)
@@ -688,6 +716,14 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LotteryWinnerCount(); ok {
 		_spec.SetField(article.FieldLotteryWinnerCount, field.TypeInt32, value)
 		_node.LotteryWinnerCount = value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(article.FieldCreatedBy, field.TypeInt64, value)
+		_node.CreatedBy = &value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(article.FieldUpdatedBy, field.TypeInt64, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(article.FieldCreatedAt, field.TypeTime, value)

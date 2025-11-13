@@ -15,7 +15,7 @@ type Comment struct {
 }
 
 func (Comment) Fields() []ent.Field {
-	return append([]ent.Field{
+	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
 		field.Int64("user_id").Comment("用户ID"),
@@ -28,7 +28,10 @@ func (Comment) Fields() []ent.Field {
 		field.Int32("reply_count").Comment("回复数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),
 		field.Int32("collect_count").Comment("收藏数").Default(0),
-	}, pkg.TimeAuditFields()...)
+	}
+	fields = append(fields, pkg.UserAuditFields()...)
+	fields = append(fields, pkg.TimeAuditFields()...)
+	return fields
 }
 
 func (Comment) Edges() []ent.Edge {

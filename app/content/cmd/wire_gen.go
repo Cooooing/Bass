@@ -22,11 +22,11 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
+	genClient, cleanup, err := client.NewDataBaseClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
-	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
+	etcdClient, cleanup2, err := data.NewEtcdClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -37,9 +37,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient, tokenRepo)
-	systemService := service.NewSystemService(baseService)
 	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
 	if err != nil {
 		cleanup3()
@@ -47,7 +44,10 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, rabbitMQClient)
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
+	systemService := service.NewSystemService(baseService)
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
 	commentRepo := data.NewCommentRepo(baseRepo, genClient)
@@ -55,7 +55,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tagRepo := data.NewTagRepo(baseRepo)
 	articleRepo := data.NewArticleRepo(baseRepo, genClient, articlePostscriptRepo, commentRepo, domainRepo, tagRepo)
 	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
-	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, domainRepo)
+	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, commentRepo, domainRepo)
 	if err != nil {
 		cleanup4()
 		cleanup3()

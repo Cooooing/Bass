@@ -18,18 +18,20 @@ type Tag struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
-	// 创建用户id
-	UserID int64 `json:"user_id,omitempty"`
 	// 标签名称
 	Name string `json:"name,omitempty"`
 	// 标签描述
-	Description string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty"`
 	// 所属领域id
 	DomainID *int64 `json:"domain_id,omitempty"`
 	// 标签状态：0-正常，1-禁用
 	Status int32 `json:"status,omitempty"`
 	// 文章数
 	ArticleCount int32 `json:"article_count,omitempty"`
+	// 创建人ID
+	CreatedBy *int64 `json:"created_by,omitempty"`
+	// 更新人ID
+	UpdatedBy *int64 `json:"updated_by,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -76,7 +78,7 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case tag.FieldID, tag.FieldUserID, tag.FieldDomainID, tag.FieldStatus, tag.FieldArticleCount:
+		case tag.FieldID, tag.FieldDomainID, tag.FieldStatus, tag.FieldArticleCount, tag.FieldCreatedBy, tag.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case tag.FieldName, tag.FieldDescription:
 			values[i] = new(sql.NullString)
@@ -103,12 +105,6 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = int64(value.Int64)
-		case tag.FieldUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
-			} else if value.Valid {
-				_m.UserID = value.Int64
-			}
 		case tag.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -119,7 +115,8 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				_m.Description = value.String
+				_m.Description = new(string)
+				*_m.Description = value.String
 			}
 		case tag.FieldDomainID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -139,6 +136,20 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field article_count", values[i])
 			} else if value.Valid {
 				_m.ArticleCount = int32(value.Int64)
+			}
+		case tag.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = new(int64)
+				*_m.CreatedBy = value.Int64
+			}
+		case tag.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = new(int64)
+				*_m.UpdatedBy = value.Int64
 			}
 		case tag.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -200,14 +211,13 @@ func (_m *Tag) String() string {
 	var builder strings.Builder
 	builder.WriteString("Tag(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
-	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(_m.Description)
+	if v := _m.Description; v != nil {
+		builder.WriteString("description=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.DomainID; v != nil {
 		builder.WriteString("domain_id=")
@@ -219,6 +229,16 @@ func (_m *Tag) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("article_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ArticleCount))
+	builder.WriteString(", ")
+	if v := _m.CreatedBy; v != nil {
+		builder.WriteString("created_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

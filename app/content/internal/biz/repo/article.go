@@ -22,7 +22,11 @@ type ArticleRepo interface {
 	GetArticleById(ctx context.Context, tx *gen.Client, id int64) (*model.Article, error)
 
 	GetOne(ctx context.Context, tx *gen.Client, articleId int64) (*v1.GetArticleOneReply, error)
-	GetList(ctx context.Context, tx *gen.Client, req *v1.GetArticleRequest) (*v1.GetArticleReply, error)
+	GetList(ctx context.Context, tx *gen.Client, req *ArticleGetReq) ([]*model.Article, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ArticleGetReq) ([]*model.Article, *cv1.PageReply, error)
+}
+
+type ArticleGetReq struct {
 }
 
 type ArticlePostscriptRepo interface {

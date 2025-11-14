@@ -194,31 +194,31 @@ func init() {
 	commentFields := schema.Comment{}.Fields()
 	_ = commentFields
 	// commentDescContent is the schema descriptor for content field.
-	commentDescContent := commentFields[3].Descriptor()
+	commentDescContent := commentFields[2].Descriptor()
 	// comment.ContentValidator is a validator for the "content" field. It is called by the builders before save.
 	comment.ContentValidator = commentDescContent.Validators[0].(func(string) error)
 	// commentDescStatus is the schema descriptor for status field.
-	commentDescStatus := commentFields[7].Descriptor()
+	commentDescStatus := commentFields[6].Descriptor()
 	// comment.DefaultStatus holds the default value on creation for the status field.
 	comment.DefaultStatus = commentDescStatus.Default.(int32)
 	// commentDescReplyCount is the schema descriptor for reply_count field.
-	commentDescReplyCount := commentFields[8].Descriptor()
+	commentDescReplyCount := commentFields[7].Descriptor()
 	// comment.DefaultReplyCount holds the default value on creation for the reply_count field.
 	comment.DefaultReplyCount = commentDescReplyCount.Default.(int32)
 	// commentDescLikeCount is the schema descriptor for like_count field.
-	commentDescLikeCount := commentFields[9].Descriptor()
+	commentDescLikeCount := commentFields[8].Descriptor()
 	// comment.DefaultLikeCount holds the default value on creation for the like_count field.
 	comment.DefaultLikeCount = commentDescLikeCount.Default.(int32)
 	// commentDescCollectCount is the schema descriptor for collect_count field.
-	commentDescCollectCount := commentFields[10].Descriptor()
+	commentDescCollectCount := commentFields[9].Descriptor()
 	// comment.DefaultCollectCount holds the default value on creation for the collect_count field.
 	comment.DefaultCollectCount = commentDescCollectCount.Default.(int32)
 	// commentDescCreatedAt is the schema descriptor for created_at field.
-	commentDescCreatedAt := commentFields[13].Descriptor()
+	commentDescCreatedAt := commentFields[12].Descriptor()
 	// comment.DefaultCreatedAt holds the default value on creation for the created_at field.
 	comment.DefaultCreatedAt = commentDescCreatedAt.Default.(func() time.Time)
 	// commentDescUpdatedAt is the schema descriptor for updated_at field.
-	commentDescUpdatedAt := commentFields[14].Descriptor()
+	commentDescUpdatedAt := commentFields[13].Descriptor()
 	// comment.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	comment.DefaultUpdatedAt = commentDescUpdatedAt.Default.(func() time.Time)
 	domainFields := schema.Domain{}.Fields()

@@ -16,8 +16,6 @@ const (
 	FieldID = "id"
 	// FieldArticleID holds the string denoting the article_id field in the database.
 	FieldArticleID = "article_id"
-	// FieldUserID holds the string denoting the user_id field in the database.
-	FieldUserID = "user_id"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
 	// FieldLevel holds the string denoting the level field in the database.
@@ -92,7 +90,6 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldArticleID,
-	FieldUserID,
 	FieldContent,
 	FieldLevel,
 	FieldParentID,
@@ -145,11 +142,6 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByArticleID orders the results by the article_id field.
 func ByArticleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldArticleID, opts...).ToFunc()
-}
-
-// ByUserID orders the results by the user_id field.
-func ByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUserID, opts...).ToFunc()
 }
 
 // ByContent orders the results by the content field.

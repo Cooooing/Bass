@@ -90,6 +90,8 @@ message Comment {
   repeated Comment comments = 14;
   // 用户信息
   user.v1.User user = 15;
+  // 回复评论的用户信息
+  user.v1.User reply_user = 16;
 }
 
 message AddCommentRequest {
@@ -105,8 +107,8 @@ message AddCommentReply {}
 message PageCommentRequest {
   // 分页
   optional common.v1.PageRequest page = 1;
-  // 评论ID
-  optional int64 id = 2;
+  // 评论ID，查询该评论的回复。需为文章的评论，回复时间正序。
+  optional int64 comment_id = 2;
   // 文章ID
   optional int64 article_id = 3;
   // 排序 0-最新 1-最热

@@ -44,7 +44,7 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 	user := util.MustGetUserInfo(ctx)
 	_, err = s.commentDomain.Add(ctx, &model.Comment{
 		ArticleID: req.ArticleId,
-		UserID:    user.ID,
+		CreatedBy: &user.ID,
 		Content:   req.Content,
 		ReplyID:   base.If(req.ReplyId != 0, &req.ReplyId, nil),
 	})
@@ -53,7 +53,7 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 
 func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (*v1.PageCommentReply, error) {
 	return s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
-		CommentId: req.Id,
+		CommentId: req.CommentId,
 		ArticleId: req.ArticleId,
 		UserId:    req.UserId,
 		Order:     req.Order,

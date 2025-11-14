@@ -44,27 +44,6 @@ func (_u *CommentUpdate) SetNillableArticleID(v *int64) *CommentUpdate {
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *CommentUpdate) SetUserID(v int64) *CommentUpdate {
-	_u.mutation.ResetUserID()
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *CommentUpdate) SetNillableUserID(v *int64) *CommentUpdate {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// AddUserID adds value to the "user_id" field.
-func (_u *CommentUpdate) AddUserID(v int64) *CommentUpdate {
-	_u.mutation.AddUserID(v)
-	return _u
-}
-
 // SetContent sets the "content" field.
 func (_u *CommentUpdate) SetContent(v string) *CommentUpdate {
 	_u.mutation.SetContent(v)
@@ -516,12 +495,6 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(comment.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(comment.FieldUserID, field.TypeInt64, value)
-	}
 	if value, ok := _u.mutation.Content(); ok {
 		_spec.SetField(comment.FieldContent, field.TypeString, value)
 	}
@@ -838,27 +811,6 @@ func (_u *CommentUpdateOne) SetNillableArticleID(v *int64) *CommentUpdateOne {
 	if v != nil {
 		_u.SetArticleID(*v)
 	}
-	return _u
-}
-
-// SetUserID sets the "user_id" field.
-func (_u *CommentUpdateOne) SetUserID(v int64) *CommentUpdateOne {
-	_u.mutation.ResetUserID()
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *CommentUpdateOne) SetNillableUserID(v *int64) *CommentUpdateOne {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// AddUserID adds value to the "user_id" field.
-func (_u *CommentUpdateOne) AddUserID(v int64) *CommentUpdateOne {
-	_u.mutation.AddUserID(v)
 	return _u
 }
 
@@ -1342,12 +1294,6 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(comment.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(comment.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.Content(); ok {
 		_spec.SetField(comment.FieldContent, field.TypeString, value)

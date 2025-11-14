@@ -994,6 +994,10 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 用户信息
+                replyUser:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 回复评论的用户信息
         common.api.content.v1.DeleteArticleReply:
             type: object
             properties: {}
@@ -1169,9 +1173,9 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
                     description: 分页
-                id:
+                commentId:
                     type: string
-                    description: 评论ID
+                    description: 评论ID，查询该评论的回复。需为文章的评论，回复时间正序。
                 articleId:
                     type: string
                     description: 文章ID

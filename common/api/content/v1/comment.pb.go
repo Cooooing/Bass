@@ -60,7 +60,9 @@ type Comment struct {
 	// 子评论
 	Comments []*Comment `protobuf:"bytes,14,rep,name=comments,proto3" json:"comments,omitempty"`
 	// 用户信息
-	User          *v1.User `protobuf:"bytes,15,opt,name=user,proto3" json:"user,omitempty"`
+	User *v1.User `protobuf:"bytes,15,opt,name=user,proto3" json:"user,omitempty"`
+	// 回复评论的用户信息
+	ReplyUser     *v1.User `protobuf:"bytes,16,opt,name=reply_user,json=replyUser,proto3" json:"reply_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -207,6 +209,13 @@ func (x *Comment) GetUser() *v1.User {
 	return nil
 }
 
+func (x *Comment) GetReplyUser() *v1.User {
+	if x != nil {
+		return x.ReplyUser
+	}
+	return nil
+}
+
 type AddCommentRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 文章ID
@@ -310,8 +319,8 @@ type PageCommentRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 分页
 	Page *v11.PageRequest `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
-	// 评论ID
-	Id *int64 `protobuf:"varint,2,opt,name=id,proto3,oneof" json:"id,omitempty"`
+	// 评论ID，查询该评论的回复。需为文章的评论，回复时间正序。
+	CommentId *int64 `protobuf:"varint,2,opt,name=comment_id,json=commentId,proto3,oneof" json:"comment_id,omitempty"`
 	// 文章ID
 	ArticleId *int64 `protobuf:"varint,3,opt,name=article_id,json=articleId,proto3,oneof" json:"article_id,omitempty"`
 	// 排序 0-最新 1-最热
@@ -359,9 +368,9 @@ func (x *PageCommentRequest) GetPage() *v11.PageRequest {
 	return nil
 }
 
-func (x *PageCommentRequest) GetId() int64 {
-	if x != nil && x.Id != nil {
-		return *x.Id
+func (x *PageCommentRequest) GetCommentId() int64 {
+	if x != nil && x.CommentId != nil {
+		return *x.CommentId
 	}
 	return 0
 }
@@ -715,7 +724,7 @@ var File_content_v1_comment_proto protoreflect.FileDescriptor
 
 const file_content_v1_comment_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xbf\x04\n" +
+	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xf8\x04\n" +
 	"\aComment\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -740,22 +749,25 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	" \x01(\x03R\tlikeCount\x12#\n" +
 	"\rcollect_count\x18\v \x01(\x03R\fcollectCount\x12:\n" +
 	"\bcomments\x18\x0e \x03(\v2\x1e.common.api.content.v1.CommentR\bcomments\x12,\n" +
-	"\x04user\x18\x0f \x01(\v2\x18.common.api.user.v1.UserR\x04user\"g\n" +
+	"\x04user\x18\x0f \x01(\v2\x18.common.api.user.v1.UserR\x04user\x127\n" +
+	"\n" +
+	"reply_user\x18\x10 \x01(\v2\x18.common.api.user.v1.UserR\treplyUser\"g\n" +
 	"\x11AddCommentRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12\x19\n" +
 	"\breply_id\x18\x06 \x01(\x03R\areplyId\"\x11\n" +
-	"\x0fAddCommentReply\"\xf7\x01\n" +
+	"\x0fAddCommentReply\"\x8e\x02\n" +
 	"\x12PageCommentRequest\x12:\n" +
-	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\x13\n" +
-	"\x02id\x18\x02 \x01(\x03H\x01R\x02id\x88\x01\x01\x12\"\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"comment_id\x18\x02 \x01(\x03H\x01R\tcommentId\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"article_id\x18\x03 \x01(\x03H\x02R\tarticleId\x88\x01\x01\x12\x19\n" +
 	"\x05order\x18\x04 \x01(\x05H\x03R\x05order\x88\x01\x01\x12\x1c\n" +
 	"\auser_id\x18\x05 \x01(\x03H\x04R\x06userId\x88\x01\x01B\a\n" +
-	"\x05_pageB\x05\n" +
-	"\x03_idB\r\n" +
+	"\x05_pageB\r\n" +
+	"\v_comment_idB\r\n" +
 	"\v_article_idB\b\n" +
 	"\x06_orderB\n" +
 	"\n" +
@@ -817,24 +829,25 @@ var file_content_v1_comment_proto_depIdxs = []int32{
 	11, // 1: common.api.content.v1.Comment.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 2: common.api.content.v1.Comment.comments:type_name -> common.api.content.v1.Comment
 	12, // 3: common.api.content.v1.Comment.user:type_name -> common.api.user.v1.User
-	13, // 4: common.api.content.v1.PageCommentRequest.page:type_name -> common.api.common.v1.PageRequest
-	14, // 5: common.api.content.v1.PageCommentReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 6: common.api.content.v1.PageCommentReply.comments:type_name -> common.api.content.v1.Comment
-	1,  // 7: common.api.content.v1.ContentCommentService.Add:input_type -> common.api.content.v1.AddCommentRequest
-	3,  // 8: common.api.content.v1.ContentCommentService.Page:input_type -> common.api.content.v1.PageCommentRequest
-	5,  // 9: common.api.content.v1.ContentCommentService.Like:input_type -> common.api.content.v1.LikeCommentRequest
-	7,  // 10: common.api.content.v1.ContentCommentService.Thank:input_type -> common.api.content.v1.ThankCommentRequest
-	9,  // 11: common.api.content.v1.ContentCommentService.UpdateStatus:input_type -> common.api.content.v1.UpdateStatusCommentRequest
-	2,  // 12: common.api.content.v1.ContentCommentService.Add:output_type -> common.api.content.v1.AddCommentReply
-	4,  // 13: common.api.content.v1.ContentCommentService.Page:output_type -> common.api.content.v1.PageCommentReply
-	6,  // 14: common.api.content.v1.ContentCommentService.Like:output_type -> common.api.content.v1.LikeCommentReply
-	8,  // 15: common.api.content.v1.ContentCommentService.Thank:output_type -> common.api.content.v1.ThankCommentReply
-	10, // 16: common.api.content.v1.ContentCommentService.UpdateStatus:output_type -> common.api.content.v1.UpdateStatusCommentReply
-	12, // [12:17] is the sub-list for method output_type
-	7,  // [7:12] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	12, // 4: common.api.content.v1.Comment.reply_user:type_name -> common.api.user.v1.User
+	13, // 5: common.api.content.v1.PageCommentRequest.page:type_name -> common.api.common.v1.PageRequest
+	14, // 6: common.api.content.v1.PageCommentReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 7: common.api.content.v1.PageCommentReply.comments:type_name -> common.api.content.v1.Comment
+	1,  // 8: common.api.content.v1.ContentCommentService.Add:input_type -> common.api.content.v1.AddCommentRequest
+	3,  // 9: common.api.content.v1.ContentCommentService.Page:input_type -> common.api.content.v1.PageCommentRequest
+	5,  // 10: common.api.content.v1.ContentCommentService.Like:input_type -> common.api.content.v1.LikeCommentRequest
+	7,  // 11: common.api.content.v1.ContentCommentService.Thank:input_type -> common.api.content.v1.ThankCommentRequest
+	9,  // 12: common.api.content.v1.ContentCommentService.UpdateStatus:input_type -> common.api.content.v1.UpdateStatusCommentRequest
+	2,  // 13: common.api.content.v1.ContentCommentService.Add:output_type -> common.api.content.v1.AddCommentReply
+	4,  // 14: common.api.content.v1.ContentCommentService.Page:output_type -> common.api.content.v1.PageCommentReply
+	6,  // 15: common.api.content.v1.ContentCommentService.Like:output_type -> common.api.content.v1.LikeCommentReply
+	8,  // 16: common.api.content.v1.ContentCommentService.Thank:output_type -> common.api.content.v1.ThankCommentReply
+	10, // 17: common.api.content.v1.ContentCommentService.UpdateStatus:output_type -> common.api.content.v1.UpdateStatusCommentReply
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_comment_proto_init() }

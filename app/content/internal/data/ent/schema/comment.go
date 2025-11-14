@@ -18,7 +18,6 @@ func (Comment) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
-		field.Int64("user_id").Comment("用户ID"),
 		field.Text("content").Comment("评论内容").NotEmpty(),
 		field.Int32("level").Comment("评论层级"),
 		field.Int64("parent_id").Comment("父级评论ID").Optional().Nillable(),

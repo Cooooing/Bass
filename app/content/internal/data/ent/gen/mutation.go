@@ -8414,8 +8414,6 @@ type CommentMutation struct {
 	op                    Op
 	typ                   string
 	id                    *int64
-	user_id               *int64
-	adduser_id            *int64
 	content               *string
 	level                 *int32
 	addlevel              *int32
@@ -8592,62 +8590,6 @@ func (m *CommentMutation) OldArticleID(ctx context.Context) (v int64, err error)
 // ResetArticleID resets all changes to the "article_id" field.
 func (m *CommentMutation) ResetArticleID() {
 	m.article = nil
-}
-
-// SetUserID sets the "user_id" field.
-func (m *CommentMutation) SetUserID(i int64) {
-	m.user_id = &i
-	m.adduser_id = nil
-}
-
-// UserID returns the value of the "user_id" field in the mutation.
-func (m *CommentMutation) UserID() (r int64, exists bool) {
-	v := m.user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUserID returns the old "user_id" field's value of the Comment entity.
-// If the Comment object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldUserID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUserID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
-	}
-	return oldValue.UserID, nil
-}
-
-// AddUserID adds i to the "user_id" field.
-func (m *CommentMutation) AddUserID(i int64) {
-	if m.adduser_id != nil {
-		*m.adduser_id += i
-	} else {
-		m.adduser_id = &i
-	}
-}
-
-// AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *CommentMutation) AddedUserID() (r int64, exists bool) {
-	v := m.adduser_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUserID resets all changes to the "user_id" field.
-func (m *CommentMutation) ResetUserID() {
-	m.user_id = nil
-	m.adduser_id = nil
 }
 
 // SetContent sets the "content" field.
@@ -9579,12 +9521,9 @@ func (m *CommentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CommentMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.article != nil {
 		fields = append(fields, comment.FieldArticleID)
-	}
-	if m.user_id != nil {
-		fields = append(fields, comment.FieldUserID)
 	}
 	if m.content != nil {
 		fields = append(fields, comment.FieldContent)
@@ -9632,8 +9571,6 @@ func (m *CommentMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case comment.FieldArticleID:
 		return m.ArticleID()
-	case comment.FieldUserID:
-		return m.UserID()
 	case comment.FieldContent:
 		return m.Content()
 	case comment.FieldLevel:
@@ -9669,8 +9606,6 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case comment.FieldArticleID:
 		return m.OldArticleID(ctx)
-	case comment.FieldUserID:
-		return m.OldUserID(ctx)
 	case comment.FieldContent:
 		return m.OldContent(ctx)
 	case comment.FieldLevel:
@@ -9710,13 +9645,6 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetArticleID(v)
-		return nil
-	case comment.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUserID(v)
 		return nil
 	case comment.FieldContent:
 		v, ok := value.(string)
@@ -9810,9 +9738,6 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *CommentMutation) AddedFields() []string {
 	var fields []string
-	if m.adduser_id != nil {
-		fields = append(fields, comment.FieldUserID)
-	}
 	if m.addlevel != nil {
 		fields = append(fields, comment.FieldLevel)
 	}
@@ -9842,8 +9767,6 @@ func (m *CommentMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case comment.FieldUserID:
-		return m.AddedUserID()
 	case comment.FieldLevel:
 		return m.AddedLevel()
 	case comment.FieldStatus:
@@ -9867,13 +9790,6 @@ func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CommentMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case comment.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUserID(v)
-		return nil
 	case comment.FieldLevel:
 		v, ok := value.(int32)
 		if !ok {
@@ -9991,9 +9907,6 @@ func (m *CommentMutation) ResetField(name string) error {
 	switch name {
 	case comment.FieldArticleID:
 		m.ResetArticleID()
-		return nil
-	case comment.FieldUserID:
-		m.ResetUserID()
 		return nil
 	case comment.FieldContent:
 		m.ResetContent()

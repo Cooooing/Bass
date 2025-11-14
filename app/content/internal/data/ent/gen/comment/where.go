@@ -60,11 +60,6 @@ func ArticleID(v int64) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldArticleID, v))
 }
 
-// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldEQ(FieldUserID, v))
-}
-
 // Content applies equality check predicate on the "content" field. It's identical to ContentEQ.
 func Content(v string) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldContent, v))
@@ -143,46 +138,6 @@ func ArticleIDIn(vs ...int64) predicate.Comment {
 // ArticleIDNotIn applies the NotIn predicate on the "article_id" field.
 func ArticleIDNotIn(vs ...int64) predicate.Comment {
 	return predicate.Comment(sql.FieldNotIn(FieldArticleID, vs...))
-}
-
-// UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldEQ(FieldUserID, v))
-}
-
-// UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldNEQ(FieldUserID, v))
-}
-
-// UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int64) predicate.Comment {
-	return predicate.Comment(sql.FieldIn(FieldUserID, vs...))
-}
-
-// UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int64) predicate.Comment {
-	return predicate.Comment(sql.FieldNotIn(FieldUserID, vs...))
-}
-
-// UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldGT(FieldUserID, v))
-}
-
-// UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldGTE(FieldUserID, v))
-}
-
-// UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldLT(FieldUserID, v))
-}
-
-// UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int64) predicate.Comment {
-	return predicate.Comment(sql.FieldLTE(FieldUserID, v))
 }
 
 // ContentEQ applies the EQ predicate on the "content" field.

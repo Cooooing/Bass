@@ -229,7 +229,6 @@ var (
 	// CommentsColumns holds the columns for the "comments" table.
 	CommentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "level", Type: field.TypeInt32},
 		{Name: "status", Type: field.TypeInt32, Default: 0},
@@ -252,19 +251,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "comments_articles_comments",
-				Columns:    []*schema.Column{CommentsColumns[12]},
+				Columns:    []*schema.Column{CommentsColumns[11]},
 				RefColumns: []*schema.Column{ArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "comments_comments_parent_replies",
-				Columns:    []*schema.Column{CommentsColumns[13]},
+				Columns:    []*schema.Column{CommentsColumns[12]},
 				RefColumns: []*schema.Column{CommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "comments_comments_reply_replies",
-				Columns:    []*schema.Column{CommentsColumns[14]},
+				Columns:    []*schema.Column{CommentsColumns[13]},
 				RefColumns: []*schema.Column{CommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -273,7 +272,7 @@ var (
 			{
 				Name:    "comment_article_id_parent_id_status",
 				Unique:  false,
-				Columns: []*schema.Column{CommentsColumns[12], CommentsColumns[13], CommentsColumns[4]},
+				Columns: []*schema.Column{CommentsColumns[11], CommentsColumns[12], CommentsColumns[3]},
 			},
 		},
 	}

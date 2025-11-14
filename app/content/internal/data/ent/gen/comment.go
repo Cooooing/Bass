@@ -20,8 +20,6 @@ type Comment struct {
 	ID int64 `json:"id,omitempty"`
 	// 所属文章ID
 	ArticleID int64 `json:"article_id,omitempty"`
-	// 用户ID
-	UserID int64 `json:"user_id,omitempty"`
 	// 评论内容
 	Content string `json:"content,omitempty"`
 	// 评论层级
@@ -136,7 +134,7 @@ func (*Comment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case comment.FieldID, comment.FieldArticleID, comment.FieldUserID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount, comment.FieldCreatedBy, comment.FieldUpdatedBy:
+		case comment.FieldID, comment.FieldArticleID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount, comment.FieldCreatedBy, comment.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case comment.FieldContent:
 			values[i] = new(sql.NullString)
@@ -168,12 +166,6 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field article_id", values[i])
 			} else if value.Valid {
 				_m.ArticleID = value.Int64
-			}
-		case comment.FieldUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
-			} else if value.Valid {
-				_m.UserID = value.Int64
 			}
 		case comment.FieldContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -321,9 +313,6 @@ func (_m *Comment) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("article_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ArticleID))
-	builder.WriteString(", ")
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(_m.Content)

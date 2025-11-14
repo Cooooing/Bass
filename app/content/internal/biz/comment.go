@@ -73,7 +73,6 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 
 		save := &model.Comment{
 			ArticleID: comment.ArticleID,
-			UserID:    comment.UserID,
 			Content:   comment.Content,
 			Level:     replyComment.Level + 1,
 			ParentID:  base.If(comment.ReplyID == nil, nil, base.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
@@ -102,7 +101,10 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		}
 		userIds := set.New[int64](0)
 		for _, item := range list {
-			userIds.Add(item.UserID)
+			userIds.Add(*item.CreatedBy)
+			if item.Edges.Reply != nil {
+				userIds.Add(*item.Edges.Reply.CreatedBy)
+			}
 		}
 
 		userService, err := client.GetServiceClient(ctx, d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
@@ -125,7 +127,10 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 			if err != nil {
 				return err
 			}
-			elems.User = users[item.UserID]
+			elems.User = users[*item.CreatedBy]
+			if item.Edges.Reply != nil {
+				elems.ReplyUser = users[*item.Edges.Reply.CreatedBy]
+			}
 			comments = append(comments, elems)
 		}
 

@@ -42,7 +42,10 @@ func AuditHook() ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			now := time.Now()
 			user, userIdOk := util.GetUserInfo(ctx)
-			userID := user.ID
+			var userID int64
+			if userIdOk {
+				userID = user.ID
+			}
 			switch {
 			case m.Op().Is(ent.OpCreate):
 				// 设置 created_at / updated_at

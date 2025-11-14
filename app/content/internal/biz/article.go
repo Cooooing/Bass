@@ -154,7 +154,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 
 		lastCommentMap, _ := d.commentRepo.GetArticleLastComments(ctx, tx, articleIds.ToSlice())
 		lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
-			userIds.Add(e.Value.UserID)
+			userIds.Add(*e.Value.CreatedBy)
 			return true
 		})
 
@@ -181,7 +181,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 			a.UpdatedAt = timestamppb.New(*item.UpdatedAt)
 			if lastReplyComment, ok := lastCommentMap.Get(item.ID); ok {
 				a.RepliedAt = timestamppb.New(*lastReplyComment.CreatedAt)
-				a.ReplyUser = userAuthors.Users[lastReplyComment.UserID]
+				a.ReplyUser = userAuthors.Users[*lastReplyComment.CreatedBy]
 			}
 			a.AuthorUser = userAuthors.Users[item.UserID]
 			articles = append(articles, a)

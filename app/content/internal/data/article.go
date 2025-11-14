@@ -172,7 +172,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 	}
 	userIds := []int64{query.UserID}
 	if lastComment != nil {
-		userIds = append(userIds, lastComment.UserID)
+		userIds = append(userIds, *lastComment.CreatedBy)
 	}
 	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
 		Ids: userIds,
@@ -182,7 +182,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 	}
 
 	if lastComment != nil {
-		a.ReplyUser = userAuthorsMap.Users[lastComment.UserID]
+		a.ReplyUser = userAuthorsMap.Users[*lastComment.CreatedBy]
 	}
 
 	return &v1.GetArticleOneReply{

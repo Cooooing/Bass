@@ -28,12 +28,6 @@ func (_c *CommentCreate) SetArticleID(v int64) *CommentCreate {
 	return _c
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *CommentCreate) SetUserID(v int64) *CommentCreate {
-	_c.mutation.SetUserID(v)
-	return _c
-}
-
 // SetContent sets the "content" field.
 func (_c *CommentCreate) SetContent(v string) *CommentCreate {
 	_c.mutation.SetContent(v)
@@ -318,9 +312,6 @@ func (_c *CommentCreate) check() error {
 	if _, ok := _c.mutation.ArticleID(); !ok {
 		return &ValidationError{Name: "article_id", err: errors.New(`gen: missing required field "Comment.article_id"`)}
 	}
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`gen: missing required field "Comment.user_id"`)}
-	}
 	if _, ok := _c.mutation.Content(); !ok {
 		return &ValidationError{Name: "content", err: errors.New(`gen: missing required field "Comment.content"`)}
 	}
@@ -378,10 +369,6 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
-	}
-	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(comment.FieldUserID, field.TypeInt64, value)
-		_node.UserID = value
 	}
 	if value, ok := _c.mutation.Content(); ok {
 		_spec.SetField(comment.FieldContent, field.TypeString, value)

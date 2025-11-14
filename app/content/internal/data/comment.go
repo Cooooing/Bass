@@ -29,7 +29,6 @@ func NewCommentRepo(baseRepo *BaseRepo, client *gen.Client) repo.CommentRepo {
 func (r CommentRepo) Save(ctx context.Context, client *gen.Client, comment *model.Comment) (*model.Comment, error) {
 	save, err := client.Comment.Create().
 		SetArticleID(comment.ArticleID).
-		SetUserID(comment.UserID).
 		SetContent(comment.Content).
 		SetLevel(comment.Level).
 		SetNillableParentID(comment.ParentID).
@@ -122,6 +121,24 @@ func (r CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 }
 
 func (r CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
+	if req.CommentId != nil {
+		query = query.Where(comment.ParentIDEQ(*req.CommentId)).
+			WithReply(func(query *gen.CommentQuery) {
+				query.Select(comment.FieldCreatedBy).Where(comment.LevelNEQ(1))
+			}).
+			Order(gen.Asc(comment.FieldCreatedAt))
+	}
+	if req.ArticleId != nil {
+		query = query.Where(comment.ArticleIDEQ(*req.ArticleId))
+	}
+	if req.UserId != nil {
+		query = query.Where(comment.CreatedByEQ(*req.UserId))
+	}
+	if req.Order != nil {
+		// Todo 评论排序
+	} else {
+		query = query.Order(gen.Desc(comment.FieldCreatedAt))
+	}
 	return query
 }
 

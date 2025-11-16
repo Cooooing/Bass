@@ -26,12 +26,6 @@ type ArticleCreate struct {
 	hooks    []Hook
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *ArticleCreate) SetUserID(v int64) *ArticleCreate {
-	_c.mutation.SetUserID(v)
-	return _c
-}
-
 // SetTitle sets the "title" field.
 func (_c *ArticleCreate) SetTitle(v string) *ArticleCreate {
 	_c.mutation.SetTitle(v)
@@ -541,9 +535,6 @@ func (_c *ArticleCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *ArticleCreate) check() error {
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`gen: missing required field "Article.user_id"`)}
-	}
 	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`gen: missing required field "Article.title"`)}
 	}
@@ -636,10 +627,6 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
-	}
-	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeInt64, value)
-		_node.UserID = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(article.FieldTitle, field.TypeString, value)

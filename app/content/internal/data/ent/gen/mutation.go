@@ -55,8 +55,6 @@ type ArticleMutation struct {
 	op                           Op
 	typ                          string
 	id                           *int64
-	user_id                      *int64
-	adduser_id                   *int64
 	title                        *string
 	content                      *string
 	has_postscript               *bool
@@ -221,62 +219,6 @@ func (m *ArticleMutation) IDs(ctx context.Context) ([]int64, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetUserID sets the "user_id" field.
-func (m *ArticleMutation) SetUserID(i int64) {
-	m.user_id = &i
-	m.adduser_id = nil
-}
-
-// UserID returns the value of the "user_id" field in the mutation.
-func (m *ArticleMutation) UserID() (r int64, exists bool) {
-	v := m.user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUserID returns the old "user_id" field's value of the Article entity.
-// If the Article object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldUserID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUserID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
-	}
-	return oldValue.UserID, nil
-}
-
-// AddUserID adds i to the "user_id" field.
-func (m *ArticleMutation) AddUserID(i int64) {
-	if m.adduser_id != nil {
-		*m.adduser_id += i
-	} else {
-		m.adduser_id = &i
-	}
-}
-
-// AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *ArticleMutation) AddedUserID() (r int64, exists bool) {
-	v := m.adduser_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUserID resets all changes to the "user_id" field.
-func (m *ArticleMutation) ResetUserID() {
-	m.user_id = nil
-	m.adduser_id = nil
 }
 
 // SetTitle sets the "title" field.
@@ -1846,10 +1788,7 @@ func (m *ArticleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticleMutation) Fields() []string {
-	fields := make([]string, 0, 24)
-	if m.user_id != nil {
-		fields = append(fields, article.FieldUserID)
-	}
+	fields := make([]string, 0, 23)
 	if m.title != nil {
 		fields = append(fields, article.FieldTitle)
 	}
@@ -1927,8 +1866,6 @@ func (m *ArticleMutation) Fields() []string {
 // schema.
 func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case article.FieldUserID:
-		return m.UserID()
 	case article.FieldTitle:
 		return m.Title()
 	case article.FieldContent:
@@ -1984,8 +1921,6 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case article.FieldUserID:
-		return m.OldUserID(ctx)
 	case article.FieldTitle:
 		return m.OldTitle(ctx)
 	case article.FieldContent:
@@ -2041,13 +1976,6 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case article.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUserID(v)
-		return nil
 	case article.FieldTitle:
 		v, ok := value.(string)
 		if !ok {
@@ -2217,9 +2145,6 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ArticleMutation) AddedFields() []string {
 	var fields []string
-	if m.adduser_id != nil {
-		fields = append(fields, article.FieldUserID)
-	}
 	if m.addreward_points != nil {
 		fields = append(fields, article.FieldRewardPoints)
 	}
@@ -2273,8 +2198,6 @@ func (m *ArticleMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case article.FieldUserID:
-		return m.AddedUserID()
 	case article.FieldRewardPoints:
 		return m.AddedRewardPoints()
 	case article.FieldStatus:
@@ -2314,13 +2237,6 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case article.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUserID(v)
-		return nil
 	case article.FieldRewardPoints:
 		v, ok := value.(int32)
 		if !ok {
@@ -2492,9 +2408,6 @@ func (m *ArticleMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ArticleMutation) ResetField(name string) error {
 	switch name {
-	case article.FieldUserID:
-		m.ResetUserID()
-		return nil
 	case article.FieldTitle:
 		m.ResetTitle()
 		return nil

@@ -34,27 +34,6 @@ func (_u *ArticleUpdate) Where(ps ...predicate.Article) *ArticleUpdate {
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *ArticleUpdate) SetUserID(v int64) *ArticleUpdate {
-	_u.mutation.ResetUserID()
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleUpdate) SetNillableUserID(v *int64) *ArticleUpdate {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// AddUserID adds value to the "user_id" field.
-func (_u *ArticleUpdate) AddUserID(v int64) *ArticleUpdate {
-	_u.mutation.AddUserID(v)
-	return _u
-}
-
 // SetTitle sets the "title" field.
 func (_u *ArticleUpdate) SetTitle(v string) *ArticleUpdate {
 	_u.mutation.SetTitle(v)
@@ -793,12 +772,6 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(article.FieldUserID, field.TypeInt64, value)
-	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(article.FieldTitle, field.TypeString, value)
 	}
@@ -1219,27 +1192,6 @@ type ArticleUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ArticleMutation
-}
-
-// SetUserID sets the "user_id" field.
-func (_u *ArticleUpdateOne) SetUserID(v int64) *ArticleUpdateOne {
-	_u.mutation.ResetUserID()
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *ArticleUpdateOne) SetNillableUserID(v *int64) *ArticleUpdateOne {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// AddUserID adds value to the "user_id" field.
-func (_u *ArticleUpdateOne) AddUserID(v int64) *ArticleUpdateOne {
-	_u.mutation.AddUserID(v)
-	return _u
 }
 
 // SetTitle sets the "title" field.
@@ -2009,12 +1961,6 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(article.FieldUserID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedUserID(); ok {
-		_spec.AddField(article.FieldUserID, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(article.FieldTitle, field.TypeString, value)

@@ -44,6 +44,9 @@ func (r *TokenRepo) SaveEmailToken(ctx context.Context, token string, code strin
 
 func (r *TokenRepo) GetEmailToken(ctx context.Context, token string) (string, *model.User, error) {
 	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenEmailCode(token)).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", nil, errors.New("email code invalid")
+	}
 	if err != nil {
 		return "", nil, err
 	}

@@ -55,11 +55,6 @@ func IDLTE(id int64) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldID, id))
 }
 
-// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int64) predicate.Article {
-	return predicate.Article(sql.FieldEQ(FieldUserID, v))
-}
-
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldTitle, v))
@@ -173,46 +168,6 @@ func CreatedAt(v time.Time) predicate.Article {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
-// UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int64) predicate.Article {
-	return predicate.Article(sql.FieldEQ(FieldUserID, v))
-}
-
-// UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int64) predicate.Article {
-	return predicate.Article(sql.FieldNEQ(FieldUserID, v))
-}
-
-// UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int64) predicate.Article {
-	return predicate.Article(sql.FieldIn(FieldUserID, vs...))
-}
-
-// UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int64) predicate.Article {
-	return predicate.Article(sql.FieldNotIn(FieldUserID, vs...))
-}
-
-// UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int64) predicate.Article {
-	return predicate.Article(sql.FieldGT(FieldUserID, v))
-}
-
-// UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int64) predicate.Article {
-	return predicate.Article(sql.FieldGTE(FieldUserID, v))
-}
-
-// UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int64) predicate.Article {
-	return predicate.Article(sql.FieldLT(FieldUserID, v))
-}
-
-// UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int64) predicate.Article {
-	return predicate.Article(sql.FieldLTE(FieldUserID, v))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.

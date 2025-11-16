@@ -54,9 +54,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
-	user := util.MustGetUserInfo(ctx)
 	_, err = s.articleDomain.Add(ctx, &model.Article{
-		UserID:        user.ID,
 		Title:         req.Title,
 		Content:       req.Content,
 		RewardContent: &req.RewardContent,
@@ -74,7 +72,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
 	user := util.MustGetUserInfo(ctx)
 	// 只有作者可以添加附言
-	if article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId); err != nil || article.UserID != user.ID {
+	if article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId); err != nil || *article.CreatedBy != user.ID {
 		if err != nil {
 			return nil, err
 		}
@@ -103,7 +101,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 			return errors.New("only drafts can be deleted")
 		}
 		// 只有作者可以删除草稿
-		if article.UserID != user.ID {
+		if *article.CreatedBy != user.ID {
 			return errors.New("you are not the author")
 		}
 		err = s.articleRepo.Delete(ctx, s.db, req.ArticleId)
@@ -116,7 +114,15 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 	if req.Status != nil && *req.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, errors.New("status only be 0(normal) or 3(drafts)")
 	}
-	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{})
+	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
+		TagId:    req.TagId,
+		DomainId: req.DomainId,
+		Status:   (*cv1.ArticleStatus)(req.Status),
+		AuthorId: req.AuthorId,
+		Order:    (*cv1.ArticleOrder)(req.Order),
+		Type:     (*cv1.ArticleType)(req.Type),
+		Keyword:  req.Keyword,
+	})
 	return rsp, err
 }
 
@@ -141,7 +147,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 		return nil, errors.New("only drafts can be publish")
 	}
 	// 只有作者可以发布草稿
-	if article.UserID != user.ID {
+	if *article.CreatedBy != user.ID {
 		return nil, errors.New("you are not the author")
 	}
 	err = s.articleDomain.Publish(ctx, req.ArticleId)

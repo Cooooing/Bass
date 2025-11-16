@@ -830,7 +830,13 @@ type PageArticleRequest struct {
 	// 状态 0-正常 3-草稿
 	Status *int32 `protobuf:"varint,4,opt,name=status,proto3,oneof" json:"status,omitempty"`
 	// 类型 0-普通 1-问答 2-投票 3-抽奖
-	Type          *int32 `protobuf:"varint,5,opt,name=type,proto3,oneof" json:"type,omitempty"`
+	Type *int32 `protobuf:"varint,5,opt,name=type,proto3,oneof" json:"type,omitempty"`
+	// 排序 0-最新 1-最热
+	Order *int32 `protobuf:"varint,8,opt,name=order,proto3,oneof" json:"order,omitempty"`
+	// 查询关键词
+	Keyword *string `protobuf:"bytes,9,opt,name=keyword,proto3,oneof" json:"keyword,omitempty"`
+	// 作者ID
+	AuthorId      *int64 `protobuf:"varint,10,opt,name=authorId,proto3,oneof" json:"authorId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -896,6 +902,27 @@ func (x *PageArticleRequest) GetStatus() int32 {
 func (x *PageArticleRequest) GetType() int32 {
 	if x != nil && x.Type != nil {
 		return *x.Type
+	}
+	return 0
+}
+
+func (x *PageArticleRequest) GetOrder() int32 {
+	if x != nil && x.Order != nil {
+		return *x.Order
+	}
+	return 0
+}
+
+func (x *PageArticleRequest) GetKeyword() string {
+	if x != nil && x.Keyword != nil {
+		return *x.Keyword
+	}
+	return ""
+}
+
+func (x *PageArticleRequest) GetAuthorId() int64 {
+	if x != nil && x.AuthorId != nil {
+		return *x.AuthorId
 	}
 	return 0
 }
@@ -1937,17 +1964,25 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x14DeleteArticleRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x01 \x01(\x03R\tarticleId\"\x14\n" +
-	"\x12DeleteArticleReply\"\xe8\x01\n" +
+	"\x12DeleteArticleReply\"\xe6\x02\n" +
 	"\x12PageArticleRequest\x125\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12\x19\n" +
 	"\x05tagId\x18\x02 \x01(\x03H\x00R\x05tagId\x88\x01\x01\x12\x1f\n" +
 	"\bdomainId\x18\x03 \x01(\x03H\x01R\bdomainId\x88\x01\x01\x12\x1b\n" +
 	"\x06status\x18\x04 \x01(\x05H\x02R\x06status\x88\x01\x01\x12\x17\n" +
-	"\x04type\x18\x05 \x01(\x05H\x03R\x04type\x88\x01\x01B\b\n" +
+	"\x04type\x18\x05 \x01(\x05H\x03R\x04type\x88\x01\x01\x12\x19\n" +
+	"\x05order\x18\b \x01(\x05H\x04R\x05order\x88\x01\x01\x12\x1d\n" +
+	"\akeyword\x18\t \x01(\tH\x05R\akeyword\x88\x01\x01\x12\x1f\n" +
+	"\bauthorId\x18\n" +
+	" \x01(\x03H\x06R\bauthorId\x88\x01\x01B\b\n" +
 	"\x06_tagIdB\v\n" +
 	"\t_domainIdB\t\n" +
 	"\a_statusB\a\n" +
-	"\x05_type\"\x83\x01\n" +
+	"\x05_typeB\b\n" +
+	"\x06_orderB\n" +
+	"\n" +
+	"\b_keywordB\v\n" +
+	"\t_authorId\"\x83\x01\n" +
 	"\x10PageArticleReply\x123\n" +
 	"\x04page\x18\x02 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
 	"\barticles\x18\x01 \x03(\v2\x1e.common.api.content.v1.ArticleR\barticles\"5\n" +

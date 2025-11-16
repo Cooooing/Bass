@@ -135,7 +135,21 @@ func (r CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) 
 		query = query.Where(comment.CreatedByEQ(*req.UserId))
 	}
 	if req.Order != nil {
-		// Todo 评论排序
+		switch *req.Order {
+		case int32(cv1.CommentOrder_CommentOrderNewest):
+			query = query.Order(gen.Desc(comment.FieldCreatedAt))
+		case int32(cv1.CommentOrder_CommentOrderHottest):
+			query = query.
+				Order(func(s *sql.Selector) {
+					s.OrderExpr(sql.Expr(`
+        (
+            (reply_count * 6 + like_count * 4 + collect_count * 1)
+            /
+            pow((extract(epoch from (now() - created_at)) / 3600) + 1.5, 1.8)
+        ) DESC`))
+				})
+		}
+
 	} else {
 		query = query.Order(gen.Desc(comment.FieldCreatedAt))
 	}

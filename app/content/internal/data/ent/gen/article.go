@@ -17,8 +17,6 @@ type Article struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
-	// 作者ID
-	UserID int64 `json:"user_id,omitempty"`
 	// 标题
 	Title string `json:"title,omitempty"`
 	// 正文内容
@@ -151,7 +149,7 @@ func (*Article) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous:
 			values[i] = new(sql.NullBool)
-		case article.FieldID, article.FieldUserID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount, article.FieldCreatedBy, article.FieldUpdatedBy:
+		case article.FieldID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount, article.FieldCreatedBy, article.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case article.FieldTitle, article.FieldContent, article.FieldRewardContent:
 			values[i] = new(sql.NullString)
@@ -178,12 +176,6 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = int64(value.Int64)
-		case article.FieldUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
-			} else if value.Valid {
-				_m.UserID = value.Int64
-			}
 		case article.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -393,9 +385,6 @@ func (_m *Article) String() string {
 	var builder strings.Builder
 	builder.WriteString("Article(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
-	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
 	builder.WriteString(", ")

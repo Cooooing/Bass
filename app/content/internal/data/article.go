@@ -12,9 +12,12 @@ import (
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/article"
 	"content/internal/data/ent/gen/articlepostscript"
+	"content/internal/data/ent/gen/tag"
 	"context"
 	"encoding/json"
+	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/jinzhu/copier"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -41,7 +44,6 @@ func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client, postscriptRepo repo.
 
 func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *model.Article) (*model.Article, error) {
 	save, err := client.Article.Create().
-		SetUserID(article.UserID).
 		SetTitle(article.Title).
 		SetContent(article.Content).
 		SetNillableRewardContent(article.RewardContent).
@@ -170,7 +172,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 	if err != nil {
 		return nil, err
 	}
-	userIds := []int64{query.UserID}
+	userIds := []int64{*query.CreatedBy}
 	if lastComment != nil {
 		userIds = append(userIds, *lastComment.CreatedBy)
 	}
@@ -187,7 +189,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 
 	return &v1.GetArticleOneReply{
 		Article: a,
-		User:    userAuthorsMap.Users[query.UserID],
+		User:    userAuthorsMap.Users[*query.CreatedBy],
 	}, nil
 }
 
@@ -236,5 +238,47 @@ func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 }
 
 func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq) *gen.ArticleQuery {
+	if req.TagId != nil {
+		query = query.Where(article.HasTagsWith(tag.IDEQ(*req.TagId)))
+	}
+	if req.DomainId != nil {
+		query = query.Where(article.HasTagsWith(tag.DomainIDEQ(*req.DomainId)))
+	}
+	if req.Status != nil {
+		query = query.Where(article.StatusEQ(int32(*req.Status)))
+	}
+	if req.AuthorId != nil {
+		query = query.Where(article.CreatedByEQ(*req.AuthorId))
+	}
+	if req.Type != nil {
+		query = query.Where(article.TypeEQ(int32(*req.Type)))
+	}
+	if req.Keyword != nil {
+		// Todo 后续考虑使用 zhparser 全文搜索拓展实现
+		query = query.Where(
+			article.Or(
+				article.TitleContains(*req.Keyword),
+				article.ContentContains(*req.Keyword),
+			),
+		)
+	}
+	if req.Order != nil {
+		switch *req.Order {
+		case cv1.ArticleOrder_ArticleOrderNewest:
+			query = query.Order(gen.Desc(article.FieldCreatedAt))
+		case cv1.ArticleOrder_ArticleOrderHottest:
+			query = query.Where(article.CreatedAtGTE(time.Now().Add(-30 * 24 * time.Hour))).
+				Order(func(s *sql.Selector) {
+					s.OrderExpr(sql.Expr(`
+        (
+            (reply_count * 8 + like_count * 4 + collect_count * 6 + thank_count * 2 + watch_count * 1)
+            /
+            pow((extract(epoch from (now() - created_at)) / 3600) + 2 , 1.3)
+        ) DESC`))
+				})
+		}
+	} else {
+		query = query.Order(gen.Desc(article.FieldCreatedAt))
+	}
 	return query
 }

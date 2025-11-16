@@ -27,6 +27,13 @@ type ArticleRepo interface {
 }
 
 type ArticleGetReq struct {
+	TagId    *int64
+	DomainId *int64
+	Status   *cv1.ArticleStatus
+	AuthorId *int64
+	Order    *cv1.ArticleOrder
+	Type     *cv1.ArticleType
+	Keyword  *string
 }
 
 type ArticlePostscriptRepo interface {

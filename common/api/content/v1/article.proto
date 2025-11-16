@@ -262,6 +262,12 @@ message PageArticleRequest {
   optional int32 status = 4;
   // 类型 0-普通 1-问答 2-投票 3-抽奖
   optional int32 type = 5;
+  // 排序 0-最新 1-最热
+  optional int32 order = 8;
+  // 查询关键词
+  optional string keyword = 9;
+  // 作者ID
+  optional int64 authorId = 10;
 }
 message PageArticleReply {
   // 分页信息

@@ -149,7 +149,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		userIds := set.New[int64](0)
 		for _, item := range list {
 			articleIds.Add(item.ID)
-			userIds.Add(item.UserID)
+			userIds.Add(*item.CreatedBy)
 		}
 
 		lastCommentMap, _ := d.commentRepo.GetArticleLastComments(ctx, tx, articleIds.ToSlice())
@@ -183,7 +183,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 				a.RepliedAt = timestamppb.New(*lastReplyComment.CreatedAt)
 				a.ReplyUser = userAuthors.Users[*lastReplyComment.CreatedBy]
 			}
-			a.AuthorUser = userAuthors.Users[item.UserID]
+			a.AuthorUser = userAuthors.Users[*item.CreatedBy]
 			articles = append(articles, a)
 		}
 		reply = &v1.PageArticleReply{

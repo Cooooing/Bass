@@ -62,6 +62,11 @@ enum ArticleAction {
   ArticleActionLotteryWinner = 7; // 抽奖中奖
 }
 
+enum ArticleOrder {
+  ArticleOrderNewest = 0; // 最新
+  ArticleOrderHottest = 1; // 最热
+}
+
 // 评论行为类型
 enum CommentAction {
   CommentActionLike = 0; // 点赞
@@ -70,7 +75,7 @@ enum CommentAction {
 }
 
 // 评论查询排序
-enum CommentSort {
-  CommentSortNewest = 0; // 最新
-  CommentSortHottest = 1; // 最热
+enum CommentOrder {
+  CommentOrderNewest = 0; // 最新
+  CommentOrderHottest = 1; // 最热
 }

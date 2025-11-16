@@ -1154,6 +1154,16 @@ components:
                     type: integer
                     description: 类型 0-普通 1-问答 2-投票 3-抽奖
                     format: int32
+                order:
+                    type: integer
+                    description: 排序 0-最新 1-最热
+                    format: int32
+                keyword:
+                    type: string
+                    description: 查询关键词
+                authorId:
+                    type: string
+                    description: 作者ID
         common.api.content.v1.PageCommentReply:
             type: object
             properties:

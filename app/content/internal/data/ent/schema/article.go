@@ -16,7 +16,6 @@ type Article struct {
 func (Article) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Int64("user_id").Comment("作者ID"),
 		field.String("title").Comment("标题").NotEmpty(),
 		field.Text("content").Comment("正文内容").NotEmpty(),
 

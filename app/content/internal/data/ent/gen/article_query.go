@@ -479,12 +479,12 @@ func (_q *ArticleQuery) WithActionRecords(opts ...func(*ArticleActionRecordQuery
 // Example:
 //
 //	var v []struct {
-//		UserID int64 `json:"user_id,omitempty"`
+//		Title string `json:"title,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Article.Query().
-//		GroupBy(article.FieldUserID).
+//		GroupBy(article.FieldTitle).
 //		Aggregate(gen.Count()).
 //		Scan(ctx, &v)
 func (_q *ArticleQuery) GroupBy(field string, fields ...string) *ArticleGroupBy {
@@ -502,11 +502,11 @@ func (_q *ArticleQuery) GroupBy(field string, fields ...string) *ArticleGroupBy 
 // Example:
 //
 //	var v []struct {
-//		UserID int64 `json:"user_id,omitempty"`
+//		Title string `json:"title,omitempty"`
 //	}
 //
 //	client.Article.Query().
-//		Select(article.FieldUserID).
+//		Select(article.FieldTitle).
 //		Scan(ctx, &v)
 func (_q *ArticleQuery) Select(fields ...string) *ArticleSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)

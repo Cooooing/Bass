@@ -1469,6 +1469,18 @@ func (m *PageArticleRequest) validate(all bool) error {
 		// no validation rules for Type
 	}
 
+	if m.Order != nil {
+		// no validation rules for Order
+	}
+
+	if m.Keyword != nil {
+		// no validation rules for Keyword
+	}
+
+	if m.AuthorId != nil {
+		// no validation rules for AuthorId
+	}
+
 	if len(errors) > 0 {
 		return PageArticleRequestMultiError(errors)
 	}

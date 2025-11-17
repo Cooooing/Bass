@@ -71,7 +71,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tagDomain := biz.NewTagDomain(baseDomain, tagRepo)
 	tagService := service.NewTagService(baseService, tagDomain)
 	v := service.ProvideServices(systemService, articleService, domainService, commentService, tagService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {

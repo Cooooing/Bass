@@ -168,7 +168,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int6
 		a.RepliedAt = timestamppb.New(*lastComment.CreatedAt)
 	}
 
-	userServiceClient, err := client.GetServiceClient(ctx, r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+	userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 	if err != nil {
 		return nil, err
 	}

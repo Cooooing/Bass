@@ -155,7 +155,8 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 				// 权限范围 Todo 用户组权限规则后续持久化入库
 
 				// 设置上下文
-				ctx = context.WithValue(ctx, constant.UserInfo, userInfo)
+				ctx = context.WithValue(ctx, constant.CtxUserInfo, userInfo)
+				ctx = context.WithValue(ctx, constant.Token, token)
 
 				return handler(ctx, req)
 			} else {

@@ -1,8 +1,10 @@
 package client
 
 import (
+	"common/pkg/constant"
 	"context"
 	"fmt"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -11,12 +13,14 @@ import (
 
 	etcdregistry "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	kgrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	khttp "github.com/go-kratos/kratos/v2/transport/http"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 // ConnPool 是 gRPC 客户端连接池
@@ -91,6 +95,17 @@ func (c *EtcdClient) NewGrpcConn(service string) (*grpc.ClientConn, error) {
 		kgrpc.WithTimeout(c.conf.Timeout.AsDuration()),
 		kgrpc.WithMiddleware(
 			tracing.Client(),
+			func(next middleware.Handler) middleware.Handler {
+				return func(ctx context.Context, req interface{}) (interface{}, error) {
+					// ---- Token 注入（写在这里）----
+					token, _ := ctx.Value(constant.CtxToken).(string)
+					if token != "" {
+						ctx = metadata.AppendToOutgoingContext(ctx, strings.ToLower(constant.Authentication), fmt.Sprintf("Bearer %s", token))
+					}
+					// ---- END ----
+					return next(ctx, req)
+				}
+			},
 		),
 	)
 }
@@ -106,6 +121,19 @@ func (c *EtcdClient) NewHTTPConn(service string) (*khttp.Client, error) {
 		khttp.WithBlock(),
 		khttp.WithMiddleware(
 			tracing.Client(),
+			func(next middleware.Handler) middleware.Handler {
+				return func(ctx context.Context, req interface{}) (interface{}, error) {
+					// ---- Token 注入（写在这里）----
+					token, _ := ctx.Value(constant.CtxToken).(string)
+					if token != "" {
+						if r, ok := req.(khttp.Request); ok {
+							r.Header.Add(constant.Authentication, fmt.Sprintf("Bearer %s", token))
+						}
+					}
+					// ---- END ----
+					return next(ctx, req)
+				}
+			},
 		),
 	)
 }
@@ -161,7 +189,7 @@ func (c *EtcdClient) CleanUp() {
 }
 
 // GetServiceClient 泛型客户端工厂，从池中获取连接并返回客户端
-func GetServiceClient[T any](ctx context.Context, etcd *EtcdClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
+func GetServiceClient[T any](etcd *EtcdClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
 	const poolSize = 3 // 连接池大小，可改为配置
 	conn, err := etcd.getConnFromPool(service, poolSize)
 	if err != nil {

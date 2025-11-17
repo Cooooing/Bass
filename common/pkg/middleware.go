@@ -1,10 +1,19 @@
 package pkg
 
 import (
+	"common/pkg/constant"
+	"common/pkg/util"
+	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/go-kratos/kratos/v2/errors"
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware"
+	"github.com/go-kratos/kratos/v2/transport"
+	"google.golang.org/grpc/metadata"
 )
 
 // HttpResponseEncoder 自定义响应编码器（统一处理正常与错误返回）
@@ -53,4 +62,45 @@ func HttpErrorEncoder(w http.ResponseWriter, r *http.Request, err error) {
 	w.WriteHeader(code)
 	res := NewResult[any](code, se.Message, nil)
 	_ = json.NewEncoder(w).Encode(res)
+}
+
+// AuthMiddleware 返回一个 Kratos 中间件，用于认证
+func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+
+			const bearerPrefix = "Bearer "
+			var token string
+			// gRPC
+			if md, ok := metadata.FromIncomingContext(ctx); ok {
+				if vals := md.Get(strings.ToLower(constant.Authentication)); len(vals) > 0 {
+					token = strings.TrimPrefix(vals[0], bearerPrefix)
+				}
+			}
+
+			// HTTP
+			if tr, ok := transport.FromServerContext(ctx); ok {
+				if h := tr.RequestHeader(); h != nil {
+					if s := h.Get(constant.Authentication); s != "" {
+						token = strings.TrimPrefix(s, bearerPrefix)
+					}
+				}
+			}
+
+			if tr, ok := transport.FromServerContext(ctx); ok {
+				token = strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), bearerPrefix)
+			}
+
+			log.Infof("token: %s", token)
+			userInfo, err := tokenRepo.GetToken(ctx, token)
+			if err != nil {
+				return nil, fmt.Errorf("invalid token: %w", err)
+			}
+
+			ctx = context.WithValue(ctx, constant.CtxToken, token)
+			ctx = context.WithValue(ctx, constant.CtxUserInfo, userInfo)
+
+			return handler(ctx, req)
+		}
+	}
 }

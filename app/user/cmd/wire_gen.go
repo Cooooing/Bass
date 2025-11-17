@@ -62,7 +62,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	authenticationService := service.NewAuthenticationService(baseService, authenticationDomain, userRepo)
 	userService := service.NewUserService(baseService, authenticationDomain, userRepo)
 	v := service.ProvideServices(systemService, authenticationService, userService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)
 	return app, func() {

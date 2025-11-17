@@ -158,7 +158,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 			return true
 		})
 
-		userServiceClient, err := client.GetServiceClient(ctx, d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+		userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 		if err != nil {
 			return err
 		}

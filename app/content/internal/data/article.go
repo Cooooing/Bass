@@ -3,8 +3,6 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
-	userv1 "common/api/user/v1"
-	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/util/base"
 	"content/internal/biz/model"
@@ -19,7 +17,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/jinzhu/copier"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ArticleRepo struct {
@@ -98,7 +95,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articl
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, client *gen.Client, articleId int64) error {
-	first, err := r.GetArticleById(ctx, client, articleId)
+	first, err := r.GetById(ctx, client, articleId)
 	if err != nil {
 		return err
 	}
@@ -126,7 +123,7 @@ func (r *ArticleRepo) Exist(ctx context.Context, client *gen.Client, id int64, s
 		Exist(ctx)
 }
 
-func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id int64) (*model.Article, error) {
+func (r *ArticleRepo) GetById(ctx context.Context, client *gen.Client, id int64) (*model.Article, error) {
 	query, err := client.Article.Query().
 		Where(article.IDEQ(id)).
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
@@ -136,61 +133,6 @@ func (r *ArticleRepo) GetArticleById(ctx context.Context, client *gen.Client, id
 		WithTags().
 		First(ctx)
 	return (*model.Article)(query), err
-}
-
-func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, articleId int64) (*v1.GetArticleOneReply, error) {
-	query, err := r.GetArticleById(ctx, tx, articleId)
-	if err != nil {
-		return nil, err
-	}
-
-	a := &v1.Article{}
-	err = copier.Copy(a, query)
-	if err != nil {
-		return nil, err
-	}
-	a.CreatedAt = timestamppb.New(*query.CreatedAt)
-	a.UpdatedAt = timestamppb.New(*query.UpdatedAt)
-	ap := make([]*v1.ArticlePostscript, 0)
-	for _, item := range (*gen.Article)(query).Edges.Postscripts {
-		ap = append(ap, &v1.ArticlePostscript{
-			Id:        item.ID,
-			ArticleId: item.ArticleID,
-			Content:   item.Content,
-			CreatedAt: timestamppb.New(*item.CreatedAt),
-			UpdatedAt: timestamppb.New(*item.UpdatedAt),
-		})
-	}
-	a.Postscripts = ap
-
-	lastComment, _ := r.commentRepo.GetArticleLastComment(ctx, tx, query.ID)
-	if lastComment != nil {
-		a.RepliedAt = timestamppb.New(*lastComment.CreatedAt)
-	}
-
-	userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	if err != nil {
-		return nil, err
-	}
-	userIds := []int64{*query.CreatedBy}
-	if lastComment != nil {
-		userIds = append(userIds, *lastComment.CreatedBy)
-	}
-	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
-		Ids: userIds,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if lastComment != nil {
-		a.ReplyUser = userAuthorsMap.Users[*lastComment.CreatedBy]
-	}
-
-	return &v1.GetArticleOneReply{
-		Article: a,
-		User:    userAuthorsMap.Users[*query.CreatedBy],
-	}, nil
 }
 
 func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) ([]*model.Article, error) {

@@ -46,6 +46,8 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 	}, nil
 }
 
+// --- 新增 ---
+
 func (d *ArticleDomain) Add(ctx context.Context, article *model.Article) (*model.Article, error) {
 	var (
 		save *model.Article
@@ -84,6 +86,8 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, cont
 	// Todo 广播添加事件
 	return err
 }
+
+// --- 更新 ---
 
 func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action cv1.ArticleAction, active bool) error {
 	err := ent.WithTx(ctx, d.db, func(client *gen.Client) error {
@@ -132,6 +136,63 @@ func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
 }
 
 // --- 查询 ---
+
+func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArticleOneReply, error) {
+	reply := &v1.GetArticleOneReply{}
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		query, err := d.articleRepo.GetById(ctx, tx, articleId)
+		if err != nil {
+			return err
+		}
+		a := &v1.Article{}
+		err = copier.Copy(a, query)
+		if err != nil {
+			return err
+		}
+		a.CreatedAt = timestamppb.New(*query.CreatedAt)
+		a.UpdatedAt = timestamppb.New(*query.UpdatedAt)
+		ap := make([]*v1.ArticlePostscript, 0)
+		for _, item := range (*gen.Article)(query).Edges.Postscripts {
+			ap = append(ap, &v1.ArticlePostscript{
+				Id:        item.ID,
+				ArticleId: item.ArticleID,
+				Content:   item.Content,
+				CreatedAt: timestamppb.New(*item.CreatedAt),
+				UpdatedAt: timestamppb.New(*item.UpdatedAt),
+			})
+		}
+		a.Postscripts = ap
+
+		lastComment, _ := d.commentRepo.GetArticleLastComment(ctx, tx, query.ID)
+		if lastComment != nil {
+			a.RepliedAt = timestamppb.New(*lastComment.CreatedAt)
+		}
+
+		userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+		if err != nil {
+			return err
+		}
+		userIds := []int64{*query.CreatedBy}
+		if lastComment != nil {
+			userIds = append(userIds, *lastComment.CreatedBy)
+		}
+		userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
+			Ids: userIds,
+		})
+		if err != nil {
+			return err
+		}
+
+		if lastComment != nil {
+			a.ReplyUser = userAuthorsMap.Users[*lastComment.CreatedBy]
+		}
+
+		reply.User = userAuthorsMap.Users[*query.CreatedBy]
+		reply.Article = a
+		return nil
+	})
+	return reply, err
+}
 
 func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ArticleGetReq) (*v1.PageArticleReply, error) {
 	var (

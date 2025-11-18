@@ -35,7 +35,7 @@ func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, arti
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *model.Comment, err error) {
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		// 回复文章
-		exist, err := d.articleRepo.GetArticleById(ctx, tx, comment.ArticleID)
+		exist, err := d.articleRepo.GetById(ctx, tx, comment.ArticleID)
 		if err != nil {
 			return err
 		}

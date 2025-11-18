@@ -121,7 +121,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 
 func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string, password string) (token string, err error) {
 	// 获取用户信息
-	user, err := s.userRepo.GetUserByAccount(ctx, s.db, account)
+	user, err := s.userRepo.GetByAccount(ctx, s.db, account)
 	if err != nil {
 		return
 	}

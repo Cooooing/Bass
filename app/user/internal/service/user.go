@@ -2,7 +2,6 @@ package service
 
 import (
 	v1 "common/api/user/v1"
-	"common/pkg/constant"
 	"context"
 	"user/internal/biz"
 	"user/internal/biz/repo"
@@ -40,7 +39,7 @@ func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp 
 	res := &v1.GetListReply{
 		Users: []*v1.User{},
 	}
-	list, err := s.userRepo.GetUserList(ctx, s.db, constant.GetPageMax(), req.Ids)
+	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{ArticleIds: req.Ids})
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +66,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	res := &v1.GetMapReply{
 		Users: make(map[int64]*v1.User),
 	}
-	list, err := s.userRepo.GetUserList(ctx, s.db, constant.GetPageMax(), req.Ids)
+	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{ArticleIds: req.Ids})
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +93,7 @@ func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v
 	res := &v1.GetOneReply{
 		User: &v1.User{},
 	}
-	user, err := s.userRepo.GetUserById(ctx, s.db, req.Id)
+	user, err := s.userRepo.GetById(ctx, s.db, req.Id)
 	if err != nil {
 		return nil, err
 	}

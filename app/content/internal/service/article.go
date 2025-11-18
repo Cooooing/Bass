@@ -72,7 +72,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
 	user := util.MustGetUserInfo(ctx)
 	// 只有作者可以添加附言
-	if article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId); err != nil || *article.CreatedBy != user.ID {
+	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || *article.CreatedBy != user.ID {
 		if err != nil {
 			return nil, err
 		}
@@ -92,7 +92,7 @@ func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequ
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
 	user := util.MustGetUserInfo(ctx)
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
-		article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId)
+		article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
 		if err != nil {
 			return err
 		}
@@ -127,7 +127,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 }
 
 func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneRequest) (rsp *v1.GetArticleOneReply, err error) {
-	return s.articleRepo.GetOne(ctx, s.db, req.ArticleId)
+	return s.articleDomain.GetOne(ctx, req.ArticleId)
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
@@ -138,7 +138,7 @@ func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
 	user := util.MustGetUserInfo(ctx)
-	article, err := s.articleRepo.GetArticleById(ctx, s.db, req.ArticleId)
+	article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
 	if err != nil {
 		return nil, err
 	}

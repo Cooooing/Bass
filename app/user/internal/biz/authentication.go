@@ -61,6 +61,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 	if existEmailCode {
 		err = errors.New("email verification code has been sent")
+		return
 	}
 
 	// 生成 code

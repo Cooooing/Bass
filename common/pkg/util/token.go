@@ -31,7 +31,7 @@ type emailTokenData struct {
 	User *model.User `json:"user"`
 }
 
-func (r *TokenRepo) SaveEmailToken(ctx context.Context, token string, code string, user *model.User, expires time.Duration) error {
+func (r *TokenRepo) SaveEmailVerificationCode(ctx context.Context, email string, code string, user *model.User, expires time.Duration) error {
 	value, err := json.Marshal(&emailTokenData{
 		Code: code,
 		User: user,
@@ -39,11 +39,11 @@ func (r *TokenRepo) SaveEmailToken(ctx context.Context, token string, code strin
 	if err != nil {
 		return err
 	}
-	return r.redis.Client.Set(ctx, constant.GetKeyTokenEmailCode(token), value, expires).Err()
+	return r.redis.Client.Set(ctx, constant.GetKeyTokenEmailCode(email), value, expires).Err()
 }
 
-func (r *TokenRepo) GetEmailToken(ctx context.Context, token string) (string, *model.User, error) {
-	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenEmailCode(token)).Result()
+func (r *TokenRepo) GetEmailVerificationCode(ctx context.Context, email string) (string, *model.User, error) {
+	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenEmailCode(email)).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", nil, errors.New("email code invalid")
 	}
@@ -57,8 +57,16 @@ func (r *TokenRepo) GetEmailToken(ctx context.Context, token string) (string, *m
 	return data.Code, data.User, nil
 }
 
-func (r *TokenRepo) DelEmailToken(ctx context.Context, token string) error {
-	return r.redis.Client.Del(ctx, constant.GetKeyTokenEmailCode(token)).Err()
+func (r *TokenRepo) ExistEmailVerificationCode(ctx context.Context, email string) (bool, error) {
+	result, err := r.redis.Client.Exists(ctx, constant.GetKeyTokenEmailCode(email)).Result()
+	if err != nil {
+		return false, err
+	}
+	return result == 1, nil
+}
+
+func (r *TokenRepo) DelEmailVerificationCode(ctx context.Context, email string) error {
+	return r.redis.Client.Del(ctx, constant.GetKeyTokenEmailCode(email)).Err()
 }
 
 func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.User, expires time.Duration) error {

@@ -119,6 +119,14 @@ message User {
 // Authentication 服务
 service UserUserService {
 
+  // 更新用户设置
+  rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply) {
+    option (google.api.http) = {
+      post: "/v1/user/updateSetting"
+      body: "*"
+    };
+  }
+
   // 查询单个用户
   rpc GetOne (GetOneRequest) returns (GetOneReply) {
     option (google.api.http) = {
@@ -143,6 +151,24 @@ service UserUserService {
     };
   }
 
+}
+
+message UpdateSettingRequest{
+  // 用户语言
+  optional string language = 1;
+  // 时区
+  optional string timezone = 2;
+  // 皮肤主题
+  optional string theme = 3;
+  // 移动端皮肤主题
+  optional string mobile_theme = 4;
+  // 启用Web通知
+  optional bool enable_web_notify = 5;
+  // 启用邮件订阅
+  optional bool enable_email_subscribe = 6;
+}
+
+message UpdateSettingReply {
 }
 
 message GetOneRequest {

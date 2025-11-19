@@ -8,6 +8,9 @@ import (
 
 func GetUserInfo(ctx context.Context) (*model.User, bool) {
 	user, ok := ctx.Value(constant.CtxUserInfo).(*model.User)
+	if user == nil {
+		return nil, false
+	}
 	return user, ok
 }
 

@@ -54,6 +54,15 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 		return
 	}
 
+	// 该邮箱是否在缓存
+	existEmailCode, err := s.tokenRepo.ExistEmailVerificationCode(ctx, u.Email)
+	if err != nil {
+		return
+	}
+	if existEmailCode {
+		err = errors.New("email verification code has been sent")
+	}
+
 	// 生成 code
 	code = util.RandStr(s.sf, 6, true, true, true, false)
 	token, err = s.tokenService.EmailTokenGen.Generate(model.TokenEmail{
@@ -70,7 +79,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenRepo.SaveEmailToken(ctx, token, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
+	err = s.tokenRepo.SaveEmailVerificationCode(ctx, u.Email, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -80,7 +89,11 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 
 func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToken string, code string) (err error) {
 	// 通过 token 获取 code
-	emailCode, saveUser, err := s.tokenRepo.GetEmailToken(ctx, codeToken)
+	tokenEmail, err := s.tokenService.EmailTokenGen.Parse(codeToken)
+	if err != nil {
+		return
+	}
+	emailCode, saveUser, err := s.tokenRepo.GetEmailVerificationCode(ctx, tokenEmail.Email)
 	if err != nil {
 		return
 	}
@@ -107,7 +120,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		}
 
 		// 删除 code 缓存
-		err = s.tokenRepo.DelEmailToken(ctx, codeToken)
+		err = s.tokenRepo.DelEmailVerificationCode(ctx, tokenEmail.Email)
 		if err != nil {
 			return err
 		}

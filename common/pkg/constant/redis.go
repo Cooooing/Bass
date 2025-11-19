@@ -12,8 +12,8 @@ var (
 	Token          = "Token::{%s}"
 )
 
-func GetKeyTokenEmailCode(token string) string {
-	return fmt.Sprintf(TokenEmailCode, token)
+func GetKeyTokenEmailCode(email string) string {
+	return fmt.Sprintf(TokenEmailCode, email)
 }
 
 func GetKeyToken(token string) string {

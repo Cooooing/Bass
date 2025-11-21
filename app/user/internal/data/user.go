@@ -27,17 +27,28 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 	userCreate := tx.User.Create().
 		SetName(u.Name).
 		SetPassword(u.Password)
-	if u.Email != "" {
-		userCreate.SetEmail(u.Email)
-	}
-	if u.Phone != "" {
-		userCreate.SetPhone(u.Phone)
-	}
-	if u.Nickname != "" {
-		userCreate.SetNickname(u.Nickname)
-	}
+	userCreate.SetEmail(u.Email)
+	userCreate.SetNillablePhone(u.Phone)
+	userCreate.SetNickname(u.Nickname)
 	createdUser, err := userCreate.Save(ctx)
 	return (*model.User)(createdUser), err
+}
+
+func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error) {
+	update := tx.User.UpdateOneID(u.ID)
+	update.SetNillableLanguage(u.Language)
+	update.SetNillableNickname(u.Timezone)
+	update.SetNillableEmail(u.Theme)
+	update.SetNillableMobileTheme(u.MobileTheme)
+	update.SetNillableEnableWebNotify(u.EnableWebNotify)
+	update.SetNillableEnableEmailSubscribe(u.EnableEmailSubscribe)
+	update.SetNillablePublicPoints(u.PublicPoints)
+	update.SetNillablePublicFollowers(u.PublicFollowers)
+	update.SetNillablePublicArticles(u.PublicArticles)
+	update.SetNillablePublicComments(u.PublicComments)
+	update.SetNillablePublicOnlineStatus(u.PublicOnlineStatus)
+	save, err := update.Save(ctx)
+	return (*model.User)(save), err
 }
 
 func (r *UserRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.User, error) {

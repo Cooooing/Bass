@@ -26,67 +26,67 @@ type User struct {
 	// 邮箱
 	Email string `json:"email,omitempty"`
 	// 手机号
-	Phone string `json:"phone,omitempty"`
+	Phone *string `json:"phone,omitempty"`
 	// 用户个人主页链接
-	URL string `json:"url,omitempty"`
+	URL *string `json:"url,omitempty"`
 	// 头像URL
-	AvatarURL string `json:"avatar_url,omitempty"`
+	AvatarURL *string `json:"avatar_url,omitempty"`
 	// 个人简介
-	Introduction string `json:"introduction,omitempty"`
+	Introduction *string `json:"introduction,omitempty"`
 	// 用户 MBTI 类型
-	Mbti string `json:"mbti,omitempty"`
+	Mbti *string `json:"mbti,omitempty"`
 	// 用户状态：0-正常，1-封禁，2-注销
-	Status int32 `json:"status,omitempty"`
+	Status *int32 `json:"status,omitempty"`
 	// 用户组名称
 	GroupName string `json:"group_name,omitempty"`
 	// 关注数
-	FollowCount int32 `json:"follow_count,omitempty"`
+	FollowCount *int32 `json:"follow_count,omitempty"`
 	// 粉丝数
-	FollowerCount int32 `json:"follower_count,omitempty"`
+	FollowerCount *int32 `json:"follower_count,omitempty"`
 	// 最近登录时间
 	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
 	// 最近登录IP
-	LastLoginIP string `json:"last_login_ip,omitempty"`
+	LastLoginIP *string `json:"last_login_ip,omitempty"`
 	// 在线总时长（分钟）
-	OnlineMinutes int32 `json:"online_minutes,omitempty"`
+	OnlineMinutes *int32 `json:"online_minutes,omitempty"`
 	// 最近签到时间
 	LastCheckinTime *time.Time `json:"last_checkin_time,omitempty"`
 	// 当前连续签到天数
-	CurrentCheckinStreak int32 `json:"current_checkin_streak,omitempty"`
+	CurrentCheckinStreak *int32 `json:"current_checkin_streak,omitempty"`
 	// 最长连续签到天数
-	LongestCheckinStreak int32 `json:"longest_checkin_streak,omitempty"`
+	LongestCheckinStreak *int32 `json:"longest_checkin_streak,omitempty"`
 	// 用户语言
-	Language string `json:"language,omitempty"`
+	Language *string `json:"language,omitempty"`
 	// 时区
-	Timezone string `json:"timezone,omitempty"`
+	Timezone *string `json:"timezone,omitempty"`
 	// 皮肤主题
-	Theme string `json:"theme,omitempty"`
+	Theme *string `json:"theme,omitempty"`
 	// 移动端皮肤主题
-	MobileTheme string `json:"mobile_theme,omitempty"`
+	MobileTheme *string `json:"mobile_theme,omitempty"`
 	// 启用Web通知
-	EnableWebNotify bool `json:"enable_web_notify,omitempty"`
+	EnableWebNotify *bool `json:"enable_web_notify,omitempty"`
 	// 启用邮件订阅
-	EnableEmailSubscribe bool `json:"enable_email_subscribe,omitempty"`
+	EnableEmailSubscribe *bool `json:"enable_email_subscribe,omitempty"`
 	// 是否公开积分榜
-	PublicPoints bool `json:"public_points,omitempty"`
+	PublicPoints *bool `json:"public_points,omitempty"`
 	// 是否公开粉丝列表
-	PublicFollowers bool `json:"public_followers,omitempty"`
+	PublicFollowers *bool `json:"public_followers,omitempty"`
 	// 是否公开帖子列表
-	PublicArticles bool `json:"public_articles,omitempty"`
+	PublicArticles *bool `json:"public_articles,omitempty"`
 	// 是否公开评论列表
-	PublicComments bool `json:"public_comments,omitempty"`
+	PublicComments *bool `json:"public_comments,omitempty"`
 	// 是否公开在线状态
-	PublicOnlineStatus bool `json:"public_online_status,omitempty"`
+	PublicOnlineStatus *bool `json:"public_online_status,omitempty"`
 	// 所在国家
-	Country string `json:"country,omitempty"`
+	Country *string `json:"country,omitempty"`
 	// 所在省份
-	Province string `json:"province,omitempty"`
+	Province *string `json:"province,omitempty"`
 	// 所在城市
-	City string `json:"city,omitempty"`
+	City *string `json:"city,omitempty"`
 	// 是否公开地理位置
-	PublicLocation bool `json:"public_location,omitempty"`
+	PublicLocation *bool `json:"public_location,omitempty"`
 	// 二步验证Secret
-	TwofaSecret string `json:"twofa_secret,omitempty"`
+	TwofaSecret *string `json:"twofa_secret,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -156,37 +156,43 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone", values[i])
 			} else if value.Valid {
-				_m.Phone = value.String
+				_m.Phone = new(string)
+				*_m.Phone = value.String
 			}
 		case user.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
 			} else if value.Valid {
-				_m.URL = value.String
+				_m.URL = new(string)
+				*_m.URL = value.String
 			}
 		case user.FieldAvatarURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_url", values[i])
 			} else if value.Valid {
-				_m.AvatarURL = value.String
+				_m.AvatarURL = new(string)
+				*_m.AvatarURL = value.String
 			}
 		case user.FieldIntroduction:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field introduction", values[i])
 			} else if value.Valid {
-				_m.Introduction = value.String
+				_m.Introduction = new(string)
+				*_m.Introduction = value.String
 			}
 		case user.FieldMbti:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mbti", values[i])
 			} else if value.Valid {
-				_m.Mbti = value.String
+				_m.Mbti = new(string)
+				*_m.Mbti = value.String
 			}
 		case user.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				_m.Status = int32(value.Int64)
+				_m.Status = new(int32)
+				*_m.Status = int32(value.Int64)
 			}
 		case user.FieldGroupName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -198,13 +204,15 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field follow_count", values[i])
 			} else if value.Valid {
-				_m.FollowCount = int32(value.Int64)
+				_m.FollowCount = new(int32)
+				*_m.FollowCount = int32(value.Int64)
 			}
 		case user.FieldFollowerCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field follower_count", values[i])
 			} else if value.Valid {
-				_m.FollowerCount = int32(value.Int64)
+				_m.FollowerCount = new(int32)
+				*_m.FollowerCount = int32(value.Int64)
 			}
 		case user.FieldLastLoginTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -217,13 +225,15 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_ip", values[i])
 			} else if value.Valid {
-				_m.LastLoginIP = value.String
+				_m.LastLoginIP = new(string)
+				*_m.LastLoginIP = value.String
 			}
 		case user.FieldOnlineMinutes:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field online_minutes", values[i])
 			} else if value.Valid {
-				_m.OnlineMinutes = int32(value.Int64)
+				_m.OnlineMinutes = new(int32)
+				*_m.OnlineMinutes = int32(value.Int64)
 			}
 		case user.FieldLastCheckinTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -236,109 +246,127 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field current_checkin_streak", values[i])
 			} else if value.Valid {
-				_m.CurrentCheckinStreak = int32(value.Int64)
+				_m.CurrentCheckinStreak = new(int32)
+				*_m.CurrentCheckinStreak = int32(value.Int64)
 			}
 		case user.FieldLongestCheckinStreak:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field longest_checkin_streak", values[i])
 			} else if value.Valid {
-				_m.LongestCheckinStreak = int32(value.Int64)
+				_m.LongestCheckinStreak = new(int32)
+				*_m.LongestCheckinStreak = int32(value.Int64)
 			}
 		case user.FieldLanguage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field language", values[i])
 			} else if value.Valid {
-				_m.Language = value.String
+				_m.Language = new(string)
+				*_m.Language = value.String
 			}
 		case user.FieldTimezone:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field timezone", values[i])
 			} else if value.Valid {
-				_m.Timezone = value.String
+				_m.Timezone = new(string)
+				*_m.Timezone = value.String
 			}
 		case user.FieldTheme:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field theme", values[i])
 			} else if value.Valid {
-				_m.Theme = value.String
+				_m.Theme = new(string)
+				*_m.Theme = value.String
 			}
 		case user.FieldMobileTheme:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mobile_theme", values[i])
 			} else if value.Valid {
-				_m.MobileTheme = value.String
+				_m.MobileTheme = new(string)
+				*_m.MobileTheme = value.String
 			}
 		case user.FieldEnableWebNotify:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field enable_web_notify", values[i])
 			} else if value.Valid {
-				_m.EnableWebNotify = value.Bool
+				_m.EnableWebNotify = new(bool)
+				*_m.EnableWebNotify = value.Bool
 			}
 		case user.FieldEnableEmailSubscribe:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field enable_email_subscribe", values[i])
 			} else if value.Valid {
-				_m.EnableEmailSubscribe = value.Bool
+				_m.EnableEmailSubscribe = new(bool)
+				*_m.EnableEmailSubscribe = value.Bool
 			}
 		case user.FieldPublicPoints:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field public_points", values[i])
 			} else if value.Valid {
-				_m.PublicPoints = value.Bool
+				_m.PublicPoints = new(bool)
+				*_m.PublicPoints = value.Bool
 			}
 		case user.FieldPublicFollowers:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field public_followers", values[i])
 			} else if value.Valid {
-				_m.PublicFollowers = value.Bool
+				_m.PublicFollowers = new(bool)
+				*_m.PublicFollowers = value.Bool
 			}
 		case user.FieldPublicArticles:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field public_articles", values[i])
 			} else if value.Valid {
-				_m.PublicArticles = value.Bool
+				_m.PublicArticles = new(bool)
+				*_m.PublicArticles = value.Bool
 			}
 		case user.FieldPublicComments:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field public_comments", values[i])
 			} else if value.Valid {
-				_m.PublicComments = value.Bool
+				_m.PublicComments = new(bool)
+				*_m.PublicComments = value.Bool
 			}
 		case user.FieldPublicOnlineStatus:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field public_online_status", values[i])
 			} else if value.Valid {
-				_m.PublicOnlineStatus = value.Bool
+				_m.PublicOnlineStatus = new(bool)
+				*_m.PublicOnlineStatus = value.Bool
 			}
 		case user.FieldCountry:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field country", values[i])
 			} else if value.Valid {
-				_m.Country = value.String
+				_m.Country = new(string)
+				*_m.Country = value.String
 			}
 		case user.FieldProvince:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field province", values[i])
 			} else if value.Valid {
-				_m.Province = value.String
+				_m.Province = new(string)
+				*_m.Province = value.String
 			}
 		case user.FieldCity:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field city", values[i])
 			} else if value.Valid {
-				_m.City = value.String
+				_m.City = new(string)
+				*_m.City = value.String
 			}
 		case user.FieldPublicLocation:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field public_location", values[i])
 			} else if value.Valid {
-				_m.PublicLocation = value.Bool
+				_m.PublicLocation = new(bool)
+				*_m.PublicLocation = value.Bool
 			}
 		case user.FieldTwofaSecret:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field twofa_secret", values[i])
 			} else if value.Valid {
-				_m.TwofaSecret = value.String
+				_m.TwofaSecret = new(string)
+				*_m.TwofaSecret = value.String
 			}
 		case user.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -401,102 +429,158 @@ func (_m *User) String() string {
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
-	builder.WriteString("phone=")
-	builder.WriteString(_m.Phone)
+	if v := _m.Phone; v != nil {
+		builder.WriteString("phone=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("url=")
-	builder.WriteString(_m.URL)
+	if v := _m.URL; v != nil {
+		builder.WriteString("url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("avatar_url=")
-	builder.WriteString(_m.AvatarURL)
+	if v := _m.AvatarURL; v != nil {
+		builder.WriteString("avatar_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("introduction=")
-	builder.WriteString(_m.Introduction)
+	if v := _m.Introduction; v != nil {
+		builder.WriteString("introduction=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("mbti=")
-	builder.WriteString(_m.Mbti)
+	if v := _m.Mbti; v != nil {
+		builder.WriteString("mbti=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	if v := _m.Status; v != nil {
+		builder.WriteString("status=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("group_name=")
 	builder.WriteString(_m.GroupName)
 	builder.WriteString(", ")
-	builder.WriteString("follow_count=")
-	builder.WriteString(fmt.Sprintf("%v", _m.FollowCount))
+	if v := _m.FollowCount; v != nil {
+		builder.WriteString("follow_count=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("follower_count=")
-	builder.WriteString(fmt.Sprintf("%v", _m.FollowerCount))
+	if v := _m.FollowerCount; v != nil {
+		builder.WriteString("follower_count=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.LastLoginTime; v != nil {
 		builder.WriteString("last_login_time=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	builder.WriteString("last_login_ip=")
-	builder.WriteString(_m.LastLoginIP)
+	if v := _m.LastLoginIP; v != nil {
+		builder.WriteString("last_login_ip=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("online_minutes=")
-	builder.WriteString(fmt.Sprintf("%v", _m.OnlineMinutes))
+	if v := _m.OnlineMinutes; v != nil {
+		builder.WriteString("online_minutes=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.LastCheckinTime; v != nil {
 		builder.WriteString("last_checkin_time=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	builder.WriteString("current_checkin_streak=")
-	builder.WriteString(fmt.Sprintf("%v", _m.CurrentCheckinStreak))
+	if v := _m.CurrentCheckinStreak; v != nil {
+		builder.WriteString("current_checkin_streak=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("longest_checkin_streak=")
-	builder.WriteString(fmt.Sprintf("%v", _m.LongestCheckinStreak))
+	if v := _m.LongestCheckinStreak; v != nil {
+		builder.WriteString("longest_checkin_streak=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("language=")
-	builder.WriteString(_m.Language)
+	if v := _m.Language; v != nil {
+		builder.WriteString("language=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("timezone=")
-	builder.WriteString(_m.Timezone)
+	if v := _m.Timezone; v != nil {
+		builder.WriteString("timezone=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("theme=")
-	builder.WriteString(_m.Theme)
+	if v := _m.Theme; v != nil {
+		builder.WriteString("theme=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("mobile_theme=")
-	builder.WriteString(_m.MobileTheme)
+	if v := _m.MobileTheme; v != nil {
+		builder.WriteString("mobile_theme=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("enable_web_notify=")
-	builder.WriteString(fmt.Sprintf("%v", _m.EnableWebNotify))
+	if v := _m.EnableWebNotify; v != nil {
+		builder.WriteString("enable_web_notify=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("enable_email_subscribe=")
-	builder.WriteString(fmt.Sprintf("%v", _m.EnableEmailSubscribe))
+	if v := _m.EnableEmailSubscribe; v != nil {
+		builder.WriteString("enable_email_subscribe=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("public_points=")
-	builder.WriteString(fmt.Sprintf("%v", _m.PublicPoints))
+	if v := _m.PublicPoints; v != nil {
+		builder.WriteString("public_points=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("public_followers=")
-	builder.WriteString(fmt.Sprintf("%v", _m.PublicFollowers))
+	if v := _m.PublicFollowers; v != nil {
+		builder.WriteString("public_followers=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("public_articles=")
-	builder.WriteString(fmt.Sprintf("%v", _m.PublicArticles))
+	if v := _m.PublicArticles; v != nil {
+		builder.WriteString("public_articles=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("public_comments=")
-	builder.WriteString(fmt.Sprintf("%v", _m.PublicComments))
+	if v := _m.PublicComments; v != nil {
+		builder.WriteString("public_comments=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("public_online_status=")
-	builder.WriteString(fmt.Sprintf("%v", _m.PublicOnlineStatus))
+	if v := _m.PublicOnlineStatus; v != nil {
+		builder.WriteString("public_online_status=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("country=")
-	builder.WriteString(_m.Country)
+	if v := _m.Country; v != nil {
+		builder.WriteString("country=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("province=")
-	builder.WriteString(_m.Province)
+	if v := _m.Province; v != nil {
+		builder.WriteString("province=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("city=")
-	builder.WriteString(_m.City)
+	if v := _m.City; v != nil {
+		builder.WriteString("city=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("public_location=")
-	builder.WriteString(fmt.Sprintf("%v", _m.PublicLocation))
+	if v := _m.PublicLocation; v != nil {
+		builder.WriteString("public_location=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("twofa_secret=")
-	builder.WriteString(_m.TwofaSecret)
+	if v := _m.TwofaSecret; v != nil {
+		builder.WriteString("twofa_secret=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

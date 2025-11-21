@@ -2,8 +2,10 @@ package service
 
 import (
 	v1 "common/api/user/v1"
+	"common/pkg/util"
 	"context"
 	"user/internal/biz"
+	"user/internal/biz/model"
 	"user/internal/biz/repo"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -35,6 +37,36 @@ func (s *UserService) RegisterHttp(hs *http.Server) {
 	v1.RegisterUserUserServiceHTTPServer(hs, s)
 }
 
+func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRequest) (rsp *v1.UpdateSettingReply, err error) {
+	user := util.MustGetUserInfo(ctx)
+	update, err := s.userRepo.Update(ctx, s.db, &model.User{
+		ID:                   user.ID,
+		Language:             req.Language,
+		Timezone:             req.Timezone,
+		Theme:                req.Theme,
+		MobileTheme:          req.MobileTheme,
+		EnableWebNotify:      req.EnableWebNotify,
+		EnableEmailSubscribe: req.EnableEmailSubscribe,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &v1.UpdateSettingReply{
+		User: update.ConvertToRpc(),
+	}, err
+}
+
+func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserRequest) (rsp *v1.GetCurrentUserReply, err error) {
+	user := util.MustGetUserInfo(ctx)
+	u, err := s.userRepo.GetById(ctx, s.db, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.GetCurrentUserReply{
+		User: u.ConvertToRpc(),
+	}, err
+}
+
 func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp *v1.GetListReply, err error) {
 	res := &v1.GetListReply{
 		Users: []*v1.User{},
@@ -45,7 +77,7 @@ func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp 
 	}
 	for i := range list {
 		item := &v1.User{}
-		err = copier.Copy(&item, list[i])
+		err = copier.Copy(item, list[i])
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +104,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	}
 	for i := range list {
 		item := &v1.User{}
-		err = copier.Copy(&item, list[i])
+		err = copier.Copy(item, list[i])
 		if err != nil {
 			return nil, err
 		}

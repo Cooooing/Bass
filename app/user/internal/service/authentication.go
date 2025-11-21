@@ -51,11 +51,14 @@ func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.Exist
 }
 
 func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginAccountRequest) (rsp *v1.LoginAccountReply, err error) {
-	token, err := s.authenticationDomain.LoginAccount(ctx, req.Account, req.Password)
+	token, user, err := s.authenticationDomain.LoginAccount(ctx, req.Account, req.Password)
 	if err != nil {
 		return nil, cv1.ErrorUnauthorized("account not exist or password is incorrect").WithCause(err)
 	}
-	return &v1.LoginAccountReply{Token: token}, err
+	return &v1.LoginAccountReply{
+		Token: token,
+		User:  user.ConvertToRpc(),
+	}, err
 }
 
 func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailRequest) (rsp *v1.RegisterEmailReply, err error) {

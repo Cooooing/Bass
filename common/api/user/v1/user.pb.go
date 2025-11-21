@@ -37,67 +37,67 @@ type User struct {
 	// 邮箱
 	Email string `protobuf:"bytes,5,opt,name=email,proto3" json:"email,omitempty"`
 	// 手机号
-	Phone string `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
+	Phone *string `protobuf:"bytes,6,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
 	// 用户个人主页链接
-	Url string `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`
+	Url *string `protobuf:"bytes,7,opt,name=url,proto3,oneof" json:"url,omitempty"`
 	// 头像URL
-	AvatarUrl string `protobuf:"bytes,8,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
+	AvatarUrl *string `protobuf:"bytes,8,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"`
 	// 个人简介
-	Introduction string `protobuf:"bytes,9,opt,name=introduction,proto3" json:"introduction,omitempty"`
+	Introduction *string `protobuf:"bytes,9,opt,name=introduction,proto3,oneof" json:"introduction,omitempty"`
 	// 用户 MBTI 类型
-	Mbti string `protobuf:"bytes,10,opt,name=mbti,proto3" json:"mbti,omitempty"`
+	Mbti *string `protobuf:"bytes,10,opt,name=mbti,proto3,oneof" json:"mbti,omitempty"`
 	// 用户状态：0-正常，1-封禁，2-注销
-	Status int64 `protobuf:"varint,11,opt,name=status,proto3" json:"status,omitempty"`
+	Status *int32 `protobuf:"varint,11,opt,name=status,proto3,oneof" json:"status,omitempty"`
 	// 用户组名称
 	GroupName string `protobuf:"bytes,12,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
 	// 关注数
-	FollowCount int64 `protobuf:"varint,13,opt,name=follow_count,json=followCount,proto3" json:"follow_count,omitempty"`
+	FollowCount *int32 `protobuf:"varint,13,opt,name=follow_count,json=followCount,proto3,oneof" json:"follow_count,omitempty"`
 	// 粉丝数
-	FollowerCount int64 `protobuf:"varint,14,opt,name=follower_count,json=followerCount,proto3" json:"follower_count,omitempty"`
+	FollowerCount *int32 `protobuf:"varint,14,opt,name=follower_count,json=followerCount,proto3,oneof" json:"follower_count,omitempty"`
 	// 最近登录时间
 	LastLoginTime *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=last_login_time,json=lastLoginTime,proto3" json:"last_login_time,omitempty"`
 	// 最近登录IP
-	LastLoginIp string `protobuf:"bytes,16,opt,name=last_login_ip,json=lastLoginIp,proto3" json:"last_login_ip,omitempty"`
+	LastLoginIp *string `protobuf:"bytes,16,opt,name=last_login_ip,json=lastLoginIp,proto3,oneof" json:"last_login_ip,omitempty"`
 	// 在线总时长（分钟）
-	OnlineMinutes int64 `protobuf:"varint,17,opt,name=online_minutes,json=onlineMinutes,proto3" json:"online_minutes,omitempty"`
+	OnlineMinutes *int32 `protobuf:"varint,17,opt,name=online_minutes,json=onlineMinutes,proto3,oneof" json:"online_minutes,omitempty"`
 	// 最近签到时间
 	LastCheckinTime *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=last_checkin_time,json=lastCheckinTime,proto3" json:"last_checkin_time,omitempty"`
 	// 当前连续签到天数
-	CurrentCheckinStreak int64 `protobuf:"varint,19,opt,name=current_checkin_streak,json=currentCheckinStreak,proto3" json:"current_checkin_streak,omitempty"`
+	CurrentCheckinStreak *int32 `protobuf:"varint,19,opt,name=current_checkin_streak,json=currentCheckinStreak,proto3,oneof" json:"current_checkin_streak,omitempty"`
 	// 最长连续签到天数
-	LongestCheckinStreak int64 `protobuf:"varint,20,opt,name=longest_checkin_streak,json=longestCheckinStreak,proto3" json:"longest_checkin_streak,omitempty"`
+	LongestCheckinStreak *int32 `protobuf:"varint,20,opt,name=longest_checkin_streak,json=longestCheckinStreak,proto3,oneof" json:"longest_checkin_streak,omitempty"`
 	// 用户语言
-	Language string `protobuf:"bytes,21,opt,name=language,proto3" json:"language,omitempty"`
+	Language *string `protobuf:"bytes,21,opt,name=language,proto3,oneof" json:"language,omitempty"`
 	// 时区
-	Timezone string `protobuf:"bytes,22,opt,name=timezone,proto3" json:"timezone,omitempty"`
+	Timezone *string `protobuf:"bytes,22,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
 	// 皮肤主题
-	Theme string `protobuf:"bytes,23,opt,name=theme,proto3" json:"theme,omitempty"`
+	Theme *string `protobuf:"bytes,23,opt,name=theme,proto3,oneof" json:"theme,omitempty"`
 	// 移动端皮肤主题
-	MobileTheme string `protobuf:"bytes,24,opt,name=mobile_theme,json=mobileTheme,proto3" json:"mobile_theme,omitempty"`
+	MobileTheme *string `protobuf:"bytes,24,opt,name=mobile_theme,json=mobileTheme,proto3,oneof" json:"mobile_theme,omitempty"`
 	// 启用Web通知
-	EnableWebNotify bool `protobuf:"varint,25,opt,name=enable_web_notify,json=enableWebNotify,proto3" json:"enable_web_notify,omitempty"`
+	EnableWebNotify *bool `protobuf:"varint,25,opt,name=enable_web_notify,json=enableWebNotify,proto3,oneof" json:"enable_web_notify,omitempty"`
 	// 启用邮件订阅
-	EnableEmailSubscribe bool `protobuf:"varint,26,opt,name=enable_email_subscribe,json=enableEmailSubscribe,proto3" json:"enable_email_subscribe,omitempty"`
+	EnableEmailSubscribe *bool `protobuf:"varint,26,opt,name=enable_email_subscribe,json=enableEmailSubscribe,proto3,oneof" json:"enable_email_subscribe,omitempty"`
 	// 是否公开积分榜
-	PublicPoints bool `protobuf:"varint,27,opt,name=public_points,json=publicPoints,proto3" json:"public_points,omitempty"`
+	PublicPoints *bool `protobuf:"varint,27,opt,name=public_points,json=publicPoints,proto3,oneof" json:"public_points,omitempty"`
 	// 是否公开粉丝列表
-	PublicFollowers bool `protobuf:"varint,28,opt,name=public_followers,json=publicFollowers,proto3" json:"public_followers,omitempty"`
+	PublicFollowers *bool `protobuf:"varint,28,opt,name=public_followers,json=publicFollowers,proto3,oneof" json:"public_followers,omitempty"`
 	// 是否公开帖子列表
-	PublicArticles bool `protobuf:"varint,29,opt,name=public_articles,json=publicArticles,proto3" json:"public_articles,omitempty"`
+	PublicArticles *bool `protobuf:"varint,29,opt,name=public_articles,json=publicArticles,proto3,oneof" json:"public_articles,omitempty"`
 	// 是否公开评论列表
-	PublicComments bool `protobuf:"varint,30,opt,name=public_comments,json=publicComments,proto3" json:"public_comments,omitempty"`
+	PublicComments *bool `protobuf:"varint,30,opt,name=public_comments,json=publicComments,proto3,oneof" json:"public_comments,omitempty"`
 	// 是否公开在线状态
-	PublicOnlineStatus bool `protobuf:"varint,31,opt,name=public_online_status,json=publicOnlineStatus,proto3" json:"public_online_status,omitempty"`
+	PublicOnlineStatus *bool `protobuf:"varint,31,opt,name=public_online_status,json=publicOnlineStatus,proto3,oneof" json:"public_online_status,omitempty"`
 	// 所在国家
-	Country string `protobuf:"bytes,32,opt,name=country,proto3" json:"country,omitempty"`
+	Country *string `protobuf:"bytes,32,opt,name=country,proto3,oneof" json:"country,omitempty"`
 	// 所在省份
-	Province string `protobuf:"bytes,33,opt,name=province,proto3" json:"province,omitempty"`
+	Province *string `protobuf:"bytes,33,opt,name=province,proto3,oneof" json:"province,omitempty"`
 	// 所在城市
-	City string `protobuf:"bytes,34,opt,name=city,proto3" json:"city,omitempty"`
+	City *string `protobuf:"bytes,34,opt,name=city,proto3,oneof" json:"city,omitempty"`
 	// 是否公开地理位置
-	PublicLocation bool `protobuf:"varint,35,opt,name=public_location,json=publicLocation,proto3" json:"public_location,omitempty"`
+	PublicLocation *bool `protobuf:"varint,35,opt,name=public_location,json=publicLocation,proto3,oneof" json:"public_location,omitempty"`
 	// 二步验证 Secret
-	TwofaSecret string `protobuf:"bytes,36,opt,name=twofa_secret,json=twofaSecret,proto3" json:"twofa_secret,omitempty"`
+	TwofaSecret *string `protobuf:"bytes,36,opt,name=twofa_secret,json=twofaSecret,proto3,oneof" json:"twofa_secret,omitempty"`
 	// 创建时间
 	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,37,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	// 更新时间
@@ -165,43 +165,43 @@ func (x *User) GetEmail() string {
 }
 
 func (x *User) GetPhone() string {
-	if x != nil {
-		return x.Phone
+	if x != nil && x.Phone != nil {
+		return *x.Phone
 	}
 	return ""
 }
 
 func (x *User) GetUrl() string {
-	if x != nil {
-		return x.Url
+	if x != nil && x.Url != nil {
+		return *x.Url
 	}
 	return ""
 }
 
 func (x *User) GetAvatarUrl() string {
-	if x != nil {
-		return x.AvatarUrl
+	if x != nil && x.AvatarUrl != nil {
+		return *x.AvatarUrl
 	}
 	return ""
 }
 
 func (x *User) GetIntroduction() string {
-	if x != nil {
-		return x.Introduction
+	if x != nil && x.Introduction != nil {
+		return *x.Introduction
 	}
 	return ""
 }
 
 func (x *User) GetMbti() string {
-	if x != nil {
-		return x.Mbti
+	if x != nil && x.Mbti != nil {
+		return *x.Mbti
 	}
 	return ""
 }
 
-func (x *User) GetStatus() int64 {
-	if x != nil {
-		return x.Status
+func (x *User) GetStatus() int32 {
+	if x != nil && x.Status != nil {
+		return *x.Status
 	}
 	return 0
 }
@@ -213,16 +213,16 @@ func (x *User) GetGroupName() string {
 	return ""
 }
 
-func (x *User) GetFollowCount() int64 {
-	if x != nil {
-		return x.FollowCount
+func (x *User) GetFollowCount() int32 {
+	if x != nil && x.FollowCount != nil {
+		return *x.FollowCount
 	}
 	return 0
 }
 
-func (x *User) GetFollowerCount() int64 {
-	if x != nil {
-		return x.FollowerCount
+func (x *User) GetFollowerCount() int32 {
+	if x != nil && x.FollowerCount != nil {
+		return *x.FollowerCount
 	}
 	return 0
 }
@@ -235,15 +235,15 @@ func (x *User) GetLastLoginTime() *timestamppb.Timestamp {
 }
 
 func (x *User) GetLastLoginIp() string {
-	if x != nil {
-		return x.LastLoginIp
+	if x != nil && x.LastLoginIp != nil {
+		return *x.LastLoginIp
 	}
 	return ""
 }
 
-func (x *User) GetOnlineMinutes() int64 {
-	if x != nil {
-		return x.OnlineMinutes
+func (x *User) GetOnlineMinutes() int32 {
+	if x != nil && x.OnlineMinutes != nil {
+		return *x.OnlineMinutes
 	}
 	return 0
 }
@@ -255,128 +255,128 @@ func (x *User) GetLastCheckinTime() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *User) GetCurrentCheckinStreak() int64 {
-	if x != nil {
-		return x.CurrentCheckinStreak
+func (x *User) GetCurrentCheckinStreak() int32 {
+	if x != nil && x.CurrentCheckinStreak != nil {
+		return *x.CurrentCheckinStreak
 	}
 	return 0
 }
 
-func (x *User) GetLongestCheckinStreak() int64 {
-	if x != nil {
-		return x.LongestCheckinStreak
+func (x *User) GetLongestCheckinStreak() int32 {
+	if x != nil && x.LongestCheckinStreak != nil {
+		return *x.LongestCheckinStreak
 	}
 	return 0
 }
 
 func (x *User) GetLanguage() string {
-	if x != nil {
-		return x.Language
+	if x != nil && x.Language != nil {
+		return *x.Language
 	}
 	return ""
 }
 
 func (x *User) GetTimezone() string {
-	if x != nil {
-		return x.Timezone
+	if x != nil && x.Timezone != nil {
+		return *x.Timezone
 	}
 	return ""
 }
 
 func (x *User) GetTheme() string {
-	if x != nil {
-		return x.Theme
+	if x != nil && x.Theme != nil {
+		return *x.Theme
 	}
 	return ""
 }
 
 func (x *User) GetMobileTheme() string {
-	if x != nil {
-		return x.MobileTheme
+	if x != nil && x.MobileTheme != nil {
+		return *x.MobileTheme
 	}
 	return ""
 }
 
 func (x *User) GetEnableWebNotify() bool {
-	if x != nil {
-		return x.EnableWebNotify
+	if x != nil && x.EnableWebNotify != nil {
+		return *x.EnableWebNotify
 	}
 	return false
 }
 
 func (x *User) GetEnableEmailSubscribe() bool {
-	if x != nil {
-		return x.EnableEmailSubscribe
+	if x != nil && x.EnableEmailSubscribe != nil {
+		return *x.EnableEmailSubscribe
 	}
 	return false
 }
 
 func (x *User) GetPublicPoints() bool {
-	if x != nil {
-		return x.PublicPoints
+	if x != nil && x.PublicPoints != nil {
+		return *x.PublicPoints
 	}
 	return false
 }
 
 func (x *User) GetPublicFollowers() bool {
-	if x != nil {
-		return x.PublicFollowers
+	if x != nil && x.PublicFollowers != nil {
+		return *x.PublicFollowers
 	}
 	return false
 }
 
 func (x *User) GetPublicArticles() bool {
-	if x != nil {
-		return x.PublicArticles
+	if x != nil && x.PublicArticles != nil {
+		return *x.PublicArticles
 	}
 	return false
 }
 
 func (x *User) GetPublicComments() bool {
-	if x != nil {
-		return x.PublicComments
+	if x != nil && x.PublicComments != nil {
+		return *x.PublicComments
 	}
 	return false
 }
 
 func (x *User) GetPublicOnlineStatus() bool {
-	if x != nil {
-		return x.PublicOnlineStatus
+	if x != nil && x.PublicOnlineStatus != nil {
+		return *x.PublicOnlineStatus
 	}
 	return false
 }
 
 func (x *User) GetCountry() string {
-	if x != nil {
-		return x.Country
+	if x != nil && x.Country != nil {
+		return *x.Country
 	}
 	return ""
 }
 
 func (x *User) GetProvince() string {
-	if x != nil {
-		return x.Province
+	if x != nil && x.Province != nil {
+		return *x.Province
 	}
 	return ""
 }
 
 func (x *User) GetCity() string {
-	if x != nil {
-		return x.City
+	if x != nil && x.City != nil {
+		return *x.City
 	}
 	return ""
 }
 
 func (x *User) GetPublicLocation() bool {
-	if x != nil {
-		return x.PublicLocation
+	if x != nil && x.PublicLocation != nil {
+		return *x.PublicLocation
 	}
 	return false
 }
 
 func (x *User) GetTwofaSecret() string {
-	if x != nil {
-		return x.TwofaSecret
+	if x != nil && x.TwofaSecret != nil {
+		return *x.TwofaSecret
 	}
 	return ""
 }
@@ -395,6 +395,222 @@ func (x *User) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type UpdateSettingRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户语言
+	Language *string `protobuf:"bytes,1,opt,name=language,proto3,oneof" json:"language,omitempty"`
+	// 时区
+	Timezone *string `protobuf:"bytes,2,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
+	// 皮肤主题
+	Theme *string `protobuf:"bytes,3,opt,name=theme,proto3,oneof" json:"theme,omitempty"`
+	// 移动端皮肤主题
+	MobileTheme *string `protobuf:"bytes,4,opt,name=mobile_theme,json=mobileTheme,proto3,oneof" json:"mobile_theme,omitempty"`
+	// 启用Web通知
+	EnableWebNotify *bool `protobuf:"varint,5,opt,name=enable_web_notify,json=enableWebNotify,proto3,oneof" json:"enable_web_notify,omitempty"`
+	// 启用邮件订阅
+	EnableEmailSubscribe *bool `protobuf:"varint,6,opt,name=enable_email_subscribe,json=enableEmailSubscribe,proto3,oneof" json:"enable_email_subscribe,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *UpdateSettingRequest) Reset() {
+	*x = UpdateSettingRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSettingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSettingRequest) ProtoMessage() {}
+
+func (x *UpdateSettingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSettingRequest.ProtoReflect.Descriptor instead.
+func (*UpdateSettingRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *UpdateSettingRequest) GetLanguage() string {
+	if x != nil && x.Language != nil {
+		return *x.Language
+	}
+	return ""
+}
+
+func (x *UpdateSettingRequest) GetTimezone() string {
+	if x != nil && x.Timezone != nil {
+		return *x.Timezone
+	}
+	return ""
+}
+
+func (x *UpdateSettingRequest) GetTheme() string {
+	if x != nil && x.Theme != nil {
+		return *x.Theme
+	}
+	return ""
+}
+
+func (x *UpdateSettingRequest) GetMobileTheme() string {
+	if x != nil && x.MobileTheme != nil {
+		return *x.MobileTheme
+	}
+	return ""
+}
+
+func (x *UpdateSettingRequest) GetEnableWebNotify() bool {
+	if x != nil && x.EnableWebNotify != nil {
+		return *x.EnableWebNotify
+	}
+	return false
+}
+
+func (x *UpdateSettingRequest) GetEnableEmailSubscribe() bool {
+	if x != nil && x.EnableEmailSubscribe != nil {
+		return *x.EnableEmailSubscribe
+	}
+	return false
+}
+
+type UpdateSettingReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户信息
+	User          *User `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSettingReply) Reset() {
+	*x = UpdateSettingReply{}
+	mi := &file_user_v1_user_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSettingReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSettingReply) ProtoMessage() {}
+
+func (x *UpdateSettingReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSettingReply.ProtoReflect.Descriptor instead.
+func (*UpdateSettingReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *UpdateSettingReply) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type GetCurrentUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCurrentUserRequest) Reset() {
+	*x = GetCurrentUserRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCurrentUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCurrentUserRequest) ProtoMessage() {}
+
+func (x *GetCurrentUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCurrentUserRequest.ProtoReflect.Descriptor instead.
+func (*GetCurrentUserRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{3}
+}
+
+type GetCurrentUserReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户信息
+	User          *User `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCurrentUserReply) Reset() {
+	*x = GetCurrentUserReply{}
+	mi := &file_user_v1_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCurrentUserReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCurrentUserReply) ProtoMessage() {}
+
+func (x *GetCurrentUserReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCurrentUserReply.ProtoReflect.Descriptor instead.
+func (*GetCurrentUserReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetCurrentUserReply) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 type GetOneRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 用户ID
@@ -405,7 +621,7 @@ type GetOneRequest struct {
 
 func (x *GetOneRequest) Reset() {
 	*x = GetOneRequest{}
-	mi := &file_user_v1_user_proto_msgTypes[1]
+	mi := &file_user_v1_user_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -417,7 +633,7 @@ func (x *GetOneRequest) String() string {
 func (*GetOneRequest) ProtoMessage() {}
 
 func (x *GetOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[1]
+	mi := &file_user_v1_user_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -430,7 +646,7 @@ func (x *GetOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOneRequest.ProtoReflect.Descriptor instead.
 func (*GetOneRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{1}
+	return file_user_v1_user_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetOneRequest) GetId() int64 {
@@ -450,7 +666,7 @@ type GetOneReply struct {
 
 func (x *GetOneReply) Reset() {
 	*x = GetOneReply{}
-	mi := &file_user_v1_user_proto_msgTypes[2]
+	mi := &file_user_v1_user_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -462,7 +678,7 @@ func (x *GetOneReply) String() string {
 func (*GetOneReply) ProtoMessage() {}
 
 func (x *GetOneReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[2]
+	mi := &file_user_v1_user_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -475,7 +691,7 @@ func (x *GetOneReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOneReply.ProtoReflect.Descriptor instead.
 func (*GetOneReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{2}
+	return file_user_v1_user_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetOneReply) GetUser() *User {
@@ -495,7 +711,7 @@ type GetListRequest struct {
 
 func (x *GetListRequest) Reset() {
 	*x = GetListRequest{}
-	mi := &file_user_v1_user_proto_msgTypes[3]
+	mi := &file_user_v1_user_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -507,7 +723,7 @@ func (x *GetListRequest) String() string {
 func (*GetListRequest) ProtoMessage() {}
 
 func (x *GetListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[3]
+	mi := &file_user_v1_user_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -520,7 +736,7 @@ func (x *GetListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetListRequest.ProtoReflect.Descriptor instead.
 func (*GetListRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{3}
+	return file_user_v1_user_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetListRequest) GetIds() []int64 {
@@ -540,7 +756,7 @@ type GetListReply struct {
 
 func (x *GetListReply) Reset() {
 	*x = GetListReply{}
-	mi := &file_user_v1_user_proto_msgTypes[4]
+	mi := &file_user_v1_user_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -552,7 +768,7 @@ func (x *GetListReply) String() string {
 func (*GetListReply) ProtoMessage() {}
 
 func (x *GetListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[4]
+	mi := &file_user_v1_user_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -565,7 +781,7 @@ func (x *GetListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetListReply.ProtoReflect.Descriptor instead.
 func (*GetListReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{4}
+	return file_user_v1_user_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetListReply) GetUsers() []*User {
@@ -585,7 +801,7 @@ type GetMapRequest struct {
 
 func (x *GetMapRequest) Reset() {
 	*x = GetMapRequest{}
-	mi := &file_user_v1_user_proto_msgTypes[5]
+	mi := &file_user_v1_user_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -597,7 +813,7 @@ func (x *GetMapRequest) String() string {
 func (*GetMapRequest) ProtoMessage() {}
 
 func (x *GetMapRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[5]
+	mi := &file_user_v1_user_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -610,7 +826,7 @@ func (x *GetMapRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMapRequest.ProtoReflect.Descriptor instead.
 func (*GetMapRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{5}
+	return file_user_v1_user_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetMapRequest) GetIds() []int64 {
@@ -630,7 +846,7 @@ type GetMapReply struct {
 
 func (x *GetMapReply) Reset() {
 	*x = GetMapReply{}
-	mi := &file_user_v1_user_proto_msgTypes[6]
+	mi := &file_user_v1_user_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -642,7 +858,7 @@ func (x *GetMapReply) String() string {
 func (*GetMapReply) ProtoMessage() {}
 
 func (x *GetMapReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[6]
+	mi := &file_user_v1_user_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -655,7 +871,7 @@ func (x *GetMapReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMapReply.ProtoReflect.Descriptor instead.
 func (*GetMapReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{6}
+	return file_user_v1_user_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetMapReply) GetUsers() map[int64]*User {
@@ -669,51 +885,98 @@ var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xd2\n" +
-	"\n" +
+	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xb8\x0f\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bnickname\x18\x03 \x01(\tR\bnickname\x12\x14\n" +
-	"\x05email\x18\x05 \x01(\tR\x05email\x12\x14\n" +
-	"\x05phone\x18\x06 \x01(\tR\x05phone\x12\x10\n" +
-	"\x03url\x18\a \x01(\tR\x03url\x12\x1d\n" +
+	"\x05email\x18\x05 \x01(\tR\x05email\x12\x19\n" +
+	"\x05phone\x18\x06 \x01(\tH\x00R\x05phone\x88\x01\x01\x12\x15\n" +
+	"\x03url\x18\a \x01(\tH\x01R\x03url\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"avatar_url\x18\b \x01(\tR\tavatarUrl\x12\"\n" +
-	"\fintroduction\x18\t \x01(\tR\fintroduction\x12\x12\n" +
+	"avatar_url\x18\b \x01(\tH\x02R\tavatarUrl\x88\x01\x01\x12'\n" +
+	"\fintroduction\x18\t \x01(\tH\x03R\fintroduction\x88\x01\x01\x12\x17\n" +
 	"\x04mbti\x18\n" +
-	" \x01(\tR\x04mbti\x12\x16\n" +
-	"\x06status\x18\v \x01(\x03R\x06status\x12\x1d\n" +
+	" \x01(\tH\x04R\x04mbti\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\v \x01(\x05H\x05R\x06status\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"group_name\x18\f \x01(\tR\tgroupName\x12!\n" +
-	"\ffollow_count\x18\r \x01(\x03R\vfollowCount\x12%\n" +
-	"\x0efollower_count\x18\x0e \x01(\x03R\rfollowerCount\x12B\n" +
-	"\x0flast_login_time\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\rlastLoginTime\x12\"\n" +
-	"\rlast_login_ip\x18\x10 \x01(\tR\vlastLoginIp\x12%\n" +
-	"\x0eonline_minutes\x18\x11 \x01(\x03R\ronlineMinutes\x12F\n" +
-	"\x11last_checkin_time\x18\x12 \x01(\v2\x1a.google.protobuf.TimestampR\x0flastCheckinTime\x124\n" +
-	"\x16current_checkin_streak\x18\x13 \x01(\x03R\x14currentCheckinStreak\x124\n" +
-	"\x16longest_checkin_streak\x18\x14 \x01(\x03R\x14longestCheckinStreak\x12\x1a\n" +
-	"\blanguage\x18\x15 \x01(\tR\blanguage\x12\x1a\n" +
-	"\btimezone\x18\x16 \x01(\tR\btimezone\x12\x14\n" +
-	"\x05theme\x18\x17 \x01(\tR\x05theme\x12!\n" +
-	"\fmobile_theme\x18\x18 \x01(\tR\vmobileTheme\x12*\n" +
-	"\x11enable_web_notify\x18\x19 \x01(\bR\x0fenableWebNotify\x124\n" +
-	"\x16enable_email_subscribe\x18\x1a \x01(\bR\x14enableEmailSubscribe\x12#\n" +
-	"\rpublic_points\x18\x1b \x01(\bR\fpublicPoints\x12)\n" +
-	"\x10public_followers\x18\x1c \x01(\bR\x0fpublicFollowers\x12'\n" +
-	"\x0fpublic_articles\x18\x1d \x01(\bR\x0epublicArticles\x12'\n" +
-	"\x0fpublic_comments\x18\x1e \x01(\bR\x0epublicComments\x120\n" +
-	"\x14public_online_status\x18\x1f \x01(\bR\x12publicOnlineStatus\x12\x18\n" +
-	"\acountry\x18  \x01(\tR\acountry\x12\x1a\n" +
-	"\bprovince\x18! \x01(\tR\bprovince\x12\x12\n" +
-	"\x04city\x18\" \x01(\tR\x04city\x12'\n" +
-	"\x0fpublic_location\x18# \x01(\bR\x0epublicLocation\x12!\n" +
-	"\ftwofa_secret\x18$ \x01(\tR\vtwofaSecret\x129\n" +
+	"group_name\x18\f \x01(\tR\tgroupName\x12&\n" +
+	"\ffollow_count\x18\r \x01(\x05H\x06R\vfollowCount\x88\x01\x01\x12*\n" +
+	"\x0efollower_count\x18\x0e \x01(\x05H\aR\rfollowerCount\x88\x01\x01\x12B\n" +
+	"\x0flast_login_time\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\rlastLoginTime\x12'\n" +
+	"\rlast_login_ip\x18\x10 \x01(\tH\bR\vlastLoginIp\x88\x01\x01\x12*\n" +
+	"\x0eonline_minutes\x18\x11 \x01(\x05H\tR\ronlineMinutes\x88\x01\x01\x12F\n" +
+	"\x11last_checkin_time\x18\x12 \x01(\v2\x1a.google.protobuf.TimestampR\x0flastCheckinTime\x129\n" +
+	"\x16current_checkin_streak\x18\x13 \x01(\x05H\n" +
+	"R\x14currentCheckinStreak\x88\x01\x01\x129\n" +
+	"\x16longest_checkin_streak\x18\x14 \x01(\x05H\vR\x14longestCheckinStreak\x88\x01\x01\x12\x1f\n" +
+	"\blanguage\x18\x15 \x01(\tH\fR\blanguage\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x16 \x01(\tH\rR\btimezone\x88\x01\x01\x12\x19\n" +
+	"\x05theme\x18\x17 \x01(\tH\x0eR\x05theme\x88\x01\x01\x12&\n" +
+	"\fmobile_theme\x18\x18 \x01(\tH\x0fR\vmobileTheme\x88\x01\x01\x12/\n" +
+	"\x11enable_web_notify\x18\x19 \x01(\bH\x10R\x0fenableWebNotify\x88\x01\x01\x129\n" +
+	"\x16enable_email_subscribe\x18\x1a \x01(\bH\x11R\x14enableEmailSubscribe\x88\x01\x01\x12(\n" +
+	"\rpublic_points\x18\x1b \x01(\bH\x12R\fpublicPoints\x88\x01\x01\x12.\n" +
+	"\x10public_followers\x18\x1c \x01(\bH\x13R\x0fpublicFollowers\x88\x01\x01\x12,\n" +
+	"\x0fpublic_articles\x18\x1d \x01(\bH\x14R\x0epublicArticles\x88\x01\x01\x12,\n" +
+	"\x0fpublic_comments\x18\x1e \x01(\bH\x15R\x0epublicComments\x88\x01\x01\x125\n" +
+	"\x14public_online_status\x18\x1f \x01(\bH\x16R\x12publicOnlineStatus\x88\x01\x01\x12\x1d\n" +
+	"\acountry\x18  \x01(\tH\x17R\acountry\x88\x01\x01\x12\x1f\n" +
+	"\bprovince\x18! \x01(\tH\x18R\bprovince\x88\x01\x01\x12\x17\n" +
+	"\x04city\x18\" \x01(\tH\x19R\x04city\x88\x01\x01\x12,\n" +
+	"\x0fpublic_location\x18# \x01(\bH\x1aR\x0epublicLocation\x88\x01\x01\x12&\n" +
+	"\ftwofa_secret\x18$ \x01(\tH\x1bR\vtwofaSecret\x88\x01\x01\x129\n" +
 	"\n" +
 	"created_at\x18% \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18& \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x1f\n" +
+	"updated_at\x18& \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\b\n" +
+	"\x06_phoneB\x06\n" +
+	"\x04_urlB\r\n" +
+	"\v_avatar_urlB\x0f\n" +
+	"\r_introductionB\a\n" +
+	"\x05_mbtiB\t\n" +
+	"\a_statusB\x0f\n" +
+	"\r_follow_countB\x11\n" +
+	"\x0f_follower_countB\x10\n" +
+	"\x0e_last_login_ipB\x11\n" +
+	"\x0f_online_minutesB\x19\n" +
+	"\x17_current_checkin_streakB\x19\n" +
+	"\x17_longest_checkin_streakB\v\n" +
+	"\t_languageB\v\n" +
+	"\t_timezoneB\b\n" +
+	"\x06_themeB\x0f\n" +
+	"\r_mobile_themeB\x14\n" +
+	"\x12_enable_web_notifyB\x19\n" +
+	"\x17_enable_email_subscribeB\x10\n" +
+	"\x0e_public_pointsB\x13\n" +
+	"\x11_public_followersB\x12\n" +
+	"\x10_public_articlesB\x12\n" +
+	"\x10_public_commentsB\x17\n" +
+	"\x15_public_online_statusB\n" +
+	"\n" +
+	"\b_countryB\v\n" +
+	"\t_provinceB\a\n" +
+	"\x05_cityB\x12\n" +
+	"\x10_public_locationB\x0f\n" +
+	"\r_twofa_secret\"\xed\x02\n" +
+	"\x14UpdateSettingRequest\x12\x1f\n" +
+	"\blanguage\x18\x01 \x01(\tH\x00R\blanguage\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x02 \x01(\tH\x01R\btimezone\x88\x01\x01\x12\x19\n" +
+	"\x05theme\x18\x03 \x01(\tH\x02R\x05theme\x88\x01\x01\x12&\n" +
+	"\fmobile_theme\x18\x04 \x01(\tH\x03R\vmobileTheme\x88\x01\x01\x12/\n" +
+	"\x11enable_web_notify\x18\x05 \x01(\bH\x04R\x0fenableWebNotify\x88\x01\x01\x129\n" +
+	"\x16enable_email_subscribe\x18\x06 \x01(\bH\x05R\x14enableEmailSubscribe\x88\x01\x01B\v\n" +
+	"\t_languageB\v\n" +
+	"\t_timezoneB\b\n" +
+	"\x06_themeB\x0f\n" +
+	"\r_mobile_themeB\x14\n" +
+	"\x12_enable_web_notifyB\x19\n" +
+	"\x17_enable_email_subscribe\"B\n" +
+	"\x12UpdateSettingReply\x12,\n" +
+	"\x04user\x18\x01 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"\x17\n" +
+	"\x15GetCurrentUserRequest\"C\n" +
+	"\x13GetCurrentUserReply\x12,\n" +
+	"\x04user\x18\x01 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"\x1f\n" +
 	"\rGetOneRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\";\n" +
 	"\vGetOneReply\x12,\n" +
@@ -729,8 +992,10 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
 	"UsersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\x03R\x03key\x12.\n" +
-	"\x05value\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x05value:\x028\x012\xd3\x02\n" +
-	"\x0fUserUserService\x12h\n" +
+	"\x05value\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x05value:\x028\x012\xe5\x04\n" +
+	"\x0fUserUserService\x12\x84\x01\n" +
+	"\rUpdateSetting\x12(.common.api.user.v1.UpdateSettingRequest\x1a&.common.api.user.v1.UpdateSettingReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/user/updateSetting\x12\x88\x01\n" +
+	"\x0eGetCurrentUser\x12).common.api.user.v1.GetCurrentUserRequest\x1a'.common.api.user.v1.GetCurrentUserReply\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/user/getCurrentUser\x12h\n" +
 	"\x06GetOne\x12!.common.api.user.v1.GetOneRequest\x1a\x1f.common.api.user.v1.GetOneReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getOne\x12l\n" +
 	"\aGetList\x12\".common.api.user.v1.GetListRequest\x1a .common.api.user.v1.GetListReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/user/getList\x12h\n" +
 	"\x06GetMap\x12!.common.api.user.v1.GetMapRequest\x1a\x1f.common.api.user.v1.GetMapReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getMapB\x17Z\x15common/api/user/v1;v1b\x06proto3"
@@ -747,38 +1012,48 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_user_v1_user_proto_goTypes = []any{
 	(*User)(nil),                  // 0: common.api.user.v1.User
-	(*GetOneRequest)(nil),         // 1: common.api.user.v1.GetOneRequest
-	(*GetOneReply)(nil),           // 2: common.api.user.v1.GetOneReply
-	(*GetListRequest)(nil),        // 3: common.api.user.v1.GetListRequest
-	(*GetListReply)(nil),          // 4: common.api.user.v1.GetListReply
-	(*GetMapRequest)(nil),         // 5: common.api.user.v1.GetMapRequest
-	(*GetMapReply)(nil),           // 6: common.api.user.v1.GetMapReply
-	nil,                           // 7: common.api.user.v1.GetMapReply.UsersEntry
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+	(*UpdateSettingRequest)(nil),  // 1: common.api.user.v1.UpdateSettingRequest
+	(*UpdateSettingReply)(nil),    // 2: common.api.user.v1.UpdateSettingReply
+	(*GetCurrentUserRequest)(nil), // 3: common.api.user.v1.GetCurrentUserRequest
+	(*GetCurrentUserReply)(nil),   // 4: common.api.user.v1.GetCurrentUserReply
+	(*GetOneRequest)(nil),         // 5: common.api.user.v1.GetOneRequest
+	(*GetOneReply)(nil),           // 6: common.api.user.v1.GetOneReply
+	(*GetListRequest)(nil),        // 7: common.api.user.v1.GetListRequest
+	(*GetListReply)(nil),          // 8: common.api.user.v1.GetListReply
+	(*GetMapRequest)(nil),         // 9: common.api.user.v1.GetMapRequest
+	(*GetMapReply)(nil),           // 10: common.api.user.v1.GetMapReply
+	nil,                           // 11: common.api.user.v1.GetMapReply.UsersEntry
+	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	8,  // 0: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
-	8,  // 1: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
-	8,  // 2: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
-	0,  // 5: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
-	7,  // 6: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
-	0,  // 7: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
-	1,  // 8: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
-	3,  // 9: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
-	5,  // 10: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
-	2,  // 11: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
-	4,  // 12: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
-	6,  // 13: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
-	11, // [11:14] is the sub-list for method output_type
-	8,  // [8:11] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	12, // 0: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
+	12, // 1: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
+	12, // 2: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	12, // 3: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 4: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
+	0,  // 5: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
+	0,  // 6: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
+	0,  // 7: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
+	11, // 8: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
+	0,  // 9: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
+	1,  // 10: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
+	3,  // 11: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest
+	5,  // 12: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
+	7,  // 13: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
+	9,  // 14: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
+	2,  // 15: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
+	4,  // 16: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
+	6,  // 17: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
+	8,  // 18: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
+	10, // 19: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
+	15, // [15:20] is the sub-list for method output_type
+	10, // [10:15] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_proto_init() }
@@ -786,13 +1061,15 @@ func file_user_v1_user_proto_init() {
 	if File_user_v1_user_proto != nil {
 		return
 	}
+	file_user_v1_user_proto_msgTypes[0].OneofWrappers = []any{}
+	file_user_v1_user_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

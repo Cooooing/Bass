@@ -568,7 +568,9 @@ func (x *LoginAccountRequest) GetPassword() string {
 type LoginAccountReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 登录令牌
-	Token         string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	// 用户信息
+	User          *User `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -610,11 +612,18 @@ func (x *LoginAccountReply) GetToken() string {
 	return ""
 }
 
+func (x *LoginAccountReply) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 var File_user_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x84\x03\n" +
+	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x84\x03\n" +
 	"\x14RegisterEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12Y\n" +
 	"\bpassword\x18\x02 \x01(\tB=\xfaB:r8\x10\x06\x18@22^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$R\bpassword\x12?\n" +
@@ -644,9 +653,10 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\x06_exist\"K\n" +
 	"\x13LoginAccountRequest\x12\x18\n" +
 	"\aaccount\x18\x01 \x01(\tR\aaccount\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\")\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"W\n" +
 	"\x11LoginAccountReply\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token2\x84\a\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12,\n" +
+	"\x04user\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x04user2\x84\a\n" +
 	"\x19UserAuthenticationService\x12\x8f\x01\n" +
 	"\rRegisterEmail\x12(.common.api.user.v1.RegisterEmailRequest\x1a&.common.api.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\xa8\x01\n" +
 	"\x13RegisterEmailVerify\x12..common.api.user.v1.RegisterEmailVerifyRequest\x1a,.common.api.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12\x83\x01\n" +
@@ -683,25 +693,27 @@ var file_user_v1_authentication_proto_goTypes = []any{
 	(*ExistPhoneReply)(nil),            // 9: common.api.user.v1.ExistPhoneReply
 	(*LoginAccountRequest)(nil),        // 10: common.api.user.v1.LoginAccountRequest
 	(*LoginAccountReply)(nil),          // 11: common.api.user.v1.LoginAccountReply
+	(*User)(nil),                       // 12: common.api.user.v1.User
 }
 var file_user_v1_authentication_proto_depIdxs = []int32{
-	0,  // 0: common.api.user.v1.UserAuthenticationService.RegisterEmail:input_type -> common.api.user.v1.RegisterEmailRequest
-	2,  // 1: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:input_type -> common.api.user.v1.RegisterEmailVerifyRequest
-	4,  // 2: common.api.user.v1.UserAuthenticationService.ExistEmail:input_type -> common.api.user.v1.ExistEmailRequest
-	8,  // 3: common.api.user.v1.UserAuthenticationService.ExistPhone:input_type -> common.api.user.v1.ExistPhoneRequest
-	6,  // 4: common.api.user.v1.UserAuthenticationService.ExistUsername:input_type -> common.api.user.v1.ExistUsernameRequest
-	10, // 5: common.api.user.v1.UserAuthenticationService.LoginAccount:input_type -> common.api.user.v1.LoginAccountRequest
-	1,  // 6: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
-	3,  // 7: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
-	5,  // 8: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
-	9,  // 9: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
-	7,  // 10: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
-	11, // 11: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
-	6,  // [6:12] is the sub-list for method output_type
-	0,  // [0:6] is the sub-list for method input_type
-	0,  // [0:0] is the sub-list for extension type_name
-	0,  // [0:0] is the sub-list for extension extendee
-	0,  // [0:0] is the sub-list for field type_name
+	12, // 0: common.api.user.v1.LoginAccountReply.user:type_name -> common.api.user.v1.User
+	0,  // 1: common.api.user.v1.UserAuthenticationService.RegisterEmail:input_type -> common.api.user.v1.RegisterEmailRequest
+	2,  // 2: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:input_type -> common.api.user.v1.RegisterEmailVerifyRequest
+	4,  // 3: common.api.user.v1.UserAuthenticationService.ExistEmail:input_type -> common.api.user.v1.ExistEmailRequest
+	8,  // 4: common.api.user.v1.UserAuthenticationService.ExistPhone:input_type -> common.api.user.v1.ExistPhoneRequest
+	6,  // 5: common.api.user.v1.UserAuthenticationService.ExistUsername:input_type -> common.api.user.v1.ExistUsernameRequest
+	10, // 6: common.api.user.v1.UserAuthenticationService.LoginAccount:input_type -> common.api.user.v1.LoginAccountRequest
+	1,  // 7: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
+	3,  // 8: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
+	5,  // 9: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
+	9,  // 10: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
+	7,  // 11: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
+	11, // 12: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
+	7,  // [7:13] is the sub-list for method output_type
+	1,  // [1:7] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_authentication_proto_init() }
@@ -709,6 +721,7 @@ func file_user_v1_authentication_proto_init() {
 	if File_user_v1_authentication_proto != nil {
 		return
 	}
+	file_user_v1_user_proto_init()
 	file_user_v1_authentication_proto_msgTypes[5].OneofWrappers = []any{}
 	file_user_v1_authentication_proto_msgTypes[7].OneofWrappers = []any{}
 	file_user_v1_authentication_proto_msgTypes[9].OneofWrappers = []any{}

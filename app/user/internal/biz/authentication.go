@@ -133,15 +133,15 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 	return
 }
 
-func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string, password string) (token string, err error) {
+func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string, password string) (token string, user *model.User, err error) {
 	// 获取用户信息
-	user, err := s.userRepo.GetByAccount(ctx, s.db, account)
+	user, err = s.userRepo.GetByAccount(ctx, s.db, account)
 	if err != nil {
 		return
 	}
 	// 验证密码
 	if !user.PasswordVerify(password) {
-		return token, errors.New("password invalid")
+		return token, nil, errors.New("password invalid")
 	}
 	// 生成 token
 	token, err = s.tokenService.TokenGen.Generate(model.Token{
@@ -162,5 +162,5 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 		return
 	}
 
-	return token, nil
+	return token, user, nil
 }

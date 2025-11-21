@@ -22,91 +22,91 @@ message User {
   // 邮箱
   string email = 5;
   // 手机号
-  string phone = 6;
+  optional string phone = 6;
   // 用户个人主页链接
-  string url = 7;
+  optional string url = 7;
   // 头像URL
-  string avatar_url = 8;
+  optional string avatar_url = 8;
   // 个人简介
-  string introduction = 9;
+  optional string introduction = 9;
   // 用户 MBTI 类型
-  string mbti = 10;
+  optional string mbti = 10;
 
   // --- 状态 ---
 
   // 用户状态：0-正常，1-封禁，2-注销
-  int64 status = 11;
+  optional int32 status = 11;
   // 用户组名称
   string group_name = 12;
 
   // --- 社交信息 ---
 
   // 关注数
-  int64 follow_count = 13;
+  optional int32 follow_count = 13;
   // 粉丝数
-  int64 follower_count = 14;
+  optional int32 follower_count = 14;
 
   // --- 登录信息 ---
 
   // 最近登录时间
   google.protobuf.Timestamp last_login_time = 15;
   // 最近登录IP
-  string last_login_ip = 16;
+  optional string last_login_ip = 16;
 
   // --- 行为统计 ---
 
   // 在线总时长（分钟）
-  int64 online_minutes = 17;
+  optional int32 online_minutes = 17;
   // 最近签到时间
   google.protobuf.Timestamp last_checkin_time = 18;
   // 当前连续签到天数
-  int64 current_checkin_streak = 19;
+  optional int32 current_checkin_streak = 19;
   // 最长连续签到天数
-  int64 longest_checkin_streak = 20;
+  optional int32 longest_checkin_streak = 20;
 
   // --- 用户偏好设置 ---
 
   // 用户语言
-  string language = 21;
+  optional string language = 21;
   // 时区
-  string timezone = 22;
+  optional string timezone = 22;
   // 皮肤主题
-  string theme = 23;
+  optional string theme = 23;
   // 移动端皮肤主题
-  string mobile_theme = 24;
+  optional string mobile_theme = 24;
   // 启用Web通知
-  bool enable_web_notify = 25;
+  optional bool enable_web_notify = 25;
   // 启用邮件订阅
-  bool enable_email_subscribe = 26;
+  optional bool enable_email_subscribe = 26;
 
   // --- 隐私设置 ---
 
   // 是否公开积分榜
-  bool public_points = 27;
+  optional bool public_points = 27;
   // 是否公开粉丝列表
-  bool public_followers = 28;
+  optional bool public_followers = 28;
   // 是否公开帖子列表
-  bool public_articles = 29;
+  optional bool public_articles = 29;
   // 是否公开评论列表
-  bool public_comments = 30;
+  optional bool public_comments = 30;
   // 是否公开在线状态
-  bool public_online_status = 31;
+  optional bool public_online_status = 31;
 
   // --- 地理信息 ---
 
   // 所在国家
-  string country = 32;
+  optional string country = 32;
   // 所在省份
-  string province = 33;
+  optional string province = 33;
   // 所在城市
-  string city = 34;
+  optional string city = 34;
   // 是否公开地理位置
-  bool public_location = 35;
+  optional bool public_location = 35;
 
   // --- 其他 ---
 
   // 二步验证 Secret
-  string twofa_secret = 36;
+  optional string twofa_secret = 36;
 
   // --- 审计字段 ---
 
@@ -116,13 +116,21 @@ message User {
   google.protobuf.Timestamp updated_at = 38;
 }
 
-// Authentication 服务
+// User 服务
 service UserUserService {
 
   // 更新用户设置
   rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply) {
     option (google.api.http) = {
       post: "/v1/user/updateSetting"
+      body: "*"
+    };
+  }
+
+  // 获取当前用户信息
+  rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserReply) {
+    option (google.api.http) = {
+      post: "/v1/user/getCurrentUser"
       body: "*"
     };
   }
@@ -167,8 +175,15 @@ message UpdateSettingRequest{
   // 启用邮件订阅
   optional bool enable_email_subscribe = 6;
 }
-
 message UpdateSettingReply {
+  // 用户信息
+  User user = 1;
+}
+
+message GetCurrentUserRequest{}
+message GetCurrentUserReply {
+  // 用户信息
+  User user = 1;
 }
 
 message GetOneRequest {

@@ -19,17 +19,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserUserService_GetOne_FullMethodName  = "/common.api.user.v1.UserUserService/GetOne"
-	UserUserService_GetList_FullMethodName = "/common.api.user.v1.UserUserService/GetList"
-	UserUserService_GetMap_FullMethodName  = "/common.api.user.v1.UserUserService/GetMap"
+	UserUserService_UpdateSetting_FullMethodName  = "/common.api.user.v1.UserUserService/UpdateSetting"
+	UserUserService_GetCurrentUser_FullMethodName = "/common.api.user.v1.UserUserService/GetCurrentUser"
+	UserUserService_GetOne_FullMethodName         = "/common.api.user.v1.UserUserService/GetOne"
+	UserUserService_GetList_FullMethodName        = "/common.api.user.v1.UserUserService/GetList"
+	UserUserService_GetMap_FullMethodName         = "/common.api.user.v1.UserUserService/GetMap"
 )
 
 // UserUserServiceClient is the client API for UserUserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Authentication 服务
+// User 服务
 type UserUserServiceClient interface {
+	// 更新用户设置
+	UpdateSetting(ctx context.Context, in *UpdateSettingRequest, opts ...grpc.CallOption) (*UpdateSettingReply, error)
+	// 获取当前用户信息
+	GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserReply, error)
 	// 查询单个用户
 	GetOne(ctx context.Context, in *GetOneRequest, opts ...grpc.CallOption) (*GetOneReply, error)
 	// 查询用户列表（返回数组）
@@ -44,6 +50,26 @@ type userUserServiceClient struct {
 
 func NewUserUserServiceClient(cc grpc.ClientConnInterface) UserUserServiceClient {
 	return &userUserServiceClient{cc}
+}
+
+func (c *userUserServiceClient) UpdateSetting(ctx context.Context, in *UpdateSettingRequest, opts ...grpc.CallOption) (*UpdateSettingReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateSettingReply)
+	err := c.cc.Invoke(ctx, UserUserService_UpdateSetting_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userUserServiceClient) GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCurrentUserReply)
+	err := c.cc.Invoke(ctx, UserUserService_GetCurrentUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *userUserServiceClient) GetOne(ctx context.Context, in *GetOneRequest, opts ...grpc.CallOption) (*GetOneReply, error) {
@@ -80,8 +106,12 @@ func (c *userUserServiceClient) GetMap(ctx context.Context, in *GetMapRequest, o
 // All implementations must embed UnimplementedUserUserServiceServer
 // for forward compatibility.
 //
-// Authentication 服务
+// User 服务
 type UserUserServiceServer interface {
+	// 更新用户设置
+	UpdateSetting(context.Context, *UpdateSettingRequest) (*UpdateSettingReply, error)
+	// 获取当前用户信息
+	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserReply, error)
 	// 查询单个用户
 	GetOne(context.Context, *GetOneRequest) (*GetOneReply, error)
 	// 查询用户列表（返回数组）
@@ -98,6 +128,12 @@ type UserUserServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserUserServiceServer struct{}
 
+func (UnimplementedUserUserServiceServer) UpdateSetting(context.Context, *UpdateSettingRequest) (*UpdateSettingReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSetting not implemented")
+}
+func (UnimplementedUserUserServiceServer) GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentUser not implemented")
+}
 func (UnimplementedUserUserServiceServer) GetOne(context.Context, *GetOneRequest) (*GetOneReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOne not implemented")
 }
@@ -126,6 +162,42 @@ func RegisterUserUserServiceServer(s grpc.ServiceRegistrar, srv UserUserServiceS
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&UserUserService_ServiceDesc, srv)
+}
+
+func _UserUserService_UpdateSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSettingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserUserServiceServer).UpdateSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserUserService_UpdateSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserUserServiceServer).UpdateSetting(ctx, req.(*UpdateSettingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserUserService_GetCurrentUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCurrentUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserUserServiceServer).GetCurrentUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserUserService_GetCurrentUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserUserServiceServer).GetCurrentUser(ctx, req.(*GetCurrentUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _UserUserService_GetOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -189,6 +261,14 @@ var UserUserService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "common.api.user.v1.UserUserService",
 	HandlerType: (*UserUserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "UpdateSetting",
+			Handler:    _UserUserService_UpdateSetting_Handler,
+		},
+		{
+			MethodName: "GetCurrentUser",
+			Handler:    _UserUserService_GetCurrentUser_Handler,
+		},
 		{
 			MethodName: "GetOne",
 			Handler:    _UserUserService_GetOne_Handler,

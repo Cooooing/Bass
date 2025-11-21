@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
+import "user/v1/user.proto";
 
 option go_package = "common/api/user/v1;v1";
 
@@ -190,4 +191,6 @@ message LoginAccountRequest {
 message LoginAccountReply {
   // 登录令牌
   string token = 1;
+  // 用户信息
+  user.v1.User user = 2;
 }

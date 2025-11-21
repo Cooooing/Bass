@@ -19,24 +19,76 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationUserUserServiceGetCurrentUser = "/common.api.user.v1.UserUserService/GetCurrentUser"
 const OperationUserUserServiceGetList = "/common.api.user.v1.UserUserService/GetList"
 const OperationUserUserServiceGetMap = "/common.api.user.v1.UserUserService/GetMap"
 const OperationUserUserServiceGetOne = "/common.api.user.v1.UserUserService/GetOne"
+const OperationUserUserServiceUpdateSetting = "/common.api.user.v1.UserUserService/UpdateSetting"
 
 type UserUserServiceHTTPServer interface {
+	// GetCurrentUser 获取当前用户信息
+	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserReply, error)
 	// GetList 查询用户列表（返回数组）
 	GetList(context.Context, *GetListRequest) (*GetListReply, error)
 	// GetMap 查询用户列表（返回map）
 	GetMap(context.Context, *GetMapRequest) (*GetMapReply, error)
 	// GetOne 查询单个用户
 	GetOne(context.Context, *GetOneRequest) (*GetOneReply, error)
+	// UpdateSetting 更新用户设置
+	UpdateSetting(context.Context, *UpdateSettingRequest) (*UpdateSettingReply, error)
 }
 
 func RegisterUserUserServiceHTTPServer(s *http.Server, srv UserUserServiceHTTPServer) {
 	r := s.Route("/")
+	r.POST("/v1/user/updateSetting", _UserUserService_UpdateSetting0_HTTP_Handler(srv))
+	r.POST("/v1/user/getCurrentUser", _UserUserService_GetCurrentUser0_HTTP_Handler(srv))
 	r.POST("/v1/user/getOne", _UserUserService_GetOne0_HTTP_Handler(srv))
 	r.POST("/v1/user/getList", _UserUserService_GetList0_HTTP_Handler(srv))
 	r.POST("/v1/user/getMap", _UserUserService_GetMap0_HTTP_Handler(srv))
+}
+
+func _UserUserService_UpdateSetting0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateSettingRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserUserServiceUpdateSetting)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateSetting(ctx, req.(*UpdateSettingRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateSettingReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _UserUserService_GetCurrentUser0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetCurrentUserRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserUserServiceGetCurrentUser)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetCurrentUser(ctx, req.(*GetCurrentUserRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetCurrentUserReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _UserUserService_GetOne0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
@@ -106,12 +158,16 @@ func _UserUserService_GetMap0_HTTP_Handler(srv UserUserServiceHTTPServer) func(c
 }
 
 type UserUserServiceHTTPClient interface {
+	// GetCurrentUser 获取当前用户信息
+	GetCurrentUser(ctx context.Context, req *GetCurrentUserRequest, opts ...http.CallOption) (rsp *GetCurrentUserReply, err error)
 	// GetList 查询用户列表（返回数组）
 	GetList(ctx context.Context, req *GetListRequest, opts ...http.CallOption) (rsp *GetListReply, err error)
 	// GetMap 查询用户列表（返回map）
 	GetMap(ctx context.Context, req *GetMapRequest, opts ...http.CallOption) (rsp *GetMapReply, err error)
 	// GetOne 查询单个用户
 	GetOne(ctx context.Context, req *GetOneRequest, opts ...http.CallOption) (rsp *GetOneReply, err error)
+	// UpdateSetting 更新用户设置
+	UpdateSetting(ctx context.Context, req *UpdateSettingRequest, opts ...http.CallOption) (rsp *UpdateSettingReply, err error)
 }
 
 type UserUserServiceHTTPClientImpl struct {
@@ -120,6 +176,20 @@ type UserUserServiceHTTPClientImpl struct {
 
 func NewUserUserServiceHTTPClient(client *http.Client) UserUserServiceHTTPClient {
 	return &UserUserServiceHTTPClientImpl{client}
+}
+
+// GetCurrentUser 获取当前用户信息
+func (c *UserUserServiceHTTPClientImpl) GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...http.CallOption) (*GetCurrentUserReply, error) {
+	var out GetCurrentUserReply
+	pattern := "/v1/user/getCurrentUser"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserUserServiceGetCurrentUser))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // GetList 查询用户列表（返回数组）
@@ -156,6 +226,20 @@ func (c *UserUserServiceHTTPClientImpl) GetOne(ctx context.Context, in *GetOneRe
 	pattern := "/v1/user/getOne"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserUserServiceGetOne))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateSetting 更新用户设置
+func (c *UserUserServiceHTTPClientImpl) UpdateSetting(ctx context.Context, in *UpdateSettingRequest, opts ...http.CallOption) (*UpdateSettingReply, error) {
+	var out UpdateSettingReply
+	pattern := "/v1/user/updateSetting"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserUserServiceUpdateSetting))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

@@ -767,27 +767,27 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.Phone(); ok {
 		_spec.SetField(user.FieldPhone, field.TypeString, value)
-		_node.Phone = value
+		_node.Phone = &value
 	}
 	if value, ok := _c.mutation.URL(); ok {
 		_spec.SetField(user.FieldURL, field.TypeString, value)
-		_node.URL = value
+		_node.URL = &value
 	}
 	if value, ok := _c.mutation.AvatarURL(); ok {
 		_spec.SetField(user.FieldAvatarURL, field.TypeString, value)
-		_node.AvatarURL = value
+		_node.AvatarURL = &value
 	}
 	if value, ok := _c.mutation.Introduction(); ok {
 		_spec.SetField(user.FieldIntroduction, field.TypeString, value)
-		_node.Introduction = value
+		_node.Introduction = &value
 	}
 	if value, ok := _c.mutation.Mbti(); ok {
 		_spec.SetField(user.FieldMbti, field.TypeString, value)
-		_node.Mbti = value
+		_node.Mbti = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeInt32, value)
-		_node.Status = value
+		_node.Status = &value
 	}
 	if value, ok := _c.mutation.GroupName(); ok {
 		_spec.SetField(user.FieldGroupName, field.TypeString, value)
@@ -795,11 +795,11 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.FollowCount(); ok {
 		_spec.SetField(user.FieldFollowCount, field.TypeInt32, value)
-		_node.FollowCount = value
+		_node.FollowCount = &value
 	}
 	if value, ok := _c.mutation.FollowerCount(); ok {
 		_spec.SetField(user.FieldFollowerCount, field.TypeInt32, value)
-		_node.FollowerCount = value
+		_node.FollowerCount = &value
 	}
 	if value, ok := _c.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
@@ -807,11 +807,11 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.LastLoginIP(); ok {
 		_spec.SetField(user.FieldLastLoginIP, field.TypeString, value)
-		_node.LastLoginIP = value
+		_node.LastLoginIP = &value
 	}
 	if value, ok := _c.mutation.OnlineMinutes(); ok {
 		_spec.SetField(user.FieldOnlineMinutes, field.TypeInt32, value)
-		_node.OnlineMinutes = value
+		_node.OnlineMinutes = &value
 	}
 	if value, ok := _c.mutation.LastCheckinTime(); ok {
 		_spec.SetField(user.FieldLastCheckinTime, field.TypeTime, value)
@@ -819,75 +819,75 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.CurrentCheckinStreak(); ok {
 		_spec.SetField(user.FieldCurrentCheckinStreak, field.TypeInt32, value)
-		_node.CurrentCheckinStreak = value
+		_node.CurrentCheckinStreak = &value
 	}
 	if value, ok := _c.mutation.LongestCheckinStreak(); ok {
 		_spec.SetField(user.FieldLongestCheckinStreak, field.TypeInt32, value)
-		_node.LongestCheckinStreak = value
+		_node.LongestCheckinStreak = &value
 	}
 	if value, ok := _c.mutation.Language(); ok {
 		_spec.SetField(user.FieldLanguage, field.TypeString, value)
-		_node.Language = value
+		_node.Language = &value
 	}
 	if value, ok := _c.mutation.Timezone(); ok {
 		_spec.SetField(user.FieldTimezone, field.TypeString, value)
-		_node.Timezone = value
+		_node.Timezone = &value
 	}
 	if value, ok := _c.mutation.Theme(); ok {
 		_spec.SetField(user.FieldTheme, field.TypeString, value)
-		_node.Theme = value
+		_node.Theme = &value
 	}
 	if value, ok := _c.mutation.MobileTheme(); ok {
 		_spec.SetField(user.FieldMobileTheme, field.TypeString, value)
-		_node.MobileTheme = value
+		_node.MobileTheme = &value
 	}
 	if value, ok := _c.mutation.EnableWebNotify(); ok {
 		_spec.SetField(user.FieldEnableWebNotify, field.TypeBool, value)
-		_node.EnableWebNotify = value
+		_node.EnableWebNotify = &value
 	}
 	if value, ok := _c.mutation.EnableEmailSubscribe(); ok {
 		_spec.SetField(user.FieldEnableEmailSubscribe, field.TypeBool, value)
-		_node.EnableEmailSubscribe = value
+		_node.EnableEmailSubscribe = &value
 	}
 	if value, ok := _c.mutation.PublicPoints(); ok {
 		_spec.SetField(user.FieldPublicPoints, field.TypeBool, value)
-		_node.PublicPoints = value
+		_node.PublicPoints = &value
 	}
 	if value, ok := _c.mutation.PublicFollowers(); ok {
 		_spec.SetField(user.FieldPublicFollowers, field.TypeBool, value)
-		_node.PublicFollowers = value
+		_node.PublicFollowers = &value
 	}
 	if value, ok := _c.mutation.PublicArticles(); ok {
 		_spec.SetField(user.FieldPublicArticles, field.TypeBool, value)
-		_node.PublicArticles = value
+		_node.PublicArticles = &value
 	}
 	if value, ok := _c.mutation.PublicComments(); ok {
 		_spec.SetField(user.FieldPublicComments, field.TypeBool, value)
-		_node.PublicComments = value
+		_node.PublicComments = &value
 	}
 	if value, ok := _c.mutation.PublicOnlineStatus(); ok {
 		_spec.SetField(user.FieldPublicOnlineStatus, field.TypeBool, value)
-		_node.PublicOnlineStatus = value
+		_node.PublicOnlineStatus = &value
 	}
 	if value, ok := _c.mutation.Country(); ok {
 		_spec.SetField(user.FieldCountry, field.TypeString, value)
-		_node.Country = value
+		_node.Country = &value
 	}
 	if value, ok := _c.mutation.Province(); ok {
 		_spec.SetField(user.FieldProvince, field.TypeString, value)
-		_node.Province = value
+		_node.Province = &value
 	}
 	if value, ok := _c.mutation.City(); ok {
 		_spec.SetField(user.FieldCity, field.TypeString, value)
-		_node.City = value
+		_node.City = &value
 	}
 	if value, ok := _c.mutation.PublicLocation(); ok {
 		_spec.SetField(user.FieldPublicLocation, field.TypeBool, value)
-		_node.PublicLocation = value
+		_node.PublicLocation = &value
 	}
 	if value, ok := _c.mutation.TwofaSecret(); ok {
 		_spec.SetField(user.FieldTwofaSecret, field.TypeString, value)
-		_node.TwofaSecret = value
+		_node.TwofaSecret = &value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(user.FieldCreatedAt, field.TypeTime, value)

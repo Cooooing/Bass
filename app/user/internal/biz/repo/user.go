@@ -10,6 +10,8 @@ import (
 type UserRepo interface {
 	Save(ctx context.Context, client *gen.Client, u *model.User) (*model.User, error)
 
+	Update(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error)
+
 	ConstantAccount(ctx context.Context, client *gen.Client, account string) (bool, error)
 	GetById(ctx context.Context, client *gen.Client, id int64) (*model.User, error)
 	GetByAccount(ctx context.Context, client *gen.Client, account string) (*model.User, error)

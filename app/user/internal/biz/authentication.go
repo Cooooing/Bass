@@ -164,3 +164,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 
 	return token, user, nil
 }
+
+func (s *AuthenticationDomain) Logout(ctx context.Context, token string) (err error) {
+	return s.tokenRepo.DelToken(ctx, token)
+}

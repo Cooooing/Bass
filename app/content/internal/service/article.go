@@ -3,6 +3,8 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/base"
 	"content/internal/biz"
@@ -70,7 +72,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	// 只有作者可以添加附言
 	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || *article.CreatedBy != user.ID {
 		if err != nil {
@@ -84,13 +86,13 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
 	return &v1.CollectArticleReply{}, err
 }
 
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
 		article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
 		if err != nil {
@@ -131,13 +133,13 @@ func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneReques
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
 	return &v1.LikeArticleReply{}, err
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
 	if err != nil {
 		return nil, err

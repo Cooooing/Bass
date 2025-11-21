@@ -2,6 +2,8 @@ package service
 
 import (
 	v1 "common/api/user/v1"
+	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"user/internal/biz"
@@ -38,7 +40,7 @@ func (s *UserService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRequest) (rsp *v1.UpdateSettingReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	update, err := s.userRepo.Update(ctx, s.db, &model.User{
 		ID:                   user.ID,
 		Language:             req.Language,
@@ -57,7 +59,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 }
 
 func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserRequest) (rsp *v1.GetCurrentUserReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	u, err := s.userRepo.GetById(ctx, s.db, user.ID)
 	if err != nil {
 		return nil, err

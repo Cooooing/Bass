@@ -23,6 +23,7 @@ const OperationUserAuthenticationServiceExistEmail = "/common.api.user.v1.UserAu
 const OperationUserAuthenticationServiceExistPhone = "/common.api.user.v1.UserAuthenticationService/ExistPhone"
 const OperationUserAuthenticationServiceExistUsername = "/common.api.user.v1.UserAuthenticationService/ExistUsername"
 const OperationUserAuthenticationServiceLoginAccount = "/common.api.user.v1.UserAuthenticationService/LoginAccount"
+const OperationUserAuthenticationServiceLogout = "/common.api.user.v1.UserAuthenticationService/Logout"
 const OperationUserAuthenticationServiceRegisterEmail = "/common.api.user.v1.UserAuthenticationService/RegisterEmail"
 const OperationUserAuthenticationServiceRegisterEmailVerify = "/common.api.user.v1.UserAuthenticationService/RegisterEmailVerify"
 
@@ -35,6 +36,8 @@ type UserAuthenticationServiceHTTPServer interface {
 	ExistUsername(context.Context, *ExistUsernameRequest) (*ExistUsernameReply, error)
 	// LoginAccount 账号登录（用户名/邮箱）
 	LoginAccount(context.Context, *LoginAccountRequest) (*LoginAccountReply, error)
+	// Logout 账号登出
+	Logout(context.Context, *LogoutRequest) (*LogoutReply, error)
 	// RegisterEmail 邮箱注册
 	RegisterEmail(context.Context, *RegisterEmailRequest) (*RegisterEmailReply, error)
 	// RegisterEmailVerify 邮箱注册验证码验证
@@ -49,6 +52,7 @@ func RegisterUserAuthenticationServiceHTTPServer(s *http.Server, srv UserAuthent
 	r.POST("/v1/authentication/exist/phone", _UserAuthenticationService_ExistPhone0_HTTP_Handler(srv))
 	r.POST("/v1/authentication/exist/username", _UserAuthenticationService_ExistUsername0_HTTP_Handler(srv))
 	r.POST("/v1/authentication/login/account", _UserAuthenticationService_LoginAccount0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/logout", _UserAuthenticationService_Logout0_HTTP_Handler(srv))
 }
 
 func _UserAuthenticationService_RegisterEmail0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
@@ -183,6 +187,28 @@ func _UserAuthenticationService_LoginAccount0_HTTP_Handler(srv UserAuthenticatio
 	}
 }
 
+func _UserAuthenticationService_Logout0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in LogoutRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserAuthenticationServiceLogout)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Logout(ctx, req.(*LogoutRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*LogoutReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserAuthenticationServiceHTTPClient interface {
 	// ExistEmail 邮箱是否存在
 	ExistEmail(ctx context.Context, req *ExistEmailRequest, opts ...http.CallOption) (rsp *ExistEmailReply, err error)
@@ -192,6 +218,8 @@ type UserAuthenticationServiceHTTPClient interface {
 	ExistUsername(ctx context.Context, req *ExistUsernameRequest, opts ...http.CallOption) (rsp *ExistUsernameReply, err error)
 	// LoginAccount 账号登录（用户名/邮箱）
 	LoginAccount(ctx context.Context, req *LoginAccountRequest, opts ...http.CallOption) (rsp *LoginAccountReply, err error)
+	// Logout 账号登出
+	Logout(ctx context.Context, req *LogoutRequest, opts ...http.CallOption) (rsp *LogoutReply, err error)
 	// RegisterEmail 邮箱注册
 	RegisterEmail(ctx context.Context, req *RegisterEmailRequest, opts ...http.CallOption) (rsp *RegisterEmailReply, err error)
 	// RegisterEmailVerify 邮箱注册验证码验证
@@ -254,6 +282,20 @@ func (c *UserAuthenticationServiceHTTPClientImpl) LoginAccount(ctx context.Conte
 	pattern := "/v1/authentication/login/account"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserAuthenticationServiceLoginAccount))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Logout 账号登出
+func (c *UserAuthenticationServiceHTTPClientImpl) Logout(ctx context.Context, in *LogoutRequest, opts ...http.CallOption) (*LogoutReply, error) {
+	var out LogoutReply
+	pattern := "/v1/authentication/logout"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceLogout))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

@@ -80,71 +80,11 @@ func (m *RegisterEmailRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetPassword()); l < 6 || l > 64 {
-		err := RegisterEmailRequestValidationError{
-			field:  "Password",
-			reason: "value length must be between 6 and 64 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Password
 
-	if !_RegisterEmailRequest_Password_Pattern.MatchString(m.GetPassword()) {
-		err := RegisterEmailRequestValidationError{
-			field:  "Password",
-			reason: "value does not match regex pattern \"^[A-Za-z0-9@#$%^&*!()_+\\\\-=\\\\[\\\\]{};:'\\\",.<>/?`~|\\\\\\\\]+$\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Name
 
-	if l := utf8.RuneCountInString(m.GetName()); l < 4 || l > 32 {
-		err := RegisterEmailRequestValidationError{
-			field:  "Name",
-			reason: "value length must be between 4 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if !_RegisterEmailRequest_Name_Pattern.MatchString(m.GetName()) {
-		err := RegisterEmailRequestValidationError{
-			field:  "Name",
-			reason: "value does not match regex pattern \"^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetNickname()); l < 2 || l > 32 {
-		err := RegisterEmailRequestValidationError{
-			field:  "Nickname",
-			reason: "value length must be between 2 and 32 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if !_RegisterEmailRequest_Nickname_Pattern.MatchString(m.GetNickname()) {
-		err := RegisterEmailRequestValidationError{
-			field:  "Nickname",
-			reason: "value does not match regex pattern \"^[0-9A-Za-z_\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{So}\\\\p{Sk}\\\\p{Cf}-]*[\\\\p{L}\\\\p{M}\\\\p{So}\\\\p{Sk}\\\\p{Cf}_-][0-9A-Za-z_\\\\p{L}\\\\p{M}\\\\p{N}\\\\p{So}\\\\p{Sk}\\\\p{Cf}-]*$\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Nickname
 
 	if len(errors) > 0 {
 		return RegisterEmailRequestMultiError(errors)
@@ -275,12 +215,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = RegisterEmailRequestValidationError{}
-
-var _RegisterEmailRequest_Password_Pattern = regexp.MustCompile("^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$")
-
-var _RegisterEmailRequest_Name_Pattern = regexp.MustCompile("^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$")
-
-var _RegisterEmailRequest_Nickname_Pattern = regexp.MustCompile("^[0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*[\\p{L}\\p{M}\\p{So}\\p{Sk}\\p{Cf}_-][0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*$")
 
 // Validate checks the field values on RegisterEmailReply with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1599,3 +1533,202 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = LoginAccountReplyValidationError{}
+
+// Validate checks the field values on LogoutRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *LogoutRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LogoutRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in LogoutRequestMultiError, or
+// nil if none found.
+func (m *LogoutRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LogoutRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return LogoutRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// LogoutRequestMultiError is an error wrapping multiple validation errors
+// returned by LogoutRequest.ValidateAll() if the designated constraints
+// aren't met.
+type LogoutRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LogoutRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LogoutRequestMultiError) AllErrors() []error { return m }
+
+// LogoutRequestValidationError is the validation error returned by
+// LogoutRequest.Validate if the designated constraints aren't met.
+type LogoutRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LogoutRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LogoutRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LogoutRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LogoutRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LogoutRequestValidationError) ErrorName() string { return "LogoutRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LogoutRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLogoutRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LogoutRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LogoutRequestValidationError{}
+
+// Validate checks the field values on LogoutReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *LogoutReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LogoutReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in LogoutReplyMultiError, or
+// nil if none found.
+func (m *LogoutReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LogoutReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return LogoutReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// LogoutReplyMultiError is an error wrapping multiple validation errors
+// returned by LogoutReply.ValidateAll() if the designated constraints aren't met.
+type LogoutReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LogoutReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LogoutReplyMultiError) AllErrors() []error { return m }
+
+// LogoutReplyValidationError is the validation error returned by
+// LogoutReply.Validate if the designated constraints aren't met.
+type LogoutReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LogoutReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LogoutReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LogoutReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LogoutReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LogoutReplyValidationError) ErrorName() string { return "LogoutReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LogoutReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLogoutReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LogoutReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LogoutReplyValidationError{}

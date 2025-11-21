@@ -63,6 +63,15 @@ service UserAuthenticationService {
       body: "*"
     };
   }
+
+  // 账号登出
+  rpc Logout (LogoutRequest) returns (LogoutReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/logout"
+      body: "*"
+    };
+  }
+
 }
 
 message RegisterEmailRequest {
@@ -77,35 +86,11 @@ message RegisterEmailRequest {
     }
   ];
   // 密码
-  string password = 2[
-    (validate.rules) = {
-      string: {
-        min_len: 6,
-        max_len: 64,
-        pattern: "^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$" // 6-64 位支持大小写字母、数字、特殊符号，至少包含一个字母、一个数字
-      }
-    }
-  ];
+  string password = 2;
   // 用户名
-  string name = 3[
-    (validate.rules) = {
-      string: {
-        min_len: 4,
-        max_len: 32,
-        pattern: "^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$" // 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
-      }
-    }
-  ];
+  string name = 3;
   // 昵称
-  string nickname = 4 [
-    (validate.rules) = {
-      string: {
-        min_len: 2,
-        max_len: 32,
-        pattern: "^[0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*[\\p{L}\\p{M}\\p{So}\\p{Sk}\\p{Cf}_-][0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*$" // 至少一个非数字，允许字母/数字/文字/emoji/下划线/连字符
-      }
-    }
-  ];
+  string nickname = 4;
 }
 message RegisterEmailReply {
   // 验证码令牌
@@ -194,3 +179,6 @@ message LoginAccountReply {
   // 用户信息
   user.v1.User user = 2;
 }
+
+message LogoutRequest{}
+message LogoutReply{}

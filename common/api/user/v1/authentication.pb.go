@@ -619,16 +619,88 @@ func (x *LoginAccountReply) GetUser() *User {
 	return nil
 }
 
+type LogoutRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LogoutRequest) Reset() {
+	*x = LogoutRequest{}
+	mi := &file_user_v1_authentication_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogoutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogoutRequest) ProtoMessage() {}
+
+func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_authentication_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
+func (*LogoutRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{12}
+}
+
+type LogoutReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LogoutReply) Reset() {
+	*x = LogoutReply{}
+	mi := &file_user_v1_authentication_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogoutReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogoutReply) ProtoMessage() {}
+
+func (x *LogoutReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_authentication_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogoutReply.ProtoReflect.Descriptor instead.
+func (*LogoutReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{13}
+}
+
 var File_user_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x84\x03\n" +
+	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x86\x01\n" +
 	"\x14RegisterEmailRequest\x12\"\n" +
-	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12Y\n" +
-	"\bpassword\x18\x02 \x01(\tB=\xfaB:r8\x10\x06\x18@22^[A-Za-z0-9@#$%^&*!()_+\\-=\\[\\]{};:'\",.<>/?`~|\\\\]+$R\bpassword\x12?\n" +
-	"\x04name\x18\x03 \x01(\tB+\xfaB(r&\x10\x04\x18 2 ^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$R\x04name\x12\xab\x01\n" +
-	"\bnickname\x18\x04 \x01(\tB\x8e\x01\xfaB\x8a\x01r\x87\x01\x10\x02\x18 2\x80\x01^[0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*[\\p{L}\\p{M}\\p{So}\\p{Sk}\\p{Cf}_-][0-9A-Za-z_\\p{L}\\p{M}\\p{N}\\p{So}\\p{Sk}\\p{Cf}-]*$R\bnickname\"F\n" +
+	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1a\n" +
+	"\bnickname\x18\x04 \x01(\tR\bnickname\"F\n" +
 	"\x12RegisterEmailReply\x12\x1c\n" +
 	"\tcodeToken\x18\x01 \x01(\tR\tcodeToken\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\"i\n" +
@@ -656,7 +728,9 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"W\n" +
 	"\x11LoginAccountReply\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12,\n" +
-	"\x04user\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x04user2\x84\a\n" +
+	"\x04user\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"\x0f\n" +
+	"\rLogoutRequest\"\r\n" +
+	"\vLogoutReply2\xf8\a\n" +
 	"\x19UserAuthenticationService\x12\x8f\x01\n" +
 	"\rRegisterEmail\x12(.common.api.user.v1.RegisterEmailRequest\x1a&.common.api.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\xa8\x01\n" +
 	"\x13RegisterEmailVerify\x12..common.api.user.v1.RegisterEmailVerifyRequest\x1a,.common.api.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12\x83\x01\n" +
@@ -665,7 +739,8 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
 	"ExistPhone\x12%.common.api.user.v1.ExistPhoneRequest\x1a#.common.api.user.v1.ExistPhoneReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/phone\x12\x8f\x01\n" +
 	"\rExistUsername\x12(.common.api.user.v1.ExistUsernameRequest\x1a&.common.api.user.v1.ExistUsernameReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/exist/username\x12\x8b\x01\n" +
-	"\fLoginAccount\x12'.common.api.user.v1.LoginAccountRequest\x1a%.common.api.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/accountB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\fLoginAccount\x12'.common.api.user.v1.LoginAccountRequest\x1a%.common.api.user.v1.LoginAccountReply\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/authentication/login/account\x12r\n" +
+	"\x06Logout\x12!.common.api.user.v1.LogoutRequest\x1a\x1f.common.api.user.v1.LogoutReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/authentication/logoutB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_authentication_proto_rawDescOnce sync.Once
@@ -679,7 +754,7 @@ func file_user_v1_authentication_proto_rawDescGZIP() []byte {
 	return file_user_v1_authentication_proto_rawDescData
 }
 
-var file_user_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_user_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_user_v1_authentication_proto_goTypes = []any{
 	(*RegisterEmailRequest)(nil),       // 0: common.api.user.v1.RegisterEmailRequest
 	(*RegisterEmailReply)(nil),         // 1: common.api.user.v1.RegisterEmailReply
@@ -693,24 +768,28 @@ var file_user_v1_authentication_proto_goTypes = []any{
 	(*ExistPhoneReply)(nil),            // 9: common.api.user.v1.ExistPhoneReply
 	(*LoginAccountRequest)(nil),        // 10: common.api.user.v1.LoginAccountRequest
 	(*LoginAccountReply)(nil),          // 11: common.api.user.v1.LoginAccountReply
-	(*User)(nil),                       // 12: common.api.user.v1.User
+	(*LogoutRequest)(nil),              // 12: common.api.user.v1.LogoutRequest
+	(*LogoutReply)(nil),                // 13: common.api.user.v1.LogoutReply
+	(*User)(nil),                       // 14: common.api.user.v1.User
 }
 var file_user_v1_authentication_proto_depIdxs = []int32{
-	12, // 0: common.api.user.v1.LoginAccountReply.user:type_name -> common.api.user.v1.User
+	14, // 0: common.api.user.v1.LoginAccountReply.user:type_name -> common.api.user.v1.User
 	0,  // 1: common.api.user.v1.UserAuthenticationService.RegisterEmail:input_type -> common.api.user.v1.RegisterEmailRequest
 	2,  // 2: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:input_type -> common.api.user.v1.RegisterEmailVerifyRequest
 	4,  // 3: common.api.user.v1.UserAuthenticationService.ExistEmail:input_type -> common.api.user.v1.ExistEmailRequest
 	8,  // 4: common.api.user.v1.UserAuthenticationService.ExistPhone:input_type -> common.api.user.v1.ExistPhoneRequest
 	6,  // 5: common.api.user.v1.UserAuthenticationService.ExistUsername:input_type -> common.api.user.v1.ExistUsernameRequest
 	10, // 6: common.api.user.v1.UserAuthenticationService.LoginAccount:input_type -> common.api.user.v1.LoginAccountRequest
-	1,  // 7: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
-	3,  // 8: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
-	5,  // 9: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
-	9,  // 10: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
-	7,  // 11: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
-	11, // 12: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
-	7,  // [7:13] is the sub-list for method output_type
-	1,  // [1:7] is the sub-list for method input_type
+	12, // 7: common.api.user.v1.UserAuthenticationService.Logout:input_type -> common.api.user.v1.LogoutRequest
+	1,  // 8: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
+	3,  // 9: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
+	5,  // 10: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
+	9,  // 11: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
+	7,  // 12: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
+	11, // 13: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
+	13, // 14: common.api.user.v1.UserAuthenticationService.Logout:output_type -> common.api.user.v1.LogoutReply
+	8,  // [8:15] is the sub-list for method output_type
+	1,  // [1:8] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name
 	1,  // [1:1] is the sub-list for extension extendee
 	0,  // [0:1] is the sub-list for field type_name
@@ -731,7 +810,7 @@ func file_user_v1_authentication_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_authentication_proto_rawDesc), len(file_user_v1_authentication_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

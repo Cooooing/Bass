@@ -2,21 +2,25 @@ package util
 
 import (
 	"common/pkg/constant"
-	"common/pkg/model"
 	"context"
 )
 
-func GetUserInfo(ctx context.Context) (*model.User, bool) {
-	user, ok := ctx.Value(constant.CtxUserInfo).(*model.User)
-	if user == nil {
-		return nil, false
-	}
-	return user, ok
+func SetContextValue[T any](ctx context.Context, key constant.CtxKey, value T) context.Context {
+	return context.WithValue(ctx, key, value)
 }
 
-func MustGetUserInfo(ctx context.Context) *model.User {
-	if user, ok := ctx.Value(constant.CtxUserInfo).(*model.User); ok {
-		return user
+func GetContextValue[T any](ctx context.Context, key constant.CtxKey) (T, bool) {
+	value := ctx.Value(key)
+	if value == nil {
+		var t T
+		return t, false
 	}
-	panic("user info not found in context or invalid type")
+	return value.(T), true
+}
+
+func MustGetContextValue[T any](ctx context.Context, key constant.CtxKey) T {
+	if value, ok := ctx.Value(key).(T); ok {
+		return value
+	}
+	panic("context value not found")
 }

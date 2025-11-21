@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"common/pkg/constant"
+	"common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"encoding/json"
@@ -10,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/errors"
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/transport"
 	"google.golang.org/grpc/metadata"
@@ -91,14 +91,13 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 				token = strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), bearerPrefix)
 			}
 
-			log.Infof("token: %s", token)
 			userInfo, err := tokenRepo.GetToken(ctx, token)
 			if err != nil {
 				return nil, fmt.Errorf("invalid token: %w", err)
 			}
 
-			ctx = context.WithValue(ctx, constant.CtxToken, token)
-			ctx = context.WithValue(ctx, constant.CtxUserInfo, userInfo)
+			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
+			ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
 
 			return handler(ctx, req)
 		}

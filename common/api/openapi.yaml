@@ -329,6 +329,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.LoginAccountReply'
+    /v1/authentication/logout:
+        post:
+            tags:
+                - UserAuthenticationService
+            description: 账号登出
+            operationId: UserAuthenticationService_Logout
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.LogoutRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.LogoutReply'
     /v1/authentication/register/email:
         post:
             tags:
@@ -590,24 +609,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateTagReply'
     /v1/user/getCurrentUser:
-      post:
-        tags:
-          - UserUserService
-        description: 获取当前用户信息
-        operationId: UserUserService_GetCurrentUser
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/common.api.user.v1.GetCurrentUserRequest'
-          required: true
-        responses:
-          "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/common.api.user.v1.GetCurrentUserReply'
+        post:
+            tags:
+                - UserUserService
+            description: 获取当前用户信息
+            operationId: UserUserService_GetCurrentUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.GetCurrentUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.GetCurrentUserReply'
     /v1/user/getList:
         post:
             tags:
@@ -666,24 +685,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.GetOneReply'
     /v1/user/updateSetting:
-      post:
-        tags:
-          - UserUserService
-        description: 更新用户设置
-        operationId: UserUserService_UpdateSetting
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/common.api.user.v1.UpdateSettingRequest'
-          required: true
-        responses:
-          "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/common.api.user.v1.UpdateSettingReply'
+        post:
+            tags:
+                - UserUserService
+            description: 更新用户设置
+            operationId: UserUserService_UpdateSetting
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.UpdateSettingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.UpdateSettingReply'
 components:
     schemas:
         common.api.common.v1.HealthReply:
@@ -1511,15 +1530,15 @@ components:
                     type: string
                     description: 用户名
         common.api.user.v1.GetCurrentUserReply:
-          type: object
-          properties:
-            user:
-              allOf:
-                - $ref: '#/components/schemas/common.api.user.v1.User'
-              description: 用户信息
+            type: object
+            properties:
+                user:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 用户信息
         common.api.user.v1.GetCurrentUserRequest:
-          type: object
-          properties: { }
+            type: object
+            properties: { }
         common.api.user.v1.GetListReply:
             type: object
             properties:
@@ -1572,9 +1591,9 @@ components:
                     type: string
                     description: 登录令牌
                 user:
-                  allOf:
-                    - $ref: '#/components/schemas/common.api.user.v1.User'
-                  description: 用户信息
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 用户信息
         common.api.user.v1.LoginAccountRequest:
             type: object
             properties:
@@ -1584,6 +1603,12 @@ components:
                 password:
                     type: string
                     description: 密码
+        common.api.user.v1.LogoutReply:
+            type: object
+            properties: { }
+        common.api.user.v1.LogoutRequest:
+            type: object
+            properties: { }
         common.api.user.v1.RegisterEmailReply:
             type: object
             properties:
@@ -1621,33 +1646,33 @@ components:
                     type: string
                     description: 验证码令牌
         common.api.user.v1.UpdateSettingReply:
-          type: object
-          properties:
-            user:
-              allOf:
-                - $ref: '#/components/schemas/common.api.user.v1.User'
-              description: 用户信息
+            type: object
+            properties:
+                user:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 用户信息
         common.api.user.v1.UpdateSettingRequest:
-          type: object
-          properties:
-            language:
-              type: string
-              description: 用户语言
-            timezone:
-              type: string
-              description: 时区
-            theme:
-              type: string
-              description: 皮肤主题
-            mobileTheme:
-              type: string
-              description: 移动端皮肤主题
-            enableWebNotify:
-              type: boolean
-              description: 启用Web通知
-            enableEmailSubscribe:
-              type: boolean
-              description: 启用邮件订阅
+            type: object
+            properties:
+                language:
+                    type: string
+                    description: 用户语言
+                timezone:
+                    type: string
+                    description: 时区
+                theme:
+                    type: string
+                    description: 皮肤主题
+                mobileTheme:
+                    type: string
+                    description: 移动端皮肤主题
+                enableWebNotify:
+                    type: boolean
+                    description: 启用Web通知
+                enableEmailSubscribe:
+                    type: boolean
+                    description: 启用邮件订阅
         common.api.user.v1.User:
             type: object
             properties:
@@ -1679,20 +1704,20 @@ components:
                     type: string
                     description: 用户 MBTI 类型
                 status:
-                  type: integer
+                    type: integer
                     description: 用户状态：0-正常，1-封禁，2-注销
-                  format: int32
+                    format: int32
                 groupName:
                     type: string
                     description: 用户组名称
                 followCount:
-                  type: integer
+                    type: integer
                     description: 关注数
-                  format: int32
+                    format: int32
                 followerCount:
-                  type: integer
+                    type: integer
                     description: 粉丝数
-                  format: int32
+                    format: int32
                 lastLoginTime:
                     type: string
                     description: 最近登录时间
@@ -1701,21 +1726,21 @@ components:
                     type: string
                     description: 最近登录IP
                 onlineMinutes:
-                  type: integer
+                    type: integer
                     description: 在线总时长（分钟）
-                  format: int32
+                    format: int32
                 lastCheckinTime:
                     type: string
                     description: 最近签到时间
                     format: date-time
                 currentCheckinStreak:
-                  type: integer
+                    type: integer
                     description: 当前连续签到天数
-                  format: int32
+                    format: int32
                 longestCheckinStreak:
-                  type: integer
+                    type: integer
                     description: 最长连续签到天数
-                  format: int32
+                    format: int32
                 language:
                     type: string
                     description: 用户语言

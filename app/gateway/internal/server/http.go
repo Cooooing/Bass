@@ -89,7 +89,21 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 			return
 		}
 		defer response.Body.Close()
-		w.Header().Set("Content-Type", response.Header.Get("Content-Type"))
+		// 复制后端 Header（过滤 hop-by-hop headers）
+		for k, vv := range response.Header {
+			if strings.EqualFold(k, "Connection") ||
+				strings.EqualFold(k, "Proxy-Connection") ||
+				strings.EqualFold(k, "Keep-Alive") ||
+				strings.EqualFold(k, "Transfer-Encoding") ||
+				strings.EqualFold(k, "TE") ||
+				strings.EqualFold(k, "Trailer") ||
+				strings.EqualFold(k, "Upgrade") {
+				continue
+			}
+			for _, v := range vv {
+				w.Header().Add(k, v)
+			}
+		}
 		w.WriteHeader(response.StatusCode)
 		_, err = io.Copy(w, response.Body)
 		if err != nil {

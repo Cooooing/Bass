@@ -3,6 +3,8 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/base"
 	"content/internal/biz"
@@ -41,7 +43,7 @@ func NewCommentService(baseService *BaseService, commentDomain *biz.CommentDomai
 }
 
 func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rsp *v1.AddCommentReply, err error) {
-	user := util.MustGetUserInfo(ctx)
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	_, err = s.commentDomain.Add(ctx, &model.Comment{
 		ArticleID: req.ArticleId,
 		CreatedBy: &user.ID,

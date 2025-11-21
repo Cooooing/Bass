@@ -25,6 +25,7 @@ const (
 	UserAuthenticationService_ExistPhone_FullMethodName          = "/common.api.user.v1.UserAuthenticationService/ExistPhone"
 	UserAuthenticationService_ExistUsername_FullMethodName       = "/common.api.user.v1.UserAuthenticationService/ExistUsername"
 	UserAuthenticationService_LoginAccount_FullMethodName        = "/common.api.user.v1.UserAuthenticationService/LoginAccount"
+	UserAuthenticationService_Logout_FullMethodName              = "/common.api.user.v1.UserAuthenticationService/Logout"
 )
 
 // UserAuthenticationServiceClient is the client API for UserAuthenticationService service.
@@ -45,6 +46,8 @@ type UserAuthenticationServiceClient interface {
 	ExistUsername(ctx context.Context, in *ExistUsernameRequest, opts ...grpc.CallOption) (*ExistUsernameReply, error)
 	// 账号登录（用户名/邮箱）
 	LoginAccount(ctx context.Context, in *LoginAccountRequest, opts ...grpc.CallOption) (*LoginAccountReply, error)
+	// 账号登出
+	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutReply, error)
 }
 
 type userAuthenticationServiceClient struct {
@@ -115,6 +118,16 @@ func (c *userAuthenticationServiceClient) LoginAccount(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *userAuthenticationServiceClient) Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogoutReply)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_Logout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserAuthenticationServiceServer is the server API for UserAuthenticationService service.
 // All implementations must embed UnimplementedUserAuthenticationServiceServer
 // for forward compatibility.
@@ -133,6 +146,8 @@ type UserAuthenticationServiceServer interface {
 	ExistUsername(context.Context, *ExistUsernameRequest) (*ExistUsernameReply, error)
 	// 账号登录（用户名/邮箱）
 	LoginAccount(context.Context, *LoginAccountRequest) (*LoginAccountReply, error)
+	// 账号登出
+	Logout(context.Context, *LogoutRequest) (*LogoutReply, error)
 	mustEmbedUnimplementedUserAuthenticationServiceServer()
 }
 
@@ -160,6 +175,9 @@ func (UnimplementedUserAuthenticationServiceServer) ExistUsername(context.Contex
 }
 func (UnimplementedUserAuthenticationServiceServer) LoginAccount(context.Context, *LoginAccountRequest) (*LoginAccountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginAccount not implemented")
+}
+func (UnimplementedUserAuthenticationServiceServer) Logout(context.Context, *LogoutRequest) (*LogoutReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
 func (UnimplementedUserAuthenticationServiceServer) mustEmbedUnimplementedUserAuthenticationServiceServer() {
 }
@@ -291,6 +309,24 @@ func _UserAuthenticationService_LoginAccount_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserAuthenticationService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserAuthenticationServiceServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserAuthenticationService_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserAuthenticationServiceServer).Logout(ctx, req.(*LogoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserAuthenticationService_ServiceDesc is the grpc.ServiceDesc for UserAuthenticationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -321,6 +357,10 @@ var UserAuthenticationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginAccount",
 			Handler:    _UserAuthenticationService_LoginAccount_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _UserAuthenticationService_Logout_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

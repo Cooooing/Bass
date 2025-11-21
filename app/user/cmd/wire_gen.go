@@ -33,6 +33,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient)
 	systemService := service.NewSystemService(baseService)
+	verifyService := service.NewVerifyService()
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient)
 	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
@@ -59,7 +60,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	authenticationService := service.NewAuthenticationService(baseService, authenticationDomain, userRepo)
+	authenticationService := service.NewAuthenticationService(baseService, verifyService, authenticationDomain, userRepo)
 	userService := service.NewUserService(baseService, authenticationDomain, userRepo)
 	v := service.ProvideServices(systemService, authenticationService, userService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)

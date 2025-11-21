@@ -1,6 +1,8 @@
 package pkg
 
 import (
+	"common/pkg/constant"
+	"common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"time"
@@ -41,7 +43,7 @@ func AuditHook() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			now := time.Now()
-			user, userIdOk := util.GetUserInfo(ctx)
+			user, userIdOk := util.GetContextValue[*model.User](ctx, constant.CtxUserInfo)
 			var userID int64
 			if userIdOk {
 				userID = user.ID

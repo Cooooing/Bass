@@ -18,17 +18,14 @@ import (
 
 // HttpResponseEncoder 自定义响应编码器（统一处理正常与错误返回）
 func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error {
-	w.Header().Set("Content-Type", "application/json")
-
 	// --- 错误响应 ---
 	if err, ok := data.(error); ok && err != nil {
+		w.Header().Set("Content-Type", "application/json")
 		se := errors.FromError(err)
-
 		code := int(se.Code)
 		if code == 0 {
 			code = http.StatusInternalServerError
 		}
-
 		// 判断是否是业务错误（proto 定义）
 		if se.Reason != "" {
 			// Reason 存在 → 业务错误
@@ -36,14 +33,18 @@ func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error
 			res := NewResult[any](code, se.Message, nil)
 			return json.NewEncoder(w).Encode(res)
 		}
-
 		// 没有 reason → 系统错误
 		w.WriteHeader(http.StatusInternalServerError)
 		res := NewResult[any](500, "Internal Server Error", nil)
 		return json.NewEncoder(w).Encode(res)
 	}
 
+	if w.Header().Get("Content-Type") != "" && w.Header().Get("Content-Type") != "application/json" {
+		return nil
+	}
+
 	// --- 正常响应 ---
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	result := SuccessData(data)
 	return json.NewEncoder(w).Encode(result)

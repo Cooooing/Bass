@@ -11,6 +11,7 @@ message Bootstrap {
   Registry registry = 3;
   Trace trace = 4;
   Jwt jwt = 5;
+  Oss oss = 6;
 }
 
 message Server {
@@ -79,4 +80,18 @@ message Jwt {
   string secret = 1;
   google.protobuf.Duration expires = 2;
   google.protobuf.Duration email_expire = 3;
+}
+
+message Oss{
+  message Local{
+    string avatar = 1;
+  }
+  message Qiniu{
+    string access_key = 1;
+    string secret_key = 2;
+    string bucket = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+  Local local = 1;
+  Qiniu qiniu = 2;
 }

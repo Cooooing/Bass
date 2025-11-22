@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package common.api.user.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "common/v1/common.proto";
+
+option go_package = "common/api/user/v1;v1";
+
+// Oss 服务
+service UserOssService {
+
+  // 获取上传文件凭证
+  rpc UploadToken (UploadTokenRequest) returns (UploadTokenReply) {
+    option (google.api.http) = {
+      post: "/v1/oss/uploadToken"
+      body: "*"
+    };
+  }
+
+}
+
+message UploadTokenRequest {}
+
+message UploadTokenReply {
+  string token = 1;
+}

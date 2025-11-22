@@ -61,8 +61,17 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	authenticationService := service.NewAuthenticationService(baseService, verifyService, authenticationDomain, userRepo)
-	userService := service.NewUserService(baseService, authenticationDomain, userRepo)
-	v := service.ProvideServices(systemService, authenticationService, userService)
+	userDomain, err := biz.NewUserDomain(baseDomain)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	userService := service.NewUserService(baseService, authenticationDomain, userDomain, userRepo)
+	ossService := service.NewOssService(baseService)
+	v := service.ProvideServices(systemService, authenticationService, userService, ossService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)

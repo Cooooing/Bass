@@ -94,7 +94,7 @@ message RegisterEmailRequest {
 }
 message RegisterEmailReply {
   // 验证码令牌
-  string codeToken = 1;
+  string code_token = 1;
   // 验证码（仅供调试使用）
   string code = 2;
 }
@@ -111,7 +111,7 @@ message RegisterEmailVerifyRequest {
     }
   ];
   // 验证码令牌
-  string codeToken = 2;
+  string code_token = 2;
 }
 message RegisterEmailVerifyReply {}
 

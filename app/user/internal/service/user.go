@@ -6,6 +6,7 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
+	"fmt"
 	"user/internal/biz"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -20,13 +21,15 @@ type UserService struct {
 	v1.UnimplementedUserUserServiceServer
 	*BaseService
 	authenticationDomain *biz.AuthenticationDomain
+	userDomain           *biz.UserDomain
 	userRepo             repo.UserRepo
 }
 
-func NewUserService(baseService *BaseService, authenticationDomain *biz.AuthenticationDomain, userRepo repo.UserRepo) *UserService {
+func NewUserService(baseService *BaseService, authenticationDomain *biz.AuthenticationDomain, userDomain *biz.UserDomain, userRepo repo.UserRepo) *UserService {
 	return &UserService{
 		BaseService:          baseService,
 		authenticationDomain: authenticationDomain,
+		userDomain:           userDomain,
 		userRepo:             userRepo,
 	}
 }
@@ -43,6 +46,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	update, err := s.userRepo.Update(ctx, s.db, &model.User{
 		ID:                   user.ID,
+		AvatarURL:            req.AvatarUrl,
 		Language:             req.Language,
 		Timezone:             req.Timezone,
 		Theme:                req.Theme,
@@ -144,4 +148,22 @@ func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v
 	res.User.CreatedAt = timestamppb.New(*user.CreatedAt)
 	res.User.UpdatedAt = timestamppb.New(*user.UpdatedAt)
 	return res, nil
+}
+
+func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarRequest) (rsp *v1.AvatarReply, err error) {
+	buf, err := s.userDomain.Avatar(ctx, req.Name)
+	if err != nil {
+		return nil, err
+	}
+	if w, ok := http.ResponseWriterFromServerContext(ctx); ok {
+		w.Header().Set("Content-Type", "image/png")
+		w.Header().Set("Content-Length", fmt.Sprint(len(buf)))
+		_, err := w.Write(buf)
+		return nil, err
+	}
+
+	return &v1.AvatarReply{
+		Data:        buf,
+		ContentType: "image/png",
+	}, nil
 }

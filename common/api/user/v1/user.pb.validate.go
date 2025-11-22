@@ -393,6 +393,10 @@ func (m *UpdateSettingRequest) validate(all bool) error {
 
 	var errors []error
 
+	if m.AvatarUrl != nil {
+		// no validation rules for AvatarUrl
+	}
+
 	if m.Language != nil {
 		// no validation rules for Language
 	}
@@ -1568,3 +1572,208 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetMapReplyValidationError{}
+
+// Validate checks the field values on AvatarRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *AvatarRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AvatarRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in AvatarRequestMultiError, or
+// nil if none found.
+func (m *AvatarRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AvatarRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return AvatarRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// AvatarRequestMultiError is an error wrapping multiple validation errors
+// returned by AvatarRequest.ValidateAll() if the designated constraints
+// aren't met.
+type AvatarRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AvatarRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AvatarRequestMultiError) AllErrors() []error { return m }
+
+// AvatarRequestValidationError is the validation error returned by
+// AvatarRequest.Validate if the designated constraints aren't met.
+type AvatarRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AvatarRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AvatarRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AvatarRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AvatarRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AvatarRequestValidationError) ErrorName() string { return "AvatarRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AvatarRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAvatarRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AvatarRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AvatarRequestValidationError{}
+
+// Validate checks the field values on AvatarReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *AvatarReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AvatarReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in AvatarReplyMultiError, or
+// nil if none found.
+func (m *AvatarReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AvatarReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Data
+
+	// no validation rules for ContentType
+
+	if len(errors) > 0 {
+		return AvatarReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// AvatarReplyMultiError is an error wrapping multiple validation errors
+// returned by AvatarReply.ValidateAll() if the designated constraints aren't met.
+type AvatarReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AvatarReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AvatarReplyMultiError) AllErrors() []error { return m }
+
+// AvatarReplyValidationError is the validation error returned by
+// AvatarReply.Validate if the designated constraints aren't met.
+type AvatarReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AvatarReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AvatarReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AvatarReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AvatarReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AvatarReplyValidationError) ErrorName() string { return "AvatarReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AvatarReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAvatarReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AvatarReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AvatarReplyValidationError{}

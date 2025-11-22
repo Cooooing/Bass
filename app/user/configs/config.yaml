@@ -47,3 +47,12 @@ jwt:
   secret: "qbceKQYgXXffTxVBgGrX"
   expires: 86400s
   email_expire: 300s
+
+oss:
+  local:
+    avatar: "https://treble.sxisa.com/v1/user/avatar/%s" # /v1/user/avatar/{name}
+  qiniu:
+    access_key: "L8l6DGiYXzmx0IVT0GpIxI-Mj8LqfoIKF6iAnrWa"
+    secret_key: "qY6ohp-qZEtd20NZN94o7TScg3IeEGSZe-ZRsVXW"
+    bucket: "bass-test"
+    timeout: 300s

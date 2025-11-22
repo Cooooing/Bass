@@ -29,6 +29,7 @@ type Bootstrap struct {
 	Registry      *Registry              `protobuf:"bytes,3,opt,name=registry,proto3" json:"registry,omitempty"`
 	Trace         *Trace                 `protobuf:"bytes,4,opt,name=trace,proto3" json:"trace,omitempty"`
 	Jwt           *Jwt                   `protobuf:"bytes,5,opt,name=jwt,proto3" json:"jwt,omitempty"`
+	Oss           *Oss                   `protobuf:"bytes,6,opt,name=oss,proto3" json:"oss,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -94,6 +95,13 @@ func (x *Bootstrap) GetTrace() *Trace {
 func (x *Bootstrap) GetJwt() *Jwt {
 	if x != nil {
 		return x.Jwt
+	}
+	return nil
+}
+
+func (x *Bootstrap) GetOss() *Oss {
+	if x != nil {
+		return x.Oss
 	}
 	return nil
 }
@@ -406,6 +414,58 @@ func (x *Jwt) GetEmailExpire() *durationpb.Duration {
 	return nil
 }
 
+type Oss struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Local         *Oss_Local             `protobuf:"bytes,1,opt,name=local,proto3" json:"local,omitempty"`
+	Qiniu         *Oss_Qiniu             `protobuf:"bytes,2,opt,name=qiniu,proto3" json:"qiniu,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Oss) Reset() {
+	*x = Oss{}
+	mi := &file_conf_conf_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Oss) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Oss) ProtoMessage() {}
+
+func (x *Oss) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Oss.ProtoReflect.Descriptor instead.
+func (*Oss) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *Oss) GetLocal() *Oss_Local {
+	if x != nil {
+		return x.Local
+	}
+	return nil
+}
+
+func (x *Oss) GetQiniu() *Oss_Qiniu {
+	if x != nil {
+		return x.Qiniu
+	}
+	return nil
+}
+
 type Server_HTTP struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
@@ -417,7 +477,7 @@ type Server_HTTP struct {
 
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -429,7 +489,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -477,7 +537,7 @@ type Server_GRPC struct {
 
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -489,7 +549,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -537,7 +597,7 @@ type Data_Database struct {
 
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -549,7 +609,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -599,7 +659,7 @@ type Data_Redis struct {
 
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
-	mi := &file_conf_conf_proto_msgTypes[9]
+	mi := &file_conf_conf_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -611,7 +671,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[9]
+	mi := &file_conf_conf_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -677,7 +737,7 @@ type Data_RabbitMQ struct {
 
 func (x *Data_RabbitMQ) Reset() {
 	*x = Data_RabbitMQ{}
-	mi := &file_conf_conf_proto_msgTypes[10]
+	mi := &file_conf_conf_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -689,7 +749,7 @@ func (x *Data_RabbitMQ) String() string {
 func (*Data_RabbitMQ) ProtoMessage() {}
 
 func (x *Data_RabbitMQ) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[10]
+	mi := &file_conf_conf_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -766,7 +826,7 @@ type Registry_Etcd struct {
 
 func (x *Registry_Etcd) Reset() {
 	*x = Registry_Etcd{}
-	mi := &file_conf_conf_proto_msgTypes[11]
+	mi := &file_conf_conf_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -778,7 +838,7 @@ func (x *Registry_Etcd) String() string {
 func (*Registry_Etcd) ProtoMessage() {}
 
 func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[11]
+	mi := &file_conf_conf_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -822,17 +882,130 @@ func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
 	return nil
 }
 
+type Oss_Local struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Avatar        string                 `protobuf:"bytes,1,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Oss_Local) Reset() {
+	*x = Oss_Local{}
+	mi := &file_conf_conf_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Oss_Local) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Oss_Local) ProtoMessage() {}
+
+func (x *Oss_Local) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Oss_Local.ProtoReflect.Descriptor instead.
+func (*Oss_Local) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{6, 0}
+}
+
+func (x *Oss_Local) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+type Oss_Qiniu struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessKey     string                 `protobuf:"bytes,1,opt,name=access_key,json=accessKey,proto3" json:"access_key,omitempty"`
+	SecretKey     string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
+	Bucket        string                 `protobuf:"bytes,3,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Oss_Qiniu) Reset() {
+	*x = Oss_Qiniu{}
+	mi := &file_conf_conf_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Oss_Qiniu) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Oss_Qiniu) ProtoMessage() {}
+
+func (x *Oss_Qiniu) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Oss_Qiniu.ProtoReflect.Descriptor instead.
+func (*Oss_Qiniu) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{6, 1}
+}
+
+func (x *Oss_Qiniu) GetAccessKey() string {
+	if x != nil {
+		return x.AccessKey
+	}
+	return ""
+}
+
+func (x *Oss_Qiniu) GetSecretKey() string {
+	if x != nil {
+		return x.SecretKey
+	}
+	return ""
+}
+
+func (x *Oss_Qiniu) GetBucket() string {
+	if x != nil {
+		return x.Bucket
+	}
+	return ""
+}
+
+func (x *Oss_Qiniu) GetTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.Timeout
+	}
+	return nil
+}
+
 var File_conf_conf_proto protoreflect.FileDescriptor
 
 const file_conf_conf_proto_rawDesc = "" +
 	"\n" +
-	"\x0fconf/conf.proto\x12\x0fkratos.api.conf\x1a\x1egoogle/protobuf/duration.proto\"\xf4\x01\n" +
+	"\x0fconf/conf.proto\x12\x0fkratos.api.conf\x1a\x1egoogle/protobuf/duration.proto\"\x9c\x02\n" +
 	"\tBootstrap\x12/\n" +
 	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.conf.ServerR\x06server\x12)\n" +
 	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x125\n" +
 	"\bregistry\x18\x03 \x01(\v2\x19.kratos.api.conf.RegistryR\bregistry\x12,\n" +
 	"\x05trace\x18\x04 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\x12&\n" +
-	"\x03jwt\x18\x05 \x01(\v2\x14.kratos.api.conf.JwtR\x03jwt\"\x84\x03\n" +
+	"\x03jwt\x18\x05 \x01(\v2\x14.kratos.api.conf.JwtR\x03jwt\x12&\n" +
+	"\x03oss\x18\x06 \x01(\v2\x14.kratos.api.conf.OssR\x03oss\"\x84\x03\n" +
 	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
@@ -885,7 +1058,19 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x03Jwt\x12\x16\n" +
 	"\x06secret\x18\x01 \x01(\tR\x06secret\x123\n" +
 	"\aexpires\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\aexpires\x12<\n" +
-	"\femail_expire\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vemailExpireB\x1eZ\x1cuser/internal/conf/conf;confb\x06proto3"
+	"\femail_expire\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vemailExpire\"\x9f\x02\n" +
+	"\x03Oss\x120\n" +
+	"\x05local\x18\x01 \x01(\v2\x1a.kratos.api.conf.Oss.LocalR\x05local\x120\n" +
+	"\x05qiniu\x18\x02 \x01(\v2\x1a.kratos.api.conf.Oss.QiniuR\x05qiniu\x1a\x1f\n" +
+	"\x05Local\x12\x16\n" +
+	"\x06avatar\x18\x01 \x01(\tR\x06avatar\x1a\x92\x01\n" +
+	"\x05Qiniu\x12\x1d\n" +
+	"\n" +
+	"access_key\x18\x01 \x01(\tR\taccessKey\x12\x1d\n" +
+	"\n" +
+	"secret_key\x18\x02 \x01(\tR\tsecretKey\x12\x16\n" +
+	"\x06bucket\x18\x03 \x01(\tR\x06bucket\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeoutB\x1eZ\x1cuser/internal/conf/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once
@@ -899,7 +1084,7 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_conf_conf_proto_goTypes = []any{
 	(*Bootstrap)(nil),           // 0: kratos.api.conf.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.conf.Server
@@ -907,13 +1092,16 @@ var file_conf_conf_proto_goTypes = []any{
 	(*Registry)(nil),            // 3: kratos.api.conf.Registry
 	(*Trace)(nil),               // 4: kratos.api.conf.Trace
 	(*Jwt)(nil),                 // 5: kratos.api.conf.Jwt
-	(*Server_HTTP)(nil),         // 6: kratos.api.conf.Server.HTTP
-	(*Server_GRPC)(nil),         // 7: kratos.api.conf.Server.GRPC
-	(*Data_Database)(nil),       // 8: kratos.api.conf.Data.Database
-	(*Data_Redis)(nil),          // 9: kratos.api.conf.Data.Redis
-	(*Data_RabbitMQ)(nil),       // 10: kratos.api.conf.Data.RabbitMQ
-	(*Registry_Etcd)(nil),       // 11: kratos.api.conf.Registry.Etcd
-	(*durationpb.Duration)(nil), // 12: google.protobuf.Duration
+	(*Oss)(nil),                 // 6: kratos.api.conf.Oss
+	(*Server_HTTP)(nil),         // 7: kratos.api.conf.Server.HTTP
+	(*Server_GRPC)(nil),         // 8: kratos.api.conf.Server.GRPC
+	(*Data_Database)(nil),       // 9: kratos.api.conf.Data.Database
+	(*Data_Redis)(nil),          // 10: kratos.api.conf.Data.Redis
+	(*Data_RabbitMQ)(nil),       // 11: kratos.api.conf.Data.RabbitMQ
+	(*Registry_Etcd)(nil),       // 12: kratos.api.conf.Registry.Etcd
+	(*Oss_Local)(nil),           // 13: kratos.api.conf.Oss.Local
+	(*Oss_Qiniu)(nil),           // 14: kratos.api.conf.Oss.Qiniu
+	(*durationpb.Duration)(nil), // 15: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.conf.Bootstrap.server:type_name -> kratos.api.conf.Server
@@ -921,26 +1109,30 @@ var file_conf_conf_proto_depIdxs = []int32{
 	3,  // 2: kratos.api.conf.Bootstrap.registry:type_name -> kratos.api.conf.Registry
 	4,  // 3: kratos.api.conf.Bootstrap.trace:type_name -> kratos.api.conf.Trace
 	5,  // 4: kratos.api.conf.Bootstrap.jwt:type_name -> kratos.api.conf.Jwt
-	6,  // 5: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
-	7,  // 6: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
-	8,  // 7: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
-	9,  // 8: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
-	10, // 9: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
-	11, // 10: kratos.api.conf.Registry.etcd:type_name -> kratos.api.conf.Registry.Etcd
-	12, // 11: kratos.api.conf.Jwt.expires:type_name -> google.protobuf.Duration
-	12, // 12: kratos.api.conf.Jwt.email_expire:type_name -> google.protobuf.Duration
-	12, // 13: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	12, // 14: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	12, // 15: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	12, // 16: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	12, // 17: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
-	12, // 18: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	12, // 19: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	6,  // 5: kratos.api.conf.Bootstrap.oss:type_name -> kratos.api.conf.Oss
+	7,  // 6: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
+	8,  // 7: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
+	9,  // 8: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
+	10, // 9: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
+	11, // 10: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
+	12, // 11: kratos.api.conf.Registry.etcd:type_name -> kratos.api.conf.Registry.Etcd
+	15, // 12: kratos.api.conf.Jwt.expires:type_name -> google.protobuf.Duration
+	15, // 13: kratos.api.conf.Jwt.email_expire:type_name -> google.protobuf.Duration
+	13, // 14: kratos.api.conf.Oss.local:type_name -> kratos.api.conf.Oss.Local
+	14, // 15: kratos.api.conf.Oss.qiniu:type_name -> kratos.api.conf.Oss.Qiniu
+	15, // 16: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	15, // 17: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	15, // 18: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	15, // 19: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	15, // 20: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
+	15, // 21: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
+	15, // 22: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
+	15, // 23: kratos.api.conf.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -954,7 +1146,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_conf_conf_proto_rawDesc), len(file_conf_conf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

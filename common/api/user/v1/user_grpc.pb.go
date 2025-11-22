@@ -24,6 +24,7 @@ const (
 	UserUserService_GetOne_FullMethodName         = "/common.api.user.v1.UserUserService/GetOne"
 	UserUserService_GetList_FullMethodName        = "/common.api.user.v1.UserUserService/GetList"
 	UserUserService_GetMap_FullMethodName         = "/common.api.user.v1.UserUserService/GetMap"
+	UserUserService_Avatar_FullMethodName         = "/common.api.user.v1.UserUserService/Avatar"
 )
 
 // UserUserServiceClient is the client API for UserUserService service.
@@ -42,6 +43,8 @@ type UserUserServiceClient interface {
 	GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListReply, error)
 	// 查询用户列表（返回map）
 	GetMap(ctx context.Context, in *GetMapRequest, opts ...grpc.CallOption) (*GetMapReply, error)
+	// 获取用户默认头像
+	Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*AvatarReply, error)
 }
 
 type userUserServiceClient struct {
@@ -102,6 +105,16 @@ func (c *userUserServiceClient) GetMap(ctx context.Context, in *GetMapRequest, o
 	return out, nil
 }
 
+func (c *userUserServiceClient) Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*AvatarReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AvatarReply)
+	err := c.cc.Invoke(ctx, UserUserService_Avatar_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserUserServiceServer is the server API for UserUserService service.
 // All implementations must embed UnimplementedUserUserServiceServer
 // for forward compatibility.
@@ -118,6 +131,8 @@ type UserUserServiceServer interface {
 	GetList(context.Context, *GetListRequest) (*GetListReply, error)
 	// 查询用户列表（返回map）
 	GetMap(context.Context, *GetMapRequest) (*GetMapReply, error)
+	// 获取用户默认头像
+	Avatar(context.Context, *AvatarRequest) (*AvatarReply, error)
 	mustEmbedUnimplementedUserUserServiceServer()
 }
 
@@ -142,6 +157,9 @@ func (UnimplementedUserUserServiceServer) GetList(context.Context, *GetListReque
 }
 func (UnimplementedUserUserServiceServer) GetMap(context.Context, *GetMapRequest) (*GetMapReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMap not implemented")
+}
+func (UnimplementedUserUserServiceServer) Avatar(context.Context, *AvatarRequest) (*AvatarReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Avatar not implemented")
 }
 func (UnimplementedUserUserServiceServer) mustEmbedUnimplementedUserUserServiceServer() {}
 func (UnimplementedUserUserServiceServer) testEmbeddedByValue()                         {}
@@ -254,6 +272,24 @@ func _UserUserService_GetMap_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserUserService_Avatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AvatarRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserUserServiceServer).Avatar(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserUserService_Avatar_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserUserServiceServer).Avatar(ctx, req.(*AvatarRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserUserService_ServiceDesc is the grpc.ServiceDesc for UserUserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -280,6 +316,10 @@ var UserUserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMap",
 			Handler:    _UserUserService_GetMap_Handler,
+		},
+		{
+			MethodName: "Avatar",
+			Handler:    _UserUserService_Avatar_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

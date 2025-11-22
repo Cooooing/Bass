@@ -538,6 +538,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
+    /v1/oss/uploadToken:
+        post:
+            tags:
+                - UserOssService
+            description: 获取上传文件凭证
+            operationId: UserOssService_UploadToken
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.UploadTokenRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.UploadTokenReply'
     /v1/system/health:
         get:
             tags:
@@ -608,6 +627,26 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateTagReply'
+    /v1/user/avatar/{name}:
+        get:
+            tags:
+                - UserUserService
+            description: 获取用户默认头像
+            operationId: UserUserService_Avatar
+            parameters:
+                - name: name
+                  in: path
+                  description: 用户名称
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.AvatarReply'
     /v1/user/getCurrentUser:
         post:
             tags:
@@ -1493,6 +1532,16 @@ components:
                 active:
                     type: boolean
                     description: 是否关注
+        common.api.user.v1.AvatarReply:
+            type: object
+            properties:
+                data:
+                    type: string
+                    description: 图片数据
+                    format: bytes
+                contentType:
+                    type: string
+                    description: 图片类型
         common.api.user.v1.ExistEmailReply:
             type: object
             properties:
@@ -1655,6 +1704,9 @@ components:
         common.api.user.v1.UpdateSettingRequest:
             type: object
             properties:
+                avatarUrl:
+                    type: string
+                    description: 头像URL
                 language:
                     type: string
                     description: 用户语言
@@ -1673,6 +1725,14 @@ components:
                 enableEmailSubscribe:
                     type: boolean
                     description: 启用邮件订阅
+        common.api.user.v1.UploadTokenReply:
+            type: object
+            properties:
+                token:
+                    type: string
+        common.api.user.v1.UploadTokenRequest:
+            type: object
+            properties: { }
         common.api.user.v1.User:
             type: object
             properties:
@@ -1810,5 +1870,7 @@ tags:
       description: System 服务
     - name: UserAuthenticationService
       description: Authentication 服务
+    - name: UserOssService
+      description: Oss 服务
     - name: UserUserService
       description: User 服务

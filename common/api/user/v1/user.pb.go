@@ -397,6 +397,8 @@ func (x *User) GetUpdatedAt() *timestamppb.Timestamp {
 
 type UpdateSettingRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// 头像URL
+	AvatarUrl *string `protobuf:"bytes,10,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"`
 	// 用户语言
 	Language *string `protobuf:"bytes,1,opt,name=language,proto3,oneof" json:"language,omitempty"`
 	// 时区
@@ -441,6 +443,13 @@ func (x *UpdateSettingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UpdateSettingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateSettingRequest) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *UpdateSettingRequest) GetAvatarUrl() string {
+	if x != nil && x.AvatarUrl != nil {
+		return *x.AvatarUrl
+	}
+	return ""
 }
 
 func (x *UpdateSettingRequest) GetLanguage() string {
@@ -881,6 +890,105 @@ func (x *GetMapReply) GetUsers() map[int64]*User {
 	return nil
 }
 
+type AvatarRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户名称
+	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AvatarRequest) Reset() {
+	*x = AvatarRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AvatarRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AvatarRequest) ProtoMessage() {}
+
+func (x *AvatarRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AvatarRequest.ProtoReflect.Descriptor instead.
+func (*AvatarRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *AvatarRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type AvatarReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 图片数据
+	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// 图片类型
+	ContentType   string `protobuf:"bytes,2,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AvatarReply) Reset() {
+	*x = AvatarReply{}
+	mi := &file_user_v1_user_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AvatarReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AvatarReply) ProtoMessage() {}
+
+func (x *AvatarReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AvatarReply.ProtoReflect.Descriptor instead.
+func (*AvatarReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AvatarReply) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *AvatarReply) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -958,14 +1066,18 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\t_provinceB\a\n" +
 	"\x05_cityB\x12\n" +
 	"\x10_public_locationB\x0f\n" +
-	"\r_twofa_secret\"\xed\x02\n" +
-	"\x14UpdateSettingRequest\x12\x1f\n" +
-	"\blanguage\x18\x01 \x01(\tH\x00R\blanguage\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18\x02 \x01(\tH\x01R\btimezone\x88\x01\x01\x12\x19\n" +
-	"\x05theme\x18\x03 \x01(\tH\x02R\x05theme\x88\x01\x01\x12&\n" +
-	"\fmobile_theme\x18\x04 \x01(\tH\x03R\vmobileTheme\x88\x01\x01\x12/\n" +
-	"\x11enable_web_notify\x18\x05 \x01(\bH\x04R\x0fenableWebNotify\x88\x01\x01\x129\n" +
-	"\x16enable_email_subscribe\x18\x06 \x01(\bH\x05R\x14enableEmailSubscribe\x88\x01\x01B\v\n" +
+	"\r_twofa_secret\"\xa0\x03\n" +
+	"\x14UpdateSettingRequest\x12\"\n" +
+	"\n" +
+	"avatar_url\x18\n" +
+	" \x01(\tH\x00R\tavatarUrl\x88\x01\x01\x12\x1f\n" +
+	"\blanguage\x18\x01 \x01(\tH\x01R\blanguage\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x02 \x01(\tH\x02R\btimezone\x88\x01\x01\x12\x19\n" +
+	"\x05theme\x18\x03 \x01(\tH\x03R\x05theme\x88\x01\x01\x12&\n" +
+	"\fmobile_theme\x18\x04 \x01(\tH\x04R\vmobileTheme\x88\x01\x01\x12/\n" +
+	"\x11enable_web_notify\x18\x05 \x01(\bH\x05R\x0fenableWebNotify\x88\x01\x01\x129\n" +
+	"\x16enable_email_subscribe\x18\x06 \x01(\bH\x06R\x14enableEmailSubscribe\x88\x01\x01B\r\n" +
+	"\v_avatar_urlB\v\n" +
 	"\t_languageB\v\n" +
 	"\t_timezoneB\b\n" +
 	"\x06_themeB\x0f\n" +
@@ -992,13 +1104,19 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
 	"UsersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\x03R\x03key\x12.\n" +
-	"\x05value\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x05value:\x028\x012\xe5\x04\n" +
+	"\x05value\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x05value:\x028\x01\"#\n" +
+	"\rAvatarRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"D\n" +
+	"\vAvatarReply\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12!\n" +
+	"\fcontent_type\x18\x02 \x01(\tR\vcontentType2\xd3\x05\n" +
 	"\x0fUserUserService\x12\x84\x01\n" +
 	"\rUpdateSetting\x12(.common.api.user.v1.UpdateSettingRequest\x1a&.common.api.user.v1.UpdateSettingReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/user/updateSetting\x12\x88\x01\n" +
 	"\x0eGetCurrentUser\x12).common.api.user.v1.GetCurrentUserRequest\x1a'.common.api.user.v1.GetCurrentUserReply\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/user/getCurrentUser\x12h\n" +
 	"\x06GetOne\x12!.common.api.user.v1.GetOneRequest\x1a\x1f.common.api.user.v1.GetOneReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getOne\x12l\n" +
 	"\aGetList\x12\".common.api.user.v1.GetListRequest\x1a .common.api.user.v1.GetListReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/user/getList\x12h\n" +
-	"\x06GetMap\x12!.common.api.user.v1.GetMapRequest\x1a\x1f.common.api.user.v1.GetMapReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getMapB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x06GetMap\x12!.common.api.user.v1.GetMapRequest\x1a\x1f.common.api.user.v1.GetMapReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getMap\x12l\n" +
+	"\x06Avatar\x12!.common.api.user.v1.AvatarRequest\x1a\x1f.common.api.user.v1.AvatarReply\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/user/avatar/{name}B\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once
@@ -1012,7 +1130,7 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_user_v1_user_proto_goTypes = []any{
 	(*User)(nil),                  // 0: common.api.user.v1.User
 	(*UpdateSettingRequest)(nil),  // 1: common.api.user.v1.UpdateSettingRequest
@@ -1025,32 +1143,36 @@ var file_user_v1_user_proto_goTypes = []any{
 	(*GetListReply)(nil),          // 8: common.api.user.v1.GetListReply
 	(*GetMapRequest)(nil),         // 9: common.api.user.v1.GetMapRequest
 	(*GetMapReply)(nil),           // 10: common.api.user.v1.GetMapReply
-	nil,                           // 11: common.api.user.v1.GetMapReply.UsersEntry
-	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
+	(*AvatarRequest)(nil),         // 11: common.api.user.v1.AvatarRequest
+	(*AvatarReply)(nil),           // 12: common.api.user.v1.AvatarReply
+	nil,                           // 13: common.api.user.v1.GetMapReply.UsersEntry
+	(*timestamppb.Timestamp)(nil), // 14: google.protobuf.Timestamp
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	12, // 0: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
-	12, // 1: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
-	12, // 2: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	12, // 3: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 0: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
+	14, // 1: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
+	14, // 2: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	14, // 3: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 4: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
 	0,  // 5: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
 	0,  // 6: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
 	0,  // 7: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
-	11, // 8: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
+	13, // 8: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
 	0,  // 9: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
 	1,  // 10: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
 	3,  // 11: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest
 	5,  // 12: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
 	7,  // 13: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
 	9,  // 14: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
-	2,  // 15: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
-	4,  // 16: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
-	6,  // 17: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
-	8,  // 18: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
-	10, // 19: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
-	15, // [15:20] is the sub-list for method output_type
-	10, // [10:15] is the sub-list for method input_type
+	11, // 15: common.api.user.v1.UserUserService.Avatar:input_type -> common.api.user.v1.AvatarRequest
+	2,  // 16: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
+	4,  // 17: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
+	6,  // 18: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
+	8,  // 19: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
+	10, // 20: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
+	12, // 21: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.user.v1.AvatarReply
+	16, // [16:22] is the sub-list for method output_type
+	10, // [10:16] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -1069,7 +1191,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -5,6 +5,7 @@ go 1.25
 require (
 	common v0.0.0-00010101000000-000000000000
 	entgo.io/ent v0.14.5
+	github.com/MuhammadSaim/goavatar v1.1.1
 	github.com/go-kratos/kratos/contrib/config/etcd/v2 v2.0.0-20250912104010-25b6c0fb9f38
 	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20250912104010-25b6c0fb9f38
 	github.com/go-kratos/kratos/v2 v2.9.1
@@ -13,6 +14,7 @@ require (
 	github.com/jinzhu/copier v0.4.0
 	github.com/lib/pq v1.10.9
 	github.com/prometheus/client_golang v1.23.2
+	github.com/qiniu/go-sdk/v7 v7.22.0
 	github.com/sony/sonyflake/v2 v2.2.0
 	go.etcd.io/etcd/client/v3 v3.6.5
 	go.opentelemetry.io/otel v1.38.0
@@ -28,6 +30,7 @@ require (
 	buf.build/go/protovalidate v0.14.0 // indirect
 	cel.dev/expr v0.24.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect

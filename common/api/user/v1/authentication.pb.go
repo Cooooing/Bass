@@ -100,7 +100,7 @@ func (x *RegisterEmailRequest) GetNickname() string {
 type RegisterEmailReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 验证码令牌
-	CodeToken string `protobuf:"bytes,1,opt,name=codeToken,proto3" json:"codeToken,omitempty"`
+	CodeToken string `protobuf:"bytes,1,opt,name=code_token,json=codeToken,proto3" json:"code_token,omitempty"`
 	// 验证码（仅供调试使用）
 	Code          string `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -156,7 +156,7 @@ type RegisterEmailVerifyRequest struct {
 	// 验证码
 	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
 	// 验证码令牌
-	CodeToken     string `protobuf:"bytes,2,opt,name=codeToken,proto3" json:"codeToken,omitempty"`
+	CodeToken     string `protobuf:"bytes,2,opt,name=code_token,json=codeToken,proto3" json:"code_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -700,13 +700,15 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1a\n" +
-	"\bnickname\x18\x04 \x01(\tR\bnickname\"F\n" +
-	"\x12RegisterEmailReply\x12\x1c\n" +
-	"\tcodeToken\x18\x01 \x01(\tR\tcodeToken\x12\x12\n" +
-	"\x04code\x18\x02 \x01(\tR\x04code\"i\n" +
+	"\bnickname\x18\x04 \x01(\tR\bnickname\"G\n" +
+	"\x12RegisterEmailReply\x12\x1d\n" +
+	"\n" +
+	"code_token\x18\x01 \x01(\tR\tcodeToken\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\"j\n" +
 	"\x1aRegisterEmailVerifyRequest\x12-\n" +
-	"\x04code\x18\x01 \x01(\tB\x19\xfaB\x16r\x14\x10\x06\x18\x062\x0e^[A-Za-z0-9]+$R\x04code\x12\x1c\n" +
-	"\tcodeToken\x18\x02 \x01(\tR\tcodeToken\"\x1a\n" +
+	"\x04code\x18\x01 \x01(\tB\x19\xfaB\x16r\x14\x10\x06\x18\x062\x0e^[A-Za-z0-9]+$R\x04code\x12\x1d\n" +
+	"\n" +
+	"code_token\x18\x02 \x01(\tR\tcodeToken\"\x1a\n" +
 	"\x18RegisterEmailVerifyReply\"7\n" +
 	"\x11ExistEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\"6\n" +

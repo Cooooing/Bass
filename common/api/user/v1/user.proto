@@ -159,9 +159,18 @@ service UserUserService {
     };
   }
 
+  // 获取用户默认头像
+  rpc Avatar(AvatarRequest) returns (AvatarReply) {
+    option (google.api.http) = {
+      get: "/v1/user/avatar/{name}"
+    };
+  }
+
 }
 
 message UpdateSettingRequest{
+  // 头像URL
+  optional string avatar_url = 10;
   // 用户语言
   optional string language = 1;
   // 时区
@@ -211,4 +220,15 @@ message GetMapRequest {
 message GetMapReply {
   // 用户ID -> 用户信息
   map<int64, User> users = 1;
+}
+
+message AvatarRequest{
+  // 用户名称
+  string name = 1;
+}
+message AvatarReply{
+  // 图片数据
+  bytes data = 1;
+  // 图片类型
+  string content_type = 2;
 }

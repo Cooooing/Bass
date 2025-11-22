@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationUserUserServiceAvatar = "/common.api.user.v1.UserUserService/Avatar"
 const OperationUserUserServiceGetCurrentUser = "/common.api.user.v1.UserUserService/GetCurrentUser"
 const OperationUserUserServiceGetList = "/common.api.user.v1.UserUserService/GetList"
 const OperationUserUserServiceGetMap = "/common.api.user.v1.UserUserService/GetMap"
@@ -26,6 +27,8 @@ const OperationUserUserServiceGetOne = "/common.api.user.v1.UserUserService/GetO
 const OperationUserUserServiceUpdateSetting = "/common.api.user.v1.UserUserService/UpdateSetting"
 
 type UserUserServiceHTTPServer interface {
+	// Avatar 获取用户默认头像
+	Avatar(context.Context, *AvatarRequest) (*AvatarReply, error)
 	// GetCurrentUser 获取当前用户信息
 	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserReply, error)
 	// GetList 查询用户列表（返回数组）
@@ -45,6 +48,7 @@ func RegisterUserUserServiceHTTPServer(s *http.Server, srv UserUserServiceHTTPSe
 	r.POST("/v1/user/getOne", _UserUserService_GetOne0_HTTP_Handler(srv))
 	r.POST("/v1/user/getList", _UserUserService_GetList0_HTTP_Handler(srv))
 	r.POST("/v1/user/getMap", _UserUserService_GetMap0_HTTP_Handler(srv))
+	r.GET("/v1/user/avatar/{name}", _UserUserService_Avatar0_HTTP_Handler(srv))
 }
 
 func _UserUserService_UpdateSetting0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
@@ -157,7 +161,31 @@ func _UserUserService_GetMap0_HTTP_Handler(srv UserUserServiceHTTPServer) func(c
 	}
 }
 
+func _UserUserService_Avatar0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AvatarRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserUserServiceAvatar)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Avatar(ctx, req.(*AvatarRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AvatarReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserUserServiceHTTPClient interface {
+	// Avatar 获取用户默认头像
+	Avatar(ctx context.Context, req *AvatarRequest, opts ...http.CallOption) (rsp *AvatarReply, err error)
 	// GetCurrentUser 获取当前用户信息
 	GetCurrentUser(ctx context.Context, req *GetCurrentUserRequest, opts ...http.CallOption) (rsp *GetCurrentUserReply, err error)
 	// GetList 查询用户列表（返回数组）
@@ -176,6 +204,20 @@ type UserUserServiceHTTPClientImpl struct {
 
 func NewUserUserServiceHTTPClient(client *http.Client) UserUserServiceHTTPClient {
 	return &UserUserServiceHTTPClientImpl{client}
+}
+
+// Avatar 获取用户默认头像
+func (c *UserUserServiceHTTPClientImpl) Avatar(ctx context.Context, in *AvatarRequest, opts ...http.CallOption) (*AvatarReply, error) {
+	var out AvatarReply
+	pattern := "/v1/user/avatar/{name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserUserServiceAvatar))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // GetCurrentUser 获取当前用户信息

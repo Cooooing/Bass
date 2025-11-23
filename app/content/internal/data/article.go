@@ -39,15 +39,20 @@ func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client, postscriptRepo repo.
 	}
 }
 
-func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *model.Article) (*model.Article, error) {
+func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *model.Article, tagIds []int64) (*model.Article, error) {
 	save, err := client.Article.Create().
 		SetTitle(article.Title).
 		SetContent(article.Content).
 		SetNillableRewardContent(article.RewardContent).
-		SetRewardPoints(article.RewardPoints).
+		SetNillableRewardPoints(article.RewardPoints).
 		SetStatus(article.Status).
 		SetType(article.Type).
-		SetBountyPoints(article.BountyPoints).
+		SetNillableBountyPoints(article.BountyPoints).
+		SetNillableStatement(article.Statement).
+		SetCommentable(article.Commentable).
+		SetAnonymous(article.Anonymous).
+		SetListable(article.Listable).
+		AddTagIDs(tagIds...).
 		Save(ctx)
 	return (*model.Article)(save), err
 }
@@ -151,6 +156,7 @@ func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Art
 	}
 	return articles, nil
 }
+
 func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *cv1.PageReply, error) {
 	var (
 		articles []*model.Article
@@ -203,6 +209,9 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 				article.ContentContains(*req.Keyword),
 			),
 		)
+	}
+	if req.Listable != nil {
+		query = query.Where(article.ListableEQ(*req.Listable))
 	}
 	if req.Order != nil {
 		switch *req.Order {

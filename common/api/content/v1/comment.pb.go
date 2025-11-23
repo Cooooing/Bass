@@ -34,9 +34,9 @@ type Comment struct {
 	// 更新时间
 	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 创建人
-	CreatedBy int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	CreatedBy *int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`
 	// 更新人
-	UpdatedBy int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
+	UpdatedBy *int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`
 	// 评论ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// 文章ID
@@ -112,15 +112,15 @@ func (x *Comment) GetUpdatedAt() *timestamppb.Timestamp {
 }
 
 func (x *Comment) GetCreatedBy() int64 {
-	if x != nil {
-		return x.CreatedBy
+	if x != nil && x.CreatedBy != nil {
+		return *x.CreatedBy
 	}
 	return 0
 }
 
 func (x *Comment) GetUpdatedBy() int64 {
-	if x != nil {
-		return x.UpdatedBy
+	if x != nil && x.UpdatedBy != nil {
+		return *x.UpdatedBy
 	}
 	return 0
 }
@@ -724,16 +724,16 @@ var File_content_v1_comment_proto protoreflect.FileDescriptor
 
 const file_content_v1_comment_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xf8\x04\n" +
+	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xa0\x05\n" +
 	"\aComment\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
-	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x1e\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12#\n" +
 	"\n" +
-	"created_by\x18\xea\a \x01(\x03R\tcreatedBy\x12\x1e\n" +
+	"created_by\x18\xea\a \x01(\x03H\x00R\tcreatedBy\x88\x01\x01\x12#\n" +
 	"\n" +
-	"updated_by\x18\xeb\a \x01(\x03R\tupdatedBy\x12\x0e\n" +
+	"updated_by\x18\xeb\a \x01(\x03H\x01R\tupdatedBy\x88\x01\x01\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
@@ -751,7 +751,9 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"\bcomments\x18\x0e \x03(\v2\x1e.common.api.content.v1.CommentR\bcomments\x12,\n" +
 	"\x04user\x18\x0f \x01(\v2\x18.common.api.user.v1.UserR\x04user\x127\n" +
 	"\n" +
-	"reply_user\x18\x10 \x01(\v2\x18.common.api.user.v1.UserR\treplyUser\"g\n" +
+	"reply_user\x18\x10 \x01(\v2\x18.common.api.user.v1.UserR\treplyUserB\r\n" +
+	"\v_created_byB\r\n" +
+	"\v_updated_by\"g\n" +
 	"\x11AddCommentRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
@@ -855,6 +857,7 @@ func file_content_v1_comment_proto_init() {
 	if File_content_v1_comment_proto != nil {
 		return
 	}
+	file_content_v1_comment_proto_msgTypes[0].OneofWrappers = []any{}
 	file_content_v1_comment_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

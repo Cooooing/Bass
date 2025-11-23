@@ -62,9 +62,10 @@ message Comment {
   // 更新时间
   google.protobuf.Timestamp updated_at = 1001;
   // 创建人
-  int64 created_by = 1002;
+  optional int64 created_by = 1002;
   // 更新人
-  int64 updated_by = 1003;
+  optional int64 updated_by = 1003;
+
   // 评论ID
   int64 id = 1;
   // 文章ID

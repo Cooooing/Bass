@@ -28,10 +28,14 @@ const (
 	FieldStatus = "status"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
+	// FieldStatement holds the string denoting the statement field in the database.
+	FieldStatement = "statement"
 	// FieldCommentable holds the string denoting the commentable field in the database.
 	FieldCommentable = "commentable"
 	// FieldAnonymous holds the string denoting the anonymous field in the database.
 	FieldAnonymous = "anonymous"
+	// FieldListable holds the string denoting the listable field in the database.
+	FieldListable = "listable"
 	// FieldThankCount holds the string denoting the thank_count field in the database.
 	FieldThankCount = "thank_count"
 	// FieldLikeCount holds the string denoting the like_count field in the database.
@@ -126,8 +130,10 @@ var Columns = []string{
 	FieldRewardPoints,
 	FieldStatus,
 	FieldType,
+	FieldStatement,
 	FieldCommentable,
 	FieldAnonymous,
+	FieldListable,
 	FieldThankCount,
 	FieldLikeCount,
 	FieldCollectCount,
@@ -177,6 +183,8 @@ var (
 	DefaultCommentable bool
 	// DefaultAnonymous holds the default value on creation for the "anonymous" field.
 	DefaultAnonymous bool
+	// DefaultListable holds the default value on creation for the "listable" field.
+	DefaultListable bool
 	// DefaultThankCount holds the default value on creation for the "thank_count" field.
 	DefaultThankCount int32
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
@@ -244,6 +252,11 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
+// ByStatement orders the results by the statement field.
+func ByStatement(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatement, opts...).ToFunc()
+}
+
 // ByCommentable orders the results by the commentable field.
 func ByCommentable(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCommentable, opts...).ToFunc()
@@ -252,6 +265,11 @@ func ByCommentable(opts ...sql.OrderTermOption) OrderOption {
 // ByAnonymous orders the results by the anonymous field.
 func ByAnonymous(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAnonymous, opts...).ToFunc()
+}
+
+// ByListable orders the results by the listable field.
+func ByListable(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldListable, opts...).ToFunc()
 }
 
 // ByThankCount orders the results by the thank_count field.

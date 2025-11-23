@@ -65,8 +65,10 @@ type ArticleMutation struct {
 	addstatus                    *int32
 	_type                        *int32
 	add_type                     *int32
+	statement                    *string
 	commentable                  *bool
 	anonymous                    *bool
+	listable                     *bool
 	thank_count                  *int32
 	addthank_count               *int32
 	like_count                   *int32
@@ -396,7 +398,7 @@ func (m *ArticleMutation) RewardPoints() (r int32, exists bool) {
 // OldRewardPoints returns the old "reward_points" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldRewardPoints(ctx context.Context) (v int32, err error) {
+func (m *ArticleMutation) OldRewardPoints(ctx context.Context) (v *int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRewardPoints is only allowed on UpdateOne operations")
 	}
@@ -428,10 +430,24 @@ func (m *ArticleMutation) AddedRewardPoints() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearRewardPoints clears the value of the "reward_points" field.
+func (m *ArticleMutation) ClearRewardPoints() {
+	m.reward_points = nil
+	m.addreward_points = nil
+	m.clearedFields[article.FieldRewardPoints] = struct{}{}
+}
+
+// RewardPointsCleared returns if the "reward_points" field was cleared in this mutation.
+func (m *ArticleMutation) RewardPointsCleared() bool {
+	_, ok := m.clearedFields[article.FieldRewardPoints]
+	return ok
+}
+
 // ResetRewardPoints resets all changes to the "reward_points" field.
 func (m *ArticleMutation) ResetRewardPoints() {
 	m.reward_points = nil
 	m.addreward_points = nil
+	delete(m.clearedFields, article.FieldRewardPoints)
 }
 
 // SetStatus sets the "status" field.
@@ -546,6 +562,55 @@ func (m *ArticleMutation) ResetType() {
 	m.add_type = nil
 }
 
+// SetStatement sets the "statement" field.
+func (m *ArticleMutation) SetStatement(s string) {
+	m.statement = &s
+}
+
+// Statement returns the value of the "statement" field in the mutation.
+func (m *ArticleMutation) Statement() (r string, exists bool) {
+	v := m.statement
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatement returns the old "statement" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldStatement(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatement is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatement requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatement: %w", err)
+	}
+	return oldValue.Statement, nil
+}
+
+// ClearStatement clears the value of the "statement" field.
+func (m *ArticleMutation) ClearStatement() {
+	m.statement = nil
+	m.clearedFields[article.FieldStatement] = struct{}{}
+}
+
+// StatementCleared returns if the "statement" field was cleared in this mutation.
+func (m *ArticleMutation) StatementCleared() bool {
+	_, ok := m.clearedFields[article.FieldStatement]
+	return ok
+}
+
+// ResetStatement resets all changes to the "statement" field.
+func (m *ArticleMutation) ResetStatement() {
+	m.statement = nil
+	delete(m.clearedFields, article.FieldStatement)
+}
+
 // SetCommentable sets the "commentable" field.
 func (m *ArticleMutation) SetCommentable(b bool) {
 	m.commentable = &b
@@ -616,6 +681,42 @@ func (m *ArticleMutation) OldAnonymous(ctx context.Context) (v bool, err error) 
 // ResetAnonymous resets all changes to the "anonymous" field.
 func (m *ArticleMutation) ResetAnonymous() {
 	m.anonymous = nil
+}
+
+// SetListable sets the "listable" field.
+func (m *ArticleMutation) SetListable(b bool) {
+	m.listable = &b
+}
+
+// Listable returns the value of the "listable" field in the mutation.
+func (m *ArticleMutation) Listable() (r bool, exists bool) {
+	v := m.listable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldListable returns the old "listable" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldListable(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldListable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldListable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldListable: %w", err)
+	}
+	return oldValue.Listable, nil
+}
+
+// ResetListable resets all changes to the "listable" field.
+func (m *ArticleMutation) ResetListable() {
+	m.listable = nil
 }
 
 // SetThankCount sets the "thank_count" field.
@@ -916,7 +1017,7 @@ func (m *ArticleMutation) BountyPoints() (r int32, exists bool) {
 // OldBountyPoints returns the old "bounty_points" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldBountyPoints(ctx context.Context) (v int32, err error) {
+func (m *ArticleMutation) OldBountyPoints(ctx context.Context) (v *int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldBountyPoints is only allowed on UpdateOne operations")
 	}
@@ -948,10 +1049,24 @@ func (m *ArticleMutation) AddedBountyPoints() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearBountyPoints clears the value of the "bounty_points" field.
+func (m *ArticleMutation) ClearBountyPoints() {
+	m.bounty_points = nil
+	m.addbounty_points = nil
+	m.clearedFields[article.FieldBountyPoints] = struct{}{}
+}
+
+// BountyPointsCleared returns if the "bounty_points" field was cleared in this mutation.
+func (m *ArticleMutation) BountyPointsCleared() bool {
+	_, ok := m.clearedFields[article.FieldBountyPoints]
+	return ok
+}
+
 // ResetBountyPoints resets all changes to the "bounty_points" field.
 func (m *ArticleMutation) ResetBountyPoints() {
 	m.bounty_points = nil
 	m.addbounty_points = nil
+	delete(m.clearedFields, article.FieldBountyPoints)
 }
 
 // SetAcceptedAnswerID sets the "accepted_answer_id" field.
@@ -972,7 +1087,7 @@ func (m *ArticleMutation) AcceptedAnswerID() (r int64, exists bool) {
 // OldAcceptedAnswerID returns the old "accepted_answer_id" field's value of the Article entity.
 // If the Article object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArticleMutation) OldAcceptedAnswerID(ctx context.Context) (v int64, err error) {
+func (m *ArticleMutation) OldAcceptedAnswerID(ctx context.Context) (v *int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAcceptedAnswerID is only allowed on UpdateOne operations")
 	}
@@ -1788,7 +1903,7 @@ func (m *ArticleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticleMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 25)
 	if m.title != nil {
 		fields = append(fields, article.FieldTitle)
 	}
@@ -1810,11 +1925,17 @@ func (m *ArticleMutation) Fields() []string {
 	if m._type != nil {
 		fields = append(fields, article.FieldType)
 	}
+	if m.statement != nil {
+		fields = append(fields, article.FieldStatement)
+	}
 	if m.commentable != nil {
 		fields = append(fields, article.FieldCommentable)
 	}
 	if m.anonymous != nil {
 		fields = append(fields, article.FieldAnonymous)
+	}
+	if m.listable != nil {
+		fields = append(fields, article.FieldListable)
 	}
 	if m.thank_count != nil {
 		fields = append(fields, article.FieldThankCount)
@@ -1880,10 +2001,14 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case article.FieldType:
 		return m.GetType()
+	case article.FieldStatement:
+		return m.Statement()
 	case article.FieldCommentable:
 		return m.Commentable()
 	case article.FieldAnonymous:
 		return m.Anonymous()
+	case article.FieldListable:
+		return m.Listable()
 	case article.FieldThankCount:
 		return m.ThankCount()
 	case article.FieldLikeCount:
@@ -1935,10 +2060,14 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldStatus(ctx)
 	case article.FieldType:
 		return m.OldType(ctx)
+	case article.FieldStatement:
+		return m.OldStatement(ctx)
 	case article.FieldCommentable:
 		return m.OldCommentable(ctx)
 	case article.FieldAnonymous:
 		return m.OldAnonymous(ctx)
+	case article.FieldListable:
+		return m.OldListable(ctx)
 	case article.FieldThankCount:
 		return m.OldThankCount(ctx)
 	case article.FieldLikeCount:
@@ -2025,6 +2154,13 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetType(v)
 		return nil
+	case article.FieldStatement:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatement(v)
+		return nil
 	case article.FieldCommentable:
 		v, ok := value.(bool)
 		if !ok {
@@ -2038,6 +2174,13 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAnonymous(v)
+		return nil
+	case article.FieldListable:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetListable(v)
 		return nil
 	case article.FieldThankCount:
 		v, ok := value.(int32)
@@ -2353,6 +2496,15 @@ func (m *ArticleMutation) ClearedFields() []string {
 	if m.FieldCleared(article.FieldRewardContent) {
 		fields = append(fields, article.FieldRewardContent)
 	}
+	if m.FieldCleared(article.FieldRewardPoints) {
+		fields = append(fields, article.FieldRewardPoints)
+	}
+	if m.FieldCleared(article.FieldStatement) {
+		fields = append(fields, article.FieldStatement)
+	}
+	if m.FieldCleared(article.FieldBountyPoints) {
+		fields = append(fields, article.FieldBountyPoints)
+	}
 	if m.FieldCleared(article.FieldAcceptedAnswerID) {
 		fields = append(fields, article.FieldAcceptedAnswerID)
 	}
@@ -2384,6 +2536,15 @@ func (m *ArticleMutation) ClearField(name string) error {
 	switch name {
 	case article.FieldRewardContent:
 		m.ClearRewardContent()
+		return nil
+	case article.FieldRewardPoints:
+		m.ClearRewardPoints()
+		return nil
+	case article.FieldStatement:
+		m.ClearStatement()
+		return nil
+	case article.FieldBountyPoints:
+		m.ClearBountyPoints()
 		return nil
 	case article.FieldAcceptedAnswerID:
 		m.ClearAcceptedAnswerID()
@@ -2429,11 +2590,17 @@ func (m *ArticleMutation) ResetField(name string) error {
 	case article.FieldType:
 		m.ResetType()
 		return nil
+	case article.FieldStatement:
+		m.ResetStatement()
+		return nil
 	case article.FieldCommentable:
 		m.ResetCommentable()
 		return nil
 	case article.FieldAnonymous:
 		m.ResetAnonymous()
+		return nil
+	case article.FieldListable:
+		m.ResetListable()
 		return nil
 	case article.FieldThankCount:
 		m.ResetThankCount()

@@ -34,9 +34,9 @@ type ArticlePostscript struct {
 	// 更新时间
 	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 创建人
-	CreatedBy int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	CreatedBy *int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`
 	// 更新人
-	UpdatedBy int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
+	UpdatedBy *int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`
 	// 主键ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// 所属文章ID
@@ -92,15 +92,15 @@ func (x *ArticlePostscript) GetUpdatedAt() *timestamppb.Timestamp {
 }
 
 func (x *ArticlePostscript) GetCreatedBy() int64 {
-	if x != nil {
-		return x.CreatedBy
+	if x != nil && x.CreatedBy != nil {
+		return *x.CreatedBy
 	}
 	return 0
 }
 
 func (x *ArticlePostscript) GetUpdatedBy() int64 {
-	if x != nil {
-		return x.UpdatedBy
+	if x != nil && x.UpdatedBy != nil {
+		return *x.UpdatedBy
 	}
 	return 0
 }
@@ -133,9 +133,9 @@ type Article struct {
 	// 更新时间
 	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 创建人
-	CreatedBy int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	CreatedBy *int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`
 	// 更新人
-	UpdatedBy int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
+	UpdatedBy *int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`
 	// 唯一ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// 标题
@@ -145,17 +145,21 @@ type Article struct {
 	// 是否有附言
 	HasPostscript bool `protobuf:"varint,5,opt,name=has_postscript,json=hasPostscript,proto3" json:"has_postscript,omitempty"`
 	// 打赏区内容（可为空）
-	RewardContent string `protobuf:"bytes,6,opt,name=reward_content,json=rewardContent,proto3" json:"reward_content,omitempty"`
+	RewardContent *string `protobuf:"bytes,6,opt,name=reward_content,json=rewardContent,proto3,oneof" json:"reward_content,omitempty"`
 	// 打赏积分
-	RewardPoints int32 `protobuf:"varint,7,opt,name=reward_points,json=rewardPoints,proto3" json:"reward_points,omitempty"`
+	RewardPoints *int32 `protobuf:"varint,7,opt,name=reward_points,json=rewardPoints,proto3,oneof" json:"reward_points,omitempty"`
 	// 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
 	Status int32 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`
 	// 类型: 0-普通 1-问答 2-投票 3-抽奖
 	Type int32 `protobuf:"varint,9,opt,name=type,proto3" json:"type,omitempty"`
+	// 创作声明
+	Statement string `protobuf:"bytes,10,opt,name=statement,proto3" json:"statement,omitempty"`
 	// 是否允许评论
-	Commentable bool `protobuf:"varint,10,opt,name=commentable,proto3" json:"commentable,omitempty"`
+	Commentable bool `protobuf:"varint,11,opt,name=commentable,proto3" json:"commentable,omitempty"`
 	// 是否匿名
-	Anonymous bool `protobuf:"varint,11,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
+	Anonymous bool `protobuf:"varint,30,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
+	// 是否在列表展示
+	Listable bool `protobuf:"varint,31,opt,name=listable,proto3" json:"listable,omitempty"`
 	// 感谢数
 	ThankCount int32 `protobuf:"varint,12,opt,name=thank_count,json=thankCount,proto3" json:"thank_count,omitempty"`
 	// 点赞数
@@ -167,9 +171,9 @@ type Article struct {
 	// 回复数
 	ReplyCount int32 `protobuf:"varint,16,opt,name=reply_count,json=replyCount,proto3" json:"reply_count,omitempty"`
 	// 悬赏积分
-	BountyPoints int32 `protobuf:"varint,17,opt,name=bounty_points,json=bountyPoints,proto3" json:"bounty_points,omitempty"`
+	BountyPoints *int32 `protobuf:"varint,17,opt,name=bounty_points,json=bountyPoints,proto3,oneof" json:"bounty_points,omitempty"`
 	// 采纳评论ID（可为空）
-	AcceptedAnswerId int64 `protobuf:"varint,18,opt,name=accepted_answer_id,json=acceptedAnswerId,proto3" json:"accepted_answer_id,omitempty"`
+	AcceptedAnswerId *int64 `protobuf:"varint,18,opt,name=accepted_answer_id,json=acceptedAnswerId,proto3,oneof" json:"accepted_answer_id,omitempty"`
 	// 总投票数
 	VoteTotal int32 `protobuf:"varint,19,opt,name=vote_total,json=voteTotal,proto3" json:"vote_total,omitempty"`
 	// 抽奖参与人数
@@ -179,11 +183,13 @@ type Article struct {
 	// 作者信息
 	AuthorUser *v1.User `protobuf:"bytes,24,opt,name=author_user,json=authorUser,proto3" json:"author_user,omitempty"`
 	// 最后回复用户
-	ReplyUser *v1.User `protobuf:"bytes,25,opt,name=reply_user,json=replyUser,proto3" json:"reply_user,omitempty"`
+	LastReplyUser *v1.User `protobuf:"bytes,25,opt,name=last_reply_user,json=lastReplyUser,proto3" json:"last_reply_user,omitempty"`
 	// 最后回复时间
-	RepliedAt *timestamppb.Timestamp `protobuf:"bytes,26,opt,name=replied_at,json=repliedAt,proto3" json:"replied_at,omitempty"`
+	LastReplyAt *timestamppb.Timestamp `protobuf:"bytes,26,opt,name=last_reply_at,json=lastReplyAt,proto3" json:"last_reply_at,omitempty"`
 	// 附言
-	Postscripts   []*ArticlePostscript `protobuf:"bytes,27,rep,name=postscripts,proto3" json:"postscripts,omitempty"`
+	Postscripts []*ArticlePostscript `protobuf:"bytes,27,rep,name=postscripts,proto3" json:"postscripts,omitempty"`
+	// 标签
+	Tags          []*Tag `protobuf:"bytes,23,rep,name=tags,proto3" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -233,15 +239,15 @@ func (x *Article) GetUpdatedAt() *timestamppb.Timestamp {
 }
 
 func (x *Article) GetCreatedBy() int64 {
-	if x != nil {
-		return x.CreatedBy
+	if x != nil && x.CreatedBy != nil {
+		return *x.CreatedBy
 	}
 	return 0
 }
 
 func (x *Article) GetUpdatedBy() int64 {
-	if x != nil {
-		return x.UpdatedBy
+	if x != nil && x.UpdatedBy != nil {
+		return *x.UpdatedBy
 	}
 	return 0
 }
@@ -275,15 +281,15 @@ func (x *Article) GetHasPostscript() bool {
 }
 
 func (x *Article) GetRewardContent() string {
-	if x != nil {
-		return x.RewardContent
+	if x != nil && x.RewardContent != nil {
+		return *x.RewardContent
 	}
 	return ""
 }
 
 func (x *Article) GetRewardPoints() int32 {
-	if x != nil {
-		return x.RewardPoints
+	if x != nil && x.RewardPoints != nil {
+		return *x.RewardPoints
 	}
 	return 0
 }
@@ -302,6 +308,13 @@ func (x *Article) GetType() int32 {
 	return 0
 }
 
+func (x *Article) GetStatement() string {
+	if x != nil {
+		return x.Statement
+	}
+	return ""
+}
+
 func (x *Article) GetCommentable() bool {
 	if x != nil {
 		return x.Commentable
@@ -312,6 +325,13 @@ func (x *Article) GetCommentable() bool {
 func (x *Article) GetAnonymous() bool {
 	if x != nil {
 		return x.Anonymous
+	}
+	return false
+}
+
+func (x *Article) GetListable() bool {
+	if x != nil {
+		return x.Listable
 	}
 	return false
 }
@@ -352,15 +372,15 @@ func (x *Article) GetReplyCount() int32 {
 }
 
 func (x *Article) GetBountyPoints() int32 {
-	if x != nil {
-		return x.BountyPoints
+	if x != nil && x.BountyPoints != nil {
+		return *x.BountyPoints
 	}
 	return 0
 }
 
 func (x *Article) GetAcceptedAnswerId() int64 {
-	if x != nil {
-		return x.AcceptedAnswerId
+	if x != nil && x.AcceptedAnswerId != nil {
+		return *x.AcceptedAnswerId
 	}
 	return 0
 }
@@ -393,16 +413,16 @@ func (x *Article) GetAuthorUser() *v1.User {
 	return nil
 }
 
-func (x *Article) GetReplyUser() *v1.User {
+func (x *Article) GetLastReplyUser() *v1.User {
 	if x != nil {
-		return x.ReplyUser
+		return x.LastReplyUser
 	}
 	return nil
 }
 
-func (x *Article) GetRepliedAt() *timestamppb.Timestamp {
+func (x *Article) GetLastReplyAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.RepliedAt
+		return x.LastReplyAt
 	}
 	return nil
 }
@@ -414,6 +434,13 @@ func (x *Article) GetPostscripts() []*ArticlePostscript {
 	return nil
 }
 
+func (x *Article) GetTags() []*Tag {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
 type AddArticleRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 标题
@@ -421,15 +448,25 @@ type AddArticleRequest struct {
 	// 内容
 	Content string `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
 	// 打赏内容
-	RewardContent string `protobuf:"bytes,3,opt,name=reward_content,json=rewardContent,proto3" json:"reward_content,omitempty"`
+	RewardContent *string `protobuf:"bytes,3,opt,name=reward_content,json=rewardContent,proto3,oneof" json:"reward_content,omitempty"`
 	// 打赏积分
-	RewardPoints int32 `protobuf:"varint,4,opt,name=reward_points,json=rewardPoints,proto3" json:"reward_points,omitempty"`
+	RewardPoints *int32 `protobuf:"varint,4,opt,name=reward_points,json=rewardPoints,proto3,oneof" json:"reward_points,omitempty"`
 	// 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
 	Status int32 `protobuf:"varint,5,opt,name=status,proto3" json:"status,omitempty"`
 	// 类型 0-普通 1-问答 2-投票 3-抽奖
 	Type int32 `protobuf:"varint,6,opt,name=type,proto3" json:"type,omitempty"`
 	// 悬赏积分
-	BountyPoints  int32 `protobuf:"varint,7,opt,name=bounty_points,json=bountyPoints,proto3" json:"bounty_points,omitempty"`
+	BountyPoints *int32 `protobuf:"varint,7,opt,name=bounty_points,json=bountyPoints,proto3,oneof" json:"bounty_points,omitempty"`
+	// 创作声明
+	Statement *string `protobuf:"bytes,10,opt,name=statement,proto3,oneof" json:"statement,omitempty"`
+	// 是否允许评论
+	Commentable *bool `protobuf:"varint,11,opt,name=commentable,proto3,oneof" json:"commentable,omitempty"`
+	// 是否匿名
+	Anonymous *bool `protobuf:"varint,12,opt,name=anonymous,proto3,oneof" json:"anonymous,omitempty"`
+	// 是否在列表展示
+	Listable *bool `protobuf:"varint,13,opt,name=listable,proto3,oneof" json:"listable,omitempty"`
+	// 标签id
+	TagIds        []int64 `protobuf:"varint,100,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -479,15 +516,15 @@ func (x *AddArticleRequest) GetContent() string {
 }
 
 func (x *AddArticleRequest) GetRewardContent() string {
-	if x != nil {
-		return x.RewardContent
+	if x != nil && x.RewardContent != nil {
+		return *x.RewardContent
 	}
 	return ""
 }
 
 func (x *AddArticleRequest) GetRewardPoints() int32 {
-	if x != nil {
-		return x.RewardPoints
+	if x != nil && x.RewardPoints != nil {
+		return *x.RewardPoints
 	}
 	return 0
 }
@@ -507,10 +544,45 @@ func (x *AddArticleRequest) GetType() int32 {
 }
 
 func (x *AddArticleRequest) GetBountyPoints() int32 {
-	if x != nil {
-		return x.BountyPoints
+	if x != nil && x.BountyPoints != nil {
+		return *x.BountyPoints
 	}
 	return 0
+}
+
+func (x *AddArticleRequest) GetStatement() string {
+	if x != nil && x.Statement != nil {
+		return *x.Statement
+	}
+	return ""
+}
+
+func (x *AddArticleRequest) GetCommentable() bool {
+	if x != nil && x.Commentable != nil {
+		return *x.Commentable
+	}
+	return false
+}
+
+func (x *AddArticleRequest) GetAnonymous() bool {
+	if x != nil && x.Anonymous != nil {
+		return *x.Anonymous
+	}
+	return false
+}
+
+func (x *AddArticleRequest) GetListable() bool {
+	if x != nil && x.Listable != nil {
+		return *x.Listable
+	}
+	return false
+}
+
+func (x *AddArticleRequest) GetTagIds() []int64 {
+	if x != nil {
+		return x.TagIds
+	}
+	return nil
 }
 
 type AddArticleReply struct {
@@ -1029,9 +1101,7 @@ func (x *GetArticleOneRequest) GetArticleId() int64 {
 type GetArticleOneReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 文章
-	Article *Article `protobuf:"bytes,1,opt,name=article,proto3" json:"article,omitempty"`
-	// 作者
-	User          *v1.User `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	Article       *Article `protobuf:"bytes,1,opt,name=article,proto3" json:"article,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1069,13 +1139,6 @@ func (*GetArticleOneReply) Descriptor() ([]byte, []int) {
 func (x *GetArticleOneReply) GetArticle() *Article {
 	if x != nil {
 		return x.Article
-	}
-	return nil
-}
-
-func (x *GetArticleOneReply) GetUser() *v1.User {
-	if x != nil {
-		return x.User
 	}
 	return nil
 }
@@ -1885,40 +1948,45 @@ var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x94\x02\n" +
+	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\x1a\x12user/v1/user.proto\"\xbc\x02\n" +
 	"\x11ArticlePostscript\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
-	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x1e\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12#\n" +
 	"\n" +
-	"created_by\x18\xea\a \x01(\x03R\tcreatedBy\x12\x1e\n" +
+	"created_by\x18\xea\a \x01(\x03H\x00R\tcreatedBy\x88\x01\x01\x12#\n" +
 	"\n" +
-	"updated_by\x18\xeb\a \x01(\x03R\tupdatedBy\x12\x0e\n" +
+	"updated_by\x18\xeb\a \x01(\x03H\x01R\tupdatedBy\x88\x01\x01\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\"\xe2\b\n" +
+	"\acontent\x18\x03 \x01(\tR\acontentB\r\n" +
+	"\v_created_byB\r\n" +
+	"\v_updated_by\"\xe4\n" +
+	"\n" +
 	"\aArticle\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
-	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x1e\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12#\n" +
 	"\n" +
-	"created_by\x18\xea\a \x01(\x03R\tcreatedBy\x12\x1e\n" +
+	"created_by\x18\xea\a \x01(\x03H\x00R\tcreatedBy\x88\x01\x01\x12#\n" +
 	"\n" +
-	"updated_by\x18\xeb\a \x01(\x03R\tupdatedBy\x12\x0e\n" +
+	"updated_by\x18\xeb\a \x01(\x03H\x01R\tupdatedBy\x88\x01\x01\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
-	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12%\n" +
-	"\x0ereward_content\x18\x06 \x01(\tR\rrewardContent\x12#\n" +
-	"\rreward_points\x18\a \x01(\x05R\frewardPoints\x12\x16\n" +
+	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12*\n" +
+	"\x0ereward_content\x18\x06 \x01(\tH\x02R\rrewardContent\x88\x01\x01\x12(\n" +
+	"\rreward_points\x18\a \x01(\x05H\x03R\frewardPoints\x88\x01\x01\x12\x16\n" +
 	"\x06status\x18\b \x01(\x05R\x06status\x12\x12\n" +
-	"\x04type\x18\t \x01(\x05R\x04type\x12 \n" +
-	"\vcommentable\x18\n" +
-	" \x01(\bR\vcommentable\x12\x1c\n" +
-	"\tanonymous\x18\v \x01(\bR\tanonymous\x12\x1f\n" +
+	"\x04type\x18\t \x01(\x05R\x04type\x12\x1c\n" +
+	"\tstatement\x18\n" +
+	" \x01(\tR\tstatement\x12 \n" +
+	"\vcommentable\x18\v \x01(\bR\vcommentable\x12\x1c\n" +
+	"\tanonymous\x18\x1e \x01(\bR\tanonymous\x12\x1a\n" +
+	"\blistable\x18\x1f \x01(\bR\blistable\x12\x1f\n" +
 	"\vthank_count\x18\f \x01(\x05R\n" +
 	"thankCount\x12\x1d\n" +
 	"\n" +
@@ -1927,28 +1995,48 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\vwatch_count\x18\x0f \x01(\x05R\n" +
 	"watchCount\x12\x1f\n" +
 	"\vreply_count\x18\x10 \x01(\x05R\n" +
-	"replyCount\x12#\n" +
-	"\rbounty_points\x18\x11 \x01(\x05R\fbountyPoints\x12,\n" +
-	"\x12accepted_answer_id\x18\x12 \x01(\x03R\x10acceptedAnswerId\x12\x1d\n" +
+	"replyCount\x12(\n" +
+	"\rbounty_points\x18\x11 \x01(\x05H\x04R\fbountyPoints\x88\x01\x01\x121\n" +
+	"\x12accepted_answer_id\x18\x12 \x01(\x03H\x05R\x10acceptedAnswerId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"vote_total\x18\x13 \x01(\x05R\tvoteTotal\x12:\n" +
 	"\x19lottery_participant_count\x18\x14 \x01(\x05R\x17lotteryParticipantCount\x120\n" +
 	"\x14lottery_winner_count\x18\x15 \x01(\x05R\x12lotteryWinnerCount\x129\n" +
 	"\vauthor_user\x18\x18 \x01(\v2\x18.common.api.user.v1.UserR\n" +
-	"authorUser\x127\n" +
-	"\n" +
-	"reply_user\x18\x19 \x01(\v2\x18.common.api.user.v1.UserR\treplyUser\x129\n" +
-	"\n" +
-	"replied_at\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\trepliedAt\x12J\n" +
-	"\vpostscripts\x18\x1b \x03(\v2(.common.api.content.v1.ArticlePostscriptR\vpostscripts\"\x86\x02\n" +
+	"authorUser\x12@\n" +
+	"\x0flast_reply_user\x18\x19 \x01(\v2\x18.common.api.user.v1.UserR\rlastReplyUser\x12>\n" +
+	"\rlast_reply_at\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\vlastReplyAt\x12J\n" +
+	"\vpostscripts\x18\x1b \x03(\v2(.common.api.content.v1.ArticlePostscriptR\vpostscripts\x12.\n" +
+	"\x04tags\x18\x17 \x03(\v2\x1a.common.api.content.v1.TagR\x04tagsB\r\n" +
+	"\v_created_byB\r\n" +
+	"\v_updated_byB\x11\n" +
+	"\x0f_reward_contentB\x10\n" +
+	"\x0e_reward_pointsB\x10\n" +
+	"\x0e_bounty_pointsB\x15\n" +
+	"\x13_accepted_answer_id\"\xac\x04\n" +
 	"\x11AddArticleRequest\x12\x1f\n" +
 	"\x05title\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18dR\x05title\x12!\n" +
-	"\acontent\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\acontent\x12%\n" +
-	"\x0ereward_content\x18\x03 \x01(\tR\rrewardContent\x12,\n" +
-	"\rreward_points\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\frewardPoints\x12\x16\n" +
+	"\acontent\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\acontent\x12*\n" +
+	"\x0ereward_content\x18\x03 \x01(\tH\x00R\rrewardContent\x88\x01\x01\x121\n" +
+	"\rreward_points\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00H\x01R\frewardPoints\x88\x01\x01\x12\x16\n" +
 	"\x06status\x18\x05 \x01(\x05R\x06status\x12\x12\n" +
-	"\x04type\x18\x06 \x01(\x05R\x04type\x12,\n" +
-	"\rbounty_points\x18\a \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\fbountyPoints\"\x11\n" +
+	"\x04type\x18\x06 \x01(\x05R\x04type\x121\n" +
+	"\rbounty_points\x18\a \x01(\x05B\a\xfaB\x04\x1a\x02(\x00H\x02R\fbountyPoints\x88\x01\x01\x12!\n" +
+	"\tstatement\x18\n" +
+	" \x01(\tH\x03R\tstatement\x88\x01\x01\x12%\n" +
+	"\vcommentable\x18\v \x01(\bH\x04R\vcommentable\x88\x01\x01\x12!\n" +
+	"\tanonymous\x18\f \x01(\bH\x05R\tanonymous\x88\x01\x01\x12\x1f\n" +
+	"\blistable\x18\r \x01(\bH\x06R\blistable\x88\x01\x01\x12\x17\n" +
+	"\atag_ids\x18d \x03(\x03R\x06tagIdsB\x11\n" +
+	"\x0f_reward_contentB\x10\n" +
+	"\x0e_reward_pointsB\x10\n" +
+	"\x0e_bounty_pointsB\f\n" +
+	"\n" +
+	"_statementB\x0e\n" +
+	"\f_commentableB\f\n" +
+	"\n" +
+	"_anonymousB\v\n" +
+	"\t_listable\"\x11\n" +
 	"\x0fAddArticleReply\"6\n" +
 	"\x15PublishArticleRequest\x12\x1d\n" +
 	"\n" +
@@ -1988,10 +2076,9 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\barticles\x18\x01 \x03(\v2\x1e.common.api.content.v1.ArticleR\barticles\"5\n" +
 	"\x14GetArticleOneRequest\x12\x1d\n" +
 	"\n" +
-	"article_id\x18\x01 \x01(\x03R\tarticleId\"|\n" +
+	"article_id\x18\x01 \x01(\x03R\tarticleId\"N\n" +
 	"\x12GetArticleOneReply\x128\n" +
-	"\aarticle\x18\x01 \x01(\v2\x1e.common.api.content.v1.ArticleR\aarticle\x12,\n" +
-	"\x04user\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"_\n" +
+	"\aarticle\x18\x01 \x01(\v2\x1e.common.api.content.v1.ArticleR\aarticle\"_\n" +
 	"\x1bAddPostscriptArticleRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x01 \x01(\x03R\tarticleId\x12!\n" +
@@ -2102,8 +2189,9 @@ var file_content_v1_article_proto_goTypes = []any{
 	(*ArticleEventPublish)(nil),         // 30: common.api.content.v1.ArticleEventPublish
 	(*timestamppb.Timestamp)(nil),       // 31: google.protobuf.Timestamp
 	(*v1.User)(nil),                     // 32: common.api.user.v1.User
-	(*v11.PageRequest)(nil),             // 33: common.api.common.v1.PageRequest
-	(*v11.PageReply)(nil),               // 34: common.api.common.v1.PageReply
+	(*Tag)(nil),                         // 33: common.api.content.v1.Tag
+	(*v11.PageRequest)(nil),             // 34: common.api.common.v1.PageRequest
+	(*v11.PageReply)(nil),               // 35: common.api.common.v1.PageReply
 }
 var file_content_v1_article_proto_depIdxs = []int32{
 	31, // 0: common.api.content.v1.ArticlePostscript.created_at:type_name -> google.protobuf.Timestamp
@@ -2111,14 +2199,14 @@ var file_content_v1_article_proto_depIdxs = []int32{
 	31, // 2: common.api.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
 	31, // 3: common.api.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
 	32, // 4: common.api.content.v1.Article.author_user:type_name -> common.api.user.v1.User
-	32, // 5: common.api.content.v1.Article.reply_user:type_name -> common.api.user.v1.User
-	31, // 6: common.api.content.v1.Article.replied_at:type_name -> google.protobuf.Timestamp
+	32, // 5: common.api.content.v1.Article.last_reply_user:type_name -> common.api.user.v1.User
+	31, // 6: common.api.content.v1.Article.last_reply_at:type_name -> google.protobuf.Timestamp
 	0,  // 7: common.api.content.v1.Article.postscripts:type_name -> common.api.content.v1.ArticlePostscript
-	33, // 8: common.api.content.v1.PageArticleRequest.page:type_name -> common.api.common.v1.PageRequest
-	34, // 9: common.api.content.v1.PageArticleReply.page:type_name -> common.api.common.v1.PageReply
-	1,  // 10: common.api.content.v1.PageArticleReply.articles:type_name -> common.api.content.v1.Article
-	1,  // 11: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
-	32, // 12: common.api.content.v1.GetArticleOneReply.user:type_name -> common.api.user.v1.User
+	33, // 8: common.api.content.v1.Article.tags:type_name -> common.api.content.v1.Tag
+	34, // 9: common.api.content.v1.PageArticleRequest.page:type_name -> common.api.common.v1.PageRequest
+	35, // 10: common.api.content.v1.PageArticleReply.page:type_name -> common.api.common.v1.PageReply
+	1,  // 11: common.api.content.v1.PageArticleReply.articles:type_name -> common.api.content.v1.Article
+	1,  // 12: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
 	2,  // 13: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
 	4,  // 14: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
 	6,  // 15: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
@@ -2157,6 +2245,10 @@ func file_content_v1_article_proto_init() {
 	if File_content_v1_article_proto != nil {
 		return
 	}
+	file_content_v1_tag_proto_init()
+	file_content_v1_article_proto_msgTypes[0].OneofWrappers = []any{}
+	file_content_v1_article_proto_msgTypes[1].OneofWrappers = []any{}
+	file_content_v1_article_proto_msgTypes[2].OneofWrappers = []any{}
 	file_content_v1_article_proto_msgTypes[10].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

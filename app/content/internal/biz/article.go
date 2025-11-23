@@ -7,6 +7,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/util"
+	"common/pkg/util/base"
 	"common/pkg/util/collections/dict"
 	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
@@ -14,10 +15,9 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
+	"time"
 
-	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ArticleDomain struct {
@@ -48,13 +48,13 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 
 // --- 新增 ---
 
-func (d *ArticleDomain) Add(ctx context.Context, article *model.Article) (*model.Article, error) {
+func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tagIds []int64) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
 	)
 	err = ent.WithTx(ctx, d.db, func(client *gen.Client) error {
-		save, err = d.articleRepo.Save(ctx, d.db, article)
+		save, err = d.articleRepo.Save(ctx, d.db, article, tagIds)
 		if err != nil {
 			return err
 		}
@@ -138,120 +138,106 @@ func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
 // --- 查询 ---
 
 func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArticleOneReply, error) {
-	reply := &v1.GetArticleOneReply{}
-	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		query, err := d.articleRepo.GetById(ctx, tx, articleId)
-		if err != nil {
-			return err
-		}
-		a := &v1.Article{}
-		err = copier.Copy(a, query)
-		if err != nil {
-			return err
-		}
-		a.CreatedAt = timestamppb.New(*query.CreatedAt)
-		a.UpdatedAt = timestamppb.New(*query.UpdatedAt)
-		ap := make([]*v1.ArticlePostscript, 0)
-		for _, item := range (*gen.Article)(query).Edges.Postscripts {
-			ap = append(ap, &v1.ArticlePostscript{
-				Id:        item.ID,
-				ArticleId: item.ArticleID,
-				Content:   item.Content,
-				CreatedAt: timestamppb.New(*item.CreatedAt),
-				UpdatedAt: timestamppb.New(*item.UpdatedAt),
-			})
-		}
-		a.Postscripts = ap
+	var (
+		reply                *v1.GetArticleOneReply
+		err                  error
+		authorUser           *userv1.User
+		lastReplyComment     *model.Comment
+		lastReplyCommentUser *userv1.User
+		lastReplyCommentAt   *time.Time
+	)
+	query, err := d.articleRepo.GetById(ctx, d.db, articleId)
+	if err != nil {
+		return nil, err
+	}
 
-		lastComment, _ := d.commentRepo.GetArticleLastComment(ctx, tx, query.ID)
-		if lastComment != nil {
-			a.RepliedAt = timestamppb.New(*lastComment.CreatedAt)
-		}
+	lastReplyComment, err = d.commentRepo.GetArticleLastComment(ctx, d.db, query.ID)
+	if err != nil {
+		return nil, err
+	}
 
-		userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-		if err != nil {
-			return err
-		}
-		userIds := []int64{*query.CreatedBy}
-		if lastComment != nil {
-			userIds = append(userIds, *lastComment.CreatedBy)
-		}
-		userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
-			Ids: userIds,
-		})
-		if err != nil {
-			return err
-		}
+	userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+	if err != nil {
+		return nil, err
+	}
+	userIds := []int64{*query.CreatedBy}
+	if lastReplyComment != nil {
+		userIds = append(userIds, *lastReplyComment.CreatedBy)
+	}
+	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Ids: userIds})
+	if err != nil {
+		return nil, err
+	}
 
-		if lastComment != nil {
-			a.ReplyUser = userAuthorsMap.Users[*lastComment.CreatedBy]
-		}
+	if lastReplyComment != nil {
+		lastReplyCommentAt = lastReplyComment.CreatedAt
+		lastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
+	}
 
-		reply.User = userAuthorsMap.Users[*query.CreatedBy]
-		reply.Article = a
-		return nil
-	})
+	authorUser = base.If(query.Anonymous, nil, userAuthorsMap.Users[*query.CreatedBy])
+	reply = &v1.GetArticleOneReply{
+		Article: query.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt),
+	}
 	return reply, err
 }
 
 func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ArticleGetReq) (*v1.PageArticleReply, error) {
 	var (
-		list      []*model.Article
-		pageReply *cv1.PageReply
-		reply     *v1.PageArticleReply
-		err       error
+		list                 []*model.Article
+		pageReply            *cv1.PageReply
+		reply                *v1.PageArticleReply
+		err                  error
+		authorUser           *userv1.User
+		lastReplyComment     *model.Comment
+		lastReplyCommentUser *userv1.User
+		lastReplyCommentAt   *time.Time
+		ok                   bool
 	)
-	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		list, pageReply, err = d.articleRepo.GetPage(ctx, tx, page, req)
-		if err != nil {
-			return err
-		}
-		articleIds := set.New[int64](0)
-		userIds := set.New[int64](0)
-		for _, item := range list {
-			articleIds.Add(item.ID)
-			userIds.Add(*item.CreatedBy)
-		}
+	list, pageReply, err = d.articleRepo.GetPage(ctx, d.db, page, req)
+	if err != nil {
+		return nil, err
+	}
+	articleIds := set.New[int64](0)
+	userIds := set.New[int64](0)
+	for _, item := range list {
+		articleIds.Add(item.ID)
+		userIds.Add(*item.CreatedBy)
+	}
 
-		lastCommentMap, _ := d.commentRepo.GetArticleLastComments(ctx, tx, articleIds.ToSlice())
-		lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
-			userIds.Add(*e.Value.CreatedBy)
-			return true
-		})
-
-		userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-		if err != nil {
-			return err
-		}
-		userAuthors, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
-			Ids: userIds.ToSlice(),
-		})
-		if err != nil {
-			return err
-		}
-
-		articles := make([]*v1.Article, 0, len(list))
-		for _, item := range list {
-			item.Summary()
-			a := &v1.Article{}
-			err = copier.Copy(a, item)
-			if err != nil {
-				return err
-			}
-			a.CreatedAt = timestamppb.New(*item.CreatedAt)
-			a.UpdatedAt = timestamppb.New(*item.UpdatedAt)
-			if lastReplyComment, ok := lastCommentMap.Get(item.ID); ok {
-				a.RepliedAt = timestamppb.New(*lastReplyComment.CreatedAt)
-				a.ReplyUser = userAuthors.Users[*lastReplyComment.CreatedBy]
-			}
-			a.AuthorUser = userAuthors.Users[*item.CreatedBy]
-			articles = append(articles, a)
-		}
-		reply = &v1.PageArticleReply{
-			Page:     pageReply,
-			Articles: articles,
-		}
-		return nil
+	lastCommentMap, err := d.commentRepo.GetArticleLastComments(ctx, d.db, articleIds.ToSlice())
+	if err != nil {
+		return nil, err
+	}
+	lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
+		userIds.Add(*e.Value.CreatedBy)
+		return true
 	})
+
+	userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+	if err != nil {
+		return nil, err
+	}
+	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
+		Ids: userIds.ToSlice(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	articles := make([]*v1.Article, 0, len(list))
+	for _, item := range list {
+		item.Summary()
+		if lastReplyComment, ok = lastCommentMap.Get(item.ID); ok {
+			lastReplyCommentAt = lastReplyComment.CreatedAt
+			lastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
+		}
+		authorUser = base.If(item.Anonymous, nil, userAuthorsMap.Users[*item.CreatedBy])
+		a := item.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt)
+		articles = append(articles, a)
+	}
+	reply = &v1.PageArticleReply{
+		Page:     pageReply,
+		Articles: articles,
+	}
 	return reply, err
 }

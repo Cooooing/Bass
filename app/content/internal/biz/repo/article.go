@@ -8,7 +8,7 @@ import (
 )
 
 type ArticleRepo interface {
-	Save(ctx context.Context, tx *gen.Client, article *model.Article) (*model.Article, error)
+	Save(ctx context.Context, tx *gen.Client, article *model.Article, tagIds []int64) (*model.Article, error)
 	UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error
 	UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status cv1.ArticleStatus) error
 	UpdateHasPostscript(ctx context.Context, tx *gen.Client, articleId int64, hasPostscript bool) error
@@ -31,6 +31,8 @@ type ArticleGetReq struct {
 	Order    *cv1.ArticleOrder
 	Type     *cv1.ArticleType
 	Keyword  *string
+
+	Listable *bool
 }
 
 type ArticlePostscriptRepo interface {

@@ -114,10 +114,6 @@ func (m *Comment) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for CreatedBy
-
-	// no validation rules for UpdatedBy
-
 	// no validation rules for Id
 
 	// no validation rules for ArticleId
@@ -228,6 +224,14 @@ func (m *Comment) validate(all bool) error {
 				cause:  err,
 			}
 		}
+	}
+
+	if m.CreatedBy != nil {
+		// no validation rules for CreatedBy
+	}
+
+	if m.UpdatedBy != nil {
+		// no validation rules for UpdatedBy
 	}
 
 	if len(errors) > 0 {

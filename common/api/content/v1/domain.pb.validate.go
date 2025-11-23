@@ -35,22 +35,21 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on DomainReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on Domain with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *DomainReply) Validate() error {
+func (m *Domain) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DomainReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in DomainReplyMultiError, or
-// nil if none found.
-func (m *DomainReply) ValidateAll() error {
+// ValidateAll checks the field values on Domain with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in DomainMultiError, or nil if none found.
+func (m *Domain) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DomainReply) validate(all bool) error {
+func (m *Domain) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -61,7 +60,7 @@ func (m *DomainReply) validate(all bool) error {
 		switch v := interface{}(m.GetCreatedAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DomainReplyValidationError{
+				errors = append(errors, DomainValidationError{
 					field:  "CreatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -69,7 +68,7 @@ func (m *DomainReply) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, DomainReplyValidationError{
+				errors = append(errors, DomainValidationError{
 					field:  "CreatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -78,7 +77,7 @@ func (m *DomainReply) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DomainReplyValidationError{
+			return DomainValidationError{
 				field:  "CreatedAt",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -90,7 +89,7 @@ func (m *DomainReply) validate(all bool) error {
 		switch v := interface{}(m.GetUpdatedAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DomainReplyValidationError{
+				errors = append(errors, DomainValidationError{
 					field:  "UpdatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -98,7 +97,7 @@ func (m *DomainReply) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, DomainReplyValidationError{
+				errors = append(errors, DomainValidationError{
 					field:  "UpdatedAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -107,17 +106,13 @@ func (m *DomainReply) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DomainReplyValidationError{
+			return DomainValidationError{
 				field:  "UpdatedAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
-
-	// no validation rules for CreatedBy
-
-	// no validation rules for UpdatedBy
 
 	// no validation rules for Id
 
@@ -136,7 +131,7 @@ func (m *DomainReply) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, DomainReplyValidationError{
+					errors = append(errors, DomainValidationError{
 						field:  fmt.Sprintf("Tags[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -144,7 +139,7 @@ func (m *DomainReply) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, DomainReplyValidationError{
+					errors = append(errors, DomainValidationError{
 						field:  fmt.Sprintf("Tags[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -153,7 +148,7 @@ func (m *DomainReply) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return DomainReplyValidationError{
+				return DomainValidationError{
 					field:  fmt.Sprintf("Tags[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -161,6 +156,14 @@ func (m *DomainReply) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.CreatedBy != nil {
+		// no validation rules for CreatedBy
+	}
+
+	if m.UpdatedBy != nil {
+		// no validation rules for UpdatedBy
 	}
 
 	if m.Description != nil {
@@ -176,18 +179,18 @@ func (m *DomainReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return DomainReplyMultiError(errors)
+		return DomainMultiError(errors)
 	}
 
 	return nil
 }
 
-// DomainReplyMultiError is an error wrapping multiple validation errors
-// returned by DomainReply.ValidateAll() if the designated constraints aren't met.
-type DomainReplyMultiError []error
+// DomainMultiError is an error wrapping multiple validation errors returned by
+// Domain.ValidateAll() if the designated constraints aren't met.
+type DomainMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DomainReplyMultiError) Error() string {
+func (m DomainMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -196,11 +199,11 @@ func (m DomainReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DomainReplyMultiError) AllErrors() []error { return m }
+func (m DomainMultiError) AllErrors() []error { return m }
 
-// DomainReplyValidationError is the validation error returned by
-// DomainReply.Validate if the designated constraints aren't met.
-type DomainReplyValidationError struct {
+// DomainValidationError is the validation error returned by Domain.Validate if
+// the designated constraints aren't met.
+type DomainValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -208,22 +211,22 @@ type DomainReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e DomainReplyValidationError) Field() string { return e.field }
+func (e DomainValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DomainReplyValidationError) Reason() string { return e.reason }
+func (e DomainValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DomainReplyValidationError) Cause() error { return e.cause }
+func (e DomainValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DomainReplyValidationError) Key() bool { return e.key }
+func (e DomainValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DomainReplyValidationError) ErrorName() string { return "DomainReplyValidationError" }
+func (e DomainValidationError) ErrorName() string { return "DomainValidationError" }
 
 // Error satisfies the builtin error interface
-func (e DomainReplyValidationError) Error() string {
+func (e DomainValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -235,14 +238,14 @@ func (e DomainReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDomainReply.%s: %s%s",
+		"invalid %sDomain.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DomainReplyValidationError{}
+var _ error = DomainValidationError{}
 
 var _ interface {
 	Field() string
@@ -250,7 +253,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DomainReplyValidationError{}
+} = DomainValidationError{}
 
 // Validate checks the field values on DomainSave with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

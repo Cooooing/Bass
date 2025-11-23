@@ -117,6 +117,12 @@ func (_u *ArticleUpdate) AddRewardPoints(v int32) *ArticleUpdate {
 	return _u
 }
 
+// ClearRewardPoints clears the value of the "reward_points" field.
+func (_u *ArticleUpdate) ClearRewardPoints() *ArticleUpdate {
+	_u.mutation.ClearRewardPoints()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *ArticleUpdate) SetStatus(v int32) *ArticleUpdate {
 	_u.mutation.ResetStatus()
@@ -159,6 +165,26 @@ func (_u *ArticleUpdate) AddType(v int32) *ArticleUpdate {
 	return _u
 }
 
+// SetStatement sets the "statement" field.
+func (_u *ArticleUpdate) SetStatement(v string) *ArticleUpdate {
+	_u.mutation.SetStatement(v)
+	return _u
+}
+
+// SetNillableStatement sets the "statement" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableStatement(v *string) *ArticleUpdate {
+	if v != nil {
+		_u.SetStatement(*v)
+	}
+	return _u
+}
+
+// ClearStatement clears the value of the "statement" field.
+func (_u *ArticleUpdate) ClearStatement() *ArticleUpdate {
+	_u.mutation.ClearStatement()
+	return _u
+}
+
 // SetCommentable sets the "commentable" field.
 func (_u *ArticleUpdate) SetCommentable(v bool) *ArticleUpdate {
 	_u.mutation.SetCommentable(v)
@@ -183,6 +209,20 @@ func (_u *ArticleUpdate) SetAnonymous(v bool) *ArticleUpdate {
 func (_u *ArticleUpdate) SetNillableAnonymous(v *bool) *ArticleUpdate {
 	if v != nil {
 		_u.SetAnonymous(*v)
+	}
+	return _u
+}
+
+// SetListable sets the "listable" field.
+func (_u *ArticleUpdate) SetListable(v bool) *ArticleUpdate {
+	_u.mutation.SetListable(v)
+	return _u
+}
+
+// SetNillableListable sets the "listable" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableListable(v *bool) *ArticleUpdate {
+	if v != nil {
+		_u.SetListable(*v)
 	}
 	return _u
 }
@@ -310,6 +350,12 @@ func (_u *ArticleUpdate) SetNillableBountyPoints(v *int32) *ArticleUpdate {
 // AddBountyPoints adds value to the "bounty_points" field.
 func (_u *ArticleUpdate) AddBountyPoints(v int32) *ArticleUpdate {
 	_u.mutation.AddBountyPoints(v)
+	return _u
+}
+
+// ClearBountyPoints clears the value of the "bounty_points" field.
+func (_u *ArticleUpdate) ClearBountyPoints() *ArticleUpdate {
+	_u.mutation.ClearBountyPoints()
 	return _u
 }
 
@@ -793,6 +839,9 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedRewardPoints(); ok {
 		_spec.AddField(article.FieldRewardPoints, field.TypeInt32, value)
 	}
+	if _u.mutation.RewardPointsCleared() {
+		_spec.ClearField(article.FieldRewardPoints, field.TypeInt32)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(article.FieldStatus, field.TypeInt32, value)
 	}
@@ -805,11 +854,20 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedType(); ok {
 		_spec.AddField(article.FieldType, field.TypeInt32, value)
 	}
+	if value, ok := _u.mutation.Statement(); ok {
+		_spec.SetField(article.FieldStatement, field.TypeString, value)
+	}
+	if _u.mutation.StatementCleared() {
+		_spec.ClearField(article.FieldStatement, field.TypeString)
+	}
 	if value, ok := _u.mutation.Commentable(); ok {
 		_spec.SetField(article.FieldCommentable, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.Anonymous(); ok {
 		_spec.SetField(article.FieldAnonymous, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Listable(); ok {
+		_spec.SetField(article.FieldListable, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.ThankCount(); ok {
 		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
@@ -846,6 +904,9 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedBountyPoints(); ok {
 		_spec.AddField(article.FieldBountyPoints, field.TypeInt32, value)
+	}
+	if _u.mutation.BountyPointsCleared() {
+		_spec.ClearField(article.FieldBountyPoints, field.TypeInt32)
 	}
 	if value, ok := _u.mutation.AcceptedAnswerID(); ok {
 		_spec.SetField(article.FieldAcceptedAnswerID, field.TypeInt64, value)
@@ -1277,6 +1338,12 @@ func (_u *ArticleUpdateOne) AddRewardPoints(v int32) *ArticleUpdateOne {
 	return _u
 }
 
+// ClearRewardPoints clears the value of the "reward_points" field.
+func (_u *ArticleUpdateOne) ClearRewardPoints() *ArticleUpdateOne {
+	_u.mutation.ClearRewardPoints()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *ArticleUpdateOne) SetStatus(v int32) *ArticleUpdateOne {
 	_u.mutation.ResetStatus()
@@ -1319,6 +1386,26 @@ func (_u *ArticleUpdateOne) AddType(v int32) *ArticleUpdateOne {
 	return _u
 }
 
+// SetStatement sets the "statement" field.
+func (_u *ArticleUpdateOne) SetStatement(v string) *ArticleUpdateOne {
+	_u.mutation.SetStatement(v)
+	return _u
+}
+
+// SetNillableStatement sets the "statement" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableStatement(v *string) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetStatement(*v)
+	}
+	return _u
+}
+
+// ClearStatement clears the value of the "statement" field.
+func (_u *ArticleUpdateOne) ClearStatement() *ArticleUpdateOne {
+	_u.mutation.ClearStatement()
+	return _u
+}
+
 // SetCommentable sets the "commentable" field.
 func (_u *ArticleUpdateOne) SetCommentable(v bool) *ArticleUpdateOne {
 	_u.mutation.SetCommentable(v)
@@ -1343,6 +1430,20 @@ func (_u *ArticleUpdateOne) SetAnonymous(v bool) *ArticleUpdateOne {
 func (_u *ArticleUpdateOne) SetNillableAnonymous(v *bool) *ArticleUpdateOne {
 	if v != nil {
 		_u.SetAnonymous(*v)
+	}
+	return _u
+}
+
+// SetListable sets the "listable" field.
+func (_u *ArticleUpdateOne) SetListable(v bool) *ArticleUpdateOne {
+	_u.mutation.SetListable(v)
+	return _u
+}
+
+// SetNillableListable sets the "listable" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableListable(v *bool) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetListable(*v)
 	}
 	return _u
 }
@@ -1470,6 +1571,12 @@ func (_u *ArticleUpdateOne) SetNillableBountyPoints(v *int32) *ArticleUpdateOne 
 // AddBountyPoints adds value to the "bounty_points" field.
 func (_u *ArticleUpdateOne) AddBountyPoints(v int32) *ArticleUpdateOne {
 	_u.mutation.AddBountyPoints(v)
+	return _u
+}
+
+// ClearBountyPoints clears the value of the "bounty_points" field.
+func (_u *ArticleUpdateOne) ClearBountyPoints() *ArticleUpdateOne {
+	_u.mutation.ClearBountyPoints()
 	return _u
 }
 
@@ -1983,6 +2090,9 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	if value, ok := _u.mutation.AddedRewardPoints(); ok {
 		_spec.AddField(article.FieldRewardPoints, field.TypeInt32, value)
 	}
+	if _u.mutation.RewardPointsCleared() {
+		_spec.ClearField(article.FieldRewardPoints, field.TypeInt32)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(article.FieldStatus, field.TypeInt32, value)
 	}
@@ -1995,11 +2105,20 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	if value, ok := _u.mutation.AddedType(); ok {
 		_spec.AddField(article.FieldType, field.TypeInt32, value)
 	}
+	if value, ok := _u.mutation.Statement(); ok {
+		_spec.SetField(article.FieldStatement, field.TypeString, value)
+	}
+	if _u.mutation.StatementCleared() {
+		_spec.ClearField(article.FieldStatement, field.TypeString)
+	}
 	if value, ok := _u.mutation.Commentable(); ok {
 		_spec.SetField(article.FieldCommentable, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.Anonymous(); ok {
 		_spec.SetField(article.FieldAnonymous, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Listable(); ok {
+		_spec.SetField(article.FieldListable, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.ThankCount(); ok {
 		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
@@ -2036,6 +2155,9 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	}
 	if value, ok := _u.mutation.AddedBountyPoints(); ok {
 		_spec.AddField(article.FieldBountyPoints, field.TypeInt32, value)
+	}
+	if _u.mutation.BountyPointsCleared() {
+		_spec.ClearField(article.FieldBountyPoints, field.TypeInt32)
 	}
 	if value, ok := _u.mutation.AcceptedAnswerID(); ok {
 		_spec.SetField(article.FieldAcceptedAnswerID, field.TypeInt64, value)

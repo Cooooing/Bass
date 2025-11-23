@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
+import "content/v1/tag.proto";
 import "user/v1/user.proto";
 
 option go_package = "common/api/content/v1;v1";
@@ -17,9 +18,10 @@ message ArticlePostscript {
   // 更新时间
   google.protobuf.Timestamp updated_at = 1001;
   // 创建人
-  int64 created_by = 1002;
+  optional int64 created_by = 1002;
   // 更新人
-  int64 updated_by = 1003;
+  optional int64 updated_by = 1003;
+
   // 主键ID
   int64 id = 1;
   // 所属文章ID
@@ -147,9 +149,9 @@ message Article {
   // 更新时间
   google.protobuf.Timestamp updated_at = 1001;
   // 创建人
-  int64 created_by = 1002;
+  optional int64 created_by = 1002;
   // 更新人
-  int64 updated_by = 1003;
+  optional int64 updated_by = 1003;
 
   // 唯一ID
   int64 id = 1;
@@ -161,18 +163,22 @@ message Article {
   // 是否有附言
   bool has_postscript = 5;
   // 打赏区内容（可为空）
-  string reward_content = 6;
+  optional string reward_content = 6;
   // 打赏积分
-  int32 reward_points = 7;
+  optional int32 reward_points = 7;
 
   // 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
   int32 status = 8;
   // 类型: 0-普通 1-问答 2-投票 3-抽奖
   int32 type = 9;
+  // 创作声明
+  string statement = 10;
   // 是否允许评论
-  bool commentable = 10;
+  bool commentable = 11;
   // 是否匿名
-  bool anonymous = 11;
+  bool anonymous = 30;
+  // 是否在列表展示
+  bool listable = 31;
 
   // 感谢数
   int32 thank_count = 12;
@@ -186,9 +192,9 @@ message Article {
   int32 reply_count = 16;
 
   // 悬赏积分
-  int32 bounty_points = 17;
+  optional int32 bounty_points = 17;
   // 采纳评论ID（可为空）
-  int64 accepted_answer_id = 18;
+  optional int64 accepted_answer_id = 18;
 
   // 总投票数
   int32 vote_total = 19;
@@ -200,12 +206,14 @@ message Article {
   // 作者信息
   user.v1.User author_user = 24;
   // 最后回复用户
-  user.v1.User reply_user = 25;
+  user.v1.User last_reply_user = 25;
   // 最后回复时间
-  google.protobuf.Timestamp replied_at = 26;
+  google.protobuf.Timestamp last_reply_at = 26;
 
   // 附言
   repeated ArticlePostscript postscripts = 27;
+  // 标签
+  repeated Tag tags = 23;
 }
 
 
@@ -215,15 +223,27 @@ message AddArticleRequest {
   // 内容
   string content = 2 [(validate.rules).string = {min_len: 1}];
   // 打赏内容
-  string reward_content = 3;
+  optional string reward_content = 3;
   // 打赏积分
-  int32 reward_points = 4 [(validate.rules).int32 = {gte: 0}];
+  optional int32 reward_points = 4 [(validate.rules).int32 = {gte: 0}];
   // 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
   int32 status = 5;
   // 类型 0-普通 1-问答 2-投票 3-抽奖
   int32 type = 6;
   // 悬赏积分
-  int32 bounty_points = 7 [(validate.rules).int32 = {gte: 0}];
+  optional int32 bounty_points = 7 [(validate.rules).int32 = {gte: 0}];
+
+  // 创作声明
+  optional string statement = 10;
+  // 是否允许评论
+  optional bool commentable = 11;
+  // 是否匿名
+  optional bool anonymous = 12;
+  // 是否在列表展示
+  optional bool listable = 13;
+
+  // 标签id
+  repeated int64 tag_ids = 100;
 }
 message AddArticleReply {}
 
@@ -283,8 +303,6 @@ message GetArticleOneRequest {
 message GetArticleOneReply {
   // 文章
   Article article = 1;
-  // 作者
-  user.v1.User user = 2;
 }
 
 message AddPostscriptArticleRequest {

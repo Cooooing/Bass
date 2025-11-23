@@ -104,6 +104,7 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 				w.Header().Add(k, v)
 			}
 		}
+		w.Header().Add("Access-Control-Allow-Origin", "*") // 允许跨域
 		w.WriteHeader(response.StatusCode)
 		_, err = io.Copy(w, response.Body)
 		if err != nil {

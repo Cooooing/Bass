@@ -90,6 +90,11 @@ func Type(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldType, v))
 }
 
+// Statement applies equality check predicate on the "statement" field. It's identical to StatementEQ.
+func Statement(v string) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldStatement, v))
+}
+
 // Commentable applies equality check predicate on the "commentable" field. It's identical to CommentableEQ.
 func Commentable(v bool) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldCommentable, v))
@@ -98,6 +103,11 @@ func Commentable(v bool) predicate.Article {
 // Anonymous applies equality check predicate on the "anonymous" field. It's identical to AnonymousEQ.
 func Anonymous(v bool) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldAnonymous, v))
+}
+
+// Listable applies equality check predicate on the "listable" field. It's identical to ListableEQ.
+func Listable(v bool) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldListable, v))
 }
 
 // ThankCount applies equality check predicate on the "thank_count" field. It's identical to ThankCountEQ.
@@ -425,6 +435,16 @@ func RewardPointsLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldRewardPoints, v))
 }
 
+// RewardPointsIsNil applies the IsNil predicate on the "reward_points" field.
+func RewardPointsIsNil() predicate.Article {
+	return predicate.Article(sql.FieldIsNull(FieldRewardPoints))
+}
+
+// RewardPointsNotNil applies the NotNil predicate on the "reward_points" field.
+func RewardPointsNotNil() predicate.Article {
+	return predicate.Article(sql.FieldNotNull(FieldRewardPoints))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldStatus, v))
@@ -505,6 +525,81 @@ func TypeLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldType, v))
 }
 
+// StatementEQ applies the EQ predicate on the "statement" field.
+func StatementEQ(v string) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldStatement, v))
+}
+
+// StatementNEQ applies the NEQ predicate on the "statement" field.
+func StatementNEQ(v string) predicate.Article {
+	return predicate.Article(sql.FieldNEQ(FieldStatement, v))
+}
+
+// StatementIn applies the In predicate on the "statement" field.
+func StatementIn(vs ...string) predicate.Article {
+	return predicate.Article(sql.FieldIn(FieldStatement, vs...))
+}
+
+// StatementNotIn applies the NotIn predicate on the "statement" field.
+func StatementNotIn(vs ...string) predicate.Article {
+	return predicate.Article(sql.FieldNotIn(FieldStatement, vs...))
+}
+
+// StatementGT applies the GT predicate on the "statement" field.
+func StatementGT(v string) predicate.Article {
+	return predicate.Article(sql.FieldGT(FieldStatement, v))
+}
+
+// StatementGTE applies the GTE predicate on the "statement" field.
+func StatementGTE(v string) predicate.Article {
+	return predicate.Article(sql.FieldGTE(FieldStatement, v))
+}
+
+// StatementLT applies the LT predicate on the "statement" field.
+func StatementLT(v string) predicate.Article {
+	return predicate.Article(sql.FieldLT(FieldStatement, v))
+}
+
+// StatementLTE applies the LTE predicate on the "statement" field.
+func StatementLTE(v string) predicate.Article {
+	return predicate.Article(sql.FieldLTE(FieldStatement, v))
+}
+
+// StatementContains applies the Contains predicate on the "statement" field.
+func StatementContains(v string) predicate.Article {
+	return predicate.Article(sql.FieldContains(FieldStatement, v))
+}
+
+// StatementHasPrefix applies the HasPrefix predicate on the "statement" field.
+func StatementHasPrefix(v string) predicate.Article {
+	return predicate.Article(sql.FieldHasPrefix(FieldStatement, v))
+}
+
+// StatementHasSuffix applies the HasSuffix predicate on the "statement" field.
+func StatementHasSuffix(v string) predicate.Article {
+	return predicate.Article(sql.FieldHasSuffix(FieldStatement, v))
+}
+
+// StatementIsNil applies the IsNil predicate on the "statement" field.
+func StatementIsNil() predicate.Article {
+	return predicate.Article(sql.FieldIsNull(FieldStatement))
+}
+
+// StatementNotNil applies the NotNil predicate on the "statement" field.
+func StatementNotNil() predicate.Article {
+	return predicate.Article(sql.FieldNotNull(FieldStatement))
+}
+
+// StatementEqualFold applies the EqualFold predicate on the "statement" field.
+func StatementEqualFold(v string) predicate.Article {
+	return predicate.Article(sql.FieldEqualFold(FieldStatement, v))
+}
+
+// StatementContainsFold applies the ContainsFold predicate on the "statement" field.
+func StatementContainsFold(v string) predicate.Article {
+	return predicate.Article(sql.FieldContainsFold(FieldStatement, v))
+}
+
 // CommentableEQ applies the EQ predicate on the "commentable" field.
 func CommentableEQ(v bool) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldCommentable, v))
@@ -523,6 +618,16 @@ func AnonymousEQ(v bool) predicate.Article {
 // AnonymousNEQ applies the NEQ predicate on the "anonymous" field.
 func AnonymousNEQ(v bool) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldAnonymous, v))
+}
+
+// ListableEQ applies the EQ predicate on the "listable" field.
+func ListableEQ(v bool) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldListable, v))
+}
+
+// ListableNEQ applies the NEQ predicate on the "listable" field.
+func ListableNEQ(v bool) predicate.Article {
+	return predicate.Article(sql.FieldNEQ(FieldListable, v))
 }
 
 // ThankCountEQ applies the EQ predicate on the "thank_count" field.
@@ -763,6 +868,16 @@ func BountyPointsLT(v int32) predicate.Article {
 // BountyPointsLTE applies the LTE predicate on the "bounty_points" field.
 func BountyPointsLTE(v int32) predicate.Article {
 	return predicate.Article(sql.FieldLTE(FieldBountyPoints, v))
+}
+
+// BountyPointsIsNil applies the IsNil predicate on the "bounty_points" field.
+func BountyPointsIsNil() predicate.Article {
+	return predicate.Article(sql.FieldIsNull(FieldBountyPoints))
+}
+
+// BountyPointsNotNil applies the NotNil predicate on the "bounty_points" field.
+func BountyPointsNotNil() predicate.Article {
+	return predicate.Article(sql.FieldNotNull(FieldBountyPoints))
 }
 
 // AcceptedAnswerIDEQ applies the EQ predicate on the "accepted_answer_id" field.

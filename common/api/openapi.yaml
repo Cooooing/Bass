@@ -830,6 +830,23 @@ components:
                     type: integer
                     description: 悬赏积分
                     format: int32
+                statement:
+                    type: string
+                    description: 创作声明
+                commentable:
+                    type: boolean
+                    description: 是否允许评论
+                anonymous:
+                    type: boolean
+                    description: 是否匿名
+                listable:
+                    type: boolean
+                    description: 是否在列表展示
+                tagIds:
+                    type: array
+                    items:
+                        type: string
+                    description: 标签id
         common.api.content.v1.AddCommentReply:
             type: object
             properties: {}
@@ -851,7 +868,7 @@ components:
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.DomainReply'
+                        $ref: '#/components/schemas/common.api.content.v1.Domain'
                     description: 添加的领域信息
         common.api.content.v1.AddDomainsRequest:
             type: object
@@ -879,7 +896,7 @@ components:
                 tags:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                        $ref: '#/components/schemas/common.api.content.v1.Tag'
                     description: 添加的标签信息
         common.api.content.v1.AddTagsRequest:
             type: object
@@ -933,12 +950,18 @@ components:
                     type: integer
                     description: '类型: 0-普通 1-问答 2-投票 3-抽奖'
                     format: int32
+                statement:
+                    type: string
+                    description: 创作声明
                 commentable:
                     type: boolean
                     description: 是否允许评论
                 anonymous:
                     type: boolean
                     description: 是否匿名
+                listable:
+                    type: boolean
+                    description: 是否在列表展示
                 thankCount:
                     type: integer
                     description: 感谢数
@@ -982,11 +1005,11 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 作者信息
-                replyUser:
+                lastReplyUser:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 最后回复用户
-                repliedAt:
+                lastReplyAt:
                     type: string
                     description: 最后回复时间
                     format: date-time
@@ -995,6 +1018,11 @@ components:
                     items:
                         $ref: '#/components/schemas/common.api.content.v1.ArticlePostscript'
                     description: 附言
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.Tag'
+                    description: 标签
         common.api.content.v1.ArticlePostscript:
             type: object
             properties:
@@ -1103,7 +1131,7 @@ components:
                 articleId:
                     type: string
                     description: 文章ID
-        common.api.content.v1.DomainReply:
+        common.api.content.v1.Domain:
             type: object
             properties:
                 createdAt:
@@ -1149,7 +1177,7 @@ components:
                 tags:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                        $ref: '#/components/schemas/common.api.content.v1.Tag'
                     description: tags
         common.api.content.v1.DomainSave:
             type: object
@@ -1183,10 +1211,6 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.content.v1.Article'
                     description: 文章
-                user:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.user.v1.User'
-                    description: 作者
         common.api.content.v1.GetArticleOneRequest:
             type: object
             properties:
@@ -1302,7 +1326,7 @@ components:
                 domains:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.DomainReply'
+                        $ref: '#/components/schemas/common.api.content.v1.Domain'
                     description: 领域信息
         common.api.content.v1.PageDomainRequest:
             type: object
@@ -1348,7 +1372,7 @@ components:
                 tags:
                     type: array
                     items:
-                        $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                        $ref: '#/components/schemas/common.api.content.v1.Tag'
                     description: 标签列表
         common.api.content.v1.PageTagRequest:
             type: object
@@ -1381,7 +1405,7 @@ components:
                 articleId:
                     type: string
                     description: 文章ID
-        common.api.content.v1.TagReply:
+        common.api.content.v1.Tag:
             type: object
             properties:
                 createdAt:
@@ -1485,7 +1509,7 @@ components:
             properties:
                 data:
                     allOf:
-                        - $ref: '#/components/schemas/common.api.content.v1.DomainReply'
+                        - $ref: '#/components/schemas/common.api.content.v1.Domain'
                     description: 修改的领域信息
         common.api.content.v1.UpdateDomainRequest:
             type: object
@@ -1511,7 +1535,7 @@ components:
             properties:
                 tag:
                     allOf:
-                        - $ref: '#/components/schemas/common.api.content.v1.TagReply'
+                        - $ref: '#/components/schemas/common.api.content.v1.Tag'
                     description: 更新的标签信息
         common.api.content.v1.UpdateTagRequest:
             type: object

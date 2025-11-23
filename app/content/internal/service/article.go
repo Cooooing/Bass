@@ -59,12 +59,16 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 	_, err = s.articleDomain.Add(ctx, &model.Article{
 		Title:         req.Title,
 		Content:       req.Content,
-		RewardContent: &req.RewardContent,
+		RewardContent: req.RewardContent,
 		RewardPoints:  req.RewardPoints,
 		Status:        req.Status,
 		Type:          req.Type,
-		BountyPoints:  base.If(req.Type != int32(cv1.ArticleType_ArticleTypeQA), 0, req.BountyPoints),
-	})
+		BountyPoints:  base.If(req.Type != int32(cv1.ArticleType_ArticleTypeQA), nil, req.BountyPoints),
+		Statement:     req.Statement,
+		Commentable:   base.DerefOrDefault(req.Commentable, true),
+		Anonymous:     base.DerefOrDefault(req.Anonymous, false),
+		Listable:      base.DerefOrDefault(req.Listable, true),
+	}, req.TagIds)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +78,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	// 只有作者可以添加附言
-	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || *article.CreatedBy != user.ID {
+	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || article == nil || *article.CreatedBy != user.ID {
 		if err != nil {
 			return nil, err
 		}

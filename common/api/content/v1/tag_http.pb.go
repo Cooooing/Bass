@@ -35,8 +35,8 @@ type ContentTagServiceHTTPServer interface {
 func RegisterContentTagServiceHTTPServer(s *http.Server, srv ContentTagServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/tag/adds", _ContentTagService_Adds0_HTTP_Handler(srv))
-	r.POST("/v1/tag/update", _ContentTagService_Update1_HTTP_Handler(srv))
-	r.POST("/v1/tag/get", _ContentTagService_Page2_HTTP_Handler(srv))
+	r.POST("/v1/tag/update", _ContentTagService_Update0_HTTP_Handler(srv))
+	r.POST("/v1/tag/get", _ContentTagService_Page0_HTTP_Handler(srv))
 }
 
 func _ContentTagService_Adds0_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
@@ -61,7 +61,7 @@ func _ContentTagService_Adds0_HTTP_Handler(srv ContentTagServiceHTTPServer) func
 	}
 }
 
-func _ContentTagService_Update1_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
+func _ContentTagService_Update0_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateTagRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -83,7 +83,7 @@ func _ContentTagService_Update1_HTTP_Handler(srv ContentTagServiceHTTPServer) fu
 	}
 }
 
-func _ContentTagService_Page2_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
+func _ContentTagService_Page0_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageTagRequest
 		if err := ctx.Bind(&in); err != nil {

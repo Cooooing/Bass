@@ -26,15 +26,19 @@ type Article struct {
 	// 打赏区内容
 	RewardContent *string `json:"reward_content,omitempty"`
 	// 打赏积分
-	RewardPoints int32 `json:"reward_points,omitempty"`
+	RewardPoints *int32 `json:"reward_points,omitempty"`
 	// 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
 	Status int32 `json:"status,omitempty"`
 	// 类型 0-普通 1-问答 2-投票 3-抽奖
 	Type int32 `json:"type,omitempty"`
+	// 创作声明
+	Statement *string `json:"statement,omitempty"`
 	// 是否允许评论
 	Commentable bool `json:"commentable,omitempty"`
 	// 是否匿名
 	Anonymous bool `json:"anonymous,omitempty"`
+	// 是否在列表展示
+	Listable bool `json:"listable,omitempty"`
 	// 帖子感谢数
 	ThankCount int32 `json:"thank_count,omitempty"`
 	// 点赞数
@@ -46,9 +50,9 @@ type Article struct {
 	// 回复数
 	ReplyCount int32 `json:"reply_count,omitempty"`
 	// 悬赏积分
-	BountyPoints int32 `json:"bounty_points,omitempty"`
+	BountyPoints *int32 `json:"bounty_points,omitempty"`
 	// 采纳评论ID
-	AcceptedAnswerID int64 `json:"accepted_answer_id,omitempty"`
+	AcceptedAnswerID *int64 `json:"accepted_answer_id,omitempty"`
 	// 总投票数
 	VoteTotal int32 `json:"vote_total,omitempty"`
 	// 抽奖参与人数
@@ -147,11 +151,11 @@ func (*Article) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous:
+		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous, article.FieldListable:
 			values[i] = new(sql.NullBool)
 		case article.FieldID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount, article.FieldCreatedBy, article.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
-		case article.FieldTitle, article.FieldContent, article.FieldRewardContent:
+		case article.FieldTitle, article.FieldContent, article.FieldRewardContent, article.FieldStatement:
 			values[i] = new(sql.NullString)
 		case article.FieldCreatedAt, article.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -205,7 +209,8 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field reward_points", values[i])
 			} else if value.Valid {
-				_m.RewardPoints = int32(value.Int64)
+				_m.RewardPoints = new(int32)
+				*_m.RewardPoints = int32(value.Int64)
 			}
 		case article.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -219,6 +224,13 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Type = int32(value.Int64)
 			}
+		case article.FieldStatement:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field statement", values[i])
+			} else if value.Valid {
+				_m.Statement = new(string)
+				*_m.Statement = value.String
+			}
 		case article.FieldCommentable:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field commentable", values[i])
@@ -230,6 +242,12 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field anonymous", values[i])
 			} else if value.Valid {
 				_m.Anonymous = value.Bool
+			}
+		case article.FieldListable:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field listable", values[i])
+			} else if value.Valid {
+				_m.Listable = value.Bool
 			}
 		case article.FieldThankCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -265,13 +283,15 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field bounty_points", values[i])
 			} else if value.Valid {
-				_m.BountyPoints = int32(value.Int64)
+				_m.BountyPoints = new(int32)
+				*_m.BountyPoints = int32(value.Int64)
 			}
 		case article.FieldAcceptedAnswerID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field accepted_answer_id", values[i])
 			} else if value.Valid {
-				_m.AcceptedAnswerID = value.Int64
+				_m.AcceptedAnswerID = new(int64)
+				*_m.AcceptedAnswerID = value.Int64
 			}
 		case article.FieldVoteTotal:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -399,8 +419,10 @@ func (_m *Article) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	builder.WriteString("reward_points=")
-	builder.WriteString(fmt.Sprintf("%v", _m.RewardPoints))
+	if v := _m.RewardPoints; v != nil {
+		builder.WriteString("reward_points=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
@@ -408,11 +430,19 @@ func (_m *Article) String() string {
 	builder.WriteString("type=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
+	if v := _m.Statement; v != nil {
+		builder.WriteString("statement=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("commentable=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Commentable))
 	builder.WriteString(", ")
 	builder.WriteString("anonymous=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Anonymous))
+	builder.WriteString(", ")
+	builder.WriteString("listable=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Listable))
 	builder.WriteString(", ")
 	builder.WriteString("thank_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ThankCount))
@@ -429,11 +459,15 @@ func (_m *Article) String() string {
 	builder.WriteString("reply_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReplyCount))
 	builder.WriteString(", ")
-	builder.WriteString("bounty_points=")
-	builder.WriteString(fmt.Sprintf("%v", _m.BountyPoints))
+	if v := _m.BountyPoints; v != nil {
+		builder.WriteString("bounty_points=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("accepted_answer_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.AcceptedAnswerID))
+	if v := _m.AcceptedAnswerID; v != nil {
+		builder.WriteString("accepted_answer_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("vote_total=")
 	builder.WriteString(fmt.Sprintf("%v", _m.VoteTotal))

@@ -12,7 +12,6 @@ import (
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type DomainService struct {
@@ -68,18 +67,7 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest)
 		return nil, err
 	}
 	return &v1.UpdateDomainReply{
-		Data: &v1.DomainReply{
-			CreatedAt:   timestamppb.New(*data.CreatedAt),
-			UpdatedAt:   timestamppb.New(*data.UpdatedAt),
-			Id:          data.ID,
-			Name:        data.Name,
-			Description: data.Description,
-			Status:      data.Status,
-			Url:         data.URL,
-			Icon:        data.Icon,
-			TagCount:    data.TagCount,
-			IsNav:       data.IsNav,
-		},
+		Data: data.ConvertToRpc(),
 	}, err
 }
 
@@ -105,36 +93,9 @@ func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v
 		}
 	}
 	data, page, err := s.domainDomain.Page(ctx, req.Page, getReq)
-	reply := make([]*v1.DomainReply, len(data))
-	for i, datum := range data {
-		replyTags := make([]*v1.TagReply, len(datum.Edges.Tags))
-		for j, tag := range datum.Edges.Tags {
-			replyTags[j] = &v1.TagReply{
-				CreatedAt:    timestamppb.New(*tag.CreatedAt),
-				UpdatedAt:    timestamppb.New(*tag.UpdatedAt),
-				CreatedBy:    tag.CreatedBy,
-				UpdatedBy:    tag.UpdatedBy,
-				Id:           tag.ID,
-				Name:         tag.Name,
-				Description:  tag.Description,
-				DomainId:     tag.DomainID,
-				Status:       tag.Status,
-				ArticleCount: tag.ArticleCount,
-			}
-		}
-		reply[i] = &v1.DomainReply{
-			CreatedAt:   timestamppb.New(*datum.CreatedAt),
-			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
-			Id:          datum.ID,
-			Name:        datum.Name,
-			Description: datum.Description,
-			Status:      datum.Status,
-			Url:         datum.URL,
-			Icon:        datum.Icon,
-			TagCount:    datum.TagCount,
-			IsNav:       datum.IsNav,
-			Tags:        replyTags,
-		}
+	reply := make([]*v1.Domain, 0, len(data))
+	for _, datum := range data {
+		reply = append(reply, datum.ConvertToRpc())
 	}
 	return &v1.PageDomainReply{
 		Page:    page,

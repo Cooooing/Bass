@@ -38,7 +38,7 @@ service ContentTagService {
 }
 
 
-message TagReply {
+message Tag {
   // 创建时间
   optional google.protobuf.Timestamp created_at = 1000;
   // 更新时间
@@ -80,7 +80,7 @@ message AddTagsRequest {
 }
 message AddTagsReply {
   // 添加的标签信息
-  repeated TagReply tags = 1;
+  repeated Tag tags = 1;
 }
 
 message UpdateTagRequest {
@@ -89,7 +89,7 @@ message UpdateTagRequest {
 }
 message UpdateTagReply {
   // 更新的标签信息
-  TagReply tag = 1;
+  Tag tag = 1;
 }
 
 message PageTagRequest {
@@ -104,5 +104,5 @@ message PageTagReply {
   // 分页
   common.v1.PageReply page = 1;
   // 标签列表
-  repeated TagReply tags = 2;
+  repeated Tag tags = 2;
 }

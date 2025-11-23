@@ -115,15 +115,19 @@ func (m *ArticlePostscript) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for CreatedBy
-
-	// no validation rules for UpdatedBy
-
 	// no validation rules for Id
 
 	// no validation rules for ArticleId
 
 	// no validation rules for Content
+
+	if m.CreatedBy != nil {
+		// no validation rules for CreatedBy
+	}
+
+	if m.UpdatedBy != nil {
+		// no validation rules for UpdatedBy
+	}
 
 	if len(errors) > 0 {
 		return ArticlePostscriptMultiError(errors)
@@ -284,10 +288,6 @@ func (m *Article) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for CreatedBy
-
-	// no validation rules for UpdatedBy
-
 	// no validation rules for Id
 
 	// no validation rules for Title
@@ -296,17 +296,17 @@ func (m *Article) validate(all bool) error {
 
 	// no validation rules for HasPostscript
 
-	// no validation rules for RewardContent
-
-	// no validation rules for RewardPoints
-
 	// no validation rules for Status
 
 	// no validation rules for Type
 
+	// no validation rules for Statement
+
 	// no validation rules for Commentable
 
 	// no validation rules for Anonymous
+
+	// no validation rules for Listable
 
 	// no validation rules for ThankCount
 
@@ -317,10 +317,6 @@ func (m *Article) validate(all bool) error {
 	// no validation rules for WatchCount
 
 	// no validation rules for ReplyCount
-
-	// no validation rules for BountyPoints
-
-	// no validation rules for AcceptedAnswerId
 
 	// no validation rules for VoteTotal
 
@@ -358,11 +354,11 @@ func (m *Article) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetReplyUser()).(type) {
+		switch v := interface{}(m.GetLastReplyUser()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, ArticleValidationError{
-					field:  "ReplyUser",
+					field:  "LastReplyUser",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -370,16 +366,16 @@ func (m *Article) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, ArticleValidationError{
-					field:  "ReplyUser",
+					field:  "LastReplyUser",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetReplyUser()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetLastReplyUser()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ArticleValidationError{
-				field:  "ReplyUser",
+				field:  "LastReplyUser",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -387,11 +383,11 @@ func (m *Article) validate(all bool) error {
 	}
 
 	if all {
-		switch v := interface{}(m.GetRepliedAt()).(type) {
+		switch v := interface{}(m.GetLastReplyAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, ArticleValidationError{
-					field:  "RepliedAt",
+					field:  "LastReplyAt",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -399,16 +395,16 @@ func (m *Article) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, ArticleValidationError{
-					field:  "RepliedAt",
+					field:  "LastReplyAt",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetRepliedAt()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetLastReplyAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ArticleValidationError{
-				field:  "RepliedAt",
+				field:  "LastReplyAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -447,6 +443,64 @@ func (m *Article) validate(all bool) error {
 			}
 		}
 
+	}
+
+	for idx, item := range m.GetTags() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ArticleValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ArticleValidationError{
+						field:  fmt.Sprintf("Tags[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ArticleValidationError{
+					field:  fmt.Sprintf("Tags[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if m.CreatedBy != nil {
+		// no validation rules for CreatedBy
+	}
+
+	if m.UpdatedBy != nil {
+		// no validation rules for UpdatedBy
+	}
+
+	if m.RewardContent != nil {
+		// no validation rules for RewardContent
+	}
+
+	if m.RewardPoints != nil {
+		// no validation rules for RewardPoints
+	}
+
+	if m.BountyPoints != nil {
+		// no validation rules for BountyPoints
+	}
+
+	if m.AcceptedAnswerId != nil {
+		// no validation rules for AcceptedAnswerId
 	}
 
 	if len(errors) > 0 {
@@ -570,32 +624,58 @@ func (m *AddArticleRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for RewardContent
-
-	if m.GetRewardPoints() < 0 {
-		err := AddArticleRequestValidationError{
-			field:  "RewardPoints",
-			reason: "value must be greater than or equal to 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	// no validation rules for Status
 
 	// no validation rules for Type
 
-	if m.GetBountyPoints() < 0 {
-		err := AddArticleRequestValidationError{
-			field:  "BountyPoints",
-			reason: "value must be greater than or equal to 0",
+	if m.RewardContent != nil {
+		// no validation rules for RewardContent
+	}
+
+	if m.RewardPoints != nil {
+
+		if m.GetRewardPoints() < 0 {
+			err := AddArticleRequestValidationError{
+				field:  "RewardPoints",
+				reason: "value must be greater than or equal to 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		if !all {
-			return err
+
+	}
+
+	if m.BountyPoints != nil {
+
+		if m.GetBountyPoints() < 0 {
+			err := AddArticleRequestValidationError{
+				field:  "BountyPoints",
+				reason: "value must be greater than or equal to 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
 		}
-		errors = append(errors, err)
+
+	}
+
+	if m.Statement != nil {
+		// no validation rules for Statement
+	}
+
+	if m.Commentable != nil {
+		// no validation rules for Commentable
+	}
+
+	if m.Anonymous != nil {
+		// no validation rules for Anonymous
+	}
+
+	if m.Listable != nil {
+		// no validation rules for Listable
 	}
 
 	if len(errors) > 0 {
@@ -1873,35 +1953,6 @@ func (m *GetArticleOneReply) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return GetArticleOneReplyValidationError{
 				field:  "Article",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetUser()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetArticleOneReplyValidationError{
-					field:  "User",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, GetArticleOneReplyValidationError{
-					field:  "User",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetArticleOneReplyValidationError{
-				field:  "User",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

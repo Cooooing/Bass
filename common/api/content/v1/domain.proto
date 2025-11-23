@@ -37,15 +37,16 @@ service ContentDomainService {
   }
 }
 
-message DomainReply {
+message Domain {
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
   // 更新时间
   google.protobuf.Timestamp updated_at = 1001;
   // 创建人
-  int64 created_by = 1002;
+  optional int64 created_by = 1002;
   // 更新人
-  int64 updated_by = 1003;
+  optional int64 updated_by = 1003;
+
   // 主键
   int64 id = 3;
   // 领域名称
@@ -63,7 +64,7 @@ message DomainReply {
   // 是否导航
   bool isNav = 10;
   // tags
-  repeated TagReply tags = 100;
+  repeated Tag tags = 100;
 }
 
 message DomainSave {
@@ -89,7 +90,7 @@ message AddDomainsRequest {
 }
 message AddDomainsReply {
   // 添加的领域信息
-  repeated DomainReply data = 1;
+  repeated Domain data = 1;
 }
 
 message UpdateDomainRequest {
@@ -98,7 +99,7 @@ message UpdateDomainRequest {
 }
 message UpdateDomainReply {
   // 修改的领域信息
-  DomainReply data = 1;
+  Domain data = 1;
 }
 
 message PageDomainRequest {
@@ -125,5 +126,5 @@ message PageDomainReply {
   // 分页信息
   optional common.v1.PageReply page = 1;
   // 领域信息
-  repeated DomainReply domains = 2;
+  repeated Domain domains = 2;
 }

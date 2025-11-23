@@ -108,6 +108,20 @@ func (_c *ArticleCreate) SetNillableType(v *int32) *ArticleCreate {
 	return _c
 }
 
+// SetStatement sets the "statement" field.
+func (_c *ArticleCreate) SetStatement(v string) *ArticleCreate {
+	_c.mutation.SetStatement(v)
+	return _c
+}
+
+// SetNillableStatement sets the "statement" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableStatement(v *string) *ArticleCreate {
+	if v != nil {
+		_c.SetStatement(*v)
+	}
+	return _c
+}
+
 // SetCommentable sets the "commentable" field.
 func (_c *ArticleCreate) SetCommentable(v bool) *ArticleCreate {
 	_c.mutation.SetCommentable(v)
@@ -132,6 +146,20 @@ func (_c *ArticleCreate) SetAnonymous(v bool) *ArticleCreate {
 func (_c *ArticleCreate) SetNillableAnonymous(v *bool) *ArticleCreate {
 	if v != nil {
 		_c.SetAnonymous(*v)
+	}
+	return _c
+}
+
+// SetListable sets the "listable" field.
+func (_c *ArticleCreate) SetListable(v bool) *ArticleCreate {
+	_c.mutation.SetListable(v)
+	return _c
+}
+
+// SetNillableListable sets the "listable" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableListable(v *bool) *ArticleCreate {
+	if v != nil {
+		_c.SetListable(*v)
 	}
 	return _c
 }
@@ -487,6 +515,10 @@ func (_c *ArticleCreate) defaults() {
 		v := article.DefaultAnonymous
 		_c.mutation.SetAnonymous(v)
 	}
+	if _, ok := _c.mutation.Listable(); !ok {
+		v := article.DefaultListable
+		_c.mutation.SetListable(v)
+	}
 	if _, ok := _c.mutation.ThankCount(); !ok {
 		v := article.DefaultThankCount
 		_c.mutation.SetThankCount(v)
@@ -554,9 +586,6 @@ func (_c *ArticleCreate) check() error {
 	if _, ok := _c.mutation.HasPostscript(); !ok {
 		return &ValidationError{Name: "has_postscript", err: errors.New(`gen: missing required field "Article.has_postscript"`)}
 	}
-	if _, ok := _c.mutation.RewardPoints(); !ok {
-		return &ValidationError{Name: "reward_points", err: errors.New(`gen: missing required field "Article.reward_points"`)}
-	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Article.status"`)}
 	}
@@ -568,6 +597,9 @@ func (_c *ArticleCreate) check() error {
 	}
 	if _, ok := _c.mutation.Anonymous(); !ok {
 		return &ValidationError{Name: "anonymous", err: errors.New(`gen: missing required field "Article.anonymous"`)}
+	}
+	if _, ok := _c.mutation.Listable(); !ok {
+		return &ValidationError{Name: "listable", err: errors.New(`gen: missing required field "Article.listable"`)}
 	}
 	if _, ok := _c.mutation.ThankCount(); !ok {
 		return &ValidationError{Name: "thank_count", err: errors.New(`gen: missing required field "Article.thank_count"`)}
@@ -583,9 +615,6 @@ func (_c *ArticleCreate) check() error {
 	}
 	if _, ok := _c.mutation.ReplyCount(); !ok {
 		return &ValidationError{Name: "reply_count", err: errors.New(`gen: missing required field "Article.reply_count"`)}
-	}
-	if _, ok := _c.mutation.BountyPoints(); !ok {
-		return &ValidationError{Name: "bounty_points", err: errors.New(`gen: missing required field "Article.bounty_points"`)}
 	}
 	if _, ok := _c.mutation.VoteTotal(); !ok {
 		return &ValidationError{Name: "vote_total", err: errors.New(`gen: missing required field "Article.vote_total"`)}
@@ -646,7 +675,7 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.RewardPoints(); ok {
 		_spec.SetField(article.FieldRewardPoints, field.TypeInt32, value)
-		_node.RewardPoints = value
+		_node.RewardPoints = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(article.FieldStatus, field.TypeInt32, value)
@@ -656,6 +685,10 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 		_spec.SetField(article.FieldType, field.TypeInt32, value)
 		_node.Type = value
 	}
+	if value, ok := _c.mutation.Statement(); ok {
+		_spec.SetField(article.FieldStatement, field.TypeString, value)
+		_node.Statement = &value
+	}
 	if value, ok := _c.mutation.Commentable(); ok {
 		_spec.SetField(article.FieldCommentable, field.TypeBool, value)
 		_node.Commentable = value
@@ -663,6 +696,10 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Anonymous(); ok {
 		_spec.SetField(article.FieldAnonymous, field.TypeBool, value)
 		_node.Anonymous = value
+	}
+	if value, ok := _c.mutation.Listable(); ok {
+		_spec.SetField(article.FieldListable, field.TypeBool, value)
+		_node.Listable = value
 	}
 	if value, ok := _c.mutation.ThankCount(); ok {
 		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
@@ -686,11 +723,11 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.BountyPoints(); ok {
 		_spec.SetField(article.FieldBountyPoints, field.TypeInt32, value)
-		_node.BountyPoints = value
+		_node.BountyPoints = &value
 	}
 	if value, ok := _c.mutation.AcceptedAnswerID(); ok {
 		_spec.SetField(article.FieldAcceptedAnswerID, field.TypeInt64, value)
-		_node.AcceptedAnswerID = value
+		_node.AcceptedAnswerID = &value
 	}
 	if value, ok := _c.mutation.VoteTotal(); ok {
 		_spec.SetField(article.FieldVoteTotal, field.TypeInt32, value)

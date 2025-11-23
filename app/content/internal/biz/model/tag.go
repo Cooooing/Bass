@@ -1,5 +1,25 @@
 package model
 
-import "content/internal/data/ent/gen"
+import (
+	v1 "common/api/content/v1"
+	"content/internal/data/ent/gen"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
+)
 
 type Tag gen.Tag
+
+func (t *Tag) ConvertToRpc() *v1.Tag {
+	return &v1.Tag{
+		CreatedAt:    timestamppb.New(*t.CreatedAt),
+		UpdatedAt:    timestamppb.New(*t.UpdatedAt),
+		CreatedBy:    t.CreatedBy,
+		UpdatedBy:    t.UpdatedBy,
+		Id:           t.ID,
+		Name:         t.Name,
+		Description:  t.Description,
+		DomainId:     t.DomainID,
+		Status:       t.Status,
+		ArticleCount: t.ArticleCount,
+	}
+}

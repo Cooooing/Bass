@@ -25,7 +25,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type TagReply struct {
+type Tag struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 创建时间
 	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1000,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"`
@@ -51,20 +51,20 @@ type TagReply struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TagReply) Reset() {
-	*x = TagReply{}
+func (x *Tag) Reset() {
+	*x = Tag{}
 	mi := &file_content_v1_tag_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TagReply) String() string {
+func (x *Tag) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TagReply) ProtoMessage() {}
+func (*Tag) ProtoMessage() {}
 
-func (x *TagReply) ProtoReflect() protoreflect.Message {
+func (x *Tag) ProtoReflect() protoreflect.Message {
 	mi := &file_content_v1_tag_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -76,75 +76,75 @@ func (x *TagReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TagReply.ProtoReflect.Descriptor instead.
-func (*TagReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use Tag.ProtoReflect.Descriptor instead.
+func (*Tag) Descriptor() ([]byte, []int) {
 	return file_content_v1_tag_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TagReply) GetCreatedAt() *timestamppb.Timestamp {
+func (x *Tag) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-func (x *TagReply) GetUpdatedAt() *timestamppb.Timestamp {
+func (x *Tag) GetUpdatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
 	}
 	return nil
 }
 
-func (x *TagReply) GetCreatedBy() int64 {
+func (x *Tag) GetCreatedBy() int64 {
 	if x != nil && x.CreatedBy != nil {
 		return *x.CreatedBy
 	}
 	return 0
 }
 
-func (x *TagReply) GetUpdatedBy() int64 {
+func (x *Tag) GetUpdatedBy() int64 {
 	if x != nil && x.UpdatedBy != nil {
 		return *x.UpdatedBy
 	}
 	return 0
 }
 
-func (x *TagReply) GetId() int64 {
+func (x *Tag) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *TagReply) GetName() string {
+func (x *Tag) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *TagReply) GetDescription() string {
+func (x *Tag) GetDescription() string {
 	if x != nil && x.Description != nil {
 		return *x.Description
 	}
 	return ""
 }
 
-func (x *TagReply) GetDomainId() int64 {
+func (x *Tag) GetDomainId() int64 {
 	if x != nil && x.DomainId != nil {
 		return *x.DomainId
 	}
 	return 0
 }
 
-func (x *TagReply) GetStatus() int32 {
+func (x *Tag) GetStatus() int32 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *TagReply) GetArticleCount() int32 {
+func (x *Tag) GetArticleCount() int32 {
 	if x != nil {
 		return x.ArticleCount
 	}
@@ -280,7 +280,7 @@ func (x *AddTagsRequest) GetTags() []*TagSave {
 type AddTagsReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 添加的标签信息
-	Tags          []*TagReply `protobuf:"bytes,1,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags          []*Tag `protobuf:"bytes,1,rep,name=tags,proto3" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -315,7 +315,7 @@ func (*AddTagsReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_tag_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AddTagsReply) GetTags() []*TagReply {
+func (x *AddTagsReply) GetTags() []*Tag {
 	if x != nil {
 		return x.Tags
 	}
@@ -370,7 +370,7 @@ func (x *UpdateTagRequest) GetTag() *TagSave {
 type UpdateTagReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 更新的标签信息
-	Tag           *TagReply `protobuf:"bytes,1,opt,name=tag,proto3" json:"tag,omitempty"`
+	Tag           *Tag `protobuf:"bytes,1,opt,name=tag,proto3" json:"tag,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -405,7 +405,7 @@ func (*UpdateTagReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_tag_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UpdateTagReply) GetTag() *TagReply {
+func (x *UpdateTagReply) GetTag() *Tag {
 	if x != nil {
 		return x.Tag
 	}
@@ -480,7 +480,7 @@ type PageTagReply struct {
 	// 分页
 	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
 	// 标签列表
-	Tags          []*TagReply `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags          []*Tag `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -522,7 +522,7 @@ func (x *PageTagReply) GetPage() *v1.PageReply {
 	return nil
 }
 
-func (x *PageTagReply) GetTags() []*TagReply {
+func (x *PageTagReply) GetTags() []*Tag {
 	if x != nil {
 		return x.Tags
 	}
@@ -533,8 +533,8 @@ var File_content_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_v1_tag_proto_rawDesc = "" +
 	"\n" +
-	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xda\x03\n" +
-	"\bTagReply\x12?\n" +
+	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xd5\x03\n" +
+	"\x03Tag\x12?\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampH\x00R\tcreatedAt\x88\x01\x01\x12?\n" +
 	"\n" +
@@ -566,13 +566,13 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"_domain_idB\x0e\n" +
 	"\f_description\"D\n" +
 	"\x0eAddTagsRequest\x122\n" +
-	"\x04tags\x18\x01 \x03(\v2\x1e.common.api.content.v1.TagSaveR\x04tags\"C\n" +
-	"\fAddTagsReply\x123\n" +
-	"\x04tags\x18\x01 \x03(\v2\x1f.common.api.content.v1.TagReplyR\x04tags\"D\n" +
+	"\x04tags\x18\x01 \x03(\v2\x1e.common.api.content.v1.TagSaveR\x04tags\">\n" +
+	"\fAddTagsReply\x12.\n" +
+	"\x04tags\x18\x01 \x03(\v2\x1a.common.api.content.v1.TagR\x04tags\"D\n" +
 	"\x10UpdateTagRequest\x120\n" +
-	"\x03tag\x18\x01 \x01(\v2\x1e.common.api.content.v1.TagSaveR\x03tag\"C\n" +
-	"\x0eUpdateTagReply\x121\n" +
-	"\x03tag\x18\x01 \x01(\v2\x1f.common.api.content.v1.TagReplyR\x03tag\"\xa1\x01\n" +
+	"\x03tag\x18\x01 \x01(\v2\x1e.common.api.content.v1.TagSaveR\x03tag\">\n" +
+	"\x0eUpdateTagReply\x12,\n" +
+	"\x03tag\x18\x01 \x01(\v2\x1a.common.api.content.v1.TagR\x03tag\"\xa1\x01\n" +
 	"\x0ePageTagRequest\x12:\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\x13\n" +
 	"\x02id\x18\x02 \x01(\x03H\x01R\x02id\x88\x01\x01\x12 \n" +
@@ -580,10 +580,10 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\x05_pageB\x05\n" +
 	"\x03_idB\f\n" +
 	"\n" +
-	"_domain_id\"x\n" +
+	"_domain_id\"s\n" +
 	"\fPageTagReply\x123\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x123\n" +
-	"\x04tags\x18\x02 \x03(\v2\x1f.common.api.content.v1.TagReplyR\x04tags2\xe1\x02\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12.\n" +
+	"\x04tags\x18\x02 \x03(\v2\x1a.common.api.content.v1.TagR\x04tags2\xe1\x02\n" +
 	"\x11ContentTagService\x12k\n" +
 	"\x04Adds\x12%.common.api.content.v1.AddTagsRequest\x1a#.common.api.content.v1.AddTagsReply\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/tag/adds\x12s\n" +
 	"\x06Update\x12'.common.api.content.v1.UpdateTagRequest\x1a%.common.api.content.v1.UpdateTagReply\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/tag/update\x12j\n" +
@@ -603,7 +603,7 @@ func file_content_v1_tag_proto_rawDescGZIP() []byte {
 
 var file_content_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_content_v1_tag_proto_goTypes = []any{
-	(*TagReply)(nil),              // 0: common.api.content.v1.TagReply
+	(*Tag)(nil),                   // 0: common.api.content.v1.Tag
 	(*TagSave)(nil),               // 1: common.api.content.v1.TagSave
 	(*AddTagsRequest)(nil),        // 2: common.api.content.v1.AddTagsRequest
 	(*AddTagsReply)(nil),          // 3: common.api.content.v1.AddTagsReply
@@ -616,15 +616,15 @@ var file_content_v1_tag_proto_goTypes = []any{
 	(*v1.PageReply)(nil),          // 10: common.api.common.v1.PageReply
 }
 var file_content_v1_tag_proto_depIdxs = []int32{
-	8,  // 0: common.api.content.v1.TagReply.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 1: common.api.content.v1.TagReply.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 0: common.api.content.v1.Tag.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 1: common.api.content.v1.Tag.updated_at:type_name -> google.protobuf.Timestamp
 	1,  // 2: common.api.content.v1.AddTagsRequest.tags:type_name -> common.api.content.v1.TagSave
-	0,  // 3: common.api.content.v1.AddTagsReply.tags:type_name -> common.api.content.v1.TagReply
+	0,  // 3: common.api.content.v1.AddTagsReply.tags:type_name -> common.api.content.v1.Tag
 	1,  // 4: common.api.content.v1.UpdateTagRequest.tag:type_name -> common.api.content.v1.TagSave
-	0,  // 5: common.api.content.v1.UpdateTagReply.tag:type_name -> common.api.content.v1.TagReply
+	0,  // 5: common.api.content.v1.UpdateTagReply.tag:type_name -> common.api.content.v1.Tag
 	9,  // 6: common.api.content.v1.PageTagRequest.page:type_name -> common.api.common.v1.PageRequest
 	10, // 7: common.api.content.v1.PageTagReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 8: common.api.content.v1.PageTagReply.tags:type_name -> common.api.content.v1.TagReply
+	0,  // 8: common.api.content.v1.PageTagReply.tags:type_name -> common.api.content.v1.Tag
 	2,  // 9: common.api.content.v1.ContentTagService.Adds:input_type -> common.api.content.v1.AddTagsRequest
 	4,  // 10: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
 	6,  // 11: common.api.content.v1.ContentTagService.Page:input_type -> common.api.content.v1.PageTagRequest

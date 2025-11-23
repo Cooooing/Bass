@@ -9,6 +9,7 @@ import (
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/tag"
 	"context"
+	"errors"
 )
 
 type TagRepo struct {
@@ -63,6 +64,9 @@ func (t *TagRepo) Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*
 
 func (t *TagRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Tag, error) {
 	query, err := tx.Tag.Query().Where(tag.IDEQ(id)).First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, errors.New("tag is not found")
+	}
 	return (*model.Tag)(query), err
 }
 
@@ -122,6 +126,9 @@ func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQue
 	}
 	if req.Name != nil {
 		query = query.Where(tag.NameContains(*req.Name))
+	}
+	if len(req.Names) > 0 {
+		query = query.Where(tag.NameIn(req.Names...))
 	}
 	if req.Description != nil {
 		query = query.Where(tag.DescriptionContains(*req.Description))

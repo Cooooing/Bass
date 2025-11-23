@@ -13,6 +13,15 @@ func New[K comparable, V any](size int) Map[K, V] {
 	return NewComparableMap[K, V](size)
 }
 
+func NewFromSlice[V1 any, K comparable, V2 any](slice []V1, fn func(V1) (K, V2)) Map[K, V2] {
+	m := New[K, V2](len(slice))
+	for _, item := range slice {
+		k, v := fn(item)
+		m.Set(k, v)
+	}
+	return m
+}
+
 func NewComparableMap[K comparable, V any](size int) Map[K, V] {
 	m := make(ComparableMap[K, V], size)
 	return &m

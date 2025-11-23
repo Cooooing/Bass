@@ -39,12 +39,12 @@ const (
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
 	// Table holds the table name of the domain in the database.
-	Table = "domains"
+	Table = "content_domains"
 	// TagsTable is the table that holds the tags relation/edge.
-	TagsTable = "tags"
+	TagsTable = "content_tags"
 	// TagsInverseTable is the table name for the Tag entity.
 	// It exists in this package in order to avoid circular dependency with the "tag" package.
-	TagsInverseTable = "tags"
+	TagsInverseTable = "content_tags"
 	// TagsColumn is the table column denoting the tags relation/edge.
 	TagsColumn = "domain_id"
 )

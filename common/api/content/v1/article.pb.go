@@ -466,7 +466,7 @@ type AddArticleRequest struct {
 	// 是否在列表展示
 	Listable *bool `protobuf:"varint,13,opt,name=listable,proto3,oneof" json:"listable,omitempty"`
 	// 标签id
-	TagIds        []int64 `protobuf:"varint,100,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
+	Tags          []*TagSave `protobuf:"bytes,100,rep,name=tags,proto3" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -578,9 +578,9 @@ func (x *AddArticleRequest) GetListable() bool {
 	return false
 }
 
-func (x *AddArticleRequest) GetTagIds() []int64 {
+func (x *AddArticleRequest) GetTags() []*TagSave {
 	if x != nil {
-		return x.TagIds
+		return x.Tags
 	}
 	return nil
 }
@@ -2013,7 +2013,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x0f_reward_contentB\x10\n" +
 	"\x0e_reward_pointsB\x10\n" +
 	"\x0e_bounty_pointsB\x15\n" +
-	"\x13_accepted_answer_id\"\xac\x04\n" +
+	"\x13_accepted_answer_id\"\xc7\x04\n" +
 	"\x11AddArticleRequest\x12\x1f\n" +
 	"\x05title\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18dR\x05title\x12!\n" +
 	"\acontent\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\acontent\x12*\n" +
@@ -2026,8 +2026,8 @@ const file_content_v1_article_proto_rawDesc = "" +
 	" \x01(\tH\x03R\tstatement\x88\x01\x01\x12%\n" +
 	"\vcommentable\x18\v \x01(\bH\x04R\vcommentable\x88\x01\x01\x12!\n" +
 	"\tanonymous\x18\f \x01(\bH\x05R\tanonymous\x88\x01\x01\x12\x1f\n" +
-	"\blistable\x18\r \x01(\bH\x06R\blistable\x88\x01\x01\x12\x17\n" +
-	"\atag_ids\x18d \x03(\x03R\x06tagIdsB\x11\n" +
+	"\blistable\x18\r \x01(\bH\x06R\blistable\x88\x01\x01\x122\n" +
+	"\x04tags\x18d \x03(\v2\x1e.common.api.content.v1.TagSaveR\x04tagsB\x11\n" +
 	"\x0f_reward_contentB\x10\n" +
 	"\x0e_reward_pointsB\x10\n" +
 	"\x0e_bounty_pointsB\f\n" +
@@ -2190,8 +2190,9 @@ var file_content_v1_article_proto_goTypes = []any{
 	(*timestamppb.Timestamp)(nil),       // 31: google.protobuf.Timestamp
 	(*v1.User)(nil),                     // 32: common.api.user.v1.User
 	(*Tag)(nil),                         // 33: common.api.content.v1.Tag
-	(*v11.PageRequest)(nil),             // 34: common.api.common.v1.PageRequest
-	(*v11.PageReply)(nil),               // 35: common.api.common.v1.PageReply
+	(*TagSave)(nil),                     // 34: common.api.content.v1.TagSave
+	(*v11.PageRequest)(nil),             // 35: common.api.common.v1.PageRequest
+	(*v11.PageReply)(nil),               // 36: common.api.common.v1.PageReply
 }
 var file_content_v1_article_proto_depIdxs = []int32{
 	31, // 0: common.api.content.v1.ArticlePostscript.created_at:type_name -> google.protobuf.Timestamp
@@ -2203,41 +2204,42 @@ var file_content_v1_article_proto_depIdxs = []int32{
 	31, // 6: common.api.content.v1.Article.last_reply_at:type_name -> google.protobuf.Timestamp
 	0,  // 7: common.api.content.v1.Article.postscripts:type_name -> common.api.content.v1.ArticlePostscript
 	33, // 8: common.api.content.v1.Article.tags:type_name -> common.api.content.v1.Tag
-	34, // 9: common.api.content.v1.PageArticleRequest.page:type_name -> common.api.common.v1.PageRequest
-	35, // 10: common.api.content.v1.PageArticleReply.page:type_name -> common.api.common.v1.PageReply
-	1,  // 11: common.api.content.v1.PageArticleReply.articles:type_name -> common.api.content.v1.Article
-	1,  // 12: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
-	2,  // 13: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
-	4,  // 14: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
-	6,  // 15: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
-	8,  // 16: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
-	10, // 17: common.api.content.v1.ContentArticleService.Page:input_type -> common.api.content.v1.PageArticleRequest
-	12, // 18: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
-	14, // 19: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
-	16, // 20: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
-	18, // 21: common.api.content.v1.ContentArticleService.Thank:input_type -> common.api.content.v1.ThankArticleRequest
-	20, // 22: common.api.content.v1.ContentArticleService.Like:input_type -> common.api.content.v1.LikeArticleRequest
-	22, // 23: common.api.content.v1.ContentArticleService.Collect:input_type -> common.api.content.v1.CollectArticleRequest
-	24, // 24: common.api.content.v1.ContentArticleService.Watch:input_type -> common.api.content.v1.WatchArticleRequest
-	26, // 25: common.api.content.v1.ContentArticleService.AcceptAnswer:input_type -> common.api.content.v1.AcceptAnswerArticleRequest
-	3,  // 26: common.api.content.v1.ContentArticleService.Add:output_type -> common.api.content.v1.AddArticleReply
-	5,  // 27: common.api.content.v1.ContentArticleService.Publish:output_type -> common.api.content.v1.PublishArticleReply
-	7,  // 28: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
-	9,  // 29: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
-	11, // 30: common.api.content.v1.ContentArticleService.Page:output_type -> common.api.content.v1.PageArticleReply
-	13, // 31: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
-	15, // 32: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
-	17, // 33: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply
-	19, // 34: common.api.content.v1.ContentArticleService.Thank:output_type -> common.api.content.v1.ThankArticleReply
-	21, // 35: common.api.content.v1.ContentArticleService.Like:output_type -> common.api.content.v1.LikeArticleReply
-	23, // 36: common.api.content.v1.ContentArticleService.Collect:output_type -> common.api.content.v1.CollectArticleReply
-	25, // 37: common.api.content.v1.ContentArticleService.Watch:output_type -> common.api.content.v1.WatchArticleReply
-	27, // 38: common.api.content.v1.ContentArticleService.AcceptAnswer:output_type -> common.api.content.v1.AcceptAnswerArticleReply
-	26, // [26:39] is the sub-list for method output_type
-	13, // [13:26] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	34, // 9: common.api.content.v1.AddArticleRequest.tags:type_name -> common.api.content.v1.TagSave
+	35, // 10: common.api.content.v1.PageArticleRequest.page:type_name -> common.api.common.v1.PageRequest
+	36, // 11: common.api.content.v1.PageArticleReply.page:type_name -> common.api.common.v1.PageReply
+	1,  // 12: common.api.content.v1.PageArticleReply.articles:type_name -> common.api.content.v1.Article
+	1,  // 13: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
+	2,  // 14: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
+	4,  // 15: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
+	6,  // 16: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
+	8,  // 17: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
+	10, // 18: common.api.content.v1.ContentArticleService.Page:input_type -> common.api.content.v1.PageArticleRequest
+	12, // 19: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
+	14, // 20: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
+	16, // 21: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
+	18, // 22: common.api.content.v1.ContentArticleService.Thank:input_type -> common.api.content.v1.ThankArticleRequest
+	20, // 23: common.api.content.v1.ContentArticleService.Like:input_type -> common.api.content.v1.LikeArticleRequest
+	22, // 24: common.api.content.v1.ContentArticleService.Collect:input_type -> common.api.content.v1.CollectArticleRequest
+	24, // 25: common.api.content.v1.ContentArticleService.Watch:input_type -> common.api.content.v1.WatchArticleRequest
+	26, // 26: common.api.content.v1.ContentArticleService.AcceptAnswer:input_type -> common.api.content.v1.AcceptAnswerArticleRequest
+	3,  // 27: common.api.content.v1.ContentArticleService.Add:output_type -> common.api.content.v1.AddArticleReply
+	5,  // 28: common.api.content.v1.ContentArticleService.Publish:output_type -> common.api.content.v1.PublishArticleReply
+	7,  // 29: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
+	9,  // 30: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
+	11, // 31: common.api.content.v1.ContentArticleService.Page:output_type -> common.api.content.v1.PageArticleReply
+	13, // 32: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
+	15, // 33: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
+	17, // 34: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply
+	19, // 35: common.api.content.v1.ContentArticleService.Thank:output_type -> common.api.content.v1.ThankArticleReply
+	21, // 36: common.api.content.v1.ContentArticleService.Like:output_type -> common.api.content.v1.LikeArticleReply
+	23, // 37: common.api.content.v1.ContentArticleService.Collect:output_type -> common.api.content.v1.CollectArticleReply
+	25, // 38: common.api.content.v1.ContentArticleService.Watch:output_type -> common.api.content.v1.WatchArticleReply
+	27, // 39: common.api.content.v1.ContentArticleService.AcceptAnswer:output_type -> common.api.content.v1.AcceptAnswerArticleReply
+	27, // [27:40] is the sub-list for method output_type
+	14, // [14:27] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_article_proto_init() }

@@ -10,6 +10,7 @@ import (
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/comment"
 	"context"
+	"errors"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -26,7 +27,7 @@ func NewCommentRepo(baseRepo *BaseRepo, client *gen.Client) repo.CommentRepo {
 	}
 }
 
-func (r CommentRepo) Save(ctx context.Context, client *gen.Client, comment *model.Comment) (*model.Comment, error) {
+func (r *CommentRepo) Save(ctx context.Context, client *gen.Client, comment *model.Comment) (*model.Comment, error) {
 	save, err := client.Comment.Create().
 		SetArticleID(comment.ArticleID).
 		SetContent(comment.Content).
@@ -38,14 +39,14 @@ func (r CommentRepo) Save(ctx context.Context, client *gen.Client, comment *mode
 	return (*model.Comment)(save), err
 }
 
-func (r CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, commentId int64, status cv1.CommentStatus) error {
+func (r *CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, commentId int64, status cv1.CommentStatus) error {
 	_, err := client.Comment.UpdateOneID(commentId).
 		SetStatus(int32(status)).
 		Save(ctx)
 	return err
 }
 
-func (r CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commentId int64, action cv1.CommentAction, num int32) error {
+func (r *CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commentId int64, action cv1.CommentAction, num int32) error {
 	updateOne := client.Comment.UpdateOneID(commentId)
 	switch action {
 	case cv1.CommentAction_CommentActionLike:
@@ -59,7 +60,7 @@ func (r CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, comment
 	return err
 }
 
-func (r CommentRepo) Exist(ctx context.Context, tx *gen.Client, id int64) (bool, error) {
+func (r *CommentRepo) Exist(ctx context.Context, tx *gen.Client, id int64) (bool, error) {
 	exist, err := tx.Comment.Query().
 		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
 		Where(comment.IDEQ(id)).
@@ -67,15 +68,18 @@ func (r CommentRepo) Exist(ctx context.Context, tx *gen.Client, id int64) (bool,
 	return exist, err
 }
 
-func (r CommentRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error) {
+func (r *CommentRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error) {
 	query, err := tx.Comment.Query().
 		Where(comment.IDEQ(id)).
 		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
 		First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, errors.New("comment is not found")
+	}
 	return (*model.Comment)(query), err
 }
 
-func (r CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) ([]*model.Comment, error) {
+func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) ([]*model.Comment, error) {
 	var (
 		comments []*model.Comment
 		err      error
@@ -92,7 +96,7 @@ func (r CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Comm
 	return comments, nil
 }
 
-func (r CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *cv1.PageReply, error) {
+func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *cv1.PageReply, error) {
 	var (
 		comments []*model.Comment
 		err      error
@@ -120,7 +124,7 @@ func (r CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 	}, nil
 }
 
-func (r CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
+func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
 	if req.CommentId != nil {
 		query = query.Where(comment.ParentIDEQ(*req.CommentId)).
 			WithReply(func(query *gen.CommentQuery) {
@@ -156,7 +160,7 @@ func (r CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) 
 	return query
 }
 
-func (r CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, articleId int64) (*model.Comment, error) {
+func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, articleId int64) (*model.Comment, error) {
 	query, err := client.Comment.Query().
 		Where(comment.ArticleIDEQ(articleId)).
 		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
@@ -165,7 +169,7 @@ func (r CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Clie
 	return (*model.Comment)(query), err
 }
 
-func (r CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, articleIds []int64) (dict.Map[int64, *model.Comment], error) {
+func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, articleIds []int64) (dict.Map[int64, *model.Comment], error) {
 	articleIdsAny := make([]any, len(articleIds))
 	for i, v := range articleIds {
 		articleIdsAny[i] = v

@@ -1,7 +1,11 @@
 package schema
 
 import (
+	"common/pkg/constant"
+
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -10,6 +14,12 @@ import (
 // CommentActionRecord 存储用户对文章的各种行为（点赞、收藏、感谢等）
 type CommentActionRecord struct {
 	ent.Schema
+}
+
+func (CommentActionRecord) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: constant.TablePrefixContent.String() + "comment_action_records"},
+	}
 }
 
 // Fields 定义表字段

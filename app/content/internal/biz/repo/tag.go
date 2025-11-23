@@ -22,6 +22,7 @@ type TagGetReq struct {
 	Ids          []int64
 	UserId       *int64
 	Name         *string
+	Names        []string
 	Description  *string
 	Status       *cv1.TagStatus
 	DomainId     *int64

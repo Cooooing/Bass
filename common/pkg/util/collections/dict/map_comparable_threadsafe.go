@@ -19,6 +19,12 @@ func NewSafeMap[K comparable, V any](size int) Map[K, V] {
 	}
 }
 
+func NewSafeMapFromSlice[V1 any, K comparable, V2 any](slice []V1, fn func(V1) (K, V2)) Map[K, V2] {
+	return &ThreadSafeMap[K, V2]{
+		unsafeMap: NewFromSlice[V1, K, V2](slice, fn).(*ComparableMap[K, V2]),
+	}
+}
+
 func (m *ThreadSafeMap[K, V]) Set(key K, value V) {
 	m.Lock()
 	m.unsafeMap.Set(key, value)

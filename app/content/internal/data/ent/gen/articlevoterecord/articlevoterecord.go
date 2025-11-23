@@ -29,12 +29,12 @@ const (
 	// EdgeVote holds the string denoting the vote edge name in mutations.
 	EdgeVote = "vote"
 	// Table holds the table name of the articlevoterecord in the database.
-	Table = "article_vote_records"
+	Table = "content_article_vote_records"
 	// VoteTable is the table that holds the vote relation/edge.
-	VoteTable = "article_vote_records"
+	VoteTable = "content_article_vote_records"
 	// VoteInverseTable is the table name for the ArticleVote entity.
 	// It exists in this package in order to avoid circular dependency with the "articlevote" package.
-	VoteInverseTable = "article_votes"
+	VoteInverseTable = "content_article_votes"
 	// VoteColumn is the table column denoting the vote relation/edge.
 	VoteColumn = "vote_id"
 )

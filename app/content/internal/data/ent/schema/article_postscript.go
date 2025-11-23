@@ -2,8 +2,11 @@ package schema
 
 import (
 	"common/pkg"
+	"common/pkg/constant"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -11,6 +14,12 @@ import (
 // ArticlePostscript 附言表
 type ArticlePostscript struct {
 	ent.Schema
+}
+
+func (ArticlePostscript) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: constant.TablePrefixContent.String() + "article_postscripts"},
+	}
 }
 
 func (ArticlePostscript) Fields() []ent.Field {

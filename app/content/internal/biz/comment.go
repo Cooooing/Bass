@@ -20,15 +20,17 @@ import (
 
 type CommentDomain struct {
 	*BaseDomain
-	commentRepo repo.CommentRepo
-	articleRepo repo.ArticleRepo
+	commentRepo             repo.CommentRepo
+	commentActionRecordRepo repo.CommentActionRecordRepo
+	articleRepo             repo.ArticleRepo
 }
 
-func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentDomain {
+func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, commentActionRecordRepo repo.CommentActionRecordRepo, articleRepo repo.ArticleRepo) *CommentDomain {
 	return &CommentDomain{
-		BaseDomain:  baseDomain,
-		commentRepo: commentRepo,
-		articleRepo: articleRepo,
+		BaseDomain:              baseDomain,
+		commentRepo:             commentRepo,
+		commentActionRecordRepo: commentActionRecordRepo,
+		articleRepo:             articleRepo,
 	}
 }
 
@@ -150,12 +152,33 @@ func (d *CommentDomain) UpdateStatus(ctx context.Context, commentId int64, statu
 	return err
 }
 
-func (d *CommentDomain) UpdateStat(ctx context.Context, commentId int64, action cv1.CommentAction, active bool) error {
-	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+func (d *CommentDomain) UpdateStat(ctx context.Context, commentId int64, userId int64, action cv1.CommentAction, active bool) error {
+	var err error
+	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		if active {
-			return d.commentRepo.UpdateStat(ctx, tx, commentId, action, 1)
+			err = d.commentRepo.UpdateStat(ctx, tx, commentId, action, 1)
+			if err != nil {
+				return err
+			}
+			_, err = d.commentActionRecordRepo.Save(ctx, tx, &model.CommentActionRecord{
+				CommentID: commentId,
+				UserID:    userId,
+				Type:      int32(action),
+			})
+			if err != nil {
+				return err
+			}
+			return nil
 		} else {
-			return d.commentRepo.UpdateStat(ctx, tx, commentId, action, -1)
+			err = d.commentRepo.UpdateStat(ctx, tx, commentId, action, -1)
+			if err != nil {
+				return err
+			}
+			err = d.commentActionRecordRepo.Delete(ctx, tx, commentId, userId, action)
+			if err != nil {
+				return err
+			}
+			return nil
 		}
 	})
 	return err

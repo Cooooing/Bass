@@ -24,6 +24,7 @@ var DataProviderSet = wire.NewSet(
 
 	NewArticleRepo,
 	NewCommentRepo,
+	NewCommentActionRecordRepo,
 	NewArticlePostscriptRepo,
 	NewArticleActionRecordRepo,
 	NewDomainRepo,

@@ -3,13 +3,14 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
-	// ArticlesColumns holds the columns for the "articles" table.
-	ArticlesColumns = []*schema.Column{
+	// ContentArticlesColumns holds the columns for the "content_articles" table.
+	ContentArticlesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
@@ -37,29 +38,29 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
-	// ArticlesTable holds the schema information for the "articles" table.
-	ArticlesTable = &schema.Table{
-		Name:       "articles",
-		Columns:    ArticlesColumns,
-		PrimaryKey: []*schema.Column{ArticlesColumns[0]},
+	// ContentArticlesTable holds the schema information for the "content_articles" table.
+	ContentArticlesTable = &schema.Table{
+		Name:       "content_articles",
+		Columns:    ContentArticlesColumns,
+		PrimaryKey: []*schema.Column{ContentArticlesColumns[0]},
 	}
-	// ArticleActionRecordsColumns holds the columns for the "article_action_records" table.
-	ArticleActionRecordsColumns = []*schema.Column{
+	// ContentArticleActionRecordsColumns holds the columns for the "content_article_action_records" table.
+	ContentArticleActionRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "type", Type: field.TypeInt32},
 		{Name: "article_id", Type: field.TypeInt64},
 	}
-	// ArticleActionRecordsTable holds the schema information for the "article_action_records" table.
-	ArticleActionRecordsTable = &schema.Table{
-		Name:       "article_action_records",
-		Columns:    ArticleActionRecordsColumns,
-		PrimaryKey: []*schema.Column{ArticleActionRecordsColumns[0]},
+	// ContentArticleActionRecordsTable holds the schema information for the "content_article_action_records" table.
+	ContentArticleActionRecordsTable = &schema.Table{
+		Name:       "content_article_action_records",
+		Columns:    ContentArticleActionRecordsColumns,
+		PrimaryKey: []*schema.Column{ContentArticleActionRecordsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_action_records_articles_action_records",
-				Columns:    []*schema.Column{ArticleActionRecordsColumns[3]},
-				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				Symbol:     "content_article_action_records_content_articles_action_records",
+				Columns:    []*schema.Column{ContentArticleActionRecordsColumns[3]},
+				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
@@ -67,22 +68,22 @@ var (
 			{
 				Name:    "articleactionrecord_article_id_user_id_type",
 				Unique:  true,
-				Columns: []*schema.Column{ArticleActionRecordsColumns[3], ArticleActionRecordsColumns[1], ArticleActionRecordsColumns[2]},
+				Columns: []*schema.Column{ContentArticleActionRecordsColumns[3], ContentArticleActionRecordsColumns[1], ContentArticleActionRecordsColumns[2]},
 			},
 			{
 				Name:    "articleactionrecord_article_id",
 				Unique:  false,
-				Columns: []*schema.Column{ArticleActionRecordsColumns[3]},
+				Columns: []*schema.Column{ContentArticleActionRecordsColumns[3]},
 			},
 			{
 				Name:    "articleactionrecord_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{ArticleActionRecordsColumns[1]},
+				Columns: []*schema.Column{ContentArticleActionRecordsColumns[1]},
 			},
 		},
 	}
-	// ArticleLotteriesColumns holds the columns for the "article_lotteries" table.
-	ArticleLotteriesColumns = []*schema.Column{
+	// ContentArticleLotteriesColumns holds the columns for the "content_article_lotteries" table.
+	ContentArticleLotteriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "prizes", Type: field.TypeJSON, Nullable: true},
 		{Name: "start_at", Type: field.TypeTime, Nullable: true},
@@ -92,44 +93,44 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt64},
 	}
-	// ArticleLotteriesTable holds the schema information for the "article_lotteries" table.
-	ArticleLotteriesTable = &schema.Table{
-		Name:       "article_lotteries",
-		Columns:    ArticleLotteriesColumns,
-		PrimaryKey: []*schema.Column{ArticleLotteriesColumns[0]},
+	// ContentArticleLotteriesTable holds the schema information for the "content_article_lotteries" table.
+	ContentArticleLotteriesTable = &schema.Table{
+		Name:       "content_article_lotteries",
+		Columns:    ContentArticleLotteriesColumns,
+		PrimaryKey: []*schema.Column{ContentArticleLotteriesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_lotteries_articles_lotteries",
-				Columns:    []*schema.Column{ArticleLotteriesColumns[7]},
-				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				Symbol:     "content_article_lotteries_content_articles_lotteries",
+				Columns:    []*schema.Column{ContentArticleLotteriesColumns[7]},
+				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// ArticleLotteryParticipantsColumns holds the columns for the "article_lottery_participants" table.
-	ArticleLotteryParticipantsColumns = []*schema.Column{
+	// ContentArticleLotteryParticipantsColumns holds the columns for the "content_article_lottery_participants" table.
+	ContentArticleLotteryParticipantsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "lottery_id", Type: field.TypeInt64},
 	}
-	// ArticleLotteryParticipantsTable holds the schema information for the "article_lottery_participants" table.
-	ArticleLotteryParticipantsTable = &schema.Table{
-		Name:       "article_lottery_participants",
-		Columns:    ArticleLotteryParticipantsColumns,
-		PrimaryKey: []*schema.Column{ArticleLotteryParticipantsColumns[0]},
+	// ContentArticleLotteryParticipantsTable holds the schema information for the "content_article_lottery_participants" table.
+	ContentArticleLotteryParticipantsTable = &schema.Table{
+		Name:       "content_article_lottery_participants",
+		Columns:    ContentArticleLotteryParticipantsColumns,
+		PrimaryKey: []*schema.Column{ContentArticleLotteryParticipantsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_lottery_participants_article_lotteries_participants",
-				Columns:    []*schema.Column{ArticleLotteryParticipantsColumns[4]},
-				RefColumns: []*schema.Column{ArticleLotteriesColumns[0]},
+				Symbol:     "content_article_lottery_participants_content_article_lotteries_participants",
+				Columns:    []*schema.Column{ContentArticleLotteryParticipantsColumns[4]},
+				RefColumns: []*schema.Column{ContentArticleLotteriesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// ArticleLotteryWinnersColumns holds the columns for the "article_lottery_winners" table.
-	ArticleLotteryWinnersColumns = []*schema.Column{
+	// ContentArticleLotteryWinnersColumns holds the columns for the "content_article_lottery_winners" table.
+	ContentArticleLotteryWinnersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "prize", Type: field.TypeString},
@@ -137,22 +138,22 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "lottery_id", Type: field.TypeInt64},
 	}
-	// ArticleLotteryWinnersTable holds the schema information for the "article_lottery_winners" table.
-	ArticleLotteryWinnersTable = &schema.Table{
-		Name:       "article_lottery_winners",
-		Columns:    ArticleLotteryWinnersColumns,
-		PrimaryKey: []*schema.Column{ArticleLotteryWinnersColumns[0]},
+	// ContentArticleLotteryWinnersTable holds the schema information for the "content_article_lottery_winners" table.
+	ContentArticleLotteryWinnersTable = &schema.Table{
+		Name:       "content_article_lottery_winners",
+		Columns:    ContentArticleLotteryWinnersColumns,
+		PrimaryKey: []*schema.Column{ContentArticleLotteryWinnersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_lottery_winners_article_lotteries_winners",
-				Columns:    []*schema.Column{ArticleLotteryWinnersColumns[5]},
-				RefColumns: []*schema.Column{ArticleLotteriesColumns[0]},
+				Symbol:     "content_article_lottery_winners_content_article_lotteries_winners",
+				Columns:    []*schema.Column{ContentArticleLotteryWinnersColumns[5]},
+				RefColumns: []*schema.Column{ContentArticleLotteriesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// ArticlePostscriptsColumns holds the columns for the "article_postscripts" table.
-	ArticlePostscriptsColumns = []*schema.Column{
+	// ContentArticlePostscriptsColumns holds the columns for the "content_article_postscripts" table.
+	ContentArticlePostscriptsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "status", Type: field.TypeInt32, Default: 0},
@@ -162,22 +163,22 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt64},
 	}
-	// ArticlePostscriptsTable holds the schema information for the "article_postscripts" table.
-	ArticlePostscriptsTable = &schema.Table{
-		Name:       "article_postscripts",
-		Columns:    ArticlePostscriptsColumns,
-		PrimaryKey: []*schema.Column{ArticlePostscriptsColumns[0]},
+	// ContentArticlePostscriptsTable holds the schema information for the "content_article_postscripts" table.
+	ContentArticlePostscriptsTable = &schema.Table{
+		Name:       "content_article_postscripts",
+		Columns:    ContentArticlePostscriptsColumns,
+		PrimaryKey: []*schema.Column{ContentArticlePostscriptsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_postscripts_articles_postscripts",
-				Columns:    []*schema.Column{ArticlePostscriptsColumns[7]},
-				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				Symbol:     "content_article_postscripts_content_articles_postscripts",
+				Columns:    []*schema.Column{ContentArticlePostscriptsColumns[7]},
+				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// ArticleVotesColumns holds the columns for the "article_votes" table.
-	ArticleVotesColumns = []*schema.Column{
+	// ContentArticleVotesColumns holds the columns for the "content_article_votes" table.
+	ContentArticleVotesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "vote_options", Type: field.TypeJSON, Nullable: true},
 		{Name: "vote_counts", Type: field.TypeJSON, Nullable: true},
@@ -189,22 +190,22 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "article_id", Type: field.TypeInt64},
 	}
-	// ArticleVotesTable holds the schema information for the "article_votes" table.
-	ArticleVotesTable = &schema.Table{
-		Name:       "article_votes",
-		Columns:    ArticleVotesColumns,
-		PrimaryKey: []*schema.Column{ArticleVotesColumns[0]},
+	// ContentArticleVotesTable holds the schema information for the "content_article_votes" table.
+	ContentArticleVotesTable = &schema.Table{
+		Name:       "content_article_votes",
+		Columns:    ContentArticleVotesColumns,
+		PrimaryKey: []*schema.Column{ContentArticleVotesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_votes_articles_votes",
-				Columns:    []*schema.Column{ArticleVotesColumns[9]},
-				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				Symbol:     "content_article_votes_content_articles_votes",
+				Columns:    []*schema.Column{ContentArticleVotesColumns[9]},
+				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// ArticleVoteRecordsColumns holds the columns for the "article_vote_records" table.
-	ArticleVoteRecordsColumns = []*schema.Column{
+	// ContentArticleVoteRecordsColumns holds the columns for the "content_article_vote_records" table.
+	ContentArticleVoteRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "option_index", Type: field.TypeInt32},
@@ -213,22 +214,22 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "vote_id", Type: field.TypeInt64},
 	}
-	// ArticleVoteRecordsTable holds the schema information for the "article_vote_records" table.
-	ArticleVoteRecordsTable = &schema.Table{
-		Name:       "article_vote_records",
-		Columns:    ArticleVoteRecordsColumns,
-		PrimaryKey: []*schema.Column{ArticleVoteRecordsColumns[0]},
+	// ContentArticleVoteRecordsTable holds the schema information for the "content_article_vote_records" table.
+	ContentArticleVoteRecordsTable = &schema.Table{
+		Name:       "content_article_vote_records",
+		Columns:    ContentArticleVoteRecordsColumns,
+		PrimaryKey: []*schema.Column{ContentArticleVoteRecordsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_vote_records_article_votes_records",
-				Columns:    []*schema.Column{ArticleVoteRecordsColumns[6]},
-				RefColumns: []*schema.Column{ArticleVotesColumns[0]},
+				Symbol:     "content_article_vote_records_content_article_votes_records",
+				Columns:    []*schema.Column{ContentArticleVoteRecordsColumns[6]},
+				RefColumns: []*schema.Column{ContentArticleVotesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// CommentsColumns holds the columns for the "comments" table.
-	CommentsColumns = []*schema.Column{
+	// ContentCommentsColumns holds the columns for the "content_comments" table.
+	ContentCommentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "level", Type: field.TypeInt32},
@@ -244,28 +245,28 @@ var (
 		{Name: "parent_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "reply_id", Type: field.TypeInt64, Nullable: true},
 	}
-	// CommentsTable holds the schema information for the "comments" table.
-	CommentsTable = &schema.Table{
-		Name:       "comments",
-		Columns:    CommentsColumns,
-		PrimaryKey: []*schema.Column{CommentsColumns[0]},
+	// ContentCommentsTable holds the schema information for the "content_comments" table.
+	ContentCommentsTable = &schema.Table{
+		Name:       "content_comments",
+		Columns:    ContentCommentsColumns,
+		PrimaryKey: []*schema.Column{ContentCommentsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "comments_articles_comments",
-				Columns:    []*schema.Column{CommentsColumns[11]},
-				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				Symbol:     "content_comments_content_articles_comments",
+				Columns:    []*schema.Column{ContentCommentsColumns[11]},
+				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "comments_comments_parent_replies",
-				Columns:    []*schema.Column{CommentsColumns[12]},
-				RefColumns: []*schema.Column{CommentsColumns[0]},
+				Symbol:     "content_comments_content_comments_parent_replies",
+				Columns:    []*schema.Column{ContentCommentsColumns[12]},
+				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "comments_comments_reply_replies",
-				Columns:    []*schema.Column{CommentsColumns[13]},
-				RefColumns: []*schema.Column{CommentsColumns[0]},
+				Symbol:     "content_comments_content_comments_reply_replies",
+				Columns:    []*schema.Column{ContentCommentsColumns[13]},
+				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -273,27 +274,27 @@ var (
 			{
 				Name:    "comment_article_id_parent_id_status",
 				Unique:  false,
-				Columns: []*schema.Column{CommentsColumns[11], CommentsColumns[12], CommentsColumns[3]},
+				Columns: []*schema.Column{ContentCommentsColumns[11], ContentCommentsColumns[12], ContentCommentsColumns[3]},
 			},
 		},
 	}
-	// CommentActionRecordsColumns holds the columns for the "comment_action_records" table.
-	CommentActionRecordsColumns = []*schema.Column{
+	// ContentCommentActionRecordsColumns holds the columns for the "content_comment_action_records" table.
+	ContentCommentActionRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "type", Type: field.TypeInt32},
 		{Name: "comment_id", Type: field.TypeInt64},
 	}
-	// CommentActionRecordsTable holds the schema information for the "comment_action_records" table.
-	CommentActionRecordsTable = &schema.Table{
-		Name:       "comment_action_records",
-		Columns:    CommentActionRecordsColumns,
-		PrimaryKey: []*schema.Column{CommentActionRecordsColumns[0]},
+	// ContentCommentActionRecordsTable holds the schema information for the "content_comment_action_records" table.
+	ContentCommentActionRecordsTable = &schema.Table{
+		Name:       "content_comment_action_records",
+		Columns:    ContentCommentActionRecordsColumns,
+		PrimaryKey: []*schema.Column{ContentCommentActionRecordsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "comment_action_records_comments_action_records",
-				Columns:    []*schema.Column{CommentActionRecordsColumns[3]},
-				RefColumns: []*schema.Column{CommentsColumns[0]},
+				Symbol:     "content_comment_action_records_content_comments_action_records",
+				Columns:    []*schema.Column{ContentCommentActionRecordsColumns[3]},
+				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
@@ -301,22 +302,22 @@ var (
 			{
 				Name:    "commentactionrecord_comment_id_user_id_type",
 				Unique:  true,
-				Columns: []*schema.Column{CommentActionRecordsColumns[3], CommentActionRecordsColumns[1], CommentActionRecordsColumns[2]},
+				Columns: []*schema.Column{ContentCommentActionRecordsColumns[3], ContentCommentActionRecordsColumns[1], ContentCommentActionRecordsColumns[2]},
 			},
 			{
 				Name:    "commentactionrecord_comment_id",
 				Unique:  false,
-				Columns: []*schema.Column{CommentActionRecordsColumns[3]},
+				Columns: []*schema.Column{ContentCommentActionRecordsColumns[3]},
 			},
 			{
 				Name:    "commentactionrecord_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{CommentActionRecordsColumns[1]},
+				Columns: []*schema.Column{ContentCommentActionRecordsColumns[1]},
 			},
 		},
 	}
-	// DomainsColumns holds the columns for the "domains" table.
-	DomainsColumns = []*schema.Column{
+	// ContentDomainsColumns holds the columns for the "content_domains" table.
+	ContentDomainsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -330,14 +331,14 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
-	// DomainsTable holds the schema information for the "domains" table.
-	DomainsTable = &schema.Table{
-		Name:       "domains",
-		Columns:    DomainsColumns,
-		PrimaryKey: []*schema.Column{DomainsColumns[0]},
+	// ContentDomainsTable holds the schema information for the "content_domains" table.
+	ContentDomainsTable = &schema.Table{
+		Name:       "content_domains",
+		Columns:    ContentDomainsColumns,
+		PrimaryKey: []*schema.Column{ContentDomainsColumns[0]},
 	}
-	// TagsColumns holds the columns for the "tags" table.
-	TagsColumns = []*schema.Column{
+	// ContentTagsColumns holds the columns for the "content_tags" table.
+	ContentTagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -349,76 +350,112 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "domain_id", Type: field.TypeInt64, Nullable: true},
 	}
-	// TagsTable holds the schema information for the "tags" table.
-	TagsTable = &schema.Table{
-		Name:       "tags",
-		Columns:    TagsColumns,
-		PrimaryKey: []*schema.Column{TagsColumns[0]},
+	// ContentTagsTable holds the schema information for the "content_tags" table.
+	ContentTagsTable = &schema.Table{
+		Name:       "content_tags",
+		Columns:    ContentTagsColumns,
+		PrimaryKey: []*schema.Column{ContentTagsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "tags_domains_tags",
-				Columns:    []*schema.Column{TagsColumns[9]},
-				RefColumns: []*schema.Column{DomainsColumns[0]},
+				Symbol:     "content_tags_content_domains_tags",
+				Columns:    []*schema.Column{ContentTagsColumns[9]},
+				RefColumns: []*schema.Column{ContentDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 	}
-	// ArticleTagsColumns holds the columns for the "article_tags" table.
-	ArticleTagsColumns = []*schema.Column{
+	// ContentArticleTagsColumns holds the columns for the "content_article_tags" table.
+	ContentArticleTagsColumns = []*schema.Column{
 		{Name: "article_id", Type: field.TypeInt64},
 		{Name: "tag_id", Type: field.TypeInt64},
 	}
-	// ArticleTagsTable holds the schema information for the "article_tags" table.
-	ArticleTagsTable = &schema.Table{
-		Name:       "article_tags",
-		Columns:    ArticleTagsColumns,
-		PrimaryKey: []*schema.Column{ArticleTagsColumns[0], ArticleTagsColumns[1]},
+	// ContentArticleTagsTable holds the schema information for the "content_article_tags" table.
+	ContentArticleTagsTable = &schema.Table{
+		Name:       "content_article_tags",
+		Columns:    ContentArticleTagsColumns,
+		PrimaryKey: []*schema.Column{ContentArticleTagsColumns[0], ContentArticleTagsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "article_tags_article_id",
-				Columns:    []*schema.Column{ArticleTagsColumns[0]},
-				RefColumns: []*schema.Column{ArticlesColumns[0]},
+				Symbol:     "content_article_tags_article_id",
+				Columns:    []*schema.Column{ContentArticleTagsColumns[0]},
+				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "article_tags_tag_id",
-				Columns:    []*schema.Column{ArticleTagsColumns[1]},
-				RefColumns: []*schema.Column{TagsColumns[0]},
+				Symbol:     "content_article_tags_tag_id",
+				Columns:    []*schema.Column{ContentArticleTagsColumns[1]},
+				RefColumns: []*schema.Column{ContentTagsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		ArticlesTable,
-		ArticleActionRecordsTable,
-		ArticleLotteriesTable,
-		ArticleLotteryParticipantsTable,
-		ArticleLotteryWinnersTable,
-		ArticlePostscriptsTable,
-		ArticleVotesTable,
-		ArticleVoteRecordsTable,
-		CommentsTable,
-		CommentActionRecordsTable,
-		DomainsTable,
-		TagsTable,
-		ArticleTagsTable,
+		ContentArticlesTable,
+		ContentArticleActionRecordsTable,
+		ContentArticleLotteriesTable,
+		ContentArticleLotteryParticipantsTable,
+		ContentArticleLotteryWinnersTable,
+		ContentArticlePostscriptsTable,
+		ContentArticleVotesTable,
+		ContentArticleVoteRecordsTable,
+		ContentCommentsTable,
+		ContentCommentActionRecordsTable,
+		ContentDomainsTable,
+		ContentTagsTable,
+		ContentArticleTagsTable,
 	}
 )
 
 func init() {
-	ArticleActionRecordsTable.ForeignKeys[0].RefTable = ArticlesTable
-	ArticleLotteriesTable.ForeignKeys[0].RefTable = ArticlesTable
-	ArticleLotteryParticipantsTable.ForeignKeys[0].RefTable = ArticleLotteriesTable
-	ArticleLotteryWinnersTable.ForeignKeys[0].RefTable = ArticleLotteriesTable
-	ArticlePostscriptsTable.ForeignKeys[0].RefTable = ArticlesTable
-	ArticleVotesTable.ForeignKeys[0].RefTable = ArticlesTable
-	ArticleVoteRecordsTable.ForeignKeys[0].RefTable = ArticleVotesTable
-	CommentsTable.ForeignKeys[0].RefTable = ArticlesTable
-	CommentsTable.ForeignKeys[1].RefTable = CommentsTable
-	CommentsTable.ForeignKeys[2].RefTable = CommentsTable
-	CommentActionRecordsTable.ForeignKeys[0].RefTable = CommentsTable
-	TagsTable.ForeignKeys[0].RefTable = DomainsTable
-	ArticleTagsTable.ForeignKeys[0].RefTable = ArticlesTable
-	ArticleTagsTable.ForeignKeys[1].RefTable = TagsTable
+	ContentArticlesTable.Annotation = &entsql.Annotation{
+		Table: "content_articles",
+	}
+	ContentArticleActionRecordsTable.ForeignKeys[0].RefTable = ContentArticlesTable
+	ContentArticleActionRecordsTable.Annotation = &entsql.Annotation{
+		Table: "content_article_action_records",
+	}
+	ContentArticleLotteriesTable.ForeignKeys[0].RefTable = ContentArticlesTable
+	ContentArticleLotteriesTable.Annotation = &entsql.Annotation{
+		Table: "content_article_lotteries",
+	}
+	ContentArticleLotteryParticipantsTable.ForeignKeys[0].RefTable = ContentArticleLotteriesTable
+	ContentArticleLotteryParticipantsTable.Annotation = &entsql.Annotation{
+		Table: "content_article_lottery_participants",
+	}
+	ContentArticleLotteryWinnersTable.ForeignKeys[0].RefTable = ContentArticleLotteriesTable
+	ContentArticleLotteryWinnersTable.Annotation = &entsql.Annotation{
+		Table: "content_article_lottery_winners",
+	}
+	ContentArticlePostscriptsTable.ForeignKeys[0].RefTable = ContentArticlesTable
+	ContentArticlePostscriptsTable.Annotation = &entsql.Annotation{
+		Table: "content_article_postscripts",
+	}
+	ContentArticleVotesTable.ForeignKeys[0].RefTable = ContentArticlesTable
+	ContentArticleVotesTable.Annotation = &entsql.Annotation{
+		Table: "content_article_votes",
+	}
+	ContentArticleVoteRecordsTable.ForeignKeys[0].RefTable = ContentArticleVotesTable
+	ContentArticleVoteRecordsTable.Annotation = &entsql.Annotation{
+		Table: "content_article_vote_records",
+	}
+	ContentCommentsTable.ForeignKeys[0].RefTable = ContentArticlesTable
+	ContentCommentsTable.ForeignKeys[1].RefTable = ContentCommentsTable
+	ContentCommentsTable.ForeignKeys[2].RefTable = ContentCommentsTable
+	ContentCommentsTable.Annotation = &entsql.Annotation{
+		Table: "content_comments",
+	}
+	ContentCommentActionRecordsTable.ForeignKeys[0].RefTable = ContentCommentsTable
+	ContentCommentActionRecordsTable.Annotation = &entsql.Annotation{
+		Table: "content_comment_action_records",
+	}
+	ContentDomainsTable.Annotation = &entsql.Annotation{
+		Table: "content_domains",
+	}
+	ContentTagsTable.ForeignKeys[0].RefTable = ContentDomainsTable
+	ContentTagsTable.Annotation = &entsql.Annotation{
+		Table: "content_tags",
+	}
+	ContentArticleTagsTable.ForeignKeys[0].RefTable = ContentArticlesTable
+	ContentArticleTagsTable.ForeignKeys[1].RefTable = ContentTagsTable
 }

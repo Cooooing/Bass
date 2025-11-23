@@ -53,35 +53,35 @@ const (
 	// EdgeActionRecords holds the string denoting the action_records edge name in mutations.
 	EdgeActionRecords = "action_records"
 	// Table holds the table name of the comment in the database.
-	Table = "comments"
+	Table = "content_comments"
 	// ArticleTable is the table that holds the article relation/edge.
-	ArticleTable = "comments"
+	ArticleTable = "content_comments"
 	// ArticleInverseTable is the table name for the Article entity.
 	// It exists in this package in order to avoid circular dependency with the "article" package.
-	ArticleInverseTable = "articles"
+	ArticleInverseTable = "content_articles"
 	// ArticleColumn is the table column denoting the article relation/edge.
 	ArticleColumn = "article_id"
 	// ParentTable is the table that holds the parent relation/edge.
-	ParentTable = "comments"
+	ParentTable = "content_comments"
 	// ParentColumn is the table column denoting the parent relation/edge.
 	ParentColumn = "parent_id"
 	// ParentRepliesTable is the table that holds the parent_replies relation/edge.
-	ParentRepliesTable = "comments"
+	ParentRepliesTable = "content_comments"
 	// ParentRepliesColumn is the table column denoting the parent_replies relation/edge.
 	ParentRepliesColumn = "parent_id"
 	// ReplyTable is the table that holds the reply relation/edge.
-	ReplyTable = "comments"
+	ReplyTable = "content_comments"
 	// ReplyColumn is the table column denoting the reply relation/edge.
 	ReplyColumn = "reply_id"
 	// ReplyRepliesTable is the table that holds the reply_replies relation/edge.
-	ReplyRepliesTable = "comments"
+	ReplyRepliesTable = "content_comments"
 	// ReplyRepliesColumn is the table column denoting the reply_replies relation/edge.
 	ReplyRepliesColumn = "reply_id"
 	// ActionRecordsTable is the table that holds the action_records relation/edge.
-	ActionRecordsTable = "comment_action_records"
+	ActionRecordsTable = "content_comment_action_records"
 	// ActionRecordsInverseTable is the table name for the CommentActionRecord entity.
 	// It exists in this package in order to avoid circular dependency with the "commentactionrecord" package.
-	ActionRecordsInverseTable = "comment_action_records"
+	ActionRecordsInverseTable = "content_comment_action_records"
 	// ActionRecordsColumn is the table column denoting the action_records relation/edge.
 	ActionRecordsColumn = "comment_id"
 )

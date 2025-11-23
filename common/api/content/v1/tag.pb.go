@@ -44,7 +44,7 @@ type Tag struct {
 	// 所属领域ID
 	DomainId *int64 `protobuf:"varint,5,opt,name=domain_id,json=domainId,proto3,oneof" json:"domain_id,omitempty"`
 	// 标签状态：0-正常，1-禁用
-	Status int32 `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
+	Status *int32 `protobuf:"varint,6,opt,name=status,proto3,oneof" json:"status,omitempty"`
 	// 文章数
 	ArticleCount  int32 `protobuf:"varint,7,opt,name=article_count,json=articleCount,proto3" json:"article_count,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -138,8 +138,8 @@ func (x *Tag) GetDomainId() int64 {
 }
 
 func (x *Tag) GetStatus() int32 {
-	if x != nil {
-		return x.Status
+	if x != nil && x.Status != nil {
+		return *x.Status
 	}
 	return 0
 }
@@ -154,11 +154,11 @@ func (x *Tag) GetArticleCount() int32 {
 type TagSave struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 主键
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id *int64 `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	// 领域ID
 	DomainId *int64 `protobuf:"varint,2,opt,name=domain_id,json=domainId,proto3,oneof" json:"domain_id,omitempty"`
 	// 状态：0-正常，1-禁用
-	Status int32 `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
+	Status *int32 `protobuf:"varint,3,opt,name=status,proto3,oneof" json:"status,omitempty"`
 	// 标签名称
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	// 标签描述
@@ -198,8 +198,8 @@ func (*TagSave) Descriptor() ([]byte, []int) {
 }
 
 func (x *TagSave) GetId() int64 {
-	if x != nil {
-		return x.Id
+	if x != nil && x.Id != nil {
+		return *x.Id
 	}
 	return 0
 }
@@ -212,8 +212,8 @@ func (x *TagSave) GetDomainId() int64 {
 }
 
 func (x *TagSave) GetStatus() int32 {
-	if x != nil {
-		return x.Status
+	if x != nil && x.Status != nil {
+		return *x.Status
 	}
 	return 0
 }
@@ -533,7 +533,7 @@ var File_content_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_v1_tag_proto_rawDesc = "" +
 	"\n" +
-	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xd5\x03\n" +
+	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xe5\x03\n" +
 	"\x03Tag\x12?\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampH\x00R\tcreatedAt\x88\x01\x01\x12?\n" +
@@ -546,8 +546,8 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x04 \x01(\tH\x04R\vdescription\x88\x01\x01\x12 \n" +
-	"\tdomain_id\x18\x05 \x01(\x03H\x05R\bdomainId\x88\x01\x01\x12\x16\n" +
-	"\x06status\x18\x06 \x01(\x05R\x06status\x12#\n" +
+	"\tdomain_id\x18\x05 \x01(\x03H\x05R\bdomainId\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\x06 \x01(\x05H\x06R\x06status\x88\x01\x01\x12#\n" +
 	"\rarticle_count\x18\a \x01(\x05R\farticleCountB\r\n" +
 	"\v_created_atB\r\n" +
 	"\v_updated_atB\r\n" +
@@ -555,15 +555,18 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\v_updated_byB\x0e\n" +
 	"\f_descriptionB\f\n" +
 	"\n" +
-	"_domain_id\"\xac\x01\n" +
-	"\aTagSave\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12 \n" +
-	"\tdomain_id\x18\x02 \x01(\x03H\x00R\bdomainId\x88\x01\x01\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\x05R\x06status\x12\x12\n" +
+	"_domain_idB\t\n" +
+	"\a_status\"\xc8\x01\n" +
+	"\aTagSave\x12\x13\n" +
+	"\x02id\x18\x01 \x01(\x03H\x00R\x02id\x88\x01\x01\x12 \n" +
+	"\tdomain_id\x18\x02 \x01(\x03H\x01R\bdomainId\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\x03 \x01(\x05H\x02R\x06status\x88\x01\x01\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x05 \x01(\tH\x01R\vdescription\x88\x01\x01B\f\n" +
+	"\vdescription\x18\x05 \x01(\tH\x03R\vdescription\x88\x01\x01B\x05\n" +
+	"\x03_idB\f\n" +
 	"\n" +
-	"_domain_idB\x0e\n" +
+	"_domain_idB\t\n" +
+	"\a_statusB\x0e\n" +
 	"\f_description\"D\n" +
 	"\x0eAddTagsRequest\x122\n" +
 	"\x04tags\x18\x01 \x03(\v2\x1e.common.api.content.v1.TagSaveR\x04tags\">\n" +

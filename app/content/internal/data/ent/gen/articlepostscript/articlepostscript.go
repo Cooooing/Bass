@@ -31,12 +31,12 @@ const (
 	// EdgeArticle holds the string denoting the article edge name in mutations.
 	EdgeArticle = "article"
 	// Table holds the table name of the articlepostscript in the database.
-	Table = "article_postscripts"
+	Table = "content_article_postscripts"
 	// ArticleTable is the table that holds the article relation/edge.
-	ArticleTable = "article_postscripts"
+	ArticleTable = "content_article_postscripts"
 	// ArticleInverseTable is the table name for the Article entity.
 	// It exists in this package in order to avoid circular dependency with the "article" package.
-	ArticleInverseTable = "articles"
+	ArticleInverseTable = "content_articles"
 	// ArticleColumn is the table column denoting the article relation/edge.
 	ArticleColumn = "article_id"
 )

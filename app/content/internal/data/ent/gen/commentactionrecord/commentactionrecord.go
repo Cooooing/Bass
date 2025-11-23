@@ -21,12 +21,12 @@ const (
 	// EdgeComment holds the string denoting the comment edge name in mutations.
 	EdgeComment = "comment"
 	// Table holds the table name of the commentactionrecord in the database.
-	Table = "comment_action_records"
+	Table = "content_comment_action_records"
 	// CommentTable is the table that holds the comment relation/edge.
-	CommentTable = "comment_action_records"
+	CommentTable = "content_comment_action_records"
 	// CommentInverseTable is the table name for the Comment entity.
 	// It exists in this package in order to avoid circular dependency with the "comment" package.
-	CommentInverseTable = "comments"
+	CommentInverseTable = "content_comments"
 	// CommentColumn is the table column denoting the comment relation/edge.
 	CommentColumn = "comment_id"
 )

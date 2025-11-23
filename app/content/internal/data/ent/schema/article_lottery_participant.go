@@ -2,8 +2,11 @@ package schema
 
 import (
 	"common/pkg"
+	"common/pkg/constant"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -11,6 +14,12 @@ import (
 // ArticleLotteryParticipant 抽奖参与记录
 type ArticleLotteryParticipant struct {
 	ent.Schema
+}
+
+func (ArticleLotteryParticipant) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: constant.TablePrefixContent.String() + "article_lottery_participants"},
+	}
 }
 
 func (ArticleLotteryParticipant) Fields() []ent.Field {

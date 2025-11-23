@@ -3,13 +3,14 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
-	// UsersColumns holds the columns for the "users" table.
-	UsersColumns = []*schema.Column{
+	// UserUsersColumns holds the columns for the "user_users" table.
+	UserUsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "nickname", Type: field.TypeString, Nullable: true},
@@ -49,34 +50,37 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 	}
-	// UsersTable holds the schema information for the "users" table.
-	UsersTable = &schema.Table{
-		Name:       "users",
-		Columns:    UsersColumns,
-		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	// UserUsersTable holds the schema information for the "user_users" table.
+	UserUsersTable = &schema.Table{
+		Name:       "user_users",
+		Columns:    UserUsersColumns,
+		PrimaryKey: []*schema.Column{UserUsersColumns[0]},
 		Indexes: []*schema.Index{
 			{
 				Name:    "user_name",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[1]},
+				Columns: []*schema.Column{UserUsersColumns[1]},
 			},
 			{
 				Name:    "user_email",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[4]},
+				Columns: []*schema.Column{UserUsersColumns[4]},
 			},
 			{
 				Name:    "user_phone",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[5]},
+				Columns: []*schema.Column{UserUsersColumns[5]},
 			},
 		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		UsersTable,
+		UserUsersTable,
 	}
 )
 
 func init() {
+	UserUsersTable.Annotation = &entsql.Annotation{
+		Table: "user_users",
+	}
 }

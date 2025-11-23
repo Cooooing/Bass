@@ -2,8 +2,11 @@ package schema
 
 import (
 	"common/pkg"
+	"common/pkg/constant"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 )
@@ -11,6 +14,12 @@ import (
 // User 用户实体定义
 type User struct {
 	ent.Schema
+}
+
+func (User) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: constant.TablePrefixUser.String() + "users"},
+	}
 }
 
 // Fields 定义表字段

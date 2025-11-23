@@ -5,6 +5,7 @@ import (
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
 	"common/pkg/util/base"
+	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -13,6 +14,7 @@ import (
 	"content/internal/data/ent/gen/tag"
 	"context"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -39,8 +41,33 @@ func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client, postscriptRepo repo.
 	}
 }
 
-func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *model.Article, tagIds []int64) (*model.Article, error) {
-	save, err := client.Article.Create().
+func (r *ArticleRepo) Save(ctx context.Context, tx *gen.Client, article *model.Article, tags []*model.Tag) (*model.Article, error) {
+
+	// 处理标签，去除重复
+	bindTagIds := make([]int64, 0)
+	if len(tags) > 0 {
+		saveTags := make([]*model.Tag, 0)
+		tagNames := set.NewFromSlice[*model.Tag, string](tags, func(m *model.Tag) string { return m.Name })
+		constantTags, err := r.tagRepo.GetList(ctx, tx, &repo.TagGetReq{Names: tagNames.ToSlice()})
+		if err != nil {
+			return nil, err
+		}
+		constantTagNameSet := set.NewFromSlice[*model.Tag, string](constantTags, func(m *model.Tag) string { return m.Name })
+		for _, i := range tags {
+			if !constantTagNameSet.Contains(i.Name) {
+				saveTags = append(saveTags, i)
+			}
+		}
+		saveTags, err = r.tagRepo.Saves(ctx, tx, saveTags)
+		if err != nil {
+			return nil, err
+		}
+		for _, i := range saveTags {
+			bindTagIds = append(bindTagIds, i.ID)
+		}
+	}
+
+	create := tx.Article.Create().
 		SetTitle(article.Title).
 		SetContent(article.Content).
 		SetNillableRewardContent(article.RewardContent).
@@ -51,31 +78,36 @@ func (r *ArticleRepo) Save(ctx context.Context, client *gen.Client, article *mod
 		SetNillableStatement(article.Statement).
 		SetCommentable(article.Commentable).
 		SetAnonymous(article.Anonymous).
-		SetListable(article.Listable).
-		AddTagIDs(tagIds...).
-		Save(ctx)
-	return (*model.Article)(save), err
+		SetListable(article.Listable)
+	if len(bindTagIds) > 0 {
+		create.AddTagIDs(bindTagIds...)
+	}
+	save, err := create.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return (*model.Article)(save), nil
 }
 
-func (r *ArticleRepo) UpdateContent(ctx context.Context, client *gen.Client, articleId int64, content string) error {
-	return client.Article.UpdateOneID(articleId).
+func (r *ArticleRepo) UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error {
+	return tx.Article.UpdateOneID(articleId).
 		SetContent(content).
 		Exec(ctx)
 }
-func (r *ArticleRepo) UpdateStatus(ctx context.Context, client *gen.Client, articleId int64, status cv1.ArticleStatus) error {
-	return client.Article.UpdateOneID(articleId).
+func (r *ArticleRepo) UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status cv1.ArticleStatus) error {
+	return tx.Article.UpdateOneID(articleId).
 		SetStatus(int32(status)).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, client *gen.Client, articleId int64, hasPostscript bool) error {
-	return client.Article.UpdateOneID(articleId).
+func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, tx *gen.Client, articleId int64, hasPostscript bool) error {
+	return tx.Article.UpdateOneID(articleId).
 		SetHasPostscript(hasPostscript).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articleId int64, action cv1.ArticleAction, num int32) error {
-	updateOne := client.Article.UpdateOneID(articleId)
+func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action cv1.ArticleAction, num int32) error {
+	updateOne := tx.Article.UpdateOneID(articleId)
 	switch action {
 	case cv1.ArticleAction_ArticleActionLike:
 		updateOne.AddLikeCount(num)
@@ -99,8 +131,8 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, client *gen.Client, articl
 	return updateOne.Exec(ctx)
 }
 
-func (r *ArticleRepo) Publish(ctx context.Context, client *gen.Client, articleId int64) error {
-	first, err := r.GetById(ctx, client, articleId)
+func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
+	first, err := r.GetById(ctx, tx, articleId)
 	if err != nil {
 		return err
 	}
@@ -117,19 +149,19 @@ func (r *ArticleRepo) Publish(ctx context.Context, client *gen.Client, articleId
 	return err
 }
 
-func (r *ArticleRepo) Delete(ctx context.Context, client *gen.Client, articleId int64) error {
-	return client.Article.UpdateOneID(articleId).SetStatus(int32(cv1.ArticleStatus_ArticleDeleted)).Exec(ctx)
+func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {
+	return tx.Article.UpdateOneID(articleId).SetStatus(int32(cv1.ArticleStatus_ArticleDeleted)).Exec(ctx)
 }
 
-func (r *ArticleRepo) Exist(ctx context.Context, client *gen.Client, id int64, status cv1.ArticleStatus) (bool, error) {
-	return client.Article.Query().
+func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, id int64, status cv1.ArticleStatus) (bool, error) {
+	return tx.Article.Query().
 		Where(article.IDEQ(id)).
 		Where(article.StatusEQ(int32(status))).
 		Exist(ctx)
 }
 
-func (r *ArticleRepo) GetById(ctx context.Context, client *gen.Client, id int64) (*model.Article, error) {
-	query, err := client.Article.Query().
+func (r *ArticleRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Article, error) {
+	query, err := tx.Article.Query().
 		Where(article.IDEQ(id)).
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
 			q.Where(articlepostscript.StatusEQ(int32(cv1.ArticlePostscriptStatus_ArticlePostscriptNormal))).
@@ -137,6 +169,9 @@ func (r *ArticleRepo) GetById(ctx context.Context, client *gen.Client, id int64)
 		}).
 		WithTags().
 		First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, errors.New("article is not found")
+	}
 	return (*model.Article)(query), err
 }
 

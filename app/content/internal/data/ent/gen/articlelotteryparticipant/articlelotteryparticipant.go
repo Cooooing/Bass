@@ -25,12 +25,12 @@ const (
 	// EdgeLottery holds the string denoting the lottery edge name in mutations.
 	EdgeLottery = "lottery"
 	// Table holds the table name of the articlelotteryparticipant in the database.
-	Table = "article_lottery_participants"
+	Table = "content_article_lottery_participants"
 	// LotteryTable is the table that holds the lottery relation/edge.
-	LotteryTable = "article_lottery_participants"
+	LotteryTable = "content_article_lottery_participants"
 	// LotteryInverseTable is the table name for the ArticleLottery entity.
 	// It exists in this package in order to avoid circular dependency with the "articlelottery" package.
-	LotteryInverseTable = "article_lotteries"
+	LotteryInverseTable = "content_article_lotteries"
 	// LotteryColumn is the table column denoting the lottery relation/edge.
 	LotteryColumn = "lottery_id"
 )

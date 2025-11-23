@@ -77,45 +77,45 @@ const (
 	// EdgeActionRecords holds the string denoting the action_records edge name in mutations.
 	EdgeActionRecords = "action_records"
 	// Table holds the table name of the article in the database.
-	Table = "articles"
+	Table = "content_articles"
 	// PostscriptsTable is the table that holds the postscripts relation/edge.
-	PostscriptsTable = "article_postscripts"
+	PostscriptsTable = "content_article_postscripts"
 	// PostscriptsInverseTable is the table name for the ArticlePostscript entity.
 	// It exists in this package in order to avoid circular dependency with the "articlepostscript" package.
-	PostscriptsInverseTable = "article_postscripts"
+	PostscriptsInverseTable = "content_article_postscripts"
 	// PostscriptsColumn is the table column denoting the postscripts relation/edge.
 	PostscriptsColumn = "article_id"
 	// VotesTable is the table that holds the votes relation/edge.
-	VotesTable = "article_votes"
+	VotesTable = "content_article_votes"
 	// VotesInverseTable is the table name for the ArticleVote entity.
 	// It exists in this package in order to avoid circular dependency with the "articlevote" package.
-	VotesInverseTable = "article_votes"
+	VotesInverseTable = "content_article_votes"
 	// VotesColumn is the table column denoting the votes relation/edge.
 	VotesColumn = "article_id"
 	// LotteriesTable is the table that holds the lotteries relation/edge.
-	LotteriesTable = "article_lotteries"
+	LotteriesTable = "content_article_lotteries"
 	// LotteriesInverseTable is the table name for the ArticleLottery entity.
 	// It exists in this package in order to avoid circular dependency with the "articlelottery" package.
-	LotteriesInverseTable = "article_lotteries"
+	LotteriesInverseTable = "content_article_lotteries"
 	// LotteriesColumn is the table column denoting the lotteries relation/edge.
 	LotteriesColumn = "article_id"
 	// CommentsTable is the table that holds the comments relation/edge.
-	CommentsTable = "comments"
+	CommentsTable = "content_comments"
 	// CommentsInverseTable is the table name for the Comment entity.
 	// It exists in this package in order to avoid circular dependency with the "comment" package.
-	CommentsInverseTable = "comments"
+	CommentsInverseTable = "content_comments"
 	// CommentsColumn is the table column denoting the comments relation/edge.
 	CommentsColumn = "article_id"
 	// TagsTable is the table that holds the tags relation/edge. The primary key declared below.
-	TagsTable = "article_tags"
+	TagsTable = "content_article_tags"
 	// TagsInverseTable is the table name for the Tag entity.
 	// It exists in this package in order to avoid circular dependency with the "tag" package.
-	TagsInverseTable = "tags"
+	TagsInverseTable = "content_tags"
 	// ActionRecordsTable is the table that holds the action_records relation/edge.
-	ActionRecordsTable = "article_action_records"
+	ActionRecordsTable = "content_article_action_records"
 	// ActionRecordsInverseTable is the table name for the ArticleActionRecord entity.
 	// It exists in this package in order to avoid circular dependency with the "articleactionrecord" package.
-	ActionRecordsInverseTable = "article_action_records"
+	ActionRecordsInverseTable = "content_article_action_records"
 	// ActionRecordsColumn is the table column denoting the action_records relation/edge.
 	ActionRecordsColumn = "article_id"
 )

@@ -2,8 +2,11 @@ package schema
 
 import (
 	"common/pkg"
+	"common/pkg/constant"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -11,6 +14,12 @@ import (
 // Article 文章实体定义
 type Article struct {
 	ent.Schema
+}
+
+func (Article) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: constant.TablePrefixContent.String() + "articles"},
+	}
 }
 
 func (Article) Fields() []ent.Field {
@@ -62,7 +71,10 @@ func (Article) Edges() []ent.Edge {
 		// 关联评论 一对多
 		edge.To("comments", Comment.Type),
 		// 关联标签 多对多
-		edge.To("tags", Tag.Type),
+		edge.To("tags", Tag.Type).
+			StorageKey(
+				edge.Table(constant.TablePrefixContent.String() + "article_tags"), // 自定义中间表名
+			),
 		// 关联操作 一对多
 		edge.To("action_records", ArticleActionRecord.Type),
 	}

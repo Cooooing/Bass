@@ -60,8 +60,6 @@ func (m *Tag) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for Status
-
 	// no validation rules for ArticleCount
 
 	if m.CreatedAt != nil {
@@ -144,6 +142,10 @@ func (m *Tag) validate(all bool) error {
 
 	if m.DomainId != nil {
 		// no validation rules for DomainId
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
 	}
 
 	if len(errors) > 0 {
@@ -244,14 +246,18 @@ func (m *TagSave) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
-	// no validation rules for Status
-
 	// no validation rules for Name
+
+	if m.Id != nil {
+		// no validation rules for Id
+	}
 
 	if m.DomainId != nil {
 		// no validation rules for DomainId
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
 	}
 
 	if m.Description != nil {

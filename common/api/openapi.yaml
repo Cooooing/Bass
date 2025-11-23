@@ -842,10 +842,10 @@ components:
                 listable:
                     type: boolean
                     description: 是否在列表展示
-                tagIds:
+                tags:
                     type: array
                     items:
-                        type: string
+                        $ref: '#/components/schemas/common.api.content.v1.TagSave'
                     description: 标签id
         common.api.content.v1.AddCommentReply:
             type: object

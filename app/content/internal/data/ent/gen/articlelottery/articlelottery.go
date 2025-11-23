@@ -35,26 +35,26 @@ const (
 	// EdgeWinners holds the string denoting the winners edge name in mutations.
 	EdgeWinners = "winners"
 	// Table holds the table name of the articlelottery in the database.
-	Table = "article_lotteries"
+	Table = "content_article_lotteries"
 	// ArticleTable is the table that holds the article relation/edge.
-	ArticleTable = "article_lotteries"
+	ArticleTable = "content_article_lotteries"
 	// ArticleInverseTable is the table name for the Article entity.
 	// It exists in this package in order to avoid circular dependency with the "article" package.
-	ArticleInverseTable = "articles"
+	ArticleInverseTable = "content_articles"
 	// ArticleColumn is the table column denoting the article relation/edge.
 	ArticleColumn = "article_id"
 	// ParticipantsTable is the table that holds the participants relation/edge.
-	ParticipantsTable = "article_lottery_participants"
+	ParticipantsTable = "content_article_lottery_participants"
 	// ParticipantsInverseTable is the table name for the ArticleLotteryParticipant entity.
 	// It exists in this package in order to avoid circular dependency with the "articlelotteryparticipant" package.
-	ParticipantsInverseTable = "article_lottery_participants"
+	ParticipantsInverseTable = "content_article_lottery_participants"
 	// ParticipantsColumn is the table column denoting the participants relation/edge.
 	ParticipantsColumn = "lottery_id"
 	// WinnersTable is the table that holds the winners relation/edge.
-	WinnersTable = "article_lottery_winners"
+	WinnersTable = "content_article_lottery_winners"
 	// WinnersInverseTable is the table name for the ArticleLotteryWinner entity.
 	// It exists in this package in order to avoid circular dependency with the "articlelotterywinner" package.
-	WinnersInverseTable = "article_lottery_winners"
+	WinnersInverseTable = "content_article_lottery_winners"
 	// WinnersColumn is the table column denoting the winners relation/edge.
 	WinnersColumn = "lottery_id"
 )

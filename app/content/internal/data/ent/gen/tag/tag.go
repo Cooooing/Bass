@@ -37,17 +37,17 @@ const (
 	// EdgeDomain holds the string denoting the domain edge name in mutations.
 	EdgeDomain = "domain"
 	// Table holds the table name of the tag in the database.
-	Table = "tags"
+	Table = "content_tags"
 	// ArticleTable is the table that holds the article relation/edge. The primary key declared below.
-	ArticleTable = "article_tags"
+	ArticleTable = "content_article_tags"
 	// ArticleInverseTable is the table name for the Article entity.
 	// It exists in this package in order to avoid circular dependency with the "article" package.
-	ArticleInverseTable = "articles"
+	ArticleInverseTable = "content_articles"
 	// DomainTable is the table that holds the domain relation/edge.
-	DomainTable = "tags"
+	DomainTable = "content_tags"
 	// DomainInverseTable is the table name for the Domain entity.
 	// It exists in this package in order to avoid circular dependency with the "domain" package.
-	DomainInverseTable = "domains"
+	DomainInverseTable = "content_domains"
 	// DomainColumn is the table column denoting the domain relation/edge.
 	DomainColumn = "domain_id"
 )

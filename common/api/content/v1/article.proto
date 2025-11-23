@@ -243,7 +243,7 @@ message AddArticleRequest {
   optional bool listable = 13;
 
   // 标签id
-  repeated int64 tag_ids = 100;
+  repeated TagSave tags = 100;
 }
 message AddArticleReply {}
 

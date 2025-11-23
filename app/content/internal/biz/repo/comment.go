@@ -31,5 +31,5 @@ type CommentGetReq struct {
 
 type CommentActionRecordRepo interface {
 	Save(ctx context.Context, tx *gen.Client, record *model.CommentActionRecord) (*model.CommentActionRecord, error)
-	Delete(ctx context.Context, tx *gen.Client, articleId int64, userId int64, action cv1.CommentAction) error
+	Delete(ctx context.Context, tx *gen.Client, commentId int64, userId int64, action cv1.CommentAction) error
 }

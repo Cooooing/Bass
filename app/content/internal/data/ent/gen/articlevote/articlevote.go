@@ -37,19 +37,19 @@ const (
 	// EdgeRecords holds the string denoting the records edge name in mutations.
 	EdgeRecords = "records"
 	// Table holds the table name of the articlevote in the database.
-	Table = "article_votes"
+	Table = "content_article_votes"
 	// ArticleTable is the table that holds the article relation/edge.
-	ArticleTable = "article_votes"
+	ArticleTable = "content_article_votes"
 	// ArticleInverseTable is the table name for the Article entity.
 	// It exists in this package in order to avoid circular dependency with the "article" package.
-	ArticleInverseTable = "articles"
+	ArticleInverseTable = "content_articles"
 	// ArticleColumn is the table column denoting the article relation/edge.
 	ArticleColumn = "article_id"
 	// RecordsTable is the table that holds the records relation/edge.
-	RecordsTable = "article_vote_records"
+	RecordsTable = "content_article_vote_records"
 	// RecordsInverseTable is the table name for the ArticleVoteRecord entity.
 	// It exists in this package in order to avoid circular dependency with the "articlevoterecord" package.
-	RecordsInverseTable = "article_vote_records"
+	RecordsInverseTable = "content_article_vote_records"
 	// RecordsColumn is the table column denoting the records relation/edge.
 	RecordsColumn = "vote_id"
 )

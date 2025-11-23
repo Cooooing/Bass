@@ -56,6 +56,18 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
+	var tags []*model.Tag
+	if len(req.Tags) > 0 {
+		for _, tag := range req.Tags {
+			tags = append(tags, &model.Tag{
+				Name:         tag.Name,
+				Description:  tag.Description,
+				Status:       int32(cv1.TagStatus_TagNormal),
+				ArticleCount: 1,
+			})
+		}
+	}
+
 	_, err = s.articleDomain.Add(ctx, &model.Article{
 		Title:         req.Title,
 		Content:       req.Content,
@@ -68,7 +80,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		Commentable:   base.DerefOrDefault(req.Commentable, true),
 		Anonymous:     base.DerefOrDefault(req.Anonymous, false),
 		Listable:      base.DerefOrDefault(req.Listable, true),
-	}, req.TagIds)
+	}, tags)
 	if err != nil {
 		return nil, err
 	}

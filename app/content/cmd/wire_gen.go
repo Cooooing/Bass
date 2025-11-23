@@ -55,7 +55,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tagRepo := data.NewTagRepo(baseRepo)
 	articleRepo := data.NewArticleRepo(baseRepo, genClient, articlePostscriptRepo, commentRepo, domainRepo, tagRepo)
 	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
-	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, commentRepo, domainRepo)
+	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, commentRepo, tagRepo, domainRepo)
 	if err != nil {
 		cleanup4()
 		cleanup3()
@@ -66,7 +66,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	articleService := service.NewArticleService(baseService, articleDomain, articleRepo)
 	domainDomain := biz.NewDomainDomain(baseDomain, domainRepo)
 	domainService := service.NewDomainService(baseService, domainDomain)
-	commentDomain := biz.NewCommentDomain(baseDomain, commentRepo, articleRepo)
+	commentActionRecordRepo := data.NewCommentActionRecordRepo(baseRepo, genClient)
+	commentDomain := biz.NewCommentDomain(baseDomain, commentRepo, commentActionRecordRepo, articleRepo)
 	commentService := service.NewCommentService(baseService, commentDomain, commentRepo, articleRepo)
 	tagDomain := biz.NewTagDomain(baseDomain, tagRepo)
 	tagService := service.NewTagService(baseService, tagDomain)

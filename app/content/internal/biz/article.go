@@ -26,11 +26,12 @@ type ArticleDomain struct {
 	postscriptRepo   repo.ArticlePostscriptRepo
 	actionRecordRepo repo.ArticleActionRecordRepo
 	commentRepo      repo.CommentRepo
+	tagRepo          repo.TagRepo
 	domainRepo       repo.DomainRepo
 	sf               *sonyflake.Sonyflake
 }
 
-func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscriptRepo repo.ArticlePostscriptRepo, actionRecordRepo repo.ArticleActionRecordRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo) (*ArticleDomain, error) {
+func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscriptRepo repo.ArticlePostscriptRepo, actionRecordRepo repo.ArticleActionRecordRepo, commentRepo repo.CommentRepo, tagRepo repo.TagRepo, domainRepo repo.DomainRepo) (*ArticleDomain, error) {
 	sf, err := util.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -41,6 +42,7 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 		postscriptRepo:   postscriptRepo,
 		actionRecordRepo: actionRecordRepo,
 		commentRepo:      commentRepo,
+		tagRepo:          tagRepo,
 		domainRepo:       domainRepo,
 		sf:               sf,
 	}, nil
@@ -48,13 +50,13 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 
 // --- 新增 ---
 
-func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tagIds []int64) (*model.Article, error) {
+func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
 	)
 	err = ent.WithTx(ctx, d.db, func(client *gen.Client) error {
-		save, err = d.articleRepo.Save(ctx, d.db, article, tagIds)
+		save, err = d.articleRepo.Save(ctx, d.db, article, tags)
 		if err != nil {
 			return err
 		}

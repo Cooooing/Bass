@@ -56,18 +56,18 @@ message Tag {
   // 所属领域ID
   optional int64 domain_id = 5;
   // 标签状态：0-正常，1-禁用
-  int32 status = 6;
+  optional int32 status = 6;
   // 文章数
   int32 article_count = 7;
 }
 
 message TagSave {
   // 主键
-  int64 id = 1;
+  optional int64 id = 1;
   // 领域ID
   optional int64 domain_id = 2;
   // 状态：0-正常，1-禁用
-  int32 status = 3;
+  optional int32 status = 3;
   // 标签名称
   string name = 4;
   // 标签描述

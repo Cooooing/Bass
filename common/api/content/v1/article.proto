@@ -167,6 +167,8 @@ message Article {
   string title = 3;
   // 正文内容
   string content = 4;
+  // 正文内容渲染
+  string content_render = 22;
 
   // 是否有附言
   bool has_postscript = 5;

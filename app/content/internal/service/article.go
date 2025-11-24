@@ -13,7 +13,6 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
-	"errors"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -51,10 +50,10 @@ func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerA
 func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rsp *v1.AddArticleReply, err error) {
 	article := req.Article
 	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, errors.New("status only be 0(normal) or 3(drafts)")
+		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
 	if article.Type != int32(cv1.ArticleType_ArticleTypeNormal) && article.Type != int32(cv1.ArticleType_ArticleTypeQA) && article.Type != int32(cv1.ArticleType_ArticleTypeVote) && article.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
-		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
 	var tags []*model.Tag
@@ -93,10 +92,10 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleDraftRequest) (rsp *v1.UpdateArticleDraftReply, err error) {
 	article := req.Article
 	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, errors.New("status only be 0(normal) or 3(drafts)")
+		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
 	if article.Type != int32(cv1.ArticleType_ArticleTypeNormal) && article.Type != int32(cv1.ArticleType_ArticleTypeQA) && article.Type != int32(cv1.ArticleType_ArticleTypeVote) && article.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
-		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
 	var tags []*model.Tag
@@ -139,7 +138,7 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 		if err != nil {
 			return nil, err
 		}
-		return nil, errors.New("you are not the author")
+		return nil, cv1.ErrorBadRequest("you are not the author")
 	}
 
 	err = s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
@@ -161,11 +160,11 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 		}
 		// 只能删除草稿
 		if article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-			return errors.New("only drafts can be deleted")
+			return cv1.ErrorBadRequest("only drafts can be deleted")
 		}
 		// 只有作者可以删除草稿
 		if *article.CreatedBy != user.ID {
-			return errors.New("you are not the author")
+			return cv1.ErrorBadRequest("you are not the author")
 		}
 		err = s.articleRepo.Delete(ctx, s.db, req.ArticleId)
 		return err
@@ -175,7 +174,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 
 func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (rsp *v1.PageArticleReply, err error) {
 	if req.Status != nil && *req.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, errors.New("status only be 0(normal) or 3(drafts)")
+		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
 	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
 		TagId:    req.TagId,
@@ -207,11 +206,11 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 	}
 	// 只能发布草稿
 	if article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, errors.New("only drafts can be publish")
+		return nil, cv1.ErrorBadRequest("only drafts can be publish")
 	}
 	// 只有作者可以发布草稿
 	if *article.CreatedBy != user.ID {
-		return nil, errors.New("you are not the author")
+		return nil, cv1.ErrorBadRequest("you are not the author")
 	}
 	err = s.articleDomain.Publish(ctx, req.ArticleId)
 	return &v1.PublishArticleReply{}, err

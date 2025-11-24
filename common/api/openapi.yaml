@@ -916,6 +916,9 @@ components:
                 content:
                     type: string
                     description: 正文内容
+                contentRender:
+                    type: string
+                    description: 正文内容渲染
                 hasPostscript:
                     type: boolean
                     description: 是否有附言

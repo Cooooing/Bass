@@ -1,10 +1,10 @@
 package biz
 
 import (
+	cv1 "common/api/common/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"errors"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/ent"
@@ -41,14 +41,14 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	// 验证数据
 	exist, err := s.userRepo.ConstantAccount(ctx, s.db, u.Email)
 	if exist {
-		err = errors.New("email already exists")
+		err = cv1.ErrorBadRequest("email already exists")
 	}
 	if err != nil {
 		return
 	}
 	exist, err = s.userRepo.ConstantAccount(ctx, s.db, u.Nickname)
 	if exist {
-		err = errors.New("nickname already exists")
+		err = cv1.ErrorBadRequest("nickname already exists")
 	}
 	if err != nil {
 		return
@@ -60,7 +60,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 		return
 	}
 	if existEmailCode {
-		err = errors.New("email verification code has been sent")
+		err = cv1.ErrorBadRequest("email verification code has been sent")
 		return
 	}
 
@@ -100,7 +100,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 	}
 	// 验证 code
 	if emailCode != code {
-		err = errors.New("email code invalid")
+		err = cv1.ErrorBadRequest("email code invalid")
 		return
 	}
 
@@ -142,7 +142,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	}
 	// 验证密码
 	if !user.PasswordVerify(password) {
-		return token, nil, errors.New("password invalid")
+		return token, nil, cv1.ErrorBadRequest("password invalid")
 	}
 	// 生成 token
 	token, err = s.tokenService.TokenGen.Generate(model.Token{

@@ -9,7 +9,6 @@ import (
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/domain"
 	"context"
-	"errors"
 )
 
 type DomainRepo struct {
@@ -93,7 +92,7 @@ func (r *DomainRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*mo
 		Where(domain.IDEQ(id)).
 		First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, errors.New("domain is not found")
+		return nil, cv1.ErrorBadRequest("domain is not found")
 	}
 	return (*model.Domain)(query), err
 }

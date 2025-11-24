@@ -294,6 +294,8 @@ func (m *Article) validate(all bool) error {
 
 	// no validation rules for Content
 
+	// no validation rules for ContentRender
+
 	// no validation rules for HasPostscript
 
 	// no validation rules for Status

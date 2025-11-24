@@ -14,7 +14,6 @@ import (
 	"content/internal/data/ent/gen/tag"
 	"context"
 	"encoding/json"
-	"errors"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -219,7 +218,7 @@ func (r *ArticleRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*m
 		WithTags().
 		First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, errors.New("article is not found")
+		return nil, cv1.ErrorBadRequest("article is not found")
 	}
 	return (*model.Article)(query), err
 }

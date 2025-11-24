@@ -142,6 +142,8 @@ type Article struct {
 	Title string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
 	// 正文内容
 	Content string `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	// 正文内容渲染
+	ContentRender string `protobuf:"bytes,22,opt,name=content_render,json=contentRender,proto3" json:"content_render,omitempty"`
 	// 是否有附言
 	HasPostscript bool `protobuf:"varint,5,opt,name=has_postscript,json=hasPostscript,proto3" json:"has_postscript,omitempty"`
 	// 打赏区内容（可为空）
@@ -269,6 +271,13 @@ func (x *Article) GetTitle() string {
 func (x *Article) GetContent() string {
 	if x != nil {
 		return x.Content
+	}
+	return ""
+}
+
+func (x *Article) GetContentRender() string {
+	if x != nil {
+		return x.ContentRender
 	}
 	return ""
 }
@@ -2107,8 +2116,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontentB\r\n" +
 	"\v_created_byB\r\n" +
-	"\v_updated_by\"\xe4\n" +
-	"\n" +
+	"\v_updated_by\"\x8b\v\n" +
 	"\aArticle\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -2121,6 +2129,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
+	"\x0econtent_render\x18\x16 \x01(\tR\rcontentRender\x12%\n" +
 	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12*\n" +
 	"\x0ereward_content\x18\x06 \x01(\tH\x02R\rrewardContent\x88\x01\x01\x12(\n" +
 	"\rreward_points\x18\a \x01(\x05H\x03R\frewardPoints\x88\x01\x01\x12\x16\n" +

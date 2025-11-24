@@ -5,7 +5,6 @@ import (
 	"common/pkg/constant"
 	"common/pkg/util/base"
 	"context"
-	"errors"
 	"fmt"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -58,7 +57,7 @@ func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*
 func (r *UserRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.User, error) {
 	u, err := tx.User.Query().Where(user.IDEQ(id)).Only(ctx)
 	if gen.IsNotFound(err) {
-		return nil, errors.New("user is not found")
+		return nil, cv1.ErrorBadRequest("user is not found")
 	}
 	return (*model.User)(u), err
 }

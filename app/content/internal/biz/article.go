@@ -15,9 +15,10 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
-	"errors"
+	"fmt"
 	"time"
 
+	"github.com/88250/lute"
 	"github.com/sony/sonyflake/v2"
 )
 
@@ -30,6 +31,7 @@ type ArticleDomain struct {
 	tagRepo          repo.TagRepo
 	domainRepo       repo.DomainRepo
 	sf               *sonyflake.Sonyflake
+	luteEngine       *lute.Lute
 }
 
 func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscriptRepo repo.ArticlePostscriptRepo, actionRecordRepo repo.ArticleActionRecordRepo, commentRepo repo.CommentRepo, tagRepo repo.TagRepo, domainRepo repo.DomainRepo) (*ArticleDomain, error) {
@@ -46,7 +48,14 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 		tagRepo:          tagRepo,
 		domainRepo:       domainRepo,
 		sf:               sf,
+		luteEngine:       lute.New(),
 	}, nil
+}
+
+// RenderContent 渲染文章内容
+func (d *ArticleDomain) RenderContent(article *model.Article) string {
+	name := fmt.Sprintf("article_%d_%d_%s", article.ID, article.CreatedBy, article.Title)
+	return d.luteEngine.MarkdownStr(name, article.Content)
 }
 
 // --- 新增 ---
@@ -103,7 +112,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 			return err
 		}
 		if articleById.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-			return errors.New("only update draft")
+			return cv1.ErrorBadRequest("only update draft")
 		}
 
 		save, err = d.articleRepo.Update(ctx, tx, article, tags)
@@ -208,8 +217,10 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArt
 	}
 
 	authorUser = base.If(query.Anonymous, nil, userAuthorsMap.Users[*query.CreatedBy])
+	articleReply := query.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt)
+	articleReply.ContentRender = d.RenderContent(query)
 	reply = &v1.GetArticleOneReply{
-		Article: query.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt),
+		Article: articleReply,
 	}
 	return reply, err
 }

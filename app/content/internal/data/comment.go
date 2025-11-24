@@ -10,7 +10,6 @@ import (
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/comment"
 	"context"
-	"errors"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -74,7 +73,7 @@ func (r *CommentRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*m
 		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
 		First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, errors.New("comment is not found")
+		return nil, cv1.ErrorBadRequest("comment is not found")
 	}
 	return (*model.Comment)(query), err
 }

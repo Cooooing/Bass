@@ -34,7 +34,7 @@ func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error
 			return json.NewEncoder(w).Encode(res)
 		}
 		// 没有 reason → 系统错误
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(code)
 		res := NewResult[any](500, "Internal Server Error", nil)
 		return json.NewEncoder(w).Encode(res)
 	}

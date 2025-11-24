@@ -15,6 +15,7 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
+	"errors"
 	"time"
 
 	"github.com/sony/sonyflake/v2"
@@ -55,14 +56,14 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 		save *model.Article
 		err  error
 	)
-	err = ent.WithTx(ctx, d.db, func(client *gen.Client) error {
-		save, err = d.articleRepo.Save(ctx, d.db, article, tags)
+	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		save, err = d.articleRepo.Save(ctx, tx, article, tags)
 		if err != nil {
 			return err
 		}
 		// 不是草稿则进行发布
 		if save.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-			err = d.articleRepo.Publish(ctx, d.db, save.ID)
+			err = d.articleRepo.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
 			}
@@ -73,13 +74,13 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 }
 
 func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, content string) error {
-	err := ent.WithTx(ctx, d.db, func(client *gen.Client) error {
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
-		err = d.postscriptRepo.AddPostscript(ctx, client, articleId, content)
+		err = d.postscriptRepo.AddPostscript(ctx, tx, articleId, content)
 		if err != nil {
 			return err
 		}
-		err = d.articleRepo.UpdateHasPostscript(ctx, client, articleId, true)
+		err = d.articleRepo.UpdateHasPostscript(ctx, tx, articleId, true)
 		if err != nil {
 			return err
 		}
@@ -91,15 +92,45 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, cont
 
 // --- 更新 ---
 
-func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action cv1.ArticleAction, active bool) error {
-	err := ent.WithTx(ctx, d.db, func(client *gen.Client) error {
-		var err error
-		if active {
-			err = d.articleRepo.UpdateStat(ctx, client, articleId, action, 1)
+func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
+	var (
+		save *model.Article
+		err  error
+	)
+	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		articleById, err := d.articleRepo.GetById(ctx, tx, article.ID)
+		if err != nil {
+			return err
+		}
+		if articleById.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+			return errors.New("only update draft")
+		}
+
+		save, err = d.articleRepo.Update(ctx, tx, article, tags)
+		if err != nil {
+			return err
+		}
+		// 不是草稿则进行发布
+		if save.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+			err = d.articleRepo.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
 			}
-			_, err = d.actionRecordRepo.Save(ctx, client, &model.ArticleActionRecord{
+		}
+		return err
+	})
+	return save, err
+}
+
+func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action cv1.ArticleAction, active bool) error {
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		var err error
+		if active {
+			err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
+			if err != nil {
+				return err
+			}
+			_, err = d.actionRecordRepo.Save(ctx, tx, &model.ArticleActionRecord{
 				ArticleID: articleId,
 				UserID:    userId,
 				Type:      int32(action),
@@ -108,11 +139,11 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 				return err
 			}
 		} else {
-			err = d.articleRepo.UpdateStat(ctx, client, articleId, action, -1)
+			err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, -1)
 			if err != nil {
 				return err
 			}
-			err = d.actionRecordRepo.Delete(ctx, client, articleId, userId, action)
+			err = d.actionRecordRepo.Delete(ctx, tx, articleId, userId, action)
 			if err != nil {
 				return err
 			}
@@ -124,12 +155,12 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 }
 
 func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
-	return ent.WithTx(ctx, d.db, func(client *gen.Client) error {
-		err := d.articleRepo.UpdateStatus(ctx, client, articleId, cv1.ArticleStatus_ArticleNormal)
+	return ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		err := d.articleRepo.UpdateStatus(ctx, tx, articleId, cv1.ArticleStatus_ArticleNormal)
 		if err != nil {
 			return err
 		}
-		err = d.articleRepo.Publish(ctx, client, articleId)
+		err = d.articleRepo.Publish(ctx, tx, articleId)
 		if err != nil {
 			return err
 		}

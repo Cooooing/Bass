@@ -31,6 +31,7 @@ const OperationContentArticleServicePublish = "/common.api.content.v1.ContentArt
 const OperationContentArticleServiceReward = "/common.api.content.v1.ContentArticleService/Reward"
 const OperationContentArticleServiceThank = "/common.api.content.v1.ContentArticleService/Thank"
 const OperationContentArticleServiceUpdate = "/common.api.content.v1.ContentArticleService/Update"
+const OperationContentArticleServiceUpdateDraft = "/common.api.content.v1.ContentArticleService/UpdateDraft"
 const OperationContentArticleServiceWatch = "/common.api.content.v1.ContentArticleService/Watch"
 
 type ContentArticleServiceHTTPServer interface {
@@ -58,6 +59,8 @@ type ContentArticleServiceHTTPServer interface {
 	Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error)
 	// Update 修改文章（管理员使用）
 	Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error)
+	// UpdateDraft 更新草稿
+	UpdateDraft(context.Context, *UpdateArticleDraftRequest) (*UpdateArticleDraftReply, error)
 	// Watch 关注文章
 	Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error)
 }
@@ -65,6 +68,7 @@ type ContentArticleServiceHTTPServer interface {
 func RegisterContentArticleServiceHTTPServer(s *http.Server, srv ContentArticleServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/article/add", _ContentArticleService_Add0_HTTP_Handler(srv))
+	r.POST("/v1/article/updateDraft", _ContentArticleService_UpdateDraft0_HTTP_Handler(srv))
 	r.POST("/v1/article/publish", _ContentArticleService_Publish0_HTTP_Handler(srv))
 	r.POST("/v1/article/update", _ContentArticleService_Update1_HTTP_Handler(srv))
 	r.POST("/v1/article/delete", _ContentArticleService_Delete0_HTTP_Handler(srv))
@@ -97,6 +101,28 @@ func _ContentArticleService_Add0_HTTP_Handler(srv ContentArticleServiceHTTPServe
 			return err
 		}
 		reply := out.(*AddArticleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ContentArticleService_UpdateDraft0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateArticleDraftRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationContentArticleServiceUpdateDraft)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateDraft(ctx, req.(*UpdateArticleDraftRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateArticleDraftReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -390,6 +416,8 @@ type ContentArticleServiceHTTPClient interface {
 	Thank(ctx context.Context, req *ThankArticleRequest, opts ...http.CallOption) (rsp *ThankArticleReply, err error)
 	// Update 修改文章（管理员使用）
 	Update(ctx context.Context, req *UpdateArticleRequest, opts ...http.CallOption) (rsp *UpdateArticleReply, err error)
+	// UpdateDraft 更新草稿
+	UpdateDraft(ctx context.Context, req *UpdateArticleDraftRequest, opts ...http.CallOption) (rsp *UpdateArticleDraftReply, err error)
 	// Watch 关注文章
 	Watch(ctx context.Context, req *WatchArticleRequest, opts ...http.CallOption) (rsp *WatchArticleReply, err error)
 }
@@ -562,6 +590,20 @@ func (c *ContentArticleServiceHTTPClientImpl) Update(ctx context.Context, in *Up
 	pattern := "/v1/article/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationContentArticleServiceUpdate))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateDraft 更新草稿
+func (c *ContentArticleServiceHTTPClientImpl) UpdateDraft(ctx context.Context, in *UpdateArticleDraftRequest, opts ...http.CallOption) (*UpdateArticleDraftReply, error) {
+	var out UpdateArticleDraftReply
+	pattern := "/v1/article/updateDraft"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationContentArticleServiceUpdateDraft))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

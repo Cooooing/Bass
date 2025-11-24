@@ -49,16 +49,17 @@ func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerA
 }
 
 func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rsp *v1.AddArticleReply, err error) {
-	if req.Status != int32(cv1.ArticleStatus_ArticleNormal) && req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+	article := req.Article
+	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, errors.New("status only be 0(normal) or 3(drafts)")
 	}
-	if req.Type != int32(cv1.ArticleType_ArticleTypeNormal) && req.Type != int32(cv1.ArticleType_ArticleTypeQA) && req.Type != int32(cv1.ArticleType_ArticleTypeVote) && req.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
+	if article.Type != int32(cv1.ArticleType_ArticleTypeNormal) && article.Type != int32(cv1.ArticleType_ArticleTypeQA) && article.Type != int32(cv1.ArticleType_ArticleTypeVote) && article.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
 		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
 	var tags []*model.Tag
-	if len(req.Tags) > 0 {
-		for _, tag := range req.Tags {
+	if len(article.Tags) > 0 {
+		for _, tag := range article.Tags {
 			tags = append(tags, &model.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
@@ -68,23 +69,67 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		}
 	}
 
-	_, err = s.articleDomain.Add(ctx, &model.Article{
-		Title:         req.Title,
-		Content:       req.Content,
-		RewardContent: req.RewardContent,
-		RewardPoints:  req.RewardPoints,
-		Status:        req.Status,
-		Type:          req.Type,
-		BountyPoints:  base.If(req.Type != int32(cv1.ArticleType_ArticleTypeQA), nil, req.BountyPoints),
-		Statement:     req.Statement,
-		Commentable:   base.DerefOrDefault(req.Commentable, true),
-		Anonymous:     base.DerefOrDefault(req.Anonymous, false),
-		Listable:      base.DerefOrDefault(req.Listable, true),
+	save, err := s.articleDomain.Add(ctx, &model.Article{
+		Title:         article.Title,
+		Content:       article.Content,
+		RewardContent: article.RewardContent,
+		RewardPoints:  article.RewardPoints,
+		Status:        article.Status,
+		Type:          article.Type,
+		BountyPoints:  base.If(article.Type != int32(cv1.ArticleType_ArticleTypeQA), nil, article.BountyPoints),
+		Statement:     article.Statement,
+		Commentable:   base.DerefOrDefault(article.Commentable, true),
+		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
+		Listable:      base.DerefOrDefault(article.Listable, true),
 	}, tags)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddArticleReply{}, nil
+	return &v1.AddArticleReply{
+		ArticleId: save.ID,
+	}, nil
+}
+
+func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleDraftRequest) (rsp *v1.UpdateArticleDraftReply, err error) {
+	article := req.Article
+	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+		return nil, errors.New("status only be 0(normal) or 3(drafts)")
+	}
+	if article.Type != int32(cv1.ArticleType_ArticleTypeNormal) && article.Type != int32(cv1.ArticleType_ArticleTypeQA) && article.Type != int32(cv1.ArticleType_ArticleTypeVote) && article.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
+		return nil, errors.New("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+	}
+
+	var tags []*model.Tag
+	if len(article.Tags) > 0 {
+		for _, tag := range article.Tags {
+			tags = append(tags, &model.Tag{
+				Name:         tag.Name,
+				Description:  tag.Description,
+				Status:       int32(cv1.TagStatus_TagNormal),
+				ArticleCount: 1,
+			})
+		}
+	}
+
+	update, err := s.articleDomain.UpdateDraft(ctx, &model.Article{
+		Title:         article.Title,
+		Content:       article.Content,
+		RewardContent: article.RewardContent,
+		RewardPoints:  article.RewardPoints,
+		Status:        article.Status,
+		Type:          article.Type,
+		BountyPoints:  base.If(article.Type != int32(cv1.ArticleType_ArticleTypeQA), nil, article.BountyPoints),
+		Statement:     article.Statement,
+		Commentable:   base.DerefOrDefault(article.Commentable, true),
+		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
+		Listable:      base.DerefOrDefault(article.Listable, true),
+	}, tags)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.UpdateArticleDraftReply{
+		ArticleId: update.ID,
+	}, nil
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {

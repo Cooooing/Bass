@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	ContentArticleService_Add_FullMethodName           = "/common.api.content.v1.ContentArticleService/Add"
+	ContentArticleService_UpdateDraft_FullMethodName   = "/common.api.content.v1.ContentArticleService/UpdateDraft"
 	ContentArticleService_Publish_FullMethodName       = "/common.api.content.v1.ContentArticleService/Publish"
 	ContentArticleService_Update_FullMethodName        = "/common.api.content.v1.ContentArticleService/Update"
 	ContentArticleService_Delete_FullMethodName        = "/common.api.content.v1.ContentArticleService/Delete"
@@ -42,6 +43,8 @@ const (
 type ContentArticleServiceClient interface {
 	// 新增文章
 	Add(ctx context.Context, in *AddArticleRequest, opts ...grpc.CallOption) (*AddArticleReply, error)
+	// 更新草稿
+	UpdateDraft(ctx context.Context, in *UpdateArticleDraftRequest, opts ...grpc.CallOption) (*UpdateArticleDraftReply, error)
 	// 发布文章（从草稿发布）
 	Publish(ctx context.Context, in *PublishArticleRequest, opts ...grpc.CallOption) (*PublishArticleReply, error)
 	// 修改文章（管理员使用）
@@ -80,6 +83,16 @@ func (c *contentArticleServiceClient) Add(ctx context.Context, in *AddArticleReq
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddArticleReply)
 	err := c.cc.Invoke(ctx, ContentArticleService_Add_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *contentArticleServiceClient) UpdateDraft(ctx context.Context, in *UpdateArticleDraftRequest, opts ...grpc.CallOption) (*UpdateArticleDraftReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateArticleDraftReply)
+	err := c.cc.Invoke(ctx, ContentArticleService_UpdateDraft_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -214,6 +227,8 @@ func (c *contentArticleServiceClient) AcceptAnswer(ctx context.Context, in *Acce
 type ContentArticleServiceServer interface {
 	// 新增文章
 	Add(context.Context, *AddArticleRequest) (*AddArticleReply, error)
+	// 更新草稿
+	UpdateDraft(context.Context, *UpdateArticleDraftRequest) (*UpdateArticleDraftReply, error)
 	// 发布文章（从草稿发布）
 	Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error)
 	// 修改文章（管理员使用）
@@ -250,6 +265,9 @@ type UnimplementedContentArticleServiceServer struct{}
 
 func (UnimplementedContentArticleServiceServer) Add(context.Context, *AddArticleRequest) (*AddArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (UnimplementedContentArticleServiceServer) UpdateDraft(context.Context, *UpdateArticleDraftRequest) (*UpdateArticleDraftReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateDraft not implemented")
 }
 func (UnimplementedContentArticleServiceServer) Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Publish not implemented")
@@ -322,6 +340,24 @@ func _ContentArticleService_Add_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ContentArticleServiceServer).Add(ctx, req.(*AddArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ContentArticleService_UpdateDraft_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateArticleDraftRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentArticleServiceServer).UpdateDraft(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ContentArticleService_UpdateDraft_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentArticleServiceServer).UpdateDraft(ctx, req.(*UpdateArticleDraftRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -552,6 +588,10 @@ var ContentArticleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Add",
 			Handler:    _ContentArticleService_Add_Handler,
+		},
+		{
+			MethodName: "UpdateDraft",
+			Handler:    _ContentArticleService_UpdateDraft_Handler,
 		},
 		{
 			MethodName: "Publish",

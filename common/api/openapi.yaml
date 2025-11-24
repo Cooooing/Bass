@@ -234,6 +234,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateArticleReply'
+    /v1/article/updateDraft:
+        post:
+            tags:
+                - ContentArticleService
+            description: 更新草稿
+            operationId: ContentArticleService_UpdateDraft
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.content.v1.UpdateArticleDraftRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.content.v1.UpdateArticleDraftReply'
     /v1/article/watch:
         post:
             tags:
@@ -801,52 +820,17 @@ components:
                     description: 评论ID
         common.api.content.v1.AddArticleReply:
             type: object
-            properties: {}
+            properties:
+                articleId:
+                    type: string
+                    description: 文章ID
         common.api.content.v1.AddArticleRequest:
             type: object
             properties:
-                title:
-                    type: string
-                    description: 标题
-                content:
-                    type: string
-                    description: 内容
-                rewardContent:
-                    type: string
-                    description: 打赏内容
-                rewardPoints:
-                    type: integer
-                    description: 打赏积分
-                    format: int32
-                status:
-                    type: integer
-                    description: 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-                    format: int32
-                type:
-                    type: integer
-                    description: 类型 0-普通 1-问答 2-投票 3-抽奖
-                    format: int32
-                bountyPoints:
-                    type: integer
-                    description: 悬赏积分
-                    format: int32
-                statement:
-                    type: string
-                    description: 创作声明
-                commentable:
-                    type: boolean
-                    description: 是否允许评论
-                anonymous:
-                    type: boolean
-                    description: 是否匿名
-                listable:
-                    type: boolean
-                    description: 是否在列表展示
-                tags:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.content.v1.TagSave'
-                    description: 标签id
+                article:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.ArticleSave'
+                    description: 文章
         common.api.content.v1.AddCommentReply:
             type: object
             properties: {}
@@ -1050,6 +1034,51 @@ components:
                     type: string
                     description: 附言内容
             description: 文章附言
+        common.api.content.v1.ArticleSave:
+            type: object
+            properties:
+                title:
+                    type: string
+                    description: 标题
+                content:
+                    type: string
+                    description: 内容
+                rewardContent:
+                    type: string
+                    description: 打赏内容
+                rewardPoints:
+                    type: integer
+                    description: 打赏积分
+                    format: int32
+                status:
+                    type: integer
+                    description: 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
+                    format: int32
+                type:
+                    type: integer
+                    description: 类型 0-普通 1-问答 2-投票 3-抽奖
+                    format: int32
+                bountyPoints:
+                    type: integer
+                    description: 悬赏积分
+                    format: int32
+                statement:
+                    type: string
+                    description: 创作声明
+                commentable:
+                    type: boolean
+                    description: 是否允许评论
+                anonymous:
+                    type: boolean
+                    description: 是否匿名
+                listable:
+                    type: boolean
+                    description: 是否在列表展示
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.content.v1.TagSave'
+                    description: 标签id
         common.api.content.v1.CollectArticleReply:
             type: object
             properties: {}
@@ -1485,6 +1514,19 @@ components:
                 active:
                     type: boolean
                     description: 是否感谢
+        common.api.content.v1.UpdateArticleDraftReply:
+            type: object
+            properties:
+                articleId:
+                    type: string
+                    description: 文章ID
+        common.api.content.v1.UpdateArticleDraftRequest:
+            type: object
+            properties:
+                article:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.ArticleSave'
+                    description: 文章
         common.api.content.v1.UpdateArticleReply:
             type: object
             properties: {}

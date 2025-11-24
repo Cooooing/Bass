@@ -89,6 +89,54 @@ func (r *ArticleRepo) Save(ctx context.Context, tx *gen.Client, article *model.A
 	return (*model.Article)(save), nil
 }
 
+func (r *ArticleRepo) Update(ctx context.Context, tx *gen.Client, updateArticle *model.Article, tags []*model.Tag) (*model.Article, error) {
+
+	// 处理标签，去除重复
+	bindTagIds := make([]int64, 0)
+	if len(tags) > 0 {
+		saveTags := make([]*model.Tag, 0)
+		tagNames := set.NewFromSlice[*model.Tag, string](tags, func(m *model.Tag) string { return m.Name })
+		constantTags, err := r.tagRepo.GetList(ctx, tx, &repo.TagGetReq{Names: tagNames.ToSlice()})
+		if err != nil {
+			return nil, err
+		}
+		constantTagNameSet := set.NewFromSlice[*model.Tag, string](constantTags, func(m *model.Tag) string { return m.Name })
+		for _, i := range tags {
+			if !constantTagNameSet.Contains(i.Name) {
+				saveTags = append(saveTags, i)
+			}
+		}
+		saveTags, err = r.tagRepo.Saves(ctx, tx, saveTags)
+		if err != nil {
+			return nil, err
+		}
+		for _, i := range saveTags {
+			bindTagIds = append(bindTagIds, i.ID)
+		}
+	}
+
+	update := tx.Article.UpdateOneID(updateArticle.ID).
+		SetTitle(updateArticle.Title).
+		SetContent(updateArticle.Content).
+		SetNillableRewardContent(updateArticle.RewardContent).
+		SetNillableRewardPoints(updateArticle.RewardPoints).
+		SetStatus(updateArticle.Status).
+		SetType(updateArticle.Type).
+		SetNillableBountyPoints(updateArticle.BountyPoints).
+		SetNillableStatement(updateArticle.Statement).
+		SetCommentable(updateArticle.Commentable).
+		SetAnonymous(updateArticle.Anonymous).
+		SetListable(updateArticle.Listable)
+	if len(bindTagIds) > 0 {
+		update.ClearTags().AddTagIDs(bindTagIds...)
+	}
+	save, err := update.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return (*model.Article)(save), nil
+}
+
 func (r *ArticleRepo) UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error {
 	return tx.Article.UpdateOneID(articleId).
 		SetContent(content).
@@ -132,6 +180,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
+	return nil
 	first, err := r.GetById(ctx, tx, articleId)
 	if err != nil {
 		return err

@@ -28,11 +28,11 @@ func NewUserRepo(repo *BaseRepo, client *gen.Client) repo.UserRepo {
 func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error) {
 	userCreate := tx.User.Create().
 		SetName(u.Name).
-		SetPassword(u.Password)
-	userCreate.SetEmail(u.Email)
-	userCreate.SetNillablePhone(u.Phone)
-	userCreate.SetNickname(u.Nickname)
-	userCreate.SetAvatarURL(fmt.Sprintf(r.conf.Oss.Local.Avatar, u.Name))
+		SetPassword(u.Password).
+		SetEmail(u.Email).
+		SetNillablePhone(u.Phone).
+		SetNickname(u.Nickname).
+		SetAvatarURL(fmt.Sprintf(r.conf.Oss.Local.Avatar, u.Name))
 	createdUser, err := userCreate.Save(ctx)
 	return (*model.User)(createdUser), err
 }

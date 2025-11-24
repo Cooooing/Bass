@@ -106,16 +106,17 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
 		// 保存用户信息
-		user := &model.User{}
-		err = copier.Copy(user, saveUser)
-		if err != nil {
-			return err
+		user := &model.User{
+			Name:     saveUser.Name,
+			Nickname: saveUser.Nickname,
+			Password: saveUser.Password,
+			Email:    saveUser.Email,
 		}
 		err = user.PasswordEncrypt()
 		if err != nil {
 			return err
 		}
-		_, err = s.userRepo.Save(ctx, s.db, user)
+		_, err = s.userRepo.Save(ctx, tx, user)
 		if err != nil {
 			return err
 		}

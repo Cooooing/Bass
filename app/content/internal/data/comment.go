@@ -166,6 +166,9 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
 		Order(gen.Desc(comment.FieldCreatedAt)).
 		First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, nil
+	}
 	return (*model.Comment)(query), err
 }
 

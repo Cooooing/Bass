@@ -371,6 +371,122 @@ var _ interface {
 	ErrorName() string
 } = UserValidationError{}
 
+// Validate checks the field values on UserQueryParams with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *UserQueryParams) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UserQueryParams with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UserQueryParamsMultiError, or nil if none found.
+func (m *UserQueryParams) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UserQueryParams) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
+	if m.Nickname != nil {
+		// no validation rules for Nickname
+	}
+
+	if m.Email != nil {
+		// no validation rules for Email
+	}
+
+	if m.Phone != nil {
+		// no validation rules for Phone
+	}
+
+	if len(errors) > 0 {
+		return UserQueryParamsMultiError(errors)
+	}
+
+	return nil
+}
+
+// UserQueryParamsMultiError is an error wrapping multiple validation errors
+// returned by UserQueryParams.ValidateAll() if the designated constraints
+// aren't met.
+type UserQueryParamsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UserQueryParamsMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UserQueryParamsMultiError) AllErrors() []error { return m }
+
+// UserQueryParamsValidationError is the validation error returned by
+// UserQueryParams.Validate if the designated constraints aren't met.
+type UserQueryParamsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UserQueryParamsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UserQueryParamsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UserQueryParamsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UserQueryParamsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UserQueryParamsValidationError) ErrorName() string { return "UserQueryParamsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UserQueryParamsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUserQueryParams.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UserQueryParamsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UserQueryParamsValidationError{}
+
 // Validate checks the field values on UpdateSettingRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1117,6 +1233,35 @@ func (m *GetListRequest) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetListRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetListRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetListRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return GetListRequestMultiError(errors)
 	}
@@ -1350,6 +1495,35 @@ func (m *GetMapRequest) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetMapRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetMapRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetMapRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return GetMapRequestMultiError(errors)
 	}
@@ -1572,6 +1746,327 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetMapReplyValidationError{}
+
+// Validate checks the field values on PageUserRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *PageUserRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageUserRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PageUserRequestMultiError, or nil if none found.
+func (m *PageUserRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageUserRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageUserRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageUserRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageUserRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageUserRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageUserRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageUserRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return PageUserRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageUserRequestMultiError is an error wrapping multiple validation errors
+// returned by PageUserRequest.ValidateAll() if the designated constraints
+// aren't met.
+type PageUserRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageUserRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageUserRequestMultiError) AllErrors() []error { return m }
+
+// PageUserRequestValidationError is the validation error returned by
+// PageUserRequest.Validate if the designated constraints aren't met.
+type PageUserRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageUserRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageUserRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageUserRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageUserRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageUserRequestValidationError) ErrorName() string { return "PageUserRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageUserRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageUserRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageUserRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageUserRequestValidationError{}
+
+// Validate checks the field values on PageUserReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PageUserReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageUserReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PageUserReplyMultiError, or
+// nil if none found.
+func (m *PageUserReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageUserReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageUserReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageUserReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageUserReplyValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetUsers() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PageUserReplyValidationError{
+						field:  fmt.Sprintf("Users[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PageUserReplyValidationError{
+						field:  fmt.Sprintf("Users[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PageUserReplyValidationError{
+					field:  fmt.Sprintf("Users[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return PageUserReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageUserReplyMultiError is an error wrapping multiple validation errors
+// returned by PageUserReply.ValidateAll() if the designated constraints
+// aren't met.
+type PageUserReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageUserReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageUserReplyMultiError) AllErrors() []error { return m }
+
+// PageUserReplyValidationError is the validation error returned by
+// PageUserReply.Validate if the designated constraints aren't met.
+type PageUserReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageUserReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageUserReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageUserReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageUserReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageUserReplyValidationError) ErrorName() string { return "PageUserReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageUserReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageUserReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageUserReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageUserReplyValidationError{}
 
 // Validate checks the field values on AvatarRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

@@ -15,10 +15,8 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
-	"fmt"
 	"time"
 
-	"github.com/88250/lute"
 	"github.com/sony/sonyflake/v2"
 )
 
@@ -31,7 +29,6 @@ type ArticleDomain struct {
 	tagRepo          repo.TagRepo
 	domainRepo       repo.DomainRepo
 	sf               *sonyflake.Sonyflake
-	luteEngine       *lute.Lute
 }
 
 func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscriptRepo repo.ArticlePostscriptRepo, actionRecordRepo repo.ArticleActionRecordRepo, commentRepo repo.CommentRepo, tagRepo repo.TagRepo, domainRepo repo.DomainRepo) (*ArticleDomain, error) {
@@ -48,14 +45,7 @@ func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscript
 		tagRepo:          tagRepo,
 		domainRepo:       domainRepo,
 		sf:               sf,
-		luteEngine:       lute.New(),
 	}, nil
-}
-
-// RenderContent 渲染文章内容
-func (d *ArticleDomain) RenderContent(article *model.Article) string {
-	name := fmt.Sprintf("article_%d_%d_%s", article.ID, article.CreatedBy, article.Title)
-	return d.luteEngine.MarkdownStr(name, article.Content)
 }
 
 // --- 新增 ---
@@ -65,13 +55,15 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 		save *model.Article
 		err  error
 	)
+	status := article.Status
+	article.Status = int32(cv1.ArticleStatus_ArticleDrafts) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		save, err = d.articleRepo.Save(ctx, tx, article, tags)
 		if err != nil {
 			return err
 		}
-		// 不是草稿则进行发布
-		if save.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+		// 正常文章，进行发布
+		if status == int32(cv1.ArticleStatus_ArticleNormal) {
 			err = d.articleRepo.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -106,6 +98,8 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 		save *model.Article
 		err  error
 	)
+	status := article.Status
+	article.Status = int32(cv1.ArticleStatus_ArticleDrafts) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		articleById, err := d.articleRepo.GetById(ctx, tx, article.ID)
 		if err != nil {
@@ -119,8 +113,8 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 		if err != nil {
 			return err
 		}
-		// 不是草稿则进行发布
-		if save.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+		// 正常文章，进行发布
+		if status == int32(cv1.ArticleStatus_ArticleNormal) {
 			err = d.articleRepo.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -164,17 +158,14 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 }
 
 func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
-	return ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		err := d.articleRepo.UpdateStatus(ctx, tx, articleId, cv1.ArticleStatus_ArticleNormal)
-		if err != nil {
-			return err
-		}
-		err = d.articleRepo.Publish(ctx, tx, articleId)
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		err := d.articleRepo.Publish(ctx, tx, articleId)
 		if err != nil {
 			return err
 		}
 		return err
 	})
+	return err
 }
 
 // --- 查询 ---
@@ -206,7 +197,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArt
 	if lastReplyComment != nil {
 		userIds = append(userIds, *lastReplyComment.CreatedBy)
 	}
-	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Ids: userIds})
+	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds}})
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +209,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArt
 
 	authorUser = base.If(query.Anonymous, nil, userAuthorsMap.Users[*query.CreatedBy])
 	articleReply := query.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt)
-	articleReply.ContentRender = d.RenderContent(query)
+	articleReply.ContentRender, _ = query.ParseContent()
 	reply = &v1.GetArticleOneReply{
 		Article: articleReply,
 	}
@@ -261,9 +252,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 	if err != nil {
 		return nil, err
 	}
-	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{
-		Ids: userIds.ToSlice(),
-	})
+	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds.ToSlice()}})
 	if err != nil {
 		return nil, err
 	}

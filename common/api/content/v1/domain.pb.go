@@ -277,190 +277,8 @@ func (x *DomainSave) GetIsNav() bool {
 	return false
 }
 
-type AddDomainsRequest struct {
+type DomainQueryParams struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 领域信息
-	Domains       []*DomainSave `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AddDomainsRequest) Reset() {
-	*x = AddDomainsRequest{}
-	mi := &file_content_v1_domain_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AddDomainsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AddDomainsRequest) ProtoMessage() {}
-
-func (x *AddDomainsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_domain_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AddDomainsRequest.ProtoReflect.Descriptor instead.
-func (*AddDomainsRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_domain_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *AddDomainsRequest) GetDomains() []*DomainSave {
-	if x != nil {
-		return x.Domains
-	}
-	return nil
-}
-
-type AddDomainsReply struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 添加的领域信息
-	Data          []*Domain `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AddDomainsReply) Reset() {
-	*x = AddDomainsReply{}
-	mi := &file_content_v1_domain_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AddDomainsReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AddDomainsReply) ProtoMessage() {}
-
-func (x *AddDomainsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_domain_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AddDomainsReply.ProtoReflect.Descriptor instead.
-func (*AddDomainsReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_domain_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *AddDomainsReply) GetData() []*Domain {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type UpdateDomainRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 领域信息
-	Domain        *DomainSave `protobuf:"bytes,1,opt,name=domain,proto3" json:"domain,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateDomainRequest) Reset() {
-	*x = UpdateDomainRequest{}
-	mi := &file_content_v1_domain_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateDomainRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateDomainRequest) ProtoMessage() {}
-
-func (x *UpdateDomainRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_domain_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateDomainRequest.ProtoReflect.Descriptor instead.
-func (*UpdateDomainRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_domain_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *UpdateDomainRequest) GetDomain() *DomainSave {
-	if x != nil {
-		return x.Domain
-	}
-	return nil
-}
-
-type UpdateDomainReply struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 修改的领域信息
-	Data          *Domain `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateDomainReply) Reset() {
-	*x = UpdateDomainReply{}
-	mi := &file_content_v1_domain_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateDomainReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateDomainReply) ProtoMessage() {}
-
-func (x *UpdateDomainReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_domain_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateDomainReply.ProtoReflect.Descriptor instead.
-func (*UpdateDomainReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_domain_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *UpdateDomainReply) GetData() *Domain {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type PageDomainRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 分页参数
-	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
 	// 主键
 	Ids []int64 `protobuf:"varint,2,rep,packed,name=ids,proto3" json:"ids,omitempty"`
 	// 领域名称
@@ -481,9 +299,285 @@ type PageDomainRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *DomainQueryParams) Reset() {
+	*x = DomainQueryParams{}
+	mi := &file_content_v1_domain_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DomainQueryParams) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DomainQueryParams) ProtoMessage() {}
+
+func (x *DomainQueryParams) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_domain_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DomainQueryParams.ProtoReflect.Descriptor instead.
+func (*DomainQueryParams) Descriptor() ([]byte, []int) {
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DomainQueryParams) GetIds() []int64 {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
+func (x *DomainQueryParams) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *DomainQueryParams) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *DomainQueryParams) GetStatus() int64 {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return 0
+}
+
+func (x *DomainQueryParams) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
+	}
+	return ""
+}
+
+func (x *DomainQueryParams) GetIcon() string {
+	if x != nil && x.Icon != nil {
+		return *x.Icon
+	}
+	return ""
+}
+
+func (x *DomainQueryParams) GetIsNav() bool {
+	if x != nil && x.IsNav != nil {
+		return *x.IsNav
+	}
+	return false
+}
+
+func (x *DomainQueryParams) GetTagCount() *v1.Int32Range {
+	if x != nil {
+		return x.TagCount
+	}
+	return nil
+}
+
+type AddDomainsRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 领域信息
+	Domains       []*DomainSave `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddDomainsRequest) Reset() {
+	*x = AddDomainsRequest{}
+	mi := &file_content_v1_domain_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDomainsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDomainsRequest) ProtoMessage() {}
+
+func (x *AddDomainsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_domain_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDomainsRequest.ProtoReflect.Descriptor instead.
+func (*AddDomainsRequest) Descriptor() ([]byte, []int) {
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AddDomainsRequest) GetDomains() []*DomainSave {
+	if x != nil {
+		return x.Domains
+	}
+	return nil
+}
+
+type AddDomainsReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 添加的领域信息
+	Data          []*Domain `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddDomainsReply) Reset() {
+	*x = AddDomainsReply{}
+	mi := &file_content_v1_domain_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDomainsReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDomainsReply) ProtoMessage() {}
+
+func (x *AddDomainsReply) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_domain_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDomainsReply.ProtoReflect.Descriptor instead.
+func (*AddDomainsReply) Descriptor() ([]byte, []int) {
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *AddDomainsReply) GetData() []*Domain {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateDomainRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 领域信息
+	Domain        *DomainSave `protobuf:"bytes,1,opt,name=domain,proto3" json:"domain,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateDomainRequest) Reset() {
+	*x = UpdateDomainRequest{}
+	mi := &file_content_v1_domain_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDomainRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDomainRequest) ProtoMessage() {}
+
+func (x *UpdateDomainRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_domain_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDomainRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDomainRequest) Descriptor() ([]byte, []int) {
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UpdateDomainRequest) GetDomain() *DomainSave {
+	if x != nil {
+		return x.Domain
+	}
+	return nil
+}
+
+type UpdateDomainReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 修改的领域信息
+	Data          *Domain `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateDomainReply) Reset() {
+	*x = UpdateDomainReply{}
+	mi := &file_content_v1_domain_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDomainReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDomainReply) ProtoMessage() {}
+
+func (x *UpdateDomainReply) ProtoReflect() protoreflect.Message {
+	mi := &file_content_v1_domain_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDomainReply.ProtoReflect.Descriptor instead.
+func (*UpdateDomainReply) Descriptor() ([]byte, []int) {
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateDomainReply) GetData() *Domain {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type PageDomainRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页参数
+	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	// 查询参数
+	Query         *DomainQueryParams `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
 func (x *PageDomainRequest) Reset() {
 	*x = PageDomainRequest{}
-	mi := &file_content_v1_domain_proto_msgTypes[6]
+	mi := &file_content_v1_domain_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -495,7 +589,7 @@ func (x *PageDomainRequest) String() string {
 func (*PageDomainRequest) ProtoMessage() {}
 
 func (x *PageDomainRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_domain_proto_msgTypes[6]
+	mi := &file_content_v1_domain_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -508,7 +602,7 @@ func (x *PageDomainRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageDomainRequest.ProtoReflect.Descriptor instead.
 func (*PageDomainRequest) Descriptor() ([]byte, []int) {
-	return file_content_v1_domain_proto_rawDescGZIP(), []int{6}
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *PageDomainRequest) GetPage() *v1.PageRequest {
@@ -518,58 +612,9 @@ func (x *PageDomainRequest) GetPage() *v1.PageRequest {
 	return nil
 }
 
-func (x *PageDomainRequest) GetIds() []int64 {
+func (x *PageDomainRequest) GetQuery() *DomainQueryParams {
 	if x != nil {
-		return x.Ids
-	}
-	return nil
-}
-
-func (x *PageDomainRequest) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
-}
-
-func (x *PageDomainRequest) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
-	}
-	return ""
-}
-
-func (x *PageDomainRequest) GetStatus() int64 {
-	if x != nil && x.Status != nil {
-		return *x.Status
-	}
-	return 0
-}
-
-func (x *PageDomainRequest) GetUrl() string {
-	if x != nil && x.Url != nil {
-		return *x.Url
-	}
-	return ""
-}
-
-func (x *PageDomainRequest) GetIcon() string {
-	if x != nil && x.Icon != nil {
-		return *x.Icon
-	}
-	return ""
-}
-
-func (x *PageDomainRequest) GetIsNav() bool {
-	if x != nil && x.IsNav != nil {
-		return *x.IsNav
-	}
-	return false
-}
-
-func (x *PageDomainRequest) GetTagCount() *v1.Int32Range {
-	if x != nil {
-		return x.TagCount
+		return x.Query
 	}
 	return nil
 }
@@ -586,7 +631,7 @@ type PageDomainReply struct {
 
 func (x *PageDomainReply) Reset() {
 	*x = PageDomainReply{}
-	mi := &file_content_v1_domain_proto_msgTypes[7]
+	mi := &file_content_v1_domain_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -598,7 +643,7 @@ func (x *PageDomainReply) String() string {
 func (*PageDomainReply) ProtoMessage() {}
 
 func (x *PageDomainReply) ProtoReflect() protoreflect.Message {
-	mi := &file_content_v1_domain_proto_msgTypes[7]
+	mi := &file_content_v1_domain_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -611,7 +656,7 @@ func (x *PageDomainReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageDomainReply.ProtoReflect.Descriptor instead.
 func (*PageDomainReply) Descriptor() ([]byte, []int) {
-	return file_content_v1_domain_proto_rawDescGZIP(), []int{7}
+	return file_content_v1_domain_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PageDomainReply) GetPage() *v1.PageReply {
@@ -669,7 +714,23 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\f_descriptionB\t\n" +
 	"\a_statusB\x06\n" +
 	"\x04_urlB\a\n" +
-	"\x05_icon\"P\n" +
+	"\x05_icon\"\xdc\x02\n" +
+	"\x11DomainQueryParams\x12\x10\n" +
+	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x17\n" +
+	"\x04name\x18\x03 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x04 \x01(\tH\x01R\vdescription\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\x05 \x01(\x03H\x02R\x06status\x88\x01\x01\x12\x15\n" +
+	"\x03url\x18\x06 \x01(\tH\x03R\x03url\x88\x01\x01\x12\x17\n" +
+	"\x04icon\x18\a \x01(\tH\x04R\x04icon\x88\x01\x01\x12\x19\n" +
+	"\x05isNav\x18\b \x01(\bH\x05R\x05isNav\x88\x01\x01\x12A\n" +
+	"\btagCount\x18\t \x01(\v2 .common.api.common.v1.Int32RangeH\x06R\btagCount\x88\x01\x01B\a\n" +
+	"\x05_nameB\x0e\n" +
+	"\f_descriptionB\t\n" +
+	"\a_statusB\x06\n" +
+	"\x04_urlB\a\n" +
+	"\x05_iconB\b\n" +
+	"\x06_isNavB\v\n" +
+	"\t_tagCount\"P\n" +
 	"\x11AddDomainsRequest\x12;\n" +
 	"\adomains\x18\x01 \x03(\v2!.common.api.content.v1.DomainSaveR\adomains\"D\n" +
 	"\x0fAddDomainsReply\x121\n" +
@@ -677,25 +738,11 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x13UpdateDomainRequest\x129\n" +
 	"\x06domain\x18\x01 \x01(\v2!.common.api.content.v1.DomainSaveR\x06domain\"F\n" +
 	"\x11UpdateDomainReply\x121\n" +
-	"\x04data\x18\x01 \x01(\v2\x1d.common.api.content.v1.DomainR\x04data\"\xa1\x03\n" +
+	"\x04data\x18\x01 \x01(\v2\x1d.common.api.content.v1.DomainR\x04data\"\x98\x01\n" +
 	"\x11PageDomainRequest\x12:\n" +
-	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12\x10\n" +
-	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x17\n" +
-	"\x04name\x18\x03 \x01(\tH\x01R\x04name\x88\x01\x01\x12%\n" +
-	"\vdescription\x18\x04 \x01(\tH\x02R\vdescription\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\x05 \x01(\x03H\x03R\x06status\x88\x01\x01\x12\x15\n" +
-	"\x03url\x18\x06 \x01(\tH\x04R\x03url\x88\x01\x01\x12\x17\n" +
-	"\x04icon\x18\a \x01(\tH\x05R\x04icon\x88\x01\x01\x12\x19\n" +
-	"\x05isNav\x18\b \x01(\bH\x06R\x05isNav\x88\x01\x01\x12A\n" +
-	"\btagCount\x18\t \x01(\v2 .common.api.common.v1.Int32RangeH\aR\btagCount\x88\x01\x01B\a\n" +
-	"\x05_pageB\a\n" +
-	"\x05_nameB\x0e\n" +
-	"\f_descriptionB\t\n" +
-	"\a_statusB\x06\n" +
-	"\x04_urlB\a\n" +
-	"\x05_iconB\b\n" +
-	"\x06_isNavB\v\n" +
-	"\t_tagCount\"\x8d\x01\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12>\n" +
+	"\x05query\x18\x02 \x01(\v2(.common.api.content.v1.DomainQueryParamsR\x05queryB\a\n" +
+	"\x05_page\"\x8d\x01\n" +
 	"\x0fPageDomainReply\x128\n" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyH\x00R\x04page\x88\x01\x01\x127\n" +
 	"\adomains\x18\x02 \x03(\v2\x1d.common.api.content.v1.DomainR\adomainsB\a\n" +
@@ -717,45 +764,47 @@ func file_content_v1_domain_proto_rawDescGZIP() []byte {
 	return file_content_v1_domain_proto_rawDescData
 }
 
-var file_content_v1_domain_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_content_v1_domain_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_content_v1_domain_proto_goTypes = []any{
 	(*Domain)(nil),                // 0: common.api.content.v1.Domain
 	(*DomainSave)(nil),            // 1: common.api.content.v1.DomainSave
-	(*AddDomainsRequest)(nil),     // 2: common.api.content.v1.AddDomainsRequest
-	(*AddDomainsReply)(nil),       // 3: common.api.content.v1.AddDomainsReply
-	(*UpdateDomainRequest)(nil),   // 4: common.api.content.v1.UpdateDomainRequest
-	(*UpdateDomainReply)(nil),     // 5: common.api.content.v1.UpdateDomainReply
-	(*PageDomainRequest)(nil),     // 6: common.api.content.v1.PageDomainRequest
-	(*PageDomainReply)(nil),       // 7: common.api.content.v1.PageDomainReply
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
-	(*Tag)(nil),                   // 9: common.api.content.v1.Tag
-	(*v1.PageRequest)(nil),        // 10: common.api.common.v1.PageRequest
+	(*DomainQueryParams)(nil),     // 2: common.api.content.v1.DomainQueryParams
+	(*AddDomainsRequest)(nil),     // 3: common.api.content.v1.AddDomainsRequest
+	(*AddDomainsReply)(nil),       // 4: common.api.content.v1.AddDomainsReply
+	(*UpdateDomainRequest)(nil),   // 5: common.api.content.v1.UpdateDomainRequest
+	(*UpdateDomainReply)(nil),     // 6: common.api.content.v1.UpdateDomainReply
+	(*PageDomainRequest)(nil),     // 7: common.api.content.v1.PageDomainRequest
+	(*PageDomainReply)(nil),       // 8: common.api.content.v1.PageDomainReply
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(*Tag)(nil),                   // 10: common.api.content.v1.Tag
 	(*v1.Int32Range)(nil),         // 11: common.api.common.v1.Int32Range
-	(*v1.PageReply)(nil),          // 12: common.api.common.v1.PageReply
+	(*v1.PageRequest)(nil),        // 12: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),          // 13: common.api.common.v1.PageReply
 }
 var file_content_v1_domain_proto_depIdxs = []int32{
-	8,  // 0: common.api.content.v1.Domain.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 1: common.api.content.v1.Domain.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 2: common.api.content.v1.Domain.tags:type_name -> common.api.content.v1.Tag
-	1,  // 3: common.api.content.v1.AddDomainsRequest.domains:type_name -> common.api.content.v1.DomainSave
-	0,  // 4: common.api.content.v1.AddDomainsReply.data:type_name -> common.api.content.v1.Domain
-	1,  // 5: common.api.content.v1.UpdateDomainRequest.domain:type_name -> common.api.content.v1.DomainSave
-	0,  // 6: common.api.content.v1.UpdateDomainReply.data:type_name -> common.api.content.v1.Domain
-	10, // 7: common.api.content.v1.PageDomainRequest.page:type_name -> common.api.common.v1.PageRequest
-	11, // 8: common.api.content.v1.PageDomainRequest.tagCount:type_name -> common.api.common.v1.Int32Range
-	12, // 9: common.api.content.v1.PageDomainReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 10: common.api.content.v1.PageDomainReply.domains:type_name -> common.api.content.v1.Domain
-	2,  // 11: common.api.content.v1.ContentDomainService.Adds:input_type -> common.api.content.v1.AddDomainsRequest
-	4,  // 12: common.api.content.v1.ContentDomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
-	6,  // 13: common.api.content.v1.ContentDomainService.Page:input_type -> common.api.content.v1.PageDomainRequest
-	3,  // 14: common.api.content.v1.ContentDomainService.Adds:output_type -> common.api.content.v1.AddDomainsReply
-	5,  // 15: common.api.content.v1.ContentDomainService.Update:output_type -> common.api.content.v1.UpdateDomainReply
-	7,  // 16: common.api.content.v1.ContentDomainService.Page:output_type -> common.api.content.v1.PageDomainReply
-	14, // [14:17] is the sub-list for method output_type
-	11, // [11:14] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	9,  // 0: common.api.content.v1.Domain.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 1: common.api.content.v1.Domain.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 2: common.api.content.v1.Domain.tags:type_name -> common.api.content.v1.Tag
+	11, // 3: common.api.content.v1.DomainQueryParams.tagCount:type_name -> common.api.common.v1.Int32Range
+	1,  // 4: common.api.content.v1.AddDomainsRequest.domains:type_name -> common.api.content.v1.DomainSave
+	0,  // 5: common.api.content.v1.AddDomainsReply.data:type_name -> common.api.content.v1.Domain
+	1,  // 6: common.api.content.v1.UpdateDomainRequest.domain:type_name -> common.api.content.v1.DomainSave
+	0,  // 7: common.api.content.v1.UpdateDomainReply.data:type_name -> common.api.content.v1.Domain
+	12, // 8: common.api.content.v1.PageDomainRequest.page:type_name -> common.api.common.v1.PageRequest
+	2,  // 9: common.api.content.v1.PageDomainRequest.query:type_name -> common.api.content.v1.DomainQueryParams
+	13, // 10: common.api.content.v1.PageDomainReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 11: common.api.content.v1.PageDomainReply.domains:type_name -> common.api.content.v1.Domain
+	3,  // 12: common.api.content.v1.ContentDomainService.Adds:input_type -> common.api.content.v1.AddDomainsRequest
+	5,  // 13: common.api.content.v1.ContentDomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
+	7,  // 14: common.api.content.v1.ContentDomainService.Page:input_type -> common.api.content.v1.PageDomainRequest
+	4,  // 15: common.api.content.v1.ContentDomainService.Adds:output_type -> common.api.content.v1.AddDomainsReply
+	6,  // 16: common.api.content.v1.ContentDomainService.Update:output_type -> common.api.content.v1.UpdateDomainReply
+	8,  // 17: common.api.content.v1.ContentDomainService.Page:output_type -> common.api.content.v1.PageDomainReply
+	15, // [15:18] is the sub-list for method output_type
+	12, // [12:15] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_domain_proto_init() }
@@ -766,15 +815,16 @@ func file_content_v1_domain_proto_init() {
 	file_content_v1_tag_proto_init()
 	file_content_v1_domain_proto_msgTypes[0].OneofWrappers = []any{}
 	file_content_v1_domain_proto_msgTypes[1].OneofWrappers = []any{}
-	file_content_v1_domain_proto_msgTypes[6].OneofWrappers = []any{}
+	file_content_v1_domain_proto_msgTypes[2].OneofWrappers = []any{}
 	file_content_v1_domain_proto_msgTypes[7].OneofWrappers = []any{}
+	file_content_v1_domain_proto_msgTypes[8].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_v1_domain_proto_rawDesc), len(file_content_v1_domain_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

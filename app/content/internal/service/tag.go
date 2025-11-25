@@ -3,6 +3,7 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	commonModel "common/pkg/model"
 	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
@@ -78,7 +79,20 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 }
 
 func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.PageTagReply, error) {
-	data, page, err := s.domainTag.Page(ctx, req.Page, &repo.TagGetReq{})
+	req.Query = base.OrDefault(req.Query, &v1.TagQueryParams{})
+	getReq := &repo.TagGetReq{
+		Ids:         req.Query.Ids,
+		UserId:      req.Query.UserId,
+		Name:        req.Query.Name,
+		Names:       req.Query.Names,
+		Description: req.Query.Description,
+		Status:      (*cv1.TagStatus)(req.Query.Status),
+		DomainId:    req.Query.DomainId,
+	}
+	if req.Query != nil {
+		getReq.ArticleCount = &commonModel.Range[int32]{Start: req.Query.ArticleCount.Start, End: req.Query.ArticleCount.End}
+	}
+	data, page, err := s.domainTag.Page(ctx, req.Page, getReq)
 	reply := make([]*v1.Tag, len(data))
 	for i, datum := range data {
 		reply[i] = datum.ConvertToRpc()

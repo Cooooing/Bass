@@ -54,11 +54,12 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 }
 
 func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (*v1.PageCommentReply, error) {
+	req.Query = base.OrDefault(req.Query, &v1.CommentQueryParams{})
 	return s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
-		CommentId: req.CommentId,
-		ArticleId: req.ArticleId,
-		UserId:    req.UserId,
-		Order:     req.Order,
+		CommentId: req.Query.CommentId,
+		ArticleId: req.Query.ArticleId,
+		UserId:    req.Query.UserId,
+		Order:     req.Query.Order,
 	})
 }
 

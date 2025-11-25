@@ -24,6 +24,7 @@ const OperationUserUserServiceGetCurrentUser = "/common.api.user.v1.UserUserServ
 const OperationUserUserServiceGetList = "/common.api.user.v1.UserUserService/GetList"
 const OperationUserUserServiceGetMap = "/common.api.user.v1.UserUserService/GetMap"
 const OperationUserUserServiceGetOne = "/common.api.user.v1.UserUserService/GetOne"
+const OperationUserUserServicePage = "/common.api.user.v1.UserUserService/Page"
 const OperationUserUserServiceUpdateSetting = "/common.api.user.v1.UserUserService/UpdateSetting"
 
 type UserUserServiceHTTPServer interface {
@@ -37,6 +38,8 @@ type UserUserServiceHTTPServer interface {
 	GetMap(context.Context, *GetMapRequest) (*GetMapReply, error)
 	// GetOne 查询单个用户
 	GetOne(context.Context, *GetOneRequest) (*GetOneReply, error)
+	// Page 分页查询用户
+	Page(context.Context, *PageUserRequest) (*PageUserReply, error)
 	// UpdateSetting 更新用户设置
 	UpdateSetting(context.Context, *UpdateSettingRequest) (*UpdateSettingReply, error)
 }
@@ -48,6 +51,7 @@ func RegisterUserUserServiceHTTPServer(s *http.Server, srv UserUserServiceHTTPSe
 	r.POST("/v1/user/getOne", _UserUserService_GetOne0_HTTP_Handler(srv))
 	r.POST("/v1/user/getList", _UserUserService_GetList0_HTTP_Handler(srv))
 	r.POST("/v1/user/getMap", _UserUserService_GetMap0_HTTP_Handler(srv))
+	r.POST("/v1/user/page", _UserUserService_Page1_HTTP_Handler(srv))
 	r.GET("/v1/user/avatar/{name}", _UserUserService_Avatar0_HTTP_Handler(srv))
 }
 
@@ -161,6 +165,28 @@ func _UserUserService_GetMap0_HTTP_Handler(srv UserUserServiceHTTPServer) func(c
 	}
 }
 
+func _UserUserService_Page1_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PageUserRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserUserServicePage)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Page(ctx, req.(*PageUserRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*PageUserReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _UserUserService_Avatar0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in AvatarRequest
@@ -194,6 +220,8 @@ type UserUserServiceHTTPClient interface {
 	GetMap(ctx context.Context, req *GetMapRequest, opts ...http.CallOption) (rsp *GetMapReply, err error)
 	// GetOne 查询单个用户
 	GetOne(ctx context.Context, req *GetOneRequest, opts ...http.CallOption) (rsp *GetOneReply, err error)
+	// Page 分页查询用户
+	Page(ctx context.Context, req *PageUserRequest, opts ...http.CallOption) (rsp *PageUserReply, err error)
 	// UpdateSetting 更新用户设置
 	UpdateSetting(ctx context.Context, req *UpdateSettingRequest, opts ...http.CallOption) (rsp *UpdateSettingReply, err error)
 }
@@ -268,6 +296,20 @@ func (c *UserUserServiceHTTPClientImpl) GetOne(ctx context.Context, in *GetOneRe
 	pattern := "/v1/user/getOne"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserUserServiceGetOne))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Page 分页查询用户
+func (c *UserUserServiceHTTPClientImpl) Page(ctx context.Context, in *PageUserRequest, opts ...http.CallOption) (*PageUserReply, error) {
+	var out PageUserReply
+	pattern := "/v1/user/page"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserUserServicePage))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

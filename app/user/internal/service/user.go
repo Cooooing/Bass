@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"common/pkg/util/base"
 	"context"
 	"fmt"
 	"user/internal/biz"
@@ -73,11 +74,40 @@ func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUser
 	}, err
 }
 
+func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v1.GetOneReply, err error) {
+	res := &v1.GetOneReply{
+		User: &v1.User{},
+	}
+	user, err := s.userRepo.GetById(ctx, s.db, req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = copier.Copy(res.User, user)
+	if err != nil {
+		return nil, err
+	}
+	if user.LastLoginTime != nil {
+		res.User.LastLoginTime = timestamppb.New(*user.LastLoginTime)
+	}
+	if user.LastCheckinTime != nil {
+		res.User.LastCheckinTime = timestamppb.New(*user.LastCheckinTime)
+	}
+	res.User.CreatedAt = timestamppb.New(*user.CreatedAt)
+	res.User.UpdatedAt = timestamppb.New(*user.UpdatedAt)
+	return res, nil
+}
+
 func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp *v1.GetListReply, err error) {
 	res := &v1.GetListReply{
 		Users: []*v1.User{},
 	}
-	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{ArticleIds: req.Ids})
+	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{
+		UserIds:  req.Query.UserIds,
+		Name:     req.Query.Name,
+		Nickname: req.Query.Nickname,
+		Email:    req.Query.Email,
+		Phone:    req.Query.Phone,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +134,13 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	res := &v1.GetMapReply{
 		Users: make(map[int64]*v1.User),
 	}
-	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{ArticleIds: req.Ids})
+	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{
+		UserIds:  req.Query.UserIds,
+		Name:     req.Query.Name,
+		Nickname: req.Query.Nickname,
+		Email:    req.Query.Email,
+		Phone:    req.Query.Phone,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -127,27 +163,27 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	return res, nil
 }
 
-func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v1.GetOneReply, err error) {
-	res := &v1.GetOneReply{
-		User: &v1.User{},
+func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v1.PageUserReply, err error) {
+	req.Query = base.OrDefault(req.Query, &v1.UserQueryParams{})
+	reply := make([]*v1.User, 0)
+	users, page, err := s.userRepo.GetPage(ctx, s.db, req.Page, &repo.UserGetReq{
+		UserIds:   req.Query.UserIds,
+		Name:      req.Query.Name,
+		Names:     req.Query.Names,
+		Nickname:  req.Query.Nickname,
+		Nicknames: req.Query.Nicknames,
+		Email:     req.Query.Email,
+		Emails:    req.Query.Emails,
+		Phone:     req.Query.Phone,
+		Phones:    req.Query.Phones,
+	})
+	for _, user := range users {
+		reply = append(reply, user.ConvertToRpc())
 	}
-	user, err := s.userRepo.GetById(ctx, s.db, req.Id)
-	if err != nil {
-		return nil, err
-	}
-	err = copier.Copy(res.User, user)
-	if err != nil {
-		return nil, err
-	}
-	if user.LastLoginTime != nil {
-		res.User.LastLoginTime = timestamppb.New(*user.LastLoginTime)
-	}
-	if user.LastCheckinTime != nil {
-		res.User.LastCheckinTime = timestamppb.New(*user.LastCheckinTime)
-	}
-	res.User.CreatedAt = timestamppb.New(*user.CreatedAt)
-	res.User.UpdatedAt = timestamppb.New(*user.UpdatedAt)
-	return res, nil
+	return &v1.PageUserReply{
+		Page:  page,
+		Users: reply,
+	}, nil
 }
 
 func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarRequest) (rsp *v1.AvatarReply, err error) {

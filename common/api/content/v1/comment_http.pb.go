@@ -41,7 +41,7 @@ type ContentCommentServiceHTTPServer interface {
 func RegisterContentCommentServiceHTTPServer(s *http.Server, srv ContentCommentServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/comment/add", _ContentCommentService_Add1_HTTP_Handler(srv))
-	r.POST("/v1/comment/page", _ContentCommentService_Page2_HTTP_Handler(srv))
+	r.POST("/v1/comment/page", _ContentCommentService_Page3_HTTP_Handler(srv))
 	r.POST("/v1/comment/like", _ContentCommentService_Like1_HTTP_Handler(srv))
 	r.POST("/v1/comment/thank", _ContentCommentService_Thank1_HTTP_Handler(srv))
 	r.POST("/v1/comment/updateStatus", _ContentCommentService_UpdateStatus0_HTTP_Handler(srv))
@@ -69,7 +69,7 @@ func _ContentCommentService_Add1_HTTP_Handler(srv ContentCommentServiceHTTPServe
 	}
 }
 
-func _ContentCommentService_Page2_HTTP_Handler(srv ContentCommentServiceHTTPServer) func(ctx http.Context) error {
+func _ContentCommentService_Page3_HTTP_Handler(srv ContentCommentServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageCommentRequest
 		if err := ctx.Bind(&in); err != nil {

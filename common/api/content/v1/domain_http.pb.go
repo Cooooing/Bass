@@ -36,7 +36,7 @@ func RegisterContentDomainServiceHTTPServer(s *http.Server, srv ContentDomainSer
 	r := s.Route("/")
 	r.POST("/v1/domain/adds", _ContentDomainService_Adds1_HTTP_Handler(srv))
 	r.POST("/v1/domain/update", _ContentDomainService_Update2_HTTP_Handler(srv))
-	r.POST("/v1/domain/page", _ContentDomainService_Page3_HTTP_Handler(srv))
+	r.POST("/v1/domain/page", _ContentDomainService_Page4_HTTP_Handler(srv))
 }
 
 func _ContentDomainService_Adds1_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
@@ -83,7 +83,7 @@ func _ContentDomainService_Update2_HTTP_Handler(srv ContentDomainServiceHTTPServ
 	}
 }
 
-func _ContentDomainService_Page3_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
+func _ContentDomainService_Page4_HTTP_Handler(srv ContentDomainServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageDomainRequest
 		if err := ctx.Bind(&in); err != nil {

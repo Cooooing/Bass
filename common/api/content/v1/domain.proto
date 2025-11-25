@@ -37,6 +37,8 @@ service ContentDomainService {
   }
 }
 
+// 实体定义
+
 message Domain {
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
@@ -84,6 +86,29 @@ message DomainSave {
   bool isNav = 7;
 }
 
+// 查询参数定义
+
+message DomainQueryParams {
+  // 主键
+  repeated int64 ids = 2;
+  // 领域名称
+  optional string name = 3;
+  // 描述
+  optional string description = 4;
+  // 状态 0-正常，1-禁用
+  optional int64 status = 5;
+  // 链接
+  optional string url = 6;
+  // 图标
+  optional string icon = 7;
+  // 是否导航
+  optional bool isNav = 8;
+  // 标签数量范围
+  optional common.v1.Int32Range tagCount = 9;
+}
+
+// 请求/响应结构定义
+
 message AddDomainsRequest {
   // 领域信息
   repeated DomainSave domains = 1;
@@ -105,22 +130,8 @@ message UpdateDomainReply {
 message PageDomainRequest {
   // 分页参数
   optional common.v1.PageRequest page = 1;
-  // 主键
-  repeated int64 ids = 2;
-  // 领域名称
-  optional string name = 3;
-  // 描述
-  optional string description = 4;
-  // 状态 0-正常，1-禁用
-  optional int64 status = 5;
-  // 链接
-  optional string url = 6;
-  // 图标
-  optional string icon = 7;
-  // 是否导航
-  optional bool isNav = 8;
-  // 标签数量范围
-  optional common.v1.Int32Range tagCount = 9;
+  // 查询参数
+  DomainQueryParams query = 2;
 }
 message PageDomainReply {
   // 分页信息

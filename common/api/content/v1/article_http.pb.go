@@ -72,7 +72,7 @@ func RegisterContentArticleServiceHTTPServer(s *http.Server, srv ContentArticleS
 	r.POST("/v1/article/publish", _ContentArticleService_Publish0_HTTP_Handler(srv))
 	r.POST("/v1/article/update", _ContentArticleService_Update1_HTTP_Handler(srv))
 	r.POST("/v1/article/delete", _ContentArticleService_Delete0_HTTP_Handler(srv))
-	r.POST("/v1/article/page", _ContentArticleService_Page1_HTTP_Handler(srv))
+	r.POST("/v1/article/page", _ContentArticleService_Page2_HTTP_Handler(srv))
 	r.POST("/v1/article/getOne", _ContentArticleService_GetOne1_HTTP_Handler(srv))
 	r.POST("/v1/article/addPostscript", _ContentArticleService_AddPostscript0_HTTP_Handler(srv))
 	r.POST("/v1/article/reward", _ContentArticleService_Reward0_HTTP_Handler(srv))
@@ -193,7 +193,7 @@ func _ContentArticleService_Delete0_HTTP_Handler(srv ContentArticleServiceHTTPSe
 	}
 }
 
-func _ContentArticleService_Page1_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
+func _ContentArticleService_Page2_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageArticleRequest
 		if err := ctx.Bind(&in); err != nil {

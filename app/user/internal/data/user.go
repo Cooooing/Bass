@@ -113,8 +113,32 @@ func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 }
 
 func (r *UserRepo) getQuery(query *gen.UserQuery, req *repo.UserGetReq) *gen.UserQuery {
-	if len(req.ArticleIds) > 0 {
-		query = query.Where(user.IDIn(req.ArticleIds...))
+	if len(req.UserIds) > 0 {
+		query = query.Where(user.IDIn(req.UserIds...))
+	}
+	if req.Name != nil {
+		query = query.Where(user.NameContains(*req.Name))
+	}
+	if len(req.Names) > 0 {
+		query = query.Where(user.NameIn(req.Names...))
+	}
+	if req.Nickname != nil {
+		query = query.Where(user.NicknameContains(*req.Nickname))
+	}
+	if len(req.Nicknames) > 0 {
+		query = query.Where(user.NicknameIn(req.Nicknames...))
+	}
+	if req.Email != nil {
+		query = query.Where(user.EmailContains(*req.Email))
+	}
+	if len(req.Emails) > 0 {
+		query = query.Where(user.EmailIn(req.Emails...))
+	}
+	if req.Phone != nil {
+		query = query.Where(user.PhoneContains(*req.Phone))
+	}
+	if len(req.Phones) > 0 {
+		query = query.Where(user.PhoneIn(req.Phones...))
 	}
 	return query
 }

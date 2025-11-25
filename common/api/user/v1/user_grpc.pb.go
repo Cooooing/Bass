@@ -24,6 +24,7 @@ const (
 	UserUserService_GetOne_FullMethodName         = "/common.api.user.v1.UserUserService/GetOne"
 	UserUserService_GetList_FullMethodName        = "/common.api.user.v1.UserUserService/GetList"
 	UserUserService_GetMap_FullMethodName         = "/common.api.user.v1.UserUserService/GetMap"
+	UserUserService_Page_FullMethodName           = "/common.api.user.v1.UserUserService/Page"
 	UserUserService_Avatar_FullMethodName         = "/common.api.user.v1.UserUserService/Avatar"
 )
 
@@ -43,6 +44,8 @@ type UserUserServiceClient interface {
 	GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListReply, error)
 	// 查询用户列表（返回map）
 	GetMap(ctx context.Context, in *GetMapRequest, opts ...grpc.CallOption) (*GetMapReply, error)
+	// 分页查询用户
+	Page(ctx context.Context, in *PageUserRequest, opts ...grpc.CallOption) (*PageUserReply, error)
 	// 获取用户默认头像
 	Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*AvatarReply, error)
 }
@@ -105,6 +108,16 @@ func (c *userUserServiceClient) GetMap(ctx context.Context, in *GetMapRequest, o
 	return out, nil
 }
 
+func (c *userUserServiceClient) Page(ctx context.Context, in *PageUserRequest, opts ...grpc.CallOption) (*PageUserReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PageUserReply)
+	err := c.cc.Invoke(ctx, UserUserService_Page_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userUserServiceClient) Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*AvatarReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AvatarReply)
@@ -131,6 +144,8 @@ type UserUserServiceServer interface {
 	GetList(context.Context, *GetListRequest) (*GetListReply, error)
 	// 查询用户列表（返回map）
 	GetMap(context.Context, *GetMapRequest) (*GetMapReply, error)
+	// 分页查询用户
+	Page(context.Context, *PageUserRequest) (*PageUserReply, error)
 	// 获取用户默认头像
 	Avatar(context.Context, *AvatarRequest) (*AvatarReply, error)
 	mustEmbedUnimplementedUserUserServiceServer()
@@ -157,6 +172,9 @@ func (UnimplementedUserUserServiceServer) GetList(context.Context, *GetListReque
 }
 func (UnimplementedUserUserServiceServer) GetMap(context.Context, *GetMapRequest) (*GetMapReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMap not implemented")
+}
+func (UnimplementedUserUserServiceServer) Page(context.Context, *PageUserRequest) (*PageUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Page not implemented")
 }
 func (UnimplementedUserUserServiceServer) Avatar(context.Context, *AvatarRequest) (*AvatarReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Avatar not implemented")
@@ -272,6 +290,24 @@ func _UserUserService_GetMap_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserUserService_Page_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PageUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserUserServiceServer).Page(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserUserService_Page_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserUserServiceServer).Page(ctx, req.(*PageUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserUserService_Avatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AvatarRequest)
 	if err := dec(in); err != nil {
@@ -316,6 +352,10 @@ var UserUserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMap",
 			Handler:    _UserUserService_GetMap_Handler,
+		},
+		{
+			MethodName: "Page",
+			Handler:    _UserUserService_Page_Handler,
 		},
 		{
 			MethodName: "Avatar",

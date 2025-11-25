@@ -42,11 +42,6 @@ func NewArticleService(baseService *BaseService, articleDomain *biz.ArticleDomai
 	}
 }
 
-func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticleRequest) (rsp *v1.AcceptAnswerArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
-}
-
 func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rsp *v1.AddArticleReply, err error) {
 	article := req.Article
 	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
@@ -131,24 +126,27 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 	}, nil
 }
 
-func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	// 只有作者可以添加附言
-	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || article == nil || *article.CreatedBy != user.ID {
-		if err != nil {
-			return nil, err
-		}
+	article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
+	if err != nil {
+		return nil, err
+	}
+	// 只能发布草稿
+	if article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+		return nil, cv1.ErrorBadRequest("only drafts can be publish")
+	}
+	// 只有作者可以发布草稿
+	if *article.CreatedBy != user.ID {
 		return nil, cv1.ErrorBadRequest("you are not the author")
 	}
-
-	err = s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
-	return &v1.AddPostscriptArticleReply{}, err
+	err = s.articleDomain.Publish(ctx, req.ArticleId)
+	return &v1.PublishArticleReply{}, err
 }
 
-func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
-	return &v1.CollectArticleReply{}, err
+func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleRequest) (rsp *v1.UpdateArticleReply, err error) {
+	// TODO implement me
+	panic("implement me")
 }
 
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
@@ -173,17 +171,19 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 }
 
 func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (rsp *v1.PageArticleReply, err error) {
-	if req.Status != nil && *req.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+	req.Query = base.OrDefault(req.Query, &v1.ArticleQueryParams{})
+	if req.Query.Status != nil && *req.Query.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Query.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
 	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
-		TagId:    req.TagId,
-		DomainId: req.DomainId,
-		Status:   (*cv1.ArticleStatus)(req.Status),
-		AuthorId: req.AuthorId,
-		Order:    (*cv1.ArticleOrder)(req.Order),
-		Type:     (*cv1.ArticleType)(req.Type),
-		Keyword:  req.Keyword,
+		TagId:    req.Query.TagId,
+		DomainId: req.Query.DomainId,
+		Status:   (*cv1.ArticleStatus)(req.Query.Status),
+		AuthorId: req.Query.AuthorId,
+		Order:    (*cv1.ArticleOrder)(req.Query.Order),
+		Type:     (*cv1.ArticleType)(req.Query.Type),
+		Keyword:  req.Query.Keyword,
+		Listable: nil,
 	})
 	return rsp, err
 }
@@ -192,28 +192,18 @@ func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneReques
 	return s.articleDomain.GetOne(ctx, req.ArticleId)
 }
 
-func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
+func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
-	return &v1.LikeArticleReply{}, err
-}
-
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
-	if err != nil {
-		return nil, err
-	}
-	// 只能发布草稿
-	if article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, cv1.ErrorBadRequest("only drafts can be publish")
-	}
-	// 只有作者可以发布草稿
-	if *article.CreatedBy != user.ID {
+	// 只有作者可以添加附言
+	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || article == nil || *article.CreatedBy != user.ID {
+		if err != nil {
+			return nil, err
+		}
 		return nil, cv1.ErrorBadRequest("you are not the author")
 	}
-	err = s.articleDomain.Publish(ctx, req.ArticleId)
-	return &v1.PublishArticleReply{}, err
+
+	err = s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
+	return &v1.AddPostscriptArticleReply{}, err
 }
 
 func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticleRequest) (rsp *v1.RewardArticleReply, err error) {
@@ -224,12 +214,24 @@ func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest)
 	return &v1.ThankArticleReply{}, nil
 }
 
-func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleRequest) (rsp *v1.UpdateArticleReply, err error) {
+func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
+	return &v1.LikeArticleReply{}, err
+}
+
+func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
+	return &v1.CollectArticleReply{}, err
+}
+
+func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticleRequest) (rsp *v1.WatchArticleReply, err error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticleRequest) (rsp *v1.WatchArticleReply, err error) {
+func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticleRequest) (rsp *v1.AcceptAnswerArticleReply, err error) {
 	// TODO implement me
 	panic("implement me")
 }

@@ -22,9 +22,9 @@ message ArticlePostscript {
   // 更新人
   optional int64 updated_by = 1003;
 
-  // 主键ID
+  // 主键Id
   int64 id = 1;
-  // 所属文章ID
+  // 所属文章Id
   int64 article_id = 2;
   // 附言内容
   string content = 3;
@@ -150,6 +150,7 @@ service ContentArticleService {
 
 }
 
+// 实体定义
 
 message Article {
   // 创建时间
@@ -161,7 +162,7 @@ message Article {
   // 更新人
   optional int64 updated_by = 1003;
 
-  // 唯一ID
+  // 唯一Id
   int64 id = 1;
   // 标题
   string title = 3;
@@ -203,7 +204,7 @@ message Article {
 
   // 悬赏积分
   optional int32 bounty_points = 17;
-  // 采纳评论ID（可为空）
+  // 采纳评论Id（可为空）
   optional int64 accepted_answer_id = 18;
 
   // 总投票数
@@ -251,56 +252,16 @@ message ArticleSave {
   // 是否在列表展示
   optional bool listable = 13;
 
+  // @ 用户id列表
+  repeated int64 at_user_ids = 20;
+
   // 标签id
   repeated TagSave tags = 100;
 }
 
+// 查询参数
 
-message AddArticleRequest {
-  // 文章
-  ArticleSave article = 1;
-}
-message AddArticleReply {
-  // 文章ID
-  int64 articleId = 1;
-}
-
-message UpdateArticleDraftRequest {
-  // 文章
-  ArticleSave article = 1;
-}
-message UpdateArticleDraftReply {
-  // 文章ID
-  int64 articleId = 1;
-}
-
-message PublishArticleRequest {
-  // 文章ID
-  int64 article_id = 1;
-}
-message PublishArticleReply {}
-
-message UpdateArticleRequest {
-  // 文章ID
-  int64 article_id = 1;
-  // 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-  int32 status = 2;
-  // 是否允许评论
-  bool commentable = 3;
-  // 是否匿名
-  bool anonymous = 4;
-}
-message UpdateArticleReply {}
-
-message DeleteArticleRequest {
-  // 文章ID
-  int64 article_id = 1;
-}
-message DeleteArticleReply {}
-
-message PageArticleRequest {
-  // 分页
-  common.v1.PageRequest page = 1;
+message ArticleQueryParams {
   // 标签
   optional int64 tagId = 2;
   // 领域
@@ -313,8 +274,59 @@ message PageArticleRequest {
   optional int32 order = 8;
   // 查询关键词
   optional string keyword = 9;
-  // 作者ID
+  // 作者Id
   optional int64 authorId = 10;
+}
+
+// 请求/响应结构定义
+
+message AddArticleRequest {
+  // 文章
+  ArticleSave article = 1;
+}
+message AddArticleReply {
+  // 文章Id
+  int64 articleId = 1;
+}
+
+message UpdateArticleDraftRequest {
+  // 文章
+  ArticleSave article = 1;
+}
+message UpdateArticleDraftReply {
+  // 文章Id
+  int64 articleId = 1;
+}
+
+message PublishArticleRequest {
+  // 文章Id
+  int64 article_id = 1;
+}
+message PublishArticleReply {}
+
+message UpdateArticleRequest {
+  // 文章Id
+  int64 article_id = 1;
+  // 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
+  int32 status = 2;
+  // 是否允许评论
+  bool commentable = 3;
+  // 是否匿名
+  bool anonymous = 4;
+}
+message UpdateArticleReply {}
+
+message DeleteArticleRequest {
+  // 文章Id
+  int64 article_id = 1;
+}
+message DeleteArticleReply {}
+
+message PageArticleRequest {
+  // 分页
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  ArticleQueryParams query = 2;
 }
 message PageArticleReply {
   // 分页信息
@@ -324,7 +336,7 @@ message PageArticleReply {
 }
 
 message GetArticleOneRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
 }
 message GetArticleOneReply {
@@ -333,7 +345,7 @@ message GetArticleOneReply {
 }
 
 message AddPostscriptArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
   // 内容
   string content = 2 [(validate.rules).string = {min_len: 1}];
@@ -341,13 +353,13 @@ message AddPostscriptArticleRequest {
 message AddPostscriptArticleReply {}
 
 message RewardArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
 }
 message RewardArticleReply {}
 
 message ThankArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
   // 是否感谢
   bool active = 2;
@@ -355,7 +367,7 @@ message ThankArticleRequest {
 message ThankArticleReply {}
 
 message LikeArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
   // 是否点赞
   bool active = 2;
@@ -363,7 +375,7 @@ message LikeArticleRequest {
 message LikeArticleReply {}
 
 message CollectArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
   // 是否收藏
   bool active = 2;
@@ -371,7 +383,7 @@ message CollectArticleRequest {
 message CollectArticleReply {}
 
 message WatchArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
   // 是否关注
   bool active = 2;
@@ -379,9 +391,9 @@ message WatchArticleRequest {
 message WatchArticleReply {}
 
 message AcceptAnswerArticleRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 1;
-  // 评论ID
+  // 评论Id
   int64 comment_id = 2;
 }
 message AcceptAnswerArticleReply {}

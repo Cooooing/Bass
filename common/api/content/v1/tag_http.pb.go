@@ -36,7 +36,7 @@ func RegisterContentTagServiceHTTPServer(s *http.Server, srv ContentTagServiceHT
 	r := s.Route("/")
 	r.POST("/v1/tag/adds", _ContentTagService_Adds0_HTTP_Handler(srv))
 	r.POST("/v1/tag/update", _ContentTagService_Update0_HTTP_Handler(srv))
-	r.POST("/v1/tag/get", _ContentTagService_Page0_HTTP_Handler(srv))
+	r.POST("/v1/tag/page", _ContentTagService_Page0_HTTP_Handler(srv))
 }
 
 func _ContentTagService_Adds0_HTTP_Handler(srv ContentTagServiceHTTPServer) func(ctx http.Context) error {
@@ -139,7 +139,7 @@ func (c *ContentTagServiceHTTPClientImpl) Adds(ctx context.Context, in *AddTagsR
 // Page 分页获取标签
 func (c *ContentTagServiceHTTPClientImpl) Page(ctx context.Context, in *PageTagRequest, opts ...http.CallOption) (*PageTagReply, error) {
 	var out PageTagReply
-	pattern := "/v1/tag/get"
+	pattern := "/v1/tag/page"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationContentTagServicePage))
 	opts = append(opts, http.PathTemplate(pattern))

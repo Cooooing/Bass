@@ -376,6 +376,165 @@ var _ interface {
 	ErrorName() string
 } = DomainSaveValidationError{}
 
+// Validate checks the field values on DomainQueryParams with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *DomainQueryParams) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DomainQueryParams with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DomainQueryParamsMultiError, or nil if none found.
+func (m *DomainQueryParams) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DomainQueryParams) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
+	if m.Url != nil {
+		// no validation rules for Url
+	}
+
+	if m.Icon != nil {
+		// no validation rules for Icon
+	}
+
+	if m.IsNav != nil {
+		// no validation rules for IsNav
+	}
+
+	if m.TagCount != nil {
+
+		if all {
+			switch v := interface{}(m.GetTagCount()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DomainQueryParamsValidationError{
+						field:  "TagCount",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DomainQueryParamsValidationError{
+						field:  "TagCount",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetTagCount()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DomainQueryParamsValidationError{
+					field:  "TagCount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return DomainQueryParamsMultiError(errors)
+	}
+
+	return nil
+}
+
+// DomainQueryParamsMultiError is an error wrapping multiple validation errors
+// returned by DomainQueryParams.ValidateAll() if the designated constraints
+// aren't met.
+type DomainQueryParamsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DomainQueryParamsMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DomainQueryParamsMultiError) AllErrors() []error { return m }
+
+// DomainQueryParamsValidationError is the validation error returned by
+// DomainQueryParams.Validate if the designated constraints aren't met.
+type DomainQueryParamsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DomainQueryParamsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DomainQueryParamsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DomainQueryParamsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DomainQueryParamsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DomainQueryParamsValidationError) ErrorName() string {
+	return "DomainQueryParamsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DomainQueryParamsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDomainQueryParams.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DomainQueryParamsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DomainQueryParamsValidationError{}
+
 // Validate checks the field values on AddDomainsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -930,6 +1089,35 @@ func (m *PageDomainRequest) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageDomainRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageDomainRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageDomainRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.Page != nil {
 
 		if all {
@@ -955,63 +1143,6 @@ func (m *PageDomainRequest) validate(all bool) error {
 			if err := v.Validate(); err != nil {
 				return PageDomainRequestValidationError{
 					field:  "Page",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	if m.Name != nil {
-		// no validation rules for Name
-	}
-
-	if m.Description != nil {
-		// no validation rules for Description
-	}
-
-	if m.Status != nil {
-		// no validation rules for Status
-	}
-
-	if m.Url != nil {
-		// no validation rules for Url
-	}
-
-	if m.Icon != nil {
-		// no validation rules for Icon
-	}
-
-	if m.IsNav != nil {
-		// no validation rules for IsNav
-	}
-
-	if m.TagCount != nil {
-
-		if all {
-			switch v := interface{}(m.GetTagCount()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, PageDomainRequestValidationError{
-						field:  "TagCount",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, PageDomainRequestValidationError{
-						field:  "TagCount",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetTagCount()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return PageDomainRequestValidationError{
-					field:  "TagCount",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

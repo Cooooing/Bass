@@ -3,6 +3,8 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	userv1 "common/api/user/v1"
+	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/util/base"
 	"common/pkg/util/collections/set"
@@ -66,6 +68,7 @@ func (r *ArticleRepo) Save(ctx context.Context, tx *gen.Client, article *model.A
 		}
 	}
 
+	article.FormatContent()
 	create := tx.Article.Create().
 		SetTitle(article.Title).
 		SetContent(article.Content).
@@ -114,6 +117,7 @@ func (r *ArticleRepo) Update(ctx context.Context, tx *gen.Client, updateArticle 
 		}
 	}
 
+	updateArticle.FormatContent()
 	update := tx.Article.UpdateOneID(updateArticle.ID).
 		SetTitle(updateArticle.Title).
 		SetContent(updateArticle.Content).
@@ -179,11 +183,24 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
-	return nil
 	first, err := r.GetById(ctx, tx, articleId)
 	if err != nil {
 		return err
 	}
+
+	if first.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+		return cv1.ErrorBadRequest("only update draft")
+	}
+
+	err = r.UpdateStatus(ctx, tx, articleId, cv1.ArticleStatus_ArticleNormal)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+	// Todo 广播添加文章事件
+
 	publish := &v1.ArticleEventPublish{}
 	err = copier.Copy(&publish, first)
 	if err != nil {
@@ -194,7 +211,20 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 		return err
 	}
 	err = r.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyArticleCreate.String(), marshal)
-	return err
+	if err != nil {
+		return err
+	}
+	// Todo 广播@用户通知
+	_, atUserNames := first.ParseContent()
+
+	userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+	atUserList, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: atUserNames}})
+	if err != nil {
+		return err
+	}
+	_ = atUserList
+
+	return nil
 }
 
 func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {

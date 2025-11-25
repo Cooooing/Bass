@@ -341,6 +341,155 @@ var _ interface {
 	ErrorName() string
 } = TagSaveValidationError{}
 
+// Validate checks the field values on TagQueryParams with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *TagQueryParams) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TagQueryParams with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in TagQueryParamsMultiError,
+// or nil if none found.
+func (m *TagQueryParams) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TagQueryParams) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetArticleCount()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, TagQueryParamsValidationError{
+					field:  "ArticleCount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, TagQueryParamsValidationError{
+					field:  "ArticleCount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetArticleCount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TagQueryParamsValidationError{
+				field:  "ArticleCount",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.UserId != nil {
+		// no validation rules for UserId
+	}
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
+
+	if m.Description != nil {
+		// no validation rules for Description
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
+	if m.DomainId != nil {
+		// no validation rules for DomainId
+	}
+
+	if len(errors) > 0 {
+		return TagQueryParamsMultiError(errors)
+	}
+
+	return nil
+}
+
+// TagQueryParamsMultiError is an error wrapping multiple validation errors
+// returned by TagQueryParams.ValidateAll() if the designated constraints
+// aren't met.
+type TagQueryParamsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TagQueryParamsMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TagQueryParamsMultiError) AllErrors() []error { return m }
+
+// TagQueryParamsValidationError is the validation error returned by
+// TagQueryParams.Validate if the designated constraints aren't met.
+type TagQueryParamsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TagQueryParamsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TagQueryParamsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TagQueryParamsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TagQueryParamsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TagQueryParamsValidationError) ErrorName() string { return "TagQueryParamsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e TagQueryParamsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTagQueryParams.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TagQueryParamsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TagQueryParamsValidationError{}
+
 // Validate checks the field values on AddTagsRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -888,6 +1037,35 @@ func (m *PageTagRequest) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageTagRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageTagRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageTagRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.Page != nil {
 
 		if all {
@@ -919,14 +1097,6 @@ func (m *PageTagRequest) validate(all bool) error {
 			}
 		}
 
-	}
-
-	if m.Id != nil {
-		// no validation rules for Id
-	}
-
-	if m.DomainId != nil {
-		// no validation rules for DomainId
 	}
 
 	if len(errors) > 0 {

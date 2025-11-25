@@ -56,6 +56,8 @@ service ContentCommentService {
 
 }
 
+// 实体定义
+
 message Comment {
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
@@ -66,17 +68,17 @@ message Comment {
   // 更新人
   optional int64 updated_by = 1003;
 
-  // 评论ID
+  // 评论Id
   int64 id = 1;
-  // 文章ID
+  // 文章Id
   int64 article_id = 2;
   // 评论内容
   string content = 4;
   // 评论层级
   int64 level = 5;
-  // 父级评论ID
+  // 父级评论Id
   int64 parent_id = 6;
-  // 回复评论ID
+  // 回复评论Id
   int64 reply_id = 7;
   // 状态
   int64 status = 8;
@@ -95,12 +97,27 @@ message Comment {
   user.v1.User reply_user = 16;
 }
 
+// 查询参数定义
+
+message CommentQueryParams {
+  // 评论Id，查询该评论的回复。需为文章的评论，回复时间正序。
+  optional int64 comment_id = 2;
+  // 文章Id
+  optional int64 article_id = 3;
+  // 排序 0-最新 1-最热
+  optional int32 order = 4;
+  // 用户Id
+  optional int64 user_id = 5;
+}
+
+// 请求/响应结构定义
+
 message AddCommentRequest {
-  // 文章ID
+  // 文章Id
   int64 article_id = 2;
   // 评论内容
   string content = 4;
-  // 回复评论ID
+  // 回复评论Id
   int64 reply_id = 6;
 }
 message AddCommentReply {}
@@ -108,14 +125,8 @@ message AddCommentReply {}
 message PageCommentRequest {
   // 分页
   optional common.v1.PageRequest page = 1;
-  // 评论ID，查询该评论的回复。需为文章的评论，回复时间正序。
-  optional int64 comment_id = 2;
-  // 文章ID
-  optional int64 article_id = 3;
-  // 排序 0-最新 1-最热
-  optional int32 order = 4;
-  // 用户ID
-  optional int64 user_id = 5;
+  // 查询参数
+  CommentQueryParams query = 2;
 }
 message PageCommentReply {
   // 分页
@@ -125,7 +136,7 @@ message PageCommentReply {
 }
 
 message LikeCommentRequest {
-  // 评论ID
+  // 评论Id
   int64 id = 1;
   // 是否点赞
   bool active = 2;
@@ -133,7 +144,7 @@ message LikeCommentRequest {
 message LikeCommentReply {}
 
 message ThankCommentRequest {
-  // 评论ID
+  // 评论Id
   int64 id = 1;
   // 是否感谢
   bool active = 2;
@@ -141,7 +152,7 @@ message ThankCommentRequest {
 message ThankCommentReply {}
 
 message UpdateStatusCommentRequest {
-  // 评论ID
+  // 评论Id
   int64 id = 1;
   // 状态
   int64 status = 2;

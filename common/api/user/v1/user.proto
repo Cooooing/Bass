@@ -10,10 +10,72 @@ import "common/v1/common.proto";
 
 option go_package = "common/api/user/v1;v1";
 
+// User 服务
+service UserUserService {
+
+  // 更新用户设置
+  rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply) {
+    option (google.api.http) = {
+      post: "/v1/user/updateSetting"
+      body: "*"
+    };
+  }
+
+  // 获取当前用户信息
+  rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserReply) {
+    option (google.api.http) = {
+      post: "/v1/user/getCurrentUser"
+      body: "*"
+    };
+  }
+
+  // 查询单个用户
+  rpc GetOne (GetOneRequest) returns (GetOneReply) {
+    option (google.api.http) = {
+      post: "/v1/user/getOne"
+      body: "*"
+    };
+  }
+
+  // 查询用户列表（返回数组）
+  rpc GetList (GetListRequest) returns (GetListReply) {
+    option (google.api.http) = {
+      post: "/v1/user/getList"
+      body: "*"
+    };
+  }
+
+  // 查询用户列表（返回map）
+  rpc GetMap(GetMapRequest) returns (GetMapReply) {
+    option (google.api.http) = {
+      post: "/v1/user/getMap"
+      body: "*"
+    };
+  }
+
+  // 分页查询用户
+  rpc Page(PageUserRequest) returns (PageUserReply) {
+    option (google.api.http) = {
+      post: "/v1/user/page"
+      body: "*"
+    };
+  }
+
+  // 获取用户默认头像
+  rpc Avatar(AvatarRequest) returns (AvatarReply) {
+    option (google.api.http) = {
+      get: "/v1/user/avatar/{name}"
+    };
+  }
+
+}
+
+// 实体定义
+
 message User {
   // --- 基础信息 ---
 
-  // 用户ID
+  // 用户Id
   int64 id = 1;
   // 用户名
   string name = 2;
@@ -116,57 +178,31 @@ message User {
   google.protobuf.Timestamp updated_at = 38;
 }
 
-// User 服务
-service UserUserService {
 
-  // 更新用户设置
-  rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply) {
-    option (google.api.http) = {
-      post: "/v1/user/updateSetting"
-      body: "*"
-    };
-  }
+// 查询参数定义
 
-  // 获取当前用户信息
-  rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getCurrentUser"
-      body: "*"
-    };
-  }
-
-  // 查询单个用户
-  rpc GetOne (GetOneRequest) returns (GetOneReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getOne"
-      body: "*"
-    };
-  }
-
-  // 查询用户列表（返回数组）
-  rpc GetList (GetListRequest) returns (GetListReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getList"
-      body: "*"
-    };
-  }
-
-  // 查询用户列表（返回map）
-  rpc GetMap(GetMapRequest) returns (GetMapReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getMap"
-      body: "*"
-    };
-  }
-
-  // 获取用户默认头像
-  rpc Avatar(AvatarRequest) returns (AvatarReply) {
-    option (google.api.http) = {
-      get: "/v1/user/avatar/{name}"
-    };
-  }
-
+message UserQueryParams {
+  // 用户Id列表
+  repeated int64 user_ids = 1;
+  // 用户名
+  optional string name = 2;
+  // 用户名列表
+  repeated string names = 3;
+  // 昵称
+  optional string nickname = 4;
+  // 昵称列表
+  repeated string nicknames = 5;
+  // 邮箱
+  optional string email = 6;
+  // 邮箱列表
+  repeated string emails = 7;
+  // 手机号
+  optional string phone = 8;
+  // 手机号列表
+  repeated string phones = 9;
 }
+
+// 请求/响应结构定义
 
 message UpdateSettingRequest{
   // 头像URL
@@ -196,7 +232,7 @@ message GetCurrentUserReply {
 }
 
 message GetOneRequest {
-  // 用户ID
+  // 用户Id
   int64 id = 1;
 }
 message GetOneReply {
@@ -205,8 +241,8 @@ message GetOneReply {
 }
 
 message GetListRequest {
-  // 用户ID列表
-  repeated int64 ids = 1;
+  // 查询参数
+  UserQueryParams query = 2;
 }
 message GetListReply {
   // 用户列表
@@ -214,12 +250,25 @@ message GetListReply {
 }
 
 message GetMapRequest {
-  // 用户ID列表
-  repeated int64 ids = 1;
+  // 查询参数
+  UserQueryParams query = 2;
 }
 message GetMapReply {
-  // 用户ID -> 用户信息
+  // 用户Id -> 用户信息
   map<int64, User> users = 1;
+}
+
+message PageUserRequest{
+  // 分页参数
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  UserQueryParams query = 2;
+}
+message PageUserReply{
+  // 分页
+  common.v1.PageReply page = 1;
+  // 用户列表
+  repeated User users = 2;
 }
 
 message AvatarRequest{

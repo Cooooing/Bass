@@ -20,5 +20,13 @@ type UserRepo interface {
 }
 
 type UserGetReq struct {
-	ArticleIds []int64
+	UserIds   []int64
+	Name      *string
+	Names     []string
+	Nickname  *string
+	Nicknames []string
+	Email     *string
+	Emails    []string
+	Phone     *string
+	Phones    []string
 }

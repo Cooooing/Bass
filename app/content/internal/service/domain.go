@@ -72,24 +72,27 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest)
 }
 
 func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v1.PageDomainReply, error) {
+	req.Query = base.OrDefault(req.Query, &v1.DomainQueryParams{})
 	getReq := &repo.DomainGetReq{
-		Ids:         req.Ids,
-		Name:        req.Name,
-		Description: req.Description,
-		Url:         req.Url,
-		Icon:        req.Icon,
-		IsNav:       req.IsNav,
+		Ids:         req.Query.Ids,
+		Name:        req.Query.Name,
+		Description: req.Query.Description,
+		Status:      nil,
+		Url:         req.Query.Url,
+		Icon:        req.Query.Icon,
+		TagCount:    nil,
+		IsNav:       req.Query.IsNav,
 	}
-	if req.Status != nil {
-		getReq.Status = base.Ptr(cv1.DomainStatus(*req.Status))
+	if req.Query.Status != nil {
+		getReq.Status = base.Ptr(cv1.DomainStatus(*req.Query.Status))
 	}
-	if req.TagCount != nil {
+	if req.Query.TagCount != nil {
 		getReq.TagCount = &commonModel.Range[int32]{}
-		if req.TagCount.Start != nil {
-			getReq.TagCount.Start = req.TagCount.Start
+		if req.Query.TagCount.Start != nil {
+			getReq.TagCount.Start = req.Query.TagCount.Start
 		}
-		if req.TagCount.End != nil {
-			getReq.TagCount.End = req.TagCount.End
+		if req.Query.TagCount.End != nil {
+			getReq.TagCount.End = req.Query.TagCount.End
 		}
 	}
 	data, page, err := s.domainDomain.Page(ctx, req.Page, getReq)

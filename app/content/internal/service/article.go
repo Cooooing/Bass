@@ -171,15 +171,32 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 }
 
 func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (rsp *v1.PageArticleReply, err error) {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	req.Query = base.OrDefault(req.Query, &v1.ArticleQueryParams{})
+
+	/*
+	 * 正常状态的只能查看公开
+	 * 草稿状态的只能查看自己
+	 */
+
 	if req.Query.Status != nil && *req.Query.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Query.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
+	status := base.Ptr(cv1.ArticleStatus_ArticleNormal)
+	authorId := req.Query.AuthorId
+	if req.Query.Status != nil && *req.Query.Status == int32(cv1.ArticleStatus_ArticleDrafts) {
+		if !ok {
+			return nil, cv1.ErrorUnauthorized("login required to view drafts")
+		}
+		authorId = &user.ID
+		status = base.Ptr(cv1.ArticleStatus_ArticleDrafts)
+	}
+
 	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
 		TagId:    req.Query.TagId,
 		DomainId: req.Query.DomainId,
-		Status:   (*cv1.ArticleStatus)(req.Query.Status),
-		AuthorId: req.Query.AuthorId,
+		Status:   status,
+		AuthorId: authorId,
 		Order:    (*cv1.ArticleOrder)(req.Query.Order),
 		Type:     (*cv1.ArticleType)(req.Query.Type),
 		Keyword:  req.Query.Keyword,

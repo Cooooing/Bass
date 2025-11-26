@@ -74,10 +74,10 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest)
 func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v1.PageDomainReply, error) {
 	req.Query = base.OrDefault(req.Query, &v1.DomainQueryParams{})
 	getReq := &repo.DomainGetReq{
-		Ids:         req.Query.Ids,
+		DomainIds:   req.Query.Ids,
 		Name:        req.Query.Name,
 		Description: req.Query.Description,
-		Status:      nil,
+		Status:      base.Ptr(cv1.DomainStatus_DomainNormal),
 		Url:         req.Query.Url,
 		Icon:        req.Query.Icon,
 		TagCount:    nil,
@@ -87,12 +87,9 @@ func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v
 		getReq.Status = base.Ptr(cv1.DomainStatus(*req.Query.Status))
 	}
 	if req.Query.TagCount != nil {
-		getReq.TagCount = &commonModel.Range[int32]{}
-		if req.Query.TagCount.Start != nil {
-			getReq.TagCount.Start = req.Query.TagCount.Start
-		}
-		if req.Query.TagCount.End != nil {
-			getReq.TagCount.End = req.Query.TagCount.End
+		getReq.TagCount = &commonModel.Range[int32]{
+			Start: req.Query.TagCount.Start,
+			End:   req.Query.TagCount.End,
 		}
 	}
 	data, page, err := s.domainDomain.Page(ctx, req.Page, getReq)
@@ -101,7 +98,7 @@ func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v
 		reply = append(reply, datum.ConvertToRpc())
 	}
 	return &v1.PageDomainReply{
-		Page:    page,
-		Domains: reply,
+		Page: page,
+		Rows: reply,
 	}, err
 }

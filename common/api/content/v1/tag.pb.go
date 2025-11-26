@@ -579,7 +579,7 @@ type PageTagReply struct {
 	// 分页
 	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
 	// 标签列表
-	Tags          []*Tag `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
+	Rows          []*Tag `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -621,9 +621,9 @@ func (x *PageTagReply) GetPage() *v1.PageReply {
 	return nil
 }
 
-func (x *PageTagReply) GetTags() []*Tag {
+func (x *PageTagReply) GetRows() []*Tag {
 	if x != nil {
-		return x.Tags
+		return x.Rows
 	}
 	return nil
 }
@@ -697,7 +697,7 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\x05_page\"s\n" +
 	"\fPageTagReply\x123\n" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12.\n" +
-	"\x04tags\x18\x02 \x03(\v2\x1a.common.api.content.v1.TagR\x04tags2\xe2\x02\n" +
+	"\x04rows\x18\x02 \x03(\v2\x1a.common.api.content.v1.TagR\x04rows2\xe2\x02\n" +
 	"\x11ContentTagService\x12k\n" +
 	"\x04Adds\x12%.common.api.content.v1.AddTagsRequest\x1a#.common.api.content.v1.AddTagsReply\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/tag/adds\x12s\n" +
 	"\x06Update\x12'.common.api.content.v1.UpdateTagRequest\x1a%.common.api.content.v1.UpdateTagReply\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/tag/update\x12k\n" +
@@ -742,7 +742,7 @@ var file_content_v1_tag_proto_depIdxs = []int32{
 	11, // 7: common.api.content.v1.PageTagRequest.page:type_name -> common.api.common.v1.PageRequest
 	2,  // 8: common.api.content.v1.PageTagRequest.query:type_name -> common.api.content.v1.TagQueryParams
 	12, // 9: common.api.content.v1.PageTagReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 10: common.api.content.v1.PageTagReply.tags:type_name -> common.api.content.v1.Tag
+	0,  // 10: common.api.content.v1.PageTagReply.rows:type_name -> common.api.content.v1.Tag
 	3,  // 11: common.api.content.v1.ContentTagService.Adds:input_type -> common.api.content.v1.AddTagsRequest
 	5,  // 12: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
 	7,  // 13: common.api.content.v1.ContentTagService.Page:input_type -> common.api.content.v1.PageTagRequest

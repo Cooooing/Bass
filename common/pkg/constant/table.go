@@ -9,4 +9,5 @@ func (t TablePrefix) String() string {
 const (
 	TablePrefixUser    TablePrefix = "user_"
 	TablePrefixContent TablePrefix = "content_"
+	TablePrefixNotify  TablePrefix = "notify_"
 )

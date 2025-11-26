@@ -446,7 +446,7 @@ type PageCommentReply struct {
 	// 分页
 	Page *v11.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
 	// 评论列表
-	Comments      []*Comment `protobuf:"bytes,2,rep,name=comments,proto3" json:"comments,omitempty"`
+	Rows          []*Comment `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -488,9 +488,9 @@ func (x *PageCommentReply) GetPage() *v11.PageReply {
 	return nil
 }
 
-func (x *PageCommentReply) GetComments() []*Comment {
+func (x *PageCommentReply) GetRows() []*Comment {
 	if x != nil {
-		return x.Comments
+		return x.Rows
 	}
 	return nil
 }
@@ -820,10 +820,10 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"\x12PageCommentRequest\x12:\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12?\n" +
 	"\x05query\x18\x02 \x01(\v2).common.api.content.v1.CommentQueryParamsR\x05queryB\a\n" +
-	"\x05_page\"\x83\x01\n" +
+	"\x05_page\"{\n" +
 	"\x10PageCommentReply\x123\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
-	"\bcomments\x18\x02 \x03(\v2\x1e.common.api.content.v1.CommentR\bcomments\"<\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x122\n" +
+	"\x04rows\x18\x02 \x03(\v2\x1e.common.api.content.v1.CommentR\x04rows\"<\n" +
 	"\x12LikeCommentRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x16\n" +
 	"\x06active\x18\x02 \x01(\bR\x06active\"\x12\n" +
@@ -883,7 +883,7 @@ var file_content_v1_comment_proto_depIdxs = []int32{
 	14, // 5: common.api.content.v1.PageCommentRequest.page:type_name -> common.api.common.v1.PageRequest
 	1,  // 6: common.api.content.v1.PageCommentRequest.query:type_name -> common.api.content.v1.CommentQueryParams
 	15, // 7: common.api.content.v1.PageCommentReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 8: common.api.content.v1.PageCommentReply.comments:type_name -> common.api.content.v1.Comment
+	0,  // 8: common.api.content.v1.PageCommentReply.rows:type_name -> common.api.content.v1.Comment
 	2,  // 9: common.api.content.v1.ContentCommentService.Add:input_type -> common.api.content.v1.AddCommentRequest
 	4,  // 10: common.api.content.v1.ContentCommentService.Page:input_type -> common.api.content.v1.PageCommentRequest
 	6,  // 11: common.api.content.v1.ContentCommentService.Like:input_type -> common.api.content.v1.LikeCommentRequest

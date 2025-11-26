@@ -85,6 +85,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 }
 
 func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleDraftRequest) (rsp *v1.UpdateArticleDraftReply, err error) {
+	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	article := req.Article
 	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
@@ -117,6 +118,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		Commentable:   base.DerefOrDefault(article.Commentable, true),
 		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
 		Listable:      base.DerefOrDefault(article.Listable, true),
+		CreatedBy:     base.Ptr(user.ID),
 	}, tags)
 	if err != nil {
 		return nil, err
@@ -128,17 +130,17 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
+	// 只有作者可以发布草稿
+	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+		ArticleId: base.Ptr(req.ArticleId),
+		Status:    base.Ptr(cv1.ArticleStatus_ArticleDrafts),
+		CreatedBy: base.Ptr(user.ID),
+	})
 	if err != nil {
 		return nil, err
 	}
-	// 只能发布草稿
-	if article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-		return nil, cv1.ErrorBadRequest("only drafts can be publish")
-	}
-	// 只有作者可以发布草稿
-	if *article.CreatedBy != user.ID {
-		return nil, cv1.ErrorBadRequest("you are not the author")
+	if !exist {
+		return nil, cv1.ErrorBadRequest("article not exist")
 	}
 	err = s.articleDomain.Publish(ctx, req.ArticleId)
 	return &v1.PublishArticleReply{}, err
@@ -152,17 +154,17 @@ func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleReques
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
-		article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId)
+		// 只有作者可以删除草稿
+		exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+			ArticleId: base.Ptr(req.ArticleId),
+			Status:    base.Ptr(cv1.ArticleStatus_ArticleDrafts),
+			CreatedBy: base.Ptr(user.ID),
+		})
 		if err != nil {
 			return err
 		}
-		// 只能删除草稿
-		if article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-			return cv1.ErrorBadRequest("only drafts can be deleted")
-		}
-		// 只有作者可以删除草稿
-		if *article.CreatedBy != user.ID {
-			return cv1.ErrorBadRequest("you are not the author")
+		if !exist {
+			return cv1.ErrorBadRequest("article not exist")
 		}
 		err = s.articleRepo.Delete(ctx, s.db, req.ArticleId)
 		return err
@@ -200,7 +202,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 		Order:    (*cv1.ArticleOrder)(req.Query.Order),
 		Type:     (*cv1.ArticleType)(req.Query.Type),
 		Keyword:  req.Query.Keyword,
-		Listable: nil,
+		Listable: base.Ptr(true),
 	})
 	return rsp, err
 }
@@ -212,11 +214,16 @@ func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneReques
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	// 只有作者可以添加附言
-	if article, err := s.articleRepo.GetById(ctx, s.db, req.ArticleId); err != nil || article == nil || *article.CreatedBy != user.ID {
-		if err != nil {
-			return nil, err
-		}
-		return nil, cv1.ErrorBadRequest("you are not the author")
+	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+		ArticleId: base.Ptr(req.ArticleId),
+		Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
+		CreatedBy: base.Ptr(user.ID),
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, cv1.ErrorBadRequest("article not exist")
 	}
 
 	err = s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)

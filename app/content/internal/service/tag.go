@@ -81,15 +81,15 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.PageTagReply, error) {
 	req.Query = base.OrDefault(req.Query, &v1.TagQueryParams{})
 	getReq := &repo.TagGetReq{
-		Ids:         req.Query.Ids,
+		TagIds:      req.Query.Ids,
 		UserId:      req.Query.UserId,
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
-		Status:      (*cv1.TagStatus)(req.Query.Status),
+		Status:      base.Ptr(cv1.TagStatus_TagNormal),
 		DomainId:    req.Query.DomainId,
 	}
-	if req.Query != nil {
+	if req.Query.ArticleCount != nil {
 		getReq.ArticleCount = &commonModel.Range[int32]{Start: req.Query.ArticleCount.Start, End: req.Query.ArticleCount.End}
 	}
 	data, page, err := s.domainTag.Page(ctx, req.Page, getReq)
@@ -99,6 +99,6 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.Page
 	}
 	return &v1.PageTagReply{
 		Page: page,
-		Tags: reply,
+		Rows: reply,
 	}, err
 }

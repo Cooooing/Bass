@@ -101,12 +101,16 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 	status := article.Status
 	article.Status = int32(cv1.ArticleStatus_ArticleDrafts) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		articleById, err := d.articleRepo.GetById(ctx, tx, article.ID)
+		exist, err := d.articleRepo.Exist(ctx, tx, &repo.ArticleGetReq{
+			ArticleId: base.Ptr(article.ID),
+			Status:    base.Ptr(cv1.ArticleStatus_ArticleDrafts),
+			CreatedBy: article.CreatedBy,
+		})
 		if err != nil {
 			return err
 		}
-		if articleById.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
-			return cv1.ErrorBadRequest("only update draft")
+		if !exist {
+			return cv1.ErrorBadRequest("article not exist")
 		}
 
 		save, err = d.articleRepo.Update(ctx, tx, article, tags)
@@ -179,12 +183,15 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArt
 		lastReplyCommentUser *userv1.User
 		lastReplyCommentAt   *time.Time
 	)
-	query, err := d.articleRepo.GetById(ctx, d.db, articleId)
+	query, err := d.articleRepo.GetById(ctx, d.db, &repo.ArticleGetReq{
+		ArticleId: base.Ptr(articleId),
+		Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	lastReplyComment, err = d.commentRepo.GetArticleLastComment(ctx, d.db, query.ID)
+	lastReplyComment, err = d.commentRepo.GetArticleLastComment(ctx, d.db, &repo.CommentGetReq{ArticleId: base.Ptr(query.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +246,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		userIds.Add(*item.CreatedBy)
 	}
 
-	lastCommentMap, err := d.commentRepo.GetArticleLastComments(ctx, d.db, articleIds.ToSlice())
+	lastCommentMap, err := d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: articleIds.ToSlice()})
 	if err != nil {
 		return nil, err
 	}
@@ -269,8 +276,8 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		articles = append(articles, a)
 	}
 	reply = &v1.PageArticleReply{
-		Page:     pageReply,
-		Articles: articles,
+		Page: pageReply,
+		Rows: articles,
 	}
 	return reply, err
 }

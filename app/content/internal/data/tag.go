@@ -61,12 +61,17 @@ func (r *TagRepo) Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*
 	return (*model.Tag)(save), nil
 }
 
-func (r *TagRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Tag, error) {
-	query, err := tx.Tag.Query().Where(tag.IDEQ(id)).First(ctx)
+func (r *TagRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) (*model.Tag, error) {
+	if req.TagId == nil {
+		return nil, cv1.ErrorBadRequest("tagId is required")
+	}
+	query := tx.Tag.Query()
+	query = r.getQuery(query, req)
+	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("tag is not found")
 	}
-	return (*model.Tag)(query), err
+	return (*model.Tag)(t), err
 }
 
 func (r *TagRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) ([]*model.Tag, error) {
@@ -117,8 +122,11 @@ func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageReq
 }
 
 func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQuery {
-	if req.Ids != nil {
-		query = query.Where(tag.IDIn(req.Ids...))
+	if req.TagId != nil {
+		query = query.Where(tag.IDEQ(*req.TagId))
+	}
+	if req.TagIds != nil {
+		query = query.Where(tag.IDIn(req.TagIds...))
 	}
 	if req.UserId != nil {
 		query = query.Where(tag.CreatedBy(*req.UserId))

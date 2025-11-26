@@ -1377,7 +1377,7 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.common.v1.PageReply'
                     description: 分页信息
-                articles:
+                rows:
                     type: array
                     items:
                         $ref: '#/components/schemas/common.api.content.v1.Article'
@@ -1400,7 +1400,7 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.common.v1.PageReply'
                     description: 分页
-                comments:
+                rows:
                     type: array
                     items:
                         $ref: '#/components/schemas/common.api.content.v1.Comment'
@@ -1423,7 +1423,7 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.common.v1.PageReply'
                     description: 分页信息
-                domains:
+                rows:
                     type: array
                     items:
                         $ref: '#/components/schemas/common.api.content.v1.Domain'
@@ -1446,7 +1446,7 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.common.v1.PageReply'
                     description: 分页
-                tags:
+                rows:
                     type: array
                     items:
                         $ref: '#/components/schemas/common.api.content.v1.Tag'
@@ -1808,7 +1808,7 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.common.v1.PageReply'
                     description: 分页
-                users:
+                rows:
                     type: array
                     items:
                         $ref: '#/components/schemas/common.api.user.v1.User'

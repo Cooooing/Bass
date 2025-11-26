@@ -1066,7 +1066,7 @@ type PageUserReply struct {
 	// 分页
 	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
 	// 用户列表
-	Users         []*User `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
+	Rows          []*User `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1108,9 +1108,9 @@ func (x *PageUserReply) GetPage() *v1.PageReply {
 	return nil
 }
 
-func (x *PageUserReply) GetUsers() []*User {
+func (x *PageUserReply) GetRows() []*User {
 	if x != nil {
-		return x.Users
+		return x.Rows
 	}
 	return nil
 }
@@ -1346,10 +1346,10 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x05value:\x028\x01\"\x83\x01\n" +
 	"\x0fPageUserRequest\x125\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x129\n" +
-	"\x05query\x18\x02 \x01(\v2#.common.api.user.v1.UserQueryParamsR\x05query\"t\n" +
+	"\x05query\x18\x02 \x01(\v2#.common.api.user.v1.UserQueryParamsR\x05query\"r\n" +
 	"\rPageUserReply\x123\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12.\n" +
-	"\x05users\x18\x02 \x03(\v2\x18.common.api.user.v1.UserR\x05users\"#\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12,\n" +
+	"\x04rows\x18\x02 \x03(\v2\x18.common.api.user.v1.UserR\x04rows\"#\n" +
 	"\rAvatarRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"D\n" +
 	"\vAvatarReply\x12\x12\n" +
@@ -1414,7 +1414,7 @@ var file_user_v1_user_proto_depIdxs = []int32{
 	18, // 11: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
 	1,  // 12: common.api.user.v1.PageUserRequest.query:type_name -> common.api.user.v1.UserQueryParams
 	19, // 13: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 14: common.api.user.v1.PageUserReply.users:type_name -> common.api.user.v1.User
+	0,  // 14: common.api.user.v1.PageUserReply.rows:type_name -> common.api.user.v1.User
 	0,  // 15: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
 	2,  // 16: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
 	4,  // 17: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest

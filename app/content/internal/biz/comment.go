@@ -37,12 +37,12 @@ func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, comm
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *model.Comment, err error) {
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		// 回复文章
-		exist, err := d.articleRepo.GetById(ctx, tx, comment.ArticleID)
+		exist, err := d.articleRepo.GetById(ctx, tx, &repo.ArticleGetReq{
+			ArticleId: base.Ptr(comment.ArticleID),
+			Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
+		})
 		if err != nil {
 			return err
-		}
-		if exist == nil || exist.Status != int32(cv1.ArticleStatus_ArticleNormal) {
-			return cv1.ErrorBadRequest("article not exist")
 		}
 		if !exist.Commentable {
 			return cv1.ErrorBadRequest("article not commentable")
@@ -51,15 +51,13 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 		// 回复评论
 		replyComment := &model.Comment{}
 		if comment.ReplyID != nil {
-			replyComment, err = d.commentRepo.GetById(ctx, tx, *comment.ReplyID)
+			replyComment, err = d.commentRepo.GetById(ctx, tx, &repo.CommentGetReq{
+				CommentId: comment.ReplyID,
+				ArticleId: base.Ptr(comment.ArticleID),
+				Status:    base.Ptr(cv1.CommentStatus_CommentNormal),
+			})
 			if err != nil {
 				return err
-			}
-			if replyComment == nil {
-				return cv1.ErrorBadRequest("reply comment not exist")
-			}
-			if replyComment.ArticleID != comment.ArticleID {
-				return cv1.ErrorBadRequest("reply comment not belong to this article")
 			}
 
 			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, cv1.CommentAction_CommentActionReply, 1)
@@ -137,8 +135,8 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		}
 
 		reply = &v1.PageCommentReply{
-			Page:     pageReply,
-			Comments: comments,
+			Page: pageReply,
+			Rows: comments,
 		}
 		return nil
 	})

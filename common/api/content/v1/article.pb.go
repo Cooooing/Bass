@@ -1211,7 +1211,7 @@ type PageArticleReply struct {
 	// 分页信息
 	Page *v11.PageReply `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
 	// 文章列表
-	Articles      []*Article `protobuf:"bytes,1,rep,name=articles,proto3" json:"articles,omitempty"`
+	Rows          []*Article `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1253,9 +1253,9 @@ func (x *PageArticleReply) GetPage() *v11.PageReply {
 	return nil
 }
 
-func (x *PageArticleReply) GetArticles() []*Article {
+func (x *PageArticleReply) GetRows() []*Article {
 	if x != nil {
-		return x.Articles
+		return x.Rows
 	}
 	return nil
 }
@@ -2287,10 +2287,10 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x12DeleteArticleReply\"\x8c\x01\n" +
 	"\x12PageArticleRequest\x125\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12?\n" +
-	"\x05query\x18\x02 \x01(\v2).common.api.content.v1.ArticleQueryParamsR\x05query\"\x83\x01\n" +
+	"\x05query\x18\x02 \x01(\v2).common.api.content.v1.ArticleQueryParamsR\x05query\"{\n" +
 	"\x10PageArticleReply\x123\n" +
-	"\x04page\x18\x02 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
-	"\barticles\x18\x01 \x03(\v2\x1e.common.api.content.v1.ArticleR\barticles\"5\n" +
+	"\x04page\x18\x02 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x122\n" +
+	"\x04rows\x18\x01 \x03(\v2\x1e.common.api.content.v1.ArticleR\x04rows\"5\n" +
 	"\x14GetArticleOneRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x01 \x01(\x03R\tarticleId\"N\n" +
@@ -2432,7 +2432,7 @@ var file_content_v1_article_proto_depIdxs = []int32{
 	39, // 12: common.api.content.v1.PageArticleRequest.page:type_name -> common.api.common.v1.PageRequest
 	3,  // 13: common.api.content.v1.PageArticleRequest.query:type_name -> common.api.content.v1.ArticleQueryParams
 	40, // 14: common.api.content.v1.PageArticleReply.page:type_name -> common.api.common.v1.PageReply
-	1,  // 15: common.api.content.v1.PageArticleReply.articles:type_name -> common.api.content.v1.Article
+	1,  // 15: common.api.content.v1.PageArticleReply.rows:type_name -> common.api.content.v1.Article
 	1,  // 16: common.api.content.v1.GetArticleOneReply.article:type_name -> common.api.content.v1.Article
 	4,  // 17: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
 	6,  // 18: common.api.content.v1.ContentArticleService.UpdateDraft:input_type -> common.api.content.v1.UpdateArticleDraftRequest

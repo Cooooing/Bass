@@ -87,14 +87,17 @@ func (r *DomainRepo) AddTagCount(ctx context.Context, tx *gen.Client, id int64, 
 	return (*model.Domain)(save), nil
 }
 
-func (r *DomainRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Domain, error) {
-	query, err := tx.Domain.Query().
-		Where(domain.IDEQ(id)).
-		First(ctx)
+func (r *DomainRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) (*model.Domain, error) {
+	if req.DomainId == nil {
+		return nil, cv1.ErrorBadRequest("domainId is required")
+	}
+	query := tx.Domain.Query()
+	query = r.getQuery(query, req)
+	d, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("domain is not found")
 	}
-	return (*model.Domain)(query), err
+	return (*model.Domain)(d), err
 }
 
 func (r *DomainRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) ([]*model.Domain, error) {
@@ -143,8 +146,11 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 }
 
 func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *gen.DomainQuery {
-	if len(req.Ids) > 0 {
-		query = query.Where(domain.IDIn(req.Ids...))
+	if req.DomainId != nil {
+		query = query.Where(domain.IDEQ(*req.DomainId))
+	}
+	if len(req.DomainIds) > 0 {
+		query = query.Where(domain.IDIn(req.DomainIds...))
 	}
 	if req.Name != nil {
 		query = query.Where(domain.NameContains(*req.Name))

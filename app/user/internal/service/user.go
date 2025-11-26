@@ -181,8 +181,8 @@ func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v
 		reply = append(reply, user.ConvertToRpc())
 	}
 	return &v1.PageUserReply{
-		Page:  page,
-		Users: reply,
+		Page: page,
+		Rows: reply,
 	}, nil
 }
 

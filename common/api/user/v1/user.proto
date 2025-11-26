@@ -268,7 +268,7 @@ message PageUserReply{
   // 分页
   common.v1.PageReply page = 1;
   // 用户列表
-  repeated User users = 2;
+  repeated User rows = 2;
 }
 
 message AvatarRequest{

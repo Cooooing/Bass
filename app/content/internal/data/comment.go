@@ -59,23 +59,27 @@ func (r *CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commen
 	return err
 }
 
-func (r *CommentRepo) Exist(ctx context.Context, tx *gen.Client, id int64) (bool, error) {
-	exist, err := tx.Comment.Query().
-		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
-		Where(comment.IDEQ(id)).
-		Exist(ctx)
+func (r *CommentRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (bool, error) {
+	if req.CommentId == nil {
+		return false, cv1.ErrorBadRequest("commentId is required")
+	}
+	query := tx.Comment.Query()
+	query = r.getQuery(query, req)
+	exist, err := query.Exist(ctx)
 	return exist, err
 }
 
-func (r *CommentRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error) {
-	query, err := tx.Comment.Query().
-		Where(comment.IDEQ(id)).
-		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
-		First(ctx)
+func (r *CommentRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (*model.Comment, error) {
+	if req.CommentId == nil {
+		return nil, cv1.ErrorBadRequest("commentId is required")
+	}
+	query := tx.Comment.Query()
+	query = r.getQuery(query, req)
+	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("comment is not found")
 	}
-	return (*model.Comment)(query), err
+	return (*model.Comment)(c), err
 }
 
 func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) ([]*model.Comment, error) {
@@ -124,18 +128,29 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 }
 
 func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
+	if req.ParentId != nil {
+		query = query.Where(comment.ParentIDEQ(*req.ParentId))
+	}
+	if req.ReplyId != nil {
+		query = query.Where(comment.ReplyIDEQ(*req.ReplyId))
+	}
 	if req.CommentId != nil {
-		query = query.Where(comment.ParentIDEQ(*req.CommentId)).
-			WithReply(func(query *gen.CommentQuery) {
-				query.Select(comment.FieldCreatedBy).Where(comment.LevelNEQ(1))
-			}).
-			Order(gen.Asc(comment.FieldCreatedAt))
+		query = query.Where(comment.IDEQ(*req.CommentId))
+	}
+	if len(req.CommentIds) > 0 {
+		query = query.Where(comment.IDIn(req.CommentIds...))
 	}
 	if req.ArticleId != nil {
 		query = query.Where(comment.ArticleIDEQ(*req.ArticleId))
 	}
-	if req.UserId != nil {
-		query = query.Where(comment.CreatedByEQ(*req.UserId))
+	if len(req.ArticleIds) > 0 {
+		query = query.Where(comment.ArticleIDIn(req.ArticleIds...))
+	}
+	if req.CreatedBy != nil {
+		query = query.Where(comment.CreatedByEQ(*req.CreatedBy))
+	}
+	if req.Status != nil {
+		query = query.Where(comment.StatusEQ(int32(*req.Status)))
 	}
 	if req.Order != nil {
 		switch *req.Order {
@@ -159,21 +174,25 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	return query
 }
 
-func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, articleId int64) (*model.Comment, error) {
-	query, err := client.Comment.Query().
-		Where(comment.ArticleIDEQ(articleId)).
-		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
-		Order(gen.Desc(comment.FieldCreatedAt)).
-		First(ctx)
+func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, req *repo.CommentGetReq) (*model.Comment, error) {
+	if req.ArticleId == nil {
+		return nil, cv1.ErrorBadRequest("articleId is required")
+	}
+	query := client.Comment.Query()
+	query = r.getQuery(query, req)
+	c, err := query.Order(gen.Desc(comment.FieldCreatedAt)).First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
-	return (*model.Comment)(query), err
+	return (*model.Comment)(c), err
 }
 
-func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, articleIds []int64) (dict.Map[int64, *model.Comment], error) {
-	articleIdsAny := make([]any, len(articleIds))
-	for i, v := range articleIds {
+func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (dict.Map[int64, *model.Comment], error) {
+	if len(req.ArticleIds) == 0 {
+		return nil, cv1.ErrorBadRequest("articleIds is required")
+	}
+	articleIdsAny := make([]any, len(req.ArticleIds))
+	for i, v := range req.ArticleIds {
 		articleIdsAny[i] = v
 	}
 	comments, err := tx.Comment.Query().
@@ -196,7 +215,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 			)
 		}).
 		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
-		Where(comment.ArticleIDIn(articleIds...)).
+		Where(comment.ArticleIDIn(req.ArticleIds...)).
 		All(ctx)
 	if err != nil {
 		return nil, err

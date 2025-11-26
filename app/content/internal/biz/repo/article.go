@@ -19,20 +19,22 @@ type ArticleRepo interface {
 
 	Delete(ctx context.Context, tx *gen.Client, articleId int64) error
 
-	Exist(ctx context.Context, tx *gen.Client, articleId int64, status cv1.ArticleStatus) (bool, error)
-	GetById(ctx context.Context, tx *gen.Client, articleId int64) (*model.Article, error)
+	Exist(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (bool, error)
+	GetById(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (*model.Article, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ArticleGetReq) ([]*model.Article, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ArticleGetReq) ([]*model.Article, *cv1.PageReply, error)
 }
 
 type ArticleGetReq struct {
-	TagId    *int64
-	DomainId *int64
-	Status   *cv1.ArticleStatus
-	AuthorId *int64
-	Order    *cv1.ArticleOrder
-	Type     *cv1.ArticleType
-	Keyword  *string
+	ArticleId *int64
+	CreatedBy *int64
+	TagId     *int64
+	DomainId  *int64
+	Status    *cv1.ArticleStatus
+	AuthorId  *int64
+	Order     *cv1.ArticleOrder
+	Type      *cv1.ArticleType
+	Keyword   *string
 
 	Listable *bool
 }

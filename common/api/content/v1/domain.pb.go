@@ -624,7 +624,7 @@ type PageDomainReply struct {
 	// 分页信息
 	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
 	// 领域信息
-	Domains       []*Domain `protobuf:"bytes,2,rep,name=domains,proto3" json:"domains,omitempty"`
+	Rows          []*Domain `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -666,9 +666,9 @@ func (x *PageDomainReply) GetPage() *v1.PageReply {
 	return nil
 }
 
-func (x *PageDomainReply) GetDomains() []*Domain {
+func (x *PageDomainReply) GetRows() []*Domain {
 	if x != nil {
-		return x.Domains
+		return x.Rows
 	}
 	return nil
 }
@@ -742,10 +742,10 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\x11PageDomainRequest\x12:\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12>\n" +
 	"\x05query\x18\x02 \x01(\v2(.common.api.content.v1.DomainQueryParamsR\x05queryB\a\n" +
-	"\x05_page\"\x8d\x01\n" +
+	"\x05_page\"\x87\x01\n" +
 	"\x0fPageDomainReply\x128\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyH\x00R\x04page\x88\x01\x01\x127\n" +
-	"\adomains\x18\x02 \x03(\v2\x1d.common.api.content.v1.DomainR\adomainsB\a\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyH\x00R\x04page\x88\x01\x01\x121\n" +
+	"\x04rows\x18\x02 \x03(\v2\x1d.common.api.content.v1.DomainR\x04rowsB\a\n" +
 	"\x05_page2\x80\x03\n" +
 	"\x14ContentDomainService\x12t\n" +
 	"\x04Adds\x12(.common.api.content.v1.AddDomainsRequest\x1a&.common.api.content.v1.AddDomainsReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/domain/adds\x12|\n" +
@@ -793,7 +793,7 @@ var file_content_v1_domain_proto_depIdxs = []int32{
 	12, // 8: common.api.content.v1.PageDomainRequest.page:type_name -> common.api.common.v1.PageRequest
 	2,  // 9: common.api.content.v1.PageDomainRequest.query:type_name -> common.api.content.v1.DomainQueryParams
 	13, // 10: common.api.content.v1.PageDomainReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 11: common.api.content.v1.PageDomainReply.domains:type_name -> common.api.content.v1.Domain
+	0,  // 11: common.api.content.v1.PageDomainReply.rows:type_name -> common.api.content.v1.Domain
 	3,  // 12: common.api.content.v1.ContentDomainService.Adds:input_type -> common.api.content.v1.AddDomainsRequest
 	5,  // 13: common.api.content.v1.ContentDomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
 	7,  // 14: common.api.content.v1.ContentDomainService.Page:input_type -> common.api.content.v1.PageDomainRequest

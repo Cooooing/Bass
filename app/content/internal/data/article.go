@@ -183,7 +183,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
-	first, err := r.GetById(ctx, tx, articleId)
+	first, err := r.GetById(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
 	if err != nil {
 		return err
 	}
@@ -231,26 +231,31 @@ func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int6
 	return tx.Article.UpdateOneID(articleId).SetStatus(int32(cv1.ArticleStatus_ArticleDeleted)).Exec(ctx)
 }
 
-func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, id int64, status cv1.ArticleStatus) (bool, error) {
-	return tx.Article.Query().
-		Where(article.IDEQ(id)).
-		Where(article.StatusEQ(int32(status))).
-		Exist(ctx)
+func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (bool, error) {
+	if req.ArticleId == nil {
+		return false, cv1.ErrorBadRequest("articleId is required")
+	}
+	query := tx.Article.Query()
+	query = r.getQuery(query, req)
+	return query.Exist(ctx)
 }
 
-func (r *ArticleRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Article, error) {
-	query, err := tx.Article.Query().
-		Where(article.IDEQ(id)).
+func (r *ArticleRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (*model.Article, error) {
+	if req.ArticleId == nil {
+		return nil, cv1.ErrorBadRequest("articleId is required")
+	}
+	query := tx.Article.Query().
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
 			q.Where(articlepostscript.StatusEQ(int32(cv1.ArticlePostscriptStatus_ArticlePostscriptNormal))).
 				Order(gen.Asc(articlepostscript.FieldCreatedAt))
 		}).
-		WithTags().
-		First(ctx)
+		WithTags()
+	query = r.getQuery(query, req)
+	a, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("article is not found")
 	}
-	return (*model.Article)(query), err
+	return (*model.Article)(a), err
 }
 
 func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) ([]*model.Article, error) {
@@ -299,6 +304,12 @@ func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 }
 
 func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq) *gen.ArticleQuery {
+	if req.ArticleId != nil {
+		query = query.Where(article.IDEQ(*req.ArticleId))
+	}
+	if req.CreatedBy != nil {
+		query = query.Where(article.CreatedByEQ(*req.CreatedBy))
+	}
 	if req.TagId != nil {
 		query = query.Where(article.HasTagsWith(tag.IDEQ(*req.TagId)))
 	}

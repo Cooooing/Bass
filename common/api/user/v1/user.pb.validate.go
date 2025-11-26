@@ -1956,7 +1956,7 @@ func (m *PageUserReply) validate(all bool) error {
 		}
 	}
 
-	for idx, item := range m.GetUsers() {
+	for idx, item := range m.GetRows() {
 		_, _ = idx, item
 
 		if all {
@@ -1964,7 +1964,7 @@ func (m *PageUserReply) validate(all bool) error {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, PageUserReplyValidationError{
-						field:  fmt.Sprintf("Users[%v]", idx),
+						field:  fmt.Sprintf("Rows[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -1972,7 +1972,7 @@ func (m *PageUserReply) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, PageUserReplyValidationError{
-						field:  fmt.Sprintf("Users[%v]", idx),
+						field:  fmt.Sprintf("Rows[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -1981,7 +1981,7 @@ func (m *PageUserReply) validate(all bool) error {
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return PageUserReplyValidationError{
-					field:  fmt.Sprintf("Users[%v]", idx),
+					field:  fmt.Sprintf("Rows[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

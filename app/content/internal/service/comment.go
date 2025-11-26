@@ -58,14 +58,14 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 	return s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
 		CommentId: req.Query.CommentId,
 		ArticleId: req.Query.ArticleId,
-		UserId:    req.Query.UserId,
+		CreatedBy: req.Query.UserId,
 		Order:     req.Query.Order,
 	})
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {
 	// user := s.tokenRepo.GetUserInfo(ctx)
-	exist, err := s.commentRepo.Exist(ctx, s.db, req.Id)
+	exist, err := s.commentRepo.Exist(ctx, s.db, &repo.CommentGetReq{CommentId: base.Ptr(req.Id)})
 	if err != nil {
 		return nil, err
 	}

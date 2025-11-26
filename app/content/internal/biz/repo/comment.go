@@ -14,19 +14,24 @@ type CommentRepo interface {
 	UpdateStatus(ctx context.Context, tx *gen.Client, commentId int64, status cv1.CommentStatus) error
 	UpdateStat(ctx context.Context, tx *gen.Client, commentId int64, action cv1.CommentAction, num int32) error
 
-	Exist(ctx context.Context, tx *gen.Client, id int64) (bool, error)
-	GetById(ctx context.Context, tx *gen.Client, id int64) (*model.Comment, error)
+	Exist(ctx context.Context, tx *gen.Client, req *CommentGetReq) (bool, error)
+	GetById(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
 	GetList(ctx context.Context, tx *gen.Client, req *CommentGetReq) ([]*model.Comment, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *CommentGetReq) ([]*model.Comment, *cv1.PageReply, error)
-	GetArticleLastComment(ctx context.Context, tx *gen.Client, articleId int64) (*model.Comment, error)
-	GetArticleLastComments(ctx context.Context, tx *gen.Client, articleIds []int64) (dict.Map[int64, *model.Comment], error)
+	GetArticleLastComment(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
+	GetArticleLastComments(ctx context.Context, tx *gen.Client, req *CommentGetReq) (dict.Map[int64, *model.Comment], error)
 }
 
 type CommentGetReq struct {
-	CommentId *int64
-	ArticleId *int64
-	UserId    *int64
-	Order     *int32
+	CommentId  *int64
+	CommentIds []int64
+	ParentId   *int64
+	ReplyId    *int64
+	ArticleId  *int64
+	ArticleIds []int64
+	CreatedBy  *int64
+	Status     *cv1.CommentStatus
+	Order      *int32
 }
 
 type CommentActionRecordRepo interface {

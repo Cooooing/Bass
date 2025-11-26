@@ -132,7 +132,7 @@ message PageCommentReply {
   // 分页
   common.v1.PageReply page = 1;
   // 评论列表
-  repeated Comment comments = 2;
+  repeated Comment rows = 2;
 }
 
 message LikeCommentRequest {

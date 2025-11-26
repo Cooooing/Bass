@@ -126,5 +126,5 @@ message PageTagReply {
   // 分页
   common.v1.PageReply page = 1;
   // 标签列表
-  repeated Tag tags = 2;
+  repeated Tag rows = 2;
 }

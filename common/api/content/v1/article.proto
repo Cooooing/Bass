@@ -332,7 +332,7 @@ message PageArticleReply {
   // 分页信息
   common.v1.PageReply page = 2;
   // 文章列表
-  repeated Article articles = 1;
+  repeated Article rows = 1;
 }
 
 message GetArticleOneRequest {

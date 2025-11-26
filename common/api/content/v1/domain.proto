@@ -137,5 +137,5 @@ message PageDomainReply {
   // 分页信息
   optional common.v1.PageReply page = 1;
   // 领域信息
-  repeated Domain domains = 2;
+  repeated Domain rows = 2;
 }

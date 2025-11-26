@@ -61,7 +61,7 @@ api:
 	       --go-grpc_out=paths=source_relative:$(API_DIR) \
 	       --go-http_out=paths=source_relative:$(API_DIR) \
 	       --go-errors_out=paths=source_relative:$(API_DIR) \
-	       --openapi_out=fq_schema_naming=true,default_response=false:$(API_DIR) \
+	       --openapi_out=fq_schema_naming=true,naming=proto,default_response=false:$(API_DIR) \
 	       --validate_out=lang=go,paths=source_relative:$(API_DIR) \
 	       $(API_PROTO_FILES)
 

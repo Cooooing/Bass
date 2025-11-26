@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	v1 "common/api/common/v1"
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
@@ -95,6 +96,9 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			userInfo, err := tokenRepo.GetToken(ctx, token)
 			if err != nil {
 				return nil, fmt.Errorf("invalid token: %w", err)
+			}
+			if token != "" && userInfo == nil {
+				return nil, v1.ErrorUnauthorized("token is invalid")
 			}
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)

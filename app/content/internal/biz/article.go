@@ -246,22 +246,28 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		userIds.Add(*item.CreatedBy)
 	}
 
-	lastCommentMap, err := d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: articleIds.ToSlice()})
-	if err != nil {
-		return nil, err
+	lastCommentMap := dict.New[int64, *model.Comment](0)
+	if articleIds.Len() > 0 {
+		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: articleIds.ToSlice()})
+		if err != nil {
+			return nil, err
+		}
+		lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
+			userIds.Add(*e.Value.CreatedBy)
+			return true
+		})
 	}
-	lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
-		userIds.Add(*e.Value.CreatedBy)
-		return true
-	})
 
-	userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	if err != nil {
-		return nil, err
-	}
-	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds.ToSlice()}})
-	if err != nil {
-		return nil, err
+	userAuthorsMap := &userv1.GetMapReply{}
+	if userIds.Len() > 0 {
+		userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+		if err != nil {
+			return nil, err
+		}
+		userAuthorsMap, err = userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds.ToSlice()}})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	articles := make([]*v1.Article, 0, len(list))

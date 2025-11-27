@@ -54,8 +54,13 @@ func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*
 	return (*model.User)(save), err
 }
 
-func (r *UserRepo) GetById(ctx context.Context, tx *gen.Client, id int64) (*model.User, error) {
-	u, err := tx.User.Query().Where(user.IDEQ(id)).Only(ctx)
+func (r *UserRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) (*model.User, error) {
+	if req.UserId == nil {
+		return nil, cv1.ErrorBadRequest("userId is required")
+	}
+	query := tx.User.Query()
+	query = r.getQuery(query, req)
+	u, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("user is not found")
 	}
@@ -113,6 +118,9 @@ func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 }
 
 func (r *UserRepo) getQuery(query *gen.UserQuery, req *repo.UserGetReq) *gen.UserQuery {
+	if req.UserId != nil {
+		query = query.Where(user.ID(*req.UserId))
+	}
 	if len(req.UserIds) > 0 {
 		query = query.Where(user.IDIn(req.UserIds...))
 	}

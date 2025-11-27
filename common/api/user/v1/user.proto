@@ -182,6 +182,8 @@ message User {
 // 查询参数定义
 
 message UserQueryParams {
+  // 用户Id
+  optional int64 user_id = 10;
   // 用户Id列表
   repeated int64 user_ids = 1;
   // 用户名
@@ -233,7 +235,9 @@ message GetCurrentUserReply {
 
 message GetOneRequest {
   // 用户Id
-  int64 id = 1;
+  optional int64 user_id = 1;
+  // 名称
+  optional string name = 2;
 }
 message GetOneReply {
   // 用户信息

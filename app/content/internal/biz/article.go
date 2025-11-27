@@ -2,10 +2,10 @@ package biz
 
 import (
 	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/base"
 	"common/pkg/util/collections/dict"
@@ -15,7 +15,6 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
-	"time"
 
 	"github.com/sony/sonyflake/v2"
 )
@@ -74,10 +73,15 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 	return save, err
 }
 
-func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, content string) error {
+func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, content string) (*model.ArticlePostscript, error) {
+	var save *model.ArticlePostscript
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
-		err = d.postscriptRepo.AddPostscript(ctx, tx, articleId, content)
+		save, err = d.postscriptRepo.Save(ctx, tx, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
+			ArticleID: articleId,
+			Content:   content,
+			Status:    int32(cv1.ArticlePostscriptStatus_ArticlePostscriptNormal),
+		}})
 		if err != nil {
 			return err
 		}
@@ -88,7 +92,7 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, cont
 		return err
 	})
 	// Todo 广播添加事件
-	return err
+	return save, err
 }
 
 // --- 更新 ---
@@ -174,24 +178,30 @@ func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
 
 // --- 查询 ---
 
-func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArticleOneReply, error) {
+func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Article, error) {
 	var (
-		reply                *v1.GetArticleOneReply
-		err                  error
-		authorUser           *userv1.User
-		lastReplyComment     *model.Comment
-		lastReplyCommentUser *userv1.User
-		lastReplyCommentAt   *time.Time
+		reply *model.Article
+		err   error
 	)
-	query, err := d.articleRepo.GetById(ctx, d.db, &repo.ArticleGetReq{
+	reply, err = d.articleRepo.GetById(ctx, d.db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(articleId),
-		Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	lastReplyComment, err = d.commentRepo.GetArticleLastComment(ctx, d.db, &repo.CommentGetReq{ArticleId: base.Ptr(query.ID)})
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+
+	/*
+	 * 正常状态的只能查看公开
+	 * 草稿状态的只能查看自己
+	 */
+
+	if reply.Status == int32(cv1.ArticleStatus_ArticleDrafts) && !ok && *reply.CreatedBy != user.ID {
+		return nil, cv1.ErrorUnauthorized("login required to view drafts")
+	}
+
+	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.db, &repo.CommentGetReq{ArticleId: base.Ptr(reply.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +210,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArt
 	if err != nil {
 		return nil, err
 	}
-	userIds := []int64{*query.CreatedBy}
+	userIds := []int64{*reply.CreatedBy}
 	if lastReplyComment != nil {
 		userIds = append(userIds, *lastReplyComment.CreatedBy)
 	}
@@ -210,34 +220,24 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*v1.GetArt
 	}
 
 	if lastReplyComment != nil {
-		lastReplyCommentAt = lastReplyComment.CreatedAt
-		lastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
+		reply.LastReplyCommentAt = lastReplyComment.CreatedAt
+		reply.LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
 	}
-
-	authorUser = base.If(query.Anonymous, nil, userAuthorsMap.Users[*query.CreatedBy])
-	articleReply := query.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt)
-	articleReply.ContentRender, _ = query.ParseContent()
-	reply = &v1.GetArticleOneReply{
-		Article: articleReply,
-	}
+	reply.AuthorUser = base.If(reply.Anonymous, nil, userAuthorsMap.Users[*reply.CreatedBy])
+	reply.ParseContent()
+	reply.ParseRewardContent()
 	return reply, err
 }
 
-func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ArticleGetReq) (*v1.PageArticleReply, error) {
+func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *cv1.PageReply, error) {
 	var (
-		list                 []*model.Article
-		pageReply            *cv1.PageReply
-		reply                *v1.PageArticleReply
-		err                  error
-		authorUser           *userv1.User
-		lastReplyComment     *model.Comment
-		lastReplyCommentUser *userv1.User
-		lastReplyCommentAt   *time.Time
-		ok                   bool
+		list      []*model.Article
+		pageReply *cv1.PageReply
+		err       error
 	)
 	list, pageReply, err = d.articleRepo.GetPage(ctx, d.db, page, req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	articleIds := set.New[int64](0)
 	userIds := set.New[int64](0)
@@ -250,7 +250,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 	if articleIds.Len() > 0 {
 		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: articleIds.ToSlice()})
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
 			userIds.Add(*e.Value.CreatedBy)
@@ -262,28 +262,23 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 	if userIds.Len() > 0 {
 		userServiceClient, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		userAuthorsMap, err = userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds.ToSlice()}})
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 	}
 
-	articles := make([]*v1.Article, 0, len(list))
-	for _, item := range list {
-		item.Summary()
-		if lastReplyComment, ok = lastCommentMap.Get(item.ID); ok {
-			lastReplyCommentAt = lastReplyComment.CreatedAt
-			lastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
+	for i := range list {
+		list[i].Summary()
+		list[i].ParseContent()
+		list[i].ParseRewardContent()
+		if lastReplyComment, ok := lastCommentMap.Get(list[i].ID); ok {
+			list[i].LastReplyCommentAt = lastReplyComment.CreatedAt
+			list[i].LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
 		}
-		authorUser = base.If(item.Anonymous, nil, userAuthorsMap.Users[*item.CreatedBy])
-		a := item.ConvertToRpc(authorUser, lastReplyCommentUser, lastReplyCommentAt)
-		articles = append(articles, a)
+		list[i].AuthorUser = base.If(list[i].Anonymous, nil, userAuthorsMap.Users[*list[i].CreatedBy])
 	}
-	reply = &v1.PageArticleReply{
-		Page: pageReply,
-		Rows: articles,
-	}
-	return reply, err
+	return list, pageReply, err
 }

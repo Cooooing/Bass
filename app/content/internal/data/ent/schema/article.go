@@ -40,7 +40,7 @@ func (Article) Fields() []ent.Field {
 		field.Bool("listable").Comment("是否在列表展示").Default(true),
 
 		// 统计信息
-		field.Int32("thank_count").Comment("帖子感谢数").Default(0),
+		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),
 		field.Int32("collect_count").Comment("收藏数").Default(0),
 		field.Int32("watch_count").Comment("关注数").Default(0),

@@ -140,24 +140,24 @@ func (_u *CommentUpdate) AddStatus(v int32) *CommentUpdate {
 	return _u
 }
 
-// SetReplyCount sets the "reply_count" field.
-func (_u *CommentUpdate) SetReplyCount(v int32) *CommentUpdate {
-	_u.mutation.ResetReplyCount()
-	_u.mutation.SetReplyCount(v)
+// SetThankCount sets the "thank_count" field.
+func (_u *CommentUpdate) SetThankCount(v int32) *CommentUpdate {
+	_u.mutation.ResetThankCount()
+	_u.mutation.SetThankCount(v)
 	return _u
 }
 
-// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
-func (_u *CommentUpdate) SetNillableReplyCount(v *int32) *CommentUpdate {
+// SetNillableThankCount sets the "thank_count" field if the given value is not nil.
+func (_u *CommentUpdate) SetNillableThankCount(v *int32) *CommentUpdate {
 	if v != nil {
-		_u.SetReplyCount(*v)
+		_u.SetThankCount(*v)
 	}
 	return _u
 }
 
-// AddReplyCount adds value to the "reply_count" field.
-func (_u *CommentUpdate) AddReplyCount(v int32) *CommentUpdate {
-	_u.mutation.AddReplyCount(v)
+// AddThankCount adds value to the "thank_count" field.
+func (_u *CommentUpdate) AddThankCount(v int32) *CommentUpdate {
+	_u.mutation.AddThankCount(v)
 	return _u
 }
 
@@ -200,6 +200,27 @@ func (_u *CommentUpdate) SetNillableCollectCount(v *int32) *CommentUpdate {
 // AddCollectCount adds value to the "collect_count" field.
 func (_u *CommentUpdate) AddCollectCount(v int32) *CommentUpdate {
 	_u.mutation.AddCollectCount(v)
+	return _u
+}
+
+// SetReplyCount sets the "reply_count" field.
+func (_u *CommentUpdate) SetReplyCount(v int32) *CommentUpdate {
+	_u.mutation.ResetReplyCount()
+	_u.mutation.SetReplyCount(v)
+	return _u
+}
+
+// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
+func (_u *CommentUpdate) SetNillableReplyCount(v *int32) *CommentUpdate {
+	if v != nil {
+		_u.SetReplyCount(*v)
+	}
+	return _u
+}
+
+// AddReplyCount adds value to the "reply_count" field.
+func (_u *CommentUpdate) AddReplyCount(v int32) *CommentUpdate {
+	_u.mutation.AddReplyCount(v)
 	return _u
 }
 
@@ -510,11 +531,11 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(comment.FieldStatus, field.TypeInt32, value)
 	}
-	if value, ok := _u.mutation.ReplyCount(); ok {
-		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
+	if value, ok := _u.mutation.ThankCount(); ok {
+		_spec.SetField(comment.FieldThankCount, field.TypeInt32, value)
 	}
-	if value, ok := _u.mutation.AddedReplyCount(); ok {
-		_spec.AddField(comment.FieldReplyCount, field.TypeInt32, value)
+	if value, ok := _u.mutation.AddedThankCount(); ok {
+		_spec.AddField(comment.FieldThankCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LikeCount(); ok {
 		_spec.SetField(comment.FieldLikeCount, field.TypeInt32, value)
@@ -527,6 +548,12 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedCollectCount(); ok {
 		_spec.AddField(comment.FieldCollectCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.ReplyCount(); ok {
+		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedReplyCount(); ok {
+		_spec.AddField(comment.FieldReplyCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.CreatedBy(); ok {
 		_spec.SetField(comment.FieldCreatedBy, field.TypeInt64, value)
@@ -910,24 +937,24 @@ func (_u *CommentUpdateOne) AddStatus(v int32) *CommentUpdateOne {
 	return _u
 }
 
-// SetReplyCount sets the "reply_count" field.
-func (_u *CommentUpdateOne) SetReplyCount(v int32) *CommentUpdateOne {
-	_u.mutation.ResetReplyCount()
-	_u.mutation.SetReplyCount(v)
+// SetThankCount sets the "thank_count" field.
+func (_u *CommentUpdateOne) SetThankCount(v int32) *CommentUpdateOne {
+	_u.mutation.ResetThankCount()
+	_u.mutation.SetThankCount(v)
 	return _u
 }
 
-// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
-func (_u *CommentUpdateOne) SetNillableReplyCount(v *int32) *CommentUpdateOne {
+// SetNillableThankCount sets the "thank_count" field if the given value is not nil.
+func (_u *CommentUpdateOne) SetNillableThankCount(v *int32) *CommentUpdateOne {
 	if v != nil {
-		_u.SetReplyCount(*v)
+		_u.SetThankCount(*v)
 	}
 	return _u
 }
 
-// AddReplyCount adds value to the "reply_count" field.
-func (_u *CommentUpdateOne) AddReplyCount(v int32) *CommentUpdateOne {
-	_u.mutation.AddReplyCount(v)
+// AddThankCount adds value to the "thank_count" field.
+func (_u *CommentUpdateOne) AddThankCount(v int32) *CommentUpdateOne {
+	_u.mutation.AddThankCount(v)
 	return _u
 }
 
@@ -970,6 +997,27 @@ func (_u *CommentUpdateOne) SetNillableCollectCount(v *int32) *CommentUpdateOne 
 // AddCollectCount adds value to the "collect_count" field.
 func (_u *CommentUpdateOne) AddCollectCount(v int32) *CommentUpdateOne {
 	_u.mutation.AddCollectCount(v)
+	return _u
+}
+
+// SetReplyCount sets the "reply_count" field.
+func (_u *CommentUpdateOne) SetReplyCount(v int32) *CommentUpdateOne {
+	_u.mutation.ResetReplyCount()
+	_u.mutation.SetReplyCount(v)
+	return _u
+}
+
+// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
+func (_u *CommentUpdateOne) SetNillableReplyCount(v *int32) *CommentUpdateOne {
+	if v != nil {
+		_u.SetReplyCount(*v)
+	}
+	return _u
+}
+
+// AddReplyCount adds value to the "reply_count" field.
+func (_u *CommentUpdateOne) AddReplyCount(v int32) *CommentUpdateOne {
+	_u.mutation.AddReplyCount(v)
 	return _u
 }
 
@@ -1310,11 +1358,11 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(comment.FieldStatus, field.TypeInt32, value)
 	}
-	if value, ok := _u.mutation.ReplyCount(); ok {
-		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
+	if value, ok := _u.mutation.ThankCount(); ok {
+		_spec.SetField(comment.FieldThankCount, field.TypeInt32, value)
 	}
-	if value, ok := _u.mutation.AddedReplyCount(); ok {
-		_spec.AddField(comment.FieldReplyCount, field.TypeInt32, value)
+	if value, ok := _u.mutation.AddedThankCount(); ok {
+		_spec.AddField(comment.FieldThankCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.LikeCount(); ok {
 		_spec.SetField(comment.FieldLikeCount, field.TypeInt32, value)
@@ -1327,6 +1375,12 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 	}
 	if value, ok := _u.mutation.AddedCollectCount(); ok {
 		_spec.AddField(comment.FieldCollectCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.ReplyCount(); ok {
+		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedReplyCount(); ok {
+		_spec.AddField(comment.FieldReplyCount, field.TypeInt32, value)
 	}
 	if value, ok := _u.mutation.CreatedBy(); ok {
 		_spec.SetField(comment.FieldCreatedBy, field.TypeInt64, value)

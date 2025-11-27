@@ -30,12 +30,14 @@ type Comment struct {
 	ReplyID *int64 `json:"reply_id,omitempty"`
 	// 状态 0-正常 1-隐藏
 	Status int32 `json:"status,omitempty"`
-	// 回复数
-	ReplyCount int32 `json:"reply_count,omitempty"`
+	// 感谢数
+	ThankCount int32 `json:"thank_count,omitempty"`
 	// 点赞数
 	LikeCount int32 `json:"like_count,omitempty"`
 	// 收藏数
 	CollectCount int32 `json:"collect_count,omitempty"`
+	// 回复数
+	ReplyCount int32 `json:"reply_count,omitempty"`
 	// 创建人ID
 	CreatedBy *int64 `json:"created_by,omitempty"`
 	// 更新人ID
@@ -134,7 +136,7 @@ func (*Comment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case comment.FieldID, comment.FieldArticleID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldReplyCount, comment.FieldLikeCount, comment.FieldCollectCount, comment.FieldCreatedBy, comment.FieldUpdatedBy:
+		case comment.FieldID, comment.FieldArticleID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldThankCount, comment.FieldLikeCount, comment.FieldCollectCount, comment.FieldReplyCount, comment.FieldCreatedBy, comment.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
 		case comment.FieldContent:
 			values[i] = new(sql.NullString)
@@ -199,11 +201,11 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = int32(value.Int64)
 			}
-		case comment.FieldReplyCount:
+		case comment.FieldThankCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field reply_count", values[i])
+				return fmt.Errorf("unexpected type %T for field thank_count", values[i])
 			} else if value.Valid {
-				_m.ReplyCount = int32(value.Int64)
+				_m.ThankCount = int32(value.Int64)
 			}
 		case comment.FieldLikeCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -216,6 +218,12 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field collect_count", values[i])
 			} else if value.Valid {
 				_m.CollectCount = int32(value.Int64)
+			}
+		case comment.FieldReplyCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field reply_count", values[i])
+			} else if value.Valid {
+				_m.ReplyCount = int32(value.Int64)
 			}
 		case comment.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -333,14 +341,17 @@ func (_m *Comment) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
-	builder.WriteString("reply_count=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ReplyCount))
+	builder.WriteString("thank_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ThankCount))
 	builder.WriteString(", ")
 	builder.WriteString("like_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.LikeCount))
 	builder.WriteString(", ")
 	builder.WriteString("collect_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CollectCount))
+	builder.WriteString(", ")
+	builder.WriteString("reply_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReplyCount))
 	builder.WriteString(", ")
 	if v := _m.CreatedBy; v != nil {
 		builder.WriteString("created_by=")

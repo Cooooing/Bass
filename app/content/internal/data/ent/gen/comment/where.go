@@ -85,9 +85,9 @@ func Status(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldStatus, v))
 }
 
-// ReplyCount applies equality check predicate on the "reply_count" field. It's identical to ReplyCountEQ.
-func ReplyCount(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldEQ(FieldReplyCount, v))
+// ThankCount applies equality check predicate on the "thank_count" field. It's identical to ThankCountEQ.
+func ThankCount(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldEQ(FieldThankCount, v))
 }
 
 // LikeCount applies equality check predicate on the "like_count" field. It's identical to LikeCountEQ.
@@ -98,6 +98,11 @@ func LikeCount(v int32) predicate.Comment {
 // CollectCount applies equality check predicate on the "collect_count" field. It's identical to CollectCountEQ.
 func CollectCount(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldEQ(FieldCollectCount, v))
+}
+
+// ReplyCount applies equality check predicate on the "reply_count" field. It's identical to ReplyCountEQ.
+func ReplyCount(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldEQ(FieldReplyCount, v))
 }
 
 // CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
@@ -345,44 +350,44 @@ func StatusLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldStatus, v))
 }
 
-// ReplyCountEQ applies the EQ predicate on the "reply_count" field.
-func ReplyCountEQ(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldEQ(FieldReplyCount, v))
+// ThankCountEQ applies the EQ predicate on the "thank_count" field.
+func ThankCountEQ(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldEQ(FieldThankCount, v))
 }
 
-// ReplyCountNEQ applies the NEQ predicate on the "reply_count" field.
-func ReplyCountNEQ(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldNEQ(FieldReplyCount, v))
+// ThankCountNEQ applies the NEQ predicate on the "thank_count" field.
+func ThankCountNEQ(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldNEQ(FieldThankCount, v))
 }
 
-// ReplyCountIn applies the In predicate on the "reply_count" field.
-func ReplyCountIn(vs ...int32) predicate.Comment {
-	return predicate.Comment(sql.FieldIn(FieldReplyCount, vs...))
+// ThankCountIn applies the In predicate on the "thank_count" field.
+func ThankCountIn(vs ...int32) predicate.Comment {
+	return predicate.Comment(sql.FieldIn(FieldThankCount, vs...))
 }
 
-// ReplyCountNotIn applies the NotIn predicate on the "reply_count" field.
-func ReplyCountNotIn(vs ...int32) predicate.Comment {
-	return predicate.Comment(sql.FieldNotIn(FieldReplyCount, vs...))
+// ThankCountNotIn applies the NotIn predicate on the "thank_count" field.
+func ThankCountNotIn(vs ...int32) predicate.Comment {
+	return predicate.Comment(sql.FieldNotIn(FieldThankCount, vs...))
 }
 
-// ReplyCountGT applies the GT predicate on the "reply_count" field.
-func ReplyCountGT(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldGT(FieldReplyCount, v))
+// ThankCountGT applies the GT predicate on the "thank_count" field.
+func ThankCountGT(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldGT(FieldThankCount, v))
 }
 
-// ReplyCountGTE applies the GTE predicate on the "reply_count" field.
-func ReplyCountGTE(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldGTE(FieldReplyCount, v))
+// ThankCountGTE applies the GTE predicate on the "thank_count" field.
+func ThankCountGTE(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldGTE(FieldThankCount, v))
 }
 
-// ReplyCountLT applies the LT predicate on the "reply_count" field.
-func ReplyCountLT(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldLT(FieldReplyCount, v))
+// ThankCountLT applies the LT predicate on the "thank_count" field.
+func ThankCountLT(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldLT(FieldThankCount, v))
 }
 
-// ReplyCountLTE applies the LTE predicate on the "reply_count" field.
-func ReplyCountLTE(v int32) predicate.Comment {
-	return predicate.Comment(sql.FieldLTE(FieldReplyCount, v))
+// ThankCountLTE applies the LTE predicate on the "thank_count" field.
+func ThankCountLTE(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldLTE(FieldThankCount, v))
 }
 
 // LikeCountEQ applies the EQ predicate on the "like_count" field.
@@ -463,6 +468,46 @@ func CollectCountLT(v int32) predicate.Comment {
 // CollectCountLTE applies the LTE predicate on the "collect_count" field.
 func CollectCountLTE(v int32) predicate.Comment {
 	return predicate.Comment(sql.FieldLTE(FieldCollectCount, v))
+}
+
+// ReplyCountEQ applies the EQ predicate on the "reply_count" field.
+func ReplyCountEQ(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldEQ(FieldReplyCount, v))
+}
+
+// ReplyCountNEQ applies the NEQ predicate on the "reply_count" field.
+func ReplyCountNEQ(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldNEQ(FieldReplyCount, v))
+}
+
+// ReplyCountIn applies the In predicate on the "reply_count" field.
+func ReplyCountIn(vs ...int32) predicate.Comment {
+	return predicate.Comment(sql.FieldIn(FieldReplyCount, vs...))
+}
+
+// ReplyCountNotIn applies the NotIn predicate on the "reply_count" field.
+func ReplyCountNotIn(vs ...int32) predicate.Comment {
+	return predicate.Comment(sql.FieldNotIn(FieldReplyCount, vs...))
+}
+
+// ReplyCountGT applies the GT predicate on the "reply_count" field.
+func ReplyCountGT(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldGT(FieldReplyCount, v))
+}
+
+// ReplyCountGTE applies the GTE predicate on the "reply_count" field.
+func ReplyCountGTE(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldGTE(FieldReplyCount, v))
+}
+
+// ReplyCountLT applies the LT predicate on the "reply_count" field.
+func ReplyCountLT(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldLT(FieldReplyCount, v))
+}
+
+// ReplyCountLTE applies the LTE predicate on the "reply_count" field.
+func ReplyCountLTE(v int32) predicate.Comment {
+	return predicate.Comment(sql.FieldLTE(FieldReplyCount, v))
 }
 
 // CreatedByEQ applies the EQ predicate on the "created_by" field.

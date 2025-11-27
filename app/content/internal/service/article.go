@@ -63,7 +63,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		}
 	}
 
-	save, err := s.articleDomain.Add(ctx, &model.Article{
+	save, err := s.articleDomain.Add(ctx, &model.Article{Article: &gen.Article{
 		Title:         article.Title,
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
@@ -75,18 +75,21 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		Commentable:   base.DerefOrDefault(article.Commentable, true),
 		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
 		Listable:      base.DerefOrDefault(article.Listable, true),
-	}, tags)
+	}}, tags)
 	if err != nil {
 		return nil, err
 	}
 	return &v1.AddArticleReply{
-		ArticleId: save.ID,
+		Article: save.ConvertToRpc(),
 	}, nil
 }
 
 func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleDraftRequest) (rsp *v1.UpdateArticleDraftReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	article := req.Article
+	if article.Id == nil {
+		return nil, cv1.ErrorBadRequest("article id is required")
+	}
 	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
@@ -106,7 +109,8 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		}
 	}
 
-	update, err := s.articleDomain.UpdateDraft(ctx, &model.Article{
+	update, err := s.articleDomain.UpdateDraft(ctx, &model.Article{Article: &gen.Article{
+		ID:            *req.Article.Id,
 		Title:         article.Title,
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
@@ -119,12 +123,12 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
 		Listable:      base.DerefOrDefault(article.Listable, true),
 		CreatedBy:     base.Ptr(user.ID),
-	}, tags)
+	}}, tags)
 	if err != nil {
 		return nil, err
 	}
 	return &v1.UpdateArticleDraftReply{
-		ArticleId: update.ID,
+		Article: update.ConvertToRpc(),
 	}, nil
 }
 
@@ -194,7 +198,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 		status = base.Ptr(cv1.ArticleStatus_ArticleDrafts)
 	}
 
-	rsp, err = s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
+	reply, page, err := s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
 		TagId:    req.Query.TagId,
 		DomainId: req.Query.DomainId,
 		Status:   status,
@@ -204,11 +208,18 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 		Keyword:  req.Query.Keyword,
 		Listable: base.Ptr(true),
 	})
-	return rsp, err
+	return &v1.PageArticleReply{
+		Page: page,
+		Rows: commonModel.ConvertToRpcList(reply),
+	}, err
 }
 
 func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneRequest) (rsp *v1.GetArticleOneReply, err error) {
-	return s.articleDomain.GetOne(ctx, req.ArticleId)
+	one, err := s.articleDomain.GetOne(ctx, req.ArticleId)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.GetArticleOneReply{Article: one.ConvertToRpc()}, err
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
@@ -226,8 +237,13 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 		return nil, cv1.ErrorBadRequest("article not exist")
 	}
 
-	err = s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
-	return &v1.AddPostscriptArticleReply{}, err
+	save, err := s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.AddPostscriptArticleReply{
+		ArticlePostscript: save.ConvertToRpc(),
+	}, err
 }
 
 func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticleRequest) (rsp *v1.RewardArticleReply, err error) {

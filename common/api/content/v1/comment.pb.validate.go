@@ -120,53 +120,19 @@ func (m *Comment) validate(all bool) error {
 
 	// no validation rules for Content
 
+	// no validation rules for ContentRender
+
 	// no validation rules for Level
-
-	// no validation rules for ParentId
-
-	// no validation rules for ReplyId
 
 	// no validation rules for Status
 
-	// no validation rules for ReplyCount
+	// no validation rules for ThankCount
 
 	// no validation rules for LikeCount
 
 	// no validation rules for CollectCount
 
-	for idx, item := range m.GetComments() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, CommentValidationError{
-						field:  fmt.Sprintf("Comments[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, CommentValidationError{
-						field:  fmt.Sprintf("Comments[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return CommentValidationError{
-					field:  fmt.Sprintf("Comments[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
+	// no validation rules for ReplyCount
 
 	if all {
 		switch v := interface{}(m.GetUser()).(type) {
@@ -232,6 +198,14 @@ func (m *Comment) validate(all bool) error {
 
 	if m.UpdatedBy != nil {
 		// no validation rules for UpdatedBy
+	}
+
+	if m.ParentId != nil {
+		// no validation rules for ParentId
+	}
+
+	if m.ReplyId != nil {
+		// no validation rules for ReplyId
 	}
 
 	if len(errors) > 0 {
@@ -341,12 +315,24 @@ func (m *CommentQueryParams) validate(all bool) error {
 		// no validation rules for ArticleId
 	}
 
+	if m.ParentId != nil {
+		// no validation rules for ParentId
+	}
+
+	if m.ReplyId != nil {
+		// no validation rules for ReplyId
+	}
+
 	if m.Order != nil {
 		// no validation rules for Order
 	}
 
 	if m.UserId != nil {
 		// no validation rules for UserId
+	}
+
+	if m.Level != nil {
+		// no validation rules for Level
 	}
 
 	if len(errors) > 0 {
@@ -558,6 +544,35 @@ func (m *AddCommentReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetComment()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddCommentReplyValidationError{
+					field:  "Comment",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddCommentReplyValidationError{
+					field:  "Comment",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetComment()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AddCommentReplyValidationError{
+				field:  "Comment",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return AddCommentReplyMultiError(errors)

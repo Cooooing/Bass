@@ -39,7 +39,7 @@ type Article struct {
 	Anonymous bool `json:"anonymous,omitempty"`
 	// 是否在列表展示
 	Listable bool `json:"listable,omitempty"`
-	// 帖子感谢数
+	// 感谢数
 	ThankCount int32 `json:"thank_count,omitempty"`
 	// 点赞数
 	LikeCount int32 `json:"like_count,omitempty"`

@@ -43,22 +43,24 @@ type Comment struct {
 	ArticleId int64 `protobuf:"varint,2,opt,name=article_id,json=articleId,proto3" json:"article_id,omitempty"`
 	// 评论内容
 	Content string `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	// 评论内容渲染
+	ContentRender string `protobuf:"bytes,12,opt,name=content_render,json=contentRender,proto3" json:"content_render,omitempty"`
 	// 评论层级
-	Level int64 `protobuf:"varint,5,opt,name=level,proto3" json:"level,omitempty"`
+	Level int32 `protobuf:"varint,5,opt,name=level,proto3" json:"level,omitempty"`
 	// 父级评论Id
-	ParentId int64 `protobuf:"varint,6,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
+	ParentId *int64 `protobuf:"varint,6,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`
 	// 回复评论Id
-	ReplyId int64 `protobuf:"varint,7,opt,name=reply_id,json=replyId,proto3" json:"reply_id,omitempty"`
+	ReplyId *int64 `protobuf:"varint,7,opt,name=reply_id,json=replyId,proto3,oneof" json:"reply_id,omitempty"`
 	// 状态
-	Status int64 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`
-	// 子评论数量
-	ReplyCount int64 `protobuf:"varint,9,opt,name=reply_count,json=replyCount,proto3" json:"reply_count,omitempty"`
+	Status int32 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`
+	// 感谢数量
+	ThankCount int32 `protobuf:"varint,13,opt,name=thank_count,json=thankCount,proto3" json:"thank_count,omitempty"`
 	// 点赞数量
-	LikeCount int64 `protobuf:"varint,10,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"`
+	LikeCount int32 `protobuf:"varint,10,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"`
 	// 收藏数量
-	CollectCount int64 `protobuf:"varint,11,opt,name=collect_count,json=collectCount,proto3" json:"collect_count,omitempty"`
-	// 子评论
-	Comments []*Comment `protobuf:"bytes,14,rep,name=comments,proto3" json:"comments,omitempty"`
+	CollectCount int32 `protobuf:"varint,11,opt,name=collect_count,json=collectCount,proto3" json:"collect_count,omitempty"`
+	// 子评论数量
+	ReplyCount int32 `protobuf:"varint,9,opt,name=reply_count,json=replyCount,proto3" json:"reply_count,omitempty"`
 	// 用户信息
 	User *v1.User `protobuf:"bytes,15,opt,name=user,proto3" json:"user,omitempty"`
 	// 回复评论的用户信息
@@ -146,7 +148,14 @@ func (x *Comment) GetContent() string {
 	return ""
 }
 
-func (x *Comment) GetLevel() int64 {
+func (x *Comment) GetContentRender() string {
+	if x != nil {
+		return x.ContentRender
+	}
+	return ""
+}
+
+func (x *Comment) GetLevel() int32 {
 	if x != nil {
 		return x.Level
 	}
@@ -154,52 +163,52 @@ func (x *Comment) GetLevel() int64 {
 }
 
 func (x *Comment) GetParentId() int64 {
-	if x != nil {
-		return x.ParentId
+	if x != nil && x.ParentId != nil {
+		return *x.ParentId
 	}
 	return 0
 }
 
 func (x *Comment) GetReplyId() int64 {
-	if x != nil {
-		return x.ReplyId
+	if x != nil && x.ReplyId != nil {
+		return *x.ReplyId
 	}
 	return 0
 }
 
-func (x *Comment) GetStatus() int64 {
+func (x *Comment) GetStatus() int32 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *Comment) GetReplyCount() int64 {
+func (x *Comment) GetThankCount() int32 {
 	if x != nil {
-		return x.ReplyCount
+		return x.ThankCount
 	}
 	return 0
 }
 
-func (x *Comment) GetLikeCount() int64 {
+func (x *Comment) GetLikeCount() int32 {
 	if x != nil {
 		return x.LikeCount
 	}
 	return 0
 }
 
-func (x *Comment) GetCollectCount() int64 {
+func (x *Comment) GetCollectCount() int32 {
 	if x != nil {
 		return x.CollectCount
 	}
 	return 0
 }
 
-func (x *Comment) GetComments() []*Comment {
+func (x *Comment) GetReplyCount() int32 {
 	if x != nil {
-		return x.Comments
+		return x.ReplyCount
 	}
-	return nil
+	return 0
 }
 
 func (x *Comment) GetUser() *v1.User {
@@ -218,14 +227,20 @@ func (x *Comment) GetReplyUser() *v1.User {
 
 type CommentQueryParams struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 评论Id，查询该评论的回复。需为文章的评论，回复时间正序。
+	// 评论Id
 	CommentId *int64 `protobuf:"varint,2,opt,name=comment_id,json=commentId,proto3,oneof" json:"comment_id,omitempty"`
 	// 文章Id
 	ArticleId *int64 `protobuf:"varint,3,opt,name=article_id,json=articleId,proto3,oneof" json:"article_id,omitempty"`
+	// 父级评论Id
+	ParentId *int64 `protobuf:"varint,4,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`
+	// 回复评论Id
+	ReplyId *int64 `protobuf:"varint,5,opt,name=reply_id,json=replyId,proto3,oneof" json:"reply_id,omitempty"`
 	// 排序 0-最新 1-最热
-	Order *int32 `protobuf:"varint,4,opt,name=order,proto3,oneof" json:"order,omitempty"`
+	Order *int32 `protobuf:"varint,6,opt,name=order,proto3,oneof" json:"order,omitempty"`
 	// 用户Id
-	UserId        *int64 `protobuf:"varint,5,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
+	UserId *int64 `protobuf:"varint,7,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
+	// 层级
+	Level         *int32 `protobuf:"varint,8,opt,name=level,proto3,oneof" json:"level,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -274,6 +289,20 @@ func (x *CommentQueryParams) GetArticleId() int64 {
 	return 0
 }
 
+func (x *CommentQueryParams) GetParentId() int64 {
+	if x != nil && x.ParentId != nil {
+		return *x.ParentId
+	}
+	return 0
+}
+
+func (x *CommentQueryParams) GetReplyId() int64 {
+	if x != nil && x.ReplyId != nil {
+		return *x.ReplyId
+	}
+	return 0
+}
+
 func (x *CommentQueryParams) GetOrder() int32 {
 	if x != nil && x.Order != nil {
 		return *x.Order
@@ -284,6 +313,13 @@ func (x *CommentQueryParams) GetOrder() int32 {
 func (x *CommentQueryParams) GetUserId() int64 {
 	if x != nil && x.UserId != nil {
 		return *x.UserId
+	}
+	return 0
+}
+
+func (x *CommentQueryParams) GetLevel() int32 {
+	if x != nil && x.Level != nil {
+		return *x.Level
 	}
 	return 0
 }
@@ -352,7 +388,9 @@ func (x *AddCommentRequest) GetReplyId() int64 {
 }
 
 type AddCommentReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 评论
+	Comment       *Comment `protobuf:"bytes,1,opt,name=comment,proto3" json:"comment,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -385,6 +423,13 @@ func (x *AddCommentReply) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AddCommentReply.ProtoReflect.Descriptor instead.
 func (*AddCommentReply) Descriptor() ([]byte, []int) {
 	return file_content_v1_comment_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AddCommentReply) GetComment() *Comment {
+	if x != nil {
+		return x.Comment
+	}
+	return nil
 }
 
 type PageCommentRequest struct {
@@ -769,7 +814,7 @@ var File_content_v1_comment_proto protoreflect.FileDescriptor
 
 const file_content_v1_comment_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xa0\x05\n" +
+	"\x18content/v1/comment.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\xd1\x05\n" +
 	"\aComment\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -782,41 +827,54 @@ const file_content_v1_comment_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
-	"\acontent\x18\x04 \x01(\tR\acontent\x12\x14\n" +
-	"\x05level\x18\x05 \x01(\x03R\x05level\x12\x1b\n" +
-	"\tparent_id\x18\x06 \x01(\x03R\bparentId\x12\x19\n" +
-	"\breply_id\x18\a \x01(\x03R\areplyId\x12\x16\n" +
-	"\x06status\x18\b \x01(\x03R\x06status\x12\x1f\n" +
-	"\vreply_count\x18\t \x01(\x03R\n" +
-	"replyCount\x12\x1d\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
+	"\x0econtent_render\x18\f \x01(\tR\rcontentRender\x12\x14\n" +
+	"\x05level\x18\x05 \x01(\x05R\x05level\x12 \n" +
+	"\tparent_id\x18\x06 \x01(\x03H\x02R\bparentId\x88\x01\x01\x12\x1e\n" +
+	"\breply_id\x18\a \x01(\x03H\x03R\areplyId\x88\x01\x01\x12\x16\n" +
+	"\x06status\x18\b \x01(\x05R\x06status\x12\x1f\n" +
+	"\vthank_count\x18\r \x01(\x05R\n" +
+	"thankCount\x12\x1d\n" +
 	"\n" +
 	"like_count\x18\n" +
-	" \x01(\x03R\tlikeCount\x12#\n" +
-	"\rcollect_count\x18\v \x01(\x03R\fcollectCount\x12:\n" +
-	"\bcomments\x18\x0e \x03(\v2\x1e.common.api.content.v1.CommentR\bcomments\x12,\n" +
+	" \x01(\x05R\tlikeCount\x12#\n" +
+	"\rcollect_count\x18\v \x01(\x05R\fcollectCount\x12\x1f\n" +
+	"\vreply_count\x18\t \x01(\x05R\n" +
+	"replyCount\x12,\n" +
 	"\x04user\x18\x0f \x01(\v2\x18.common.api.user.v1.UserR\x04user\x127\n" +
 	"\n" +
 	"reply_user\x18\x10 \x01(\v2\x18.common.api.user.v1.UserR\treplyUserB\r\n" +
 	"\v_created_byB\r\n" +
-	"\v_updated_by\"\xc9\x01\n" +
+	"\v_updated_byB\f\n" +
+	"\n" +
+	"_parent_idB\v\n" +
+	"\t_reply_id\"\xcb\x02\n" +
 	"\x12CommentQueryParams\x12\"\n" +
 	"\n" +
 	"comment_id\x18\x02 \x01(\x03H\x00R\tcommentId\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"article_id\x18\x03 \x01(\x03H\x01R\tarticleId\x88\x01\x01\x12\x19\n" +
-	"\x05order\x18\x04 \x01(\x05H\x02R\x05order\x88\x01\x01\x12\x1c\n" +
-	"\auser_id\x18\x05 \x01(\x03H\x03R\x06userId\x88\x01\x01B\r\n" +
+	"article_id\x18\x03 \x01(\x03H\x01R\tarticleId\x88\x01\x01\x12 \n" +
+	"\tparent_id\x18\x04 \x01(\x03H\x02R\bparentId\x88\x01\x01\x12\x1e\n" +
+	"\breply_id\x18\x05 \x01(\x03H\x03R\areplyId\x88\x01\x01\x12\x19\n" +
+	"\x05order\x18\x06 \x01(\x05H\x04R\x05order\x88\x01\x01\x12\x1c\n" +
+	"\auser_id\x18\a \x01(\x03H\x05R\x06userId\x88\x01\x01\x12\x19\n" +
+	"\x05level\x18\b \x01(\x05H\x06R\x05level\x88\x01\x01B\r\n" +
 	"\v_comment_idB\r\n" +
-	"\v_article_idB\b\n" +
+	"\v_article_idB\f\n" +
+	"\n" +
+	"_parent_idB\v\n" +
+	"\t_reply_idB\b\n" +
 	"\x06_orderB\n" +
 	"\n" +
-	"\b_user_id\"g\n" +
+	"\b_user_idB\b\n" +
+	"\x06_level\"g\n" +
 	"\x11AddCommentRequest\x12\x1d\n" +
 	"\n" +
 	"article_id\x18\x02 \x01(\x03R\tarticleId\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12\x19\n" +
-	"\breply_id\x18\x06 \x01(\x03R\areplyId\"\x11\n" +
-	"\x0fAddCommentReply\"\x9a\x01\n" +
+	"\breply_id\x18\x06 \x01(\x03R\areplyId\"K\n" +
+	"\x0fAddCommentReply\x128\n" +
+	"\acomment\x18\x01 \x01(\v2\x1e.common.api.content.v1.CommentR\acomment\"\x9a\x01\n" +
 	"\x12PageCommentRequest\x12:\n" +
 	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestH\x00R\x04page\x88\x01\x01\x12?\n" +
 	"\x05query\x18\x02 \x01(\v2).common.api.content.v1.CommentQueryParamsR\x05queryB\a\n" +
@@ -877,9 +935,9 @@ var file_content_v1_comment_proto_goTypes = []any{
 var file_content_v1_comment_proto_depIdxs = []int32{
 	12, // 0: common.api.content.v1.Comment.created_at:type_name -> google.protobuf.Timestamp
 	12, // 1: common.api.content.v1.Comment.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: common.api.content.v1.Comment.comments:type_name -> common.api.content.v1.Comment
-	13, // 3: common.api.content.v1.Comment.user:type_name -> common.api.user.v1.User
-	13, // 4: common.api.content.v1.Comment.reply_user:type_name -> common.api.user.v1.User
+	13, // 2: common.api.content.v1.Comment.user:type_name -> common.api.user.v1.User
+	13, // 3: common.api.content.v1.Comment.reply_user:type_name -> common.api.user.v1.User
+	0,  // 4: common.api.content.v1.AddCommentReply.comment:type_name -> common.api.content.v1.Comment
 	14, // 5: common.api.content.v1.PageCommentRequest.page:type_name -> common.api.common.v1.PageRequest
 	1,  // 6: common.api.content.v1.PageCommentRequest.query:type_name -> common.api.content.v1.CommentQueryParams
 	15, // 7: common.api.content.v1.PageCommentReply.page:type_name -> common.api.common.v1.PageReply

@@ -397,6 +397,8 @@ func (x *User) GetUpdatedAt() *timestamppb.Timestamp {
 
 type UserQueryParams struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户Id
+	UserId *int64 `protobuf:"varint,10,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
 	// 用户Id列表
 	UserIds []int64 `protobuf:"varint,1,rep,packed,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
 	// 用户名
@@ -447,6 +449,13 @@ func (x *UserQueryParams) ProtoReflect() protoreflect.Message {
 // Deprecated: Use UserQueryParams.ProtoReflect.Descriptor instead.
 func (*UserQueryParams) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *UserQueryParams) GetUserId() int64 {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
+	}
+	return 0
 }
 
 func (x *UserQueryParams) GetUserIds() []int64 {
@@ -740,7 +749,9 @@ func (x *GetCurrentUserReply) GetUser() *User {
 type GetOneRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 用户Id
-	Id            int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId *int64 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
+	// 名称
+	Name          *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -775,11 +786,18 @@ func (*GetOneRequest) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GetOneRequest) GetId() int64 {
-	if x != nil {
-		return x.Id
+func (x *GetOneRequest) GetUserId() int64 {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
 	}
 	return 0
+}
+
+func (x *GetOneRequest) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
 }
 
 type GetOneReply struct {
@@ -1291,17 +1309,21 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\t_provinceB\a\n" +
 	"\x05_cityB\x12\n" +
 	"\x10_public_locationB\x0f\n" +
-	"\r_twofa_secret\"\xaa\x02\n" +
-	"\x0fUserQueryParams\x12\x19\n" +
+	"\r_twofa_secret\"\xd4\x02\n" +
+	"\x0fUserQueryParams\x12\x1c\n" +
+	"\auser_id\x18\n" +
+	" \x01(\x03H\x00R\x06userId\x88\x01\x01\x12\x19\n" +
 	"\buser_ids\x18\x01 \x03(\x03R\auserIds\x12\x17\n" +
-	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x14\n" +
+	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01\x12\x14\n" +
 	"\x05names\x18\x03 \x03(\tR\x05names\x12\x1f\n" +
-	"\bnickname\x18\x04 \x01(\tH\x01R\bnickname\x88\x01\x01\x12\x1c\n" +
+	"\bnickname\x18\x04 \x01(\tH\x02R\bnickname\x88\x01\x01\x12\x1c\n" +
 	"\tnicknames\x18\x05 \x03(\tR\tnicknames\x12\x19\n" +
-	"\x05email\x18\x06 \x01(\tH\x02R\x05email\x88\x01\x01\x12\x16\n" +
+	"\x05email\x18\x06 \x01(\tH\x03R\x05email\x88\x01\x01\x12\x16\n" +
 	"\x06emails\x18\a \x03(\tR\x06emails\x12\x19\n" +
-	"\x05phone\x18\b \x01(\tH\x03R\x05phone\x88\x01\x01\x12\x16\n" +
-	"\x06phones\x18\t \x03(\tR\x06phonesB\a\n" +
+	"\x05phone\x18\b \x01(\tH\x04R\x05phone\x88\x01\x01\x12\x16\n" +
+	"\x06phones\x18\t \x03(\tR\x06phonesB\n" +
+	"\n" +
+	"\b_user_idB\a\n" +
 	"\x05_nameB\v\n" +
 	"\t_nicknameB\b\n" +
 	"\x06_emailB\b\n" +
@@ -1327,9 +1349,13 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x04user\x18\x01 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"\x17\n" +
 	"\x15GetCurrentUserRequest\"C\n" +
 	"\x13GetCurrentUserReply\x12,\n" +
-	"\x04user\x18\x01 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"\x1f\n" +
-	"\rGetOneRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\";\n" +
+	"\x04user\x18\x01 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"[\n" +
+	"\rGetOneRequest\x12\x1c\n" +
+	"\auser_id\x18\x01 \x01(\x03H\x00R\x06userId\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\n" +
+	"\n" +
+	"\b_user_idB\a\n" +
+	"\x05_name\";\n" +
 	"\vGetOneReply\x12,\n" +
 	"\x04user\x18\x01 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"K\n" +
 	"\x0eGetListRequest\x129\n" +
@@ -1445,6 +1471,7 @@ func file_user_v1_user_proto_init() {
 	file_user_v1_user_proto_msgTypes[0].OneofWrappers = []any{}
 	file_user_v1_user_proto_msgTypes[1].OneofWrappers = []any{}
 	file_user_v1_user_proto_msgTypes[2].OneofWrappers = []any{}
+	file_user_v1_user_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

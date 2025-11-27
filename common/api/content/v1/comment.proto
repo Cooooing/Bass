@@ -74,23 +74,25 @@ message Comment {
   int64 article_id = 2;
   // 评论内容
   string content = 4;
+  // 评论内容渲染
+  string content_render = 12;
   // 评论层级
-  int64 level = 5;
+  int32 level = 5;
   // 父级评论Id
-  int64 parent_id = 6;
+  optional int64 parent_id = 6;
   // 回复评论Id
-  int64 reply_id = 7;
+  optional int64 reply_id = 7;
   // 状态
-  int64 status = 8;
-  // 子评论数量
-  int64 reply_count = 9;
+  int32 status = 8;
+  // 感谢数量
+  int32 thank_count = 13;
   // 点赞数量
-  int64 like_count = 10;
+  int32 like_count = 10;
   // 收藏数量
-  int64 collect_count = 11;
+  int32 collect_count = 11;
+  // 子评论数量
+  int32 reply_count = 9;
 
-  // 子评论
-  repeated Comment comments = 14;
   // 用户信息
   user.v1.User user = 15;
   // 回复评论的用户信息
@@ -100,14 +102,20 @@ message Comment {
 // 查询参数定义
 
 message CommentQueryParams {
-  // 评论Id，查询该评论的回复。需为文章的评论，回复时间正序。
+  // 评论Id
   optional int64 comment_id = 2;
   // 文章Id
   optional int64 article_id = 3;
+  // 父级评论Id
+  optional int64 parent_id = 4;
+  // 回复评论Id
+  optional int64 reply_id = 5;
   // 排序 0-最新 1-最热
-  optional int32 order = 4;
+  optional int32 order = 6;
   // 用户Id
-  optional int64 user_id = 5;
+  optional int64 user_id = 7;
+  // 层级
+  optional int32 level = 8;
 }
 
 // 请求/响应结构定义
@@ -120,7 +128,10 @@ message AddCommentRequest {
   // 回复评论Id
   int64 reply_id = 6;
 }
-message AddCommentReply {}
+message AddCommentReply {
+  // 评论
+  Comment comment = 1;
+}
 
 message PageCommentRequest {
   // 分页

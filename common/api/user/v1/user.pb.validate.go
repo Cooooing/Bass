@@ -393,6 +393,10 @@ func (m *UserQueryParams) validate(all bool) error {
 
 	var errors []error
 
+	if m.UserId != nil {
+		// no validation rules for UserId
+	}
+
 	if m.Name != nil {
 		// no validation rules for Name
 	}
@@ -1003,7 +1007,13 @@ func (m *GetOneRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if m.UserId != nil {
+		// no validation rules for UserId
+	}
+
+	if m.Name != nil {
+		// no validation rules for Name
+	}
 
 	if len(errors) > 0 {
 		return GetOneRequestMultiError(errors)

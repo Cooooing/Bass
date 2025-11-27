@@ -88,7 +88,7 @@ func (r *ArticleRepo) Save(ctx context.Context, tx *gen.Client, article *model.A
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Article)(save), nil
+	return &model.Article{Article: save}, nil
 }
 
 func (r *ArticleRepo) Update(ctx context.Context, tx *gen.Client, updateArticle *model.Article, tags []*model.Tag) (*model.Article, error) {
@@ -137,7 +137,7 @@ func (r *ArticleRepo) Update(ctx context.Context, tx *gen.Client, updateArticle 
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Article)(save), nil
+	return &model.Article{Article: save}, nil
 }
 
 func (r *ArticleRepo) UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error {
@@ -215,10 +215,10 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 		return err
 	}
 	// Todo 广播@用户通知
-	_, atUserNames := first.ParseContent()
+	atUserNames := first.ParseContent()
 
 	userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	atUserList, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: atUserNames}})
+	atUserList, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: atUserNames.ToSlice()}})
 	if err != nil {
 		return err
 	}
@@ -255,7 +255,7 @@ func (r *ArticleRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.Art
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("article is not found")
 	}
-	return (*model.Article)(a), err
+	return &model.Article{Article: a}, err
 }
 
 func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) ([]*model.Article, error) {
@@ -270,7 +270,7 @@ func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Art
 		return nil, err
 	}
 	for i := range list {
-		articles = append(articles, (*model.Article)(list[i]))
+		articles = append(articles, &model.Article{Article: list[i]})
 	}
 	return articles, nil
 }
@@ -294,7 +294,7 @@ func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		return nil, nil, err
 	}
 	for i := range list {
-		articles = append(articles, (*model.Article)(list[i]))
+		articles = append(articles, &model.Article{Article: list[i]})
 	}
 	return articles, &cv1.PageReply{
 		Total: uint32(total),

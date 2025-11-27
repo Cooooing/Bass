@@ -33,9 +33,10 @@ func (Comment) Fields() []ent.Field {
 		field.Int64("reply_id").Comment("回复评论ID").Optional().Nillable(),
 		field.Int32("status").Comment("状态 0-正常 1-隐藏").Default(0),
 
-		field.Int32("reply_count").Comment("回复数").Default(0),
+		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),
 		field.Int32("collect_count").Comment("收藏数").Default(0),
+		field.Int32("reply_count").Comment("回复数").Default(0),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)

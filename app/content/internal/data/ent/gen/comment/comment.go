@@ -26,12 +26,14 @@ const (
 	FieldReplyID = "reply_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldReplyCount holds the string denoting the reply_count field in the database.
-	FieldReplyCount = "reply_count"
+	// FieldThankCount holds the string denoting the thank_count field in the database.
+	FieldThankCount = "thank_count"
 	// FieldLikeCount holds the string denoting the like_count field in the database.
 	FieldLikeCount = "like_count"
 	// FieldCollectCount holds the string denoting the collect_count field in the database.
 	FieldCollectCount = "collect_count"
+	// FieldReplyCount holds the string denoting the reply_count field in the database.
+	FieldReplyCount = "reply_count"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
@@ -95,9 +97,10 @@ var Columns = []string{
 	FieldParentID,
 	FieldReplyID,
 	FieldStatus,
-	FieldReplyCount,
+	FieldThankCount,
 	FieldLikeCount,
 	FieldCollectCount,
+	FieldReplyCount,
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldCreatedAt,
@@ -119,12 +122,14 @@ var (
 	ContentValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int32
-	// DefaultReplyCount holds the default value on creation for the "reply_count" field.
-	DefaultReplyCount int32
+	// DefaultThankCount holds the default value on creation for the "thank_count" field.
+	DefaultThankCount int32
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
 	DefaultLikeCount int32
 	// DefaultCollectCount holds the default value on creation for the "collect_count" field.
 	DefaultCollectCount int32
+	// DefaultReplyCount holds the default value on creation for the "reply_count" field.
+	DefaultReplyCount int32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -169,9 +174,9 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByReplyCount orders the results by the reply_count field.
-func ByReplyCount(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldReplyCount, opts...).ToFunc()
+// ByThankCount orders the results by the thank_count field.
+func ByThankCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldThankCount, opts...).ToFunc()
 }
 
 // ByLikeCount orders the results by the like_count field.
@@ -182,6 +187,11 @@ func ByLikeCount(opts ...sql.OrderTermOption) OrderOption {
 // ByCollectCount orders the results by the collect_count field.
 func ByCollectCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCollectCount, opts...).ToFunc()
+}
+
+// ByReplyCount orders the results by the reply_count field.
+func ByReplyCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReplyCount, opts...).ToFunc()
 }
 
 // ByCreatedBy orders the results by the created_by field.

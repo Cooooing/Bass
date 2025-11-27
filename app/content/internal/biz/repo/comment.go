@@ -31,6 +31,7 @@ type CommentGetReq struct {
 	ArticleIds []int64
 	CreatedBy  *int64
 	Status     *cv1.CommentStatus
+	Level      *int32
 	Order      *int32
 }
 

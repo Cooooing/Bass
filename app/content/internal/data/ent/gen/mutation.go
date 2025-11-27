@@ -8499,12 +8499,14 @@ type CommentMutation struct {
 	addlevel              *int32
 	status                *int32
 	addstatus             *int32
-	reply_count           *int32
-	addreply_count        *int32
+	thank_count           *int32
+	addthank_count        *int32
 	like_count            *int32
 	addlike_count         *int32
 	collect_count         *int32
 	addcollect_count      *int32
+	reply_count           *int32
+	addreply_count        *int32
 	created_by            *int64
 	addcreated_by         *int64
 	updated_by            *int64
@@ -8918,60 +8920,60 @@ func (m *CommentMutation) ResetStatus() {
 	m.addstatus = nil
 }
 
-// SetReplyCount sets the "reply_count" field.
-func (m *CommentMutation) SetReplyCount(i int32) {
-	m.reply_count = &i
-	m.addreply_count = nil
+// SetThankCount sets the "thank_count" field.
+func (m *CommentMutation) SetThankCount(i int32) {
+	m.thank_count = &i
+	m.addthank_count = nil
 }
 
-// ReplyCount returns the value of the "reply_count" field in the mutation.
-func (m *CommentMutation) ReplyCount() (r int32, exists bool) {
-	v := m.reply_count
+// ThankCount returns the value of the "thank_count" field in the mutation.
+func (m *CommentMutation) ThankCount() (r int32, exists bool) {
+	v := m.thank_count
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldReplyCount returns the old "reply_count" field's value of the Comment entity.
+// OldThankCount returns the old "thank_count" field's value of the Comment entity.
 // If the Comment object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CommentMutation) OldReplyCount(ctx context.Context) (v int32, err error) {
+func (m *CommentMutation) OldThankCount(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldReplyCount is only allowed on UpdateOne operations")
+		return v, errors.New("OldThankCount is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldReplyCount requires an ID field in the mutation")
+		return v, errors.New("OldThankCount requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldReplyCount: %w", err)
+		return v, fmt.Errorf("querying old value for OldThankCount: %w", err)
 	}
-	return oldValue.ReplyCount, nil
+	return oldValue.ThankCount, nil
 }
 
-// AddReplyCount adds i to the "reply_count" field.
-func (m *CommentMutation) AddReplyCount(i int32) {
-	if m.addreply_count != nil {
-		*m.addreply_count += i
+// AddThankCount adds i to the "thank_count" field.
+func (m *CommentMutation) AddThankCount(i int32) {
+	if m.addthank_count != nil {
+		*m.addthank_count += i
 	} else {
-		m.addreply_count = &i
+		m.addthank_count = &i
 	}
 }
 
-// AddedReplyCount returns the value that was added to the "reply_count" field in this mutation.
-func (m *CommentMutation) AddedReplyCount() (r int32, exists bool) {
-	v := m.addreply_count
+// AddedThankCount returns the value that was added to the "thank_count" field in this mutation.
+func (m *CommentMutation) AddedThankCount() (r int32, exists bool) {
+	v := m.addthank_count
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetReplyCount resets all changes to the "reply_count" field.
-func (m *CommentMutation) ResetReplyCount() {
-	m.reply_count = nil
-	m.addreply_count = nil
+// ResetThankCount resets all changes to the "thank_count" field.
+func (m *CommentMutation) ResetThankCount() {
+	m.thank_count = nil
+	m.addthank_count = nil
 }
 
 // SetLikeCount sets the "like_count" field.
@@ -9084,6 +9086,62 @@ func (m *CommentMutation) AddedCollectCount() (r int32, exists bool) {
 func (m *CommentMutation) ResetCollectCount() {
 	m.collect_count = nil
 	m.addcollect_count = nil
+}
+
+// SetReplyCount sets the "reply_count" field.
+func (m *CommentMutation) SetReplyCount(i int32) {
+	m.reply_count = &i
+	m.addreply_count = nil
+}
+
+// ReplyCount returns the value of the "reply_count" field in the mutation.
+func (m *CommentMutation) ReplyCount() (r int32, exists bool) {
+	v := m.reply_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReplyCount returns the old "reply_count" field's value of the Comment entity.
+// If the Comment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentMutation) OldReplyCount(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReplyCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReplyCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReplyCount: %w", err)
+	}
+	return oldValue.ReplyCount, nil
+}
+
+// AddReplyCount adds i to the "reply_count" field.
+func (m *CommentMutation) AddReplyCount(i int32) {
+	if m.addreply_count != nil {
+		*m.addreply_count += i
+	} else {
+		m.addreply_count = &i
+	}
+}
+
+// AddedReplyCount returns the value that was added to the "reply_count" field in this mutation.
+func (m *CommentMutation) AddedReplyCount() (r int32, exists bool) {
+	v := m.addreply_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetReplyCount resets all changes to the "reply_count" field.
+func (m *CommentMutation) ResetReplyCount() {
+	m.reply_count = nil
+	m.addreply_count = nil
 }
 
 // SetCreatedBy sets the "created_by" field.
@@ -9601,7 +9659,7 @@ func (m *CommentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CommentMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.article != nil {
 		fields = append(fields, comment.FieldArticleID)
 	}
@@ -9620,14 +9678,17 @@ func (m *CommentMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, comment.FieldStatus)
 	}
-	if m.reply_count != nil {
-		fields = append(fields, comment.FieldReplyCount)
+	if m.thank_count != nil {
+		fields = append(fields, comment.FieldThankCount)
 	}
 	if m.like_count != nil {
 		fields = append(fields, comment.FieldLikeCount)
 	}
 	if m.collect_count != nil {
 		fields = append(fields, comment.FieldCollectCount)
+	}
+	if m.reply_count != nil {
+		fields = append(fields, comment.FieldReplyCount)
 	}
 	if m.created_by != nil {
 		fields = append(fields, comment.FieldCreatedBy)
@@ -9661,12 +9722,14 @@ func (m *CommentMutation) Field(name string) (ent.Value, bool) {
 		return m.ReplyID()
 	case comment.FieldStatus:
 		return m.Status()
-	case comment.FieldReplyCount:
-		return m.ReplyCount()
+	case comment.FieldThankCount:
+		return m.ThankCount()
 	case comment.FieldLikeCount:
 		return m.LikeCount()
 	case comment.FieldCollectCount:
 		return m.CollectCount()
+	case comment.FieldReplyCount:
+		return m.ReplyCount()
 	case comment.FieldCreatedBy:
 		return m.CreatedBy()
 	case comment.FieldUpdatedBy:
@@ -9696,12 +9759,14 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldReplyID(ctx)
 	case comment.FieldStatus:
 		return m.OldStatus(ctx)
-	case comment.FieldReplyCount:
-		return m.OldReplyCount(ctx)
+	case comment.FieldThankCount:
+		return m.OldThankCount(ctx)
 	case comment.FieldLikeCount:
 		return m.OldLikeCount(ctx)
 	case comment.FieldCollectCount:
 		return m.OldCollectCount(ctx)
+	case comment.FieldReplyCount:
+		return m.OldReplyCount(ctx)
 	case comment.FieldCreatedBy:
 		return m.OldCreatedBy(ctx)
 	case comment.FieldUpdatedBy:
@@ -9761,12 +9826,12 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case comment.FieldReplyCount:
+	case comment.FieldThankCount:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetReplyCount(v)
+		m.SetThankCount(v)
 		return nil
 	case comment.FieldLikeCount:
 		v, ok := value.(int32)
@@ -9781,6 +9846,13 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCollectCount(v)
+		return nil
+	case comment.FieldReplyCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReplyCount(v)
 		return nil
 	case comment.FieldCreatedBy:
 		v, ok := value.(int64)
@@ -9824,14 +9896,17 @@ func (m *CommentMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, comment.FieldStatus)
 	}
-	if m.addreply_count != nil {
-		fields = append(fields, comment.FieldReplyCount)
+	if m.addthank_count != nil {
+		fields = append(fields, comment.FieldThankCount)
 	}
 	if m.addlike_count != nil {
 		fields = append(fields, comment.FieldLikeCount)
 	}
 	if m.addcollect_count != nil {
 		fields = append(fields, comment.FieldCollectCount)
+	}
+	if m.addreply_count != nil {
+		fields = append(fields, comment.FieldReplyCount)
 	}
 	if m.addcreated_by != nil {
 		fields = append(fields, comment.FieldCreatedBy)
@@ -9851,12 +9926,14 @@ func (m *CommentMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedLevel()
 	case comment.FieldStatus:
 		return m.AddedStatus()
-	case comment.FieldReplyCount:
-		return m.AddedReplyCount()
+	case comment.FieldThankCount:
+		return m.AddedThankCount()
 	case comment.FieldLikeCount:
 		return m.AddedLikeCount()
 	case comment.FieldCollectCount:
 		return m.AddedCollectCount()
+	case comment.FieldReplyCount:
+		return m.AddedReplyCount()
 	case comment.FieldCreatedBy:
 		return m.AddedCreatedBy()
 	case comment.FieldUpdatedBy:
@@ -9884,12 +9961,12 @@ func (m *CommentMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddStatus(v)
 		return nil
-	case comment.FieldReplyCount:
+	case comment.FieldThankCount:
 		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddReplyCount(v)
+		m.AddThankCount(v)
 		return nil
 	case comment.FieldLikeCount:
 		v, ok := value.(int32)
@@ -9904,6 +9981,13 @@ func (m *CommentMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCollectCount(v)
+		return nil
+	case comment.FieldReplyCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddReplyCount(v)
 		return nil
 	case comment.FieldCreatedBy:
 		v, ok := value.(int64)
@@ -10003,14 +10087,17 @@ func (m *CommentMutation) ResetField(name string) error {
 	case comment.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case comment.FieldReplyCount:
-		m.ResetReplyCount()
+	case comment.FieldThankCount:
+		m.ResetThankCount()
 		return nil
 	case comment.FieldLikeCount:
 		m.ResetLikeCount()
 		return nil
 	case comment.FieldCollectCount:
 		m.ResetCollectCount()
+		return nil
+	case comment.FieldReplyCount:
+		m.ResetReplyCount()
 		return nil
 	case comment.FieldCreatedBy:
 		m.ResetCreatedBy()

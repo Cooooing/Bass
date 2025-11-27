@@ -11,25 +11,6 @@ import "user/v1/user.proto";
 
 option go_package = "common/api/content/v1;v1";
 
-// 文章附言
-message ArticlePostscript {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
-  // 创建人
-  optional int64 created_by = 1002;
-  // 更新人
-  optional int64 updated_by = 1003;
-
-  // 主键Id
-  int64 id = 1;
-  // 所属文章Id
-  int64 article_id = 2;
-  // 附言内容
-  string content = 3;
-}
-
 // Article 服务
 service ContentArticleService {
 
@@ -175,6 +156,8 @@ message Article {
   bool has_postscript = 5;
   // 打赏区内容（可为空）
   optional string reward_content = 6;
+  // 打赏内容渲染（可为空）
+  optional string reward_content_render = 23;
   // 打赏积分
   optional int32 reward_points = 7;
 
@@ -224,10 +207,34 @@ message Article {
   // 附言
   repeated ArticlePostscript postscripts = 27;
   // 标签
-  repeated Tag tags = 23;
+  repeated Tag tags = 100;
+}
+
+
+// 文章附言
+message ArticlePostscript {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  optional int64 created_by = 1002;
+  // 更新人
+  optional int64 updated_by = 1003;
+
+  // 主键Id
+  int64 id = 1;
+  // 所属文章Id
+  int64 article_id = 2;
+  // 附言内容
+  string content = 3;
+  // 附言内容渲染
+  string content_render = 4;
 }
 
 message ArticleSave {
+  // 文章id
+  optional int64 id = 8;
   // 标题
   string title = 1 [(validate.rules).string = {min_len: 1, max_len: 100}];
   // 内容
@@ -285,8 +292,8 @@ message AddArticleRequest {
   ArticleSave article = 1;
 }
 message AddArticleReply {
-  // 文章Id
-  int64 articleId = 1;
+  // 文章
+  Article article = 1;
 }
 
 message UpdateArticleDraftRequest {
@@ -294,8 +301,8 @@ message UpdateArticleDraftRequest {
   ArticleSave article = 1;
 }
 message UpdateArticleDraftReply {
-  // 文章Id
-  int64 articleId = 1;
+  // 文章
+  Article article = 1;
 }
 
 message PublishArticleRequest {
@@ -350,7 +357,10 @@ message AddPostscriptArticleRequest {
   // 内容
   string content = 2 [(validate.rules).string = {min_len: 1}];
 }
-message AddPostscriptArticleReply {}
+message AddPostscriptArticleReply {
+  // 附言
+  ArticlePostscript article_postscript = 1;
+}
 
 message RewardArticleRequest {
   // 文章Id

@@ -35,180 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on ArticlePostscript with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *ArticlePostscript) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ArticlePostscript with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// ArticlePostscriptMultiError, or nil if none found.
-func (m *ArticlePostscript) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ArticlePostscript) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ArticlePostscriptValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ArticlePostscriptValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ArticlePostscriptValidationError{
-				field:  "CreatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if all {
-		switch v := interface{}(m.GetUpdatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ArticlePostscriptValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, ArticlePostscriptValidationError{
-					field:  "UpdatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ArticlePostscriptValidationError{
-				field:  "UpdatedAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for Id
-
-	// no validation rules for ArticleId
-
-	// no validation rules for Content
-
-	if m.CreatedBy != nil {
-		// no validation rules for CreatedBy
-	}
-
-	if m.UpdatedBy != nil {
-		// no validation rules for UpdatedBy
-	}
-
-	if len(errors) > 0 {
-		return ArticlePostscriptMultiError(errors)
-	}
-
-	return nil
-}
-
-// ArticlePostscriptMultiError is an error wrapping multiple validation errors
-// returned by ArticlePostscript.ValidateAll() if the designated constraints
-// aren't met.
-type ArticlePostscriptMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ArticlePostscriptMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ArticlePostscriptMultiError) AllErrors() []error { return m }
-
-// ArticlePostscriptValidationError is the validation error returned by
-// ArticlePostscript.Validate if the designated constraints aren't met.
-type ArticlePostscriptValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ArticlePostscriptValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ArticlePostscriptValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ArticlePostscriptValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ArticlePostscriptValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ArticlePostscriptValidationError) ErrorName() string {
-	return "ArticlePostscriptValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ArticlePostscriptValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sArticlePostscript.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ArticlePostscriptValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ArticlePostscriptValidationError{}
-
 // Validate checks the field values on Article with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -493,6 +319,10 @@ func (m *Article) validate(all bool) error {
 		// no validation rules for RewardContent
 	}
 
+	if m.RewardContentRender != nil {
+		// no validation rules for RewardContentRender
+	}
+
 	if m.RewardPoints != nil {
 		// no validation rules for RewardPoints
 	}
@@ -582,6 +412,182 @@ var _ interface {
 	ErrorName() string
 } = ArticleValidationError{}
 
+// Validate checks the field values on ArticlePostscript with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ArticlePostscript) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ArticlePostscript with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ArticlePostscriptMultiError, or nil if none found.
+func (m *ArticlePostscript) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ArticlePostscript) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticlePostscriptValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticlePostscriptValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticlePostscriptValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ArticlePostscriptValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ArticlePostscriptValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ArticlePostscriptValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Id
+
+	// no validation rules for ArticleId
+
+	// no validation rules for Content
+
+	// no validation rules for ContentRender
+
+	if m.CreatedBy != nil {
+		// no validation rules for CreatedBy
+	}
+
+	if m.UpdatedBy != nil {
+		// no validation rules for UpdatedBy
+	}
+
+	if len(errors) > 0 {
+		return ArticlePostscriptMultiError(errors)
+	}
+
+	return nil
+}
+
+// ArticlePostscriptMultiError is an error wrapping multiple validation errors
+// returned by ArticlePostscript.ValidateAll() if the designated constraints
+// aren't met.
+type ArticlePostscriptMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ArticlePostscriptMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ArticlePostscriptMultiError) AllErrors() []error { return m }
+
+// ArticlePostscriptValidationError is the validation error returned by
+// ArticlePostscript.Validate if the designated constraints aren't met.
+type ArticlePostscriptValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ArticlePostscriptValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ArticlePostscriptValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ArticlePostscriptValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ArticlePostscriptValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ArticlePostscriptValidationError) ErrorName() string {
+	return "ArticlePostscriptValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ArticlePostscriptValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sArticlePostscript.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ArticlePostscriptValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ArticlePostscriptValidationError{}
+
 // Validate checks the field values on ArticleSave with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -662,6 +668,10 @@ func (m *ArticleSave) validate(all bool) error {
 			}
 		}
 
+	}
+
+	if m.Id != nil {
+		// no validation rules for Id
 	}
 
 	if m.RewardContent != nil {
@@ -1074,7 +1084,34 @@ func (m *AddArticleReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ArticleId
+	if all {
+		switch v := interface{}(m.GetArticle()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddArticleReplyValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddArticleReplyValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetArticle()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AddArticleReplyValidationError{
+				field:  "Article",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return AddArticleReplyMultiError(errors)
@@ -1307,7 +1344,34 @@ func (m *UpdateArticleDraftReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for ArticleId
+	if all {
+		switch v := interface{}(m.GetArticle()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateArticleDraftReplyValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateArticleDraftReplyValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetArticle()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateArticleDraftReplyValidationError{
+				field:  "Article",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return UpdateArticleDraftReplyMultiError(errors)
@@ -2708,6 +2772,35 @@ func (m *AddPostscriptArticleReply) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetArticlePostscript()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddPostscriptArticleReplyValidationError{
+					field:  "ArticlePostscript",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddPostscriptArticleReplyValidationError{
+					field:  "ArticlePostscript",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetArticlePostscript()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AddPostscriptArticleReplyValidationError{
+				field:  "ArticlePostscript",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return AddPostscriptArticleReplyMultiError(errors)

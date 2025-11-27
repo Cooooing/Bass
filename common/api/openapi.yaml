@@ -840,9 +840,10 @@ components:
         common.api.content.v1.AddArticleReply:
             type: object
             properties:
-                articleId:
-                    type: string
-                    description: 文章Id
+              article:
+                allOf:
+                  - $ref: '#/components/schemas/common.api.content.v1.Article'
+                description: 文章
         common.api.content.v1.AddArticleRequest:
             type: object
             properties:
@@ -852,7 +853,11 @@ components:
                     description: 文章
         common.api.content.v1.AddCommentReply:
             type: object
-            properties: {}
+            properties:
+              comment:
+                allOf:
+                  - $ref: '#/components/schemas/common.api.content.v1.Comment'
+                description: 评论
         common.api.content.v1.AddCommentRequest:
             type: object
             properties:
@@ -883,7 +888,11 @@ components:
                     description: 领域信息
         common.api.content.v1.AddPostscriptArticleReply:
             type: object
-            properties: {}
+            properties:
+              article_postscript:
+                allOf:
+                  - $ref: '#/components/schemas/common.api.content.v1.ArticlePostscript'
+                description: 附言
         common.api.content.v1.AddPostscriptArticleRequest:
             type: object
             properties:
@@ -944,6 +953,9 @@ components:
               reward_content:
                     type: string
                     description: 打赏区内容（可为空）
+              reward_content_render:
+                type: string
+                description: 打赏内容渲染（可为空）
               reward_points:
                     type: integer
                     description: 打赏积分
@@ -1055,6 +1067,9 @@ components:
                 content:
                     type: string
                     description: 附言内容
+              content_render:
+                type: string
+                description: 附言内容渲染
             description: 文章附言
         common.api.content.v1.ArticleQueryParams:
             type: object
@@ -1086,6 +1101,9 @@ components:
         common.api.content.v1.ArticleSave:
             type: object
             properties:
+              id:
+                type: string
+                description: 文章id
                 title:
                     type: string
                     description: 标题
@@ -1171,9 +1189,13 @@ components:
                 content:
                     type: string
                     description: 评论内容
-                level:
+              content_render:
                     type: string
+                    description: 评论内容渲染
+              level:
+                type: integer
                     description: 评论层级
+                format: int32
               parent_id:
                     type: string
                     description: 父级评论Id
@@ -1181,22 +1203,25 @@ components:
                     type: string
                     description: 回复评论Id
                 status:
-                    type: string
+                  type: integer
                     description: 状态
-              reply_count:
-                    type: string
-                    description: 子评论数量
+                  format: int32
+              thank_count:
+                type: integer
+                description: 感谢数量
+                format: int32
               like_count:
-                    type: string
+                type: integer
                     description: 点赞数量
+                format: int32
               collect_count:
-                    type: string
+                type: integer
                     description: 收藏数量
-                comments:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.content.v1.Comment'
-                    description: 子评论
+                format: int32
+              reply_count:
+                type: integer
+                description: 子评论数量
+                format: int32
                 user:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
@@ -1210,10 +1235,16 @@ components:
             properties:
               comment_id:
                     type: string
-                    description: 评论Id，查询该评论的回复。需为文章的评论，回复时间正序。
+                    description: 评论Id
               article_id:
                     type: string
                     description: 文章Id
+              parent_id:
+                type: string
+                description: 父级评论Id
+              reply_id:
+                type: string
+                description: 回复评论Id
                 order:
                     type: integer
                     description: 排序 0-最新 1-最热
@@ -1221,6 +1252,10 @@ components:
               user_id:
                     type: string
                     description: 用户Id
+              level:
+                type: integer
+                description: 层级
+                format: int32
         common.api.content.v1.DeleteArticleReply:
             type: object
             properties: {}
@@ -1596,9 +1631,10 @@ components:
         common.api.content.v1.UpdateArticleDraftReply:
             type: object
             properties:
-                articleId:
-                    type: string
-                    description: 文章Id
+              article:
+                allOf:
+                  - $ref: '#/components/schemas/common.api.content.v1.Article'
+                description: 文章
         common.api.content.v1.UpdateArticleDraftRequest:
             type: object
             properties:
@@ -1773,9 +1809,12 @@ components:
         common.api.user.v1.GetOneRequest:
             type: object
             properties:
-                id:
+              user_id:
                     type: string
                     description: 用户Id
+              name:
+                type: string
+                description: 名称
         common.api.user.v1.LoginAccountReply:
             type: object
             properties:
@@ -2026,6 +2065,9 @@ components:
         common.api.user.v1.UserQueryParams:
             type: object
             properties:
+              user_id:
+                type: string
+                description: 用户Id
               user_ids:
                     type: array
                     items:

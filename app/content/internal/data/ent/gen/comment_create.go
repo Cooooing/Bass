@@ -82,16 +82,16 @@ func (_c *CommentCreate) SetNillableStatus(v *int32) *CommentCreate {
 	return _c
 }
 
-// SetReplyCount sets the "reply_count" field.
-func (_c *CommentCreate) SetReplyCount(v int32) *CommentCreate {
-	_c.mutation.SetReplyCount(v)
+// SetThankCount sets the "thank_count" field.
+func (_c *CommentCreate) SetThankCount(v int32) *CommentCreate {
+	_c.mutation.SetThankCount(v)
 	return _c
 }
 
-// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
-func (_c *CommentCreate) SetNillableReplyCount(v *int32) *CommentCreate {
+// SetNillableThankCount sets the "thank_count" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableThankCount(v *int32) *CommentCreate {
 	if v != nil {
-		_c.SetReplyCount(*v)
+		_c.SetThankCount(*v)
 	}
 	return _c
 }
@@ -120,6 +120,20 @@ func (_c *CommentCreate) SetCollectCount(v int32) *CommentCreate {
 func (_c *CommentCreate) SetNillableCollectCount(v *int32) *CommentCreate {
 	if v != nil {
 		_c.SetCollectCount(*v)
+	}
+	return _c
+}
+
+// SetReplyCount sets the "reply_count" field.
+func (_c *CommentCreate) SetReplyCount(v int32) *CommentCreate {
+	_c.mutation.SetReplyCount(v)
+	return _c
+}
+
+// SetNillableReplyCount sets the "reply_count" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableReplyCount(v *int32) *CommentCreate {
+	if v != nil {
+		_c.SetReplyCount(*v)
 	}
 	return _c
 }
@@ -285,9 +299,9 @@ func (_c *CommentCreate) defaults() {
 		v := comment.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.ReplyCount(); !ok {
-		v := comment.DefaultReplyCount
-		_c.mutation.SetReplyCount(v)
+	if _, ok := _c.mutation.ThankCount(); !ok {
+		v := comment.DefaultThankCount
+		_c.mutation.SetThankCount(v)
 	}
 	if _, ok := _c.mutation.LikeCount(); !ok {
 		v := comment.DefaultLikeCount
@@ -296,6 +310,10 @@ func (_c *CommentCreate) defaults() {
 	if _, ok := _c.mutation.CollectCount(); !ok {
 		v := comment.DefaultCollectCount
 		_c.mutation.SetCollectCount(v)
+	}
+	if _, ok := _c.mutation.ReplyCount(); !ok {
+		v := comment.DefaultReplyCount
+		_c.mutation.SetReplyCount(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := comment.DefaultCreatedAt()
@@ -326,14 +344,17 @@ func (_c *CommentCreate) check() error {
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Comment.status"`)}
 	}
-	if _, ok := _c.mutation.ReplyCount(); !ok {
-		return &ValidationError{Name: "reply_count", err: errors.New(`gen: missing required field "Comment.reply_count"`)}
+	if _, ok := _c.mutation.ThankCount(); !ok {
+		return &ValidationError{Name: "thank_count", err: errors.New(`gen: missing required field "Comment.thank_count"`)}
 	}
 	if _, ok := _c.mutation.LikeCount(); !ok {
 		return &ValidationError{Name: "like_count", err: errors.New(`gen: missing required field "Comment.like_count"`)}
 	}
 	if _, ok := _c.mutation.CollectCount(); !ok {
 		return &ValidationError{Name: "collect_count", err: errors.New(`gen: missing required field "Comment.collect_count"`)}
+	}
+	if _, ok := _c.mutation.ReplyCount(); !ok {
+		return &ValidationError{Name: "reply_count", err: errors.New(`gen: missing required field "Comment.reply_count"`)}
 	}
 	if len(_c.mutation.ArticleIDs()) == 0 {
 		return &ValidationError{Name: "article", err: errors.New(`gen: missing required edge "Comment.article"`)}
@@ -382,9 +403,9 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 		_spec.SetField(comment.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
 	}
-	if value, ok := _c.mutation.ReplyCount(); ok {
-		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
-		_node.ReplyCount = value
+	if value, ok := _c.mutation.ThankCount(); ok {
+		_spec.SetField(comment.FieldThankCount, field.TypeInt32, value)
+		_node.ThankCount = value
 	}
 	if value, ok := _c.mutation.LikeCount(); ok {
 		_spec.SetField(comment.FieldLikeCount, field.TypeInt32, value)
@@ -393,6 +414,10 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.CollectCount(); ok {
 		_spec.SetField(comment.FieldCollectCount, field.TypeInt32, value)
 		_node.CollectCount = value
+	}
+	if value, ok := _c.mutation.ReplyCount(); ok {
+		_spec.SetField(comment.FieldReplyCount, field.TypeInt32, value)
+		_node.ReplyCount = value
 	}
 	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(comment.FieldCreatedBy, field.TypeInt64, value)

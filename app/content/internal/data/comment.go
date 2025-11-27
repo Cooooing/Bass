@@ -35,7 +35,7 @@ func (r *CommentRepo) Save(ctx context.Context, client *gen.Client, comment *mod
 		SetNillableReplyID(comment.ReplyID).
 		SetStatus(0).
 		Save(ctx)
-	return (*model.Comment)(save), err
+	return &model.Comment{Comment: save}, err
 }
 
 func (r *CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, commentId int64, status cv1.CommentStatus) error {
@@ -79,7 +79,7 @@ func (r *CommentRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.Com
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("comment is not found")
 	}
-	return (*model.Comment)(c), err
+	return &model.Comment{Comment: c}, err
 }
 
 func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) ([]*model.Comment, error) {
@@ -94,7 +94,7 @@ func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Com
 		return nil, err
 	}
 	for i := range list {
-		comments = append(comments, (*model.Comment)(list[i]))
+		comments = append(comments, &model.Comment{Comment: list[i]})
 	}
 	return comments, nil
 }
@@ -106,7 +106,7 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		total    int
 	)
 	page = base.OrDefault(page, constant.GetPageDefault())
-	query := tx.Comment.Query()
+	query := tx.Comment.Query().WithReply()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	total, err = countQuery.Count(ctx)
@@ -118,7 +118,7 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		return nil, nil, err
 	}
 	for i := range list {
-		comments = append(comments, (*model.Comment)(list[i]))
+		comments = append(comments, &model.Comment{Comment: list[i]})
 	}
 	return comments, &cv1.PageReply{
 		Total: uint32(total),
@@ -152,6 +152,9 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	if req.Status != nil {
 		query = query.Where(comment.StatusEQ(int32(*req.Status)))
 	}
+	if req.Level != nil {
+		query = query.Where(comment.LevelEQ(*req.Level))
+	}
 	if req.Order != nil {
 		switch *req.Order {
 		case int32(cv1.CommentOrder_CommentOrderNewest):
@@ -184,7 +187,7 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
-	return (*model.Comment)(c), err
+	return &model.Comment{Comment: c}, err
 }
 
 func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (dict.Map[int64, *model.Comment], error) {
@@ -222,7 +225,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 	}
 	commentMap := dict.New[int64, *model.Comment](0)
 	for _, item := range comments {
-		commentMap.Set(item.ArticleID, (*model.Comment)(item))
+		commentMap.Set(item.ArticleID, &model.Comment{Comment: item})
 	}
 	return commentMap, err
 }

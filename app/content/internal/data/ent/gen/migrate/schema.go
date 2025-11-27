@@ -234,9 +234,10 @@ var (
 		{Name: "content", Type: field.TypeString, Size: 2147483647},
 		{Name: "level", Type: field.TypeInt32},
 		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
+		{Name: "thank_count", Type: field.TypeInt32, Default: 0},
 		{Name: "like_count", Type: field.TypeInt32, Default: 0},
 		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
+		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
@@ -253,19 +254,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "content_comments_content_articles_comments",
-				Columns:    []*schema.Column{ContentCommentsColumns[11]},
+				Columns:    []*schema.Column{ContentCommentsColumns[12]},
 				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "content_comments_content_comments_parent_replies",
-				Columns:    []*schema.Column{ContentCommentsColumns[12]},
+				Columns:    []*schema.Column{ContentCommentsColumns[13]},
 				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "content_comments_content_comments_reply_replies",
-				Columns:    []*schema.Column{ContentCommentsColumns[13]},
+				Columns:    []*schema.Column{ContentCommentsColumns[14]},
 				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -274,7 +275,7 @@ var (
 			{
 				Name:    "comment_article_id_parent_id_status",
 				Unique:  false,
-				Columns: []*schema.Column{ContentCommentsColumns[11], ContentCommentsColumns[12], ContentCommentsColumns[3]},
+				Columns: []*schema.Column{ContentCommentsColumns[12], ContentCommentsColumns[13], ContentCommentsColumns[3]},
 			},
 		},
 	}

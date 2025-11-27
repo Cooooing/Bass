@@ -2,7 +2,6 @@ package biz
 
 import (
 	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
@@ -13,9 +12,6 @@ import (
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
-
-	"github.com/jinzhu/copier"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type CommentDomain struct {
@@ -49,7 +45,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 		}
 
 		// 回复评论
-		replyComment := &model.Comment{}
+		replyComment := &model.Comment{Comment: &gen.Comment{}}
 		if comment.ReplyID != nil {
 			replyComment, err = d.commentRepo.GetById(ctx, tx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
@@ -71,36 +67,36 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			return err
 		}
 
-		save := &model.Comment{
-			ArticleID: comment.ArticleID,
-			Content:   comment.Content,
-			Level:     replyComment.Level + 1,
-			ParentID:  base.If(comment.ReplyID == nil, nil, base.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
-			ReplyID:   comment.ReplyID,
-		}
+		save := &model.Comment{Comment: &gen.Comment{ArticleID: comment.ArticleID,
+			Content:  comment.Content,
+			Level:    replyComment.Level + 1,
+			ParentID: base.If(comment.ReplyID == nil, nil, base.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
+			ReplyID:  comment.ReplyID,
+		}}
 
-		_, err = d.commentRepo.Save(ctx, tx, save)
+		res, err = d.commentRepo.Save(ctx, tx, save)
 		if err != nil {
 			return err
 		}
-
 		return nil
 	})
+	res.ParseContent()
 	return res, err
 }
 
-func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.CommentGetReq) (*v1.PageCommentReply, error) {
+func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.CommentGetReq) (*cv1.PageReply, []*model.Comment, error) {
 	var (
-		reply *v1.PageCommentReply
-		err   error
+		pageReply *cv1.PageReply
+		reply     []*model.Comment
+		err       error
 	)
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		list, pageReply, err := d.commentRepo.GetPage(ctx, tx, page, req)
+		reply, pageReply, err = d.commentRepo.GetPage(ctx, tx, page, req)
 		if err != nil {
 			return err
 		}
 		userIds := set.New[int64](0)
-		for _, item := range list {
+		for _, item := range reply {
 			userIds.Add(*item.CreatedBy)
 			if item.Edges.Reply != nil {
 				userIds.Add(*item.Edges.Reply.CreatedBy)
@@ -117,30 +113,15 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		}
 		users := userMap.Users
 
-		comments := make([]*v1.Comment, 0)
-		for _, item := range list {
-			elems := &v1.Comment{
-				CreatedAt: timestamppb.New(*item.CreatedAt),
-				UpdatedAt: timestamppb.New(*item.UpdatedAt),
+		for i := range reply {
+			reply[i].User = users[*reply[i].CreatedBy]
+			if reply[i].Edges.Reply != nil {
+				reply[i].ReplyUser = users[*reply[i].Edges.Reply.CreatedBy]
 			}
-			err = copier.Copy(elems, item)
-			if err != nil {
-				return err
-			}
-			elems.User = users[*item.CreatedBy]
-			if item.Edges.Reply != nil {
-				elems.ReplyUser = users[*item.Edges.Reply.CreatedBy]
-			}
-			comments = append(comments, elems)
-		}
-
-		reply = &v1.PageCommentReply{
-			Page: pageReply,
-			Rows: comments,
 		}
 		return nil
 	})
-	return reply, err
+	return pageReply, reply, err
 }
 
 func (d *CommentDomain) UpdateStatus(ctx context.Context, commentId int64, status cv1.CommentStatus) error {

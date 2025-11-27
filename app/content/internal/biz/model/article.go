@@ -3,19 +3,30 @@ package model
 import (
 	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
+	"common/pkg/util"
+	"common/pkg/util/collections/set"
 	"content/internal/data/ent/gen"
 	"fmt"
-	"strings"
 	"time"
 
-	"github.com/88250/lute"
 	"github.com/88250/lute/ast"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type Article gen.Article
+type Article struct {
+	*gen.Article
+	ContentRender       string `json:"content_render"`
+	RewardContentRender string `json:"reward_content_render"`
 
-var luteEngine = lute.New()
+	AuthorUser           *userv1.User `json:"author_user"`
+	LastReplyCommentUser *userv1.User `json:"last_reply_user"`
+	LastReplyCommentAt   *time.Time   `json:"last_replied_at"`
+}
+
+func NewArticle(model *gen.Article) *Article {
+	a := &Article{Article: model}
+	return a
+}
 
 // Summary 文章摘要
 func (a *Article) Summary() {
@@ -25,60 +36,42 @@ func (a *Article) Summary() {
 	}
 }
 
-func (a *Article) luteDocName() string {
-	return fmt.Sprintf("article_%d_%d_%s", a.ID, a.CreatedBy, a.Title)
-}
-
 // FormatContent 格式化文章内容
 func (a *Article) FormatContent() {
-	a.Content = luteEngine.FormatStr(a.luteDocName(), a.Content)
+	a.Content = util.LuteEngine.FormatStr(fmt.Sprintf("%s_%d", "article_content", a.ID), a.Content)
 }
 
 // ParseContent 解析文章内容
-func (a *Article) ParseContent() (renderContent string, atUserNames []string) {
-	luteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
-		if !entering {
-			return "", ast.WalkContinue
-		}
-		// 链接文本
-		text := n.Text() // n.Text() 会递归获取 NodeLinkText 或 TextMarkTextContent
-		// 链接地址
-		link := ""
-		if n.IsTextMarkType("a") {
-			link = n.TextMarkAHref
-		} else {
-			// 或者尝试找 NodeLinkDest 子节点
-			destNode := n.ChildByType(ast.NodeLinkDest)
-			if destNode != nil {
-				link = string(destNode.Tokens)
-			}
-		}
-
-		s := text[1:]
-		if strings.HasPrefix(text, "@") {
-			// 解析 at 用户 [@username](user's home page link)
-			username := s
-			// 这里可以收集用户ID或者生成特定HTML
-			atUserNames = append(atUserNames, username)
-			return fmt.Sprintf(`<a href="%s">%s</a>`, link, text), ast.WalkContinue
-		} else if strings.HasPrefix(text, "&") {
-			// 解析引用文章 [&username:title](article's link)
-			parts := strings.SplitN(s, ":", 2)
-			if len(parts) == 2 {
-				return fmt.Sprintf(`<a href="%s">%s</a>`, link, text), ast.WalkContinue
-			}
-		} else if strings.HasPrefix(text, "#") {
-			// 解析引用标签或领域 [#tag/domain](tag's link)
-			return fmt.Sprintf(`<a href="%s">%s</a>`, link, text), ast.WalkContinue
-		}
-
-		// 默认返回原生链接
-		return fmt.Sprintf(`<a href="%s">%s</a>`, link, text), ast.WalkContinue
+func (a *Article) ParseContent() (atUserNames set.Set[string]) {
+	atUserNames = set.New[string](0)
+	util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
+		return util.ParseNodeLink(n, entering, atUserNames)
 	}
-	return luteEngine.MarkdownStr(a.luteDocName(), a.Content), atUserNames
+	a.ContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", a.ID), a.Content)
+	return atUserNames
 }
 
-func (a *Article) ConvertToRpc(authorUser *userv1.User, lastReplyUser *userv1.User, repliedAt *time.Time) *v1.Article {
+// FormatRewardContent 格式化文章打赏区内容
+func (a *Article) FormatRewardContent() {
+	a.Content = util.LuteEngine.FormatStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), a.Content)
+}
+
+// ParseRewardContent 解析文章打赏区内容
+func (a *Article) ParseRewardContent() (atUserNames set.Set[string]) {
+	atUserNames = set.New[string](0)
+	if a.RewardContent != nil {
+		util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
+			return util.ParseNodeLink(n, entering, atUserNames)
+		}
+		a.RewardContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent)
+	}
+	return atUserNames
+}
+
+// ConvertToRpc 转换为RPC返回格式
+func (a *Article) ConvertToRpc() *v1.Article {
+	a.ParseContent()
+	a.ParseRewardContent()
 	article := &v1.Article{
 		CreatedAt:               timestamppb.New(*a.CreatedAt),
 		UpdatedAt:               timestamppb.New(*a.UpdatedAt),
@@ -87,6 +80,7 @@ func (a *Article) ConvertToRpc(authorUser *userv1.User, lastReplyUser *userv1.Us
 		Id:                      a.ID,
 		Title:                   a.Title,
 		Content:                 a.Content,
+		ContentRender:           a.ContentRender,
 		HasPostscript:           a.HasPostscript,
 		RewardContent:           a.RewardContent,
 		RewardPoints:            a.RewardPoints,
@@ -104,20 +98,19 @@ func (a *Article) ConvertToRpc(authorUser *userv1.User, lastReplyUser *userv1.Us
 		VoteTotal:               a.VoteTotal,
 		LotteryParticipantCount: a.LotteryParticipantCount,
 		LotteryWinnerCount:      a.LotteryWinnerCount,
-		AuthorUser:              authorUser,
-		LastReplyUser:           lastReplyUser,
+		AuthorUser:              a.AuthorUser,
+		LastReplyUser:           a.LastReplyCommentUser,
 	}
-	if repliedAt != nil {
-		article.LastReplyAt = timestamppb.New(*repliedAt)
+	if a.LastReplyCommentAt != nil {
+		article.LastReplyAt = timestamppb.New(*a.LastReplyCommentAt)
 	}
-	entArticle := (*gen.Article)(a)
-	if len(entArticle.Edges.Postscripts) > 0 {
-		for _, postscript := range entArticle.Edges.Postscripts {
-			article.Postscripts = append(article.Postscripts, (*ArticlePostscript)(postscript).ConvertToRpc())
+	if len(a.Edges.Postscripts) > 0 {
+		for _, postscript := range a.Edges.Postscripts {
+			article.Postscripts = append(article.Postscripts, (&ArticlePostscript{ArticlePostscript: postscript}).ConvertToRpc())
 		}
 	}
-	if len(entArticle.Edges.Tags) > 0 {
-		for _, tag := range entArticle.Edges.Tags {
+	if len(a.Edges.Tags) > 0 {
+		for _, tag := range a.Edges.Tags {
 			article.Tags = append(article.Tags, (*Tag)(tag).ConvertToRpc())
 		}
 	}

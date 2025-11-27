@@ -40,7 +40,7 @@ type ArticleGetReq struct {
 }
 
 type ArticlePostscriptRepo interface {
-	AddPostscript(ctx context.Context, tx *gen.Client, articleId int64, content string) error
+	Save(ctx context.Context, tx *gen.Client, articlePostscript *model.ArticlePostscript) (*model.ArticlePostscript, error)
 }
 
 type ArticleActionRecordRepo interface {

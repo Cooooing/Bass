@@ -13,7 +13,7 @@ type UserRepo interface {
 	Update(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error)
 
 	ConstantAccount(ctx context.Context, client *gen.Client, account string) (bool, error)
-	GetById(ctx context.Context, client *gen.Client, req *UserGetReq) (*model.User, error)
+	GetOne(ctx context.Context, client *gen.Client, req *UserGetReq) (*model.User, error)
 	GetByAccount(ctx context.Context, client *gen.Client, account string) (*model.User, error)
 	GetList(ctx context.Context, tx *gen.Client, req *UserGetReq) ([]*model.User, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *UserGetReq) ([]*model.User, *cv1.PageReply, error)

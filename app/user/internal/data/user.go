@@ -54,10 +54,7 @@ func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*
 	return (*model.User)(save), err
 }
 
-func (r *UserRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) (*model.User, error) {
-	if req.UserId == nil {
-		return nil, cv1.ErrorBadRequest("userId is required")
-	}
+func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) (*model.User, error) {
 	query := tx.User.Query()
 	query = r.getQuery(query, req)
 	u, err := query.First(ctx)

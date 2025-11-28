@@ -13,7 +13,7 @@ type TagRepo interface {
 	Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) ([]*model.Tag, error)
 	Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*model.Tag, error)
 
-	GetById(ctx context.Context, tx *gen.Client, req *TagGetReq) (*model.Tag, error)
+	GetOne(ctx context.Context, tx *gen.Client, req *TagGetReq) (*model.Tag, error)
 	GetList(ctx context.Context, tx *gen.Client, req *TagGetReq) ([]*model.Tag, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *TagGetReq) ([]*model.Tag, *cv1.PageReply, error)
 }

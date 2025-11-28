@@ -15,7 +15,7 @@ type CommentRepo interface {
 	UpdateStat(ctx context.Context, tx *gen.Client, commentId int64, action cv1.CommentAction, num int32) error
 
 	Exist(ctx context.Context, tx *gen.Client, req *CommentGetReq) (bool, error)
-	GetById(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
+	GetOne(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
 	GetList(ctx context.Context, tx *gen.Client, req *CommentGetReq) ([]*model.Comment, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *CommentGetReq) ([]*model.Comment, *cv1.PageReply, error)
 	GetArticleLastComment(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)

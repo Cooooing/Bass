@@ -20,7 +20,7 @@ type ArticleRepo interface {
 	Delete(ctx context.Context, tx *gen.Client, articleId int64) error
 
 	Exist(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (bool, error)
-	GetById(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (*model.Article, error)
+	GetOne(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (*model.Article, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ArticleGetReq) ([]*model.Article, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ArticleGetReq) ([]*model.Article, *cv1.PageReply, error)
 }

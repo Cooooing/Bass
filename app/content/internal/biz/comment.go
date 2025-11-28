@@ -33,7 +33,7 @@ func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, comm
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *model.Comment, err error) {
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		// 回复文章
-		exist, err := d.articleRepo.GetById(ctx, tx, &repo.ArticleGetReq{
+		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(comment.ArticleID),
 			Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
 		})
@@ -47,7 +47,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 		// 回复评论
 		replyComment := &model.Comment{Comment: &gen.Comment{}}
 		if comment.ReplyID != nil {
-			replyComment, err = d.commentRepo.GetById(ctx, tx, &repo.CommentGetReq{
+			replyComment, err = d.commentRepo.GetOne(ctx, tx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
 				ArticleId: base.Ptr(comment.ArticleID),
 				Status:    base.Ptr(cv1.CommentStatus_CommentNormal),

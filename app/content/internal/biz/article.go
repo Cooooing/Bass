@@ -183,7 +183,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 		reply *model.Article
 		err   error
 	)
-	reply, err = d.articleRepo.GetById(ctx, d.db, &repo.ArticleGetReq{
+	reply, err = d.articleRepo.GetOne(ctx, d.db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(articleId),
 	})
 	if err != nil {

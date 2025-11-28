@@ -60,19 +60,13 @@ func (r *CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commen
 }
 
 func (r *CommentRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (bool, error) {
-	if req.CommentId == nil {
-		return false, cv1.ErrorBadRequest("commentId is required")
-	}
 	query := tx.Comment.Query()
 	query = r.getQuery(query, req)
 	exist, err := query.Exist(ctx)
 	return exist, err
 }
 
-func (r *CommentRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (*model.Comment, error) {
-	if req.CommentId == nil {
-		return nil, cv1.ErrorBadRequest("commentId is required")
-	}
+func (r *CommentRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (*model.Comment, error) {
 	query := tx.Comment.Query()
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)

@@ -87,10 +87,7 @@ func (r *DomainRepo) AddTagCount(ctx context.Context, tx *gen.Client, id int64, 
 	return (*model.Domain)(save), nil
 }
 
-func (r *DomainRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) (*model.Domain, error) {
-	if req.DomainId == nil {
-		return nil, cv1.ErrorBadRequest("domainId is required")
-	}
+func (r *DomainRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) (*model.Domain, error) {
 	query := tx.Domain.Query()
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)

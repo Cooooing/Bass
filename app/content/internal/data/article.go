@@ -183,7 +183,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
-	first, err := r.GetById(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
+	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
 	if err != nil {
 		return err
 	}
@@ -232,18 +232,12 @@ func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int6
 }
 
 func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (bool, error) {
-	if req.ArticleId == nil {
-		return false, cv1.ErrorBadRequest("articleId is required")
-	}
 	query := tx.Article.Query()
 	query = r.getQuery(query, req)
 	return query.Exist(ctx)
 }
 
-func (r *ArticleRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (*model.Article, error) {
-	if req.ArticleId == nil {
-		return nil, cv1.ErrorBadRequest("articleId is required")
-	}
+func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (*model.Article, error) {
 	query := tx.Article.Query().
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
 			q.Where(articlepostscript.StatusEQ(int32(cv1.ArticlePostscriptStatus_ArticlePostscriptNormal))).

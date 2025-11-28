@@ -61,10 +61,7 @@ func (r *TagRepo) Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*
 	return (*model.Tag)(save), nil
 }
 
-func (r *TagRepo) GetById(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) (*model.Tag, error) {
-	if req.TagId == nil {
-		return nil, cv1.ErrorBadRequest("tagId is required")
-	}
+func (r *TagRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) (*model.Tag, error) {
 	query := tx.Tag.Query()
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)

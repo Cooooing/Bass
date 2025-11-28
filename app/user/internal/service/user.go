@@ -65,7 +65,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 
 func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserRequest) (rsp *v1.GetCurrentUserReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	u, err := s.userRepo.GetById(ctx, s.db, &repo.UserGetReq{UserId: base.Ptr(user.ID)})
+	u, err := s.userRepo.GetOne(ctx, s.db, &repo.UserGetReq{UserId: base.Ptr(user.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v
 	res := &v1.GetOneReply{
 		User: &v1.User{},
 	}
-	user, err := s.userRepo.GetById(ctx, s.db, &repo.UserGetReq{
+	user, err := s.userRepo.GetOne(ctx, s.db, &repo.UserGetReq{
 		UserId: req.UserId,
 		Name:   req.Name,
 	})

@@ -2,6 +2,7 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
 	"context"
@@ -12,9 +13,9 @@ type ArticleRepo interface {
 
 	Update(ctx context.Context, tx *gen.Client, article *model.Article, tags []*model.Tag) (*model.Article, error)
 	UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error
-	UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status cv1.ArticleStatus) error
+	UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status v1.ArticleStatus) error
 	UpdateHasPostscript(ctx context.Context, tx *gen.Client, articleId int64, hasPostscript bool) error
-	UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action cv1.ArticleAction, num int32) error
+	UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) error
 	Publish(ctx context.Context, tx *gen.Client, articleId int64) error
 
 	Delete(ctx context.Context, tx *gen.Client, articleId int64) error
@@ -30,10 +31,10 @@ type ArticleGetReq struct {
 	CreatedBy *int64
 	TagId     *int64
 	DomainId  *int64
-	Status    *cv1.ArticleStatus
+	Status    *v1.ArticleStatus
 	AuthorId  *int64
-	Order     *cv1.ArticleOrder
-	Type      *cv1.ArticleType
+	Order     *v1.ArticleOrder
+	Type      *v1.ArticleType
 	Keyword   *string
 
 	Listable *bool
@@ -45,5 +46,5 @@ type ArticlePostscriptRepo interface {
 
 type ArticleActionRecordRepo interface {
 	Save(ctx context.Context, tx *gen.Client, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error)
-	Delete(ctx context.Context, tx *gen.Client, articleId int64, userId int64, action cv1.ArticleAction) error
+	Delete(ctx context.Context, tx *gen.Client, articleId int64, userId int64, action v1.ArticleAction) error
 }

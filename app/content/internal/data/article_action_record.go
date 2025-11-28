@@ -1,7 +1,7 @@
 package data
 
 import (
-	"common/api/common/v1"
+	v1 "common/api/content/v1"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"

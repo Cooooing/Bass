@@ -2,6 +2,7 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	commonModel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
@@ -25,7 +26,7 @@ type TagGetReq struct {
 	Name         *string
 	Names        []string
 	Description  *string
-	Status       *cv1.TagStatus
+	Status       *v1.TagStatus
 	DomainId     *int64
 	ArticleCount *commonModel.Range[int32]
 }

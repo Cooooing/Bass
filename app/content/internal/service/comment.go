@@ -88,7 +88,7 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (
 		return nil, cv1.ErrorBadRequest("comment not exist")
 	}
 
-	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, cv1.CommentAction_CommentActionLike, base.If[int32](req.Active, 1, -1))
+	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, v1.CommentAction_CommentActionLike, base.If[int32](req.Active, 1, -1))
 	return &v1.LikeCommentReply{}, err
 }
 

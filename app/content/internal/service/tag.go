@@ -1,7 +1,6 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util/base"
@@ -43,7 +42,7 @@ func (s *TagService) Adds(ctx context.Context, req *v1.AddTagsRequest) (*v1.AddT
 			Name:        tag.Name,
 			Description: tag.Description,
 			DomainID:    tag.DomainId,
-			Status:      base.DerefOrDefault(tag.Status, int32(cv1.TagStatus_TagNormal)),
+			Status:      base.DerefOrDefault(tag.Status, int32(v1.TagStatus_TagNormal)),
 		}
 	}
 	saves, err := s.domainTag.Saves(ctx, tags)
@@ -68,7 +67,7 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
-		Status:      base.DerefOrDefault(req.Tag.Status, int32(cv1.TagStatus_TagNormal)),
+		Status:      base.DerefOrDefault(req.Tag.Status, int32(v1.TagStatus_TagNormal)),
 	})
 	if err != nil {
 		return nil, err
@@ -86,7 +85,7 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.Page
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
-		Status:      base.Ptr(cv1.TagStatus_TagNormal),
+		Status:      base.Ptr(v1.TagStatus_TagNormal),
 		DomainId:    req.Query.DomainId,
 	}
 	if req.Query.ArticleCount != nil {

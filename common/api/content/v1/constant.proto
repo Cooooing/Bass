@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package common.api.common.v1;
+
+option go_package = "common/api/common/v1;v1";
+
+enum DomainStatus {
+  DomainNormal = 0; // 正常
+  DomainDisabled = 1; // 禁用
+}
+
+enum TagStatus {
+  TagNormal = 0; // 正常
+  TagDisabled = 1; // 禁用
+}
+
+enum CommentStatus {
+  CommentNormal = 0; // 正常
+  CommentHidden = 1; // 隐藏
+}
+
+enum ArticleLotteryStatus {
+  ArticleLotteryNotStarted = 0; // 未开始
+  ArticleLotteryInProgress = 1; // 进行中
+  ArticleLotteryFinished = 2; // 已结束
+}
+
+enum ArticleStatus {
+  ArticleNormal = 0; // 正常
+  ArticleHidden = 1; // 隐藏
+  ArticleLocked = 2; // 锁定
+  ArticleDrafts = 3; // 草稿
+  ArticleDeleted = 4; // 删除
+}
+
+enum ArticleType {
+  ArticleTypeNormal = 0; // 普通文章
+  ArticleTypeQA = 1; // 问答
+  ArticleTypeVote = 2; // 投票
+  ArticleTypeLottery = 3; // 抽奖
+}
+
+enum ArticlePostscriptStatus {
+  ArticlePostscriptNormal = 0; // 正常
+  ArticlePostscriptHidden = 1; // 隐藏
+}
+
+// 文章行为类型
+enum ArticleAction {
+  ArticleActionLike = 0; // 点赞
+  ArticleActionThank = 1; // 感谢
+  ArticleActionCollect = 2; // 收藏
+  ArticleActionWatch = 3; // 关注
+  ArticleActionReply = 4; // 回复
+  ArticleActionVote = 5; // 投票
+  ArticleActionLottery = 6; // 抽奖参与
+  ArticleActionLotteryWinner = 7; // 抽奖中奖
+}
+
+enum ArticleOrder {
+  ArticleOrderNewest = 0; // 最新
+  ArticleOrderHottest = 1; // 最热
+}
+
+// 评论行为类型
+enum CommentAction {
+  CommentActionLike = 0; // 点赞
+  CommentActionCollect = 1; // 收藏
+  CommentActionReply = 2; // 回复
+}
+
+// 评论查询排序
+enum CommentOrder {
+  CommentOrderNewest = 0; // 最新
+  CommentOrderHottest = 1; // 最热
+}

@@ -2,6 +2,7 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	"common/pkg/util/collections/dict"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
@@ -11,8 +12,8 @@ import (
 type CommentRepo interface {
 	Save(ctx context.Context, tx *gen.Client, comment *model.Comment) (*model.Comment, error)
 
-	UpdateStatus(ctx context.Context, tx *gen.Client, commentId int64, status cv1.CommentStatus) error
-	UpdateStat(ctx context.Context, tx *gen.Client, commentId int64, action cv1.CommentAction, num int32) error
+	UpdateStatus(ctx context.Context, tx *gen.Client, commentId int64, status v1.CommentStatus) error
+	UpdateStat(ctx context.Context, tx *gen.Client, commentId int64, action v1.CommentAction, num int32) error
 
 	Exist(ctx context.Context, tx *gen.Client, req *CommentGetReq) (bool, error)
 	GetOne(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
@@ -30,12 +31,12 @@ type CommentGetReq struct {
 	ArticleId  *int64
 	ArticleIds []int64
 	CreatedBy  *int64
-	Status     *cv1.CommentStatus
+	Status     *v1.CommentStatus
 	Level      *int32
 	Order      *int32
 }
 
 type CommentActionRecordRepo interface {
 	Save(ctx context.Context, tx *gen.Client, record *model.CommentActionRecord) (*model.CommentActionRecord, error)
-	Delete(ctx context.Context, tx *gen.Client, commentId int64, userId int64, action cv1.CommentAction) error
+	Delete(ctx context.Context, tx *gen.Client, commentId int64, userId int64, action v1.CommentAction) error
 }

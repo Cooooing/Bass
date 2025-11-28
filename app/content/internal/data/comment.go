@@ -2,6 +2,7 @@ package data
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	"common/pkg/constant"
 	"common/pkg/util/base"
 	"common/pkg/util/collections/dict"
@@ -38,21 +39,21 @@ func (r *CommentRepo) Save(ctx context.Context, client *gen.Client, comment *mod
 	return &model.Comment{Comment: save}, err
 }
 
-func (r *CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, commentId int64, status cv1.CommentStatus) error {
+func (r *CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, commentId int64, status v1.CommentStatus) error {
 	_, err := client.Comment.UpdateOneID(commentId).
 		SetStatus(int32(status)).
 		Save(ctx)
 	return err
 }
 
-func (r *CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commentId int64, action cv1.CommentAction, num int32) error {
+func (r *CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commentId int64, action v1.CommentAction, num int32) error {
 	updateOne := client.Comment.UpdateOneID(commentId)
 	switch action {
-	case cv1.CommentAction_CommentActionLike:
+	case v1.CommentAction_CommentActionLike:
 		updateOne.AddLikeCount(num)
-	case cv1.CommentAction_CommentActionCollect:
+	case v1.CommentAction_CommentActionCollect:
 		updateOne.AddCollectCount(num)
-	case cv1.CommentAction_CommentActionReply:
+	case v1.CommentAction_CommentActionReply:
 		updateOne.AddReplyCount(num)
 	}
 	_, err := updateOne.Save(ctx)
@@ -151,9 +152,9 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	}
 	if req.Order != nil {
 		switch *req.Order {
-		case int32(cv1.CommentOrder_CommentOrderNewest):
+		case int32(v1.CommentOrder_CommentOrderNewest):
 			query = query.Order(gen.Desc(comment.FieldCreatedAt))
-		case int32(cv1.CommentOrder_CommentOrderHottest):
+		case int32(v1.CommentOrder_CommentOrderHottest):
 			query = query.
 				Order(func(s *sql.Selector) {
 					s.OrderExpr(sql.Expr(`
@@ -200,7 +201,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 				sql.As(sql.Max(comment.FieldCreatedAt), "latest_time"),
 			).
 				From(sql.Table(comment.Table)).
-				Where(sql.EQ(comment.FieldStatus, int32(cv1.CommentStatus_CommentNormal))).
+				Where(sql.EQ(comment.FieldStatus, int32(v1.CommentStatus_CommentNormal))).
 				Where(sql.In(comment.FieldArticleID, articleIdsAny...)).
 				GroupBy(comment.FieldArticleID)
 
@@ -211,7 +212,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 				s.C(comment.FieldCreatedAt), sub.C("latest_time"),
 			)
 		}).
-		Where(comment.StatusEQ(int32(cv1.CommentStatus_CommentNormal))).
+		Where(comment.StatusEQ(int32(v1.CommentStatus_CommentNormal))).
 		Where(comment.ArticleIDIn(req.ArticleIds...)).
 		All(ctx)
 	if err != nil {

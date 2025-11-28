@@ -44,10 +44,10 @@ func NewArticleService(baseService *BaseService, articleDomain *biz.ArticleDomai
 
 func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rsp *v1.AddArticleReply, err error) {
 	article := req.Article
-	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+	if article.Status != int32(v1.ArticleStatus_ArticleNormal) && article.Status != int32(v1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
-	if article.Type != int32(cv1.ArticleType_ArticleTypeNormal) && article.Type != int32(cv1.ArticleType_ArticleTypeQA) && article.Type != int32(cv1.ArticleType_ArticleTypeVote) && article.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
+	if article.Type != int32(v1.ArticleType_ArticleTypeNormal) && article.Type != int32(v1.ArticleType_ArticleTypeQA) && article.Type != int32(v1.ArticleType_ArticleTypeVote) && article.Type != int32(v1.ArticleType_ArticleTypeLottery) {
 		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
@@ -57,7 +57,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 			tags = append(tags, &model.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
-				Status:       int32(cv1.TagStatus_TagNormal),
+				Status:       int32(v1.TagStatus_TagNormal),
 				ArticleCount: 1,
 			})
 		}
@@ -70,7 +70,7 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		RewardPoints:  article.RewardPoints,
 		Status:        article.Status,
 		Type:          article.Type,
-		BountyPoints:  base.If(article.Type != int32(cv1.ArticleType_ArticleTypeQA), nil, article.BountyPoints),
+		BountyPoints:  base.If(article.Type != int32(v1.ArticleType_ArticleTypeQA), nil, article.BountyPoints),
 		Statement:     article.Statement,
 		Commentable:   base.DerefOrDefault(article.Commentable, true),
 		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
@@ -90,10 +90,10 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 	if article.Id == nil {
 		return nil, cv1.ErrorBadRequest("article id is required")
 	}
-	if article.Status != int32(cv1.ArticleStatus_ArticleNormal) && article.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+	if article.Status != int32(v1.ArticleStatus_ArticleNormal) && article.Status != int32(v1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
-	if article.Type != int32(cv1.ArticleType_ArticleTypeNormal) && article.Type != int32(cv1.ArticleType_ArticleTypeQA) && article.Type != int32(cv1.ArticleType_ArticleTypeVote) && article.Type != int32(cv1.ArticleType_ArticleTypeLottery) {
+	if article.Type != int32(v1.ArticleType_ArticleTypeNormal) && article.Type != int32(v1.ArticleType_ArticleTypeQA) && article.Type != int32(v1.ArticleType_ArticleTypeVote) && article.Type != int32(v1.ArticleType_ArticleTypeLottery) {
 		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
 
@@ -103,7 +103,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 			tags = append(tags, &model.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
-				Status:       int32(cv1.TagStatus_TagNormal),
+				Status:       int32(v1.TagStatus_TagNormal),
 				ArticleCount: 1,
 			})
 		}
@@ -117,7 +117,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		RewardPoints:  article.RewardPoints,
 		Status:        article.Status,
 		Type:          article.Type,
-		BountyPoints:  base.If(article.Type != int32(cv1.ArticleType_ArticleTypeQA), nil, article.BountyPoints),
+		BountyPoints:  base.If(article.Type != int32(v1.ArticleType_ArticleTypeQA), nil, article.BountyPoints),
 		Statement:     article.Statement,
 		Commentable:   base.DerefOrDefault(article.Commentable, true),
 		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
@@ -137,7 +137,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 	// 只有作者可以发布草稿
 	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(req.ArticleId),
-		Status:    base.Ptr(cv1.ArticleStatus_ArticleDrafts),
+		Status:    base.Ptr(v1.ArticleStatus_ArticleDrafts),
 		CreatedBy: base.Ptr(user.ID),
 	})
 	if err != nil {
@@ -161,7 +161,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 		// 只有作者可以删除草稿
 		exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(req.ArticleId),
-			Status:    base.Ptr(cv1.ArticleStatus_ArticleDrafts),
+			Status:    base.Ptr(v1.ArticleStatus_ArticleDrafts),
 			CreatedBy: base.Ptr(user.ID),
 		})
 		if err != nil {
@@ -185,17 +185,17 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 	 * 草稿状态的只能查看自己
 	 */
 
-	if req.Query.Status != nil && *req.Query.Status != int32(cv1.ArticleStatus_ArticleNormal) && *req.Query.Status != int32(cv1.ArticleStatus_ArticleDrafts) {
+	if req.Query.Status != nil && *req.Query.Status != int32(v1.ArticleStatus_ArticleNormal) && *req.Query.Status != int32(v1.ArticleStatus_ArticleDrafts) {
 		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
 	}
-	status := base.Ptr(cv1.ArticleStatus_ArticleNormal)
+	status := base.Ptr(v1.ArticleStatus_ArticleNormal)
 	authorId := req.Query.AuthorId
-	if req.Query.Status != nil && *req.Query.Status == int32(cv1.ArticleStatus_ArticleDrafts) {
+	if req.Query.Status != nil && *req.Query.Status == int32(v1.ArticleStatus_ArticleDrafts) {
 		if !ok {
 			return nil, cv1.ErrorUnauthorized("login required to view drafts")
 		}
 		authorId = &user.ID
-		status = base.Ptr(cv1.ArticleStatus_ArticleDrafts)
+		status = base.Ptr(v1.ArticleStatus_ArticleDrafts)
 	}
 
 	reply, page, err := s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
@@ -203,8 +203,8 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 		DomainId: req.Query.DomainId,
 		Status:   status,
 		AuthorId: authorId,
-		Order:    (*cv1.ArticleOrder)(req.Query.Order),
-		Type:     (*cv1.ArticleType)(req.Query.Type),
+		Order:    (*v1.ArticleOrder)(req.Query.Order),
+		Type:     (*v1.ArticleType)(req.Query.Type),
 		Keyword:  req.Query.Keyword,
 		Listable: base.Ptr(true),
 	})
@@ -227,7 +227,7 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	// 只有作者可以添加附言
 	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(req.ArticleId),
-		Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
+		Status:    base.Ptr(v1.ArticleStatus_ArticleNormal),
 		CreatedBy: base.Ptr(user.ID),
 	})
 	if err != nil {
@@ -256,13 +256,13 @@ func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest)
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionLike, req.Active)
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionLike, req.Active)
 	return &v1.LikeArticleReply{}, err
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
 	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, cv1.ArticleAction_ArticleActionCollect, req.Active)
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionCollect, req.Active)
 	return &v1.CollectArticleReply{}, err
 }
 

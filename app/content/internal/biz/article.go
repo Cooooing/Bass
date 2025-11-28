@@ -2,6 +2,7 @@ package biz
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
@@ -55,14 +56,14 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 		err  error
 	)
 	status := article.Status
-	article.Status = int32(cv1.ArticleStatus_ArticleDrafts) // 默认均为草稿
+	article.Status = int32(v1.ArticleStatus_ArticleDrafts) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		save, err = d.articleRepo.Save(ctx, tx, article, tags)
 		if err != nil {
 			return err
 		}
 		// 正常文章，进行发布
-		if status == int32(cv1.ArticleStatus_ArticleNormal) {
+		if status == int32(v1.ArticleStatus_ArticleNormal) {
 			err = d.articleRepo.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -80,7 +81,7 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, cont
 		save, err = d.postscriptRepo.Save(ctx, tx, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
 			ArticleID: articleId,
 			Content:   content,
-			Status:    int32(cv1.ArticlePostscriptStatus_ArticlePostscriptNormal),
+			Status:    int32(v1.ArticlePostscriptStatus_ArticlePostscriptNormal),
 		}})
 		if err != nil {
 			return err
@@ -103,11 +104,11 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 		err  error
 	)
 	status := article.Status
-	article.Status = int32(cv1.ArticleStatus_ArticleDrafts) // 默认均为草稿
+	article.Status = int32(v1.ArticleStatus_ArticleDrafts) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		exist, err := d.articleRepo.Exist(ctx, tx, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(article.ID),
-			Status:    base.Ptr(cv1.ArticleStatus_ArticleDrafts),
+			Status:    base.Ptr(v1.ArticleStatus_ArticleDrafts),
 			CreatedBy: article.CreatedBy,
 		})
 		if err != nil {
@@ -122,7 +123,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 			return err
 		}
 		// 正常文章，进行发布
-		if status == int32(cv1.ArticleStatus_ArticleNormal) {
+		if status == int32(v1.ArticleStatus_ArticleNormal) {
 			err = d.articleRepo.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -133,7 +134,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 	return save, err
 }
 
-func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action cv1.ArticleAction, active bool) error {
+func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
 		if active {
@@ -197,7 +198,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	 * 草稿状态的只能查看自己
 	 */
 
-	if reply.Status == int32(cv1.ArticleStatus_ArticleDrafts) && !ok && *reply.CreatedBy != user.ID {
+	if reply.Status == int32(v1.ArticleStatus_ArticleDrafts) && !ok && *reply.CreatedBy != user.ID {
 		return nil, cv1.ErrorUnauthorized("login required to view drafts")
 	}
 

@@ -1,7 +1,6 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util/base"
@@ -41,7 +40,7 @@ func (s *DomainService) Adds(ctx context.Context, req *v1.AddDomainsRequest) (*v
 		domains[i] = &model.Domain{
 			Name:        domain.Name,
 			Description: domain.Description,
-			Status:      base.DerefOrDefault(domain.Status, int32(cv1.DomainStatus_DomainNormal)),
+			Status:      base.DerefOrDefault(domain.Status, int32(v1.DomainStatus_DomainNormal)),
 			URL:         domain.Url,
 			Icon:        domain.Icon,
 			IsNav:       domain.IsNav,
@@ -58,7 +57,7 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest)
 	data, err := s.domainDomain.Update(ctx, &model.Domain{
 		Name:        req.Domain.Name,
 		Description: req.Domain.Description,
-		Status:      base.DerefOrDefault(req.Domain.Status, int32(cv1.DomainStatus_DomainNormal)),
+		Status:      base.DerefOrDefault(req.Domain.Status, int32(v1.DomainStatus_DomainNormal)),
 		URL:         req.Domain.Url,
 		Icon:        req.Domain.Icon,
 		IsNav:       req.Domain.IsNav,
@@ -77,14 +76,14 @@ func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v
 		DomainIds:   req.Query.Ids,
 		Name:        req.Query.Name,
 		Description: req.Query.Description,
-		Status:      base.Ptr(cv1.DomainStatus_DomainNormal),
+		Status:      base.Ptr(v1.DomainStatus_DomainNormal),
 		Url:         req.Query.Url,
 		Icon:        req.Query.Icon,
 		TagCount:    nil,
 		IsNav:       req.Query.IsNav,
 	}
 	if req.Query.Status != nil {
-		getReq.Status = base.Ptr(cv1.DomainStatus(*req.Query.Status))
+		getReq.Status = base.Ptr(v1.DomainStatus(*req.Query.Status))
 	}
 	if req.Query.TagCount != nil {
 		getReq.TagCount = &commonModel.Range[int32]{

@@ -2,6 +2,7 @@ package data
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	"common/pkg/constant"
 	"common/pkg/util/base"
 	"content/internal/biz/model"
@@ -25,7 +26,7 @@ func (r *TagRepo) Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*mo
 	save, err := tx.Tag.Create().
 		SetName(tag.Name).
 		SetNillableDomainID(tag.DomainID).
-		SetStatus(int32(cv1.TagStatus_TagNormal)).
+		SetStatus(int32(v1.TagStatus_TagNormal)).
 		Save(ctx)
 	return (*model.Tag)(save), err
 }
@@ -37,7 +38,7 @@ func (r *TagRepo) Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) 
 			tx.Tag.Create().
 				SetName(tags[i].Name).
 				SetNillableDomainID(tags[i].DomainID).
-				SetStatus(int32(cv1.TagStatus_TagNormal)),
+				SetStatus(int32(v1.TagStatus_TagNormal)),
 		)
 	}
 	save, err := tx.Tag.CreateBulk(creates...).Save(ctx)
@@ -53,7 +54,7 @@ func (r *TagRepo) Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
-		SetStatus(int32(cv1.TagStatus_TagNormal))
+		SetStatus(int32(v1.TagStatus_TagNormal))
 	save, err := update.Save(ctx)
 	if err != nil {
 		return nil, err

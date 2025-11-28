@@ -2,6 +2,7 @@ package biz
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
@@ -35,7 +36,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 		// 回复文章
 		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(comment.ArticleID),
-			Status:    base.Ptr(cv1.ArticleStatus_ArticleNormal),
+			Status:    base.Ptr(v1.ArticleStatus_ArticleNormal),
 		})
 		if err != nil {
 			return err
@@ -50,19 +51,19 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			replyComment, err = d.commentRepo.GetOne(ctx, tx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
 				ArticleId: base.Ptr(comment.ArticleID),
-				Status:    base.Ptr(cv1.CommentStatus_CommentNormal),
+				Status:    base.Ptr(v1.CommentStatus_CommentNormal),
 			})
 			if err != nil {
 				return err
 			}
 
-			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, cv1.CommentAction_CommentActionReply, 1)
+			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, v1.CommentAction_CommentActionReply, 1)
 			if err != nil {
 				return err
 			}
 		}
 
-		err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, cv1.ArticleAction_ArticleActionReply, 1)
+		err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, v1.ArticleAction_ArticleActionReply, 1)
 		if err != nil {
 			return err
 		}
@@ -124,14 +125,14 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 	return pageReply, reply, err
 }
 
-func (d *CommentDomain) UpdateStatus(ctx context.Context, commentId int64, status cv1.CommentStatus) error {
+func (d *CommentDomain) UpdateStatus(ctx context.Context, commentId int64, status v1.CommentStatus) error {
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		return d.commentRepo.UpdateStatus(ctx, tx, commentId, status)
 	})
 	return err
 }
 
-func (d *CommentDomain) UpdateStat(ctx context.Context, commentId int64, userId int64, action cv1.CommentAction, active bool) error {
+func (d *CommentDomain) UpdateStat(ctx context.Context, commentId int64, userId int64, action v1.CommentAction, active bool) error {
 	var err error
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		if active {

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.common.v1;
+
+option go_package = "common/api/common/v1;v1";
+
+enum NotificationMetaStatus {
+  NotificationMetaStatusNormal = 0; // 正常
+  NotificationMetaStatusCancel = 1; // 取消
+}
+
+enum NotificationMetaType {
+  NotificationMetaTypeNormal = 0; // 普通
+  NotificationMetaTypeSystem = 1; // 系统
+}

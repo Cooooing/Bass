@@ -1,0 +1,18 @@
+name: notify-service
+version: 1.0.0
+mode: dev
+
+registry:
+  etcd:
+    endpoints:
+      - "127.0.0.1:2379"
+    username: "root"
+    password: "123456"
+    timeout: 5s
+
+config:
+  etcd: "/config/notify/config.yaml"
+
+log:
+  level: debug
+  file: logs/notify-service.log

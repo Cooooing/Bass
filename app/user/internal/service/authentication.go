@@ -40,13 +40,13 @@ func (s *AuthenticationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailRequest) (rsp *v1.RegisterEmailReply, err error) {
-	if !s.verifyName(req.Name) {
+	if !s.VerifyName(req.Name) {
 		return nil, cv1.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
 	}
-	if req.Nickname != nil && !s.verifyNickname(*req.Nickname) {
+	if req.Nickname != nil && !s.VerifyNickname(*req.Nickname) {
 		return nil, cv1.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
 	}
-	if !s.verifyPassword(req.Password) {
+	if !s.VerifyPassword(req.Password) {
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{

@@ -7,7 +7,7 @@
 package v1
 
 import (
-	_ "common/api/common/v1"
+	v1 "common/api/common/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -38,8 +38,16 @@ type NotificationMeta struct {
 	Uuid string `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	// 通知类型
 	NotificationType int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3" json:"notification_type,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// 发送者ID
+	SenderId int64 `protobuf:"varint,6,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty"`
+	// 通知元数据
+	Meta string `protobuf:"bytes,7,opt,name=meta,proto3" json:"meta,omitempty"`
+	// 状态 0-正常 1-被取消
+	Status int32 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`
+	// 渲染内容
+	ContentRender string `protobuf:"bytes,20,opt,name=content_render,json=contentRender,proto3" json:"content_render,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *NotificationMeta) Reset() {
@@ -107,26 +115,64 @@ func (x *NotificationMeta) GetNotificationType() int32 {
 	return 0
 }
 
-type PageRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+func (x *NotificationMeta) GetSenderId() int64 {
+	if x != nil {
+		return x.SenderId
+	}
+	return 0
+}
+
+func (x *NotificationMeta) GetMeta() string {
+	if x != nil {
+		return x.Meta
+	}
+	return ""
+}
+
+func (x *NotificationMeta) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *NotificationMeta) GetContentRender() string {
+	if x != nil {
+		return x.ContentRender
+	}
+	return ""
+}
+
+type NotificationMetaQueryParams struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 主键
+	Ids []int64 `protobuf:"varint,2,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+	// uuid
+	Uuids []string `protobuf:"bytes,3,rep,name=uuids,proto3" json:"uuids,omitempty"`
+	// 通知类型
+	NotificationType *int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,oneof" json:"notification_type,omitempty"`
+	// 发送者ID
+	SenderIds []int64 `protobuf:"varint,6,rep,packed,name=sender_ids,json=senderIds,proto3" json:"sender_ids,omitempty"`
+	// 状态 0-正常 1-被取消
+	Status        *int32 `protobuf:"varint,8,opt,name=status,proto3,oneof" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PageRequest) Reset() {
-	*x = PageRequest{}
+func (x *NotificationMetaQueryParams) Reset() {
+	*x = NotificationMetaQueryParams{}
 	mi := &file_notify_v1_notifocation_mete_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PageRequest) String() string {
+func (x *NotificationMetaQueryParams) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PageRequest) ProtoMessage() {}
+func (*NotificationMetaQueryParams) ProtoMessage() {}
 
-func (x *PageRequest) ProtoReflect() protoreflect.Message {
+func (x *NotificationMetaQueryParams) ProtoReflect() protoreflect.Message {
 	mi := &file_notify_v1_notifocation_mete_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -138,31 +184,70 @@ func (x *PageRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PageRequest.ProtoReflect.Descriptor instead.
-func (*PageRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use NotificationMetaQueryParams.ProtoReflect.Descriptor instead.
+func (*NotificationMetaQueryParams) Descriptor() ([]byte, []int) {
 	return file_notify_v1_notifocation_mete_proto_rawDescGZIP(), []int{1}
 }
 
-type PageReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+func (x *NotificationMetaQueryParams) GetIds() []int64 {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
+func (x *NotificationMetaQueryParams) GetUuids() []string {
+	if x != nil {
+		return x.Uuids
+	}
+	return nil
+}
+
+func (x *NotificationMetaQueryParams) GetNotificationType() int32 {
+	if x != nil && x.NotificationType != nil {
+		return *x.NotificationType
+	}
+	return 0
+}
+
+func (x *NotificationMetaQueryParams) GetSenderIds() []int64 {
+	if x != nil {
+		return x.SenderIds
+	}
+	return nil
+}
+
+func (x *NotificationMetaQueryParams) GetStatus() int32 {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return 0
+}
+
+type NotificationMetaPageRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页参数
+	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	// 查询参数
+	Query         *NotificationMetaQueryParams `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PageReply) Reset() {
-	*x = PageReply{}
+func (x *NotificationMetaPageRequest) Reset() {
+	*x = NotificationMetaPageRequest{}
 	mi := &file_notify_v1_notifocation_mete_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PageReply) String() string {
+func (x *NotificationMetaPageRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PageReply) ProtoMessage() {}
+func (*NotificationMetaPageRequest) ProtoMessage() {}
 
-func (x *PageReply) ProtoReflect() protoreflect.Message {
+func (x *NotificationMetaPageRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_notify_v1_notifocation_mete_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -174,16 +259,84 @@ func (x *PageReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PageReply.ProtoReflect.Descriptor instead.
-func (*PageReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use NotificationMetaPageRequest.ProtoReflect.Descriptor instead.
+func (*NotificationMetaPageRequest) Descriptor() ([]byte, []int) {
 	return file_notify_v1_notifocation_mete_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *NotificationMetaPageRequest) GetPage() *v1.PageRequest {
+	if x != nil {
+		return x.Page
+	}
+	return nil
+}
+
+func (x *NotificationMetaPageRequest) GetQuery() *NotificationMetaQueryParams {
+	if x != nil {
+		return x.Query
+	}
+	return nil
+}
+
+type NotificationMetaPageReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 分页信息
+	Page *v1.PageReply `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	// 通知元数据信息
+	Rows          []*NotificationMeta `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NotificationMetaPageReply) Reset() {
+	*x = NotificationMetaPageReply{}
+	mi := &file_notify_v1_notifocation_mete_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NotificationMetaPageReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NotificationMetaPageReply) ProtoMessage() {}
+
+func (x *NotificationMetaPageReply) ProtoReflect() protoreflect.Message {
+	mi := &file_notify_v1_notifocation_mete_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NotificationMetaPageReply.ProtoReflect.Descriptor instead.
+func (*NotificationMetaPageReply) Descriptor() ([]byte, []int) {
+	return file_notify_v1_notifocation_mete_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *NotificationMetaPageReply) GetPage() *v1.PageReply {
+	if x != nil {
+		return x.Page
+	}
+	return nil
+}
+
+func (x *NotificationMetaPageReply) GetRows() []*NotificationMeta {
+	if x != nil {
+		return x.Rows
+	}
+	return nil
 }
 
 var File_notify_v1_notifocation_mete_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_mete_proto_rawDesc = "" +
 	"\n" +
-	"!notify/v1/notifocation_mete.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xdb\x01\n" +
+	"!notify/v1/notifocation_mete.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xcb\x02\n" +
 	"\x10NotificationMeta\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -191,11 +344,28 @@ const file_notify_v1_notifocation_mete_proto_rawDesc = "" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04uuid\x18\x04 \x01(\tR\x04uuid\x12+\n" +
-	"\x11notification_type\x18\x05 \x01(\x05R\x10notificationType\"\r\n" +
-	"\vPageRequest\"\v\n" +
-	"\tPageReply2\x8d\x01\n" +
-	"\x1dNotifyNotificationMetaService\x12l\n" +
-	"\x04Page\x12\x1f.common.api.user.v1.PageRequest\x1a\x1d.common.api.user.v1.PageReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/notificationMeta/pageB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x11notification_type\x18\x05 \x01(\x05R\x10notificationType\x12\x1b\n" +
+	"\tsender_id\x18\x06 \x01(\x03R\bsenderId\x12\x12\n" +
+	"\x04meta\x18\a \x01(\tR\x04meta\x12\x16\n" +
+	"\x06status\x18\b \x01(\x05R\x06status\x12%\n" +
+	"\x0econtent_render\x18\x14 \x01(\tR\rcontentRender\"\xd4\x01\n" +
+	"\x1bNotificationMetaQueryParams\x12\x10\n" +
+	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x14\n" +
+	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x120\n" +
+	"\x11notification_type\x18\x05 \x01(\x05H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12\x1b\n" +
+	"\x06status\x18\b \x01(\x05H\x01R\x06status\x88\x01\x01B\x14\n" +
+	"\x12_notification_typeB\t\n" +
+	"\a_status\"\x9b\x01\n" +
+	"\x1bNotificationMetaPageRequest\x125\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12E\n" +
+	"\x05query\x18\x02 \x01(\v2/.common.api.user.v1.NotificationMetaQueryParamsR\x05query\"\x8a\x01\n" +
+	"\x19NotificationMetaPageReply\x123\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x128\n" +
+	"\x04rows\x18\x02 \x03(\v2$.common.api.user.v1.NotificationMetaR\x04rows2\xae\x01\n" +
+	"\x1dNotifyNotificationMetaService\x12\x8c\x01\n" +
+	"\x04Page\x12/.common.api.user.v1.NotificationMetaPageRequest\x1a-.common.api.user.v1.NotificationMetaPageReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/notificationMeta/pageB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_mete_proto_rawDescOnce sync.Once
@@ -209,23 +379,30 @@ func file_notify_v1_notifocation_mete_proto_rawDescGZIP() []byte {
 	return file_notify_v1_notifocation_mete_proto_rawDescData
 }
 
-var file_notify_v1_notifocation_mete_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_notify_v1_notifocation_mete_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_notify_v1_notifocation_mete_proto_goTypes = []any{
-	(*NotificationMeta)(nil),      // 0: common.api.user.v1.NotificationMeta
-	(*PageRequest)(nil),           // 1: common.api.user.v1.PageRequest
-	(*PageReply)(nil),             // 2: common.api.user.v1.PageReply
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(*NotificationMeta)(nil),            // 0: common.api.user.v1.NotificationMeta
+	(*NotificationMetaQueryParams)(nil), // 1: common.api.user.v1.NotificationMetaQueryParams
+	(*NotificationMetaPageRequest)(nil), // 2: common.api.user.v1.NotificationMetaPageRequest
+	(*NotificationMetaPageReply)(nil),   // 3: common.api.user.v1.NotificationMetaPageReply
+	(*timestamppb.Timestamp)(nil),       // 4: google.protobuf.Timestamp
+	(*v1.PageRequest)(nil),              // 5: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),                // 6: common.api.common.v1.PageReply
 }
 var file_notify_v1_notifocation_mete_proto_depIdxs = []int32{
-	3, // 0: common.api.user.v1.NotificationMeta.created_at:type_name -> google.protobuf.Timestamp
-	3, // 1: common.api.user.v1.NotificationMeta.updated_at:type_name -> google.protobuf.Timestamp
-	1, // 2: common.api.user.v1.NotifyNotificationMetaService.Page:input_type -> common.api.user.v1.PageRequest
-	2, // 3: common.api.user.v1.NotifyNotificationMetaService.Page:output_type -> common.api.user.v1.PageReply
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	4, // 0: common.api.user.v1.NotificationMeta.created_at:type_name -> google.protobuf.Timestamp
+	4, // 1: common.api.user.v1.NotificationMeta.updated_at:type_name -> google.protobuf.Timestamp
+	5, // 2: common.api.user.v1.NotificationMetaPageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1, // 3: common.api.user.v1.NotificationMetaPageRequest.query:type_name -> common.api.user.v1.NotificationMetaQueryParams
+	6, // 4: common.api.user.v1.NotificationMetaPageReply.page:type_name -> common.api.common.v1.PageReply
+	0, // 5: common.api.user.v1.NotificationMetaPageReply.rows:type_name -> common.api.user.v1.NotificationMeta
+	2, // 6: common.api.user.v1.NotifyNotificationMetaService.Page:input_type -> common.api.user.v1.NotificationMetaPageRequest
+	3, // 7: common.api.user.v1.NotifyNotificationMetaService.Page:output_type -> common.api.user.v1.NotificationMetaPageReply
+	7, // [7:8] is the sub-list for method output_type
+	6, // [6:7] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_notify_v1_notifocation_mete_proto_init() }
@@ -233,13 +410,14 @@ func file_notify_v1_notifocation_mete_proto_init() {
 	if File_notify_v1_notifocation_mete_proto != nil {
 		return
 	}
+	file_notify_v1_notifocation_mete_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_notify_v1_notifocation_mete_proto_rawDesc), len(file_notify_v1_notifocation_mete_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

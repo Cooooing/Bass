@@ -7,16 +7,17 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
+import "notify/v1/notifocation_mete.proto";
 
 option go_package = "common/api/user/v1;v1";
 
-// Notification_Meta 服务
-service NotifyNotificationMetaService {
+// Notification_Record 服务
+service NotifyNotificationRecordService {
 
-  // 查询通知元数据
-  rpc Page (NotificationMetaPageRequest) returns (NotificationMetaPageReply) {
+  // 查询通知详情数据
+  rpc Page (NotificationRecordPageRequest) returns (NotificationRecordPageReply) {
     option (google.api.http) = {
-      post: "/v1/notificationMeta/page"
+      post: "/v1/notificationRecord/page"
       body: "*"
     };
   }
@@ -25,7 +26,7 @@ service NotifyNotificationMetaService {
 
 // 实体定义
 
-message NotificationMeta {
+message NotificationRecord {
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
   // 更新时间
@@ -33,25 +34,20 @@ message NotificationMeta {
 
   // 主键
   int64 id = 3;
-  // uuid
-  string uuid = 4;
-  // 通知类型
-  int32 notification_type = 5;
-  // 发送者ID
-  int64 sender_id = 6;
+  // 通知元数据id
+  int64 notification_id = 4;
+  // 接收者ID
+  int64 receiver_id = 5;
+  // 已读时间
+  google.protobuf.Timestamp read_time = 6;
+
   // 通知元数据
-  string meta = 7;
-  // 状态 0-正常 1-被取消
-  int32 status = 8;
-
-  // 渲染内容
-  string content_render = 20;
-
+  NotificationMeta notification_meta = 20;
 }
 
 // 查询参数定义
 
-message NotificationMetaQueryParams {
+message NotificationRecordQueryParams {
   // 主键
   repeated int64 ids = 2;
   // uuid
@@ -66,16 +62,16 @@ message NotificationMetaQueryParams {
 
 // 请求/响应结构定义
 
-message NotificationMetaPageRequest {
+message NotificationRecordPageRequest {
   // 分页参数
   common.v1.PageRequest page = 1;
   // 查询参数
-  NotificationMetaQueryParams query = 2;
+  NotificationRecordQueryParams query = 2;
 }
 
-message NotificationMetaPageReply {
+message NotificationRecordPageReply {
   // 分页信息
   common.v1.PageReply page = 1;
   // 通知元数据信息
-  repeated NotificationMeta rows = 2;
+  repeated NotificationRecord rows = 2;
 }

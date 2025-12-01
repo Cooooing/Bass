@@ -3,8 +3,6 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
-	userv1 "common/api/user/v1"
-	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/util/base"
 	"common/pkg/util/collections/set"
@@ -15,11 +13,9 @@ import (
 	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/tag"
 	"context"
-	"encoding/json"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/jinzhu/copier"
 )
 
 type ArticleRepo struct {
@@ -199,32 +195,31 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 
 	return nil
 
-	// Todo 广播添加文章事件
-
-	publish := &v1.ArticleEventPublish{}
-	err = copier.Copy(&publish, first)
-	if err != nil {
-		return err
-	}
-	marshal, err := json.Marshal(publish)
-	if err != nil {
-		return err
-	}
-	err = r.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyArticleCreate.String(), marshal)
-	if err != nil {
-		return err
-	}
-	// Todo 广播@用户通知
-	atUserNames := first.ParseContent()
-
-	userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	atUserList, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: atUserNames.ToSlice()}})
-	if err != nil {
-		return err
-	}
-	_ = atUserList
-
-	return nil
+	//// Todo 广播添加文章事件
+	//publish := &v1.ArticleEventPublish{}
+	//err = copier.Copy(&publish, first)
+	//if err != nil {
+	//	return err
+	//}
+	//marshal, err := json.Marshal(publish)
+	//if err != nil {
+	//	return err
+	//}
+	//err = r.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyArticleCreate.String(), marshal)
+	//if err != nil {
+	//	return err
+	//}
+	//// Todo 广播@用户通知
+	//atUserNames := first.ParseContent()
+	//
+	//userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+	//atUserList, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: atUserNames.ToSlice()}})
+	//if err != nil {
+	//	return err
+	//}
+	//_ = atUserList
+	//
+	//return nil
 }
 
 func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {

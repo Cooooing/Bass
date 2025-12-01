@@ -12,4 +12,18 @@ enum NotificationMetaStatus {
 enum NotificationMetaType {
   NotificationMetaTypeNormal = 0; // 普通
   NotificationMetaTypeSystem = 1; // 系统
+
+  NotificationMetaTypeUserRegister = 100; // 用户注册
+
+  NotificationMetaTypeArticlePublish = 200; // 文章发布
+  NotificationMetaTypeArticleThank = 201; // 文章感谢
+  NotificationMetaTypeArticleLike = 202; // 文章点赞
+  NotificationMetaTypeArticleCollect = 203; // 文章收藏
+  NotificationMetaTypeArticleWatch = 204; // 文章关注
+
+  NotificationMetaTypeComment = 300; // 评论发布
+  NotificationMetaTypeCommentThank = 301; // 评论感谢
+  NotificationMetaTypeCommentLike = 302; // 评论点赞
+  NotificationMetaTypeCommentCollect = 303; // 评论收藏
+
 }

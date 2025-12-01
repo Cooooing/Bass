@@ -23,7 +23,7 @@ const OperationNotifyNotificationMetaServicePage = "/common.api.user.v1.NotifyNo
 
 type NotifyNotificationMetaServiceHTTPServer interface {
 	// Page 查询通知元数据
-	Page(context.Context, *PageRequest) (*PageReply, error)
+	Page(context.Context, *NotificationMetaPageRequest) (*NotificationMetaPageReply, error)
 }
 
 func RegisterNotifyNotificationMetaServiceHTTPServer(s *http.Server, srv NotifyNotificationMetaServiceHTTPServer) {
@@ -33,7 +33,7 @@ func RegisterNotifyNotificationMetaServiceHTTPServer(s *http.Server, srv NotifyN
 
 func _NotifyNotificationMetaService_Page5_HTTP_Handler(srv NotifyNotificationMetaServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in PageRequest
+		var in NotificationMetaPageRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -42,20 +42,20 @@ func _NotifyNotificationMetaService_Page5_HTTP_Handler(srv NotifyNotificationMet
 		}
 		http.SetOperation(ctx, OperationNotifyNotificationMetaServicePage)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Page(ctx, req.(*PageRequest))
+			return srv.Page(ctx, req.(*NotificationMetaPageRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*PageReply)
+		reply := out.(*NotificationMetaPageReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type NotifyNotificationMetaServiceHTTPClient interface {
 	// Page 查询通知元数据
-	Page(ctx context.Context, req *PageRequest, opts ...http.CallOption) (rsp *PageReply, err error)
+	Page(ctx context.Context, req *NotificationMetaPageRequest, opts ...http.CallOption) (rsp *NotificationMetaPageReply, err error)
 }
 
 type NotifyNotificationMetaServiceHTTPClientImpl struct {
@@ -67,8 +67,8 @@ func NewNotifyNotificationMetaServiceHTTPClient(client *http.Client) NotifyNotif
 }
 
 // Page 查询通知元数据
-func (c *NotifyNotificationMetaServiceHTTPClientImpl) Page(ctx context.Context, in *PageRequest, opts ...http.CallOption) (*PageReply, error) {
-	var out PageReply
+func (c *NotifyNotificationMetaServiceHTTPClientImpl) Page(ctx context.Context, in *NotificationMetaPageRequest, opts ...http.CallOption) (*NotificationMetaPageReply, error) {
+	var out NotificationMetaPageReply
 	pattern := "/v1/notificationMeta/page"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNotifyNotificationMetaServicePage))

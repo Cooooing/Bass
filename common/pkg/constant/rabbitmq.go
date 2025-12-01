@@ -66,33 +66,29 @@ const (
 
 	ExchangeContent    ExchangeName = "content.topic.exchange"
 	ExchangeContentDlx ExchangeName = "content.dlx.exchange"
+
+	ExchangeNotify    ExchangeName = "notify.topic.exchange"
+	ExchangeNotifyDlx ExchangeName = "notify.dlx.exchange"
+
+	ExchangeEconomy    ExchangeName = "economy.topic.exchange"
+	ExchangeEconomyDlx ExchangeName = "economy.dlx.exchange"
 )
 
 // 队列枚举
 const (
-	QueueUserArticleEvent    QueueName = "user.article.event"
-	QueueUserCommentEvent    QueueName = "user.comment.event"
-	QueueEconomyArticleEvent QueueName = "economy.article.event"
-)
+	// 队列模块
 
-// 队列绑定枚举
-const (
-	QueueBindUserArticleEvents    QueueBindName = "user.article.event.bind"
-	QueueBindUserCommentEvents    QueueBindName = "user.comment.event.bind"
-	QueueBindEconomyArticleEvents QueueBindName = "economy.article.event.bind"
-)
+	QueueUser    QueueName = "queue.user"
+	QueueContent QueueName = "queue.content"
+	QueueNotify  QueueName = "queue.notify"
+	QueueEconomy QueueName = "queue.economy"
 
-// 路由键枚举
-const (
-	RoutingKeyArticle        RoutingKey = "content.article.*"
-	RoutingKeyArticleCreate  RoutingKey = "content.article.create"
-	RoutingKeyArticleThank   RoutingKey = "content.article.thank"
-	RoutingKeyArticleLike    RoutingKey = "content.article.like"
-	RoutingKeyArticleCollect RoutingKey = "content.article.collect"
-	RoutingKeyArticleWatch   RoutingKey = "content.article.watch"
+	// 死信队列
 
-	RoutingKeyComment       RoutingKey = "content.comment.*"
-	RoutingKeyCommentCreate RoutingKey = "content.comment.create"
+	QueueUserDlx    QueueName = "queue.user.dlx"
+	QueueContentDlx QueueName = "queue.content.dlx"
+	QueueNotifyDlx  QueueName = "queue.notify.dlx"
+	QueueEconomyDlx QueueName = "queue.economy.dlx"
 )
 
 // 配置映射表
@@ -103,16 +99,36 @@ var ExchangeMap = map[ExchangeName]ExchangeDeclare{
 	ExchangeUserDlx:    {Name: ExchangeUserDlx, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
 	ExchangeContent:    {Name: ExchangeContent, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
 	ExchangeContentDlx: {Name: ExchangeContentDlx, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
+	ExchangeNotify:     {Name: ExchangeNotify, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
+	ExchangeNotifyDlx:  {Name: ExchangeNotifyDlx, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
+	ExchangeEconomy:    {Name: ExchangeEconomy, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
+	ExchangeEconomyDlx: {Name: ExchangeEconomyDlx, Kind: "topic", Durable: true, AutoDelete: false, Internal: false, NoWait: false, Args: nil},
 }
 
 // QueueMap 队列配置
 var QueueMap = map[QueueName]QueueDeclare{
-	QueueUserArticleEvent:    {Name: QueueUserArticleEvent, Durable: true, Args: map[string]interface{}{"x-dead-letter-exchange": ExchangeContentDlx.String()}},
-	QueueEconomyArticleEvent: {Name: QueueEconomyArticleEvent, Durable: true, Args: map[string]interface{}{"x-dead-letter-exchange": ExchangeContentDlx.String()}},
+	QueueUser:    {Name: QueueUser, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeUserDlx.String()}},
+	QueueContent: {Name: QueueContent, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeContentDlx.String()}},
+	QueueNotify:  {Name: QueueNotify, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeNotifyDlx.String()}},
+	QueueEconomy: {Name: QueueEconomy, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeEconomyDlx.String()}},
+
+	QueueUserDlx:    {Name: QueueUserDlx, Durable: true},
+	QueueContentDlx: {Name: QueueContentDlx, Durable: true},
+	QueueNotifyDlx:  {Name: QueueNotifyDlx, Durable: true},
+	QueueEconomyDlx: {Name: QueueEconomyDlx, Durable: true},
 }
 
 // QueueBindMap 队列绑定配置
 var QueueBindMap = map[QueueBindName]QueueBind{
-	QueueBindUserArticleEvents:    {Name: QueueUserArticleEvent, Key: RoutingKeyArticle, Exchange: ExchangeContent},
-	QueueBindEconomyArticleEvents: {Name: QueueEconomyArticleEvent, Key: "content.article.create", Exchange: ExchangeContent},
+	// User模块
+	QueueBindName("bind.queue.user.notify"): {Name: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
+
+	// Content模块
+	QueueBindName("bind.queue.content"): {Name: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
+
+	// Notify模块
+	//QueueBindName("bind.queue.notify"): {Name: QueueNotify, Key: RoutingKey(""), Exchange: ExchangeUser},
+
+	// Economy模块
+	QueueBindName("bind.queue.economy"): {Name: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
 }

@@ -567,7 +567,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.user.v1.PageRequest'
+                            $ref: '#/components/schemas/common.api.user.v1.NotificationMetaPageRequest'
                 required: true
             responses:
                 "200":
@@ -575,7 +575,26 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.user.v1.PageReply'
+                                $ref: '#/components/schemas/common.api.user.v1.NotificationMetaPageReply'
+    /v1/notificationRecord/page:
+        post:
+            tags:
+                - NotifyNotificationRecordService
+            description: 查询通知详情数据
+            operationId: NotifyNotificationRecordService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.NotificationRecordPageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.NotificationRecordPageReply'
     /v1/oss/uploadToken:
         post:
             tags:
@@ -1859,12 +1878,166 @@ components:
         common.api.user.v1.LogoutRequest:
             type: object
             properties: {}
-        common.api.user.v1.PageReply:
+        common.api.user.v1.NotificationMeta:
             type: object
-            properties: {}
-        common.api.user.v1.PageRequest:
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                id:
+                    type: string
+                    description: 主键
+                uuid:
+                    type: string
+                    description: uuid
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                sender_id:
+                    type: string
+                    description: 发送者ID
+                meta:
+                    type: string
+                    description: 通知元数据
+                status:
+                    type: integer
+                    description: 状态 0-正常 1-被取消
+                    format: int32
+                content_render:
+                    type: string
+                    description: 渲染内容
+        common.api.user.v1.NotificationMetaPageReply:
             type: object
-            properties: {}
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.user.v1.NotificationMeta'
+                    description: 通知元数据信息
+        common.api.user.v1.NotificationMetaPageRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.NotificationMetaQueryParams'
+                    description: 查询参数
+        common.api.user.v1.NotificationMetaQueryParams:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+                uuids:
+                    type: array
+                    items:
+                        type: string
+                    description: uuid
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                sender_ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 发送者ID
+                status:
+                    type: integer
+                    description: 状态 0-正常 1-被取消
+                    format: int32
+        common.api.user.v1.NotificationRecord:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                id:
+                    type: string
+                    description: 主键
+                notification_id:
+                    type: string
+                    description: 通知元数据id
+                receiver_id:
+                    type: string
+                    description: 接收者ID
+                read_time:
+                    type: string
+                    description: 已读时间
+                    format: date-time
+                notification_meta:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.NotificationMeta'
+                    description: 通知元数据
+        common.api.user.v1.NotificationRecordPageReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.user.v1.NotificationRecord'
+                    description: 通知元数据信息
+        common.api.user.v1.NotificationRecordPageRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.NotificationRecordQueryParams'
+                    description: 查询参数
+        common.api.user.v1.NotificationRecordQueryParams:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+                uuids:
+                    type: array
+                    items:
+                        type: string
+                    description: uuid
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                sender_ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 发送者ID
+                status:
+                    type: integer
+                    description: 状态 0-正常 1-被取消
+                    format: int32
         common.api.user.v1.PageUserReply:
             type: object
             properties:
@@ -2140,7 +2313,9 @@ tags:
     - name: ContentTagService
       description: 标签服务
     - name: NotifyNotificationMetaService
-      description: Notification_Mete 服务
+      description: Notification_Meta 服务
+    - name: NotifyNotificationRecordService
+      description: Notification_Record 服务
     - name: System
       description: System 服务
     - name: UserAuthenticationService

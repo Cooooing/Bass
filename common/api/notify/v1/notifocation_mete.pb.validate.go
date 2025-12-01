@@ -121,6 +121,14 @@ func (m *NotificationMeta) validate(all bool) error {
 
 	// no validation rules for NotificationType
 
+	// no validation rules for SenderId
+
+	// no validation rules for Meta
+
+	// no validation rules for Status
+
+	// no validation rules for ContentRender
+
 	if len(errors) > 0 {
 		return NotificationMetaMultiError(errors)
 	}
@@ -199,41 +207,50 @@ var _ interface {
 	ErrorName() string
 } = NotificationMetaValidationError{}
 
-// Validate checks the field values on PageRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *PageRequest) Validate() error {
+// Validate checks the field values on NotificationMetaQueryParams with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationMetaQueryParams) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PageRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PageRequestMultiError, or
-// nil if none found.
-func (m *PageRequest) ValidateAll() error {
+// ValidateAll checks the field values on NotificationMetaQueryParams with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NotificationMetaQueryParamsMultiError, or nil if none found.
+func (m *NotificationMetaQueryParams) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PageRequest) validate(all bool) error {
+func (m *NotificationMetaQueryParams) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	if m.NotificationType != nil {
+		// no validation rules for NotificationType
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
 	if len(errors) > 0 {
-		return PageRequestMultiError(errors)
+		return NotificationMetaQueryParamsMultiError(errors)
 	}
 
 	return nil
 }
 
-// PageRequestMultiError is an error wrapping multiple validation errors
-// returned by PageRequest.ValidateAll() if the designated constraints aren't met.
-type PageRequestMultiError []error
+// NotificationMetaQueryParamsMultiError is an error wrapping multiple
+// validation errors returned by NotificationMetaQueryParams.ValidateAll() if
+// the designated constraints aren't met.
+type NotificationMetaQueryParamsMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PageRequestMultiError) Error() string {
+func (m NotificationMetaQueryParamsMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -242,11 +259,12 @@ func (m PageRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PageRequestMultiError) AllErrors() []error { return m }
+func (m NotificationMetaQueryParamsMultiError) AllErrors() []error { return m }
 
-// PageRequestValidationError is the validation error returned by
-// PageRequest.Validate if the designated constraints aren't met.
-type PageRequestValidationError struct {
+// NotificationMetaQueryParamsValidationError is the validation error returned
+// by NotificationMetaQueryParams.Validate if the designated constraints
+// aren't met.
+type NotificationMetaQueryParamsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -254,22 +272,24 @@ type PageRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e PageRequestValidationError) Field() string { return e.field }
+func (e NotificationMetaQueryParamsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PageRequestValidationError) Reason() string { return e.reason }
+func (e NotificationMetaQueryParamsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PageRequestValidationError) Cause() error { return e.cause }
+func (e NotificationMetaQueryParamsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PageRequestValidationError) Key() bool { return e.key }
+func (e NotificationMetaQueryParamsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PageRequestValidationError) ErrorName() string { return "PageRequestValidationError" }
+func (e NotificationMetaQueryParamsValidationError) ErrorName() string {
+	return "NotificationMetaQueryParamsValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e PageRequestValidationError) Error() string {
+func (e NotificationMetaQueryParamsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -281,14 +301,14 @@ func (e PageRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPageRequest.%s: %s%s",
+		"invalid %sNotificationMetaQueryParams.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PageRequestValidationError{}
+var _ error = NotificationMetaQueryParamsValidationError{}
 
 var _ interface {
 	Field() string
@@ -296,43 +316,102 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PageRequestValidationError{}
+} = NotificationMetaQueryParamsValidationError{}
 
-// Validate checks the field values on PageReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *PageReply) Validate() error {
+// Validate checks the field values on NotificationMetaPageRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationMetaPageRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PageReply with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PageReplyMultiError, or nil
-// if none found.
-func (m *PageReply) ValidateAll() error {
+// ValidateAll checks the field values on NotificationMetaPageRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NotificationMetaPageRequestMultiError, or nil if none found.
+func (m *NotificationMetaPageRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PageReply) validate(all bool) error {
+func (m *NotificationMetaPageRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, NotificationMetaPageRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, NotificationMetaPageRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotificationMetaPageRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, NotificationMetaPageRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, NotificationMetaPageRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotificationMetaPageRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
-		return PageReplyMultiError(errors)
+		return NotificationMetaPageRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// PageReplyMultiError is an error wrapping multiple validation errors returned
-// by PageReply.ValidateAll() if the designated constraints aren't met.
-type PageReplyMultiError []error
+// NotificationMetaPageRequestMultiError is an error wrapping multiple
+// validation errors returned by NotificationMetaPageRequest.ValidateAll() if
+// the designated constraints aren't met.
+type NotificationMetaPageRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PageReplyMultiError) Error() string {
+func (m NotificationMetaPageRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -341,11 +420,12 @@ func (m PageReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PageReplyMultiError) AllErrors() []error { return m }
+func (m NotificationMetaPageRequestMultiError) AllErrors() []error { return m }
 
-// PageReplyValidationError is the validation error returned by
-// PageReply.Validate if the designated constraints aren't met.
-type PageReplyValidationError struct {
+// NotificationMetaPageRequestValidationError is the validation error returned
+// by NotificationMetaPageRequest.Validate if the designated constraints
+// aren't met.
+type NotificationMetaPageRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -353,22 +433,24 @@ type PageReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e PageReplyValidationError) Field() string { return e.field }
+func (e NotificationMetaPageRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PageReplyValidationError) Reason() string { return e.reason }
+func (e NotificationMetaPageRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PageReplyValidationError) Cause() error { return e.cause }
+func (e NotificationMetaPageRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PageReplyValidationError) Key() bool { return e.key }
+func (e NotificationMetaPageRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PageReplyValidationError) ErrorName() string { return "PageReplyValidationError" }
+func (e NotificationMetaPageRequestValidationError) ErrorName() string {
+	return "NotificationMetaPageRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e PageReplyValidationError) Error() string {
+func (e NotificationMetaPageRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -380,14 +462,14 @@ func (e PageReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPageReply.%s: %s%s",
+		"invalid %sNotificationMetaPageRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PageReplyValidationError{}
+var _ error = NotificationMetaPageRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -395,4 +477,169 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PageReplyValidationError{}
+} = NotificationMetaPageRequestValidationError{}
+
+// Validate checks the field values on NotificationMetaPageReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationMetaPageReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NotificationMetaPageReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NotificationMetaPageReplyMultiError, or nil if none found.
+func (m *NotificationMetaPageReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NotificationMetaPageReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, NotificationMetaPageReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, NotificationMetaPageReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotificationMetaPageReplyValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetRows() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, NotificationMetaPageReplyValidationError{
+						field:  fmt.Sprintf("Rows[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, NotificationMetaPageReplyValidationError{
+						field:  fmt.Sprintf("Rows[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return NotificationMetaPageReplyValidationError{
+					field:  fmt.Sprintf("Rows[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return NotificationMetaPageReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// NotificationMetaPageReplyMultiError is an error wrapping multiple validation
+// errors returned by NotificationMetaPageReply.ValidateAll() if the
+// designated constraints aren't met.
+type NotificationMetaPageReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NotificationMetaPageReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NotificationMetaPageReplyMultiError) AllErrors() []error { return m }
+
+// NotificationMetaPageReplyValidationError is the validation error returned by
+// NotificationMetaPageReply.Validate if the designated constraints aren't met.
+type NotificationMetaPageReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotificationMetaPageReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotificationMetaPageReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotificationMetaPageReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotificationMetaPageReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotificationMetaPageReplyValidationError) ErrorName() string {
+	return "NotificationMetaPageReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotificationMetaPageReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotificationMetaPageReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotificationMetaPageReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotificationMetaPageReplyValidationError{}

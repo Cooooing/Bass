@@ -26,10 +26,10 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Notification_Mete 服务
+// Notification_Meta 服务
 type NotifyNotificationMetaServiceClient interface {
 	// 查询通知元数据
-	Page(ctx context.Context, in *PageRequest, opts ...grpc.CallOption) (*PageReply, error)
+	Page(ctx context.Context, in *NotificationMetaPageRequest, opts ...grpc.CallOption) (*NotificationMetaPageReply, error)
 }
 
 type notifyNotificationMetaServiceClient struct {
@@ -40,9 +40,9 @@ func NewNotifyNotificationMetaServiceClient(cc grpc.ClientConnInterface) NotifyN
 	return &notifyNotificationMetaServiceClient{cc}
 }
 
-func (c *notifyNotificationMetaServiceClient) Page(ctx context.Context, in *PageRequest, opts ...grpc.CallOption) (*PageReply, error) {
+func (c *notifyNotificationMetaServiceClient) Page(ctx context.Context, in *NotificationMetaPageRequest, opts ...grpc.CallOption) (*NotificationMetaPageReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PageReply)
+	out := new(NotificationMetaPageReply)
 	err := c.cc.Invoke(ctx, NotifyNotificationMetaService_Page_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -54,10 +54,10 @@ func (c *notifyNotificationMetaServiceClient) Page(ctx context.Context, in *Page
 // All implementations must embed UnimplementedNotifyNotificationMetaServiceServer
 // for forward compatibility.
 //
-// Notification_Mete 服务
+// Notification_Meta 服务
 type NotifyNotificationMetaServiceServer interface {
 	// 查询通知元数据
-	Page(context.Context, *PageRequest) (*PageReply, error)
+	Page(context.Context, *NotificationMetaPageRequest) (*NotificationMetaPageReply, error)
 	mustEmbedUnimplementedNotifyNotificationMetaServiceServer()
 }
 
@@ -68,7 +68,7 @@ type NotifyNotificationMetaServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedNotifyNotificationMetaServiceServer struct{}
 
-func (UnimplementedNotifyNotificationMetaServiceServer) Page(context.Context, *PageRequest) (*PageReply, error) {
+func (UnimplementedNotifyNotificationMetaServiceServer) Page(context.Context, *NotificationMetaPageRequest) (*NotificationMetaPageReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Page not implemented")
 }
 func (UnimplementedNotifyNotificationMetaServiceServer) mustEmbedUnimplementedNotifyNotificationMetaServiceServer() {
@@ -94,7 +94,7 @@ func RegisterNotifyNotificationMetaServiceServer(s grpc.ServiceRegistrar, srv No
 }
 
 func _NotifyNotificationMetaService_Page_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PageRequest)
+	in := new(NotificationMetaPageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func _NotifyNotificationMetaService_Page_Handler(srv interface{}, ctx context.Co
 		FullMethod: NotifyNotificationMetaService_Page_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotifyNotificationMetaServiceServer).Page(ctx, req.(*PageRequest))
+		return srv.(NotifyNotificationMetaServiceServer).Page(ctx, req.(*NotificationMetaPageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

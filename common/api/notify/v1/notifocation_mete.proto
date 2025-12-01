@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package common.api.user.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "common/v1/common.proto";
+
+option go_package = "common/api/user/v1;v1";
+
+// Notification_Mete 服务
+service NotifyNotificationMetaService {
+
+  // 查询通知元数据
+  rpc Page (PageRequest) returns (PageReply) {
+    option (google.api.http) = {
+      post: "/v1/notificationMeta/page"
+      body: "*"
+    };
+  }
+
+}
+
+// 实体定义
+
+message NotificationMeta {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 主键
+  int64 id = 3;
+  // uuid
+  string uuid = 4;
+  // 通知类型
+  int32 notification_type = 5;
+
+}
+
+// 请求/响应结构定义
+
+message PageRequest {}
+
+message PageReply {
+
+}

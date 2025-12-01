@@ -755,7 +755,7 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.Nickname(); ok {
 		_spec.SetField(user.FieldNickname, field.TypeString, value)
-		_node.Nickname = value
+		_node.Nickname = &value
 	}
 	if value, ok := _c.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)

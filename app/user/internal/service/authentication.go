@@ -43,7 +43,7 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 	if !s.verifyName(req.Name) {
 		return nil, cv1.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
 	}
-	if !s.verifyNickname(req.Nickname) {
+	if req.Nickname != nil && !s.verifyNickname(*req.Nickname) {
 		return nil, cv1.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
 	}
 	if !s.verifyPassword(req.Password) {

@@ -28,7 +28,7 @@ func (User) Fields() []ent.Field {
 		// --- 基础信息 ---
 		field.Int64("id").Immutable().Unique(),
 		field.String("name").Comment("用户名").NotEmpty(),
-		field.String("nickname").Comment("昵称").Optional(),
+		field.String("nickname").Comment("昵称").Optional().Nillable(),
 		field.String("password").Comment("密码").NotEmpty().Sensitive(),
 		field.String("email").Comment("邮箱").Optional(),
 		field.String("phone").Comment("手机号").Optional().Nillable(),

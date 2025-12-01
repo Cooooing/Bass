@@ -30,7 +30,7 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 		SetPassword(u.Password).
 		SetEmail(u.Email).
 		SetNillablePhone(u.Phone).
-		SetNickname(u.Nickname).
+		SetNillableNickname(u.Nickname).
 		SetAvatarURL(fmt.Sprintf(r.conf.Oss.Local.Avatar, u.Name))
 	createdUser, err := userCreate.Save(ctx)
 	return (*model.User)(createdUser), err
@@ -40,8 +40,10 @@ func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*
 	update := tx.User.UpdateOneID(u.ID)
 	update.SetNillableAvatarURL(u.AvatarURL)
 	update.SetNillableLanguage(u.Language)
-	update.SetNillableNickname(u.Timezone)
-	update.SetNillableEmail(u.Theme)
+	update.SetNillableNickname(u.Nickname)
+	update.SetNillableLanguage(u.Language)
+	update.SetNillableTimezone(u.Timezone)
+	update.SetNillableTheme(u.Theme)
 	update.SetNillableMobileTheme(u.MobileTheme)
 	update.SetNillableEnableWebNotify(u.EnableWebNotify)
 	update.SetNillableEnableEmailSubscribe(u.EnableEmailSubscribe)

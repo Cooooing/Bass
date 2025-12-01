@@ -80,7 +80,7 @@ message User {
   // 用户名
   string name = 2;
   // 昵称
-  string nickname = 3;
+  optional string nickname = 3;
   // 邮箱
   string email = 5;
   // 手机号

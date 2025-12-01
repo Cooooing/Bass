@@ -4,6 +4,7 @@ import (
 	cv1 "common/api/common/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"common/pkg/util/base"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -46,9 +47,9 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	exist, err = s.userRepo.ConstantAccount(ctx, s.db, u.Nickname)
+	exist, err = s.userRepo.ConstantAccount(ctx, s.db, u.Name)
 	if exist {
-		err = cv1.ErrorBadRequest("nickname already exists")
+		err = cv1.ErrorBadRequest("name already exists")
 	}
 	if err != nil {
 		return
@@ -108,7 +109,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		// 保存用户信息
 		user := &model.User{
 			Name:     saveUser.Name,
-			Nickname: saveUser.Nickname,
+			Nickname: base.Ptr(saveUser.Nickname),
 			Password: saveUser.Password,
 			Email:    saveUser.Email,
 		}

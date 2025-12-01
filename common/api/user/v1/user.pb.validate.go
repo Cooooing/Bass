@@ -60,8 +60,6 @@ func (m *User) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for Nickname
-
 	// no validation rules for Email
 
 	// no validation rules for GroupName
@@ -180,6 +178,10 @@ func (m *User) validate(all bool) error {
 				cause:  err,
 			}
 		}
+	}
+
+	if m.Nickname != nil {
+		// no validation rules for Nickname
 	}
 
 	if m.Phone != nil {

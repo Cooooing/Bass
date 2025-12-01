@@ -90,7 +90,7 @@ message RegisterEmailRequest {
   // 用户名
   string name = 3;
   // 昵称
-  string nickname = 4;
+  optional string nickname = 4;
 }
 message RegisterEmailReply {
   // 验证码令牌

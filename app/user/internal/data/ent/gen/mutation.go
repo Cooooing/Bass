@@ -239,7 +239,7 @@ func (m *UserMutation) Nickname() (r string, exists bool) {
 // OldNickname returns the old "nickname" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldNickname(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldNickname(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldNickname is only allowed on UpdateOne operations")
 	}

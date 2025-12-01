@@ -84,7 +84,9 @@ func (m *RegisterEmailRequest) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for Nickname
+	if m.Nickname != nil {
+		// no validation rules for Nickname
+	}
 
 	if len(errors) > 0 {
 		return RegisterEmailRequestMultiError(errors)

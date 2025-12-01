@@ -557,6 +557,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
+    /v1/notificationMeta/page:
+        post:
+            tags:
+                - NotifyNotificationMetaService
+            description: 查询通知元数据
+            operationId: NotifyNotificationMetaService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.PageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.PageReply'
     /v1/oss/uploadToken:
         post:
             tags:
@@ -831,19 +850,19 @@ components:
         common.api.content.v1.AcceptAnswerArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
-              comment_id:
+                comment_id:
                     type: string
                     description: 评论Id
         common.api.content.v1.AddArticleReply:
             type: object
             properties:
-              article:
-                allOf:
-                  - $ref: '#/components/schemas/common.api.content.v1.Article'
-                description: 文章
+                article:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.Article'
+                    description: 文章
         common.api.content.v1.AddArticleRequest:
             type: object
             properties:
@@ -854,20 +873,20 @@ components:
         common.api.content.v1.AddCommentReply:
             type: object
             properties:
-              comment:
-                allOf:
-                  - $ref: '#/components/schemas/common.api.content.v1.Comment'
-                description: 评论
+                comment:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.Comment'
+                    description: 评论
         common.api.content.v1.AddCommentRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 content:
                     type: string
                     description: 评论内容
-              reply_id:
+                reply_id:
                     type: string
                     description: 回复评论Id
         common.api.content.v1.AddDomainsReply:
@@ -889,14 +908,14 @@ components:
         common.api.content.v1.AddPostscriptArticleReply:
             type: object
             properties:
-              article_postscript:
-                allOf:
-                  - $ref: '#/components/schemas/common.api.content.v1.ArticlePostscript'
-                description: 附言
+                article_postscript:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.ArticlePostscript'
+                    description: 附言
         common.api.content.v1.AddPostscriptArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 content:
@@ -921,18 +940,18 @@ components:
         common.api.content.v1.Article:
             type: object
             properties:
-              created_at:
+                created_at:
                     type: string
                     description: 创建时间
                     format: date-time
-              updated_at:
+                updated_at:
                     type: string
                     description: 更新时间
                     format: date-time
-              created_by:
+                created_by:
                     type: string
                     description: 创建人
-              updated_by:
+                updated_by:
                     type: string
                     description: 更新人
                 id:
@@ -944,19 +963,19 @@ components:
                 content:
                     type: string
                     description: 正文内容
-              content_render:
+                content_render:
                     type: string
                     description: 正文内容渲染
-              has_postscript:
+                has_postscript:
                     type: boolean
                     description: 是否有附言
-              reward_content:
+                reward_content:
                     type: string
                     description: 打赏区内容（可为空）
-              reward_content_render:
-                type: string
-                description: 打赏内容渲染（可为空）
-              reward_points:
+                reward_content_render:
+                    type: string
+                    description: 打赏内容渲染（可为空）
+                reward_points:
                     type: integer
                     description: 打赏积分
                     format: int32
@@ -980,54 +999,54 @@ components:
                 listable:
                     type: boolean
                     description: 是否在列表展示
-              thank_count:
+                thank_count:
                     type: integer
                     description: 感谢数
                     format: int32
-              like_count:
+                like_count:
                     type: integer
                     description: 点赞数
                     format: int32
-              collect_count:
+                collect_count:
                     type: integer
                     description: 收藏数
                     format: int32
-              watch_count:
+                watch_count:
                     type: integer
                     description: 关注数
                     format: int32
-              reply_count:
+                reply_count:
                     type: integer
                     description: 回复数
                     format: int32
-              bounty_points:
+                bounty_points:
                     type: integer
                     description: 悬赏积分
                     format: int32
-              accepted_answer_id:
+                accepted_answer_id:
                     type: string
                     description: 采纳评论Id（可为空）
-              vote_total:
+                vote_total:
                     type: integer
                     description: 总投票数
                     format: int32
-              lottery_participant_count:
+                lottery_participant_count:
                     type: integer
                     description: 抽奖参与人数
                     format: int32
-              lottery_winner_count:
+                lottery_winner_count:
                     type: integer
                     description: 抽奖获奖人数
                     format: int32
-              author_user:
+                author_user:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 作者信息
-              last_reply_user:
+                last_reply_user:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 最后回复用户
-              last_reply_at:
+                last_reply_at:
                     type: string
                     description: 最后回复时间
                     format: date-time
@@ -1044,32 +1063,32 @@ components:
         common.api.content.v1.ArticlePostscript:
             type: object
             properties:
-              created_at:
+                created_at:
                     type: string
                     description: 创建时间
                     format: date-time
-              updated_at:
+                updated_at:
                     type: string
                     description: 更新时间
                     format: date-time
-              created_by:
+                created_by:
                     type: string
                     description: 创建人
-              updated_by:
+                updated_by:
                     type: string
                     description: 更新人
                 id:
                     type: string
                     description: 主键Id
-              article_id:
+                article_id:
                     type: string
                     description: 所属文章Id
                 content:
                     type: string
                     description: 附言内容
-              content_render:
-                type: string
-                description: 附言内容渲染
+                content_render:
+                    type: string
+                    description: 附言内容渲染
             description: 文章附言
         common.api.content.v1.ArticleQueryParams:
             type: object
@@ -1101,9 +1120,9 @@ components:
         common.api.content.v1.ArticleSave:
             type: object
             properties:
-              id:
-                type: string
-                description: 文章id
+                id:
+                    type: string
+                    description: 文章id
                 title:
                     type: string
                     description: 标题
@@ -1157,7 +1176,7 @@ components:
         common.api.content.v1.CollectArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 active:
@@ -1166,120 +1185,120 @@ components:
         common.api.content.v1.Comment:
             type: object
             properties:
-              created_at:
+                created_at:
                     type: string
                     description: 创建时间
                     format: date-time
-              updated_at:
+                updated_at:
                     type: string
                     description: 更新时间
                     format: date-time
-              created_by:
+                created_by:
                     type: string
                     description: 创建人
-              updated_by:
+                updated_by:
                     type: string
                     description: 更新人
                 id:
                     type: string
                     description: 评论Id
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 content:
                     type: string
                     description: 评论内容
-              content_render:
+                content_render:
                     type: string
                     description: 评论内容渲染
-              level:
-                type: integer
+                level:
+                    type: integer
                     description: 评论层级
-                format: int32
-              parent_id:
+                    format: int32
+                parent_id:
                     type: string
                     description: 父级评论Id
-              reply_id:
+                reply_id:
                     type: string
                     description: 回复评论Id
                 status:
-                  type: integer
+                    type: integer
                     description: 状态
-                  format: int32
-              thank_count:
-                type: integer
-                description: 感谢数量
-                format: int32
-              like_count:
-                type: integer
+                    format: int32
+                thank_count:
+                    type: integer
+                    description: 感谢数量
+                    format: int32
+                like_count:
+                    type: integer
                     description: 点赞数量
-                format: int32
-              collect_count:
-                type: integer
+                    format: int32
+                collect_count:
+                    type: integer
                     description: 收藏数量
-                format: int32
-              reply_count:
-                type: integer
-                description: 子评论数量
-                format: int32
+                    format: int32
+                reply_count:
+                    type: integer
+                    description: 子评论数量
+                    format: int32
                 user:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 用户信息
-              reply_user:
+                reply_user:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 回复评论的用户信息
         common.api.content.v1.CommentQueryParams:
             type: object
             properties:
-              comment_id:
+                comment_id:
                     type: string
                     description: 评论Id
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
-              parent_id:
-                type: string
-                description: 父级评论Id
-              reply_id:
-                type: string
-                description: 回复评论Id
+                parent_id:
+                    type: string
+                    description: 父级评论Id
+                reply_id:
+                    type: string
+                    description: 回复评论Id
                 order:
                     type: integer
                     description: 排序 0-最新 1-最热
                     format: int32
-              user_id:
+                user_id:
                     type: string
                     description: 用户Id
-              level:
-                type: integer
-                description: 层级
-                format: int32
+                level:
+                    type: integer
+                    description: 层级
+                    format: int32
         common.api.content.v1.DeleteArticleReply:
             type: object
             properties: {}
         common.api.content.v1.DeleteArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
         common.api.content.v1.Domain:
             type: object
             properties:
-              created_at:
+                created_at:
                     type: string
                     description: 创建时间
                     format: date-time
-              updated_at:
+                updated_at:
                     type: string
                     description: 更新时间
                     format: date-time
-              created_by:
+                created_by:
                     type: string
                     description: 创建人
-              updated_by:
+                updated_by:
                     type: string
                     description: 更新人
                 id:
@@ -1378,7 +1397,7 @@ components:
         common.api.content.v1.GetArticleOneRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
         common.api.content.v1.LikeArticleReply:
@@ -1387,7 +1406,7 @@ components:
         common.api.content.v1.LikeArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 active:
@@ -1503,7 +1522,7 @@ components:
         common.api.content.v1.PublishArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
         common.api.content.v1.RewardArticleReply:
@@ -1512,24 +1531,24 @@ components:
         common.api.content.v1.RewardArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
         common.api.content.v1.Tag:
             type: object
             properties:
-              created_at:
+                created_at:
                     type: string
                     description: 创建时间
                     format: date-time
-              updated_at:
+                updated_at:
                     type: string
                     description: 更新时间
                     format: date-time
-              created_by:
+                created_by:
                     type: string
                     description: 创建人
-              updated_by:
+                updated_by:
                     type: string
                     description: 更新人
                 id:
@@ -1541,14 +1560,14 @@ components:
                 description:
                     type: string
                     description: 描述
-              domain_id:
+                domain_id:
                     type: string
                     description: 所属领域Id
                 status:
                     type: integer
                     description: 标签状态：0-正常，1-禁用
                     format: int32
-              article_count:
+                article_count:
                     type: integer
                     description: 文章数
                     format: int32
@@ -1610,7 +1629,7 @@ components:
         common.api.content.v1.ThankArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 active:
@@ -1631,10 +1650,10 @@ components:
         common.api.content.v1.UpdateArticleDraftReply:
             type: object
             properties:
-              article:
-                allOf:
-                  - $ref: '#/components/schemas/common.api.content.v1.Article'
-                description: 文章
+                article:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.Article'
+                    description: 文章
         common.api.content.v1.UpdateArticleDraftRequest:
             type: object
             properties:
@@ -1648,7 +1667,7 @@ components:
         common.api.content.v1.UpdateArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 status:
@@ -1707,7 +1726,7 @@ components:
         common.api.content.v1.WatchArticleRequest:
             type: object
             properties:
-              article_id:
+                article_id:
                     type: string
                     description: 文章Id
                 active:
@@ -1768,7 +1787,7 @@ components:
                     description: 用户信息
         common.api.user.v1.GetCurrentUserRequest:
             type: object
-            properties: { }
+            properties: {}
         common.api.user.v1.GetListReply:
             type: object
             properties:
@@ -1809,12 +1828,12 @@ components:
         common.api.user.v1.GetOneRequest:
             type: object
             properties:
-              user_id:
+                user_id:
                     type: string
                     description: 用户Id
-              name:
-                type: string
-                description: 名称
+                name:
+                    type: string
+                    description: 名称
         common.api.user.v1.LoginAccountReply:
             type: object
             properties:
@@ -1836,10 +1855,16 @@ components:
                     description: 密码
         common.api.user.v1.LogoutReply:
             type: object
-            properties: { }
+            properties: {}
         common.api.user.v1.LogoutRequest:
             type: object
-            properties: { }
+            properties: {}
+        common.api.user.v1.PageReply:
+            type: object
+            properties: {}
+        common.api.user.v1.PageRequest:
+            type: object
+            properties: {}
         common.api.user.v1.PageUserReply:
             type: object
             properties:
@@ -1866,7 +1891,7 @@ components:
         common.api.user.v1.RegisterEmailReply:
             type: object
             properties:
-              code_token:
+                code_token:
                     type: string
                     description: 验证码令牌
                 code:
@@ -1909,7 +1934,7 @@ components:
         common.api.user.v1.UpdateSettingRequest:
             type: object
             properties:
-              avatar_url:
+                avatar_url:
                     type: string
                     description: 头像URL
                 language:
@@ -1921,13 +1946,13 @@ components:
                 theme:
                     type: string
                     description: 皮肤主题
-              mobile_theme:
+                mobile_theme:
                     type: string
                     description: 移动端皮肤主题
-              enable_web_notify:
+                enable_web_notify:
                     type: boolean
                     description: 启用Web通知
-              enable_email_subscribe:
+                enable_email_subscribe:
                     type: boolean
                     description: 启用邮件订阅
         common.api.user.v1.UploadTokenReply:
@@ -1937,7 +1962,7 @@ components:
                     type: string
         common.api.user.v1.UploadTokenRequest:
             type: object
-            properties: { }
+            properties: {}
         common.api.user.v1.User:
             type: object
             properties:
@@ -2065,10 +2090,10 @@ components:
         common.api.user.v1.UserQueryParams:
             type: object
             properties:
-              user_id:
-                type: string
-                description: 用户Id
-              user_ids:
+                user_id:
+                    type: string
+                    description: 用户Id
+                user_ids:
                     type: array
                     items:
                         type: string
@@ -2114,6 +2139,8 @@ tags:
       description: 领域服务
     - name: ContentTagService
       description: 标签服务
+    - name: NotifyNotificationMetaService
+      description: Notification_Mete 服务
     - name: System
       description: System 服务
     - name: UserAuthenticationService

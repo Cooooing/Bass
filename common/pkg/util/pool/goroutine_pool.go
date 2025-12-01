@@ -116,3 +116,7 @@ func (p *Pool) Stop() {
 	p.cancel()
 	p.wg.Wait()
 }
+
+func (p *Pool) RunningWorkers() int {
+	return p.running
+}

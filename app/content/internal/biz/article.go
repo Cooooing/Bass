@@ -234,6 +234,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		pageReply *cv1.PageReply
 		err       error
 	)
+	req.IsSummary = true
 	list, pageReply, err = d.articleRepo.GetPage(ctx, d.db, page, req)
 	if err != nil {
 		return nil, nil, err
@@ -270,7 +271,6 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 	}
 
 	for i := range list {
-		list[i].Summary()
 		if lastReplyComment, ok := lastCommentMap.Get(list[i].ID); ok {
 			list[i].LastReplyCommentAt = lastReplyComment.CreatedAt
 			list[i].LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]

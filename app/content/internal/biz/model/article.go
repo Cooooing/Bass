@@ -4,6 +4,7 @@ import (
 	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/util"
+	"common/pkg/util/base"
 	"common/pkg/util/collections/set"
 	"content/internal/data/ent/gen"
 	"fmt"
@@ -15,12 +16,16 @@ import (
 
 type Article struct {
 	*gen.Article
-	ContentRender       string `json:"content_render"`
-	RewardContentRender string `json:"reward_content_render"`
+	ContentRender       string  `json:"content_render"`
+	RewardContentRender *string `json:"reward_content_render"`
+	CoverImageUrl       *string `json:"cover_image_url"`
 
 	AuthorUser           *userv1.User `json:"author_user"`
 	LastReplyCommentUser *userv1.User `json:"last_reply_user"`
 	LastReplyCommentAt   *time.Time   `json:"last_replied_at"`
+
+	// option
+	IsSummary bool `json:"-"`
 }
 
 func NewArticle(model *gen.Article) *Article {
@@ -31,8 +36,8 @@ func NewArticle(model *gen.Article) *Article {
 // Summary 文章摘要
 func (a *Article) Summary() {
 	r := []rune(a.Content)
-	if len(r) > 20 {
-		a.Content = string(r[:20]) + "..."
+	if len(r) > 200 {
+		a.Content = string(r[:200]) + "..."
 	}
 }
 
@@ -46,6 +51,14 @@ func (a *Article) ParseContent() (atUserNames set.Set[string]) {
 	atUserNames = set.New[string](0)
 	util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
 		return util.ParseNodeLink(n, entering, atUserNames)
+	}
+	util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeImage] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
+		coverImageUrl := base.Ptr("")
+		s, status := util.ParseNodeImage(n, entering, coverImageUrl)
+		if *coverImageUrl != "" {
+			a.CoverImageUrl = coverImageUrl
+		}
+		return s, status
 	}
 	a.ContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", a.ID), a.Content)
 	return atUserNames
@@ -63,7 +76,7 @@ func (a *Article) ParseRewardContent() (atUserNames set.Set[string]) {
 		util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
 			return util.ParseNodeLink(n, entering, atUserNames)
 		}
-		a.RewardContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent)
+		a.RewardContentRender = base.Ptr(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
 	}
 	return atUserNames
 }
@@ -72,6 +85,9 @@ func (a *Article) ParseRewardContent() (atUserNames set.Set[string]) {
 func (a *Article) ConvertToRpc() *v1.Article {
 	a.ParseContent()
 	a.ParseRewardContent()
+	if a.IsSummary {
+		a.Summary()
+	}
 	article := &v1.Article{
 		CreatedAt:               timestamppb.New(*a.CreatedAt),
 		UpdatedAt:               timestamppb.New(*a.UpdatedAt),
@@ -83,9 +99,11 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		ContentRender:           a.ContentRender,
 		HasPostscript:           a.HasPostscript,
 		RewardContent:           a.RewardContent,
+		RewardContentRender:     a.RewardContentRender,
 		RewardPoints:            a.RewardPoints,
 		Status:                  a.Status,
 		Type:                    a.Type,
+		Statement:               a.Statement,
 		Commentable:             a.Commentable,
 		Anonymous:               a.Anonymous,
 		ThankCount:              a.ThankCount,
@@ -100,6 +118,7 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		LotteryWinnerCount:      a.LotteryWinnerCount,
 		AuthorUser:              a.AuthorUser,
 		LastReplyUser:           a.LastReplyCommentUser,
+		CoverImageUrl:           a.CoverImageUrl,
 	}
 	if a.LastReplyCommentAt != nil {
 		article.LastReplyAt = timestamppb.New(*a.LastReplyCommentAt)

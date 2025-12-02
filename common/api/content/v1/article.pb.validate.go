@@ -128,8 +128,6 @@ func (m *Article) validate(all bool) error {
 
 	// no validation rules for Type
 
-	// no validation rules for Statement
-
 	// no validation rules for Commentable
 
 	// no validation rules for Anonymous
@@ -327,12 +325,20 @@ func (m *Article) validate(all bool) error {
 		// no validation rules for RewardPoints
 	}
 
+	if m.Statement != nil {
+		// no validation rules for Statement
+	}
+
 	if m.BountyPoints != nil {
 		// no validation rules for BountyPoints
 	}
 
 	if m.AcceptedAnswerId != nil {
 		// no validation rules for AcceptedAnswerId
+	}
+
+	if m.CoverImageUrl != nil {
+		// no validation rules for CoverImageUrl
 	}
 
 	if len(errors) > 0 {

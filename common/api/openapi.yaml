@@ -1069,6 +1069,9 @@ components:
                     type: string
                     description: 最后回复时间
                     format: date-time
+                cover_image_url:
+                    type: string
+                    description: 文章封面图
                 postscripts:
                     type: array
                     items:

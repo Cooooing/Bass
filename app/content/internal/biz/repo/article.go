@@ -38,6 +38,8 @@ type ArticleGetReq struct {
 	Keyword   *string
 
 	Listable *bool
+
+	IsSummary bool
 }
 
 type ArticlePostscriptRepo interface {

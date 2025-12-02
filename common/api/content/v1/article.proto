@@ -166,7 +166,7 @@ message Article {
   // 类型: 0-普通 1-问答 2-投票 3-抽奖
   int32 type = 9;
   // 创作声明
-  string statement = 10;
+  optional string statement = 10;
   // 是否允许评论
   bool commentable = 11;
   // 是否匿名
@@ -204,8 +204,11 @@ message Article {
   // 最后回复时间
   google.protobuf.Timestamp last_reply_at = 26;
 
+  // 文章封面图
+  optional string cover_image_url = 27;
+
   // 附言
-  repeated ArticlePostscript postscripts = 27;
+  repeated ArticlePostscript postscripts = 99;
   // 标签
   repeated Tag tags = 100;
 }

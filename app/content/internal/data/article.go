@@ -244,7 +244,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Arti
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("article is not found")
 	}
-	return &model.Article{Article: a}, err
+	return &model.Article{Article: a, IsSummary: req.IsSummary}, err
 }
 
 func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) ([]*model.Article, error) {
@@ -259,7 +259,7 @@ func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Art
 		return nil, err
 	}
 	for i := range list {
-		articles = append(articles, &model.Article{Article: list[i]})
+		articles = append(articles, &model.Article{Article: list[i], IsSummary: req.IsSummary})
 	}
 	return articles, nil
 }
@@ -283,7 +283,7 @@ func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		return nil, nil, err
 	}
 	for i := range list {
-		articles = append(articles, &model.Article{Article: list[i]})
+		articles = append(articles, &model.Article{Article: list[i], IsSummary: req.IsSummary})
 	}
 	return articles, &cv1.PageReply{
 		Total: uint32(total),

@@ -12,7 +12,7 @@ import (
 var LuteEngine = lute.New()
 
 func ParseNodeLink(n *ast.Node, entering bool, atUserNames set.Set[string]) (string, ast.WalkStatus) {
-	if !entering {
+	if !entering || n.Type != ast.NodeLink {
 		return "", ast.WalkContinue
 	}
 
@@ -43,4 +43,22 @@ func ParseNodeLink(n *ast.Node, entering bool, atUserNames set.Set[string]) (str
 	}
 
 	return fmt.Sprintf(`<p href="%s">%s</p>`, link, text), ast.WalkContinue
+}
+
+func ParseNodeImage(n *ast.Node, entering bool, coverImageUrl *string) (string, ast.WalkStatus) {
+	if !entering || n.Type != ast.NodeImage {
+		return "", ast.WalkContinue
+	}
+	// 如果已经有第一张图片了，跳过
+	if coverImageUrl != nil && *coverImageUrl != "" {
+		return "", ast.WalkStop // 停止遍历，后面的图片不会再处理
+	}
+	// 解析图片 URL
+	if coverImageUrl != nil {
+		dest := n.ChildByType(ast.NodeLinkDest)
+		if dest != nil {
+			*coverImageUrl = string(dest.Tokens)
+		}
+	}
+	return "", ast.WalkContinue
 }

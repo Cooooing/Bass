@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/88250/lute/ast"
+	"github.com/88250/lute/parse"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -28,9 +29,10 @@ func (c *Comment) FormatContent() {
 // ParseContent 解析评论内容
 func (c *Comment) ParseContent() (atUserNames set.Set[string]) {
 	atUserNames = set.New[string](0)
-	util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
-		return util.ParseNodeLink(n, entering, atUserNames)
-	}
+	tree := parse.Parse(fmt.Sprintf("article_postscript_%d", c.ID), []byte(c.Content), parse.NewOptions())
+	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+		return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
+	})
 	c.ContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("article_postscript_%d", c.ID), c.Content)
 	return atUserNames
 }

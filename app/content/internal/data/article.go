@@ -59,6 +59,9 @@ func (r *ArticleRepo) Save(ctx context.Context, tx *gen.Client, article *model.A
 		if err != nil {
 			return nil, err
 		}
+		for _, t := range constantTags {
+			bindTagIds = append(bindTagIds, t.ID)
+		}
 		for _, i := range saveTags {
 			bindTagIds = append(bindTagIds, i.ID)
 		}

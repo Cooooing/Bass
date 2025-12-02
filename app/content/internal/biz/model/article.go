@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/88250/lute/ast"
+	"github.com/88250/lute/parse"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -26,6 +27,8 @@ type Article struct {
 
 	// option
 	IsSummary bool `json:"-"`
+
+	// lute
 }
 
 func NewArticle(model *gen.Article) *Article {
@@ -49,17 +52,18 @@ func (a *Article) FormatContent() {
 // ParseContent 解析文章内容
 func (a *Article) ParseContent() (atUserNames set.Set[string]) {
 	atUserNames = set.New[string](0)
-	util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
-		return util.ParseNodeLink(n, entering, atUserNames)
-	}
-	util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeImage] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
+	tree := parse.Parse(fmt.Sprintf("%s_%d", "article_content", a.ID), []byte(a.Content), parse.NewOptions())
+	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+		return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
+	})
+	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		coverImageUrl := base.Ptr("")
-		s, status := util.ParseNodeImage(n, entering, coverImageUrl)
+		status := util.ParseNodeImageCoverImageUrl(n, entering, coverImageUrl)
 		if *coverImageUrl != "" {
 			a.CoverImageUrl = coverImageUrl
 		}
-		return s, status
-	}
+		return status
+	})
 	a.ContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", a.ID), a.Content)
 	return atUserNames
 }
@@ -73,9 +77,10 @@ func (a *Article) FormatRewardContent() {
 func (a *Article) ParseRewardContent() (atUserNames set.Set[string]) {
 	atUserNames = set.New[string](0)
 	if a.RewardContent != nil {
-		util.LuteEngine.Md2HTMLRendererFuncs[ast.NodeLink] = func(n *ast.Node, entering bool) (string, ast.WalkStatus) {
-			return util.ParseNodeLink(n, entering, atUserNames)
-		}
+		tree := parse.Parse(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), []byte(*a.RewardContent), parse.NewOptions())
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
+		})
 		a.RewardContentRender = base.Ptr(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
 	}
 	return atUserNames

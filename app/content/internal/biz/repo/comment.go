@@ -34,6 +34,8 @@ type CommentGetReq struct {
 	Status     *v1.CommentStatus
 	Level      *int32
 	Order      *int32
+
+	WithArticle bool
 }
 
 type CommentActionRecordRepo interface {

@@ -19,6 +19,7 @@ type ArticleVoteRecord struct {
 func (ArticleVoteRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixContent.String() + "article_vote_records"},
+		entsql.WithComments(true),
 	}
 }
 

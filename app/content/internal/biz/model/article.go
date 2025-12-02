@@ -27,8 +27,6 @@ type Article struct {
 
 	// option
 	IsSummary bool `json:"-"`
-
-	// lute
 }
 
 func NewArticle(model *gen.Article) *Article {
@@ -98,6 +96,8 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		UpdatedAt:               timestamppb.New(*a.UpdatedAt),
 		CreatedBy:               a.CreatedBy,
 		UpdatedBy:               a.UpdatedBy,
+		CreatedByName:           a.CreatedByName,
+		UpdatedByName:           a.UpdatedByName,
 		Id:                      a.ID,
 		Title:                   a.Title,
 		Content:                 a.Content,
@@ -111,6 +111,7 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		Statement:               a.Statement,
 		Commentable:             a.Commentable,
 		Anonymous:               a.Anonymous,
+		ViewCount:               a.ViewCount,
 		ThankCount:              a.ThankCount,
 		LikeCount:               a.LikeCount,
 		CollectCount:            a.CollectCount,

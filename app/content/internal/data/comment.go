@@ -4,7 +4,6 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
-	"common/pkg/util/base"
 	"common/pkg/util/collections/dict"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -74,7 +73,7 @@ func (r *CommentRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Comm
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("comment is not found")
 	}
-	return &model.Comment{Comment: c}, err
+	return &model.Comment{Comment: c, WithArticle: req.WithArticle}, err
 }
 
 func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) ([]*model.Comment, error) {
@@ -89,7 +88,7 @@ func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Com
 		return nil, err
 	}
 	for i := range list {
-		comments = append(comments, &model.Comment{Comment: list[i]})
+		comments = append(comments, &model.Comment{Comment: list[i], WithArticle: req.WithArticle})
 	}
 	return comments, nil
 }
@@ -100,7 +99,7 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		err      error
 		total    int
 	)
-	page = base.OrDefault(page, constant.GetPageDefault())
+	page = constant.PageValid(page)
 	query := tx.Comment.Query().WithReply()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -113,7 +112,7 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		return nil, nil, err
 	}
 	for i := range list {
-		comments = append(comments, &model.Comment{Comment: list[i]})
+		comments = append(comments, &model.Comment{Comment: list[i], WithArticle: req.WithArticle})
 	}
 	return comments, &cv1.PageReply{
 		Total: uint32(total),
@@ -123,6 +122,10 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 }
 
 func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
+	if req.WithArticle {
+		query = query.WithArticle()
+	}
+
 	if req.ParentId != nil {
 		query = query.Where(comment.ParentIDEQ(*req.ParentId))
 	}
@@ -182,7 +185,7 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
-	return &model.Comment{Comment: c}, err
+	return &model.Comment{Comment: c, WithArticle: req.WithArticle}, err
 }
 
 func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (dict.Map[int64, *model.Comment], error) {
@@ -220,7 +223,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 	}
 	commentMap := dict.New[int64, *model.Comment](0)
 	for _, item := range comments {
-		commentMap.Set(item.ArticleID, &model.Comment{Comment: item})
+		commentMap.Set(item.ArticleID, &model.Comment{Comment: item, WithArticle: req.WithArticle})
 	}
 	return commentMap, err
 }

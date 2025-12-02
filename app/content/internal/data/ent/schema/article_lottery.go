@@ -19,6 +19,7 @@ type ArticleLottery struct {
 func (ArticleLottery) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixContent.String() + "article_lotteries"},
+		entsql.WithComments(true),
 	}
 }
 

@@ -46,6 +46,10 @@ type Comment struct {
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	// 创建人用户名
+	CreatedByName *string `json:"created_by_name,omitempty"`
+	// 更新人用户名
+	UpdatedByName *string `json:"updated_by_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CommentQuery when eager-loading is set.
 	Edges        CommentEdges `json:"edges"`
@@ -138,7 +142,7 @@ func (*Comment) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case comment.FieldID, comment.FieldArticleID, comment.FieldLevel, comment.FieldParentID, comment.FieldReplyID, comment.FieldStatus, comment.FieldThankCount, comment.FieldLikeCount, comment.FieldCollectCount, comment.FieldReplyCount, comment.FieldCreatedBy, comment.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
-		case comment.FieldContent:
+		case comment.FieldContent, comment.FieldCreatedByName, comment.FieldUpdatedByName:
 			values[i] = new(sql.NullString)
 		case comment.FieldCreatedAt, comment.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -252,6 +256,20 @@ func (_m *Comment) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UpdatedAt = new(time.Time)
 				*_m.UpdatedAt = value.Time
+			}
+		case comment.FieldCreatedByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_name", values[i])
+			} else if value.Valid {
+				_m.CreatedByName = new(string)
+				*_m.CreatedByName = value.String
+			}
+		case comment.FieldUpdatedByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_name", values[i])
+			} else if value.Valid {
+				_m.UpdatedByName = new(string)
+				*_m.UpdatedByName = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -371,6 +389,16 @@ func (_m *Comment) String() string {
 	if v := _m.UpdatedAt; v != nil {
 		builder.WriteString("updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.CreatedByName; v != nil {
+		builder.WriteString("created_by_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedByName; v != nil {
+		builder.WriteString("updated_by_name=")
+		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')
 	return builder.String()

@@ -19,6 +19,7 @@ type User struct {
 func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixUser.String() + "users"},
+		entsql.WithComments(true),
 	}
 }
 

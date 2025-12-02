@@ -4,7 +4,6 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
-	"common/pkg/util/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -95,7 +94,7 @@ func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageReq
 		tags []*model.Tag
 		err  error
 	)
-	page = base.OrDefault(page, constant.GetPageDefault())
+	page = constant.PageValid(page)
 	query := tx.Tag.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

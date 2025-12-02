@@ -36,6 +36,8 @@ const (
 	FieldAnonymous = "anonymous"
 	// FieldListable holds the string denoting the listable field in the database.
 	FieldListable = "listable"
+	// FieldViewCount holds the string denoting the view_count field in the database.
+	FieldViewCount = "view_count"
 	// FieldThankCount holds the string denoting the thank_count field in the database.
 	FieldThankCount = "thank_count"
 	// FieldLikeCount holds the string denoting the like_count field in the database.
@@ -64,6 +66,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldCreatedByName holds the string denoting the created_by_name field in the database.
+	FieldCreatedByName = "created_by_name"
+	// FieldUpdatedByName holds the string denoting the updated_by_name field in the database.
+	FieldUpdatedByName = "updated_by_name"
 	// EdgePostscripts holds the string denoting the postscripts edge name in mutations.
 	EdgePostscripts = "postscripts"
 	// EdgeVotes holds the string denoting the votes edge name in mutations.
@@ -134,6 +140,7 @@ var Columns = []string{
 	FieldCommentable,
 	FieldAnonymous,
 	FieldListable,
+	FieldViewCount,
 	FieldThankCount,
 	FieldLikeCount,
 	FieldCollectCount,
@@ -148,6 +155,8 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldCreatedByName,
+	FieldUpdatedByName,
 }
 
 var (
@@ -185,6 +194,8 @@ var (
 	DefaultAnonymous bool
 	// DefaultListable holds the default value on creation for the "listable" field.
 	DefaultListable bool
+	// DefaultViewCount holds the default value on creation for the "view_count" field.
+	DefaultViewCount int32
 	// DefaultThankCount holds the default value on creation for the "thank_count" field.
 	DefaultThankCount int32
 	// DefaultLikeCount holds the default value on creation for the "like_count" field.
@@ -272,6 +283,11 @@ func ByListable(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldListable, opts...).ToFunc()
 }
 
+// ByViewCount orders the results by the view_count field.
+func ByViewCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldViewCount, opts...).ToFunc()
+}
+
 // ByThankCount orders the results by the thank_count field.
 func ByThankCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldThankCount, opts...).ToFunc()
@@ -340,6 +356,16 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByCreatedByName orders the results by the created_by_name field.
+func ByCreatedByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByName, opts...).ToFunc()
+}
+
+// ByUpdatedByName orders the results by the updated_by_name field.
+func ByUpdatedByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByName, opts...).ToFunc()
 }
 
 // ByPostscriptsCount orders the results by postscripts count.

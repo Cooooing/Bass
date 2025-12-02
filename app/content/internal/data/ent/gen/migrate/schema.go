@@ -12,31 +12,34 @@ var (
 	// ContentArticlesColumns holds the columns for the "content_articles" table.
 	ContentArticlesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "title", Type: field.TypeString},
-		{Name: "content", Type: field.TypeString, Size: 2147483647},
-		{Name: "has_postscript", Type: field.TypeBool, Default: false},
-		{Name: "reward_content", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "reward_points", Type: field.TypeInt32, Nullable: true, Default: 0},
-		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "type", Type: field.TypeInt32, Default: 0},
-		{Name: "statement", Type: field.TypeString, Nullable: true},
-		{Name: "commentable", Type: field.TypeBool, Default: true},
-		{Name: "anonymous", Type: field.TypeBool, Default: false},
-		{Name: "listable", Type: field.TypeBool, Default: true},
-		{Name: "thank_count", Type: field.TypeInt32, Default: 0},
-		{Name: "like_count", Type: field.TypeInt32, Default: 0},
-		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
-		{Name: "watch_count", Type: field.TypeInt32, Default: 0},
-		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
-		{Name: "bounty_points", Type: field.TypeInt32, Nullable: true, Default: 0},
-		{Name: "accepted_answer_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "vote_total", Type: field.TypeInt32, Default: 0},
-		{Name: "lottery_participant_count", Type: field.TypeInt32, Default: 0},
-		{Name: "lottery_winner_count", Type: field.TypeInt32, Default: 0},
-		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "title", Type: field.TypeString, Comment: "标题"},
+		{Name: "content", Type: field.TypeString, Size: 2147483647, Comment: "正文内容"},
+		{Name: "has_postscript", Type: field.TypeBool, Comment: "是否有附言", Default: false},
+		{Name: "reward_content", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "打赏区内容"},
+		{Name: "reward_points", Type: field.TypeInt32, Nullable: true, Comment: "打赏积分", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除", Default: 0},
+		{Name: "type", Type: field.TypeInt32, Comment: "类型 0-普通 1-问答 2-投票 3-抽奖", Default: 0},
+		{Name: "statement", Type: field.TypeString, Nullable: true, Comment: "创作声明"},
+		{Name: "commentable", Type: field.TypeBool, Comment: "是否允许评论", Default: true},
+		{Name: "anonymous", Type: field.TypeBool, Comment: "是否匿名", Default: false},
+		{Name: "listable", Type: field.TypeBool, Comment: "是否在列表展示", Default: true},
+		{Name: "view_count", Type: field.TypeInt32, Comment: "浏览数", Default: 0},
+		{Name: "thank_count", Type: field.TypeInt32, Comment: "感谢数", Default: 0},
+		{Name: "like_count", Type: field.TypeInt32, Comment: "点赞数", Default: 0},
+		{Name: "collect_count", Type: field.TypeInt32, Comment: "收藏数", Default: 0},
+		{Name: "watch_count", Type: field.TypeInt32, Comment: "关注数", Default: 0},
+		{Name: "reply_count", Type: field.TypeInt32, Comment: "回复数", Default: 0},
+		{Name: "bounty_points", Type: field.TypeInt32, Nullable: true, Comment: "悬赏积分", Default: 0},
+		{Name: "accepted_answer_id", Type: field.TypeInt64, Nullable: true, Comment: "采纳评论ID"},
+		{Name: "vote_total", Type: field.TypeInt32, Comment: "总投票数", Default: 0},
+		{Name: "lottery_participant_count", Type: field.TypeInt32, Comment: "抽奖参与人数", Default: 0},
+		{Name: "lottery_winner_count", Type: field.TypeInt32, Comment: "抽奖获奖人数", Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "created_by_name", Type: field.TypeString, Nullable: true, Comment: "创建人用户名"},
+		{Name: "updated_by_name", Type: field.TypeString, Nullable: true, Comment: "更新人用户名"},
 	}
 	// ContentArticlesTable holds the schema information for the "content_articles" table.
 	ContentArticlesTable = &schema.Table{
@@ -47,9 +50,9 @@ var (
 	// ContentArticleActionRecordsColumns holds the columns for the "content_article_action_records" table.
 	ContentArticleActionRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
-		{Name: "type", Type: field.TypeInt32},
-		{Name: "article_id", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeInt64, Comment: "执行行为的用户ID"},
+		{Name: "type", Type: field.TypeInt32, Comment: "行为类型 0-点赞 1-感谢 2-收藏 3-关注"},
+		{Name: "article_id", Type: field.TypeInt64, Comment: "关联的文章ID"},
 	}
 	// ContentArticleActionRecordsTable holds the schema information for the "content_article_action_records" table.
 	ContentArticleActionRecordsTable = &schema.Table{
@@ -85,13 +88,13 @@ var (
 	// ContentArticleLotteriesColumns holds the columns for the "content_article_lotteries" table.
 	ContentArticleLotteriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "prizes", Type: field.TypeJSON, Nullable: true},
-		{Name: "start_at", Type: field.TypeTime, Nullable: true},
-		{Name: "end_at", Type: field.TypeTime, Nullable: true},
-		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt64},
+		{Name: "prizes", Type: field.TypeJSON, Nullable: true, Comment: "奖品列表"},
+		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "抽奖开始时间"},
+		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "抽奖结束时间"},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-未开始 1-进行中 2-已结束", Default: 0},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "article_id", Type: field.TypeInt64, Comment: "所属文章ID"},
 	}
 	// ContentArticleLotteriesTable holds the schema information for the "content_article_lotteries" table.
 	ContentArticleLotteriesTable = &schema.Table{
@@ -110,10 +113,10 @@ var (
 	// ContentArticleLotteryParticipantsColumns holds the columns for the "content_article_lottery_participants" table.
 	ContentArticleLotteryParticipantsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "lottery_id", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeInt64, Comment: "参与用户ID"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "lottery_id", Type: field.TypeInt64, Comment: "所属抽奖ID"},
 	}
 	// ContentArticleLotteryParticipantsTable holds the schema information for the "content_article_lottery_participants" table.
 	ContentArticleLotteryParticipantsTable = &schema.Table{
@@ -132,11 +135,11 @@ var (
 	// ContentArticleLotteryWinnersColumns holds the columns for the "content_article_lottery_winners" table.
 	ContentArticleLotteryWinnersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
-		{Name: "prize", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "lottery_id", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeInt64, Comment: "获奖用户ID"},
+		{Name: "prize", Type: field.TypeString, Comment: "奖品名称"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "lottery_id", Type: field.TypeInt64, Comment: "所属抽奖ID"},
 	}
 	// ContentArticleLotteryWinnersTable holds the schema information for the "content_article_lottery_winners" table.
 	ContentArticleLotteryWinnersTable = &schema.Table{
@@ -155,13 +158,13 @@ var (
 	// ContentArticlePostscriptsColumns holds the columns for the "content_article_postscripts" table.
 	ContentArticlePostscriptsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "content", Type: field.TypeString, Size: 2147483647},
-		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt64},
+		{Name: "content", Type: field.TypeString, Size: 2147483647, Comment: "附言内容"},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-正常 1-隐藏", Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "article_id", Type: field.TypeInt64, Comment: "所属文章ID"},
 	}
 	// ContentArticlePostscriptsTable holds the schema information for the "content_article_postscripts" table.
 	ContentArticlePostscriptsTable = &schema.Table{
@@ -180,15 +183,15 @@ var (
 	// ContentArticleVotesColumns holds the columns for the "content_article_votes" table.
 	ContentArticleVotesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "vote_options", Type: field.TypeJSON, Nullable: true},
-		{Name: "vote_counts", Type: field.TypeJSON, Nullable: true},
-		{Name: "vote_multiple", Type: field.TypeBool, Default: false},
-		{Name: "vote_anonymous", Type: field.TypeBool, Default: true},
-		{Name: "total_count", Type: field.TypeInt32, Default: 0},
-		{Name: "end_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt64},
+		{Name: "vote_options", Type: field.TypeJSON, Nullable: true, Comment: "投票选项"},
+		{Name: "vote_counts", Type: field.TypeJSON, Nullable: true, Comment: "各选项票数"},
+		{Name: "vote_multiple", Type: field.TypeBool, Comment: "是否允许多选", Default: false},
+		{Name: "vote_anonymous", Type: field.TypeBool, Comment: "是否匿名投票", Default: true},
+		{Name: "total_count", Type: field.TypeInt32, Comment: "总投票数", Default: 0},
+		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "投票截止时间"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "article_id", Type: field.TypeInt64, Comment: "所属文章ID"},
 	}
 	// ContentArticleVotesTable holds the schema information for the "content_article_votes" table.
 	ContentArticleVotesTable = &schema.Table{
@@ -207,12 +210,12 @@ var (
 	// ContentArticleVoteRecordsColumns holds the columns for the "content_article_vote_records" table.
 	ContentArticleVoteRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
-		{Name: "option_index", Type: field.TypeInt32},
-		{Name: "anonymous", Type: field.TypeBool, Default: false},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "vote_id", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeInt64, Comment: "投票用户ID"},
+		{Name: "option_index", Type: field.TypeInt32, Comment: "投票选项索引"},
+		{Name: "anonymous", Type: field.TypeBool, Comment: "是否匿名", Default: false},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "vote_id", Type: field.TypeInt64, Comment: "所属投票ID"},
 	}
 	// ContentArticleVoteRecordsTable holds the schema information for the "content_article_vote_records" table.
 	ContentArticleVoteRecordsTable = &schema.Table{
@@ -231,20 +234,22 @@ var (
 	// ContentCommentsColumns holds the columns for the "content_comments" table.
 	ContentCommentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "content", Type: field.TypeString, Size: 2147483647},
-		{Name: "level", Type: field.TypeInt32},
-		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "thank_count", Type: field.TypeInt32, Default: 0},
-		{Name: "like_count", Type: field.TypeInt32, Default: 0},
-		{Name: "collect_count", Type: field.TypeInt32, Default: 0},
-		{Name: "reply_count", Type: field.TypeInt32, Default: 0},
-		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "article_id", Type: field.TypeInt64},
-		{Name: "parent_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "reply_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "content", Type: field.TypeString, Size: 2147483647, Comment: "评论内容"},
+		{Name: "level", Type: field.TypeInt32, Comment: "评论层级"},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-正常 1-隐藏", Default: 0},
+		{Name: "thank_count", Type: field.TypeInt32, Comment: "感谢数", Default: 0},
+		{Name: "like_count", Type: field.TypeInt32, Comment: "点赞数", Default: 0},
+		{Name: "collect_count", Type: field.TypeInt32, Comment: "收藏数", Default: 0},
+		{Name: "reply_count", Type: field.TypeInt32, Comment: "回复数", Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "created_by_name", Type: field.TypeString, Nullable: true, Comment: "创建人用户名"},
+		{Name: "updated_by_name", Type: field.TypeString, Nullable: true, Comment: "更新人用户名"},
+		{Name: "article_id", Type: field.TypeInt64, Comment: "所属文章ID"},
+		{Name: "parent_id", Type: field.TypeInt64, Nullable: true, Comment: "父级评论ID"},
+		{Name: "reply_id", Type: field.TypeInt64, Nullable: true, Comment: "回复评论ID"},
 	}
 	// ContentCommentsTable holds the schema information for the "content_comments" table.
 	ContentCommentsTable = &schema.Table{
@@ -254,19 +259,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "content_comments_content_articles_comments",
-				Columns:    []*schema.Column{ContentCommentsColumns[12]},
+				Columns:    []*schema.Column{ContentCommentsColumns[14]},
 				RefColumns: []*schema.Column{ContentArticlesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "content_comments_content_comments_parent_replies",
-				Columns:    []*schema.Column{ContentCommentsColumns[13]},
+				Columns:    []*schema.Column{ContentCommentsColumns[15]},
 				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "content_comments_content_comments_reply_replies",
-				Columns:    []*schema.Column{ContentCommentsColumns[14]},
+				Columns:    []*schema.Column{ContentCommentsColumns[16]},
 				RefColumns: []*schema.Column{ContentCommentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -275,16 +280,16 @@ var (
 			{
 				Name:    "comment_article_id_parent_id_status",
 				Unique:  false,
-				Columns: []*schema.Column{ContentCommentsColumns[12], ContentCommentsColumns[13], ContentCommentsColumns[3]},
+				Columns: []*schema.Column{ContentCommentsColumns[14], ContentCommentsColumns[15], ContentCommentsColumns[3]},
 			},
 		},
 	}
 	// ContentCommentActionRecordsColumns holds the columns for the "content_comment_action_records" table.
 	ContentCommentActionRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
-		{Name: "type", Type: field.TypeInt32},
-		{Name: "comment_id", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeInt64, Comment: "执行行为的用户ID"},
+		{Name: "type", Type: field.TypeInt32, Comment: "行为类型 0-点赞 1收藏"},
+		{Name: "comment_id", Type: field.TypeInt64, Comment: "关联的文章ID"},
 	}
 	// ContentCommentActionRecordsTable holds the schema information for the "content_comment_action_records" table.
 	ContentCommentActionRecordsTable = &schema.Table{
@@ -320,17 +325,17 @@ var (
 	// ContentDomainsColumns holds the columns for the "content_domains" table.
 	ContentDomainsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeInt32, Nullable: true, Default: 0},
-		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "icon", Type: field.TypeString, Nullable: true},
-		{Name: "tag_count", Type: field.TypeInt32, Default: 0},
-		{Name: "is_nav", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "name", Type: field.TypeString, Comment: "域名名称"},
+		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "域名描述"},
+		{Name: "status", Type: field.TypeInt32, Nullable: true, Comment: "状态 0-正常，1-禁用", Default: 0},
+		{Name: "url", Type: field.TypeString, Nullable: true, Comment: "领域地址"},
+		{Name: "icon", Type: field.TypeString, Nullable: true, Comment: "图标"},
+		{Name: "tag_count", Type: field.TypeInt32, Comment: "标签数", Default: 0},
+		{Name: "is_nav", Type: field.TypeBool, Nullable: true, Comment: "是否导航", Default: false},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
 	}
 	// ContentDomainsTable holds the schema information for the "content_domains" table.
 	ContentDomainsTable = &schema.Table{
@@ -341,15 +346,15 @@ var (
 	// ContentTagsColumns holds the columns for the "content_tags" table.
 	ContentTagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "article_count", Type: field.TypeInt32, Default: 0},
-		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "domain_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "name", Type: field.TypeString, Comment: "标签名称"},
+		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "标签描述"},
+		{Name: "status", Type: field.TypeInt32, Comment: "标签状态：0-正常，1-禁用", Default: 0},
+		{Name: "article_count", Type: field.TypeInt32, Comment: "文章数", Default: 0},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "domain_id", Type: field.TypeInt64, Nullable: true, Comment: "所属领域id"},
 	}
 	// ContentTagsTable holds the schema information for the "content_tags" table.
 	ContentTagsTable = &schema.Table{

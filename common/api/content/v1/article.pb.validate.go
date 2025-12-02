@@ -134,6 +134,8 @@ func (m *Article) validate(all bool) error {
 
 	// no validation rules for Listable
 
+	// no validation rules for ViewCount
+
 	// no validation rules for ThankCount
 
 	// no validation rules for LikeCount
@@ -311,6 +313,14 @@ func (m *Article) validate(all bool) error {
 
 	if m.UpdatedBy != nil {
 		// no validation rules for UpdatedBy
+	}
+
+	if m.CreatedByName != nil {
+		// no validation rules for CreatedByName
+	}
+
+	if m.UpdatedByName != nil {
+		// no validation rules for UpdatedByName
 	}
 
 	if m.RewardContent != nil {

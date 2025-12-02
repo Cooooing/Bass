@@ -192,12 +192,49 @@ func (m *Comment) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetArticle()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CommentValidationError{
+					field:  "Article",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetArticle()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CommentValidationError{
+				field:  "Article",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.CreatedBy != nil {
 		// no validation rules for CreatedBy
 	}
 
 	if m.UpdatedBy != nil {
 		// no validation rules for UpdatedBy
+	}
+
+	if m.CreatedByName != nil {
+		// no validation rules for CreatedByName
+	}
+
+	if m.UpdatedByName != nil {
+		// no validation rules for UpdatedByName
 	}
 
 	if m.ParentId != nil {
@@ -306,6 +343,8 @@ func (m *CommentQueryParams) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for WithArticle
 
 	if m.CommentId != nil {
 		// no validation rules for CommentId

@@ -273,7 +273,7 @@ func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 		err      error
 		total    int
 	)
-	page = base.OrDefault(page, constant.GetPageDefault())
+	page = constant.PageValid(page)
 	query := tx.Article.Query().WithTags()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

@@ -69,6 +69,8 @@ type ArticleMutation struct {
 	commentable                  *bool
 	anonymous                    *bool
 	listable                     *bool
+	view_count                   *int32
+	addview_count                *int32
 	thank_count                  *int32
 	addthank_count               *int32
 	like_count                   *int32
@@ -95,6 +97,8 @@ type ArticleMutation struct {
 	addupdated_by                *int64
 	created_at                   *time.Time
 	updated_at                   *time.Time
+	created_by_name              *string
+	updated_by_name              *string
 	clearedFields                map[string]struct{}
 	postscripts                  map[int64]struct{}
 	removedpostscripts           map[int64]struct{}
@@ -717,6 +721,62 @@ func (m *ArticleMutation) OldListable(ctx context.Context) (v bool, err error) {
 // ResetListable resets all changes to the "listable" field.
 func (m *ArticleMutation) ResetListable() {
 	m.listable = nil
+}
+
+// SetViewCount sets the "view_count" field.
+func (m *ArticleMutation) SetViewCount(i int32) {
+	m.view_count = &i
+	m.addview_count = nil
+}
+
+// ViewCount returns the value of the "view_count" field in the mutation.
+func (m *ArticleMutation) ViewCount() (r int32, exists bool) {
+	v := m.view_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldViewCount returns the old "view_count" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldViewCount(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldViewCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldViewCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldViewCount: %w", err)
+	}
+	return oldValue.ViewCount, nil
+}
+
+// AddViewCount adds i to the "view_count" field.
+func (m *ArticleMutation) AddViewCount(i int32) {
+	if m.addview_count != nil {
+		*m.addview_count += i
+	} else {
+		m.addview_count = &i
+	}
+}
+
+// AddedViewCount returns the value that was added to the "view_count" field in this mutation.
+func (m *ArticleMutation) AddedViewCount() (r int32, exists bool) {
+	v := m.addview_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetViewCount resets all changes to the "view_count" field.
+func (m *ArticleMutation) ResetViewCount() {
+	m.view_count = nil
+	m.addview_count = nil
 }
 
 // SetThankCount sets the "thank_count" field.
@@ -1545,6 +1605,104 @@ func (m *ArticleMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, article.FieldUpdatedAt)
 }
 
+// SetCreatedByName sets the "created_by_name" field.
+func (m *ArticleMutation) SetCreatedByName(s string) {
+	m.created_by_name = &s
+}
+
+// CreatedByName returns the value of the "created_by_name" field in the mutation.
+func (m *ArticleMutation) CreatedByName() (r string, exists bool) {
+	v := m.created_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedByName returns the old "created_by_name" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldCreatedByName(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedByName: %w", err)
+	}
+	return oldValue.CreatedByName, nil
+}
+
+// ClearCreatedByName clears the value of the "created_by_name" field.
+func (m *ArticleMutation) ClearCreatedByName() {
+	m.created_by_name = nil
+	m.clearedFields[article.FieldCreatedByName] = struct{}{}
+}
+
+// CreatedByNameCleared returns if the "created_by_name" field was cleared in this mutation.
+func (m *ArticleMutation) CreatedByNameCleared() bool {
+	_, ok := m.clearedFields[article.FieldCreatedByName]
+	return ok
+}
+
+// ResetCreatedByName resets all changes to the "created_by_name" field.
+func (m *ArticleMutation) ResetCreatedByName() {
+	m.created_by_name = nil
+	delete(m.clearedFields, article.FieldCreatedByName)
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (m *ArticleMutation) SetUpdatedByName(s string) {
+	m.updated_by_name = &s
+}
+
+// UpdatedByName returns the value of the "updated_by_name" field in the mutation.
+func (m *ArticleMutation) UpdatedByName() (r string, exists bool) {
+	v := m.updated_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByName returns the old "updated_by_name" field's value of the Article entity.
+// If the Article object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArticleMutation) OldUpdatedByName(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByName: %w", err)
+	}
+	return oldValue.UpdatedByName, nil
+}
+
+// ClearUpdatedByName clears the value of the "updated_by_name" field.
+func (m *ArticleMutation) ClearUpdatedByName() {
+	m.updated_by_name = nil
+	m.clearedFields[article.FieldUpdatedByName] = struct{}{}
+}
+
+// UpdatedByNameCleared returns if the "updated_by_name" field was cleared in this mutation.
+func (m *ArticleMutation) UpdatedByNameCleared() bool {
+	_, ok := m.clearedFields[article.FieldUpdatedByName]
+	return ok
+}
+
+// ResetUpdatedByName resets all changes to the "updated_by_name" field.
+func (m *ArticleMutation) ResetUpdatedByName() {
+	m.updated_by_name = nil
+	delete(m.clearedFields, article.FieldUpdatedByName)
+}
+
 // AddPostscriptIDs adds the "postscripts" edge to the ArticlePostscript entity by ids.
 func (m *ArticleMutation) AddPostscriptIDs(ids ...int64) {
 	if m.postscripts == nil {
@@ -1903,7 +2061,7 @@ func (m *ArticleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArticleMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 28)
 	if m.title != nil {
 		fields = append(fields, article.FieldTitle)
 	}
@@ -1936,6 +2094,9 @@ func (m *ArticleMutation) Fields() []string {
 	}
 	if m.listable != nil {
 		fields = append(fields, article.FieldListable)
+	}
+	if m.view_count != nil {
+		fields = append(fields, article.FieldViewCount)
 	}
 	if m.thank_count != nil {
 		fields = append(fields, article.FieldThankCount)
@@ -1979,6 +2140,12 @@ func (m *ArticleMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, article.FieldUpdatedAt)
 	}
+	if m.created_by_name != nil {
+		fields = append(fields, article.FieldCreatedByName)
+	}
+	if m.updated_by_name != nil {
+		fields = append(fields, article.FieldUpdatedByName)
+	}
 	return fields
 }
 
@@ -2009,6 +2176,8 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 		return m.Anonymous()
 	case article.FieldListable:
 		return m.Listable()
+	case article.FieldViewCount:
+		return m.ViewCount()
 	case article.FieldThankCount:
 		return m.ThankCount()
 	case article.FieldLikeCount:
@@ -2037,6 +2206,10 @@ func (m *ArticleMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case article.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case article.FieldCreatedByName:
+		return m.CreatedByName()
+	case article.FieldUpdatedByName:
+		return m.UpdatedByName()
 	}
 	return nil, false
 }
@@ -2068,6 +2241,8 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldAnonymous(ctx)
 	case article.FieldListable:
 		return m.OldListable(ctx)
+	case article.FieldViewCount:
+		return m.OldViewCount(ctx)
 	case article.FieldThankCount:
 		return m.OldThankCount(ctx)
 	case article.FieldLikeCount:
@@ -2096,6 +2271,10 @@ func (m *ArticleMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCreatedAt(ctx)
 	case article.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case article.FieldCreatedByName:
+		return m.OldCreatedByName(ctx)
+	case article.FieldUpdatedByName:
+		return m.OldUpdatedByName(ctx)
 	}
 	return nil, fmt.Errorf("unknown Article field %s", name)
 }
@@ -2181,6 +2360,13 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetListable(v)
+		return nil
+	case article.FieldViewCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetViewCount(v)
 		return nil
 	case article.FieldThankCount:
 		v, ok := value.(int32)
@@ -2280,6 +2466,20 @@ func (m *ArticleMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedAt(v)
 		return nil
+	case article.FieldCreatedByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedByName(v)
+		return nil
+	case article.FieldUpdatedByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByName(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Article field %s", name)
 }
@@ -2296,6 +2496,9 @@ func (m *ArticleMutation) AddedFields() []string {
 	}
 	if m.add_type != nil {
 		fields = append(fields, article.FieldType)
+	}
+	if m.addview_count != nil {
+		fields = append(fields, article.FieldViewCount)
 	}
 	if m.addthank_count != nil {
 		fields = append(fields, article.FieldThankCount)
@@ -2347,6 +2550,8 @@ func (m *ArticleMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedStatus()
 	case article.FieldType:
 		return m.AddedType()
+	case article.FieldViewCount:
+		return m.AddedViewCount()
 	case article.FieldThankCount:
 		return m.AddedThankCount()
 	case article.FieldLikeCount:
@@ -2400,6 +2605,13 @@ func (m *ArticleMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddType(v)
+		return nil
+	case article.FieldViewCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddViewCount(v)
 		return nil
 	case article.FieldThankCount:
 		v, ok := value.(int32)
@@ -2520,6 +2732,12 @@ func (m *ArticleMutation) ClearedFields() []string {
 	if m.FieldCleared(article.FieldUpdatedAt) {
 		fields = append(fields, article.FieldUpdatedAt)
 	}
+	if m.FieldCleared(article.FieldCreatedByName) {
+		fields = append(fields, article.FieldCreatedByName)
+	}
+	if m.FieldCleared(article.FieldUpdatedByName) {
+		fields = append(fields, article.FieldUpdatedByName)
+	}
 	return fields
 }
 
@@ -2560,6 +2778,12 @@ func (m *ArticleMutation) ClearField(name string) error {
 		return nil
 	case article.FieldUpdatedAt:
 		m.ClearUpdatedAt()
+		return nil
+	case article.FieldCreatedByName:
+		m.ClearCreatedByName()
+		return nil
+	case article.FieldUpdatedByName:
+		m.ClearUpdatedByName()
 		return nil
 	}
 	return fmt.Errorf("unknown Article nullable field %s", name)
@@ -2602,6 +2826,9 @@ func (m *ArticleMutation) ResetField(name string) error {
 	case article.FieldListable:
 		m.ResetListable()
 		return nil
+	case article.FieldViewCount:
+		m.ResetViewCount()
+		return nil
 	case article.FieldThankCount:
 		m.ResetThankCount()
 		return nil
@@ -2643,6 +2870,12 @@ func (m *ArticleMutation) ResetField(name string) error {
 		return nil
 	case article.FieldUpdatedAt:
 		m.ResetUpdatedAt()
+		return nil
+	case article.FieldCreatedByName:
+		m.ResetCreatedByName()
+		return nil
+	case article.FieldUpdatedByName:
+		m.ResetUpdatedByName()
 		return nil
 	}
 	return fmt.Errorf("unknown Article field %s", name)
@@ -8513,6 +8746,8 @@ type CommentMutation struct {
 	addupdated_by         *int64
 	created_at            *time.Time
 	updated_at            *time.Time
+	created_by_name       *string
+	updated_by_name       *string
 	clearedFields         map[string]struct{}
 	article               *int64
 	clearedarticle        bool
@@ -9382,6 +9617,104 @@ func (m *CommentMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, comment.FieldUpdatedAt)
 }
 
+// SetCreatedByName sets the "created_by_name" field.
+func (m *CommentMutation) SetCreatedByName(s string) {
+	m.created_by_name = &s
+}
+
+// CreatedByName returns the value of the "created_by_name" field in the mutation.
+func (m *CommentMutation) CreatedByName() (r string, exists bool) {
+	v := m.created_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedByName returns the old "created_by_name" field's value of the Comment entity.
+// If the Comment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentMutation) OldCreatedByName(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedByName: %w", err)
+	}
+	return oldValue.CreatedByName, nil
+}
+
+// ClearCreatedByName clears the value of the "created_by_name" field.
+func (m *CommentMutation) ClearCreatedByName() {
+	m.created_by_name = nil
+	m.clearedFields[comment.FieldCreatedByName] = struct{}{}
+}
+
+// CreatedByNameCleared returns if the "created_by_name" field was cleared in this mutation.
+func (m *CommentMutation) CreatedByNameCleared() bool {
+	_, ok := m.clearedFields[comment.FieldCreatedByName]
+	return ok
+}
+
+// ResetCreatedByName resets all changes to the "created_by_name" field.
+func (m *CommentMutation) ResetCreatedByName() {
+	m.created_by_name = nil
+	delete(m.clearedFields, comment.FieldCreatedByName)
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (m *CommentMutation) SetUpdatedByName(s string) {
+	m.updated_by_name = &s
+}
+
+// UpdatedByName returns the value of the "updated_by_name" field in the mutation.
+func (m *CommentMutation) UpdatedByName() (r string, exists bool) {
+	v := m.updated_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByName returns the old "updated_by_name" field's value of the Comment entity.
+// If the Comment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CommentMutation) OldUpdatedByName(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByName: %w", err)
+	}
+	return oldValue.UpdatedByName, nil
+}
+
+// ClearUpdatedByName clears the value of the "updated_by_name" field.
+func (m *CommentMutation) ClearUpdatedByName() {
+	m.updated_by_name = nil
+	m.clearedFields[comment.FieldUpdatedByName] = struct{}{}
+}
+
+// UpdatedByNameCleared returns if the "updated_by_name" field was cleared in this mutation.
+func (m *CommentMutation) UpdatedByNameCleared() bool {
+	_, ok := m.clearedFields[comment.FieldUpdatedByName]
+	return ok
+}
+
+// ResetUpdatedByName resets all changes to the "updated_by_name" field.
+func (m *CommentMutation) ResetUpdatedByName() {
+	m.updated_by_name = nil
+	delete(m.clearedFields, comment.FieldUpdatedByName)
+}
+
 // ClearArticle clears the "article" edge to the Article entity.
 func (m *CommentMutation) ClearArticle() {
 	m.clearedarticle = true
@@ -9659,7 +9992,7 @@ func (m *CommentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CommentMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 16)
 	if m.article != nil {
 		fields = append(fields, comment.FieldArticleID)
 	}
@@ -9702,6 +10035,12 @@ func (m *CommentMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, comment.FieldUpdatedAt)
 	}
+	if m.created_by_name != nil {
+		fields = append(fields, comment.FieldCreatedByName)
+	}
+	if m.updated_by_name != nil {
+		fields = append(fields, comment.FieldUpdatedByName)
+	}
 	return fields
 }
 
@@ -9738,6 +10077,10 @@ func (m *CommentMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case comment.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case comment.FieldCreatedByName:
+		return m.CreatedByName()
+	case comment.FieldUpdatedByName:
+		return m.UpdatedByName()
 	}
 	return nil, false
 }
@@ -9775,6 +10118,10 @@ func (m *CommentMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCreatedAt(ctx)
 	case comment.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case comment.FieldCreatedByName:
+		return m.OldCreatedByName(ctx)
+	case comment.FieldUpdatedByName:
+		return m.OldUpdatedByName(ctx)
 	}
 	return nil, fmt.Errorf("unknown Comment field %s", name)
 }
@@ -9881,6 +10228,20 @@ func (m *CommentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case comment.FieldCreatedByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedByName(v)
+		return nil
+	case comment.FieldUpdatedByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByName(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Comment field %s", name)
@@ -10029,6 +10390,12 @@ func (m *CommentMutation) ClearedFields() []string {
 	if m.FieldCleared(comment.FieldUpdatedAt) {
 		fields = append(fields, comment.FieldUpdatedAt)
 	}
+	if m.FieldCleared(comment.FieldCreatedByName) {
+		fields = append(fields, comment.FieldCreatedByName)
+	}
+	if m.FieldCleared(comment.FieldUpdatedByName) {
+		fields = append(fields, comment.FieldUpdatedByName)
+	}
 	return fields
 }
 
@@ -10060,6 +10427,12 @@ func (m *CommentMutation) ClearField(name string) error {
 		return nil
 	case comment.FieldUpdatedAt:
 		m.ClearUpdatedAt()
+		return nil
+	case comment.FieldCreatedByName:
+		m.ClearCreatedByName()
+		return nil
+	case comment.FieldUpdatedByName:
+		m.ClearUpdatedByName()
 		return nil
 	}
 	return fmt.Errorf("unknown Comment nullable field %s", name)
@@ -10110,6 +10483,12 @@ func (m *CommentMutation) ResetField(name string) error {
 		return nil
 	case comment.FieldUpdatedAt:
 		m.ResetUpdatedAt()
+		return nil
+	case comment.FieldCreatedByName:
+		m.ResetCreatedByName()
+		return nil
+	case comment.FieldUpdatedByName:
+		m.ResetUpdatedByName()
 		return nil
 	}
 	return fmt.Errorf("unknown Comment field %s", name)

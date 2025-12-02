@@ -64,13 +64,17 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (*v1.PageCommentReply, error) {
 	req.Query = base.OrDefault(req.Query, &v1.CommentQueryParams{})
 	page, comments, err := s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
-		CommentId: req.Query.CommentId,
-		ArticleId: req.Query.ArticleId,
-		ParentId:  req.Query.ParentId,
-		ReplyId:   req.Query.ReplyId,
-		CreatedBy: req.Query.UserId,
-		Order:     req.Query.Order,
-		Level:     req.Query.Level,
+		CommentId:   req.Query.CommentId,
+		CommentIds:  nil,
+		ParentId:    req.Query.ParentId,
+		ReplyId:     req.Query.ReplyId,
+		ArticleId:   req.Query.ArticleId,
+		ArticleIds:  nil,
+		CreatedBy:   req.Query.UserId,
+		Status:      base.Ptr(v1.CommentStatus_CommentNormal),
+		Level:       req.Query.Level,
+		Order:       req.Query.Order,
+		WithArticle: req.Query.WithArticle,
 	})
 	return &v1.PageCommentReply{
 		Page: page,

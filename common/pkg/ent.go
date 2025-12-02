@@ -5,6 +5,7 @@ import (
 	"common/pkg/model"
 	"common/pkg/util"
 	"context"
+	"errors"
 	"time"
 
 	"entgo.io/ent"
@@ -26,10 +27,10 @@ func TimeAuditFields() []ent.Field {
 }
 
 type UserAuditSetter interface {
-	SetCreateBy(int)
-	SetUpdateBy(int)
-	CreateBy() (int, bool)
-	UpdateBy() (int, bool)
+	SetCreatedBy(int64)
+	SetUpdatedBy(int64)
+	CreatedBy() (int64, bool)
+	UpdatedBy() (int64, bool)
 }
 
 func UserAuditFields() []ent.Field {
@@ -39,47 +40,82 @@ func UserAuditFields() []ent.Field {
 	}
 }
 
+type UsernameAuditSetter interface {
+	SetCreatedByName(string)
+	SetUpdatedByName(string)
+	CreatedByName() (string, bool)
+	UpdatedByName() (string, bool)
+}
+
+func UsernameAuditFields() []ent.Field {
+	// 可选冗余字段，用于减少查询
+	return []ent.Field{
+		field.String("created_by_name").Comment("创建人用户名").Nillable().Optional(),
+		field.String("updated_by_name").Comment("更新人用户名").Nillable().Optional(),
+	}
+}
+
 func AuditHook() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			now := time.Now()
-			user, userIdOk := util.GetContextValue[*model.User](ctx, constant.CtxUserInfo)
-			var userID int64
-			if userIdOk {
+			user, userOk := util.GetContextValue[*model.User](ctx, constant.CtxUserInfo)
+			var (
+				userID   int64
+				username string
+			)
+			if userOk {
 				userID = user.ID
+				username = user.Name
 			}
 			switch {
 			case m.Op().Is(ent.OpCreate):
-				// 设置 created_at / updated_at
-				if setter, ok := m.(interface{ SetCreatedAt(time.Time) }); ok {
-					setter.SetCreatedAt(now)
+				// 时间字段
+				if ts, ok := m.(TimeAuditSetter); ok {
+					ts.SetCreatedAt(now)
+					ts.SetUpdatedAt(now)
 				}
-				if setter, ok := m.(interface{ SetUpdatedAt(time.Time) }); ok {
-					setter.SetUpdatedAt(now)
-				}
-				// 设置 created_by / updated_by
-				if setter, ok := m.(interface{ SetCreatedBy(int64) }); ok && userID != 0 {
-					if !userIdOk {
-						panic("can not get userId")
+
+				// 用户ID字段
+				if us, ok := m.(UserAuditSetter); ok {
+					if !userOk {
+						return nil, errors.New("cannot get user info from context for UserAudit fields")
 					}
-					setter.SetCreatedBy(userID)
+					us.SetCreatedBy(userID)
+					us.SetUpdatedBy(userID)
 				}
-				if setter, ok := m.(interface{ SetUpdatedBy(int64) }); ok && userID != 0 {
-					if userIdOk {
-						setter.SetUpdatedBy(userID)
+
+				// 用户名字段
+				if uns, ok := m.(UsernameAuditSetter); ok {
+					if !userOk {
+						return nil, errors.New("cannot get user info from context for UsernameAudit fields")
 					}
+					uns.SetCreatedByName(username)
+					uns.SetUpdatedByName(username)
 				}
 
 			case m.Op().Is(ent.OpUpdate | ent.OpUpdateOne):
-				// 只更新 updated_at / updated_by
-				if setter, ok := m.(interface{ SetUpdatedAt(time.Time) }); ok {
-					setter.SetUpdatedAt(now)
+				// 时间字段
+				if ts, ok := m.(TimeAuditSetter); ok {
+					ts.SetUpdatedAt(now)
 				}
-				if setter, ok := m.(interface{ SetUpdatedBy(int64) }); ok && userID != 0 {
-					if userIdOk {
-						setter.SetUpdatedBy(userID)
+
+				// 用户ID字段
+				if us, ok := m.(UserAuditSetter); ok {
+					if !userOk {
+						return nil, errors.New("cannot get user info from context for UserAudit fields")
 					}
+					us.SetUpdatedBy(userID)
 				}
+
+				// 用户名字段
+				if uns, ok := m.(UsernameAuditSetter); ok {
+					if !userOk {
+						return nil, errors.New("cannot get user info from context for UsernameAudit fields")
+					}
+					uns.SetUpdatedByName(username)
+				}
+
 			}
 			return next.Mutate(ctx, m)
 		})

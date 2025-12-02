@@ -227,6 +227,27 @@ func (_u *ArticleUpdate) SetNillableListable(v *bool) *ArticleUpdate {
 	return _u
 }
 
+// SetViewCount sets the "view_count" field.
+func (_u *ArticleUpdate) SetViewCount(v int32) *ArticleUpdate {
+	_u.mutation.ResetViewCount()
+	_u.mutation.SetViewCount(v)
+	return _u
+}
+
+// SetNillableViewCount sets the "view_count" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableViewCount(v *int32) *ArticleUpdate {
+	if v != nil {
+		_u.SetViewCount(*v)
+	}
+	return _u
+}
+
+// AddViewCount adds value to the "view_count" field.
+func (_u *ArticleUpdate) AddViewCount(v int32) *ArticleUpdate {
+	_u.mutation.AddViewCount(v)
+	return _u
+}
+
 // SetThankCount sets the "thank_count" field.
 func (_u *ArticleUpdate) SetThankCount(v int32) *ArticleUpdate {
 	_u.mutation.ResetThankCount()
@@ -540,6 +561,46 @@ func (_u *ArticleUpdate) SetNillableUpdatedAt(v *time.Time) *ArticleUpdate {
 // ClearUpdatedAt clears the value of the "updated_at" field.
 func (_u *ArticleUpdate) ClearUpdatedAt() *ArticleUpdate {
 	_u.mutation.ClearUpdatedAt()
+	return _u
+}
+
+// SetCreatedByName sets the "created_by_name" field.
+func (_u *ArticleUpdate) SetCreatedByName(v string) *ArticleUpdate {
+	_u.mutation.SetCreatedByName(v)
+	return _u
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableCreatedByName(v *string) *ArticleUpdate {
+	if v != nil {
+		_u.SetCreatedByName(*v)
+	}
+	return _u
+}
+
+// ClearCreatedByName clears the value of the "created_by_name" field.
+func (_u *ArticleUpdate) ClearCreatedByName() *ArticleUpdate {
+	_u.mutation.ClearCreatedByName()
+	return _u
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_u *ArticleUpdate) SetUpdatedByName(v string) *ArticleUpdate {
+	_u.mutation.SetUpdatedByName(v)
+	return _u
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_u *ArticleUpdate) SetNillableUpdatedByName(v *string) *ArticleUpdate {
+	if v != nil {
+		_u.SetUpdatedByName(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByName clears the value of the "updated_by_name" field.
+func (_u *ArticleUpdate) ClearUpdatedByName() *ArticleUpdate {
+	_u.mutation.ClearUpdatedByName()
 	return _u
 }
 
@@ -869,6 +930,12 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Listable(); ok {
 		_spec.SetField(article.FieldListable, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.ViewCount(); ok {
+		_spec.SetField(article.FieldViewCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedViewCount(); ok {
+		_spec.AddField(article.FieldViewCount, field.TypeInt32, value)
+	}
 	if value, ok := _u.mutation.ThankCount(); ok {
 		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
 	}
@@ -964,6 +1031,18 @@ func (_u *ArticleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(article.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.CreatedByName(); ok {
+		_spec.SetField(article.FieldCreatedByName, field.TypeString, value)
+	}
+	if _u.mutation.CreatedByNameCleared() {
+		_spec.ClearField(article.FieldCreatedByName, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByName(); ok {
+		_spec.SetField(article.FieldUpdatedByName, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByNameCleared() {
+		_spec.ClearField(article.FieldUpdatedByName, field.TypeString)
 	}
 	if _u.mutation.PostscriptsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1448,6 +1527,27 @@ func (_u *ArticleUpdateOne) SetNillableListable(v *bool) *ArticleUpdateOne {
 	return _u
 }
 
+// SetViewCount sets the "view_count" field.
+func (_u *ArticleUpdateOne) SetViewCount(v int32) *ArticleUpdateOne {
+	_u.mutation.ResetViewCount()
+	_u.mutation.SetViewCount(v)
+	return _u
+}
+
+// SetNillableViewCount sets the "view_count" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableViewCount(v *int32) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetViewCount(*v)
+	}
+	return _u
+}
+
+// AddViewCount adds value to the "view_count" field.
+func (_u *ArticleUpdateOne) AddViewCount(v int32) *ArticleUpdateOne {
+	_u.mutation.AddViewCount(v)
+	return _u
+}
+
 // SetThankCount sets the "thank_count" field.
 func (_u *ArticleUpdateOne) SetThankCount(v int32) *ArticleUpdateOne {
 	_u.mutation.ResetThankCount()
@@ -1761,6 +1861,46 @@ func (_u *ArticleUpdateOne) SetNillableUpdatedAt(v *time.Time) *ArticleUpdateOne
 // ClearUpdatedAt clears the value of the "updated_at" field.
 func (_u *ArticleUpdateOne) ClearUpdatedAt() *ArticleUpdateOne {
 	_u.mutation.ClearUpdatedAt()
+	return _u
+}
+
+// SetCreatedByName sets the "created_by_name" field.
+func (_u *ArticleUpdateOne) SetCreatedByName(v string) *ArticleUpdateOne {
+	_u.mutation.SetCreatedByName(v)
+	return _u
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableCreatedByName(v *string) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetCreatedByName(*v)
+	}
+	return _u
+}
+
+// ClearCreatedByName clears the value of the "created_by_name" field.
+func (_u *ArticleUpdateOne) ClearCreatedByName() *ArticleUpdateOne {
+	_u.mutation.ClearCreatedByName()
+	return _u
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_u *ArticleUpdateOne) SetUpdatedByName(v string) *ArticleUpdateOne {
+	_u.mutation.SetUpdatedByName(v)
+	return _u
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_u *ArticleUpdateOne) SetNillableUpdatedByName(v *string) *ArticleUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByName(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByName clears the value of the "updated_by_name" field.
+func (_u *ArticleUpdateOne) ClearUpdatedByName() *ArticleUpdateOne {
+	_u.mutation.ClearUpdatedByName()
 	return _u
 }
 
@@ -2120,6 +2260,12 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	if value, ok := _u.mutation.Listable(); ok {
 		_spec.SetField(article.FieldListable, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.ViewCount(); ok {
+		_spec.SetField(article.FieldViewCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedViewCount(); ok {
+		_spec.AddField(article.FieldViewCount, field.TypeInt32, value)
+	}
 	if value, ok := _u.mutation.ThankCount(); ok {
 		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
 	}
@@ -2215,6 +2361,18 @@ func (_u *ArticleUpdateOne) sqlSave(ctx context.Context) (_node *Article, err er
 	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(article.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.CreatedByName(); ok {
+		_spec.SetField(article.FieldCreatedByName, field.TypeString, value)
+	}
+	if _u.mutation.CreatedByNameCleared() {
+		_spec.ClearField(article.FieldCreatedByName, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByName(); ok {
+		_spec.SetField(article.FieldUpdatedByName, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByNameCleared() {
+		_spec.ClearField(article.FieldUpdatedByName, field.TypeString)
 	}
 	if _u.mutation.PostscriptsCleared() {
 		edge := &sqlgraph.EdgeSpec{

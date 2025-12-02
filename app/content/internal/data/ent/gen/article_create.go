@@ -164,6 +164,20 @@ func (_c *ArticleCreate) SetNillableListable(v *bool) *ArticleCreate {
 	return _c
 }
 
+// SetViewCount sets the "view_count" field.
+func (_c *ArticleCreate) SetViewCount(v int32) *ArticleCreate {
+	_c.mutation.SetViewCount(v)
+	return _c
+}
+
+// SetNillableViewCount sets the "view_count" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableViewCount(v *int32) *ArticleCreate {
+	if v != nil {
+		_c.SetViewCount(*v)
+	}
+	return _c
+}
+
 // SetThankCount sets the "thank_count" field.
 func (_c *ArticleCreate) SetThankCount(v int32) *ArticleCreate {
 	_c.mutation.SetThankCount(v)
@@ -360,6 +374,34 @@ func (_c *ArticleCreate) SetNillableUpdatedAt(v *time.Time) *ArticleCreate {
 	return _c
 }
 
+// SetCreatedByName sets the "created_by_name" field.
+func (_c *ArticleCreate) SetCreatedByName(v string) *ArticleCreate {
+	_c.mutation.SetCreatedByName(v)
+	return _c
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableCreatedByName(v *string) *ArticleCreate {
+	if v != nil {
+		_c.SetCreatedByName(*v)
+	}
+	return _c
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_c *ArticleCreate) SetUpdatedByName(v string) *ArticleCreate {
+	_c.mutation.SetUpdatedByName(v)
+	return _c
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_c *ArticleCreate) SetNillableUpdatedByName(v *string) *ArticleCreate {
+	if v != nil {
+		_c.SetUpdatedByName(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ArticleCreate) SetID(v int64) *ArticleCreate {
 	_c.mutation.SetID(v)
@@ -519,6 +561,10 @@ func (_c *ArticleCreate) defaults() {
 		v := article.DefaultListable
 		_c.mutation.SetListable(v)
 	}
+	if _, ok := _c.mutation.ViewCount(); !ok {
+		v := article.DefaultViewCount
+		_c.mutation.SetViewCount(v)
+	}
 	if _, ok := _c.mutation.ThankCount(); !ok {
 		v := article.DefaultThankCount
 		_c.mutation.SetThankCount(v)
@@ -600,6 +646,9 @@ func (_c *ArticleCreate) check() error {
 	}
 	if _, ok := _c.mutation.Listable(); !ok {
 		return &ValidationError{Name: "listable", err: errors.New(`gen: missing required field "Article.listable"`)}
+	}
+	if _, ok := _c.mutation.ViewCount(); !ok {
+		return &ValidationError{Name: "view_count", err: errors.New(`gen: missing required field "Article.view_count"`)}
 	}
 	if _, ok := _c.mutation.ThankCount(); !ok {
 		return &ValidationError{Name: "thank_count", err: errors.New(`gen: missing required field "Article.thank_count"`)}
@@ -701,6 +750,10 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 		_spec.SetField(article.FieldListable, field.TypeBool, value)
 		_node.Listable = value
 	}
+	if value, ok := _c.mutation.ViewCount(); ok {
+		_spec.SetField(article.FieldViewCount, field.TypeInt32, value)
+		_node.ViewCount = value
+	}
 	if value, ok := _c.mutation.ThankCount(); ok {
 		_spec.SetField(article.FieldThankCount, field.TypeInt32, value)
 		_node.ThankCount = value
@@ -756,6 +809,14 @@ func (_c *ArticleCreate) createSpec() (*Article, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(article.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = &value
+	}
+	if value, ok := _c.mutation.CreatedByName(); ok {
+		_spec.SetField(article.FieldCreatedByName, field.TypeString, value)
+		_node.CreatedByName = &value
+	}
+	if value, ok := _c.mutation.UpdatedByName(); ok {
+		_spec.SetField(article.FieldUpdatedByName, field.TypeString, value)
+		_node.UpdatedByName = &value
 	}
 	if nodes := _c.mutation.PostscriptsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -8,6 +8,7 @@ import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "user/v1/user.proto";
+import "content/v1/article.proto";
 
 option go_package = "common/api/content/v1;v1";
 
@@ -67,6 +68,10 @@ message Comment {
   optional int64 created_by = 1002;
   // 更新人
   optional int64 updated_by = 1003;
+  // 创建人名称
+  optional string created_by_name = 1004;
+  // 更新人名称
+  optional string updated_by_name = 1005;
 
   // 评论Id
   int64 id = 1;
@@ -97,6 +102,9 @@ message Comment {
   user.v1.User user = 15;
   // 回复评论的用户信息
   user.v1.User reply_user = 16;
+
+  // 文章信息
+  content.v1.Article article = 100;
 }
 
 // 查询参数定义
@@ -116,6 +124,9 @@ message CommentQueryParams {
   optional int64 user_id = 7;
   // 层级
   optional int32 level = 8;
+
+  // 是否返回文章信息
+  bool with_article = 100;
 }
 
 // 请求/响应结构定义

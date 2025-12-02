@@ -19,6 +19,7 @@ type Article struct {
 func (Article) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixContent.String() + "articles"},
+		entsql.WithComments(true),
 	}
 }
 
@@ -40,6 +41,7 @@ func (Article) Fields() []ent.Field {
 		field.Bool("listable").Comment("是否在列表展示").Default(true),
 
 		// 统计信息
+		field.Int32("view_count").Comment("浏览数").Default(0),
 		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),
 		field.Int32("collect_count").Comment("收藏数").Default(0),
@@ -57,6 +59,7 @@ func (Article) Fields() []ent.Field {
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, pkg.UsernameAuditFields()...)
 	return fields
 }
 

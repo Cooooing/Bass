@@ -19,6 +19,8 @@ type Comment struct {
 
 	User      *userv1.User `json:"user"`
 	ReplyUser *userv1.User `json:"reply_user"`
+
+	WithArticle bool `json:"-"`
 }
 
 // FormatContent 格式化评论内容
@@ -44,6 +46,8 @@ func (c *Comment) ConvertToRpc() *v1.Comment {
 		UpdatedAt:     timestamppb.New(*c.UpdatedAt),
 		CreatedBy:     c.CreatedBy,
 		UpdatedBy:     c.UpdatedBy,
+		CreatedByName: c.CreatedByName,
+		UpdatedByName: c.UpdatedByName,
 		Id:            c.ID,
 		ArticleId:     c.ArticleID,
 		Content:       c.Content,
@@ -58,6 +62,13 @@ func (c *Comment) ConvertToRpc() *v1.Comment {
 		ReplyCount:    c.ReplyCount,
 		User:          c.User,
 		ReplyUser:     c.ReplyUser,
+	}
+	if c.WithArticle {
+		comment.Article = &v1.Article{
+			Title:         c.Edges.Article.Title,
+			CreatedBy:     c.Edges.Article.CreatedBy,
+			CreatedByName: c.Edges.Article.CreatedByName,
+		}
 	}
 	return comment
 }

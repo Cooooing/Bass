@@ -59,48 +59,52 @@ func init() {
 	articleDescListable := articleFields[11].Descriptor()
 	// article.DefaultListable holds the default value on creation for the listable field.
 	article.DefaultListable = articleDescListable.Default.(bool)
+	// articleDescViewCount is the schema descriptor for view_count field.
+	articleDescViewCount := articleFields[12].Descriptor()
+	// article.DefaultViewCount holds the default value on creation for the view_count field.
+	article.DefaultViewCount = articleDescViewCount.Default.(int32)
 	// articleDescThankCount is the schema descriptor for thank_count field.
-	articleDescThankCount := articleFields[12].Descriptor()
+	articleDescThankCount := articleFields[13].Descriptor()
 	// article.DefaultThankCount holds the default value on creation for the thank_count field.
 	article.DefaultThankCount = articleDescThankCount.Default.(int32)
 	// articleDescLikeCount is the schema descriptor for like_count field.
-	articleDescLikeCount := articleFields[13].Descriptor()
+	articleDescLikeCount := articleFields[14].Descriptor()
 	// article.DefaultLikeCount holds the default value on creation for the like_count field.
 	article.DefaultLikeCount = articleDescLikeCount.Default.(int32)
 	// articleDescCollectCount is the schema descriptor for collect_count field.
-	articleDescCollectCount := articleFields[14].Descriptor()
+	articleDescCollectCount := articleFields[15].Descriptor()
 	// article.DefaultCollectCount holds the default value on creation for the collect_count field.
 	article.DefaultCollectCount = articleDescCollectCount.Default.(int32)
 	// articleDescWatchCount is the schema descriptor for watch_count field.
-	articleDescWatchCount := articleFields[15].Descriptor()
+	articleDescWatchCount := articleFields[16].Descriptor()
 	// article.DefaultWatchCount holds the default value on creation for the watch_count field.
 	article.DefaultWatchCount = articleDescWatchCount.Default.(int32)
 	// articleDescReplyCount is the schema descriptor for reply_count field.
-	articleDescReplyCount := articleFields[16].Descriptor()
+	articleDescReplyCount := articleFields[17].Descriptor()
 	// article.DefaultReplyCount holds the default value on creation for the reply_count field.
 	article.DefaultReplyCount = articleDescReplyCount.Default.(int32)
 	// articleDescBountyPoints is the schema descriptor for bounty_points field.
-	articleDescBountyPoints := articleFields[17].Descriptor()
+	articleDescBountyPoints := articleFields[18].Descriptor()
 	// article.DefaultBountyPoints holds the default value on creation for the bounty_points field.
 	article.DefaultBountyPoints = articleDescBountyPoints.Default.(int32)
 	// articleDescVoteTotal is the schema descriptor for vote_total field.
-	articleDescVoteTotal := articleFields[19].Descriptor()
+	articleDescVoteTotal := articleFields[20].Descriptor()
 	// article.DefaultVoteTotal holds the default value on creation for the vote_total field.
 	article.DefaultVoteTotal = articleDescVoteTotal.Default.(int32)
 	// articleDescLotteryParticipantCount is the schema descriptor for lottery_participant_count field.
-	articleDescLotteryParticipantCount := articleFields[20].Descriptor()
+	articleDescLotteryParticipantCount := articleFields[21].Descriptor()
 	// article.DefaultLotteryParticipantCount holds the default value on creation for the lottery_participant_count field.
 	article.DefaultLotteryParticipantCount = articleDescLotteryParticipantCount.Default.(int32)
 	// articleDescLotteryWinnerCount is the schema descriptor for lottery_winner_count field.
-	articleDescLotteryWinnerCount := articleFields[21].Descriptor()
+	articleDescLotteryWinnerCount := articleFields[22].Descriptor()
 	// article.DefaultLotteryWinnerCount holds the default value on creation for the lottery_winner_count field.
 	article.DefaultLotteryWinnerCount = articleDescLotteryWinnerCount.Default.(int32)
 	// articleDescCreatedAt is the schema descriptor for created_at field.
-	articleDescCreatedAt := articleFields[24].Descriptor()
+	articleDescCreatedAt := articleFields[25].Descriptor()
 	// article.DefaultCreatedAt holds the default value on creation for the created_at field.
 	article.DefaultCreatedAt = articleDescCreatedAt.Default.(func() time.Time)
 	// articleDescUpdatedAt is the schema descriptor for updated_at field.
-	articleDescUpdatedAt := articleFields[25].Descriptor()
+	articleDescUpdatedAt := articleFields[26].Descriptor()
 	// article.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	article.DefaultUpdatedAt = articleDescUpdatedAt.Default.(func() time.Time)
 	articlelotteryFields := schema.ArticleLottery{}.Fields()

@@ -18,6 +18,7 @@ type Tag struct {
 func (Tag) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixContent.String() + "tags"},
+		entsql.WithComments(true),
 	}
 }
 

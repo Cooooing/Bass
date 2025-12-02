@@ -36,6 +36,10 @@ type Article struct {
 	CreatedBy *int64 `protobuf:"varint,1002,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`
 	// 更新人
 	UpdatedBy *int64 `protobuf:"varint,1003,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`
+	// 创建人名称
+	CreatedByName *string `protobuf:"bytes,1004,opt,name=created_by_name,json=createdByName,proto3,oneof" json:"created_by_name,omitempty"`
+	// 更新人名称
+	UpdatedByName *string `protobuf:"bytes,1005,opt,name=updated_by_name,json=updatedByName,proto3,oneof" json:"updated_by_name,omitempty"`
 	// 唯一Id
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// 标题
@@ -64,6 +68,8 @@ type Article struct {
 	Anonymous bool `protobuf:"varint,30,opt,name=anonymous,proto3" json:"anonymous,omitempty"`
 	// 是否在列表展示
 	Listable bool `protobuf:"varint,31,opt,name=listable,proto3" json:"listable,omitempty"`
+	// 浏览数
+	ViewCount int32 `protobuf:"varint,32,opt,name=view_count,json=viewCount,proto3" json:"view_count,omitempty"`
 	// 感谢数
 	ThankCount int32 `protobuf:"varint,12,opt,name=thank_count,json=thankCount,proto3" json:"thank_count,omitempty"`
 	// 点赞数
@@ -156,6 +162,20 @@ func (x *Article) GetUpdatedBy() int64 {
 		return *x.UpdatedBy
 	}
 	return 0
+}
+
+func (x *Article) GetCreatedByName() string {
+	if x != nil && x.CreatedByName != nil {
+		return *x.CreatedByName
+	}
+	return ""
+}
+
+func (x *Article) GetUpdatedByName() string {
+	if x != nil && x.UpdatedByName != nil {
+		return *x.UpdatedByName
+	}
+	return ""
 }
 
 func (x *Article) GetId() int64 {
@@ -254,6 +274,13 @@ func (x *Article) GetListable() bool {
 		return x.Listable
 	}
 	return false
+}
+
+func (x *Article) GetViewCount() int32 {
+	if x != nil {
+		return x.ViewCount
+	}
+	return 0
 }
 
 func (x *Article) GetThankCount() int32 {
@@ -2200,7 +2227,7 @@ var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\x1a\x12user/v1/user.proto\"\xb2\f\n" +
+	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\x1a\x12user/v1/user.proto\"\xd5\r\n" +
 	"\aArticle\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -2209,22 +2236,26 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
 	"created_by\x18\xea\a \x01(\x03H\x00R\tcreatedBy\x88\x01\x01\x12#\n" +
 	"\n" +
-	"updated_by\x18\xeb\a \x01(\x03H\x01R\tupdatedBy\x88\x01\x01\x12\x0e\n" +
+	"updated_by\x18\xeb\a \x01(\x03H\x01R\tupdatedBy\x88\x01\x01\x12,\n" +
+	"\x0fcreated_by_name\x18\xec\a \x01(\tH\x02R\rcreatedByName\x88\x01\x01\x12,\n" +
+	"\x0fupdated_by_name\x18\xed\a \x01(\tH\x03R\rupdatedByName\x88\x01\x01\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
 	"\x0econtent_render\x18\x16 \x01(\tR\rcontentRender\x12%\n" +
 	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12*\n" +
-	"\x0ereward_content\x18\x06 \x01(\tH\x02R\rrewardContent\x88\x01\x01\x127\n" +
-	"\x15reward_content_render\x18\x17 \x01(\tH\x03R\x13rewardContentRender\x88\x01\x01\x12(\n" +
-	"\rreward_points\x18\a \x01(\x05H\x04R\frewardPoints\x88\x01\x01\x12\x16\n" +
+	"\x0ereward_content\x18\x06 \x01(\tH\x04R\rrewardContent\x88\x01\x01\x127\n" +
+	"\x15reward_content_render\x18\x17 \x01(\tH\x05R\x13rewardContentRender\x88\x01\x01\x12(\n" +
+	"\rreward_points\x18\a \x01(\x05H\x06R\frewardPoints\x88\x01\x01\x12\x16\n" +
 	"\x06status\x18\b \x01(\x05R\x06status\x12\x12\n" +
 	"\x04type\x18\t \x01(\x05R\x04type\x12!\n" +
 	"\tstatement\x18\n" +
-	" \x01(\tH\x05R\tstatement\x88\x01\x01\x12 \n" +
+	" \x01(\tH\aR\tstatement\x88\x01\x01\x12 \n" +
 	"\vcommentable\x18\v \x01(\bR\vcommentable\x12\x1c\n" +
 	"\tanonymous\x18\x1e \x01(\bR\tanonymous\x12\x1a\n" +
-	"\blistable\x18\x1f \x01(\bR\blistable\x12\x1f\n" +
+	"\blistable\x18\x1f \x01(\bR\blistable\x12\x1d\n" +
+	"\n" +
+	"view_count\x18  \x01(\x05R\tviewCount\x12\x1f\n" +
 	"\vthank_count\x18\f \x01(\x05R\n" +
 	"thankCount\x12\x1d\n" +
 	"\n" +
@@ -2234,8 +2265,8 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"watchCount\x12\x1f\n" +
 	"\vreply_count\x18\x10 \x01(\x05R\n" +
 	"replyCount\x12(\n" +
-	"\rbounty_points\x18\x11 \x01(\x05H\x06R\fbountyPoints\x88\x01\x01\x121\n" +
-	"\x12accepted_answer_id\x18\x12 \x01(\x03H\aR\x10acceptedAnswerId\x88\x01\x01\x12\x1d\n" +
+	"\rbounty_points\x18\x11 \x01(\x05H\bR\fbountyPoints\x88\x01\x01\x121\n" +
+	"\x12accepted_answer_id\x18\x12 \x01(\x03H\tR\x10acceptedAnswerId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"vote_total\x18\x13 \x01(\x05R\tvoteTotal\x12:\n" +
 	"\x19lottery_participant_count\x18\x14 \x01(\x05R\x17lotteryParticipantCount\x120\n" +
@@ -2244,11 +2275,14 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"authorUser\x12@\n" +
 	"\x0flast_reply_user\x18\x19 \x01(\v2\x18.common.api.user.v1.UserR\rlastReplyUser\x12>\n" +
 	"\rlast_reply_at\x18\x1a \x01(\v2\x1a.google.protobuf.TimestampR\vlastReplyAt\x12+\n" +
-	"\x0fcover_image_url\x18\x1b \x01(\tH\bR\rcoverImageUrl\x88\x01\x01\x12J\n" +
+	"\x0fcover_image_url\x18\x1b \x01(\tH\n" +
+	"R\rcoverImageUrl\x88\x01\x01\x12J\n" +
 	"\vpostscripts\x18c \x03(\v2(.common.api.content.v1.ArticlePostscriptR\vpostscripts\x12.\n" +
 	"\x04tags\x18d \x03(\v2\x1a.common.api.content.v1.TagR\x04tagsB\r\n" +
 	"\v_created_byB\r\n" +
-	"\v_updated_byB\x11\n" +
+	"\v_updated_byB\x12\n" +
+	"\x10_created_by_nameB\x12\n" +
+	"\x10_updated_by_nameB\x11\n" +
 	"\x0f_reward_contentB\x18\n" +
 	"\x16_reward_content_renderB\x10\n" +
 	"\x0e_reward_pointsB\f\n" +

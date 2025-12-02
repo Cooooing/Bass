@@ -194,6 +194,34 @@ func (_c *CommentCreate) SetNillableUpdatedAt(v *time.Time) *CommentCreate {
 	return _c
 }
 
+// SetCreatedByName sets the "created_by_name" field.
+func (_c *CommentCreate) SetCreatedByName(v string) *CommentCreate {
+	_c.mutation.SetCreatedByName(v)
+	return _c
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableCreatedByName(v *string) *CommentCreate {
+	if v != nil {
+		_c.SetCreatedByName(*v)
+	}
+	return _c
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_c *CommentCreate) SetUpdatedByName(v string) *CommentCreate {
+	_c.mutation.SetUpdatedByName(v)
+	return _c
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_c *CommentCreate) SetNillableUpdatedByName(v *string) *CommentCreate {
+	if v != nil {
+		_c.SetUpdatedByName(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CommentCreate) SetID(v int64) *CommentCreate {
 	_c.mutation.SetID(v)
@@ -434,6 +462,14 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(comment.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = &value
+	}
+	if value, ok := _c.mutation.CreatedByName(); ok {
+		_spec.SetField(comment.FieldCreatedByName, field.TypeString, value)
+		_node.CreatedByName = &value
+	}
+	if value, ok := _c.mutation.UpdatedByName(); ok {
+		_spec.SetField(comment.FieldUpdatedByName, field.TypeString, value)
+		_node.UpdatedByName = &value
 	}
 	if nodes := _c.mutation.ArticleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

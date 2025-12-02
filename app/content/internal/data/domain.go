@@ -3,7 +3,6 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	"common/pkg/constant"
-	"common/pkg/util/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -120,7 +119,7 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 		err     error
 		total   int
 	)
-	page = base.OrDefault(page, constant.GetPageDefault())
+	page = constant.PageValid(page)
 	query := tx.Domain.Query().WithTags()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

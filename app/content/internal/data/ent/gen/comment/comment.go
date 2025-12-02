@@ -42,6 +42,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldCreatedByName holds the string denoting the created_by_name field in the database.
+	FieldCreatedByName = "created_by_name"
+	// FieldUpdatedByName holds the string denoting the updated_by_name field in the database.
+	FieldUpdatedByName = "updated_by_name"
 	// EdgeArticle holds the string denoting the article edge name in mutations.
 	EdgeArticle = "article"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -105,6 +109,8 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldCreatedByName,
+	FieldUpdatedByName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -212,6 +218,16 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByCreatedByName orders the results by the created_by_name field.
+func ByCreatedByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByName, opts...).ToFunc()
+}
+
+// ByUpdatedByName orders the results by the updated_by_name field.
+func ByUpdatedByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByName, opts...).ToFunc()
 }
 
 // ByArticleField orders the results by article field.

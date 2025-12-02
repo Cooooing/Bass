@@ -39,6 +39,8 @@ type Article struct {
 	Anonymous bool `json:"anonymous,omitempty"`
 	// 是否在列表展示
 	Listable bool `json:"listable,omitempty"`
+	// 浏览数
+	ViewCount int32 `json:"view_count,omitempty"`
 	// 感谢数
 	ThankCount int32 `json:"thank_count,omitempty"`
 	// 点赞数
@@ -67,6 +69,10 @@ type Article struct {
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	// 创建人用户名
+	CreatedByName *string `json:"created_by_name,omitempty"`
+	// 更新人用户名
+	UpdatedByName *string `json:"updated_by_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArticleQuery when eager-loading is set.
 	Edges        ArticleEdges `json:"edges"`
@@ -153,9 +159,9 @@ func (*Article) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case article.FieldHasPostscript, article.FieldCommentable, article.FieldAnonymous, article.FieldListable:
 			values[i] = new(sql.NullBool)
-		case article.FieldID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount, article.FieldCreatedBy, article.FieldUpdatedBy:
+		case article.FieldID, article.FieldRewardPoints, article.FieldStatus, article.FieldType, article.FieldViewCount, article.FieldThankCount, article.FieldLikeCount, article.FieldCollectCount, article.FieldWatchCount, article.FieldReplyCount, article.FieldBountyPoints, article.FieldAcceptedAnswerID, article.FieldVoteTotal, article.FieldLotteryParticipantCount, article.FieldLotteryWinnerCount, article.FieldCreatedBy, article.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
-		case article.FieldTitle, article.FieldContent, article.FieldRewardContent, article.FieldStatement:
+		case article.FieldTitle, article.FieldContent, article.FieldRewardContent, article.FieldStatement, article.FieldCreatedByName, article.FieldUpdatedByName:
 			values[i] = new(sql.NullString)
 		case article.FieldCreatedAt, article.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -249,6 +255,12 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Listable = value.Bool
 			}
+		case article.FieldViewCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field view_count", values[i])
+			} else if value.Valid {
+				_m.ViewCount = int32(value.Int64)
+			}
 		case article.FieldThankCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field thank_count", values[i])
@@ -338,6 +350,20 @@ func (_m *Article) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UpdatedAt = new(time.Time)
 				*_m.UpdatedAt = value.Time
+			}
+		case article.FieldCreatedByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_name", values[i])
+			} else if value.Valid {
+				_m.CreatedByName = new(string)
+				*_m.CreatedByName = value.String
+			}
+		case article.FieldUpdatedByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_name", values[i])
+			} else if value.Valid {
+				_m.UpdatedByName = new(string)
+				*_m.UpdatedByName = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -444,6 +470,9 @@ func (_m *Article) String() string {
 	builder.WriteString("listable=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Listable))
 	builder.WriteString(", ")
+	builder.WriteString("view_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ViewCount))
+	builder.WriteString(", ")
 	builder.WriteString("thank_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ThankCount))
 	builder.WriteString(", ")
@@ -496,6 +525,16 @@ func (_m *Article) String() string {
 	if v := _m.UpdatedAt; v != nil {
 		builder.WriteString("updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.CreatedByName; v != nil {
+		builder.WriteString("created_by_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedByName; v != nil {
+		builder.WriteString("updated_by_name=")
+		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')
 	return builder.String()

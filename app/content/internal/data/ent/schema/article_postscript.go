@@ -19,6 +19,7 @@ type ArticlePostscript struct {
 func (ArticlePostscript) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixContent.String() + "article_postscripts"},
+		entsql.WithComments(true),
 	}
 }
 

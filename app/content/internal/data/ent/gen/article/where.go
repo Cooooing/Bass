@@ -110,6 +110,11 @@ func Listable(v bool) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldListable, v))
 }
 
+// ViewCount applies equality check predicate on the "view_count" field. It's identical to ViewCountEQ.
+func ViewCount(v int32) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldViewCount, v))
+}
+
 // ThankCount applies equality check predicate on the "thank_count" field. It's identical to ThankCountEQ.
 func ThankCount(v int32) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldThankCount, v))
@@ -178,6 +183,16 @@ func CreatedAt(v time.Time) predicate.Article {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.Article {
 	return predicate.Article(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// CreatedByName applies equality check predicate on the "created_by_name" field. It's identical to CreatedByNameEQ.
+func CreatedByName(v string) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldCreatedByName, v))
+}
+
+// UpdatedByName applies equality check predicate on the "updated_by_name" field. It's identical to UpdatedByNameEQ.
+func UpdatedByName(v string) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldUpdatedByName, v))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.
@@ -628,6 +643,46 @@ func ListableEQ(v bool) predicate.Article {
 // ListableNEQ applies the NEQ predicate on the "listable" field.
 func ListableNEQ(v bool) predicate.Article {
 	return predicate.Article(sql.FieldNEQ(FieldListable, v))
+}
+
+// ViewCountEQ applies the EQ predicate on the "view_count" field.
+func ViewCountEQ(v int32) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldViewCount, v))
+}
+
+// ViewCountNEQ applies the NEQ predicate on the "view_count" field.
+func ViewCountNEQ(v int32) predicate.Article {
+	return predicate.Article(sql.FieldNEQ(FieldViewCount, v))
+}
+
+// ViewCountIn applies the In predicate on the "view_count" field.
+func ViewCountIn(vs ...int32) predicate.Article {
+	return predicate.Article(sql.FieldIn(FieldViewCount, vs...))
+}
+
+// ViewCountNotIn applies the NotIn predicate on the "view_count" field.
+func ViewCountNotIn(vs ...int32) predicate.Article {
+	return predicate.Article(sql.FieldNotIn(FieldViewCount, vs...))
+}
+
+// ViewCountGT applies the GT predicate on the "view_count" field.
+func ViewCountGT(v int32) predicate.Article {
+	return predicate.Article(sql.FieldGT(FieldViewCount, v))
+}
+
+// ViewCountGTE applies the GTE predicate on the "view_count" field.
+func ViewCountGTE(v int32) predicate.Article {
+	return predicate.Article(sql.FieldGTE(FieldViewCount, v))
+}
+
+// ViewCountLT applies the LT predicate on the "view_count" field.
+func ViewCountLT(v int32) predicate.Article {
+	return predicate.Article(sql.FieldLT(FieldViewCount, v))
+}
+
+// ViewCountLTE applies the LTE predicate on the "view_count" field.
+func ViewCountLTE(v int32) predicate.Article {
+	return predicate.Article(sql.FieldLTE(FieldViewCount, v))
 }
 
 // ThankCountEQ applies the EQ predicate on the "thank_count" field.
@@ -1248,6 +1303,156 @@ func UpdatedAtIsNil() predicate.Article {
 // UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
 func UpdatedAtNotNil() predicate.Article {
 	return predicate.Article(sql.FieldNotNull(FieldUpdatedAt))
+}
+
+// CreatedByNameEQ applies the EQ predicate on the "created_by_name" field.
+func CreatedByNameEQ(v string) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldCreatedByName, v))
+}
+
+// CreatedByNameNEQ applies the NEQ predicate on the "created_by_name" field.
+func CreatedByNameNEQ(v string) predicate.Article {
+	return predicate.Article(sql.FieldNEQ(FieldCreatedByName, v))
+}
+
+// CreatedByNameIn applies the In predicate on the "created_by_name" field.
+func CreatedByNameIn(vs ...string) predicate.Article {
+	return predicate.Article(sql.FieldIn(FieldCreatedByName, vs...))
+}
+
+// CreatedByNameNotIn applies the NotIn predicate on the "created_by_name" field.
+func CreatedByNameNotIn(vs ...string) predicate.Article {
+	return predicate.Article(sql.FieldNotIn(FieldCreatedByName, vs...))
+}
+
+// CreatedByNameGT applies the GT predicate on the "created_by_name" field.
+func CreatedByNameGT(v string) predicate.Article {
+	return predicate.Article(sql.FieldGT(FieldCreatedByName, v))
+}
+
+// CreatedByNameGTE applies the GTE predicate on the "created_by_name" field.
+func CreatedByNameGTE(v string) predicate.Article {
+	return predicate.Article(sql.FieldGTE(FieldCreatedByName, v))
+}
+
+// CreatedByNameLT applies the LT predicate on the "created_by_name" field.
+func CreatedByNameLT(v string) predicate.Article {
+	return predicate.Article(sql.FieldLT(FieldCreatedByName, v))
+}
+
+// CreatedByNameLTE applies the LTE predicate on the "created_by_name" field.
+func CreatedByNameLTE(v string) predicate.Article {
+	return predicate.Article(sql.FieldLTE(FieldCreatedByName, v))
+}
+
+// CreatedByNameContains applies the Contains predicate on the "created_by_name" field.
+func CreatedByNameContains(v string) predicate.Article {
+	return predicate.Article(sql.FieldContains(FieldCreatedByName, v))
+}
+
+// CreatedByNameHasPrefix applies the HasPrefix predicate on the "created_by_name" field.
+func CreatedByNameHasPrefix(v string) predicate.Article {
+	return predicate.Article(sql.FieldHasPrefix(FieldCreatedByName, v))
+}
+
+// CreatedByNameHasSuffix applies the HasSuffix predicate on the "created_by_name" field.
+func CreatedByNameHasSuffix(v string) predicate.Article {
+	return predicate.Article(sql.FieldHasSuffix(FieldCreatedByName, v))
+}
+
+// CreatedByNameIsNil applies the IsNil predicate on the "created_by_name" field.
+func CreatedByNameIsNil() predicate.Article {
+	return predicate.Article(sql.FieldIsNull(FieldCreatedByName))
+}
+
+// CreatedByNameNotNil applies the NotNil predicate on the "created_by_name" field.
+func CreatedByNameNotNil() predicate.Article {
+	return predicate.Article(sql.FieldNotNull(FieldCreatedByName))
+}
+
+// CreatedByNameEqualFold applies the EqualFold predicate on the "created_by_name" field.
+func CreatedByNameEqualFold(v string) predicate.Article {
+	return predicate.Article(sql.FieldEqualFold(FieldCreatedByName, v))
+}
+
+// CreatedByNameContainsFold applies the ContainsFold predicate on the "created_by_name" field.
+func CreatedByNameContainsFold(v string) predicate.Article {
+	return predicate.Article(sql.FieldContainsFold(FieldCreatedByName, v))
+}
+
+// UpdatedByNameEQ applies the EQ predicate on the "updated_by_name" field.
+func UpdatedByNameEQ(v string) predicate.Article {
+	return predicate.Article(sql.FieldEQ(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameNEQ applies the NEQ predicate on the "updated_by_name" field.
+func UpdatedByNameNEQ(v string) predicate.Article {
+	return predicate.Article(sql.FieldNEQ(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameIn applies the In predicate on the "updated_by_name" field.
+func UpdatedByNameIn(vs ...string) predicate.Article {
+	return predicate.Article(sql.FieldIn(FieldUpdatedByName, vs...))
+}
+
+// UpdatedByNameNotIn applies the NotIn predicate on the "updated_by_name" field.
+func UpdatedByNameNotIn(vs ...string) predicate.Article {
+	return predicate.Article(sql.FieldNotIn(FieldUpdatedByName, vs...))
+}
+
+// UpdatedByNameGT applies the GT predicate on the "updated_by_name" field.
+func UpdatedByNameGT(v string) predicate.Article {
+	return predicate.Article(sql.FieldGT(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameGTE applies the GTE predicate on the "updated_by_name" field.
+func UpdatedByNameGTE(v string) predicate.Article {
+	return predicate.Article(sql.FieldGTE(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameLT applies the LT predicate on the "updated_by_name" field.
+func UpdatedByNameLT(v string) predicate.Article {
+	return predicate.Article(sql.FieldLT(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameLTE applies the LTE predicate on the "updated_by_name" field.
+func UpdatedByNameLTE(v string) predicate.Article {
+	return predicate.Article(sql.FieldLTE(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameContains applies the Contains predicate on the "updated_by_name" field.
+func UpdatedByNameContains(v string) predicate.Article {
+	return predicate.Article(sql.FieldContains(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameHasPrefix applies the HasPrefix predicate on the "updated_by_name" field.
+func UpdatedByNameHasPrefix(v string) predicate.Article {
+	return predicate.Article(sql.FieldHasPrefix(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameHasSuffix applies the HasSuffix predicate on the "updated_by_name" field.
+func UpdatedByNameHasSuffix(v string) predicate.Article {
+	return predicate.Article(sql.FieldHasSuffix(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameIsNil applies the IsNil predicate on the "updated_by_name" field.
+func UpdatedByNameIsNil() predicate.Article {
+	return predicate.Article(sql.FieldIsNull(FieldUpdatedByName))
+}
+
+// UpdatedByNameNotNil applies the NotNil predicate on the "updated_by_name" field.
+func UpdatedByNameNotNil() predicate.Article {
+	return predicate.Article(sql.FieldNotNull(FieldUpdatedByName))
+}
+
+// UpdatedByNameEqualFold applies the EqualFold predicate on the "updated_by_name" field.
+func UpdatedByNameEqualFold(v string) predicate.Article {
+	return predicate.Article(sql.FieldEqualFold(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameContainsFold applies the ContainsFold predicate on the "updated_by_name" field.
+func UpdatedByNameContainsFold(v string) predicate.Article {
+	return predicate.Article(sql.FieldContainsFold(FieldUpdatedByName, v))
 }
 
 // HasPostscripts applies the HasEdge predicate on the "postscripts" edge.

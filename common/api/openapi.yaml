@@ -973,6 +973,12 @@ components:
                 updated_by:
                     type: string
                     description: 更新人
+                created_by_name:
+                    type: string
+                    description: 创建人名称
+                updated_by_name:
+                    type: string
+                    description: 更新人名称
                 id:
                     type: string
                     description: 唯一Id
@@ -1018,6 +1024,10 @@ components:
                 listable:
                     type: boolean
                     description: 是否在列表展示
+                view_count:
+                    type: integer
+                    description: 浏览数
+                    format: int32
                 thank_count:
                     type: integer
                     description: 感谢数
@@ -1221,6 +1231,12 @@ components:
                 updated_by:
                     type: string
                     description: 更新人
+                created_by_name:
+                    type: string
+                    description: 创建人名称
+                updated_by_name:
+                    type: string
+                    description: 更新人名称
                 id:
                     type: string
                     description: 评论Id
@@ -1271,6 +1287,10 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.User'
                     description: 回复评论的用户信息
+                article:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.content.v1.Article'
+                    description: 文章信息
         common.api.content.v1.CommentQueryParams:
             type: object
             properties:
@@ -1297,6 +1317,9 @@ components:
                     type: integer
                     description: 层级
                     format: int32
+                with_article:
+                    type: boolean
+                    description: 是否返回文章信息
         common.api.content.v1.DeleteArticleReply:
             type: object
             properties: {}

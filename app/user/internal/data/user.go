@@ -3,7 +3,6 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	"common/pkg/constant"
-	"common/pkg/util/base"
 	"context"
 	"fmt"
 	"user/internal/biz/model"
@@ -93,7 +92,7 @@ func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 		err   error
 		total int
 	)
-	page = base.OrDefault(page, constant.GetPageDefault())
+	page = constant.PageValid(page)
 	query := tx.User.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

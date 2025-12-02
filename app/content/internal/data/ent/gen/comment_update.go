@@ -318,6 +318,46 @@ func (_u *CommentUpdate) ClearUpdatedAt() *CommentUpdate {
 	return _u
 }
 
+// SetCreatedByName sets the "created_by_name" field.
+func (_u *CommentUpdate) SetCreatedByName(v string) *CommentUpdate {
+	_u.mutation.SetCreatedByName(v)
+	return _u
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_u *CommentUpdate) SetNillableCreatedByName(v *string) *CommentUpdate {
+	if v != nil {
+		_u.SetCreatedByName(*v)
+	}
+	return _u
+}
+
+// ClearCreatedByName clears the value of the "created_by_name" field.
+func (_u *CommentUpdate) ClearCreatedByName() *CommentUpdate {
+	_u.mutation.ClearCreatedByName()
+	return _u
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_u *CommentUpdate) SetUpdatedByName(v string) *CommentUpdate {
+	_u.mutation.SetUpdatedByName(v)
+	return _u
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_u *CommentUpdate) SetNillableUpdatedByName(v *string) *CommentUpdate {
+	if v != nil {
+		_u.SetUpdatedByName(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByName clears the value of the "updated_by_name" field.
+func (_u *CommentUpdate) ClearUpdatedByName() *CommentUpdate {
+	_u.mutation.ClearUpdatedByName()
+	return _u
+}
+
 // SetArticle sets the "article" edge to the Article entity.
 func (_u *CommentUpdate) SetArticle(v *Article) *CommentUpdate {
 	return _u.SetArticleID(v.ID)
@@ -584,6 +624,18 @@ func (_u *CommentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(comment.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.CreatedByName(); ok {
+		_spec.SetField(comment.FieldCreatedByName, field.TypeString, value)
+	}
+	if _u.mutation.CreatedByNameCleared() {
+		_spec.ClearField(comment.FieldCreatedByName, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByName(); ok {
+		_spec.SetField(comment.FieldUpdatedByName, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByNameCleared() {
+		_spec.ClearField(comment.FieldUpdatedByName, field.TypeString)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1115,6 +1167,46 @@ func (_u *CommentUpdateOne) ClearUpdatedAt() *CommentUpdateOne {
 	return _u
 }
 
+// SetCreatedByName sets the "created_by_name" field.
+func (_u *CommentUpdateOne) SetCreatedByName(v string) *CommentUpdateOne {
+	_u.mutation.SetCreatedByName(v)
+	return _u
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_u *CommentUpdateOne) SetNillableCreatedByName(v *string) *CommentUpdateOne {
+	if v != nil {
+		_u.SetCreatedByName(*v)
+	}
+	return _u
+}
+
+// ClearCreatedByName clears the value of the "created_by_name" field.
+func (_u *CommentUpdateOne) ClearCreatedByName() *CommentUpdateOne {
+	_u.mutation.ClearCreatedByName()
+	return _u
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_u *CommentUpdateOne) SetUpdatedByName(v string) *CommentUpdateOne {
+	_u.mutation.SetUpdatedByName(v)
+	return _u
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_u *CommentUpdateOne) SetNillableUpdatedByName(v *string) *CommentUpdateOne {
+	if v != nil {
+		_u.SetUpdatedByName(*v)
+	}
+	return _u
+}
+
+// ClearUpdatedByName clears the value of the "updated_by_name" field.
+func (_u *CommentUpdateOne) ClearUpdatedByName() *CommentUpdateOne {
+	_u.mutation.ClearUpdatedByName()
+	return _u
+}
+
 // SetArticle sets the "article" edge to the Article entity.
 func (_u *CommentUpdateOne) SetArticle(v *Article) *CommentUpdateOne {
 	return _u.SetArticleID(v.ID)
@@ -1411,6 +1503,18 @@ func (_u *CommentUpdateOne) sqlSave(ctx context.Context) (_node *Comment, err er
 	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(comment.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.CreatedByName(); ok {
+		_spec.SetField(comment.FieldCreatedByName, field.TypeString, value)
+	}
+	if _u.mutation.CreatedByNameCleared() {
+		_spec.ClearField(comment.FieldCreatedByName, field.TypeString)
+	}
+	if value, ok := _u.mutation.UpdatedByName(); ok {
+		_spec.SetField(comment.FieldUpdatedByName, field.TypeString, value)
+	}
+	if _u.mutation.UpdatedByNameCleared() {
+		_spec.ClearField(comment.FieldUpdatedByName, field.TypeString)
 	}
 	if _u.mutation.ArticleCleared() {
 		edge := &sqlgraph.EdgeSpec{

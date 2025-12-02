@@ -20,6 +20,7 @@ type Comment struct {
 func (Comment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: constant.TablePrefixContent.String() + "comments"},
+		entsql.WithComments(true),
 	}
 }
 
@@ -40,6 +41,7 @@ func (Comment) Fields() []ent.Field {
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, pkg.UsernameAuditFields()...)
 	return fields
 }
 

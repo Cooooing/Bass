@@ -225,8 +225,6 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 		reply.LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
 	}
 	reply.AuthorUser = base.If(reply.Anonymous, nil, userAuthorsMap.Users[*reply.CreatedBy])
-	reply.ParseContent()
-	reply.ParseRewardContent()
 	return reply, err
 }
 
@@ -273,8 +271,6 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 
 	for i := range list {
 		list[i].Summary()
-		list[i].ParseContent()
-		list[i].ParseRewardContent()
 		if lastReplyComment, ok := lastCommentMap.Get(list[i].ID); ok {
 			list[i].LastReplyCommentAt = lastReplyComment.CreatedAt
 			list[i].LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]

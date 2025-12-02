@@ -70,19 +70,49 @@ func (NotificationMetaStatus) EnumDescriptor() ([]byte, []int) {
 type NotificationMetaType int32
 
 const (
-	NotificationMetaType_NotificationMetaTypeNormal NotificationMetaType = 0 // 普通
-	NotificationMetaType_NotificationMetaTypeSystem NotificationMetaType = 1 // 系统
+	NotificationMetaType_NotificationMetaTypeNormal         NotificationMetaType = 0   // 普通
+	NotificationMetaType_NotificationMetaTypeSystem         NotificationMetaType = 1   // 系统
+	NotificationMetaType_NotificationMetaTypeUserRegister   NotificationMetaType = 100 // 用户注册
+	NotificationMetaType_NotificationMetaTypeArticlePublish NotificationMetaType = 200 // 文章发布
+	NotificationMetaType_NotificationMetaTypeArticleThank   NotificationMetaType = 201 // 文章感谢
+	NotificationMetaType_NotificationMetaTypeArticleLike    NotificationMetaType = 202 // 文章点赞
+	NotificationMetaType_NotificationMetaTypeArticleCollect NotificationMetaType = 203 // 文章收藏
+	NotificationMetaType_NotificationMetaTypeArticleWatch   NotificationMetaType = 204 // 文章关注
+	NotificationMetaType_NotificationMetaTypeComment        NotificationMetaType = 300 // 评论发布
+	NotificationMetaType_NotificationMetaTypeCommentThank   NotificationMetaType = 301 // 评论感谢
+	NotificationMetaType_NotificationMetaTypeCommentLike    NotificationMetaType = 302 // 评论点赞
+	NotificationMetaType_NotificationMetaTypeCommentCollect NotificationMetaType = 303 // 评论收藏
 )
 
 // Enum value maps for NotificationMetaType.
 var (
 	NotificationMetaType_name = map[int32]string{
-		0: "NotificationMetaTypeNormal",
-		1: "NotificationMetaTypeSystem",
+		0:   "NotificationMetaTypeNormal",
+		1:   "NotificationMetaTypeSystem",
+		100: "NotificationMetaTypeUserRegister",
+		200: "NotificationMetaTypeArticlePublish",
+		201: "NotificationMetaTypeArticleThank",
+		202: "NotificationMetaTypeArticleLike",
+		203: "NotificationMetaTypeArticleCollect",
+		204: "NotificationMetaTypeArticleWatch",
+		300: "NotificationMetaTypeComment",
+		301: "NotificationMetaTypeCommentThank",
+		302: "NotificationMetaTypeCommentLike",
+		303: "NotificationMetaTypeCommentCollect",
 	}
 	NotificationMetaType_value = map[string]int32{
-		"NotificationMetaTypeNormal": 0,
-		"NotificationMetaTypeSystem": 1,
+		"NotificationMetaTypeNormal":         0,
+		"NotificationMetaTypeSystem":         1,
+		"NotificationMetaTypeUserRegister":   100,
+		"NotificationMetaTypeArticlePublish": 200,
+		"NotificationMetaTypeArticleThank":   201,
+		"NotificationMetaTypeArticleLike":    202,
+		"NotificationMetaTypeArticleCollect": 203,
+		"NotificationMetaTypeArticleWatch":   204,
+		"NotificationMetaTypeComment":        300,
+		"NotificationMetaTypeCommentThank":   301,
+		"NotificationMetaTypeCommentLike":    302,
+		"NotificationMetaTypeCommentCollect": 303,
 	}
 )
 
@@ -120,10 +150,20 @@ const file_notify_v1_constant_proto_rawDesc = "" +
 	"\x18notify/v1/constant.proto\x12\x14common.api.common.v1*\\\n" +
 	"\x16NotificationMetaStatus\x12 \n" +
 	"\x1cNotificationMetaStatusNormal\x10\x00\x12 \n" +
-	"\x1cNotificationMetaStatusCancel\x10\x01*V\n" +
+	"\x1cNotificationMetaStatusCancel\x10\x01*\xda\x03\n" +
 	"\x14NotificationMetaType\x12\x1e\n" +
 	"\x1aNotificationMetaTypeNormal\x10\x00\x12\x1e\n" +
-	"\x1aNotificationMetaTypeSystem\x10\x01B\x19Z\x17common/api/common/v1;v1b\x06proto3"
+	"\x1aNotificationMetaTypeSystem\x10\x01\x12$\n" +
+	" NotificationMetaTypeUserRegister\x10d\x12'\n" +
+	"\"NotificationMetaTypeArticlePublish\x10\xc8\x01\x12%\n" +
+	" NotificationMetaTypeArticleThank\x10\xc9\x01\x12$\n" +
+	"\x1fNotificationMetaTypeArticleLike\x10\xca\x01\x12'\n" +
+	"\"NotificationMetaTypeArticleCollect\x10\xcb\x01\x12%\n" +
+	" NotificationMetaTypeArticleWatch\x10\xcc\x01\x12 \n" +
+	"\x1bNotificationMetaTypeComment\x10\xac\x02\x12%\n" +
+	" NotificationMetaTypeCommentThank\x10\xad\x02\x12$\n" +
+	"\x1fNotificationMetaTypeCommentLike\x10\xae\x02\x12'\n" +
+	"\"NotificationMetaTypeCommentCollect\x10\xaf\x02B\x19Z\x17common/api/common/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_constant_proto_rawDescOnce sync.Once

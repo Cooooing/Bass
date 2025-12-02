@@ -525,6 +525,8 @@ type UpdateSettingRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 头像URL
 	AvatarUrl *string `protobuf:"bytes,10,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"`
+	// 昵称
+	Nickname *string `protobuf:"bytes,7,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"`
 	// 用户语言
 	Language *string `protobuf:"bytes,1,opt,name=language,proto3,oneof" json:"language,omitempty"`
 	// 时区
@@ -574,6 +576,13 @@ func (*UpdateSettingRequest) Descriptor() ([]byte, []int) {
 func (x *UpdateSettingRequest) GetAvatarUrl() string {
 	if x != nil && x.AvatarUrl != nil {
 		return *x.AvatarUrl
+	}
+	return ""
+}
+
+func (x *UpdateSettingRequest) GetNickname() string {
+	if x != nil && x.Nickname != nil {
+		return *x.Nickname
 	}
 	return ""
 }
@@ -1328,18 +1337,20 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x05_nameB\v\n" +
 	"\t_nicknameB\b\n" +
 	"\x06_emailB\b\n" +
-	"\x06_phone\"\xa0\x03\n" +
+	"\x06_phone\"\xce\x03\n" +
 	"\x14UpdateSettingRequest\x12\"\n" +
 	"\n" +
 	"avatar_url\x18\n" +
 	" \x01(\tH\x00R\tavatarUrl\x88\x01\x01\x12\x1f\n" +
-	"\blanguage\x18\x01 \x01(\tH\x01R\blanguage\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18\x02 \x01(\tH\x02R\btimezone\x88\x01\x01\x12\x19\n" +
-	"\x05theme\x18\x03 \x01(\tH\x03R\x05theme\x88\x01\x01\x12&\n" +
-	"\fmobile_theme\x18\x04 \x01(\tH\x04R\vmobileTheme\x88\x01\x01\x12/\n" +
-	"\x11enable_web_notify\x18\x05 \x01(\bH\x05R\x0fenableWebNotify\x88\x01\x01\x129\n" +
-	"\x16enable_email_subscribe\x18\x06 \x01(\bH\x06R\x14enableEmailSubscribe\x88\x01\x01B\r\n" +
+	"\bnickname\x18\a \x01(\tH\x01R\bnickname\x88\x01\x01\x12\x1f\n" +
+	"\blanguage\x18\x01 \x01(\tH\x02R\blanguage\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x02 \x01(\tH\x03R\btimezone\x88\x01\x01\x12\x19\n" +
+	"\x05theme\x18\x03 \x01(\tH\x04R\x05theme\x88\x01\x01\x12&\n" +
+	"\fmobile_theme\x18\x04 \x01(\tH\x05R\vmobileTheme\x88\x01\x01\x12/\n" +
+	"\x11enable_web_notify\x18\x05 \x01(\bH\x06R\x0fenableWebNotify\x88\x01\x01\x129\n" +
+	"\x16enable_email_subscribe\x18\x06 \x01(\bH\aR\x14enableEmailSubscribe\x88\x01\x01B\r\n" +
 	"\v_avatar_urlB\v\n" +
+	"\t_nicknameB\v\n" +
 	"\t_languageB\v\n" +
 	"\t_timezoneB\b\n" +
 	"\x06_themeB\x0f\n" +

@@ -519,6 +519,10 @@ func (m *UpdateSettingRequest) validate(all bool) error {
 		// no validation rules for AvatarUrl
 	}
 
+	if m.Nickname != nil {
+		// no validation rules for Nickname
+	}
+
 	if m.Language != nil {
 		// no validation rules for Language
 	}

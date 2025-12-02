@@ -209,6 +209,8 @@ message UserQueryParams {
 message UpdateSettingRequest{
   // 头像URL
   optional string avatar_url = 10;
+  // 昵称
+  optional string nickname = 7;
   // 用户语言
   optional string language = 1;
   // 时区

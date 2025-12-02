@@ -49,6 +49,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 		ID:                   user.ID,
 		AvatarURL:            req.AvatarUrl,
 		Language:             req.Language,
+		Nickname:             req.Nickname,
 		Timezone:             req.Timezone,
 		Theme:                req.Theme,
 		MobileTheme:          req.MobileTheme,

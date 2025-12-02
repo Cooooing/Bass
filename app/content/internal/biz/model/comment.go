@@ -36,6 +36,7 @@ func (c *Comment) ParseContent() (atUserNames set.Set[string]) {
 }
 
 func (c *Comment) ConvertToRpc() *v1.Comment {
+	c.ParseContent()
 	comment := &v1.Comment{
 		CreatedAt:     timestamppb.New(*c.CreatedAt),
 		UpdatedAt:     timestamppb.New(*c.UpdatedAt),

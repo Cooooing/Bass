@@ -74,14 +74,13 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			ParentID: base.If(comment.ReplyID == nil, nil, base.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
 			ReplyID:  comment.ReplyID,
 		}}
-
+		save.FormatContent()
 		res, err = d.commentRepo.Save(ctx, tx, save)
 		if err != nil {
 			return err
 		}
 		return nil
 	})
-	res.ParseContent()
 	return res, err
 }
 

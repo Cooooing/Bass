@@ -2110,6 +2110,9 @@ components:
                 avatar_url:
                     type: string
                     description: 头像URL
+                nickname:
+                    type: string
+                    description: 昵称
                 language:
                     type: string
                     description: 用户语言

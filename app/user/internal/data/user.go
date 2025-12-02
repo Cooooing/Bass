@@ -39,7 +39,6 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error) {
 	update := tx.User.UpdateOneID(u.ID)
 	update.SetNillableAvatarURL(u.AvatarURL)
-	update.SetNillableLanguage(u.Language)
 	update.SetNillableNickname(u.Nickname)
 	update.SetNillableLanguage(u.Language)
 	update.SetNillableTimezone(u.Timezone)

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"common/pkg/constant"
 	"common/pkg/model"
 	"fmt"
 	"os"
@@ -14,7 +15,7 @@ import (
 
 func newClient() (*RabbitMQClient, func(), error) {
 	client, f, err := NewRabbitMQClient(log.NewHelper(log.NewStdLogger(os.Stdout)), &model.RabbitmqConf{
-		Url:            "amqp://root:123456@192.168.1.6:5672/admin_vhost",
+		Url:            "amqp://admin:123456@127.0.0.1:5672/dev_vhost",
 		Heartbeat:      durationpb.New(time.Second * 10),
 		DialTimeout:    durationpb.New(time.Second * 5),
 		PrefetchCount:  10,
@@ -35,9 +36,9 @@ func TestRabbitMQClient_Publishsh(t *testing.T) {
 	}
 	defer f()
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		s := fmt.Sprintf("hello %d", i)
-		err = client.Publish("user_events", "user.created", []byte(s))
+		err = client.Publish(constant.ExchangeUser.String(), "user.create", []byte(s))
 		if err != nil {
 			t.Error(err)
 		}
@@ -51,10 +52,11 @@ func TestRabbitMQClient_Consume(t *testing.T) {
 	}
 	defer f()
 
-	ch, err := client.Consume("email_service_queue")
+	msgs, ch, err := client.Consume(constant.QueueNotify.String())
 	if err != nil {
 		t.Error(err)
 	}
+	defer client.ReleaseChannel(ch)
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
@@ -63,7 +65,7 @@ func TestRabbitMQClient_Consume(t *testing.T) {
 		for {
 			timeout := time.After(3 * time.Second)
 			select {
-			case msg := <-ch:
+			case msg := <-msgs:
 				t.Log("Received message:", string(msg.Body))
 				err = msg.Ack(false)
 

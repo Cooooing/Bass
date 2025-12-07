@@ -121,14 +121,14 @@ var QueueMap = map[QueueName]QueueDeclare{
 // QueueBindMap 队列绑定配置
 var QueueBindMap = map[QueueBindName]QueueBind{
 	// User模块
-	QueueBindName("bind.queue.user.notify"): {Name: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
+	//QueueBindName("bind.queue.user.notify"): {Name: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
 
 	// Content模块
-	QueueBindName("bind.queue.content"): {Name: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
+	//QueueBindName("bind.queue.content"): {Name: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
 
 	// Notify模块
-	//QueueBindName("bind.queue.notify"): {Name: QueueNotify, Key: RoutingKey(""), Exchange: ExchangeUser},
+	QueueBindName("bind.queue.notify"): {Name: QueueNotify, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
 
 	// Economy模块
-	QueueBindName("bind.queue.economy"): {Name: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
+	//QueueBindName("bind.queue.economy"): {Name: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
 }

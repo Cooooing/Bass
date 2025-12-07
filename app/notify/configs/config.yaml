@@ -20,7 +20,7 @@ data:
     read_timeout: 1s
     write_timeout: 1s
   rabbitmq:
-    url: "amqp://root:123456@127.0.0.1:5672/admin_vhost"
+    url: "amqp://admin:123456@127.0.0.1:5672/dev_vhost"
     heartbeat: 10s            # 心跳，秒
     dial_timeout: 5s          # 连接超时，秒
     prefetch_count: 10        # Qos，未确认消息最大数量

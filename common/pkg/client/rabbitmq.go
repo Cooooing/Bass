@@ -4,17 +4,16 @@ import (
 	"common/pkg/constant"
 	"common/pkg/model"
 	"fmt"
-	"sync"
 
 	"github.com/go-kratos/kratos/v2/log"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type RabbitMQClient struct {
-	log  *log.Helper
-	conf *model.RabbitmqConf
-	conn *amqp.Connection
-	pool *sync.Pool // *amqp091.Channel 池
+	log    *log.Helper
+	conf   *model.RabbitmqConf
+	conn   *amqp.Connection
+	chPool chan *amqp.Channel // 固定大小 channel 池
 }
 
 // NewRabbitMQClient 初始化 RabbitMQ 单机客户端
@@ -28,22 +27,10 @@ func NewRabbitMQClient(log *log.Helper, conf *model.RabbitmqConf) (*RabbitMQClie
 	}
 
 	client := &RabbitMQClient{
-		log:  log,
-		conn: conn,
-		conf: conf,
-		pool: &sync.Pool{
-			New: func() any {
-				ch, err := conn.Channel()
-				if err != nil {
-					log.Errorf("failed to create channel: %s", err)
-					return nil
-				}
-				if err := ch.Qos(int(conf.PrefetchCount), 0, conf.PrefetchGlobal); err != nil {
-					log.Errorf("failed to set qos: %s", err)
-				}
-				return ch
-			},
-		},
+		log:    log,
+		conn:   conn,
+		conf:   conf,
+		chPool: make(chan *amqp.Channel, 16), // 固定大小 channel 池
 	}
 
 	// 初始化队列和交换机
@@ -56,8 +43,16 @@ func NewRabbitMQClient(log *log.Helper, conf *model.RabbitmqConf) (*RabbitMQClie
 
 	// 清理函数
 	cleanup := func() {
-		if err := client.conn.Close(); err != nil {
-			log.Errorf("failed to close RabbitMQ connection: %s", err.Error())
+		// 关闭所有 channel
+		close(client.chPool)
+		for ch := range client.chPool {
+			if ch != nil && !ch.IsClosed() {
+				_ = ch.Close()
+			}
+		}
+		// 关闭连接
+		if err := conn.Close(); err != nil {
+			log.Errorf("failed to close RabbitMQ connection: %v", err)
 		} else {
 			log.Infof("rabbitmq connection closed")
 		}
@@ -66,28 +61,57 @@ func NewRabbitMQClient(log *log.Helper, conf *model.RabbitmqConf) (*RabbitMQClie
 	return client, cleanup, nil
 }
 
-// 从池中获取一个 channel
-func (r *RabbitMQClient) getChannel() (*amqp.Channel, error) {
-	ch := r.pool.Get()
-	if ch == nil {
-		return nil, fmt.Errorf("failed to get channel from pool")
+// newChannel 创建一个新的 channel 并设置 Qos
+func (r *RabbitMQClient) newChannel() (*amqp.Channel, error) {
+	ch, err := r.conn.Channel()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create channel: %s", err)
 	}
-	return ch.(*amqp.Channel), nil
+	// 设置 Qos
+	if err := ch.Qos(int(r.conf.PrefetchCount), 0, r.conf.PrefetchGlobal); err != nil {
+		return nil, fmt.Errorf("failed to set qos: %s", err)
+	}
+	return ch, nil
 }
 
-// 放回 channel
-func (r *RabbitMQClient) releaseChannel(ch *amqp.Channel) {
+// GetChannel 从池中获取一个 channel
+func (r *RabbitMQClient) GetChannel() (*amqp.Channel, error) {
+	// 从池中获取 channel
+	select {
+	case ch := <-r.chPool:
+		// 如果有空闲通道，直接返回
+		return ch, nil
+	default:
+		// 如果池已满，尝试创建新的通道
+		ch, err := r.newChannel()
+		if err != nil {
+			return nil, err
+		}
+		return ch, nil
+	}
+}
+
+// ReleaseChannel 放回 channel 到池中
+func (r *RabbitMQClient) ReleaseChannel(ch *amqp.Channel) {
 	if ch != nil && !ch.IsClosed() {
-		r.pool.Put(ch)
+		// 如果池中有空闲空间，则将通道放回池中
+		select {
+		case r.chPool <- ch:
+		default:
+			// 如果池已满，关闭通道
+			_ = ch.Close()
+		}
 	}
 }
 
 func (r *RabbitMQClient) declareResources() error {
-	ch, err := r.getChannel()
+	ch, err := r.newChannel()
 	if err != nil {
 		return err
 	}
-	defer r.releaseChannel(ch)
+	defer func(ch *amqp.Channel) {
+		_ = ch.Close()
+	}(ch)
 
 	// 声明 Exchange
 	for _, v := range constant.ExchangeMap {
@@ -118,18 +142,19 @@ func (r *RabbitMQClient) declareResources() error {
 
 // Publish 发送消息
 func (r *RabbitMQClient) Publish(exchange, routingKey string, body []byte) error {
-	ch, err := r.getChannel()
-	if err != nil {
-		return err
-	}
-	defer r.releaseChannel(ch)
-
 	if exchange == "" {
 		return fmt.Errorf("exchange cannot be empty")
 	}
 	if routingKey == "" {
 		return fmt.Errorf("routingKey cannot be empty")
 	}
+
+	// 获取一个通道
+	ch, err := r.GetChannel()
+	if err != nil {
+		return err
+	}
+	defer r.ReleaseChannel(ch)
 
 	return ch.Publish(
 		exchange,
@@ -145,21 +170,22 @@ func (r *RabbitMQClient) Publish(exchange, routingKey string, body []byte) error
 }
 
 // Consume 消费消息
-func (r *RabbitMQClient) Consume(queue string) (<-chan amqp.Delivery, error) {
-	ch, err := r.getChannel()
-	if err != nil {
-		return nil, err
-	}
-	defer r.releaseChannel(ch)
-
+func (r *RabbitMQClient) Consume(queue string) (<-chan amqp.Delivery, *amqp.Channel, error) {
+	// 检查队列是否为空
 	if queue == "" {
-		return nil, fmt.Errorf("queue cannot be empty")
+		return nil, nil, fmt.Errorf("queue cannot be empty")
 	}
-	var consumerTag string
 
+	// 获取一个通道
+	ch, err := r.GetChannel()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// 开始消费
 	msgs, err := ch.Consume(
 		queue,
-		consumerTag,
+		"", // consumerTag
 		r.conf.AutoAck,
 		false, // exclusive
 		false, // noLocal
@@ -167,8 +193,8 @@ func (r *RabbitMQClient) Consume(queue string) (<-chan amqp.Delivery, error) {
 		nil,   // args
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to consume queue [%s]: %w", queue, err)
+		return nil, nil, fmt.Errorf("failed to consume queue [%s]: %w", queue, err)
 	}
 
-	return msgs, nil
+	return msgs, ch, nil
 }

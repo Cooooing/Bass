@@ -82,7 +82,7 @@ func (m *RegisterEmailRequest) validate(all bool) error {
 
 	// no validation rules for Password
 
-	// no validation rules for Name
+	// no validation rules for GetName
 
 	if m.Nickname != nil {
 		// no validation rules for Nickname

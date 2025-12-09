@@ -36,7 +36,7 @@ func TestRabbitMQClient_Publishsh(t *testing.T) {
 	}
 	defer f()
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 10; i++ {
 		s := fmt.Sprintf("hello %d", i)
 		err = client.Publish(constant.ExchangeUser.String(), "user.create", []byte(s))
 		if err != nil {

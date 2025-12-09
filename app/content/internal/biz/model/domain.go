@@ -7,7 +7,9 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type Domain gen.Domain
+type Domain struct {
+	*gen.Domain
+}
 
 func (t *Domain) ConvertToRpc() *v1.Domain {
 	domain := &v1.Domain{
@@ -24,10 +26,9 @@ func (t *Domain) ConvertToRpc() *v1.Domain {
 		TagCount:    t.TagCount,
 		IsNav:       t.IsNav,
 	}
-	entDomain := (*gen.Domain)(t)
-	if len(entDomain.Edges.Tags) > 0 {
-		for _, tag := range entDomain.Edges.Tags {
-			domain.Tags = append(domain.Tags, (*Tag)(tag).ConvertToRpc())
+	if len(t.Domain.Edges.Tags) > 0 {
+		for _, tag := range t.Domain.Edges.Tags {
+			domain.Tags = append(domain.Tags, (&Tag{Tag: tag}).ConvertToRpc())
 		}
 	}
 	return domain

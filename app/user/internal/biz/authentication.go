@@ -2,9 +2,10 @@ package biz
 
 import (
 	cv1 "common/api/common/v1"
+	"common/pkg/cutil/base"
+	"common/pkg/cutil/base/str"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"common/pkg/util/base"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -25,7 +26,7 @@ type AuthenticationDomain struct {
 }
 
 func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo *util.TokenRepo, tokenService *TokenService) (*AuthenticationDomain, error) {
-	sf, err := util.NewSonyflake()
+	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 
 	// 生成 code
-	code = util.RandStr(s.sf, 6, true, true, true, false)
+	code = str.RandStr(s.sf, 6, true, true, true, false)
 	token, err = s.tokenService.EmailTokenGen.Generate(model.TokenEmail{
 		Email: u.Email,
 	})

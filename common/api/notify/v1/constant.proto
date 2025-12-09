@@ -4,26 +4,32 @@ package common.api.common.v1;
 
 option go_package = "common/api/common/v1;v1";
 
-enum NotificationMetaStatus {
-  NotificationMetaStatusNormal = 0; // 正常
-  NotificationMetaStatusCancel = 1; // 取消
+enum NotificationStatus {
+  NotificationStatusNormal = 0; // 正常
+  NotificationStatusCancel = 1; // 取消
 }
 
-enum NotificationMetaType {
-  NotificationMetaTypeNormal = 0; // 普通
-  NotificationMetaTypeSystem = 1; // 系统
+enum NotificationChannel {
+  NotificationChannelEmail = 0; // 邮件
+  NotificationChannelSMS = 1; // 短信
+  NotificationChannelWebSite = 2; // 网站
+}
 
-  NotificationMetaTypeUserRegister = 100; // 用户注册
+enum NotificationType {
+  NotificationTypeNormal = 0; // 普通
+  NotificationTypeSystem = 1; // 系统
 
-  NotificationMetaTypeArticlePublish = 200; // 文章发布
-  NotificationMetaTypeArticleThank = 201; // 文章感谢
-  NotificationMetaTypeArticleLike = 202; // 文章点赞
-  NotificationMetaTypeArticleCollect = 203; // 文章收藏
-  NotificationMetaTypeArticleWatch = 204; // 文章关注
+  NotificationTypeUserRegister = 100; // 用户注册
 
-  NotificationMetaTypeComment = 300; // 评论发布
-  NotificationMetaTypeCommentThank = 301; // 评论感谢
-  NotificationMetaTypeCommentLike = 302; // 评论点赞
-  NotificationMetaTypeCommentCollect = 303; // 评论收藏
+  NotificationTypeArticlePublish = 200; // 文章发布
+  NotificationTypeArticleThank = 201; // 文章感谢
+  NotificationTypeArticleLike = 202; // 文章点赞
+  NotificationTypeArticleCollect = 203; // 文章收藏
+  NotificationTypeArticleWatch = 204; // 文章关注
+
+  NotificationTypeComment = 300; // 评论发布
+  NotificationTypeCommentThank = 301; // 评论感谢
+  NotificationTypeCommentLike = 302; // 评论点赞
+  NotificationTypeCommentCollect = 303; // 评论收藏
 
 }

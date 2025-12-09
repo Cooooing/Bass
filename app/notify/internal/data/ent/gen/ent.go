@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"notify/internal/data/ent/gen/notificationmeta"
 	"notify/internal/data/ent/gen/notificationrecord"
+	"notify/internal/data/ent/gen/notificationtemplate"
 	"reflect"
 	"sync"
 
@@ -74,8 +75,9 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			notificationmeta.Table:   notificationmeta.ValidColumn,
-			notificationrecord.Table: notificationrecord.ValidColumn,
+			notificationmeta.Table:     notificationmeta.ValidColumn,
+			notificationrecord.Table:   notificationrecord.ValidColumn,
+			notificationtemplate.Table: notificationtemplate.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

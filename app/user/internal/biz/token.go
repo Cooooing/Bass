@@ -1,20 +1,20 @@
 package biz
 
 import (
-	"common/pkg/util"
+	"common/pkg/cutil/jwt"
 	"user/internal/biz/model"
 	"user/internal/conf"
 )
 
 type TokenService struct {
 	conf          *conf.Bootstrap
-	EmailTokenGen *util.TokenGenerator[model.TokenEmail]
-	TokenGen      *util.TokenGenerator[model.Token]
+	EmailTokenGen *jwt.TokenGenerator[model.TokenEmail]
+	TokenGen      *jwt.TokenGenerator[model.Token]
 }
 
 func NewTokenService(conf *conf.Bootstrap) *TokenService {
-	emailTokenGen := util.NewTokenGenerator[model.TokenEmail](conf.Jwt.Secret, conf.Jwt.EmailExpire.AsDuration())
-	tokenGen := util.NewTokenGenerator[model.Token](conf.Jwt.Secret, conf.Jwt.Expires.AsDuration())
+	emailTokenGen := jwt.NewTokenGenerator[model.TokenEmail](conf.Jwt.Secret, conf.Jwt.EmailExpire.AsDuration())
+	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Jwt.Secret, conf.Jwt.Expires.AsDuration())
 	return &TokenService{
 		conf:          conf,
 		EmailTokenGen: emailTokenGen,

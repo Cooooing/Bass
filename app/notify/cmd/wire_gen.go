@@ -10,6 +10,9 @@ import (
 	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"notify/internal/biz"
+	"notify/internal/biz/base"
+	"notify/internal/biz/handler"
 	"notify/internal/conf"
 	"notify/internal/data"
 	"notify/internal/data/client"
@@ -42,8 +45,33 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
-	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)
+	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
+	if err != nil {
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	filter := handler.NewFilter()
+	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	notificationMetaRepo := data.NewNotificationMetaRepo(baseRepo)
+	notificationRecordRepo := data.NewNotificationRecordRepo(baseRepo)
+	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
+	dictMap := handler.ProvideHandlers(filter, fullHandler)
+	notificationTemplateRepo := data.NewNotificationTemplateRepo(baseRepo)
+	eventHandler, cleanup5, err := biz.NewEventHandler(baseDomain, dictMap, notificationTemplateRepo)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	app := newApp(logger, helper, grpcServer, httpServer, etcdClient, eventHandler)
 	return app, func() {
+		cleanup5()
+		cleanup4()
 		cleanup3()
 		cleanup2()
 		cleanup()

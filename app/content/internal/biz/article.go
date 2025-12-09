@@ -6,11 +6,12 @@ import (
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/cutil/base"
+	"common/pkg/cutil/base/str"
+	dict2 "common/pkg/cutil/collections/dict"
+	"common/pkg/cutil/collections/set"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"common/pkg/util/base"
-	"common/pkg/util/collections/dict"
-	"common/pkg/util/collections/set"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent"
@@ -32,7 +33,7 @@ type ArticleDomain struct {
 }
 
 func NewArticleDomain(base *BaseDomain, articleRepo repo.ArticleRepo, postscriptRepo repo.ArticlePostscriptRepo, actionRecordRepo repo.ArticleActionRecordRepo, commentRepo repo.CommentRepo, tagRepo repo.TagRepo, domainRepo repo.DomainRepo) (*ArticleDomain, error) {
-	sf, err := util.NewSonyflake()
+	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
@@ -246,13 +247,13 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		userIds.Add(*item.CreatedBy)
 	}
 
-	lastCommentMap := dict.New[int64, *model.Comment](0)
+	lastCommentMap := dict2.New[int64, *model.Comment](0)
 	if articleIds.Len() > 0 {
 		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: articleIds.ToSlice()})
 		if err != nil {
 			return nil, nil, err
 		}
-		lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
+		lastCommentMap.Foreach(func(e *dict2.Entry[int64, *model.Comment]) bool {
 			userIds.Add(*e.Value.CreatedBy)
 			return true
 		})

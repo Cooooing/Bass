@@ -2,12 +2,14 @@ package data
 
 import (
 	cv1 "common/api/common/v1"
+	"common/pkg/constant"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/data/ent/gen"
 	"notify/internal/data/ent/gen/notificationmeta"
 	"notify/internal/data/ent/gen/notificationrecord"
+	"time"
 )
 
 type NotificationRecordRepo struct {
@@ -51,6 +53,23 @@ func (r *NotificationRecordRepo) Saves(ctx context.Context, tx *gen.Client, u []
 	return res, nil
 }
 
+func (r *NotificationRecordRepo) Read(ctx context.Context, tx *gen.Client, receiverId int64, startTime *time.Time, endTime *time.Time, notificationRecordIds []int64) (int, error) {
+	update := tx.NotificationRecord.Update().Where(notificationrecord.ReceiverIDEQ(receiverId))
+	if startTime != nil {
+		update = update.Where(notificationrecord.ReadTimeGTE(*startTime))
+	}
+	if endTime != nil {
+		update = update.Where(notificationrecord.ReadTimeLTE(*endTime))
+	}
+	if len(notificationRecordIds) > 0 {
+		update = update.Where(notificationrecord.IDIn(notificationRecordIds...))
+	}
+	count, err := update.
+		SetReadTime(time.Now()).
+		Save(ctx)
+	return count, err
+}
+
 func (r *NotificationRecordRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.NotificationRecordGetReq) (*model.NotificationRecord, error) {
 	query := tx.NotificationRecord.Query()
 	query = r.getQuery(query, req)
@@ -58,7 +77,7 @@ func (r *NotificationRecordRepo) GetOne(ctx context.Context, tx *gen.Client, req
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
-	return &model.NotificationRecord{NotificationRecord: n}, err
+	return &model.NotificationRecord{NotificationRecord: n, WithMeta: req.WithMeta}, err
 }
 
 func (r *NotificationRecordRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.NotificationRecordGetReq) ([]*model.NotificationRecord, error) {
@@ -73,44 +92,66 @@ func (r *NotificationRecordRepo) GetList(ctx context.Context, tx *gen.Client, re
 		return nil, err
 	}
 	for i := range list {
-		records = append(records, &model.NotificationRecord{NotificationRecord: list[i]})
+		records = append(records, &model.NotificationRecord{NotificationRecord: list[i], WithMeta: req.WithMeta})
 	}
 	return records, nil
 }
 
 func (r *NotificationRecordRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.NotificationRecordGetReq) ([]*model.NotificationRecord, *cv1.PageReply, error) {
-	// TODO implement me
-	panic("implement me")
+	var (
+		notificationRecords []*model.NotificationRecord
+		err                 error
+	)
+	page = constant.PageValid(page)
+	query := tx.NotificationRecord.Query()
+	query = r.getQuery(query, req)
+	countQuery := query.Clone()
+	count, err := countQuery.Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for _, item := range list {
+		notificationRecords = append(notificationRecords, &model.NotificationRecord{NotificationRecord: item, WithMeta: req.WithMeta})
+	}
+	return notificationRecords, &cv1.PageReply{
+		Total: uint32(count),
+		Size:  page.Size,
+		Page:  page.Page,
+	}, nil
 }
 
 func (r *NotificationRecordRepo) getQuery(query *gen.NotificationRecordQuery, req *repo.NotificationRecordGetReq) *gen.NotificationRecordQuery {
-	if req.NotificationMetaId != nil {
-		query = query.Where(notificationrecord.NotificationIDEQ(*req.NotificationMetaId))
-	}
-	if req.NotificationMetaIds != nil {
-		query = query.Where(notificationrecord.NotificationIDIn(req.NotificationMetaIds...))
-	}
 	if req.NotificationRecordId != nil {
 		query = query.Where(notificationrecord.IDEQ(*req.NotificationRecordId))
 	}
-	if req.NotificationRecordIds != nil {
+	if len(req.NotificationRecordIds) > 0 {
 		query = query.Where(notificationrecord.IDIn(req.NotificationRecordIds...))
+	}
+	if req.NotificationMetaId != nil {
+		query = query.Where(notificationrecord.NotificationIDEQ(*req.NotificationMetaId))
+	}
+	if len(req.NotificationMetaIds) > 0 {
+		query = query.Where(notificationrecord.NotificationIDIn(req.NotificationMetaIds...))
+	}
+	if req.SenderId != nil {
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.SenderIDEQ(*req.SenderId)))
 	}
 	if req.ReceiverId != nil {
 		query = query.Where(notificationrecord.ReceiverIDEQ(*req.ReceiverId))
 	}
+	if req.Status != nil {
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.StatusEQ(int32(*req.Status))))
+	}
+	if req.NotificationType != nil {
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.NotificationTypeEQ(int32(*req.NotificationType))))
+	}
 	if req.WithMeta {
-		query = query.WithNotificationMeta(func(query *gen.NotificationMetaQuery) {
-			if req.NotificationType != nil {
-				query = query.Where(notificationmeta.NotificationTypeEQ(int32(*req.NotificationType)))
-			}
-			if req.Status != nil {
-				query = query.Where(notificationmeta.StatusEQ(int32(*req.Status)))
-			}
-			if req.SenderId != nil {
-				query = query.Where(notificationmeta.SenderIDEQ(*req.SenderId))
-			}
-		})
+		query = query.WithNotificationMeta()
 	}
 	return query
 }

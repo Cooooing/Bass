@@ -2,13 +2,15 @@ package model
 
 import (
 	v1 "common/api/content/v1"
-	"common/pkg/util/base"
+	"common/pkg/cutil/base"
 	"content/internal/data/ent/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type Tag gen.Tag
+type Tag struct {
+	*gen.Tag
+}
 
 func (t *Tag) ConvertToRpc() *v1.Tag {
 	return &v1.Tag{

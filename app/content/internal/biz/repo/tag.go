@@ -12,7 +12,7 @@ import (
 type TagRepo interface {
 	Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*model.Tag, error)
 	Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) ([]*model.Tag, error)
-	Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*model.Tag, error)
+	Update(ctx context.Context, tx *gen.Client, tag *model.Tag) (*model.Tag, error)
 
 	GetOne(ctx context.Context, tx *gen.Client, req *TagGetReq) (*model.Tag, error)
 	GetList(ctx context.Context, tx *gen.Client, req *TagGetReq) ([]*model.Tag, error)

@@ -3,9 +3,9 @@ package model
 import (
 	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
+	"common/pkg/cutil/base"
+	set2 "common/pkg/cutil/collections/set"
 	"common/pkg/util"
-	"common/pkg/util/base"
-	"common/pkg/util/collections/set"
 	"content/internal/data/ent/gen"
 	"fmt"
 	"time"
@@ -29,11 +29,6 @@ type Article struct {
 	IsSummary bool `json:"-"`
 }
 
-func NewArticle(model *gen.Article) *Article {
-	a := &Article{Article: model}
-	return a
-}
-
 // Summary 文章摘要
 func (a *Article) Summary() {
 	r := []rune(a.Content)
@@ -48,8 +43,8 @@ func (a *Article) FormatContent() {
 }
 
 // ParseContent 解析文章内容
-func (a *Article) ParseContent() (atUserNames set.Set[string]) {
-	atUserNames = set.New[string](0)
+func (a *Article) ParseContent() (atUserNames set2.Set[string]) {
+	atUserNames = set2.New[string](0)
 	tree := parse.Parse(fmt.Sprintf("%s_%d", "article_content", a.ID), []byte(a.Content), parse.NewOptions())
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
@@ -72,8 +67,8 @@ func (a *Article) FormatRewardContent() {
 }
 
 // ParseRewardContent 解析文章打赏区内容
-func (a *Article) ParseRewardContent() (atUserNames set.Set[string]) {
-	atUserNames = set.New[string](0)
+func (a *Article) ParseRewardContent() (atUserNames set2.Set[string]) {
+	atUserNames = set2.New[string](0)
 	if a.RewardContent != nil {
 		tree := parse.Parse(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), []byte(*a.RewardContent), parse.NewOptions())
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -136,7 +131,7 @@ func (a *Article) ConvertToRpc() *v1.Article {
 	}
 	if len(a.Edges.Tags) > 0 {
 		for _, tag := range a.Edges.Tags {
-			article.Tags = append(article.Tags, (*Tag)(tag).ConvertToRpc())
+			article.Tags = append(article.Tags, (&Tag{Tag: tag}).ConvertToRpc())
 		}
 	}
 	return article

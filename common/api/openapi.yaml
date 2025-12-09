@@ -595,6 +595,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.NotificationRecordPageReply'
+    /v1/notificationRecord/read:
+        post:
+            tags:
+                - NotifyNotificationRecordService
+            description: 已读
+            operationId: NotifyNotificationRecordService_Read
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.NotificationRecordReadRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.NotificationRecordReadReply'
     /v1/oss/uploadToken:
         post:
             tags:
@@ -863,6 +882,17 @@ components:
                     type: integer
                     description: 页大小
                     format: uint32
+        common.api.common.v1.TimeRange:
+            type: object
+            properties:
+                start:
+                    type: string
+                    description: 开始
+                    format: date-time
+                end:
+                    type: string
+                    description: 结束
+                    format: date-time
         common.api.content.v1.AcceptAnswerArticleReply:
             type: object
             properties: {}
@@ -2064,6 +2094,25 @@ components:
                     type: integer
                     description: 状态 0-正常 1-被取消
                     format: int32
+        common.api.user.v1.NotificationRecordReadReply:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+        common.api.user.v1.NotificationRecordReadRequest:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                read_time_range:
+                    $ref: '#/components/schemas/common.api.common.v1.TimeRange'
+                notification_record_ids:
+                    type: array
+                    items:
+                        type: string
         common.api.user.v1.PageUserReply:
             type: object
             properties:

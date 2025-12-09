@@ -2,6 +2,7 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/notify/v1"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/data/ent/gen"
@@ -16,4 +17,12 @@ type NotificationMetaRepo interface {
 }
 
 type NotificationMetaGetReq struct {
+	NotificationMetaId   *int64
+	NotificationMeraIds  []int64
+	UUID                 *string
+	UUIDs                []string
+	NotificationMetaType *v1.NotificationType
+	SenderId             *int64
+	SenderIds            []int64
+	Status               *v1.NotificationStatus
 }

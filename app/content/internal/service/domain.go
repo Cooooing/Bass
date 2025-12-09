@@ -2,11 +2,12 @@ package service
 
 import (
 	v1 "common/api/content/v1"
+	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
-	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/data/ent/gen"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -37,14 +38,14 @@ func NewDomainService(baseService *BaseService, domainDomain *biz.DomainDomain) 
 func (s *DomainService) Adds(ctx context.Context, req *v1.AddDomainsRequest) (*v1.AddDomainsReply, error) {
 	domains := make([]*model.Domain, len(req.Domains))
 	for i, domain := range req.Domains {
-		domains[i] = &model.Domain{
+		domains[i] = &model.Domain{Domain: &gen.Domain{
 			Name:        domain.Name,
 			Description: domain.Description,
 			Status:      base.DerefOrDefault(domain.Status, int32(v1.DomainStatus_DomainNormal)),
 			URL:         domain.Url,
 			Icon:        domain.Icon,
 			IsNav:       domain.IsNav,
-		}
+		}}
 	}
 	_, err := s.domainDomain.Adds(ctx, domains)
 	if err != nil {
@@ -54,14 +55,14 @@ func (s *DomainService) Adds(ctx context.Context, req *v1.AddDomainsRequest) (*v
 }
 
 func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest) (*v1.UpdateDomainReply, error) {
-	data, err := s.domainDomain.Update(ctx, &model.Domain{
+	data, err := s.domainDomain.Update(ctx, &model.Domain{&gen.Domain{
 		Name:        req.Domain.Name,
 		Description: req.Domain.Description,
 		Status:      base.DerefOrDefault(req.Domain.Status, int32(v1.DomainStatus_DomainNormal)),
 		URL:         req.Domain.Url,
 		Icon:        req.Domain.Icon,
 		IsNav:       req.Domain.IsNav,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}

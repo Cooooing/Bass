@@ -58,7 +58,7 @@ func (m *Tag) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Name
+	// no validation rules for GetName
 
 	// no validation rules for ArticleCount
 
@@ -246,7 +246,7 @@ func (m *TagSave) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Name
+	// no validation rules for GetName
 
 	if m.Id != nil {
 		// no validation rules for Id
@@ -397,7 +397,7 @@ func (m *TagQueryParams) validate(all bool) error {
 	}
 
 	if m.Name != nil {
-		// no validation rules for Name
+		// no validation rules for GetName
 	}
 
 	if m.Description != nil {

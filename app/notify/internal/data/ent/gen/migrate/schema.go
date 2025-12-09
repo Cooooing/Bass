@@ -69,10 +69,28 @@ var (
 			},
 		},
 	}
+	// NotifyNotificationTemplateColumns holds the columns for the "notify_notification_template" table.
+	NotifyNotificationTemplateColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "notification_type", Type: field.TypeInt32},
+		{Name: "channel", Type: field.TypeInt32},
+		{Name: "content", Type: field.TypeString},
+		{Name: "processors", Type: field.TypeJSON},
+		{Name: "enable", Type: field.TypeBool, Default: false},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+	}
+	// NotifyNotificationTemplateTable holds the schema information for the "notify_notification_template" table.
+	NotifyNotificationTemplateTable = &schema.Table{
+		Name:       "notify_notification_template",
+		Columns:    NotifyNotificationTemplateColumns,
+		PrimaryKey: []*schema.Column{NotifyNotificationTemplateColumns[0]},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		NotifyNotificationMetaTable,
 		NotifyNotificationRecordTable,
+		NotifyNotificationTemplateTable,
 	}
 )
 
@@ -83,5 +101,8 @@ func init() {
 	NotifyNotificationRecordTable.ForeignKeys[0].RefTable = NotifyNotificationMetaTable
 	NotifyNotificationRecordTable.Annotation = &entsql.Annotation{
 		Table: "notify_notification_record",
+	}
+	NotifyNotificationTemplateTable.Annotation = &entsql.Annotation{
+		Table: "notify_notification_template",
 	}
 }

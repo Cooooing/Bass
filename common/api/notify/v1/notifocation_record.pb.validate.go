@@ -696,3 +696,240 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NotificationRecordPageReplyValidationError{}
+
+// Validate checks the field values on NotificationRecordReadRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationRecordReadRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NotificationRecordReadRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// NotificationRecordReadRequestMultiError, or nil if none found.
+func (m *NotificationRecordReadRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NotificationRecordReadRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetReadTimeRange()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, NotificationRecordReadRequestValidationError{
+					field:  "ReadTimeRange",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, NotificationRecordReadRequestValidationError{
+					field:  "ReadTimeRange",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetReadTimeRange()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotificationRecordReadRequestValidationError{
+				field:  "ReadTimeRange",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return NotificationRecordReadRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// NotificationRecordReadRequestMultiError is an error wrapping multiple
+// validation errors returned by NotificationRecordReadRequest.ValidateAll()
+// if the designated constraints aren't met.
+type NotificationRecordReadRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NotificationRecordReadRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NotificationRecordReadRequestMultiError) AllErrors() []error { return m }
+
+// NotificationRecordReadRequestValidationError is the validation error
+// returned by NotificationRecordReadRequest.Validate if the designated
+// constraints aren't met.
+type NotificationRecordReadRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotificationRecordReadRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotificationRecordReadRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotificationRecordReadRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotificationRecordReadRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotificationRecordReadRequestValidationError) ErrorName() string {
+	return "NotificationRecordReadRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotificationRecordReadRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotificationRecordReadRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotificationRecordReadRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotificationRecordReadRequestValidationError{}
+
+// Validate checks the field values on NotificationRecordReadReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *NotificationRecordReadReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on NotificationRecordReadReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// NotificationRecordReadReplyMultiError, or nil if none found.
+func (m *NotificationRecordReadReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *NotificationRecordReadReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Count
+
+	if len(errors) > 0 {
+		return NotificationRecordReadReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// NotificationRecordReadReplyMultiError is an error wrapping multiple
+// validation errors returned by NotificationRecordReadReply.ValidateAll() if
+// the designated constraints aren't met.
+type NotificationRecordReadReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NotificationRecordReadReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NotificationRecordReadReplyMultiError) AllErrors() []error { return m }
+
+// NotificationRecordReadReplyValidationError is the validation error returned
+// by NotificationRecordReadReply.Validate if the designated constraints
+// aren't met.
+type NotificationRecordReadReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotificationRecordReadReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotificationRecordReadReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotificationRecordReadReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotificationRecordReadReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotificationRecordReadReplyValidationError) ErrorName() string {
+	return "NotificationRecordReadReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotificationRecordReadReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotificationRecordReadReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotificationRecordReadReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotificationRecordReadReplyValidationError{}

@@ -11,3 +11,6 @@ type NotificationMeta func(*sql.Selector)
 
 // NotificationRecord is the predicate function for notificationrecord builders.
 type NotificationRecord func(*sql.Selector)
+
+// NotificationTemplate is the predicate function for notificationtemplate builders.
+type NotificationTemplate func(*sql.Selector)

@@ -90,7 +90,10 @@ func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginA
 }
 
 func (s *AuthenticationService) Logout(ctx context.Context, req *v1.LogoutRequest) (rsp *v1.LogoutReply, err error) {
-	token := util.MustGetContextValue[string](ctx, constant.CtxToken)
+	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	err = s.authenticationDomain.Logout(ctx, token)
 	return &v1.LogoutReply{}, err
 }

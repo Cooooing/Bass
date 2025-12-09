@@ -2,11 +2,12 @@ package service
 
 import (
 	v1 "common/api/content/v1"
+	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
-	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/data/ent/gen"
 	"context"
 	"errors"
 
@@ -38,12 +39,12 @@ func NewTagService(baseService *BaseService, domainTag *biz.TagDomain) *TagServi
 func (s *TagService) Adds(ctx context.Context, req *v1.AddTagsRequest) (*v1.AddTagsReply, error) {
 	tags := make([]*model.Tag, 0, len(req.Tags))
 	for i, tag := range req.Tags {
-		tags[i] = &model.Tag{
+		tags[i] = &model.Tag{Tag: &gen.Tag{
 			Name:        tag.Name,
 			Description: tag.Description,
 			DomainID:    tag.DomainId,
 			Status:      base.DerefOrDefault(tag.Status, int32(v1.TagStatus_TagNormal)),
-		}
+		}}
 	}
 	saves, err := s.domainTag.Saves(ctx, tags)
 	if err != nil {
@@ -62,13 +63,13 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 	if req.Tag.Id == nil {
 		return nil, errors.New("tag id is nil")
 	}
-	update, err := s.domainTag.Update(ctx, &model.Tag{
+	update, err := s.domainTag.Update(ctx, &model.Tag{Tag: &gen.Tag{
 		ID:          *req.Tag.Id,
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
 		Status:      base.DerefOrDefault(req.Tag.Status, int32(v1.TagStatus_TagNormal)),
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}

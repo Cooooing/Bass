@@ -27,7 +27,7 @@ func (r *TagRepo) Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*mo
 		SetNillableDomainID(tag.DomainID).
 		SetStatus(int32(v1.TagStatus_TagNormal)).
 		Save(ctx)
-	return (*model.Tag)(save), err
+	return &model.Tag{Tag: save}, err
 }
 
 func (r *TagRepo) Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) ([]*model.Tag, error) {
@@ -43,13 +43,13 @@ func (r *TagRepo) Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) 
 	save, err := tx.Tag.CreateBulk(creates...).Save(ctx)
 	res := make([]*model.Tag, 0, len(save))
 	for _, item := range save {
-		res = append(res, (*model.Tag)(item))
+		res = append(res, &model.Tag{Tag: item})
 	}
 	return res, err
 }
 
-func (r *TagRepo) Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*model.Tag, error) {
-	update := db.Tag.UpdateOneID(tag.ID).
+func (r *TagRepo) Update(ctx context.Context, tx *gen.Client, tag *model.Tag) (*model.Tag, error) {
+	update := tx.Tag.UpdateOneID(tag.ID).
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
@@ -58,7 +58,7 @@ func (r *TagRepo) Update(ctx context.Context, db *gen.Client, tag *model.Tag) (*
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Tag)(save), nil
+	return &model.Tag{Tag: save}, nil
 }
 
 func (r *TagRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) (*model.Tag, error) {
@@ -68,7 +68,7 @@ func (r *TagRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.TagGetRe
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("tag is not found")
 	}
-	return (*model.Tag)(t), err
+	return &model.Tag{Tag: t}, err
 }
 
 func (r *TagRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.TagGetReq) ([]*model.Tag, error) {
@@ -84,7 +84,7 @@ func (r *TagRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.TagGetR
 	}
 
 	for _, item := range list {
-		tags = append(tags, (*model.Tag)(item))
+		tags = append(tags, &model.Tag{Tag: item})
 	}
 	return tags, nil
 }
@@ -108,14 +108,13 @@ func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageReq
 	}
 
 	for _, item := range list {
-		tags = append(tags, (*model.Tag)(item))
+		tags = append(tags, &model.Tag{Tag: item})
 	}
-	return tags,
-		&cv1.PageReply{
-			Total: uint32(count),
-			Size:  page.Size,
-			Page:  page.Page,
-		}, nil
+	return tags, &cv1.PageReply{
+		Total: uint32(count),
+		Size:  page.Size,
+		Page:  page.Page,
+	}, nil
 }
 
 func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQuery {

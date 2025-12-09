@@ -32,7 +32,7 @@ func (r *DomainRepo) Save(ctx context.Context, tx *gen.Client, domain *model.Dom
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Domain)(save), nil
+	return &model.Domain{Domain: save}, nil
 }
 
 func (r *DomainRepo) Saves(ctx context.Context, tx *gen.Client, domains []*model.Domain) ([]*model.Domain, error) {
@@ -56,7 +56,7 @@ func (r *DomainRepo) Saves(ctx context.Context, tx *gen.Client, domains []*model
 	}
 	res := make([]*model.Domain, len(save))
 	for i := range save {
-		res[i] = (*model.Domain)(save[i])
+		res[i] = &model.Domain{Domain: save[i]}
 	}
 	return res, nil
 }
@@ -73,7 +73,7 @@ func (r *DomainRepo) Update(ctx context.Context, tx *gen.Client, domain *model.D
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Domain)(save), nil
+	return &model.Domain{Domain: save}, nil
 }
 
 func (r *DomainRepo) AddTagCount(ctx context.Context, tx *gen.Client, id int64, num int32) (*model.Domain, error) {
@@ -83,7 +83,7 @@ func (r *DomainRepo) AddTagCount(ctx context.Context, tx *gen.Client, id int64, 
 	if err != nil {
 		return nil, err
 	}
-	return (*model.Domain)(save), nil
+	return &model.Domain{Domain: save}, nil
 }
 
 func (r *DomainRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) (*model.Domain, error) {
@@ -93,7 +93,7 @@ func (r *DomainRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Domai
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("domain is not found")
 	}
-	return (*model.Domain)(d), err
+	return &model.Domain{Domain: d}, err
 }
 
 func (r *DomainRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) ([]*model.Domain, error) {
@@ -108,7 +108,7 @@ func (r *DomainRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Doma
 		return nil, err
 	}
 	for i := range list {
-		domains = append(domains, (*model.Domain)(list[i]))
+		domains = append(domains, &model.Domain{Domain: list[i]})
 	}
 	return domains, nil
 }
@@ -132,7 +132,7 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 		return nil, nil, err
 	}
 	for i := range list {
-		domains = append(domains, (*model.Domain)(list[i]))
+		domains = append(domains, &model.Domain{Domain: list[i]})
 	}
 	return domains, &cv1.PageReply{
 		Total: uint32(total),

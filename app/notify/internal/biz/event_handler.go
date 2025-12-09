@@ -1,68 +1,154 @@
 package biz
 
 import (
+	v1 "common/api/notify/v1"
 	"common/pkg/constant"
+	"common/pkg/cutil/collections/dict"
+	"common/pkg/cutil/handlerchain"
+	commonModel "common/pkg/model"
 	"context"
-	"time"
+	"encoding/json"
+	"notify/internal/biz/base"
+	"notify/internal/biz/repo"
+	"runtime/debug"
 
 	"github.com/panjf2000/ants/v2"
+	"github.com/rabbitmq/amqp091-go"
 )
 
 type EventHandler struct {
-	*BaseDomain
-	pool   *ants.Pool
-	ctx    context.Context
-	cancel context.CancelFunc
+	*base.BaseDomain
+	handlerMap               dict.Map[string, handlerchain.Handler[*commonModel.Notification]]
+	notificationTemplateRepo repo.NotificationTemplateRepo
+
+	workerCount int
+	pool        *ants.Pool
+	ctx         context.Context
+	cancel      context.CancelFunc
 }
 
-func NewEventHandler(base *BaseDomain) (*EventHandler, func(), error) {
-	pool, err := ants.NewPool(16, ants.WithNonblocking(false))
+func NewEventHandler(base *base.BaseDomain, handlerMap dict.Map[string, handlerchain.Handler[*commonModel.Notification]], notificationTemplateRepo repo.NotificationTemplateRepo) (*EventHandler, func(), error) {
+	workCount := 16
+	pool, err := ants.NewPool(
+		workCount,
+		ants.WithNonblocking(false),
+		ants.WithPanicHandler(func(err interface{}) {
+			// 错误兜底逻辑
+			base.Log.Errorf("[ants] worker panic recovered: %v\n%s", err, debug.Stack())
+		}),
+	)
 	if err != nil {
 		return nil, nil, err
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	h := &EventHandler{
-		BaseDomain: base,
-		pool:       pool,
-		ctx:        ctx,
-		cancel:     cancel,
+		BaseDomain:               base,
+		handlerMap:               handlerMap,
+		notificationTemplateRepo: notificationTemplateRepo,
+		workerCount:              workCount,
+		pool:                     pool,
+		ctx:                      ctx,
+		cancel:                   cancel,
+	}
+	err = h.init()
+	if err != nil {
+		return nil, nil, err
 	}
 	return h, h.CleanUp, nil
 }
 
-func (h *EventHandler) Handle() {
-	msgs, ch, err := h.rabbitmq.Consume(constant.QueueNotify.String())
-	if err != nil {
-		h.log.Error("consume error: %v", err)
-		return
+// init Todo 初始化默认模板
+func (h *EventHandler) init() error {
+	//err := ent.WithTx(h.ctx, h.db, func(tx *gen.Client) error {
+	//	templateMap, err := h.notificationTemplateRepo.GetMap(h.ctx, tx, &repo.NotificationTemplateGetReq{})
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//	templates := make([]*model.NotificationTemplate, 0)
+	//	h.notificationTemplateRepo.Saves(h.ctx, h.db, templates)
+	//})
+	//if err != nil {
+	//	return err
+	//}
+	return nil
+}
+
+func (h *EventHandler) defaultTemplate(notificationType v1.NotificationType, channel v1.NotificationChannel) {
+	switch channel {
+	default:
+		switch notificationType {
+		case v1.NotificationType_NotificationTypeUserRegister:
+
+		}
 	}
-	defer ch.Close()
-	for {
-		select {
-		case <-h.ctx.Done():
-			h.log.Info("Handle exited due to context cancel")
-			return
-		case msg, ok := <-msgs:
-			if !ok {
-				h.log.Info("Channel closed")
+}
+
+func (h *EventHandler) Handle() {
+	for range h.workerCount {
+		err := h.pool.Submit(func() {
+			msgs, ch, err := h.Rabbitmq.Consume(constant.QueueNotify.String())
+			if err != nil {
+				h.Log.Error("consume error: %v", err)
 				return
 			}
-
-			// 提交给线程池
-			m := msg
-			h.pool.Submit(func() {
-				h.log.Infof("receive message: %s", string(m.Body))
-
-				// 模拟业务处理
-				time.Sleep(3 * time.Second)
-
-				// ack 消息
-				if err := m.Ack(false); err != nil {
-					h.log.Errorf("ack failed: %v", err)
-					// 可选择重试或 nack
-					// m.Nack(false, true)
+			defer func(ch *amqp091.Channel) {
+				err := ch.Close()
+				if err != nil {
+					h.Log.Error("close channel failed: %v", err)
 				}
-			})
+			}(ch)
+			for {
+				select {
+				case <-h.ctx.Done():
+					h.Log.Info("Handle exited due to context cancel")
+					return
+				case msg, ok := <-msgs:
+					if !ok {
+						h.Log.Info("Channel closed")
+						return
+					}
+					h.Log.Infof("Received message: %s", string(msg.Body))
+
+					notification := &commonModel.Notification{}
+					err := json.Unmarshal(msg.Body, notification)
+					if err != nil {
+						h.Log.Errorf("unmarshal failed: %v", err)
+						continue
+					}
+
+					templateMap, err := h.notificationTemplateRepo.GetCache(h.ctx, notification.Type, notification.Channels)
+					if err != nil {
+						h.Log.Errorf("get template failed: %v", err)
+						continue
+					}
+
+					// 构建处理器链
+					factory := handlerchain.NewHandlerFactoryWithHandlers(h.handlerMap.Values()...)
+					// 依次按模板处理消息
+					for _, template := range templateMap.Values() {
+						handler, err := factory.BuildChainByNames(template.Processors)
+						if err != nil {
+							h.Log.Errorf("build chain failed: %v", err)
+							continue
+						}
+						notification.Content = template.Content
+						_, err = handler.Handle(h.ctx, notification)
+						if err != nil {
+							h.Log.Errorf("handle failed: %v", err)
+							continue
+						}
+					}
+
+					// ack 消息
+					if err := msg.Ack(false); err != nil {
+						h.Log.Errorf("ack failed: %v", err)
+					}
+				}
+			}
+		})
+		if err != nil {
+			h.Log.Error("submit task failed: %v", err)
 		}
 	}
 }

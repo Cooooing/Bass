@@ -22,6 +22,14 @@ service NotifyNotificationRecordService {
     };
   }
 
+  // 已读
+  rpc Read (NotificationRecordReadRequest) returns (NotificationRecordReadReply) {
+    option (google.api.http) = {
+      post: "/v1/notificationRecord/read"
+      body: "*"
+    };
+  }
+
 }
 
 // 实体定义
@@ -68,10 +76,18 @@ message NotificationRecordPageRequest {
   // 查询参数
   NotificationRecordQueryParams query = 2;
 }
-
 message NotificationRecordPageReply {
   // 分页信息
   common.v1.PageReply page = 1;
   // 通知元数据信息
   repeated NotificationRecord rows = 2;
+}
+
+message NotificationRecordReadRequest{
+  repeated int64 ids = 1;
+  common.v1.TimeRange read_time_range = 2;
+  repeated int64 notification_record_ids = 3;
+}
+message NotificationRecordReadReply{
+  int32 count = 1;
 }

@@ -3,9 +3,12 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	notifyv1 "common/api/notify/v1"
 	"common/pkg/constant"
-	"common/pkg/util/base"
-	"common/pkg/util/collections/set"
+	"common/pkg/cutil/base"
+	"common/pkg/cutil/collections/set"
+	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -13,9 +16,11 @@ import (
 	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/tag"
 	"context"
+	"encoding/json"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 type ArticleRepo struct {
@@ -182,6 +187,11 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("user not login")
+	}
+
 	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
 	if err != nil {
 		return err
@@ -196,22 +206,25 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 		return err
 	}
 
-	return nil
+	//return nil
 
-	//// Todo 广播添加文章事件
-	//publish := &v1.ArticleEventPublish{}
-	//err = copier.Copy(&publish, first)
-	//if err != nil {
-	//	return err
-	//}
-	//marshal, err := json.Marshal(publish)
-	//if err != nil {
-	//	return err
-	//}
-	//err = r.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyArticleCreate.String(), marshal)
-	//if err != nil {
-	//	return err
-	//}
+	// Todo 广播添加文章事件
+	publish := &commonModel.Notification{
+		UUID:     uuid.New().String(),
+		Type:     base.Ptr(notifyv1.NotificationType_NotificationTypeArticlePublish),
+		SenderId: user.ID,
+		Channels: []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+		Meta:     map[string]any{"user": commonModel.User{Name: user.Name}, "article": first},
+		Status:   notifyv1.NotificationStatus_NotificationStatusNormal,
+	}
+	marshal, err := json.Marshal(publish)
+	if err != nil {
+		return err
+	}
+	err = r.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), marshal)
+	if err != nil {
+		return err
+	}
 	//// Todo 广播@用户通知
 	//atUserNames := first.ParseContent()
 	//
@@ -221,8 +234,8 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 	//	return err
 	//}
 	//_ = atUserList
-	//
-	//return nil
+
+	return nil
 }
 
 func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {

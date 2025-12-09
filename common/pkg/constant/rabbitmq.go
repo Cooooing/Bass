@@ -91,6 +91,14 @@ const (
 	QueueEconomyDlx QueueName = "queue.economy.dlx"
 )
 
+// 路由键枚举
+const (
+	RoutingKeyUser RoutingKey = "user.#"
+
+	RoutingKeyContent               RoutingKey = "content.#"
+	RoutingKeyContentArticlePublish RoutingKey = "content.article.publish"
+)
+
 // 配置映射表
 
 // ExchangeMap 交换机配置
@@ -121,14 +129,15 @@ var QueueMap = map[QueueName]QueueDeclare{
 // QueueBindMap 队列绑定配置
 var QueueBindMap = map[QueueBindName]QueueBind{
 	// User模块
-	//QueueBindName("bind.queue.user.notify"): {Name: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
+	//QueueBindName("bind.queue.user.notify"): {GetName: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
 
 	// Content模块
-	//QueueBindName("bind.queue.content"): {Name: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
+	//QueueBindName("bind.queue.content"): {GetName: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
 
 	// Notify模块
-	QueueBindName("bind.queue.notify"): {Name: QueueNotify, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
+	QueueBindName("bind.queue.user->notify"):    {Name: QueueNotify, Key: RoutingKeyUser, Exchange: ExchangeUser},
+	QueueBindName("bind.queue.content->notify"): {Name: QueueNotify, Key: RoutingKeyContent, Exchange: ExchangeContent},
 
 	// Economy模块
-	//QueueBindName("bind.queue.economy"): {Name: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
+	//QueueBindName("bind.queue.economy"): {GetName: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
 }

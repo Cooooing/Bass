@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"common/pkg/cutil/base/logger"
 	"context"
 	"fmt"
 	"os"
@@ -51,7 +52,7 @@ func NewLogger(name string, version string, mode string, level string, file stri
 	zapLogger := Logger(mode, level, file)
 
 	// 添加全局字段（With 包装）
-	logger := log.With(zapLogger,
+	l := log.With(zapLogger,
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.name", name,
@@ -59,7 +60,7 @@ func NewLogger(name string, version string, mode string, level string, file stri
 		"trace_id", TraceIDValuer(), // 自动注入 trace_id
 		"span_id", SpanIDValuer(), // 自动注入 span_id
 	)
-	log.SetLogger(logger)
+	log.SetLogger(l)
 	return log.GetLogger()
 }
 
@@ -104,7 +105,12 @@ func Logger(mode string, level string, file string) log.Logger {
 		opts = append(opts, zap.Development()) // dev 模式添加开发友好字段
 	}
 
-	return NewZapLogger(mode, file, encoder, zap.NewAtomicLevelAt(l), opts...)
+	zapLogger := NewZapLogger(mode, file, encoder, zap.NewAtomicLevelAt(l), opts...)
+	// 将工具库的 logger 转换为 zap 的 Logger
+	adapter := NewZapAdapter(zapLogger.log)
+	logger.SetLogger(adapter)
+
+	return zapLogger
 }
 
 // NewZapLogger 创建 ZapLogger 实例
@@ -239,4 +245,35 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 
 	log.Info("Tracing setup complete (OTEL enabled)")
 	return tp.Shutdown, nil
+}
+
+// cutil 工具类日志实现
+
+type ZapAdapter struct {
+	zapLogger *zap.Logger
+}
+
+// NewZapAdapter 构造函数，接受一个 *zap.Logger，并返回一个适配器实例
+func NewZapAdapter(zapLogger *zap.Logger) *ZapAdapter {
+	return &ZapAdapter{zapLogger: zapLogger}
+}
+
+// Debug 转发日志到 zap 的 Debug 方法
+func (a *ZapAdapter) Debug(format string, v ...interface{}) {
+	a.zapLogger.Debug(fmt.Sprintf(format, v...))
+}
+
+// Info 转发日志到 zap 的 Info 方法
+func (a *ZapAdapter) Info(format string, v ...interface{}) {
+	a.zapLogger.Info(fmt.Sprintf(format, v...))
+}
+
+// Warn 转发日志到 zap 的 Warn 方法
+func (a *ZapAdapter) Warn(format string, v ...interface{}) {
+	a.zapLogger.Warn(fmt.Sprintf(format, v...))
+}
+
+// Error 转发日志到 zap 的 Error 方法
+func (a *ZapAdapter) Error(format string, v ...interface{}) {
+	a.zapLogger.Error(fmt.Sprintf(format, v...))
 }

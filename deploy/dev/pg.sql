@@ -2,7 +2,11 @@
 CREATE USER bass WITH PASSWORD '123456';
 CREATE DATABASE bass OWNER bass;
 
-
+-- 初始化默认通知模板
+insert into notify_notification_template (notification_type, channel, content, processors, enable, created_at, updated_at)
+values (100, 2, '{{username}} 注册成功', '[]', true, now(), now())
+     , (200, 2, '{{username}} 发布文章 {{title}}', '[]', true, now(), now())
+;
 
 
 
@@ -13,7 +17,8 @@ CREATE DATABASE bass OWNER bass;
 -- 数据库中创建拓展
 CREATE EXTENSION IF NOT EXISTS zhparser;
 
-ALTER TABLE articles ADD COLUMN IF NOT EXISTS tsv tsvector;
+ALTER TABLE articles
+    ADD COLUMN IF NOT EXISTS tsv tsvector;
 
 UPDATE articles
 SET tsv =

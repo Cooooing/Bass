@@ -3,7 +3,7 @@ package repo
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
-	"common/pkg/util/collections/dict"
+	"common/pkg/cutil/collections/dict"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
 	"context"

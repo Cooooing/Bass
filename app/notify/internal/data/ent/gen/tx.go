@@ -16,6 +16,8 @@ type Tx struct {
 	NotificationMeta *NotificationMetaClient
 	// NotificationRecord is the client for interacting with the NotificationRecord builders.
 	NotificationRecord *NotificationRecordClient
+	// NotificationTemplate is the client for interacting with the NotificationTemplate builders.
+	NotificationTemplate *NotificationTemplateClient
 
 	// lazily loaded.
 	client     *Client
@@ -149,6 +151,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.NotificationMeta = NewNotificationMetaClient(tx.config)
 	tx.NotificationRecord = NewNotificationRecordClient(tx.config)
+	tx.NotificationTemplate = NewNotificationTemplateClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

@@ -6,6 +6,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"notify/internal/biz"
 	"notify/internal/conf"
 	"notify/internal/conf/bootstrap"
 	"notify/internal/server"
@@ -39,10 +40,13 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server, es *commonClient.EtcdClient) *kratos.App {
+func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server, es *commonClient.EtcdClient, eventHandler *biz.EventHandler) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
+
+	go eventHandler.Handle()
+	log.Infof("start message quque event handler")
 
 	return kratos.New(
 		kratos.ID(id),

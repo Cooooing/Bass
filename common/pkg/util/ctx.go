@@ -2,7 +2,7 @@ package util
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util/base"
+	"common/pkg/cutil/base"
 	"context"
 )
 
@@ -17,11 +17,4 @@ func GetContextValue[T any](ctx context.Context, key constant.CtxKey) (T, bool) 
 		return t, false
 	}
 	return value.(T), true
-}
-
-func MustGetContextValue[T any](ctx context.Context, key constant.CtxKey) T {
-	if value, ok := ctx.Value(key).(T); ok {
-		return value
-	}
-	panic("context value not found")
 }

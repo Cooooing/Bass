@@ -23,6 +23,7 @@ var DataProviderSet = wire.NewSet(
 
 	NewNotificationMetaRepo,
 	NewNotificationRecordRepo,
+	NewNotificationTemplateRepo,
 )
 
 type BaseRepo struct {

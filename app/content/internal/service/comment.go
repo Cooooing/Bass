@@ -4,9 +4,9 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
+	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -44,7 +44,10 @@ func NewCommentService(baseService *BaseService, commentDomain *biz.CommentDomai
 }
 
 func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rsp *v1.AddCommentReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	comment, err := s.commentDomain.Add(ctx, &model.Comment{
 		Comment: &gen.Comment{
 			ArticleID: req.ArticleId,

@@ -4,9 +4,9 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
+	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"common/pkg/util/base"
 	"content/internal/biz"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -54,12 +54,12 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 	var tags []*model.Tag
 	if len(article.Tags) > 0 {
 		for _, tag := range article.Tags {
-			tags = append(tags, &model.Tag{
+			tags = append(tags, &model.Tag{Tag: &gen.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
 				Status:       int32(v1.TagStatus_TagNormal),
 				ArticleCount: 1,
-			})
+			}})
 		}
 	}
 
@@ -85,7 +85,10 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 }
 
 func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleDraftRequest) (rsp *v1.UpdateArticleDraftReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	article := req.Article
 	if article.Id == nil {
 		return nil, cv1.ErrorBadRequest("article id is required")
@@ -100,12 +103,12 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 	var tags []*model.Tag
 	if len(article.Tags) > 0 {
 		for _, tag := range article.Tags {
-			tags = append(tags, &model.Tag{
+			tags = append(tags, &model.Tag{Tag: &gen.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
 				Status:       int32(v1.TagStatus_TagNormal),
 				ArticleCount: 1,
-			})
+			}})
 		}
 	}
 
@@ -133,7 +136,10 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	// 只有作者可以发布草稿
 	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(req.ArticleId),
@@ -156,7 +162,10 @@ func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleReques
 }
 
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
 		// 只有作者可以删除草稿
 		exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
@@ -223,7 +232,10 @@ func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneReques
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	// 只有作者可以添加附言
 	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(req.ArticleId),
@@ -255,13 +267,19 @@ func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest)
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionLike, req.Active)
 	return &v1.LikeArticleReply{}, err
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
-	user := util.MustGetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionCollect, req.Active)
 	return &v1.CollectArticleReply{}, err
 }

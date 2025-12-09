@@ -335,7 +335,7 @@ func (_q *TagQuery) WithDomain(opts ...func(*DomainQuery)) *TagQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		GetName string `json:"name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -358,7 +358,7 @@ func (_q *TagQuery) GroupBy(field string, fields ...string) *TagGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		GetName string `json:"name,omitempty"`
 //	}
 //
 //	client.Tag.Query().

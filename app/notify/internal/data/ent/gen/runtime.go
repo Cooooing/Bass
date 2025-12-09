@@ -5,6 +5,7 @@ package gen
 import (
 	"notify/internal/data/ent/gen/notificationmeta"
 	"notify/internal/data/ent/gen/notificationrecord"
+	"notify/internal/data/ent/gen/notificationtemplate"
 	"notify/internal/data/ent/schema"
 	"time"
 )
@@ -33,4 +34,18 @@ func init() {
 	notificationrecordDescUpdatedAt := notificationrecordFields[5].Descriptor()
 	// notificationrecord.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	notificationrecord.DefaultUpdatedAt = notificationrecordDescUpdatedAt.Default.(func() time.Time)
+	notificationtemplateFields := schema.NotificationTemplate{}.Fields()
+	_ = notificationtemplateFields
+	// notificationtemplateDescEnable is the schema descriptor for enable field.
+	notificationtemplateDescEnable := notificationtemplateFields[5].Descriptor()
+	// notificationtemplate.DefaultEnable holds the default value on creation for the enable field.
+	notificationtemplate.DefaultEnable = notificationtemplateDescEnable.Default.(bool)
+	// notificationtemplateDescCreatedAt is the schema descriptor for created_at field.
+	notificationtemplateDescCreatedAt := notificationtemplateFields[6].Descriptor()
+	// notificationtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
+	notificationtemplate.DefaultCreatedAt = notificationtemplateDescCreatedAt.Default.(func() time.Time)
+	// notificationtemplateDescUpdatedAt is the schema descriptor for updated_at field.
+	notificationtemplateDescUpdatedAt := notificationtemplateFields[7].Descriptor()
+	// notificationtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	notificationtemplate.DefaultUpdatedAt = notificationtemplateDescUpdatedAt.Default.(func() time.Time)
 }

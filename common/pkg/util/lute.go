@@ -1,7 +1,7 @@
 package util
 
 import (
-	"common/pkg/util/collections/set"
+	"common/pkg/cutil/collections/set"
 	"strings"
 
 	"github.com/88250/lute"
@@ -17,6 +17,16 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames set.Set[st
 
 	text := n.Text()
 
+	/*
+		@username
+		[@username](user's home page link)
+
+		&username:title
+		[&username:title](article's link)
+
+		#tag/domain
+		[#tag/domain](tag's link)
+	*/
 	s := text[1:]
 	if strings.HasPrefix(text, "@") {
 		username := s

@@ -2,7 +2,7 @@ package model
 
 import (
 	v1 "common/api/user/v1"
-	"common/pkg/util"
+	"common/pkg/cutil/base/str"
 	"user/internal/data/ent/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -11,13 +11,13 @@ import (
 type User gen.User
 
 func (u *User) PasswordEncrypt() error {
-	password, err := util.HashPassword(u.Password)
+	password, err := str.HashPassword(u.Password)
 	u.Password = password
 	return err
 }
 
 func (u *User) PasswordVerify(password string) bool {
-	return util.VerifyPassword(u.Password, password)
+	return str.VerifyPassword(u.Password, password)
 }
 
 func (u *User) ConvertToRpc() *v1.User {

@@ -51,10 +51,11 @@ enum ArticleAction {
   ArticleActionThank = 1; // 感谢
   ArticleActionCollect = 2; // 收藏
   ArticleActionWatch = 3; // 关注
-  ArticleActionReply = 4; // 回复
-  ArticleActionVote = 5; // 投票
-  ArticleActionLottery = 6; // 抽奖参与
-  ArticleActionLotteryWinner = 7; // 抽奖中奖
+  ArticleActionReward = 4; // 打赏
+  ArticleActionReply = 5; // 回复
+  ArticleActionVote = 6; // 投票
+  ArticleActionLottery = 7; // 抽奖参与
+  ArticleActionLotteryWinner = 8; // 抽奖中奖
 }
 
 enum ArticleOrder {

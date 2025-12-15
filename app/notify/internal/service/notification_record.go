@@ -22,9 +22,10 @@ type NotificationRecordService struct {
 	notificationRecordDomain *biz.NotificationRecordDomain
 }
 
-func NewNotificationRecordService(baseService *BaseService) *NotificationRecordService {
+func NewNotificationRecordService(baseService *BaseService, notificationRecordDomain *biz.NotificationRecordDomain) *NotificationRecordService {
 	return &NotificationRecordService{
-		BaseService: baseService,
+		BaseService:              baseService,
+		notificationRecordDomain: notificationRecordDomain,
 	}
 }
 

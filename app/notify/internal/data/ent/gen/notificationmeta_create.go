@@ -3,6 +3,7 @@
 package gen
 
 import (
+	"common/pkg/model"
 	"context"
 	"errors"
 	"fmt"
@@ -40,7 +41,7 @@ func (_c *NotificationMetaCreate) SetSenderID(v int64) *NotificationMetaCreate {
 }
 
 // SetMeta sets the "meta" field.
-func (_c *NotificationMetaCreate) SetMeta(v map[string]interface{}) *NotificationMetaCreate {
+func (_c *NotificationMetaCreate) SetMeta(v model.Meta) *NotificationMetaCreate {
 	_c.mutation.SetMeta(v)
 	return _c
 }

@@ -3,24 +3,21 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
-	notifyv1 "common/api/notify/v1"
 	"common/pkg/constant"
 	"common/pkg/cutil/base"
 	"common/pkg/cutil/collections/set"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
 	"content/internal/data/ent/gen/article"
+	"content/internal/data/ent/gen/articleactionrecord"
 	"content/internal/data/ent/gen/articlepostscript"
 	"content/internal/data/ent/gen/tag"
 	"context"
-	"encoding/json"
+	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 type ArticleRepo struct {
@@ -161,7 +158,7 @@ func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, tx *gen.Client, a
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) error {
+func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) (*model.Article, error) {
 	updateOne := tx.Article.UpdateOneID(articleId)
 	switch action {
 	case v1.ArticleAction_ArticleActionLike:
@@ -181,61 +178,44 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 	case v1.ArticleAction_ArticleActionLotteryWinner:
 		updateOne.AddLotteryWinnerCount(num)
 	default:
-		return nil
+		return nil, fmt.Errorf("unknown action")
 	}
-	return updateOne.Exec(ctx)
+	save, err := updateOne.Save(ctx)
+	return &model.Article{Article: save}, err
 }
 
-func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return cv1.ErrorUnauthorized("user not login")
+func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, articleId int64, commentId int64) (*model.Article, error) {
+	exist, err := r.commentRepo.Exist(ctx, tx, &repo.CommentGetReq{CommentId: base.Ptr(commentId), ArticleId: base.Ptr(articleId)})
+	if err != nil {
+		return nil, err
 	}
+	if !exist {
+		return nil, fmt.Errorf("comment not exist")
+	}
+	a, err := tx.Article.UpdateOneID(articleId).
+		SetAcceptedAnswerID(commentId).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Article{Article: a}, nil
+}
 
+func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) (*model.Article, error) {
 	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if first.Status != int32(v1.ArticleStatus_ArticleDrafts) {
-		return cv1.ErrorBadRequest("only update draft")
+		return nil, cv1.ErrorBadRequest("only update draft")
 	}
 
 	err = r.UpdateStatus(ctx, tx, articleId, v1.ArticleStatus_ArticleNormal)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	//return nil
-
-	// Todo 广播添加文章事件
-	publish := &commonModel.Notification{
-		UUID:     uuid.New().String(),
-		Type:     base.Ptr(notifyv1.NotificationType_NotificationTypeArticlePublish),
-		SenderId: user.ID,
-		Channels: []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
-		Meta:     map[string]any{"user": commonModel.User{Name: user.Name}, "article": first},
-		Status:   notifyv1.NotificationStatus_NotificationStatusNormal,
-	}
-	marshal, err := json.Marshal(publish)
-	if err != nil {
-		return err
-	}
-	err = r.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), marshal)
-	if err != nil {
-		return err
-	}
-	//// Todo 广播@用户通知
-	//atUserNames := first.ParseContent()
-	//
-	//userServiceClient, err := client.GetServiceClient(r.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	//atUserList, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: atUserNames.ToSlice()}})
-	//if err != nil {
-	//	return err
-	//}
-	//_ = atUserList
-
-	return nil
+	return first, nil
 }
 
 func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {
@@ -329,6 +309,11 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 	}
 	if req.Type != nil {
 		query = query.Where(article.TypeEQ(int32(*req.Type)))
+	}
+	if req.QueryUserId != nil {
+		query = query.WithActionRecords(func(query *gen.ArticleActionRecordQuery) {
+			query.Where(articleactionrecord.UserIDEQ(*req.QueryUserId))
+		})
 	}
 	if req.Keyword != nil {
 		// Todo 后续考虑使用 zhparser 全文搜索拓展实现

@@ -12,6 +12,7 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
+	NewEventPool,
 
 	NewArticleDomain,
 	NewCommentDomain,
@@ -20,21 +21,23 @@ var BizProviderSet = wire.NewSet(
 )
 
 type BaseDomain struct {
-	conf     *conf.Bootstrap
-	log      *log.Helper
-	db       *gen.Client
-	etcd     *client.EtcdClient
-	redis    *client.RedisClient
-	rabbitmq *client.RabbitMQClient
+	conf      *conf.Bootstrap
+	log       *log.Helper
+	db        *gen.Client
+	etcd      *client.EtcdClient
+	redis     *client.RedisClient
+	rabbitmq  *client.RabbitMQClient
+	eventPool *EventPool
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *EventPool) *BaseDomain {
 	return &BaseDomain{
-		conf:     conf,
-		log:      log,
-		db:       db,
-		etcd:     etcd,
-		redis:    redis,
-		rabbitmq: rabbitmq,
+		conf:      conf,
+		log:       log,
+		db:        db,
+		etcd:      etcd,
+		redis:     redis,
+		rabbitmq:  rabbitmq,
+		eventPool: eventPool,
 	}
 }

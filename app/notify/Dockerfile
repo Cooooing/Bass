@@ -45,7 +45,7 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 暴露端口
-EXPOSE 8001 9001
+EXPOSE 8003 9003
 
 # 启动命令
 CMD ["/app/server"]

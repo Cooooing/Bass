@@ -27,6 +27,15 @@ func NewNotificationTemplateRepo(repo *BaseRepo) repo.NotificationTemplateRepo {
 }
 
 func (r *NotificationTemplateRepo) Save(ctx context.Context, tx *gen.Client, u *model.NotificationTemplate) (*model.NotificationTemplate, error) {
+	if u.Enable {
+		_, err := tx.NotificationTemplate.Update().
+			SetEnable(false).
+			Where(notificationtemplate.NotificationTypeEQ(u.NotificationType), notificationtemplate.ChannelEQ(u.Channel)).
+			Save(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
 	save, err := tx.NotificationTemplate.Create().
 		SetNotificationType(u.NotificationType).
 		SetChannel(u.Channel).
@@ -40,27 +49,18 @@ func (r *NotificationTemplateRepo) Save(ctx context.Context, tx *gen.Client, u *
 	return &model.NotificationTemplate{NotificationTemplate: save}, nil
 }
 
-func (r *NotificationTemplateRepo) Saves(ctx context.Context, tx *gen.Client, u []*model.NotificationTemplate) ([]*model.NotificationTemplate, error) {
-	records := make([]*gen.NotificationTemplateCreate, 0, len(u))
-	for _, v := range u {
-		records = append(records,
-			tx.NotificationTemplate.Create().
-				SetNotificationType(v.NotificationType).
-				SetChannel(v.Channel).
-				SetContent(v.Content).
-				SetProcessors(v.Processors).
-				SetEnable(v.Enable),
-		)
+func (r *NotificationTemplateRepo) Update(ctx context.Context, tx *gen.Client, u *model.NotificationTemplate) (*model.NotificationTemplate, error) {
+	if u.Enable {
+		_, err := tx.NotificationTemplate.Update().
+			SetEnable(false).
+			Where(notificationtemplate.NotificationTypeEQ(u.NotificationType), notificationtemplate.ChannelEQ(u.Channel)).
+			Save(ctx)
+		if err != nil {
+			return nil, err
+		}
 	}
-	saves, err := tx.NotificationTemplate.CreateBulk(records...).Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	res := make([]*model.NotificationTemplate, len(saves))
-	for i := range saves {
-		res[i] = &model.NotificationTemplate{NotificationTemplate: saves[i]}
-	}
-	return res, nil
+	update, err := tx.NotificationTemplate.UpdateOne(u.NotificationTemplate).Save(ctx)
+	return &model.NotificationTemplate{NotificationTemplate: update}, err
 }
 
 func (r *NotificationTemplateRepo) SaveCache(ctx context.Context, records dict.Map[string, *model.NotificationTemplate]) error {

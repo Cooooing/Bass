@@ -93,10 +93,32 @@ const (
 
 // 路由键枚举
 const (
-	RoutingKeyUser RoutingKey = "user.#"
+	RoutingKeyUser    RoutingKey = "user.#"
+	RoutingKeyUserDlx RoutingKey = "user.dlx"
 
 	RoutingKeyContent               RoutingKey = "content.#"
+	RoutingKeyContentDlx            RoutingKey = "content.dlx"
 	RoutingKeyContentArticlePublish RoutingKey = "content.article.publish"
+	RoutingKeyContentArticleThank   RoutingKey = "content.article.thank"
+	RoutingKeyContentArticleLike    RoutingKey = "content.article.like"
+	RoutingKeyContentArticleCollect RoutingKey = "content.article.collect"
+	RoutingKeyContentArticleWatch   RoutingKey = "content.article.watch"
+	RoutingKeyContentArticleAt      RoutingKey = "content.article.at"
+
+	RoutingKeyContentCommentPublish       RoutingKey = "content.comment.publish"
+	RoutingKeyContentCommentThank         RoutingKey = "content.comment.thank"
+	RoutingKeyContentCommentLike          RoutingKey = "content.comment.like"
+	RoutingKeyContentCommentCollect       RoutingKey = "content.comment.collect"
+	RoutingKeyContentCommentAt            RoutingKey = "content.comment.at"
+	RoutingKeyContentArticleVote          RoutingKey = "content.article.vote"
+	RoutingKeyContentArticleLottery       RoutingKey = "content.article.lottery"
+	RoutingKeyContentArticleLotteryWinner RoutingKey = "content.article.lottery_winner"
+
+	RoutingKeyNotify    RoutingKey = "notify.#"
+	RoutingKeyNotifyDlx RoutingKey = "notify.dlx"
+
+	RoutingKeyEconomy    RoutingKey = "economy.#"
+	RoutingKeyEconomyDlx RoutingKey = "economy.dlx"
 )
 
 // 配置映射表
@@ -115,10 +137,10 @@ var ExchangeMap = map[ExchangeName]ExchangeDeclare{
 
 // QueueMap 队列配置
 var QueueMap = map[QueueName]QueueDeclare{
-	QueueUser:    {Name: QueueUser, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeUserDlx.String()}},
-	QueueContent: {Name: QueueContent, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeContentDlx.String()}},
-	QueueNotify:  {Name: QueueNotify, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeNotifyDlx.String()}},
-	QueueEconomy: {Name: QueueEconomy, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeEconomyDlx.String()}},
+	QueueUser:    {Name: QueueUser, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeUserDlx.String(), "x-dead-letter-routing-key": RoutingKeyUserDlx.String()}},
+	QueueContent: {Name: QueueContent, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeContentDlx.String(), "x-dead-letter-routing-key": RoutingKeyContentDlx.String()}},
+	QueueNotify:  {Name: QueueNotify, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeNotifyDlx.String(), "x-dead-letter-routing-key": RoutingKeyNotifyDlx.String()}},
+	QueueEconomy: {Name: QueueEconomy, Durable: true, Args: amqp091.Table{"x-dead-letter-exchange": ExchangeEconomyDlx.String(), "x-dead-letter-routing-key": RoutingKeyEconomyDlx.String()}},
 
 	QueueUserDlx:    {Name: QueueUserDlx, Durable: true},
 	QueueContentDlx: {Name: QueueContentDlx, Durable: true},
@@ -131,13 +153,21 @@ var QueueBindMap = map[QueueBindName]QueueBind{
 	// User模块
 	//QueueBindName("bind.queue.user.notify"): {GetName: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
 
+	QueueBindName("bind.dlx.queue.user->user"): {Name: QueueUserDlx, Key: RoutingKeyUserDlx, Exchange: ExchangeUserDlx},
+
 	// Content模块
 	//QueueBindName("bind.queue.content"): {GetName: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
+
+	QueueBindName("bind.dlx.queue.content->content"): {Name: QueueContentDlx, Key: RoutingKeyContentDlx, Exchange: ExchangeContentDlx},
 
 	// Notify模块
 	QueueBindName("bind.queue.user->notify"):    {Name: QueueNotify, Key: RoutingKeyUser, Exchange: ExchangeUser},
 	QueueBindName("bind.queue.content->notify"): {Name: QueueNotify, Key: RoutingKeyContent, Exchange: ExchangeContent},
 
+	QueueBindName("bind.dlx.queue.notify->notify"): {Name: QueueNotifyDlx, Key: RoutingKeyNotifyDlx, Exchange: ExchangeNotifyDlx},
+
 	// Economy模块
 	//QueueBindName("bind.queue.economy"): {GetName: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
+
+	QueueBindName("bind.dlx.queue.economy->economy"): {Name: QueueEconomyDlx, Key: RoutingKeyEconomyDlx, Exchange: ExchangeEconomyDlx},
 }

@@ -50,6 +50,8 @@ type Article struct {
 	ContentRender string `protobuf:"bytes,22,opt,name=content_render,json=contentRender,proto3" json:"content_render,omitempty"`
 	// 是否有附言
 	HasPostscript bool `protobuf:"varint,5,opt,name=has_postscript,json=hasPostscript,proto3" json:"has_postscript,omitempty"`
+	// 是否有打赏区
+	HasReward bool `protobuf:"varint,33,opt,name=has_reward,json=hasReward,proto3" json:"has_reward,omitempty"`
 	// 打赏区内容（可为空）
 	RewardContent *string `protobuf:"bytes,6,opt,name=reward_content,json=rewardContent,proto3,oneof" json:"reward_content,omitempty"`
 	// 打赏内容渲染（可为空）
@@ -209,6 +211,13 @@ func (x *Article) GetContentRender() string {
 func (x *Article) GetHasPostscript() bool {
 	if x != nil {
 		return x.HasPostscript
+	}
+	return false
+}
+
+func (x *Article) GetHasReward() bool {
+	if x != nil {
+		return x.HasReward
 	}
 	return false
 }
@@ -530,8 +539,6 @@ type ArticleSave struct {
 	Anonymous *bool `protobuf:"varint,12,opt,name=anonymous,proto3,oneof" json:"anonymous,omitempty"`
 	// 是否在列表展示
 	Listable *bool `protobuf:"varint,13,opt,name=listable,proto3,oneof" json:"listable,omitempty"`
-	// @ 用户id列表
-	AtUserIds []int64 `protobuf:"varint,20,rep,packed,name=at_user_ids,json=atUserIds,proto3" json:"at_user_ids,omitempty"`
 	// 标签id
 	Tags          []*TagSave `protobuf:"bytes,100,rep,name=tags,proto3" json:"tags,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -650,13 +657,6 @@ func (x *ArticleSave) GetListable() bool {
 		return *x.Listable
 	}
 	return false
-}
-
-func (x *ArticleSave) GetAtUserIds() []int64 {
-	if x != nil {
-		return x.AtUserIds
-	}
-	return nil
 }
 
 func (x *ArticleSave) GetTags() []*TagSave {
@@ -2227,7 +2227,7 @@ var File_content_v1_article_proto protoreflect.FileDescriptor
 
 const file_content_v1_article_proto_rawDesc = "" +
 	"\n" +
-	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\x1a\x12user/v1/user.proto\"\xd5\r\n" +
+	"\x18content/v1/article.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\x1a\x12user/v1/user.proto\"\xf4\r\n" +
 	"\aArticle\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -2243,7 +2243,9 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12%\n" +
 	"\x0econtent_render\x18\x16 \x01(\tR\rcontentRender\x12%\n" +
-	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12*\n" +
+	"\x0ehas_postscript\x18\x05 \x01(\bR\rhasPostscript\x12\x1d\n" +
+	"\n" +
+	"has_reward\x18! \x01(\bR\thasReward\x12*\n" +
 	"\x0ereward_content\x18\x06 \x01(\tH\x04R\rrewardContent\x88\x01\x01\x127\n" +
 	"\x15reward_content_render\x18\x17 \x01(\tH\x05R\x13rewardContentRender\x88\x01\x01\x12(\n" +
 	"\rreward_points\x18\a \x01(\x05H\x06R\frewardPoints\x88\x01\x01\x12\x16\n" +
@@ -2306,7 +2308,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\acontent\x18\x03 \x01(\tR\acontent\x12%\n" +
 	"\x0econtent_render\x18\x04 \x01(\tR\rcontentRenderB\r\n" +
 	"\v_created_byB\r\n" +
-	"\v_updated_by\"\xfd\x04\n" +
+	"\v_updated_by\"\xdd\x04\n" +
 	"\vArticleSave\x12\x13\n" +
 	"\x02id\x18\b \x01(\x03H\x00R\x02id\x88\x01\x01\x12\x1f\n" +
 	"\x05title\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18dR\x05title\x12!\n" +
@@ -2320,8 +2322,7 @@ const file_content_v1_article_proto_rawDesc = "" +
 	" \x01(\tH\x04R\tstatement\x88\x01\x01\x12%\n" +
 	"\vcommentable\x18\v \x01(\bH\x05R\vcommentable\x88\x01\x01\x12!\n" +
 	"\tanonymous\x18\f \x01(\bH\x06R\tanonymous\x88\x01\x01\x12\x1f\n" +
-	"\blistable\x18\r \x01(\bH\aR\blistable\x88\x01\x01\x12\x1e\n" +
-	"\vat_user_ids\x18\x14 \x03(\x03R\tatUserIds\x122\n" +
+	"\blistable\x18\r \x01(\bH\aR\blistable\x88\x01\x01\x122\n" +
 	"\x04tags\x18d \x03(\v2\x1e.common.api.content.v1.TagSaveR\x04tagsB\x05\n" +
 	"\x03_idB\x11\n" +
 	"\x0f_reward_contentB\x10\n" +
@@ -2436,17 +2437,17 @@ const file_content_v1_article_proto_rawDesc = "" +
 	"\x15ContentArticleService\x12s\n" +
 	"\x03Add\x12(.common.api.content.v1.AddArticleRequest\x1a&.common.api.content.v1.AddArticleReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/article/add\x12\x93\x01\n" +
 	"\vUpdateDraft\x120.common.api.content.v1.UpdateArticleDraftRequest\x1a..common.api.content.v1.UpdateArticleDraftReply\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/article/updateDraft\x12\x83\x01\n" +
-	"\aPublish\x12,.common.api.content.v1.PublishArticleRequest\x1a*.common.api.content.v1.PublishArticleReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/article/publish\x12\x7f\n" +
+	"\aPublish\x12,.common.api.content.v1.PublishArticleRequest\x1a*.common.api.content.v1.PublishArticleReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/article/publish\x12\x9b\x01\n" +
+	"\rAddPostscript\x122.common.api.content.v1.AddPostscriptArticleRequest\x1a0.common.api.content.v1.AddPostscriptArticleReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/article/addPostscript\x12\x7f\n" +
 	"\x06Update\x12+.common.api.content.v1.UpdateArticleRequest\x1a).common.api.content.v1.UpdateArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/update\x12\x7f\n" +
 	"\x06Delete\x12+.common.api.content.v1.DeleteArticleRequest\x1a).common.api.content.v1.DeleteArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/delete\x12w\n" +
 	"\x04Page\x12).common.api.content.v1.PageArticleRequest\x1a'.common.api.content.v1.PageArticleReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/article/page\x12\x7f\n" +
-	"\x06GetOne\x12+.common.api.content.v1.GetArticleOneRequest\x1a).common.api.content.v1.GetArticleOneReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/getOne\x12\x9b\x01\n" +
-	"\rAddPostscript\x122.common.api.content.v1.AddPostscriptArticleRequest\x1a0.common.api.content.v1.AddPostscriptArticleReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/article/addPostscript\x12\x7f\n" +
-	"\x06Reward\x12+.common.api.content.v1.RewardArticleRequest\x1a).common.api.content.v1.RewardArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/reward\x12{\n" +
-	"\x05Thank\x12*.common.api.content.v1.ThankArticleRequest\x1a(.common.api.content.v1.ThankArticleReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/article/thank\x12w\n" +
-	"\x04Like\x12).common.api.content.v1.LikeArticleRequest\x1a'.common.api.content.v1.LikeArticleReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/article/like\x12\x83\x01\n" +
+	"\x06GetOne\x12+.common.api.content.v1.GetArticleOneRequest\x1a).common.api.content.v1.GetArticleOneReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/getOne\x12w\n" +
+	"\x04Like\x12).common.api.content.v1.LikeArticleRequest\x1a'.common.api.content.v1.LikeArticleReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/article/like\x12{\n" +
+	"\x05Thank\x12*.common.api.content.v1.ThankArticleRequest\x1a(.common.api.content.v1.ThankArticleReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/article/thank\x12\x83\x01\n" +
 	"\aCollect\x12,.common.api.content.v1.CollectArticleRequest\x1a*.common.api.content.v1.CollectArticleReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/article/collect\x12{\n" +
-	"\x05Watch\x12*.common.api.content.v1.WatchArticleRequest\x1a(.common.api.content.v1.WatchArticleReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/article/watch\x12\x97\x01\n" +
+	"\x05Watch\x12*.common.api.content.v1.WatchArticleRequest\x1a(.common.api.content.v1.WatchArticleReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/article/watch\x12\x7f\n" +
+	"\x06Reward\x12+.common.api.content.v1.RewardArticleRequest\x1a).common.api.content.v1.RewardArticleReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/article/reward\x12\x97\x01\n" +
 	"\fAcceptAnswer\x121.common.api.content.v1.AcceptAnswerArticleRequest\x1a/.common.api.content.v1.AcceptAnswerArticleReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/article/acceptAnswerB\x1aZ\x18common/api/content/v1;v1b\x06proto3"
 
 var (
@@ -2529,30 +2530,30 @@ var file_content_v1_article_proto_depIdxs = []int32{
 	4,  // 20: common.api.content.v1.ContentArticleService.Add:input_type -> common.api.content.v1.AddArticleRequest
 	6,  // 21: common.api.content.v1.ContentArticleService.UpdateDraft:input_type -> common.api.content.v1.UpdateArticleDraftRequest
 	8,  // 22: common.api.content.v1.ContentArticleService.Publish:input_type -> common.api.content.v1.PublishArticleRequest
-	10, // 23: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
-	12, // 24: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
-	14, // 25: common.api.content.v1.ContentArticleService.Page:input_type -> common.api.content.v1.PageArticleRequest
-	16, // 26: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
-	18, // 27: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
-	20, // 28: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
+	18, // 23: common.api.content.v1.ContentArticleService.AddPostscript:input_type -> common.api.content.v1.AddPostscriptArticleRequest
+	10, // 24: common.api.content.v1.ContentArticleService.Update:input_type -> common.api.content.v1.UpdateArticleRequest
+	12, // 25: common.api.content.v1.ContentArticleService.Delete:input_type -> common.api.content.v1.DeleteArticleRequest
+	14, // 26: common.api.content.v1.ContentArticleService.Page:input_type -> common.api.content.v1.PageArticleRequest
+	16, // 27: common.api.content.v1.ContentArticleService.GetOne:input_type -> common.api.content.v1.GetArticleOneRequest
+	24, // 28: common.api.content.v1.ContentArticleService.Like:input_type -> common.api.content.v1.LikeArticleRequest
 	22, // 29: common.api.content.v1.ContentArticleService.Thank:input_type -> common.api.content.v1.ThankArticleRequest
-	24, // 30: common.api.content.v1.ContentArticleService.Like:input_type -> common.api.content.v1.LikeArticleRequest
-	26, // 31: common.api.content.v1.ContentArticleService.Collect:input_type -> common.api.content.v1.CollectArticleRequest
-	28, // 32: common.api.content.v1.ContentArticleService.Watch:input_type -> common.api.content.v1.WatchArticleRequest
+	26, // 30: common.api.content.v1.ContentArticleService.Collect:input_type -> common.api.content.v1.CollectArticleRequest
+	28, // 31: common.api.content.v1.ContentArticleService.Watch:input_type -> common.api.content.v1.WatchArticleRequest
+	20, // 32: common.api.content.v1.ContentArticleService.Reward:input_type -> common.api.content.v1.RewardArticleRequest
 	30, // 33: common.api.content.v1.ContentArticleService.AcceptAnswer:input_type -> common.api.content.v1.AcceptAnswerArticleRequest
 	5,  // 34: common.api.content.v1.ContentArticleService.Add:output_type -> common.api.content.v1.AddArticleReply
 	7,  // 35: common.api.content.v1.ContentArticleService.UpdateDraft:output_type -> common.api.content.v1.UpdateArticleDraftReply
 	9,  // 36: common.api.content.v1.ContentArticleService.Publish:output_type -> common.api.content.v1.PublishArticleReply
-	11, // 37: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
-	13, // 38: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
-	15, // 39: common.api.content.v1.ContentArticleService.Page:output_type -> common.api.content.v1.PageArticleReply
-	17, // 40: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
-	19, // 41: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
-	21, // 42: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply
+	19, // 37: common.api.content.v1.ContentArticleService.AddPostscript:output_type -> common.api.content.v1.AddPostscriptArticleReply
+	11, // 38: common.api.content.v1.ContentArticleService.Update:output_type -> common.api.content.v1.UpdateArticleReply
+	13, // 39: common.api.content.v1.ContentArticleService.Delete:output_type -> common.api.content.v1.DeleteArticleReply
+	15, // 40: common.api.content.v1.ContentArticleService.Page:output_type -> common.api.content.v1.PageArticleReply
+	17, // 41: common.api.content.v1.ContentArticleService.GetOne:output_type -> common.api.content.v1.GetArticleOneReply
+	25, // 42: common.api.content.v1.ContentArticleService.Like:output_type -> common.api.content.v1.LikeArticleReply
 	23, // 43: common.api.content.v1.ContentArticleService.Thank:output_type -> common.api.content.v1.ThankArticleReply
-	25, // 44: common.api.content.v1.ContentArticleService.Like:output_type -> common.api.content.v1.LikeArticleReply
-	27, // 45: common.api.content.v1.ContentArticleService.Collect:output_type -> common.api.content.v1.CollectArticleReply
-	29, // 46: common.api.content.v1.ContentArticleService.Watch:output_type -> common.api.content.v1.WatchArticleReply
+	27, // 44: common.api.content.v1.ContentArticleService.Collect:output_type -> common.api.content.v1.CollectArticleReply
+	29, // 45: common.api.content.v1.ContentArticleService.Watch:output_type -> common.api.content.v1.WatchArticleReply
+	21, // 46: common.api.content.v1.ContentArticleService.Reward:output_type -> common.api.content.v1.RewardArticleReply
 	31, // 47: common.api.content.v1.ContentArticleService.AcceptAnswer:output_type -> common.api.content.v1.AcceptAnswerArticleReply
 	34, // [34:48] is the sub-list for method output_type
 	20, // [20:34] is the sub-list for method input_type

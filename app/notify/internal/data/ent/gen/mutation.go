@@ -3,6 +3,7 @@
 package gen
 
 import (
+	"common/pkg/model"
 	"context"
 	"errors"
 	"fmt"
@@ -42,7 +43,7 @@ type NotificationMetaMutation struct {
 	addnotification_type        *int32
 	sender_id                   *int64
 	addsender_id                *int64
-	meta                        *map[string]interface{}
+	meta                        *model.Meta
 	content                     *string
 	status                      *int32
 	addstatus                   *int32
@@ -310,12 +311,12 @@ func (m *NotificationMetaMutation) ResetSenderID() {
 }
 
 // SetMeta sets the "meta" field.
-func (m *NotificationMetaMutation) SetMeta(value map[string]interface{}) {
+func (m *NotificationMetaMutation) SetMeta(value model.Meta) {
 	m.meta = &value
 }
 
 // Meta returns the value of the "meta" field in the mutation.
-func (m *NotificationMetaMutation) Meta() (r map[string]interface{}, exists bool) {
+func (m *NotificationMetaMutation) Meta() (r model.Meta, exists bool) {
 	v := m.meta
 	if v == nil {
 		return
@@ -326,7 +327,7 @@ func (m *NotificationMetaMutation) Meta() (r map[string]interface{}, exists bool
 // OldMeta returns the old "meta" field's value of the NotificationMeta entity.
 // If the NotificationMeta object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NotificationMetaMutation) OldMeta(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *NotificationMetaMutation) OldMeta(ctx context.Context) (v model.Meta, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldMeta is only allowed on UpdateOne operations")
 	}
@@ -728,7 +729,7 @@ func (m *NotificationMetaMutation) SetField(name string, value ent.Value) error 
 		m.SetSenderID(v)
 		return nil
 	case notificationmeta.FieldMeta:
-		v, ok := value.(map[string]interface{})
+		v, ok := value.(model.Meta)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

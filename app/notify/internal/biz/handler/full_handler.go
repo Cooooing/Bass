@@ -9,6 +9,7 @@ import (
 	"common/pkg/cutil/handlerchain"
 	commonModel "common/pkg/model"
 	"context"
+	"encoding/json"
 	"html/template"
 	"notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -34,17 +35,79 @@ func NewFullHandler(base *base.BaseDomain, notificationMetaRepo repo.Notificatio
 }
 
 func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification) (*commonModel.Notification, error) {
-	// 查询通知接收用户
-	userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	if err != nil {
-		return nil, err
-	}
-	reply, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{}})
-	if err != nil {
-		return nil, err
-	}
-	for _, i := range reply.Users {
-		data.ReceiverIds = append(data.ReceiverIds, i.Id)
+	marshal, _ := json.Marshal(data)
+	h.Log.Infof("handle notification: %s", marshal)
+	switch *data.Type {
+	case notifyv1.NotificationType_NotificationTypeArticlePublish:
+		// Todo 查询关注用户
+
+	case notifyv1.NotificationType_NotificationTypeArticleLike:
+		if data.Meta.Article != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeArticleThank:
+		if data.Meta.Article != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeArticleCollect:
+		if data.Meta.Article != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeArticleWatch:
+		if data.Meta.Article != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeArticleReward:
+		if data.Meta.Article != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeArticleAt:
+		if len(data.Meta.AtUsernames) > 0 {
+			userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+			if err != nil {
+				return nil, err
+			}
+			reply, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
+			if err != nil {
+				return nil, err
+			}
+			for _, i := range reply.Users {
+				data.ReceiverIds = append(data.ReceiverIds, i.Id)
+			}
+		}
+	case notifyv1.NotificationType_NotificationTypeCommentPublish:
+		if data.Meta.Comment != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.ArticleId)
+			if data.Meta.Comment.ReplyId != nil {
+				data.ReceiverIds = append(data.ReceiverIds, *data.Meta.Comment.ReplyId)
+			}
+		}
+	case notifyv1.NotificationType_NotificationTypeCommentLike:
+		if data.Meta.Comment != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeCommentThank:
+		if data.Meta.Comment != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeCommentCollect:
+		if data.Meta.Comment != nil {
+			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.CreatedBy)
+		}
+	case notifyv1.NotificationType_NotificationTypeCommentAt:
+		if len(data.Meta.AtUsernames) > 0 {
+			userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+			if err != nil {
+				return nil, err
+			}
+			reply, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
+			if err != nil {
+				return nil, err
+			}
+			for _, i := range reply.Users {
+				data.ReceiverIds = append(data.ReceiverIds, i.Id)
+			}
+		}
 	}
 
 	// 按模板渲染

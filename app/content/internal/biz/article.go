@@ -3,12 +3,13 @@ package biz
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	notifyv1 "common/api/notify/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/cutil/base"
 	"common/pkg/cutil/base/str"
-	dict2 "common/pkg/cutil/collections/dict"
+	"common/pkg/cutil/collections/dict"
 	"common/pkg/cutil/collections/set"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -18,6 +19,7 @@ import (
 	"content/internal/data/ent/gen"
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/sony/sonyflake/v2"
 )
 
@@ -65,7 +67,7 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 		}
 		// 正常文章，进行发布
 		if status == int32(v1.ArticleStatus_ArticleNormal) {
-			err = d.articleRepo.Publish(ctx, tx, save.ID)
+			err = d.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
 			}
@@ -93,7 +95,6 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, cont
 		}
 		return err
 	})
-	// Todo 广播添加事件
 	return save, err
 }
 
@@ -125,7 +126,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 		}
 		// 正常文章，进行发布
 		if status == int32(v1.ArticleStatus_ArticleNormal) {
-			err = d.articleRepo.Publish(ctx, tx, save.ID)
+			err = d.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
 			}
@@ -136,23 +137,29 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 }
 
 func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("user not login")
+	}
+
+	var a *model.Article
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
 		if active {
-			err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
+			a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
 			if err != nil {
 				return err
 			}
-			_, err = d.actionRecordRepo.Save(ctx, tx, &model.ArticleActionRecord{
+			_, err = d.actionRecordRepo.Save(ctx, tx, &model.ArticleActionRecord{ArticleActionRecord: &gen.ArticleActionRecord{
 				ArticleID: articleId,
 				UserID:    userId,
 				Type:      int32(action),
-			})
+			}})
 			if err != nil {
 				return err
 			}
 		} else {
-			err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, -1)
+			a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, -1)
 			if err != nil {
 				return err
 			}
@@ -163,19 +170,184 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 		}
 		return err
 	})
-	// Todo 广播行为事件
+	if active {
+		err = d.eventPool.Submit(func() {
+			switch action {
+			case v1.ArticleAction_ArticleActionLike:
+				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
+					UUID:       uuid.New().String(),
+					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleLike),
+					SenderId:   user.ID,
+					SenderName: user.Name,
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Meta: commonModel.Meta{
+						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+					},
+					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+				})
+				if err != nil {
+					d.log.Errorf("publish article like event error: %v", err)
+					return
+				}
+			case v1.ArticleAction_ArticleActionThank:
+				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
+					UUID:       uuid.New().String(),
+					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleThank),
+					SenderId:   user.ID,
+					SenderName: user.Name,
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Meta: commonModel.Meta{
+						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+					},
+					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+				})
+				if err != nil {
+					d.log.Errorf("publish article thank event error: %v", err)
+					return
+				}
+			case v1.ArticleAction_ArticleActionCollect:
+				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
+					UUID:       uuid.New().String(),
+					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleCollect),
+					SenderId:   user.ID,
+					SenderName: user.Name,
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Meta: commonModel.Meta{
+						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+					},
+					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+				})
+				if err != nil {
+					d.log.Errorf("publish article collect event error: %v", err)
+					return
+				}
+			case v1.ArticleAction_ArticleActionWatch:
+				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
+					UUID:       uuid.New().String(),
+					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleWatch),
+					SenderId:   user.ID,
+					SenderName: user.Name,
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Meta: commonModel.Meta{
+						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+					},
+					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+				})
+				if err != nil {
+					d.log.Errorf("publish article watch event error: %v", err)
+					return
+				}
+			case v1.ArticleAction_ArticleActionReward:
+				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
+					UUID:       uuid.New().String(),
+					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleReward),
+					SenderId:   user.ID,
+					SenderName: user.Name,
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Meta: commonModel.Meta{
+						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+					},
+					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+				})
+				if err != nil {
+					d.log.Errorf("publish article watch event error: %v", err)
+					return
+				}
+			default:
+				return
+			}
+		})
+	}
 	return err
 }
 
-func (d *ArticleDomain) Publish(ctx context.Context, articleId int64) error {
-	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		err := d.articleRepo.Publish(ctx, tx, articleId)
+func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("user not login")
+	}
+
+	var err error
+	var a *model.Article
+	err = ent.WithTx(ctx, tx, func(tx *gen.Client) error {
+		a, err = d.articleRepo.Publish(ctx, tx, articleId)
 		if err != nil {
 			return err
 		}
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	err = d.eventPool.Submit(func() {
+
+		// 广播发布文章事件
+		err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
+			UUID:       uuid.New().String(),
+			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticlePublish),
+			SenderId:   user.ID,
+			SenderName: user.Name,
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+			Meta: commonModel.Meta{
+				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+			},
+			Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+		})
+		if err != nil {
+			d.log.Errorf("publish a publish event error: %v", err)
+			return
+		}
+
+		// 广播@用户通知
+		atUserNames := a.ParseContent()
+		if atUserNames.Len() > 0 {
+			err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
+				UUID:       uuid.New().String(),
+				Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleAt),
+				SenderId:   user.ID,
+				SenderName: user.Name,
+				Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+				Meta: commonModel.Meta{
+					AtUsernames: atUserNames.ToSlice(),
+					Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+				},
+			})
+			if err != nil {
+				d.log.Errorf("publish a at event error: %v", err)
+				return
+			}
+		}
+	})
 	return err
+}
+
+func (d *ArticleDomain) AcceptAnswer(ctx context.Context, articleId int64, commentId int64) error {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("user not login")
+	}
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		a, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
+		if err != nil {
+			return err
+		}
+		if *a.CreatedBy != user.ID {
+			return cv1.ErrorForbidden("you are not the author of this article")
+		}
+		if a.AcceptedAnswerID != nil {
+			return cv1.ErrorBadRequest("article already accepted answer")
+		}
+		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, tx, articleId, commentId)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	// Todo 发送通知
+	return nil
 }
 
 // --- 查询 ---
@@ -247,13 +419,13 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		userIds.Add(*item.CreatedBy)
 	}
 
-	lastCommentMap := dict2.New[int64, *model.Comment](0)
+	lastCommentMap := dict.New[int64, *model.Comment](0)
 	if articleIds.Len() > 0 {
 		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: articleIds.ToSlice()})
 		if err != nil {
 			return nil, nil, err
 		}
-		lastCommentMap.Foreach(func(e *dict2.Entry[int64, *model.Comment]) bool {
+		lastCommentMap.Foreach(func(e *dict.Entry[int64, *model.Comment]) bool {
 			userIds.Add(*e.Value.CreatedBy)
 			return true
 		})
@@ -279,4 +451,16 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		list[i].AuthorUser = base.If(list[i].Anonymous, nil, userAuthorsMap.Users[*list[i].CreatedBy])
 	}
 	return list, pageReply, err
+}
+
+func (d *ArticleDomain) GetReward(ctx context.Context, articleId int64, userId int64) (*model.Article, error) {
+	d.actionRecordRepo.GetOne(ctx, d.db, &repo.ArticleActionRecordReq{
+		ArticleId: base.Ptr(articleId),
+		UserId:    base.Ptr(userId),
+		Type:      base.Ptr(v1.ArticleAction_ArticleActionReward),
+	})
+	one, err := d.articleRepo.GetOne(ctx, d.db, &repo.ArticleGetReq{
+		ArticleId: base.Ptr(articleId),
+	})
+	return one, err
 }

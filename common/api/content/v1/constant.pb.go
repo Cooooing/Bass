@@ -369,10 +369,11 @@ const (
 	ArticleAction_ArticleActionThank         ArticleAction = 1 // 感谢
 	ArticleAction_ArticleActionCollect       ArticleAction = 2 // 收藏
 	ArticleAction_ArticleActionWatch         ArticleAction = 3 // 关注
-	ArticleAction_ArticleActionReply         ArticleAction = 4 // 回复
-	ArticleAction_ArticleActionVote          ArticleAction = 5 // 投票
-	ArticleAction_ArticleActionLottery       ArticleAction = 6 // 抽奖参与
-	ArticleAction_ArticleActionLotteryWinner ArticleAction = 7 // 抽奖中奖
+	ArticleAction_ArticleActionReward        ArticleAction = 4 // 打赏
+	ArticleAction_ArticleActionReply         ArticleAction = 5 // 回复
+	ArticleAction_ArticleActionVote          ArticleAction = 6 // 投票
+	ArticleAction_ArticleActionLottery       ArticleAction = 7 // 抽奖参与
+	ArticleAction_ArticleActionLotteryWinner ArticleAction = 8 // 抽奖中奖
 )
 
 // Enum value maps for ArticleAction.
@@ -382,20 +383,22 @@ var (
 		1: "ArticleActionThank",
 		2: "ArticleActionCollect",
 		3: "ArticleActionWatch",
-		4: "ArticleActionReply",
-		5: "ArticleActionVote",
-		6: "ArticleActionLottery",
-		7: "ArticleActionLotteryWinner",
+		4: "ArticleActionReward",
+		5: "ArticleActionReply",
+		6: "ArticleActionVote",
+		7: "ArticleActionLottery",
+		8: "ArticleActionLotteryWinner",
 	}
 	ArticleAction_value = map[string]int32{
 		"ArticleActionLike":          0,
 		"ArticleActionThank":         1,
 		"ArticleActionCollect":       2,
 		"ArticleActionWatch":         3,
-		"ArticleActionReply":         4,
-		"ArticleActionVote":          5,
-		"ArticleActionLottery":       6,
-		"ArticleActionLotteryWinner": 7,
+		"ArticleActionReward":        4,
+		"ArticleActionReply":         5,
+		"ArticleActionVote":          6,
+		"ArticleActionLottery":       7,
+		"ArticleActionLotteryWinner": 8,
 	}
 )
 
@@ -600,16 +603,17 @@ const file_content_v1_constant_proto_rawDesc = "" +
 	"\x12ArticleTypeLottery\x10\x03*S\n" +
 	"\x17ArticlePostscriptStatus\x12\x1b\n" +
 	"\x17ArticlePostscriptNormal\x10\x00\x12\x1b\n" +
-	"\x17ArticlePostscriptHidden\x10\x01*\xd9\x01\n" +
+	"\x17ArticlePostscriptHidden\x10\x01*\xf2\x01\n" +
 	"\rArticleAction\x12\x15\n" +
 	"\x11ArticleActionLike\x10\x00\x12\x16\n" +
 	"\x12ArticleActionThank\x10\x01\x12\x18\n" +
 	"\x14ArticleActionCollect\x10\x02\x12\x16\n" +
-	"\x12ArticleActionWatch\x10\x03\x12\x16\n" +
-	"\x12ArticleActionReply\x10\x04\x12\x15\n" +
-	"\x11ArticleActionVote\x10\x05\x12\x18\n" +
-	"\x14ArticleActionLottery\x10\x06\x12\x1e\n" +
-	"\x1aArticleActionLotteryWinner\x10\a*?\n" +
+	"\x12ArticleActionWatch\x10\x03\x12\x17\n" +
+	"\x13ArticleActionReward\x10\x04\x12\x16\n" +
+	"\x12ArticleActionReply\x10\x05\x12\x15\n" +
+	"\x11ArticleActionVote\x10\x06\x12\x18\n" +
+	"\x14ArticleActionLottery\x10\a\x12\x1e\n" +
+	"\x1aArticleActionLotteryWinner\x10\b*?\n" +
 	"\fArticleOrder\x12\x16\n" +
 	"\x12ArticleOrderNewest\x10\x00\x12\x17\n" +
 	"\x13ArticleOrderHottest\x10\x01*X\n" +

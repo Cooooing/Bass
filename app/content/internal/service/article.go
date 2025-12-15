@@ -152,8 +152,35 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 	if !exist {
 		return nil, cv1.ErrorBadRequest("article not exist")
 	}
-	err = s.articleDomain.Publish(ctx, req.ArticleId)
+	err = s.articleDomain.Publish(ctx, s.db, req.ArticleId)
 	return &v1.PublishArticleReply{}, err
+}
+
+func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
+	// 只有作者可以添加附言
+	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+		ArticleId: base.Ptr(req.ArticleId),
+		Status:    base.Ptr(v1.ArticleStatus_ArticleNormal),
+		CreatedBy: base.Ptr(user.ID),
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, cv1.ErrorBadRequest("article not exist")
+	}
+
+	save, err := s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.AddPostscriptArticleReply{
+		ArticlePostscript: save.ConvertToRpc(),
+	}, err
 }
 
 func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleRequest) (rsp *v1.UpdateArticleReply, err error) {
@@ -231,39 +258,13 @@ func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneReques
 	return &v1.GetArticleOneReply{Article: one.ConvertToRpc()}, err
 }
 
-func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
+func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticleRequest) (rsp *v1.RewardArticleReply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	// 只有作者可以添加附言
-	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
-		ArticleId: base.Ptr(req.ArticleId),
-		Status:    base.Ptr(v1.ArticleStatus_ArticleNormal),
-		CreatedBy: base.Ptr(user.ID),
-	})
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, cv1.ErrorBadRequest("article not exist")
-	}
-
-	save, err := s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
-	if err != nil {
-		return nil, err
-	}
-	return &v1.AddPostscriptArticleReply{
-		ArticlePostscript: save.ConvertToRpc(),
-	}, err
-}
-
-func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticleRequest) (rsp *v1.RewardArticleReply, err error) {
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionReward, true)
 	return &v1.RewardArticleReply{}, nil
-}
-
-func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest) (rsp *v1.ThankArticleReply, err error) {
-	return &v1.ThankArticleReply{}, nil
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
@@ -273,6 +274,15 @@ func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (
 	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionLike, req.Active)
 	return &v1.LikeArticleReply{}, err
+}
+
+func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest) (rsp *v1.ThankArticleReply, err error) {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionThank, req.Active)
+	return &v1.ThankArticleReply{}, nil
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
@@ -285,11 +295,15 @@ func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequ
 }
 
 func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticleRequest) (rsp *v1.WatchArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
+	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ArticleActionWatch, req.Active)
+	return &v1.WatchArticleReply{}, err
 }
 
 func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticleRequest) (rsp *v1.AcceptAnswerArticleReply, err error) {
-	// TODO implement me
-	panic("implement me")
+	err = s.articleDomain.AcceptAnswer(ctx, req.ArticleId, req.CommentId)
+	return &v1.AcceptAnswerArticleReply{}, err
 }

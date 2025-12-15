@@ -70,16 +70,16 @@ func RegisterContentArticleServiceHTTPServer(s *http.Server, srv ContentArticleS
 	r.POST("/v1/article/add", _ContentArticleService_Add0_HTTP_Handler(srv))
 	r.POST("/v1/article/updateDraft", _ContentArticleService_UpdateDraft0_HTTP_Handler(srv))
 	r.POST("/v1/article/publish", _ContentArticleService_Publish0_HTTP_Handler(srv))
+	r.POST("/v1/article/addPostscript", _ContentArticleService_AddPostscript0_HTTP_Handler(srv))
 	r.POST("/v1/article/update", _ContentArticleService_Update1_HTTP_Handler(srv))
 	r.POST("/v1/article/delete", _ContentArticleService_Delete0_HTTP_Handler(srv))
 	r.POST("/v1/article/page", _ContentArticleService_Page2_HTTP_Handler(srv))
 	r.POST("/v1/article/getOne", _ContentArticleService_GetOne1_HTTP_Handler(srv))
-	r.POST("/v1/article/addPostscript", _ContentArticleService_AddPostscript0_HTTP_Handler(srv))
-	r.POST("/v1/article/reward", _ContentArticleService_Reward0_HTTP_Handler(srv))
-	r.POST("/v1/article/thank", _ContentArticleService_Thank0_HTTP_Handler(srv))
 	r.POST("/v1/article/like", _ContentArticleService_Like0_HTTP_Handler(srv))
+	r.POST("/v1/article/thank", _ContentArticleService_Thank0_HTTP_Handler(srv))
 	r.POST("/v1/article/collect", _ContentArticleService_Collect0_HTTP_Handler(srv))
 	r.POST("/v1/article/watch", _ContentArticleService_Watch0_HTTP_Handler(srv))
+	r.POST("/v1/article/reward", _ContentArticleService_Reward0_HTTP_Handler(srv))
 	r.POST("/v1/article/acceptAnswer", _ContentArticleService_AcceptAnswer0_HTTP_Handler(srv))
 }
 
@@ -145,6 +145,28 @@ func _ContentArticleService_Publish0_HTTP_Handler(srv ContentArticleServiceHTTPS
 			return err
 		}
 		reply := out.(*PublishArticleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ContentArticleService_AddPostscript0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AddPostscriptArticleRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationContentArticleServiceAddPostscript)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.AddPostscript(ctx, req.(*AddPostscriptArticleRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AddPostscriptArticleReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -237,46 +259,24 @@ func _ContentArticleService_GetOne1_HTTP_Handler(srv ContentArticleServiceHTTPSe
 	}
 }
 
-func _ContentArticleService_AddPostscript0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
+func _ContentArticleService_Like0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in AddPostscriptArticleRequest
+		var in LikeArticleRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationContentArticleServiceAddPostscript)
+		http.SetOperation(ctx, OperationContentArticleServiceLike)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.AddPostscript(ctx, req.(*AddPostscriptArticleRequest))
+			return srv.Like(ctx, req.(*LikeArticleRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*AddPostscriptArticleReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _ContentArticleService_Reward0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in RewardArticleRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationContentArticleServiceReward)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Reward(ctx, req.(*RewardArticleRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*RewardArticleReply)
+		reply := out.(*LikeArticleReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -299,28 +299,6 @@ func _ContentArticleService_Thank0_HTTP_Handler(srv ContentArticleServiceHTTPSer
 			return err
 		}
 		reply := out.(*ThankArticleReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _ContentArticleService_Like0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in LikeArticleRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationContentArticleServiceLike)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Like(ctx, req.(*LikeArticleRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*LikeArticleReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -365,6 +343,28 @@ func _ContentArticleService_Watch0_HTTP_Handler(srv ContentArticleServiceHTTPSer
 			return err
 		}
 		reply := out.(*WatchArticleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _ContentArticleService_Reward0_HTTP_Handler(srv ContentArticleServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RewardArticleRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationContentArticleServiceReward)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Reward(ctx, req.(*RewardArticleRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*RewardArticleReply)
 		return ctx.Result(200, reply)
 	}
 }

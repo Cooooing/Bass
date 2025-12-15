@@ -15,9 +15,10 @@ type NotificationMetaService struct {
 	notificationMetaDomain *biz.NotificationMetaDomain
 }
 
-func NewNotificationMetaService(baseService *BaseService) *NotificationMetaService {
+func NewNotificationMetaService(baseService *BaseService, notificationMetaDomain *biz.NotificationMetaDomain) *NotificationMetaService {
 	return &NotificationMetaService{
-		BaseService: baseService,
+		BaseService:            baseService,
+		notificationMetaDomain: notificationMetaDomain,
 	}
 }
 

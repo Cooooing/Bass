@@ -58,7 +58,7 @@ func (m *User) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for GetName
+	// no validation rules for Name
 
 	// no validation rules for Email
 
@@ -400,7 +400,7 @@ func (m *UserQueryParams) validate(all bool) error {
 	}
 
 	if m.Name != nil {
-		// no validation rules for GetName
+		// no validation rules for Name
 	}
 
 	if m.Nickname != nil {
@@ -1018,7 +1018,7 @@ func (m *GetOneRequest) validate(all bool) error {
 	}
 
 	if m.Name != nil {
-		// no validation rules for GetName
+		// no validation rules for Name
 	}
 
 	if len(errors) > 0 {
@@ -2106,7 +2106,7 @@ func (m *AvatarRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for GetName
+	// no validation rules for Name
 
 	if len(errors) > 0 {
 		return AvatarRequestMultiError(errors)

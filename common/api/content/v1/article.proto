@@ -38,6 +38,14 @@ service ContentArticleService {
     };
   }
 
+  // 添加附言
+  rpc AddPostscript (AddPostscriptArticleRequest) returns (AddPostscriptArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/addPostscript"
+      body: "*"
+    };
+  }
+
   // 修改文章（管理员使用）
   rpc Update (UpdateArticleRequest) returns (UpdateArticleReply) {
     option (google.api.http) = {
@@ -62,7 +70,6 @@ service ContentArticleService {
     };
   }
 
-
   // 查询单篇文章
   rpc GetOne (GetArticleOneRequest) returns (GetArticleOneReply) {
     option (google.api.http) = {
@@ -71,20 +78,10 @@ service ContentArticleService {
     };
   }
 
-
-
-  // 添加附言
-  rpc AddPostscript (AddPostscriptArticleRequest) returns (AddPostscriptArticleReply) {
+  // 点赞文章
+  rpc Like (LikeArticleRequest) returns (LikeArticleReply) {
     option (google.api.http) = {
-      post: "/v1/article/addPostscript"
-      body: "*"
-    };
-  }
-
-  // 打赏文章
-  rpc Reward (RewardArticleRequest) returns (RewardArticleReply) {
-    option (google.api.http) = {
-      post: "/v1/article/reward"
+      post: "/v1/article/like"
       body: "*"
     };
   }
@@ -93,14 +90,6 @@ service ContentArticleService {
   rpc Thank (ThankArticleRequest) returns (ThankArticleReply) {
     option (google.api.http) = {
       post: "/v1/article/thank"
-      body: "*"
-    };
-  }
-
-  // 点赞文章
-  rpc Like (LikeArticleRequest) returns (LikeArticleReply) {
-    option (google.api.http) = {
-      post: "/v1/article/like"
       body: "*"
     };
   }
@@ -117,6 +106,14 @@ service ContentArticleService {
   rpc Watch (WatchArticleRequest) returns (WatchArticleReply) {
     option (google.api.http) = {
       post: "/v1/article/watch"
+      body: "*"
+    };
+  }
+  
+  // 打赏文章
+  rpc Reward (RewardArticleRequest) returns (RewardArticleReply) {
+    option (google.api.http) = {
+      post: "/v1/article/reward"
       body: "*"
     };
   }
@@ -158,6 +155,8 @@ message Article {
 
   // 是否有附言
   bool has_postscript = 5;
+  // 是否有打赏区
+  bool has_reward = 33;
   // 打赏区内容（可为空）
   optional string reward_content = 6;
   // 打赏内容渲染（可为空）
@@ -267,9 +266,6 @@ message ArticleSave {
   optional bool anonymous = 12;
   // 是否在列表展示
   optional bool listable = 13;
-
-  // @ 用户id列表
-  repeated int64 at_user_ids = 20;
 
   // 标签id
   repeated TagSave tags = 100;

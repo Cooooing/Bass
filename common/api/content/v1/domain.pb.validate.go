@@ -116,7 +116,7 @@ func (m *Domain) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for GetName
+	// no validation rules for Name
 
 	// no validation rules for Status
 
@@ -279,7 +279,7 @@ func (m *DomainSave) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for GetName
+	// no validation rules for Name
 
 	// no validation rules for IsNav
 
@@ -399,7 +399,7 @@ func (m *DomainQueryParams) validate(all bool) error {
 	var errors []error
 
 	if m.Name != nil {
-		// no validation rules for GetName
+		// no validation rules for Name
 	}
 
 	if m.Description != nil {

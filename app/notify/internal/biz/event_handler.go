@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/json"
 	"notify/internal/biz/base"
+	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"runtime/debug"
 
@@ -108,36 +109,44 @@ func (h *EventHandler) Handle() {
 						h.Log.Info("Channel closed")
 						return
 					}
+					var err error
 					h.Log.Infof("Received message: %s", string(msg.Body))
 
 					notification := &commonModel.Notification{}
-					err := json.Unmarshal(msg.Body, notification)
+					err = json.Unmarshal(msg.Body, notification)
 					if err != nil {
 						h.Log.Errorf("unmarshal failed: %v", err)
+						_ = msg.Nack(false, false)
 						continue
 					}
 
-					templateMap, err := h.notificationTemplateRepo.GetCache(h.ctx, notification.Type, notification.Channels)
+					var templateMap dict.Map[string, *model.NotificationTemplate]
+					templateMap, err = h.notificationTemplateRepo.GetCache(h.ctx, notification.Type, notification.Channels)
 					if err != nil {
 						h.Log.Errorf("get template failed: %v", err)
+						_ = msg.Nack(false, false)
 						continue
 					}
 
 					// 构建处理器链
 					factory := handlerchain.NewHandlerFactoryWithHandlers(h.handlerMap.Values()...)
 					// 依次按模板处理消息
+					var handler handlerchain.Handler[*commonModel.Notification]
 					for _, template := range templateMap.Values() {
-						handler, err := factory.BuildChainByNames(template.Processors)
+						handler, err = factory.BuildChainByNames(template.Processors)
 						if err != nil {
-							h.Log.Errorf("build chain failed: %v", err)
-							continue
+							break
 						}
 						notification.Content = template.Content
 						_, err = handler.Handle(h.ctx, notification)
 						if err != nil {
-							h.Log.Errorf("handle failed: %v", err)
-							continue
+							break
 						}
+					}
+					if err != nil {
+						h.Log.Errorf("handle failed: %v", err)
+						_ = msg.Nack(false, false)
+						continue
 					}
 
 					// ack 消息

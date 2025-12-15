@@ -119,18 +119,24 @@ func (NotificationChannel) EnumDescriptor() ([]byte, []int) {
 type NotificationType int32
 
 const (
-	NotificationType_NotificationTypeNormal         NotificationType = 0   // 普通
-	NotificationType_NotificationTypeSystem         NotificationType = 1   // 系统
-	NotificationType_NotificationTypeUserRegister   NotificationType = 100 // 用户注册
-	NotificationType_NotificationTypeArticlePublish NotificationType = 200 // 文章发布
-	NotificationType_NotificationTypeArticleThank   NotificationType = 201 // 文章感谢
-	NotificationType_NotificationTypeArticleLike    NotificationType = 202 // 文章点赞
-	NotificationType_NotificationTypeArticleCollect NotificationType = 203 // 文章收藏
-	NotificationType_NotificationTypeArticleWatch   NotificationType = 204 // 文章关注
-	NotificationType_NotificationTypeComment        NotificationType = 300 // 评论发布
-	NotificationType_NotificationTypeCommentThank   NotificationType = 301 // 评论感谢
-	NotificationType_NotificationTypeCommentLike    NotificationType = 302 // 评论点赞
-	NotificationType_NotificationTypeCommentCollect NotificationType = 303 // 评论收藏
+	NotificationType_NotificationTypeNormal               NotificationType = 0   // 普通
+	NotificationType_NotificationTypeSystem               NotificationType = 1   // 系统
+	NotificationType_NotificationTypeUserRegister         NotificationType = 100 // 用户注册
+	NotificationType_NotificationTypeArticlePublish       NotificationType = 200 // 文章发布
+	NotificationType_NotificationTypeArticleLike          NotificationType = 201 // 文章点赞
+	NotificationType_NotificationTypeArticleThank         NotificationType = 202 // 文章感谢
+	NotificationType_NotificationTypeArticleCollect       NotificationType = 203 // 文章收藏
+	NotificationType_NotificationTypeArticleWatch         NotificationType = 204 // 文章关注
+	NotificationType_NotificationTypeArticleReward        NotificationType = 205 // 文章打赏
+	NotificationType_NotificationTypeArticleAt            NotificationType = 206 // 文章@
+	NotificationType_NotificationTypeArticleVote          NotificationType = 207 // 文章投票
+	NotificationType_NotificationTypeArticleLottery       NotificationType = 208 // 文章抽奖
+	NotificationType_NotificationTypeArticleLotteryWinner NotificationType = 209 // 抽奖中奖
+	NotificationType_NotificationTypeCommentPublish       NotificationType = 300 // 评论发布
+	NotificationType_NotificationTypeCommentLike          NotificationType = 301 // 评论点赞
+	NotificationType_NotificationTypeCommentThank         NotificationType = 302 // 评论感谢
+	NotificationType_NotificationTypeCommentCollect       NotificationType = 303 // 评论收藏
+	NotificationType_NotificationTypeCommentAt            NotificationType = 304 // 评论@
 )
 
 // Enum value maps for NotificationType.
@@ -140,28 +146,40 @@ var (
 		1:   "NotificationTypeSystem",
 		100: "NotificationTypeUserRegister",
 		200: "NotificationTypeArticlePublish",
-		201: "NotificationTypeArticleThank",
-		202: "NotificationTypeArticleLike",
+		201: "NotificationTypeArticleLike",
+		202: "NotificationTypeArticleThank",
 		203: "NotificationTypeArticleCollect",
 		204: "NotificationTypeArticleWatch",
-		300: "NotificationTypeComment",
-		301: "NotificationTypeCommentThank",
-		302: "NotificationTypeCommentLike",
+		205: "NotificationTypeArticleReward",
+		206: "NotificationTypeArticleAt",
+		207: "NotificationTypeArticleVote",
+		208: "NotificationTypeArticleLottery",
+		209: "NotificationTypeArticleLotteryWinner",
+		300: "NotificationTypeCommentPublish",
+		301: "NotificationTypeCommentLike",
+		302: "NotificationTypeCommentThank",
 		303: "NotificationTypeCommentCollect",
+		304: "NotificationTypeCommentAt",
 	}
 	NotificationType_value = map[string]int32{
-		"NotificationTypeNormal":         0,
-		"NotificationTypeSystem":         1,
-		"NotificationTypeUserRegister":   100,
-		"NotificationTypeArticlePublish": 200,
-		"NotificationTypeArticleThank":   201,
-		"NotificationTypeArticleLike":    202,
-		"NotificationTypeArticleCollect": 203,
-		"NotificationTypeArticleWatch":   204,
-		"NotificationTypeComment":        300,
-		"NotificationTypeCommentThank":   301,
-		"NotificationTypeCommentLike":    302,
-		"NotificationTypeCommentCollect": 303,
+		"NotificationTypeNormal":               0,
+		"NotificationTypeSystem":               1,
+		"NotificationTypeUserRegister":         100,
+		"NotificationTypeArticlePublish":       200,
+		"NotificationTypeArticleLike":          201,
+		"NotificationTypeArticleThank":         202,
+		"NotificationTypeArticleCollect":       203,
+		"NotificationTypeArticleWatch":         204,
+		"NotificationTypeArticleReward":        205,
+		"NotificationTypeArticleAt":            206,
+		"NotificationTypeArticleVote":          207,
+		"NotificationTypeArticleLottery":       208,
+		"NotificationTypeArticleLotteryWinner": 209,
+		"NotificationTypeCommentPublish":       300,
+		"NotificationTypeCommentLike":          301,
+		"NotificationTypeCommentThank":         302,
+		"NotificationTypeCommentCollect":       303,
+		"NotificationTypeCommentAt":            304,
 	}
 )
 
@@ -203,20 +221,26 @@ const file_notify_v1_constant_proto_rawDesc = "" +
 	"\x13NotificationChannel\x12\x1c\n" +
 	"\x18NotificationChannelEmail\x10\x00\x12\x1a\n" +
 	"\x16NotificationChannelSMS\x10\x01\x12\x1e\n" +
-	"\x1aNotificationChannelWebSite\x10\x02*\xa6\x03\n" +
+	"\x1aNotificationChannelWebSite\x10\x02*\x83\x05\n" +
 	"\x10NotificationType\x12\x1a\n" +
 	"\x16NotificationTypeNormal\x10\x00\x12\x1a\n" +
 	"\x16NotificationTypeSystem\x10\x01\x12 \n" +
 	"\x1cNotificationTypeUserRegister\x10d\x12#\n" +
-	"\x1eNotificationTypeArticlePublish\x10\xc8\x01\x12!\n" +
-	"\x1cNotificationTypeArticleThank\x10\xc9\x01\x12 \n" +
-	"\x1bNotificationTypeArticleLike\x10\xca\x01\x12#\n" +
+	"\x1eNotificationTypeArticlePublish\x10\xc8\x01\x12 \n" +
+	"\x1bNotificationTypeArticleLike\x10\xc9\x01\x12!\n" +
+	"\x1cNotificationTypeArticleThank\x10\xca\x01\x12#\n" +
 	"\x1eNotificationTypeArticleCollect\x10\xcb\x01\x12!\n" +
-	"\x1cNotificationTypeArticleWatch\x10\xcc\x01\x12\x1c\n" +
-	"\x17NotificationTypeComment\x10\xac\x02\x12!\n" +
-	"\x1cNotificationTypeCommentThank\x10\xad\x02\x12 \n" +
-	"\x1bNotificationTypeCommentLike\x10\xae\x02\x12#\n" +
-	"\x1eNotificationTypeCommentCollect\x10\xaf\x02B\x19Z\x17common/api/common/v1;v1b\x06proto3"
+	"\x1cNotificationTypeArticleWatch\x10\xcc\x01\x12\"\n" +
+	"\x1dNotificationTypeArticleReward\x10\xcd\x01\x12\x1e\n" +
+	"\x19NotificationTypeArticleAt\x10\xce\x01\x12 \n" +
+	"\x1bNotificationTypeArticleVote\x10\xcf\x01\x12#\n" +
+	"\x1eNotificationTypeArticleLottery\x10\xd0\x01\x12)\n" +
+	"$NotificationTypeArticleLotteryWinner\x10\xd1\x01\x12#\n" +
+	"\x1eNotificationTypeCommentPublish\x10\xac\x02\x12 \n" +
+	"\x1bNotificationTypeCommentLike\x10\xad\x02\x12!\n" +
+	"\x1cNotificationTypeCommentThank\x10\xae\x02\x12#\n" +
+	"\x1eNotificationTypeCommentCollect\x10\xaf\x02\x12\x1e\n" +
+	"\x19NotificationTypeCommentAt\x10\xb0\x02B\x19Z\x17common/api/common/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_constant_proto_rawDescOnce sync.Once

@@ -23,9 +23,7 @@ func (n *NotificationMeta) ConvertToRpc() *v1.NotificationMeta {
 		Status:           n.Status,
 		ContentRender:    n.Content,
 	}
-	if n.Meta != nil {
-		s, _ := json.Marshal(n.Meta)
-		m.Meta = string(s)
-	}
+	s, _ := json.Marshal(n.Meta)
+	m.Meta = string(s)
 	return m
 }

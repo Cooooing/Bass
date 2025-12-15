@@ -69,7 +69,7 @@ func (a *Article) FormatRewardContent() {
 // ParseRewardContent 解析文章打赏区内容
 func (a *Article) ParseRewardContent() (atUserNames set2.Set[string]) {
 	atUserNames = set2.New[string](0)
-	if a.RewardContent != nil {
+	if a.RewardContent != nil && len(a.Edges.ActionRecords) > 0 && a.HasRewarded() {
 		tree := parse.Parse(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), []byte(*a.RewardContent), parse.NewOptions())
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
@@ -77,6 +77,16 @@ func (a *Article) ParseRewardContent() (atUserNames set2.Set[string]) {
 		a.RewardContentRender = base.Ptr(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
 	}
 	return atUserNames
+}
+
+// HasRewarded 判断文章是否打赏过，需要查询时使用 WithActionRecords 并按 UserId 过滤
+func (a *Article) HasRewarded() bool {
+	for _, record := range a.Edges.ActionRecords {
+		if record.Type == int32(v1.ArticleAction_ArticleActionReward) {
+			return true
+		}
+	}
+	return false
 }
 
 // ConvertToRpc 转换为RPC返回格式
@@ -97,9 +107,10 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		Title:                   a.Title,
 		Content:                 a.Content,
 		ContentRender:           a.ContentRender,
-		HasPostscript:           a.HasPostscript,
 		RewardContent:           a.RewardContent,
 		RewardContentRender:     a.RewardContentRender,
+		HasPostscript:           a.HasPostscript,
+		HasReward:               base.IsNotNil(a.RewardPoints),
 		RewardPoints:            a.RewardPoints,
 		Status:                  a.Status,
 		Type:                    a.Type,

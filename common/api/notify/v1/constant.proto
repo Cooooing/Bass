@@ -22,14 +22,20 @@ enum NotificationType {
   NotificationTypeUserRegister = 100; // 用户注册
 
   NotificationTypeArticlePublish = 200; // 文章发布
-  NotificationTypeArticleThank = 201; // 文章感谢
-  NotificationTypeArticleLike = 202; // 文章点赞
+  NotificationTypeArticleLike = 201; // 文章点赞
+  NotificationTypeArticleThank = 202; // 文章感谢
   NotificationTypeArticleCollect = 203; // 文章收藏
   NotificationTypeArticleWatch = 204; // 文章关注
+  NotificationTypeArticleReward = 205; // 文章打赏
+  NotificationTypeArticleAt = 206; // 文章@
+  NotificationTypeArticleVote = 207; // 文章投票
+  NotificationTypeArticleLottery = 208;// 文章抽奖
+  NotificationTypeArticleLotteryWinner = 209; // 抽奖中奖
 
-  NotificationTypeComment = 300; // 评论发布
-  NotificationTypeCommentThank = 301; // 评论感谢
-  NotificationTypeCommentLike = 302; // 评论点赞
+  NotificationTypeCommentPublish = 300; // 评论发布
+  NotificationTypeCommentLike = 301; // 评论点赞
+  NotificationTypeCommentThank = 302; // 评论感谢
   NotificationTypeCommentCollect = 303; // 评论收藏
+  NotificationTypeCommentAt = 304; // 评论@
 
 }

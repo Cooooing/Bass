@@ -11,7 +11,7 @@ import (
 
 type NotificationTemplateRepo interface {
 	Save(ctx context.Context, tx *gen.Client, u *model.NotificationTemplate) (*model.NotificationTemplate, error)
-	Saves(ctx context.Context, tx *gen.Client, u []*model.NotificationTemplate) ([]*model.NotificationTemplate, error)
+	Update(ctx context.Context, tx *gen.Client, u *model.NotificationTemplate) (*model.NotificationTemplate, error)
 
 	SaveCache(ctx context.Context, records dict.Map[string, *model.NotificationTemplate]) error
 	GetCache(ctx context.Context, notificationType *v1.NotificationType, channels []*v1.NotificationChannel) (dict.Map[string, *model.NotificationTemplate], error)

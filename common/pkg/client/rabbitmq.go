@@ -3,6 +3,7 @@ package client
 import (
 	"common/pkg/constant"
 	"common/pkg/model"
+	"encoding/json"
 	"fmt"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -141,7 +142,7 @@ func (r *RabbitMQClient) declareResources() error {
 }
 
 // Publish 发送消息
-func (r *RabbitMQClient) Publish(exchange, routingKey string, body []byte) error {
+func (r *RabbitMQClient) Publish(exchange, routingKey string, body any) error {
 	if exchange == "" {
 		return fmt.Errorf("exchange cannot be empty")
 	}
@@ -156,6 +157,12 @@ func (r *RabbitMQClient) Publish(exchange, routingKey string, body []byte) error
 	}
 	defer r.ReleaseChannel(ch)
 
+	// 序列化
+	marshal, err := json.Marshal(body)
+	if err != nil {
+		return err
+	}
+
 	return ch.Publish(
 		exchange,
 		routingKey,
@@ -163,7 +170,7 @@ func (r *RabbitMQClient) Publish(exchange, routingKey string, body []byte) error
 		false, // immediate
 		amqp.Publishing{
 			ContentType:  "text/plain",
-			Body:         body,
+			Body:         marshal,
 			DeliveryMode: uint8(r.conf.DeliveryMode), // 消息持久化
 		},
 	)

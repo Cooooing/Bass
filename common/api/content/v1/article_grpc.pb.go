@@ -22,16 +22,16 @@ const (
 	ContentArticleService_Add_FullMethodName           = "/common.api.content.v1.ContentArticleService/Add"
 	ContentArticleService_UpdateDraft_FullMethodName   = "/common.api.content.v1.ContentArticleService/UpdateDraft"
 	ContentArticleService_Publish_FullMethodName       = "/common.api.content.v1.ContentArticleService/Publish"
+	ContentArticleService_AddPostscript_FullMethodName = "/common.api.content.v1.ContentArticleService/AddPostscript"
 	ContentArticleService_Update_FullMethodName        = "/common.api.content.v1.ContentArticleService/Update"
 	ContentArticleService_Delete_FullMethodName        = "/common.api.content.v1.ContentArticleService/Delete"
 	ContentArticleService_Page_FullMethodName          = "/common.api.content.v1.ContentArticleService/Page"
 	ContentArticleService_GetOne_FullMethodName        = "/common.api.content.v1.ContentArticleService/GetOne"
-	ContentArticleService_AddPostscript_FullMethodName = "/common.api.content.v1.ContentArticleService/AddPostscript"
-	ContentArticleService_Reward_FullMethodName        = "/common.api.content.v1.ContentArticleService/Reward"
-	ContentArticleService_Thank_FullMethodName         = "/common.api.content.v1.ContentArticleService/Thank"
 	ContentArticleService_Like_FullMethodName          = "/common.api.content.v1.ContentArticleService/Like"
+	ContentArticleService_Thank_FullMethodName         = "/common.api.content.v1.ContentArticleService/Thank"
 	ContentArticleService_Collect_FullMethodName       = "/common.api.content.v1.ContentArticleService/Collect"
 	ContentArticleService_Watch_FullMethodName         = "/common.api.content.v1.ContentArticleService/Watch"
+	ContentArticleService_Reward_FullMethodName        = "/common.api.content.v1.ContentArticleService/Reward"
 	ContentArticleService_AcceptAnswer_FullMethodName  = "/common.api.content.v1.ContentArticleService/AcceptAnswer"
 )
 
@@ -47,6 +47,8 @@ type ContentArticleServiceClient interface {
 	UpdateDraft(ctx context.Context, in *UpdateArticleDraftRequest, opts ...grpc.CallOption) (*UpdateArticleDraftReply, error)
 	// 发布文章（从草稿发布）
 	Publish(ctx context.Context, in *PublishArticleRequest, opts ...grpc.CallOption) (*PublishArticleReply, error)
+	// 添加附言
+	AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error)
 	// 修改文章（管理员使用）
 	Update(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*UpdateArticleReply, error)
 	// 删除文章（仅草稿）
@@ -55,18 +57,16 @@ type ContentArticleServiceClient interface {
 	Page(ctx context.Context, in *PageArticleRequest, opts ...grpc.CallOption) (*PageArticleReply, error)
 	// 查询单篇文章
 	GetOne(ctx context.Context, in *GetArticleOneRequest, opts ...grpc.CallOption) (*GetArticleOneReply, error)
-	// 添加附言
-	AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error)
-	// 打赏文章
-	Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error)
-	// 感谢文章
-	Thank(ctx context.Context, in *ThankArticleRequest, opts ...grpc.CallOption) (*ThankArticleReply, error)
 	// 点赞文章
 	Like(ctx context.Context, in *LikeArticleRequest, opts ...grpc.CallOption) (*LikeArticleReply, error)
+	// 感谢文章
+	Thank(ctx context.Context, in *ThankArticleRequest, opts ...grpc.CallOption) (*ThankArticleReply, error)
 	// 收藏文章
 	Collect(ctx context.Context, in *CollectArticleRequest, opts ...grpc.CallOption) (*CollectArticleReply, error)
 	// 关注文章
 	Watch(ctx context.Context, in *WatchArticleRequest, opts ...grpc.CallOption) (*WatchArticleReply, error)
+	// 打赏文章
+	Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error)
 	// 采纳评论
 	AcceptAnswer(ctx context.Context, in *AcceptAnswerArticleRequest, opts ...grpc.CallOption) (*AcceptAnswerArticleReply, error)
 }
@@ -103,6 +103,16 @@ func (c *contentArticleServiceClient) Publish(ctx context.Context, in *PublishAr
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PublishArticleReply)
 	err := c.cc.Invoke(ctx, ContentArticleService_Publish_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *contentArticleServiceClient) AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddPostscriptArticleReply)
+	err := c.cc.Invoke(ctx, ContentArticleService_AddPostscript_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -149,20 +159,10 @@ func (c *contentArticleServiceClient) GetOne(ctx context.Context, in *GetArticle
 	return out, nil
 }
 
-func (c *contentArticleServiceClient) AddPostscript(ctx context.Context, in *AddPostscriptArticleRequest, opts ...grpc.CallOption) (*AddPostscriptArticleReply, error) {
+func (c *contentArticleServiceClient) Like(ctx context.Context, in *LikeArticleRequest, opts ...grpc.CallOption) (*LikeArticleReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddPostscriptArticleReply)
-	err := c.cc.Invoke(ctx, ContentArticleService_AddPostscript_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contentArticleServiceClient) Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RewardArticleReply)
-	err := c.cc.Invoke(ctx, ContentArticleService_Reward_FullMethodName, in, out, cOpts...)
+	out := new(LikeArticleReply)
+	err := c.cc.Invoke(ctx, ContentArticleService_Like_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -173,16 +173,6 @@ func (c *contentArticleServiceClient) Thank(ctx context.Context, in *ThankArticl
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ThankArticleReply)
 	err := c.cc.Invoke(ctx, ContentArticleService_Thank_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *contentArticleServiceClient) Like(ctx context.Context, in *LikeArticleRequest, opts ...grpc.CallOption) (*LikeArticleReply, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LikeArticleReply)
-	err := c.cc.Invoke(ctx, ContentArticleService_Like_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -203,6 +193,16 @@ func (c *contentArticleServiceClient) Watch(ctx context.Context, in *WatchArticl
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(WatchArticleReply)
 	err := c.cc.Invoke(ctx, ContentArticleService_Watch_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *contentArticleServiceClient) Reward(ctx context.Context, in *RewardArticleRequest, opts ...grpc.CallOption) (*RewardArticleReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RewardArticleReply)
+	err := c.cc.Invoke(ctx, ContentArticleService_Reward_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -231,6 +231,8 @@ type ContentArticleServiceServer interface {
 	UpdateDraft(context.Context, *UpdateArticleDraftRequest) (*UpdateArticleDraftReply, error)
 	// 发布文章（从草稿发布）
 	Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error)
+	// 添加附言
+	AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error)
 	// 修改文章（管理员使用）
 	Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error)
 	// 删除文章（仅草稿）
@@ -239,18 +241,16 @@ type ContentArticleServiceServer interface {
 	Page(context.Context, *PageArticleRequest) (*PageArticleReply, error)
 	// 查询单篇文章
 	GetOne(context.Context, *GetArticleOneRequest) (*GetArticleOneReply, error)
-	// 添加附言
-	AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error)
-	// 打赏文章
-	Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error)
-	// 感谢文章
-	Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error)
 	// 点赞文章
 	Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error)
+	// 感谢文章
+	Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error)
 	// 收藏文章
 	Collect(context.Context, *CollectArticleRequest) (*CollectArticleReply, error)
 	// 关注文章
 	Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error)
+	// 打赏文章
+	Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error)
 	// 采纳评论
 	AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error)
 	mustEmbedUnimplementedContentArticleServiceServer()
@@ -272,6 +272,9 @@ func (UnimplementedContentArticleServiceServer) UpdateDraft(context.Context, *Up
 func (UnimplementedContentArticleServiceServer) Publish(context.Context, *PublishArticleRequest) (*PublishArticleReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Publish not implemented")
 }
+func (UnimplementedContentArticleServiceServer) AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddPostscript not implemented")
+}
 func (UnimplementedContentArticleServiceServer) Update(context.Context, *UpdateArticleRequest) (*UpdateArticleReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
 }
@@ -284,23 +287,20 @@ func (UnimplementedContentArticleServiceServer) Page(context.Context, *PageArtic
 func (UnimplementedContentArticleServiceServer) GetOne(context.Context, *GetArticleOneRequest) (*GetArticleOneReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetOne not implemented")
 }
-func (UnimplementedContentArticleServiceServer) AddPostscript(context.Context, *AddPostscriptArticleRequest) (*AddPostscriptArticleReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method AddPostscript not implemented")
-}
-func (UnimplementedContentArticleServiceServer) Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method Reward not implemented")
+func (UnimplementedContentArticleServiceServer) Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Like not implemented")
 }
 func (UnimplementedContentArticleServiceServer) Thank(context.Context, *ThankArticleRequest) (*ThankArticleReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Thank not implemented")
-}
-func (UnimplementedContentArticleServiceServer) Like(context.Context, *LikeArticleRequest) (*LikeArticleReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method Like not implemented")
 }
 func (UnimplementedContentArticleServiceServer) Collect(context.Context, *CollectArticleRequest) (*CollectArticleReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Collect not implemented")
 }
 func (UnimplementedContentArticleServiceServer) Watch(context.Context, *WatchArticleRequest) (*WatchArticleReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Watch not implemented")
+}
+func (UnimplementedContentArticleServiceServer) Reward(context.Context, *RewardArticleRequest) (*RewardArticleReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Reward not implemented")
 }
 func (UnimplementedContentArticleServiceServer) AcceptAnswer(context.Context, *AcceptAnswerArticleRequest) (*AcceptAnswerArticleReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method AcceptAnswer not implemented")
@@ -380,6 +380,24 @@ func _ContentArticleService_Publish_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ContentArticleService_AddPostscript_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPostscriptArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentArticleServiceServer).AddPostscript(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ContentArticleService_AddPostscript_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentArticleServiceServer).AddPostscript(ctx, req.(*AddPostscriptArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ContentArticleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateArticleRequest)
 	if err := dec(in); err != nil {
@@ -452,38 +470,20 @@ func _ContentArticleService_GetOne_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentArticleService_AddPostscript_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPostscriptArticleRequest)
+func _ContentArticleService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LikeArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentArticleServiceServer).AddPostscript(ctx, in)
+		return srv.(ContentArticleServiceServer).Like(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ContentArticleService_AddPostscript_FullMethodName,
+		FullMethod: ContentArticleService_Like_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentArticleServiceServer).AddPostscript(ctx, req.(*AddPostscriptArticleRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContentArticleService_Reward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RewardArticleRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContentArticleServiceServer).Reward(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContentArticleService_Reward_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentArticleServiceServer).Reward(ctx, req.(*RewardArticleRequest))
+		return srv.(ContentArticleServiceServer).Like(ctx, req.(*LikeArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -502,24 +502,6 @@ func _ContentArticleService_Thank_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ContentArticleServiceServer).Thank(ctx, req.(*ThankArticleRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ContentArticleService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LikeArticleRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ContentArticleServiceServer).Like(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ContentArticleService_Like_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentArticleServiceServer).Like(ctx, req.(*LikeArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -556,6 +538,24 @@ func _ContentArticleService_Watch_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ContentArticleServiceServer).Watch(ctx, req.(*WatchArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ContentArticleService_Reward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RewardArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentArticleServiceServer).Reward(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ContentArticleService_Reward_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentArticleServiceServer).Reward(ctx, req.(*RewardArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -598,6 +598,10 @@ var ContentArticleService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ContentArticleService_Publish_Handler,
 		},
 		{
+			MethodName: "AddPostscript",
+			Handler:    _ContentArticleService_AddPostscript_Handler,
+		},
+		{
 			MethodName: "Update",
 			Handler:    _ContentArticleService_Update_Handler,
 		},
@@ -614,20 +618,12 @@ var ContentArticleService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ContentArticleService_GetOne_Handler,
 		},
 		{
-			MethodName: "AddPostscript",
-			Handler:    _ContentArticleService_AddPostscript_Handler,
-		},
-		{
-			MethodName: "Reward",
-			Handler:    _ContentArticleService_Reward_Handler,
+			MethodName: "Like",
+			Handler:    _ContentArticleService_Like_Handler,
 		},
 		{
 			MethodName: "Thank",
 			Handler:    _ContentArticleService_Thank_Handler,
-		},
-		{
-			MethodName: "Like",
-			Handler:    _ContentArticleService_Like_Handler,
 		},
 		{
 			MethodName: "Collect",
@@ -636,6 +632,10 @@ var ContentArticleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Watch",
 			Handler:    _ContentArticleService_Watch_Handler,
+		},
+		{
+			MethodName: "Reward",
+			Handler:    _ContentArticleService_Reward_Handler,
 		},
 		{
 			MethodName: "AcceptAnswer",

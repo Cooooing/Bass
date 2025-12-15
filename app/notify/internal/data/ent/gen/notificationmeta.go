@@ -3,6 +3,7 @@
 package gen
 
 import (
+	"common/pkg/model"
 	"encoding/json"
 	"fmt"
 	"notify/internal/data/ent/gen/notificationmeta"
@@ -25,7 +26,7 @@ type NotificationMeta struct {
 	// 发送者ID
 	SenderID int64 `json:"sender_id,omitempty"`
 	// 通知元数据
-	Meta map[string]interface{} `json:"meta,omitempty"`
+	Meta model.Meta `json:"meta,omitempty"`
 	// 渲染内容
 	Content string `json:"content,omitempty"`
 	// 状态 0-正常 1-被取消

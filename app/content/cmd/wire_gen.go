@@ -47,7 +47,15 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
 	systemService := service.NewSystemService(baseService)
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	eventPool, cleanup5, err := biz.NewEventPool(helper)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseRepo, genClient)
 	commentRepo := data.NewCommentRepo(baseRepo, genClient)
@@ -57,6 +65,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseRepo, genClient)
 	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, commentRepo, tagRepo, domainRepo)
 	if err != nil {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()
@@ -76,6 +85,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()

@@ -614,6 +614,63 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.NotificationRecordReadReply'
+    /v1/notificationTemplate/add:
+        post:
+            tags:
+                - NotifyNotificationTemplateService
+            description: 添加通知模板
+            operationId: NotifyNotificationTemplateService_Add
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.NotificationTemplateAddRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.NotificationTemplateAddReply'
+    /v1/notificationTemplate/page:
+        post:
+            tags:
+                - NotifyNotificationTemplateService
+            description: 查询通知模板
+            operationId: NotifyNotificationTemplateService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.NotificationTemplatePageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.NotificationTemplatePageReply'
+    /v1/notificationTemplate/update:
+        put:
+            tags:
+                - NotifyNotificationTemplateService
+            description: 更新通知模板
+            operationId: NotifyNotificationTemplateService_Update
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.NotificationTemplateUpdateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.NotificationTemplateUpdateReply'
     /v1/oss/uploadToken:
         post:
             tags:
@@ -1024,6 +1081,9 @@ components:
                 has_postscript:
                     type: boolean
                     description: 是否有附言
+                has_reward:
+                    type: boolean
+                    description: 是否有打赏区
                 reward_content:
                     type: string
                     description: 打赏区内容（可为空）
@@ -1222,11 +1282,6 @@ components:
                 listable:
                     type: boolean
                     description: 是否在列表展示
-                at_user_ids:
-                    type: array
-                    items:
-                        type: string
-                    description: '@ 用户id列表'
                 tags:
                     type: array
                     items:
@@ -2113,6 +2168,131 @@ components:
                     type: array
                     items:
                         type: string
+        common.api.user.v1.NotificationTemplate:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                id:
+                    type: string
+                    description: 主键
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                channel:
+                    type: integer
+                    description: 通知渠道
+                    format: int32
+                content:
+                    type: string
+                    description: 模板内容
+                processors:
+                    type: array
+                    items:
+                        type: string
+                    description: 处理器链（有序执行）
+                enable:
+                    type: boolean
+                    description: 是否启用
+        common.api.user.v1.NotificationTemplateAddReply:
+            type: object
+            properties:
+                notification_template:
+                    $ref: '#/components/schemas/common.api.user.v1.NotificationTemplate'
+        common.api.user.v1.NotificationTemplateAddRequest:
+            type: object
+            properties:
+                notification_template:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.NotificationTemplate'
+                    description: 模板信息
+        common.api.user.v1.NotificationTemplatePageReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.user.v1.NotificationTemplate'
+                    description: 通知元数据信息
+        common.api.user.v1.NotificationTemplatePageRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.NotificationTemplateQueryParams'
+                    description: 查询参数
+        common.api.user.v1.NotificationTemplateQueryParams:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                channel:
+                    type: integer
+                    description: 通知渠道
+                    format: int32
+                content:
+                    type: string
+                    description: 模板内容
+                processors:
+                    type: array
+                    items:
+                        type: string
+                    description: 处理器链（有序执行）
+                enable:
+                    type: boolean
+                    description: 是否启用
+        common.api.user.v1.NotificationTemplateUpdateReply:
+            type: object
+            properties:
+                notification_template:
+                    $ref: '#/components/schemas/common.api.user.v1.NotificationTemplate'
+        common.api.user.v1.NotificationTemplateUpdateRequest:
+            type: object
+            properties:
+                ids:
+                    type: string
+                    description: 主键
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                channel:
+                    type: integer
+                    description: 通知渠道
+                    format: int32
+                content:
+                    type: string
+                    description: 模板内容
+                processors:
+                    type: array
+                    items:
+                        type: string
+                    description: 处理器链（有序执行）
+                enable:
+                    type: boolean
+                    description: 是否启用
         common.api.user.v1.PageUserReply:
             type: object
             properties:
@@ -2394,6 +2574,8 @@ tags:
       description: Notification_Meta 服务
     - name: NotifyNotificationRecordService
       description: Notification_Record 服务
+    - name: NotifyNotificationTemplateService
+      description: Notification_Template 服务
     - name: System
       description: System 服务
     - name: UserAuthenticationService

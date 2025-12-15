@@ -61,6 +61,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 	// 代理 handler
 	srv.HandlePrefix("/user", NewProxyHandler(middlewares, etcdClient, constant.UserServiceName.String(), "/user", logger))
 	srv.HandlePrefix("/content", NewProxyHandler(middlewares, etcdClient, constant.ContentServiceName.String(), "/content", logger))
+	srv.HandlePrefix("/notify", NewProxyHandler(middlewares, etcdClient, constant.NotifyServiceName.String(), "/notify", logger))
 
 	for _, s := range services {
 		s.RegisterHttp(srv)

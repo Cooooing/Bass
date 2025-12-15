@@ -3,6 +3,7 @@
 package gen
 
 import (
+	"common/pkg/model"
 	"context"
 	"errors"
 	"fmt"
@@ -86,8 +87,16 @@ func (_u *NotificationMetaUpdate) AddSenderID(v int64) *NotificationMetaUpdate {
 }
 
 // SetMeta sets the "meta" field.
-func (_u *NotificationMetaUpdate) SetMeta(v map[string]interface{}) *NotificationMetaUpdate {
+func (_u *NotificationMetaUpdate) SetMeta(v model.Meta) *NotificationMetaUpdate {
 	_u.mutation.SetMeta(v)
+	return _u
+}
+
+// SetNillableMeta sets the "meta" field if the given value is not nil.
+func (_u *NotificationMetaUpdate) SetNillableMeta(v *model.Meta) *NotificationMetaUpdate {
+	if v != nil {
+		_u.SetMeta(*v)
+	}
 	return _u
 }
 
@@ -404,8 +413,16 @@ func (_u *NotificationMetaUpdateOne) AddSenderID(v int64) *NotificationMetaUpdat
 }
 
 // SetMeta sets the "meta" field.
-func (_u *NotificationMetaUpdateOne) SetMeta(v map[string]interface{}) *NotificationMetaUpdateOne {
+func (_u *NotificationMetaUpdateOne) SetMeta(v model.Meta) *NotificationMetaUpdateOne {
 	_u.mutation.SetMeta(v)
+	return _u
+}
+
+// SetNillableMeta sets the "meta" field if the given value is not nil.
+func (_u *NotificationMetaUpdateOne) SetNillableMeta(v *model.Meta) *NotificationMetaUpdateOne {
+	if v != nil {
+		_u.SetMeta(*v)
+	}
 	return _u
 }
 

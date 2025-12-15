@@ -3,16 +3,21 @@ package biz
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
+	notifyv1 "common/api/notify/v1"
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/cutil/base"
 	"common/pkg/cutil/collections/set"
+	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent"
 	"content/internal/data/ent/gen"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type CommentDomain struct {
@@ -31,7 +36,11 @@ func NewCommentDomain(baseDomain *BaseDomain, commentRepo repo.CommentRepo, comm
 	}
 }
 
-func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *model.Comment, err error) {
+func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *model.Comment, err error) {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return nil, cv1.ErrorUnauthorized("user not login")
+	}
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		// 回复文章
 		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
@@ -63,7 +72,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			}
 		}
 
-		err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, v1.ArticleAction_ArticleActionReply, 1)
+		_, err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, v1.ArticleAction_ArticleActionReply, 1)
 		if err != nil {
 			return err
 		}
@@ -75,13 +84,44 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (res *m
 			ReplyID:  comment.ReplyID,
 		}}
 		save.FormatContent()
-		res, err = d.commentRepo.Save(ctx, tx, save)
+		c, err = d.commentRepo.Save(ctx, tx, save)
 		if err != nil {
 			return err
 		}
 		return nil
 	})
-	return res, err
+	if err != nil {
+		return nil, err
+	}
+	err = d.eventPool.Submit(func() {
+		atUserNames := c.ParseContent()
+		err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
+			UUID:       uuid.New().String(),
+			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleAt),
+			SenderId:   user.ID,
+			SenderName: user.Name,
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+			Meta: commonModel.Meta{
+				AtUsernames: atUserNames.ToSlice(),
+				Comment: &commonModel.CommentMeta{
+					CommentId:     c.ID,
+					ArticleId:     c.ArticleID,
+					Content:       c.Content,
+					ReplyId:       c.ReplyID,
+					CreatedBy:     *c.CreatedBy,
+					CreatedByName: *c.CreatedByName,
+				},
+			},
+		})
+		if err != nil {
+			d.log.Errorf("publish a at event error: %v", err)
+			return
+		}
+	})
+	if err != nil {
+		return nil, err
+	}
+	return c, err
 }
 
 func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.CommentGetReq) (*cv1.PageReply, []*model.Comment, error) {

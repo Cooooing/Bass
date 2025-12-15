@@ -15,8 +15,9 @@ type ArticleRepo interface {
 	UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error
 	UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status v1.ArticleStatus) error
 	UpdateHasPostscript(ctx context.Context, tx *gen.Client, articleId int64, hasPostscript bool) error
-	UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) error
-	Publish(ctx context.Context, tx *gen.Client, articleId int64) error
+	UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) (*model.Article, error)
+	UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, articleId int64, commentId int64) (*model.Article, error)
+	Publish(ctx context.Context, tx *gen.Client, articleId int64) (*model.Article, error)
 
 	Delete(ctx context.Context, tx *gen.Client, articleId int64) error
 
@@ -39,7 +40,8 @@ type ArticleGetReq struct {
 
 	Listable *bool
 
-	IsSummary bool
+	IsSummary   bool
+	QueryUserId *int64
 }
 
 type ArticlePostscriptRepo interface {
@@ -49,4 +51,14 @@ type ArticlePostscriptRepo interface {
 type ArticleActionRecordRepo interface {
 	Save(ctx context.Context, tx *gen.Client, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error)
 	Delete(ctx context.Context, tx *gen.Client, articleId int64, userId int64, action v1.ArticleAction) error
+
+	GetOne(ctx context.Context, tx *gen.Client, req *ArticleActionRecordReq) (*model.ArticleActionRecord, error)
+	GetList(ctx context.Context, tx *gen.Client, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, *cv1.PageReply, error)
+}
+
+type ArticleActionRecordReq struct {
+	ArticleId *int64
+	UserId    *int64
+	Type      *v1.ArticleAction
 }

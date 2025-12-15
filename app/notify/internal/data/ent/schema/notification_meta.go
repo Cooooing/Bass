@@ -3,6 +3,7 @@ package schema
 import (
 	"common/pkg"
 	"common/pkg/constant"
+	commonModel "common/pkg/model"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -30,7 +31,7 @@ func (NotificationMeta) Fields() []ent.Field {
 		field.String("uuid").Comment("唯一标识 幂等").Unique(),
 		field.Int32("notification_type").Comment("通知类型"),
 		field.Int64("sender_id").Comment("发送者ID"),
-		field.JSON("meta", map[string]any{}).Comment("通知元数据"),
+		field.JSON("meta", commonModel.Meta{}).Comment("通知元数据"),
 		field.String("content").Comment("渲染内容"),
 		field.Int32("status").Comment("状态 0-正常 1-被取消"),
 	}

@@ -124,6 +124,8 @@ func (m *Article) validate(all bool) error {
 
 	// no validation rules for HasPostscript
 
+	// no validation rules for HasReward
+
 	// no validation rules for Status
 
 	// no validation rules for Type

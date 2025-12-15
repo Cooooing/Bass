@@ -35,16 +35,12 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient)
 	systemService := service.NewSystemService(baseService)
-	v := service.ProvideServices(systemService)
 	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
 	if err != nil {
 		cleanup3()
@@ -53,10 +49,18 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	filter := handler.NewFilter()
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	notificationMetaRepo := data.NewNotificationMetaRepo(baseRepo)
+	notificationMetaDomain := biz.NewNotificationMetaDomain(baseDomain, notificationMetaRepo)
+	notificationMetaService := service.NewNotificationMetaService(baseService, notificationMetaDomain)
 	notificationRecordRepo := data.NewNotificationRecordRepo(baseRepo)
+	notificationRecordDomain := biz.NewNotificationRecordDomain(baseDomain, notificationRecordRepo)
+	notificationRecordService := service.NewNotificationRecordService(baseService, notificationRecordDomain)
+	v := service.ProvideServices(systemService, notificationMetaService, notificationRecordService)
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
+	filter := handler.NewFilter()
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
 	dictMap := handler.ProvideHandlers(filter, fullHandler)
 	notificationTemplateRepo := data.NewNotificationTemplateRepo(baseRepo)

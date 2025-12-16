@@ -8,7 +8,9 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type User gen.User
+type User struct {
+	*gen.User
+}
 
 func (u *User) PasswordEncrypt() error {
 	password, err := str.HashPassword(u.Password)
@@ -35,6 +37,8 @@ func (u *User) ConvertToRpc() *v1.User {
 		GroupName:            u.GroupName,
 		FollowCount:          u.FollowCount,
 		FollowerCount:        u.FollowerCount,
+		BlockCount:           u.BlockCount,
+		BlockedCount:         u.BlockedCount,
 		LastLoginIp:          u.LastLoginIP,
 		OnlineMinutes:        u.OnlineMinutes,
 		CurrentCheckinStreak: u.CurrentCheckinStreak,

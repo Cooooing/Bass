@@ -10,6 +10,7 @@ import (
 	"time"
 	"user/internal/data/ent/gen/predicate"
 	"user/internal/data/ent/gen/user"
+	"user/internal/data/ent/gen/userrelation"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -24,62 +25,73 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeUser = "User"
+	TypeUser         = "User"
+	TypeUserRelation = "UserRelation"
 )
 
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op                        Op
-	typ                       string
-	id                        *int64
-	name                      *string
-	nickname                  *string
-	password                  *string
-	email                     *string
-	phone                     *string
-	url                       *string
-	avatar_url                *string
-	introduction              *string
-	mbti                      *string
-	status                    *int32
-	addstatus                 *int32
-	group_name                *string
-	follow_count              *int32
-	addfollow_count           *int32
-	follower_count            *int32
-	addfollower_count         *int32
-	last_login_time           *time.Time
-	last_login_ip             *string
-	online_minutes            *int32
-	addonline_minutes         *int32
-	last_checkin_time         *time.Time
-	current_checkin_streak    *int32
-	addcurrent_checkin_streak *int32
-	longest_checkin_streak    *int32
-	addlongest_checkin_streak *int32
-	language                  *string
-	timezone                  *string
-	theme                     *string
-	mobile_theme              *string
-	enable_web_notify         *bool
-	enable_email_subscribe    *bool
-	public_points             *bool
-	public_followers          *bool
-	public_articles           *bool
-	public_comments           *bool
-	public_online_status      *bool
-	country                   *string
-	province                  *string
-	city                      *string
-	public_location           *bool
-	twofa_secret              *string
-	created_at                *time.Time
-	updated_at                *time.Time
-	clearedFields             map[string]struct{}
-	done                      bool
-	oldValue                  func(context.Context) (*User, error)
-	predicates                []predicate.User
+	op                         Op
+	typ                        string
+	id                         *int64
+	name                       *string
+	nickname                   *string
+	password                   *string
+	email                      *string
+	phone                      *string
+	url                        *string
+	avatar_url                 *string
+	introduction               *string
+	mbti                       *string
+	status                     *int32
+	addstatus                  *int32
+	group_name                 *string
+	follow_count               *int32
+	addfollow_count            *int32
+	follower_count             *int32
+	addfollower_count          *int32
+	block_count                *int32
+	addblock_count             *int32
+	blocked_count              *int32
+	addblocked_count           *int32
+	last_login_time            *time.Time
+	last_login_ip              *string
+	online_minutes             *int32
+	addonline_minutes          *int32
+	last_checkin_time          *time.Time
+	current_checkin_streak     *int32
+	addcurrent_checkin_streak  *int32
+	longest_checkin_streak     *int32
+	addlongest_checkin_streak  *int32
+	language                   *string
+	timezone                   *string
+	theme                      *string
+	mobile_theme               *string
+	enable_web_notify          *bool
+	enable_email_subscribe     *bool
+	public_points              *bool
+	public_followers           *bool
+	public_articles            *bool
+	public_comments            *bool
+	public_online_status       *bool
+	country                    *string
+	province                   *string
+	city                       *string
+	public_location            *bool
+	twofa_secret               *string
+	created_at                 *time.Time
+	updated_at                 *time.Time
+	clearedFields              map[string]struct{}
+	relations_as_actor         map[int64]struct{}
+	removedrelations_as_actor  map[int64]struct{}
+	clearedrelations_as_actor  bool
+	relations_as_target        map[int64]struct{}
+	removedrelations_as_target map[int64]struct{}
+	clearedrelations_as_target bool
+	done                       bool
+	oldValue                   func(context.Context) (*User, error)
+	predicates                 []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -816,6 +828,118 @@ func (m *UserMutation) AddedFollowerCount() (r int32, exists bool) {
 func (m *UserMutation) ResetFollowerCount() {
 	m.follower_count = nil
 	m.addfollower_count = nil
+}
+
+// SetBlockCount sets the "block_count" field.
+func (m *UserMutation) SetBlockCount(i int32) {
+	m.block_count = &i
+	m.addblock_count = nil
+}
+
+// BlockCount returns the value of the "block_count" field in the mutation.
+func (m *UserMutation) BlockCount() (r int32, exists bool) {
+	v := m.block_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlockCount returns the old "block_count" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldBlockCount(ctx context.Context) (v *int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlockCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlockCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlockCount: %w", err)
+	}
+	return oldValue.BlockCount, nil
+}
+
+// AddBlockCount adds i to the "block_count" field.
+func (m *UserMutation) AddBlockCount(i int32) {
+	if m.addblock_count != nil {
+		*m.addblock_count += i
+	} else {
+		m.addblock_count = &i
+	}
+}
+
+// AddedBlockCount returns the value that was added to the "block_count" field in this mutation.
+func (m *UserMutation) AddedBlockCount() (r int32, exists bool) {
+	v := m.addblock_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetBlockCount resets all changes to the "block_count" field.
+func (m *UserMutation) ResetBlockCount() {
+	m.block_count = nil
+	m.addblock_count = nil
+}
+
+// SetBlockedCount sets the "blocked_count" field.
+func (m *UserMutation) SetBlockedCount(i int32) {
+	m.blocked_count = &i
+	m.addblocked_count = nil
+}
+
+// BlockedCount returns the value of the "blocked_count" field in the mutation.
+func (m *UserMutation) BlockedCount() (r int32, exists bool) {
+	v := m.blocked_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlockedCount returns the old "blocked_count" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldBlockedCount(ctx context.Context) (v *int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlockedCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlockedCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlockedCount: %w", err)
+	}
+	return oldValue.BlockedCount, nil
+}
+
+// AddBlockedCount adds i to the "blocked_count" field.
+func (m *UserMutation) AddBlockedCount(i int32) {
+	if m.addblocked_count != nil {
+		*m.addblocked_count += i
+	} else {
+		m.addblocked_count = &i
+	}
+}
+
+// AddedBlockedCount returns the value that was added to the "blocked_count" field in this mutation.
+func (m *UserMutation) AddedBlockedCount() (r int32, exists bool) {
+	v := m.addblocked_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetBlockedCount resets all changes to the "blocked_count" field.
+func (m *UserMutation) ResetBlockedCount() {
+	m.blocked_count = nil
+	m.addblocked_count = nil
 }
 
 // SetLastLoginTime sets the "last_login_time" field.
@@ -1859,6 +1983,114 @@ func (m *UserMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, user.FieldUpdatedAt)
 }
 
+// AddRelationsAsActorIDs adds the "relations_as_actor" edge to the UserRelation entity by ids.
+func (m *UserMutation) AddRelationsAsActorIDs(ids ...int64) {
+	if m.relations_as_actor == nil {
+		m.relations_as_actor = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.relations_as_actor[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRelationsAsActor clears the "relations_as_actor" edge to the UserRelation entity.
+func (m *UserMutation) ClearRelationsAsActor() {
+	m.clearedrelations_as_actor = true
+}
+
+// RelationsAsActorCleared reports if the "relations_as_actor" edge to the UserRelation entity was cleared.
+func (m *UserMutation) RelationsAsActorCleared() bool {
+	return m.clearedrelations_as_actor
+}
+
+// RemoveRelationsAsActorIDs removes the "relations_as_actor" edge to the UserRelation entity by IDs.
+func (m *UserMutation) RemoveRelationsAsActorIDs(ids ...int64) {
+	if m.removedrelations_as_actor == nil {
+		m.removedrelations_as_actor = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.relations_as_actor, ids[i])
+		m.removedrelations_as_actor[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRelationsAsActor returns the removed IDs of the "relations_as_actor" edge to the UserRelation entity.
+func (m *UserMutation) RemovedRelationsAsActorIDs() (ids []int64) {
+	for id := range m.removedrelations_as_actor {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RelationsAsActorIDs returns the "relations_as_actor" edge IDs in the mutation.
+func (m *UserMutation) RelationsAsActorIDs() (ids []int64) {
+	for id := range m.relations_as_actor {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRelationsAsActor resets all changes to the "relations_as_actor" edge.
+func (m *UserMutation) ResetRelationsAsActor() {
+	m.relations_as_actor = nil
+	m.clearedrelations_as_actor = false
+	m.removedrelations_as_actor = nil
+}
+
+// AddRelationsAsTargetIDs adds the "relations_as_target" edge to the UserRelation entity by ids.
+func (m *UserMutation) AddRelationsAsTargetIDs(ids ...int64) {
+	if m.relations_as_target == nil {
+		m.relations_as_target = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.relations_as_target[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRelationsAsTarget clears the "relations_as_target" edge to the UserRelation entity.
+func (m *UserMutation) ClearRelationsAsTarget() {
+	m.clearedrelations_as_target = true
+}
+
+// RelationsAsTargetCleared reports if the "relations_as_target" edge to the UserRelation entity was cleared.
+func (m *UserMutation) RelationsAsTargetCleared() bool {
+	return m.clearedrelations_as_target
+}
+
+// RemoveRelationsAsTargetIDs removes the "relations_as_target" edge to the UserRelation entity by IDs.
+func (m *UserMutation) RemoveRelationsAsTargetIDs(ids ...int64) {
+	if m.removedrelations_as_target == nil {
+		m.removedrelations_as_target = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.relations_as_target, ids[i])
+		m.removedrelations_as_target[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRelationsAsTarget returns the removed IDs of the "relations_as_target" edge to the UserRelation entity.
+func (m *UserMutation) RemovedRelationsAsTargetIDs() (ids []int64) {
+	for id := range m.removedrelations_as_target {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RelationsAsTargetIDs returns the "relations_as_target" edge IDs in the mutation.
+func (m *UserMutation) RelationsAsTargetIDs() (ids []int64) {
+	for id := range m.relations_as_target {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRelationsAsTarget resets all changes to the "relations_as_target" edge.
+func (m *UserMutation) ResetRelationsAsTarget() {
+	m.relations_as_target = nil
+	m.clearedrelations_as_target = false
+	m.removedrelations_as_target = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -1893,7 +2125,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 37)
+	fields := make([]string, 0, 39)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -1932,6 +2164,12 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.follower_count != nil {
 		fields = append(fields, user.FieldFollowerCount)
+	}
+	if m.block_count != nil {
+		fields = append(fields, user.FieldBlockCount)
+	}
+	if m.blocked_count != nil {
+		fields = append(fields, user.FieldBlockedCount)
 	}
 	if m.last_login_time != nil {
 		fields = append(fields, user.FieldLastLoginTime)
@@ -2039,6 +2277,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.FollowCount()
 	case user.FieldFollowerCount:
 		return m.FollowerCount()
+	case user.FieldBlockCount:
+		return m.BlockCount()
+	case user.FieldBlockedCount:
+		return m.BlockedCount()
 	case user.FieldLastLoginTime:
 		return m.LastLoginTime()
 	case user.FieldLastLoginIP:
@@ -2122,6 +2364,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldFollowCount(ctx)
 	case user.FieldFollowerCount:
 		return m.OldFollowerCount(ctx)
+	case user.FieldBlockCount:
+		return m.OldBlockCount(ctx)
+	case user.FieldBlockedCount:
+		return m.OldBlockedCount(ctx)
 	case user.FieldLastLoginTime:
 		return m.OldLastLoginTime(ctx)
 	case user.FieldLastLoginIP:
@@ -2269,6 +2515,20 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFollowerCount(v)
+		return nil
+	case user.FieldBlockCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlockCount(v)
+		return nil
+	case user.FieldBlockedCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlockedCount(v)
 		return nil
 	case user.FieldLastLoginTime:
 		v, ok := value.(time.Time)
@@ -2455,6 +2715,12 @@ func (m *UserMutation) AddedFields() []string {
 	if m.addfollower_count != nil {
 		fields = append(fields, user.FieldFollowerCount)
 	}
+	if m.addblock_count != nil {
+		fields = append(fields, user.FieldBlockCount)
+	}
+	if m.addblocked_count != nil {
+		fields = append(fields, user.FieldBlockedCount)
+	}
 	if m.addonline_minutes != nil {
 		fields = append(fields, user.FieldOnlineMinutes)
 	}
@@ -2478,6 +2744,10 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedFollowCount()
 	case user.FieldFollowerCount:
 		return m.AddedFollowerCount()
+	case user.FieldBlockCount:
+		return m.AddedBlockCount()
+	case user.FieldBlockedCount:
+		return m.AddedBlockedCount()
 	case user.FieldOnlineMinutes:
 		return m.AddedOnlineMinutes()
 	case user.FieldCurrentCheckinStreak:
@@ -2513,6 +2783,20 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddFollowerCount(v)
+		return nil
+	case user.FieldBlockCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddBlockCount(v)
+		return nil
+	case user.FieldBlockedCount:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddBlockedCount(v)
 		return nil
 	case user.FieldOnlineMinutes:
 		v, ok := value.(int32)
@@ -2706,6 +2990,12 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldFollowerCount:
 		m.ResetFollowerCount()
 		return nil
+	case user.FieldBlockCount:
+		m.ResetBlockCount()
+		return nil
+	case user.FieldBlockedCount:
+		m.ResetBlockedCount()
+		return nil
 	case user.FieldLastLoginTime:
 		m.ResetLastLoginTime()
 		return nil
@@ -2784,48 +3074,835 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.relations_as_actor != nil {
+		edges = append(edges, user.EdgeRelationsAsActor)
+	}
+	if m.relations_as_target != nil {
+		edges = append(edges, user.EdgeRelationsAsTarget)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *UserMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case user.EdgeRelationsAsActor:
+		ids := make([]ent.Value, 0, len(m.relations_as_actor))
+		for id := range m.relations_as_actor {
+			ids = append(ids, id)
+		}
+		return ids
+	case user.EdgeRelationsAsTarget:
+		ids := make([]ent.Value, 0, len(m.relations_as_target))
+		for id := range m.relations_as_target {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.removedrelations_as_actor != nil {
+		edges = append(edges, user.EdgeRelationsAsActor)
+	}
+	if m.removedrelations_as_target != nil {
+		edges = append(edges, user.EdgeRelationsAsTarget)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *UserMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case user.EdgeRelationsAsActor:
+		ids := make([]ent.Value, 0, len(m.removedrelations_as_actor))
+		for id := range m.removedrelations_as_actor {
+			ids = append(ids, id)
+		}
+		return ids
+	case user.EdgeRelationsAsTarget:
+		ids := make([]ent.Value, 0, len(m.removedrelations_as_target))
+		for id := range m.removedrelations_as_target {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 2)
+	if m.clearedrelations_as_actor {
+		edges = append(edges, user.EdgeRelationsAsActor)
+	}
+	if m.clearedrelations_as_target {
+		edges = append(edges, user.EdgeRelationsAsTarget)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *UserMutation) EdgeCleared(name string) bool {
+	switch name {
+	case user.EdgeRelationsAsActor:
+		return m.clearedrelations_as_actor
+	case user.EdgeRelationsAsTarget:
+		return m.clearedrelations_as_target
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *UserMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown User unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *UserMutation) ResetEdge(name string) error {
+	switch name {
+	case user.EdgeRelationsAsActor:
+		m.ResetRelationsAsActor()
+		return nil
+	case user.EdgeRelationsAsTarget:
+		m.ResetRelationsAsTarget()
+		return nil
+	}
 	return fmt.Errorf("unknown User edge %s", name)
+}
+
+// UserRelationMutation represents an operation that mutates the UserRelation nodes in the graph.
+type UserRelationMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int64
+	_type         *int32
+	add_type      *int32
+	created_at    *time.Time
+	updated_at    *time.Time
+	clearedFields map[string]struct{}
+	actor         *int64
+	clearedactor  bool
+	target        *int64
+	clearedtarget bool
+	done          bool
+	oldValue      func(context.Context) (*UserRelation, error)
+	predicates    []predicate.UserRelation
+}
+
+var _ ent.Mutation = (*UserRelationMutation)(nil)
+
+// userrelationOption allows management of the mutation configuration using functional options.
+type userrelationOption func(*UserRelationMutation)
+
+// newUserRelationMutation creates new mutation for the UserRelation entity.
+func newUserRelationMutation(c config, op Op, opts ...userrelationOption) *UserRelationMutation {
+	m := &UserRelationMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeUserRelation,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withUserRelationID sets the ID field of the mutation.
+func withUserRelationID(id int64) userrelationOption {
+	return func(m *UserRelationMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *UserRelation
+		)
+		m.oldValue = func(ctx context.Context) (*UserRelation, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().UserRelation.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withUserRelation sets the old UserRelation of the mutation.
+func withUserRelation(node *UserRelation) userrelationOption {
+	return func(m *UserRelationMutation) {
+		m.oldValue = func(context.Context) (*UserRelation, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m UserRelationMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m UserRelationMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("gen: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of UserRelation entities.
+func (m *UserRelationMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *UserRelationMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *UserRelationMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().UserRelation.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetActorID sets the "actor_id" field.
+func (m *UserRelationMutation) SetActorID(i int64) {
+	m.actor = &i
+}
+
+// ActorID returns the value of the "actor_id" field in the mutation.
+func (m *UserRelationMutation) ActorID() (r int64, exists bool) {
+	v := m.actor
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldActorID returns the old "actor_id" field's value of the UserRelation entity.
+// If the UserRelation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserRelationMutation) OldActorID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldActorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldActorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldActorID: %w", err)
+	}
+	return oldValue.ActorID, nil
+}
+
+// ResetActorID resets all changes to the "actor_id" field.
+func (m *UserRelationMutation) ResetActorID() {
+	m.actor = nil
+}
+
+// SetTargetID sets the "target_id" field.
+func (m *UserRelationMutation) SetTargetID(i int64) {
+	m.target = &i
+}
+
+// TargetID returns the value of the "target_id" field in the mutation.
+func (m *UserRelationMutation) TargetID() (r int64, exists bool) {
+	v := m.target
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTargetID returns the old "target_id" field's value of the UserRelation entity.
+// If the UserRelation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserRelationMutation) OldTargetID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTargetID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTargetID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTargetID: %w", err)
+	}
+	return oldValue.TargetID, nil
+}
+
+// ResetTargetID resets all changes to the "target_id" field.
+func (m *UserRelationMutation) ResetTargetID() {
+	m.target = nil
+}
+
+// SetType sets the "type" field.
+func (m *UserRelationMutation) SetType(i int32) {
+	m._type = &i
+	m.add_type = nil
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *UserRelationMutation) GetType() (r int32, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the UserRelation entity.
+// If the UserRelation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserRelationMutation) OldType(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// AddType adds i to the "type" field.
+func (m *UserRelationMutation) AddType(i int32) {
+	if m.add_type != nil {
+		*m.add_type += i
+	} else {
+		m.add_type = &i
+	}
+}
+
+// AddedType returns the value that was added to the "type" field in this mutation.
+func (m *UserRelationMutation) AddedType() (r int32, exists bool) {
+	v := m.add_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *UserRelationMutation) ResetType() {
+	m._type = nil
+	m.add_type = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *UserRelationMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *UserRelationMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the UserRelation entity.
+// If the UserRelation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserRelationMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *UserRelationMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[userrelation.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *UserRelationMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[userrelation.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *UserRelationMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, userrelation.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *UserRelationMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *UserRelationMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the UserRelation entity.
+// If the UserRelation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserRelationMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *UserRelationMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[userrelation.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *UserRelationMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[userrelation.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *UserRelationMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, userrelation.FieldUpdatedAt)
+}
+
+// ClearActor clears the "actor" edge to the User entity.
+func (m *UserRelationMutation) ClearActor() {
+	m.clearedactor = true
+	m.clearedFields[userrelation.FieldActorID] = struct{}{}
+}
+
+// ActorCleared reports if the "actor" edge to the User entity was cleared.
+func (m *UserRelationMutation) ActorCleared() bool {
+	return m.clearedactor
+}
+
+// ActorIDs returns the "actor" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ActorID instead. It exists only for internal usage by the builders.
+func (m *UserRelationMutation) ActorIDs() (ids []int64) {
+	if id := m.actor; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetActor resets all changes to the "actor" edge.
+func (m *UserRelationMutation) ResetActor() {
+	m.actor = nil
+	m.clearedactor = false
+}
+
+// ClearTarget clears the "target" edge to the User entity.
+func (m *UserRelationMutation) ClearTarget() {
+	m.clearedtarget = true
+	m.clearedFields[userrelation.FieldTargetID] = struct{}{}
+}
+
+// TargetCleared reports if the "target" edge to the User entity was cleared.
+func (m *UserRelationMutation) TargetCleared() bool {
+	return m.clearedtarget
+}
+
+// TargetIDs returns the "target" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// TargetID instead. It exists only for internal usage by the builders.
+func (m *UserRelationMutation) TargetIDs() (ids []int64) {
+	if id := m.target; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetTarget resets all changes to the "target" edge.
+func (m *UserRelationMutation) ResetTarget() {
+	m.target = nil
+	m.clearedtarget = false
+}
+
+// Where appends a list predicates to the UserRelationMutation builder.
+func (m *UserRelationMutation) Where(ps ...predicate.UserRelation) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the UserRelationMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *UserRelationMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.UserRelation, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *UserRelationMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *UserRelationMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (UserRelation).
+func (m *UserRelationMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *UserRelationMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.actor != nil {
+		fields = append(fields, userrelation.FieldActorID)
+	}
+	if m.target != nil {
+		fields = append(fields, userrelation.FieldTargetID)
+	}
+	if m._type != nil {
+		fields = append(fields, userrelation.FieldType)
+	}
+	if m.created_at != nil {
+		fields = append(fields, userrelation.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, userrelation.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *UserRelationMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case userrelation.FieldActorID:
+		return m.ActorID()
+	case userrelation.FieldTargetID:
+		return m.TargetID()
+	case userrelation.FieldType:
+		return m.GetType()
+	case userrelation.FieldCreatedAt:
+		return m.CreatedAt()
+	case userrelation.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *UserRelationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case userrelation.FieldActorID:
+		return m.OldActorID(ctx)
+	case userrelation.FieldTargetID:
+		return m.OldTargetID(ctx)
+	case userrelation.FieldType:
+		return m.OldType(ctx)
+	case userrelation.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case userrelation.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown UserRelation field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UserRelationMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case userrelation.FieldActorID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetActorID(v)
+		return nil
+	case userrelation.FieldTargetID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTargetID(v)
+		return nil
+	case userrelation.FieldType:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case userrelation.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case userrelation.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown UserRelation field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *UserRelationMutation) AddedFields() []string {
+	var fields []string
+	if m.add_type != nil {
+		fields = append(fields, userrelation.FieldType)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *UserRelationMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case userrelation.FieldType:
+		return m.AddedType()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UserRelationMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case userrelation.FieldType:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown UserRelation numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *UserRelationMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(userrelation.FieldCreatedAt) {
+		fields = append(fields, userrelation.FieldCreatedAt)
+	}
+	if m.FieldCleared(userrelation.FieldUpdatedAt) {
+		fields = append(fields, userrelation.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *UserRelationMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *UserRelationMutation) ClearField(name string) error {
+	switch name {
+	case userrelation.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case userrelation.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown UserRelation nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *UserRelationMutation) ResetField(name string) error {
+	switch name {
+	case userrelation.FieldActorID:
+		m.ResetActorID()
+		return nil
+	case userrelation.FieldTargetID:
+		m.ResetTargetID()
+		return nil
+	case userrelation.FieldType:
+		m.ResetType()
+		return nil
+	case userrelation.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case userrelation.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown UserRelation field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *UserRelationMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.actor != nil {
+		edges = append(edges, userrelation.EdgeActor)
+	}
+	if m.target != nil {
+		edges = append(edges, userrelation.EdgeTarget)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *UserRelationMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case userrelation.EdgeActor:
+		if id := m.actor; id != nil {
+			return []ent.Value{*id}
+		}
+	case userrelation.EdgeTarget:
+		if id := m.target; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *UserRelationMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *UserRelationMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *UserRelationMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedactor {
+		edges = append(edges, userrelation.EdgeActor)
+	}
+	if m.clearedtarget {
+		edges = append(edges, userrelation.EdgeTarget)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *UserRelationMutation) EdgeCleared(name string) bool {
+	switch name {
+	case userrelation.EdgeActor:
+		return m.clearedactor
+	case userrelation.EdgeTarget:
+		return m.clearedtarget
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *UserRelationMutation) ClearEdge(name string) error {
+	switch name {
+	case userrelation.EdgeActor:
+		m.ClearActor()
+		return nil
+	case userrelation.EdgeTarget:
+		m.ClearTarget()
+		return nil
+	}
+	return fmt.Errorf("unknown UserRelation unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *UserRelationMutation) ResetEdge(name string) error {
+	switch name {
+	case userrelation.EdgeActor:
+		m.ResetActor()
+		return nil
+	case userrelation.EdgeTarget:
+		m.ResetTarget()
+		return nil
+	}
+	return fmt.Errorf("unknown UserRelation edge %s", name)
 }

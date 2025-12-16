@@ -54,6 +54,10 @@ type User struct {
 	FollowCount *int32 `protobuf:"varint,13,opt,name=follow_count,json=followCount,proto3,oneof" json:"follow_count,omitempty"`
 	// 粉丝数
 	FollowerCount *int32 `protobuf:"varint,14,opt,name=follower_count,json=followerCount,proto3,oneof" json:"follower_count,omitempty"`
+	// 屏蔽数
+	BlockCount *int32 `protobuf:"varint,40,opt,name=block_count,json=blockCount,proto3,oneof" json:"block_count,omitempty"`
+	// 被屏蔽数
+	BlockedCount *int32 `protobuf:"varint,41,opt,name=blocked_count,json=blockedCount,proto3,oneof" json:"blocked_count,omitempty"`
 	// 最近登录时间
 	LastLoginTime *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=last_login_time,json=lastLoginTime,proto3" json:"last_login_time,omitempty"`
 	// 最近登录IP
@@ -223,6 +227,20 @@ func (x *User) GetFollowCount() int32 {
 func (x *User) GetFollowerCount() int32 {
 	if x != nil && x.FollowerCount != nil {
 		return *x.FollowerCount
+	}
+	return 0
+}
+
+func (x *User) GetBlockCount() int32 {
+	if x != nil && x.BlockCount != nil {
+		return *x.BlockCount
+	}
+	return 0
+}
+
+func (x *User) GetBlockedCount() int32 {
+	if x != nil && x.BlockedCount != nil {
+		return *x.BlockedCount
 	}
 	return 0
 }
@@ -1245,7 +1263,7 @@ var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xca\x0f\n" +
+	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xbc\x10\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
@@ -1262,30 +1280,33 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
 	"group_name\x18\f \x01(\tR\tgroupName\x12&\n" +
 	"\ffollow_count\x18\r \x01(\x05H\aR\vfollowCount\x88\x01\x01\x12*\n" +
-	"\x0efollower_count\x18\x0e \x01(\x05H\bR\rfollowerCount\x88\x01\x01\x12B\n" +
+	"\x0efollower_count\x18\x0e \x01(\x05H\bR\rfollowerCount\x88\x01\x01\x12$\n" +
+	"\vblock_count\x18( \x01(\x05H\tR\n" +
+	"blockCount\x88\x01\x01\x12(\n" +
+	"\rblocked_count\x18) \x01(\x05H\n" +
+	"R\fblockedCount\x88\x01\x01\x12B\n" +
 	"\x0flast_login_time\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\rlastLoginTime\x12'\n" +
-	"\rlast_login_ip\x18\x10 \x01(\tH\tR\vlastLoginIp\x88\x01\x01\x12*\n" +
-	"\x0eonline_minutes\x18\x11 \x01(\x05H\n" +
-	"R\ronlineMinutes\x88\x01\x01\x12F\n" +
+	"\rlast_login_ip\x18\x10 \x01(\tH\vR\vlastLoginIp\x88\x01\x01\x12*\n" +
+	"\x0eonline_minutes\x18\x11 \x01(\x05H\fR\ronlineMinutes\x88\x01\x01\x12F\n" +
 	"\x11last_checkin_time\x18\x12 \x01(\v2\x1a.google.protobuf.TimestampR\x0flastCheckinTime\x129\n" +
-	"\x16current_checkin_streak\x18\x13 \x01(\x05H\vR\x14currentCheckinStreak\x88\x01\x01\x129\n" +
-	"\x16longest_checkin_streak\x18\x14 \x01(\x05H\fR\x14longestCheckinStreak\x88\x01\x01\x12\x1f\n" +
-	"\blanguage\x18\x15 \x01(\tH\rR\blanguage\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18\x16 \x01(\tH\x0eR\btimezone\x88\x01\x01\x12\x19\n" +
-	"\x05theme\x18\x17 \x01(\tH\x0fR\x05theme\x88\x01\x01\x12&\n" +
-	"\fmobile_theme\x18\x18 \x01(\tH\x10R\vmobileTheme\x88\x01\x01\x12/\n" +
-	"\x11enable_web_notify\x18\x19 \x01(\bH\x11R\x0fenableWebNotify\x88\x01\x01\x129\n" +
-	"\x16enable_email_subscribe\x18\x1a \x01(\bH\x12R\x14enableEmailSubscribe\x88\x01\x01\x12(\n" +
-	"\rpublic_points\x18\x1b \x01(\bH\x13R\fpublicPoints\x88\x01\x01\x12.\n" +
-	"\x10public_followers\x18\x1c \x01(\bH\x14R\x0fpublicFollowers\x88\x01\x01\x12,\n" +
-	"\x0fpublic_articles\x18\x1d \x01(\bH\x15R\x0epublicArticles\x88\x01\x01\x12,\n" +
-	"\x0fpublic_comments\x18\x1e \x01(\bH\x16R\x0epublicComments\x88\x01\x01\x125\n" +
-	"\x14public_online_status\x18\x1f \x01(\bH\x17R\x12publicOnlineStatus\x88\x01\x01\x12\x1d\n" +
-	"\acountry\x18  \x01(\tH\x18R\acountry\x88\x01\x01\x12\x1f\n" +
-	"\bprovince\x18! \x01(\tH\x19R\bprovince\x88\x01\x01\x12\x17\n" +
-	"\x04city\x18\" \x01(\tH\x1aR\x04city\x88\x01\x01\x12,\n" +
-	"\x0fpublic_location\x18# \x01(\bH\x1bR\x0epublicLocation\x88\x01\x01\x12&\n" +
-	"\ftwofa_secret\x18$ \x01(\tH\x1cR\vtwofaSecret\x88\x01\x01\x129\n" +
+	"\x16current_checkin_streak\x18\x13 \x01(\x05H\rR\x14currentCheckinStreak\x88\x01\x01\x129\n" +
+	"\x16longest_checkin_streak\x18\x14 \x01(\x05H\x0eR\x14longestCheckinStreak\x88\x01\x01\x12\x1f\n" +
+	"\blanguage\x18\x15 \x01(\tH\x0fR\blanguage\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x16 \x01(\tH\x10R\btimezone\x88\x01\x01\x12\x19\n" +
+	"\x05theme\x18\x17 \x01(\tH\x11R\x05theme\x88\x01\x01\x12&\n" +
+	"\fmobile_theme\x18\x18 \x01(\tH\x12R\vmobileTheme\x88\x01\x01\x12/\n" +
+	"\x11enable_web_notify\x18\x19 \x01(\bH\x13R\x0fenableWebNotify\x88\x01\x01\x129\n" +
+	"\x16enable_email_subscribe\x18\x1a \x01(\bH\x14R\x14enableEmailSubscribe\x88\x01\x01\x12(\n" +
+	"\rpublic_points\x18\x1b \x01(\bH\x15R\fpublicPoints\x88\x01\x01\x12.\n" +
+	"\x10public_followers\x18\x1c \x01(\bH\x16R\x0fpublicFollowers\x88\x01\x01\x12,\n" +
+	"\x0fpublic_articles\x18\x1d \x01(\bH\x17R\x0epublicArticles\x88\x01\x01\x12,\n" +
+	"\x0fpublic_comments\x18\x1e \x01(\bH\x18R\x0epublicComments\x88\x01\x01\x125\n" +
+	"\x14public_online_status\x18\x1f \x01(\bH\x19R\x12publicOnlineStatus\x88\x01\x01\x12\x1d\n" +
+	"\acountry\x18  \x01(\tH\x1aR\acountry\x88\x01\x01\x12\x1f\n" +
+	"\bprovince\x18! \x01(\tH\x1bR\bprovince\x88\x01\x01\x12\x17\n" +
+	"\x04city\x18\" \x01(\tH\x1cR\x04city\x88\x01\x01\x12,\n" +
+	"\x0fpublic_location\x18# \x01(\bH\x1dR\x0epublicLocation\x88\x01\x01\x12&\n" +
+	"\ftwofa_secret\x18$ \x01(\tH\x1eR\vtwofaSecret\x88\x01\x01\x129\n" +
 	"\n" +
 	"created_at\x18% \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
@@ -1298,7 +1319,9 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x05_mbtiB\t\n" +
 	"\a_statusB\x0f\n" +
 	"\r_follow_countB\x11\n" +
-	"\x0f_follower_countB\x10\n" +
+	"\x0f_follower_countB\x0e\n" +
+	"\f_block_countB\x10\n" +
+	"\x0e_blocked_countB\x10\n" +
 	"\x0e_last_login_ipB\x11\n" +
 	"\x0f_online_minutesB\x19\n" +
 	"\x17_current_checkin_streakB\x19\n" +

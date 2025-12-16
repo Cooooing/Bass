@@ -108,12 +108,12 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 
 	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
 		// 保存用户信息
-		user := &model.User{
+		user := &model.User{User: &gen.User{
 			Name:     saveUser.Name,
 			Nickname: base.Ptr(saveUser.Nickname),
 			Password: saveUser.Password,
 			Email:    saveUser.Email,
-		}
+		}}
 		err = user.PasswordEncrypt()
 		if err != nil {
 			return err

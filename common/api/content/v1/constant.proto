@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package common.api.common.v1;
+package common.api.content.v1;
 
-option go_package = "common/api/common/v1;v1";
+option go_package = "common/api/content/v1;v1";
 
 enum DomainStatus {
   DomainNormal = 0; // 正常

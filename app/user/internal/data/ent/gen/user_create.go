@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"time"
 	"user/internal/data/ent/gen/user"
+	"user/internal/data/ent/gen/userrelation"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -182,6 +183,34 @@ func (_c *UserCreate) SetFollowerCount(v int32) *UserCreate {
 func (_c *UserCreate) SetNillableFollowerCount(v *int32) *UserCreate {
 	if v != nil {
 		_c.SetFollowerCount(*v)
+	}
+	return _c
+}
+
+// SetBlockCount sets the "block_count" field.
+func (_c *UserCreate) SetBlockCount(v int32) *UserCreate {
+	_c.mutation.SetBlockCount(v)
+	return _c
+}
+
+// SetNillableBlockCount sets the "block_count" field if the given value is not nil.
+func (_c *UserCreate) SetNillableBlockCount(v *int32) *UserCreate {
+	if v != nil {
+		_c.SetBlockCount(*v)
+	}
+	return _c
+}
+
+// SetBlockedCount sets the "blocked_count" field.
+func (_c *UserCreate) SetBlockedCount(v int32) *UserCreate {
+	_c.mutation.SetBlockedCount(v)
+	return _c
+}
+
+// SetNillableBlockedCount sets the "blocked_count" field if the given value is not nil.
+func (_c *UserCreate) SetNillableBlockedCount(v *int32) *UserCreate {
+	if v != nil {
+		_c.SetBlockedCount(*v)
 	}
 	return _c
 }
@@ -528,6 +557,36 @@ func (_c *UserCreate) SetID(v int64) *UserCreate {
 	return _c
 }
 
+// AddRelationsAsActorIDs adds the "relations_as_actor" edge to the UserRelation entity by IDs.
+func (_c *UserCreate) AddRelationsAsActorIDs(ids ...int64) *UserCreate {
+	_c.mutation.AddRelationsAsActorIDs(ids...)
+	return _c
+}
+
+// AddRelationsAsActor adds the "relations_as_actor" edges to the UserRelation entity.
+func (_c *UserCreate) AddRelationsAsActor(v ...*UserRelation) *UserCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRelationsAsActorIDs(ids...)
+}
+
+// AddRelationsAsTargetIDs adds the "relations_as_target" edge to the UserRelation entity by IDs.
+func (_c *UserCreate) AddRelationsAsTargetIDs(ids ...int64) *UserCreate {
+	_c.mutation.AddRelationsAsTargetIDs(ids...)
+	return _c
+}
+
+// AddRelationsAsTarget adds the "relations_as_target" edges to the UserRelation entity.
+func (_c *UserCreate) AddRelationsAsTarget(v ...*UserRelation) *UserCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRelationsAsTargetIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_c *UserCreate) Mutation() *UserMutation {
 	return _c.mutation
@@ -574,6 +633,14 @@ func (_c *UserCreate) defaults() {
 	if _, ok := _c.mutation.FollowerCount(); !ok {
 		v := user.DefaultFollowerCount
 		_c.mutation.SetFollowerCount(v)
+	}
+	if _, ok := _c.mutation.BlockCount(); !ok {
+		v := user.DefaultBlockCount
+		_c.mutation.SetBlockCount(v)
+	}
+	if _, ok := _c.mutation.BlockedCount(); !ok {
+		v := user.DefaultBlockedCount
+		_c.mutation.SetBlockedCount(v)
 	}
 	if _, ok := _c.mutation.OnlineMinutes(); !ok {
 		v := user.DefaultOnlineMinutes
@@ -671,6 +738,12 @@ func (_c *UserCreate) check() error {
 	}
 	if _, ok := _c.mutation.FollowerCount(); !ok {
 		return &ValidationError{Name: "follower_count", err: errors.New(`gen: missing required field "User.follower_count"`)}
+	}
+	if _, ok := _c.mutation.BlockCount(); !ok {
+		return &ValidationError{Name: "block_count", err: errors.New(`gen: missing required field "User.block_count"`)}
+	}
+	if _, ok := _c.mutation.BlockedCount(); !ok {
+		return &ValidationError{Name: "blocked_count", err: errors.New(`gen: missing required field "User.blocked_count"`)}
 	}
 	if _, ok := _c.mutation.OnlineMinutes(); !ok {
 		return &ValidationError{Name: "online_minutes", err: errors.New(`gen: missing required field "User.online_minutes"`)}
@@ -801,6 +874,14 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldFollowerCount, field.TypeInt32, value)
 		_node.FollowerCount = &value
 	}
+	if value, ok := _c.mutation.BlockCount(); ok {
+		_spec.SetField(user.FieldBlockCount, field.TypeInt32, value)
+		_node.BlockCount = &value
+	}
+	if value, ok := _c.mutation.BlockedCount(); ok {
+		_spec.SetField(user.FieldBlockedCount, field.TypeInt32, value)
+		_node.BlockedCount = &value
+	}
 	if value, ok := _c.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
 		_node.LastLoginTime = &value
@@ -896,6 +977,38 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = &value
+	}
+	if nodes := _c.mutation.RelationsAsActorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RelationsAsTargetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

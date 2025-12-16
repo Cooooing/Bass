@@ -9,6 +9,7 @@ import (
 	"time"
 	"user/internal/data/ent/gen/predicate"
 	"user/internal/data/ent/gen/user"
+	"user/internal/data/ent/gen/userrelation"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -276,6 +277,48 @@ func (_u *UserUpdate) SetNillableFollowerCount(v *int32) *UserUpdate {
 // AddFollowerCount adds value to the "follower_count" field.
 func (_u *UserUpdate) AddFollowerCount(v int32) *UserUpdate {
 	_u.mutation.AddFollowerCount(v)
+	return _u
+}
+
+// SetBlockCount sets the "block_count" field.
+func (_u *UserUpdate) SetBlockCount(v int32) *UserUpdate {
+	_u.mutation.ResetBlockCount()
+	_u.mutation.SetBlockCount(v)
+	return _u
+}
+
+// SetNillableBlockCount sets the "block_count" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableBlockCount(v *int32) *UserUpdate {
+	if v != nil {
+		_u.SetBlockCount(*v)
+	}
+	return _u
+}
+
+// AddBlockCount adds value to the "block_count" field.
+func (_u *UserUpdate) AddBlockCount(v int32) *UserUpdate {
+	_u.mutation.AddBlockCount(v)
+	return _u
+}
+
+// SetBlockedCount sets the "blocked_count" field.
+func (_u *UserUpdate) SetBlockedCount(v int32) *UserUpdate {
+	_u.mutation.ResetBlockedCount()
+	_u.mutation.SetBlockedCount(v)
+	return _u
+}
+
+// SetNillableBlockedCount sets the "blocked_count" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableBlockedCount(v *int32) *UserUpdate {
+	if v != nil {
+		_u.SetBlockedCount(*v)
+	}
+	return _u
+}
+
+// AddBlockedCount adds value to the "blocked_count" field.
+func (_u *UserUpdate) AddBlockedCount(v int32) *UserUpdate {
+	_u.mutation.AddBlockedCount(v)
 	return _u
 }
 
@@ -690,9 +733,81 @@ func (_u *UserUpdate) ClearUpdatedAt() *UserUpdate {
 	return _u
 }
 
+// AddRelationsAsActorIDs adds the "relations_as_actor" edge to the UserRelation entity by IDs.
+func (_u *UserUpdate) AddRelationsAsActorIDs(ids ...int64) *UserUpdate {
+	_u.mutation.AddRelationsAsActorIDs(ids...)
+	return _u
+}
+
+// AddRelationsAsActor adds the "relations_as_actor" edges to the UserRelation entity.
+func (_u *UserUpdate) AddRelationsAsActor(v ...*UserRelation) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRelationsAsActorIDs(ids...)
+}
+
+// AddRelationsAsTargetIDs adds the "relations_as_target" edge to the UserRelation entity by IDs.
+func (_u *UserUpdate) AddRelationsAsTargetIDs(ids ...int64) *UserUpdate {
+	_u.mutation.AddRelationsAsTargetIDs(ids...)
+	return _u
+}
+
+// AddRelationsAsTarget adds the "relations_as_target" edges to the UserRelation entity.
+func (_u *UserUpdate) AddRelationsAsTarget(v ...*UserRelation) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRelationsAsTargetIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_u *UserUpdate) Mutation() *UserMutation {
 	return _u.mutation
+}
+
+// ClearRelationsAsActor clears all "relations_as_actor" edges to the UserRelation entity.
+func (_u *UserUpdate) ClearRelationsAsActor() *UserUpdate {
+	_u.mutation.ClearRelationsAsActor()
+	return _u
+}
+
+// RemoveRelationsAsActorIDs removes the "relations_as_actor" edge to UserRelation entities by IDs.
+func (_u *UserUpdate) RemoveRelationsAsActorIDs(ids ...int64) *UserUpdate {
+	_u.mutation.RemoveRelationsAsActorIDs(ids...)
+	return _u
+}
+
+// RemoveRelationsAsActor removes "relations_as_actor" edges to UserRelation entities.
+func (_u *UserUpdate) RemoveRelationsAsActor(v ...*UserRelation) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRelationsAsActorIDs(ids...)
+}
+
+// ClearRelationsAsTarget clears all "relations_as_target" edges to the UserRelation entity.
+func (_u *UserUpdate) ClearRelationsAsTarget() *UserUpdate {
+	_u.mutation.ClearRelationsAsTarget()
+	return _u
+}
+
+// RemoveRelationsAsTargetIDs removes the "relations_as_target" edge to UserRelation entities by IDs.
+func (_u *UserUpdate) RemoveRelationsAsTargetIDs(ids ...int64) *UserUpdate {
+	_u.mutation.RemoveRelationsAsTargetIDs(ids...)
+	return _u
+}
+
+// RemoveRelationsAsTarget removes "relations_as_target" edges to UserRelation entities.
+func (_u *UserUpdate) RemoveRelationsAsTarget(v ...*UserRelation) *UserUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRelationsAsTargetIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -821,6 +936,18 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.AddedFollowerCount(); ok {
 		_spec.AddField(user.FieldFollowerCount, field.TypeInt32, value)
 	}
+	if value, ok := _u.mutation.BlockCount(); ok {
+		_spec.SetField(user.FieldBlockCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedBlockCount(); ok {
+		_spec.AddField(user.FieldBlockCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.BlockedCount(); ok {
+		_spec.SetField(user.FieldBlockedCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedBlockedCount(); ok {
+		_spec.AddField(user.FieldBlockedCount, field.TypeInt32, value)
+	}
 	if value, ok := _u.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
 	}
@@ -928,6 +1055,96 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(user.FieldUpdatedAt, field.TypeTime)
+	}
+	if _u.mutation.RelationsAsActorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRelationsAsActorIDs(); len(nodes) > 0 && !_u.mutation.RelationsAsActorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RelationsAsActorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RelationsAsTargetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRelationsAsTargetIDs(); len(nodes) > 0 && !_u.mutation.RelationsAsTargetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RelationsAsTargetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1197,6 +1414,48 @@ func (_u *UserUpdateOne) SetNillableFollowerCount(v *int32) *UserUpdateOne {
 // AddFollowerCount adds value to the "follower_count" field.
 func (_u *UserUpdateOne) AddFollowerCount(v int32) *UserUpdateOne {
 	_u.mutation.AddFollowerCount(v)
+	return _u
+}
+
+// SetBlockCount sets the "block_count" field.
+func (_u *UserUpdateOne) SetBlockCount(v int32) *UserUpdateOne {
+	_u.mutation.ResetBlockCount()
+	_u.mutation.SetBlockCount(v)
+	return _u
+}
+
+// SetNillableBlockCount sets the "block_count" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableBlockCount(v *int32) *UserUpdateOne {
+	if v != nil {
+		_u.SetBlockCount(*v)
+	}
+	return _u
+}
+
+// AddBlockCount adds value to the "block_count" field.
+func (_u *UserUpdateOne) AddBlockCount(v int32) *UserUpdateOne {
+	_u.mutation.AddBlockCount(v)
+	return _u
+}
+
+// SetBlockedCount sets the "blocked_count" field.
+func (_u *UserUpdateOne) SetBlockedCount(v int32) *UserUpdateOne {
+	_u.mutation.ResetBlockedCount()
+	_u.mutation.SetBlockedCount(v)
+	return _u
+}
+
+// SetNillableBlockedCount sets the "blocked_count" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableBlockedCount(v *int32) *UserUpdateOne {
+	if v != nil {
+		_u.SetBlockedCount(*v)
+	}
+	return _u
+}
+
+// AddBlockedCount adds value to the "blocked_count" field.
+func (_u *UserUpdateOne) AddBlockedCount(v int32) *UserUpdateOne {
+	_u.mutation.AddBlockedCount(v)
 	return _u
 }
 
@@ -1611,9 +1870,81 @@ func (_u *UserUpdateOne) ClearUpdatedAt() *UserUpdateOne {
 	return _u
 }
 
+// AddRelationsAsActorIDs adds the "relations_as_actor" edge to the UserRelation entity by IDs.
+func (_u *UserUpdateOne) AddRelationsAsActorIDs(ids ...int64) *UserUpdateOne {
+	_u.mutation.AddRelationsAsActorIDs(ids...)
+	return _u
+}
+
+// AddRelationsAsActor adds the "relations_as_actor" edges to the UserRelation entity.
+func (_u *UserUpdateOne) AddRelationsAsActor(v ...*UserRelation) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRelationsAsActorIDs(ids...)
+}
+
+// AddRelationsAsTargetIDs adds the "relations_as_target" edge to the UserRelation entity by IDs.
+func (_u *UserUpdateOne) AddRelationsAsTargetIDs(ids ...int64) *UserUpdateOne {
+	_u.mutation.AddRelationsAsTargetIDs(ids...)
+	return _u
+}
+
+// AddRelationsAsTarget adds the "relations_as_target" edges to the UserRelation entity.
+func (_u *UserUpdateOne) AddRelationsAsTarget(v ...*UserRelation) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRelationsAsTargetIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_u *UserUpdateOne) Mutation() *UserMutation {
 	return _u.mutation
+}
+
+// ClearRelationsAsActor clears all "relations_as_actor" edges to the UserRelation entity.
+func (_u *UserUpdateOne) ClearRelationsAsActor() *UserUpdateOne {
+	_u.mutation.ClearRelationsAsActor()
+	return _u
+}
+
+// RemoveRelationsAsActorIDs removes the "relations_as_actor" edge to UserRelation entities by IDs.
+func (_u *UserUpdateOne) RemoveRelationsAsActorIDs(ids ...int64) *UserUpdateOne {
+	_u.mutation.RemoveRelationsAsActorIDs(ids...)
+	return _u
+}
+
+// RemoveRelationsAsActor removes "relations_as_actor" edges to UserRelation entities.
+func (_u *UserUpdateOne) RemoveRelationsAsActor(v ...*UserRelation) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRelationsAsActorIDs(ids...)
+}
+
+// ClearRelationsAsTarget clears all "relations_as_target" edges to the UserRelation entity.
+func (_u *UserUpdateOne) ClearRelationsAsTarget() *UserUpdateOne {
+	_u.mutation.ClearRelationsAsTarget()
+	return _u
+}
+
+// RemoveRelationsAsTargetIDs removes the "relations_as_target" edge to UserRelation entities by IDs.
+func (_u *UserUpdateOne) RemoveRelationsAsTargetIDs(ids ...int64) *UserUpdateOne {
+	_u.mutation.RemoveRelationsAsTargetIDs(ids...)
+	return _u
+}
+
+// RemoveRelationsAsTarget removes "relations_as_target" edges to UserRelation entities.
+func (_u *UserUpdateOne) RemoveRelationsAsTarget(v ...*UserRelation) *UserUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRelationsAsTargetIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1772,6 +2103,18 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if value, ok := _u.mutation.AddedFollowerCount(); ok {
 		_spec.AddField(user.FieldFollowerCount, field.TypeInt32, value)
 	}
+	if value, ok := _u.mutation.BlockCount(); ok {
+		_spec.SetField(user.FieldBlockCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedBlockCount(); ok {
+		_spec.AddField(user.FieldBlockCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.BlockedCount(); ok {
+		_spec.SetField(user.FieldBlockedCount, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedBlockedCount(); ok {
+		_spec.AddField(user.FieldBlockedCount, field.TypeInt32, value)
+	}
 	if value, ok := _u.mutation.LastLoginTime(); ok {
 		_spec.SetField(user.FieldLastLoginTime, field.TypeTime, value)
 	}
@@ -1879,6 +2222,96 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(user.FieldUpdatedAt, field.TypeTime)
+	}
+	if _u.mutation.RelationsAsActorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRelationsAsActorIDs(); len(nodes) > 0 && !_u.mutation.RelationsAsActorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RelationsAsActorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsActorTable,
+			Columns: []string{user.RelationsAsActorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RelationsAsTargetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRelationsAsTargetIDs(); len(nodes) > 0 && !_u.mutation.RelationsAsTargetCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RelationsAsTargetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RelationsAsTargetTable,
+			Columns: []string{user.RelationsAsTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrelation.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &User{config: _u.config}
 	_spec.Assign = _node.assignValues

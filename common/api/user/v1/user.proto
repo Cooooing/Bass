@@ -107,6 +107,10 @@ message User {
   optional int32 follow_count = 13;
   // 粉丝数
   optional int32 follower_count = 14;
+  // 屏蔽数
+  optional int32 block_count =40;
+  // 被屏蔽数
+  optional int32 blocked_count = 41;
 
   // --- 登录信息 ---
 

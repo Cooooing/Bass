@@ -20,7 +20,8 @@ type Notification struct {
 
 type Meta struct {
 	AtUsernames []string     `json:"at_usernames"`
-	User        []*UserMeta  `json:"user"`
+	User        *UserMeta    `json:"user"`
+	Users       []*UserMeta  `json:"users"`
 	Article     *ArticleMeta `json:"article"`
 	Comment     *CommentMeta `json:"comment"`
 }

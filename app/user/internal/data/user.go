@@ -2,6 +2,7 @@ package data
 
 import (
 	cv1 "common/api/common/v1"
+	v1 "common/api/user/v1"
 	"common/pkg/constant"
 	"context"
 	"fmt"
@@ -13,13 +14,11 @@ import (
 
 type UserRepo struct {
 	*BaseRepo
-	client *gen.Client
 }
 
-func NewUserRepo(repo *BaseRepo, client *gen.Client) repo.UserRepo {
+func NewUserRepo(repo *BaseRepo) repo.UserRepo {
 	return &UserRepo{
 		BaseRepo: repo,
-		client:   client,
 	}
 }
 
@@ -32,7 +31,7 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 		SetNillableNickname(u.Nickname).
 		SetAvatarURL(fmt.Sprintf(r.conf.Oss.Local.Avatar, u.Name))
 	createdUser, err := userCreate.Save(ctx)
-	return (*model.User)(createdUser), err
+	return &model.User{User: createdUser}, err
 }
 
 func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error) {
@@ -51,7 +50,25 @@ func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*
 	update.SetNillablePublicComments(u.PublicComments)
 	update.SetNillablePublicOnlineStatus(u.PublicOnlineStatus)
 	save, err := update.Save(ctx)
-	return (*model.User)(save), err
+	return &model.User{User: save}, err
+}
+
+func (r *UserRepo) UpdateStat(ctx context.Context, tx *gen.Client, userId int64, statType v1.UserStatType, num int32) (*model.User, error) {
+	updateOne := tx.User.UpdateOneID(userId)
+	switch statType {
+	case v1.UserStatType_USER_STAT_TYPE_FOLLOW:
+		updateOne.AddFollowCount(num)
+	case v1.UserStatType_USER_STAT_TYPE_FOLLOWER:
+		updateOne.AddFollowerCount(num)
+	case v1.UserStatType_USER_STAT_TYPE_BLOCK:
+		updateOne.AddBlockCount(num)
+	case v1.UserStatType_USER_STAT_TYPE_BLOCKED:
+		updateOne.AddBlockedCount(num)
+	default:
+		return nil, fmt.Errorf("unknown statType")
+	}
+	save, err := updateOne.Save(ctx)
+	return &model.User{User: save}, err
 }
 
 func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) (*model.User, error) {
@@ -61,12 +78,12 @@ func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGet
 	if gen.IsNotFound(err) {
 		return nil, cv1.ErrorBadRequest("user is not found")
 	}
-	return (*model.User)(u), err
+	return &model.User{User: u}, err
 }
 
 func (r *UserRepo) GetByAccount(ctx context.Context, tx *gen.Client, account string) (*model.User, error) {
 	queryUser, err := tx.User.Query().Where(user.Or(user.NameEQ(account), user.EmailEQ(account), user.PhoneEQ(account))).Only(ctx)
-	return (*model.User)(queryUser), err
+	return &model.User{User: queryUser}, err
 }
 
 func (r *UserRepo) ConstantAccount(ctx context.Context, tx *gen.Client, account string) (bool, error) {
@@ -82,7 +99,7 @@ func (r *UserRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.UserGe
 		return nil, err
 	}
 	for _, u := range users {
-		res = append(res, (*model.User)(u))
+		res = append(res, &model.User{User: u})
 	}
 	return res, nil
 }
@@ -105,7 +122,7 @@ func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 		return nil, nil, err
 	}
 	for _, u := range list {
-		users = append(users, (*model.User)(u))
+		users = append(users, &model.User{User: u})
 	}
 	return users, &cv1.PageReply{
 		Total: uint32(total),

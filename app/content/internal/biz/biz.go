@@ -2,6 +2,7 @@ package biz
 
 import (
 	"common/pkg/client"
+	"common/pkg/util"
 	"content/internal/conf"
 	"content/internal/data/ent/gen"
 
@@ -12,7 +13,7 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
-	NewEventPool,
+	util.NewEventPool,
 
 	NewArticleDomain,
 	NewCommentDomain,
@@ -27,10 +28,10 @@ type BaseDomain struct {
 	etcd      *client.EtcdClient
 	redis     *client.RedisClient
 	rabbitmq  *client.RabbitMQClient
-	eventPool *EventPool
+	eventPool *util.EventPool
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *EventPool) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
 	return &BaseDomain{
 		conf:      conf,
 		log:       log,

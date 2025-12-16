@@ -34,7 +34,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient)
 	systemService := service.NewSystemService(baseService)
 	verifyService := service.NewVerifyService()
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient)
 	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
 		cleanup2()
@@ -48,12 +47,22 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
+	eventPool, cleanup5, err := util.NewEventPool(helper)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	userRepo := data.NewUserRepo(baseRepo, genClient)
+	userRepo := data.NewUserRepo(baseRepo)
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
 	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
 	if err != nil {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()
@@ -63,6 +72,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	authenticationService := service.NewAuthenticationService(baseService, verifyService, authenticationDomain, userRepo)
 	userDomain, err := biz.NewUserDomain(baseDomain)
 	if err != nil {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()
@@ -70,12 +80,24 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userService := service.NewUserService(baseService, authenticationDomain, userDomain, userRepo)
+	userRelationRepo := data.NewUserRelationRepo(baseRepo)
+	userRelationDomain, err := biz.NewUserRelationDomain(baseDomain, userRelationRepo, userRepo)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
 	ossService := service.NewOssService(baseService)
-	v := service.ProvideServices(systemService, authenticationService, userService, ossService)
+	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, ossService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)
 	return app, func() {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()

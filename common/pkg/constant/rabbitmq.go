@@ -93,11 +93,21 @@ const (
 
 // 路由键枚举
 const (
+	// 用户模块
+
 	RoutingKeyUser    RoutingKey = "user.#"
 	RoutingKeyUserDlx RoutingKey = "user.dlx"
 
-	RoutingKeyContent               RoutingKey = "content.#"
-	RoutingKeyContentDlx            RoutingKey = "content.dlx"
+	RoutingKeyUserFollow   RoutingKey = "user.user.follow"
+	RoutingKeyUserUnfollow RoutingKey = "user.user.unfollow"
+	RoutingKeyUserBlock    RoutingKey = "user.user.block"
+	RoutingKeyUserUnblock  RoutingKey = "user.user.unblock"
+
+	// 内容模块
+
+	RoutingKeyContent    RoutingKey = "content.#"
+	RoutingKeyContentDlx RoutingKey = "content.dlx"
+
 	RoutingKeyContentArticlePublish RoutingKey = "content.article.publish"
 	RoutingKeyContentArticleThank   RoutingKey = "content.article.thank"
 	RoutingKeyContentArticleLike    RoutingKey = "content.article.like"
@@ -114,8 +124,12 @@ const (
 	RoutingKeyContentArticleLottery       RoutingKey = "content.article.lottery"
 	RoutingKeyContentArticleLotteryWinner RoutingKey = "content.article.lottery_winner"
 
+	// 通知模块
+
 	RoutingKeyNotify    RoutingKey = "notify.#"
 	RoutingKeyNotifyDlx RoutingKey = "notify.dlx"
+
+	// 经济模块
 
 	RoutingKeyEconomy    RoutingKey = "economy.#"
 	RoutingKeyEconomyDlx RoutingKey = "economy.dlx"

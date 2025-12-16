@@ -1,4 +1,4 @@
-package biz
+package util
 
 import (
 	"runtime/debug"

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package common.api.user.v1;
+
+option go_package = "common/api/user/v1;v1";
+
+enum UserStatus {
+  USER_STATUS_NORMAL = 0;
+  USER_STATUS_BANNED = 1;
+  USER_STATUS_DELETED = 2;
+}
+
+enum UserStatType {
+  USER_STAT_TYPE_FOLLOW = 0;
+  USER_STAT_TYPE_FOLLOWER = 1;
+  USER_STAT_TYPE_BLOCK = 2;
+  USER_STAT_TYPE_BLOCKED = 3;
+}
+
+enum UserRelationType {
+  USER_RELATION_TYPE_FOLLOW = 0;
+  USER_RELATION_TYPE_BLOCK = 1;
+}

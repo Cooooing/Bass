@@ -43,6 +43,10 @@ type User struct {
 	FollowCount *int32 `json:"follow_count,omitempty"`
 	// 粉丝数
 	FollowerCount *int32 `json:"follower_count,omitempty"`
+	// 屏蔽数
+	BlockCount *int32 `json:"block_count,omitempty"`
+	// 被屏蔽数
+	BlockedCount *int32 `json:"blocked_count,omitempty"`
 	// 最近登录时间
 	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
 	// 最近登录IP
@@ -90,8 +94,40 @@ type User struct {
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
-	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the UserQuery when eager-loading is set.
+	Edges        UserEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// UserEdges holds the relations/edges for other nodes in the graph.
+type UserEdges struct {
+	// RelationsAsActor holds the value of the relations_as_actor edge.
+	RelationsAsActor []*UserRelation `json:"relations_as_actor,omitempty"`
+	// RelationsAsTarget holds the value of the relations_as_target edge.
+	RelationsAsTarget []*UserRelation `json:"relations_as_target,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+}
+
+// RelationsAsActorOrErr returns the RelationsAsActor value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) RelationsAsActorOrErr() ([]*UserRelation, error) {
+	if e.loadedTypes[0] {
+		return e.RelationsAsActor, nil
+	}
+	return nil, &NotLoadedError{edge: "relations_as_actor"}
+}
+
+// RelationsAsTargetOrErr returns the RelationsAsTarget value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) RelationsAsTargetOrErr() ([]*UserRelation, error) {
+	if e.loadedTypes[1] {
+		return e.RelationsAsTarget, nil
+	}
+	return nil, &NotLoadedError{edge: "relations_as_target"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -101,7 +137,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldEnableWebNotify, user.FieldEnableEmailSubscribe, user.FieldPublicPoints, user.FieldPublicFollowers, user.FieldPublicArticles, user.FieldPublicComments, user.FieldPublicOnlineStatus, user.FieldPublicLocation:
 			values[i] = new(sql.NullBool)
-		case user.FieldID, user.FieldStatus, user.FieldFollowCount, user.FieldFollowerCount, user.FieldOnlineMinutes, user.FieldCurrentCheckinStreak, user.FieldLongestCheckinStreak:
+		case user.FieldID, user.FieldStatus, user.FieldFollowCount, user.FieldFollowerCount, user.FieldBlockCount, user.FieldBlockedCount, user.FieldOnlineMinutes, user.FieldCurrentCheckinStreak, user.FieldLongestCheckinStreak:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName, user.FieldNickname, user.FieldPassword, user.FieldEmail, user.FieldPhone, user.FieldURL, user.FieldAvatarURL, user.FieldIntroduction, user.FieldMbti, user.FieldGroupName, user.FieldLastLoginIP, user.FieldLanguage, user.FieldTimezone, user.FieldTheme, user.FieldMobileTheme, user.FieldCountry, user.FieldProvince, user.FieldCity, user.FieldTwofaSecret:
 			values[i] = new(sql.NullString)
@@ -214,6 +250,20 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.FollowerCount = new(int32)
 				*_m.FollowerCount = int32(value.Int64)
+			}
+		case user.FieldBlockCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field block_count", values[i])
+			} else if value.Valid {
+				_m.BlockCount = new(int32)
+				*_m.BlockCount = int32(value.Int64)
+			}
+		case user.FieldBlockedCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field blocked_count", values[i])
+			} else if value.Valid {
+				_m.BlockedCount = new(int32)
+				*_m.BlockedCount = int32(value.Int64)
 			}
 		case user.FieldLastLoginTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -396,6 +446,16 @@ func (_m *User) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryRelationsAsActor queries the "relations_as_actor" edge of the User entity.
+func (_m *User) QueryRelationsAsActor() *UserRelationQuery {
+	return NewUserClient(_m.config).QueryRelationsAsActor(_m)
+}
+
+// QueryRelationsAsTarget queries the "relations_as_target" edge of the User entity.
+func (_m *User) QueryRelationsAsTarget() *UserRelationQuery {
+	return NewUserClient(_m.config).QueryRelationsAsTarget(_m)
+}
+
 // Update returns a builder for updating this User.
 // Note that you need to call User.Unwrap() before calling this method if this User
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -472,6 +532,16 @@ func (_m *User) String() string {
 	builder.WriteString(", ")
 	if v := _m.FollowerCount; v != nil {
 		builder.WriteString("follower_count=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.BlockCount; v != nil {
+		builder.WriteString("block_count=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.BlockedCount; v != nil {
+		builder.WriteString("blocked_count=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")

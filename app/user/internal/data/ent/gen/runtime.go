@@ -5,6 +5,7 @@ package gen
 import (
 	"time"
 	"user/internal/data/ent/gen/user"
+	"user/internal/data/ent/gen/userrelation"
 	"user/internal/data/ent/schema"
 )
 
@@ -34,72 +35,90 @@ func init() {
 	userDescFollowerCount := userFields[13].Descriptor()
 	// user.DefaultFollowerCount holds the default value on creation for the follower_count field.
 	user.DefaultFollowerCount = userDescFollowerCount.Default.(int32)
+	// userDescBlockCount is the schema descriptor for block_count field.
+	userDescBlockCount := userFields[14].Descriptor()
+	// user.DefaultBlockCount holds the default value on creation for the block_count field.
+	user.DefaultBlockCount = userDescBlockCount.Default.(int32)
+	// userDescBlockedCount is the schema descriptor for blocked_count field.
+	userDescBlockedCount := userFields[15].Descriptor()
+	// user.DefaultBlockedCount holds the default value on creation for the blocked_count field.
+	user.DefaultBlockedCount = userDescBlockedCount.Default.(int32)
 	// userDescOnlineMinutes is the schema descriptor for online_minutes field.
-	userDescOnlineMinutes := userFields[16].Descriptor()
+	userDescOnlineMinutes := userFields[18].Descriptor()
 	// user.DefaultOnlineMinutes holds the default value on creation for the online_minutes field.
 	user.DefaultOnlineMinutes = userDescOnlineMinutes.Default.(int32)
 	// userDescCurrentCheckinStreak is the schema descriptor for current_checkin_streak field.
-	userDescCurrentCheckinStreak := userFields[18].Descriptor()
+	userDescCurrentCheckinStreak := userFields[20].Descriptor()
 	// user.DefaultCurrentCheckinStreak holds the default value on creation for the current_checkin_streak field.
 	user.DefaultCurrentCheckinStreak = userDescCurrentCheckinStreak.Default.(int32)
 	// userDescLongestCheckinStreak is the schema descriptor for longest_checkin_streak field.
-	userDescLongestCheckinStreak := userFields[19].Descriptor()
+	userDescLongestCheckinStreak := userFields[21].Descriptor()
 	// user.DefaultLongestCheckinStreak holds the default value on creation for the longest_checkin_streak field.
 	user.DefaultLongestCheckinStreak = userDescLongestCheckinStreak.Default.(int32)
 	// userDescLanguage is the schema descriptor for language field.
-	userDescLanguage := userFields[20].Descriptor()
+	userDescLanguage := userFields[22].Descriptor()
 	// user.DefaultLanguage holds the default value on creation for the language field.
 	user.DefaultLanguage = userDescLanguage.Default.(string)
 	// userDescTimezone is the schema descriptor for timezone field.
-	userDescTimezone := userFields[21].Descriptor()
+	userDescTimezone := userFields[23].Descriptor()
 	// user.DefaultTimezone holds the default value on creation for the timezone field.
 	user.DefaultTimezone = userDescTimezone.Default.(string)
 	// userDescTheme is the schema descriptor for theme field.
-	userDescTheme := userFields[22].Descriptor()
+	userDescTheme := userFields[24].Descriptor()
 	// user.DefaultTheme holds the default value on creation for the theme field.
 	user.DefaultTheme = userDescTheme.Default.(string)
 	// userDescMobileTheme is the schema descriptor for mobile_theme field.
-	userDescMobileTheme := userFields[23].Descriptor()
+	userDescMobileTheme := userFields[25].Descriptor()
 	// user.DefaultMobileTheme holds the default value on creation for the mobile_theme field.
 	user.DefaultMobileTheme = userDescMobileTheme.Default.(string)
 	// userDescEnableWebNotify is the schema descriptor for enable_web_notify field.
-	userDescEnableWebNotify := userFields[24].Descriptor()
+	userDescEnableWebNotify := userFields[26].Descriptor()
 	// user.DefaultEnableWebNotify holds the default value on creation for the enable_web_notify field.
 	user.DefaultEnableWebNotify = userDescEnableWebNotify.Default.(bool)
 	// userDescEnableEmailSubscribe is the schema descriptor for enable_email_subscribe field.
-	userDescEnableEmailSubscribe := userFields[25].Descriptor()
+	userDescEnableEmailSubscribe := userFields[27].Descriptor()
 	// user.DefaultEnableEmailSubscribe holds the default value on creation for the enable_email_subscribe field.
 	user.DefaultEnableEmailSubscribe = userDescEnableEmailSubscribe.Default.(bool)
 	// userDescPublicPoints is the schema descriptor for public_points field.
-	userDescPublicPoints := userFields[26].Descriptor()
+	userDescPublicPoints := userFields[28].Descriptor()
 	// user.DefaultPublicPoints holds the default value on creation for the public_points field.
 	user.DefaultPublicPoints = userDescPublicPoints.Default.(bool)
 	// userDescPublicFollowers is the schema descriptor for public_followers field.
-	userDescPublicFollowers := userFields[27].Descriptor()
+	userDescPublicFollowers := userFields[29].Descriptor()
 	// user.DefaultPublicFollowers holds the default value on creation for the public_followers field.
 	user.DefaultPublicFollowers = userDescPublicFollowers.Default.(bool)
 	// userDescPublicArticles is the schema descriptor for public_articles field.
-	userDescPublicArticles := userFields[28].Descriptor()
+	userDescPublicArticles := userFields[30].Descriptor()
 	// user.DefaultPublicArticles holds the default value on creation for the public_articles field.
 	user.DefaultPublicArticles = userDescPublicArticles.Default.(bool)
 	// userDescPublicComments is the schema descriptor for public_comments field.
-	userDescPublicComments := userFields[29].Descriptor()
+	userDescPublicComments := userFields[31].Descriptor()
 	// user.DefaultPublicComments holds the default value on creation for the public_comments field.
 	user.DefaultPublicComments = userDescPublicComments.Default.(bool)
 	// userDescPublicOnlineStatus is the schema descriptor for public_online_status field.
-	userDescPublicOnlineStatus := userFields[30].Descriptor()
+	userDescPublicOnlineStatus := userFields[32].Descriptor()
 	// user.DefaultPublicOnlineStatus holds the default value on creation for the public_online_status field.
 	user.DefaultPublicOnlineStatus = userDescPublicOnlineStatus.Default.(bool)
 	// userDescPublicLocation is the schema descriptor for public_location field.
-	userDescPublicLocation := userFields[34].Descriptor()
+	userDescPublicLocation := userFields[36].Descriptor()
 	// user.DefaultPublicLocation holds the default value on creation for the public_location field.
 	user.DefaultPublicLocation = userDescPublicLocation.Default.(bool)
 	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userFields[36].Descriptor()
+	userDescCreatedAt := userFields[38].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
 	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
 	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userFields[37].Descriptor()
+	userDescUpdatedAt := userFields[39].Descriptor()
 	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
+	userrelationFields := schema.UserRelation{}.Fields()
+	_ = userrelationFields
+	// userrelationDescCreatedAt is the schema descriptor for created_at field.
+	userrelationDescCreatedAt := userrelationFields[4].Descriptor()
+	// userrelation.DefaultCreatedAt holds the default value on creation for the created_at field.
+	userrelation.DefaultCreatedAt = userrelationDescCreatedAt.Default.(func() time.Time)
+	// userrelationDescUpdatedAt is the schema descriptor for updated_at field.
+	userrelationDescUpdatedAt := userrelationFields[5].Descriptor()
+	// userrelation.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	userrelation.DefaultUpdatedAt = userrelationDescUpdatedAt.Default.(func() time.Time)
 }

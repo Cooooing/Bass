@@ -20,6 +20,8 @@ enum NotificationType {
   NotificationTypeSystem = 1; // 系统
 
   NotificationTypeUserRegister = 100; // 用户注册
+  NotificationTypeUserFollow = 101; // 用户关注
+  NotificationTypeUserBlock = 102; // 用户拉黑
 
   NotificationTypeArticlePublish = 200; // 文章发布
   NotificationTypeArticleLike = 201; // 文章点赞

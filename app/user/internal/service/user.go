@@ -12,6 +12,7 @@ import (
 	"user/internal/biz"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -49,7 +50,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	update, err := s.userRepo.Update(ctx, s.db, &model.User{
+	update, err := s.userRepo.Update(ctx, s.db, &model.User{User: &gen.User{
 		ID:                   user.ID,
 		AvatarURL:            req.AvatarUrl,
 		Language:             req.Language,
@@ -59,7 +60,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 		MobileTheme:          req.MobileTheme,
 		EnableWebNotify:      req.EnableWebNotify,
 		EnableEmailSubscribe: req.EnableEmailSubscribe,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}

@@ -14,6 +14,7 @@ import (
 	"content/internal/data/client"
 	"content/internal/server"
 	"content/internal/service"
+
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -47,7 +48,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
 	systemService := service.NewSystemService(baseService)
-	eventPool, cleanup5, err := biz.NewEventPool(helper)
+	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
 		cleanup4()
 		cleanup3()

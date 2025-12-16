@@ -25,6 +25,8 @@ var (
 		{Name: "group_name", Type: field.TypeString, Nullable: true, Comment: "用户组名称"},
 		{Name: "follow_count", Type: field.TypeInt32, Comment: "关注数", Default: 0},
 		{Name: "follower_count", Type: field.TypeInt32, Comment: "粉丝数", Default: 0},
+		{Name: "block_count", Type: field.TypeInt32, Comment: "屏蔽数", Default: 0},
+		{Name: "blocked_count", Type: field.TypeInt32, Comment: "被屏蔽数", Default: 0},
 		{Name: "last_login_time", Type: field.TypeTime, Nullable: true, Comment: "最近登录时间"},
 		{Name: "last_login_ip", Type: field.TypeString, Nullable: true, Comment: "最近登录IP"},
 		{Name: "online_minutes", Type: field.TypeInt32, Comment: "在线总时长（分钟）", Default: 0},
@@ -73,14 +75,66 @@ var (
 			},
 		},
 	}
+	// UserFollowsColumns holds the columns for the "user_follows" table.
+	UserFollowsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "type", Type: field.TypeInt32, Comment: "关系类型 0-follow 1-block"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+		{Name: "actor_id", Type: field.TypeInt64, Comment: "关系发起者"},
+		{Name: "target_id", Type: field.TypeInt64, Comment: "关系目标用户"},
+	}
+	// UserFollowsTable holds the schema information for the "user_follows" table.
+	UserFollowsTable = &schema.Table{
+		Name:       "user_follows",
+		Columns:    UserFollowsColumns,
+		PrimaryKey: []*schema.Column{UserFollowsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_follows_user_users_relations_as_actor",
+				Columns:    []*schema.Column{UserFollowsColumns[4]},
+				RefColumns: []*schema.Column{UserUsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "user_follows_user_users_relations_as_target",
+				Columns:    []*schema.Column{UserFollowsColumns[5]},
+				RefColumns: []*schema.Column{UserUsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "userrelation_actor_id_target_id_type",
+				Unique:  true,
+				Columns: []*schema.Column{UserFollowsColumns[4], UserFollowsColumns[5], UserFollowsColumns[1]},
+			},
+			{
+				Name:    "userrelation_actor_id_type",
+				Unique:  false,
+				Columns: []*schema.Column{UserFollowsColumns[4], UserFollowsColumns[1]},
+			},
+			{
+				Name:    "userrelation_target_id_type",
+				Unique:  false,
+				Columns: []*schema.Column{UserFollowsColumns[5], UserFollowsColumns[1]},
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		UserUsersTable,
+		UserFollowsTable,
 	}
 )
 
 func init() {
 	UserUsersTable.Annotation = &entsql.Annotation{
 		Table: "user_users",
+	}
+	UserFollowsTable.ForeignKeys[0].RefTable = UserUsersTable
+	UserFollowsTable.ForeignKeys[1].RefTable = UserUsersTable
+	UserFollowsTable.Annotation = &entsql.Annotation{
+		Table: "user_follows",
 	}
 }

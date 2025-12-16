@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package common.api.user.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "common/v1/common.proto";
+import "user/v1/user.proto";
+
+option go_package = "common/api/user/v1;v1";
+
+// UserRelation 服务
+service UserUserRelationService {
+
+  // 关注用户
+  rpc Follow(FollowRequest) returns (FollowReply) {
+    option (google.api.http) = {
+      post: "/api/v1/userRelation/follow"
+      body: "*"
+    };
+  }
+
+  // 屏蔽用户
+  rpc Block(BlockRequest) returns (BlockReply) {
+    option (google.api.http) = {
+      post: "/api/v1/userRelation/block"
+      body: "*"
+    };
+  }
+
+  // 查询用户关系
+  rpc Page(PageUserRelationRequest) returns (PageUserRelationReply) {
+    option (google.api.http) = {
+      post: "/api/v1/userRelation/page"
+      body: "*"
+    };
+  }
+
+}
+
+// 实体定义
+
+message UserRelation {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 用户关系ID
+  int64 id = 1;
+  // 关系类型 0-follow 1-block
+  int32 type = 2;
+  // 关系发起者ID
+  int64 actor_id = 3;
+  // 关系目标用户ID
+  int64 target_id = 4;
+  // 目标用户信息
+  user.v1.User user = 100;
+}
+
+
+// 查询参数定义
+
+message UserRelationQueryParams {
+  // 关系类型
+  optional int32 type = 1;
+}
+
+// 请求/响应结构定义
+
+message FollowRequest {
+  // 是否关注
+  bool follow = 1;
+  // 关注用户ID
+  int64 follow_user_id = 2;
+}
+message FollowReply {}
+
+message BlockRequest {
+  // 是否屏蔽
+  bool block = 1;
+  // 屏蔽用户ID
+  int64 block_user_id = 2;
+}
+message BlockReply {}
+
+message PageUserRelationRequest {
+  // 分页参数
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  UserRelationQueryParams query = 2;
+}
+message PageUserRelationReply {
+  // 分页
+  common.v1.PageReply page = 1;
+  // 用户列表
+  repeated UserRelation rows = 2;
+}

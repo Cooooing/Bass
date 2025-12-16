@@ -576,7 +576,7 @@ var File_content_v1_constant_proto protoreflect.FileDescriptor
 
 const file_content_v1_constant_proto_rawDesc = "" +
 	"\n" +
-	"\x19content/v1/constant.proto\x12\x14common.api.common.v1*4\n" +
+	"\x19content/v1/constant.proto\x12\x15common.api.content.v1*4\n" +
 	"\fDomainStatus\x12\x10\n" +
 	"\fDomainNormal\x10\x00\x12\x12\n" +
 	"\x0eDomainDisabled\x10\x01*+\n" +
@@ -623,7 +623,7 @@ const file_content_v1_constant_proto_rawDesc = "" +
 	"\x12CommentActionReply\x10\x02*?\n" +
 	"\fCommentOrder\x12\x16\n" +
 	"\x12CommentOrderNewest\x10\x00\x12\x17\n" +
-	"\x13CommentOrderHottest\x10\x01B\x19Z\x17common/api/common/v1;v1b\x06proto3"
+	"\x13CommentOrderHottest\x10\x01B\x1aZ\x18common/api/content/v1;v1b\x06proto3"
 
 var (
 	file_content_v1_constant_proto_rawDescOnce sync.Once
@@ -639,17 +639,17 @@ func file_content_v1_constant_proto_rawDescGZIP() []byte {
 
 var file_content_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 11)
 var file_content_v1_constant_proto_goTypes = []any{
-	(DomainStatus)(0),            // 0: common.api.common.v1.DomainStatus
-	(TagStatus)(0),               // 1: common.api.common.v1.TagStatus
-	(CommentStatus)(0),           // 2: common.api.common.v1.CommentStatus
-	(ArticleLotteryStatus)(0),    // 3: common.api.common.v1.ArticleLotteryStatus
-	(ArticleStatus)(0),           // 4: common.api.common.v1.ArticleStatus
-	(ArticleType)(0),             // 5: common.api.common.v1.ArticleType
-	(ArticlePostscriptStatus)(0), // 6: common.api.common.v1.ArticlePostscriptStatus
-	(ArticleAction)(0),           // 7: common.api.common.v1.ArticleAction
-	(ArticleOrder)(0),            // 8: common.api.common.v1.ArticleOrder
-	(CommentAction)(0),           // 9: common.api.common.v1.CommentAction
-	(CommentOrder)(0),            // 10: common.api.common.v1.CommentOrder
+	(DomainStatus)(0),            // 0: common.api.content.v1.DomainStatus
+	(TagStatus)(0),               // 1: common.api.content.v1.TagStatus
+	(CommentStatus)(0),           // 2: common.api.content.v1.CommentStatus
+	(ArticleLotteryStatus)(0),    // 3: common.api.content.v1.ArticleLotteryStatus
+	(ArticleStatus)(0),           // 4: common.api.content.v1.ArticleStatus
+	(ArticleType)(0),             // 5: common.api.content.v1.ArticleType
+	(ArticlePostscriptStatus)(0), // 6: common.api.content.v1.ArticlePostscriptStatus
+	(ArticleAction)(0),           // 7: common.api.content.v1.ArticleAction
+	(ArticleOrder)(0),            // 8: common.api.content.v1.ArticleOrder
+	(CommentAction)(0),           // 9: common.api.content.v1.CommentAction
+	(CommentOrder)(0),            // 10: common.api.content.v1.CommentOrder
 }
 var file_content_v1_constant_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

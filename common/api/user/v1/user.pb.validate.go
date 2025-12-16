@@ -216,6 +216,14 @@ func (m *User) validate(all bool) error {
 		// no validation rules for FollowerCount
 	}
 
+	if m.BlockCount != nil {
+		// no validation rules for BlockCount
+	}
+
+	if m.BlockedCount != nil {
+		// no validation rules for BlockedCount
+	}
+
 	if m.LastLoginIp != nil {
 		// no validation rules for LastLoginIp
 	}

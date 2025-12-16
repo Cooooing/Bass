@@ -7,6 +7,7 @@ import (
 	"user/internal/data/ent/gen/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -117,6 +118,16 @@ func FollowCount(v int32) predicate.User {
 // FollowerCount applies equality check predicate on the "follower_count" field. It's identical to FollowerCountEQ.
 func FollowerCount(v int32) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFollowerCount, v))
+}
+
+// BlockCount applies equality check predicate on the "block_count" field. It's identical to BlockCountEQ.
+func BlockCount(v int32) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldBlockCount, v))
+}
+
+// BlockedCount applies equality check predicate on the "blocked_count" field. It's identical to BlockedCountEQ.
+func BlockedCount(v int32) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldBlockedCount, v))
 }
 
 // LastLoginTime applies equality check predicate on the "last_login_time" field. It's identical to LastLoginTimeEQ.
@@ -1087,6 +1098,86 @@ func FollowerCountLT(v int32) predicate.User {
 // FollowerCountLTE applies the LTE predicate on the "follower_count" field.
 func FollowerCountLTE(v int32) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldFollowerCount, v))
+}
+
+// BlockCountEQ applies the EQ predicate on the "block_count" field.
+func BlockCountEQ(v int32) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldBlockCount, v))
+}
+
+// BlockCountNEQ applies the NEQ predicate on the "block_count" field.
+func BlockCountNEQ(v int32) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldBlockCount, v))
+}
+
+// BlockCountIn applies the In predicate on the "block_count" field.
+func BlockCountIn(vs ...int32) predicate.User {
+	return predicate.User(sql.FieldIn(FieldBlockCount, vs...))
+}
+
+// BlockCountNotIn applies the NotIn predicate on the "block_count" field.
+func BlockCountNotIn(vs ...int32) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldBlockCount, vs...))
+}
+
+// BlockCountGT applies the GT predicate on the "block_count" field.
+func BlockCountGT(v int32) predicate.User {
+	return predicate.User(sql.FieldGT(FieldBlockCount, v))
+}
+
+// BlockCountGTE applies the GTE predicate on the "block_count" field.
+func BlockCountGTE(v int32) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldBlockCount, v))
+}
+
+// BlockCountLT applies the LT predicate on the "block_count" field.
+func BlockCountLT(v int32) predicate.User {
+	return predicate.User(sql.FieldLT(FieldBlockCount, v))
+}
+
+// BlockCountLTE applies the LTE predicate on the "block_count" field.
+func BlockCountLTE(v int32) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldBlockCount, v))
+}
+
+// BlockedCountEQ applies the EQ predicate on the "blocked_count" field.
+func BlockedCountEQ(v int32) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldBlockedCount, v))
+}
+
+// BlockedCountNEQ applies the NEQ predicate on the "blocked_count" field.
+func BlockedCountNEQ(v int32) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldBlockedCount, v))
+}
+
+// BlockedCountIn applies the In predicate on the "blocked_count" field.
+func BlockedCountIn(vs ...int32) predicate.User {
+	return predicate.User(sql.FieldIn(FieldBlockedCount, vs...))
+}
+
+// BlockedCountNotIn applies the NotIn predicate on the "blocked_count" field.
+func BlockedCountNotIn(vs ...int32) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldBlockedCount, vs...))
+}
+
+// BlockedCountGT applies the GT predicate on the "blocked_count" field.
+func BlockedCountGT(v int32) predicate.User {
+	return predicate.User(sql.FieldGT(FieldBlockedCount, v))
+}
+
+// BlockedCountGTE applies the GTE predicate on the "blocked_count" field.
+func BlockedCountGTE(v int32) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldBlockedCount, v))
+}
+
+// BlockedCountLT applies the LT predicate on the "blocked_count" field.
+func BlockedCountLT(v int32) predicate.User {
+	return predicate.User(sql.FieldLT(FieldBlockedCount, v))
+}
+
+// BlockedCountLTE applies the LTE predicate on the "blocked_count" field.
+func BlockedCountLTE(v int32) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldBlockedCount, v))
 }
 
 // LastLoginTimeEQ applies the EQ predicate on the "last_login_time" field.
@@ -2122,6 +2213,52 @@ func UpdatedAtIsNil() predicate.User {
 // UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
 func UpdatedAtNotNil() predicate.User {
 	return predicate.User(sql.FieldNotNull(FieldUpdatedAt))
+}
+
+// HasRelationsAsActor applies the HasEdge predicate on the "relations_as_actor" edge.
+func HasRelationsAsActor() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RelationsAsActorTable, RelationsAsActorColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRelationsAsActorWith applies the HasEdge predicate on the "relations_as_actor" edge with a given conditions (other predicates).
+func HasRelationsAsActorWith(preds ...predicate.UserRelation) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newRelationsAsActorStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRelationsAsTarget applies the HasEdge predicate on the "relations_as_target" edge.
+func HasRelationsAsTarget() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RelationsAsTargetTable, RelationsAsTargetColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRelationsAsTargetWith applies the HasEdge predicate on the "relations_as_target" edge with a given conditions (other predicates).
+func HasRelationsAsTargetWith(preds ...predicate.UserRelation) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newRelationsAsTargetStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

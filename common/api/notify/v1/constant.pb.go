@@ -122,6 +122,8 @@ const (
 	NotificationType_NotificationTypeNormal               NotificationType = 0   // 普通
 	NotificationType_NotificationTypeSystem               NotificationType = 1   // 系统
 	NotificationType_NotificationTypeUserRegister         NotificationType = 100 // 用户注册
+	NotificationType_NotificationTypeUserFollow           NotificationType = 101 // 用户关注
+	NotificationType_NotificationTypeUserBlock            NotificationType = 102 // 用户拉黑
 	NotificationType_NotificationTypeArticlePublish       NotificationType = 200 // 文章发布
 	NotificationType_NotificationTypeArticleLike          NotificationType = 201 // 文章点赞
 	NotificationType_NotificationTypeArticleThank         NotificationType = 202 // 文章感谢
@@ -145,6 +147,8 @@ var (
 		0:   "NotificationTypeNormal",
 		1:   "NotificationTypeSystem",
 		100: "NotificationTypeUserRegister",
+		101: "NotificationTypeUserFollow",
+		102: "NotificationTypeUserBlock",
 		200: "NotificationTypeArticlePublish",
 		201: "NotificationTypeArticleLike",
 		202: "NotificationTypeArticleThank",
@@ -165,6 +169,8 @@ var (
 		"NotificationTypeNormal":               0,
 		"NotificationTypeSystem":               1,
 		"NotificationTypeUserRegister":         100,
+		"NotificationTypeUserFollow":           101,
+		"NotificationTypeUserBlock":            102,
 		"NotificationTypeArticlePublish":       200,
 		"NotificationTypeArticleLike":          201,
 		"NotificationTypeArticleThank":         202,
@@ -221,11 +227,13 @@ const file_notify_v1_constant_proto_rawDesc = "" +
 	"\x13NotificationChannel\x12\x1c\n" +
 	"\x18NotificationChannelEmail\x10\x00\x12\x1a\n" +
 	"\x16NotificationChannelSMS\x10\x01\x12\x1e\n" +
-	"\x1aNotificationChannelWebSite\x10\x02*\x83\x05\n" +
+	"\x1aNotificationChannelWebSite\x10\x02*\xc2\x05\n" +
 	"\x10NotificationType\x12\x1a\n" +
 	"\x16NotificationTypeNormal\x10\x00\x12\x1a\n" +
 	"\x16NotificationTypeSystem\x10\x01\x12 \n" +
-	"\x1cNotificationTypeUserRegister\x10d\x12#\n" +
+	"\x1cNotificationTypeUserRegister\x10d\x12\x1e\n" +
+	"\x1aNotificationTypeUserFollow\x10e\x12\x1d\n" +
+	"\x19NotificationTypeUserBlock\x10f\x12#\n" +
 	"\x1eNotificationTypeArticlePublish\x10\xc8\x01\x12 \n" +
 	"\x1bNotificationTypeArticleLike\x10\xc9\x01\x12!\n" +
 	"\x1cNotificationTypeArticleThank\x10\xca\x01\x12#\n" +

@@ -45,7 +45,7 @@ trace:
 
 jwt:
   secret: "qbceKQYgXXffTxVBgGrX"
-  expires: 86400s
+  expires: 864000s
   email_expire: 300s
 
 oss:

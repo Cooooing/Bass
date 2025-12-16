@@ -20,6 +20,18 @@ func (f UserFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.UserMutation", m)
 }
 
+// The UserRelationFunc type is an adapter to allow the use of ordinary
+// function as UserRelation mutator.
+type UserRelationFunc func(context.Context, *gen.UserRelationMutation) (gen.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UserRelationFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
+	if mv, ok := m.(*gen.UserRelationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.UserRelationMutation", m)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, gen.Mutation) bool
 

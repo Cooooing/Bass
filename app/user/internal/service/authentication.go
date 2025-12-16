@@ -9,6 +9,7 @@ import (
 	"user/internal/biz"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -49,12 +50,12 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 	if !s.VerifyPassword(req.Password) {
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
-	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{
+	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{User: &gen.User{
 		Email:    req.Email,
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
-	})
+	}})
 	return &v1.RegisterEmailReply{Code: code, CodeToken: token}, err
 }
 

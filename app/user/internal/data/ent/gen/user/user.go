@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -39,6 +40,10 @@ const (
 	FieldFollowCount = "follow_count"
 	// FieldFollowerCount holds the string denoting the follower_count field in the database.
 	FieldFollowerCount = "follower_count"
+	// FieldBlockCount holds the string denoting the block_count field in the database.
+	FieldBlockCount = "block_count"
+	// FieldBlockedCount holds the string denoting the blocked_count field in the database.
+	FieldBlockedCount = "blocked_count"
 	// FieldLastLoginTime holds the string denoting the last_login_time field in the database.
 	FieldLastLoginTime = "last_login_time"
 	// FieldLastLoginIP holds the string denoting the last_login_ip field in the database.
@@ -87,8 +92,26 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// EdgeRelationsAsActor holds the string denoting the relations_as_actor edge name in mutations.
+	EdgeRelationsAsActor = "relations_as_actor"
+	// EdgeRelationsAsTarget holds the string denoting the relations_as_target edge name in mutations.
+	EdgeRelationsAsTarget = "relations_as_target"
 	// Table holds the table name of the user in the database.
 	Table = "user_users"
+	// RelationsAsActorTable is the table that holds the relations_as_actor relation/edge.
+	RelationsAsActorTable = "user_follows"
+	// RelationsAsActorInverseTable is the table name for the UserRelation entity.
+	// It exists in this package in order to avoid circular dependency with the "userrelation" package.
+	RelationsAsActorInverseTable = "user_follows"
+	// RelationsAsActorColumn is the table column denoting the relations_as_actor relation/edge.
+	RelationsAsActorColumn = "actor_id"
+	// RelationsAsTargetTable is the table that holds the relations_as_target relation/edge.
+	RelationsAsTargetTable = "user_follows"
+	// RelationsAsTargetInverseTable is the table name for the UserRelation entity.
+	// It exists in this package in order to avoid circular dependency with the "userrelation" package.
+	RelationsAsTargetInverseTable = "user_follows"
+	// RelationsAsTargetColumn is the table column denoting the relations_as_target relation/edge.
+	RelationsAsTargetColumn = "target_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -107,6 +130,8 @@ var Columns = []string{
 	FieldGroupName,
 	FieldFollowCount,
 	FieldFollowerCount,
+	FieldBlockCount,
+	FieldBlockedCount,
 	FieldLastLoginTime,
 	FieldLastLoginIP,
 	FieldOnlineMinutes,
@@ -154,6 +179,10 @@ var (
 	DefaultFollowCount int32
 	// DefaultFollowerCount holds the default value on creation for the "follower_count" field.
 	DefaultFollowerCount int32
+	// DefaultBlockCount holds the default value on creation for the "block_count" field.
+	DefaultBlockCount int32
+	// DefaultBlockedCount holds the default value on creation for the "blocked_count" field.
+	DefaultBlockedCount int32
 	// DefaultOnlineMinutes holds the default value on creation for the "online_minutes" field.
 	DefaultOnlineMinutes int32
 	// DefaultCurrentCheckinStreak holds the default value on creation for the "current_checkin_streak" field.
@@ -261,6 +290,16 @@ func ByFollowCount(opts ...sql.OrderTermOption) OrderOption {
 // ByFollowerCount orders the results by the follower_count field.
 func ByFollowerCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFollowerCount, opts...).ToFunc()
+}
+
+// ByBlockCount orders the results by the block_count field.
+func ByBlockCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBlockCount, opts...).ToFunc()
+}
+
+// ByBlockedCount orders the results by the blocked_count field.
+func ByBlockedCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBlockedCount, opts...).ToFunc()
 }
 
 // ByLastLoginTime orders the results by the last_login_time field.
@@ -381,4 +420,46 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByRelationsAsActorCount orders the results by relations_as_actor count.
+func ByRelationsAsActorCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRelationsAsActorStep(), opts...)
+	}
+}
+
+// ByRelationsAsActor orders the results by relations_as_actor terms.
+func ByRelationsAsActor(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRelationsAsActorStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRelationsAsTargetCount orders the results by relations_as_target count.
+func ByRelationsAsTargetCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRelationsAsTargetStep(), opts...)
+	}
+}
+
+// ByRelationsAsTarget orders the results by relations_as_target terms.
+func ByRelationsAsTarget(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRelationsAsTargetStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newRelationsAsActorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RelationsAsActorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RelationsAsActorTable, RelationsAsActorColumn),
+	)
+}
+func newRelationsAsTargetStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RelationsAsTargetInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RelationsAsTargetTable, RelationsAsTargetColumn),
+	)
 }

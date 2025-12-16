@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 )
@@ -45,6 +46,8 @@ func (User) Fields() []ent.Field {
 		// --- 社交信息 ---
 		field.Int32("follow_count").Comment("关注数").Default(0).Nillable(),
 		field.Int32("follower_count").Comment("粉丝数").Default(0).Nillable(),
+		field.Int32("block_count").Comment("屏蔽数").Default(0).Nillable(),
+		field.Int32("blocked_count").Comment("被屏蔽数").Default(0).Nillable(),
 
 		// --- 登录信息 ---
 		field.Time("last_login_time").Comment("最近登录时间").Optional().Nillable(),
@@ -89,5 +92,14 @@ func (User) Indexes() []ent.Index {
 		index.Fields("name").Unique(),
 		index.Fields("email").Unique(),
 		index.Fields("phone").Unique(),
+	}
+}
+
+func (User) Edges() []ent.Edge {
+	return []ent.Edge{
+		// 关联用户关系发起者 一对多
+		edge.To("relations_as_actor", UserRelation.Type),
+		// 关联用户关系目标 一对多
+		edge.To("relations_as_target", UserRelation.Type),
 	}
 }

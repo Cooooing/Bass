@@ -50,6 +50,9 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 	if article.Type != int32(v1.ArticleType_ArticleTypeNormal) && article.Type != int32(v1.ArticleType_ArticleTypeQA) && article.Type != int32(v1.ArticleType_ArticleTypeVote) && article.Type != int32(v1.ArticleType_ArticleTypeLottery) {
 		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
 	}
+	if article.Type != int32(v1.ArticleType_ArticleTypeQA) && article.BountyPoints != nil {
+		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 1(QA)")
+	}
 
 	var tags []*model.Tag
 	if len(article.Tags) > 0 {
@@ -98,6 +101,9 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 	}
 	if article.Type != int32(v1.ArticleType_ArticleTypeNormal) && article.Type != int32(v1.ArticleType_ArticleTypeQA) && article.Type != int32(v1.ArticleType_ArticleTypeVote) && article.Type != int32(v1.ArticleType_ArticleTypeLottery) {
 		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+	}
+	if article.Type != int32(v1.ArticleType_ArticleTypeQA) && article.BountyPoints != nil {
+		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 1(QA)")
 	}
 
 	var tags []*model.Tag

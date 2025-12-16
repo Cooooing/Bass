@@ -6,6 +6,63 @@ info:
     title: ""
     version: 0.0.1
 paths:
+    /api/v1/userRelation/block:
+        post:
+            tags:
+                - UserUserRelationService
+            description: 屏蔽用户
+            operationId: UserUserRelationService_Block
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.BlockRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.BlockReply'
+    /api/v1/userRelation/follow:
+        post:
+            tags:
+                - UserUserRelationService
+            description: 关注用户
+            operationId: UserUserRelationService_Follow
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.FollowRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.FollowReply'
+    /api/v1/userRelation/page:
+        post:
+            tags:
+                - UserUserRelationService
+            description: 查询用户关系
+            operationId: UserUserRelationService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.PageUserRelationRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.PageUserRelationReply'
     /v1/article/acceptAnswer:
         post:
             tags:
@@ -1872,6 +1929,18 @@ components:
                 content_type:
                     type: string
                     description: 图片类型
+        common.api.user.v1.BlockReply:
+            type: object
+            properties: {}
+        common.api.user.v1.BlockRequest:
+            type: object
+            properties:
+                block:
+                    type: boolean
+                    description: 是否屏蔽
+                block_user_id:
+                    type: string
+                    description: 屏蔽用户ID
         common.api.user.v1.ExistEmailReply:
             type: object
             properties:
@@ -1908,6 +1977,18 @@ components:
                 username:
                     type: string
                     description: 用户名
+        common.api.user.v1.FollowReply:
+            type: object
+            properties: {}
+        common.api.user.v1.FollowRequest:
+            type: object
+            properties:
+                follow:
+                    type: boolean
+                    description: 是否关注
+                follow_user_id:
+                    type: string
+                    description: 关注用户ID
         common.api.user.v1.GetCurrentUserReply:
             type: object
             properties:
@@ -2293,6 +2374,29 @@ components:
                 enable:
                     type: boolean
                     description: 是否启用
+        common.api.user.v1.PageUserRelationReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.user.v1.UserRelation'
+                    description: 用户列表
+        common.api.user.v1.PageUserRelationRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.UserRelationQueryParams'
+                    description: 查询参数
         common.api.user.v1.PageUserReply:
             type: object
             properties:
@@ -2439,6 +2543,14 @@ components:
                     type: integer
                     description: 粉丝数
                     format: int32
+                block_count:
+                    type: integer
+                    description: 屏蔽数
+                    format: int32
+                blocked_count:
+                    type: integer
+                    description: 被屏蔽数
+                    format: int32
                 last_login_time:
                     type: string
                     description: 最近登录时间
@@ -2561,6 +2673,41 @@ components:
                     items:
                         type: string
                     description: 手机号列表
+        common.api.user.v1.UserRelation:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                id:
+                    type: string
+                    description: 用户关系ID
+                type:
+                    type: integer
+                    description: 关系类型 0-follow 1-block
+                    format: int32
+                actor_id:
+                    type: string
+                    description: 关系发起者ID
+                target_id:
+                    type: string
+                    description: 关系目标用户ID
+                user:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 目标用户信息
+        common.api.user.v1.UserRelationQueryParams:
+            type: object
+            properties:
+                type:
+                    type: integer
+                    description: 关系类型
+                    format: int32
 tags:
     - name: ContentArticleService
       description: Article 服务
@@ -2582,5 +2729,7 @@ tags:
       description: Authentication 服务
     - name: UserOssService
       description: Oss 服务
+    - name: UserUserRelationService
+      description: UserRelation 服务
     - name: UserUserService
       description: User 服务

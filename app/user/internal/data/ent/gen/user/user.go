@@ -86,6 +86,10 @@ const (
 	FieldCity = "city"
 	// FieldPublicLocation holds the string denoting the public_location field in the database.
 	FieldPublicLocation = "public_location"
+	// FieldTwofaEnable holds the string denoting the twofa_enable field in the database.
+	FieldTwofaEnable = "twofa_enable"
+	// FieldTwofaEnableTime holds the string denoting the twofa_enable_time field in the database.
+	FieldTwofaEnableTime = "twofa_enable_time"
 	// FieldTwofaSecret holds the string denoting the twofa_secret field in the database.
 	FieldTwofaSecret = "twofa_secret"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -153,6 +157,8 @@ var Columns = []string{
 	FieldProvince,
 	FieldCity,
 	FieldPublicLocation,
+	FieldTwofaEnable,
+	FieldTwofaEnableTime,
 	FieldTwofaSecret,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -213,6 +219,10 @@ var (
 	DefaultPublicOnlineStatus bool
 	// DefaultPublicLocation holds the default value on creation for the "public_location" field.
 	DefaultPublicLocation bool
+	// DefaultTwofaEnable holds the default value on creation for the "twofa_enable" field.
+	DefaultTwofaEnable bool
+	// DefaultTwofaSecret holds the default value on creation for the "twofa_secret" field.
+	DefaultTwofaSecret string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -405,6 +415,16 @@ func ByCity(opts ...sql.OrderTermOption) OrderOption {
 // ByPublicLocation orders the results by the public_location field.
 func ByPublicLocation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPublicLocation, opts...).ToFunc()
+}
+
+// ByTwofaEnable orders the results by the twofa_enable field.
+func ByTwofaEnable(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTwofaEnable, opts...).ToFunc()
+}
+
+// ByTwofaEnableTime orders the results by the twofa_enable_time field.
+func ByTwofaEnableTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTwofaEnableTime, opts...).ToFunc()
 }
 
 // ByTwofaSecret orders the results by the twofa_secret field.

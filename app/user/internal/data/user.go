@@ -6,6 +6,7 @@ import (
 	"common/pkg/constant"
 	"context"
 	"fmt"
+	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/ent/gen"
@@ -69,6 +70,23 @@ func (r *UserRepo) UpdateStat(ctx context.Context, tx *gen.Client, userId int64,
 	}
 	save, err := updateOne.Save(ctx)
 	return &model.User{User: save}, err
+}
+
+func (r *UserRepo) EnableTwoFactorAuthentication(ctx context.Context, tx *gen.Client, name string, secret string) (int, error) {
+	return tx.User.Update().
+		Where(user.NameEQ(name)).
+		SetTwofaEnable(true).
+		SetTwofaEnableTime(time.Now()).
+		SetTwofaSecret(secret).
+		Save(ctx)
+}
+
+func (r *UserRepo) DisableTwoFactorAuthentication(ctx context.Context, tx *gen.Client, name string) (int, error) {
+	return tx.User.Update().
+		Where(user.NameEQ(name)).
+		SetTwofaEnable(false).
+		SetTwofaSecret("").
+		Save(ctx)
 }
 
 func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) (*model.User, error) {

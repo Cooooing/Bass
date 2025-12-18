@@ -509,6 +509,34 @@ func (_c *UserCreate) SetNillablePublicLocation(v *bool) *UserCreate {
 	return _c
 }
 
+// SetTwofaEnable sets the "twofa_enable" field.
+func (_c *UserCreate) SetTwofaEnable(v bool) *UserCreate {
+	_c.mutation.SetTwofaEnable(v)
+	return _c
+}
+
+// SetNillableTwofaEnable sets the "twofa_enable" field if the given value is not nil.
+func (_c *UserCreate) SetNillableTwofaEnable(v *bool) *UserCreate {
+	if v != nil {
+		_c.SetTwofaEnable(*v)
+	}
+	return _c
+}
+
+// SetTwofaEnableTime sets the "twofa_enable_time" field.
+func (_c *UserCreate) SetTwofaEnableTime(v time.Time) *UserCreate {
+	_c.mutation.SetTwofaEnableTime(v)
+	return _c
+}
+
+// SetNillableTwofaEnableTime sets the "twofa_enable_time" field if the given value is not nil.
+func (_c *UserCreate) SetNillableTwofaEnableTime(v *time.Time) *UserCreate {
+	if v != nil {
+		_c.SetTwofaEnableTime(*v)
+	}
+	return _c
+}
+
 // SetTwofaSecret sets the "twofa_secret" field.
 func (_c *UserCreate) SetTwofaSecret(v string) *UserCreate {
 	_c.mutation.SetTwofaSecret(v)
@@ -702,6 +730,14 @@ func (_c *UserCreate) defaults() {
 		v := user.DefaultPublicLocation
 		_c.mutation.SetPublicLocation(v)
 	}
+	if _, ok := _c.mutation.TwofaEnable(); !ok {
+		v := user.DefaultTwofaEnable
+		_c.mutation.SetTwofaEnable(v)
+	}
+	if _, ok := _c.mutation.TwofaSecret(); !ok {
+		v := user.DefaultTwofaSecret
+		_c.mutation.SetTwofaSecret(v)
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := user.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
@@ -789,6 +825,12 @@ func (_c *UserCreate) check() error {
 	}
 	if _, ok := _c.mutation.PublicLocation(); !ok {
 		return &ValidationError{Name: "public_location", err: errors.New(`gen: missing required field "User.public_location"`)}
+	}
+	if _, ok := _c.mutation.TwofaEnable(); !ok {
+		return &ValidationError{Name: "twofa_enable", err: errors.New(`gen: missing required field "User.twofa_enable"`)}
+	}
+	if _, ok := _c.mutation.TwofaSecret(); !ok {
+		return &ValidationError{Name: "twofa_secret", err: errors.New(`gen: missing required field "User.twofa_secret"`)}
 	}
 	return nil
 }
@@ -966,9 +1008,17 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldPublicLocation, field.TypeBool, value)
 		_node.PublicLocation = &value
 	}
+	if value, ok := _c.mutation.TwofaEnable(); ok {
+		_spec.SetField(user.FieldTwofaEnable, field.TypeBool, value)
+		_node.TwofaEnable = value
+	}
+	if value, ok := _c.mutation.TwofaEnableTime(); ok {
+		_spec.SetField(user.FieldTwofaEnableTime, field.TypeTime, value)
+		_node.TwofaEnableTime = &value
+	}
 	if value, ok := _c.mutation.TwofaSecret(); ok {
 		_spec.SetField(user.FieldTwofaSecret, field.TypeString, value)
-		_node.TwofaSecret = &value
+		_node.TwofaSecret = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(user.FieldCreatedAt, field.TypeTime, value)

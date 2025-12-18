@@ -89,8 +89,12 @@ type User struct {
 	City *string `json:"city,omitempty"`
 	// 是否公开地理位置
 	PublicLocation *bool `json:"public_location,omitempty"`
+	// 是否开启二步验证
+	TwofaEnable bool `json:"twofa_enable,omitempty"`
+	// 二步验证启用时间
+	TwofaEnableTime *time.Time `json:"twofa_enable_time,omitempty"`
 	// 二步验证Secret
-	TwofaSecret *string `json:"twofa_secret,omitempty"`
+	TwofaSecret string `json:"twofa_secret,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -135,13 +139,13 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldEnableWebNotify, user.FieldEnableEmailSubscribe, user.FieldPublicPoints, user.FieldPublicFollowers, user.FieldPublicArticles, user.FieldPublicComments, user.FieldPublicOnlineStatus, user.FieldPublicLocation:
+		case user.FieldEnableWebNotify, user.FieldEnableEmailSubscribe, user.FieldPublicPoints, user.FieldPublicFollowers, user.FieldPublicArticles, user.FieldPublicComments, user.FieldPublicOnlineStatus, user.FieldPublicLocation, user.FieldTwofaEnable:
 			values[i] = new(sql.NullBool)
 		case user.FieldID, user.FieldStatus, user.FieldFollowCount, user.FieldFollowerCount, user.FieldBlockCount, user.FieldBlockedCount, user.FieldOnlineMinutes, user.FieldCurrentCheckinStreak, user.FieldLongestCheckinStreak:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName, user.FieldNickname, user.FieldPassword, user.FieldEmail, user.FieldPhone, user.FieldURL, user.FieldAvatarURL, user.FieldIntroduction, user.FieldMbti, user.FieldGroupName, user.FieldLastLoginIP, user.FieldLanguage, user.FieldTimezone, user.FieldTheme, user.FieldMobileTheme, user.FieldCountry, user.FieldProvince, user.FieldCity, user.FieldTwofaSecret:
 			values[i] = new(sql.NullString)
-		case user.FieldLastLoginTime, user.FieldLastCheckinTime, user.FieldCreatedAt, user.FieldUpdatedAt:
+		case user.FieldLastLoginTime, user.FieldLastCheckinTime, user.FieldTwofaEnableTime, user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -412,12 +416,24 @@ func (_m *User) assignValues(columns []string, values []any) error {
 				_m.PublicLocation = new(bool)
 				*_m.PublicLocation = value.Bool
 			}
+		case user.FieldTwofaEnable:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field twofa_enable", values[i])
+			} else if value.Valid {
+				_m.TwofaEnable = value.Bool
+			}
+		case user.FieldTwofaEnableTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field twofa_enable_time", values[i])
+			} else if value.Valid {
+				_m.TwofaEnableTime = new(time.Time)
+				*_m.TwofaEnableTime = value.Time
+			}
 		case user.FieldTwofaSecret:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field twofa_secret", values[i])
 			} else if value.Valid {
-				_m.TwofaSecret = new(string)
-				*_m.TwofaSecret = value.String
+				_m.TwofaSecret = value.String
 			}
 		case user.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -650,10 +666,16 @@ func (_m *User) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.TwofaSecret; v != nil {
-		builder.WriteString("twofa_secret=")
-		builder.WriteString(*v)
+	builder.WriteString("twofa_enable=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TwofaEnable))
+	builder.WriteString(", ")
+	if v := _m.TwofaEnableTime; v != nil {
+		builder.WriteString("twofa_enable_time=")
+		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("twofa_secret=")
+	builder.WriteString(_m.TwofaSecret)
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

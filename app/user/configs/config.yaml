@@ -1,4 +1,5 @@
 server:
+  app: FishPi
   name: user-service
   version: 1.0.0
   mode: dev

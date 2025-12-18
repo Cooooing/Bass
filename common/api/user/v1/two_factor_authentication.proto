@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package common.api.user.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "common/v1/common.proto";
+import "user/v1/user.proto";
+
+option go_package = "common/api/user/v1;v1";
+
+// TwoFactorAuthentication 服务
+service UserTwoFactorAuthenticationService {
+
+  // 验证
+  rpc Validate(UserTwoFactorAuthenticationValidateRequest) returns (UserTwoFactorAuthenticationValidateReply) {
+    option (google.api.http) = {
+      post: "/api/v1/user/2FA/validate"
+      body: "*"
+    };
+  }
+
+  // 开启 2FA 验证
+  rpc Enable(UserTwoFactorAuthenticationEnableRequest) returns (UserTwoFactorAuthenticationEnableReply) {
+    option (google.api.http) = {
+      get: "/api/v1/user/2FA/enable"
+    };
+  }
+
+  // 关闭 2FA 验证
+  rpc Disable(UserTwoFactorAuthenticationDisableRequest) returns (UserTwoFactorAuthenticationDisableReply) {
+    option (google.api.http) = {
+      post: "/api/v1/user/2FA/disable"
+      body: "*"
+    };
+  }
+
+  // 确认 2FA 绑定
+  rpc Confirm(UserTwoFactorAuthenticationConfirmRequest) returns (UserTwoFactorAuthenticationConfirmReply) {
+    option (google.api.http) = {
+      post: "/api/v1/user/2FA/confirm"
+      body: "*"
+    };
+  }
+}
+
+// 实体定义
+
+// 查询参数定义
+
+message UserTwoFactorAuthenticationValidateRequest {
+  // 2FA 验证码
+  string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+}
+message UserTwoFactorAuthenticationValidateReply {
+  // 验证结果
+  bool verified = 1;
+}
+
+message UserTwoFactorAuthenticationEnableRequest {}
+message UserTwoFactorAuthenticationEnableReply {
+  // 图片数据
+  bytes data = 1;
+  // 图片类型
+  string content_type = 2;
+}
+
+message UserTwoFactorAuthenticationDisableRequest {
+  // 2FA 验证码
+  string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+}
+message UserTwoFactorAuthenticationDisableReply {}
+
+message UserTwoFactorAuthenticationConfirmRequest {
+  // 2FA 验证码
+  string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+}
+message UserTwoFactorAuthenticationConfirmReply {}

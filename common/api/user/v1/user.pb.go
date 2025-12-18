@@ -100,12 +100,14 @@ type User struct {
 	City *string `protobuf:"bytes,34,opt,name=city,proto3,oneof" json:"city,omitempty"`
 	// 是否公开地理位置
 	PublicLocation *bool `protobuf:"varint,35,opt,name=public_location,json=publicLocation,proto3,oneof" json:"public_location,omitempty"`
-	// 二步验证 Secret
-	TwofaSecret *string `protobuf:"bytes,36,opt,name=twofa_secret,json=twofaSecret,proto3,oneof" json:"twofa_secret,omitempty"`
+	// 是否二步验证
+	TwofaEnable bool `protobuf:"varint,36,opt,name=twofa_enable,json=twofaEnable,proto3" json:"twofa_enable,omitempty"`
+	// 二步验证启用时间
+	TwofaEnableTime *timestamppb.Timestamp `protobuf:"bytes,37,opt,name=twofa_enable_time,json=twofaEnableTime,proto3" json:"twofa_enable_time,omitempty"`
 	// 创建时间
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,37,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	// 更新时间
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,38,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -392,11 +394,18 @@ func (x *User) GetPublicLocation() bool {
 	return false
 }
 
-func (x *User) GetTwofaSecret() string {
-	if x != nil && x.TwofaSecret != nil {
-		return *x.TwofaSecret
+func (x *User) GetTwofaEnable() bool {
+	if x != nil {
+		return x.TwofaEnable
 	}
-	return ""
+	return false
+}
+
+func (x *User) GetTwofaEnableTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.TwofaEnableTime
+	}
+	return nil
 }
 
 func (x *User) GetCreatedAt() *timestamppb.Timestamp {
@@ -1263,7 +1272,7 @@ var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xbc\x10\n" +
+	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xf0\x10\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
@@ -1305,12 +1314,13 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\acountry\x18  \x01(\tH\x1aR\acountry\x88\x01\x01\x12\x1f\n" +
 	"\bprovince\x18! \x01(\tH\x1bR\bprovince\x88\x01\x01\x12\x17\n" +
 	"\x04city\x18\" \x01(\tH\x1cR\x04city\x88\x01\x01\x12,\n" +
-	"\x0fpublic_location\x18# \x01(\bH\x1dR\x0epublicLocation\x88\x01\x01\x12&\n" +
-	"\ftwofa_secret\x18$ \x01(\tH\x1eR\vtwofaSecret\x88\x01\x01\x129\n" +
+	"\x0fpublic_location\x18# \x01(\bH\x1dR\x0epublicLocation\x88\x01\x01\x12!\n" +
+	"\ftwofa_enable\x18$ \x01(\bR\vtwofaEnable\x12F\n" +
+	"\x11twofa_enable_time\x18% \x01(\v2\x1a.google.protobuf.TimestampR\x0ftwofaEnableTime\x12:\n" +
 	"\n" +
-	"created_at\x18% \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
-	"updated_at\x18& \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\v\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\v\n" +
 	"\t_nicknameB\b\n" +
 	"\x06_phoneB\x06\n" +
 	"\x04_urlB\r\n" +
@@ -1341,8 +1351,7 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\b_countryB\v\n" +
 	"\t_provinceB\a\n" +
 	"\x05_cityB\x12\n" +
-	"\x10_public_locationB\x0f\n" +
-	"\r_twofa_secret\"\xd4\x02\n" +
+	"\x10_public_location\"\xd4\x02\n" +
 	"\x0fUserQueryParams\x12\x1c\n" +
 	"\auser_id\x18\n" +
 	" \x01(\x03H\x00R\x06userId\x88\x01\x01\x12\x19\n" +
@@ -1463,39 +1472,40 @@ var file_user_v1_user_proto_goTypes = []any{
 var file_user_v1_user_proto_depIdxs = []int32{
 	17, // 0: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
 	17, // 1: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
-	17, // 2: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	17, // 3: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
-	0,  // 5: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
-	0,  // 6: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
-	1,  // 7: common.api.user.v1.GetListRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	0,  // 8: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
-	1,  // 9: common.api.user.v1.GetMapRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	16, // 10: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
-	18, // 11: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 12: common.api.user.v1.PageUserRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	19, // 13: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 14: common.api.user.v1.PageUserReply.rows:type_name -> common.api.user.v1.User
-	0,  // 15: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
-	2,  // 16: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
-	4,  // 17: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest
-	6,  // 18: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
-	8,  // 19: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
-	10, // 20: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
-	12, // 21: common.api.user.v1.UserUserService.Page:input_type -> common.api.user.v1.PageUserRequest
-	14, // 22: common.api.user.v1.UserUserService.Avatar:input_type -> common.api.user.v1.AvatarRequest
-	3,  // 23: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
-	5,  // 24: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
-	7,  // 25: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
-	9,  // 26: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
-	11, // 27: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
-	13, // 28: common.api.user.v1.UserUserService.Page:output_type -> common.api.user.v1.PageUserReply
-	15, // 29: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.user.v1.AvatarReply
-	23, // [23:30] is the sub-list for method output_type
-	16, // [16:23] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	17, // 2: common.api.user.v1.User.twofa_enable_time:type_name -> google.protobuf.Timestamp
+	17, // 3: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	17, // 4: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 5: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
+	0,  // 6: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
+	0,  // 7: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
+	1,  // 8: common.api.user.v1.GetListRequest.query:type_name -> common.api.user.v1.UserQueryParams
+	0,  // 9: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
+	1,  // 10: common.api.user.v1.GetMapRequest.query:type_name -> common.api.user.v1.UserQueryParams
+	16, // 11: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
+	18, // 12: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 13: common.api.user.v1.PageUserRequest.query:type_name -> common.api.user.v1.UserQueryParams
+	19, // 14: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 15: common.api.user.v1.PageUserReply.rows:type_name -> common.api.user.v1.User
+	0,  // 16: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
+	2,  // 17: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
+	4,  // 18: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest
+	6,  // 19: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
+	8,  // 20: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
+	10, // 21: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
+	12, // 22: common.api.user.v1.UserUserService.Page:input_type -> common.api.user.v1.PageUserRequest
+	14, // 23: common.api.user.v1.UserUserService.Avatar:input_type -> common.api.user.v1.AvatarRequest
+	3,  // 24: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
+	5,  // 25: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
+	7,  // 26: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
+	9,  // 27: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
+	11, // 28: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
+	13, // 29: common.api.user.v1.UserUserService.Page:output_type -> common.api.user.v1.PageUserReply
+	15, // 30: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.user.v1.AvatarReply
+	24, // [24:31] is the sub-list for method output_type
+	17, // [17:24] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_proto_init() }

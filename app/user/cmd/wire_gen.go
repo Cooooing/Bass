@@ -92,7 +92,17 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
 	ossService := service.NewOssService(baseService)
-	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, ossService)
+	twoFactorAuthenticationDomain, err := biz.NewTwoFactorAuthenticationDomain(baseDomain, userRepo)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	twoFactorAuthenticationService := service.NewTwoFactorAuthenticationService(baseService, twoFactorAuthenticationDomain)
+	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, ossService, twoFactorAuthenticationService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)

@@ -235,6 +235,16 @@ func PublicLocation(v bool) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPublicLocation, v))
 }
 
+// TwofaEnable applies equality check predicate on the "twofa_enable" field. It's identical to TwofaEnableEQ.
+func TwofaEnable(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldTwofaEnable, v))
+}
+
+// TwofaEnableTime applies equality check predicate on the "twofa_enable_time" field. It's identical to TwofaEnableTimeEQ.
+func TwofaEnableTime(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldTwofaEnableTime, v))
+}
+
 // TwofaSecret applies equality check predicate on the "twofa_secret" field. It's identical to TwofaSecretEQ.
 func TwofaSecret(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldTwofaSecret, v))
@@ -2040,6 +2050,66 @@ func PublicLocationNEQ(v bool) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldPublicLocation, v))
 }
 
+// TwofaEnableEQ applies the EQ predicate on the "twofa_enable" field.
+func TwofaEnableEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldTwofaEnable, v))
+}
+
+// TwofaEnableNEQ applies the NEQ predicate on the "twofa_enable" field.
+func TwofaEnableNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldTwofaEnable, v))
+}
+
+// TwofaEnableTimeEQ applies the EQ predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldTwofaEnableTime, v))
+}
+
+// TwofaEnableTimeNEQ applies the NEQ predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeNEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldTwofaEnableTime, v))
+}
+
+// TwofaEnableTimeIn applies the In predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldIn(FieldTwofaEnableTime, vs...))
+}
+
+// TwofaEnableTimeNotIn applies the NotIn predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeNotIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldTwofaEnableTime, vs...))
+}
+
+// TwofaEnableTimeGT applies the GT predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeGT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGT(FieldTwofaEnableTime, v))
+}
+
+// TwofaEnableTimeGTE applies the GTE predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeGTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldTwofaEnableTime, v))
+}
+
+// TwofaEnableTimeLT applies the LT predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeLT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLT(FieldTwofaEnableTime, v))
+}
+
+// TwofaEnableTimeLTE applies the LTE predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeLTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldTwofaEnableTime, v))
+}
+
+// TwofaEnableTimeIsNil applies the IsNil predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldTwofaEnableTime))
+}
+
+// TwofaEnableTimeNotNil applies the NotNil predicate on the "twofa_enable_time" field.
+func TwofaEnableTimeNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldTwofaEnableTime))
+}
+
 // TwofaSecretEQ applies the EQ predicate on the "twofa_secret" field.
 func TwofaSecretEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldTwofaSecret, v))
@@ -2093,16 +2163,6 @@ func TwofaSecretHasPrefix(v string) predicate.User {
 // TwofaSecretHasSuffix applies the HasSuffix predicate on the "twofa_secret" field.
 func TwofaSecretHasSuffix(v string) predicate.User {
 	return predicate.User(sql.FieldHasSuffix(FieldTwofaSecret, v))
-}
-
-// TwofaSecretIsNil applies the IsNil predicate on the "twofa_secret" field.
-func TwofaSecretIsNil() predicate.User {
-	return predicate.User(sql.FieldIsNull(FieldTwofaSecret))
-}
-
-// TwofaSecretNotNil applies the NotNil predicate on the "twofa_secret" field.
-func TwofaSecretNotNil() predicate.User {
-	return predicate.User(sql.FieldNotNull(FieldTwofaSecret))
 }
 
 // TwofaSecretEqualFold applies the EqualFold predicate on the "twofa_secret" field.

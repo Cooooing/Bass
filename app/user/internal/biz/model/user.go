@@ -58,9 +58,12 @@ func (u *User) ConvertToRpc() *v1.User {
 		Province:             u.Province,
 		City:                 u.City,
 		PublicLocation:       u.PublicLocation,
-		TwofaSecret:          u.TwofaSecret,
+		TwofaEnable:          u.TwofaEnable,
 		CreatedAt:            timestamppb.New(*u.CreatedAt),
 		UpdatedAt:            timestamppb.New(*u.UpdatedAt),
+	}
+	if u.TwofaEnable && u.TwofaEnableTime != nil {
+		reply.TwofaEnableTime = timestamppb.New(*u.TwofaEnableTime)
 	}
 	if u.LastLoginTime != nil {
 		reply.LastLoginTime = timestamppb.New(*u.LastLoginTime)

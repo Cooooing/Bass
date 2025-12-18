@@ -79,6 +79,8 @@ type UserMutation struct {
 	province                   *string
 	city                       *string
 	public_location            *bool
+	twofa_enable               *bool
+	twofa_enable_time          *time.Time
 	twofa_secret               *string
 	created_at                 *time.Time
 	updated_at                 *time.Time
@@ -1836,6 +1838,91 @@ func (m *UserMutation) ResetPublicLocation() {
 	m.public_location = nil
 }
 
+// SetTwofaEnable sets the "twofa_enable" field.
+func (m *UserMutation) SetTwofaEnable(b bool) {
+	m.twofa_enable = &b
+}
+
+// TwofaEnable returns the value of the "twofa_enable" field in the mutation.
+func (m *UserMutation) TwofaEnable() (r bool, exists bool) {
+	v := m.twofa_enable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTwofaEnable returns the old "twofa_enable" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldTwofaEnable(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTwofaEnable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTwofaEnable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTwofaEnable: %w", err)
+	}
+	return oldValue.TwofaEnable, nil
+}
+
+// ResetTwofaEnable resets all changes to the "twofa_enable" field.
+func (m *UserMutation) ResetTwofaEnable() {
+	m.twofa_enable = nil
+}
+
+// SetTwofaEnableTime sets the "twofa_enable_time" field.
+func (m *UserMutation) SetTwofaEnableTime(t time.Time) {
+	m.twofa_enable_time = &t
+}
+
+// TwofaEnableTime returns the value of the "twofa_enable_time" field in the mutation.
+func (m *UserMutation) TwofaEnableTime() (r time.Time, exists bool) {
+	v := m.twofa_enable_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTwofaEnableTime returns the old "twofa_enable_time" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldTwofaEnableTime(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTwofaEnableTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTwofaEnableTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTwofaEnableTime: %w", err)
+	}
+	return oldValue.TwofaEnableTime, nil
+}
+
+// ClearTwofaEnableTime clears the value of the "twofa_enable_time" field.
+func (m *UserMutation) ClearTwofaEnableTime() {
+	m.twofa_enable_time = nil
+	m.clearedFields[user.FieldTwofaEnableTime] = struct{}{}
+}
+
+// TwofaEnableTimeCleared returns if the "twofa_enable_time" field was cleared in this mutation.
+func (m *UserMutation) TwofaEnableTimeCleared() bool {
+	_, ok := m.clearedFields[user.FieldTwofaEnableTime]
+	return ok
+}
+
+// ResetTwofaEnableTime resets all changes to the "twofa_enable_time" field.
+func (m *UserMutation) ResetTwofaEnableTime() {
+	m.twofa_enable_time = nil
+	delete(m.clearedFields, user.FieldTwofaEnableTime)
+}
+
 // SetTwofaSecret sets the "twofa_secret" field.
 func (m *UserMutation) SetTwofaSecret(s string) {
 	m.twofa_secret = &s
@@ -1853,7 +1940,7 @@ func (m *UserMutation) TwofaSecret() (r string, exists bool) {
 // OldTwofaSecret returns the old "twofa_secret" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldTwofaSecret(ctx context.Context) (v *string, err error) {
+func (m *UserMutation) OldTwofaSecret(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTwofaSecret is only allowed on UpdateOne operations")
 	}
@@ -1867,22 +1954,9 @@ func (m *UserMutation) OldTwofaSecret(ctx context.Context) (v *string, err error
 	return oldValue.TwofaSecret, nil
 }
 
-// ClearTwofaSecret clears the value of the "twofa_secret" field.
-func (m *UserMutation) ClearTwofaSecret() {
-	m.twofa_secret = nil
-	m.clearedFields[user.FieldTwofaSecret] = struct{}{}
-}
-
-// TwofaSecretCleared returns if the "twofa_secret" field was cleared in this mutation.
-func (m *UserMutation) TwofaSecretCleared() bool {
-	_, ok := m.clearedFields[user.FieldTwofaSecret]
-	return ok
-}
-
 // ResetTwofaSecret resets all changes to the "twofa_secret" field.
 func (m *UserMutation) ResetTwofaSecret() {
 	m.twofa_secret = nil
-	delete(m.clearedFields, user.FieldTwofaSecret)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -2125,7 +2199,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 39)
+	fields := make([]string, 0, 41)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -2234,6 +2308,12 @@ func (m *UserMutation) Fields() []string {
 	if m.public_location != nil {
 		fields = append(fields, user.FieldPublicLocation)
 	}
+	if m.twofa_enable != nil {
+		fields = append(fields, user.FieldTwofaEnable)
+	}
+	if m.twofa_enable_time != nil {
+		fields = append(fields, user.FieldTwofaEnableTime)
+	}
 	if m.twofa_secret != nil {
 		fields = append(fields, user.FieldTwofaSecret)
 	}
@@ -2323,6 +2403,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.City()
 	case user.FieldPublicLocation:
 		return m.PublicLocation()
+	case user.FieldTwofaEnable:
+		return m.TwofaEnable()
+	case user.FieldTwofaEnableTime:
+		return m.TwofaEnableTime()
 	case user.FieldTwofaSecret:
 		return m.TwofaSecret()
 	case user.FieldCreatedAt:
@@ -2410,6 +2494,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCity(ctx)
 	case user.FieldPublicLocation:
 		return m.OldPublicLocation(ctx)
+	case user.FieldTwofaEnable:
+		return m.OldTwofaEnable(ctx)
+	case user.FieldTwofaEnableTime:
+		return m.OldTwofaEnableTime(ctx)
 	case user.FieldTwofaSecret:
 		return m.OldTwofaSecret(ctx)
 	case user.FieldCreatedAt:
@@ -2677,6 +2765,20 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPublicLocation(v)
 		return nil
+	case user.FieldTwofaEnable:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTwofaEnable(v)
+		return nil
+	case user.FieldTwofaEnableTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTwofaEnableTime(v)
+		return nil
 	case user.FieldTwofaSecret:
 		v, ok := value.(string)
 		if !ok {
@@ -2869,8 +2971,8 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldCity) {
 		fields = append(fields, user.FieldCity)
 	}
-	if m.FieldCleared(user.FieldTwofaSecret) {
-		fields = append(fields, user.FieldTwofaSecret)
+	if m.FieldCleared(user.FieldTwofaEnableTime) {
+		fields = append(fields, user.FieldTwofaEnableTime)
 	}
 	if m.FieldCleared(user.FieldCreatedAt) {
 		fields = append(fields, user.FieldCreatedAt)
@@ -2934,8 +3036,8 @@ func (m *UserMutation) ClearField(name string) error {
 	case user.FieldCity:
 		m.ClearCity()
 		return nil
-	case user.FieldTwofaSecret:
-		m.ClearTwofaSecret()
+	case user.FieldTwofaEnableTime:
+		m.ClearTwofaEnableTime()
 		return nil
 	case user.FieldCreatedAt:
 		m.ClearCreatedAt()
@@ -3058,6 +3160,12 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldPublicLocation:
 		m.ResetPublicLocation()
+		return nil
+	case user.FieldTwofaEnable:
+		m.ResetTwofaEnable()
+		return nil
+	case user.FieldTwofaEnableTime:
+		m.ResetTwofaEnableTime()
 		return nil
 	case user.FieldTwofaSecret:
 		m.ResetTwofaSecret()

@@ -21,6 +21,7 @@ var BizProviderSet = wire.NewSet(
 	NewAuthenticationDomain,
 	NewUserDomain,
 	NewUserRelationDomain,
+	NewTwoFactorAuthenticationDomain,
 )
 
 type BaseDomain struct {

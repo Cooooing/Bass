@@ -81,7 +81,9 @@ func (User) Fields() []ent.Field {
 		field.Bool("public_location").Comment("是否公开地理位置").Default(true).Nillable(),
 
 		// --- 其他 ---
-		field.String("twofa_secret").Comment("二步验证Secret").Optional().Nillable(),
+		field.Bool("twofa_enable").Comment("是否开启二步验证").Default(false),
+		field.Time("twofa_enable_time").Comment("二步验证启用时间").Optional().Nillable(),
+		field.String("twofa_secret").Comment("二步验证Secret").Default(""),
 	}
 	fields = append(fields, pkg.TimeAuditFields()...)
 	return fields

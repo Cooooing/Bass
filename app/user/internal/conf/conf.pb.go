@@ -108,6 +108,7 @@ func (x *Bootstrap) GetOss() *Oss {
 
 type Server struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	App           string                 `protobuf:"bytes,6,opt,name=app,proto3" json:"app,omitempty"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
 	Mode          string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
@@ -145,6 +146,13 @@ func (x *Server) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Server.ProtoReflect.Descriptor instead.
 func (*Server) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Server) GetApp() string {
+	if x != nil {
+		return x.App
+	}
+	return ""
 }
 
 func (x *Server) GetName() string {
@@ -1005,8 +1013,9 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\bregistry\x18\x03 \x01(\v2\x19.kratos.api.conf.RegistryR\bregistry\x12,\n" +
 	"\x05trace\x18\x04 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\x12&\n" +
 	"\x03jwt\x18\x05 \x01(\v2\x14.kratos.api.conf.JwtR\x03jwt\x12&\n" +
-	"\x03oss\x18\x06 \x01(\v2\x14.kratos.api.conf.OssR\x03oss\"\x84\x03\n" +
-	"\x06Server\x12\x12\n" +
+	"\x03oss\x18\x06 \x01(\v2\x14.kratos.api.conf.OssR\x03oss\"\x96\x03\n" +
+	"\x06Server\x12\x10\n" +
+	"\x03app\x18\x06 \x01(\tR\x03app\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
 	"\x04mode\x18\x03 \x01(\tR\x04mode\x120\n" +

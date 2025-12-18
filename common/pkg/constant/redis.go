@@ -2,9 +2,7 @@ package constant
 
 import (
 	v1 "common/api/notify/v1"
-	"common/pkg/cutil/base"
 	"fmt"
-	"strings"
 )
 
 var Authentication = "Authorization" // token 请求头名称
@@ -14,6 +12,7 @@ var (
 	TokenEmailCode          = "TokenEmailCode::{%s}"
 	Token                   = "Token::{%s}"
 	NotificationTemplateMap = "NotificationTemplateMap"
+	TwoFactorAuthentication = "TwoFactorAuthentication::{%s}"
 )
 
 func GetKeyTokenEmailCode(email string) string {
@@ -35,18 +34,6 @@ func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *
 	return fmt.Sprintf("%s_%s", notificationType.String(), channel.String())
 }
 
-func GetNotificationTemplateTypeFromKey(key string) *v1.NotificationType {
-	s := strings.Split(key, "_")[0]
-	if v, ok := v1.NotificationType_value[s]; ok {
-		return base.Ptr(v1.NotificationType(v))
-	}
-	return nil
-}
-
-func GetNotificationTemplateChannelFromKey(key string) *v1.NotificationChannel {
-	s := strings.Split(key, "_")[1]
-	if v, ok := v1.NotificationChannel_value[s]; ok {
-		return base.Ptr(v1.NotificationChannel(v))
-	}
-	return nil
+func GetKeyTwoFactorAuthentication(name string) string {
+	return fmt.Sprintf(TwoFactorAuthentication, name)
 }

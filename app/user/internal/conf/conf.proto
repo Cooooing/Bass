@@ -15,6 +15,7 @@ message Bootstrap {
 }
 
 message Server {
+  string app = 6;
   string name = 1;
   string version = 2;
   string mode = 3;

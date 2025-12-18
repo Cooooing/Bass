@@ -75,6 +75,10 @@ type User struct {
 	City string `json:"city,omitempty"`
 	// 是否公开地理位置
 	PublicLocation bool `json:"public_location,omitempty"`
+	// 是否开启二步验证
+	TwofaEnable bool `json:"twofa_enable,omitempty"`
+	// 二步验证启用时间
+	TwofaEnableTime *time.Time `json:"twofa_enable_time,omitempty"`
 	// 二步验证Secret
 	TwofaSecret string `json:"twofa_secret,omitempty"`
 	// 创建时间

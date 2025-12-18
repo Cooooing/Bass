@@ -6,6 +6,76 @@ info:
     title: ""
     version: 0.0.1
 paths:
+    /api/v1/user/2FA/confirm:
+        post:
+            tags:
+                - UserTwoFactorAuthenticationService
+            description: 确认 2FA 绑定
+            operationId: UserTwoFactorAuthenticationService_Confirm
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationConfirmRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationConfirmReply'
+    /api/v1/user/2FA/disable:
+        post:
+            tags:
+                - UserTwoFactorAuthenticationService
+            description: 关闭 2FA 验证
+            operationId: UserTwoFactorAuthenticationService_Disable
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationDisableRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationDisableReply'
+    /api/v1/user/2FA/enable:
+        get:
+            tags:
+                - UserTwoFactorAuthenticationService
+            description: 开启 2FA 验证
+            operationId: UserTwoFactorAuthenticationService_Enable
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationEnableReply'
+    /api/v1/user/2FA/validate:
+        post:
+            tags:
+                - UserTwoFactorAuthenticationService
+            description: 验证
+            operationId: UserTwoFactorAuthenticationService_Validate
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationValidateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.UserTwoFactorAuthenticationValidateReply'
     /api/v1/userRelation/block:
         post:
             tags:
@@ -2622,9 +2692,13 @@ components:
                 public_location:
                     type: boolean
                     description: 是否公开地理位置
-                twofa_secret:
+                twofa_enable:
+                    type: boolean
+                    description: 是否二步验证
+                twofa_enable_time:
                     type: string
-                    description: 二步验证 Secret
+                    description: 二步验证启用时间
+                    format: date-time
                 created_at:
                     type: string
                     description: 创建时间
@@ -2711,6 +2785,46 @@ components:
                     type: integer
                     description: 关系类型
                     format: int32
+        common.api.user.v1.UserTwoFactorAuthenticationConfirmReply:
+            type: object
+            properties: {}
+        common.api.user.v1.UserTwoFactorAuthenticationConfirmRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: 2FA 验证码
+        common.api.user.v1.UserTwoFactorAuthenticationDisableReply:
+            type: object
+            properties: {}
+        common.api.user.v1.UserTwoFactorAuthenticationDisableRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: 2FA 验证码
+        common.api.user.v1.UserTwoFactorAuthenticationEnableReply:
+            type: object
+            properties:
+                data:
+                    type: string
+                    description: 图片数据
+                    format: bytes
+                content_type:
+                    type: string
+                    description: 图片类型
+        common.api.user.v1.UserTwoFactorAuthenticationValidateReply:
+            type: object
+            properties:
+                verified:
+                    type: boolean
+                    description: 验证结果
+        common.api.user.v1.UserTwoFactorAuthenticationValidateRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: 2FA 验证码
 tags:
     - name: ContentArticleService
       description: Article 服务
@@ -2732,6 +2846,8 @@ tags:
       description: Authentication 服务
     - name: UserOssService
       description: Oss 服务
+    - name: UserTwoFactorAuthenticationService
+      description: TwoFactorAuthentication 服务
     - name: UserUserRelationService
       description: UserRelation 服务
     - name: UserUserService

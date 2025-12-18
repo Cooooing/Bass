@@ -103,12 +103,20 @@ func init() {
 	userDescPublicLocation := userFields[36].Descriptor()
 	// user.DefaultPublicLocation holds the default value on creation for the public_location field.
 	user.DefaultPublicLocation = userDescPublicLocation.Default.(bool)
+	// userDescTwofaEnable is the schema descriptor for twofa_enable field.
+	userDescTwofaEnable := userFields[37].Descriptor()
+	// user.DefaultTwofaEnable holds the default value on creation for the twofa_enable field.
+	user.DefaultTwofaEnable = userDescTwofaEnable.Default.(bool)
+	// userDescTwofaSecret is the schema descriptor for twofa_secret field.
+	userDescTwofaSecret := userFields[39].Descriptor()
+	// user.DefaultTwofaSecret holds the default value on creation for the twofa_secret field.
+	user.DefaultTwofaSecret = userDescTwofaSecret.Default.(string)
 	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userFields[38].Descriptor()
+	userDescCreatedAt := userFields[40].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
 	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
 	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userFields[39].Descriptor()
+	userDescUpdatedAt := userFields[41].Descriptor()
 	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	userrelationFields := schema.UserRelation{}.Fields()

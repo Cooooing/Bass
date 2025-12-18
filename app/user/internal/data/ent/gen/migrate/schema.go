@@ -48,7 +48,9 @@ var (
 		{Name: "province", Type: field.TypeString, Nullable: true, Comment: "所在省份"},
 		{Name: "city", Type: field.TypeString, Nullable: true, Comment: "所在城市"},
 		{Name: "public_location", Type: field.TypeBool, Comment: "是否公开地理位置", Default: true},
-		{Name: "twofa_secret", Type: field.TypeString, Nullable: true, Comment: "二步验证Secret"},
+		{Name: "twofa_enable", Type: field.TypeBool, Comment: "是否开启二步验证", Default: false},
+		{Name: "twofa_enable_time", Type: field.TypeTime, Nullable: true, Comment: "二步验证启用时间"},
+		{Name: "twofa_secret", Type: field.TypeString, Comment: "二步验证Secret", Default: ""},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
 	}

@@ -108,7 +108,7 @@ message User {
   // 粉丝数
   optional int32 follower_count = 14;
   // 屏蔽数
-  optional int32 block_count =40;
+  optional int32 block_count = 40;
   // 被屏蔽数
   optional int32 blocked_count = 41;
 
@@ -171,15 +171,17 @@ message User {
 
   // --- 其他 ---
 
-  // 二步验证 Secret
-  optional string twofa_secret = 36;
+  // 是否二步验证
+  bool twofa_enable = 36;
+  // 二步验证启用时间
+  google.protobuf.Timestamp twofa_enable_time = 37;
 
   // --- 审计字段 ---
 
   // 创建时间
-  google.protobuf.Timestamp created_at = 37;
+  google.protobuf.Timestamp created_at = 1000;
   // 更新时间
-  google.protobuf.Timestamp updated_at = 38;
+  google.protobuf.Timestamp updated_at = 1001;
 }
 
 

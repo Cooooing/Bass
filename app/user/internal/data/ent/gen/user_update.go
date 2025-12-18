@@ -673,6 +673,40 @@ func (_u *UserUpdate) SetNillablePublicLocation(v *bool) *UserUpdate {
 	return _u
 }
 
+// SetTwofaEnable sets the "twofa_enable" field.
+func (_u *UserUpdate) SetTwofaEnable(v bool) *UserUpdate {
+	_u.mutation.SetTwofaEnable(v)
+	return _u
+}
+
+// SetNillableTwofaEnable sets the "twofa_enable" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableTwofaEnable(v *bool) *UserUpdate {
+	if v != nil {
+		_u.SetTwofaEnable(*v)
+	}
+	return _u
+}
+
+// SetTwofaEnableTime sets the "twofa_enable_time" field.
+func (_u *UserUpdate) SetTwofaEnableTime(v time.Time) *UserUpdate {
+	_u.mutation.SetTwofaEnableTime(v)
+	return _u
+}
+
+// SetNillableTwofaEnableTime sets the "twofa_enable_time" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableTwofaEnableTime(v *time.Time) *UserUpdate {
+	if v != nil {
+		_u.SetTwofaEnableTime(*v)
+	}
+	return _u
+}
+
+// ClearTwofaEnableTime clears the value of the "twofa_enable_time" field.
+func (_u *UserUpdate) ClearTwofaEnableTime() *UserUpdate {
+	_u.mutation.ClearTwofaEnableTime()
+	return _u
+}
+
 // SetTwofaSecret sets the "twofa_secret" field.
 func (_u *UserUpdate) SetTwofaSecret(v string) *UserUpdate {
 	_u.mutation.SetTwofaSecret(v)
@@ -684,12 +718,6 @@ func (_u *UserUpdate) SetNillableTwofaSecret(v *string) *UserUpdate {
 	if v != nil {
 		_u.SetTwofaSecret(*v)
 	}
-	return _u
-}
-
-// ClearTwofaSecret clears the value of the "twofa_secret" field.
-func (_u *UserUpdate) ClearTwofaSecret() *UserUpdate {
-	_u.mutation.ClearTwofaSecret()
 	return _u
 }
 
@@ -1038,11 +1066,17 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.PublicLocation(); ok {
 		_spec.SetField(user.FieldPublicLocation, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.TwofaEnable(); ok {
+		_spec.SetField(user.FieldTwofaEnable, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.TwofaEnableTime(); ok {
+		_spec.SetField(user.FieldTwofaEnableTime, field.TypeTime, value)
+	}
+	if _u.mutation.TwofaEnableTimeCleared() {
+		_spec.ClearField(user.FieldTwofaEnableTime, field.TypeTime)
+	}
 	if value, ok := _u.mutation.TwofaSecret(); ok {
 		_spec.SetField(user.FieldTwofaSecret, field.TypeString, value)
-	}
-	if _u.mutation.TwofaSecretCleared() {
-		_spec.ClearField(user.FieldTwofaSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(user.FieldCreatedAt, field.TypeTime, value)
@@ -1810,6 +1844,40 @@ func (_u *UserUpdateOne) SetNillablePublicLocation(v *bool) *UserUpdateOne {
 	return _u
 }
 
+// SetTwofaEnable sets the "twofa_enable" field.
+func (_u *UserUpdateOne) SetTwofaEnable(v bool) *UserUpdateOne {
+	_u.mutation.SetTwofaEnable(v)
+	return _u
+}
+
+// SetNillableTwofaEnable sets the "twofa_enable" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableTwofaEnable(v *bool) *UserUpdateOne {
+	if v != nil {
+		_u.SetTwofaEnable(*v)
+	}
+	return _u
+}
+
+// SetTwofaEnableTime sets the "twofa_enable_time" field.
+func (_u *UserUpdateOne) SetTwofaEnableTime(v time.Time) *UserUpdateOne {
+	_u.mutation.SetTwofaEnableTime(v)
+	return _u
+}
+
+// SetNillableTwofaEnableTime sets the "twofa_enable_time" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableTwofaEnableTime(v *time.Time) *UserUpdateOne {
+	if v != nil {
+		_u.SetTwofaEnableTime(*v)
+	}
+	return _u
+}
+
+// ClearTwofaEnableTime clears the value of the "twofa_enable_time" field.
+func (_u *UserUpdateOne) ClearTwofaEnableTime() *UserUpdateOne {
+	_u.mutation.ClearTwofaEnableTime()
+	return _u
+}
+
 // SetTwofaSecret sets the "twofa_secret" field.
 func (_u *UserUpdateOne) SetTwofaSecret(v string) *UserUpdateOne {
 	_u.mutation.SetTwofaSecret(v)
@@ -1821,12 +1889,6 @@ func (_u *UserUpdateOne) SetNillableTwofaSecret(v *string) *UserUpdateOne {
 	if v != nil {
 		_u.SetTwofaSecret(*v)
 	}
-	return _u
-}
-
-// ClearTwofaSecret clears the value of the "twofa_secret" field.
-func (_u *UserUpdateOne) ClearTwofaSecret() *UserUpdateOne {
-	_u.mutation.ClearTwofaSecret()
 	return _u
 }
 
@@ -2205,11 +2267,17 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	if value, ok := _u.mutation.PublicLocation(); ok {
 		_spec.SetField(user.FieldPublicLocation, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.TwofaEnable(); ok {
+		_spec.SetField(user.FieldTwofaEnable, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.TwofaEnableTime(); ok {
+		_spec.SetField(user.FieldTwofaEnableTime, field.TypeTime, value)
+	}
+	if _u.mutation.TwofaEnableTimeCleared() {
+		_spec.ClearField(user.FieldTwofaEnableTime, field.TypeTime)
+	}
 	if value, ok := _u.mutation.TwofaSecret(); ok {
 		_spec.SetField(user.FieldTwofaSecret, field.TypeString, value)
-	}
-	if _u.mutation.TwofaSecretCleared() {
-		_spec.ClearField(user.FieldTwofaSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(user.FieldCreatedAt, field.TypeTime, value)

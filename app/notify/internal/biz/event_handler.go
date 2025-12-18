@@ -137,6 +137,7 @@ func (h *EventHandler) Handle() {
 						if err != nil {
 							break
 						}
+						notification.Title = template.Title
 						notification.Content = template.Content
 						_, err = handler.Handle(h.ctx, notification)
 						if err != nil {

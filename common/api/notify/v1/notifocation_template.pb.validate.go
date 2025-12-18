@@ -121,6 +121,8 @@ func (m *NotificationTemplate) validate(all bool) error {
 
 	// no validation rules for Channel
 
+	// no validation rules for Title
+
 	// no validation rules for Content
 
 	// no validation rules for Enable

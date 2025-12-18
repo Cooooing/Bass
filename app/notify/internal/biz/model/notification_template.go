@@ -24,6 +24,7 @@ func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {
 		Id:               n.ID,
 		NotificationType: n.NotificationType,
 		Channel:          n.Channel,
+		Title:            n.Title,
 		Content:          n.Content,
 		Processors:       n.Processors,
 		Enable:           n.Enable,

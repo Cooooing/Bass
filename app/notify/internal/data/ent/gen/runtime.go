@@ -36,16 +36,20 @@ func init() {
 	notificationrecord.DefaultUpdatedAt = notificationrecordDescUpdatedAt.Default.(func() time.Time)
 	notificationtemplateFields := schema.NotificationTemplate{}.Fields()
 	_ = notificationtemplateFields
+	// notificationtemplateDescTitle is the schema descriptor for title field.
+	notificationtemplateDescTitle := notificationtemplateFields[3].Descriptor()
+	// notificationtemplate.DefaultTitle holds the default value on creation for the title field.
+	notificationtemplate.DefaultTitle = notificationtemplateDescTitle.Default.(string)
 	// notificationtemplateDescEnable is the schema descriptor for enable field.
-	notificationtemplateDescEnable := notificationtemplateFields[5].Descriptor()
+	notificationtemplateDescEnable := notificationtemplateFields[6].Descriptor()
 	// notificationtemplate.DefaultEnable holds the default value on creation for the enable field.
 	notificationtemplate.DefaultEnable = notificationtemplateDescEnable.Default.(bool)
 	// notificationtemplateDescCreatedAt is the schema descriptor for created_at field.
-	notificationtemplateDescCreatedAt := notificationtemplateFields[6].Descriptor()
+	notificationtemplateDescCreatedAt := notificationtemplateFields[7].Descriptor()
 	// notificationtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
 	notificationtemplate.DefaultCreatedAt = notificationtemplateDescCreatedAt.Default.(func() time.Time)
 	// notificationtemplateDescUpdatedAt is the schema descriptor for updated_at field.
-	notificationtemplateDescUpdatedAt := notificationtemplateFields[7].Descriptor()
+	notificationtemplateDescUpdatedAt := notificationtemplateFields[8].Descriptor()
 	// notificationtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	notificationtemplate.DefaultUpdatedAt = notificationtemplateDescUpdatedAt.Default.(func() time.Time)
 }

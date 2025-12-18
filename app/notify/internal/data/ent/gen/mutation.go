@@ -1699,6 +1699,7 @@ type NotificationTemplateMutation struct {
 	addnotification_type *int32
 	channel              *int32
 	addchannel           *int32
+	title                *string
 	content              *string
 	processors           *[]string
 	appendprocessors     []string
@@ -1925,6 +1926,42 @@ func (m *NotificationTemplateMutation) AddedChannel() (r int32, exists bool) {
 func (m *NotificationTemplateMutation) ResetChannel() {
 	m.channel = nil
 	m.addchannel = nil
+}
+
+// SetTitle sets the "title" field.
+func (m *NotificationTemplateMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *NotificationTemplateMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the NotificationTemplate entity.
+// If the NotificationTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NotificationTemplateMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *NotificationTemplateMutation) ResetTitle() {
+	m.title = nil
 }
 
 // SetContent sets the "content" field.
@@ -2182,12 +2219,15 @@ func (m *NotificationTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NotificationTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.notification_type != nil {
 		fields = append(fields, notificationtemplate.FieldNotificationType)
 	}
 	if m.channel != nil {
 		fields = append(fields, notificationtemplate.FieldChannel)
+	}
+	if m.title != nil {
+		fields = append(fields, notificationtemplate.FieldTitle)
 	}
 	if m.content != nil {
 		fields = append(fields, notificationtemplate.FieldContent)
@@ -2216,6 +2256,8 @@ func (m *NotificationTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.NotificationType()
 	case notificationtemplate.FieldChannel:
 		return m.Channel()
+	case notificationtemplate.FieldTitle:
+		return m.Title()
 	case notificationtemplate.FieldContent:
 		return m.Content()
 	case notificationtemplate.FieldProcessors:
@@ -2239,6 +2281,8 @@ func (m *NotificationTemplateMutation) OldField(ctx context.Context, name string
 		return m.OldNotificationType(ctx)
 	case notificationtemplate.FieldChannel:
 		return m.OldChannel(ctx)
+	case notificationtemplate.FieldTitle:
+		return m.OldTitle(ctx)
 	case notificationtemplate.FieldContent:
 		return m.OldContent(ctx)
 	case notificationtemplate.FieldProcessors:
@@ -2271,6 +2315,13 @@ func (m *NotificationTemplateMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetChannel(v)
+		return nil
+	case notificationtemplate.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
 		return nil
 	case notificationtemplate.FieldContent:
 		v, ok := value.(string)
@@ -2403,6 +2454,9 @@ func (m *NotificationTemplateMutation) ResetField(name string) error {
 		return nil
 	case notificationtemplate.FieldChannel:
 		m.ResetChannel()
+		return nil
+	case notificationtemplate.FieldTitle:
+		m.ResetTitle()
 		return nil
 	case notificationtemplate.FieldContent:
 		m.ResetContent()

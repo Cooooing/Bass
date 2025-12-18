@@ -64,6 +64,11 @@ func Channel(v int32) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldEQ(FieldChannel, v))
 }
 
+// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
+func Title(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldEQ(FieldTitle, v))
+}
+
 // Content applies equality check predicate on the "content" field. It's identical to ContentEQ.
 func Content(v string) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldEQ(FieldContent, v))
@@ -162,6 +167,71 @@ func ChannelLT(v int32) predicate.NotificationTemplate {
 // ChannelLTE applies the LTE predicate on the "channel" field.
 func ChannelLTE(v int32) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldLTE(FieldChannel, v))
+}
+
+// TitleEQ applies the EQ predicate on the "title" field.
+func TitleEQ(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldEQ(FieldTitle, v))
+}
+
+// TitleNEQ applies the NEQ predicate on the "title" field.
+func TitleNEQ(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldNEQ(FieldTitle, v))
+}
+
+// TitleIn applies the In predicate on the "title" field.
+func TitleIn(vs ...string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldIn(FieldTitle, vs...))
+}
+
+// TitleNotIn applies the NotIn predicate on the "title" field.
+func TitleNotIn(vs ...string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldNotIn(FieldTitle, vs...))
+}
+
+// TitleGT applies the GT predicate on the "title" field.
+func TitleGT(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldGT(FieldTitle, v))
+}
+
+// TitleGTE applies the GTE predicate on the "title" field.
+func TitleGTE(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldGTE(FieldTitle, v))
+}
+
+// TitleLT applies the LT predicate on the "title" field.
+func TitleLT(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldLT(FieldTitle, v))
+}
+
+// TitleLTE applies the LTE predicate on the "title" field.
+func TitleLTE(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldLTE(FieldTitle, v))
+}
+
+// TitleContains applies the Contains predicate on the "title" field.
+func TitleContains(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldContains(FieldTitle, v))
+}
+
+// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
+func TitleHasPrefix(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldHasPrefix(FieldTitle, v))
+}
+
+// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
+func TitleHasSuffix(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldHasSuffix(FieldTitle, v))
+}
+
+// TitleEqualFold applies the EqualFold predicate on the "title" field.
+func TitleEqualFold(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldEqualFold(FieldTitle, v))
+}
+
+// TitleContainsFold applies the ContainsFold predicate on the "title" field.
+func TitleContainsFold(v string) predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldContainsFold(FieldTitle, v))
 }
 
 // ContentEQ applies the EQ predicate on the "content" field.

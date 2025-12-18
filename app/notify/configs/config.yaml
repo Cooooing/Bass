@@ -42,3 +42,11 @@ trace:
   endpoint: "127.0.0.1:4317"  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率
+
+email:
+  enable: true
+  smtp_host: smtp.qq.com
+  smtp_port: 465
+  username: example
+  password: example
+  from: example@example.com

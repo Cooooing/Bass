@@ -10,15 +10,15 @@ import (
 
 var HandlerSet = wire.NewSet(
 	NewFullHandler,
-	NewFilter,
+	NewRegisterVerifyCode,
 )
 
 func ProvideHandlers(
-	filter *Filter,
+	registerVerifyCode *RegisterVerifyCode,
 	fullHandler *FullHandler,
 ) dict.Map[string, handlerchain.Handler[*commonModel.Notification]] {
 	m := dict.New[string, handlerchain.Handler[*commonModel.Notification]](0)
-	m.Set(filter.Name(), filter)
+	m.Set(registerVerifyCode.Name(), registerVerifyCode)
 	m.Set(fullHandler.Name(), fullHandler)
 	return m
 }

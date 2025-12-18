@@ -17,6 +17,8 @@ const (
 	FieldNotificationType = "notification_type"
 	// FieldChannel holds the string denoting the channel field in the database.
 	FieldChannel = "channel"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
 	// FieldProcessors holds the string denoting the processors field in the database.
@@ -36,6 +38,7 @@ var Columns = []string{
 	FieldID,
 	FieldNotificationType,
 	FieldChannel,
+	FieldTitle,
 	FieldContent,
 	FieldProcessors,
 	FieldEnable,
@@ -54,6 +57,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultTitle holds the default value on creation for the "title" field.
+	DefaultTitle string
 	// DefaultEnable holds the default value on creation for the "enable" field.
 	DefaultEnable bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -78,6 +83,11 @@ func ByNotificationType(opts ...sql.OrderTermOption) OrderOption {
 // ByChannel orders the results by the channel field.
 func ByChannel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChannel, opts...).ToFunc()
+}
+
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
 // ByContent orders the results by the content field.

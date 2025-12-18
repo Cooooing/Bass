@@ -2271,6 +2271,9 @@ components:
                     type: integer
                     description: 通知渠道
                     format: int32
+                title:
+                    type: string
+                    description: 模板标题
                 content:
                     type: string
                     description: 模板内容

@@ -18,4 +18,5 @@ var BizProviderSet = wire.NewSet(
 	NewNotificationMetaDomain,
 	NewNotificationRecordDomain,
 	NewNotificationTemplateDomain,
+	base.NewEmailDomain,
 )

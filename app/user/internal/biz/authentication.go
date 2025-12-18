@@ -2,6 +2,8 @@ package biz
 
 import (
 	cv1 "common/api/common/v1"
+	notifyv1 "common/api/notify/v1"
+	"common/pkg/constant"
 	"common/pkg/cutil/base"
 	"common/pkg/cutil/base/str"
 	commonModel "common/pkg/model"
@@ -12,6 +14,7 @@ import (
 	"user/internal/data/ent"
 	"user/internal/data/ent/gen"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
 )
@@ -74,7 +77,29 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	// Todo 发送邮件
+	// 发送邮件验证码通知
+	err = s.eventPool.Submit(func() {
+		err := s.rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
+			UUID:       uuid.New().String(),
+			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeUserRegisterVerifyCode),
+			SenderId:   u.ID,
+			SenderName: u.Name,
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelEmail)},
+			Meta: commonModel.Meta{
+				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
+					Email:  u.Email,
+					Code:   code,
+					Expire: s.conf.Jwt.EmailExpire.AsDuration(),
+				},
+			},
+		})
+		if err != nil {
+			s.log.Errorf("publish user register verfity code event error: %v", err)
+		}
+	})
+	if err != nil {
+		return
+	}
 
 	// 保存 code 到缓存
 	saveUser := &commonModel.User{}

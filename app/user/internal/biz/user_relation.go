@@ -112,7 +112,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 				},
 			)
 			if err != nil {
-				d.log.Error(err)
+				d.log.Errorf("publish user follow event error: %v", err)
 			}
 		})
 		if err != nil {

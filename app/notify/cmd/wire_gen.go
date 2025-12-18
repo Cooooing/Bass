@@ -60,9 +60,10 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
-	filter := handler.NewFilter()
+	emailDomain := base.NewEmailDomain(baseDomain)
+	registerVerifyCode := handler.NewRegisterVerifyCode(emailDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
-	dictMap := handler.ProvideHandlers(filter, fullHandler)
+	dictMap := handler.ProvideHandlers(registerVerifyCode, fullHandler)
 	notificationTemplateRepo := data.NewNotificationTemplateRepo(baseRepo)
 	eventHandler, cleanup5, err := biz.NewEventHandler(baseDomain, dictMap, notificationTemplateRepo)
 	if err != nil {

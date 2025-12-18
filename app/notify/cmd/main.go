@@ -46,7 +46,7 @@ func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server
 	log.Infof("start server %s", id)
 
 	go eventHandler.Handle()
-	log.Infof("start message quque event handler")
+	log.Infof("start message queue event handler")
 
 	return kratos.New(
 		kratos.ID(id),

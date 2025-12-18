@@ -98,10 +98,11 @@ const (
 	RoutingKeyUser    RoutingKey = "user.#"
 	RoutingKeyUserDlx RoutingKey = "user.dlx"
 
-	RoutingKeyUserFollow   RoutingKey = "user.user.follow"
-	RoutingKeyUserUnfollow RoutingKey = "user.user.unfollow"
-	RoutingKeyUserBlock    RoutingKey = "user.user.block"
-	RoutingKeyUserUnblock  RoutingKey = "user.user.unblock"
+	RoutingKeyUserRegisterVerifyCode RoutingKey = "user.user.register.verifyCode"
+	RoutingKeyUserFollow             RoutingKey = "user.user.follow"
+	RoutingKeyUserUnfollow           RoutingKey = "user.user.unfollow"
+	RoutingKeyUserBlock              RoutingKey = "user.user.block"
+	RoutingKeyUserUnblock            RoutingKey = "user.user.unblock"
 
 	// 内容模块
 

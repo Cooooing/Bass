@@ -19,6 +19,7 @@ enum NotificationType {
   NotificationTypeNormal = 0; // 普通
   NotificationTypeSystem = 1; // 系统
 
+  NotificationTypeUserRegisterVerifyCode = 99; // 用户注册验证码
   NotificationTypeUserRegister = 100; // 用户注册
   NotificationTypeUserFollow = 101; // 用户关注
   NotificationTypeUserBlock = 102; // 用户拉黑

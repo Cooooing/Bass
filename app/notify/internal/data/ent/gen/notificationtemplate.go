@@ -22,6 +22,8 @@ type NotificationTemplate struct {
 	NotificationType int32 `json:"notification_type,omitempty"`
 	// 通知渠道
 	Channel int32 `json:"channel,omitempty"`
+	// 标题
+	Title string `json:"title,omitempty"`
 	// 模板内容
 	Content string `json:"content,omitempty"`
 	// 处理器链（有序执行）
@@ -46,7 +48,7 @@ func (*NotificationTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case notificationtemplate.FieldID, notificationtemplate.FieldNotificationType, notificationtemplate.FieldChannel:
 			values[i] = new(sql.NullInt64)
-		case notificationtemplate.FieldContent:
+		case notificationtemplate.FieldTitle, notificationtemplate.FieldContent:
 			values[i] = new(sql.NullString)
 		case notificationtemplate.FieldCreatedAt, notificationtemplate.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -82,6 +84,12 @@ func (_m *NotificationTemplate) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field channel", values[i])
 			} else if value.Valid {
 				_m.Channel = int32(value.Int64)
+			}
+		case notificationtemplate.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
 			}
 		case notificationtemplate.FieldContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -158,6 +166,9 @@ func (_m *NotificationTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("channel=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Channel))
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(_m.Content)

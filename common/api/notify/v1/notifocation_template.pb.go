@@ -38,6 +38,8 @@ type NotificationTemplate struct {
 	NotificationType int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3" json:"notification_type,omitempty"`
 	// 通知渠道
 	Channel int32 `protobuf:"varint,6,opt,name=channel,proto3" json:"channel,omitempty"`
+	// 模板标题
+	Title string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
 	// 模板内容
 	Content string `protobuf:"bytes,7,opt,name=content,proto3" json:"content,omitempty"`
 	// 处理器链（有序执行）
@@ -111,6 +113,13 @@ func (x *NotificationTemplate) GetChannel() int32 {
 		return x.Channel
 	}
 	return 0
+}
+
+func (x *NotificationTemplate) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
 }
 
 func (x *NotificationTemplate) GetContent() string {
@@ -559,7 +568,7 @@ var File_notify_v1_notifocation_template_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"\n" +
-	"%notify/v1/notifocation_template.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xb7\x02\n" +
+	"%notify/v1/notifocation_template.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xcd\x02\n" +
 	"\x14NotificationTemplate\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -567,7 +576,8 @@ const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\x03R\x02id\x12+\n" +
 	"\x11notification_type\x18\x05 \x01(\x05R\x10notificationType\x12\x18\n" +
-	"\achannel\x18\x06 \x01(\x05R\achannel\x12\x18\n" +
+	"\achannel\x18\x06 \x01(\x05R\achannel\x12\x14\n" +
+	"\x05title\x18\x04 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\a \x01(\tR\acontent\x12\x1e\n" +
 	"\n" +
 	"processors\x18\b \x03(\tR\n" +

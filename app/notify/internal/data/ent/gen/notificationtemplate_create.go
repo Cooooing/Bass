@@ -32,6 +32,20 @@ func (_c *NotificationTemplateCreate) SetChannel(v int32) *NotificationTemplateC
 	return _c
 }
 
+// SetTitle sets the "title" field.
+func (_c *NotificationTemplateCreate) SetTitle(v string) *NotificationTemplateCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_c *NotificationTemplateCreate) SetNillableTitle(v *string) *NotificationTemplateCreate {
+	if v != nil {
+		_c.SetTitle(*v)
+	}
+	return _c
+}
+
 // SetContent sets the "content" field.
 func (_c *NotificationTemplateCreate) SetContent(v string) *NotificationTemplateCreate {
 	_c.mutation.SetContent(v)
@@ -127,6 +141,10 @@ func (_c *NotificationTemplateCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *NotificationTemplateCreate) defaults() {
+	if _, ok := _c.mutation.Title(); !ok {
+		v := notificationtemplate.DefaultTitle
+		_c.mutation.SetTitle(v)
+	}
 	if _, ok := _c.mutation.Enable(); !ok {
 		v := notificationtemplate.DefaultEnable
 		_c.mutation.SetEnable(v)
@@ -148,6 +166,9 @@ func (_c *NotificationTemplateCreate) check() error {
 	}
 	if _, ok := _c.mutation.Channel(); !ok {
 		return &ValidationError{Name: "channel", err: errors.New(`gen: missing required field "NotificationTemplate.channel"`)}
+	}
+	if _, ok := _c.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`gen: missing required field "NotificationTemplate.title"`)}
 	}
 	if _, ok := _c.mutation.Content(); !ok {
 		return &ValidationError{Name: "content", err: errors.New(`gen: missing required field "NotificationTemplate.content"`)}
@@ -197,6 +218,10 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 	if value, ok := _c.mutation.Channel(); ok {
 		_spec.SetField(notificationtemplate.FieldChannel, field.TypeInt32, value)
 		_node.Channel = value
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(notificationtemplate.FieldTitle, field.TypeString, value)
+		_node.Title = value
 	}
 	if value, ok := _c.mutation.Content(); ok {
 		_spec.SetField(notificationtemplate.FieldContent, field.TypeString, value)

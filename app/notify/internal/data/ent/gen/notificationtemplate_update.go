@@ -71,6 +71,20 @@ func (_u *NotificationTemplateUpdate) AddChannel(v int32) *NotificationTemplateU
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *NotificationTemplateUpdate) SetTitle(v string) *NotificationTemplateUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *NotificationTemplateUpdate) SetNillableTitle(v *string) *NotificationTemplateUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
 // SetContent sets the "content" field.
 func (_u *NotificationTemplateUpdate) SetContent(v string) *NotificationTemplateUpdate {
 	_u.mutation.SetContent(v)
@@ -204,6 +218,9 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 	if value, ok := _u.mutation.AddedChannel(); ok {
 		_spec.AddField(notificationtemplate.FieldChannel, field.TypeInt32, value)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(notificationtemplate.FieldTitle, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.Content(); ok {
 		_spec.SetField(notificationtemplate.FieldContent, field.TypeString, value)
 	}
@@ -289,6 +306,20 @@ func (_u *NotificationTemplateUpdateOne) SetNillableChannel(v *int32) *Notificat
 // AddChannel adds value to the "channel" field.
 func (_u *NotificationTemplateUpdateOne) AddChannel(v int32) *NotificationTemplateUpdateOne {
 	_u.mutation.AddChannel(v)
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *NotificationTemplateUpdateOne) SetTitle(v string) *NotificationTemplateUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *NotificationTemplateUpdateOne) SetNillableTitle(v *string) *NotificationTemplateUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
 	return _u
 }
 
@@ -454,6 +485,9 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 	}
 	if value, ok := _u.mutation.AddedChannel(); ok {
 		_spec.AddField(notificationtemplate.FieldChannel, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(notificationtemplate.FieldTitle, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Content(); ok {
 		_spec.SetField(notificationtemplate.FieldContent, field.TypeString, value)

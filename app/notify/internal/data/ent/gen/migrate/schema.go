@@ -74,6 +74,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "notification_type", Type: field.TypeInt32},
 		{Name: "channel", Type: field.TypeInt32},
+		{Name: "title", Type: field.TypeString, Default: ""},
 		{Name: "content", Type: field.TypeString},
 		{Name: "processors", Type: field.TypeJSON},
 		{Name: "enable", Type: field.TypeBool, Default: false},

@@ -2,6 +2,7 @@ package model
 
 import (
 	notifyv1 "common/api/notify/v1"
+	"time"
 )
 
 type Notification struct {
@@ -14,16 +15,18 @@ type Notification struct {
 	Status     notifyv1.NotificationStatus     `json:"status"`
 
 	ReceiverIds   []int64 `json:"-"` // 接收者ID
+	Title         string  `json:"-"` // 模板标题
 	Content       string  `json:"-"` // 模板内容
 	ContentRender string  `json:"-"` // 模板内容渲染结果(持久化)
 }
 
 type Meta struct {
-	AtUsernames []string     `json:"at_usernames"`
-	User        *UserMeta    `json:"user"`
-	Users       []*UserMeta  `json:"users"`
-	Article     *ArticleMeta `json:"article"`
-	Comment     *CommentMeta `json:"comment"`
+	AtUsernames        []string            `json:"at_usernames"`
+	User               *UserMeta           `json:"user"`
+	Users              []*UserMeta         `json:"users"`
+	Article            *ArticleMeta        `json:"article"`
+	Comment            *CommentMeta        `json:"comment"`
+	RegisterVerifyCode *RegisterVerifyCode `json:"register_verify_code"`
 }
 
 type UserMeta struct {
@@ -45,4 +48,11 @@ type CommentMeta struct {
 	ReplyId       *int64 `json:"reply_id"`
 	CreatedBy     int64  `json:"created_by"`
 	CreatedByName string `json:"created_by_name"`
+}
+
+type RegisterVerifyCode struct {
+	Email         string        `json:"email"`
+	Code          string        `json:"code"`
+	Expire        time.Duration `json:"expire"`
+	ExpireMinutes int           `json:"expire_minutes"`
 }

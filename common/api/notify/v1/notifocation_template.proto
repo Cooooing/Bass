@@ -53,6 +53,8 @@ message NotificationTemplate {
   int32 notification_type = 5;
   // 通知渠道
   int32 channel = 6;
+  // 模板标题
+  string title = 4;
   // 模板内容
   string content = 7;
   // 处理器链（有序执行）

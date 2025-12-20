@@ -4,6 +4,7 @@ package gen
 
 import (
 	"time"
+	"user/internal/data/ent/gen/objectstorage"
 	"user/internal/data/ent/gen/user"
 	"user/internal/data/ent/gen/userrelation"
 	"user/internal/data/ent/schema"
@@ -13,6 +14,16 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	objectstorageFields := schema.ObjectStorage{}.Fields()
+	_ = objectstorageFields
+	// objectstorageDescCreatedAt is the schema descriptor for created_at field.
+	objectstorageDescCreatedAt := objectstorageFields[11].Descriptor()
+	// objectstorage.DefaultCreatedAt holds the default value on creation for the created_at field.
+	objectstorage.DefaultCreatedAt = objectstorageDescCreatedAt.Default.(func() time.Time)
+	// objectstorageDescUpdatedAt is the schema descriptor for updated_at field.
+	objectstorageDescUpdatedAt := objectstorageFields[12].Descriptor()
+	// objectstorage.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	objectstorage.DefaultUpdatedAt = objectstorageDescUpdatedAt.Default.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.

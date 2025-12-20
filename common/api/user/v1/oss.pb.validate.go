@@ -57,6 +57,8 @@ func (m *UploadTokenRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Num
+
 	if len(errors) > 0 {
 		return UploadTokenRequestMultiError(errors)
 	}
@@ -159,7 +161,39 @@ func (m *UploadTokenReply) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Token
+	for idx, item := range m.GetUploadToken() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, UploadTokenReplyValidationError{
+						field:  fmt.Sprintf("UploadToken[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, UploadTokenReplyValidationError{
+						field:  fmt.Sprintf("UploadToken[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UploadTokenReplyValidationError{
+					field:  fmt.Sprintf("UploadToken[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	if len(errors) > 0 {
 		return UploadTokenReplyMultiError(errors)
@@ -238,3 +272,326 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UploadTokenReplyValidationError{}
+
+// Validate checks the field values on QiniuUploadCallbackRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *QiniuUploadCallbackRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QiniuUploadCallbackRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QiniuUploadCallbackRequestMultiError, or nil if none found.
+func (m *QiniuUploadCallbackRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuUploadCallbackRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Key
+
+	// no validation rules for Hash
+
+	// no validation rules for Size
+
+	// no validation rules for Bucket
+
+	// no validation rules for Name
+
+	// no validation rules for MimeType
+
+	if len(errors) > 0 {
+		return QiniuUploadCallbackRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuUploadCallbackRequestMultiError is an error wrapping multiple
+// validation errors returned by QiniuUploadCallbackRequest.ValidateAll() if
+// the designated constraints aren't met.
+type QiniuUploadCallbackRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuUploadCallbackRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuUploadCallbackRequestMultiError) AllErrors() []error { return m }
+
+// QiniuUploadCallbackRequestValidationError is the validation error returned
+// by QiniuUploadCallbackRequest.Validate if the designated constraints aren't met.
+type QiniuUploadCallbackRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuUploadCallbackRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QiniuUploadCallbackRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QiniuUploadCallbackRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QiniuUploadCallbackRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuUploadCallbackRequestValidationError) ErrorName() string {
+	return "QiniuUploadCallbackRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuUploadCallbackRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuUploadCallbackRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuUploadCallbackRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuUploadCallbackRequestValidationError{}
+
+// Validate checks the field values on QiniuUploadCallbackReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *QiniuUploadCallbackReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QiniuUploadCallbackReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// QiniuUploadCallbackReplyMultiError, or nil if none found.
+func (m *QiniuUploadCallbackReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuUploadCallbackReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return QiniuUploadCallbackReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuUploadCallbackReplyMultiError is an error wrapping multiple validation
+// errors returned by QiniuUploadCallbackReply.ValidateAll() if the designated
+// constraints aren't met.
+type QiniuUploadCallbackReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuUploadCallbackReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuUploadCallbackReplyMultiError) AllErrors() []error { return m }
+
+// QiniuUploadCallbackReplyValidationError is the validation error returned by
+// QiniuUploadCallbackReply.Validate if the designated constraints aren't met.
+type QiniuUploadCallbackReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuUploadCallbackReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QiniuUploadCallbackReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QiniuUploadCallbackReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QiniuUploadCallbackReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuUploadCallbackReplyValidationError) ErrorName() string {
+	return "QiniuUploadCallbackReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuUploadCallbackReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuUploadCallbackReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuUploadCallbackReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuUploadCallbackReplyValidationError{}
+
+// Validate checks the field values on UploadTokenReply_UploadToken with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UploadTokenReply_UploadToken) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UploadTokenReply_UploadToken with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UploadTokenReply_UploadTokenMultiError, or nil if none found.
+func (m *UploadTokenReply_UploadToken) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UploadTokenReply_UploadToken) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Key
+
+	// no validation rules for Token
+
+	if len(errors) > 0 {
+		return UploadTokenReply_UploadTokenMultiError(errors)
+	}
+
+	return nil
+}
+
+// UploadTokenReply_UploadTokenMultiError is an error wrapping multiple
+// validation errors returned by UploadTokenReply_UploadToken.ValidateAll() if
+// the designated constraints aren't met.
+type UploadTokenReply_UploadTokenMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UploadTokenReply_UploadTokenMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UploadTokenReply_UploadTokenMultiError) AllErrors() []error { return m }
+
+// UploadTokenReply_UploadTokenValidationError is the validation error returned
+// by UploadTokenReply_UploadToken.Validate if the designated constraints
+// aren't met.
+type UploadTokenReply_UploadTokenValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UploadTokenReply_UploadTokenValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UploadTokenReply_UploadTokenValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UploadTokenReply_UploadTokenValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UploadTokenReply_UploadTokenValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UploadTokenReply_UploadTokenValidationError) ErrorName() string {
+	return "UploadTokenReply_UploadTokenValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UploadTokenReply_UploadTokenValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUploadTokenReply_UploadToken.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UploadTokenReply_UploadTokenValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UploadTokenReply_UploadTokenValidationError{}

@@ -424,8 +424,10 @@ func (x *Jwt) GetEmailExpire() *durationpb.Duration {
 
 type Oss struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Local         *Oss_Local             `protobuf:"bytes,1,opt,name=local,proto3" json:"local,omitempty"`
-	Qiniu         *Oss_Qiniu             `protobuf:"bytes,2,opt,name=qiniu,proto3" json:"qiniu,omitempty"`
+	Provider      string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	Avatar        string                 `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	Qiniu         *Oss_Qiniu             `protobuf:"bytes,10,opt,name=qiniu,proto3" json:"qiniu,omitempty"`
+	Minio         *Oss_Minio             `protobuf:"bytes,11,opt,name=minio,proto3" json:"minio,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -460,16 +462,30 @@ func (*Oss) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *Oss) GetLocal() *Oss_Local {
+func (x *Oss) GetProvider() string {
 	if x != nil {
-		return x.Local
+		return x.Provider
 	}
-	return nil
+	return ""
+}
+
+func (x *Oss) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
 }
 
 func (x *Oss) GetQiniu() *Oss_Qiniu {
 	if x != nil {
 		return x.Qiniu
+	}
+	return nil
+}
+
+func (x *Oss) GetMinio() *Oss_Minio {
+	if x != nil {
+		return x.Minio
 	}
 	return nil
 }
@@ -890,63 +906,22 @@ func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
 	return nil
 }
 
-type Oss_Local struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Avatar        string                 `protobuf:"bytes,1,opt,name=avatar,proto3" json:"avatar,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Oss_Local) Reset() {
-	*x = Oss_Local{}
-	mi := &file_conf_conf_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Oss_Local) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Oss_Local) ProtoMessage() {}
-
-func (x *Oss_Local) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Oss_Local.ProtoReflect.Descriptor instead.
-func (*Oss_Local) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{6, 0}
-}
-
-func (x *Oss_Local) GetAvatar() string {
-	if x != nil {
-		return x.Avatar
-	}
-	return ""
-}
-
 type Oss_Qiniu struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AccessKey     string                 `protobuf:"bytes,1,opt,name=access_key,json=accessKey,proto3" json:"access_key,omitempty"`
 	SecretKey     string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
 	Bucket        string                 `protobuf:"bytes,3,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	SizeMin       int64                  `protobuf:"varint,5,opt,name=size_min,json=sizeMin,proto3" json:"size_min,omitempty"`
+	SizeMax       int64                  `protobuf:"varint,6,opt,name=size_max,json=sizeMax,proto3" json:"size_max,omitempty"`
+	CallbackUrl   string                 `protobuf:"bytes,7,opt,name=callback_url,json=callbackUrl,proto3" json:"callback_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Oss_Qiniu) Reset() {
 	*x = Oss_Qiniu{}
-	mi := &file_conf_conf_proto_msgTypes[14]
+	mi := &file_conf_conf_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -958,7 +933,7 @@ func (x *Oss_Qiniu) String() string {
 func (*Oss_Qiniu) ProtoMessage() {}
 
 func (x *Oss_Qiniu) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[14]
+	mi := &file_conf_conf_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -971,7 +946,7 @@ func (x *Oss_Qiniu) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Oss_Qiniu.ProtoReflect.Descriptor instead.
 func (*Oss_Qiniu) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{6, 1}
+	return file_conf_conf_proto_rawDescGZIP(), []int{6, 0}
 }
 
 func (x *Oss_Qiniu) GetAccessKey() string {
@@ -1000,6 +975,63 @@ func (x *Oss_Qiniu) GetTimeout() *durationpb.Duration {
 		return x.Timeout
 	}
 	return nil
+}
+
+func (x *Oss_Qiniu) GetSizeMin() int64 {
+	if x != nil {
+		return x.SizeMin
+	}
+	return 0
+}
+
+func (x *Oss_Qiniu) GetSizeMax() int64 {
+	if x != nil {
+		return x.SizeMax
+	}
+	return 0
+}
+
+func (x *Oss_Qiniu) GetCallbackUrl() string {
+	if x != nil {
+		return x.CallbackUrl
+	}
+	return ""
+}
+
+type Oss_Minio struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Oss_Minio) Reset() {
+	*x = Oss_Minio{}
+	mi := &file_conf_conf_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Oss_Minio) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Oss_Minio) ProtoMessage() {}
+
+func (x *Oss_Minio) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Oss_Minio.ProtoReflect.Descriptor instead.
+func (*Oss_Minio) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{6, 1}
 }
 
 var File_conf_conf_proto protoreflect.FileDescriptor
@@ -1067,19 +1099,24 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x03Jwt\x12\x16\n" +
 	"\x06secret\x18\x01 \x01(\tR\x06secret\x123\n" +
 	"\aexpires\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\aexpires\x12<\n" +
-	"\femail_expire\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vemailExpire\"\x9f\x02\n" +
-	"\x03Oss\x120\n" +
-	"\x05local\x18\x01 \x01(\v2\x1a.kratos.api.conf.Oss.LocalR\x05local\x120\n" +
-	"\x05qiniu\x18\x02 \x01(\v2\x1a.kratos.api.conf.Oss.QiniuR\x05qiniu\x1a\x1f\n" +
-	"\x05Local\x12\x16\n" +
-	"\x06avatar\x18\x01 \x01(\tR\x06avatar\x1a\x92\x01\n" +
+	"\femail_expire\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vemailExpire\"\x94\x03\n" +
+	"\x03Oss\x12\x1a\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\x12\x16\n" +
+	"\x06avatar\x18\x02 \x01(\tR\x06avatar\x120\n" +
+	"\x05qiniu\x18\n" +
+	" \x01(\v2\x1a.kratos.api.conf.Oss.QiniuR\x05qiniu\x120\n" +
+	"\x05minio\x18\v \x01(\v2\x1a.kratos.api.conf.Oss.MinioR\x05minio\x1a\xeb\x01\n" +
 	"\x05Qiniu\x12\x1d\n" +
 	"\n" +
 	"access_key\x18\x01 \x01(\tR\taccessKey\x12\x1d\n" +
 	"\n" +
 	"secret_key\x18\x02 \x01(\tR\tsecretKey\x12\x16\n" +
 	"\x06bucket\x18\x03 \x01(\tR\x06bucket\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeoutB\x1eZ\x1cuser/internal/conf/conf;confb\x06proto3"
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12\x19\n" +
+	"\bsize_min\x18\x05 \x01(\x03R\asizeMin\x12\x19\n" +
+	"\bsize_max\x18\x06 \x01(\x03R\asizeMax\x12!\n" +
+	"\fcallback_url\x18\a \x01(\tR\vcallbackUrl\x1a\a\n" +
+	"\x05MinioB\x1eZ\x1cuser/internal/conf/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once
@@ -1108,8 +1145,8 @@ var file_conf_conf_proto_goTypes = []any{
 	(*Data_Redis)(nil),          // 10: kratos.api.conf.Data.Redis
 	(*Data_RabbitMQ)(nil),       // 11: kratos.api.conf.Data.RabbitMQ
 	(*Registry_Etcd)(nil),       // 12: kratos.api.conf.Registry.Etcd
-	(*Oss_Local)(nil),           // 13: kratos.api.conf.Oss.Local
-	(*Oss_Qiniu)(nil),           // 14: kratos.api.conf.Oss.Qiniu
+	(*Oss_Qiniu)(nil),           // 13: kratos.api.conf.Oss.Qiniu
+	(*Oss_Minio)(nil),           // 14: kratos.api.conf.Oss.Minio
 	(*durationpb.Duration)(nil), // 15: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
@@ -1127,8 +1164,8 @@ var file_conf_conf_proto_depIdxs = []int32{
 	12, // 11: kratos.api.conf.Registry.etcd:type_name -> kratos.api.conf.Registry.Etcd
 	15, // 12: kratos.api.conf.Jwt.expires:type_name -> google.protobuf.Duration
 	15, // 13: kratos.api.conf.Jwt.email_expire:type_name -> google.protobuf.Duration
-	13, // 14: kratos.api.conf.Oss.local:type_name -> kratos.api.conf.Oss.Local
-	14, // 15: kratos.api.conf.Oss.qiniu:type_name -> kratos.api.conf.Oss.Qiniu
+	13, // 14: kratos.api.conf.Oss.qiniu:type_name -> kratos.api.conf.Oss.Qiniu
+	14, // 15: kratos.api.conf.Oss.minio:type_name -> kratos.api.conf.Oss.Minio
 	15, // 16: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
 	15, // 17: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
 	15, // 18: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration

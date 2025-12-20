@@ -84,15 +84,19 @@ message Jwt {
 }
 
 message Oss{
-  message Local{
-    string avatar = 1;
-  }
+  string provider = 1;
+  string avatar = 2;
   message Qiniu{
     string access_key = 1;
     string secret_key = 2;
     string bucket = 3;
     google.protobuf.Duration timeout = 4;
+    int64 size_min = 5;
+    int64 size_max = 6;
+    string callback_url = 7;
   }
-  Local local = 1;
-  Qiniu qiniu = 2;
+  Qiniu qiniu = 10;
+  message Minio{
+  }
+  Minio minio = 11;
 }

@@ -50,10 +50,15 @@ jwt:
   email_expire: 300s
 
 oss:
-  local:
-    avatar: "https://treble.sxisa.com/v1/user/avatar/%s" # /v1/user/avatar/{name}
+  provider: "qiniu"
+  avatar: "https://treble.sxisa.com/api/user/v1/user/avatar/%s" # /v1/user/avatar/{name}
+  minio:
+
   qiniu:
     access_key: "L8l6DGiYXzmx0IVT0GpIxI-Mj8LqfoIKF6iAnrWa"
     secret_key: "qY6ohp-qZEtd20NZN94o7TScg3IeEGSZe-ZRsVXW"
     bucket: "bass-test"
     timeout: 300s
+    size_min: 0  # 单位 MB
+    size_max: 20 # 单位 MB
+    callback_url: "https://treble.sxisa.com/api/user/v1/oss/qiniu/uploadCallback"

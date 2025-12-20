@@ -21,10 +21,36 @@ service UserOssService {
     };
   }
 
+  // 七牛上传回调
+  rpc QiniuUploadCallback (QiniuUploadCallbackRequest) returns (QiniuUploadCallbackReply) {
+    option (google.api.http) = {
+      post: "/v1/oss/qiniu/uploadCallback"
+      body: "*"
+    };
+  }
+
 }
 
-message UploadTokenRequest {}
-
+message UploadTokenRequest {
+  // 上传文件数量
+  int32 num = 1;
+}
 message UploadTokenReply {
-  string token = 1;
+  message UploadToken {
+    // 文件key
+    string key = 1;
+    // 上传凭证
+    string token = 2;
+  }
+  repeated UploadToken upload_token = 1;
 }
+
+message QiniuUploadCallbackRequest{
+  string key = 1;
+  string hash = 2;
+  int64 size = 3;
+  string bucket = 4;
+  string name = 5;
+  string mime_type = 6;
+}
+message QiniuUploadCallbackReply{}

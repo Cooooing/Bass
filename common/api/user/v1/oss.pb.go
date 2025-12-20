@@ -27,7 +27,9 @@ const (
 )
 
 type UploadTokenRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 上传文件数量
+	Num           int32 `protobuf:"varint,1,opt,name=num,proto3" json:"num,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -62,9 +64,16 @@ func (*UploadTokenRequest) Descriptor() ([]byte, []int) {
 	return file_user_v1_oss_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *UploadTokenRequest) GetNum() int32 {
+	if x != nil {
+		return x.Num
+	}
+	return 0
+}
+
 type UploadTokenReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	state         protoimpl.MessageState          `protogen:"open.v1"`
+	UploadToken   []*UploadTokenReply_UploadToken `protobuf:"bytes,1,rep,name=upload_token,json=uploadToken,proto3" json:"upload_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -99,7 +108,181 @@ func (*UploadTokenReply) Descriptor() ([]byte, []int) {
 	return file_user_v1_oss_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *UploadTokenReply) GetToken() string {
+func (x *UploadTokenReply) GetUploadToken() []*UploadTokenReply_UploadToken {
+	if x != nil {
+		return x.UploadToken
+	}
+	return nil
+}
+
+type QiniuUploadCallbackRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Hash          string                 `protobuf:"bytes,2,opt,name=hash,proto3" json:"hash,omitempty"`
+	Size          int64                  `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	Bucket        string                 `protobuf:"bytes,4,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	Name          string                 `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	MimeType      string                 `protobuf:"bytes,6,opt,name=mime_type,json=mimeType,proto3" json:"mime_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QiniuUploadCallbackRequest) Reset() {
+	*x = QiniuUploadCallbackRequest{}
+	mi := &file_user_v1_oss_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QiniuUploadCallbackRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QiniuUploadCallbackRequest) ProtoMessage() {}
+
+func (x *QiniuUploadCallbackRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_oss_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QiniuUploadCallbackRequest.ProtoReflect.Descriptor instead.
+func (*QiniuUploadCallbackRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_oss_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *QiniuUploadCallbackRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *QiniuUploadCallbackRequest) GetHash() string {
+	if x != nil {
+		return x.Hash
+	}
+	return ""
+}
+
+func (x *QiniuUploadCallbackRequest) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *QiniuUploadCallbackRequest) GetBucket() string {
+	if x != nil {
+		return x.Bucket
+	}
+	return ""
+}
+
+func (x *QiniuUploadCallbackRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *QiniuUploadCallbackRequest) GetMimeType() string {
+	if x != nil {
+		return x.MimeType
+	}
+	return ""
+}
+
+type QiniuUploadCallbackReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QiniuUploadCallbackReply) Reset() {
+	*x = QiniuUploadCallbackReply{}
+	mi := &file_user_v1_oss_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QiniuUploadCallbackReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QiniuUploadCallbackReply) ProtoMessage() {}
+
+func (x *QiniuUploadCallbackReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_oss_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QiniuUploadCallbackReply.ProtoReflect.Descriptor instead.
+func (*QiniuUploadCallbackReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_oss_proto_rawDescGZIP(), []int{3}
+}
+
+type UploadTokenReply_UploadToken struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 文件key
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// 上传凭证
+	Token         string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadTokenReply_UploadToken) Reset() {
+	*x = UploadTokenReply_UploadToken{}
+	mi := &file_user_v1_oss_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadTokenReply_UploadToken) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadTokenReply_UploadToken) ProtoMessage() {}
+
+func (x *UploadTokenReply_UploadToken) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_oss_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadTokenReply_UploadToken.ProtoReflect.Descriptor instead.
+func (*UploadTokenReply_UploadToken) Descriptor() ([]byte, []int) {
+	return file_user_v1_oss_proto_rawDescGZIP(), []int{1, 0}
+}
+
+func (x *UploadTokenReply_UploadToken) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *UploadTokenReply_UploadToken) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
@@ -110,12 +293,25 @@ var File_user_v1_oss_proto protoreflect.FileDescriptor
 
 const file_user_v1_oss_proto_rawDesc = "" +
 	"\n" +
-	"\x11user/v1/oss.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\x14\n" +
-	"\x12UploadTokenRequest\"(\n" +
-	"\x10UploadTokenReply\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token2\x8d\x01\n" +
+	"\x11user/v1/oss.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"&\n" +
+	"\x12UploadTokenRequest\x12\x10\n" +
+	"\x03num\x18\x01 \x01(\x05R\x03num\"\x9e\x01\n" +
+	"\x10UploadTokenReply\x12S\n" +
+	"\fupload_token\x18\x01 \x03(\v20.common.api.user.v1.UploadTokenReply.UploadTokenR\vuploadToken\x1a5\n" +
+	"\vUploadToken\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token\"\x9f\x01\n" +
+	"\x1aQiniuUploadCallbackRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n" +
+	"\x04hash\x18\x02 \x01(\tR\x04hash\x12\x12\n" +
+	"\x04size\x18\x03 \x01(\x03R\x04size\x12\x16\n" +
+	"\x06bucket\x18\x04 \x01(\tR\x06bucket\x12\x12\n" +
+	"\x04name\x18\x05 \x01(\tR\x04name\x12\x1b\n" +
+	"\tmime_type\x18\x06 \x01(\tR\bmimeType\"\x1a\n" +
+	"\x18QiniuUploadCallbackReply2\xac\x02\n" +
 	"\x0eUserOssService\x12{\n" +
-	"\vUploadToken\x12&.common.api.user.v1.UploadTokenRequest\x1a$.common.api.user.v1.UploadTokenReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/oss/uploadTokenB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\vUploadToken\x12&.common.api.user.v1.UploadTokenRequest\x1a$.common.api.user.v1.UploadTokenReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/oss/uploadToken\x12\x9c\x01\n" +
+	"\x13QiniuUploadCallback\x12..common.api.user.v1.QiniuUploadCallbackRequest\x1a,.common.api.user.v1.QiniuUploadCallbackReply\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/oss/qiniu/uploadCallbackB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_oss_proto_rawDescOnce sync.Once
@@ -129,19 +325,25 @@ func file_user_v1_oss_proto_rawDescGZIP() []byte {
 	return file_user_v1_oss_proto_rawDescData
 }
 
-var file_user_v1_oss_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_user_v1_oss_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_user_v1_oss_proto_goTypes = []any{
-	(*UploadTokenRequest)(nil), // 0: common.api.user.v1.UploadTokenRequest
-	(*UploadTokenReply)(nil),   // 1: common.api.user.v1.UploadTokenReply
+	(*UploadTokenRequest)(nil),           // 0: common.api.user.v1.UploadTokenRequest
+	(*UploadTokenReply)(nil),             // 1: common.api.user.v1.UploadTokenReply
+	(*QiniuUploadCallbackRequest)(nil),   // 2: common.api.user.v1.QiniuUploadCallbackRequest
+	(*QiniuUploadCallbackReply)(nil),     // 3: common.api.user.v1.QiniuUploadCallbackReply
+	(*UploadTokenReply_UploadToken)(nil), // 4: common.api.user.v1.UploadTokenReply.UploadToken
 }
 var file_user_v1_oss_proto_depIdxs = []int32{
-	0, // 0: common.api.user.v1.UserOssService.UploadToken:input_type -> common.api.user.v1.UploadTokenRequest
-	1, // 1: common.api.user.v1.UserOssService.UploadToken:output_type -> common.api.user.v1.UploadTokenReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	4, // 0: common.api.user.v1.UploadTokenReply.upload_token:type_name -> common.api.user.v1.UploadTokenReply.UploadToken
+	0, // 1: common.api.user.v1.UserOssService.UploadToken:input_type -> common.api.user.v1.UploadTokenRequest
+	2, // 2: common.api.user.v1.UserOssService.QiniuUploadCallback:input_type -> common.api.user.v1.QiniuUploadCallbackRequest
+	1, // 3: common.api.user.v1.UserOssService.UploadToken:output_type -> common.api.user.v1.UploadTokenReply
+	3, // 4: common.api.user.v1.UserOssService.QiniuUploadCallback:output_type -> common.api.user.v1.QiniuUploadCallbackReply
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_oss_proto_init() }
@@ -155,7 +357,7 @@ func file_user_v1_oss_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_oss_proto_rawDesc), len(file_user_v1_oss_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

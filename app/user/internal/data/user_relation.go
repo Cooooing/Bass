@@ -6,15 +6,16 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/data/base"
 	"user/internal/data/ent/gen"
 	"user/internal/data/ent/gen/userrelation"
 )
 
 type UserRelationRepo struct {
-	*BaseRepo
+	*base.BaseRepo
 }
 
-func NewUserRelationRepo(repo *BaseRepo) repo.UserRelationRepo {
+func NewUserRelationRepo(repo *base.BaseRepo) repo.UserRelationRepo {
 	return &UserRelationRepo{
 		BaseRepo: repo,
 	}

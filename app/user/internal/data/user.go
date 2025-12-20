@@ -9,15 +9,16 @@ import (
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/data/base"
 	"user/internal/data/ent/gen"
 	"user/internal/data/ent/gen/user"
 )
 
 type UserRepo struct {
-	*BaseRepo
+	*base.BaseRepo
 }
 
-func NewUserRepo(repo *BaseRepo) repo.UserRepo {
+func NewUserRepo(repo *base.BaseRepo) repo.UserRepo {
 	return &UserRepo{
 		BaseRepo: repo,
 	}
@@ -30,7 +31,7 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 		SetEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
-		SetAvatarURL(fmt.Sprintf(r.conf.Oss.Local.Avatar, u.Name))
+		SetAvatarURL(fmt.Sprintf(r.Conf.Oss.Avatar, u.Name))
 	createdUser, err := userCreate.Save(ctx)
 	return &model.User{User: createdUser}, err
 }

@@ -6,6 +6,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// ObjectStorage is the predicate function for objectstorage builders.
+type ObjectStorage func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
 

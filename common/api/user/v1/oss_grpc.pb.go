@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserOssService_UploadToken_FullMethodName = "/common.api.user.v1.UserOssService/UploadToken"
+	UserOssService_UploadToken_FullMethodName         = "/common.api.user.v1.UserOssService/UploadToken"
+	UserOssService_QiniuUploadCallback_FullMethodName = "/common.api.user.v1.UserOssService/QiniuUploadCallback"
 )
 
 // UserOssServiceClient is the client API for UserOssService service.
@@ -30,6 +31,8 @@ const (
 type UserOssServiceClient interface {
 	// 获取上传文件凭证
 	UploadToken(ctx context.Context, in *UploadTokenRequest, opts ...grpc.CallOption) (*UploadTokenReply, error)
+	// 七牛上传回调
+	QiniuUploadCallback(ctx context.Context, in *QiniuUploadCallbackRequest, opts ...grpc.CallOption) (*QiniuUploadCallbackReply, error)
 }
 
 type userOssServiceClient struct {
@@ -50,6 +53,16 @@ func (c *userOssServiceClient) UploadToken(ctx context.Context, in *UploadTokenR
 	return out, nil
 }
 
+func (c *userOssServiceClient) QiniuUploadCallback(ctx context.Context, in *QiniuUploadCallbackRequest, opts ...grpc.CallOption) (*QiniuUploadCallbackReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QiniuUploadCallbackReply)
+	err := c.cc.Invoke(ctx, UserOssService_QiniuUploadCallback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserOssServiceServer is the server API for UserOssService service.
 // All implementations must embed UnimplementedUserOssServiceServer
 // for forward compatibility.
@@ -58,6 +71,8 @@ func (c *userOssServiceClient) UploadToken(ctx context.Context, in *UploadTokenR
 type UserOssServiceServer interface {
 	// 获取上传文件凭证
 	UploadToken(context.Context, *UploadTokenRequest) (*UploadTokenReply, error)
+	// 七牛上传回调
+	QiniuUploadCallback(context.Context, *QiniuUploadCallbackRequest) (*QiniuUploadCallbackReply, error)
 	mustEmbedUnimplementedUserOssServiceServer()
 }
 
@@ -70,6 +85,9 @@ type UnimplementedUserOssServiceServer struct{}
 
 func (UnimplementedUserOssServiceServer) UploadToken(context.Context, *UploadTokenRequest) (*UploadTokenReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadToken not implemented")
+}
+func (UnimplementedUserOssServiceServer) QiniuUploadCallback(context.Context, *QiniuUploadCallbackRequest) (*QiniuUploadCallbackReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method QiniuUploadCallback not implemented")
 }
 func (UnimplementedUserOssServiceServer) mustEmbedUnimplementedUserOssServiceServer() {}
 func (UnimplementedUserOssServiceServer) testEmbeddedByValue()                        {}
@@ -110,6 +128,24 @@ func _UserOssService_UploadToken_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserOssService_QiniuUploadCallback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QiniuUploadCallbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserOssServiceServer).QiniuUploadCallback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserOssService_QiniuUploadCallback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserOssServiceServer).QiniuUploadCallback(ctx, req.(*QiniuUploadCallbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserOssService_ServiceDesc is the grpc.ServiceDesc for UserOssService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -120,6 +156,10 @@ var UserOssService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadToken",
 			Handler:    _UserOssService_UploadToken_Handler,
+		},
+		{
+			MethodName: "QiniuUploadCallback",
+			Handler:    _UserOssService_QiniuUploadCallback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

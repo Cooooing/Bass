@@ -19,9 +19,12 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationUserOssServiceQiniuUploadCallback = "/common.api.user.v1.UserOssService/QiniuUploadCallback"
 const OperationUserOssServiceUploadToken = "/common.api.user.v1.UserOssService/UploadToken"
 
 type UserOssServiceHTTPServer interface {
+	// QiniuUploadCallback 七牛上传回调
+	QiniuUploadCallback(context.Context, *QiniuUploadCallbackRequest) (*QiniuUploadCallbackReply, error)
 	// UploadToken 获取上传文件凭证
 	UploadToken(context.Context, *UploadTokenRequest) (*UploadTokenReply, error)
 }
@@ -29,6 +32,7 @@ type UserOssServiceHTTPServer interface {
 func RegisterUserOssServiceHTTPServer(s *http.Server, srv UserOssServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/oss/uploadToken", _UserOssService_UploadToken0_HTTP_Handler(srv))
+	r.POST("/v1/oss/qiniu/uploadCallback", _UserOssService_QiniuUploadCallback0_HTTP_Handler(srv))
 }
 
 func _UserOssService_UploadToken0_HTTP_Handler(srv UserOssServiceHTTPServer) func(ctx http.Context) error {
@@ -53,7 +57,31 @@ func _UserOssService_UploadToken0_HTTP_Handler(srv UserOssServiceHTTPServer) fun
 	}
 }
 
+func _UserOssService_QiniuUploadCallback0_HTTP_Handler(srv UserOssServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in QiniuUploadCallbackRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserOssServiceQiniuUploadCallback)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.QiniuUploadCallback(ctx, req.(*QiniuUploadCallbackRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*QiniuUploadCallbackReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserOssServiceHTTPClient interface {
+	// QiniuUploadCallback 七牛上传回调
+	QiniuUploadCallback(ctx context.Context, req *QiniuUploadCallbackRequest, opts ...http.CallOption) (rsp *QiniuUploadCallbackReply, err error)
 	// UploadToken 获取上传文件凭证
 	UploadToken(ctx context.Context, req *UploadTokenRequest, opts ...http.CallOption) (rsp *UploadTokenReply, err error)
 }
@@ -64,6 +92,20 @@ type UserOssServiceHTTPClientImpl struct {
 
 func NewUserOssServiceHTTPClient(client *http.Client) UserOssServiceHTTPClient {
 	return &UserOssServiceHTTPClientImpl{client}
+}
+
+// QiniuUploadCallback 七牛上传回调
+func (c *UserOssServiceHTTPClientImpl) QiniuUploadCallback(ctx context.Context, in *QiniuUploadCallbackRequest, opts ...http.CallOption) (*QiniuUploadCallbackReply, error) {
+	var out QiniuUploadCallbackReply
+	pattern := "/v1/oss/qiniu/uploadCallback"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserOssServiceQiniuUploadCallback))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // UploadToken 获取上传文件凭证

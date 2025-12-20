@@ -13,7 +13,11 @@ import (
 	"user/internal/biz"
 	"user/internal/conf"
 	"user/internal/data"
+	"user/internal/data/base"
 	"user/internal/data/client"
+	"user/internal/data/oss"
+	"user/internal/data/oss/minio"
+	"user/internal/data/oss/qiniu"
 	"user/internal/server"
 	"user/internal/service"
 )
@@ -56,7 +60,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	baseRepo := base.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	userRepo := data.NewUserRepo(baseRepo)
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
@@ -91,7 +95,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
-	ossService := service.NewOssService(baseService)
+	minioMinio := minio.NewMinio()
+	qiniuQiniu := qiniu.NewQiniu(baseRepo)
+	factory := oss.NewFactory(minioMinio, qiniuQiniu)
+	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, factory)
+	ossService := service.NewOssService(baseService, objectStorageDomain)
 	twoFactorAuthenticationDomain, err := biz.NewTwoFactorAuthenticationDomain(baseDomain, userRepo)
 	if err != nil {
 		cleanup5()

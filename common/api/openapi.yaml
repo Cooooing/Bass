@@ -798,6 +798,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.NotificationTemplateUpdateReply'
+    /v1/oss/qiniu/uploadCallback:
+        post:
+            tags:
+                - UserOssService
+            description: 七牛上传回调
+            operationId: UserOssService_QiniuUploadCallback
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.QiniuUploadCallbackRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.QiniuUploadCallbackReply'
     /v1/oss/uploadToken:
         post:
             tags:
@@ -2493,6 +2512,24 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.UserQueryParams'
                     description: 查询参数
+        common.api.user.v1.QiniuUploadCallbackReply:
+            type: object
+            properties: {}
+        common.api.user.v1.QiniuUploadCallbackRequest:
+            type: object
+            properties:
+                key:
+                    type: string
+                hash:
+                    type: string
+                size:
+                    type: string
+                bucket:
+                    type: string
+                name:
+                    type: string
+                mime_type:
+                    type: string
         common.api.user.v1.RegisterEmailReply:
             type: object
             properties:
@@ -2566,11 +2603,26 @@ components:
         common.api.user.v1.UploadTokenReply:
             type: object
             properties:
+                upload_token:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.user.v1.UploadTokenReply_UploadToken'
+        common.api.user.v1.UploadTokenReply_UploadToken:
+            type: object
+            properties:
+                key:
+                    type: string
+                    description: 文件key
                 token:
                     type: string
+                    description: 上传凭证
         common.api.user.v1.UploadTokenRequest:
             type: object
-            properties: {}
+            properties:
+                num:
+                    type: integer
+                    description: 上传文件数量
+                    format: int32
         common.api.user.v1.User:
             type: object
             properties:

@@ -9,6 +9,28 @@ import (
 )
 
 var (
+	// UserObjectStoragesColumns holds the columns for the "user_object_storages" table.
+	UserObjectStoragesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "provider", Type: field.TypeString, Comment: "OSS 提供商，如 minio/qiniu/aliyun/tencent"},
+		{Name: "bucket", Type: field.TypeString, Comment: "bucket 名称"},
+		{Name: "key", Type: field.TypeString, Comment: "对象 key"},
+		{Name: "mime_type", Type: field.TypeString, Comment: "文件 MIME 类型"},
+		{Name: "size", Type: field.TypeInt64, Comment: "文件大小（字节）"},
+		{Name: "hash", Type: field.TypeString, Comment: "文件 Hash"},
+		{Name: "blocked_reason", Type: field.TypeString, Nullable: true, Comment: "违规原因"},
+		{Name: "blocked_at", Type: field.TypeTime, Nullable: true, Comment: "违规时间"},
+		{Name: "blocked_by", Type: field.TypeInt64, Nullable: true, Comment: "违规处理人"},
+		{Name: "blocked_by_name", Type: field.TypeString, Nullable: true, Comment: "违规处理人名称"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
+	}
+	// UserObjectStoragesTable holds the schema information for the "user_object_storages" table.
+	UserObjectStoragesTable = &schema.Table{
+		Name:       "user_object_storages",
+		Columns:    UserObjectStoragesColumns,
+		PrimaryKey: []*schema.Column{UserObjectStoragesColumns[0]},
+	}
 	// UserUsersColumns holds the columns for the "user_users" table.
 	UserUsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -125,12 +147,16 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		UserObjectStoragesTable,
 		UserUsersTable,
 		UserFollowsTable,
 	}
 )
 
 func init() {
+	UserObjectStoragesTable.Annotation = &entsql.Annotation{
+		Table: "user_object_storages",
+	}
 	UserUsersTable.Annotation = &entsql.Annotation{
 		Table: "user_users",
 	}

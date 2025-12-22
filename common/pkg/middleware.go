@@ -15,6 +15,8 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/transport"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 // HttpResponseEncoder 自定义响应编码器（统一处理正常与错误返回）
@@ -38,6 +40,23 @@ func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error
 		w.WriteHeader(code)
 		res := NewResult[any](500, "Internal Server Error", nil)
 		return json.NewEncoder(w).Encode(res)
+	}
+
+	if msg, ok := data.(proto.Message); ok {
+		marshaler := protojson.MarshalOptions{
+			EmitUnpopulated: true,
+			UseProtoNames:   true,
+		}
+
+		b, err := marshaler.Marshal(msg)
+		if err != nil {
+			return err
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		result := SuccessData(json.RawMessage(b))
+		return json.NewEncoder(w).Encode(result)
 	}
 
 	if w.Header().Get("Content-Type") != "" && w.Header().Get("Content-Type") != "application/json" {

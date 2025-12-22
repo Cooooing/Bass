@@ -57,3 +57,10 @@ func (q *Qiniu) UploadToken(key string) string {
 	}
 	return putPolicy.UploadToken(mac)
 }
+
+func (q *Qiniu) Status(ctx context.Context, key string, enable bool) error {
+	mac := auth.New(q.Conf.Oss.Qiniu.AccessKey, q.Conf.Oss.Qiniu.SecretKey)
+	bucketManager := storage.NewBucketManager(mac, nil)
+	err := bucketManager.UpdateObjectStatus(q.Conf.Oss.Qiniu.Bucket, key, enable)
+	return err
+}

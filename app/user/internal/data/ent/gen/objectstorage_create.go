@@ -56,6 +56,34 @@ func (_c *ObjectStorageCreate) SetHash(v string) *ObjectStorageCreate {
 	return _c
 }
 
+// SetAuditCallbackReply sets the "audit_callback_reply" field.
+func (_c *ObjectStorageCreate) SetAuditCallbackReply(v string) *ObjectStorageCreate {
+	_c.mutation.SetAuditCallbackReply(v)
+	return _c
+}
+
+// SetNillableAuditCallbackReply sets the "audit_callback_reply" field if the given value is not nil.
+func (_c *ObjectStorageCreate) SetNillableAuditCallbackReply(v *string) *ObjectStorageCreate {
+	if v != nil {
+		_c.SetAuditCallbackReply(*v)
+	}
+	return _c
+}
+
+// SetBlocked sets the "blocked" field.
+func (_c *ObjectStorageCreate) SetBlocked(v bool) *ObjectStorageCreate {
+	_c.mutation.SetBlocked(v)
+	return _c
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_c *ObjectStorageCreate) SetNillableBlocked(v *bool) *ObjectStorageCreate {
+	if v != nil {
+		_c.SetBlocked(*v)
+	}
+	return _c
+}
+
 // SetBlockedReason sets the "blocked_reason" field.
 func (_c *ObjectStorageCreate) SetBlockedReason(v string) *ObjectStorageCreate {
 	_c.mutation.SetBlockedReason(v)
@@ -181,6 +209,10 @@ func (_c *ObjectStorageCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *ObjectStorageCreate) defaults() {
+	if _, ok := _c.mutation.Blocked(); !ok {
+		v := objectstorage.DefaultBlocked
+		_c.mutation.SetBlocked(v)
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := objectstorage.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
@@ -210,6 +242,9 @@ func (_c *ObjectStorageCreate) check() error {
 	}
 	if _, ok := _c.mutation.Hash(); !ok {
 		return &ValidationError{Name: "hash", err: errors.New(`gen: missing required field "ObjectStorage.hash"`)}
+	}
+	if _, ok := _c.mutation.Blocked(); !ok {
+		return &ValidationError{Name: "blocked", err: errors.New(`gen: missing required field "ObjectStorage.blocked"`)}
 	}
 	return nil
 }
@@ -266,6 +301,14 @@ func (_c *ObjectStorageCreate) createSpec() (*ObjectStorage, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Hash(); ok {
 		_spec.SetField(objectstorage.FieldHash, field.TypeString, value)
 		_node.Hash = value
+	}
+	if value, ok := _c.mutation.AuditCallbackReply(); ok {
+		_spec.SetField(objectstorage.FieldAuditCallbackReply, field.TypeString, value)
+		_node.AuditCallbackReply = &value
+	}
+	if value, ok := _c.mutation.Blocked(); ok {
+		_spec.SetField(objectstorage.FieldBlocked, field.TypeBool, value)
+		_node.Blocked = value
 	}
 	if value, ok := _c.mutation.BlockedReason(); ok {
 		_spec.SetField(objectstorage.FieldBlockedReason, field.TypeString, value)

@@ -29,6 +29,10 @@ type ObjectStorage struct {
 	Size int64 `json:"size,omitempty"`
 	// 文件 Hash
 	Hash string `json:"hash,omitempty"`
+	// 审核回调响应
+	AuditCallbackReply *string `json:"audit_callback_reply,omitempty"`
+	// 是否违规
+	Blocked bool `json:"blocked,omitempty"`
 	// 违规原因
 	BlockedReason *string `json:"blocked_reason,omitempty"`
 	// 违规时间
@@ -49,9 +53,11 @@ func (*ObjectStorage) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case objectstorage.FieldBlocked:
+			values[i] = new(sql.NullBool)
 		case objectstorage.FieldID, objectstorage.FieldSize, objectstorage.FieldBlockedBy:
 			values[i] = new(sql.NullInt64)
-		case objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey, objectstorage.FieldMimeType, objectstorage.FieldHash, objectstorage.FieldBlockedReason, objectstorage.FieldBlockedByName:
+		case objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey, objectstorage.FieldMimeType, objectstorage.FieldHash, objectstorage.FieldAuditCallbackReply, objectstorage.FieldBlockedReason, objectstorage.FieldBlockedByName:
 			values[i] = new(sql.NullString)
 		case objectstorage.FieldBlockedAt, objectstorage.FieldCreatedAt, objectstorage.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -111,6 +117,19 @@ func (_m *ObjectStorage) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field hash", values[i])
 			} else if value.Valid {
 				_m.Hash = value.String
+			}
+		case objectstorage.FieldAuditCallbackReply:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field audit_callback_reply", values[i])
+			} else if value.Valid {
+				_m.AuditCallbackReply = new(string)
+				*_m.AuditCallbackReply = value.String
+			}
+		case objectstorage.FieldBlocked:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field blocked", values[i])
+			} else if value.Valid {
+				_m.Blocked = value.Bool
 			}
 		case objectstorage.FieldBlockedReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -207,6 +226,14 @@ func (_m *ObjectStorage) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("hash=")
 	builder.WriteString(_m.Hash)
+	builder.WriteString(", ")
+	if v := _m.AuditCallbackReply; v != nil {
+		builder.WriteString("audit_callback_reply=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("blocked=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Blocked))
 	builder.WriteString(", ")
 	if v := _m.BlockedReason; v != nil {
 		builder.WriteString("blocked_reason=")

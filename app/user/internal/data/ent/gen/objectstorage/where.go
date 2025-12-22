@@ -84,6 +84,16 @@ func Hash(v string) predicate.ObjectStorage {
 	return predicate.ObjectStorage(sql.FieldEQ(FieldHash, v))
 }
 
+// AuditCallbackReply applies equality check predicate on the "audit_callback_reply" field. It's identical to AuditCallbackReplyEQ.
+func AuditCallbackReply(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldAuditCallbackReply, v))
+}
+
+// Blocked applies equality check predicate on the "blocked" field. It's identical to BlockedEQ.
+func Blocked(v bool) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldBlocked, v))
+}
+
 // BlockedReason applies equality check predicate on the "blocked_reason" field. It's identical to BlockedReasonEQ.
 func BlockedReason(v string) predicate.ObjectStorage {
 	return predicate.ObjectStorage(sql.FieldEQ(FieldBlockedReason, v))
@@ -477,6 +487,91 @@ func HashEqualFold(v string) predicate.ObjectStorage {
 // HashContainsFold applies the ContainsFold predicate on the "hash" field.
 func HashContainsFold(v string) predicate.ObjectStorage {
 	return predicate.ObjectStorage(sql.FieldContainsFold(FieldHash, v))
+}
+
+// AuditCallbackReplyEQ applies the EQ predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyEQ(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyNEQ applies the NEQ predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyNEQ(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNEQ(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyIn applies the In predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyIn(vs ...string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldIn(FieldAuditCallbackReply, vs...))
+}
+
+// AuditCallbackReplyNotIn applies the NotIn predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyNotIn(vs ...string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNotIn(FieldAuditCallbackReply, vs...))
+}
+
+// AuditCallbackReplyGT applies the GT predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyGT(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldGT(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyGTE applies the GTE predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyGTE(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldGTE(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyLT applies the LT predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyLT(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldLT(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyLTE applies the LTE predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyLTE(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldLTE(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyContains applies the Contains predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyContains(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldContains(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyHasPrefix applies the HasPrefix predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyHasPrefix(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldHasPrefix(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyHasSuffix applies the HasSuffix predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyHasSuffix(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldHasSuffix(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyIsNil applies the IsNil predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyIsNil() predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldIsNull(FieldAuditCallbackReply))
+}
+
+// AuditCallbackReplyNotNil applies the NotNil predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyNotNil() predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNotNull(FieldAuditCallbackReply))
+}
+
+// AuditCallbackReplyEqualFold applies the EqualFold predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyEqualFold(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEqualFold(FieldAuditCallbackReply, v))
+}
+
+// AuditCallbackReplyContainsFold applies the ContainsFold predicate on the "audit_callback_reply" field.
+func AuditCallbackReplyContainsFold(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldContainsFold(FieldAuditCallbackReply, v))
+}
+
+// BlockedEQ applies the EQ predicate on the "blocked" field.
+func BlockedEQ(v bool) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldBlocked, v))
+}
+
+// BlockedNEQ applies the NEQ predicate on the "blocked" field.
+func BlockedNEQ(v bool) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNEQ(FieldBlocked, v))
 }
 
 // BlockedReasonEQ applies the EQ predicate on the "blocked_reason" field.

@@ -506,3 +506,110 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Int32RangeValidationError{}
+
+// Validate checks the field values on Int64Range with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Int64Range) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Int64Range with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in Int64RangeMultiError, or
+// nil if none found.
+func (m *Int64Range) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Int64Range) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Start != nil {
+		// no validation rules for Start
+	}
+
+	if m.End != nil {
+		// no validation rules for End
+	}
+
+	if len(errors) > 0 {
+		return Int64RangeMultiError(errors)
+	}
+
+	return nil
+}
+
+// Int64RangeMultiError is an error wrapping multiple validation errors
+// returned by Int64Range.ValidateAll() if the designated constraints aren't met.
+type Int64RangeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Int64RangeMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Int64RangeMultiError) AllErrors() []error { return m }
+
+// Int64RangeValidationError is the validation error returned by
+// Int64Range.Validate if the designated constraints aren't met.
+type Int64RangeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Int64RangeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Int64RangeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Int64RangeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Int64RangeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Int64RangeValidationError) ErrorName() string { return "Int64RangeValidationError" }
+
+// Error satisfies the builtin error interface
+func (e Int64RangeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInt64Range.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Int64RangeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Int64RangeValidationError{}

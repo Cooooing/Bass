@@ -15,7 +15,7 @@ var ProviderSet = wire.NewSet(
 )
 
 type Factory struct {
-	providers map[string]repo.ObjectStorageRepo
+	providers map[string]repo.ObjectStorageProvider
 }
 
 func NewFactory(
@@ -23,13 +23,13 @@ func NewFactory(
 	qiniu *qiniu.Qiniu,
 ) *Factory {
 	return &Factory{
-		providers: map[string]repo.ObjectStorageRepo{
+		providers: map[string]repo.ObjectStorageProvider{
 			minio.Name(): minio,
 			qiniu.Name(): qiniu,
 		},
 	}
 }
 
-func (f *Factory) Get(name string) repo.ObjectStorageRepo {
+func (f *Factory) Get(name string) repo.ObjectStorageProvider {
 	return f.providers[name]
 }

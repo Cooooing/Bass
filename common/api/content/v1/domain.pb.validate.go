@@ -398,6 +398,35 @@ func (m *DomainQueryParams) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetTagCount()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DomainQueryParamsValidationError{
+					field:  "TagCount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DomainQueryParamsValidationError{
+					field:  "TagCount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTagCount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DomainQueryParamsValidationError{
+				field:  "TagCount",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.Name != nil {
 		// no validation rules for Name
 	}
@@ -420,39 +449,6 @@ func (m *DomainQueryParams) validate(all bool) error {
 
 	if m.IsNav != nil {
 		// no validation rules for IsNav
-	}
-
-	if m.TagCount != nil {
-
-		if all {
-			switch v := interface{}(m.GetTagCount()).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, DomainQueryParamsValidationError{
-						field:  "TagCount",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, DomainQueryParamsValidationError{
-						field:  "TagCount",
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(m.GetTagCount()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return DomainQueryParamsValidationError{
-					field:  "TagCount",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
 	}
 
 	if len(errors) > 0 {

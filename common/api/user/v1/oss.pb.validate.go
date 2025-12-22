@@ -35,6 +35,376 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on Oss with the rules defined in the proto
+// definition for this message. If any rules are violated, the first error
+// encountered is returned, or nil if there are no violations.
+func (m *Oss) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Oss with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in OssMultiError, or nil if none found.
+func (m *Oss) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Oss) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OssValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OssValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OssValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OssValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OssValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OssValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Id
+
+	// no validation rules for Provider
+
+	// no validation rules for Bucket
+
+	// no validation rules for Key
+
+	// no validation rules for MimeType
+
+	// no validation rules for Size
+
+	// no validation rules for Hash
+
+	// no validation rules for Blocked
+
+	if all {
+		switch v := interface{}(m.GetBlockedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OssValidationError{
+					field:  "BlockedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OssValidationError{
+					field:  "BlockedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBlockedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OssValidationError{
+				field:  "BlockedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.AuditCallbackReply != nil {
+		// no validation rules for AuditCallbackReply
+	}
+
+	if m.BlockedReason != nil {
+		// no validation rules for BlockedReason
+	}
+
+	if m.BlockedBy != nil {
+		// no validation rules for BlockedBy
+	}
+
+	if m.BlockedByName != nil {
+		// no validation rules for BlockedByName
+	}
+
+	if len(errors) > 0 {
+		return OssMultiError(errors)
+	}
+
+	return nil
+}
+
+// OssMultiError is an error wrapping multiple validation errors returned by
+// Oss.ValidateAll() if the designated constraints aren't met.
+type OssMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OssMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OssMultiError) AllErrors() []error { return m }
+
+// OssValidationError is the validation error returned by Oss.Validate if the
+// designated constraints aren't met.
+type OssValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OssValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OssValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OssValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OssValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OssValidationError) ErrorName() string { return "OssValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OssValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOss.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OssValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OssValidationError{}
+
+// Validate checks the field values on OssQueryParams with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *OssQueryParams) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OssQueryParams with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in OssQueryParamsMultiError,
+// or nil if none found.
+func (m *OssQueryParams) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OssQueryParams) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetSize()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OssQueryParamsValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OssQueryParamsValidationError{
+					field:  "Size",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSize()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OssQueryParamsValidationError{
+				field:  "Size",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.Provider != nil {
+		// no validation rules for Provider
+	}
+
+	if m.Bucket != nil {
+		// no validation rules for Bucket
+	}
+
+	if m.Key != nil {
+		// no validation rules for Key
+	}
+
+	if m.MimeType != nil {
+		// no validation rules for MimeType
+	}
+
+	if m.Blocked != nil {
+		// no validation rules for Blocked
+	}
+
+	if m.BlockedByName != nil {
+		// no validation rules for BlockedByName
+	}
+
+	if len(errors) > 0 {
+		return OssQueryParamsMultiError(errors)
+	}
+
+	return nil
+}
+
+// OssQueryParamsMultiError is an error wrapping multiple validation errors
+// returned by OssQueryParams.ValidateAll() if the designated constraints
+// aren't met.
+type OssQueryParamsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OssQueryParamsMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OssQueryParamsMultiError) AllErrors() []error { return m }
+
+// OssQueryParamsValidationError is the validation error returned by
+// OssQueryParams.Validate if the designated constraints aren't met.
+type OssQueryParamsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OssQueryParamsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OssQueryParamsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OssQueryParamsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OssQueryParamsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OssQueryParamsValidationError) ErrorName() string { return "OssQueryParamsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OssQueryParamsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOssQueryParams.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OssQueryParamsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OssQueryParamsValidationError{}
+
 // Validate checks the field values on UploadTokenRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -273,6 +643,532 @@ var _ interface {
 	ErrorName() string
 } = UploadTokenReplyValidationError{}
 
+// Validate checks the field values on AuditRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *AuditRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AuditRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in AuditRequestMultiError, or
+// nil if none found.
+func (m *AuditRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AuditRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Key
+
+	// no validation rules for Status
+
+	if m.Reason != nil {
+		// no validation rules for Reason
+	}
+
+	if len(errors) > 0 {
+		return AuditRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// AuditRequestMultiError is an error wrapping multiple validation errors
+// returned by AuditRequest.ValidateAll() if the designated constraints aren't met.
+type AuditRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AuditRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AuditRequestMultiError) AllErrors() []error { return m }
+
+// AuditRequestValidationError is the validation error returned by
+// AuditRequest.Validate if the designated constraints aren't met.
+type AuditRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AuditRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AuditRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AuditRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AuditRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AuditRequestValidationError) ErrorName() string { return "AuditRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AuditRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAuditRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AuditRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AuditRequestValidationError{}
+
+// Validate checks the field values on AuditReply with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *AuditReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AuditReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in AuditReplyMultiError, or
+// nil if none found.
+func (m *AuditReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AuditReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return AuditReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// AuditReplyMultiError is an error wrapping multiple validation errors
+// returned by AuditReply.ValidateAll() if the designated constraints aren't met.
+type AuditReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AuditReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AuditReplyMultiError) AllErrors() []error { return m }
+
+// AuditReplyValidationError is the validation error returned by
+// AuditReply.Validate if the designated constraints aren't met.
+type AuditReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AuditReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AuditReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AuditReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AuditReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AuditReplyValidationError) ErrorName() string { return "AuditReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AuditReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAuditReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AuditReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AuditReplyValidationError{}
+
+// Validate checks the field values on PageOssRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PageOssRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageOssRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PageOssRequestMultiError,
+// or nil if none found.
+func (m *PageOssRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageOssRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageOssRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageOssRequestValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageOssRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetQuery()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageOssRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageOssRequestValidationError{
+					field:  "Query",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuery()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageOssRequestValidationError{
+				field:  "Query",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return PageOssRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageOssRequestMultiError is an error wrapping multiple validation errors
+// returned by PageOssRequest.ValidateAll() if the designated constraints
+// aren't met.
+type PageOssRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageOssRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageOssRequestMultiError) AllErrors() []error { return m }
+
+// PageOssRequestValidationError is the validation error returned by
+// PageOssRequest.Validate if the designated constraints aren't met.
+type PageOssRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageOssRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageOssRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageOssRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageOssRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageOssRequestValidationError) ErrorName() string { return "PageOssRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageOssRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageOssRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageOssRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageOssRequestValidationError{}
+
+// Validate checks the field values on PageOssReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PageOssReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageOssReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PageOssReplyMultiError, or
+// nil if none found.
+func (m *PageOssReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageOssReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PageOssReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PageOssReplyValidationError{
+					field:  "Page",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PageOssReplyValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetRows() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PageOssReplyValidationError{
+						field:  fmt.Sprintf("Rows[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PageOssReplyValidationError{
+						field:  fmt.Sprintf("Rows[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PageOssReplyValidationError{
+					field:  fmt.Sprintf("Rows[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return PageOssReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageOssReplyMultiError is an error wrapping multiple validation errors
+// returned by PageOssReply.ValidateAll() if the designated constraints aren't met.
+type PageOssReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageOssReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageOssReplyMultiError) AllErrors() []error { return m }
+
+// PageOssReplyValidationError is the validation error returned by
+// PageOssReply.Validate if the designated constraints aren't met.
+type PageOssReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageOssReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageOssReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageOssReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageOssReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageOssReplyValidationError) ErrorName() string { return "PageOssReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PageOssReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageOssReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageOssReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageOssReplyValidationError{}
+
 // Validate checks the field values on QiniuUploadCallbackRequest with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -489,6 +1385,264 @@ var _ interface {
 	ErrorName() string
 } = QiniuUploadCallbackReplyValidationError{}
 
+// Validate checks the field values on QiniuIncrementAuditCallbackRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *QiniuIncrementAuditCallbackRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QiniuIncrementAuditCallbackRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// QiniuIncrementAuditCallbackRequestMultiError, or nil if none found.
+func (m *QiniuIncrementAuditCallbackRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuIncrementAuditCallbackRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Pipeline
+
+	// no validation rules for Code
+
+	// no validation rules for Desc
+
+	// no validation rules for Reqid
+
+	// no validation rules for InputBucket
+
+	// no validation rules for InputKey
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, QiniuIncrementAuditCallbackRequestValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, QiniuIncrementAuditCallbackRequestValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return QiniuIncrementAuditCallbackRequestValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return QiniuIncrementAuditCallbackRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuIncrementAuditCallbackRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// QiniuIncrementAuditCallbackRequest.ValidateAll() if the designated
+// constraints aren't met.
+type QiniuIncrementAuditCallbackRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuIncrementAuditCallbackRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuIncrementAuditCallbackRequestMultiError) AllErrors() []error { return m }
+
+// QiniuIncrementAuditCallbackRequestValidationError is the validation error
+// returned by QiniuIncrementAuditCallbackRequest.Validate if the designated
+// constraints aren't met.
+type QiniuIncrementAuditCallbackRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuIncrementAuditCallbackRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QiniuIncrementAuditCallbackRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QiniuIncrementAuditCallbackRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QiniuIncrementAuditCallbackRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuIncrementAuditCallbackRequestValidationError) ErrorName() string {
+	return "QiniuIncrementAuditCallbackRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuIncrementAuditCallbackRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuIncrementAuditCallbackRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuIncrementAuditCallbackRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuIncrementAuditCallbackRequestValidationError{}
+
+// Validate checks the field values on QiniuIncrementAuditCallbackReply with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *QiniuIncrementAuditCallbackReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on QiniuIncrementAuditCallbackReply with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// QiniuIncrementAuditCallbackReplyMultiError, or nil if none found.
+func (m *QiniuIncrementAuditCallbackReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuIncrementAuditCallbackReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return QiniuIncrementAuditCallbackReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuIncrementAuditCallbackReplyMultiError is an error wrapping multiple
+// validation errors returned by
+// QiniuIncrementAuditCallbackReply.ValidateAll() if the designated
+// constraints aren't met.
+type QiniuIncrementAuditCallbackReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuIncrementAuditCallbackReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuIncrementAuditCallbackReplyMultiError) AllErrors() []error { return m }
+
+// QiniuIncrementAuditCallbackReplyValidationError is the validation error
+// returned by QiniuIncrementAuditCallbackReply.Validate if the designated
+// constraints aren't met.
+type QiniuIncrementAuditCallbackReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuIncrementAuditCallbackReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QiniuIncrementAuditCallbackReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QiniuIncrementAuditCallbackReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QiniuIncrementAuditCallbackReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuIncrementAuditCallbackReplyValidationError) ErrorName() string {
+	return "QiniuIncrementAuditCallbackReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuIncrementAuditCallbackReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuIncrementAuditCallbackReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuIncrementAuditCallbackReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuIncrementAuditCallbackReplyValidationError{}
+
 // Validate checks the field values on UploadTokenReply_UploadToken with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -595,3 +1749,435 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UploadTokenReply_UploadTokenValidationError{}
+
+// Validate checks the field values on QiniuIncrementAuditCallbackRequest_Item
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *QiniuIncrementAuditCallbackRequest_Item) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// QiniuIncrementAuditCallbackRequest_Item with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
+// QiniuIncrementAuditCallbackRequest_ItemMultiError, or nil if none found.
+func (m *QiniuIncrementAuditCallbackRequest_Item) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuIncrementAuditCallbackRequest_Item) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Cmd
+
+	// no validation rules for Code
+
+	// no validation rules for Desc
+
+	if all {
+		switch v := interface{}(m.GetResult()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QiniuIncrementAuditCallbackRequest_ItemValidationError{
+					field:  "Result",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QiniuIncrementAuditCallbackRequest_ItemValidationError{
+					field:  "Result",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetResult()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QiniuIncrementAuditCallbackRequest_ItemValidationError{
+				field:  "Result",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for ReturnOld
+
+	if len(errors) > 0 {
+		return QiniuIncrementAuditCallbackRequest_ItemMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuIncrementAuditCallbackRequest_ItemMultiError is an error wrapping
+// multiple validation errors returned by
+// QiniuIncrementAuditCallbackRequest_Item.ValidateAll() if the designated
+// constraints aren't met.
+type QiniuIncrementAuditCallbackRequest_ItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuIncrementAuditCallbackRequest_ItemMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuIncrementAuditCallbackRequest_ItemMultiError) AllErrors() []error { return m }
+
+// QiniuIncrementAuditCallbackRequest_ItemValidationError is the validation
+// error returned by QiniuIncrementAuditCallbackRequest_Item.Validate if the
+// designated constraints aren't met.
+type QiniuIncrementAuditCallbackRequest_ItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuIncrementAuditCallbackRequest_ItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QiniuIncrementAuditCallbackRequest_ItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e QiniuIncrementAuditCallbackRequest_ItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QiniuIncrementAuditCallbackRequest_ItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuIncrementAuditCallbackRequest_ItemValidationError) ErrorName() string {
+	return "QiniuIncrementAuditCallbackRequest_ItemValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuIncrementAuditCallbackRequest_ItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuIncrementAuditCallbackRequest_Item.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuIncrementAuditCallbackRequest_ItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuIncrementAuditCallbackRequest_ItemValidationError{}
+
+// Validate checks the field values on
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapper with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *QiniuIncrementAuditCallbackRequest_ItemResultWrapper) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapper with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapperMultiError, or nil if
+// none found.
+func (m *QiniuIncrementAuditCallbackRequest_ItemResultWrapper) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuIncrementAuditCallbackRequest_ItemResultWrapper) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Disable
+
+	if all {
+		switch v := interface{}(m.GetResult()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError{
+					field:  "Result",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError{
+					field:  "Result",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetResult()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError{
+				field:  "Result",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return QiniuIncrementAuditCallbackRequest_ItemResultWrapperMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapperMultiError is an error
+// wrapping multiple validation errors returned by
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapper.ValidateAll() if the
+// designated constraints aren't met.
+type QiniuIncrementAuditCallbackRequest_ItemResultWrapperMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuIncrementAuditCallbackRequest_ItemResultWrapperMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuIncrementAuditCallbackRequest_ItemResultWrapperMultiError) AllErrors() []error { return m }
+
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError is the
+// validation error returned by
+// QiniuIncrementAuditCallbackRequest_ItemResultWrapper.Validate if the
+// designated constraints aren't met.
+type QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError) Cause() error {
+	return e.cause
+}
+
+// Key function returns key value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError) ErrorName() string {
+	return "QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuIncrementAuditCallbackRequest_ItemResultWrapper.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuIncrementAuditCallbackRequest_ItemResultWrapperValidationError{}
+
+// Validate checks the field values on
+// QiniuIncrementAuditCallbackRequest_ItemResult with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *QiniuIncrementAuditCallbackRequest_ItemResult) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// QiniuIncrementAuditCallbackRequest_ItemResult with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in
+// QiniuIncrementAuditCallbackRequest_ItemResultMultiError, or nil if none found.
+func (m *QiniuIncrementAuditCallbackRequest_ItemResult) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *QiniuIncrementAuditCallbackRequest_ItemResult) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Message
+
+	if all {
+		switch v := interface{}(m.GetScenes()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, QiniuIncrementAuditCallbackRequest_ItemResultValidationError{
+					field:  "Scenes",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, QiniuIncrementAuditCallbackRequest_ItemResultValidationError{
+					field:  "Scenes",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetScenes()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return QiniuIncrementAuditCallbackRequest_ItemResultValidationError{
+				field:  "Scenes",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Suggestion
+
+	if len(errors) > 0 {
+		return QiniuIncrementAuditCallbackRequest_ItemResultMultiError(errors)
+	}
+
+	return nil
+}
+
+// QiniuIncrementAuditCallbackRequest_ItemResultMultiError is an error wrapping
+// multiple validation errors returned by
+// QiniuIncrementAuditCallbackRequest_ItemResult.ValidateAll() if the
+// designated constraints aren't met.
+type QiniuIncrementAuditCallbackRequest_ItemResultMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m QiniuIncrementAuditCallbackRequest_ItemResultMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m QiniuIncrementAuditCallbackRequest_ItemResultMultiError) AllErrors() []error { return m }
+
+// QiniuIncrementAuditCallbackRequest_ItemResultValidationError is the
+// validation error returned by
+// QiniuIncrementAuditCallbackRequest_ItemResult.Validate if the designated
+// constraints aren't met.
+type QiniuIncrementAuditCallbackRequest_ItemResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e QiniuIncrementAuditCallbackRequest_ItemResultValidationError) ErrorName() string {
+	return "QiniuIncrementAuditCallbackRequest_ItemResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e QiniuIncrementAuditCallbackRequest_ItemResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sQiniuIncrementAuditCallbackRequest_ItemResult.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = QiniuIncrementAuditCallbackRequest_ItemResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = QiniuIncrementAuditCallbackRequest_ItemResultValidationError{}

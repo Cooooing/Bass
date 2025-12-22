@@ -27,3 +27,8 @@ func (m *Minio) UploadToken(key string) string {
 	//TODO implement me
 	panic("implement me")
 }
+
+func (m *Minio) Status(ctx context.Context, key string, enable bool) error {
+	//TODO implement me
+	panic("implement me")
+}

@@ -94,6 +94,8 @@ message Oss{
     int64 size_min = 5;
     int64 size_max = 6;
     string callback_url = 7;
+    bool increment_audit = 8;
+    string increment_audit_callback_url = 9;
   }
   Qiniu qiniu = 10;
   message Minio{

@@ -25,6 +25,10 @@ const (
 	FieldSize = "size"
 	// FieldHash holds the string denoting the hash field in the database.
 	FieldHash = "hash"
+	// FieldAuditCallbackReply holds the string denoting the audit_callback_reply field in the database.
+	FieldAuditCallbackReply = "audit_callback_reply"
+	// FieldBlocked holds the string denoting the blocked field in the database.
+	FieldBlocked = "blocked"
 	// FieldBlockedReason holds the string denoting the blocked_reason field in the database.
 	FieldBlockedReason = "blocked_reason"
 	// FieldBlockedAt holds the string denoting the blocked_at field in the database.
@@ -50,6 +54,8 @@ var Columns = []string{
 	FieldMimeType,
 	FieldSize,
 	FieldHash,
+	FieldAuditCallbackReply,
+	FieldBlocked,
 	FieldBlockedReason,
 	FieldBlockedAt,
 	FieldBlockedBy,
@@ -69,6 +75,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultBlocked holds the default value on creation for the "blocked" field.
+	DefaultBlocked bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -111,6 +119,16 @@ func BySize(opts ...sql.OrderTermOption) OrderOption {
 // ByHash orders the results by the hash field.
 func ByHash(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHash, opts...).ToFunc()
+}
+
+// ByAuditCallbackReply orders the results by the audit_callback_reply field.
+func ByAuditCallbackReply(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditCallbackReply, opts...).ToFunc()
+}
+
+// ByBlocked orders the results by the blocked field.
+func ByBlocked(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBlocked, opts...).ToFunc()
 }
 
 // ByBlockedReason orders the results by the blocked_reason field.

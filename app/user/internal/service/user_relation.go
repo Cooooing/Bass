@@ -71,6 +71,9 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 		Type:       (*v1.UserRelationType)(req.Query.Type),
 		WithTarget: true,
 	})
+	if err != nil {
+		return nil, err
+	}
 	return &v1.PageUserRelationReply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(userRelations),

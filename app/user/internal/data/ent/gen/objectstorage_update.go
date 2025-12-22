@@ -119,6 +119,40 @@ func (_u *ObjectStorageUpdate) SetNillableHash(v *string) *ObjectStorageUpdate {
 	return _u
 }
 
+// SetAuditCallbackReply sets the "audit_callback_reply" field.
+func (_u *ObjectStorageUpdate) SetAuditCallbackReply(v string) *ObjectStorageUpdate {
+	_u.mutation.SetAuditCallbackReply(v)
+	return _u
+}
+
+// SetNillableAuditCallbackReply sets the "audit_callback_reply" field if the given value is not nil.
+func (_u *ObjectStorageUpdate) SetNillableAuditCallbackReply(v *string) *ObjectStorageUpdate {
+	if v != nil {
+		_u.SetAuditCallbackReply(*v)
+	}
+	return _u
+}
+
+// ClearAuditCallbackReply clears the value of the "audit_callback_reply" field.
+func (_u *ObjectStorageUpdate) ClearAuditCallbackReply() *ObjectStorageUpdate {
+	_u.mutation.ClearAuditCallbackReply()
+	return _u
+}
+
+// SetBlocked sets the "blocked" field.
+func (_u *ObjectStorageUpdate) SetBlocked(v bool) *ObjectStorageUpdate {
+	_u.mutation.SetBlocked(v)
+	return _u
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_u *ObjectStorageUpdate) SetNillableBlocked(v *bool) *ObjectStorageUpdate {
+	if v != nil {
+		_u.SetBlocked(*v)
+	}
+	return _u
+}
+
 // SetBlockedReason sets the "blocked_reason" field.
 func (_u *ObjectStorageUpdate) SetBlockedReason(v string) *ObjectStorageUpdate {
 	_u.mutation.SetBlockedReason(v)
@@ -308,6 +342,15 @@ func (_u *ObjectStorageUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if value, ok := _u.mutation.Hash(); ok {
 		_spec.SetField(objectstorage.FieldHash, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.AuditCallbackReply(); ok {
+		_spec.SetField(objectstorage.FieldAuditCallbackReply, field.TypeString, value)
+	}
+	if _u.mutation.AuditCallbackReplyCleared() {
+		_spec.ClearField(objectstorage.FieldAuditCallbackReply, field.TypeString)
+	}
+	if value, ok := _u.mutation.Blocked(); ok {
+		_spec.SetField(objectstorage.FieldBlocked, field.TypeBool, value)
+	}
 	if value, ok := _u.mutation.BlockedReason(); ok {
 		_spec.SetField(objectstorage.FieldBlockedReason, field.TypeString, value)
 	}
@@ -454,6 +497,40 @@ func (_u *ObjectStorageUpdateOne) SetHash(v string) *ObjectStorageUpdateOne {
 func (_u *ObjectStorageUpdateOne) SetNillableHash(v *string) *ObjectStorageUpdateOne {
 	if v != nil {
 		_u.SetHash(*v)
+	}
+	return _u
+}
+
+// SetAuditCallbackReply sets the "audit_callback_reply" field.
+func (_u *ObjectStorageUpdateOne) SetAuditCallbackReply(v string) *ObjectStorageUpdateOne {
+	_u.mutation.SetAuditCallbackReply(v)
+	return _u
+}
+
+// SetNillableAuditCallbackReply sets the "audit_callback_reply" field if the given value is not nil.
+func (_u *ObjectStorageUpdateOne) SetNillableAuditCallbackReply(v *string) *ObjectStorageUpdateOne {
+	if v != nil {
+		_u.SetAuditCallbackReply(*v)
+	}
+	return _u
+}
+
+// ClearAuditCallbackReply clears the value of the "audit_callback_reply" field.
+func (_u *ObjectStorageUpdateOne) ClearAuditCallbackReply() *ObjectStorageUpdateOne {
+	_u.mutation.ClearAuditCallbackReply()
+	return _u
+}
+
+// SetBlocked sets the "blocked" field.
+func (_u *ObjectStorageUpdateOne) SetBlocked(v bool) *ObjectStorageUpdateOne {
+	_u.mutation.SetBlocked(v)
+	return _u
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_u *ObjectStorageUpdateOne) SetNillableBlocked(v *bool) *ObjectStorageUpdateOne {
+	if v != nil {
+		_u.SetBlocked(*v)
 	}
 	return _u
 }
@@ -676,6 +753,15 @@ func (_u *ObjectStorageUpdateOne) sqlSave(ctx context.Context) (_node *ObjectSto
 	}
 	if value, ok := _u.mutation.Hash(); ok {
 		_spec.SetField(objectstorage.FieldHash, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AuditCallbackReply(); ok {
+		_spec.SetField(objectstorage.FieldAuditCallbackReply, field.TypeString, value)
+	}
+	if _u.mutation.AuditCallbackReplyCleared() {
+		_spec.ClearField(objectstorage.FieldAuditCallbackReply, field.TypeString)
+	}
+	if value, ok := _u.mutation.Blocked(); ok {
+		_spec.SetField(objectstorage.FieldBlocked, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.BlockedReason(); ok {
 		_spec.SetField(objectstorage.FieldBlockedReason, field.TypeString, value)

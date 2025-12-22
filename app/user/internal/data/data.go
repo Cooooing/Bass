@@ -26,6 +26,7 @@ var DataProviderSet = wire.NewSet(
 
 	NewUserRepo,
 	NewUserRelationRepo,
+	NewObjectStorageRepo,
 )
 
 func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {

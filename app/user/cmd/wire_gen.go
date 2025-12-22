@@ -95,10 +95,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
+	objectStorageRepo := data.NewObjectStorageRepo(baseRepo)
 	minioMinio := minio.NewMinio()
 	qiniuQiniu := qiniu.NewQiniu(baseRepo)
 	factory := oss.NewFactory(minioMinio, qiniuQiniu)
-	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, factory)
+	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
 	ossService := service.NewOssService(baseService, objectStorageDomain)
 	twoFactorAuthenticationDomain, err := biz.NewTwoFactorAuthenticationDomain(baseDomain, userRepo)
 	if err != nil {

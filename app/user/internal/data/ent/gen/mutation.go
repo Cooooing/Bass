@@ -34,27 +34,29 @@ const (
 // ObjectStorageMutation represents an operation that mutates the ObjectStorage nodes in the graph.
 type ObjectStorageMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int64
-	provider        *string
-	bucket          *string
-	key             *string
-	mime_type       *string
-	size            *int64
-	addsize         *int64
-	hash            *string
-	blocked_reason  *string
-	blocked_at      *time.Time
-	blocked_by      *int64
-	addblocked_by   *int64
-	blocked_by_name *string
-	created_at      *time.Time
-	updated_at      *time.Time
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*ObjectStorage, error)
-	predicates      []predicate.ObjectStorage
+	op                   Op
+	typ                  string
+	id                   *int64
+	provider             *string
+	bucket               *string
+	key                  *string
+	mime_type            *string
+	size                 *int64
+	addsize              *int64
+	hash                 *string
+	audit_callback_reply *string
+	blocked              *bool
+	blocked_reason       *string
+	blocked_at           *time.Time
+	blocked_by           *int64
+	addblocked_by        *int64
+	blocked_by_name      *string
+	created_at           *time.Time
+	updated_at           *time.Time
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ObjectStorage, error)
+	predicates           []predicate.ObjectStorage
 }
 
 var _ ent.Mutation = (*ObjectStorageMutation)(nil)
@@ -395,6 +397,91 @@ func (m *ObjectStorageMutation) OldHash(ctx context.Context) (v string, err erro
 // ResetHash resets all changes to the "hash" field.
 func (m *ObjectStorageMutation) ResetHash() {
 	m.hash = nil
+}
+
+// SetAuditCallbackReply sets the "audit_callback_reply" field.
+func (m *ObjectStorageMutation) SetAuditCallbackReply(s string) {
+	m.audit_callback_reply = &s
+}
+
+// AuditCallbackReply returns the value of the "audit_callback_reply" field in the mutation.
+func (m *ObjectStorageMutation) AuditCallbackReply() (r string, exists bool) {
+	v := m.audit_callback_reply
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditCallbackReply returns the old "audit_callback_reply" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldAuditCallbackReply(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditCallbackReply is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditCallbackReply requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditCallbackReply: %w", err)
+	}
+	return oldValue.AuditCallbackReply, nil
+}
+
+// ClearAuditCallbackReply clears the value of the "audit_callback_reply" field.
+func (m *ObjectStorageMutation) ClearAuditCallbackReply() {
+	m.audit_callback_reply = nil
+	m.clearedFields[objectstorage.FieldAuditCallbackReply] = struct{}{}
+}
+
+// AuditCallbackReplyCleared returns if the "audit_callback_reply" field was cleared in this mutation.
+func (m *ObjectStorageMutation) AuditCallbackReplyCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldAuditCallbackReply]
+	return ok
+}
+
+// ResetAuditCallbackReply resets all changes to the "audit_callback_reply" field.
+func (m *ObjectStorageMutation) ResetAuditCallbackReply() {
+	m.audit_callback_reply = nil
+	delete(m.clearedFields, objectstorage.FieldAuditCallbackReply)
+}
+
+// SetBlocked sets the "blocked" field.
+func (m *ObjectStorageMutation) SetBlocked(b bool) {
+	m.blocked = &b
+}
+
+// Blocked returns the value of the "blocked" field in the mutation.
+func (m *ObjectStorageMutation) Blocked() (r bool, exists bool) {
+	v := m.blocked
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlocked returns the old "blocked" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBlocked(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlocked is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlocked requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlocked: %w", err)
+	}
+	return oldValue.Blocked, nil
+}
+
+// ResetBlocked resets all changes to the "blocked" field.
+func (m *ObjectStorageMutation) ResetBlocked() {
+	m.blocked = nil
 }
 
 // SetBlockedReason sets the "blocked_reason" field.
@@ -746,7 +833,7 @@ func (m *ObjectStorageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ObjectStorageMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 14)
 	if m.provider != nil {
 		fields = append(fields, objectstorage.FieldProvider)
 	}
@@ -764,6 +851,12 @@ func (m *ObjectStorageMutation) Fields() []string {
 	}
 	if m.hash != nil {
 		fields = append(fields, objectstorage.FieldHash)
+	}
+	if m.audit_callback_reply != nil {
+		fields = append(fields, objectstorage.FieldAuditCallbackReply)
+	}
+	if m.blocked != nil {
+		fields = append(fields, objectstorage.FieldBlocked)
 	}
 	if m.blocked_reason != nil {
 		fields = append(fields, objectstorage.FieldBlockedReason)
@@ -803,6 +896,10 @@ func (m *ObjectStorageMutation) Field(name string) (ent.Value, bool) {
 		return m.Size()
 	case objectstorage.FieldHash:
 		return m.Hash()
+	case objectstorage.FieldAuditCallbackReply:
+		return m.AuditCallbackReply()
+	case objectstorage.FieldBlocked:
+		return m.Blocked()
 	case objectstorage.FieldBlockedReason:
 		return m.BlockedReason()
 	case objectstorage.FieldBlockedAt:
@@ -836,6 +933,10 @@ func (m *ObjectStorageMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldSize(ctx)
 	case objectstorage.FieldHash:
 		return m.OldHash(ctx)
+	case objectstorage.FieldAuditCallbackReply:
+		return m.OldAuditCallbackReply(ctx)
+	case objectstorage.FieldBlocked:
+		return m.OldBlocked(ctx)
 	case objectstorage.FieldBlockedReason:
 		return m.OldBlockedReason(ctx)
 	case objectstorage.FieldBlockedAt:
@@ -898,6 +999,20 @@ func (m *ObjectStorageMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHash(v)
+		return nil
+	case objectstorage.FieldAuditCallbackReply:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditCallbackReply(v)
+		return nil
+	case objectstorage.FieldBlocked:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlocked(v)
 		return nil
 	case objectstorage.FieldBlockedReason:
 		v, ok := value.(string)
@@ -998,6 +1113,9 @@ func (m *ObjectStorageMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ObjectStorageMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(objectstorage.FieldAuditCallbackReply) {
+		fields = append(fields, objectstorage.FieldAuditCallbackReply)
+	}
 	if m.FieldCleared(objectstorage.FieldBlockedReason) {
 		fields = append(fields, objectstorage.FieldBlockedReason)
 	}
@@ -1030,6 +1148,9 @@ func (m *ObjectStorageMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ObjectStorageMutation) ClearField(name string) error {
 	switch name {
+	case objectstorage.FieldAuditCallbackReply:
+		m.ClearAuditCallbackReply()
+		return nil
 	case objectstorage.FieldBlockedReason:
 		m.ClearBlockedReason()
 		return nil
@@ -1073,6 +1194,12 @@ func (m *ObjectStorageMutation) ResetField(name string) error {
 		return nil
 	case objectstorage.FieldHash:
 		m.ResetHash()
+		return nil
+	case objectstorage.FieldAuditCallbackReply:
+		m.ResetAuditCallbackReply()
+		return nil
+	case objectstorage.FieldBlocked:
+		m.ResetBlocked()
 		return nil
 	case objectstorage.FieldBlockedReason:
 		m.ResetBlockedReason()

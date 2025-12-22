@@ -1,8 +1,14 @@
 package biz
 
 import (
+	cv1 "common/api/common/v1"
+	"common/pkg/constant"
+	"common/pkg/cutil/base"
+	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
+	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/ent"
@@ -14,13 +20,15 @@ import (
 
 type ObjectStorageDomain struct {
 	*BaseDomain
-	objectStorageRepo repo.ObjectStorageRepo
+	objectStorageRepo     repo.ObjectStorageRepo
+	objectStorageProvider repo.ObjectStorageProvider
 }
 
-func NewObjectStorageDomain(base *BaseDomain, ossFactory *oss.Factory) *ObjectStorageDomain {
+func NewObjectStorageDomain(base *BaseDomain, objectStorageRepo repo.ObjectStorageRepo, ossFactory *oss.Factory) *ObjectStorageDomain {
 	return &ObjectStorageDomain{
-		BaseDomain:        base,
-		objectStorageRepo: ossFactory.Get(base.conf.Oss.Provider),
+		BaseDomain:            base,
+		objectStorageRepo:     objectStorageRepo,
+		objectStorageProvider: ossFactory.Get(base.conf.Oss.Provider),
 	}
 }
 
@@ -30,10 +38,51 @@ func (d *ObjectStorageDomain) UploadToken(ctx context.Context, num int) ([]*mode
 		key := uuid.New().String()
 		tokens = append(tokens, &model.UploadToken{
 			Key:   key,
-			Token: d.objectStorageRepo.UploadToken(key),
+			Token: d.objectStorageProvider.UploadToken(key),
 		})
 	}
 	return tokens, nil
+}
+
+func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enable bool, reason *string) error {
+	var err error
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("user not login")
+	}
+
+	err = d.objectStorageProvider.Status(ctx, key, enable)
+	if err != nil {
+		return err
+	}
+	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
+			Key:           key,
+			Blocked:       enable,
+			BlockedReason: reason,
+			BlockedAt:     base.Ptr(time.Now()),
+			BlockedBy:     base.Ptr(user.ID),
+			BlockedByName: base.Ptr(user.Name),
+		}})
+		return err
+	})
+	return err
+}
+
+func (d *ObjectStorageDomain) AIAudit(ctx context.Context, key string, enable bool, reply string) error {
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
+			Key:                key,
+			AuditCallbackReply: base.Ptr(reply),
+			Blocked:            enable,
+		}})
+		return err
+	})
+	return err
+}
+
+func (d *ObjectStorageDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *cv1.PageReply, error) {
+	return d.objectStorageRepo.GetPage(ctx, d.db, page, req)
 }
 
 func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.ObjectStorage) error {
@@ -42,6 +91,18 @@ func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.
 
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		_, err := d.objectStorageRepo.Save(ctx, tx, o)
+		return err
+	})
+	return err
+}
+
+func (d *ObjectStorageDomain) QiniuIncrementAuditCallback(ctx context.Context, key string, reply string, blocked bool) error {
+	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
+		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
+			Key:                key,
+			AuditCallbackReply: base.Ptr(reply),
+			Blocked:            blocked,
+		}})
 		return err
 	})
 	return err

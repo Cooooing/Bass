@@ -33,6 +33,8 @@ func (ObjectStorage) Fields() []ent.Field {
 		field.Int64("size").Comment("文件大小（字节）"),
 		field.String("hash").Comment("文件 Hash"),
 
+		field.String("audit_callback_reply").Comment("审核回调响应").Optional().Nillable(),
+		field.Bool("blocked").Comment("是否违规").Default(false),
 		field.String("blocked_reason").Comment("违规原因").Optional().Nillable(),
 		field.Time("blocked_at").Comment("违规时间").Optional().Nillable(),
 		field.Int64("blocked_by").Comment("违规处理人").Optional().Nillable(),

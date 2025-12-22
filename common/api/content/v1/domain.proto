@@ -104,7 +104,7 @@ message DomainQueryParams {
   // 是否导航
   optional bool isNav = 8;
   // 标签数量范围
-  optional common.v1.Int32Range tagCount = 9;
+  common.v1.Int32Range tagCount = 9;
 }
 
 // 请求/响应结构定义

@@ -84,6 +84,16 @@ func Hash(v string) predicate.ObjectStorage {
 	return predicate.ObjectStorage(sql.FieldEQ(FieldHash, v))
 }
 
+// UploadBy applies equality check predicate on the "upload_by" field. It's identical to UploadByEQ.
+func UploadBy(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldUploadBy, v))
+}
+
+// UploadByName applies equality check predicate on the "upload_by_name" field. It's identical to UploadByNameEQ.
+func UploadByName(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldUploadByName, v))
+}
+
 // AuditCallbackReply applies equality check predicate on the "audit_callback_reply" field. It's identical to AuditCallbackReplyEQ.
 func AuditCallbackReply(v string) predicate.ObjectStorage {
 	return predicate.ObjectStorage(sql.FieldEQ(FieldAuditCallbackReply, v))
@@ -487,6 +497,111 @@ func HashEqualFold(v string) predicate.ObjectStorage {
 // HashContainsFold applies the ContainsFold predicate on the "hash" field.
 func HashContainsFold(v string) predicate.ObjectStorage {
 	return predicate.ObjectStorage(sql.FieldContainsFold(FieldHash, v))
+}
+
+// UploadByEQ applies the EQ predicate on the "upload_by" field.
+func UploadByEQ(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldUploadBy, v))
+}
+
+// UploadByNEQ applies the NEQ predicate on the "upload_by" field.
+func UploadByNEQ(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNEQ(FieldUploadBy, v))
+}
+
+// UploadByIn applies the In predicate on the "upload_by" field.
+func UploadByIn(vs ...int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldIn(FieldUploadBy, vs...))
+}
+
+// UploadByNotIn applies the NotIn predicate on the "upload_by" field.
+func UploadByNotIn(vs ...int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNotIn(FieldUploadBy, vs...))
+}
+
+// UploadByGT applies the GT predicate on the "upload_by" field.
+func UploadByGT(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldGT(FieldUploadBy, v))
+}
+
+// UploadByGTE applies the GTE predicate on the "upload_by" field.
+func UploadByGTE(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldGTE(FieldUploadBy, v))
+}
+
+// UploadByLT applies the LT predicate on the "upload_by" field.
+func UploadByLT(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldLT(FieldUploadBy, v))
+}
+
+// UploadByLTE applies the LTE predicate on the "upload_by" field.
+func UploadByLTE(v int64) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldLTE(FieldUploadBy, v))
+}
+
+// UploadByNameEQ applies the EQ predicate on the "upload_by_name" field.
+func UploadByNameEQ(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEQ(FieldUploadByName, v))
+}
+
+// UploadByNameNEQ applies the NEQ predicate on the "upload_by_name" field.
+func UploadByNameNEQ(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNEQ(FieldUploadByName, v))
+}
+
+// UploadByNameIn applies the In predicate on the "upload_by_name" field.
+func UploadByNameIn(vs ...string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldIn(FieldUploadByName, vs...))
+}
+
+// UploadByNameNotIn applies the NotIn predicate on the "upload_by_name" field.
+func UploadByNameNotIn(vs ...string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldNotIn(FieldUploadByName, vs...))
+}
+
+// UploadByNameGT applies the GT predicate on the "upload_by_name" field.
+func UploadByNameGT(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldGT(FieldUploadByName, v))
+}
+
+// UploadByNameGTE applies the GTE predicate on the "upload_by_name" field.
+func UploadByNameGTE(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldGTE(FieldUploadByName, v))
+}
+
+// UploadByNameLT applies the LT predicate on the "upload_by_name" field.
+func UploadByNameLT(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldLT(FieldUploadByName, v))
+}
+
+// UploadByNameLTE applies the LTE predicate on the "upload_by_name" field.
+func UploadByNameLTE(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldLTE(FieldUploadByName, v))
+}
+
+// UploadByNameContains applies the Contains predicate on the "upload_by_name" field.
+func UploadByNameContains(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldContains(FieldUploadByName, v))
+}
+
+// UploadByNameHasPrefix applies the HasPrefix predicate on the "upload_by_name" field.
+func UploadByNameHasPrefix(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldHasPrefix(FieldUploadByName, v))
+}
+
+// UploadByNameHasSuffix applies the HasSuffix predicate on the "upload_by_name" field.
+func UploadByNameHasSuffix(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldHasSuffix(FieldUploadByName, v))
+}
+
+// UploadByNameEqualFold applies the EqualFold predicate on the "upload_by_name" field.
+func UploadByNameEqualFold(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldEqualFold(FieldUploadByName, v))
+}
+
+// UploadByNameContainsFold applies the ContainsFold predicate on the "upload_by_name" field.
+func UploadByNameContainsFold(v string) predicate.ObjectStorage {
+	return predicate.ObjectStorage(sql.FieldContainsFold(FieldUploadByName, v))
 }
 
 // AuditCallbackReplyEQ applies the EQ predicate on the "audit_callback_reply" field.

@@ -29,6 +29,10 @@ type ObjectStorage struct {
 	Size int64 `json:"size,omitempty"`
 	// 文件 Hash
 	Hash string `json:"hash,omitempty"`
+	// 上传者ID
+	UploadBy int64 `json:"upload_by,omitempty"`
+	// 上传者名称
+	UploadByName string `json:"upload_by_name,omitempty"`
 	// 审核回调响应
 	AuditCallbackReply *string `json:"audit_callback_reply,omitempty"`
 	// 是否违规
@@ -55,9 +59,9 @@ func (*ObjectStorage) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case objectstorage.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case objectstorage.FieldID, objectstorage.FieldSize, objectstorage.FieldBlockedBy:
+		case objectstorage.FieldID, objectstorage.FieldSize, objectstorage.FieldUploadBy, objectstorage.FieldBlockedBy:
 			values[i] = new(sql.NullInt64)
-		case objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey, objectstorage.FieldMimeType, objectstorage.FieldHash, objectstorage.FieldAuditCallbackReply, objectstorage.FieldBlockedReason, objectstorage.FieldBlockedByName:
+		case objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey, objectstorage.FieldMimeType, objectstorage.FieldHash, objectstorage.FieldUploadByName, objectstorage.FieldAuditCallbackReply, objectstorage.FieldBlockedReason, objectstorage.FieldBlockedByName:
 			values[i] = new(sql.NullString)
 		case objectstorage.FieldBlockedAt, objectstorage.FieldCreatedAt, objectstorage.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,6 +121,18 @@ func (_m *ObjectStorage) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field hash", values[i])
 			} else if value.Valid {
 				_m.Hash = value.String
+			}
+		case objectstorage.FieldUploadBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_by", values[i])
+			} else if value.Valid {
+				_m.UploadBy = value.Int64
+			}
+		case objectstorage.FieldUploadByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_by_name", values[i])
+			} else if value.Valid {
+				_m.UploadByName = value.String
 			}
 		case objectstorage.FieldAuditCallbackReply:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -226,6 +242,12 @@ func (_m *ObjectStorage) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("hash=")
 	builder.WriteString(_m.Hash)
+	builder.WriteString(", ")
+	builder.WriteString("upload_by=")
+	builder.WriteString(fmt.Sprintf("%v", _m.UploadBy))
+	builder.WriteString(", ")
+	builder.WriteString("upload_by_name=")
+	builder.WriteString(_m.UploadByName)
 	builder.WriteString(", ")
 	if v := _m.AuditCallbackReply; v != nil {
 		builder.WriteString("audit_callback_reply=")

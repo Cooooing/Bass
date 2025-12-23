@@ -56,6 +56,18 @@ func (_c *ObjectStorageCreate) SetHash(v string) *ObjectStorageCreate {
 	return _c
 }
 
+// SetUploadBy sets the "upload_by" field.
+func (_c *ObjectStorageCreate) SetUploadBy(v int64) *ObjectStorageCreate {
+	_c.mutation.SetUploadBy(v)
+	return _c
+}
+
+// SetUploadByName sets the "upload_by_name" field.
+func (_c *ObjectStorageCreate) SetUploadByName(v string) *ObjectStorageCreate {
+	_c.mutation.SetUploadByName(v)
+	return _c
+}
+
 // SetAuditCallbackReply sets the "audit_callback_reply" field.
 func (_c *ObjectStorageCreate) SetAuditCallbackReply(v string) *ObjectStorageCreate {
 	_c.mutation.SetAuditCallbackReply(v)
@@ -243,6 +255,12 @@ func (_c *ObjectStorageCreate) check() error {
 	if _, ok := _c.mutation.Hash(); !ok {
 		return &ValidationError{Name: "hash", err: errors.New(`gen: missing required field "ObjectStorage.hash"`)}
 	}
+	if _, ok := _c.mutation.UploadBy(); !ok {
+		return &ValidationError{Name: "upload_by", err: errors.New(`gen: missing required field "ObjectStorage.upload_by"`)}
+	}
+	if _, ok := _c.mutation.UploadByName(); !ok {
+		return &ValidationError{Name: "upload_by_name", err: errors.New(`gen: missing required field "ObjectStorage.upload_by_name"`)}
+	}
 	if _, ok := _c.mutation.Blocked(); !ok {
 		return &ValidationError{Name: "blocked", err: errors.New(`gen: missing required field "ObjectStorage.blocked"`)}
 	}
@@ -301,6 +319,14 @@ func (_c *ObjectStorageCreate) createSpec() (*ObjectStorage, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Hash(); ok {
 		_spec.SetField(objectstorage.FieldHash, field.TypeString, value)
 		_node.Hash = value
+	}
+	if value, ok := _c.mutation.UploadBy(); ok {
+		_spec.SetField(objectstorage.FieldUploadBy, field.TypeInt64, value)
+		_node.UploadBy = value
+	}
+	if value, ok := _c.mutation.UploadByName(); ok {
+		_spec.SetField(objectstorage.FieldUploadByName, field.TypeString, value)
+		_node.UploadByName = value
 	}
 	if value, ok := _c.mutation.AuditCallbackReply(); ok {
 		_spec.SetField(objectstorage.FieldAuditCallbackReply, field.TypeString, value)

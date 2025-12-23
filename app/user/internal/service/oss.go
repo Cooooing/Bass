@@ -97,12 +97,14 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 	s.log.Infof("qiniu upload callback: %s", string(bytes))
 
 	err = s.ossObjectStorageDomain.QiniuUploadCallback(ctx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
-		Provider: constant.Qiniu.String(),
-		Bucket:   req.Bucket,
-		Key:      req.Key,
-		MimeType: req.MimeType,
-		Size:     req.Size,
-		Hash:     req.Hash,
+		Provider:     constant.Qiniu.String(),
+		Bucket:       req.Bucket,
+		Key:          req.Key,
+		MimeType:     req.MimeType,
+		Size:         req.Size,
+		Hash:         req.Hash,
+		UploadBy:     req.UploadBy,
+		UploadByName: req.UploadByName,
 	}})
 	return &v1.QiniuUploadCallbackReply{}, err
 }

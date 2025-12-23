@@ -25,6 +25,10 @@ const (
 	FieldSize = "size"
 	// FieldHash holds the string denoting the hash field in the database.
 	FieldHash = "hash"
+	// FieldUploadBy holds the string denoting the upload_by field in the database.
+	FieldUploadBy = "upload_by"
+	// FieldUploadByName holds the string denoting the upload_by_name field in the database.
+	FieldUploadByName = "upload_by_name"
 	// FieldAuditCallbackReply holds the string denoting the audit_callback_reply field in the database.
 	FieldAuditCallbackReply = "audit_callback_reply"
 	// FieldBlocked holds the string denoting the blocked field in the database.
@@ -54,6 +58,8 @@ var Columns = []string{
 	FieldMimeType,
 	FieldSize,
 	FieldHash,
+	FieldUploadBy,
+	FieldUploadByName,
 	FieldAuditCallbackReply,
 	FieldBlocked,
 	FieldBlockedReason,
@@ -119,6 +125,16 @@ func BySize(opts ...sql.OrderTermOption) OrderOption {
 // ByHash orders the results by the hash field.
 func ByHash(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHash, opts...).ToFunc()
+}
+
+// ByUploadBy orders the results by the upload_by field.
+func ByUploadBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadBy, opts...).ToFunc()
+}
+
+// ByUploadByName orders the results by the upload_by_name field.
+func ByUploadByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadByName, opts...).ToFunc()
 }
 
 // ByAuditCallbackReply orders the results by the audit_callback_reply field.

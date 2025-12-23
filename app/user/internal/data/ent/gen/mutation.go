@@ -44,6 +44,9 @@ type ObjectStorageMutation struct {
 	size                 *int64
 	addsize              *int64
 	hash                 *string
+	upload_by            *int64
+	addupload_by         *int64
+	upload_by_name       *string
 	audit_callback_reply *string
 	blocked              *bool
 	blocked_reason       *string
@@ -397,6 +400,98 @@ func (m *ObjectStorageMutation) OldHash(ctx context.Context) (v string, err erro
 // ResetHash resets all changes to the "hash" field.
 func (m *ObjectStorageMutation) ResetHash() {
 	m.hash = nil
+}
+
+// SetUploadBy sets the "upload_by" field.
+func (m *ObjectStorageMutation) SetUploadBy(i int64) {
+	m.upload_by = &i
+	m.addupload_by = nil
+}
+
+// UploadBy returns the value of the "upload_by" field in the mutation.
+func (m *ObjectStorageMutation) UploadBy() (r int64, exists bool) {
+	v := m.upload_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadBy returns the old "upload_by" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldUploadBy(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadBy: %w", err)
+	}
+	return oldValue.UploadBy, nil
+}
+
+// AddUploadBy adds i to the "upload_by" field.
+func (m *ObjectStorageMutation) AddUploadBy(i int64) {
+	if m.addupload_by != nil {
+		*m.addupload_by += i
+	} else {
+		m.addupload_by = &i
+	}
+}
+
+// AddedUploadBy returns the value that was added to the "upload_by" field in this mutation.
+func (m *ObjectStorageMutation) AddedUploadBy() (r int64, exists bool) {
+	v := m.addupload_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUploadBy resets all changes to the "upload_by" field.
+func (m *ObjectStorageMutation) ResetUploadBy() {
+	m.upload_by = nil
+	m.addupload_by = nil
+}
+
+// SetUploadByName sets the "upload_by_name" field.
+func (m *ObjectStorageMutation) SetUploadByName(s string) {
+	m.upload_by_name = &s
+}
+
+// UploadByName returns the value of the "upload_by_name" field in the mutation.
+func (m *ObjectStorageMutation) UploadByName() (r string, exists bool) {
+	v := m.upload_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadByName returns the old "upload_by_name" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldUploadByName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadByName: %w", err)
+	}
+	return oldValue.UploadByName, nil
+}
+
+// ResetUploadByName resets all changes to the "upload_by_name" field.
+func (m *ObjectStorageMutation) ResetUploadByName() {
+	m.upload_by_name = nil
 }
 
 // SetAuditCallbackReply sets the "audit_callback_reply" field.
@@ -833,7 +928,7 @@ func (m *ObjectStorageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ObjectStorageMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 16)
 	if m.provider != nil {
 		fields = append(fields, objectstorage.FieldProvider)
 	}
@@ -851,6 +946,12 @@ func (m *ObjectStorageMutation) Fields() []string {
 	}
 	if m.hash != nil {
 		fields = append(fields, objectstorage.FieldHash)
+	}
+	if m.upload_by != nil {
+		fields = append(fields, objectstorage.FieldUploadBy)
+	}
+	if m.upload_by_name != nil {
+		fields = append(fields, objectstorage.FieldUploadByName)
 	}
 	if m.audit_callback_reply != nil {
 		fields = append(fields, objectstorage.FieldAuditCallbackReply)
@@ -896,6 +997,10 @@ func (m *ObjectStorageMutation) Field(name string) (ent.Value, bool) {
 		return m.Size()
 	case objectstorage.FieldHash:
 		return m.Hash()
+	case objectstorage.FieldUploadBy:
+		return m.UploadBy()
+	case objectstorage.FieldUploadByName:
+		return m.UploadByName()
 	case objectstorage.FieldAuditCallbackReply:
 		return m.AuditCallbackReply()
 	case objectstorage.FieldBlocked:
@@ -933,6 +1038,10 @@ func (m *ObjectStorageMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldSize(ctx)
 	case objectstorage.FieldHash:
 		return m.OldHash(ctx)
+	case objectstorage.FieldUploadBy:
+		return m.OldUploadBy(ctx)
+	case objectstorage.FieldUploadByName:
+		return m.OldUploadByName(ctx)
 	case objectstorage.FieldAuditCallbackReply:
 		return m.OldAuditCallbackReply(ctx)
 	case objectstorage.FieldBlocked:
@@ -999,6 +1108,20 @@ func (m *ObjectStorageMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHash(v)
+		return nil
+	case objectstorage.FieldUploadBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadBy(v)
+		return nil
+	case objectstorage.FieldUploadByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadByName(v)
 		return nil
 	case objectstorage.FieldAuditCallbackReply:
 		v, ok := value.(string)
@@ -1067,6 +1190,9 @@ func (m *ObjectStorageMutation) AddedFields() []string {
 	if m.addsize != nil {
 		fields = append(fields, objectstorage.FieldSize)
 	}
+	if m.addupload_by != nil {
+		fields = append(fields, objectstorage.FieldUploadBy)
+	}
 	if m.addblocked_by != nil {
 		fields = append(fields, objectstorage.FieldBlockedBy)
 	}
@@ -1080,6 +1206,8 @@ func (m *ObjectStorageMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case objectstorage.FieldSize:
 		return m.AddedSize()
+	case objectstorage.FieldUploadBy:
+		return m.AddedUploadBy()
 	case objectstorage.FieldBlockedBy:
 		return m.AddedBlockedBy()
 	}
@@ -1097,6 +1225,13 @@ func (m *ObjectStorageMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddSize(v)
+		return nil
+	case objectstorage.FieldUploadBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUploadBy(v)
 		return nil
 	case objectstorage.FieldBlockedBy:
 		v, ok := value.(int64)
@@ -1194,6 +1329,12 @@ func (m *ObjectStorageMutation) ResetField(name string) error {
 		return nil
 	case objectstorage.FieldHash:
 		m.ResetHash()
+		return nil
+	case objectstorage.FieldUploadBy:
+		m.ResetUploadBy()
+		return nil
+	case objectstorage.FieldUploadByName:
+		m.ResetUploadByName()
 		return nil
 	case objectstorage.FieldAuditCallbackReply:
 		m.ResetAuditCallbackReply()

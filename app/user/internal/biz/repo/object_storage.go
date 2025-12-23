@@ -35,7 +35,7 @@ type ObjectStorageProvider interface {
 	Name() string
 
 	// UploadToken 获取上传token
-	UploadToken(key string) string
+	UploadToken(ctx context.Context, key string) (string, error)
 	// Status 启用或禁用对象
 	Status(ctx context.Context, key string, enable bool) error
 }

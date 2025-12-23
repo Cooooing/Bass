@@ -23,7 +23,7 @@ func (m *Minio) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 	panic("implement me")
 }
 
-func (m *Minio) UploadToken(key string) string {
+func (m *Minio) UploadToken(ctx context.Context, key string) (string, error) {
 	//TODO implement me
 	panic("implement me")
 }

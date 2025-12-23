@@ -33,6 +33,9 @@ func (ObjectStorage) Fields() []ent.Field {
 		field.Int64("size").Comment("文件大小（字节）"),
 		field.String("hash").Comment("文件 Hash"),
 
+		field.Int64("upload_by").Comment("上传者ID"),
+		field.String("upload_by_name").Comment("上传者名称"),
+
 		field.String("audit_callback_reply").Comment("审核回调响应").Optional().Nillable(),
 		field.Bool("blocked").Comment("是否违规").Default(false),
 		field.String("blocked_reason").Comment("违规原因").Optional().Nillable(),

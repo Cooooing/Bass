@@ -1203,6 +1203,10 @@ func (m *QiniuUploadCallbackRequest) validate(all bool) error {
 
 	// no validation rules for MimeType
 
+	// no validation rules for UploadBy
+
+	// no validation rules for UploadByName
+
 	if len(errors) > 0 {
 		return QiniuUploadCallbackRequestMultiError(errors)
 	}

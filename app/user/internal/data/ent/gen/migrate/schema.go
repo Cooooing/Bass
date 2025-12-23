@@ -18,6 +18,8 @@ var (
 		{Name: "mime_type", Type: field.TypeString, Comment: "文件 MIME 类型"},
 		{Name: "size", Type: field.TypeInt64, Comment: "文件大小（字节）"},
 		{Name: "hash", Type: field.TypeString, Comment: "文件 Hash"},
+		{Name: "upload_by", Type: field.TypeInt64, Comment: "上传者ID"},
+		{Name: "upload_by_name", Type: field.TypeString, Comment: "上传者名称"},
 		{Name: "audit_callback_reply", Type: field.TypeString, Nullable: true, Comment: "审核回调响应"},
 		{Name: "blocked", Type: field.TypeBool, Comment: "是否违规", Default: false},
 		{Name: "blocked_reason", Type: field.TypeString, Nullable: true, Comment: "违规原因"},

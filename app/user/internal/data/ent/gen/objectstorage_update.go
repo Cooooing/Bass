@@ -119,6 +119,41 @@ func (_u *ObjectStorageUpdate) SetNillableHash(v *string) *ObjectStorageUpdate {
 	return _u
 }
 
+// SetUploadBy sets the "upload_by" field.
+func (_u *ObjectStorageUpdate) SetUploadBy(v int64) *ObjectStorageUpdate {
+	_u.mutation.ResetUploadBy()
+	_u.mutation.SetUploadBy(v)
+	return _u
+}
+
+// SetNillableUploadBy sets the "upload_by" field if the given value is not nil.
+func (_u *ObjectStorageUpdate) SetNillableUploadBy(v *int64) *ObjectStorageUpdate {
+	if v != nil {
+		_u.SetUploadBy(*v)
+	}
+	return _u
+}
+
+// AddUploadBy adds value to the "upload_by" field.
+func (_u *ObjectStorageUpdate) AddUploadBy(v int64) *ObjectStorageUpdate {
+	_u.mutation.AddUploadBy(v)
+	return _u
+}
+
+// SetUploadByName sets the "upload_by_name" field.
+func (_u *ObjectStorageUpdate) SetUploadByName(v string) *ObjectStorageUpdate {
+	_u.mutation.SetUploadByName(v)
+	return _u
+}
+
+// SetNillableUploadByName sets the "upload_by_name" field if the given value is not nil.
+func (_u *ObjectStorageUpdate) SetNillableUploadByName(v *string) *ObjectStorageUpdate {
+	if v != nil {
+		_u.SetUploadByName(*v)
+	}
+	return _u
+}
+
 // SetAuditCallbackReply sets the "audit_callback_reply" field.
 func (_u *ObjectStorageUpdate) SetAuditCallbackReply(v string) *ObjectStorageUpdate {
 	_u.mutation.SetAuditCallbackReply(v)
@@ -342,6 +377,15 @@ func (_u *ObjectStorageUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if value, ok := _u.mutation.Hash(); ok {
 		_spec.SetField(objectstorage.FieldHash, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.UploadBy(); ok {
+		_spec.SetField(objectstorage.FieldUploadBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUploadBy(); ok {
+		_spec.AddField(objectstorage.FieldUploadBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.UploadByName(); ok {
+		_spec.SetField(objectstorage.FieldUploadByName, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.AuditCallbackReply(); ok {
 		_spec.SetField(objectstorage.FieldAuditCallbackReply, field.TypeString, value)
 	}
@@ -497,6 +541,41 @@ func (_u *ObjectStorageUpdateOne) SetHash(v string) *ObjectStorageUpdateOne {
 func (_u *ObjectStorageUpdateOne) SetNillableHash(v *string) *ObjectStorageUpdateOne {
 	if v != nil {
 		_u.SetHash(*v)
+	}
+	return _u
+}
+
+// SetUploadBy sets the "upload_by" field.
+func (_u *ObjectStorageUpdateOne) SetUploadBy(v int64) *ObjectStorageUpdateOne {
+	_u.mutation.ResetUploadBy()
+	_u.mutation.SetUploadBy(v)
+	return _u
+}
+
+// SetNillableUploadBy sets the "upload_by" field if the given value is not nil.
+func (_u *ObjectStorageUpdateOne) SetNillableUploadBy(v *int64) *ObjectStorageUpdateOne {
+	if v != nil {
+		_u.SetUploadBy(*v)
+	}
+	return _u
+}
+
+// AddUploadBy adds value to the "upload_by" field.
+func (_u *ObjectStorageUpdateOne) AddUploadBy(v int64) *ObjectStorageUpdateOne {
+	_u.mutation.AddUploadBy(v)
+	return _u
+}
+
+// SetUploadByName sets the "upload_by_name" field.
+func (_u *ObjectStorageUpdateOne) SetUploadByName(v string) *ObjectStorageUpdateOne {
+	_u.mutation.SetUploadByName(v)
+	return _u
+}
+
+// SetNillableUploadByName sets the "upload_by_name" field if the given value is not nil.
+func (_u *ObjectStorageUpdateOne) SetNillableUploadByName(v *string) *ObjectStorageUpdateOne {
+	if v != nil {
+		_u.SetUploadByName(*v)
 	}
 	return _u
 }
@@ -753,6 +832,15 @@ func (_u *ObjectStorageUpdateOne) sqlSave(ctx context.Context) (_node *ObjectSto
 	}
 	if value, ok := _u.mutation.Hash(); ok {
 		_spec.SetField(objectstorage.FieldHash, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.UploadBy(); ok {
+		_spec.SetField(objectstorage.FieldUploadBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUploadBy(); ok {
+		_spec.AddField(objectstorage.FieldUploadBy, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.UploadByName(); ok {
+		_spec.SetField(objectstorage.FieldUploadByName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.AuditCallbackReply(); ok {
 		_spec.SetField(objectstorage.FieldAuditCallbackReply, field.TypeString, value)

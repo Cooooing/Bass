@@ -35,9 +35,13 @@ func (d *ObjectStorageDomain) UploadToken(ctx context.Context, num int) ([]*mode
 	tokens := make([]*model.UploadToken, 0, num)
 	for range num {
 		key := uuid.New().String()
+		token, err := d.objectStorageProvider.UploadToken(ctx, key)
+		if err != nil {
+			return nil, err
+		}
 		tokens = append(tokens, &model.UploadToken{
 			Key:   key,
-			Token: d.objectStorageProvider.UploadToken(key),
+			Token: token,
 		})
 	}
 	return tokens, nil

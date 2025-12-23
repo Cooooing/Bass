@@ -2762,6 +2762,10 @@ components:
                     type: string
                 mime_type:
                     type: string
+                upload_by:
+                    type: string
+                upload_by_name:
+                    type: string
         common.api.user.v1.RegisterEmailReply:
             type: object
             properties:

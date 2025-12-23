@@ -597,6 +597,8 @@ type QiniuUploadCallbackRequest struct {
 	Bucket        string                 `protobuf:"bytes,4,opt,name=bucket,proto3" json:"bucket,omitempty"`
 	Name          string                 `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
 	MimeType      string                 `protobuf:"bytes,6,opt,name=mime_type,json=mimeType,proto3" json:"mime_type,omitempty"`
+	UploadBy      int64                  `protobuf:"varint,7,opt,name=upload_by,json=uploadBy,proto3" json:"upload_by,omitempty"`
+	UploadByName  string                 `protobuf:"bytes,8,opt,name=upload_by_name,json=uploadByName,proto3" json:"upload_by_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -669,6 +671,20 @@ func (x *QiniuUploadCallbackRequest) GetName() string {
 func (x *QiniuUploadCallbackRequest) GetMimeType() string {
 	if x != nil {
 		return x.MimeType
+	}
+	return ""
+}
+
+func (x *QiniuUploadCallbackRequest) GetUploadBy() int64 {
+	if x != nil {
+		return x.UploadBy
+	}
+	return 0
+}
+
+func (x *QiniuUploadCallbackRequest) GetUploadByName() string {
+	if x != nil {
+		return x.UploadByName
 	}
 	return ""
 }
@@ -1160,14 +1176,16 @@ const file_user_v1_oss_proto_rawDesc = "" +
 	"\x05query\x18\x02 \x01(\v2\".common.api.user.v1.OssQueryParamsR\x05query\"p\n" +
 	"\fPageOssReply\x123\n" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12+\n" +
-	"\x04rows\x18\x02 \x03(\v2\x17.common.api.user.v1.OssR\x04rows\"\x9f\x01\n" +
+	"\x04rows\x18\x02 \x03(\v2\x17.common.api.user.v1.OssR\x04rows\"\xe2\x01\n" +
 	"\x1aQiniuUploadCallbackRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n" +
 	"\x04hash\x18\x02 \x01(\tR\x04hash\x12\x12\n" +
 	"\x04size\x18\x03 \x01(\x03R\x04size\x12\x16\n" +
 	"\x06bucket\x18\x04 \x01(\tR\x06bucket\x12\x12\n" +
 	"\x04name\x18\x05 \x01(\tR\x04name\x12\x1b\n" +
-	"\tmime_type\x18\x06 \x01(\tR\bmimeType\"\x1a\n" +
+	"\tmime_type\x18\x06 \x01(\tR\bmimeType\x12\x1b\n" +
+	"\tupload_by\x18\a \x01(\x03R\buploadBy\x12$\n" +
+	"\x0eupload_by_name\x18\b \x01(\tR\fuploadByName\"\x1a\n" +
 	"\x18QiniuUploadCallbackReply\"\xfb\x05\n" +
 	"\"QiniuIncrementAuditCallbackRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +

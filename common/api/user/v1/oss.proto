@@ -154,6 +154,8 @@ message QiniuUploadCallbackRequest{
   string bucket = 4;
   string name = 5;
   string mime_type = 6;
+  int64 upload_by = 7;
+  string upload_by_name = 8;
 }
 message QiniuUploadCallbackReply{}
 

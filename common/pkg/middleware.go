@@ -115,6 +115,9 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			if !strings.HasPrefix(token, bearerPrefix) {
 				return handler(ctx, req)
 			}
+			fmt.Println("token:", token)
+			token = strings.TrimPrefix(token, bearerPrefix)
+			fmt.Println("token:", token)
 
 			userInfo, err := tokenRepo.GetToken(ctx, token)
 			if err != nil {

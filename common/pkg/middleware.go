@@ -95,7 +95,7 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			// gRPC
 			if md, ok := metadata.FromIncomingContext(ctx); ok {
 				if vals := md.Get(strings.ToLower(constant.Authentication)); len(vals) > 0 {
-					token = strings.TrimPrefix(vals[0], bearerPrefix)
+					token = vals[0]
 				}
 			}
 
@@ -103,13 +103,17 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			if tr, ok := transport.FromServerContext(ctx); ok {
 				if h := tr.RequestHeader(); h != nil {
 					if s := h.Get(constant.Authentication); s != "" {
-						token = strings.TrimPrefix(s, bearerPrefix)
+						token = s
 					}
 				}
 			}
 
 			if tr, ok := transport.FromServerContext(ctx); ok {
-				token = strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), bearerPrefix)
+				token = tr.RequestHeader().Get(constant.Authentication)
+			}
+
+			if !strings.HasPrefix(token, bearerPrefix) {
+				return handler(ctx, req)
 			}
 
 			userInfo, err := tokenRepo.GetToken(ctx, token)

@@ -94,7 +94,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 
 	u, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return cv1.ErrorUnauthorized("u not login")
+		return cv1.ErrorUnauthorized("user not login")
 	}
 	// 发送通知，仅关注通知
 	if relationType == v1.UserRelationType_USER_RELATION_TYPE_FOLLOW {

@@ -76,8 +76,8 @@ func (q *Qiniu) VerifyCallback(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-		if !verify {
-			return errNoAuth
+		if verify {
+			return nil
 		}
 	}
 	return errNoAuth

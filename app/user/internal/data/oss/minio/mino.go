@@ -32,3 +32,8 @@ func (m *Minio) Status(ctx context.Context, key string, enable bool) error {
 	//TODO implement me
 	panic("implement me")
 }
+
+func (m *Minio) VerifyCallback(ctx context.Context) error {
+	//TODO implement me
+	panic("implement me")
+}

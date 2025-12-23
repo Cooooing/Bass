@@ -89,6 +89,10 @@ func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.
 	marshal, _ := json.Marshal(o)
 	d.log.Infof("QiniuUploadCallback: %s", marshal)
 
+	if err := d.objectStorageProvider.VerifyCallback(ctx); err != nil {
+		return err
+	}
+
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		_, err := d.objectStorageRepo.Save(ctx, tx, o)
 		return err
@@ -97,6 +101,9 @@ func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.
 }
 
 func (d *ObjectStorageDomain) QiniuIncrementAuditCallback(ctx context.Context, key string, reply string, blocked bool) error {
+	if err := d.objectStorageProvider.VerifyCallback(ctx); err != nil {
+		return err
+	}
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:                key,

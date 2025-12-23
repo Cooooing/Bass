@@ -86,6 +86,7 @@ func (s *OssService) Page(ctx context.Context, req *v1.PageOssRequest) (*v1.Page
 
 func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploadCallbackRequest) (*v1.QiniuUploadCallbackReply, error) {
 	var err error
+
 	opts := protojson.MarshalOptions{
 		EmitUnpopulated: true,
 	}

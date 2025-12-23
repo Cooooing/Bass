@@ -75,8 +75,28 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 	propagator := propagation.TraceContext{}
 	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		conn, err := etcdClient.NewHTTPConn(serviceName)
+		if err != nil {
+			logger.Errorf("new http conn error: %v", err)
+			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
+			return
+		}
+		originalPath := r.URL.Path
 		r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
 		r.RequestURI = ""
+
+		proxiedPath := r.URL.Path
+		if r.URL.RawQuery != "" {
+			proxiedPath += "?" + r.URL.RawQuery
+		}
+
+		logger.Infof(
+			"proxy -> service=%s method=%s original_path=%s headers=%v",
+			serviceName,
+			r.Method,
+			originalPath,
+			r.Header,
+		)
+
 		response, err := conn.Do(r)
 
 		if err != nil {
@@ -115,7 +135,6 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 		}
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logger.Infof("proxy -> %s headers: %v", serviceName, r.Header)
 		h := middleware.Chain(middlewares...)(func(ctx context.Context, req interface{}) (interface{}, error) {
 			handlerFunc(w, r)
 			return nil, nil
@@ -183,6 +202,8 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 }
 
 var NoAuthEndpoints = map[string]struct{}{
-	"^.*/v1/system/health$":        {},
-	"^/user/v1/authentication/.*$": {},
+	"^.*/v1/system/health$":                       {},
+	"^/user/v1/authentication/.*$":                {},
+	"^/user/v1/oss/qiniu/uploadCallback$":         {},
+	"^/user/v1/oss/qiniu/incrementAuditCallback$": {},
 }

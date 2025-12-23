@@ -53,9 +53,9 @@ func (q *Qiniu) UploadToken(ctx context.Context, key string) (string, error) {
 	putPolicy := storage.PutPolicy{
 		Scope:            fmt.Sprintf("%s:%s", q.Conf.Oss.Qiniu.Bucket, key),
 		CallbackURL:      q.Conf.Oss.Qiniu.CallbackUrl,
-		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}",upload_by:%d,upload_by_name:"%s"}`, user.ID, user.Name),
+		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, user.ID, user.Name),
 		CallbackBodyType: "application/json",
-		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}",upload_by:%d,upload_by_name:"%s"}`, user.ID, user.Name),
+		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, user.ID, user.Name),
 		Expires:          uint64(q.Conf.Oss.Qiniu.Timeout.Seconds),
 		InsertOnly:       1,
 		FsizeMin:         1024 * 1024 * q.Conf.Oss.Qiniu.SizeMin,

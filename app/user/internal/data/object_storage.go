@@ -29,6 +29,8 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, tx *gen.Client, u *model.O
 		SetMimeType(u.MimeType).
 		SetSize(u.Size).
 		SetHash(u.Hash).
+		SetUploadBy(u.UploadBy).
+		SetUploadByName(u.UploadByName).
 		Save(ctx)
 	return &model.ObjectStorage{ObjectStorage: save}, err
 }

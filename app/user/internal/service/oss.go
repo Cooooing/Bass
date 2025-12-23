@@ -116,11 +116,11 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 	if err != nil {
 		return nil, err
 	}
-	s.log.Infof("qiniu upload callback: %s", string(bytes))
+	s.log.Infof("qiniu increment audit callback: %s", string(bytes))
 
 	suggestion := req.Items[0].Result.Result.Suggestion
 	if suggestion == "block" {
-		err := s.ossObjectStorageDomain.AIAudit(ctx, req.InputKey, true, string(bytes))
+		err := s.ossObjectStorageDomain.QiniuIncrementAuditCallback(ctx, req.InputKey, string(bytes), true)
 		return &v1.QiniuIncrementAuditCallbackReply{}, err
 	}
 	return &v1.QiniuIncrementAuditCallbackReply{}, err

@@ -7,7 +7,6 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"encoding/json"
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -69,30 +68,11 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 	return err
 }
 
-func (d *ObjectStorageDomain) AIAudit(ctx context.Context, key string, enable bool, reply string) error {
-	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
-			Key:                key,
-			AuditCallbackReply: base.Ptr(reply),
-			Blocked:            enable,
-		}})
-		return err
-	})
-	return err
-}
-
 func (d *ObjectStorageDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *cv1.PageReply, error) {
 	return d.objectStorageRepo.GetPage(ctx, d.db, page, req)
 }
 
 func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.ObjectStorage) error {
-	marshal, _ := json.Marshal(o)
-	d.log.Infof("QiniuUploadCallback: %s", marshal)
-
-	if err := d.objectStorageProvider.VerifyCallback(ctx); err != nil {
-		return err
-	}
-
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		_, err := d.objectStorageRepo.Save(ctx, tx, o)
 		return err
@@ -101,9 +81,6 @@ func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.
 }
 
 func (d *ObjectStorageDomain) QiniuIncrementAuditCallback(ctx context.Context, key string, reply string, blocked bool) error {
-	if err := d.objectStorageProvider.VerifyCallback(ctx); err != nil {
-		return err
-	}
 	err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:                key,

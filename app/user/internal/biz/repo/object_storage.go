@@ -38,6 +38,4 @@ type ObjectStorageProvider interface {
 	UploadToken(key string) string
 	// Status 启用或禁用对象
 	Status(ctx context.Context, key string, enable bool) error
-	// VerifyCallback 验证回调来源
-	VerifyCallback(ctx context.Context) error
 }

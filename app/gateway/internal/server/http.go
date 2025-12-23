@@ -11,7 +11,6 @@ import (
 	"gateway/internal/service"
 	"io"
 	"net/http"
-	"regexp"
 	"strings"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -21,8 +20,8 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/transport"
 	transporthttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/otel/propagation"
@@ -39,7 +38,12 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 			metrics.WithRequests(_metricRequests),
 		),
 		logging.Server(logger),
-		AuthMiddleware(tokenRepo),
+
+		// 七牛回调验签
+		selector.Server(QiniuCallbackSignMiddleware(c)).Match(QiniuCallbackMatch()).Build(),
+		// 认证鉴权
+		selector.Server(AuthMiddleware(tokenRepo), PermissionMiddleware()).Match(UserAPIMatch()).Build(),
+
 		validate.ProtoValidate(),
 	}
 	var opts = []transporthttp.ServerOption{
@@ -59,9 +63,9 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 	srv := transporthttp.NewServer(opts...)
 	srv.Handle("/metrics", promhttp.Handler())
 	// 代理 handler
-	srv.HandlePrefix("/user", NewProxyHandler(middlewares, etcdClient, constant.UserServiceName.String(), "/user", logger))
-	srv.HandlePrefix("/content", NewProxyHandler(middlewares, etcdClient, constant.ContentServiceName.String(), "/content", logger))
-	srv.HandlePrefix("/notify", NewProxyHandler(middlewares, etcdClient, constant.NotifyServiceName.String(), "/notify", logger))
+	srv.HandlePrefix("/api/user", NewProxyHandler(middlewares, etcdClient, constant.UserServiceName.String(), "/api/user", logger))
+	srv.HandlePrefix("/api/content", NewProxyHandler(middlewares, etcdClient, constant.ContentServiceName.String(), "/api/content", logger))
+	srv.HandlePrefix("/api/notify", NewProxyHandler(middlewares, etcdClient, constant.NotifyServiceName.String(), "/api/notify", logger))
 
 	for _, s := range services {
 		s.RegisterHttp(srv)
@@ -83,6 +87,7 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 		originalPath := r.URL.Path
 		r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
 		r.RequestURI = ""
+		r.Header.Set("Host", r.Host)
 
 		proxiedPath := r.URL.Path
 		if r.URL.RawQuery != "" {
@@ -152,58 +157,4 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 			}
 		}
 	})
-}
-
-// AuthMiddleware 返回一个 Kratos 中间件，用于认证
-func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
-	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			tr, ok := transport.FromServerContext(ctx)
-			if !ok {
-				return nil, errors.New("transport not found")
-			}
-			// 使用请求路径重写 operation
-			if ht, ok := tr.(*transporthttp.Transport); ok {
-				uri := ht.Request().URL.Path
-				// 是否需要鉴权 Todo 用户组权限规则后续持久化入库
-				var allow bool
-				for pattern := range NoAuthEndpoints {
-					matched, err := regexp.MatchString(pattern, uri)
-					if err == nil && matched {
-						allow = true
-						break
-					}
-				}
-				if allow {
-					return handler(ctx, req)
-				}
-
-				// 获取 token
-				token := strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), "Bearer ")
-
-				// 验证 token
-				userInfo, err := tokenRepo.GetToken(ctx, token)
-				if err != nil {
-					return nil, err
-				}
-
-				// 权限范围 Todo 用户组权限规则后续持久化入库
-
-				// 设置上下文
-				ctx = context.WithValue(ctx, constant.CtxUserInfo, userInfo)
-				ctx = context.WithValue(ctx, constant.Token, token)
-
-				return handler(ctx, req)
-			} else {
-				return nil, errors.New("transport not http")
-			}
-		}
-	}
-}
-
-var NoAuthEndpoints = map[string]struct{}{
-	"^.*/v1/system/health$":                       {},
-	"^/user/v1/authentication/.*$":                {},
-	"^/user/v1/oss/qiniu/uploadCallback$":         {},
-	"^/user/v1/oss/qiniu/incrementAuditCallback$": {},
 }

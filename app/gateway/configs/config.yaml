@@ -42,3 +42,19 @@ trace:
   endpoint: "127.0.0.1:4317"  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率
+
+oss:
+  provider: "qiniu"
+  avatar: "https://treble.sxisa.com/api/user/v1/user/avatar/%s" # /v1/user/avatar/{name}
+  minio:
+
+  qiniu:
+    access_key: "L8l6DGiYXzmx0IVT0GpIxI-Mj8LqfoIKF6iAnrWa"
+    secret_key: "qY6ohp-qZEtd20NZN94o7TScg3IeEGSZe-ZRsVXW"
+    bucket: "bass-test"
+    timeout: 300s
+    size_min: 0 # 单位 MB
+    size_max: 20 # 单位 MB
+    callback_url: "https://treble.sxisa.com/api/user/v1/oss/qiniu/uploadCallback" # 上传图片回调
+    increment_audit: false # 是否开启增量审核
+    increment_audit_callback_url: "https://treble.sxisa.com/api/user/v1/oss/qiniu/incrementAuditCallback" # 增量审核回调地址

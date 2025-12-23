@@ -1,7 +1,6 @@
 package qiniu
 
 import (
-	cv1 "common/api/common/v1"
 	"common/pkg/constant"
 	"context"
 	"fmt"
@@ -9,9 +8,7 @@ import (
 	"user/internal/data/base"
 	"user/internal/data/ent/gen"
 
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/qiniu/go-sdk/v7/auth"
-	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 )
 
@@ -66,19 +63,4 @@ func (q *Qiniu) Status(ctx context.Context, key string, enable bool) error {
 	bucketManager := storage.NewBucketManager(mac, nil)
 	err := bucketManager.UpdateObjectStatus(q.Conf.Oss.Qiniu.Bucket, key, enable)
 	return err
-}
-
-func (q *Qiniu) VerifyCallback(ctx context.Context) error {
-	errNoAuth := cv1.ErrorForbidden("verify callback failed")
-	mac := auth.New(q.Conf.Oss.Qiniu.AccessKey, q.Conf.Oss.Qiniu.SecretKey)
-	if r, ok := http.RequestFromServerContext(ctx); ok {
-		verify, err := qbox.VerifyCallback(mac, r)
-		if err != nil {
-			return err
-		}
-		if verify {
-			return nil
-		}
-	}
-	return errNoAuth
 }

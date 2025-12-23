@@ -12,6 +12,7 @@ require (
 	github.com/google/wire v0.7.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/prometheus/client_golang v1.23.2
+	github.com/qiniu/go-sdk/v7 v7.25.5
 	go.etcd.io/etcd/client/v3 v3.6.7
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/metric v1.39.0
@@ -25,6 +26,7 @@ require (
 	dario.cat/mergo v1.0.0 // indirect
 	entgo.io/ent v0.14.5 // indirect
 	github.com/88250/lute v1.7.6 // indirect
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect

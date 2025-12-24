@@ -63,7 +63,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
-            ghcr.io/docker-cooooing/gateway:latest
+            ghcr.io/cooooing/gateway:latest
 
   user:
     runs-on: ubuntu-latest
@@ -114,7 +114,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
-            ghcr.io/docker-cooooing/user:latest
+            ghcr.io/cooooing/user:latest
   content:
     runs-on: ubuntu-latest
 
@@ -164,7 +164,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
-            ghcr.io/docker-cooooing/content:latest
+            ghcr.io/cooooing/content:latest
   notify:
     runs-on: ubuntu-latest
 
@@ -214,7 +214,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
-            ghcr.io/docker-cooooing/notify:latest
+            ghcr.io/cooooing/notify:latest
 
 
 

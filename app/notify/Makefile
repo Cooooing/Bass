@@ -34,7 +34,7 @@ init:
 .PHONY: config
 config:
 	@echo "Generating internal proto files..."
-	protoc -I $(INTERNAL_DIR) \
+	protoc -I $(INTERNAL_DIR) -I $(THIRD_PARTY_DIR) \
 	       --go_out=paths=source_relative:$(INTERNAL_DIR) \
 	       $(INTERNAL_PROTO_FILES)
 

@@ -2,8 +2,8 @@
 FROM golang:1.25 AS builder
 
 # 构建期环境变量
-ENV CGO_ENABLED=0
-    GOOS=linux
+ENV CGO_ENABLED=0 \
+    GOOS=linux \
     GOARCH=amd64
 
 # 设置工作目录

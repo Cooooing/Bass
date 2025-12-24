@@ -367,6 +367,7 @@ type Jwt struct {
 	Secret        string                 `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	Expires       *durationpb.Duration   `protobuf:"bytes,2,opt,name=expires,proto3" json:"expires,omitempty"`
 	EmailExpire   *durationpb.Duration   `protobuf:"bytes,3,opt,name=email_expire,json=emailExpire,proto3" json:"email_expire,omitempty"`
+	PhoneExpire   *durationpb.Duration   `protobuf:"bytes,4,opt,name=phone_expire,json=phoneExpire,proto3" json:"phone_expire,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -418,6 +419,13 @@ func (x *Jwt) GetExpires() *durationpb.Duration {
 func (x *Jwt) GetEmailExpire() *durationpb.Duration {
 	if x != nil {
 		return x.EmailExpire
+	}
+	return nil
+}
+
+func (x *Jwt) GetPhoneExpire() *durationpb.Duration {
+	if x != nil {
+		return x.PhoneExpire
 	}
 	return nil
 }
@@ -1111,11 +1119,12 @@ const file_conf_conf_proto_rawDesc = "" +
 	"enableOtel\x12\x1a\n" +
 	"\bendpoint\x18\x02 \x01(\tR\bendpoint\x12\x1a\n" +
 	"\binsecure\x18\x03 \x01(\bR\binsecure\x12\x18\n" +
-	"\asampler\x18\x04 \x01(\x01R\asampler\"\x90\x01\n" +
+	"\asampler\x18\x04 \x01(\x01R\asampler\"\xce\x01\n" +
 	"\x03Jwt\x12\x16\n" +
 	"\x06secret\x18\x01 \x01(\tR\x06secret\x123\n" +
 	"\aexpires\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\aexpires\x12<\n" +
-	"\femail_expire\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vemailExpire\"\xfe\x03\n" +
+	"\femail_expire\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vemailExpire\x12<\n" +
+	"\fphone_expire\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vphoneExpire\"\xfe\x03\n" +
 	"\x03Oss\x12\x1a\n" +
 	"\bprovider\x18\x01 \x01(\tR\bprovider\x12\x16\n" +
 	"\x06avatar\x18\x02 \x01(\tR\x06avatar\x120\n" +
@@ -1182,21 +1191,22 @@ var file_conf_conf_proto_depIdxs = []int32{
 	12, // 11: kratos.api.conf.Registry.etcd:type_name -> kratos.api.conf.Registry.Etcd
 	15, // 12: kratos.api.conf.Jwt.expires:type_name -> google.protobuf.Duration
 	15, // 13: kratos.api.conf.Jwt.email_expire:type_name -> google.protobuf.Duration
-	13, // 14: kratos.api.conf.Oss.qiniu:type_name -> kratos.api.conf.Oss.Qiniu
-	14, // 15: kratos.api.conf.Oss.minio:type_name -> kratos.api.conf.Oss.Minio
-	15, // 16: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	15, // 17: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	15, // 18: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	15, // 19: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	15, // 20: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
-	15, // 21: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	15, // 22: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
-	15, // 23: kratos.api.conf.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	15, // 14: kratos.api.conf.Jwt.phone_expire:type_name -> google.protobuf.Duration
+	13, // 15: kratos.api.conf.Oss.qiniu:type_name -> kratos.api.conf.Oss.Qiniu
+	14, // 16: kratos.api.conf.Oss.minio:type_name -> kratos.api.conf.Oss.Minio
+	15, // 17: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	15, // 18: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	15, // 19: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	15, // 20: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	15, // 21: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
+	15, // 22: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
+	15, // 23: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
+	15, // 24: kratos.api.conf.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }

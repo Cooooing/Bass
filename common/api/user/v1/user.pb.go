@@ -35,7 +35,7 @@ type User struct {
 	// 昵称
 	Nickname *string `protobuf:"bytes,3,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"`
 	// 邮箱
-	Email string `protobuf:"bytes,5,opt,name=email,proto3" json:"email,omitempty"`
+	Email *string `protobuf:"bytes,5,opt,name=email,proto3,oneof" json:"email,omitempty"`
 	// 手机号
 	Phone *string `protobuf:"bytes,6,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
 	// 用户个人主页链接
@@ -164,8 +164,8 @@ func (x *User) GetNickname() string {
 }
 
 func (x *User) GetEmail() string {
-	if x != nil {
-		return x.Email
+	if x != nil && x.Email != nil {
+		return *x.Email
 	}
 	return ""
 }
@@ -1272,49 +1272,49 @@ var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xf0\x10\n" +
+	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xff\x10\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
-	"\bnickname\x18\x03 \x01(\tH\x00R\bnickname\x88\x01\x01\x12\x14\n" +
-	"\x05email\x18\x05 \x01(\tR\x05email\x12\x19\n" +
-	"\x05phone\x18\x06 \x01(\tH\x01R\x05phone\x88\x01\x01\x12\x15\n" +
-	"\x03url\x18\a \x01(\tH\x02R\x03url\x88\x01\x01\x12\"\n" +
+	"\bnickname\x18\x03 \x01(\tH\x00R\bnickname\x88\x01\x01\x12\x19\n" +
+	"\x05email\x18\x05 \x01(\tH\x01R\x05email\x88\x01\x01\x12\x19\n" +
+	"\x05phone\x18\x06 \x01(\tH\x02R\x05phone\x88\x01\x01\x12\x15\n" +
+	"\x03url\x18\a \x01(\tH\x03R\x03url\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"avatar_url\x18\b \x01(\tH\x03R\tavatarUrl\x88\x01\x01\x12'\n" +
-	"\fintroduction\x18\t \x01(\tH\x04R\fintroduction\x88\x01\x01\x12\x17\n" +
+	"avatar_url\x18\b \x01(\tH\x04R\tavatarUrl\x88\x01\x01\x12'\n" +
+	"\fintroduction\x18\t \x01(\tH\x05R\fintroduction\x88\x01\x01\x12\x17\n" +
 	"\x04mbti\x18\n" +
-	" \x01(\tH\x05R\x04mbti\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\v \x01(\x05H\x06R\x06status\x88\x01\x01\x12\x1d\n" +
+	" \x01(\tH\x06R\x04mbti\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\v \x01(\x05H\aR\x06status\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"group_name\x18\f \x01(\tR\tgroupName\x12&\n" +
-	"\ffollow_count\x18\r \x01(\x05H\aR\vfollowCount\x88\x01\x01\x12*\n" +
-	"\x0efollower_count\x18\x0e \x01(\x05H\bR\rfollowerCount\x88\x01\x01\x12$\n" +
-	"\vblock_count\x18( \x01(\x05H\tR\n" +
+	"\ffollow_count\x18\r \x01(\x05H\bR\vfollowCount\x88\x01\x01\x12*\n" +
+	"\x0efollower_count\x18\x0e \x01(\x05H\tR\rfollowerCount\x88\x01\x01\x12$\n" +
+	"\vblock_count\x18( \x01(\x05H\n" +
+	"R\n" +
 	"blockCount\x88\x01\x01\x12(\n" +
-	"\rblocked_count\x18) \x01(\x05H\n" +
-	"R\fblockedCount\x88\x01\x01\x12B\n" +
+	"\rblocked_count\x18) \x01(\x05H\vR\fblockedCount\x88\x01\x01\x12B\n" +
 	"\x0flast_login_time\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\rlastLoginTime\x12'\n" +
-	"\rlast_login_ip\x18\x10 \x01(\tH\vR\vlastLoginIp\x88\x01\x01\x12*\n" +
-	"\x0eonline_minutes\x18\x11 \x01(\x05H\fR\ronlineMinutes\x88\x01\x01\x12F\n" +
+	"\rlast_login_ip\x18\x10 \x01(\tH\fR\vlastLoginIp\x88\x01\x01\x12*\n" +
+	"\x0eonline_minutes\x18\x11 \x01(\x05H\rR\ronlineMinutes\x88\x01\x01\x12F\n" +
 	"\x11last_checkin_time\x18\x12 \x01(\v2\x1a.google.protobuf.TimestampR\x0flastCheckinTime\x129\n" +
-	"\x16current_checkin_streak\x18\x13 \x01(\x05H\rR\x14currentCheckinStreak\x88\x01\x01\x129\n" +
-	"\x16longest_checkin_streak\x18\x14 \x01(\x05H\x0eR\x14longestCheckinStreak\x88\x01\x01\x12\x1f\n" +
-	"\blanguage\x18\x15 \x01(\tH\x0fR\blanguage\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18\x16 \x01(\tH\x10R\btimezone\x88\x01\x01\x12\x19\n" +
-	"\x05theme\x18\x17 \x01(\tH\x11R\x05theme\x88\x01\x01\x12&\n" +
-	"\fmobile_theme\x18\x18 \x01(\tH\x12R\vmobileTheme\x88\x01\x01\x12/\n" +
-	"\x11enable_web_notify\x18\x19 \x01(\bH\x13R\x0fenableWebNotify\x88\x01\x01\x129\n" +
-	"\x16enable_email_subscribe\x18\x1a \x01(\bH\x14R\x14enableEmailSubscribe\x88\x01\x01\x12(\n" +
-	"\rpublic_points\x18\x1b \x01(\bH\x15R\fpublicPoints\x88\x01\x01\x12.\n" +
-	"\x10public_followers\x18\x1c \x01(\bH\x16R\x0fpublicFollowers\x88\x01\x01\x12,\n" +
-	"\x0fpublic_articles\x18\x1d \x01(\bH\x17R\x0epublicArticles\x88\x01\x01\x12,\n" +
-	"\x0fpublic_comments\x18\x1e \x01(\bH\x18R\x0epublicComments\x88\x01\x01\x125\n" +
-	"\x14public_online_status\x18\x1f \x01(\bH\x19R\x12publicOnlineStatus\x88\x01\x01\x12\x1d\n" +
-	"\acountry\x18  \x01(\tH\x1aR\acountry\x88\x01\x01\x12\x1f\n" +
-	"\bprovince\x18! \x01(\tH\x1bR\bprovince\x88\x01\x01\x12\x17\n" +
-	"\x04city\x18\" \x01(\tH\x1cR\x04city\x88\x01\x01\x12,\n" +
-	"\x0fpublic_location\x18# \x01(\bH\x1dR\x0epublicLocation\x88\x01\x01\x12!\n" +
+	"\x16current_checkin_streak\x18\x13 \x01(\x05H\x0eR\x14currentCheckinStreak\x88\x01\x01\x129\n" +
+	"\x16longest_checkin_streak\x18\x14 \x01(\x05H\x0fR\x14longestCheckinStreak\x88\x01\x01\x12\x1f\n" +
+	"\blanguage\x18\x15 \x01(\tH\x10R\blanguage\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x16 \x01(\tH\x11R\btimezone\x88\x01\x01\x12\x19\n" +
+	"\x05theme\x18\x17 \x01(\tH\x12R\x05theme\x88\x01\x01\x12&\n" +
+	"\fmobile_theme\x18\x18 \x01(\tH\x13R\vmobileTheme\x88\x01\x01\x12/\n" +
+	"\x11enable_web_notify\x18\x19 \x01(\bH\x14R\x0fenableWebNotify\x88\x01\x01\x129\n" +
+	"\x16enable_email_subscribe\x18\x1a \x01(\bH\x15R\x14enableEmailSubscribe\x88\x01\x01\x12(\n" +
+	"\rpublic_points\x18\x1b \x01(\bH\x16R\fpublicPoints\x88\x01\x01\x12.\n" +
+	"\x10public_followers\x18\x1c \x01(\bH\x17R\x0fpublicFollowers\x88\x01\x01\x12,\n" +
+	"\x0fpublic_articles\x18\x1d \x01(\bH\x18R\x0epublicArticles\x88\x01\x01\x12,\n" +
+	"\x0fpublic_comments\x18\x1e \x01(\bH\x19R\x0epublicComments\x88\x01\x01\x125\n" +
+	"\x14public_online_status\x18\x1f \x01(\bH\x1aR\x12publicOnlineStatus\x88\x01\x01\x12\x1d\n" +
+	"\acountry\x18  \x01(\tH\x1bR\acountry\x88\x01\x01\x12\x1f\n" +
+	"\bprovince\x18! \x01(\tH\x1cR\bprovince\x88\x01\x01\x12\x17\n" +
+	"\x04city\x18\" \x01(\tH\x1dR\x04city\x88\x01\x01\x12,\n" +
+	"\x0fpublic_location\x18# \x01(\bH\x1eR\x0epublicLocation\x88\x01\x01\x12!\n" +
 	"\ftwofa_enable\x18$ \x01(\bR\vtwofaEnable\x12F\n" +
 	"\x11twofa_enable_time\x18% \x01(\v2\x1a.google.protobuf.TimestampR\x0ftwofaEnableTime\x12:\n" +
 	"\n" +
@@ -1322,6 +1322,7 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\v\n" +
 	"\t_nicknameB\b\n" +
+	"\x06_emailB\b\n" +
 	"\x06_phoneB\x06\n" +
 	"\x04_urlB\r\n" +
 	"\v_avatar_urlB\x0f\n" +

@@ -20,15 +20,15 @@ var c = &conf.Bootstrap{
 
 func TestJwt(t *testing.T) {
 	service := biz.NewTokenService(c)
-	token, err := service.EmailTokenGen.Generate(model.TokenEmail{
-		Email: "2222",
-	})
+	token, err := service.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{
+		Account: "2222",
+	}, 5*time.Minute)
 	if err != nil {
 		t.Error(err)
 	}
 	t.Log(token)
 	time.Sleep(2 * time.Second)
-	claims, err := service.EmailTokenGen.Parse(token)
+	claims, err := service.VerityCodeAccountTokenGen.Parse(token)
 	if err != nil {
 		t.Error(err)
 	}

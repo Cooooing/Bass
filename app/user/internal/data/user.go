@@ -28,7 +28,7 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 	userCreate := tx.User.Create().
 		SetName(u.Name).
 		SetPassword(u.Password).
-		SetEmail(u.Email).
+		SetNillableEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
 		SetAvatarURL(fmt.Sprintf(r.Conf.Oss.Avatar, u.Name))

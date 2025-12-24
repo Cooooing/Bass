@@ -628,7 +628,7 @@ const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"!NotifyNotificationTemplateService\x12\x98\x01\n" +
 	"\x04Page\x123.common.api.user.v1.NotificationTemplatePageRequest\x1a1.common.api.user.v1.NotificationTemplatePageReply\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/notificationTemplate/page\x12\x94\x01\n" +
 	"\x03Add\x122.common.api.user.v1.NotificationTemplateAddRequest\x1a0.common.api.user.v1.NotificationTemplateAddReply\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/notificationTemplate/add\x12\xa0\x01\n" +
-	"\x06Update\x125.common.api.user.v1.NotificationTemplateUpdateRequest\x1a3.common.api.user.v1.NotificationTemplateUpdateReply\"*\x82\xd3\xe4\x93\x02$:\x01*\x1a\x1f/v1/notificationTemplate/updateB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x06Update\x125.common.api.user.v1.NotificationTemplateUpdateRequest\x1a3.common.api.user.v1.NotificationTemplateUpdateReply\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/notificationTemplate/updateB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_template_proto_rawDescOnce sync.Once

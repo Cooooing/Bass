@@ -24,7 +24,7 @@ type User struct {
 	// 密码
 	Password string `json:"-"`
 	// 邮箱
-	Email string `json:"email,omitempty"`
+	Email *string `json:"email,omitempty"`
 	// 手机号
 	Phone *string `json:"phone,omitempty"`
 	// 用户个人主页链接
@@ -191,7 +191,8 @@ func (_m *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				_m.Email = value.String
+				_m.Email = new(string)
+				*_m.Email = value.String
 			}
 		case user.FieldPhone:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -505,8 +506,10 @@ func (_m *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("password=<sensitive>")
 	builder.WriteString(", ")
-	builder.WriteString("email=")
-	builder.WriteString(_m.Email)
+	if v := _m.Email; v != nil {
+		builder.WriteString("email=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.Phone; v != nil {
 		builder.WriteString("phone=")

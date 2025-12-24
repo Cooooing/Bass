@@ -7,17 +7,17 @@ import (
 )
 
 type TokenService struct {
-	conf          *conf.Bootstrap
-	EmailTokenGen *jwt.TokenGenerator[model.TokenEmail]
-	TokenGen      *jwt.TokenGenerator[model.Token]
+	conf                      *conf.Bootstrap
+	VerityCodeAccountTokenGen *jwt.TokenGenerator[model.TokenVerityCodeAccount]
+	TokenGen                  *jwt.TokenGenerator[model.Token]
 }
 
 func NewTokenService(conf *conf.Bootstrap) *TokenService {
-	emailTokenGen := jwt.NewTokenGenerator[model.TokenEmail](conf.Jwt.Secret, conf.Jwt.EmailExpire.AsDuration())
-	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Jwt.Secret, conf.Jwt.Expires.AsDuration())
+	verityCodeAccountTokenGen := jwt.NewTokenGenerator[model.TokenVerityCodeAccount](conf.Jwt.Secret)
+	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Jwt.Secret)
 	return &TokenService{
-		conf:          conf,
-		EmailTokenGen: emailTokenGen,
-		TokenGen:      tokenGen,
+		conf:                      conf,
+		VerityCodeAccountTokenGen: verityCodeAccountTokenGen,
+		TokenGen:                  tokenGen,
 	}
 }

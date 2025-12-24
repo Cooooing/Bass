@@ -1,16 +1,17 @@
-package base
+package infra
 
 import (
 	"fmt"
+	"notify/internal/biz/base"
 
 	"gopkg.in/gomail.v2"
 )
 
 type EmailDomain struct {
-	*BaseDomain
+	*base.BaseDomain
 }
 
-func NewEmailDomain(base *BaseDomain) *EmailDomain {
+func NewEmailDomain(base *base.BaseDomain) *EmailDomain {
 	return &EmailDomain{
 		BaseDomain: base,
 	}

@@ -14,10 +14,11 @@ type Notification struct {
 	Meta       Meta                            `json:"meta"`
 	Status     notifyv1.NotificationStatus     `json:"status"`
 
-	ReceiverIds   []int64 `json:"-"` // 接收者ID
-	Title         string  `json:"-"` // 模板标题
-	Content       string  `json:"-"` // 模板内容
-	ContentRender string  `json:"-"` // 模板内容渲染结果(持久化)
+	ReceiverIds   []int64                      `json:"-"` // 接收者ID
+	Title         string                       `json:"-"` // 模板标题
+	Content       string                       `json:"-"` // 模板内容
+	ContentRender string                       `json:"-"` // 模板内容渲染结果(持久化)
+	Channel       notifyv1.NotificationChannel `json:"-"` // 通知渠道
 }
 
 type Meta struct {
@@ -52,7 +53,10 @@ type CommentMeta struct {
 
 type RegisterVerifyCode struct {
 	Email         string        `json:"email"`
-	Code          string        `json:"code"`
 	Expire        time.Duration `json:"expire"`
 	ExpireMinutes int           `json:"expire_minutes"`
+
+	Phone string `json:"phone"`
+
+	Code string `json:"code"`
 }

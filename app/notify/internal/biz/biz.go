@@ -4,6 +4,7 @@ import (
 	"common/pkg/util"
 	"notify/internal/biz/base"
 	"notify/internal/biz/handler"
+	"notify/internal/biz/infra"
 
 	"github.com/google/wire"
 )
@@ -18,5 +19,6 @@ var BizProviderSet = wire.NewSet(
 	NewNotificationMetaDomain,
 	NewNotificationRecordDomain,
 	NewNotificationTemplateDomain,
-	base.NewEmailDomain,
+	infra.NewTencentSmsDomain,
+	infra.NewEmailDomain,
 )

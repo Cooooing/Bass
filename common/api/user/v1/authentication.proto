@@ -29,6 +29,20 @@ service UserAuthenticationService {
       body: "*"
     };
   }
+  // 手机号注册
+  rpc RegisterPhone (RegisterPhoneRequest) returns (RegisterPhoneReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/register/phone"
+      body: "*"
+    };
+  }
+  // 手机号注册验证码验证
+  rpc RegisterPhoneVerify (RegisterPhoneVerifyRequest) returns (RegisterPhoneVerifyReply) {
+    option (google.api.http) = {
+      post: "/v1/authentication/register/phone/verify"
+      body: "*"
+    };
+  }
 
   // -- 账号信息查询
 
@@ -114,6 +128,47 @@ message RegisterEmailVerifyRequest {
   string code_token = 2;
 }
 message RegisterEmailVerifyReply {}
+
+message RegisterPhoneRequest {
+  // 邮箱
+  string phone = 1[
+    (validate.rules) = {
+      string: {
+        min_len: 11,
+        max_len: 11,
+        pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$" // 11 位国内手机号
+      }
+    }
+  ];
+  // 密码
+  string password = 2;
+  // 用户名
+  string name = 3;
+  // 昵称
+  optional string nickname = 4;
+}
+message RegisterPhoneReply {
+  // 验证码令牌
+  string code_token = 1;
+  // 验证码（仅供调试使用）
+  string code = 2;
+}
+
+message RegisterPhoneVerifyRequest {
+  // 验证码
+  string code = 1 [
+    (validate.rules) = {
+      string: {
+        min_len: 6,
+        max_len: 6,
+        pattern: "^[A-Za-z0-9]+$"  // 6 位验证码
+      }
+    }
+  ];
+  // 验证码令牌
+  string code_token = 2;
+}
+message RegisterPhoneVerifyReply {}
 
 message ExistEmailRequest {
   // 邮箱

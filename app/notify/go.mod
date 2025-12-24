@@ -16,6 +16,8 @@ require (
 	github.com/panjf2000/ants/v2 v2.11.3
 	github.com/prometheus/client_golang v1.23.2
 	github.com/rabbitmq/amqp091-go v1.10.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.1.49
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.1.49
 	go.etcd.io/etcd/client/v3 v3.6.7
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/metric v1.39.0

@@ -11,7 +11,6 @@ import (
 // TokenGenerator 负责生成和解析 JWT Token
 type TokenGenerator[T any] struct {
 	secret string
-	expire time.Duration
 }
 
 // Claims 自定义载荷结构
@@ -21,19 +20,18 @@ type Claims[T any] struct {
 }
 
 // NewTokenGenerator 创建一个新的 Token 生成器
-func NewTokenGenerator[T any](secret string, expire time.Duration) *TokenGenerator[T] {
+func NewTokenGenerator[T any](secret string) *TokenGenerator[T] {
 	return &TokenGenerator[T]{
 		secret: secret,
-		expire: expire,
 	}
 }
 
 // Generate 生成 JWT Token
-func (g *TokenGenerator[T]) Generate(data T) (string, error) {
+func (g *TokenGenerator[T]) Generate(data T, expire time.Duration) (string, error) {
 	claims := &Claims[T]{
 		Data: data,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(g.expire)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expire)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()), // Token 立即可用
 		},

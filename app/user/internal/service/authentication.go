@@ -4,6 +4,7 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/user/v1"
 	"common/pkg/constant"
+	"common/pkg/cutil/base"
 	"common/pkg/util"
 	"context"
 	"user/internal/biz"
@@ -51,7 +52,7 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{User: &gen.User{
-		Email:    req.Email,
+		Email:    base.Ptr(req.Email),
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
@@ -62,6 +63,30 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 func (s *AuthenticationService) RegisterEmailVerify(ctx context.Context, req *v1.RegisterEmailVerifyRequest) (rsp *v1.RegisterEmailVerifyReply, err error) {
 	err = s.authenticationDomain.RegisterEmailVerify(ctx, req.CodeToken, req.Code)
 	return &v1.RegisterEmailVerifyReply{}, err
+}
+
+func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.RegisterPhoneRequest) (rsp *v1.RegisterPhoneReply, err error) {
+	if !s.VerifyName(req.Name) {
+		return nil, cv1.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
+	}
+	if req.Nickname != nil && !s.VerifyNickname(*req.Nickname) {
+		return nil, cv1.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
+	}
+	if !s.VerifyPassword(req.Password) {
+		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
+	}
+	code, token, err := s.authenticationDomain.RegisterPhone(ctx, &model.User{User: &gen.User{
+		Phone:    base.Ptr(req.Phone),
+		Password: req.Password,
+		Name:     req.Name,
+		Nickname: req.Nickname,
+	}})
+	return &v1.RegisterPhoneReply{Code: code, CodeToken: token}, err
+}
+
+func (s *AuthenticationService) RegisterPhoneVerify(ctx context.Context, req *v1.RegisterPhoneVerifyRequest) (rsp *v1.RegisterPhoneVerifyReply, err error) {
+	err = s.authenticationDomain.RegisterPhoneVerify(ctx, req.CodeToken, req.Code)
+	return &v1.RegisterPhoneVerifyReply{}, err
 }
 
 func (s *AuthenticationService) ExistEmail(ctx context.Context, req *v1.ExistEmailRequest) (rsp *v1.ExistEmailReply, err error) {

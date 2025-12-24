@@ -11,6 +11,7 @@ message Bootstrap {
   Registry registry = 3;
   Trace trace = 4;
   Email email = 5;
+  SmsConfig sms = 6;
 }
 
 message Server {
@@ -83,3 +84,17 @@ message Email {
   string password = 5;      // SMTP 密码
   string from = 6;          // 发件人邮箱
 }
+
+message SmsConfig {
+  string provider = 1;
+  message TencentSmsConfig {
+    string secret_id = 1;
+    string secret_key = 2;
+    string diyu = 3;
+    string sms_sdk_app_id = 4;
+    string sign_name = 5;
+    string template_id = 6;
+  }
+  TencentSmsConfig tencent = 2;
+}
+

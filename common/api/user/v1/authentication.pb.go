@@ -241,6 +241,222 @@ func (*RegisterEmailVerifyReply) Descriptor() ([]byte, []int) {
 	return file_user_v1_authentication_proto_rawDescGZIP(), []int{3}
 }
 
+type RegisterPhoneRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 邮箱
+	Phone string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
+	// 密码
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	// 用户名
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// 昵称
+	Nickname      *string `protobuf:"bytes,4,opt,name=nickname,proto3,oneof" json:"nickname,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterPhoneRequest) Reset() {
+	*x = RegisterPhoneRequest{}
+	mi := &file_user_v1_authentication_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterPhoneRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterPhoneRequest) ProtoMessage() {}
+
+func (x *RegisterPhoneRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_authentication_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterPhoneRequest.ProtoReflect.Descriptor instead.
+func (*RegisterPhoneRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *RegisterPhoneRequest) GetPhone() string {
+	if x != nil {
+		return x.Phone
+	}
+	return ""
+}
+
+func (x *RegisterPhoneRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *RegisterPhoneRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *RegisterPhoneRequest) GetNickname() string {
+	if x != nil && x.Nickname != nil {
+		return *x.Nickname
+	}
+	return ""
+}
+
+type RegisterPhoneReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 验证码令牌
+	CodeToken string `protobuf:"bytes,1,opt,name=code_token,json=codeToken,proto3" json:"code_token,omitempty"`
+	// 验证码（仅供调试使用）
+	Code          string `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterPhoneReply) Reset() {
+	*x = RegisterPhoneReply{}
+	mi := &file_user_v1_authentication_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterPhoneReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterPhoneReply) ProtoMessage() {}
+
+func (x *RegisterPhoneReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_authentication_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterPhoneReply.ProtoReflect.Descriptor instead.
+func (*RegisterPhoneReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *RegisterPhoneReply) GetCodeToken() string {
+	if x != nil {
+		return x.CodeToken
+	}
+	return ""
+}
+
+func (x *RegisterPhoneReply) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type RegisterPhoneVerifyRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 验证码
+	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	// 验证码令牌
+	CodeToken     string `protobuf:"bytes,2,opt,name=code_token,json=codeToken,proto3" json:"code_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterPhoneVerifyRequest) Reset() {
+	*x = RegisterPhoneVerifyRequest{}
+	mi := &file_user_v1_authentication_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterPhoneVerifyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterPhoneVerifyRequest) ProtoMessage() {}
+
+func (x *RegisterPhoneVerifyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_authentication_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterPhoneVerifyRequest.ProtoReflect.Descriptor instead.
+func (*RegisterPhoneVerifyRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *RegisterPhoneVerifyRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *RegisterPhoneVerifyRequest) GetCodeToken() string {
+	if x != nil {
+		return x.CodeToken
+	}
+	return ""
+}
+
+type RegisterPhoneVerifyReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterPhoneVerifyReply) Reset() {
+	*x = RegisterPhoneVerifyReply{}
+	mi := &file_user_v1_authentication_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterPhoneVerifyReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterPhoneVerifyReply) ProtoMessage() {}
+
+func (x *RegisterPhoneVerifyReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_authentication_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterPhoneVerifyReply.ProtoReflect.Descriptor instead.
+func (*RegisterPhoneVerifyReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{7}
+}
+
 type ExistEmailRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 邮箱
@@ -251,7 +467,7 @@ type ExistEmailRequest struct {
 
 func (x *ExistEmailRequest) Reset() {
 	*x = ExistEmailRequest{}
-	mi := &file_user_v1_authentication_proto_msgTypes[4]
+	mi := &file_user_v1_authentication_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -263,7 +479,7 @@ func (x *ExistEmailRequest) String() string {
 func (*ExistEmailRequest) ProtoMessage() {}
 
 func (x *ExistEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[4]
+	mi := &file_user_v1_authentication_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +492,7 @@ func (x *ExistEmailRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistEmailRequest.ProtoReflect.Descriptor instead.
 func (*ExistEmailRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{4}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ExistEmailRequest) GetEmail() string {
@@ -296,7 +512,7 @@ type ExistEmailReply struct {
 
 func (x *ExistEmailReply) Reset() {
 	*x = ExistEmailReply{}
-	mi := &file_user_v1_authentication_proto_msgTypes[5]
+	mi := &file_user_v1_authentication_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -308,7 +524,7 @@ func (x *ExistEmailReply) String() string {
 func (*ExistEmailReply) ProtoMessage() {}
 
 func (x *ExistEmailReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[5]
+	mi := &file_user_v1_authentication_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -321,7 +537,7 @@ func (x *ExistEmailReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistEmailReply.ProtoReflect.Descriptor instead.
 func (*ExistEmailReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{5}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ExistEmailReply) GetExist() bool {
@@ -341,7 +557,7 @@ type ExistUsernameRequest struct {
 
 func (x *ExistUsernameRequest) Reset() {
 	*x = ExistUsernameRequest{}
-	mi := &file_user_v1_authentication_proto_msgTypes[6]
+	mi := &file_user_v1_authentication_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -353,7 +569,7 @@ func (x *ExistUsernameRequest) String() string {
 func (*ExistUsernameRequest) ProtoMessage() {}
 
 func (x *ExistUsernameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[6]
+	mi := &file_user_v1_authentication_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -366,7 +582,7 @@ func (x *ExistUsernameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistUsernameRequest.ProtoReflect.Descriptor instead.
 func (*ExistUsernameRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{6}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ExistUsernameRequest) GetUsername() string {
@@ -386,7 +602,7 @@ type ExistUsernameReply struct {
 
 func (x *ExistUsernameReply) Reset() {
 	*x = ExistUsernameReply{}
-	mi := &file_user_v1_authentication_proto_msgTypes[7]
+	mi := &file_user_v1_authentication_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -398,7 +614,7 @@ func (x *ExistUsernameReply) String() string {
 func (*ExistUsernameReply) ProtoMessage() {}
 
 func (x *ExistUsernameReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[7]
+	mi := &file_user_v1_authentication_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -411,7 +627,7 @@ func (x *ExistUsernameReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistUsernameReply.ProtoReflect.Descriptor instead.
 func (*ExistUsernameReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{7}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ExistUsernameReply) GetExist() bool {
@@ -431,7 +647,7 @@ type ExistPhoneRequest struct {
 
 func (x *ExistPhoneRequest) Reset() {
 	*x = ExistPhoneRequest{}
-	mi := &file_user_v1_authentication_proto_msgTypes[8]
+	mi := &file_user_v1_authentication_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -443,7 +659,7 @@ func (x *ExistPhoneRequest) String() string {
 func (*ExistPhoneRequest) ProtoMessage() {}
 
 func (x *ExistPhoneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[8]
+	mi := &file_user_v1_authentication_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -456,7 +672,7 @@ func (x *ExistPhoneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistPhoneRequest.ProtoReflect.Descriptor instead.
 func (*ExistPhoneRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{8}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ExistPhoneRequest) GetPhone() string {
@@ -476,7 +692,7 @@ type ExistPhoneReply struct {
 
 func (x *ExistPhoneReply) Reset() {
 	*x = ExistPhoneReply{}
-	mi := &file_user_v1_authentication_proto_msgTypes[9]
+	mi := &file_user_v1_authentication_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -488,7 +704,7 @@ func (x *ExistPhoneReply) String() string {
 func (*ExistPhoneReply) ProtoMessage() {}
 
 func (x *ExistPhoneReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[9]
+	mi := &file_user_v1_authentication_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -501,7 +717,7 @@ func (x *ExistPhoneReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExistPhoneReply.ProtoReflect.Descriptor instead.
 func (*ExistPhoneReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{9}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ExistPhoneReply) GetExist() bool {
@@ -523,7 +739,7 @@ type LoginAccountRequest struct {
 
 func (x *LoginAccountRequest) Reset() {
 	*x = LoginAccountRequest{}
-	mi := &file_user_v1_authentication_proto_msgTypes[10]
+	mi := &file_user_v1_authentication_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -535,7 +751,7 @@ func (x *LoginAccountRequest) String() string {
 func (*LoginAccountRequest) ProtoMessage() {}
 
 func (x *LoginAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[10]
+	mi := &file_user_v1_authentication_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -548,7 +764,7 @@ func (x *LoginAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginAccountRequest.ProtoReflect.Descriptor instead.
 func (*LoginAccountRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{10}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *LoginAccountRequest) GetAccount() string {
@@ -577,7 +793,7 @@ type LoginAccountReply struct {
 
 func (x *LoginAccountReply) Reset() {
 	*x = LoginAccountReply{}
-	mi := &file_user_v1_authentication_proto_msgTypes[11]
+	mi := &file_user_v1_authentication_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -589,7 +805,7 @@ func (x *LoginAccountReply) String() string {
 func (*LoginAccountReply) ProtoMessage() {}
 
 func (x *LoginAccountReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[11]
+	mi := &file_user_v1_authentication_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -602,7 +818,7 @@ func (x *LoginAccountReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginAccountReply.ProtoReflect.Descriptor instead.
 func (*LoginAccountReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{11}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *LoginAccountReply) GetToken() string {
@@ -627,7 +843,7 @@ type LogoutRequest struct {
 
 func (x *LogoutRequest) Reset() {
 	*x = LogoutRequest{}
-	mi := &file_user_v1_authentication_proto_msgTypes[12]
+	mi := &file_user_v1_authentication_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -639,7 +855,7 @@ func (x *LogoutRequest) String() string {
 func (*LogoutRequest) ProtoMessage() {}
 
 func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[12]
+	mi := &file_user_v1_authentication_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -652,7 +868,7 @@ func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
 func (*LogoutRequest) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{12}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{16}
 }
 
 type LogoutReply struct {
@@ -663,7 +879,7 @@ type LogoutReply struct {
 
 func (x *LogoutReply) Reset() {
 	*x = LogoutReply{}
-	mi := &file_user_v1_authentication_proto_msgTypes[13]
+	mi := &file_user_v1_authentication_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -675,7 +891,7 @@ func (x *LogoutReply) String() string {
 func (*LogoutReply) ProtoMessage() {}
 
 func (x *LogoutReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_authentication_proto_msgTypes[13]
+	mi := &file_user_v1_authentication_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -688,7 +904,7 @@ func (x *LogoutReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutReply.ProtoReflect.Descriptor instead.
 func (*LogoutReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_authentication_proto_rawDescGZIP(), []int{13}
+	return file_user_v1_authentication_proto_rawDescGZIP(), []int{17}
 }
 
 var File_user_v1_authentication_proto protoreflect.FileDescriptor
@@ -710,7 +926,22 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\tB\x19\xfaB\x16r\x14\x10\x06\x18\x062\x0e^[A-Za-z0-9]+$R\x04code\x12\x1d\n" +
 	"\n" +
 	"code_token\x18\x02 \x01(\tR\tcodeToken\"\x1a\n" +
-	"\x18RegisterEmailVerifyReply\"7\n" +
+	"\x18RegisterEmailVerifyReply\"\xe3\x01\n" +
+	"\x14RegisterPhoneRequest\x12m\n" +
+	"\x05phone\x18\x01 \x01(\tBW\xfaBTrR\x10\v\x18\v2L^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$R\x05phone\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1f\n" +
+	"\bnickname\x18\x04 \x01(\tH\x00R\bnickname\x88\x01\x01B\v\n" +
+	"\t_nickname\"G\n" +
+	"\x12RegisterPhoneReply\x12\x1d\n" +
+	"\n" +
+	"code_token\x18\x01 \x01(\tR\tcodeToken\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\"j\n" +
+	"\x1aRegisterPhoneVerifyRequest\x12-\n" +
+	"\x04code\x18\x01 \x01(\tB\x19\xfaB\x16r\x14\x10\x06\x18\x062\x0e^[A-Za-z0-9]+$R\x04code\x12\x1d\n" +
+	"\n" +
+	"code_token\x18\x02 \x01(\tR\tcodeToken\"\x1a\n" +
+	"\x18RegisterPhoneVerifyReply\"7\n" +
 	"\x11ExistEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\"6\n" +
 	"\x0fExistEmailReply\x12\x19\n" +
@@ -733,10 +964,13 @@ const file_user_v1_authentication_proto_rawDesc = "" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12,\n" +
 	"\x04user\x18\x02 \x01(\v2\x18.common.api.user.v1.UserR\x04user\"\x0f\n" +
 	"\rLogoutRequest\"\r\n" +
-	"\vLogoutReply2\xf8\a\n" +
+	"\vLogoutReply2\xb5\n" +
+	"\n" +
 	"\x19UserAuthenticationService\x12\x8f\x01\n" +
 	"\rRegisterEmail\x12(.common.api.user.v1.RegisterEmailRequest\x1a&.common.api.user.v1.RegisterEmailReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/email\x12\xa8\x01\n" +
-	"\x13RegisterEmailVerify\x12..common.api.user.v1.RegisterEmailVerifyRequest\x1a,.common.api.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12\x83\x01\n" +
+	"\x13RegisterEmailVerify\x12..common.api.user.v1.RegisterEmailVerifyRequest\x1a,.common.api.user.v1.RegisterEmailVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/email/verify\x12\x8f\x01\n" +
+	"\rRegisterPhone\x12(.common.api.user.v1.RegisterPhoneRequest\x1a&.common.api.user.v1.RegisterPhoneReply\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/authentication/register/phone\x12\xa8\x01\n" +
+	"\x13RegisterPhoneVerify\x12..common.api.user.v1.RegisterPhoneVerifyRequest\x1a,.common.api.user.v1.RegisterPhoneVerifyReply\"3\x82\xd3\xe4\x93\x02-:\x01*\"(/v1/authentication/register/phone/verify\x12\x83\x01\n" +
 	"\n" +
 	"ExistEmail\x12%.common.api.user.v1.ExistEmailRequest\x1a#.common.api.user.v1.ExistEmailReply\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/v1/authentication/exist/email\x12\x83\x01\n" +
 	"\n" +
@@ -757,42 +991,50 @@ func file_user_v1_authentication_proto_rawDescGZIP() []byte {
 	return file_user_v1_authentication_proto_rawDescData
 }
 
-var file_user_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_user_v1_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_user_v1_authentication_proto_goTypes = []any{
 	(*RegisterEmailRequest)(nil),       // 0: common.api.user.v1.RegisterEmailRequest
 	(*RegisterEmailReply)(nil),         // 1: common.api.user.v1.RegisterEmailReply
 	(*RegisterEmailVerifyRequest)(nil), // 2: common.api.user.v1.RegisterEmailVerifyRequest
 	(*RegisterEmailVerifyReply)(nil),   // 3: common.api.user.v1.RegisterEmailVerifyReply
-	(*ExistEmailRequest)(nil),          // 4: common.api.user.v1.ExistEmailRequest
-	(*ExistEmailReply)(nil),            // 5: common.api.user.v1.ExistEmailReply
-	(*ExistUsernameRequest)(nil),       // 6: common.api.user.v1.ExistUsernameRequest
-	(*ExistUsernameReply)(nil),         // 7: common.api.user.v1.ExistUsernameReply
-	(*ExistPhoneRequest)(nil),          // 8: common.api.user.v1.ExistPhoneRequest
-	(*ExistPhoneReply)(nil),            // 9: common.api.user.v1.ExistPhoneReply
-	(*LoginAccountRequest)(nil),        // 10: common.api.user.v1.LoginAccountRequest
-	(*LoginAccountReply)(nil),          // 11: common.api.user.v1.LoginAccountReply
-	(*LogoutRequest)(nil),              // 12: common.api.user.v1.LogoutRequest
-	(*LogoutReply)(nil),                // 13: common.api.user.v1.LogoutReply
-	(*User)(nil),                       // 14: common.api.user.v1.User
+	(*RegisterPhoneRequest)(nil),       // 4: common.api.user.v1.RegisterPhoneRequest
+	(*RegisterPhoneReply)(nil),         // 5: common.api.user.v1.RegisterPhoneReply
+	(*RegisterPhoneVerifyRequest)(nil), // 6: common.api.user.v1.RegisterPhoneVerifyRequest
+	(*RegisterPhoneVerifyReply)(nil),   // 7: common.api.user.v1.RegisterPhoneVerifyReply
+	(*ExistEmailRequest)(nil),          // 8: common.api.user.v1.ExistEmailRequest
+	(*ExistEmailReply)(nil),            // 9: common.api.user.v1.ExistEmailReply
+	(*ExistUsernameRequest)(nil),       // 10: common.api.user.v1.ExistUsernameRequest
+	(*ExistUsernameReply)(nil),         // 11: common.api.user.v1.ExistUsernameReply
+	(*ExistPhoneRequest)(nil),          // 12: common.api.user.v1.ExistPhoneRequest
+	(*ExistPhoneReply)(nil),            // 13: common.api.user.v1.ExistPhoneReply
+	(*LoginAccountRequest)(nil),        // 14: common.api.user.v1.LoginAccountRequest
+	(*LoginAccountReply)(nil),          // 15: common.api.user.v1.LoginAccountReply
+	(*LogoutRequest)(nil),              // 16: common.api.user.v1.LogoutRequest
+	(*LogoutReply)(nil),                // 17: common.api.user.v1.LogoutReply
+	(*User)(nil),                       // 18: common.api.user.v1.User
 }
 var file_user_v1_authentication_proto_depIdxs = []int32{
-	14, // 0: common.api.user.v1.LoginAccountReply.user:type_name -> common.api.user.v1.User
+	18, // 0: common.api.user.v1.LoginAccountReply.user:type_name -> common.api.user.v1.User
 	0,  // 1: common.api.user.v1.UserAuthenticationService.RegisterEmail:input_type -> common.api.user.v1.RegisterEmailRequest
 	2,  // 2: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:input_type -> common.api.user.v1.RegisterEmailVerifyRequest
-	4,  // 3: common.api.user.v1.UserAuthenticationService.ExistEmail:input_type -> common.api.user.v1.ExistEmailRequest
-	8,  // 4: common.api.user.v1.UserAuthenticationService.ExistPhone:input_type -> common.api.user.v1.ExistPhoneRequest
-	6,  // 5: common.api.user.v1.UserAuthenticationService.ExistUsername:input_type -> common.api.user.v1.ExistUsernameRequest
-	10, // 6: common.api.user.v1.UserAuthenticationService.LoginAccount:input_type -> common.api.user.v1.LoginAccountRequest
-	12, // 7: common.api.user.v1.UserAuthenticationService.Logout:input_type -> common.api.user.v1.LogoutRequest
-	1,  // 8: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
-	3,  // 9: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
-	5,  // 10: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
-	9,  // 11: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
-	7,  // 12: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
-	11, // 13: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
-	13, // 14: common.api.user.v1.UserAuthenticationService.Logout:output_type -> common.api.user.v1.LogoutReply
-	8,  // [8:15] is the sub-list for method output_type
-	1,  // [1:8] is the sub-list for method input_type
+	4,  // 3: common.api.user.v1.UserAuthenticationService.RegisterPhone:input_type -> common.api.user.v1.RegisterPhoneRequest
+	6,  // 4: common.api.user.v1.UserAuthenticationService.RegisterPhoneVerify:input_type -> common.api.user.v1.RegisterPhoneVerifyRequest
+	8,  // 5: common.api.user.v1.UserAuthenticationService.ExistEmail:input_type -> common.api.user.v1.ExistEmailRequest
+	12, // 6: common.api.user.v1.UserAuthenticationService.ExistPhone:input_type -> common.api.user.v1.ExistPhoneRequest
+	10, // 7: common.api.user.v1.UserAuthenticationService.ExistUsername:input_type -> common.api.user.v1.ExistUsernameRequest
+	14, // 8: common.api.user.v1.UserAuthenticationService.LoginAccount:input_type -> common.api.user.v1.LoginAccountRequest
+	16, // 9: common.api.user.v1.UserAuthenticationService.Logout:input_type -> common.api.user.v1.LogoutRequest
+	1,  // 10: common.api.user.v1.UserAuthenticationService.RegisterEmail:output_type -> common.api.user.v1.RegisterEmailReply
+	3,  // 11: common.api.user.v1.UserAuthenticationService.RegisterEmailVerify:output_type -> common.api.user.v1.RegisterEmailVerifyReply
+	5,  // 12: common.api.user.v1.UserAuthenticationService.RegisterPhone:output_type -> common.api.user.v1.RegisterPhoneReply
+	7,  // 13: common.api.user.v1.UserAuthenticationService.RegisterPhoneVerify:output_type -> common.api.user.v1.RegisterPhoneVerifyReply
+	9,  // 14: common.api.user.v1.UserAuthenticationService.ExistEmail:output_type -> common.api.user.v1.ExistEmailReply
+	13, // 15: common.api.user.v1.UserAuthenticationService.ExistPhone:output_type -> common.api.user.v1.ExistPhoneReply
+	11, // 16: common.api.user.v1.UserAuthenticationService.ExistUsername:output_type -> common.api.user.v1.ExistUsernameReply
+	15, // 17: common.api.user.v1.UserAuthenticationService.LoginAccount:output_type -> common.api.user.v1.LoginAccountReply
+	17, // 18: common.api.user.v1.UserAuthenticationService.Logout:output_type -> common.api.user.v1.LogoutReply
+	10, // [10:19] is the sub-list for method output_type
+	1,  // [1:10] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name
 	1,  // [1:1] is the sub-list for extension extendee
 	0,  // [0:1] is the sub-list for field type_name
@@ -805,16 +1047,17 @@ func file_user_v1_authentication_proto_init() {
 	}
 	file_user_v1_user_proto_init()
 	file_user_v1_authentication_proto_msgTypes[0].OneofWrappers = []any{}
-	file_user_v1_authentication_proto_msgTypes[5].OneofWrappers = []any{}
-	file_user_v1_authentication_proto_msgTypes[7].OneofWrappers = []any{}
+	file_user_v1_authentication_proto_msgTypes[4].OneofWrappers = []any{}
 	file_user_v1_authentication_proto_msgTypes[9].OneofWrappers = []any{}
+	file_user_v1_authentication_proto_msgTypes[11].OneofWrappers = []any{}
+	file_user_v1_authentication_proto_msgTypes[13].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_authentication_proto_rawDesc), len(file_user_v1_authentication_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

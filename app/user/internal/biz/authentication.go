@@ -44,7 +44,10 @@ func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo
 
 func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User) (code string, token string, err error) {
 	// 验证数据
-	exist, err := s.userRepo.ConstantAccount(ctx, s.db, u.Email)
+	if u.Email == nil {
+		return "", "", cv1.ErrorBadRequest("email can not be empty")
+	}
+	exist, err := s.userRepo.ConstantAccount(ctx, s.db, *u.Email)
 	if exist {
 		err = cv1.ErrorBadRequest("email already exists")
 	}
@@ -60,7 +63,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 
 	// 该邮箱是否在缓存
-	existEmailCode, err := s.tokenRepo.ExistEmailVerificationCode(ctx, u.Email)
+	existEmailCode, err := s.tokenRepo.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email)
 	if err != nil {
 		return
 	}
@@ -71,9 +74,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 
 	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.EmailTokenGen.Generate(model.TokenEmail{
-		Email: u.Email,
-	})
+	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -87,7 +88,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelEmail)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
-					Email:  u.Email,
+					Email:  *u.Email,
 					Code:   code,
 					Expire: s.conf.Jwt.EmailExpire.AsDuration(),
 				},
@@ -107,7 +108,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenRepo.SaveEmailVerificationCode(ctx, u.Email, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
+	err = s.tokenRepo.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -117,16 +118,16 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 
 func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToken string, code string) (err error) {
 	// 通过 token 获取 code
-	tokenEmail, err := s.tokenService.EmailTokenGen.Parse(codeToken)
+	token, err := s.tokenService.VerityCodeAccountTokenGen.Parse(codeToken)
 	if err != nil {
 		return
 	}
-	emailCode, saveUser, err := s.tokenRepo.GetEmailVerificationCode(ctx, tokenEmail.Email)
+	verityCode, saveUser, err := s.tokenRepo.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
 	if err != nil {
 		return
 	}
 	// 验证 code
-	if emailCode != code {
+	if verityCode != code {
 		err = cv1.ErrorBadRequest("email code invalid")
 		return
 	}
@@ -137,7 +138,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 			Name:     saveUser.Name,
 			Nickname: base.Ptr(saveUser.Nickname),
 			Password: saveUser.Password,
-			Email:    saveUser.Email,
+			Email:    base.Ptr(saveUser.Email),
 		}}
 		err = user.PasswordEncrypt()
 		if err != nil {
@@ -149,7 +150,127 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		}
 
 		// 删除 code 缓存
-		err = s.tokenRepo.DelEmailVerificationCode(ctx, tokenEmail.Email)
+		err = s.tokenRepo.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User) (code string, token string, err error) {
+	// 验证数据
+	if u.Phone == nil {
+		return "", "", cv1.ErrorBadRequest("phone can not be empty")
+	}
+	exist, err := s.userRepo.ConstantAccount(ctx, s.db, *u.Phone)
+	if exist {
+		err = cv1.ErrorBadRequest("phone already exists")
+	}
+	if err != nil {
+		return
+	}
+	exist, err = s.userRepo.ConstantAccount(ctx, s.db, u.Name)
+	if exist {
+		err = cv1.ErrorBadRequest("name already exists")
+	}
+	if err != nil {
+		return
+	}
+
+	// 该邮箱是否在缓存
+	existPhoneCode, err := s.tokenRepo.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone)
+	if err != nil {
+		return
+	}
+	if existPhoneCode {
+		err = cv1.ErrorBadRequest("phone verification code has been sent")
+		return
+	}
+
+	// 生成 code
+	code = str.RandStr(s.sf, 6, true, true, true, false)
+	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Jwt.PhoneExpire.AsDuration())
+	if err != nil {
+		return
+	}
+	// 发送邮件验证码通知
+	err = s.eventPool.Submit(func() {
+		err := s.rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
+			UUID:       uuid.New().String(),
+			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeUserRegisterVerifyCode),
+			SenderId:   u.ID,
+			SenderName: u.Name,
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelSMS)},
+			Meta: commonModel.Meta{
+				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
+					Phone:  *u.Phone,
+					Code:   code,
+					Expire: s.conf.Jwt.PhoneExpire.AsDuration(),
+				},
+			},
+		})
+		if err != nil {
+			s.log.Errorf("publish user register verfity code event error: %v", err)
+		}
+	})
+	if err != nil {
+		return
+	}
+
+	// 保存 code 到缓存
+	saveUser := &commonModel.User{}
+	err = copier.Copy(saveUser, u)
+	if err != nil {
+		return
+	}
+	err = s.tokenRepo.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.conf.Jwt.PhoneExpire.AsDuration())
+	if err != nil {
+		return
+	}
+
+	return code, token, nil
+}
+
+func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToken string, code string) (err error) {
+	// 通过 token 获取 code
+	token, err := s.tokenService.VerityCodeAccountTokenGen.Parse(codeToken)
+	if err != nil {
+		return
+	}
+	verityCode, saveUser, err := s.tokenRepo.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
+	if err != nil {
+		return
+	}
+	// 验证 code
+	if verityCode != code {
+		err = cv1.ErrorBadRequest("phone code invalid")
+		return
+	}
+
+	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
+		// 保存用户信息
+		user := &model.User{User: &gen.User{
+			Name:     saveUser.Name,
+			Nickname: base.Ptr(saveUser.Nickname),
+			Password: saveUser.Password,
+			Phone:    base.Ptr(saveUser.Phone),
+		}}
+		err = user.PasswordEncrypt()
+		if err != nil {
+			return err
+		}
+		_, err = s.userRepo.Save(ctx, tx, user)
+		if err != nil {
+			return err
+		}
+
+		// 删除 code 缓存
+		err = s.tokenRepo.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
 		if err != nil {
 			return err
 		}
@@ -175,7 +296,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	token, err = s.tokenService.TokenGen.Generate(model.Token{
 		User:     user,
 		IsOnline: true,
-	})
+	}, s.conf.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}

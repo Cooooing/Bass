@@ -9,14 +9,14 @@ var Authentication = "Authorization" // token 请求头名称
 
 // Redis key
 var (
-	TokenEmailCode          = "TokenEmailCode::{%s}"
+	TokenEmailCode          = "TokenVerifyCode::{%s}::{%s}"
 	Token                   = "Token::{%s}"
 	NotificationTemplateMap = "NotificationTemplateMap"
 	TwoFactorAuthentication = "TwoFactorAuthentication::{%s}"
 )
 
-func GetKeyTokenEmailCode(email string) string {
-	return fmt.Sprintf(TokenEmailCode, email)
+func GetKeyTokenVerityCode(verifyCodeType VerifyCodeType, account string) string {
+	return fmt.Sprintf(TokenEmailCode, verifyCodeType, account)
 }
 
 func GetKeyToken(token string) string {
@@ -37,3 +37,14 @@ func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *
 func GetKeyTwoFactorAuthentication(name string) string {
 	return fmt.Sprintf(TwoFactorAuthentication, name)
 }
+
+type VerifyCodeType string
+
+func (v VerifyCodeType) String() string {
+	return string(v)
+}
+
+const (
+	VerifyCodeTypeRegisterEmail VerifyCodeType = "register_email"
+	VerifyCodeTypeRegisterPhone VerifyCodeType = "register_phone"
+)

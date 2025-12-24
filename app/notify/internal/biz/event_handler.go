@@ -139,6 +139,7 @@ func (h *EventHandler) Handle() {
 						}
 						notification.Title = template.Title
 						notification.Content = template.Content
+						notification.Channel = v1.NotificationChannel(template.Channel)
 						_, err = handler.Handle(h.ctx, notification)
 						if err != nil {
 							break

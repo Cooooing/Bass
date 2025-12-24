@@ -36,7 +36,7 @@ func RegisterNotifyNotificationTemplateServiceHTTPServer(s *http.Server, srv Not
 	r := s.Route("/")
 	r.POST("/v1/notificationTemplate/page", _NotifyNotificationTemplateService_Page7_HTTP_Handler(srv))
 	r.POST("/v1/notificationTemplate/add", _NotifyNotificationTemplateService_Add2_HTTP_Handler(srv))
-	r.PUT("/v1/notificationTemplate/update", _NotifyNotificationTemplateService_Update3_HTTP_Handler(srv))
+	r.POST("/v1/notificationTemplate/update", _NotifyNotificationTemplateService_Update3_HTTP_Handler(srv))
 }
 
 func _NotifyNotificationTemplateService_Page7_HTTP_Handler(srv NotifyNotificationTemplateServiceHTTPServer) func(ctx http.Context) error {
@@ -157,7 +157,7 @@ func (c *NotifyNotificationTemplateServiceHTTPClientImpl) Update(ctx context.Con
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationNotifyNotificationTemplateServiceUpdate))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

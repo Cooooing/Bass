@@ -2,22 +2,26 @@ package handler
 
 import (
 	"bytes"
+	v1 "common/api/notify/v1"
 	"common/pkg/cutil/handlerchain"
 	commonModel "common/pkg/model"
 	"context"
+	"fmt"
 	"html/template"
-	"notify/internal/biz/base"
+	"notify/internal/biz/infra"
 )
 
 type RegisterVerifyCode struct {
 	*handlerchain.BaseHandler[*commonModel.Notification]
-	emailDomain *base.EmailDomain
+	emailDomain      *infra.EmailDomain
+	tencentSmsDomain *infra.TencentSmsDomain
 }
 
-func NewRegisterVerifyCode(emailDomain *base.EmailDomain) *RegisterVerifyCode {
+func NewRegisterVerifyCode(emailDomain *infra.EmailDomain, tencentSmsDomain *infra.TencentSmsDomain) *RegisterVerifyCode {
 	return &RegisterVerifyCode{
-		BaseHandler: &handlerchain.BaseHandler[*commonModel.Notification]{Name: "register_verify_code"},
-		emailDomain: emailDomain,
+		BaseHandler:      &handlerchain.BaseHandler[*commonModel.Notification]{Name: "register_verify_code"},
+		emailDomain:      emailDomain,
+		tencentSmsDomain: tencentSmsDomain,
 	}
 }
 
@@ -36,10 +40,21 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 	}
 	data.ContentRender = buf.String()
 
-	// 发送邮件
-	err = h.emailDomain.Send([]string{data.Meta.RegisterVerifyCode.Email}, data.Title, data.ContentRender)
-	if err != nil {
-		return nil, err
+	switch data.Channel {
+	case v1.NotificationChannel_NotificationChannelEmail:
+		// 发送邮件
+		err = h.emailDomain.Send([]string{data.Meta.RegisterVerifyCode.Email}, data.Title, data.ContentRender)
+		if err != nil {
+			return nil, err
+		}
+	case v1.NotificationChannel_NotificationChannelSMS:
+		// 发送短信
+		err = h.tencentSmsDomain.SendSms(ctx, []string{data.Meta.RegisterVerifyCode.Phone}, []string{data.Meta.RegisterVerifyCode.Code})
+		if err != nil {
+			return nil, err
+		}
+	default:
+		return nil, fmt.Errorf("channel %s not supported", data.Channel)
 	}
 
 	return h.BaseHandler.Next(ctx, data)

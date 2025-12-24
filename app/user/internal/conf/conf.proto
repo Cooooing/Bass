@@ -81,6 +81,7 @@ message Jwt {
   string secret = 1;
   google.protobuf.Duration expires = 2;
   google.protobuf.Duration email_expire = 3;
+  google.protobuf.Duration phone_expire = 4;
 }
 
 message Oss{

@@ -13,6 +13,7 @@ import (
 	"notify/internal/biz"
 	"notify/internal/biz/base"
 	"notify/internal/biz/handler"
+	"notify/internal/biz/infra"
 	"notify/internal/conf"
 	"notify/internal/data"
 	"notify/internal/data/client"
@@ -60,8 +61,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
-	emailDomain := base.NewEmailDomain(baseDomain)
-	registerVerifyCode := handler.NewRegisterVerifyCode(emailDomain)
+	emailDomain := infra.NewEmailDomain(baseDomain)
+	tencentSmsDomain := infra.NewTencentSmsDomain(baseDomain)
+	registerVerifyCode := handler.NewRegisterVerifyCode(emailDomain, tencentSmsDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
 	dictMap := handler.ProvideHandlers(registerVerifyCode, fullHandler)
 	notificationTemplateRepo := data.NewNotificationTemplateRepo(baseRepo)

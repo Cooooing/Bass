@@ -555,6 +555,478 @@ var _ interface {
 	ErrorName() string
 } = RegisterEmailVerifyReplyValidationError{}
 
+// Validate checks the field values on RegisterPhoneRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RegisterPhoneRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterPhoneRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RegisterPhoneRequestMultiError, or nil if none found.
+func (m *RegisterPhoneRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterPhoneRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if utf8.RuneCountInString(m.GetPhone()) != 11 {
+		err := RegisterPhoneRequestValidationError{
+			field:  "Phone",
+			reason: "value length must be 11 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if !_RegisterPhoneRequest_Phone_Pattern.MatchString(m.GetPhone()) {
+		err := RegisterPhoneRequestValidationError{
+			field:  "Phone",
+			reason: "value does not match regex pattern \"^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\\\d{8}$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Password
+
+	// no validation rules for Name
+
+	if m.Nickname != nil {
+		// no validation rules for Nickname
+	}
+
+	if len(errors) > 0 {
+		return RegisterPhoneRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// RegisterPhoneRequestMultiError is an error wrapping multiple validation
+// errors returned by RegisterPhoneRequest.ValidateAll() if the designated
+// constraints aren't met.
+type RegisterPhoneRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterPhoneRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterPhoneRequestMultiError) AllErrors() []error { return m }
+
+// RegisterPhoneRequestValidationError is the validation error returned by
+// RegisterPhoneRequest.Validate if the designated constraints aren't met.
+type RegisterPhoneRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RegisterPhoneRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RegisterPhoneRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RegisterPhoneRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RegisterPhoneRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RegisterPhoneRequestValidationError) ErrorName() string {
+	return "RegisterPhoneRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RegisterPhoneRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRegisterPhoneRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RegisterPhoneRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RegisterPhoneRequestValidationError{}
+
+var _RegisterPhoneRequest_Phone_Pattern = regexp.MustCompile("^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$")
+
+// Validate checks the field values on RegisterPhoneReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RegisterPhoneReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterPhoneReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RegisterPhoneReplyMultiError, or nil if none found.
+func (m *RegisterPhoneReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterPhoneReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for CodeToken
+
+	// no validation rules for Code
+
+	if len(errors) > 0 {
+		return RegisterPhoneReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// RegisterPhoneReplyMultiError is an error wrapping multiple validation errors
+// returned by RegisterPhoneReply.ValidateAll() if the designated constraints
+// aren't met.
+type RegisterPhoneReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterPhoneReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterPhoneReplyMultiError) AllErrors() []error { return m }
+
+// RegisterPhoneReplyValidationError is the validation error returned by
+// RegisterPhoneReply.Validate if the designated constraints aren't met.
+type RegisterPhoneReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RegisterPhoneReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RegisterPhoneReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RegisterPhoneReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RegisterPhoneReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RegisterPhoneReplyValidationError) ErrorName() string {
+	return "RegisterPhoneReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RegisterPhoneReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRegisterPhoneReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RegisterPhoneReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RegisterPhoneReplyValidationError{}
+
+// Validate checks the field values on RegisterPhoneVerifyRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RegisterPhoneVerifyRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterPhoneVerifyRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RegisterPhoneVerifyRequestMultiError, or nil if none found.
+func (m *RegisterPhoneVerifyRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterPhoneVerifyRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if utf8.RuneCountInString(m.GetCode()) != 6 {
+		err := RegisterPhoneVerifyRequestValidationError{
+			field:  "Code",
+			reason: "value length must be 6 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
+
+	if !_RegisterPhoneVerifyRequest_Code_Pattern.MatchString(m.GetCode()) {
+		err := RegisterPhoneVerifyRequestValidationError{
+			field:  "Code",
+			reason: "value does not match regex pattern \"^[A-Za-z0-9]+$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for CodeToken
+
+	if len(errors) > 0 {
+		return RegisterPhoneVerifyRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// RegisterPhoneVerifyRequestMultiError is an error wrapping multiple
+// validation errors returned by RegisterPhoneVerifyRequest.ValidateAll() if
+// the designated constraints aren't met.
+type RegisterPhoneVerifyRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterPhoneVerifyRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterPhoneVerifyRequestMultiError) AllErrors() []error { return m }
+
+// RegisterPhoneVerifyRequestValidationError is the validation error returned
+// by RegisterPhoneVerifyRequest.Validate if the designated constraints aren't met.
+type RegisterPhoneVerifyRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RegisterPhoneVerifyRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RegisterPhoneVerifyRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RegisterPhoneVerifyRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RegisterPhoneVerifyRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RegisterPhoneVerifyRequestValidationError) ErrorName() string {
+	return "RegisterPhoneVerifyRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RegisterPhoneVerifyRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRegisterPhoneVerifyRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RegisterPhoneVerifyRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RegisterPhoneVerifyRequestValidationError{}
+
+var _RegisterPhoneVerifyRequest_Code_Pattern = regexp.MustCompile("^[A-Za-z0-9]+$")
+
+// Validate checks the field values on RegisterPhoneVerifyReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RegisterPhoneVerifyReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterPhoneVerifyReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RegisterPhoneVerifyReplyMultiError, or nil if none found.
+func (m *RegisterPhoneVerifyReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterPhoneVerifyReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return RegisterPhoneVerifyReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// RegisterPhoneVerifyReplyMultiError is an error wrapping multiple validation
+// errors returned by RegisterPhoneVerifyReply.ValidateAll() if the designated
+// constraints aren't met.
+type RegisterPhoneVerifyReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterPhoneVerifyReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterPhoneVerifyReplyMultiError) AllErrors() []error { return m }
+
+// RegisterPhoneVerifyReplyValidationError is the validation error returned by
+// RegisterPhoneVerifyReply.Validate if the designated constraints aren't met.
+type RegisterPhoneVerifyReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RegisterPhoneVerifyReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RegisterPhoneVerifyReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RegisterPhoneVerifyReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RegisterPhoneVerifyReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RegisterPhoneVerifyReplyValidationError) ErrorName() string {
+	return "RegisterPhoneVerifyReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RegisterPhoneVerifyReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRegisterPhoneVerifyReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RegisterPhoneVerifyReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RegisterPhoneVerifyReplyValidationError{}
+
 // Validate checks the field values on ExistEmailRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.

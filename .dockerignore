@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+.github/
+
+# 编辑器
+.idea/
+.vscode/
+
+# 本地构建产物
+bin/
+dist/
+build/
+*.out
+
+# Go 测试
+**/*_test.go
+**/testdata/
+
+# 文档
+README*
+docs/
+deploy/
+*.md
+
+# 日志 & 临时文件
+*.log
+tmp/
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db

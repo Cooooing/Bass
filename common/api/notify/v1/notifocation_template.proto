@@ -32,7 +32,7 @@ service NotifyNotificationTemplateService {
   // 更新通知模板
   rpc Update (NotificationTemplateUpdateRequest) returns (NotificationTemplateUpdateReply) {
     option (google.api.http) = {
-      put: "/v1/notificationTemplate/update"
+      post: "/v1/notificationTemplate/update"
       body: "*"
     };
   }

@@ -1,7 +1,7 @@
 package model
 
-type TokenEmail struct {
-	Email string `json:"email"`
+type TokenVerityCodeAccount struct {
+	Account string `json:"account"`
 }
 
 type Token struct {

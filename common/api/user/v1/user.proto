@@ -82,7 +82,7 @@ message User {
   // 昵称
   optional string nickname = 3;
   // 邮箱
-  string email = 5;
+  optional string email = 5;
   // 手机号
   optional string phone = 6;
   // 用户个人主页链接

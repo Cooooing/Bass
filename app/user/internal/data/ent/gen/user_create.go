@@ -878,7 +878,7 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
-		_node.Email = value
+		_node.Email = &value
 	}
 	if value, ok := _c.mutation.Phone(); ok {
 		_spec.SetField(user.FieldPhone, field.TypeString, value)

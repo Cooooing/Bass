@@ -532,6 +532,44 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.RegisterEmailVerifyReply'
+    /v1/authentication/register/phone:
+        post:
+            tags:
+                - UserAuthenticationService
+            description: 手机号注册
+            operationId: UserAuthenticationService_RegisterPhone
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.RegisterPhoneRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.RegisterPhoneReply'
+    /v1/authentication/register/phone/verify:
+        post:
+            tags:
+                - UserAuthenticationService
+            description: 手机号注册验证码验证
+            operationId: UserAuthenticationService_RegisterPhoneVerify
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.user.v1.RegisterPhoneVerifyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.user.v1.RegisterPhoneVerifyReply'
     /v1/comment/add:
         post:
             tags:
@@ -780,7 +818,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.NotificationTemplatePageReply'
     /v1/notificationTemplate/update:
-        put:
+        post:
             tags:
                 - NotifyNotificationTemplateService
             description: 更新通知模板
@@ -2794,6 +2832,42 @@ components:
             type: object
             properties: {}
         common.api.user.v1.RegisterEmailVerifyRequest:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: 验证码
+                code_token:
+                    type: string
+                    description: 验证码令牌
+        common.api.user.v1.RegisterPhoneReply:
+            type: object
+            properties:
+                code_token:
+                    type: string
+                    description: 验证码令牌
+                code:
+                    type: string
+                    description: 验证码（仅供调试使用）
+        common.api.user.v1.RegisterPhoneRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+                    description: 邮箱
+                password:
+                    type: string
+                    description: 密码
+                name:
+                    type: string
+                    description: 用户名
+                nickname:
+                    type: string
+                    description: 昵称
+        common.api.user.v1.RegisterPhoneVerifyReply:
+            type: object
+            properties: {}
+        common.api.user.v1.RegisterPhoneVerifyRequest:
             type: object
             properties:
                 code:

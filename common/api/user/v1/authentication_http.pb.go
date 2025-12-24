@@ -26,6 +26,8 @@ const OperationUserAuthenticationServiceLoginAccount = "/common.api.user.v1.User
 const OperationUserAuthenticationServiceLogout = "/common.api.user.v1.UserAuthenticationService/Logout"
 const OperationUserAuthenticationServiceRegisterEmail = "/common.api.user.v1.UserAuthenticationService/RegisterEmail"
 const OperationUserAuthenticationServiceRegisterEmailVerify = "/common.api.user.v1.UserAuthenticationService/RegisterEmailVerify"
+const OperationUserAuthenticationServiceRegisterPhone = "/common.api.user.v1.UserAuthenticationService/RegisterPhone"
+const OperationUserAuthenticationServiceRegisterPhoneVerify = "/common.api.user.v1.UserAuthenticationService/RegisterPhoneVerify"
 
 type UserAuthenticationServiceHTTPServer interface {
 	// ExistEmail 邮箱是否存在
@@ -42,12 +44,18 @@ type UserAuthenticationServiceHTTPServer interface {
 	RegisterEmail(context.Context, *RegisterEmailRequest) (*RegisterEmailReply, error)
 	// RegisterEmailVerify 邮箱注册验证码验证
 	RegisterEmailVerify(context.Context, *RegisterEmailVerifyRequest) (*RegisterEmailVerifyReply, error)
+	// RegisterPhone 手机号注册
+	RegisterPhone(context.Context, *RegisterPhoneRequest) (*RegisterPhoneReply, error)
+	// RegisterPhoneVerify 手机号注册验证码验证
+	RegisterPhoneVerify(context.Context, *RegisterPhoneVerifyRequest) (*RegisterPhoneVerifyReply, error)
 }
 
 func RegisterUserAuthenticationServiceHTTPServer(s *http.Server, srv UserAuthenticationServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/authentication/register/email", _UserAuthenticationService_RegisterEmail0_HTTP_Handler(srv))
 	r.POST("/v1/authentication/register/email/verify", _UserAuthenticationService_RegisterEmailVerify0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/register/phone", _UserAuthenticationService_RegisterPhone0_HTTP_Handler(srv))
+	r.POST("/v1/authentication/register/phone/verify", _UserAuthenticationService_RegisterPhoneVerify0_HTTP_Handler(srv))
 	r.POST("/v1/authentication/exist/email", _UserAuthenticationService_ExistEmail0_HTTP_Handler(srv))
 	r.POST("/v1/authentication/exist/phone", _UserAuthenticationService_ExistPhone0_HTTP_Handler(srv))
 	r.POST("/v1/authentication/exist/username", _UserAuthenticationService_ExistUsername0_HTTP_Handler(srv))
@@ -95,6 +103,50 @@ func _UserAuthenticationService_RegisterEmailVerify0_HTTP_Handler(srv UserAuthen
 			return err
 		}
 		reply := out.(*RegisterEmailVerifyReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _UserAuthenticationService_RegisterPhone0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RegisterPhoneRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserAuthenticationServiceRegisterPhone)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RegisterPhone(ctx, req.(*RegisterPhoneRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*RegisterPhoneReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _UserAuthenticationService_RegisterPhoneVerify0_HTTP_Handler(srv UserAuthenticationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RegisterPhoneVerifyRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserAuthenticationServiceRegisterPhoneVerify)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RegisterPhoneVerify(ctx, req.(*RegisterPhoneVerifyRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*RegisterPhoneVerifyReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -224,6 +276,10 @@ type UserAuthenticationServiceHTTPClient interface {
 	RegisterEmail(ctx context.Context, req *RegisterEmailRequest, opts ...http.CallOption) (rsp *RegisterEmailReply, err error)
 	// RegisterEmailVerify 邮箱注册验证码验证
 	RegisterEmailVerify(ctx context.Context, req *RegisterEmailVerifyRequest, opts ...http.CallOption) (rsp *RegisterEmailVerifyReply, err error)
+	// RegisterPhone 手机号注册
+	RegisterPhone(ctx context.Context, req *RegisterPhoneRequest, opts ...http.CallOption) (rsp *RegisterPhoneReply, err error)
+	// RegisterPhoneVerify 手机号注册验证码验证
+	RegisterPhoneVerify(ctx context.Context, req *RegisterPhoneVerifyRequest, opts ...http.CallOption) (rsp *RegisterPhoneVerifyReply, err error)
 }
 
 type UserAuthenticationServiceHTTPClientImpl struct {
@@ -324,6 +380,34 @@ func (c *UserAuthenticationServiceHTTPClientImpl) RegisterEmailVerify(ctx contex
 	pattern := "/v1/authentication/register/email/verify"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserAuthenticationServiceRegisterEmailVerify))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// RegisterPhone 手机号注册
+func (c *UserAuthenticationServiceHTTPClientImpl) RegisterPhone(ctx context.Context, in *RegisterPhoneRequest, opts ...http.CallOption) (*RegisterPhoneReply, error) {
+	var out RegisterPhoneReply
+	pattern := "/v1/authentication/register/phone"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceRegisterPhone))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// RegisterPhoneVerify 手机号注册验证码验证
+func (c *UserAuthenticationServiceHTTPClientImpl) RegisterPhoneVerify(ctx context.Context, in *RegisterPhoneVerifyRequest, opts ...http.CallOption) (*RegisterPhoneVerifyReply, error) {
+	var out RegisterPhoneVerifyReply
+	pattern := "/v1/authentication/register/phone/verify"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserAuthenticationServiceRegisterPhoneVerify))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

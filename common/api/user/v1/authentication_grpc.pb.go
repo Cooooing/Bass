@@ -21,6 +21,8 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	UserAuthenticationService_RegisterEmail_FullMethodName       = "/common.api.user.v1.UserAuthenticationService/RegisterEmail"
 	UserAuthenticationService_RegisterEmailVerify_FullMethodName = "/common.api.user.v1.UserAuthenticationService/RegisterEmailVerify"
+	UserAuthenticationService_RegisterPhone_FullMethodName       = "/common.api.user.v1.UserAuthenticationService/RegisterPhone"
+	UserAuthenticationService_RegisterPhoneVerify_FullMethodName = "/common.api.user.v1.UserAuthenticationService/RegisterPhoneVerify"
 	UserAuthenticationService_ExistEmail_FullMethodName          = "/common.api.user.v1.UserAuthenticationService/ExistEmail"
 	UserAuthenticationService_ExistPhone_FullMethodName          = "/common.api.user.v1.UserAuthenticationService/ExistPhone"
 	UserAuthenticationService_ExistUsername_FullMethodName       = "/common.api.user.v1.UserAuthenticationService/ExistUsername"
@@ -38,6 +40,10 @@ type UserAuthenticationServiceClient interface {
 	RegisterEmail(ctx context.Context, in *RegisterEmailRequest, opts ...grpc.CallOption) (*RegisterEmailReply, error)
 	// 邮箱注册验证码验证
 	RegisterEmailVerify(ctx context.Context, in *RegisterEmailVerifyRequest, opts ...grpc.CallOption) (*RegisterEmailVerifyReply, error)
+	// 手机号注册
+	RegisterPhone(ctx context.Context, in *RegisterPhoneRequest, opts ...grpc.CallOption) (*RegisterPhoneReply, error)
+	// 手机号注册验证码验证
+	RegisterPhoneVerify(ctx context.Context, in *RegisterPhoneVerifyRequest, opts ...grpc.CallOption) (*RegisterPhoneVerifyReply, error)
 	// 邮箱是否存在
 	ExistEmail(ctx context.Context, in *ExistEmailRequest, opts ...grpc.CallOption) (*ExistEmailReply, error)
 	// 手机号是否存在
@@ -72,6 +78,26 @@ func (c *userAuthenticationServiceClient) RegisterEmailVerify(ctx context.Contex
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RegisterEmailVerifyReply)
 	err := c.cc.Invoke(ctx, UserAuthenticationService_RegisterEmailVerify_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userAuthenticationServiceClient) RegisterPhone(ctx context.Context, in *RegisterPhoneRequest, opts ...grpc.CallOption) (*RegisterPhoneReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegisterPhoneReply)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_RegisterPhone_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userAuthenticationServiceClient) RegisterPhoneVerify(ctx context.Context, in *RegisterPhoneVerifyRequest, opts ...grpc.CallOption) (*RegisterPhoneVerifyReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegisterPhoneVerifyReply)
+	err := c.cc.Invoke(ctx, UserAuthenticationService_RegisterPhoneVerify_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,6 +164,10 @@ type UserAuthenticationServiceServer interface {
 	RegisterEmail(context.Context, *RegisterEmailRequest) (*RegisterEmailReply, error)
 	// 邮箱注册验证码验证
 	RegisterEmailVerify(context.Context, *RegisterEmailVerifyRequest) (*RegisterEmailVerifyReply, error)
+	// 手机号注册
+	RegisterPhone(context.Context, *RegisterPhoneRequest) (*RegisterPhoneReply, error)
+	// 手机号注册验证码验证
+	RegisterPhoneVerify(context.Context, *RegisterPhoneVerifyRequest) (*RegisterPhoneVerifyReply, error)
 	// 邮箱是否存在
 	ExistEmail(context.Context, *ExistEmailRequest) (*ExistEmailReply, error)
 	// 手机号是否存在
@@ -163,6 +193,12 @@ func (UnimplementedUserAuthenticationServiceServer) RegisterEmail(context.Contex
 }
 func (UnimplementedUserAuthenticationServiceServer) RegisterEmailVerify(context.Context, *RegisterEmailVerifyRequest) (*RegisterEmailVerifyReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method RegisterEmailVerify not implemented")
+}
+func (UnimplementedUserAuthenticationServiceServer) RegisterPhone(context.Context, *RegisterPhoneRequest) (*RegisterPhoneReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterPhone not implemented")
+}
+func (UnimplementedUserAuthenticationServiceServer) RegisterPhoneVerify(context.Context, *RegisterPhoneVerifyRequest) (*RegisterPhoneVerifyReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method RegisterPhoneVerify not implemented")
 }
 func (UnimplementedUserAuthenticationServiceServer) ExistEmail(context.Context, *ExistEmailRequest) (*ExistEmailReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method ExistEmail not implemented")
@@ -233,6 +269,42 @@ func _UserAuthenticationService_RegisterEmailVerify_Handler(srv interface{}, ctx
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserAuthenticationServiceServer).RegisterEmailVerify(ctx, req.(*RegisterEmailVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserAuthenticationService_RegisterPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterPhoneRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserAuthenticationServiceServer).RegisterPhone(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserAuthenticationService_RegisterPhone_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserAuthenticationServiceServer).RegisterPhone(ctx, req.(*RegisterPhoneRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserAuthenticationService_RegisterPhoneVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterPhoneVerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserAuthenticationServiceServer).RegisterPhoneVerify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserAuthenticationService_RegisterPhoneVerify_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserAuthenticationServiceServer).RegisterPhoneVerify(ctx, req.(*RegisterPhoneVerifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -341,6 +413,14 @@ var UserAuthenticationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterEmailVerify",
 			Handler:    _UserAuthenticationService_RegisterEmailVerify_Handler,
+		},
+		{
+			MethodName: "RegisterPhone",
+			Handler:    _UserAuthenticationService_RegisterPhone_Handler,
+		},
+		{
+			MethodName: "RegisterPhoneVerify",
+			Handler:    _UserAuthenticationService_RegisterPhoneVerify_Handler,
 		},
 		{
 			MethodName: "ExistEmail",

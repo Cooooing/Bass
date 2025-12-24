@@ -26,47 +26,47 @@ func NewTokenRepo(log *log.Helper, redis *client.RedisClient) *TokenRepo {
 	}
 }
 
-type emailTokenData struct {
+type verityCodeTokenData struct {
 	Code string      `json:"code"`
 	User *model.User `json:"user"`
 }
 
-func (r *TokenRepo) SaveEmailVerificationCode(ctx context.Context, email string, code string, user *model.User, expires time.Duration) error {
-	value, err := json.Marshal(&emailTokenData{
+func (r *TokenRepo) SaveVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string, code string, user *model.User, expires time.Duration) error {
+	value, err := json.Marshal(&verityCodeTokenData{
 		Code: code,
 		User: user,
 	})
 	if err != nil {
 		return err
 	}
-	return r.redis.Client.Set(ctx, constant.GetKeyTokenEmailCode(email), value, expires).Err()
+	return r.redis.Client.Set(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account), value, expires).Err()
 }
 
-func (r *TokenRepo) GetEmailVerificationCode(ctx context.Context, email string) (string, *model.User, error) {
-	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenEmailCode(email)).Result()
+func (r *TokenRepo) GetVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (string, *model.User, error) {
+	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", nil, errors.New("email code invalid")
 	}
 	if err != nil {
 		return "", nil, err
 	}
-	var data emailTokenData
+	var data verityCodeTokenData
 	if err := json.Unmarshal([]byte(value), &data); err != nil {
 		return "", nil, err
 	}
 	return data.Code, data.User, nil
 }
 
-func (r *TokenRepo) ExistEmailVerificationCode(ctx context.Context, email string) (bool, error) {
-	result, err := r.redis.Client.Exists(ctx, constant.GetKeyTokenEmailCode(email)).Result()
+func (r *TokenRepo) ExistVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (bool, error) {
+	result, err := r.redis.Client.Exists(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
 	if err != nil {
 		return false, err
 	}
 	return result == 1, nil
 }
 
-func (r *TokenRepo) DelEmailVerificationCode(ctx context.Context, email string) error {
-	return r.redis.Client.Del(ctx, constant.GetKeyTokenEmailCode(email)).Err()
+func (r *TokenRepo) DelVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) error {
+	return r.redis.Client.Del(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Err()
 }
 
 func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.User, expires time.Duration) error {

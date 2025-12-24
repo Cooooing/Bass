@@ -32,7 +32,7 @@ func (User) Fields() []ent.Field {
 		field.String("name").Comment("用户名").NotEmpty(),
 		field.String("nickname").Comment("昵称").Optional().Nillable(),
 		field.String("password").Comment("密码").NotEmpty().Sensitive(),
-		field.String("email").Comment("邮箱").Optional(),
+		field.String("email").Comment("邮箱").Optional().Nillable(),
 		field.String("phone").Comment("手机号").Optional().Nillable(),
 		field.String("url").Comment("用户个人主页链接").Optional().Nillable(),
 		field.String("avatar_url").Comment("头像URL").Optional().Nillable(),

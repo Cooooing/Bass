@@ -75,7 +75,7 @@ build:
 	@echo "Building notify service..."
 	@cd $(USER_DIR) && \
 	go mod tidy && go mod download && \
-	go build -o $(ROOT_DIR)/$(SERVER) ./cmd/...
+	go build -trimpath -ldflags "-s -w" -o $(ROOT_DIR)/$(SERVER) ./cmd/...
 
 # ============ Run All Steps ============
 .PHONY: all

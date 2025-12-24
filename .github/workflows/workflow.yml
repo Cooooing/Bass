@@ -1,4 +1,7 @@
 name: Service Build
+permissions:
+  contents: read
+  packages: write
 
 on:
   push:
@@ -35,13 +38,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      # Step 4: Docker Login
+      # Step 4: ali Docker Login
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # GHCR Docker Login
+      - name: Docker Login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
@@ -52,6 +63,8 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
+            ghcr.io/docker-cooooing/gateway:latest
+
   user:
     runs-on: ubuntu-latest
 
@@ -76,13 +89,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      # Step 4: Docker Login
+      # Step 4: ali Docker Login
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # GHCR Docker Login
+      - name: Docker Login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
@@ -93,6 +114,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
+            ghcr.io/docker-cooooing/user:latest
   content:
     runs-on: ubuntu-latest
 
@@ -117,13 +139,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      # Step 4: Docker Login
+      # Step 4: ali Docker Login
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # GHCR Docker Login
+      - name: Docker Login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
@@ -134,6 +164,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
+            ghcr.io/docker-cooooing/content:latest
   notify:
     runs-on: ubuntu-latest
 
@@ -158,13 +189,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      # Step 4: Docker Login
+      # Step 4: ali Docker Login
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # GHCR Docker Login
+      - name: Docker Login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
@@ -175,6 +214,7 @@ jobs:
           push: true
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
+            ghcr.io/docker-cooooing/notify:latest
 
 
 

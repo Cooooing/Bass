@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN make all
 
 # 使用 UPX 压缩
-RUN upx -9 --lzma /build/user
+RUN upx -9 --lzma /build/notify
 
 # ===================== 第二阶段：制作轻量运行环境 =====================
 FROM scratch

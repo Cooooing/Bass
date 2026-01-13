@@ -27,11 +27,11 @@ func (ChatMessage) Annotations() []schema.Annotation {
 func (ChatMessage) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.String("session_id").Comment("会话全局id").NotEmpty(),
-		field.Int64("sender_id").Comment("发送者id"),
-		field.Int64("target_id").Comment("接收者id（用户id或者群组id）").Optional(),
-		field.Int32("type").Comment("消息类型").Default(1),
-		field.Text("content").Comment("消息内容").NotEmpty(),
+		field.Int64("sender_id").Comment("发送者ID"),
+		field.Int64("receiver_id").Comment("私聊接收者ID (仅私聊有值)").Optional().Nillable(),
+		field.Int64("group_id").Comment("群组ID (仅群聊有值)").Optional().Nillable(),
+		field.Int32("type").Comment("消息内容类型").Default(1),
+		field.Text("content").Comment("消息内容"),
 		field.Int32("status").Comment("状态: 0-正常, 1-撤回").Default(0),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
@@ -42,17 +42,18 @@ func (ChatMessage) Fields() []ent.Field {
 
 func (ChatMessage) Edges() []ent.Edge {
 	return []ent.Edge{
-		// 消息所属的群 (M2O)
-		edge.From("group", ChatGroup.Type).Ref("messages").Unique().Field("target_id"),
-		// 作为群组的最后一条消息 (O2O 反向)
-		edge.From("last_msg_of_group", ChatGroup.Type).Ref("last_message").Unique(),
-		// 作为私聊会话的最后一条消息 (O2O 反向)
-		edge.From("last_msg_of_session", ChatSession.Type).Ref("last_message").Unique(),
+		// 关联群组 多对一
+		edge.From("group", ChatGroup.Type).Ref("messages").Field("group_id").Unique(),
+		// 关联群组最后一条消息 一对一
+		edge.To("last_message_group", ChatGroup.Type).Unique(),
+		// 关联会话最后一条消息 一对一
+		edge.To("last_message_session", ChatSession.Type).Unique(),
 	}
 }
 
 func (ChatMessage) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("session_id", "id"),
+		index.Fields("receiver_id"),
+		index.Fields("group_id"),
 	}
 }

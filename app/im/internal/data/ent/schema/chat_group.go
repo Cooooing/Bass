@@ -29,9 +29,11 @@ func (ChatGroup) Fields() []ent.Field {
 		field.Int64("owner_id").Comment("群主id"),
 		field.Int32("status").Comment("群状态: 0-正常, 1-解散").Default(0),
 		field.Int32("member_count").Comment("群成员数").Default(0),
+
 		field.Int64("message_count").Comment("群消息数").Default(0),
-		field.Int64("last_message_id").Comment("最后一条消息id").Default(0),
-		field.String("last_message_content").Comment("消息内容").Default(""),
+		field.Int64("last_message_id").Comment("最后一条消息id").Unique().Optional().Nillable(),
+		field.String("last_message_content").Comment("最后消息内容").Optional().Nillable(),
+		field.Time("last_message_at").Comment("最后消息时间").Optional().Nillable(),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)
@@ -41,13 +43,13 @@ func (ChatGroup) Fields() []ent.Field {
 
 func (ChatGroup) Edges() []ent.Edge {
 	return []ent.Edge{
-		// 成员列表 (O2M)
+		// 关联群成员 一对多
 		edge.To("members", ChatGroupMember.Type),
-		// 属于该群的所有会话 (O2M)
+		// 关联会话 一对多
 		edge.To("sessions", ChatSession.Type),
-		// 群聊消息记录 (O2M)
+		// 关联消息 一对多
 		edge.To("messages", ChatMessage.Type),
-		// 最后一条消息 (O2O)
-		edge.To("last_message", ChatMessage.Type).Unique().Field("last_message_id"),
+		// 关联最后一条群消息 一对一
+		edge.From("last_message_of_group", ChatMessage.Type).Ref("last_message_group").Unique().Field("last_message_id"),
 	}
 }

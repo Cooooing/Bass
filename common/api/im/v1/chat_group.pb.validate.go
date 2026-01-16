@@ -359,6 +359,212 @@ var _ interface {
 	ErrorName() string
 } = ChatGroupCreateReplyValidationError{}
 
+// Validate checks the field values on ChatGroupDismissRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ChatGroupDismissRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ChatGroupDismissRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ChatGroupDismissRequestMultiError, or nil if none found.
+func (m *ChatGroupDismissRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ChatGroupDismissRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return ChatGroupDismissRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ChatGroupDismissRequestMultiError is an error wrapping multiple validation
+// errors returned by ChatGroupDismissRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ChatGroupDismissRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ChatGroupDismissRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ChatGroupDismissRequestMultiError) AllErrors() []error { return m }
+
+// ChatGroupDismissRequestValidationError is the validation error returned by
+// ChatGroupDismissRequest.Validate if the designated constraints aren't met.
+type ChatGroupDismissRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ChatGroupDismissRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ChatGroupDismissRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ChatGroupDismissRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ChatGroupDismissRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ChatGroupDismissRequestValidationError) ErrorName() string {
+	return "ChatGroupDismissRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ChatGroupDismissRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sChatGroupDismissRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ChatGroupDismissRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ChatGroupDismissRequestValidationError{}
+
+// Validate checks the field values on ChatGroupDismissReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ChatGroupDismissReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ChatGroupDismissReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ChatGroupDismissReplyMultiError, or nil if none found.
+func (m *ChatGroupDismissReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ChatGroupDismissReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ChatGroupDismissReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// ChatGroupDismissReplyMultiError is an error wrapping multiple validation
+// errors returned by ChatGroupDismissReply.ValidateAll() if the designated
+// constraints aren't met.
+type ChatGroupDismissReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ChatGroupDismissReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ChatGroupDismissReplyMultiError) AllErrors() []error { return m }
+
+// ChatGroupDismissReplyValidationError is the validation error returned by
+// ChatGroupDismissReply.Validate if the designated constraints aren't met.
+type ChatGroupDismissReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ChatGroupDismissReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ChatGroupDismissReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ChatGroupDismissReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ChatGroupDismissReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ChatGroupDismissReplyValidationError) ErrorName() string {
+	return "ChatGroupDismissReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ChatGroupDismissReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sChatGroupDismissReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ChatGroupDismissReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ChatGroupDismissReplyValidationError{}
+
 // Validate checks the field values on ChatGroupPageRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

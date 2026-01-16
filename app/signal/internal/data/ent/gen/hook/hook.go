@@ -8,16 +8,16 @@ import (
 	"signal/internal/data/ent/gen"
 )
 
-// The SignalFunc type is an adapter to allow the use of ordinary
-// function as Signal mutator.
-type SignalFunc func(context.Context, *gen.SignalMutation) (gen.Value, error)
+// The NodeFunc type is an adapter to allow the use of ordinary
+// function as Node mutator.
+type NodeFunc func(context.Context, *gen.NodeMutation) (gen.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f SignalFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
-	if mv, ok := m.(*gen.SignalMutation); ok {
+func (f NodeFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
+	if mv, ok := m.(*gen.NodeMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.SignalMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.NodeMutation", m)
 }
 
 // Condition is a hook condition function.

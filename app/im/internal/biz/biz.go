@@ -13,7 +13,10 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
-	util.NewEventPool,
+
+	NewChatGroupDomain,
+	NewChatSessionDomain,
+	NewChatMessageDomain,
 )
 
 type BaseDomain struct {

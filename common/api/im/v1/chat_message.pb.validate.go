@@ -371,6 +371,212 @@ var _ interface {
 	ErrorName() string
 } = ChatMessageSendReplyValidationError{}
 
+// Validate checks the field values on ChatMessageRevokeRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ChatMessageRevokeRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ChatMessageRevokeRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ChatMessageRevokeRequestMultiError, or nil if none found.
+func (m *ChatMessageRevokeRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ChatMessageRevokeRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return ChatMessageRevokeRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ChatMessageRevokeRequestMultiError is an error wrapping multiple validation
+// errors returned by ChatMessageRevokeRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ChatMessageRevokeRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ChatMessageRevokeRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ChatMessageRevokeRequestMultiError) AllErrors() []error { return m }
+
+// ChatMessageRevokeRequestValidationError is the validation error returned by
+// ChatMessageRevokeRequest.Validate if the designated constraints aren't met.
+type ChatMessageRevokeRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ChatMessageRevokeRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ChatMessageRevokeRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ChatMessageRevokeRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ChatMessageRevokeRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ChatMessageRevokeRequestValidationError) ErrorName() string {
+	return "ChatMessageRevokeRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ChatMessageRevokeRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sChatMessageRevokeRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ChatMessageRevokeRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ChatMessageRevokeRequestValidationError{}
+
+// Validate checks the field values on ChatMessageRevokeReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ChatMessageRevokeReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ChatMessageRevokeReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ChatMessageRevokeReplyMultiError, or nil if none found.
+func (m *ChatMessageRevokeReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ChatMessageRevokeReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ChatMessageRevokeReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// ChatMessageRevokeReplyMultiError is an error wrapping multiple validation
+// errors returned by ChatMessageRevokeReply.ValidateAll() if the designated
+// constraints aren't met.
+type ChatMessageRevokeReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ChatMessageRevokeReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ChatMessageRevokeReplyMultiError) AllErrors() []error { return m }
+
+// ChatMessageRevokeReplyValidationError is the validation error returned by
+// ChatMessageRevokeReply.Validate if the designated constraints aren't met.
+type ChatMessageRevokeReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ChatMessageRevokeReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ChatMessageRevokeReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ChatMessageRevokeReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ChatMessageRevokeReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ChatMessageRevokeReplyValidationError) ErrorName() string {
+	return "ChatMessageRevokeReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ChatMessageRevokeReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sChatMessageRevokeReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ChatMessageRevokeReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ChatMessageRevokeReplyValidationError{}
+
 // Validate checks the field values on ChatMessagePageRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

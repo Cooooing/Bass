@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package common.api.signal.v1;
+
+import "google/protobuf/timestamp.proto";
+import "user/v1/user.proto";
+import "signal/v1/constant.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "common/api/signal/v1;v1";
+
+// node 节点
+message Node {
+
+}
+
+// Websocket 消息
+message Message {
+  MessageType type = 1;
+  google.protobuf.Struct payload = 2;
+}

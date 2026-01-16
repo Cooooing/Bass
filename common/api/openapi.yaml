@@ -570,6 +570,196 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.RegisterPhoneVerifyReply'
+    /v1/chatGroup/create:
+        post:
+            tags:
+                - IMChatGroupService
+            description: 创建群组
+            operationId: IMChatGroupService_Create
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatGroupCreateRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatGroupCreateReply'
+    /v1/chatGroup/dismiss:
+        post:
+            tags:
+                - IMChatGroupService
+            description: 解散群组
+            operationId: IMChatGroupService_Dismiss
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatGroupDismissRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatGroupDismissReply'
+    /v1/chatGroup/page:
+        post:
+            tags:
+                - IMChatGroupService
+            description: 查询群组列表
+            operationId: IMChatGroupService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatGroupPageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatGroupPageReply'
+    /v1/chatMessage/page:
+        post:
+            tags:
+                - IMChatMessageService
+            description: 查询消息数据
+            operationId: IMChatMessageService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatMessagePageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatMessagePageReply'
+    /v1/chatMessage/revoke:
+        post:
+            tags:
+                - IMChatMessageService
+            description: 撤回消息
+            operationId: IMChatMessageService_Revoke
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatMessageRevokeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatMessageRevokeReply'
+    /v1/chatMessage/send:
+        post:
+            tags:
+                - IMChatMessageService
+            description: 发送消息
+            operationId: IMChatMessageService_Send
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatMessageSendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatMessageSendReply'
+    /v1/chatSession/markDisturb:
+        post:
+            tags:
+                - IMChatSessionService
+            description: 免打扰
+            operationId: IMChatSessionService_MarkDisturb
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkDisturbRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkDisturbReply'
+    /v1/chatSession/markRead:
+        post:
+            tags:
+                - IMChatSessionService
+            description: 标为已读
+            operationId: IMChatSessionService_MarkRead
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkReadRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkReadReply'
+    /v1/chatSession/markTop:
+        post:
+            tags:
+                - IMChatSessionService
+            description: 置顶
+            operationId: IMChatSessionService_MarkTop
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkTopRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkTopReply'
+    /v1/chatSession/page:
+        post:
+            tags:
+                - IMChatSessionService
+            description: 查询会话数据
+            operationId: IMChatSessionService_Page
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionPageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionPageReply'
     /v1/comment/add:
         post:
             tags:
@@ -722,6 +912,101 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
+    /v1/node/offline:
+        post:
+            tags:
+                - SignalNodeService
+            description: 用户下线
+            operationId: SignalNodeService_Offline
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.signal.v1.SignalNodeOfflineRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.signal.v1.SignalNodeOfflineReply'
+    /v1/node/online:
+        post:
+            tags:
+                - SignalNodeService
+            description: 用户上线
+            operationId: SignalNodeService_Online
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.signal.v1.SignalNodeOnlineRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.signal.v1.SignalNodeOnlineReply'
+    /v1/node/online/list:
+        post:
+            tags:
+                - SignalNodeService
+            description: 在线用户列表
+            operationId: SignalNodeService_OnlineList
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.signal.v1.SignalNodeOnlineListRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.signal.v1.SignalNodeOnlineListReply'
+    /v1/node/register:
+        post:
+            tags:
+                - SignalNodeService
+            description: 注册节点
+            operationId: SignalNodeService_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.signal.v1.SignalNodeRegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.signal.v1.SignalNodeRegisterReply'
+    /v1/node/save:
+        post:
+            tags:
+                - SignalNodeService
+            description: 保存节点
+            operationId: SignalNodeService_Save
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.signal.v1.SignalNodeSaveRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.signal.v1.SignalNodeSaveReply'
     /v1/notificationMeta/page:
         post:
             tags:
@@ -2112,6 +2397,370 @@ components:
                 active:
                     type: boolean
                     description: 是否关注
+        common.api.im.v1.ChatGroup:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                id:
+                    type: string
+                    description: 主键
+                name:
+                    type: string
+                    description: 群名称
+                avatar:
+                    type: string
+                    description: 群头像
+                introduction:
+                    type: string
+                    description: 群简介
+                status:
+                    type: integer
+                    description: 群状态
+                    format: enum
+                owner:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: 群主信息
+                member_count:
+                    type: integer
+                    description: 群成员数
+                    format: uint32
+                last_message:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.im.v1.ChatMessage'
+                    description: 最后一条消息
+            description: 群组
+        common.api.im.v1.ChatGroupCreateReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatGroupCreateRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: 群名称
+                avatar:
+                    type: string
+                    description: 群头像
+                introduction:
+                    type: string
+                    description: 群简介
+        common.api.im.v1.ChatGroupDismissReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatGroupDismissRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: 群组ID
+        common.api.im.v1.ChatGroupPageReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.im.v1.ChatGroup'
+                    description: 通知元数据信息
+        common.api.im.v1.ChatGroupPageRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.im.v1.ChatGroupQueryParams'
+                    description: 查询参数
+        common.api.im.v1.ChatGroupQueryParams:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+                uuids:
+                    type: array
+                    items:
+                        type: string
+                    description: uuid
+                notification_type:
+                    type: integer
+                    description: 通知类型
+                    format: int32
+                sender_ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 发送者ID
+                status:
+                    type: integer
+                    description: 状态 0-正常 1-被取消
+                    format: int32
+        common.api.im.v1.ChatMessage:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                created_by:
+                    type: string
+                    description: 创建人
+                updated_by:
+                    type: string
+                    description: 更新人
+                created_by_name:
+                    type: string
+                    description: 创建人名称
+                updated_by_name:
+                    type: string
+                    description: 更新人名称
+                id:
+                    type: string
+                    description: 主键
+                sender:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.user.v1.User'
+                    description: sender
+                receiver_user_id:
+                    type: string
+                    description: receiver_user
+                receiver_user:
+                    $ref: '#/components/schemas/common.api.user.v1.User'
+                receiver_group_id:
+                    type: string
+                    description: receiver_group
+                receiver_group:
+                    $ref: '#/components/schemas/common.api.im.v1.ChatGroup'
+                type:
+                    type: integer
+                    description: 消息类型
+                    format: int32
+                content:
+                    type: string
+                    description: 内容
+                status:
+                    type: integer
+                    description: 状态 0-正常 1-撤回
+                    format: int32
+            description: 消息
+        common.api.im.v1.ChatMessagePageReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.im.v1.ChatMessage'
+                    description: 消息信息
+        common.api.im.v1.ChatMessagePageRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.im.v1.ChatMessageQueryParams'
+                    description: 查询参数
+        common.api.im.v1.ChatMessageQueryParams:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+                session_id:
+                    type: string
+                    description: 会话id
+                sender_id:
+                    type: string
+                    description: senderId
+        common.api.im.v1.ChatMessageRevokeReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatMessageRevokeRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: 主键
+        common.api.im.v1.ChatMessageSendReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatMessageSendRequest:
+            type: object
+            properties:
+                receiver_id:
+                    type: string
+                    description: receiverId
+                receiver_type:
+                    type: integer
+                    description: 接收者类型
+                    format: enum
+                type:
+                    type: integer
+                    description: 消息类型
+                    format: int32
+                content:
+                    type: string
+                    description: 内容
+        common.api.im.v1.ChatSession:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                id:
+                    type: string
+                    description: 主键
+                relation_id:
+                    type: string
+                    description: 私聊
+                group_id:
+                    type: string
+                    description: 群组
+                is_muted:
+                    type: boolean
+                    description: 是否免打扰
+                is_pinned:
+                    type: boolean
+                    description: 是否置顶
+                last_read_message_id:
+                    type: string
+                    description: 已读最后一条消息 ID
+                unread_count:
+                    type: integer
+                    description: 未读数
+                    format: uint32
+        common.api.im.v1.ChatSessionMarkDisturbReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatSessionMarkDisturbRequest:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 会话ID
+                disturb:
+                    type: boolean
+                    description: 是否免打扰
+        common.api.im.v1.ChatSessionMarkReadReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatSessionMarkReadRequest:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 会话ID
+        common.api.im.v1.ChatSessionMarkTopReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatSessionMarkTopRequest:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 会话ID
+                top:
+                    type: boolean
+                    description: 是否置顶
+        common.api.im.v1.ChatSessionPageReply:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                    description: 分页信息
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.im.v1.ChatSession'
+                    description: 消息信息
+        common.api.im.v1.ChatSessionPageRequest:
+            type: object
+            properties:
+                page:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                    description: 分页参数
+                query:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.im.v1.ChatSessionQueryParams'
+                    description: 查询参数
+        common.api.im.v1.ChatSessionQueryParams:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 主键
+        common.api.signal.v1.SignalNodeOfflineReply:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeOfflineRequest:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeOnlineListReply:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeOnlineListRequest:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeOnlineReply:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeOnlineRequest:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeRegisterReply:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeRegisterRequest:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeSaveReply:
+            type: object
+            properties: {}
+        common.api.signal.v1.SignalNodeSaveRequest:
+            type: object
+            properties: {}
         common.api.user.v1.AuditReply:
             type: object
             properties: {}
@@ -3196,12 +3845,20 @@ tags:
       description: 领域服务
     - name: ContentTagService
       description: 标签服务
+    - name: IMChatGroupService
+      description: ChatGroup 服务
+    - name: IMChatMessageService
+      description: ChatMessage 服务
+    - name: IMChatSessionService
+      description: ChatSession 服务
     - name: NotifyNotificationMetaService
       description: Notification_Meta 服务
     - name: NotifyNotificationRecordService
       description: Notification_Record 服务
     - name: NotifyNotificationTemplateService
       description: Notification_Template 服务
+    - name: SignalNodeService
+      description: Node 服务
     - name: System
       description: System 服务
     - name: UserAuthenticationService

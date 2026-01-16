@@ -9,24 +9,32 @@ import (
 )
 
 var (
-	// SignalSignalsColumns holds the columns for the "signal_signals" table.
-	SignalSignalsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+	// SignalNodesColumns holds the columns for the "signal_nodes" table.
+	SignalNodesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "owner_id", Type: field.TypeInt64, Nullable: true, Comment: "节点拥有者 ID"},
+		{Name: "name", Type: field.TypeString, Comment: "节点名称，节点唯一标识"},
+		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "节点描述"},
+		{Name: "secret", Type: field.TypeString, Comment: "节点密钥"},
+		{Name: "callback_url", Type: field.TypeString, Comment: "节点回调公网地址，如 https://example.com/api"},
+		{Name: "status", Type: field.TypeInt32, Comment: "节点状态: 1-正常, 2-禁用", Default: 1},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
 	}
-	// SignalSignalsTable holds the schema information for the "signal_signals" table.
-	SignalSignalsTable = &schema.Table{
-		Name:       "signal_signals",
-		Columns:    SignalSignalsColumns,
-		PrimaryKey: []*schema.Column{SignalSignalsColumns[0]},
+	// SignalNodesTable holds the schema information for the "signal_nodes" table.
+	SignalNodesTable = &schema.Table{
+		Name:       "signal_nodes",
+		Columns:    SignalNodesColumns,
+		PrimaryKey: []*schema.Column{SignalNodesColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		SignalSignalsTable,
+		SignalNodesTable,
 	}
 )
 
 func init() {
-	SignalSignalsTable.Annotation = &entsql.Annotation{
-		Table: "signal_signals",
+	SignalNodesTable.Annotation = &entsql.Annotation{
+		Table: "signal_nodes",
 	}
 }

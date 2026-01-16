@@ -24,6 +24,14 @@ service IMChatMessageService {
     };
   }
 
+  // 撤回消息
+  rpc Revoke (ChatMessageRevokeRequest) returns (ChatMessageRevokeReply) {
+    option (google.api.http) = {
+      post: "/v1/chatMessage/revoke"
+      body: "*"
+    };
+  }
+
   // 查询消息数据
   rpc Page (ChatMessagePageRequest) returns (ChatMessagePageReply) {
     option (google.api.http) = {
@@ -59,6 +67,12 @@ message ChatMessageSendRequest {
   string content = 6;
 }
 message ChatMessageSendReply {}
+
+message ChatMessageRevokeRequest {
+  // 主键
+  int64 id = 1;
+}
+message ChatMessageRevokeReply {}
 
 message ChatMessagePageRequest {
   // 分页参数

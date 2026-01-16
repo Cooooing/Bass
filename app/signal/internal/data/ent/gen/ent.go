@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"signal/internal/data/ent/gen/signal"
+	"signal/internal/data/ent/gen/node"
 	"sync"
 
 	"entgo.io/ent"
@@ -73,7 +73,7 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			signal.Table: signal.ValidColumn,
+			node.Table: node.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

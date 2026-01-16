@@ -24,6 +24,19 @@ service IMChatGroupService {
     };
   }
 
+  // 解散群组
+  rpc Dismiss (ChatGroupDismissRequest) returns (ChatGroupDismissReply) {
+    option (google.api.http) = {
+      post: "/v1/chatGroup/dismiss"
+      body: "*"
+    };
+  }
+
+  // 转让群主
+  // 踢出群成员
+  // 禁言群成员
+  // 解除禁言群成员
+
   // 查询群组列表
   rpc Page (ChatGroupPageRequest) returns (ChatGroupPageReply) {
     option (google.api.http) = {
@@ -31,6 +44,10 @@ service IMChatGroupService {
       body: "*"
     };
   }
+
+  // 邀请群成员
+  // 同意入群邀请
+  // 查询邀请列表
 
 }
 
@@ -60,6 +77,12 @@ message ChatGroupCreateRequest{
   optional string introduction = 4;
 }
 message ChatGroupCreateReply{}
+
+message ChatGroupDismissRequest{
+  // 群组ID
+  int64 id = 1;
+}
+message ChatGroupDismissReply{}
 
 message ChatGroupPageRequest {
   // 分页参数

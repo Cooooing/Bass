@@ -4,34 +4,34 @@ package gen
 
 import (
 	"context"
+	"signal/internal/data/ent/gen/node"
 	"signal/internal/data/ent/gen/predicate"
-	"signal/internal/data/ent/gen/signal"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
 
-// SignalDelete is the builder for deleting a Signal entity.
-type SignalDelete struct {
+// NodeDelete is the builder for deleting a Node entity.
+type NodeDelete struct {
 	config
 	hooks    []Hook
-	mutation *SignalMutation
+	mutation *NodeMutation
 }
 
-// Where appends a list predicates to the SignalDelete builder.
-func (_d *SignalDelete) Where(ps ...predicate.Signal) *SignalDelete {
+// Where appends a list predicates to the NodeDelete builder.
+func (_d *NodeDelete) Where(ps ...predicate.Node) *NodeDelete {
 	_d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (_d *SignalDelete) Exec(ctx context.Context) (int, error) {
+func (_d *NodeDelete) Exec(ctx context.Context) (int, error) {
 	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *SignalDelete) ExecX(ctx context.Context) int {
+func (_d *NodeDelete) ExecX(ctx context.Context) int {
 	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
@@ -39,8 +39,8 @@ func (_d *SignalDelete) ExecX(ctx context.Context) int {
 	return n
 }
 
-func (_d *SignalDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(signal.Table, sqlgraph.NewFieldSpec(signal.FieldID, field.TypeInt))
+func (_d *NodeDelete) sqlExec(ctx context.Context) (int, error) {
+	_spec := sqlgraph.NewDeleteSpec(node.Table, sqlgraph.NewFieldSpec(node.FieldID, field.TypeInt64))
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -56,32 +56,32 @@ func (_d *SignalDelete) sqlExec(ctx context.Context) (int, error) {
 	return affected, err
 }
 
-// SignalDeleteOne is the builder for deleting a single Signal entity.
-type SignalDeleteOne struct {
-	_d *SignalDelete
+// NodeDeleteOne is the builder for deleting a single Node entity.
+type NodeDeleteOne struct {
+	_d *NodeDelete
 }
 
-// Where appends a list predicates to the SignalDelete builder.
-func (_d *SignalDeleteOne) Where(ps ...predicate.Signal) *SignalDeleteOne {
+// Where appends a list predicates to the NodeDelete builder.
+func (_d *NodeDeleteOne) Where(ps ...predicate.Node) *NodeDeleteOne {
 	_d._d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query.
-func (_d *SignalDeleteOne) Exec(ctx context.Context) error {
+func (_d *NodeDeleteOne) Exec(ctx context.Context) error {
 	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
 	case n == 0:
-		return &NotFoundError{signal.Label}
+		return &NotFoundError{node.Label}
 	default:
 		return nil
 	}
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *SignalDeleteOne) ExecX(ctx context.Context) {
+func (_d *NodeDeleteOne) ExecX(ctx context.Context) {
 	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}

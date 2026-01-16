@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package common.api.signal.v1;
+
+option go_package = "common/api/signal/v1;v1";
+
+// 消息类型
+enum MessageType {
+  MESSAGE_TYPE_UNKNOWN = 0;
+  // 通知消息
+  MESSAGE_TYPE_NOTIFY = 1;
+  // IM 消息
+  MESSAGE_TYPE_IM = 2;
+}

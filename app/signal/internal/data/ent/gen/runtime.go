@@ -2,8 +2,32 @@
 
 package gen
 
+import (
+	"signal/internal/data/ent/gen/node"
+	"signal/internal/data/ent/schema"
+	"time"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	nodeFields := schema.Node{}.Fields()
+	_ = nodeFields
+	// nodeDescName is the schema descriptor for name field.
+	nodeDescName := nodeFields[2].Descriptor()
+	// node.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	node.NameValidator = nodeDescName.Validators[0].(func(string) error)
+	// nodeDescStatus is the schema descriptor for status field.
+	nodeDescStatus := nodeFields[6].Descriptor()
+	// node.DefaultStatus holds the default value on creation for the status field.
+	node.DefaultStatus = nodeDescStatus.Default.(int32)
+	// nodeDescCreatedAt is the schema descriptor for created_at field.
+	nodeDescCreatedAt := nodeFields[7].Descriptor()
+	// node.DefaultCreatedAt holds the default value on creation for the created_at field.
+	node.DefaultCreatedAt = nodeDescCreatedAt.Default.(func() time.Time)
+	// nodeDescUpdatedAt is the schema descriptor for updated_at field.
+	nodeDescUpdatedAt := nodeFields[8].Descriptor()
+	// node.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	node.DefaultUpdatedAt = nodeDescUpdatedAt.Default.(func() time.Time)
 }

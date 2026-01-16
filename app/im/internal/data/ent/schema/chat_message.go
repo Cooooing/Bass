@@ -32,7 +32,7 @@ func (ChatMessage) Fields() []ent.Field {
 		field.Int64("group_id").Comment("群组ID (仅群聊有值)").Optional().Nillable(),
 		field.Int32("type").Comment("消息内容类型").Default(1),
 		field.Text("content").Comment("消息内容"),
-		field.Int32("status").Comment("状态: 0-正常, 1-撤回").Default(0),
+		field.Int32("status").Comment("状态: 1-正常, 2-撤回").Default(1),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)
@@ -43,17 +43,19 @@ func (ChatMessage) Fields() []ent.Field {
 func (ChatMessage) Edges() []ent.Edge {
 	return []ent.Edge{
 		// 关联群组 多对一
-		edge.From("group", ChatGroup.Type).Ref("messages").Field("group_id").Unique(),
+		edge.From("group", ChatGroup.Type).Ref("group_messages").Field("group_id").Unique(),
 		// 关联群组最后一条消息 一对一
 		edge.To("last_message_group", ChatGroup.Type).Unique(),
-		// 关联会话最后一条消息 一对一
+		// 关联私聊 多对一
+		edge.From("session", ChatSession.Type).Ref("session_messages").Field("receiver_id").Unique(),
+		// 关联私聊最后一条消息 一对一
 		edge.To("last_message_session", ChatSession.Type).Unique(),
 	}
 }
 
 func (ChatMessage) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("receiver_id"),
+		index.Fields("sender_id"),
 		index.Fields("group_id"),
 	}
 }

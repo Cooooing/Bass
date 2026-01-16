@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package common.api.im.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "common/v1/common.proto";
+import "user/v1/user.proto";
+import "im/v1/model.proto";
+import "im/v1/constant.proto";
+
+option go_package = "common/api/im/v1;v1";
+
+// ChatGroup 服务
+service IMChatGroupService {
+
+  // 创建群组
+  rpc Create (ChatGroupCreateRequest) returns (ChatGroupCreateReply) {
+    option (google.api.http) = {
+      post: "/v1/chatGroup/create"
+      body: "*"
+    };
+  }
+
+  // 查询群组列表
+  rpc Page (ChatGroupPageRequest) returns (ChatGroupPageReply) {
+    option (google.api.http) = {
+      post: "/v1/chatGroup/page"
+      body: "*"
+    };
+  }
+
+}
+
+// 查询参数定义
+
+message ChatGroupQueryParams {
+  // 主键
+  repeated int64 ids = 2;
+  // uuid
+  repeated string uuids = 3;
+  // 通知类型
+  optional int32 notification_type = 5;
+  // 发送者ID
+  repeated int64 sender_ids = 6;
+  // 状态 0-正常 1-被取消
+  optional int32 status = 8;
+}
+
+// 请求/响应结构定义
+
+message ChatGroupCreateRequest{
+  // 群名称
+  string name = 2;
+  // 群头像
+  optional string avatar = 3;
+  // 群简介
+  optional string introduction = 4;
+}
+message ChatGroupCreateReply{}
+
+message ChatGroupPageRequest {
+  // 分页参数
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  ChatGroupQueryParams query = 2;
+}
+message ChatGroupPageReply {
+  // 分页信息
+  common.v1.PageReply page = 1;
+  // 通知元数据信息
+  repeated ChatGroup rows = 2;
+}

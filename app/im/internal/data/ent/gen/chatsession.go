@@ -19,32 +19,34 @@ type ChatSession struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
-	// 所属用户id
-	UserID int64 `json:"user_id,omitempty"`
-	// 私聊接收者ID (仅私聊有值)
+	// 私聊接收者 ID (仅私聊有值)
 	ReceiverID *int64 `json:"receiver_id,omitempty"`
 	// 群组ID (仅群聊有值)
 	GroupID *int64 `json:"group_id,omitempty"`
-	// 已读最后一条消息id
-	LastReadMessageID int64 `json:"last_read_message_id,omitempty"`
-	// 已读数
-	ReadCount int32 `json:"read_count,omitempty"`
-	// 消息总数（仅私聊有意义）
-	MessageCount int32 `json:"message_count,omitempty"`
 	// 是否免打扰
 	IsMuted bool `json:"is_muted,omitempty"`
 	// 是否置顶
 	IsPinned bool `json:"is_pinned,omitempty"`
-	// 最后一条消息id 仅私聊，群聊避免写扩散存储在群组表中
+	// 已读最后一条消息 ID
+	LastReadMessageID *int64 `json:"last_read_message_id,omitempty"`
+	// 已读数
+	ReadCount uint32 `json:"read_count,omitempty"`
+	// 私聊消息数
+	MessageCount uint32 `json:"message_count,omitempty"`
+	// 最后消息 ID
 	LastMessageID *int64 `json:"last_message_id,omitempty"`
-	// 最后消息内容 仅私聊，群聊避免写扩散存储在群组表中
-	LastMessageContent *string `json:"last_message_content,omitempty"`
-	// 最后消息时间 仅私聊，群聊避免写扩散存储在群组表中
-	LastMessageAt *time.Time `json:"last_message_at,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	// 创建人ID
+	CreatedBy *int64 `json:"created_by,omitempty"`
+	// 更新人ID
+	UpdatedBy *int64 `json:"updated_by,omitempty"`
+	// 创建人用户名
+	CreatedByName *string `json:"created_by_name,omitempty"`
+	// 更新人用户名
+	UpdatedByName *string `json:"updated_by_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ChatSessionQuery when eager-loading is set.
 	Edges        ChatSessionEdges `json:"edges"`
@@ -55,11 +57,13 @@ type ChatSession struct {
 type ChatSessionEdges struct {
 	// Group holds the value of the group edge.
 	Group *ChatGroup `json:"group,omitempty"`
+	// SessionMessages holds the value of the session_messages edge.
+	SessionMessages []*ChatMessage `json:"session_messages,omitempty"`
 	// LastMessageOfSession holds the value of the last_message_of_session edge.
 	LastMessageOfSession *ChatMessage `json:"last_message_of_session,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // GroupOrErr returns the Group value or an error if the edge
@@ -73,12 +77,21 @@ func (e ChatSessionEdges) GroupOrErr() (*ChatGroup, error) {
 	return nil, &NotLoadedError{edge: "group"}
 }
 
+// SessionMessagesOrErr returns the SessionMessages value or an error if the edge
+// was not loaded in eager-loading.
+func (e ChatSessionEdges) SessionMessagesOrErr() ([]*ChatMessage, error) {
+	if e.loadedTypes[1] {
+		return e.SessionMessages, nil
+	}
+	return nil, &NotLoadedError{edge: "session_messages"}
+}
+
 // LastMessageOfSessionOrErr returns the LastMessageOfSession value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ChatSessionEdges) LastMessageOfSessionOrErr() (*ChatMessage, error) {
 	if e.LastMessageOfSession != nil {
 		return e.LastMessageOfSession, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: chatmessage.Label}
 	}
 	return nil, &NotLoadedError{edge: "last_message_of_session"}
@@ -91,11 +104,11 @@ func (*ChatSession) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case chatsession.FieldIsMuted, chatsession.FieldIsPinned:
 			values[i] = new(sql.NullBool)
-		case chatsession.FieldID, chatsession.FieldUserID, chatsession.FieldReceiverID, chatsession.FieldGroupID, chatsession.FieldLastReadMessageID, chatsession.FieldReadCount, chatsession.FieldMessageCount, chatsession.FieldLastMessageID:
+		case chatsession.FieldID, chatsession.FieldReceiverID, chatsession.FieldGroupID, chatsession.FieldLastReadMessageID, chatsession.FieldReadCount, chatsession.FieldMessageCount, chatsession.FieldLastMessageID, chatsession.FieldCreatedBy, chatsession.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
-		case chatsession.FieldLastMessageContent:
+		case chatsession.FieldCreatedByName, chatsession.FieldUpdatedByName:
 			values[i] = new(sql.NullString)
-		case chatsession.FieldLastMessageAt, chatsession.FieldCreatedAt, chatsession.FieldUpdatedAt:
+		case chatsession.FieldCreatedAt, chatsession.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -118,12 +131,6 @@ func (_m *ChatSession) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = int64(value.Int64)
-		case chatsession.FieldUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
-			} else if value.Valid {
-				_m.UserID = value.Int64
-			}
 		case chatsession.FieldReceiverID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field receiver_id", values[i])
@@ -138,24 +145,6 @@ func (_m *ChatSession) assignValues(columns []string, values []any) error {
 				_m.GroupID = new(int64)
 				*_m.GroupID = value.Int64
 			}
-		case chatsession.FieldLastReadMessageID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field last_read_message_id", values[i])
-			} else if value.Valid {
-				_m.LastReadMessageID = value.Int64
-			}
-		case chatsession.FieldReadCount:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field read_count", values[i])
-			} else if value.Valid {
-				_m.ReadCount = int32(value.Int64)
-			}
-		case chatsession.FieldMessageCount:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field message_count", values[i])
-			} else if value.Valid {
-				_m.MessageCount = int32(value.Int64)
-			}
 		case chatsession.FieldIsMuted:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_muted", values[i])
@@ -168,26 +157,31 @@ func (_m *ChatSession) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IsPinned = value.Bool
 			}
+		case chatsession.FieldLastReadMessageID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field last_read_message_id", values[i])
+			} else if value.Valid {
+				_m.LastReadMessageID = new(int64)
+				*_m.LastReadMessageID = value.Int64
+			}
+		case chatsession.FieldReadCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field read_count", values[i])
+			} else if value.Valid {
+				_m.ReadCount = uint32(value.Int64)
+			}
+		case chatsession.FieldMessageCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field message_count", values[i])
+			} else if value.Valid {
+				_m.MessageCount = uint32(value.Int64)
+			}
 		case chatsession.FieldLastMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field last_message_id", values[i])
 			} else if value.Valid {
 				_m.LastMessageID = new(int64)
 				*_m.LastMessageID = value.Int64
-			}
-		case chatsession.FieldLastMessageContent:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field last_message_content", values[i])
-			} else if value.Valid {
-				_m.LastMessageContent = new(string)
-				*_m.LastMessageContent = value.String
-			}
-		case chatsession.FieldLastMessageAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_message_at", values[i])
-			} else if value.Valid {
-				_m.LastMessageAt = new(time.Time)
-				*_m.LastMessageAt = value.Time
 			}
 		case chatsession.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -202,6 +196,34 @@ func (_m *ChatSession) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UpdatedAt = new(time.Time)
 				*_m.UpdatedAt = value.Time
+			}
+		case chatsession.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				_m.CreatedBy = new(int64)
+				*_m.CreatedBy = value.Int64
+			}
+		case chatsession.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				_m.UpdatedBy = new(int64)
+				*_m.UpdatedBy = value.Int64
+			}
+		case chatsession.FieldCreatedByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by_name", values[i])
+			} else if value.Valid {
+				_m.CreatedByName = new(string)
+				*_m.CreatedByName = value.String
+			}
+		case chatsession.FieldUpdatedByName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by_name", values[i])
+			} else if value.Valid {
+				_m.UpdatedByName = new(string)
+				*_m.UpdatedByName = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -219,6 +241,11 @@ func (_m *ChatSession) Value(name string) (ent.Value, error) {
 // QueryGroup queries the "group" edge of the ChatSession entity.
 func (_m *ChatSession) QueryGroup() *ChatGroupQuery {
 	return NewChatSessionClient(_m.config).QueryGroup(_m)
+}
+
+// QuerySessionMessages queries the "session_messages" edge of the ChatSession entity.
+func (_m *ChatSession) QuerySessionMessages() *ChatMessageQuery {
+	return NewChatSessionClient(_m.config).QuerySessionMessages(_m)
 }
 
 // QueryLastMessageOfSession queries the "last_message_of_session" edge of the ChatSession entity.
@@ -249,9 +276,6 @@ func (_m *ChatSession) String() string {
 	var builder strings.Builder
 	builder.WriteString("ChatSession(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
-	builder.WriteString(", ")
 	if v := _m.ReceiverID; v != nil {
 		builder.WriteString("receiver_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
@@ -262,8 +286,16 @@ func (_m *ChatSession) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	builder.WriteString("last_read_message_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.LastReadMessageID))
+	builder.WriteString("is_muted=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsMuted))
+	builder.WriteString(", ")
+	builder.WriteString("is_pinned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsPinned))
+	builder.WriteString(", ")
+	if v := _m.LastReadMessageID; v != nil {
+		builder.WriteString("last_read_message_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("read_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReadCount))
@@ -271,25 +303,9 @@ func (_m *ChatSession) String() string {
 	builder.WriteString("message_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MessageCount))
 	builder.WriteString(", ")
-	builder.WriteString("is_muted=")
-	builder.WriteString(fmt.Sprintf("%v", _m.IsMuted))
-	builder.WriteString(", ")
-	builder.WriteString("is_pinned=")
-	builder.WriteString(fmt.Sprintf("%v", _m.IsPinned))
-	builder.WriteString(", ")
 	if v := _m.LastMessageID; v != nil {
 		builder.WriteString("last_message_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.LastMessageContent; v != nil {
-		builder.WriteString("last_message_content=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.LastMessageAt; v != nil {
-		builder.WriteString("last_message_at=")
-		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
@@ -300,6 +316,26 @@ func (_m *ChatSession) String() string {
 	if v := _m.UpdatedAt; v != nil {
 		builder.WriteString("updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.CreatedBy; v != nil {
+		builder.WriteString("created_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.CreatedByName; v != nil {
+		builder.WriteString("created_by_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.UpdatedByName; v != nil {
+		builder.WriteString("updated_by_name=")
+		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')
 	return builder.String()

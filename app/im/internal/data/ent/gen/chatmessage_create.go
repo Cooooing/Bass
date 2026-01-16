@@ -204,6 +204,25 @@ func (_c *ChatMessageCreate) SetLastMessageGroup(v *ChatGroup) *ChatMessageCreat
 	return _c.SetLastMessageGroupID(v.ID)
 }
 
+// SetSessionID sets the "session" edge to the ChatSession entity by ID.
+func (_c *ChatMessageCreate) SetSessionID(id int64) *ChatMessageCreate {
+	_c.mutation.SetSessionID(id)
+	return _c
+}
+
+// SetNillableSessionID sets the "session" edge to the ChatSession entity by ID if the given value is not nil.
+func (_c *ChatMessageCreate) SetNillableSessionID(id *int64) *ChatMessageCreate {
+	if id != nil {
+		_c = _c.SetSessionID(*id)
+	}
+	return _c
+}
+
+// SetSession sets the "session" edge to the ChatSession entity.
+func (_c *ChatMessageCreate) SetSession(v *ChatSession) *ChatMessageCreate {
+	return _c.SetSessionID(v.ID)
+}
+
 // SetLastMessageSessionID sets the "last_message_session" edge to the ChatSession entity by ID.
 func (_c *ChatMessageCreate) SetLastMessageSessionID(id int64) *ChatMessageCreate {
 	_c.mutation.SetLastMessageSessionID(id)
@@ -326,10 +345,6 @@ func (_c *ChatMessageCreate) createSpec() (*ChatMessage, *sqlgraph.CreateSpec) {
 		_spec.SetField(chatmessage.FieldSenderID, field.TypeInt64, value)
 		_node.SenderID = value
 	}
-	if value, ok := _c.mutation.ReceiverID(); ok {
-		_spec.SetField(chatmessage.FieldReceiverID, field.TypeInt64, value)
-		_node.ReceiverID = &value
-	}
 	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(chatmessage.FieldType, field.TypeInt32, value)
 		_node.Type = value
@@ -397,6 +412,23 @@ func (_c *ChatMessageCreate) createSpec() (*ChatMessage, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SessionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   chatmessage.SessionTable,
+			Columns: []string{chatmessage.SessionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(chatsession.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReceiverID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.LastMessageSessionIDs(); len(nodes) > 0 {

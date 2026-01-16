@@ -53,7 +53,6 @@ func (_u *ChatMessageUpdate) AddSenderID(v int64) *ChatMessageUpdate {
 
 // SetReceiverID sets the "receiver_id" field.
 func (_u *ChatMessageUpdate) SetReceiverID(v int64) *ChatMessageUpdate {
-	_u.mutation.ResetReceiverID()
 	_u.mutation.SetReceiverID(v)
 	return _u
 }
@@ -63,12 +62,6 @@ func (_u *ChatMessageUpdate) SetNillableReceiverID(v *int64) *ChatMessageUpdate 
 	if v != nil {
 		_u.SetReceiverID(*v)
 	}
-	return _u
-}
-
-// AddReceiverID adds value to the "receiver_id" field.
-func (_u *ChatMessageUpdate) AddReceiverID(v int64) *ChatMessageUpdate {
-	_u.mutation.AddReceiverID(v)
 	return _u
 }
 
@@ -312,6 +305,25 @@ func (_u *ChatMessageUpdate) SetLastMessageGroup(v *ChatGroup) *ChatMessageUpdat
 	return _u.SetLastMessageGroupID(v.ID)
 }
 
+// SetSessionID sets the "session" edge to the ChatSession entity by ID.
+func (_u *ChatMessageUpdate) SetSessionID(id int64) *ChatMessageUpdate {
+	_u.mutation.SetSessionID(id)
+	return _u
+}
+
+// SetNillableSessionID sets the "session" edge to the ChatSession entity by ID if the given value is not nil.
+func (_u *ChatMessageUpdate) SetNillableSessionID(id *int64) *ChatMessageUpdate {
+	if id != nil {
+		_u = _u.SetSessionID(*id)
+	}
+	return _u
+}
+
+// SetSession sets the "session" edge to the ChatSession entity.
+func (_u *ChatMessageUpdate) SetSession(v *ChatSession) *ChatMessageUpdate {
+	return _u.SetSessionID(v.ID)
+}
+
 // SetLastMessageSessionID sets the "last_message_session" edge to the ChatSession entity by ID.
 func (_u *ChatMessageUpdate) SetLastMessageSessionID(id int64) *ChatMessageUpdate {
 	_u.mutation.SetLastMessageSessionID(id)
@@ -345,6 +357,12 @@ func (_u *ChatMessageUpdate) ClearGroup() *ChatMessageUpdate {
 // ClearLastMessageGroup clears the "last_message_group" edge to the ChatGroup entity.
 func (_u *ChatMessageUpdate) ClearLastMessageGroup() *ChatMessageUpdate {
 	_u.mutation.ClearLastMessageGroup()
+	return _u
+}
+
+// ClearSession clears the "session" edge to the ChatSession entity.
+func (_u *ChatMessageUpdate) ClearSession() *ChatMessageUpdate {
+	_u.mutation.ClearSession()
 	return _u
 }
 
@@ -395,15 +413,6 @@ func (_u *ChatMessageUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.AddedSenderID(); ok {
 		_spec.AddField(chatmessage.FieldSenderID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.ReceiverID(); ok {
-		_spec.SetField(chatmessage.FieldReceiverID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedReceiverID(); ok {
-		_spec.AddField(chatmessage.FieldReceiverID, field.TypeInt64, value)
-	}
-	if _u.mutation.ReceiverIDCleared() {
-		_spec.ClearField(chatmessage.FieldReceiverID, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(chatmessage.FieldType, field.TypeInt32, value)
@@ -520,6 +529,35 @@ func (_u *ChatMessageUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SessionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   chatmessage.SessionTable,
+			Columns: []string{chatmessage.SessionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(chatsession.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SessionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   chatmessage.SessionTable,
+			Columns: []string{chatmessage.SessionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(chatsession.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.LastMessageSessionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -592,7 +630,6 @@ func (_u *ChatMessageUpdateOne) AddSenderID(v int64) *ChatMessageUpdateOne {
 
 // SetReceiverID sets the "receiver_id" field.
 func (_u *ChatMessageUpdateOne) SetReceiverID(v int64) *ChatMessageUpdateOne {
-	_u.mutation.ResetReceiverID()
 	_u.mutation.SetReceiverID(v)
 	return _u
 }
@@ -602,12 +639,6 @@ func (_u *ChatMessageUpdateOne) SetNillableReceiverID(v *int64) *ChatMessageUpda
 	if v != nil {
 		_u.SetReceiverID(*v)
 	}
-	return _u
-}
-
-// AddReceiverID adds value to the "receiver_id" field.
-func (_u *ChatMessageUpdateOne) AddReceiverID(v int64) *ChatMessageUpdateOne {
-	_u.mutation.AddReceiverID(v)
 	return _u
 }
 
@@ -851,6 +882,25 @@ func (_u *ChatMessageUpdateOne) SetLastMessageGroup(v *ChatGroup) *ChatMessageUp
 	return _u.SetLastMessageGroupID(v.ID)
 }
 
+// SetSessionID sets the "session" edge to the ChatSession entity by ID.
+func (_u *ChatMessageUpdateOne) SetSessionID(id int64) *ChatMessageUpdateOne {
+	_u.mutation.SetSessionID(id)
+	return _u
+}
+
+// SetNillableSessionID sets the "session" edge to the ChatSession entity by ID if the given value is not nil.
+func (_u *ChatMessageUpdateOne) SetNillableSessionID(id *int64) *ChatMessageUpdateOne {
+	if id != nil {
+		_u = _u.SetSessionID(*id)
+	}
+	return _u
+}
+
+// SetSession sets the "session" edge to the ChatSession entity.
+func (_u *ChatMessageUpdateOne) SetSession(v *ChatSession) *ChatMessageUpdateOne {
+	return _u.SetSessionID(v.ID)
+}
+
 // SetLastMessageSessionID sets the "last_message_session" edge to the ChatSession entity by ID.
 func (_u *ChatMessageUpdateOne) SetLastMessageSessionID(id int64) *ChatMessageUpdateOne {
 	_u.mutation.SetLastMessageSessionID(id)
@@ -884,6 +934,12 @@ func (_u *ChatMessageUpdateOne) ClearGroup() *ChatMessageUpdateOne {
 // ClearLastMessageGroup clears the "last_message_group" edge to the ChatGroup entity.
 func (_u *ChatMessageUpdateOne) ClearLastMessageGroup() *ChatMessageUpdateOne {
 	_u.mutation.ClearLastMessageGroup()
+	return _u
+}
+
+// ClearSession clears the "session" edge to the ChatSession entity.
+func (_u *ChatMessageUpdateOne) ClearSession() *ChatMessageUpdateOne {
+	_u.mutation.ClearSession()
 	return _u
 }
 
@@ -964,15 +1020,6 @@ func (_u *ChatMessageUpdateOne) sqlSave(ctx context.Context) (_node *ChatMessage
 	}
 	if value, ok := _u.mutation.AddedSenderID(); ok {
 		_spec.AddField(chatmessage.FieldSenderID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.ReceiverID(); ok {
-		_spec.SetField(chatmessage.FieldReceiverID, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedReceiverID(); ok {
-		_spec.AddField(chatmessage.FieldReceiverID, field.TypeInt64, value)
-	}
-	if _u.mutation.ReceiverIDCleared() {
-		_spec.ClearField(chatmessage.FieldReceiverID, field.TypeInt64)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(chatmessage.FieldType, field.TypeInt32, value)
@@ -1082,6 +1129,35 @@ func (_u *ChatMessageUpdateOne) sqlSave(ctx context.Context) (_node *ChatMessage
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(chatgroup.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SessionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   chatmessage.SessionTable,
+			Columns: []string{chatmessage.SessionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(chatsession.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SessionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   chatmessage.SessionTable,
+			Columns: []string{chatmessage.SessionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(chatsession.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

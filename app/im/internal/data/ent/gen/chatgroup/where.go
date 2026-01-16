@@ -65,6 +65,11 @@ func Avatar(v string) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldAvatar, v))
 }
 
+// Introduction applies equality check predicate on the "introduction" field. It's identical to IntroductionEQ.
+func Introduction(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldEQ(FieldIntroduction, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v int64) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldOwnerID, v))
@@ -76,28 +81,18 @@ func Status(v int32) predicate.ChatGroup {
 }
 
 // MemberCount applies equality check predicate on the "member_count" field. It's identical to MemberCountEQ.
-func MemberCount(v int32) predicate.ChatGroup {
+func MemberCount(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldMemberCount, v))
 }
 
 // MessageCount applies equality check predicate on the "message_count" field. It's identical to MessageCountEQ.
-func MessageCount(v int64) predicate.ChatGroup {
+func MessageCount(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldMessageCount, v))
 }
 
 // LastMessageID applies equality check predicate on the "last_message_id" field. It's identical to LastMessageIDEQ.
 func LastMessageID(v int64) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldLastMessageID, v))
-}
-
-// LastMessageContent applies equality check predicate on the "last_message_content" field. It's identical to LastMessageContentEQ.
-func LastMessageContent(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldEQ(FieldLastMessageContent, v))
-}
-
-// LastMessageAt applies equality check predicate on the "last_message_at" field. It's identical to LastMessageAtEQ.
-func LastMessageAt(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldEQ(FieldLastMessageAt, v))
 }
 
 // CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
@@ -250,6 +245,16 @@ func AvatarHasSuffix(v string) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldHasSuffix(FieldAvatar, v))
 }
 
+// AvatarIsNil applies the IsNil predicate on the "avatar" field.
+func AvatarIsNil() predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldIsNull(FieldAvatar))
+}
+
+// AvatarNotNil applies the NotNil predicate on the "avatar" field.
+func AvatarNotNil() predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldNotNull(FieldAvatar))
+}
+
 // AvatarEqualFold applies the EqualFold predicate on the "avatar" field.
 func AvatarEqualFold(v string) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEqualFold(FieldAvatar, v))
@@ -258,6 +263,71 @@ func AvatarEqualFold(v string) predicate.ChatGroup {
 // AvatarContainsFold applies the ContainsFold predicate on the "avatar" field.
 func AvatarContainsFold(v string) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldContainsFold(FieldAvatar, v))
+}
+
+// IntroductionEQ applies the EQ predicate on the "introduction" field.
+func IntroductionEQ(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldEQ(FieldIntroduction, v))
+}
+
+// IntroductionNEQ applies the NEQ predicate on the "introduction" field.
+func IntroductionNEQ(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldNEQ(FieldIntroduction, v))
+}
+
+// IntroductionIn applies the In predicate on the "introduction" field.
+func IntroductionIn(vs ...string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldIn(FieldIntroduction, vs...))
+}
+
+// IntroductionNotIn applies the NotIn predicate on the "introduction" field.
+func IntroductionNotIn(vs ...string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldNotIn(FieldIntroduction, vs...))
+}
+
+// IntroductionGT applies the GT predicate on the "introduction" field.
+func IntroductionGT(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldGT(FieldIntroduction, v))
+}
+
+// IntroductionGTE applies the GTE predicate on the "introduction" field.
+func IntroductionGTE(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldGTE(FieldIntroduction, v))
+}
+
+// IntroductionLT applies the LT predicate on the "introduction" field.
+func IntroductionLT(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldLT(FieldIntroduction, v))
+}
+
+// IntroductionLTE applies the LTE predicate on the "introduction" field.
+func IntroductionLTE(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldLTE(FieldIntroduction, v))
+}
+
+// IntroductionContains applies the Contains predicate on the "introduction" field.
+func IntroductionContains(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldContains(FieldIntroduction, v))
+}
+
+// IntroductionHasPrefix applies the HasPrefix predicate on the "introduction" field.
+func IntroductionHasPrefix(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldHasPrefix(FieldIntroduction, v))
+}
+
+// IntroductionHasSuffix applies the HasSuffix predicate on the "introduction" field.
+func IntroductionHasSuffix(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldHasSuffix(FieldIntroduction, v))
+}
+
+// IntroductionEqualFold applies the EqualFold predicate on the "introduction" field.
+func IntroductionEqualFold(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldEqualFold(FieldIntroduction, v))
+}
+
+// IntroductionContainsFold applies the ContainsFold predicate on the "introduction" field.
+func IntroductionContainsFold(v string) predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldContainsFold(FieldIntroduction, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -341,82 +411,82 @@ func StatusLTE(v int32) predicate.ChatGroup {
 }
 
 // MemberCountEQ applies the EQ predicate on the "member_count" field.
-func MemberCountEQ(v int32) predicate.ChatGroup {
+func MemberCountEQ(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldMemberCount, v))
 }
 
 // MemberCountNEQ applies the NEQ predicate on the "member_count" field.
-func MemberCountNEQ(v int32) predicate.ChatGroup {
+func MemberCountNEQ(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldNEQ(FieldMemberCount, v))
 }
 
 // MemberCountIn applies the In predicate on the "member_count" field.
-func MemberCountIn(vs ...int32) predicate.ChatGroup {
+func MemberCountIn(vs ...uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldIn(FieldMemberCount, vs...))
 }
 
 // MemberCountNotIn applies the NotIn predicate on the "member_count" field.
-func MemberCountNotIn(vs ...int32) predicate.ChatGroup {
+func MemberCountNotIn(vs ...uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldNotIn(FieldMemberCount, vs...))
 }
 
 // MemberCountGT applies the GT predicate on the "member_count" field.
-func MemberCountGT(v int32) predicate.ChatGroup {
+func MemberCountGT(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldGT(FieldMemberCount, v))
 }
 
 // MemberCountGTE applies the GTE predicate on the "member_count" field.
-func MemberCountGTE(v int32) predicate.ChatGroup {
+func MemberCountGTE(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldGTE(FieldMemberCount, v))
 }
 
 // MemberCountLT applies the LT predicate on the "member_count" field.
-func MemberCountLT(v int32) predicate.ChatGroup {
+func MemberCountLT(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldLT(FieldMemberCount, v))
 }
 
 // MemberCountLTE applies the LTE predicate on the "member_count" field.
-func MemberCountLTE(v int32) predicate.ChatGroup {
+func MemberCountLTE(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldLTE(FieldMemberCount, v))
 }
 
 // MessageCountEQ applies the EQ predicate on the "message_count" field.
-func MessageCountEQ(v int64) predicate.ChatGroup {
+func MessageCountEQ(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEQ(FieldMessageCount, v))
 }
 
 // MessageCountNEQ applies the NEQ predicate on the "message_count" field.
-func MessageCountNEQ(v int64) predicate.ChatGroup {
+func MessageCountNEQ(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldNEQ(FieldMessageCount, v))
 }
 
 // MessageCountIn applies the In predicate on the "message_count" field.
-func MessageCountIn(vs ...int64) predicate.ChatGroup {
+func MessageCountIn(vs ...uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldIn(FieldMessageCount, vs...))
 }
 
 // MessageCountNotIn applies the NotIn predicate on the "message_count" field.
-func MessageCountNotIn(vs ...int64) predicate.ChatGroup {
+func MessageCountNotIn(vs ...uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldNotIn(FieldMessageCount, vs...))
 }
 
 // MessageCountGT applies the GT predicate on the "message_count" field.
-func MessageCountGT(v int64) predicate.ChatGroup {
+func MessageCountGT(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldGT(FieldMessageCount, v))
 }
 
 // MessageCountGTE applies the GTE predicate on the "message_count" field.
-func MessageCountGTE(v int64) predicate.ChatGroup {
+func MessageCountGTE(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldGTE(FieldMessageCount, v))
 }
 
 // MessageCountLT applies the LT predicate on the "message_count" field.
-func MessageCountLT(v int64) predicate.ChatGroup {
+func MessageCountLT(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldLT(FieldMessageCount, v))
 }
 
 // MessageCountLTE applies the LTE predicate on the "message_count" field.
-func MessageCountLTE(v int64) predicate.ChatGroup {
+func MessageCountLTE(v uint32) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldLTE(FieldMessageCount, v))
 }
 
@@ -448,131 +518,6 @@ func LastMessageIDIsNil() predicate.ChatGroup {
 // LastMessageIDNotNil applies the NotNil predicate on the "last_message_id" field.
 func LastMessageIDNotNil() predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldNotNull(FieldLastMessageID))
-}
-
-// LastMessageContentEQ applies the EQ predicate on the "last_message_content" field.
-func LastMessageContentEQ(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldEQ(FieldLastMessageContent, v))
-}
-
-// LastMessageContentNEQ applies the NEQ predicate on the "last_message_content" field.
-func LastMessageContentNEQ(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldNEQ(FieldLastMessageContent, v))
-}
-
-// LastMessageContentIn applies the In predicate on the "last_message_content" field.
-func LastMessageContentIn(vs ...string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldIn(FieldLastMessageContent, vs...))
-}
-
-// LastMessageContentNotIn applies the NotIn predicate on the "last_message_content" field.
-func LastMessageContentNotIn(vs ...string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldNotIn(FieldLastMessageContent, vs...))
-}
-
-// LastMessageContentGT applies the GT predicate on the "last_message_content" field.
-func LastMessageContentGT(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldGT(FieldLastMessageContent, v))
-}
-
-// LastMessageContentGTE applies the GTE predicate on the "last_message_content" field.
-func LastMessageContentGTE(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldGTE(FieldLastMessageContent, v))
-}
-
-// LastMessageContentLT applies the LT predicate on the "last_message_content" field.
-func LastMessageContentLT(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldLT(FieldLastMessageContent, v))
-}
-
-// LastMessageContentLTE applies the LTE predicate on the "last_message_content" field.
-func LastMessageContentLTE(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldLTE(FieldLastMessageContent, v))
-}
-
-// LastMessageContentContains applies the Contains predicate on the "last_message_content" field.
-func LastMessageContentContains(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldContains(FieldLastMessageContent, v))
-}
-
-// LastMessageContentHasPrefix applies the HasPrefix predicate on the "last_message_content" field.
-func LastMessageContentHasPrefix(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldHasPrefix(FieldLastMessageContent, v))
-}
-
-// LastMessageContentHasSuffix applies the HasSuffix predicate on the "last_message_content" field.
-func LastMessageContentHasSuffix(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldHasSuffix(FieldLastMessageContent, v))
-}
-
-// LastMessageContentIsNil applies the IsNil predicate on the "last_message_content" field.
-func LastMessageContentIsNil() predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldIsNull(FieldLastMessageContent))
-}
-
-// LastMessageContentNotNil applies the NotNil predicate on the "last_message_content" field.
-func LastMessageContentNotNil() predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldNotNull(FieldLastMessageContent))
-}
-
-// LastMessageContentEqualFold applies the EqualFold predicate on the "last_message_content" field.
-func LastMessageContentEqualFold(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldEqualFold(FieldLastMessageContent, v))
-}
-
-// LastMessageContentContainsFold applies the ContainsFold predicate on the "last_message_content" field.
-func LastMessageContentContainsFold(v string) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldContainsFold(FieldLastMessageContent, v))
-}
-
-// LastMessageAtEQ applies the EQ predicate on the "last_message_at" field.
-func LastMessageAtEQ(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldEQ(FieldLastMessageAt, v))
-}
-
-// LastMessageAtNEQ applies the NEQ predicate on the "last_message_at" field.
-func LastMessageAtNEQ(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldNEQ(FieldLastMessageAt, v))
-}
-
-// LastMessageAtIn applies the In predicate on the "last_message_at" field.
-func LastMessageAtIn(vs ...time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldIn(FieldLastMessageAt, vs...))
-}
-
-// LastMessageAtNotIn applies the NotIn predicate on the "last_message_at" field.
-func LastMessageAtNotIn(vs ...time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldNotIn(FieldLastMessageAt, vs...))
-}
-
-// LastMessageAtGT applies the GT predicate on the "last_message_at" field.
-func LastMessageAtGT(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldGT(FieldLastMessageAt, v))
-}
-
-// LastMessageAtGTE applies the GTE predicate on the "last_message_at" field.
-func LastMessageAtGTE(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldGTE(FieldLastMessageAt, v))
-}
-
-// LastMessageAtLT applies the LT predicate on the "last_message_at" field.
-func LastMessageAtLT(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldLT(FieldLastMessageAt, v))
-}
-
-// LastMessageAtLTE applies the LTE predicate on the "last_message_at" field.
-func LastMessageAtLTE(v time.Time) predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldLTE(FieldLastMessageAt, v))
-}
-
-// LastMessageAtIsNil applies the IsNil predicate on the "last_message_at" field.
-func LastMessageAtIsNil() predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldIsNull(FieldLastMessageAt))
-}
-
-// LastMessageAtNotNil applies the NotNil predicate on the "last_message_at" field.
-func LastMessageAtNotNil() predicate.ChatGroup {
-	return predicate.ChatGroup(sql.FieldNotNull(FieldLastMessageAt))
 }
 
 // CreatedByEQ applies the EQ predicate on the "created_by" field.
@@ -948,21 +893,21 @@ func HasMembersWith(preds ...predicate.ChatGroupMember) predicate.ChatGroup {
 	})
 }
 
-// HasSessions applies the HasEdge predicate on the "sessions" edge.
-func HasSessions() predicate.ChatGroup {
+// HasGroupSessions applies the HasEdge predicate on the "group_sessions" edge.
+func HasGroupSessions() predicate.ChatGroup {
 	return predicate.ChatGroup(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, SessionsTable, SessionsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, GroupSessionsTable, GroupSessionsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasSessionsWith applies the HasEdge predicate on the "sessions" edge with a given conditions (other predicates).
-func HasSessionsWith(preds ...predicate.ChatSession) predicate.ChatGroup {
+// HasGroupSessionsWith applies the HasEdge predicate on the "group_sessions" edge with a given conditions (other predicates).
+func HasGroupSessionsWith(preds ...predicate.ChatSession) predicate.ChatGroup {
 	return predicate.ChatGroup(func(s *sql.Selector) {
-		step := newSessionsStep()
+		step := newGroupSessionsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -971,21 +916,21 @@ func HasSessionsWith(preds ...predicate.ChatSession) predicate.ChatGroup {
 	})
 }
 
-// HasMessages applies the HasEdge predicate on the "messages" edge.
-func HasMessages() predicate.ChatGroup {
+// HasGroupMessages applies the HasEdge predicate on the "group_messages" edge.
+func HasGroupMessages() predicate.ChatGroup {
 	return predicate.ChatGroup(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, MessagesTable, MessagesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, GroupMessagesTable, GroupMessagesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasMessagesWith applies the HasEdge predicate on the "messages" edge with a given conditions (other predicates).
-func HasMessagesWith(preds ...predicate.ChatMessage) predicate.ChatGroup {
+// HasGroupMessagesWith applies the HasEdge predicate on the "group_messages" edge with a given conditions (other predicates).
+func HasGroupMessagesWith(preds ...predicate.ChatMessage) predicate.ChatGroup {
 	return predicate.ChatGroup(func(s *sql.Selector) {
-		step := newMessagesStep()
+		step := newGroupMessagesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

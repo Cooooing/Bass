@@ -14,34 +14,38 @@ const (
 	Label = "chat_session"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldUserID holds the string denoting the user_id field in the database.
-	FieldUserID = "user_id"
 	// FieldReceiverID holds the string denoting the receiver_id field in the database.
 	FieldReceiverID = "receiver_id"
 	// FieldGroupID holds the string denoting the group_id field in the database.
 	FieldGroupID = "group_id"
+	// FieldIsMuted holds the string denoting the is_muted field in the database.
+	FieldIsMuted = "is_muted"
+	// FieldIsPinned holds the string denoting the is_pinned field in the database.
+	FieldIsPinned = "is_pinned"
 	// FieldLastReadMessageID holds the string denoting the last_read_message_id field in the database.
 	FieldLastReadMessageID = "last_read_message_id"
 	// FieldReadCount holds the string denoting the read_count field in the database.
 	FieldReadCount = "read_count"
 	// FieldMessageCount holds the string denoting the message_count field in the database.
 	FieldMessageCount = "message_count"
-	// FieldIsMuted holds the string denoting the is_muted field in the database.
-	FieldIsMuted = "is_muted"
-	// FieldIsPinned holds the string denoting the is_pinned field in the database.
-	FieldIsPinned = "is_pinned"
 	// FieldLastMessageID holds the string denoting the last_message_id field in the database.
 	FieldLastMessageID = "last_message_id"
-	// FieldLastMessageContent holds the string denoting the last_message_content field in the database.
-	FieldLastMessageContent = "last_message_content"
-	// FieldLastMessageAt holds the string denoting the last_message_at field in the database.
-	FieldLastMessageAt = "last_message_at"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
+	// FieldCreatedByName holds the string denoting the created_by_name field in the database.
+	FieldCreatedByName = "created_by_name"
+	// FieldUpdatedByName holds the string denoting the updated_by_name field in the database.
+	FieldUpdatedByName = "updated_by_name"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
 	EdgeGroup = "group"
+	// EdgeSessionMessages holds the string denoting the session_messages edge name in mutations.
+	EdgeSessionMessages = "session_messages"
 	// EdgeLastMessageOfSession holds the string denoting the last_message_of_session edge name in mutations.
 	EdgeLastMessageOfSession = "last_message_of_session"
 	// Table holds the table name of the chatsession in the database.
@@ -53,6 +57,13 @@ const (
 	GroupInverseTable = "im_chat_groups"
 	// GroupColumn is the table column denoting the group relation/edge.
 	GroupColumn = "group_id"
+	// SessionMessagesTable is the table that holds the session_messages relation/edge.
+	SessionMessagesTable = "im_chat_messages"
+	// SessionMessagesInverseTable is the table name for the ChatMessage entity.
+	// It exists in this package in order to avoid circular dependency with the "chatmessage" package.
+	SessionMessagesInverseTable = "im_chat_messages"
+	// SessionMessagesColumn is the table column denoting the session_messages relation/edge.
+	SessionMessagesColumn = "receiver_id"
 	// LastMessageOfSessionTable is the table that holds the last_message_of_session relation/edge.
 	LastMessageOfSessionTable = "im_chat_sessions"
 	// LastMessageOfSessionInverseTable is the table name for the ChatMessage entity.
@@ -65,19 +76,20 @@ const (
 // Columns holds all SQL columns for chatsession fields.
 var Columns = []string{
 	FieldID,
-	FieldUserID,
 	FieldReceiverID,
 	FieldGroupID,
+	FieldIsMuted,
+	FieldIsPinned,
 	FieldLastReadMessageID,
 	FieldReadCount,
 	FieldMessageCount,
-	FieldIsMuted,
-	FieldIsPinned,
 	FieldLastMessageID,
-	FieldLastMessageContent,
-	FieldLastMessageAt,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldCreatedBy,
+	FieldUpdatedBy,
+	FieldCreatedByName,
+	FieldUpdatedByName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -91,16 +103,14 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultLastReadMessageID holds the default value on creation for the "last_read_message_id" field.
-	DefaultLastReadMessageID int64
-	// DefaultReadCount holds the default value on creation for the "read_count" field.
-	DefaultReadCount int32
-	// DefaultMessageCount holds the default value on creation for the "message_count" field.
-	DefaultMessageCount int32
 	// DefaultIsMuted holds the default value on creation for the "is_muted" field.
 	DefaultIsMuted bool
 	// DefaultIsPinned holds the default value on creation for the "is_pinned" field.
 	DefaultIsPinned bool
+	// DefaultReadCount holds the default value on creation for the "read_count" field.
+	DefaultReadCount uint32
+	// DefaultMessageCount holds the default value on creation for the "message_count" field.
+	DefaultMessageCount uint32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -115,11 +125,6 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByUserID orders the results by the user_id field.
-func ByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUserID, opts...).ToFunc()
-}
-
 // ByReceiverID orders the results by the receiver_id field.
 func ByReceiverID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReceiverID, opts...).ToFunc()
@@ -128,6 +133,16 @@ func ByReceiverID(opts ...sql.OrderTermOption) OrderOption {
 // ByGroupID orders the results by the group_id field.
 func ByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGroupID, opts...).ToFunc()
+}
+
+// ByIsMuted orders the results by the is_muted field.
+func ByIsMuted(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsMuted, opts...).ToFunc()
+}
+
+// ByIsPinned orders the results by the is_pinned field.
+func ByIsPinned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPinned, opts...).ToFunc()
 }
 
 // ByLastReadMessageID orders the results by the last_read_message_id field.
@@ -145,29 +160,9 @@ func ByMessageCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMessageCount, opts...).ToFunc()
 }
 
-// ByIsMuted orders the results by the is_muted field.
-func ByIsMuted(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIsMuted, opts...).ToFunc()
-}
-
-// ByIsPinned orders the results by the is_pinned field.
-func ByIsPinned(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIsPinned, opts...).ToFunc()
-}
-
 // ByLastMessageID orders the results by the last_message_id field.
 func ByLastMessageID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastMessageID, opts...).ToFunc()
-}
-
-// ByLastMessageContent orders the results by the last_message_content field.
-func ByLastMessageContent(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastMessageContent, opts...).ToFunc()
-}
-
-// ByLastMessageAt orders the results by the last_message_at field.
-func ByLastMessageAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastMessageAt, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.
@@ -180,10 +175,44 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByCreatedByName orders the results by the created_by_name field.
+func ByCreatedByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedByName, opts...).ToFunc()
+}
+
+// ByUpdatedByName orders the results by the updated_by_name field.
+func ByUpdatedByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedByName, opts...).ToFunc()
+}
+
 // ByGroupField orders the results by group field.
 func ByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySessionMessagesCount orders the results by session_messages count.
+func BySessionMessagesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSessionMessagesStep(), opts...)
+	}
+}
+
+// BySessionMessages orders the results by session_messages terms.
+func BySessionMessages(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSessionMessagesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -198,6 +227,13 @@ func newGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, GroupTable, GroupColumn),
+	)
+}
+func newSessionMessagesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SessionMessagesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SessionMessagesTable, SessionMessagesColumn),
 	)
 }
 func newLastMessageOfSessionStep() *sqlgraph.Step {

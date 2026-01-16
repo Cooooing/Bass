@@ -22,12 +22,6 @@ type ChatSessionCreate struct {
 	hooks    []Hook
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *ChatSessionCreate) SetUserID(v int64) *ChatSessionCreate {
-	_c.mutation.SetUserID(v)
-	return _c
-}
-
 // SetReceiverID sets the "receiver_id" field.
 func (_c *ChatSessionCreate) SetReceiverID(v int64) *ChatSessionCreate {
 	_c.mutation.SetReceiverID(v)
@@ -52,48 +46,6 @@ func (_c *ChatSessionCreate) SetGroupID(v int64) *ChatSessionCreate {
 func (_c *ChatSessionCreate) SetNillableGroupID(v *int64) *ChatSessionCreate {
 	if v != nil {
 		_c.SetGroupID(*v)
-	}
-	return _c
-}
-
-// SetLastReadMessageID sets the "last_read_message_id" field.
-func (_c *ChatSessionCreate) SetLastReadMessageID(v int64) *ChatSessionCreate {
-	_c.mutation.SetLastReadMessageID(v)
-	return _c
-}
-
-// SetNillableLastReadMessageID sets the "last_read_message_id" field if the given value is not nil.
-func (_c *ChatSessionCreate) SetNillableLastReadMessageID(v *int64) *ChatSessionCreate {
-	if v != nil {
-		_c.SetLastReadMessageID(*v)
-	}
-	return _c
-}
-
-// SetReadCount sets the "read_count" field.
-func (_c *ChatSessionCreate) SetReadCount(v int32) *ChatSessionCreate {
-	_c.mutation.SetReadCount(v)
-	return _c
-}
-
-// SetNillableReadCount sets the "read_count" field if the given value is not nil.
-func (_c *ChatSessionCreate) SetNillableReadCount(v *int32) *ChatSessionCreate {
-	if v != nil {
-		_c.SetReadCount(*v)
-	}
-	return _c
-}
-
-// SetMessageCount sets the "message_count" field.
-func (_c *ChatSessionCreate) SetMessageCount(v int32) *ChatSessionCreate {
-	_c.mutation.SetMessageCount(v)
-	return _c
-}
-
-// SetNillableMessageCount sets the "message_count" field if the given value is not nil.
-func (_c *ChatSessionCreate) SetNillableMessageCount(v *int32) *ChatSessionCreate {
-	if v != nil {
-		_c.SetMessageCount(*v)
 	}
 	return _c
 }
@@ -126,6 +78,48 @@ func (_c *ChatSessionCreate) SetNillableIsPinned(v *bool) *ChatSessionCreate {
 	return _c
 }
 
+// SetLastReadMessageID sets the "last_read_message_id" field.
+func (_c *ChatSessionCreate) SetLastReadMessageID(v int64) *ChatSessionCreate {
+	_c.mutation.SetLastReadMessageID(v)
+	return _c
+}
+
+// SetNillableLastReadMessageID sets the "last_read_message_id" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableLastReadMessageID(v *int64) *ChatSessionCreate {
+	if v != nil {
+		_c.SetLastReadMessageID(*v)
+	}
+	return _c
+}
+
+// SetReadCount sets the "read_count" field.
+func (_c *ChatSessionCreate) SetReadCount(v uint32) *ChatSessionCreate {
+	_c.mutation.SetReadCount(v)
+	return _c
+}
+
+// SetNillableReadCount sets the "read_count" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableReadCount(v *uint32) *ChatSessionCreate {
+	if v != nil {
+		_c.SetReadCount(*v)
+	}
+	return _c
+}
+
+// SetMessageCount sets the "message_count" field.
+func (_c *ChatSessionCreate) SetMessageCount(v uint32) *ChatSessionCreate {
+	_c.mutation.SetMessageCount(v)
+	return _c
+}
+
+// SetNillableMessageCount sets the "message_count" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableMessageCount(v *uint32) *ChatSessionCreate {
+	if v != nil {
+		_c.SetMessageCount(*v)
+	}
+	return _c
+}
+
 // SetLastMessageID sets the "last_message_id" field.
 func (_c *ChatSessionCreate) SetLastMessageID(v int64) *ChatSessionCreate {
 	_c.mutation.SetLastMessageID(v)
@@ -136,34 +130,6 @@ func (_c *ChatSessionCreate) SetLastMessageID(v int64) *ChatSessionCreate {
 func (_c *ChatSessionCreate) SetNillableLastMessageID(v *int64) *ChatSessionCreate {
 	if v != nil {
 		_c.SetLastMessageID(*v)
-	}
-	return _c
-}
-
-// SetLastMessageContent sets the "last_message_content" field.
-func (_c *ChatSessionCreate) SetLastMessageContent(v string) *ChatSessionCreate {
-	_c.mutation.SetLastMessageContent(v)
-	return _c
-}
-
-// SetNillableLastMessageContent sets the "last_message_content" field if the given value is not nil.
-func (_c *ChatSessionCreate) SetNillableLastMessageContent(v *string) *ChatSessionCreate {
-	if v != nil {
-		_c.SetLastMessageContent(*v)
-	}
-	return _c
-}
-
-// SetLastMessageAt sets the "last_message_at" field.
-func (_c *ChatSessionCreate) SetLastMessageAt(v time.Time) *ChatSessionCreate {
-	_c.mutation.SetLastMessageAt(v)
-	return _c
-}
-
-// SetNillableLastMessageAt sets the "last_message_at" field if the given value is not nil.
-func (_c *ChatSessionCreate) SetNillableLastMessageAt(v *time.Time) *ChatSessionCreate {
-	if v != nil {
-		_c.SetLastMessageAt(*v)
 	}
 	return _c
 }
@@ -196,6 +162,62 @@ func (_c *ChatSessionCreate) SetNillableUpdatedAt(v *time.Time) *ChatSessionCrea
 	return _c
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (_c *ChatSessionCreate) SetCreatedBy(v int64) *ChatSessionCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableCreatedBy(v *int64) *ChatSessionCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
+	}
+	return _c
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *ChatSessionCreate) SetUpdatedBy(v int64) *ChatSessionCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableUpdatedBy(v *int64) *ChatSessionCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
+	}
+	return _c
+}
+
+// SetCreatedByName sets the "created_by_name" field.
+func (_c *ChatSessionCreate) SetCreatedByName(v string) *ChatSessionCreate {
+	_c.mutation.SetCreatedByName(v)
+	return _c
+}
+
+// SetNillableCreatedByName sets the "created_by_name" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableCreatedByName(v *string) *ChatSessionCreate {
+	if v != nil {
+		_c.SetCreatedByName(*v)
+	}
+	return _c
+}
+
+// SetUpdatedByName sets the "updated_by_name" field.
+func (_c *ChatSessionCreate) SetUpdatedByName(v string) *ChatSessionCreate {
+	_c.mutation.SetUpdatedByName(v)
+	return _c
+}
+
+// SetNillableUpdatedByName sets the "updated_by_name" field if the given value is not nil.
+func (_c *ChatSessionCreate) SetNillableUpdatedByName(v *string) *ChatSessionCreate {
+	if v != nil {
+		_c.SetUpdatedByName(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ChatSessionCreate) SetID(v int64) *ChatSessionCreate {
 	_c.mutation.SetID(v)
@@ -205,6 +227,21 @@ func (_c *ChatSessionCreate) SetID(v int64) *ChatSessionCreate {
 // SetGroup sets the "group" edge to the ChatGroup entity.
 func (_c *ChatSessionCreate) SetGroup(v *ChatGroup) *ChatSessionCreate {
 	return _c.SetGroupID(v.ID)
+}
+
+// AddSessionMessageIDs adds the "session_messages" edge to the ChatMessage entity by IDs.
+func (_c *ChatSessionCreate) AddSessionMessageIDs(ids ...int64) *ChatSessionCreate {
+	_c.mutation.AddSessionMessageIDs(ids...)
+	return _c
+}
+
+// AddSessionMessages adds the "session_messages" edges to the ChatMessage entity.
+func (_c *ChatSessionCreate) AddSessionMessages(v ...*ChatMessage) *ChatSessionCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSessionMessageIDs(ids...)
 }
 
 // SetLastMessageOfSessionID sets the "last_message_of_session" edge to the ChatMessage entity by ID.
@@ -261,9 +298,13 @@ func (_c *ChatSessionCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *ChatSessionCreate) defaults() {
-	if _, ok := _c.mutation.LastReadMessageID(); !ok {
-		v := chatsession.DefaultLastReadMessageID
-		_c.mutation.SetLastReadMessageID(v)
+	if _, ok := _c.mutation.IsMuted(); !ok {
+		v := chatsession.DefaultIsMuted
+		_c.mutation.SetIsMuted(v)
+	}
+	if _, ok := _c.mutation.IsPinned(); !ok {
+		v := chatsession.DefaultIsPinned
+		_c.mutation.SetIsPinned(v)
 	}
 	if _, ok := _c.mutation.ReadCount(); !ok {
 		v := chatsession.DefaultReadCount
@@ -272,14 +313,6 @@ func (_c *ChatSessionCreate) defaults() {
 	if _, ok := _c.mutation.MessageCount(); !ok {
 		v := chatsession.DefaultMessageCount
 		_c.mutation.SetMessageCount(v)
-	}
-	if _, ok := _c.mutation.IsMuted(); !ok {
-		v := chatsession.DefaultIsMuted
-		_c.mutation.SetIsMuted(v)
-	}
-	if _, ok := _c.mutation.IsPinned(); !ok {
-		v := chatsession.DefaultIsPinned
-		_c.mutation.SetIsPinned(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := chatsession.DefaultCreatedAt()
@@ -293,23 +326,17 @@ func (_c *ChatSessionCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *ChatSessionCreate) check() error {
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`gen: missing required field "ChatSession.user_id"`)}
+	if _, ok := _c.mutation.IsMuted(); !ok {
+		return &ValidationError{Name: "is_muted", err: errors.New(`gen: missing required field "ChatSession.is_muted"`)}
 	}
-	if _, ok := _c.mutation.LastReadMessageID(); !ok {
-		return &ValidationError{Name: "last_read_message_id", err: errors.New(`gen: missing required field "ChatSession.last_read_message_id"`)}
+	if _, ok := _c.mutation.IsPinned(); !ok {
+		return &ValidationError{Name: "is_pinned", err: errors.New(`gen: missing required field "ChatSession.is_pinned"`)}
 	}
 	if _, ok := _c.mutation.ReadCount(); !ok {
 		return &ValidationError{Name: "read_count", err: errors.New(`gen: missing required field "ChatSession.read_count"`)}
 	}
 	if _, ok := _c.mutation.MessageCount(); !ok {
 		return &ValidationError{Name: "message_count", err: errors.New(`gen: missing required field "ChatSession.message_count"`)}
-	}
-	if _, ok := _c.mutation.IsMuted(); !ok {
-		return &ValidationError{Name: "is_muted", err: errors.New(`gen: missing required field "ChatSession.is_muted"`)}
-	}
-	if _, ok := _c.mutation.IsPinned(); !ok {
-		return &ValidationError{Name: "is_pinned", err: errors.New(`gen: missing required field "ChatSession.is_pinned"`)}
 	}
 	return nil
 }
@@ -343,25 +370,9 @@ func (_c *ChatSessionCreate) createSpec() (*ChatSession, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(chatsession.FieldUserID, field.TypeInt64, value)
-		_node.UserID = value
-	}
 	if value, ok := _c.mutation.ReceiverID(); ok {
 		_spec.SetField(chatsession.FieldReceiverID, field.TypeInt64, value)
 		_node.ReceiverID = &value
-	}
-	if value, ok := _c.mutation.LastReadMessageID(); ok {
-		_spec.SetField(chatsession.FieldLastReadMessageID, field.TypeInt64, value)
-		_node.LastReadMessageID = value
-	}
-	if value, ok := _c.mutation.ReadCount(); ok {
-		_spec.SetField(chatsession.FieldReadCount, field.TypeInt32, value)
-		_node.ReadCount = value
-	}
-	if value, ok := _c.mutation.MessageCount(); ok {
-		_spec.SetField(chatsession.FieldMessageCount, field.TypeInt32, value)
-		_node.MessageCount = value
 	}
 	if value, ok := _c.mutation.IsMuted(); ok {
 		_spec.SetField(chatsession.FieldIsMuted, field.TypeBool, value)
@@ -371,13 +382,17 @@ func (_c *ChatSessionCreate) createSpec() (*ChatSession, *sqlgraph.CreateSpec) {
 		_spec.SetField(chatsession.FieldIsPinned, field.TypeBool, value)
 		_node.IsPinned = value
 	}
-	if value, ok := _c.mutation.LastMessageContent(); ok {
-		_spec.SetField(chatsession.FieldLastMessageContent, field.TypeString, value)
-		_node.LastMessageContent = &value
+	if value, ok := _c.mutation.LastReadMessageID(); ok {
+		_spec.SetField(chatsession.FieldLastReadMessageID, field.TypeInt64, value)
+		_node.LastReadMessageID = &value
 	}
-	if value, ok := _c.mutation.LastMessageAt(); ok {
-		_spec.SetField(chatsession.FieldLastMessageAt, field.TypeTime, value)
-		_node.LastMessageAt = &value
+	if value, ok := _c.mutation.ReadCount(); ok {
+		_spec.SetField(chatsession.FieldReadCount, field.TypeUint32, value)
+		_node.ReadCount = value
+	}
+	if value, ok := _c.mutation.MessageCount(); ok {
+		_spec.SetField(chatsession.FieldMessageCount, field.TypeUint32, value)
+		_node.MessageCount = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(chatsession.FieldCreatedAt, field.TypeTime, value)
@@ -386,6 +401,22 @@ func (_c *ChatSessionCreate) createSpec() (*ChatSession, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(chatsession.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = &value
+	}
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(chatsession.FieldCreatedBy, field.TypeInt64, value)
+		_node.CreatedBy = &value
+	}
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(chatsession.FieldUpdatedBy, field.TypeInt64, value)
+		_node.UpdatedBy = &value
+	}
+	if value, ok := _c.mutation.CreatedByName(); ok {
+		_spec.SetField(chatsession.FieldCreatedByName, field.TypeString, value)
+		_node.CreatedByName = &value
+	}
+	if value, ok := _c.mutation.UpdatedByName(); ok {
+		_spec.SetField(chatsession.FieldUpdatedByName, field.TypeString, value)
+		_node.UpdatedByName = &value
 	}
 	if nodes := _c.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -402,6 +433,22 @@ func (_c *ChatSessionCreate) createSpec() (*ChatSession, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.GroupID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SessionMessagesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   chatsession.SessionMessagesTable,
+			Columns: []string{chatsession.SessionMessagesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(chatmessage.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.LastMessageOfSessionIDs(); len(nodes) > 0 {

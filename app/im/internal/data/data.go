@@ -3,7 +3,6 @@ package data
 import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"im/internal/conf"
 	"im/internal/data/client"
 	"im/internal/data/ent/gen"
@@ -22,7 +21,8 @@ var DataProviderSet = wire.NewSet(
 	NewRedisClient,
 	NewRabbitMQClient,
 
-	util.NewTokenRepo,
+	NewChatGroupRepo,
+	NewChatSessionRepo,
 )
 
 type BaseRepo struct {

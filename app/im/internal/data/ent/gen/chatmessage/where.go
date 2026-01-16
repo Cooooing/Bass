@@ -175,26 +175,6 @@ func ReceiverIDNotIn(vs ...int64) predicate.ChatMessage {
 	return predicate.ChatMessage(sql.FieldNotIn(FieldReceiverID, vs...))
 }
 
-// ReceiverIDGT applies the GT predicate on the "receiver_id" field.
-func ReceiverIDGT(v int64) predicate.ChatMessage {
-	return predicate.ChatMessage(sql.FieldGT(FieldReceiverID, v))
-}
-
-// ReceiverIDGTE applies the GTE predicate on the "receiver_id" field.
-func ReceiverIDGTE(v int64) predicate.ChatMessage {
-	return predicate.ChatMessage(sql.FieldGTE(FieldReceiverID, v))
-}
-
-// ReceiverIDLT applies the LT predicate on the "receiver_id" field.
-func ReceiverIDLT(v int64) predicate.ChatMessage {
-	return predicate.ChatMessage(sql.FieldLT(FieldReceiverID, v))
-}
-
-// ReceiverIDLTE applies the LTE predicate on the "receiver_id" field.
-func ReceiverIDLTE(v int64) predicate.ChatMessage {
-	return predicate.ChatMessage(sql.FieldLTE(FieldReceiverID, v))
-}
-
 // ReceiverIDIsNil applies the IsNil predicate on the "receiver_id" field.
 func ReceiverIDIsNil() predicate.ChatMessage {
 	return predicate.ChatMessage(sql.FieldIsNull(FieldReceiverID))
@@ -768,6 +748,29 @@ func HasLastMessageGroup() predicate.ChatMessage {
 func HasLastMessageGroupWith(preds ...predicate.ChatGroup) predicate.ChatMessage {
 	return predicate.ChatMessage(func(s *sql.Selector) {
 		step := newLastMessageGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSession applies the HasEdge predicate on the "session" edge.
+func HasSession() predicate.ChatMessage {
+	return predicate.ChatMessage(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SessionTable, SessionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSessionWith applies the HasEdge predicate on the "session" edge with a given conditions (other predicates).
+func HasSessionWith(preds ...predicate.ChatSession) predicate.ChatMessage {
+	return predicate.ChatMessage(func(s *sql.Selector) {
+		step := newSessionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

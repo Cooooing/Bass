@@ -55,11 +55,6 @@ func IDLTE(id int64) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldLTE(FieldID, id))
 }
 
-// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldUserID, v))
-}
-
 // ReceiverID applies equality check predicate on the "receiver_id" field. It's identical to ReceiverIDEQ.
 func ReceiverID(v int64) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldReceiverID, v))
@@ -68,21 +63,6 @@ func ReceiverID(v int64) predicate.ChatSession {
 // GroupID applies equality check predicate on the "group_id" field. It's identical to GroupIDEQ.
 func GroupID(v int64) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldGroupID, v))
-}
-
-// LastReadMessageID applies equality check predicate on the "last_read_message_id" field. It's identical to LastReadMessageIDEQ.
-func LastReadMessageID(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldLastReadMessageID, v))
-}
-
-// ReadCount applies equality check predicate on the "read_count" field. It's identical to ReadCountEQ.
-func ReadCount(v int32) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldReadCount, v))
-}
-
-// MessageCount applies equality check predicate on the "message_count" field. It's identical to MessageCountEQ.
-func MessageCount(v int32) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldMessageCount, v))
 }
 
 // IsMuted applies equality check predicate on the "is_muted" field. It's identical to IsMutedEQ.
@@ -95,19 +75,24 @@ func IsPinned(v bool) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldIsPinned, v))
 }
 
+// LastReadMessageID applies equality check predicate on the "last_read_message_id" field. It's identical to LastReadMessageIDEQ.
+func LastReadMessageID(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldLastReadMessageID, v))
+}
+
+// ReadCount applies equality check predicate on the "read_count" field. It's identical to ReadCountEQ.
+func ReadCount(v uint32) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldReadCount, v))
+}
+
+// MessageCount applies equality check predicate on the "message_count" field. It's identical to MessageCountEQ.
+func MessageCount(v uint32) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldMessageCount, v))
+}
+
 // LastMessageID applies equality check predicate on the "last_message_id" field. It's identical to LastMessageIDEQ.
 func LastMessageID(v int64) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldLastMessageID, v))
-}
-
-// LastMessageContent applies equality check predicate on the "last_message_content" field. It's identical to LastMessageContentEQ.
-func LastMessageContent(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldLastMessageContent, v))
-}
-
-// LastMessageAt applies equality check predicate on the "last_message_at" field. It's identical to LastMessageAtEQ.
-func LastMessageAt(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldLastMessageAt, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -120,44 +105,24 @@ func UpdatedAt(v time.Time) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldUserID, v))
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldCreatedBy, v))
 }
 
-// UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNEQ(FieldUserID, v))
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldIn(FieldUserID, vs...))
+// CreatedByName applies equality check predicate on the "created_by_name" field. It's identical to CreatedByNameEQ.
+func CreatedByName(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldCreatedByName, v))
 }
 
-// UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNotIn(FieldUserID, vs...))
-}
-
-// UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldGT(FieldUserID, v))
-}
-
-// UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldGTE(FieldUserID, v))
-}
-
-// UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldLT(FieldUserID, v))
-}
-
-// UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int64) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldLTE(FieldUserID, v))
+// UpdatedByName applies equality check predicate on the "updated_by_name" field. It's identical to UpdatedByNameEQ.
+func UpdatedByName(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldUpdatedByName, v))
 }
 
 // ReceiverIDEQ applies the EQ predicate on the "receiver_id" field.
@@ -240,6 +205,26 @@ func GroupIDNotNil() predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNotNull(FieldGroupID))
 }
 
+// IsMutedEQ applies the EQ predicate on the "is_muted" field.
+func IsMutedEQ(v bool) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldIsMuted, v))
+}
+
+// IsMutedNEQ applies the NEQ predicate on the "is_muted" field.
+func IsMutedNEQ(v bool) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNEQ(FieldIsMuted, v))
+}
+
+// IsPinnedEQ applies the EQ predicate on the "is_pinned" field.
+func IsPinnedEQ(v bool) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldIsPinned, v))
+}
+
+// IsPinnedNEQ applies the NEQ predicate on the "is_pinned" field.
+func IsPinnedNEQ(v bool) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNEQ(FieldIsPinned, v))
+}
+
 // LastReadMessageIDEQ applies the EQ predicate on the "last_read_message_id" field.
 func LastReadMessageIDEQ(v int64) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldLastReadMessageID, v))
@@ -280,104 +265,94 @@ func LastReadMessageIDLTE(v int64) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldLTE(FieldLastReadMessageID, v))
 }
 
+// LastReadMessageIDIsNil applies the IsNil predicate on the "last_read_message_id" field.
+func LastReadMessageIDIsNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIsNull(FieldLastReadMessageID))
+}
+
+// LastReadMessageIDNotNil applies the NotNil predicate on the "last_read_message_id" field.
+func LastReadMessageIDNotNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotNull(FieldLastReadMessageID))
+}
+
 // ReadCountEQ applies the EQ predicate on the "read_count" field.
-func ReadCountEQ(v int32) predicate.ChatSession {
+func ReadCountEQ(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldReadCount, v))
 }
 
 // ReadCountNEQ applies the NEQ predicate on the "read_count" field.
-func ReadCountNEQ(v int32) predicate.ChatSession {
+func ReadCountNEQ(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNEQ(FieldReadCount, v))
 }
 
 // ReadCountIn applies the In predicate on the "read_count" field.
-func ReadCountIn(vs ...int32) predicate.ChatSession {
+func ReadCountIn(vs ...uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldIn(FieldReadCount, vs...))
 }
 
 // ReadCountNotIn applies the NotIn predicate on the "read_count" field.
-func ReadCountNotIn(vs ...int32) predicate.ChatSession {
+func ReadCountNotIn(vs ...uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNotIn(FieldReadCount, vs...))
 }
 
 // ReadCountGT applies the GT predicate on the "read_count" field.
-func ReadCountGT(v int32) predicate.ChatSession {
+func ReadCountGT(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldGT(FieldReadCount, v))
 }
 
 // ReadCountGTE applies the GTE predicate on the "read_count" field.
-func ReadCountGTE(v int32) predicate.ChatSession {
+func ReadCountGTE(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldGTE(FieldReadCount, v))
 }
 
 // ReadCountLT applies the LT predicate on the "read_count" field.
-func ReadCountLT(v int32) predicate.ChatSession {
+func ReadCountLT(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldLT(FieldReadCount, v))
 }
 
 // ReadCountLTE applies the LTE predicate on the "read_count" field.
-func ReadCountLTE(v int32) predicate.ChatSession {
+func ReadCountLTE(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldLTE(FieldReadCount, v))
 }
 
 // MessageCountEQ applies the EQ predicate on the "message_count" field.
-func MessageCountEQ(v int32) predicate.ChatSession {
+func MessageCountEQ(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldEQ(FieldMessageCount, v))
 }
 
 // MessageCountNEQ applies the NEQ predicate on the "message_count" field.
-func MessageCountNEQ(v int32) predicate.ChatSession {
+func MessageCountNEQ(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNEQ(FieldMessageCount, v))
 }
 
 // MessageCountIn applies the In predicate on the "message_count" field.
-func MessageCountIn(vs ...int32) predicate.ChatSession {
+func MessageCountIn(vs ...uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldIn(FieldMessageCount, vs...))
 }
 
 // MessageCountNotIn applies the NotIn predicate on the "message_count" field.
-func MessageCountNotIn(vs ...int32) predicate.ChatSession {
+func MessageCountNotIn(vs ...uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNotIn(FieldMessageCount, vs...))
 }
 
 // MessageCountGT applies the GT predicate on the "message_count" field.
-func MessageCountGT(v int32) predicate.ChatSession {
+func MessageCountGT(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldGT(FieldMessageCount, v))
 }
 
 // MessageCountGTE applies the GTE predicate on the "message_count" field.
-func MessageCountGTE(v int32) predicate.ChatSession {
+func MessageCountGTE(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldGTE(FieldMessageCount, v))
 }
 
 // MessageCountLT applies the LT predicate on the "message_count" field.
-func MessageCountLT(v int32) predicate.ChatSession {
+func MessageCountLT(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldLT(FieldMessageCount, v))
 }
 
 // MessageCountLTE applies the LTE predicate on the "message_count" field.
-func MessageCountLTE(v int32) predicate.ChatSession {
+func MessageCountLTE(v uint32) predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldLTE(FieldMessageCount, v))
-}
-
-// IsMutedEQ applies the EQ predicate on the "is_muted" field.
-func IsMutedEQ(v bool) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldIsMuted, v))
-}
-
-// IsMutedNEQ applies the NEQ predicate on the "is_muted" field.
-func IsMutedNEQ(v bool) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNEQ(FieldIsMuted, v))
-}
-
-// IsPinnedEQ applies the EQ predicate on the "is_pinned" field.
-func IsPinnedEQ(v bool) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldIsPinned, v))
-}
-
-// IsPinnedNEQ applies the NEQ predicate on the "is_pinned" field.
-func IsPinnedNEQ(v bool) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNEQ(FieldIsPinned, v))
 }
 
 // LastMessageIDEQ applies the EQ predicate on the "last_message_id" field.
@@ -408,131 +383,6 @@ func LastMessageIDIsNil() predicate.ChatSession {
 // LastMessageIDNotNil applies the NotNil predicate on the "last_message_id" field.
 func LastMessageIDNotNil() predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNotNull(FieldLastMessageID))
-}
-
-// LastMessageContentEQ applies the EQ predicate on the "last_message_content" field.
-func LastMessageContentEQ(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldLastMessageContent, v))
-}
-
-// LastMessageContentNEQ applies the NEQ predicate on the "last_message_content" field.
-func LastMessageContentNEQ(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNEQ(FieldLastMessageContent, v))
-}
-
-// LastMessageContentIn applies the In predicate on the "last_message_content" field.
-func LastMessageContentIn(vs ...string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldIn(FieldLastMessageContent, vs...))
-}
-
-// LastMessageContentNotIn applies the NotIn predicate on the "last_message_content" field.
-func LastMessageContentNotIn(vs ...string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNotIn(FieldLastMessageContent, vs...))
-}
-
-// LastMessageContentGT applies the GT predicate on the "last_message_content" field.
-func LastMessageContentGT(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldGT(FieldLastMessageContent, v))
-}
-
-// LastMessageContentGTE applies the GTE predicate on the "last_message_content" field.
-func LastMessageContentGTE(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldGTE(FieldLastMessageContent, v))
-}
-
-// LastMessageContentLT applies the LT predicate on the "last_message_content" field.
-func LastMessageContentLT(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldLT(FieldLastMessageContent, v))
-}
-
-// LastMessageContentLTE applies the LTE predicate on the "last_message_content" field.
-func LastMessageContentLTE(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldLTE(FieldLastMessageContent, v))
-}
-
-// LastMessageContentContains applies the Contains predicate on the "last_message_content" field.
-func LastMessageContentContains(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldContains(FieldLastMessageContent, v))
-}
-
-// LastMessageContentHasPrefix applies the HasPrefix predicate on the "last_message_content" field.
-func LastMessageContentHasPrefix(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldHasPrefix(FieldLastMessageContent, v))
-}
-
-// LastMessageContentHasSuffix applies the HasSuffix predicate on the "last_message_content" field.
-func LastMessageContentHasSuffix(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldHasSuffix(FieldLastMessageContent, v))
-}
-
-// LastMessageContentIsNil applies the IsNil predicate on the "last_message_content" field.
-func LastMessageContentIsNil() predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldIsNull(FieldLastMessageContent))
-}
-
-// LastMessageContentNotNil applies the NotNil predicate on the "last_message_content" field.
-func LastMessageContentNotNil() predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNotNull(FieldLastMessageContent))
-}
-
-// LastMessageContentEqualFold applies the EqualFold predicate on the "last_message_content" field.
-func LastMessageContentEqualFold(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEqualFold(FieldLastMessageContent, v))
-}
-
-// LastMessageContentContainsFold applies the ContainsFold predicate on the "last_message_content" field.
-func LastMessageContentContainsFold(v string) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldContainsFold(FieldLastMessageContent, v))
-}
-
-// LastMessageAtEQ applies the EQ predicate on the "last_message_at" field.
-func LastMessageAtEQ(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldEQ(FieldLastMessageAt, v))
-}
-
-// LastMessageAtNEQ applies the NEQ predicate on the "last_message_at" field.
-func LastMessageAtNEQ(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNEQ(FieldLastMessageAt, v))
-}
-
-// LastMessageAtIn applies the In predicate on the "last_message_at" field.
-func LastMessageAtIn(vs ...time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldIn(FieldLastMessageAt, vs...))
-}
-
-// LastMessageAtNotIn applies the NotIn predicate on the "last_message_at" field.
-func LastMessageAtNotIn(vs ...time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNotIn(FieldLastMessageAt, vs...))
-}
-
-// LastMessageAtGT applies the GT predicate on the "last_message_at" field.
-func LastMessageAtGT(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldGT(FieldLastMessageAt, v))
-}
-
-// LastMessageAtGTE applies the GTE predicate on the "last_message_at" field.
-func LastMessageAtGTE(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldGTE(FieldLastMessageAt, v))
-}
-
-// LastMessageAtLT applies the LT predicate on the "last_message_at" field.
-func LastMessageAtLT(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldLT(FieldLastMessageAt, v))
-}
-
-// LastMessageAtLTE applies the LTE predicate on the "last_message_at" field.
-func LastMessageAtLTE(v time.Time) predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldLTE(FieldLastMessageAt, v))
-}
-
-// LastMessageAtIsNil applies the IsNil predicate on the "last_message_at" field.
-func LastMessageAtIsNil() predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldIsNull(FieldLastMessageAt))
-}
-
-// LastMessageAtNotNil applies the NotNil predicate on the "last_message_at" field.
-func LastMessageAtNotNil() predicate.ChatSession {
-	return predicate.ChatSession(sql.FieldNotNull(FieldLastMessageAt))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -635,6 +485,256 @@ func UpdatedAtNotNil() predicate.ChatSession {
 	return predicate.ChatSession(sql.FieldNotNull(FieldUpdatedAt))
 }
 
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// CreatedByIsNil applies the IsNil predicate on the "created_by" field.
+func CreatedByIsNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIsNull(FieldCreatedBy))
+}
+
+// CreatedByNotNil applies the NotNil predicate on the "created_by" field.
+func CreatedByNotNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotNull(FieldCreatedBy))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v int64) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// CreatedByNameEQ applies the EQ predicate on the "created_by_name" field.
+func CreatedByNameEQ(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldCreatedByName, v))
+}
+
+// CreatedByNameNEQ applies the NEQ predicate on the "created_by_name" field.
+func CreatedByNameNEQ(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNEQ(FieldCreatedByName, v))
+}
+
+// CreatedByNameIn applies the In predicate on the "created_by_name" field.
+func CreatedByNameIn(vs ...string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIn(FieldCreatedByName, vs...))
+}
+
+// CreatedByNameNotIn applies the NotIn predicate on the "created_by_name" field.
+func CreatedByNameNotIn(vs ...string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotIn(FieldCreatedByName, vs...))
+}
+
+// CreatedByNameGT applies the GT predicate on the "created_by_name" field.
+func CreatedByNameGT(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGT(FieldCreatedByName, v))
+}
+
+// CreatedByNameGTE applies the GTE predicate on the "created_by_name" field.
+func CreatedByNameGTE(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGTE(FieldCreatedByName, v))
+}
+
+// CreatedByNameLT applies the LT predicate on the "created_by_name" field.
+func CreatedByNameLT(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLT(FieldCreatedByName, v))
+}
+
+// CreatedByNameLTE applies the LTE predicate on the "created_by_name" field.
+func CreatedByNameLTE(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLTE(FieldCreatedByName, v))
+}
+
+// CreatedByNameContains applies the Contains predicate on the "created_by_name" field.
+func CreatedByNameContains(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldContains(FieldCreatedByName, v))
+}
+
+// CreatedByNameHasPrefix applies the HasPrefix predicate on the "created_by_name" field.
+func CreatedByNameHasPrefix(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldHasPrefix(FieldCreatedByName, v))
+}
+
+// CreatedByNameHasSuffix applies the HasSuffix predicate on the "created_by_name" field.
+func CreatedByNameHasSuffix(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldHasSuffix(FieldCreatedByName, v))
+}
+
+// CreatedByNameIsNil applies the IsNil predicate on the "created_by_name" field.
+func CreatedByNameIsNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIsNull(FieldCreatedByName))
+}
+
+// CreatedByNameNotNil applies the NotNil predicate on the "created_by_name" field.
+func CreatedByNameNotNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotNull(FieldCreatedByName))
+}
+
+// CreatedByNameEqualFold applies the EqualFold predicate on the "created_by_name" field.
+func CreatedByNameEqualFold(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEqualFold(FieldCreatedByName, v))
+}
+
+// CreatedByNameContainsFold applies the ContainsFold predicate on the "created_by_name" field.
+func CreatedByNameContainsFold(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldContainsFold(FieldCreatedByName, v))
+}
+
+// UpdatedByNameEQ applies the EQ predicate on the "updated_by_name" field.
+func UpdatedByNameEQ(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEQ(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameNEQ applies the NEQ predicate on the "updated_by_name" field.
+func UpdatedByNameNEQ(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNEQ(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameIn applies the In predicate on the "updated_by_name" field.
+func UpdatedByNameIn(vs ...string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIn(FieldUpdatedByName, vs...))
+}
+
+// UpdatedByNameNotIn applies the NotIn predicate on the "updated_by_name" field.
+func UpdatedByNameNotIn(vs ...string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotIn(FieldUpdatedByName, vs...))
+}
+
+// UpdatedByNameGT applies the GT predicate on the "updated_by_name" field.
+func UpdatedByNameGT(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGT(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameGTE applies the GTE predicate on the "updated_by_name" field.
+func UpdatedByNameGTE(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldGTE(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameLT applies the LT predicate on the "updated_by_name" field.
+func UpdatedByNameLT(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLT(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameLTE applies the LTE predicate on the "updated_by_name" field.
+func UpdatedByNameLTE(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldLTE(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameContains applies the Contains predicate on the "updated_by_name" field.
+func UpdatedByNameContains(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldContains(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameHasPrefix applies the HasPrefix predicate on the "updated_by_name" field.
+func UpdatedByNameHasPrefix(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldHasPrefix(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameHasSuffix applies the HasSuffix predicate on the "updated_by_name" field.
+func UpdatedByNameHasSuffix(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldHasSuffix(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameIsNil applies the IsNil predicate on the "updated_by_name" field.
+func UpdatedByNameIsNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldIsNull(FieldUpdatedByName))
+}
+
+// UpdatedByNameNotNil applies the NotNil predicate on the "updated_by_name" field.
+func UpdatedByNameNotNil() predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldNotNull(FieldUpdatedByName))
+}
+
+// UpdatedByNameEqualFold applies the EqualFold predicate on the "updated_by_name" field.
+func UpdatedByNameEqualFold(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldEqualFold(FieldUpdatedByName, v))
+}
+
+// UpdatedByNameContainsFold applies the ContainsFold predicate on the "updated_by_name" field.
+func UpdatedByNameContainsFold(v string) predicate.ChatSession {
+	return predicate.ChatSession(sql.FieldContainsFold(FieldUpdatedByName, v))
+}
+
 // HasGroup applies the HasEdge predicate on the "group" edge.
 func HasGroup() predicate.ChatSession {
 	return predicate.ChatSession(func(s *sql.Selector) {
@@ -650,6 +750,29 @@ func HasGroup() predicate.ChatSession {
 func HasGroupWith(preds ...predicate.ChatGroup) predicate.ChatSession {
 	return predicate.ChatSession(func(s *sql.Selector) {
 		step := newGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSessionMessages applies the HasEdge predicate on the "session_messages" edge.
+func HasSessionMessages() predicate.ChatSession {
+	return predicate.ChatSession(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SessionMessagesTable, SessionMessagesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSessionMessagesWith applies the HasEdge predicate on the "session_messages" edge with a given conditions (other predicates).
+func HasSessionMessagesWith(preds ...predicate.ChatMessage) predicate.ChatSession {
+	return predicate.ChatSession(func(s *sql.Selector) {
+		step := newSessionMessagesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

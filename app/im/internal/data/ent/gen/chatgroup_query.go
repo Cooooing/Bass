@@ -27,8 +27,8 @@ type ChatGroupQuery struct {
 	inters                 []Interceptor
 	predicates             []predicate.ChatGroup
 	withMembers            *ChatGroupMemberQuery
-	withSessions           *ChatSessionQuery
-	withMessages           *ChatMessageQuery
+	withGroupSessions      *ChatSessionQuery
+	withGroupMessages      *ChatMessageQuery
 	withLastMessageOfGroup *ChatMessageQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -88,8 +88,8 @@ func (_q *ChatGroupQuery) QueryMembers() *ChatGroupMemberQuery {
 	return query
 }
 
-// QuerySessions chains the current query on the "sessions" edge.
-func (_q *ChatGroupQuery) QuerySessions() *ChatSessionQuery {
+// QueryGroupSessions chains the current query on the "group_sessions" edge.
+func (_q *ChatGroupQuery) QueryGroupSessions() *ChatSessionQuery {
 	query := (&ChatSessionClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -102,7 +102,7 @@ func (_q *ChatGroupQuery) QuerySessions() *ChatSessionQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(chatgroup.Table, chatgroup.FieldID, selector),
 			sqlgraph.To(chatsession.Table, chatsession.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.SessionsTable, chatgroup.SessionsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.GroupSessionsTable, chatgroup.GroupSessionsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -110,8 +110,8 @@ func (_q *ChatGroupQuery) QuerySessions() *ChatSessionQuery {
 	return query
 }
 
-// QueryMessages chains the current query on the "messages" edge.
-func (_q *ChatGroupQuery) QueryMessages() *ChatMessageQuery {
+// QueryGroupMessages chains the current query on the "group_messages" edge.
+func (_q *ChatGroupQuery) QueryGroupMessages() *ChatMessageQuery {
 	query := (&ChatMessageClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -124,7 +124,7 @@ func (_q *ChatGroupQuery) QueryMessages() *ChatMessageQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(chatgroup.Table, chatgroup.FieldID, selector),
 			sqlgraph.To(chatmessage.Table, chatmessage.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.MessagesTable, chatgroup.MessagesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.GroupMessagesTable, chatgroup.GroupMessagesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -347,8 +347,8 @@ func (_q *ChatGroupQuery) Clone() *ChatGroupQuery {
 		inters:                 append([]Interceptor{}, _q.inters...),
 		predicates:             append([]predicate.ChatGroup{}, _q.predicates...),
 		withMembers:            _q.withMembers.Clone(),
-		withSessions:           _q.withSessions.Clone(),
-		withMessages:           _q.withMessages.Clone(),
+		withGroupSessions:      _q.withGroupSessions.Clone(),
+		withGroupMessages:      _q.withGroupMessages.Clone(),
 		withLastMessageOfGroup: _q.withLastMessageOfGroup.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
@@ -367,25 +367,25 @@ func (_q *ChatGroupQuery) WithMembers(opts ...func(*ChatGroupMemberQuery)) *Chat
 	return _q
 }
 
-// WithSessions tells the query-builder to eager-load the nodes that are connected to
-// the "sessions" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ChatGroupQuery) WithSessions(opts ...func(*ChatSessionQuery)) *ChatGroupQuery {
+// WithGroupSessions tells the query-builder to eager-load the nodes that are connected to
+// the "group_sessions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ChatGroupQuery) WithGroupSessions(opts ...func(*ChatSessionQuery)) *ChatGroupQuery {
 	query := (&ChatSessionClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withSessions = query
+	_q.withGroupSessions = query
 	return _q
 }
 
-// WithMessages tells the query-builder to eager-load the nodes that are connected to
-// the "messages" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ChatGroupQuery) WithMessages(opts ...func(*ChatMessageQuery)) *ChatGroupQuery {
+// WithGroupMessages tells the query-builder to eager-load the nodes that are connected to
+// the "group_messages" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ChatGroupQuery) WithGroupMessages(opts ...func(*ChatMessageQuery)) *ChatGroupQuery {
 	query := (&ChatMessageClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withMessages = query
+	_q.withGroupMessages = query
 	return _q
 }
 
@@ -480,8 +480,8 @@ func (_q *ChatGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
 			_q.withMembers != nil,
-			_q.withSessions != nil,
-			_q.withMessages != nil,
+			_q.withGroupSessions != nil,
+			_q.withGroupMessages != nil,
 			_q.withLastMessageOfGroup != nil,
 		}
 	)
@@ -510,17 +510,17 @@ func (_q *ChatGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 			return nil, err
 		}
 	}
-	if query := _q.withSessions; query != nil {
-		if err := _q.loadSessions(ctx, query, nodes,
-			func(n *ChatGroup) { n.Edges.Sessions = []*ChatSession{} },
-			func(n *ChatGroup, e *ChatSession) { n.Edges.Sessions = append(n.Edges.Sessions, e) }); err != nil {
+	if query := _q.withGroupSessions; query != nil {
+		if err := _q.loadGroupSessions(ctx, query, nodes,
+			func(n *ChatGroup) { n.Edges.GroupSessions = []*ChatSession{} },
+			func(n *ChatGroup, e *ChatSession) { n.Edges.GroupSessions = append(n.Edges.GroupSessions, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := _q.withMessages; query != nil {
-		if err := _q.loadMessages(ctx, query, nodes,
-			func(n *ChatGroup) { n.Edges.Messages = []*ChatMessage{} },
-			func(n *ChatGroup, e *ChatMessage) { n.Edges.Messages = append(n.Edges.Messages, e) }); err != nil {
+	if query := _q.withGroupMessages; query != nil {
+		if err := _q.loadGroupMessages(ctx, query, nodes,
+			func(n *ChatGroup) { n.Edges.GroupMessages = []*ChatMessage{} },
+			func(n *ChatGroup, e *ChatMessage) { n.Edges.GroupMessages = append(n.Edges.GroupMessages, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -563,7 +563,7 @@ func (_q *ChatGroupQuery) loadMembers(ctx context.Context, query *ChatGroupMembe
 	}
 	return nil
 }
-func (_q *ChatGroupQuery) loadSessions(ctx context.Context, query *ChatSessionQuery, nodes []*ChatGroup, init func(*ChatGroup), assign func(*ChatGroup, *ChatSession)) error {
+func (_q *ChatGroupQuery) loadGroupSessions(ctx context.Context, query *ChatSessionQuery, nodes []*ChatGroup, init func(*ChatGroup), assign func(*ChatGroup, *ChatSession)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*ChatGroup)
 	for i := range nodes {
@@ -577,7 +577,7 @@ func (_q *ChatGroupQuery) loadSessions(ctx context.Context, query *ChatSessionQu
 		query.ctx.AppendFieldOnce(chatsession.FieldGroupID)
 	}
 	query.Where(predicate.ChatSession(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(chatgroup.SessionsColumn), fks...))
+		s.Where(sql.InValues(s.C(chatgroup.GroupSessionsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -596,7 +596,7 @@ func (_q *ChatGroupQuery) loadSessions(ctx context.Context, query *ChatSessionQu
 	}
 	return nil
 }
-func (_q *ChatGroupQuery) loadMessages(ctx context.Context, query *ChatMessageQuery, nodes []*ChatGroup, init func(*ChatGroup), assign func(*ChatGroup, *ChatMessage)) error {
+func (_q *ChatGroupQuery) loadGroupMessages(ctx context.Context, query *ChatMessageQuery, nodes []*ChatGroup, init func(*ChatGroup), assign func(*ChatGroup, *ChatMessage)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*ChatGroup)
 	for i := range nodes {
@@ -610,7 +610,7 @@ func (_q *ChatGroupQuery) loadMessages(ctx context.Context, query *ChatMessageQu
 		query.ctx.AppendFieldOnce(chatmessage.FieldGroupID)
 	}
 	query.Where(predicate.ChatMessage(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(chatgroup.MessagesColumn), fks...))
+		s.Where(sql.InValues(s.C(chatgroup.GroupMessagesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

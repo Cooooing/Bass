@@ -18,6 +18,8 @@ const (
 	FieldName = "name"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
+	// FieldIntroduction holds the string denoting the introduction field in the database.
+	FieldIntroduction = "introduction"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -28,10 +30,6 @@ const (
 	FieldMessageCount = "message_count"
 	// FieldLastMessageID holds the string denoting the last_message_id field in the database.
 	FieldLastMessageID = "last_message_id"
-	// FieldLastMessageContent holds the string denoting the last_message_content field in the database.
-	FieldLastMessageContent = "last_message_content"
-	// FieldLastMessageAt holds the string denoting the last_message_at field in the database.
-	FieldLastMessageAt = "last_message_at"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
@@ -46,10 +44,10 @@ const (
 	FieldUpdatedByName = "updated_by_name"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
-	// EdgeSessions holds the string denoting the sessions edge name in mutations.
-	EdgeSessions = "sessions"
-	// EdgeMessages holds the string denoting the messages edge name in mutations.
-	EdgeMessages = "messages"
+	// EdgeGroupSessions holds the string denoting the group_sessions edge name in mutations.
+	EdgeGroupSessions = "group_sessions"
+	// EdgeGroupMessages holds the string denoting the group_messages edge name in mutations.
+	EdgeGroupMessages = "group_messages"
 	// EdgeLastMessageOfGroup holds the string denoting the last_message_of_group edge name in mutations.
 	EdgeLastMessageOfGroup = "last_message_of_group"
 	// Table holds the table name of the chatgroup in the database.
@@ -61,20 +59,20 @@ const (
 	MembersInverseTable = "im_chat_group_members"
 	// MembersColumn is the table column denoting the members relation/edge.
 	MembersColumn = "group_id"
-	// SessionsTable is the table that holds the sessions relation/edge.
-	SessionsTable = "im_chat_sessions"
-	// SessionsInverseTable is the table name for the ChatSession entity.
+	// GroupSessionsTable is the table that holds the group_sessions relation/edge.
+	GroupSessionsTable = "im_chat_sessions"
+	// GroupSessionsInverseTable is the table name for the ChatSession entity.
 	// It exists in this package in order to avoid circular dependency with the "chatsession" package.
-	SessionsInverseTable = "im_chat_sessions"
-	// SessionsColumn is the table column denoting the sessions relation/edge.
-	SessionsColumn = "group_id"
-	// MessagesTable is the table that holds the messages relation/edge.
-	MessagesTable = "im_chat_messages"
-	// MessagesInverseTable is the table name for the ChatMessage entity.
+	GroupSessionsInverseTable = "im_chat_sessions"
+	// GroupSessionsColumn is the table column denoting the group_sessions relation/edge.
+	GroupSessionsColumn = "group_id"
+	// GroupMessagesTable is the table that holds the group_messages relation/edge.
+	GroupMessagesTable = "im_chat_messages"
+	// GroupMessagesInverseTable is the table name for the ChatMessage entity.
 	// It exists in this package in order to avoid circular dependency with the "chatmessage" package.
-	MessagesInverseTable = "im_chat_messages"
-	// MessagesColumn is the table column denoting the messages relation/edge.
-	MessagesColumn = "group_id"
+	GroupMessagesInverseTable = "im_chat_messages"
+	// GroupMessagesColumn is the table column denoting the group_messages relation/edge.
+	GroupMessagesColumn = "group_id"
 	// LastMessageOfGroupTable is the table that holds the last_message_of_group relation/edge.
 	LastMessageOfGroupTable = "im_chat_groups"
 	// LastMessageOfGroupInverseTable is the table name for the ChatMessage entity.
@@ -89,13 +87,12 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldAvatar,
+	FieldIntroduction,
 	FieldOwnerID,
 	FieldStatus,
 	FieldMemberCount,
 	FieldMessageCount,
 	FieldLastMessageID,
-	FieldLastMessageContent,
-	FieldLastMessageAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldCreatedAt,
@@ -117,14 +114,14 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DefaultAvatar holds the default value on creation for the "avatar" field.
-	DefaultAvatar string
+	// DefaultIntroduction holds the default value on creation for the "introduction" field.
+	DefaultIntroduction string
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int32
 	// DefaultMemberCount holds the default value on creation for the "member_count" field.
-	DefaultMemberCount int32
+	DefaultMemberCount uint32
 	// DefaultMessageCount holds the default value on creation for the "message_count" field.
-	DefaultMessageCount int64
+	DefaultMessageCount uint32
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -147,6 +144,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatar orders the results by the avatar field.
 func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatar, opts...).ToFunc()
+}
+
+// ByIntroduction orders the results by the introduction field.
+func ByIntroduction(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntroduction, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -172,16 +174,6 @@ func ByMessageCount(opts ...sql.OrderTermOption) OrderOption {
 // ByLastMessageID orders the results by the last_message_id field.
 func ByLastMessageID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastMessageID, opts...).ToFunc()
-}
-
-// ByLastMessageContent orders the results by the last_message_content field.
-func ByLastMessageContent(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastMessageContent, opts...).ToFunc()
-}
-
-// ByLastMessageAt orders the results by the last_message_at field.
-func ByLastMessageAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastMessageAt, opts...).ToFunc()
 }
 
 // ByCreatedBy orders the results by the created_by field.
@@ -228,31 +220,31 @@ func ByMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// BySessionsCount orders the results by sessions count.
-func BySessionsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByGroupSessionsCount orders the results by group_sessions count.
+func ByGroupSessionsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSessionsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newGroupSessionsStep(), opts...)
 	}
 }
 
-// BySessions orders the results by sessions terms.
-func BySessions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByGroupSessions orders the results by group_sessions terms.
+func ByGroupSessions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSessionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newGroupSessionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByMessagesCount orders the results by messages count.
-func ByMessagesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByGroupMessagesCount orders the results by group_messages count.
+func ByGroupMessagesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newMessagesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newGroupMessagesStep(), opts...)
 	}
 }
 
-// ByMessages orders the results by messages terms.
-func ByMessages(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByGroupMessages orders the results by group_messages terms.
+func ByGroupMessages(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMessagesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newGroupMessagesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -269,18 +261,18 @@ func newMembersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, MembersTable, MembersColumn),
 	)
 }
-func newSessionsStep() *sqlgraph.Step {
+func newGroupSessionsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SessionsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SessionsTable, SessionsColumn),
+		sqlgraph.To(GroupSessionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, GroupSessionsTable, GroupSessionsColumn),
 	)
 }
-func newMessagesStep() *sqlgraph.Step {
+func newGroupMessagesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MessagesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, MessagesTable, MessagesColumn),
+		sqlgraph.To(GroupMessagesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, GroupMessagesTable, GroupMessagesColumn),
 	)
 }
 func newLastMessageOfGroupStep() *sqlgraph.Step {

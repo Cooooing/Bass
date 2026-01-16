@@ -27,6 +27,7 @@ type ChatMessageQuery struct {
 	predicates             []predicate.ChatMessage
 	withGroup              *ChatGroupQuery
 	withLastMessageGroup   *ChatGroupQuery
+	withSession            *ChatSessionQuery
 	withLastMessageSession *ChatSessionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -101,6 +102,28 @@ func (_q *ChatMessageQuery) QueryLastMessageGroup() *ChatGroupQuery {
 			sqlgraph.From(chatmessage.Table, chatmessage.FieldID, selector),
 			sqlgraph.To(chatgroup.Table, chatgroup.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, chatmessage.LastMessageGroupTable, chatmessage.LastMessageGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySession chains the current query on the "session" edge.
+func (_q *ChatMessageQuery) QuerySession() *ChatSessionQuery {
+	query := (&ChatSessionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(chatmessage.Table, chatmessage.FieldID, selector),
+			sqlgraph.To(chatsession.Table, chatsession.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, chatmessage.SessionTable, chatmessage.SessionColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -324,6 +347,7 @@ func (_q *ChatMessageQuery) Clone() *ChatMessageQuery {
 		predicates:             append([]predicate.ChatMessage{}, _q.predicates...),
 		withGroup:              _q.withGroup.Clone(),
 		withLastMessageGroup:   _q.withLastMessageGroup.Clone(),
+		withSession:            _q.withSession.Clone(),
 		withLastMessageSession: _q.withLastMessageSession.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
@@ -350,6 +374,17 @@ func (_q *ChatMessageQuery) WithLastMessageGroup(opts ...func(*ChatGroupQuery)) 
 		opt(query)
 	}
 	_q.withLastMessageGroup = query
+	return _q
+}
+
+// WithSession tells the query-builder to eager-load the nodes that are connected to
+// the "session" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ChatMessageQuery) WithSession(opts ...func(*ChatSessionQuery)) *ChatMessageQuery {
+	query := (&ChatSessionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSession = query
 	return _q
 }
 
@@ -442,9 +477,10 @@ func (_q *ChatMessageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*ChatMessage{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withGroup != nil,
 			_q.withLastMessageGroup != nil,
+			_q.withSession != nil,
 			_q.withLastMessageSession != nil,
 		}
 	)
@@ -475,6 +511,12 @@ func (_q *ChatMessageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if query := _q.withLastMessageGroup; query != nil {
 		if err := _q.loadLastMessageGroup(ctx, query, nodes, nil,
 			func(n *ChatMessage, e *ChatGroup) { n.Edges.LastMessageGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSession; query != nil {
+		if err := _q.loadSession(ctx, query, nodes, nil,
+			func(n *ChatMessage, e *ChatSession) { n.Edges.Session = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -549,6 +591,38 @@ func (_q *ChatMessageQuery) loadLastMessageGroup(ctx context.Context, query *Cha
 	}
 	return nil
 }
+func (_q *ChatMessageQuery) loadSession(ctx context.Context, query *ChatSessionQuery, nodes []*ChatMessage, init func(*ChatMessage), assign func(*ChatMessage, *ChatSession)) error {
+	ids := make([]int64, 0, len(nodes))
+	nodeids := make(map[int64][]*ChatMessage)
+	for i := range nodes {
+		if nodes[i].ReceiverID == nil {
+			continue
+		}
+		fk := *nodes[i].ReceiverID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(chatsession.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "receiver_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ChatMessageQuery) loadLastMessageSession(ctx context.Context, query *ChatSessionQuery, nodes []*ChatMessage, init func(*ChatMessage), assign func(*ChatMessage, *ChatSession)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*ChatMessage)
@@ -607,6 +681,9 @@ func (_q *ChatMessageQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withGroup != nil {
 			_spec.Node.AddColumnOnce(chatmessage.FieldGroupID)
+		}
+		if _q.withSession != nil {
+			_spec.Node.AddColumnOnce(chatmessage.FieldReceiverID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package common.api.im.v1;
+
+import "google/protobuf/timestamp.proto";
+import "user/v1/user.proto";
+import "im/v1/constant.proto";
+
+option go_package = "common/api/im/v1;v1";
+
+// 群组
+message ChatGroup {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 主键
+  int64 id = 1;
+  // 群名称
+  string name = 2;
+  // 群头像
+  optional string avatar = 3;
+  // 群简介
+  optional string introduction = 4;
+  // 群状态
+  ChatGroupStatus status = 5;
+  // 群主信息
+  user.v1.User owner = 6;
+  // 群成员数
+  uint32 member_count = 7;
+  // 最后一条消息
+  ChatMessage last_message = 9;
+}
+
+message ChatGroupMember {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 创建时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 主键
+  int64 id = 1;
+  // 群组
+  int64 group_id = 2;
+  // 成员
+  user.v1.User member = 3;
+  // 群内昵称
+  optional string nickname = 4;
+  // 角色
+  int32 role = 5;
+  // 禁言结束时间
+  google.protobuf.Timestamp mute_end_at = 6;
+}
+
+message ChatSession {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 创建时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 主键
+  int64 id = 1;
+  // 私聊
+  int64 relation_id = 2;
+  // 群组
+  int64 group_id = 3;
+  // 是否免打扰
+  bool is_muted = 4;
+  // 是否置顶
+  bool is_pinned = 5;
+  // 已读最后一条消息 ID
+  int64 last_read_message_id = 6;
+  // 未读数
+  uint32 unread_count = 7;
+}
+
+// 消息
+message ChatMessage {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  optional int64 created_by = 1002;
+  // 更新人
+  optional int64 updated_by = 1003;
+  // 创建人名称
+  optional string created_by_name = 1004;
+  // 更新人名称
+  optional string updated_by_name = 1005;
+
+  // 主键
+  int64 id = 1;
+  // sender
+  user.v1.User sender = 2;
+  // receiver_user
+  int64 receiver_user_id = 3;
+  user.v1.User receiver_user = 4;
+  // receiver_group
+  int64 receiver_group_id = 5;
+  ChatGroup receiver_group = 6;
+  // 消息类型
+  int32 type = 7;
+  // 内容
+  string content = 8;
+  // 状态 0-正常 1-撤回
+  int32 status = 9;
+}

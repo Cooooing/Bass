@@ -24,7 +24,7 @@ type ChatGroupMember struct {
 	UserID int64 `json:"user_id,omitempty"`
 	// 群内昵称
 	Nickname *string `json:"nickname,omitempty"`
-	// 角色: 0-成员, 1-管理员, 2-群主
+	// 角色: 1-成员, 2-管理员, 3-群主
 	Role int32 `json:"role,omitempty"`
 	// 禁言结束时间
 	MuteEndAt *time.Time `json:"mute_end_at,omitempty"`

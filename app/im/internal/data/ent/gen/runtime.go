@@ -21,28 +21,28 @@ func init() {
 	chatgroupDescName := chatgroupFields[1].Descriptor()
 	// chatgroup.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	chatgroup.NameValidator = chatgroupDescName.Validators[0].(func(string) error)
-	// chatgroupDescAvatar is the schema descriptor for avatar field.
-	chatgroupDescAvatar := chatgroupFields[2].Descriptor()
-	// chatgroup.DefaultAvatar holds the default value on creation for the avatar field.
-	chatgroup.DefaultAvatar = chatgroupDescAvatar.Default.(string)
+	// chatgroupDescIntroduction is the schema descriptor for introduction field.
+	chatgroupDescIntroduction := chatgroupFields[3].Descriptor()
+	// chatgroup.DefaultIntroduction holds the default value on creation for the introduction field.
+	chatgroup.DefaultIntroduction = chatgroupDescIntroduction.Default.(string)
 	// chatgroupDescStatus is the schema descriptor for status field.
-	chatgroupDescStatus := chatgroupFields[4].Descriptor()
+	chatgroupDescStatus := chatgroupFields[5].Descriptor()
 	// chatgroup.DefaultStatus holds the default value on creation for the status field.
 	chatgroup.DefaultStatus = chatgroupDescStatus.Default.(int32)
 	// chatgroupDescMemberCount is the schema descriptor for member_count field.
-	chatgroupDescMemberCount := chatgroupFields[5].Descriptor()
+	chatgroupDescMemberCount := chatgroupFields[6].Descriptor()
 	// chatgroup.DefaultMemberCount holds the default value on creation for the member_count field.
-	chatgroup.DefaultMemberCount = chatgroupDescMemberCount.Default.(int32)
+	chatgroup.DefaultMemberCount = chatgroupDescMemberCount.Default.(uint32)
 	// chatgroupDescMessageCount is the schema descriptor for message_count field.
-	chatgroupDescMessageCount := chatgroupFields[6].Descriptor()
+	chatgroupDescMessageCount := chatgroupFields[7].Descriptor()
 	// chatgroup.DefaultMessageCount holds the default value on creation for the message_count field.
-	chatgroup.DefaultMessageCount = chatgroupDescMessageCount.Default.(int64)
+	chatgroup.DefaultMessageCount = chatgroupDescMessageCount.Default.(uint32)
 	// chatgroupDescCreatedAt is the schema descriptor for created_at field.
-	chatgroupDescCreatedAt := chatgroupFields[12].Descriptor()
+	chatgroupDescCreatedAt := chatgroupFields[11].Descriptor()
 	// chatgroup.DefaultCreatedAt holds the default value on creation for the created_at field.
 	chatgroup.DefaultCreatedAt = chatgroupDescCreatedAt.Default.(func() time.Time)
 	// chatgroupDescUpdatedAt is the schema descriptor for updated_at field.
-	chatgroupDescUpdatedAt := chatgroupFields[13].Descriptor()
+	chatgroupDescUpdatedAt := chatgroupFields[12].Descriptor()
 	// chatgroup.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	chatgroup.DefaultUpdatedAt = chatgroupDescUpdatedAt.Default.(func() time.Time)
 	chatgroupmemberFields := schema.ChatGroupMember{}.Fields()
@@ -79,32 +79,28 @@ func init() {
 	chatmessage.DefaultUpdatedAt = chatmessageDescUpdatedAt.Default.(func() time.Time)
 	chatsessionFields := schema.ChatSession{}.Fields()
 	_ = chatsessionFields
-	// chatsessionDescLastReadMessageID is the schema descriptor for last_read_message_id field.
-	chatsessionDescLastReadMessageID := chatsessionFields[4].Descriptor()
-	// chatsession.DefaultLastReadMessageID holds the default value on creation for the last_read_message_id field.
-	chatsession.DefaultLastReadMessageID = chatsessionDescLastReadMessageID.Default.(int64)
-	// chatsessionDescReadCount is the schema descriptor for read_count field.
-	chatsessionDescReadCount := chatsessionFields[5].Descriptor()
-	// chatsession.DefaultReadCount holds the default value on creation for the read_count field.
-	chatsession.DefaultReadCount = chatsessionDescReadCount.Default.(int32)
-	// chatsessionDescMessageCount is the schema descriptor for message_count field.
-	chatsessionDescMessageCount := chatsessionFields[6].Descriptor()
-	// chatsession.DefaultMessageCount holds the default value on creation for the message_count field.
-	chatsession.DefaultMessageCount = chatsessionDescMessageCount.Default.(int32)
 	// chatsessionDescIsMuted is the schema descriptor for is_muted field.
-	chatsessionDescIsMuted := chatsessionFields[7].Descriptor()
+	chatsessionDescIsMuted := chatsessionFields[3].Descriptor()
 	// chatsession.DefaultIsMuted holds the default value on creation for the is_muted field.
 	chatsession.DefaultIsMuted = chatsessionDescIsMuted.Default.(bool)
 	// chatsessionDescIsPinned is the schema descriptor for is_pinned field.
-	chatsessionDescIsPinned := chatsessionFields[8].Descriptor()
+	chatsessionDescIsPinned := chatsessionFields[4].Descriptor()
 	// chatsession.DefaultIsPinned holds the default value on creation for the is_pinned field.
 	chatsession.DefaultIsPinned = chatsessionDescIsPinned.Default.(bool)
+	// chatsessionDescReadCount is the schema descriptor for read_count field.
+	chatsessionDescReadCount := chatsessionFields[6].Descriptor()
+	// chatsession.DefaultReadCount holds the default value on creation for the read_count field.
+	chatsession.DefaultReadCount = chatsessionDescReadCount.Default.(uint32)
+	// chatsessionDescMessageCount is the schema descriptor for message_count field.
+	chatsessionDescMessageCount := chatsessionFields[7].Descriptor()
+	// chatsession.DefaultMessageCount holds the default value on creation for the message_count field.
+	chatsession.DefaultMessageCount = chatsessionDescMessageCount.Default.(uint32)
 	// chatsessionDescCreatedAt is the schema descriptor for created_at field.
-	chatsessionDescCreatedAt := chatsessionFields[12].Descriptor()
+	chatsessionDescCreatedAt := chatsessionFields[9].Descriptor()
 	// chatsession.DefaultCreatedAt holds the default value on creation for the created_at field.
 	chatsession.DefaultCreatedAt = chatsessionDescCreatedAt.Default.(func() time.Time)
 	// chatsessionDescUpdatedAt is the schema descriptor for updated_at field.
-	chatsessionDescUpdatedAt := chatsessionFields[13].Descriptor()
+	chatsessionDescUpdatedAt := chatsessionFields[10].Descriptor()
 	// chatsession.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	chatsession.DefaultUpdatedAt = chatsessionDescUpdatedAt.Default.(func() time.Time)
 }

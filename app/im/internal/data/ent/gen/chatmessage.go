@@ -29,7 +29,7 @@ type ChatMessage struct {
 	Type int32 `json:"type,omitempty"`
 	// 消息内容
 	Content string `json:"content,omitempty"`
-	// 状态: 0-正常, 1-撤回
+	// 状态: 1-正常, 2-撤回
 	Status int32 `json:"status,omitempty"`
 	// 创建人ID
 	CreatedBy *int64 `json:"created_by,omitempty"`
@@ -55,11 +55,13 @@ type ChatMessageEdges struct {
 	Group *ChatGroup `json:"group,omitempty"`
 	// LastMessageGroup holds the value of the last_message_group edge.
 	LastMessageGroup *ChatGroup `json:"last_message_group,omitempty"`
+	// Session holds the value of the session edge.
+	Session *ChatSession `json:"session,omitempty"`
 	// LastMessageSession holds the value of the last_message_session edge.
 	LastMessageSession *ChatSession `json:"last_message_session,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // GroupOrErr returns the Group value or an error if the edge
@@ -84,12 +86,23 @@ func (e ChatMessageEdges) LastMessageGroupOrErr() (*ChatGroup, error) {
 	return nil, &NotLoadedError{edge: "last_message_group"}
 }
 
+// SessionOrErr returns the Session value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ChatMessageEdges) SessionOrErr() (*ChatSession, error) {
+	if e.Session != nil {
+		return e.Session, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: chatsession.Label}
+	}
+	return nil, &NotLoadedError{edge: "session"}
+}
+
 // LastMessageSessionOrErr returns the LastMessageSession value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ChatMessageEdges) LastMessageSessionOrErr() (*ChatSession, error) {
 	if e.LastMessageSession != nil {
 		return e.LastMessageSession, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: chatsession.Label}
 	}
 	return nil, &NotLoadedError{edge: "last_message_session"}
@@ -228,6 +241,11 @@ func (_m *ChatMessage) QueryGroup() *ChatGroupQuery {
 // QueryLastMessageGroup queries the "last_message_group" edge of the ChatMessage entity.
 func (_m *ChatMessage) QueryLastMessageGroup() *ChatGroupQuery {
 	return NewChatMessageClient(_m.config).QueryLastMessageGroup(_m)
+}
+
+// QuerySession queries the "session" edge of the ChatMessage entity.
+func (_m *ChatMessage) QuerySession() *ChatSessionQuery {
+	return NewChatMessageClient(_m.config).QuerySession(_m)
 }
 
 // QueryLastMessageSession queries the "last_message_session" edge of the ChatMessage entity.

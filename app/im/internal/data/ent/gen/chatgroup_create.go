@@ -43,6 +43,20 @@ func (_c *ChatGroupCreate) SetNillableAvatar(v *string) *ChatGroupCreate {
 	return _c
 }
 
+// SetIntroduction sets the "introduction" field.
+func (_c *ChatGroupCreate) SetIntroduction(v string) *ChatGroupCreate {
+	_c.mutation.SetIntroduction(v)
+	return _c
+}
+
+// SetNillableIntroduction sets the "introduction" field if the given value is not nil.
+func (_c *ChatGroupCreate) SetNillableIntroduction(v *string) *ChatGroupCreate {
+	if v != nil {
+		_c.SetIntroduction(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ChatGroupCreate) SetOwnerID(v int64) *ChatGroupCreate {
 	_c.mutation.SetOwnerID(v)
@@ -64,13 +78,13 @@ func (_c *ChatGroupCreate) SetNillableStatus(v *int32) *ChatGroupCreate {
 }
 
 // SetMemberCount sets the "member_count" field.
-func (_c *ChatGroupCreate) SetMemberCount(v int32) *ChatGroupCreate {
+func (_c *ChatGroupCreate) SetMemberCount(v uint32) *ChatGroupCreate {
 	_c.mutation.SetMemberCount(v)
 	return _c
 }
 
 // SetNillableMemberCount sets the "member_count" field if the given value is not nil.
-func (_c *ChatGroupCreate) SetNillableMemberCount(v *int32) *ChatGroupCreate {
+func (_c *ChatGroupCreate) SetNillableMemberCount(v *uint32) *ChatGroupCreate {
 	if v != nil {
 		_c.SetMemberCount(*v)
 	}
@@ -78,13 +92,13 @@ func (_c *ChatGroupCreate) SetNillableMemberCount(v *int32) *ChatGroupCreate {
 }
 
 // SetMessageCount sets the "message_count" field.
-func (_c *ChatGroupCreate) SetMessageCount(v int64) *ChatGroupCreate {
+func (_c *ChatGroupCreate) SetMessageCount(v uint32) *ChatGroupCreate {
 	_c.mutation.SetMessageCount(v)
 	return _c
 }
 
 // SetNillableMessageCount sets the "message_count" field if the given value is not nil.
-func (_c *ChatGroupCreate) SetNillableMessageCount(v *int64) *ChatGroupCreate {
+func (_c *ChatGroupCreate) SetNillableMessageCount(v *uint32) *ChatGroupCreate {
 	if v != nil {
 		_c.SetMessageCount(*v)
 	}
@@ -101,34 +115,6 @@ func (_c *ChatGroupCreate) SetLastMessageID(v int64) *ChatGroupCreate {
 func (_c *ChatGroupCreate) SetNillableLastMessageID(v *int64) *ChatGroupCreate {
 	if v != nil {
 		_c.SetLastMessageID(*v)
-	}
-	return _c
-}
-
-// SetLastMessageContent sets the "last_message_content" field.
-func (_c *ChatGroupCreate) SetLastMessageContent(v string) *ChatGroupCreate {
-	_c.mutation.SetLastMessageContent(v)
-	return _c
-}
-
-// SetNillableLastMessageContent sets the "last_message_content" field if the given value is not nil.
-func (_c *ChatGroupCreate) SetNillableLastMessageContent(v *string) *ChatGroupCreate {
-	if v != nil {
-		_c.SetLastMessageContent(*v)
-	}
-	return _c
-}
-
-// SetLastMessageAt sets the "last_message_at" field.
-func (_c *ChatGroupCreate) SetLastMessageAt(v time.Time) *ChatGroupCreate {
-	_c.mutation.SetLastMessageAt(v)
-	return _c
-}
-
-// SetNillableLastMessageAt sets the "last_message_at" field if the given value is not nil.
-func (_c *ChatGroupCreate) SetNillableLastMessageAt(v *time.Time) *ChatGroupCreate {
-	if v != nil {
-		_c.SetLastMessageAt(*v)
 	}
 	return _c
 }
@@ -238,34 +224,34 @@ func (_c *ChatGroupCreate) AddMembers(v ...*ChatGroupMember) *ChatGroupCreate {
 	return _c.AddMemberIDs(ids...)
 }
 
-// AddSessionIDs adds the "sessions" edge to the ChatSession entity by IDs.
-func (_c *ChatGroupCreate) AddSessionIDs(ids ...int64) *ChatGroupCreate {
-	_c.mutation.AddSessionIDs(ids...)
+// AddGroupSessionIDs adds the "group_sessions" edge to the ChatSession entity by IDs.
+func (_c *ChatGroupCreate) AddGroupSessionIDs(ids ...int64) *ChatGroupCreate {
+	_c.mutation.AddGroupSessionIDs(ids...)
 	return _c
 }
 
-// AddSessions adds the "sessions" edges to the ChatSession entity.
-func (_c *ChatGroupCreate) AddSessions(v ...*ChatSession) *ChatGroupCreate {
+// AddGroupSessions adds the "group_sessions" edges to the ChatSession entity.
+func (_c *ChatGroupCreate) AddGroupSessions(v ...*ChatSession) *ChatGroupCreate {
 	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddSessionIDs(ids...)
+	return _c.AddGroupSessionIDs(ids...)
 }
 
-// AddMessageIDs adds the "messages" edge to the ChatMessage entity by IDs.
-func (_c *ChatGroupCreate) AddMessageIDs(ids ...int64) *ChatGroupCreate {
-	_c.mutation.AddMessageIDs(ids...)
+// AddGroupMessageIDs adds the "group_messages" edge to the ChatMessage entity by IDs.
+func (_c *ChatGroupCreate) AddGroupMessageIDs(ids ...int64) *ChatGroupCreate {
+	_c.mutation.AddGroupMessageIDs(ids...)
 	return _c
 }
 
-// AddMessages adds the "messages" edges to the ChatMessage entity.
-func (_c *ChatGroupCreate) AddMessages(v ...*ChatMessage) *ChatGroupCreate {
+// AddGroupMessages adds the "group_messages" edges to the ChatMessage entity.
+func (_c *ChatGroupCreate) AddGroupMessages(v ...*ChatMessage) *ChatGroupCreate {
 	ids := make([]int64, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddMessageIDs(ids...)
+	return _c.AddGroupMessageIDs(ids...)
 }
 
 // SetLastMessageOfGroupID sets the "last_message_of_group" edge to the ChatMessage entity by ID.
@@ -322,9 +308,9 @@ func (_c *ChatGroupCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *ChatGroupCreate) defaults() {
-	if _, ok := _c.mutation.Avatar(); !ok {
-		v := chatgroup.DefaultAvatar
-		_c.mutation.SetAvatar(v)
+	if _, ok := _c.mutation.Introduction(); !ok {
+		v := chatgroup.DefaultIntroduction
+		_c.mutation.SetIntroduction(v)
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := chatgroup.DefaultStatus
@@ -358,8 +344,8 @@ func (_c *ChatGroupCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "ChatGroup.name": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Avatar(); !ok {
-		return &ValidationError{Name: "avatar", err: errors.New(`gen: missing required field "ChatGroup.avatar"`)}
+	if _, ok := _c.mutation.Introduction(); !ok {
+		return &ValidationError{Name: "introduction", err: errors.New(`gen: missing required field "ChatGroup.introduction"`)}
 	}
 	if _, ok := _c.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`gen: missing required field "ChatGroup.owner_id"`)}
@@ -411,7 +397,11 @@ func (_c *ChatGroupCreate) createSpec() (*ChatGroup, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.Avatar(); ok {
 		_spec.SetField(chatgroup.FieldAvatar, field.TypeString, value)
-		_node.Avatar = value
+		_node.Avatar = &value
+	}
+	if value, ok := _c.mutation.Introduction(); ok {
+		_spec.SetField(chatgroup.FieldIntroduction, field.TypeString, value)
+		_node.Introduction = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(chatgroup.FieldOwnerID, field.TypeInt64, value)
@@ -422,20 +412,12 @@ func (_c *ChatGroupCreate) createSpec() (*ChatGroup, *sqlgraph.CreateSpec) {
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.MemberCount(); ok {
-		_spec.SetField(chatgroup.FieldMemberCount, field.TypeInt32, value)
+		_spec.SetField(chatgroup.FieldMemberCount, field.TypeUint32, value)
 		_node.MemberCount = value
 	}
 	if value, ok := _c.mutation.MessageCount(); ok {
-		_spec.SetField(chatgroup.FieldMessageCount, field.TypeInt64, value)
+		_spec.SetField(chatgroup.FieldMessageCount, field.TypeUint32, value)
 		_node.MessageCount = value
-	}
-	if value, ok := _c.mutation.LastMessageContent(); ok {
-		_spec.SetField(chatgroup.FieldLastMessageContent, field.TypeString, value)
-		_node.LastMessageContent = &value
-	}
-	if value, ok := _c.mutation.LastMessageAt(); ok {
-		_spec.SetField(chatgroup.FieldLastMessageAt, field.TypeTime, value)
-		_node.LastMessageAt = &value
 	}
 	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(chatgroup.FieldCreatedBy, field.TypeInt64, value)
@@ -477,12 +459,12 @@ func (_c *ChatGroupCreate) createSpec() (*ChatGroup, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.SessionsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupSessionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   chatgroup.SessionsTable,
-			Columns: []string{chatgroup.SessionsColumn},
+			Table:   chatgroup.GroupSessionsTable,
+			Columns: []string{chatgroup.GroupSessionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(chatsession.FieldID, field.TypeInt64),
@@ -493,12 +475,12 @@ func (_c *ChatGroupCreate) createSpec() (*ChatGroup, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.MessagesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupMessagesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   chatgroup.MessagesTable,
-			Columns: []string{chatgroup.MessagesColumn},
+			Table:   chatgroup.GroupMessagesTable,
+			Columns: []string{chatgroup.GroupMessagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(chatmessage.FieldID, field.TypeInt64),

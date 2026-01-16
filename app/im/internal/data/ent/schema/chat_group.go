@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 type ChatGroup struct {
@@ -25,15 +26,14 @@ func (ChatGroup) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("name").Comment("群名称").NotEmpty(),
-		field.String("avatar").Comment("群头像").Default(""),
+		field.String("avatar").Comment("群头像").Optional().Nillable(),
+		field.String("introduction").Comment("群简介").Default(""),
 		field.Int64("owner_id").Comment("群主id"),
-		field.Int32("status").Comment("群状态: 0-正常, 1-解散").Default(0),
-		field.Int32("member_count").Comment("群成员数").Default(0),
+		field.Int32("status").Comment("群状态: 1-正常, 2-解散").Default(1),
+		field.Uint32("member_count").Comment("群成员数").Default(0),
 
-		field.Int64("message_count").Comment("群消息数").Default(0),
+		field.Uint32("message_count").Comment("群消息数").Default(0),
 		field.Int64("last_message_id").Comment("最后一条消息id").Unique().Optional().Nillable(),
-		field.String("last_message_content").Comment("最后消息内容").Optional().Nillable(),
-		field.Time("last_message_at").Comment("最后消息时间").Optional().Nillable(),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)
@@ -46,10 +46,16 @@ func (ChatGroup) Edges() []ent.Edge {
 		// 关联群成员 一对多
 		edge.To("members", ChatGroupMember.Type),
 		// 关联会话 一对多
-		edge.To("sessions", ChatSession.Type),
+		edge.To("group_sessions", ChatSession.Type),
 		// 关联消息 一对多
-		edge.To("messages", ChatMessage.Type),
+		edge.To("group_messages", ChatMessage.Type),
 		// 关联最后一条群消息 一对一
 		edge.From("last_message_of_group", ChatMessage.Type).Ref("last_message_group").Unique().Field("last_message_id"),
+	}
+}
+
+func (ChatGroup) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("owner_id"),
 	}
 }

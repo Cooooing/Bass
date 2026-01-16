@@ -352,15 +352,15 @@ func (c *ChatGroupClient) QueryMembers(_m *ChatGroup) *ChatGroupMemberQuery {
 	return query
 }
 
-// QuerySessions queries the sessions edge of a ChatGroup.
-func (c *ChatGroupClient) QuerySessions(_m *ChatGroup) *ChatSessionQuery {
+// QueryGroupSessions queries the group_sessions edge of a ChatGroup.
+func (c *ChatGroupClient) QueryGroupSessions(_m *ChatGroup) *ChatSessionQuery {
 	query := (&ChatSessionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(chatgroup.Table, chatgroup.FieldID, id),
 			sqlgraph.To(chatsession.Table, chatsession.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.SessionsTable, chatgroup.SessionsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.GroupSessionsTable, chatgroup.GroupSessionsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -368,15 +368,15 @@ func (c *ChatGroupClient) QuerySessions(_m *ChatGroup) *ChatSessionQuery {
 	return query
 }
 
-// QueryMessages queries the messages edge of a ChatGroup.
-func (c *ChatGroupClient) QueryMessages(_m *ChatGroup) *ChatMessageQuery {
+// QueryGroupMessages queries the group_messages edge of a ChatGroup.
+func (c *ChatGroupClient) QueryGroupMessages(_m *ChatGroup) *ChatMessageQuery {
 	query := (&ChatMessageClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(chatgroup.Table, chatgroup.FieldID, id),
 			sqlgraph.To(chatmessage.Table, chatmessage.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.MessagesTable, chatgroup.MessagesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, chatgroup.GroupMessagesTable, chatgroup.GroupMessagesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -714,6 +714,22 @@ func (c *ChatMessageClient) QueryLastMessageGroup(_m *ChatMessage) *ChatGroupQue
 	return query
 }
 
+// QuerySession queries the session edge of a ChatMessage.
+func (c *ChatMessageClient) QuerySession(_m *ChatMessage) *ChatSessionQuery {
+	query := (&ChatSessionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(chatmessage.Table, chatmessage.FieldID, id),
+			sqlgraph.To(chatsession.Table, chatsession.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, chatmessage.SessionTable, chatmessage.SessionColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryLastMessageSession queries the last_message_session edge of a ChatMessage.
 func (c *ChatMessageClient) QueryLastMessageSession(_m *ChatMessage) *ChatSessionQuery {
 	query := (&ChatSessionClient{config: c.config}).Query()
@@ -872,6 +888,22 @@ func (c *ChatSessionClient) QueryGroup(_m *ChatSession) *ChatGroupQuery {
 			sqlgraph.From(chatsession.Table, chatsession.FieldID, id),
 			sqlgraph.To(chatgroup.Table, chatgroup.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, chatsession.GroupTable, chatsession.GroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySessionMessages queries the session_messages edge of a ChatSession.
+func (c *ChatSessionClient) QuerySessionMessages(_m *ChatSession) *ChatMessageQuery {
+	query := (&ChatMessageClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(chatsession.Table, chatsession.FieldID, id),
+			sqlgraph.To(chatmessage.Table, chatmessage.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, chatsession.SessionMessagesTable, chatsession.SessionMessagesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

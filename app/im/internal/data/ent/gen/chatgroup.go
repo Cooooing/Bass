@@ -21,21 +21,19 @@ type ChatGroup struct {
 	// 群名称
 	Name string `json:"name,omitempty"`
 	// 群头像
-	Avatar string `json:"avatar,omitempty"`
+	Avatar *string `json:"avatar,omitempty"`
+	// 群简介
+	Introduction string `json:"introduction,omitempty"`
 	// 群主id
 	OwnerID int64 `json:"owner_id,omitempty"`
-	// 群状态: 0-正常, 1-解散
+	// 群状态: 1-正常, 2-解散
 	Status int32 `json:"status,omitempty"`
 	// 群成员数
-	MemberCount int32 `json:"member_count,omitempty"`
+	MemberCount uint32 `json:"member_count,omitempty"`
 	// 群消息数
-	MessageCount int64 `json:"message_count,omitempty"`
+	MessageCount uint32 `json:"message_count,omitempty"`
 	// 最后一条消息id
 	LastMessageID *int64 `json:"last_message_id,omitempty"`
-	// 最后消息内容
-	LastMessageContent *string `json:"last_message_content,omitempty"`
-	// 最后消息时间
-	LastMessageAt *time.Time `json:"last_message_at,omitempty"`
 	// 创建人ID
 	CreatedBy *int64 `json:"created_by,omitempty"`
 	// 更新人ID
@@ -58,10 +56,10 @@ type ChatGroup struct {
 type ChatGroupEdges struct {
 	// Members holds the value of the members edge.
 	Members []*ChatGroupMember `json:"members,omitempty"`
-	// Sessions holds the value of the sessions edge.
-	Sessions []*ChatSession `json:"sessions,omitempty"`
-	// Messages holds the value of the messages edge.
-	Messages []*ChatMessage `json:"messages,omitempty"`
+	// GroupSessions holds the value of the group_sessions edge.
+	GroupSessions []*ChatSession `json:"group_sessions,omitempty"`
+	// GroupMessages holds the value of the group_messages edge.
+	GroupMessages []*ChatMessage `json:"group_messages,omitempty"`
 	// LastMessageOfGroup holds the value of the last_message_of_group edge.
 	LastMessageOfGroup *ChatMessage `json:"last_message_of_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -78,22 +76,22 @@ func (e ChatGroupEdges) MembersOrErr() ([]*ChatGroupMember, error) {
 	return nil, &NotLoadedError{edge: "members"}
 }
 
-// SessionsOrErr returns the Sessions value or an error if the edge
+// GroupSessionsOrErr returns the GroupSessions value or an error if the edge
 // was not loaded in eager-loading.
-func (e ChatGroupEdges) SessionsOrErr() ([]*ChatSession, error) {
+func (e ChatGroupEdges) GroupSessionsOrErr() ([]*ChatSession, error) {
 	if e.loadedTypes[1] {
-		return e.Sessions, nil
+		return e.GroupSessions, nil
 	}
-	return nil, &NotLoadedError{edge: "sessions"}
+	return nil, &NotLoadedError{edge: "group_sessions"}
 }
 
-// MessagesOrErr returns the Messages value or an error if the edge
+// GroupMessagesOrErr returns the GroupMessages value or an error if the edge
 // was not loaded in eager-loading.
-func (e ChatGroupEdges) MessagesOrErr() ([]*ChatMessage, error) {
+func (e ChatGroupEdges) GroupMessagesOrErr() ([]*ChatMessage, error) {
 	if e.loadedTypes[2] {
-		return e.Messages, nil
+		return e.GroupMessages, nil
 	}
-	return nil, &NotLoadedError{edge: "messages"}
+	return nil, &NotLoadedError{edge: "group_messages"}
 }
 
 // LastMessageOfGroupOrErr returns the LastMessageOfGroup value or an error if the edge
@@ -114,9 +112,9 @@ func (*ChatGroup) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case chatgroup.FieldID, chatgroup.FieldOwnerID, chatgroup.FieldStatus, chatgroup.FieldMemberCount, chatgroup.FieldMessageCount, chatgroup.FieldLastMessageID, chatgroup.FieldCreatedBy, chatgroup.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
-		case chatgroup.FieldName, chatgroup.FieldAvatar, chatgroup.FieldLastMessageContent, chatgroup.FieldCreatedByName, chatgroup.FieldUpdatedByName:
+		case chatgroup.FieldName, chatgroup.FieldAvatar, chatgroup.FieldIntroduction, chatgroup.FieldCreatedByName, chatgroup.FieldUpdatedByName:
 			values[i] = new(sql.NullString)
-		case chatgroup.FieldLastMessageAt, chatgroup.FieldCreatedAt, chatgroup.FieldUpdatedAt:
+		case chatgroup.FieldCreatedAt, chatgroup.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -149,7 +147,14 @@ func (_m *ChatGroup) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar", values[i])
 			} else if value.Valid {
-				_m.Avatar = value.String
+				_m.Avatar = new(string)
+				*_m.Avatar = value.String
+			}
+		case chatgroup.FieldIntroduction:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field introduction", values[i])
+			} else if value.Valid {
+				_m.Introduction = value.String
 			}
 		case chatgroup.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -167,13 +172,13 @@ func (_m *ChatGroup) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field member_count", values[i])
 			} else if value.Valid {
-				_m.MemberCount = int32(value.Int64)
+				_m.MemberCount = uint32(value.Int64)
 			}
 		case chatgroup.FieldMessageCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field message_count", values[i])
 			} else if value.Valid {
-				_m.MessageCount = value.Int64
+				_m.MessageCount = uint32(value.Int64)
 			}
 		case chatgroup.FieldLastMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -181,20 +186,6 @@ func (_m *ChatGroup) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.LastMessageID = new(int64)
 				*_m.LastMessageID = value.Int64
-			}
-		case chatgroup.FieldLastMessageContent:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field last_message_content", values[i])
-			} else if value.Valid {
-				_m.LastMessageContent = new(string)
-				*_m.LastMessageContent = value.String
-			}
-		case chatgroup.FieldLastMessageAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_message_at", values[i])
-			} else if value.Valid {
-				_m.LastMessageAt = new(time.Time)
-				*_m.LastMessageAt = value.Time
 			}
 		case chatgroup.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -256,14 +247,14 @@ func (_m *ChatGroup) QueryMembers() *ChatGroupMemberQuery {
 	return NewChatGroupClient(_m.config).QueryMembers(_m)
 }
 
-// QuerySessions queries the "sessions" edge of the ChatGroup entity.
-func (_m *ChatGroup) QuerySessions() *ChatSessionQuery {
-	return NewChatGroupClient(_m.config).QuerySessions(_m)
+// QueryGroupSessions queries the "group_sessions" edge of the ChatGroup entity.
+func (_m *ChatGroup) QueryGroupSessions() *ChatSessionQuery {
+	return NewChatGroupClient(_m.config).QueryGroupSessions(_m)
 }
 
-// QueryMessages queries the "messages" edge of the ChatGroup entity.
-func (_m *ChatGroup) QueryMessages() *ChatMessageQuery {
-	return NewChatGroupClient(_m.config).QueryMessages(_m)
+// QueryGroupMessages queries the "group_messages" edge of the ChatGroup entity.
+func (_m *ChatGroup) QueryGroupMessages() *ChatMessageQuery {
+	return NewChatGroupClient(_m.config).QueryGroupMessages(_m)
 }
 
 // QueryLastMessageOfGroup queries the "last_message_of_group" edge of the ChatGroup entity.
@@ -297,8 +288,13 @@ func (_m *ChatGroup) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
-	builder.WriteString("avatar=")
-	builder.WriteString(_m.Avatar)
+	if v := _m.Avatar; v != nil {
+		builder.WriteString("avatar=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("introduction=")
+	builder.WriteString(_m.Introduction)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OwnerID))
@@ -315,16 +311,6 @@ func (_m *ChatGroup) String() string {
 	if v := _m.LastMessageID; v != nil {
 		builder.WriteString("last_message_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
-	if v := _m.LastMessageContent; v != nil {
-		builder.WriteString("last_message_content=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.LastMessageAt; v != nil {
-		builder.WriteString("last_message_at=")
-		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	if v := _m.CreatedBy; v != nil {

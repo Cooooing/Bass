@@ -13,13 +13,12 @@ var (
 	ImChatGroupsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "avatar", Type: field.TypeString, Default: ""},
+		{Name: "avatar", Type: field.TypeString, Nullable: true},
+		{Name: "introduction", Type: field.TypeString, Default: ""},
 		{Name: "owner_id", Type: field.TypeInt64},
-		{Name: "status", Type: field.TypeInt32, Default: 0},
-		{Name: "member_count", Type: field.TypeInt32, Default: 0},
-		{Name: "message_count", Type: field.TypeInt64, Default: 0},
-		{Name: "last_message_content", Type: field.TypeString, Nullable: true},
-		{Name: "last_message_at", Type: field.TypeTime, Nullable: true},
+		{Name: "status", Type: field.TypeInt32, Default: 1},
+		{Name: "member_count", Type: field.TypeUint32, Default: 0},
+		{Name: "message_count", Type: field.TypeUint32, Default: 0},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
@@ -36,9 +35,16 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "im_chat_groups_im_chat_messages_last_message_group",
-				Columns:    []*schema.Column{ImChatGroupsColumns[15]},
+				Columns:    []*schema.Column{ImChatGroupsColumns[14]},
 				RefColumns: []*schema.Column{ImChatMessagesColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "chatgroup_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ImChatGroupsColumns[4]},
 			},
 		},
 	}
@@ -47,7 +53,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "nickname", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeInt32, Default: 0},
+		{Name: "role", Type: field.TypeInt32, Default: 1},
 		{Name: "mute_end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
@@ -87,10 +93,9 @@ var (
 	ImChatMessagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "sender_id", Type: field.TypeInt64, Comment: "发送者ID"},
-		{Name: "receiver_id", Type: field.TypeInt64, Nullable: true, Comment: "私聊接收者ID (仅私聊有值)"},
 		{Name: "type", Type: field.TypeInt32, Comment: "消息内容类型", Default: 1},
 		{Name: "content", Type: field.TypeString, Size: 2147483647, Comment: "消息内容"},
-		{Name: "status", Type: field.TypeInt32, Comment: "状态: 0-正常, 1-撤回", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态: 1-正常, 2-撤回", Default: 1},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
@@ -98,6 +103,7 @@ var (
 		{Name: "created_by_name", Type: field.TypeString, Nullable: true, Comment: "创建人用户名"},
 		{Name: "updated_by_name", Type: field.TypeString, Nullable: true, Comment: "更新人用户名"},
 		{Name: "group_id", Type: field.TypeInt64, Nullable: true, Comment: "群组ID (仅群聊有值)"},
+		{Name: "receiver_id", Type: field.TypeInt64, Nullable: true, Comment: "私聊接收者ID (仅私聊有值)"},
 	}
 	// ImChatMessagesTable holds the schema information for the "im_chat_messages" table.
 	ImChatMessagesTable = &schema.Table{
@@ -106,39 +112,46 @@ var (
 		PrimaryKey: []*schema.Column{ImChatMessagesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "im_chat_messages_im_chat_groups_messages",
-				Columns:    []*schema.Column{ImChatMessagesColumns[12]},
+				Symbol:     "im_chat_messages_im_chat_groups_group_messages",
+				Columns:    []*schema.Column{ImChatMessagesColumns[11]},
 				RefColumns: []*schema.Column{ImChatGroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "im_chat_messages_im_chat_sessions_session_messages",
+				Columns:    []*schema.Column{ImChatMessagesColumns[12]},
+				RefColumns: []*schema.Column{ImChatSessionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "chatmessage_receiver_id",
+				Name:    "chatmessage_sender_id",
 				Unique:  false,
-				Columns: []*schema.Column{ImChatMessagesColumns[2]},
+				Columns: []*schema.Column{ImChatMessagesColumns[1]},
 			},
 			{
 				Name:    "chatmessage_group_id",
 				Unique:  false,
-				Columns: []*schema.Column{ImChatMessagesColumns[12]},
+				Columns: []*schema.Column{ImChatMessagesColumns[11]},
 			},
 		},
 	}
 	// ImChatSessionsColumns holds the columns for the "im_chat_sessions" table.
 	ImChatSessionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "user_id", Type: field.TypeInt64},
 		{Name: "receiver_id", Type: field.TypeInt64, Nullable: true},
-		{Name: "last_read_message_id", Type: field.TypeInt64, Default: 0},
-		{Name: "read_count", Type: field.TypeInt32, Default: 0},
-		{Name: "message_count", Type: field.TypeInt32, Default: 0},
 		{Name: "is_muted", Type: field.TypeBool, Default: false},
 		{Name: "is_pinned", Type: field.TypeBool, Default: false},
-		{Name: "last_message_content", Type: field.TypeString, Nullable: true},
-		{Name: "last_message_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_read_message_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "read_count", Type: field.TypeUint32, Default: 0},
+		{Name: "message_count", Type: field.TypeUint32, Default: 0},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "created_by_name", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_name", Type: field.TypeString, Nullable: true},
 		{Name: "group_id", Type: field.TypeInt64, Nullable: true},
 		{Name: "last_message_id", Type: field.TypeInt64, Unique: true, Nullable: true},
 	}
@@ -149,28 +162,23 @@ var (
 		PrimaryKey: []*schema.Column{ImChatSessionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "im_chat_sessions_im_chat_groups_sessions",
-				Columns:    []*schema.Column{ImChatSessionsColumns[12]},
+				Symbol:     "im_chat_sessions_im_chat_groups_group_sessions",
+				Columns:    []*schema.Column{ImChatSessionsColumns[13]},
 				RefColumns: []*schema.Column{ImChatGroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "im_chat_sessions_im_chat_messages_last_message_session",
-				Columns:    []*schema.Column{ImChatSessionsColumns[13]},
+				Columns:    []*schema.Column{ImChatSessionsColumns[14]},
 				RefColumns: []*schema.Column{ImChatMessagesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "chatsession_user_id_receiver_id",
+				Name:    "chatsession_created_by_group_id",
 				Unique:  true,
-				Columns: []*schema.Column{ImChatSessionsColumns[1], ImChatSessionsColumns[2]},
-			},
-			{
-				Name:    "chatsession_user_id_group_id",
-				Unique:  true,
-				Columns: []*schema.Column{ImChatSessionsColumns[1], ImChatSessionsColumns[12]},
+				Columns: []*schema.Column{ImChatSessionsColumns[9], ImChatSessionsColumns[13]},
 			},
 		},
 	}
@@ -193,6 +201,7 @@ func init() {
 		Table: "im_chat_group_members",
 	}
 	ImChatMessagesTable.ForeignKeys[0].RefTable = ImChatGroupsTable
+	ImChatMessagesTable.ForeignKeys[1].RefTable = ImChatSessionsTable
 	ImChatMessagesTable.Annotation = &entsql.Annotation{
 		Table: "im_chat_messages",
 	}

@@ -42,6 +42,8 @@ const (
 	EdgeGroup = "group"
 	// EdgeLastMessageGroup holds the string denoting the last_message_group edge name in mutations.
 	EdgeLastMessageGroup = "last_message_group"
+	// EdgeSession holds the string denoting the session edge name in mutations.
+	EdgeSession = "session"
 	// EdgeLastMessageSession holds the string denoting the last_message_session edge name in mutations.
 	EdgeLastMessageSession = "last_message_session"
 	// Table holds the table name of the chatmessage in the database.
@@ -60,6 +62,13 @@ const (
 	LastMessageGroupInverseTable = "im_chat_groups"
 	// LastMessageGroupColumn is the table column denoting the last_message_group relation/edge.
 	LastMessageGroupColumn = "last_message_id"
+	// SessionTable is the table that holds the session relation/edge.
+	SessionTable = "im_chat_messages"
+	// SessionInverseTable is the table name for the ChatSession entity.
+	// It exists in this package in order to avoid circular dependency with the "chatsession" package.
+	SessionInverseTable = "im_chat_sessions"
+	// SessionColumn is the table column denoting the session relation/edge.
+	SessionColumn = "receiver_id"
 	// LastMessageSessionTable is the table that holds the last_message_session relation/edge.
 	LastMessageSessionTable = "im_chat_sessions"
 	// LastMessageSessionInverseTable is the table name for the ChatSession entity.
@@ -189,6 +198,13 @@ func ByLastMessageGroupField(field string, opts ...sql.OrderTermOption) OrderOpt
 	}
 }
 
+// BySessionField orders the results by session field.
+func BySessionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSessionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByLastMessageSessionField orders the results by last_message_session field.
 func ByLastMessageSessionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -207,6 +223,13 @@ func newLastMessageGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LastMessageGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, false, LastMessageGroupTable, LastMessageGroupColumn),
+	)
+}
+func newSessionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SessionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SessionTable, SessionColumn),
 	)
 }
 func newLastMessageSessionStep() *sqlgraph.Step {

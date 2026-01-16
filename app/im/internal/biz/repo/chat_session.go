@@ -10,8 +10,7 @@ import (
 type ChatSessionRepo interface {
 	Save(ctx context.Context, tx *gen.Client, chatSession *model.ChatSession) (*model.ChatSession, error)
 
-	UpdateLastReadMessage(ctx context.Context, tx *gen.Client) (*model.ChatSession, error)
-	UpdateLastMessage(ctx context.Context, tx *gen.Client, message *model.ChatMessage) (*model.ChatSession, error)
+	UpdateLastReadMessage(ctx context.Context, tx *gen.Client, chatSessionId int64, messageId int64, operationReadCount int32) (*model.ChatSession, error)
 	UpdateMuted(ctx context.Context, tx *gen.Client, chatSessionId int64, muted bool) (*model.ChatSession, error)
 	UpdatePinned(ctx context.Context, tx *gen.Client, chatSessionId int64, pinned bool) (*model.ChatSession, error)
 

@@ -19,11 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SignalNodeService_Save_FullMethodName       = "/common.api.signal.v1.SignalNodeService/Save"
-	SignalNodeService_Register_FullMethodName   = "/common.api.signal.v1.SignalNodeService/Register"
-	SignalNodeService_Online_FullMethodName     = "/common.api.signal.v1.SignalNodeService/Online"
-	SignalNodeService_Offline_FullMethodName    = "/common.api.signal.v1.SignalNodeService/Offline"
-	SignalNodeService_OnlineList_FullMethodName = "/common.api.signal.v1.SignalNodeService/OnlineList"
+	SignalNodeService_Save_FullMethodName         = "/common.api.signal.v1.SignalNodeService/Save"
+	SignalNodeService_Update_FullMethodName       = "/common.api.signal.v1.SignalNodeService/Update"
+	SignalNodeService_GetSecret_FullMethodName    = "/common.api.signal.v1.SignalNodeService/GetSecret"
+	SignalNodeService_UpdateSecret_FullMethodName = "/common.api.signal.v1.SignalNodeService/UpdateSecret"
+	SignalNodeService_List_FullMethodName         = "/common.api.signal.v1.SignalNodeService/List"
+	SignalNodeService_Negotiate_FullMethodName    = "/common.api.signal.v1.SignalNodeService/Negotiate"
+	SignalNodeService_Register_FullMethodName     = "/common.api.signal.v1.SignalNodeService/Register"
+	SignalNodeService_Unregister_FullMethodName   = "/common.api.signal.v1.SignalNodeService/Unregister"
+	SignalNodeService_Online_FullMethodName       = "/common.api.signal.v1.SignalNodeService/Online"
+	SignalNodeService_Offline_FullMethodName      = "/common.api.signal.v1.SignalNodeService/Offline"
+	SignalNodeService_OnlineList_FullMethodName   = "/common.api.signal.v1.SignalNodeService/OnlineList"
 )
 
 // SignalNodeServiceClient is the client API for SignalNodeService service.
@@ -34,8 +40,20 @@ const (
 type SignalNodeServiceClient interface {
 	// 保存节点
 	Save(ctx context.Context, in *SignalNodeSaveRequest, opts ...grpc.CallOption) (*SignalNodeSaveReply, error)
+	// 更新节点信息
+	Update(ctx context.Context, in *SignalNodeUpdateRequest, opts ...grpc.CallOption) (*SignalNodeUpdateReply, error)
+	// 获取密钥
+	GetSecret(ctx context.Context, in *SignalNodeGetSecretRequest, opts ...grpc.CallOption) (*SignalNodeGetSecretReply, error)
+	// 更新密钥
+	UpdateSecret(ctx context.Context, in *SignalNodeUpdateSecretRequest, opts ...grpc.CallOption) (*SignalNodeUpdateSecretReply, error)
+	// 查询节点列表
+	List(ctx context.Context, in *SignalNodeListRequest, opts ...grpc.CallOption) (*SignalNodeListReply, error)
+	// 客户端调度/协商
+	Negotiate(ctx context.Context, in *SignalNodeNegotiateRequest, opts ...grpc.CallOption) (*SignalNodeNegotiateReply, error)
 	// 注册节点
 	Register(ctx context.Context, in *SignalNodeRegisterRequest, opts ...grpc.CallOption) (*SignalNodeRegisterReply, error)
+	// 注销节点
+	Unregister(ctx context.Context, in *SignalNodeUnregisterRequest, opts ...grpc.CallOption) (*SignalNodeUnregisterReply, error)
 	// 用户上线
 	Online(ctx context.Context, in *SignalNodeOnlineRequest, opts ...grpc.CallOption) (*SignalNodeOnlineReply, error)
 	// 用户下线
@@ -62,10 +80,70 @@ func (c *signalNodeServiceClient) Save(ctx context.Context, in *SignalNodeSaveRe
 	return out, nil
 }
 
+func (c *signalNodeServiceClient) Update(ctx context.Context, in *SignalNodeUpdateRequest, opts ...grpc.CallOption) (*SignalNodeUpdateReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeUpdateReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_Update_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signalNodeServiceClient) GetSecret(ctx context.Context, in *SignalNodeGetSecretRequest, opts ...grpc.CallOption) (*SignalNodeGetSecretReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeGetSecretReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_GetSecret_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signalNodeServiceClient) UpdateSecret(ctx context.Context, in *SignalNodeUpdateSecretRequest, opts ...grpc.CallOption) (*SignalNodeUpdateSecretReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeUpdateSecretReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_UpdateSecret_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signalNodeServiceClient) List(ctx context.Context, in *SignalNodeListRequest, opts ...grpc.CallOption) (*SignalNodeListReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeListReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signalNodeServiceClient) Negotiate(ctx context.Context, in *SignalNodeNegotiateRequest, opts ...grpc.CallOption) (*SignalNodeNegotiateReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeNegotiateReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_Negotiate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *signalNodeServiceClient) Register(ctx context.Context, in *SignalNodeRegisterRequest, opts ...grpc.CallOption) (*SignalNodeRegisterReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SignalNodeRegisterReply)
 	err := c.cc.Invoke(ctx, SignalNodeService_Register_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signalNodeServiceClient) Unregister(ctx context.Context, in *SignalNodeUnregisterRequest, opts ...grpc.CallOption) (*SignalNodeUnregisterReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeUnregisterReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_Unregister_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -110,8 +188,20 @@ func (c *signalNodeServiceClient) OnlineList(ctx context.Context, in *SignalNode
 type SignalNodeServiceServer interface {
 	// 保存节点
 	Save(context.Context, *SignalNodeSaveRequest) (*SignalNodeSaveReply, error)
+	// 更新节点信息
+	Update(context.Context, *SignalNodeUpdateRequest) (*SignalNodeUpdateReply, error)
+	// 获取密钥
+	GetSecret(context.Context, *SignalNodeGetSecretRequest) (*SignalNodeGetSecretReply, error)
+	// 更新密钥
+	UpdateSecret(context.Context, *SignalNodeUpdateSecretRequest) (*SignalNodeUpdateSecretReply, error)
+	// 查询节点列表
+	List(context.Context, *SignalNodeListRequest) (*SignalNodeListReply, error)
+	// 客户端调度/协商
+	Negotiate(context.Context, *SignalNodeNegotiateRequest) (*SignalNodeNegotiateReply, error)
 	// 注册节点
 	Register(context.Context, *SignalNodeRegisterRequest) (*SignalNodeRegisterReply, error)
+	// 注销节点
+	Unregister(context.Context, *SignalNodeUnregisterRequest) (*SignalNodeUnregisterReply, error)
 	// 用户上线
 	Online(context.Context, *SignalNodeOnlineRequest) (*SignalNodeOnlineReply, error)
 	// 用户下线
@@ -131,8 +221,26 @@ type UnimplementedSignalNodeServiceServer struct{}
 func (UnimplementedSignalNodeServiceServer) Save(context.Context, *SignalNodeSaveRequest) (*SignalNodeSaveReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Save not implemented")
 }
+func (UnimplementedSignalNodeServiceServer) Update(context.Context, *SignalNodeUpdateRequest) (*SignalNodeUpdateReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedSignalNodeServiceServer) GetSecret(context.Context, *SignalNodeGetSecretRequest) (*SignalNodeGetSecretReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSecret not implemented")
+}
+func (UnimplementedSignalNodeServiceServer) UpdateSecret(context.Context, *SignalNodeUpdateSecretRequest) (*SignalNodeUpdateSecretReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateSecret not implemented")
+}
+func (UnimplementedSignalNodeServiceServer) List(context.Context, *SignalNodeListRequest) (*SignalNodeListReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedSignalNodeServiceServer) Negotiate(context.Context, *SignalNodeNegotiateRequest) (*SignalNodeNegotiateReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Negotiate not implemented")
+}
 func (UnimplementedSignalNodeServiceServer) Register(context.Context, *SignalNodeRegisterRequest) (*SignalNodeRegisterReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedSignalNodeServiceServer) Unregister(context.Context, *SignalNodeUnregisterRequest) (*SignalNodeUnregisterReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Unregister not implemented")
 }
 func (UnimplementedSignalNodeServiceServer) Online(context.Context, *SignalNodeOnlineRequest) (*SignalNodeOnlineReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Online not implemented")
@@ -182,6 +290,96 @@ func _SignalNodeService_Save_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SignalNodeService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).Update(ctx, req.(*SignalNodeUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SignalNodeService_GetSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeGetSecretRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).GetSecret(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_GetSecret_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).GetSecret(ctx, req.(*SignalNodeGetSecretRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SignalNodeService_UpdateSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeUpdateSecretRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).UpdateSecret(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_UpdateSecret_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).UpdateSecret(ctx, req.(*SignalNodeUpdateSecretRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SignalNodeService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_List_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).List(ctx, req.(*SignalNodeListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SignalNodeService_Negotiate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeNegotiateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).Negotiate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_Negotiate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).Negotiate(ctx, req.(*SignalNodeNegotiateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SignalNodeService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SignalNodeRegisterRequest)
 	if err := dec(in); err != nil {
@@ -196,6 +394,24 @@ func _SignalNodeService_Register_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SignalNodeServiceServer).Register(ctx, req.(*SignalNodeRegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SignalNodeService_Unregister_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeUnregisterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).Unregister(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_Unregister_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).Unregister(ctx, req.(*SignalNodeUnregisterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -266,8 +482,32 @@ var SignalNodeService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SignalNodeService_Save_Handler,
 		},
 		{
+			MethodName: "Update",
+			Handler:    _SignalNodeService_Update_Handler,
+		},
+		{
+			MethodName: "GetSecret",
+			Handler:    _SignalNodeService_GetSecret_Handler,
+		},
+		{
+			MethodName: "UpdateSecret",
+			Handler:    _SignalNodeService_UpdateSecret_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _SignalNodeService_List_Handler,
+		},
+		{
+			MethodName: "Negotiate",
+			Handler:    _SignalNodeService_Negotiate_Handler,
+		},
+		{
 			MethodName: "Register",
 			Handler:    _SignalNodeService_Register_Handler,
+		},
+		{
+			MethodName: "Unregister",
+			Handler:    _SignalNodeService_Unregister_Handler,
 		},
 		{
 			MethodName: "Online",

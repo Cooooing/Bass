@@ -21,6 +21,58 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// 节点状态
+type NodeStatus int32
+
+const (
+	NodeStatus_NODE_STATUS_UNKNOWN NodeStatus = 0
+	// 正常
+	NodeStatus_NODE_STATUS_NORMAL NodeStatus = 1
+	// 禁用
+	NodeStatus_NODE_STATUS_DISABLED NodeStatus = 2
+)
+
+// Enum value maps for NodeStatus.
+var (
+	NodeStatus_name = map[int32]string{
+		0: "NODE_STATUS_UNKNOWN",
+		1: "NODE_STATUS_NORMAL",
+		2: "NODE_STATUS_DISABLED",
+	}
+	NodeStatus_value = map[string]int32{
+		"NODE_STATUS_UNKNOWN":  0,
+		"NODE_STATUS_NORMAL":   1,
+		"NODE_STATUS_DISABLED": 2,
+	}
+)
+
+func (x NodeStatus) Enum() *NodeStatus {
+	p := new(NodeStatus)
+	*p = x
+	return p
+}
+
+func (x NodeStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (NodeStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_signal_v1_constant_proto_enumTypes[0].Descriptor()
+}
+
+func (NodeStatus) Type() protoreflect.EnumType {
+	return &file_signal_v1_constant_proto_enumTypes[0]
+}
+
+func (x NodeStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use NodeStatus.Descriptor instead.
+func (NodeStatus) EnumDescriptor() ([]byte, []int) {
+	return file_signal_v1_constant_proto_rawDescGZIP(), []int{0}
+}
+
 // 消息类型
 type MessageType int32
 
@@ -57,11 +109,11 @@ func (x MessageType) String() string {
 }
 
 func (MessageType) Descriptor() protoreflect.EnumDescriptor {
-	return file_signal_v1_constant_proto_enumTypes[0].Descriptor()
+	return file_signal_v1_constant_proto_enumTypes[1].Descriptor()
 }
 
 func (MessageType) Type() protoreflect.EnumType {
-	return &file_signal_v1_constant_proto_enumTypes[0]
+	return &file_signal_v1_constant_proto_enumTypes[1]
 }
 
 func (x MessageType) Number() protoreflect.EnumNumber {
@@ -70,14 +122,19 @@ func (x MessageType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MessageType.Descriptor instead.
 func (MessageType) EnumDescriptor() ([]byte, []int) {
-	return file_signal_v1_constant_proto_rawDescGZIP(), []int{0}
+	return file_signal_v1_constant_proto_rawDescGZIP(), []int{1}
 }
 
 var File_signal_v1_constant_proto protoreflect.FileDescriptor
 
 const file_signal_v1_constant_proto_rawDesc = "" +
 	"\n" +
-	"\x18signal/v1/constant.proto\x12\x14common.api.signal.v1*U\n" +
+	"\x18signal/v1/constant.proto\x12\x14common.api.signal.v1*W\n" +
+	"\n" +
+	"NodeStatus\x12\x17\n" +
+	"\x13NODE_STATUS_UNKNOWN\x10\x00\x12\x16\n" +
+	"\x12NODE_STATUS_NORMAL\x10\x01\x12\x18\n" +
+	"\x14NODE_STATUS_DISABLED\x10\x02*U\n" +
 	"\vMessageType\x12\x18\n" +
 	"\x14MESSAGE_TYPE_UNKNOWN\x10\x00\x12\x17\n" +
 	"\x13MESSAGE_TYPE_NOTIFY\x10\x01\x12\x13\n" +
@@ -95,9 +152,10 @@ func file_signal_v1_constant_proto_rawDescGZIP() []byte {
 	return file_signal_v1_constant_proto_rawDescData
 }
 
-var file_signal_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_signal_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_signal_v1_constant_proto_goTypes = []any{
-	(MessageType)(0), // 0: common.api.signal.v1.MessageType
+	(NodeStatus)(0),  // 0: common.api.signal.v1.NodeStatus
+	(MessageType)(0), // 1: common.api.signal.v1.MessageType
 }
 var file_signal_v1_constant_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -117,7 +175,7 @@ func file_signal_v1_constant_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_signal_v1_constant_proto_rawDesc), len(file_signal_v1_constant_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

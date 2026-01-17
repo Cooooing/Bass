@@ -57,6 +57,35 @@ func (m *SignalNodeSaveRequest) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetNode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SignalNodeSaveRequestValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SignalNodeSaveRequestValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNode()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SignalNodeSaveRequestValidationError{
+				field:  "Node",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return SignalNodeSaveRequestMultiError(errors)
 	}
@@ -159,6 +188,35 @@ func (m *SignalNodeSaveReply) validate(all bool) error {
 
 	var errors []error
 
+	if all {
+		switch v := interface{}(m.GetNode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SignalNodeSaveReplyValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SignalNodeSaveReplyValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNode()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SignalNodeSaveReplyValidationError{
+				field:  "Node",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return SignalNodeSaveReplyMultiError(errors)
 	}
@@ -238,6 +296,1193 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SignalNodeSaveReplyValidationError{}
+
+// Validate checks the field values on SignalNodeUpdateRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeUpdateRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeUpdateRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeUpdateRequestMultiError, or nil if none found.
+func (m *SignalNodeUpdateRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeUpdateRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetNode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SignalNodeUpdateRequestValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SignalNodeUpdateRequestValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNode()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SignalNodeUpdateRequestValidationError{
+				field:  "Node",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return SignalNodeUpdateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeUpdateRequestMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeUpdateRequest.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeUpdateRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeUpdateRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeUpdateRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeUpdateRequestValidationError is the validation error returned by
+// SignalNodeUpdateRequest.Validate if the designated constraints aren't met.
+type SignalNodeUpdateRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeUpdateRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeUpdateRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeUpdateRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeUpdateRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeUpdateRequestValidationError) ErrorName() string {
+	return "SignalNodeUpdateRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeUpdateRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeUpdateRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeUpdateRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeUpdateRequestValidationError{}
+
+// Validate checks the field values on SignalNodeUpdateReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeUpdateReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeUpdateReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeUpdateReplyMultiError, or nil if none found.
+func (m *SignalNodeUpdateReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeUpdateReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetNode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SignalNodeUpdateReplyValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SignalNodeUpdateReplyValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNode()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SignalNodeUpdateReplyValidationError{
+				field:  "Node",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return SignalNodeUpdateReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeUpdateReplyMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeUpdateReply.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeUpdateReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeUpdateReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeUpdateReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeUpdateReplyValidationError is the validation error returned by
+// SignalNodeUpdateReply.Validate if the designated constraints aren't met.
+type SignalNodeUpdateReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeUpdateReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeUpdateReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeUpdateReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeUpdateReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeUpdateReplyValidationError) ErrorName() string {
+	return "SignalNodeUpdateReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeUpdateReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeUpdateReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeUpdateReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeUpdateReplyValidationError{}
+
+// Validate checks the field values on SignalNodeGetSecretRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeGetSecretRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeGetSecretRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeGetSecretRequestMultiError, or nil if none found.
+func (m *SignalNodeGetSecretRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeGetSecretRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return SignalNodeGetSecretRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeGetSecretRequestMultiError is an error wrapping multiple
+// validation errors returned by SignalNodeGetSecretRequest.ValidateAll() if
+// the designated constraints aren't met.
+type SignalNodeGetSecretRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeGetSecretRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeGetSecretRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeGetSecretRequestValidationError is the validation error returned
+// by SignalNodeGetSecretRequest.Validate if the designated constraints aren't met.
+type SignalNodeGetSecretRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeGetSecretRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeGetSecretRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeGetSecretRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeGetSecretRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeGetSecretRequestValidationError) ErrorName() string {
+	return "SignalNodeGetSecretRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeGetSecretRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeGetSecretRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeGetSecretRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeGetSecretRequestValidationError{}
+
+// Validate checks the field values on SignalNodeGetSecretReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeGetSecretReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeGetSecretReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeGetSecretReplyMultiError, or nil if none found.
+func (m *SignalNodeGetSecretReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeGetSecretReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Secret
+
+	if len(errors) > 0 {
+		return SignalNodeGetSecretReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeGetSecretReplyMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeGetSecretReply.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeGetSecretReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeGetSecretReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeGetSecretReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeGetSecretReplyValidationError is the validation error returned by
+// SignalNodeGetSecretReply.Validate if the designated constraints aren't met.
+type SignalNodeGetSecretReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeGetSecretReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeGetSecretReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeGetSecretReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeGetSecretReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeGetSecretReplyValidationError) ErrorName() string {
+	return "SignalNodeGetSecretReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeGetSecretReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeGetSecretReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeGetSecretReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeGetSecretReplyValidationError{}
+
+// Validate checks the field values on SignalNodeUpdateSecretRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeUpdateSecretRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeUpdateSecretRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// SignalNodeUpdateSecretRequestMultiError, or nil if none found.
+func (m *SignalNodeUpdateSecretRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeUpdateSecretRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return SignalNodeUpdateSecretRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeUpdateSecretRequestMultiError is an error wrapping multiple
+// validation errors returned by SignalNodeUpdateSecretRequest.ValidateAll()
+// if the designated constraints aren't met.
+type SignalNodeUpdateSecretRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeUpdateSecretRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeUpdateSecretRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeUpdateSecretRequestValidationError is the validation error
+// returned by SignalNodeUpdateSecretRequest.Validate if the designated
+// constraints aren't met.
+type SignalNodeUpdateSecretRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeUpdateSecretRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeUpdateSecretRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeUpdateSecretRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeUpdateSecretRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeUpdateSecretRequestValidationError) ErrorName() string {
+	return "SignalNodeUpdateSecretRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeUpdateSecretRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeUpdateSecretRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeUpdateSecretRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeUpdateSecretRequestValidationError{}
+
+// Validate checks the field values on SignalNodeUpdateSecretReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeUpdateSecretReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeUpdateSecretReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeUpdateSecretReplyMultiError, or nil if none found.
+func (m *SignalNodeUpdateSecretReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeUpdateSecretReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Secret
+
+	if len(errors) > 0 {
+		return SignalNodeUpdateSecretReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeUpdateSecretReplyMultiError is an error wrapping multiple
+// validation errors returned by SignalNodeUpdateSecretReply.ValidateAll() if
+// the designated constraints aren't met.
+type SignalNodeUpdateSecretReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeUpdateSecretReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeUpdateSecretReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeUpdateSecretReplyValidationError is the validation error returned
+// by SignalNodeUpdateSecretReply.Validate if the designated constraints
+// aren't met.
+type SignalNodeUpdateSecretReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeUpdateSecretReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeUpdateSecretReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeUpdateSecretReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeUpdateSecretReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeUpdateSecretReplyValidationError) ErrorName() string {
+	return "SignalNodeUpdateSecretReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeUpdateSecretReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeUpdateSecretReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeUpdateSecretReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeUpdateSecretReplyValidationError{}
+
+// Validate checks the field values on SignalNodeListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeListRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeListRequestMultiError, or nil if none found.
+func (m *SignalNodeListRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeListRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Status
+
+	if len(errors) > 0 {
+		return SignalNodeListRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeListRequestMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeListRequest.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeListRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeListRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeListRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeListRequestValidationError is the validation error returned by
+// SignalNodeListRequest.Validate if the designated constraints aren't met.
+type SignalNodeListRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeListRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeListRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeListRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeListRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeListRequestValidationError) ErrorName() string {
+	return "SignalNodeListRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeListRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeListRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeListRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeListRequestValidationError{}
+
+// Validate checks the field values on SignalNodeListReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeListReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeListReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeListReplyMultiError, or nil if none found.
+func (m *SignalNodeListReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeListReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetNodes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SignalNodeListReplyValidationError{
+						field:  fmt.Sprintf("Nodes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SignalNodeListReplyValidationError{
+						field:  fmt.Sprintf("Nodes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SignalNodeListReplyValidationError{
+					field:  fmt.Sprintf("Nodes[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return SignalNodeListReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeListReplyMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeListReply.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeListReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeListReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeListReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeListReplyValidationError is the validation error returned by
+// SignalNodeListReply.Validate if the designated constraints aren't met.
+type SignalNodeListReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeListReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeListReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeListReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeListReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeListReplyValidationError) ErrorName() string {
+	return "SignalNodeListReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeListReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeListReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeListReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeListReplyValidationError{}
+
+// Validate checks the field values on SignalNodeNegotiateRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeNegotiateRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeNegotiateRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeNegotiateRequestMultiError, or nil if none found.
+func (m *SignalNodeNegotiateRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeNegotiateRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return SignalNodeNegotiateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeNegotiateRequestMultiError is an error wrapping multiple
+// validation errors returned by SignalNodeNegotiateRequest.ValidateAll() if
+// the designated constraints aren't met.
+type SignalNodeNegotiateRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeNegotiateRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeNegotiateRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeNegotiateRequestValidationError is the validation error returned
+// by SignalNodeNegotiateRequest.Validate if the designated constraints aren't met.
+type SignalNodeNegotiateRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeNegotiateRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeNegotiateRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeNegotiateRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeNegotiateRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeNegotiateRequestValidationError) ErrorName() string {
+	return "SignalNodeNegotiateRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeNegotiateRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeNegotiateRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeNegotiateRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeNegotiateRequestValidationError{}
+
+// Validate checks the field values on SignalNodeNegotiateReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeNegotiateReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeNegotiateReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeNegotiateReplyMultiError, or nil if none found.
+func (m *SignalNodeNegotiateReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeNegotiateReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetNode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SignalNodeNegotiateReplyValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SignalNodeNegotiateReplyValidationError{
+					field:  "Node",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNode()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SignalNodeNegotiateReplyValidationError{
+				field:  "Node",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetNodes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SignalNodeNegotiateReplyValidationError{
+						field:  fmt.Sprintf("Nodes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SignalNodeNegotiateReplyValidationError{
+						field:  fmt.Sprintf("Nodes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SignalNodeNegotiateReplyValidationError{
+					field:  fmt.Sprintf("Nodes[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return SignalNodeNegotiateReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeNegotiateReplyMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeNegotiateReply.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeNegotiateReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeNegotiateReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeNegotiateReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeNegotiateReplyValidationError is the validation error returned by
+// SignalNodeNegotiateReply.Validate if the designated constraints aren't met.
+type SignalNodeNegotiateReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeNegotiateReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeNegotiateReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeNegotiateReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeNegotiateReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeNegotiateReplyValidationError) ErrorName() string {
+	return "SignalNodeNegotiateReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeNegotiateReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeNegotiateReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeNegotiateReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeNegotiateReplyValidationError{}
 
 // Validate checks the field values on SignalNodeRegisterRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -443,6 +1688,211 @@ var _ interface {
 	ErrorName() string
 } = SignalNodeRegisterReplyValidationError{}
 
+// Validate checks the field values on SignalNodeUnregisterRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeUnregisterRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeUnregisterRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeUnregisterRequestMultiError, or nil if none found.
+func (m *SignalNodeUnregisterRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeUnregisterRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return SignalNodeUnregisterRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeUnregisterRequestMultiError is an error wrapping multiple
+// validation errors returned by SignalNodeUnregisterRequest.ValidateAll() if
+// the designated constraints aren't met.
+type SignalNodeUnregisterRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeUnregisterRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeUnregisterRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeUnregisterRequestValidationError is the validation error returned
+// by SignalNodeUnregisterRequest.Validate if the designated constraints
+// aren't met.
+type SignalNodeUnregisterRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeUnregisterRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeUnregisterRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeUnregisterRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeUnregisterRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeUnregisterRequestValidationError) ErrorName() string {
+	return "SignalNodeUnregisterRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeUnregisterRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeUnregisterRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeUnregisterRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeUnregisterRequestValidationError{}
+
+// Validate checks the field values on SignalNodeUnregisterReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeUnregisterReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeUnregisterReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeUnregisterReplyMultiError, or nil if none found.
+func (m *SignalNodeUnregisterReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeUnregisterReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return SignalNodeUnregisterReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeUnregisterReplyMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeUnregisterReply.ValidateAll() if the
+// designated constraints aren't met.
+type SignalNodeUnregisterReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeUnregisterReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeUnregisterReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeUnregisterReplyValidationError is the validation error returned by
+// SignalNodeUnregisterReply.Validate if the designated constraints aren't met.
+type SignalNodeUnregisterReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeUnregisterReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeUnregisterReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeUnregisterReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeUnregisterReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeUnregisterReplyValidationError) ErrorName() string {
+	return "SignalNodeUnregisterReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeUnregisterReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeUnregisterReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeUnregisterReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeUnregisterReplyValidationError{}
+
 // Validate checks the field values on SignalNodeOnlineRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -464,6 +1914,10 @@ func (m *SignalNodeOnlineRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for UserId
+
+	// no validation rules for SessionId
 
 	if len(errors) > 0 {
 		return SignalNodeOnlineRequestMultiError(errors)
@@ -668,6 +2122,10 @@ func (m *SignalNodeOfflineRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for UserId
+
+	// no validation rules for SessionId
 
 	if len(errors) > 0 {
 		return SignalNodeOfflineRequestMultiError(errors)

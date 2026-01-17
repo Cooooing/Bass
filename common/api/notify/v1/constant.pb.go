@@ -223,7 +223,7 @@ var File_notify_v1_constant_proto protoreflect.FileDescriptor
 
 const file_notify_v1_constant_proto_rawDesc = "" +
 	"\n" +
-	"\x18notify/v1/constant.proto\x12\x14common.api.common.v1*P\n" +
+	"\x18notify/v1/constant.proto\x12\x14common.api.notify.v1*P\n" +
 	"\x12NotificationStatus\x12\x1c\n" +
 	"\x18NotificationStatusNormal\x10\x00\x12\x1c\n" +
 	"\x18NotificationStatusCancel\x10\x01*o\n" +
@@ -268,9 +268,9 @@ func file_notify_v1_constant_proto_rawDescGZIP() []byte {
 
 var file_notify_v1_constant_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_notify_v1_constant_proto_goTypes = []any{
-	(NotificationStatus)(0),  // 0: common.api.common.v1.NotificationStatus
-	(NotificationChannel)(0), // 1: common.api.common.v1.NotificationChannel
-	(NotificationType)(0),    // 2: common.api.common.v1.NotificationType
+	(NotificationStatus)(0),  // 0: common.api.notify.v1.NotificationStatus
+	(NotificationChannel)(0), // 1: common.api.notify.v1.NotificationChannel
+	(NotificationType)(0),    // 2: common.api.notify.v1.NotificationType
 }
 var file_notify_v1_constant_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

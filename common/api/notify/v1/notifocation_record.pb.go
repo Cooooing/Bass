@@ -422,7 +422,7 @@ var File_notify_v1_notifocation_record_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"\n" +
-	"#notify/v1/notifocation_record.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a!notify/v1/notifocation_mete.proto\"\xf2\x02\n" +
+	"#notify/v1/notifocation_record.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a!notify/v1/notifocation_mete.proto\"\xf4\x02\n" +
 	"\x12NotificationRecord\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -432,8 +432,8 @@ const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"\x0fnotification_id\x18\x04 \x01(\x03R\x0enotificationId\x12\x1f\n" +
 	"\vreceiver_id\x18\x05 \x01(\x03R\n" +
 	"receiverId\x127\n" +
-	"\tread_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\breadTime\x12Q\n" +
-	"\x11notification_meta\x18\x14 \x01(\v2$.common.api.user.v1.NotificationMetaR\x10notificationMeta\"\xd6\x01\n" +
+	"\tread_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\breadTime\x12S\n" +
+	"\x11notification_meta\x18\x14 \x01(\v2&.common.api.notify.v1.NotificationMetaR\x10notificationMeta\"\xd6\x01\n" +
 	"\x1dNotificationRecordQueryParams\x12\x10\n" +
 	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x14\n" +
 	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x120\n" +
@@ -442,22 +442,22 @@ const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12\x1b\n" +
 	"\x06status\x18\b \x01(\x05H\x01R\x06status\x88\x01\x01B\x14\n" +
 	"\x12_notification_typeB\t\n" +
-	"\a_status\"\x9f\x01\n" +
+	"\a_status\"\xa1\x01\n" +
 	"\x1dNotificationRecordPageRequest\x125\n" +
-	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12G\n" +
-	"\x05query\x18\x02 \x01(\v21.common.api.user.v1.NotificationRecordQueryParamsR\x05query\"\x8e\x01\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12I\n" +
+	"\x05query\x18\x02 \x01(\v23.common.api.notify.v1.NotificationRecordQueryParamsR\x05query\"\x90\x01\n" +
 	"\x1bNotificationRecordPageReply\x123\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
-	"\x04rows\x18\x02 \x03(\v2&.common.api.user.v1.NotificationRecordR\x04rows\"\xb2\x01\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12<\n" +
+	"\x04rows\x18\x02 \x03(\v2(.common.api.notify.v1.NotificationRecordR\x04rows\"\xb2\x01\n" +
 	"\x1dNotificationRecordReadRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12G\n" +
 	"\x0fread_time_range\x18\x02 \x01(\v2\x1f.common.api.common.v1.TimeRangeR\rreadTimeRange\x126\n" +
 	"\x17notification_record_ids\x18\x03 \x03(\x03R\x15notificationRecordIds\"3\n" +
 	"\x1bNotificationRecordReadReply\x12\x14\n" +
-	"\x05count\x18\x01 \x01(\x05R\x05count2\xcb\x02\n" +
-	"\x1fNotifyNotificationRecordService\x12\x92\x01\n" +
-	"\x04Page\x121.common.api.user.v1.NotificationRecordPageRequest\x1a/.common.api.user.v1.NotificationRecordPageReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/page\x12\x92\x01\n" +
-	"\x04Read\x121.common.api.user.v1.NotificationRecordReadRequest\x1a/.common.api.user.v1.NotificationRecordReadReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/readB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x05count\x18\x01 \x01(\x05R\x05count2\xd3\x02\n" +
+	"\x1fNotifyNotificationRecordService\x12\x96\x01\n" +
+	"\x04Page\x123.common.api.notify.v1.NotificationRecordPageRequest\x1a1.common.api.notify.v1.NotificationRecordPageReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/page\x12\x96\x01\n" +
+	"\x04Read\x123.common.api.notify.v1.NotificationRecordReadRequest\x1a1.common.api.notify.v1.NotificationRecordReadReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/readB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_record_proto_rawDescOnce sync.Once
@@ -473,32 +473,32 @@ func file_notify_v1_notifocation_record_proto_rawDescGZIP() []byte {
 
 var file_notify_v1_notifocation_record_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_notify_v1_notifocation_record_proto_goTypes = []any{
-	(*NotificationRecord)(nil),            // 0: common.api.user.v1.NotificationRecord
-	(*NotificationRecordQueryParams)(nil), // 1: common.api.user.v1.NotificationRecordQueryParams
-	(*NotificationRecordPageRequest)(nil), // 2: common.api.user.v1.NotificationRecordPageRequest
-	(*NotificationRecordPageReply)(nil),   // 3: common.api.user.v1.NotificationRecordPageReply
-	(*NotificationRecordReadRequest)(nil), // 4: common.api.user.v1.NotificationRecordReadRequest
-	(*NotificationRecordReadReply)(nil),   // 5: common.api.user.v1.NotificationRecordReadReply
+	(*NotificationRecord)(nil),            // 0: common.api.notify.v1.NotificationRecord
+	(*NotificationRecordQueryParams)(nil), // 1: common.api.notify.v1.NotificationRecordQueryParams
+	(*NotificationRecordPageRequest)(nil), // 2: common.api.notify.v1.NotificationRecordPageRequest
+	(*NotificationRecordPageReply)(nil),   // 3: common.api.notify.v1.NotificationRecordPageReply
+	(*NotificationRecordReadRequest)(nil), // 4: common.api.notify.v1.NotificationRecordReadRequest
+	(*NotificationRecordReadReply)(nil),   // 5: common.api.notify.v1.NotificationRecordReadReply
 	(*timestamppb.Timestamp)(nil),         // 6: google.protobuf.Timestamp
-	(*NotificationMeta)(nil),              // 7: common.api.user.v1.NotificationMeta
+	(*NotificationMeta)(nil),              // 7: common.api.notify.v1.NotificationMeta
 	(*v1.PageRequest)(nil),                // 8: common.api.common.v1.PageRequest
 	(*v1.PageReply)(nil),                  // 9: common.api.common.v1.PageReply
 	(*v1.TimeRange)(nil),                  // 10: common.api.common.v1.TimeRange
 }
 var file_notify_v1_notifocation_record_proto_depIdxs = []int32{
-	6,  // 0: common.api.user.v1.NotificationRecord.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 1: common.api.user.v1.NotificationRecord.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 2: common.api.user.v1.NotificationRecord.read_time:type_name -> google.protobuf.Timestamp
-	7,  // 3: common.api.user.v1.NotificationRecord.notification_meta:type_name -> common.api.user.v1.NotificationMeta
-	8,  // 4: common.api.user.v1.NotificationRecordPageRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 5: common.api.user.v1.NotificationRecordPageRequest.query:type_name -> common.api.user.v1.NotificationRecordQueryParams
-	9,  // 6: common.api.user.v1.NotificationRecordPageReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 7: common.api.user.v1.NotificationRecordPageReply.rows:type_name -> common.api.user.v1.NotificationRecord
-	10, // 8: common.api.user.v1.NotificationRecordReadRequest.read_time_range:type_name -> common.api.common.v1.TimeRange
-	2,  // 9: common.api.user.v1.NotifyNotificationRecordService.Page:input_type -> common.api.user.v1.NotificationRecordPageRequest
-	4,  // 10: common.api.user.v1.NotifyNotificationRecordService.Read:input_type -> common.api.user.v1.NotificationRecordReadRequest
-	3,  // 11: common.api.user.v1.NotifyNotificationRecordService.Page:output_type -> common.api.user.v1.NotificationRecordPageReply
-	5,  // 12: common.api.user.v1.NotifyNotificationRecordService.Read:output_type -> common.api.user.v1.NotificationRecordReadReply
+	6,  // 0: common.api.notify.v1.NotificationRecord.created_at:type_name -> google.protobuf.Timestamp
+	6,  // 1: common.api.notify.v1.NotificationRecord.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 2: common.api.notify.v1.NotificationRecord.read_time:type_name -> google.protobuf.Timestamp
+	7,  // 3: common.api.notify.v1.NotificationRecord.notification_meta:type_name -> common.api.notify.v1.NotificationMeta
+	8,  // 4: common.api.notify.v1.NotificationRecordPageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 5: common.api.notify.v1.NotificationRecordPageRequest.query:type_name -> common.api.notify.v1.NotificationRecordQueryParams
+	9,  // 6: common.api.notify.v1.NotificationRecordPageReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 7: common.api.notify.v1.NotificationRecordPageReply.rows:type_name -> common.api.notify.v1.NotificationRecord
+	10, // 8: common.api.notify.v1.NotificationRecordReadRequest.read_time_range:type_name -> common.api.common.v1.TimeRange
+	2,  // 9: common.api.notify.v1.NotifyNotificationRecordService.Page:input_type -> common.api.notify.v1.NotificationRecordPageRequest
+	4,  // 10: common.api.notify.v1.NotifyNotificationRecordService.Read:input_type -> common.api.notify.v1.NotificationRecordReadRequest
+	3,  // 11: common.api.notify.v1.NotifyNotificationRecordService.Page:output_type -> common.api.notify.v1.NotificationRecordPageReply
+	5,  // 12: common.api.notify.v1.NotifyNotificationRecordService.Read:output_type -> common.api.notify.v1.NotificationRecordReadReply
 	11, // [11:13] is the sub-list for method output_type
 	9,  // [9:11] is the sub-list for method input_type
 	9,  // [9:9] is the sub-list for extension type_name

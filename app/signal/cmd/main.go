@@ -3,6 +3,7 @@ package main
 import (
 	"common/pkg"
 	"common/pkg/client"
+	"common/pkg/constant"
 	"context"
 	"flag"
 	"fmt"
@@ -108,10 +109,7 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 		return nil, nil, cleanup, err
 	}
 	var c *conf.Bootstrap
-	if bc.Mode == "dev" {
-		c, err := loadLocalConfig(bc)
-		return c, bc, cleanup, err
-	} else {
+	if bc.Mode != constant.Dev {
 		c, cli, err := loadEtcdConfig(bc)
 		if err != nil {
 			panic(err)
@@ -123,6 +121,9 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 			}
 		}
 		return c, bc, cleanup, nil
+	} else {
+		c, err := loadLocalConfig(bc)
+		return c, bc, cleanup, err
 	}
 
 	return c, bc, cleanup, nil

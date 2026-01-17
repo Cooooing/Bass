@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NotifyNotificationTemplateService_Page_FullMethodName   = "/common.api.user.v1.NotifyNotificationTemplateService/Page"
-	NotifyNotificationTemplateService_Add_FullMethodName    = "/common.api.user.v1.NotifyNotificationTemplateService/Add"
-	NotifyNotificationTemplateService_Update_FullMethodName = "/common.api.user.v1.NotifyNotificationTemplateService/Update"
+	NotifyNotificationTemplateService_Page_FullMethodName   = "/common.api.notify.v1.NotifyNotificationTemplateService/Page"
+	NotifyNotificationTemplateService_Add_FullMethodName    = "/common.api.notify.v1.NotifyNotificationTemplateService/Add"
+	NotifyNotificationTemplateService_Update_FullMethodName = "/common.api.notify.v1.NotifyNotificationTemplateService/Update"
 )
 
 // NotifyNotificationTemplateServiceClient is the client API for NotifyNotificationTemplateService service.
@@ -187,7 +187,7 @@ func _NotifyNotificationTemplateService_Update_Handler(srv interface{}, ctx cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NotifyNotificationTemplateService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "common.api.user.v1.NotifyNotificationTemplateService",
+	ServiceName: "common.api.notify.v1.NotifyNotificationTemplateService",
 	HandlerType: (*NotifyNotificationTemplateServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

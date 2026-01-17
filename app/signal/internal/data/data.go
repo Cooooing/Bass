@@ -23,6 +23,8 @@ var DataProviderSet = wire.NewSet(
 	NewRabbitMQClient,
 
 	util.NewTokenRepo,
+
+	NewNodeRepo,
 )
 
 type BaseRepo struct {

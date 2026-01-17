@@ -5,18 +5,21 @@ import (
 	"fmt"
 )
 
-var Authentication = "Authorization" // token 请求头名称
-
 // Redis key
 var (
-	TokenEmailCode          = "TokenVerifyCode::{%s}::{%s}"
-	Token                   = "Token::{%s}"
-	NotificationTemplateMap = "NotificationTemplateMap"
-	TwoFactorAuthentication = "TwoFactorAuthentication::{%s}"
+	RequestNonce            = "RequestNonce::{%s}"            // 请求防重放
+	TokenVerifyCode         = "TokenVerifyCode::{%s}::{%s}"   // 验证码 Token
+	Token                   = "Token::{%s}"                   // Token
+	NotificationTemplateMap = "NotificationTemplateMap"       // 通知模板
+	TwoFactorAuthentication = "TwoFactorAuthentication::{%s}" // 2FA 验证码，首次启用 2FA 时使用
 )
 
+func GetKeyRequestNonce(nonce string) string {
+	return fmt.Sprintf(RequestNonce, nonce)
+}
+
 func GetKeyTokenVerityCode(verifyCodeType VerifyCodeType, account string) string {
-	return fmt.Sprintf(TokenEmailCode, verifyCodeType, account)
+	return fmt.Sprintf(TokenVerifyCode, verifyCodeType, account)
 }
 
 func GetKeyToken(token string) string {
@@ -45,6 +48,6 @@ func (v VerifyCodeType) String() string {
 }
 
 const (
-	VerifyCodeTypeRegisterEmail VerifyCodeType = "register_email"
-	VerifyCodeTypeRegisterPhone VerifyCodeType = "register_phone"
+	VerifyCodeTypeRegisterEmail VerifyCodeType = "RegisterEmail"
+	VerifyCodeTypeRegisterPhone VerifyCodeType = "RegisterPhone"
 )

@@ -109,7 +109,7 @@ service ContentArticleService {
       body: "*"
     };
   }
-  
+
   // 打赏文章
   rpc Reward (RewardArticleRequest) returns (RewardArticleReply) {
     option (google.api.http) = {

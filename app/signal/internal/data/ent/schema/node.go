@@ -31,6 +31,7 @@ func (Node) Fields() []ent.Field {
 		field.String("secret").Comment("节点密钥"),
 		field.String("callback_url").Comment("节点回调公网地址，如 https://example.com/api"),
 		field.Int32("status").Comment("节点状态: 1-正常, 2-禁用").Default(1),
+		field.Float("weight").Comment("节点权重").Default(1.0),
 	}
 	fields = append(fields, pkg.TimeAuditFields()...)
 	return fields

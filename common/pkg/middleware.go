@@ -9,7 +9,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -85,32 +87,64 @@ func HttpErrorEncoder(w http.ResponseWriter, r *http.Request, err error) {
 	_ = json.NewEncoder(w).Encode(res)
 }
 
+func TimestampMiddleware(mode string) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			if mode == constant.Dev || true {
+				return handler(ctx, req)
+			}
+			// 毫秒级时间戳
+			timestampStr := getHeader(ctx, constant.Timestamp)
+			if timestampStr == "" {
+				return nil, v1.ErrorUnauthorized("timestamp is required")
+			}
+			timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
+			if err != nil {
+				return nil, v1.ErrorUnauthorized("invalid timestamp format")
+			}
+
+			diff := time.Now().Sub(time.UnixMilli(timestamp))
+			if diff < 0 {
+				diff = -diff
+			}
+
+			if diff > 10*time.Second {
+				return nil, v1.ErrorUnauthorized("timestamp is expired or clock unsynced")
+			}
+			return handler(ctx, req)
+		}
+	}
+}
+
+func NonceMiddleware(tokenRepo *util.TokenRepo, mode string) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			// Todo nonce 是否需要携带更多信息
+			if mode == constant.Dev || true {
+				return handler(ctx, req)
+			}
+			nonce := getHeader(ctx, constant.Nonce)
+			if nonce == "" {
+				return nil, v1.ErrorUnauthorized("nonce is required")
+			}
+			if len(nonce) > 256 {
+				return nil, v1.ErrorUnauthorized("nonce is too long")
+			}
+			if ok, err := tokenRepo.SaveRequestNonce(ctx, constant.GetKeyRequestNonce(nonce), 15*time.Second); err != nil || !ok {
+				return nil, v1.ErrorUnauthorized("nonce is invalid")
+			}
+			return handler(ctx, req)
+		}
+	}
+}
+
 // AuthMiddleware 返回一个 Kratos 中间件，用于认证
 func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 
 			const bearerPrefix = "Bearer "
-			var token string
-			// gRPC
-			if md, ok := metadata.FromIncomingContext(ctx); ok {
-				if vals := md.Get(strings.ToLower(constant.Authentication)); len(vals) > 0 {
-					token = vals[0]
-				}
-			}
-
-			// HTTP
-			if tr, ok := transport.FromServerContext(ctx); ok {
-				if h := tr.RequestHeader(); h != nil {
-					if s := h.Get(constant.Authentication); s != "" {
-						token = s
-					}
-				}
-			}
-
-			if tr, ok := transport.FromServerContext(ctx); ok {
-				token = tr.RequestHeader().Get(constant.Authentication)
-			}
+			token := getHeader(ctx, constant.Authentication)
 
 			if !strings.HasPrefix(token, bearerPrefix) {
 				return handler(ctx, req)
@@ -131,4 +165,28 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			return handler(ctx, req)
 		}
 	}
+}
+
+func getHeader(ctx context.Context, key string) string {
+	var v string
+	// gRPC
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if vals := md.Get(strings.ToLower(key)); len(vals) > 0 {
+			v = vals[0]
+		}
+	}
+
+	// HTTP
+	if tr, ok := transport.FromServerContext(ctx); ok {
+		if h := tr.RequestHeader(); h != nil {
+			if s := h.Get(key); s != "" {
+				v = s
+			}
+		}
+	}
+
+	if tr, ok := transport.FromServerContext(ctx); ok {
+		v = tr.RequestHeader().Get(key)
+	}
+	return v
 }

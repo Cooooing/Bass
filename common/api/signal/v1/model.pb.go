@@ -11,7 +11,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -26,7 +26,23 @@ const (
 
 // node 节点
 type Node struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 创建时间
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// 创建时间
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// 节点id
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 节点名称
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// 节点描述
+	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	// 节点回调公网地址
+	CallbackUrl string `protobuf:"bytes,5,opt,name=callback_url,json=callbackUrl,proto3" json:"callback_url,omitempty"`
+	// 状态
+	Status int32 `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
+	// 节点拥有者 ID
+	OwnerId       *int64 `protobuf:"varint,7,opt,name=owner_id,json=ownerId,proto3,oneof" json:"owner_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,6 +75,62 @@ func (x *Node) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Node.ProtoReflect.Descriptor instead.
 func (*Node) Descriptor() ([]byte, []int) {
 	return file_signal_v1_model_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Node) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Node) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *Node) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Node) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Node) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *Node) GetCallbackUrl() string {
+	if x != nil {
+		return x.CallbackUrl
+	}
+	return ""
+}
+
+func (x *Node) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *Node) GetOwnerId() int64 {
+	if x != nil && x.OwnerId != nil {
+		return *x.OwnerId
+	}
+	return 0
 }
 
 // Websocket 消息
@@ -118,8 +190,20 @@ var File_signal_v1_model_proto protoreflect.FileDescriptor
 
 const file_signal_v1_model_proto_rawDesc = "" +
 	"\n" +
-	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12user/v1/user.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x06\n" +
-	"\x04Node\"s\n" +
+	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12user/v1/user.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xc1\x02\n" +
+	"\x04Node\x12:\n" +
+	"\n" +
+	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
+	"\n" +
+	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12!\n" +
+	"\fcallback_url\x18\x05 \x01(\tR\vcallbackUrl\x12\x16\n" +
+	"\x06status\x18\x06 \x01(\x05R\x06status\x12\x1e\n" +
+	"\bowner_id\x18\a \x01(\x03H\x01R\aownerId\x88\x01\x01B\x0e\n" +
+	"\f_descriptionB\v\n" +
+	"\t_owner_id\"s\n" +
 	"\aMessage\x125\n" +
 	"\x04type\x18\x01 \x01(\x0e2!.common.api.signal.v1.MessageTypeR\x04type\x121\n" +
 	"\apayload\x18\x02 \x01(\v2\x17.google.protobuf.StructR\apayloadB\x19Z\x17common/api/signal/v1;v1b\x06proto3"
@@ -138,19 +222,22 @@ func file_signal_v1_model_proto_rawDescGZIP() []byte {
 
 var file_signal_v1_model_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_signal_v1_model_proto_goTypes = []any{
-	(*Node)(nil),            // 0: common.api.signal.v1.Node
-	(*Message)(nil),         // 1: common.api.signal.v1.Message
-	(MessageType)(0),        // 2: common.api.signal.v1.MessageType
-	(*structpb.Struct)(nil), // 3: google.protobuf.Struct
+	(*Node)(nil),                  // 0: common.api.signal.v1.Node
+	(*Message)(nil),               // 1: common.api.signal.v1.Message
+	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(MessageType)(0),              // 3: common.api.signal.v1.MessageType
+	(*structpb.Struct)(nil),       // 4: google.protobuf.Struct
 }
 var file_signal_v1_model_proto_depIdxs = []int32{
-	2, // 0: common.api.signal.v1.Message.type:type_name -> common.api.signal.v1.MessageType
-	3, // 1: common.api.signal.v1.Message.payload:type_name -> google.protobuf.Struct
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	2, // 0: common.api.signal.v1.Node.created_at:type_name -> google.protobuf.Timestamp
+	2, // 1: common.api.signal.v1.Node.updated_at:type_name -> google.protobuf.Timestamp
+	3, // 2: common.api.signal.v1.Message.type:type_name -> common.api.signal.v1.MessageType
+	4, // 3: common.api.signal.v1.Message.payload:type_name -> google.protobuf.Struct
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_signal_v1_model_proto_init() }
@@ -159,6 +246,7 @@ func file_signal_v1_model_proto_init() {
 		return
 	}
 	file_signal_v1_constant_proto_init()
+	file_signal_v1_model_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NotifyNotificationMetaService_Page_FullMethodName = "/common.api.user.v1.NotifyNotificationMetaService/Page"
+	NotifyNotificationMetaService_Page_FullMethodName = "/common.api.notify.v1.NotifyNotificationMetaService/Page"
 )
 
 // NotifyNotificationMetaServiceClient is the client API for NotifyNotificationMetaService service.
@@ -115,7 +115,7 @@ func _NotifyNotificationMetaService_Page_Handler(srv interface{}, ctx context.Co
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NotifyNotificationMetaService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "common.api.user.v1.NotifyNotificationMetaService",
+	ServiceName: "common.api.notify.v1.NotifyNotificationMetaService",
 	HandlerType: (*NotifyNotificationMetaServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

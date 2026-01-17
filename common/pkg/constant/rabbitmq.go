@@ -166,12 +166,12 @@ var QueueMap = map[QueueName]QueueDeclare{
 // QueueBindMap 队列绑定配置
 var QueueBindMap = map[QueueBindName]QueueBind{
 	// User模块
-	//QueueBindName("bind.queue.user.notify"): {GetName: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
+	// QueueBindName("bind.queue.user.notify"): {GetName: QueueUser, Key: RoutingKey("user.#"), Exchange: ExchangeUser},
 
 	QueueBindName("bind.dlx.queue.user->user"): {Name: QueueUserDlx, Key: RoutingKeyUserDlx, Exchange: ExchangeUserDlx},
 
 	// Content模块
-	//QueueBindName("bind.queue.content"): {GetName: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
+	// QueueBindName("bind.queue.content"): {GetName: QueueContent, Key: RoutingKey("content.#"), Exchange: ExchangeContent},
 
 	QueueBindName("bind.dlx.queue.content->content"): {Name: QueueContentDlx, Key: RoutingKeyContentDlx, Exchange: ExchangeContentDlx},
 
@@ -182,7 +182,7 @@ var QueueBindMap = map[QueueBindName]QueueBind{
 	QueueBindName("bind.dlx.queue.notify->notify"): {Name: QueueNotifyDlx, Key: RoutingKeyNotifyDlx, Exchange: ExchangeNotifyDlx},
 
 	// Economy模块
-	//QueueBindName("bind.queue.economy"): {GetName: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
+	// QueueBindName("bind.queue.economy"): {GetName: QueueEconomy, Key: RoutingKey("economy.#"), Exchange: ExchangeEconomy},
 
 	QueueBindName("bind.dlx.queue.economy->economy"): {Name: QueueEconomyDlx, Key: RoutingKeyEconomyDlx, Exchange: ExchangeEconomyDlx},
 }

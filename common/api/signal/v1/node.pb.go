@@ -28,7 +28,9 @@ const (
 )
 
 type SignalNodeSaveRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点信息
+	Node          *Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -63,8 +65,17 @@ func (*SignalNodeSaveRequest) Descriptor() ([]byte, []int) {
 	return file_signal_v1_node_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *SignalNodeSaveRequest) GetNode() *Node {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
 type SignalNodeSaveReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点信息
+	Node          *Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -99,6 +110,463 @@ func (*SignalNodeSaveReply) Descriptor() ([]byte, []int) {
 	return file_signal_v1_node_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *SignalNodeSaveReply) GetNode() *Node {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
+type SignalNodeUpdateRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点信息
+	Node          *Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeUpdateRequest) Reset() {
+	*x = SignalNodeUpdateRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeUpdateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeUpdateRequest) ProtoMessage() {}
+
+func (x *SignalNodeUpdateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeUpdateRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeUpdateRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SignalNodeUpdateRequest) GetNode() *Node {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
+type SignalNodeUpdateReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点信息
+	Node          *Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeUpdateReply) Reset() {
+	*x = SignalNodeUpdateReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeUpdateReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeUpdateReply) ProtoMessage() {}
+
+func (x *SignalNodeUpdateReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeUpdateReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeUpdateReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SignalNodeUpdateReply) GetNode() *Node {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
+type SignalNodeGetSecretRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点 ID
+	Id            int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeGetSecretRequest) Reset() {
+	*x = SignalNodeGetSecretRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeGetSecretRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeGetSecretRequest) ProtoMessage() {}
+
+func (x *SignalNodeGetSecretRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeGetSecretRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeGetSecretRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SignalNodeGetSecretRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type SignalNodeGetSecretReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 密钥
+	Secret        string `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeGetSecretReply) Reset() {
+	*x = SignalNodeGetSecretReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeGetSecretReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeGetSecretReply) ProtoMessage() {}
+
+func (x *SignalNodeGetSecretReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeGetSecretReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeGetSecretReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SignalNodeGetSecretReply) GetSecret() string {
+	if x != nil {
+		return x.Secret
+	}
+	return ""
+}
+
+type SignalNodeUpdateSecretRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点 ID
+	Id            int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeUpdateSecretRequest) Reset() {
+	*x = SignalNodeUpdateSecretRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeUpdateSecretRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeUpdateSecretRequest) ProtoMessage() {}
+
+func (x *SignalNodeUpdateSecretRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeUpdateSecretRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeUpdateSecretRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SignalNodeUpdateSecretRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type SignalNodeUpdateSecretReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 密钥
+	Secret        string `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeUpdateSecretReply) Reset() {
+	*x = SignalNodeUpdateSecretReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeUpdateSecretReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeUpdateSecretReply) ProtoMessage() {}
+
+func (x *SignalNodeUpdateSecretReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeUpdateSecretReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeUpdateSecretReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SignalNodeUpdateSecretReply) GetSecret() string {
+	if x != nil {
+		return x.Secret
+	}
+	return ""
+}
+
+type SignalNodeListRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点状态
+	Status        NodeStatus `protobuf:"varint,1,opt,name=status,proto3,enum=common.api.signal.v1.NodeStatus" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeListRequest) Reset() {
+	*x = SignalNodeListRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeListRequest) ProtoMessage() {}
+
+func (x *SignalNodeListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeListRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeListRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SignalNodeListRequest) GetStatus() NodeStatus {
+	if x != nil {
+		return x.Status
+	}
+	return NodeStatus_NODE_STATUS_UNKNOWN
+}
+
+type SignalNodeListReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 节点列表
+	Nodes         []*Node `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeListReply) Reset() {
+	*x = SignalNodeListReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeListReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeListReply) ProtoMessage() {}
+
+func (x *SignalNodeListReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeListReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeListReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SignalNodeListReply) GetNodes() []*Node {
+	if x != nil {
+		return x.Nodes
+	}
+	return nil
+}
+
+type SignalNodeNegotiateRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeNegotiateRequest) Reset() {
+	*x = SignalNodeNegotiateRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeNegotiateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeNegotiateRequest) ProtoMessage() {}
+
+func (x *SignalNodeNegotiateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeNegotiateRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeNegotiateRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{10}
+}
+
+type SignalNodeNegotiateReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 推荐节点信息
+	Node *Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
+	// 节点列表
+	Nodes         []*Node `protobuf:"bytes,2,rep,name=nodes,proto3" json:"nodes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeNegotiateReply) Reset() {
+	*x = SignalNodeNegotiateReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeNegotiateReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeNegotiateReply) ProtoMessage() {}
+
+func (x *SignalNodeNegotiateReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeNegotiateReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeNegotiateReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SignalNodeNegotiateReply) GetNode() *Node {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
+func (x *SignalNodeNegotiateReply) GetNodes() []*Node {
+	if x != nil {
+		return x.Nodes
+	}
+	return nil
+}
+
 type SignalNodeRegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -107,7 +575,7 @@ type SignalNodeRegisterRequest struct {
 
 func (x *SignalNodeRegisterRequest) Reset() {
 	*x = SignalNodeRegisterRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[2]
+	mi := &file_signal_v1_node_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -119,7 +587,7 @@ func (x *SignalNodeRegisterRequest) String() string {
 func (*SignalNodeRegisterRequest) ProtoMessage() {}
 
 func (x *SignalNodeRegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[2]
+	mi := &file_signal_v1_node_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -132,7 +600,7 @@ func (x *SignalNodeRegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeRegisterRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeRegisterRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{2}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{12}
 }
 
 type SignalNodeRegisterReply struct {
@@ -143,7 +611,7 @@ type SignalNodeRegisterReply struct {
 
 func (x *SignalNodeRegisterReply) Reset() {
 	*x = SignalNodeRegisterReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[3]
+	mi := &file_signal_v1_node_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -155,7 +623,7 @@ func (x *SignalNodeRegisterReply) String() string {
 func (*SignalNodeRegisterReply) ProtoMessage() {}
 
 func (x *SignalNodeRegisterReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[3]
+	mi := &file_signal_v1_node_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,18 +636,94 @@ func (x *SignalNodeRegisterReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeRegisterReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeRegisterReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{3}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{13}
+}
+
+type SignalNodeUnregisterRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeUnregisterRequest) Reset() {
+	*x = SignalNodeUnregisterRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeUnregisterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeUnregisterRequest) ProtoMessage() {}
+
+func (x *SignalNodeUnregisterRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeUnregisterRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeUnregisterRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{14}
+}
+
+type SignalNodeUnregisterReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeUnregisterReply) Reset() {
+	*x = SignalNodeUnregisterReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeUnregisterReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeUnregisterReply) ProtoMessage() {}
+
+func (x *SignalNodeUnregisterReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeUnregisterReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeUnregisterReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{15}
 }
 
 type SignalNodeOnlineRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户 ID
+	UserId int64 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// session ID
+	SessionId     string `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SignalNodeOnlineRequest) Reset() {
 	*x = SignalNodeOnlineRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[4]
+	mi := &file_signal_v1_node_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -191,7 +735,7 @@ func (x *SignalNodeOnlineRequest) String() string {
 func (*SignalNodeOnlineRequest) ProtoMessage() {}
 
 func (x *SignalNodeOnlineRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[4]
+	mi := &file_signal_v1_node_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -204,7 +748,21 @@ func (x *SignalNodeOnlineRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{4}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *SignalNodeOnlineRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *SignalNodeOnlineRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SignalNodeOnlineReply struct {
@@ -215,7 +773,7 @@ type SignalNodeOnlineReply struct {
 
 func (x *SignalNodeOnlineReply) Reset() {
 	*x = SignalNodeOnlineReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[5]
+	mi := &file_signal_v1_node_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -227,7 +785,7 @@ func (x *SignalNodeOnlineReply) String() string {
 func (*SignalNodeOnlineReply) ProtoMessage() {}
 
 func (x *SignalNodeOnlineReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[5]
+	mi := &file_signal_v1_node_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -240,18 +798,22 @@ func (x *SignalNodeOnlineReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{5}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{17}
 }
 
 type SignalNodeOfflineRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 用户 ID
+	UserId int64 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// session ID
+	SessionId     string `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SignalNodeOfflineRequest) Reset() {
 	*x = SignalNodeOfflineRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[6]
+	mi := &file_signal_v1_node_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -263,7 +825,7 @@ func (x *SignalNodeOfflineRequest) String() string {
 func (*SignalNodeOfflineRequest) ProtoMessage() {}
 
 func (x *SignalNodeOfflineRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[6]
+	mi := &file_signal_v1_node_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +838,21 @@ func (x *SignalNodeOfflineRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOfflineRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeOfflineRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{6}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *SignalNodeOfflineRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *SignalNodeOfflineRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SignalNodeOfflineReply struct {
@@ -287,7 +863,7 @@ type SignalNodeOfflineReply struct {
 
 func (x *SignalNodeOfflineReply) Reset() {
 	*x = SignalNodeOfflineReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[7]
+	mi := &file_signal_v1_node_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -299,7 +875,7 @@ func (x *SignalNodeOfflineReply) String() string {
 func (*SignalNodeOfflineReply) ProtoMessage() {}
 
 func (x *SignalNodeOfflineReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[7]
+	mi := &file_signal_v1_node_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -312,7 +888,7 @@ func (x *SignalNodeOfflineReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOfflineReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeOfflineReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{7}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{19}
 }
 
 type SignalNodeOnlineListRequest struct {
@@ -323,7 +899,7 @@ type SignalNodeOnlineListRequest struct {
 
 func (x *SignalNodeOnlineListRequest) Reset() {
 	*x = SignalNodeOnlineListRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[8]
+	mi := &file_signal_v1_node_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -335,7 +911,7 @@ func (x *SignalNodeOnlineListRequest) String() string {
 func (*SignalNodeOnlineListRequest) ProtoMessage() {}
 
 func (x *SignalNodeOnlineListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[8]
+	mi := &file_signal_v1_node_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -348,7 +924,7 @@ func (x *SignalNodeOnlineListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineListRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineListRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{8}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{20}
 }
 
 type SignalNodeOnlineListReply struct {
@@ -359,7 +935,7 @@ type SignalNodeOnlineListReply struct {
 
 func (x *SignalNodeOnlineListReply) Reset() {
 	*x = SignalNodeOnlineListReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[9]
+	mi := &file_signal_v1_node_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -371,7 +947,7 @@ func (x *SignalNodeOnlineListReply) String() string {
 func (*SignalNodeOnlineListReply) ProtoMessage() {}
 
 func (x *SignalNodeOnlineListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[9]
+	mi := &file_signal_v1_node_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -384,27 +960,64 @@ func (x *SignalNodeOnlineListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineListReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineListReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{9}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{21}
 }
 
 var File_signal_v1_node_proto protoreflect.FileDescriptor
 
 const file_signal_v1_node_proto_rawDesc = "" +
 	"\n" +
-	"\x14signal/v1/node.proto\x12\x14common.api.signal.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\x1a\x15signal/v1/model.proto\x1a\x18signal/v1/constant.proto\"\x17\n" +
-	"\x15SignalNodeSaveRequest\"\x15\n" +
-	"\x13SignalNodeSaveReply\"\x1b\n" +
+	"\x14signal/v1/node.proto\x12\x14common.api.signal.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\x1a\x15signal/v1/model.proto\x1a\x18signal/v1/constant.proto\"G\n" +
+	"\x15SignalNodeSaveRequest\x12.\n" +
+	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\"E\n" +
+	"\x13SignalNodeSaveReply\x12.\n" +
+	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\"I\n" +
+	"\x17SignalNodeUpdateRequest\x12.\n" +
+	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\"G\n" +
+	"\x15SignalNodeUpdateReply\x12.\n" +
+	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\",\n" +
+	"\x1aSignalNodeGetSecretRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"2\n" +
+	"\x18SignalNodeGetSecretReply\x12\x16\n" +
+	"\x06secret\x18\x01 \x01(\tR\x06secret\"/\n" +
+	"\x1dSignalNodeUpdateSecretRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"5\n" +
+	"\x1bSignalNodeUpdateSecretReply\x12\x16\n" +
+	"\x06secret\x18\x01 \x01(\tR\x06secret\"Q\n" +
+	"\x15SignalNodeListRequest\x128\n" +
+	"\x06status\x18\x01 \x01(\x0e2 .common.api.signal.v1.NodeStatusR\x06status\"G\n" +
+	"\x13SignalNodeListReply\x120\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1c\n" +
+	"\x1aSignalNodeNegotiateRequest\"|\n" +
+	"\x18SignalNodeNegotiateReply\x12.\n" +
+	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\x120\n" +
+	"\x05nodes\x18\x02 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1b\n" +
 	"\x19SignalNodeRegisterRequest\"\x19\n" +
-	"\x17SignalNodeRegisterReply\"\x19\n" +
-	"\x17SignalNodeOnlineRequest\"\x17\n" +
-	"\x15SignalNodeOnlineReply\"\x1a\n" +
-	"\x18SignalNodeOfflineRequest\"\x18\n" +
+	"\x17SignalNodeRegisterReply\"\x1d\n" +
+	"\x1bSignalNodeUnregisterRequest\"\x1b\n" +
+	"\x19SignalNodeUnregisterReply\"Q\n" +
+	"\x17SignalNodeOnlineRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x02 \x01(\tR\tsessionId\"\x17\n" +
+	"\x15SignalNodeOnlineReply\"R\n" +
+	"\x18SignalNodeOfflineRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x02 \x01(\tR\tsessionId\"\x18\n" +
 	"\x16SignalNodeOfflineReply\"\x1d\n" +
 	"\x1bSignalNodeOnlineListRequest\"\x1b\n" +
-	"\x19SignalNodeOnlineListReply2\xb6\x05\n" +
+	"\x19SignalNodeOnlineListReply2\x81\f\n" +
 	"\x11SignalNodeService\x12x\n" +
-	"\x04Save\x12+.common.api.signal.v1.SignalNodeSaveRequest\x1a).common.api.signal.v1.SignalNodeSaveReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/node/save\x12\x88\x01\n" +
-	"\bRegister\x12/.common.api.signal.v1.SignalNodeRegisterRequest\x1a-.common.api.signal.v1.SignalNodeRegisterReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/node/register\x12\x80\x01\n" +
+	"\x04Save\x12+.common.api.signal.v1.SignalNodeSaveRequest\x1a).common.api.signal.v1.SignalNodeSaveReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/node/save\x12\x80\x01\n" +
+	"\x06Update\x12-.common.api.signal.v1.SignalNodeUpdateRequest\x1a+.common.api.signal.v1.SignalNodeUpdateReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/node/update\x12\x8d\x01\n" +
+	"\tGetSecret\x120.common.api.signal.v1.SignalNodeGetSecretRequest\x1a..common.api.signal.v1.SignalNodeGetSecretReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/node/get/Secret\x12\x99\x01\n" +
+	"\fUpdateSecret\x123.common.api.signal.v1.SignalNodeUpdateSecretRequest\x1a1.common.api.signal.v1.SignalNodeUpdateSecretReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/node/update/Secret\x12x\n" +
+	"\x04List\x12+.common.api.signal.v1.SignalNodeListRequest\x1a).common.api.signal.v1.SignalNodeListReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/node/list\x12\x8c\x01\n" +
+	"\tNegotiate\x120.common.api.signal.v1.SignalNodeNegotiateRequest\x1a..common.api.signal.v1.SignalNodeNegotiateReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/node/negotiate\x12\x88\x01\n" +
+	"\bRegister\x12/.common.api.signal.v1.SignalNodeRegisterRequest\x1a-.common.api.signal.v1.SignalNodeRegisterReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/node/register\x12\x90\x01\n" +
+	"\n" +
+	"Unregister\x121.common.api.signal.v1.SignalNodeUnregisterRequest\x1a/.common.api.signal.v1.SignalNodeUnregisterReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/node/unregister\x12\x80\x01\n" +
 	"\x06Online\x12-.common.api.signal.v1.SignalNodeOnlineRequest\x1a+.common.api.signal.v1.SignalNodeOnlineReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/node/online\x12\x84\x01\n" +
 	"\aOffline\x12..common.api.signal.v1.SignalNodeOfflineRequest\x1a,.common.api.signal.v1.SignalNodeOfflineReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/node/offline\x12\x91\x01\n" +
 	"\n" +
@@ -422,35 +1035,69 @@ func file_signal_v1_node_proto_rawDescGZIP() []byte {
 	return file_signal_v1_node_proto_rawDescData
 }
 
-var file_signal_v1_node_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_signal_v1_node_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_signal_v1_node_proto_goTypes = []any{
-	(*SignalNodeSaveRequest)(nil),       // 0: common.api.signal.v1.SignalNodeSaveRequest
-	(*SignalNodeSaveReply)(nil),         // 1: common.api.signal.v1.SignalNodeSaveReply
-	(*SignalNodeRegisterRequest)(nil),   // 2: common.api.signal.v1.SignalNodeRegisterRequest
-	(*SignalNodeRegisterReply)(nil),     // 3: common.api.signal.v1.SignalNodeRegisterReply
-	(*SignalNodeOnlineRequest)(nil),     // 4: common.api.signal.v1.SignalNodeOnlineRequest
-	(*SignalNodeOnlineReply)(nil),       // 5: common.api.signal.v1.SignalNodeOnlineReply
-	(*SignalNodeOfflineRequest)(nil),    // 6: common.api.signal.v1.SignalNodeOfflineRequest
-	(*SignalNodeOfflineReply)(nil),      // 7: common.api.signal.v1.SignalNodeOfflineReply
-	(*SignalNodeOnlineListRequest)(nil), // 8: common.api.signal.v1.SignalNodeOnlineListRequest
-	(*SignalNodeOnlineListReply)(nil),   // 9: common.api.signal.v1.SignalNodeOnlineListReply
+	(*SignalNodeSaveRequest)(nil),         // 0: common.api.signal.v1.SignalNodeSaveRequest
+	(*SignalNodeSaveReply)(nil),           // 1: common.api.signal.v1.SignalNodeSaveReply
+	(*SignalNodeUpdateRequest)(nil),       // 2: common.api.signal.v1.SignalNodeUpdateRequest
+	(*SignalNodeUpdateReply)(nil),         // 3: common.api.signal.v1.SignalNodeUpdateReply
+	(*SignalNodeGetSecretRequest)(nil),    // 4: common.api.signal.v1.SignalNodeGetSecretRequest
+	(*SignalNodeGetSecretReply)(nil),      // 5: common.api.signal.v1.SignalNodeGetSecretReply
+	(*SignalNodeUpdateSecretRequest)(nil), // 6: common.api.signal.v1.SignalNodeUpdateSecretRequest
+	(*SignalNodeUpdateSecretReply)(nil),   // 7: common.api.signal.v1.SignalNodeUpdateSecretReply
+	(*SignalNodeListRequest)(nil),         // 8: common.api.signal.v1.SignalNodeListRequest
+	(*SignalNodeListReply)(nil),           // 9: common.api.signal.v1.SignalNodeListReply
+	(*SignalNodeNegotiateRequest)(nil),    // 10: common.api.signal.v1.SignalNodeNegotiateRequest
+	(*SignalNodeNegotiateReply)(nil),      // 11: common.api.signal.v1.SignalNodeNegotiateReply
+	(*SignalNodeRegisterRequest)(nil),     // 12: common.api.signal.v1.SignalNodeRegisterRequest
+	(*SignalNodeRegisterReply)(nil),       // 13: common.api.signal.v1.SignalNodeRegisterReply
+	(*SignalNodeUnregisterRequest)(nil),   // 14: common.api.signal.v1.SignalNodeUnregisterRequest
+	(*SignalNodeUnregisterReply)(nil),     // 15: common.api.signal.v1.SignalNodeUnregisterReply
+	(*SignalNodeOnlineRequest)(nil),       // 16: common.api.signal.v1.SignalNodeOnlineRequest
+	(*SignalNodeOnlineReply)(nil),         // 17: common.api.signal.v1.SignalNodeOnlineReply
+	(*SignalNodeOfflineRequest)(nil),      // 18: common.api.signal.v1.SignalNodeOfflineRequest
+	(*SignalNodeOfflineReply)(nil),        // 19: common.api.signal.v1.SignalNodeOfflineReply
+	(*SignalNodeOnlineListRequest)(nil),   // 20: common.api.signal.v1.SignalNodeOnlineListRequest
+	(*SignalNodeOnlineListReply)(nil),     // 21: common.api.signal.v1.SignalNodeOnlineListReply
+	(*Node)(nil),                          // 22: common.api.signal.v1.Node
+	(NodeStatus)(0),                       // 23: common.api.signal.v1.NodeStatus
 }
 var file_signal_v1_node_proto_depIdxs = []int32{
-	0, // 0: common.api.signal.v1.SignalNodeService.Save:input_type -> common.api.signal.v1.SignalNodeSaveRequest
-	2, // 1: common.api.signal.v1.SignalNodeService.Register:input_type -> common.api.signal.v1.SignalNodeRegisterRequest
-	4, // 2: common.api.signal.v1.SignalNodeService.Online:input_type -> common.api.signal.v1.SignalNodeOnlineRequest
-	6, // 3: common.api.signal.v1.SignalNodeService.Offline:input_type -> common.api.signal.v1.SignalNodeOfflineRequest
-	8, // 4: common.api.signal.v1.SignalNodeService.OnlineList:input_type -> common.api.signal.v1.SignalNodeOnlineListRequest
-	1, // 5: common.api.signal.v1.SignalNodeService.Save:output_type -> common.api.signal.v1.SignalNodeSaveReply
-	3, // 6: common.api.signal.v1.SignalNodeService.Register:output_type -> common.api.signal.v1.SignalNodeRegisterReply
-	5, // 7: common.api.signal.v1.SignalNodeService.Online:output_type -> common.api.signal.v1.SignalNodeOnlineReply
-	7, // 8: common.api.signal.v1.SignalNodeService.Offline:output_type -> common.api.signal.v1.SignalNodeOfflineReply
-	9, // 9: common.api.signal.v1.SignalNodeService.OnlineList:output_type -> common.api.signal.v1.SignalNodeOnlineListReply
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	22, // 0: common.api.signal.v1.SignalNodeSaveRequest.node:type_name -> common.api.signal.v1.Node
+	22, // 1: common.api.signal.v1.SignalNodeSaveReply.node:type_name -> common.api.signal.v1.Node
+	22, // 2: common.api.signal.v1.SignalNodeUpdateRequest.node:type_name -> common.api.signal.v1.Node
+	22, // 3: common.api.signal.v1.SignalNodeUpdateReply.node:type_name -> common.api.signal.v1.Node
+	23, // 4: common.api.signal.v1.SignalNodeListRequest.status:type_name -> common.api.signal.v1.NodeStatus
+	22, // 5: common.api.signal.v1.SignalNodeListReply.nodes:type_name -> common.api.signal.v1.Node
+	22, // 6: common.api.signal.v1.SignalNodeNegotiateReply.node:type_name -> common.api.signal.v1.Node
+	22, // 7: common.api.signal.v1.SignalNodeNegotiateReply.nodes:type_name -> common.api.signal.v1.Node
+	0,  // 8: common.api.signal.v1.SignalNodeService.Save:input_type -> common.api.signal.v1.SignalNodeSaveRequest
+	2,  // 9: common.api.signal.v1.SignalNodeService.Update:input_type -> common.api.signal.v1.SignalNodeUpdateRequest
+	4,  // 10: common.api.signal.v1.SignalNodeService.GetSecret:input_type -> common.api.signal.v1.SignalNodeGetSecretRequest
+	6,  // 11: common.api.signal.v1.SignalNodeService.UpdateSecret:input_type -> common.api.signal.v1.SignalNodeUpdateSecretRequest
+	8,  // 12: common.api.signal.v1.SignalNodeService.List:input_type -> common.api.signal.v1.SignalNodeListRequest
+	10, // 13: common.api.signal.v1.SignalNodeService.Negotiate:input_type -> common.api.signal.v1.SignalNodeNegotiateRequest
+	12, // 14: common.api.signal.v1.SignalNodeService.Register:input_type -> common.api.signal.v1.SignalNodeRegisterRequest
+	14, // 15: common.api.signal.v1.SignalNodeService.Unregister:input_type -> common.api.signal.v1.SignalNodeUnregisterRequest
+	16, // 16: common.api.signal.v1.SignalNodeService.Online:input_type -> common.api.signal.v1.SignalNodeOnlineRequest
+	18, // 17: common.api.signal.v1.SignalNodeService.Offline:input_type -> common.api.signal.v1.SignalNodeOfflineRequest
+	20, // 18: common.api.signal.v1.SignalNodeService.OnlineList:input_type -> common.api.signal.v1.SignalNodeOnlineListRequest
+	1,  // 19: common.api.signal.v1.SignalNodeService.Save:output_type -> common.api.signal.v1.SignalNodeSaveReply
+	3,  // 20: common.api.signal.v1.SignalNodeService.Update:output_type -> common.api.signal.v1.SignalNodeUpdateReply
+	5,  // 21: common.api.signal.v1.SignalNodeService.GetSecret:output_type -> common.api.signal.v1.SignalNodeGetSecretReply
+	7,  // 22: common.api.signal.v1.SignalNodeService.UpdateSecret:output_type -> common.api.signal.v1.SignalNodeUpdateSecretReply
+	9,  // 23: common.api.signal.v1.SignalNodeService.List:output_type -> common.api.signal.v1.SignalNodeListReply
+	11, // 24: common.api.signal.v1.SignalNodeService.Negotiate:output_type -> common.api.signal.v1.SignalNodeNegotiateReply
+	13, // 25: common.api.signal.v1.SignalNodeService.Register:output_type -> common.api.signal.v1.SignalNodeRegisterReply
+	15, // 26: common.api.signal.v1.SignalNodeService.Unregister:output_type -> common.api.signal.v1.SignalNodeUnregisterReply
+	17, // 27: common.api.signal.v1.SignalNodeService.Online:output_type -> common.api.signal.v1.SignalNodeOnlineReply
+	19, // 28: common.api.signal.v1.SignalNodeService.Offline:output_type -> common.api.signal.v1.SignalNodeOfflineReply
+	21, // 29: common.api.signal.v1.SignalNodeService.OnlineList:output_type -> common.api.signal.v1.SignalNodeOnlineListReply
+	19, // [19:30] is the sub-list for method output_type
+	8,  // [8:19] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_signal_v1_node_proto_init() }
@@ -466,7 +1113,7 @@ func file_signal_v1_node_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_signal_v1_node_proto_rawDesc), len(file_signal_v1_node_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

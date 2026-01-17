@@ -5,6 +5,22 @@ import (
 	"math"
 )
 
+// 服务启动模式定义
+var (
+	Dev  = "dev"
+	Test = "test"
+	Prod = "prod"
+)
+
+// 请求头 key 定义
+var (
+	Timestamp           = "X-Timestamp"            // 时间戳，防止过期请求
+	Nonce               = "X-Nonce"                // 随机数，防止重放攻击
+	Authentication      = "Authorization"          // token 请求头名称
+	SignalNode          = "X-Signal-NodeName"      // 信令服务节点名称
+	SignalNodeSignature = "X-Signal-NodeSignature" // 节点签名
+)
+
 var page uint32 = 1
 var size uint32 = 10
 

@@ -19,9 +19,9 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationNotifyNotificationTemplateServiceAdd = "/common.api.user.v1.NotifyNotificationTemplateService/Add"
-const OperationNotifyNotificationTemplateServicePage = "/common.api.user.v1.NotifyNotificationTemplateService/Page"
-const OperationNotifyNotificationTemplateServiceUpdate = "/common.api.user.v1.NotifyNotificationTemplateService/Update"
+const OperationNotifyNotificationTemplateServiceAdd = "/common.api.notify.v1.NotifyNotificationTemplateService/Add"
+const OperationNotifyNotificationTemplateServicePage = "/common.api.notify.v1.NotifyNotificationTemplateService/Page"
+const OperationNotifyNotificationTemplateServiceUpdate = "/common.api.notify.v1.NotifyNotificationTemplateService/Update"
 
 type NotifyNotificationTemplateServiceHTTPServer interface {
 	// Add 添加通知模板
@@ -34,12 +34,12 @@ type NotifyNotificationTemplateServiceHTTPServer interface {
 
 func RegisterNotifyNotificationTemplateServiceHTTPServer(s *http.Server, srv NotifyNotificationTemplateServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notificationTemplate/page", _NotifyNotificationTemplateService_Page7_HTTP_Handler(srv))
+	r.POST("/v1/notificationTemplate/page", _NotifyNotificationTemplateService_Page10_HTTP_Handler(srv))
 	r.POST("/v1/notificationTemplate/add", _NotifyNotificationTemplateService_Add2_HTTP_Handler(srv))
 	r.POST("/v1/notificationTemplate/update", _NotifyNotificationTemplateService_Update3_HTTP_Handler(srv))
 }
 
-func _NotifyNotificationTemplateService_Page7_HTTP_Handler(srv NotifyNotificationTemplateServiceHTTPServer) func(ctx http.Context) error {
+func _NotifyNotificationTemplateService_Page10_HTTP_Handler(srv NotifyNotificationTemplateServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationTemplatePageRequest
 		if err := ctx.Bind(&in); err != nil {

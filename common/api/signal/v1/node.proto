@@ -15,7 +15,7 @@ option go_package = "common/api/signal/v1;v1";
 
 // Node 服务
 service SignalNodeService {
-  
+
   // 保存节点
   rpc Save (SignalNodeSaveRequest) returns (SignalNodeSaveReply) {
     option (google.api.http) = {
@@ -24,10 +24,58 @@ service SignalNodeService {
     };
   }
 
+  // 更新节点信息
+  rpc Update (SignalNodeUpdateRequest) returns (SignalNodeUpdateReply) {
+    option (google.api.http) = {
+      post: "/v1/node/update"
+      body: "*"
+    };
+  }
+
+  // 获取密钥
+  rpc GetSecret (SignalNodeGetSecretRequest) returns (SignalNodeGetSecretReply) {
+    option (google.api.http) = {
+      post: "/v1/node/get/Secret"
+      body: "*"
+    };
+  }
+
+  // 更新密钥
+  rpc UpdateSecret (SignalNodeUpdateSecretRequest) returns (SignalNodeUpdateSecretReply) {
+    option (google.api.http) = {
+      post: "/v1/node/update/Secret"
+      body: "*"
+    };
+  }
+
+  // 查询节点列表
+  rpc List (SignalNodeListRequest) returns (SignalNodeListReply) {
+    option (google.api.http) = {
+      post: "/v1/node/list"
+      body: "*"
+    };
+  }
+
+  // 客户端调度/协商
+  rpc Negotiate (SignalNodeNegotiateRequest) returns (SignalNodeNegotiateReply) {
+    option (google.api.http) = {
+      post: "/v1/node/negotiate"
+      body: "*"
+    };
+  }
+
   // 注册节点
   rpc Register (SignalNodeRegisterRequest) returns (SignalNodeRegisterReply) {
     option (google.api.http) = {
       post: "/v1/node/register"
+      body: "*"
+    };
+  }
+
+  // 注销节点
+  rpc Unregister (SignalNodeUnregisterRequest) returns (SignalNodeUnregisterReply) {
+    option (google.api.http) = {
+      post: "/v1/node/unregister"
       body: "*"
     };
   }
@@ -64,16 +112,79 @@ service SignalNodeService {
 
 // 请求/响应结构定义
 
-message SignalNodeSaveRequest {}
-message SignalNodeSaveReply {}
+message SignalNodeSaveRequest {
+  // 节点信息
+  Node node = 1;
+}
+message SignalNodeSaveReply {
+  // 节点信息
+  Node node = 1;
+}
+
+message SignalNodeUpdateRequest {
+  // 节点信息
+  Node node = 1;
+}
+message SignalNodeUpdateReply {
+  // 节点信息
+  Node node = 1;
+}
+
+message SignalNodeGetSecretRequest {
+  // 节点 ID
+  int64 id = 1;
+}
+message SignalNodeGetSecretReply {
+  // 密钥
+  string secret = 1;
+}
+
+message SignalNodeUpdateSecretRequest {
+  // 节点 ID
+  int64 id = 1;
+}
+message SignalNodeUpdateSecretReply {
+  // 密钥
+  string secret = 1;
+}
+
+message SignalNodeListRequest {
+  // 节点状态
+  NodeStatus status = 1;
+}
+message SignalNodeListReply {
+  // 节点列表
+  repeated Node nodes = 1;
+}
+
+message SignalNodeNegotiateRequest {}
+message SignalNodeNegotiateReply {
+  // 推荐节点信息
+  Node node = 1;
+  // 节点列表
+  repeated Node nodes = 2;
+}
 
 message SignalNodeRegisterRequest {}
 message SignalNodeRegisterReply {}
 
-message SignalNodeOnlineRequest {}
+message SignalNodeUnregisterRequest {}
+message SignalNodeUnregisterReply {}
+
+message SignalNodeOnlineRequest {
+  // 用户 ID
+  int64 user_id = 1;
+  // session ID
+  string session_id = 2;
+}
 message SignalNodeOnlineReply {}
 
-message SignalNodeOfflineRequest {}
+message SignalNodeOfflineRequest {
+  // 用户 ID
+  int64 user_id = 1;
+  // session ID
+  string session_id = 2;
+}
 message SignalNodeOfflineReply {}
 
 message SignalNodeOnlineListRequest {}

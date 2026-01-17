@@ -19,8 +19,8 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationNotifyNotificationRecordServicePage = "/common.api.user.v1.NotifyNotificationRecordService/Page"
-const OperationNotifyNotificationRecordServiceRead = "/common.api.user.v1.NotifyNotificationRecordService/Read"
+const OperationNotifyNotificationRecordServicePage = "/common.api.notify.v1.NotifyNotificationRecordService/Page"
+const OperationNotifyNotificationRecordServiceRead = "/common.api.notify.v1.NotifyNotificationRecordService/Read"
 
 type NotifyNotificationRecordServiceHTTPServer interface {
 	// Page 查询通知详情数据
@@ -31,11 +31,11 @@ type NotifyNotificationRecordServiceHTTPServer interface {
 
 func RegisterNotifyNotificationRecordServiceHTTPServer(s *http.Server, srv NotifyNotificationRecordServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notificationRecord/page", _NotifyNotificationRecordService_Page6_HTTP_Handler(srv))
+	r.POST("/v1/notificationRecord/page", _NotifyNotificationRecordService_Page9_HTTP_Handler(srv))
 	r.POST("/v1/notificationRecord/read", _NotifyNotificationRecordService_Read0_HTTP_Handler(srv))
 }
 
-func _NotifyNotificationRecordService_Page6_HTTP_Handler(srv NotifyNotificationRecordServiceHTTPServer) func(ctx http.Context) error {
+func _NotifyNotificationRecordService_Page9_HTTP_Handler(srv NotifyNotificationRecordServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationRecordPageRequest
 		if err := ctx.Bind(&in); err != nil {

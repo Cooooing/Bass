@@ -3,6 +3,7 @@ package main
 import (
 	"common/pkg"
 	"common/pkg/client"
+	"common/pkg/constant"
 	"content/internal/conf"
 	"content/internal/conf/bootstrap"
 	"content/internal/server"
@@ -108,7 +109,7 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 		return nil, nil, cleanup, err
 	}
 	var c *conf.Bootstrap
-	if bc.Mode == "dev" {
+	if bc.Mode == constant.Dev {
 		c, err := loadLocalConfig(bc)
 		return c, bc, cleanup, err
 	} else {

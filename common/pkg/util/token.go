@@ -92,3 +92,8 @@ func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, er
 func (r *TokenRepo) DelToken(ctx context.Context, token string) error {
 	return r.redis.Client.Del(ctx, constant.GetKeyToken(token)).Err()
 }
+
+// SaveRequestNonce 保存请求的 nonce，利用 SETNX (Set if Not Exists) 的原子性。如果返回成功，说明是第一次收到；如果失败，说明是重放攻击。
+func (r *TokenRepo) SaveRequestNonce(ctx context.Context, nonce string, expires time.Duration) (bool, error) {
+	return r.redis.Client.SetNX(ctx, constant.GetKeyRequestNonce(nonce), "1", expires).Result()
+}

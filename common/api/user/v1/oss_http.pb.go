@@ -42,7 +42,7 @@ func RegisterUserOssServiceHTTPServer(s *http.Server, srv UserOssServiceHTTPServ
 	r := s.Route("/")
 	r.POST("/v1/oss/uploadToken", _UserOssService_UploadToken0_HTTP_Handler(srv))
 	r.POST("/v1/oss/audit", _UserOssService_Audit0_HTTP_Handler(srv))
-	r.POST("/v1/oss/page", _UserOssService_Page8_HTTP_Handler(srv))
+	r.POST("/v1/oss/page", _UserOssService_Page11_HTTP_Handler(srv))
 	r.POST("/v1/oss/qiniu/uploadCallback", _UserOssService_QiniuUploadCallback0_HTTP_Handler(srv))
 	r.POST("/v1/oss/qiniu/incrementAuditCallback", _UserOssService_QiniuIncrementAuditCallback0_HTTP_Handler(srv))
 }
@@ -91,7 +91,7 @@ func _UserOssService_Audit0_HTTP_Handler(srv UserOssServiceHTTPServer) func(ctx 
 	}
 }
 
-func _UserOssService_Page8_HTTP_Handler(srv UserOssServiceHTTPServer) func(ctx http.Context) error {
+func _UserOssService_Page11_HTTP_Handler(srv UserOssServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageOssRequest
 		if err := ctx.Bind(&in); err != nil {

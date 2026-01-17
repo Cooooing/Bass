@@ -36,7 +36,7 @@ func RegisterUserUserRelationServiceHTTPServer(s *http.Server, srv UserUserRelat
 	r := s.Route("/")
 	r.POST("/api/v1/userRelation/follow", _UserUserRelationService_Follow0_HTTP_Handler(srv))
 	r.POST("/api/v1/userRelation/block", _UserUserRelationService_Block0_HTTP_Handler(srv))
-	r.POST("/api/v1/userRelation/page", _UserUserRelationService_Page9_HTTP_Handler(srv))
+	r.POST("/api/v1/userRelation/page", _UserUserRelationService_Page12_HTTP_Handler(srv))
 }
 
 func _UserUserRelationService_Follow0_HTTP_Handler(srv UserUserRelationServiceHTTPServer) func(ctx http.Context) error {
@@ -83,7 +83,7 @@ func _UserUserRelationService_Block0_HTTP_Handler(srv UserUserRelationServiceHTT
 	}
 }
 
-func _UserUserRelationService_Page9_HTTP_Handler(srv UserUserRelationServiceHTTPServer) func(ctx http.Context) error {
+func _UserUserRelationService_Page12_HTTP_Handler(srv UserUserRelationServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageUserRelationRequest
 		if err := ctx.Bind(&in); err != nil {

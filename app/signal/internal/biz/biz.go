@@ -14,6 +14,8 @@ import (
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
 	util.NewEventPool,
+
+	NewNodeDomain,
 )
 
 type BaseDomain struct {

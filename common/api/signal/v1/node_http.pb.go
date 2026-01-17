@@ -19,13 +19,25 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationSignalNodeServiceGetSecret = "/common.api.signal.v1.SignalNodeService/GetSecret"
+const OperationSignalNodeServiceList = "/common.api.signal.v1.SignalNodeService/List"
+const OperationSignalNodeServiceNegotiate = "/common.api.signal.v1.SignalNodeService/Negotiate"
 const OperationSignalNodeServiceOffline = "/common.api.signal.v1.SignalNodeService/Offline"
 const OperationSignalNodeServiceOnline = "/common.api.signal.v1.SignalNodeService/Online"
 const OperationSignalNodeServiceOnlineList = "/common.api.signal.v1.SignalNodeService/OnlineList"
 const OperationSignalNodeServiceRegister = "/common.api.signal.v1.SignalNodeService/Register"
 const OperationSignalNodeServiceSave = "/common.api.signal.v1.SignalNodeService/Save"
+const OperationSignalNodeServiceUnregister = "/common.api.signal.v1.SignalNodeService/Unregister"
+const OperationSignalNodeServiceUpdate = "/common.api.signal.v1.SignalNodeService/Update"
+const OperationSignalNodeServiceUpdateSecret = "/common.api.signal.v1.SignalNodeService/UpdateSecret"
 
 type SignalNodeServiceHTTPServer interface {
+	// GetSecret 获取密钥
+	GetSecret(context.Context, *SignalNodeGetSecretRequest) (*SignalNodeGetSecretReply, error)
+	// List 查询节点列表
+	List(context.Context, *SignalNodeListRequest) (*SignalNodeListReply, error)
+	// Negotiate 客户端调度/协商
+	Negotiate(context.Context, *SignalNodeNegotiateRequest) (*SignalNodeNegotiateReply, error)
 	// Offline 用户下线
 	Offline(context.Context, *SignalNodeOfflineRequest) (*SignalNodeOfflineReply, error)
 	// Online 用户上线
@@ -36,12 +48,24 @@ type SignalNodeServiceHTTPServer interface {
 	Register(context.Context, *SignalNodeRegisterRequest) (*SignalNodeRegisterReply, error)
 	// Save 保存节点
 	Save(context.Context, *SignalNodeSaveRequest) (*SignalNodeSaveReply, error)
+	// Unregister 注销节点
+	Unregister(context.Context, *SignalNodeUnregisterRequest) (*SignalNodeUnregisterReply, error)
+	// Update 更新节点信息
+	Update(context.Context, *SignalNodeUpdateRequest) (*SignalNodeUpdateReply, error)
+	// UpdateSecret 更新密钥
+	UpdateSecret(context.Context, *SignalNodeUpdateSecretRequest) (*SignalNodeUpdateSecretReply, error)
 }
 
 func RegisterSignalNodeServiceHTTPServer(s *http.Server, srv SignalNodeServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/node/save", _SignalNodeService_Save0_HTTP_Handler(srv))
+	r.POST("/v1/node/update", _SignalNodeService_Update4_HTTP_Handler(srv))
+	r.POST("/v1/node/get/Secret", _SignalNodeService_GetSecret0_HTTP_Handler(srv))
+	r.POST("/v1/node/update/Secret", _SignalNodeService_UpdateSecret0_HTTP_Handler(srv))
+	r.POST("/v1/node/list", _SignalNodeService_List0_HTTP_Handler(srv))
+	r.POST("/v1/node/negotiate", _SignalNodeService_Negotiate0_HTTP_Handler(srv))
 	r.POST("/v1/node/register", _SignalNodeService_Register0_HTTP_Handler(srv))
+	r.POST("/v1/node/unregister", _SignalNodeService_Unregister0_HTTP_Handler(srv))
 	r.POST("/v1/node/online", _SignalNodeService_Online0_HTTP_Handler(srv))
 	r.POST("/v1/node/offline", _SignalNodeService_Offline0_HTTP_Handler(srv))
 	r.POST("/v1/node/online/list", _SignalNodeService_OnlineList0_HTTP_Handler(srv))
@@ -69,6 +93,116 @@ func _SignalNodeService_Save0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func
 	}
 }
 
+func _SignalNodeService_Update4_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeUpdateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceUpdate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Update(ctx, req.(*SignalNodeUpdateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeUpdateReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SignalNodeService_GetSecret0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeGetSecretRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceGetSecret)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetSecret(ctx, req.(*SignalNodeGetSecretRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeGetSecretReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SignalNodeService_UpdateSecret0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeUpdateSecretRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceUpdateSecret)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateSecret(ctx, req.(*SignalNodeUpdateSecretRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeUpdateSecretReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SignalNodeService_List0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeListRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.List(ctx, req.(*SignalNodeListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeListReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SignalNodeService_Negotiate0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeNegotiateRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceNegotiate)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Negotiate(ctx, req.(*SignalNodeNegotiateRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeNegotiateReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _SignalNodeService_Register0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SignalNodeRegisterRequest
@@ -87,6 +221,28 @@ func _SignalNodeService_Register0_HTTP_Handler(srv SignalNodeServiceHTTPServer) 
 			return err
 		}
 		reply := out.(*SignalNodeRegisterReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _SignalNodeService_Unregister0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeUnregisterRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceUnregister)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Unregister(ctx, req.(*SignalNodeUnregisterRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeUnregisterReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -158,6 +314,12 @@ func _SignalNodeService_OnlineList0_HTTP_Handler(srv SignalNodeServiceHTTPServer
 }
 
 type SignalNodeServiceHTTPClient interface {
+	// GetSecret 获取密钥
+	GetSecret(ctx context.Context, req *SignalNodeGetSecretRequest, opts ...http.CallOption) (rsp *SignalNodeGetSecretReply, err error)
+	// List 查询节点列表
+	List(ctx context.Context, req *SignalNodeListRequest, opts ...http.CallOption) (rsp *SignalNodeListReply, err error)
+	// Negotiate 客户端调度/协商
+	Negotiate(ctx context.Context, req *SignalNodeNegotiateRequest, opts ...http.CallOption) (rsp *SignalNodeNegotiateReply, err error)
 	// Offline 用户下线
 	Offline(ctx context.Context, req *SignalNodeOfflineRequest, opts ...http.CallOption) (rsp *SignalNodeOfflineReply, err error)
 	// Online 用户上线
@@ -168,6 +330,12 @@ type SignalNodeServiceHTTPClient interface {
 	Register(ctx context.Context, req *SignalNodeRegisterRequest, opts ...http.CallOption) (rsp *SignalNodeRegisterReply, err error)
 	// Save 保存节点
 	Save(ctx context.Context, req *SignalNodeSaveRequest, opts ...http.CallOption) (rsp *SignalNodeSaveReply, err error)
+	// Unregister 注销节点
+	Unregister(ctx context.Context, req *SignalNodeUnregisterRequest, opts ...http.CallOption) (rsp *SignalNodeUnregisterReply, err error)
+	// Update 更新节点信息
+	Update(ctx context.Context, req *SignalNodeUpdateRequest, opts ...http.CallOption) (rsp *SignalNodeUpdateReply, err error)
+	// UpdateSecret 更新密钥
+	UpdateSecret(ctx context.Context, req *SignalNodeUpdateSecretRequest, opts ...http.CallOption) (rsp *SignalNodeUpdateSecretReply, err error)
 }
 
 type SignalNodeServiceHTTPClientImpl struct {
@@ -176,6 +344,48 @@ type SignalNodeServiceHTTPClientImpl struct {
 
 func NewSignalNodeServiceHTTPClient(client *http.Client) SignalNodeServiceHTTPClient {
 	return &SignalNodeServiceHTTPClientImpl{client}
+}
+
+// GetSecret 获取密钥
+func (c *SignalNodeServiceHTTPClientImpl) GetSecret(ctx context.Context, in *SignalNodeGetSecretRequest, opts ...http.CallOption) (*SignalNodeGetSecretReply, error) {
+	var out SignalNodeGetSecretReply
+	pattern := "/v1/node/get/Secret"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceGetSecret))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// List 查询节点列表
+func (c *SignalNodeServiceHTTPClientImpl) List(ctx context.Context, in *SignalNodeListRequest, opts ...http.CallOption) (*SignalNodeListReply, error) {
+	var out SignalNodeListReply
+	pattern := "/v1/node/list"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Negotiate 客户端调度/协商
+func (c *SignalNodeServiceHTTPClientImpl) Negotiate(ctx context.Context, in *SignalNodeNegotiateRequest, opts ...http.CallOption) (*SignalNodeNegotiateReply, error) {
+	var out SignalNodeNegotiateReply
+	pattern := "/v1/node/negotiate"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceNegotiate))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // Offline 用户下线
@@ -240,6 +450,48 @@ func (c *SignalNodeServiceHTTPClientImpl) Save(ctx context.Context, in *SignalNo
 	pattern := "/v1/node/save"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSignalNodeServiceSave))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Unregister 注销节点
+func (c *SignalNodeServiceHTTPClientImpl) Unregister(ctx context.Context, in *SignalNodeUnregisterRequest, opts ...http.CallOption) (*SignalNodeUnregisterReply, error) {
+	var out SignalNodeUnregisterReply
+	pattern := "/v1/node/unregister"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceUnregister))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Update 更新节点信息
+func (c *SignalNodeServiceHTTPClientImpl) Update(ctx context.Context, in *SignalNodeUpdateRequest, opts ...http.CallOption) (*SignalNodeUpdateReply, error) {
+	var out SignalNodeUpdateReply
+	pattern := "/v1/node/update"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceUpdate))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateSecret 更新密钥
+func (c *SignalNodeServiceHTTPClientImpl) UpdateSecret(ctx context.Context, in *SignalNodeUpdateSecretRequest, opts ...http.CallOption) (*SignalNodeUpdateSecretReply, error) {
+	var out SignalNodeUpdateSecretReply
+	pattern := "/v1/node/update/Secret"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceUpdateSecret))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

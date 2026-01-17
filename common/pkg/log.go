@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"common/pkg/constant"
 	"common/pkg/cutil/base/logger"
 	"context"
 	"fmt"
@@ -101,7 +102,7 @@ func Logger(mode string, level string, file string) log.Logger {
 		zap.AddCallerSkip(2), // 调整为 1，因为 Kratos log 层已包装
 	}
 
-	if mode == "dev" {
+	if mode == constant.Dev {
 		opts = append(opts, zap.Development()) // dev 模式添加开发友好字段
 	}
 
@@ -128,7 +129,7 @@ func NewZapLogger(mode string, file string, encoder zapcore.EncoderConfig, level
 		writers = append(writers, zapcore.AddSync(lumberJackLogger))
 	}
 
-	if mode == "dev" {
+	if mode == constant.Dev {
 		core = zapcore.NewCore(
 			zapcore.NewConsoleEncoder(encoder),
 			zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件

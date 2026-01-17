@@ -19,7 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationNotifyNotificationMetaServicePage = "/common.api.user.v1.NotifyNotificationMetaService/Page"
+const OperationNotifyNotificationMetaServicePage = "/common.api.notify.v1.NotifyNotificationMetaService/Page"
 
 type NotifyNotificationMetaServiceHTTPServer interface {
 	// Page 查询通知元数据
@@ -28,10 +28,10 @@ type NotifyNotificationMetaServiceHTTPServer interface {
 
 func RegisterNotifyNotificationMetaServiceHTTPServer(s *http.Server, srv NotifyNotificationMetaServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notificationMeta/page", _NotifyNotificationMetaService_Page5_HTTP_Handler(srv))
+	r.POST("/v1/notificationMeta/page", _NotifyNotificationMetaService_Page8_HTTP_Handler(srv))
 }
 
-func _NotifyNotificationMetaService_Page5_HTTP_Handler(srv NotifyNotificationMetaServiceHTTPServer) func(ctx http.Context) error {
+func _NotifyNotificationMetaService_Page8_HTTP_Handler(srv NotifyNotificationMetaServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationMetaPageRequest
 		if err := ctx.Bind(&in); err != nil {

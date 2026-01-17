@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NotifyNotificationRecordService_Page_FullMethodName = "/common.api.user.v1.NotifyNotificationRecordService/Page"
-	NotifyNotificationRecordService_Read_FullMethodName = "/common.api.user.v1.NotifyNotificationRecordService/Read"
+	NotifyNotificationRecordService_Page_FullMethodName = "/common.api.notify.v1.NotifyNotificationRecordService/Page"
+	NotifyNotificationRecordService_Read_FullMethodName = "/common.api.notify.v1.NotifyNotificationRecordService/Read"
 )
 
 // NotifyNotificationRecordServiceClient is the client API for NotifyNotificationRecordService service.
@@ -151,7 +151,7 @@ func _NotifyNotificationRecordService_Read_Handler(srv interface{}, ctx context.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NotifyNotificationRecordService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "common.api.user.v1.NotifyNotificationRecordService",
+	ServiceName: "common.api.notify.v1.NotifyNotificationRecordService",
 	HandlerType: (*NotifyNotificationRecordServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -568,7 +568,7 @@ var File_notify_v1_notifocation_template_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"\n" +
-	"%notify/v1/notifocation_template.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xcd\x02\n" +
+	"%notify/v1/notifocation_template.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xcd\x02\n" +
 	"\x14NotificationTemplate\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -597,17 +597,17 @@ const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"\b_channelB\n" +
 	"\n" +
 	"\b_contentB\t\n" +
-	"\a_enable\"\xa3\x01\n" +
+	"\a_enable\"\xa5\x01\n" +
 	"\x1fNotificationTemplatePageRequest\x125\n" +
-	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12I\n" +
-	"\x05query\x18\x02 \x01(\v23.common.api.user.v1.NotificationTemplateQueryParamsR\x05query\"\x92\x01\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12K\n" +
+	"\x05query\x18\x02 \x01(\v25.common.api.notify.v1.NotificationTemplateQueryParamsR\x05query\"\x94\x01\n" +
 	"\x1dNotificationTemplatePageReply\x123\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12<\n" +
-	"\x04rows\x18\x02 \x03(\v2(.common.api.user.v1.NotificationTemplateR\x04rows\"\x7f\n" +
-	"\x1eNotificationTemplateAddRequest\x12]\n" +
-	"\x15notification_template\x18\x02 \x01(\v2(.common.api.user.v1.NotificationTemplateR\x14notificationTemplate\"}\n" +
-	"\x1cNotificationTemplateAddReply\x12]\n" +
-	"\x15notification_template\x18\x01 \x01(\v2(.common.api.user.v1.NotificationTemplateR\x14notificationTemplate\"\x9b\x02\n" +
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12>\n" +
+	"\x04rows\x18\x02 \x03(\v2*.common.api.notify.v1.NotificationTemplateR\x04rows\"\x81\x01\n" +
+	"\x1eNotificationTemplateAddRequest\x12_\n" +
+	"\x15notification_template\x18\x02 \x01(\v2*.common.api.notify.v1.NotificationTemplateR\x14notificationTemplate\"\x7f\n" +
+	"\x1cNotificationTemplateAddReply\x12_\n" +
+	"\x15notification_template\x18\x01 \x01(\v2*.common.api.notify.v1.NotificationTemplateR\x14notificationTemplate\"\x9b\x02\n" +
 	"!NotificationTemplateUpdateRequest\x12\x10\n" +
 	"\x03ids\x18\x02 \x01(\x03R\x03ids\x120\n" +
 	"\x11notification_type\x18\x05 \x01(\x05H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
@@ -622,13 +622,13 @@ const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"\b_channelB\n" +
 	"\n" +
 	"\b_contentB\t\n" +
-	"\a_enable\"\x80\x01\n" +
-	"\x1fNotificationTemplateUpdateReply\x12]\n" +
-	"\x15notification_template\x18\x01 \x01(\v2(.common.api.user.v1.NotificationTemplateR\x14notificationTemplate2\xf8\x03\n" +
-	"!NotifyNotificationTemplateService\x12\x98\x01\n" +
-	"\x04Page\x123.common.api.user.v1.NotificationTemplatePageRequest\x1a1.common.api.user.v1.NotificationTemplatePageReply\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/notificationTemplate/page\x12\x94\x01\n" +
-	"\x03Add\x122.common.api.user.v1.NotificationTemplateAddRequest\x1a0.common.api.user.v1.NotificationTemplateAddReply\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/notificationTemplate/add\x12\xa0\x01\n" +
-	"\x06Update\x125.common.api.user.v1.NotificationTemplateUpdateRequest\x1a3.common.api.user.v1.NotificationTemplateUpdateReply\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/notificationTemplate/updateB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\a_enable\"\x82\x01\n" +
+	"\x1fNotificationTemplateUpdateReply\x12_\n" +
+	"\x15notification_template\x18\x01 \x01(\v2*.common.api.notify.v1.NotificationTemplateR\x14notificationTemplate2\x84\x04\n" +
+	"!NotifyNotificationTemplateService\x12\x9c\x01\n" +
+	"\x04Page\x125.common.api.notify.v1.NotificationTemplatePageRequest\x1a3.common.api.notify.v1.NotificationTemplatePageReply\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/notificationTemplate/page\x12\x98\x01\n" +
+	"\x03Add\x124.common.api.notify.v1.NotificationTemplateAddRequest\x1a2.common.api.notify.v1.NotificationTemplateAddReply\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/notificationTemplate/add\x12\xa4\x01\n" +
+	"\x06Update\x127.common.api.notify.v1.NotificationTemplateUpdateRequest\x1a5.common.api.notify.v1.NotificationTemplateUpdateReply\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/notificationTemplate/updateB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_template_proto_rawDescOnce sync.Once
@@ -644,34 +644,34 @@ func file_notify_v1_notifocation_template_proto_rawDescGZIP() []byte {
 
 var file_notify_v1_notifocation_template_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_notify_v1_notifocation_template_proto_goTypes = []any{
-	(*NotificationTemplate)(nil),              // 0: common.api.user.v1.NotificationTemplate
-	(*NotificationTemplateQueryParams)(nil),   // 1: common.api.user.v1.NotificationTemplateQueryParams
-	(*NotificationTemplatePageRequest)(nil),   // 2: common.api.user.v1.NotificationTemplatePageRequest
-	(*NotificationTemplatePageReply)(nil),     // 3: common.api.user.v1.NotificationTemplatePageReply
-	(*NotificationTemplateAddRequest)(nil),    // 4: common.api.user.v1.NotificationTemplateAddRequest
-	(*NotificationTemplateAddReply)(nil),      // 5: common.api.user.v1.NotificationTemplateAddReply
-	(*NotificationTemplateUpdateRequest)(nil), // 6: common.api.user.v1.NotificationTemplateUpdateRequest
-	(*NotificationTemplateUpdateReply)(nil),   // 7: common.api.user.v1.NotificationTemplateUpdateReply
+	(*NotificationTemplate)(nil),              // 0: common.api.notify.v1.NotificationTemplate
+	(*NotificationTemplateQueryParams)(nil),   // 1: common.api.notify.v1.NotificationTemplateQueryParams
+	(*NotificationTemplatePageRequest)(nil),   // 2: common.api.notify.v1.NotificationTemplatePageRequest
+	(*NotificationTemplatePageReply)(nil),     // 3: common.api.notify.v1.NotificationTemplatePageReply
+	(*NotificationTemplateAddRequest)(nil),    // 4: common.api.notify.v1.NotificationTemplateAddRequest
+	(*NotificationTemplateAddReply)(nil),      // 5: common.api.notify.v1.NotificationTemplateAddReply
+	(*NotificationTemplateUpdateRequest)(nil), // 6: common.api.notify.v1.NotificationTemplateUpdateRequest
+	(*NotificationTemplateUpdateReply)(nil),   // 7: common.api.notify.v1.NotificationTemplateUpdateReply
 	(*timestamppb.Timestamp)(nil),             // 8: google.protobuf.Timestamp
 	(*v1.PageRequest)(nil),                    // 9: common.api.common.v1.PageRequest
 	(*v1.PageReply)(nil),                      // 10: common.api.common.v1.PageReply
 }
 var file_notify_v1_notifocation_template_proto_depIdxs = []int32{
-	8,  // 0: common.api.user.v1.NotificationTemplate.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 1: common.api.user.v1.NotificationTemplate.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 2: common.api.user.v1.NotificationTemplatePageRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 3: common.api.user.v1.NotificationTemplatePageRequest.query:type_name -> common.api.user.v1.NotificationTemplateQueryParams
-	10, // 4: common.api.user.v1.NotificationTemplatePageReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 5: common.api.user.v1.NotificationTemplatePageReply.rows:type_name -> common.api.user.v1.NotificationTemplate
-	0,  // 6: common.api.user.v1.NotificationTemplateAddRequest.notification_template:type_name -> common.api.user.v1.NotificationTemplate
-	0,  // 7: common.api.user.v1.NotificationTemplateAddReply.notification_template:type_name -> common.api.user.v1.NotificationTemplate
-	0,  // 8: common.api.user.v1.NotificationTemplateUpdateReply.notification_template:type_name -> common.api.user.v1.NotificationTemplate
-	2,  // 9: common.api.user.v1.NotifyNotificationTemplateService.Page:input_type -> common.api.user.v1.NotificationTemplatePageRequest
-	4,  // 10: common.api.user.v1.NotifyNotificationTemplateService.Add:input_type -> common.api.user.v1.NotificationTemplateAddRequest
-	6,  // 11: common.api.user.v1.NotifyNotificationTemplateService.Update:input_type -> common.api.user.v1.NotificationTemplateUpdateRequest
-	3,  // 12: common.api.user.v1.NotifyNotificationTemplateService.Page:output_type -> common.api.user.v1.NotificationTemplatePageReply
-	5,  // 13: common.api.user.v1.NotifyNotificationTemplateService.Add:output_type -> common.api.user.v1.NotificationTemplateAddReply
-	7,  // 14: common.api.user.v1.NotifyNotificationTemplateService.Update:output_type -> common.api.user.v1.NotificationTemplateUpdateReply
+	8,  // 0: common.api.notify.v1.NotificationTemplate.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 1: common.api.notify.v1.NotificationTemplate.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 2: common.api.notify.v1.NotificationTemplatePageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 3: common.api.notify.v1.NotificationTemplatePageRequest.query:type_name -> common.api.notify.v1.NotificationTemplateQueryParams
+	10, // 4: common.api.notify.v1.NotificationTemplatePageReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 5: common.api.notify.v1.NotificationTemplatePageReply.rows:type_name -> common.api.notify.v1.NotificationTemplate
+	0,  // 6: common.api.notify.v1.NotificationTemplateAddRequest.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
+	0,  // 7: common.api.notify.v1.NotificationTemplateAddReply.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
+	0,  // 8: common.api.notify.v1.NotificationTemplateUpdateReply.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
+	2,  // 9: common.api.notify.v1.NotifyNotificationTemplateService.Page:input_type -> common.api.notify.v1.NotificationTemplatePageRequest
+	4,  // 10: common.api.notify.v1.NotifyNotificationTemplateService.Add:input_type -> common.api.notify.v1.NotificationTemplateAddRequest
+	6,  // 11: common.api.notify.v1.NotifyNotificationTemplateService.Update:input_type -> common.api.notify.v1.NotificationTemplateUpdateRequest
+	3,  // 12: common.api.notify.v1.NotifyNotificationTemplateService.Page:output_type -> common.api.notify.v1.NotificationTemplatePageReply
+	5,  // 13: common.api.notify.v1.NotifyNotificationTemplateService.Add:output_type -> common.api.notify.v1.NotificationTemplateAddReply
+	7,  // 14: common.api.notify.v1.NotifyNotificationTemplateService.Update:output_type -> common.api.notify.v1.NotificationTemplateUpdateReply
 	12, // [12:15] is the sub-list for method output_type
 	9,  // [9:12] is the sub-list for method input_type
 	9,  // [9:9] is the sub-list for extension type_name

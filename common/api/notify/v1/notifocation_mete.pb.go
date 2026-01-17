@@ -336,7 +336,7 @@ var File_notify_v1_notifocation_mete_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_mete_proto_rawDesc = "" +
 	"\n" +
-	"!notify/v1/notifocation_mete.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xcb\x02\n" +
+	"!notify/v1/notifocation_mete.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xcb\x02\n" +
 	"\x10NotificationMeta\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -357,15 +357,15 @@ const file_notify_v1_notifocation_mete_proto_rawDesc = "" +
 	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12\x1b\n" +
 	"\x06status\x18\b \x01(\x05H\x01R\x06status\x88\x01\x01B\x14\n" +
 	"\x12_notification_typeB\t\n" +
-	"\a_status\"\x9b\x01\n" +
+	"\a_status\"\x9d\x01\n" +
 	"\x1bNotificationMetaPageRequest\x125\n" +
-	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12E\n" +
-	"\x05query\x18\x02 \x01(\v2/.common.api.user.v1.NotificationMetaQueryParamsR\x05query\"\x8a\x01\n" +
+	"\x04page\x18\x01 \x01(\v2!.common.api.common.v1.PageRequestR\x04page\x12G\n" +
+	"\x05query\x18\x02 \x01(\v21.common.api.notify.v1.NotificationMetaQueryParamsR\x05query\"\x8c\x01\n" +
 	"\x19NotificationMetaPageReply\x123\n" +
-	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x128\n" +
-	"\x04rows\x18\x02 \x03(\v2$.common.api.user.v1.NotificationMetaR\x04rows2\xae\x01\n" +
-	"\x1dNotifyNotificationMetaService\x12\x8c\x01\n" +
-	"\x04Page\x12/.common.api.user.v1.NotificationMetaPageRequest\x1a-.common.api.user.v1.NotificationMetaPageReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/notificationMeta/pageB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
+	"\x04rows\x18\x02 \x03(\v2&.common.api.notify.v1.NotificationMetaR\x04rows2\xb2\x01\n" +
+	"\x1dNotifyNotificationMetaService\x12\x90\x01\n" +
+	"\x04Page\x121.common.api.notify.v1.NotificationMetaPageRequest\x1a/.common.api.notify.v1.NotificationMetaPageReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/notificationMeta/pageB\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_mete_proto_rawDescOnce sync.Once
@@ -381,23 +381,23 @@ func file_notify_v1_notifocation_mete_proto_rawDescGZIP() []byte {
 
 var file_notify_v1_notifocation_mete_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_notify_v1_notifocation_mete_proto_goTypes = []any{
-	(*NotificationMeta)(nil),            // 0: common.api.user.v1.NotificationMeta
-	(*NotificationMetaQueryParams)(nil), // 1: common.api.user.v1.NotificationMetaQueryParams
-	(*NotificationMetaPageRequest)(nil), // 2: common.api.user.v1.NotificationMetaPageRequest
-	(*NotificationMetaPageReply)(nil),   // 3: common.api.user.v1.NotificationMetaPageReply
+	(*NotificationMeta)(nil),            // 0: common.api.notify.v1.NotificationMeta
+	(*NotificationMetaQueryParams)(nil), // 1: common.api.notify.v1.NotificationMetaQueryParams
+	(*NotificationMetaPageRequest)(nil), // 2: common.api.notify.v1.NotificationMetaPageRequest
+	(*NotificationMetaPageReply)(nil),   // 3: common.api.notify.v1.NotificationMetaPageReply
 	(*timestamppb.Timestamp)(nil),       // 4: google.protobuf.Timestamp
 	(*v1.PageRequest)(nil),              // 5: common.api.common.v1.PageRequest
 	(*v1.PageReply)(nil),                // 6: common.api.common.v1.PageReply
 }
 var file_notify_v1_notifocation_mete_proto_depIdxs = []int32{
-	4, // 0: common.api.user.v1.NotificationMeta.created_at:type_name -> google.protobuf.Timestamp
-	4, // 1: common.api.user.v1.NotificationMeta.updated_at:type_name -> google.protobuf.Timestamp
-	5, // 2: common.api.user.v1.NotificationMetaPageRequest.page:type_name -> common.api.common.v1.PageRequest
-	1, // 3: common.api.user.v1.NotificationMetaPageRequest.query:type_name -> common.api.user.v1.NotificationMetaQueryParams
-	6, // 4: common.api.user.v1.NotificationMetaPageReply.page:type_name -> common.api.common.v1.PageReply
-	0, // 5: common.api.user.v1.NotificationMetaPageReply.rows:type_name -> common.api.user.v1.NotificationMeta
-	2, // 6: common.api.user.v1.NotifyNotificationMetaService.Page:input_type -> common.api.user.v1.NotificationMetaPageRequest
-	3, // 7: common.api.user.v1.NotifyNotificationMetaService.Page:output_type -> common.api.user.v1.NotificationMetaPageReply
+	4, // 0: common.api.notify.v1.NotificationMeta.created_at:type_name -> google.protobuf.Timestamp
+	4, // 1: common.api.notify.v1.NotificationMeta.updated_at:type_name -> google.protobuf.Timestamp
+	5, // 2: common.api.notify.v1.NotificationMetaPageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1, // 3: common.api.notify.v1.NotificationMetaPageRequest.query:type_name -> common.api.notify.v1.NotificationMetaQueryParams
+	6, // 4: common.api.notify.v1.NotificationMetaPageReply.page:type_name -> common.api.common.v1.PageReply
+	0, // 5: common.api.notify.v1.NotificationMetaPageReply.rows:type_name -> common.api.notify.v1.NotificationMeta
+	2, // 6: common.api.notify.v1.NotifyNotificationMetaService.Page:input_type -> common.api.notify.v1.NotificationMetaPageRequest
+	3, // 7: common.api.notify.v1.NotifyNotificationMetaService.Page:output_type -> common.api.notify.v1.NotificationMetaPageReply
 	7, // [7:8] is the sub-list for method output_type
 	6, // [6:7] is the sub-list for method input_type
 	6, // [6:6] is the sub-list for extension type_name

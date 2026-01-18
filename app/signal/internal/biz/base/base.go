@@ -1,0 +1,32 @@
+package base
+
+import (
+	"common/pkg/client"
+	"common/pkg/util"
+	"signal/internal/conf"
+	"signal/internal/data/ent/gen"
+
+	"github.com/go-kratos/kratos/v2/log"
+)
+
+type BaseDomain struct {
+	conf      *conf.Bootstrap
+	log       *log.Helper
+	db        *gen.Client
+	etcd      *client.EtcdClient
+	redis     *client.RedisClient
+	rabbitmq  *client.RabbitMQClient
+	eventPool *util.EventPool
+}
+
+func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
+	return &BaseDomain{
+		conf:      conf,
+		log:       log,
+		db:        db,
+		etcd:      etcd,
+		redis:     redis,
+		rabbitmq:  rabbitmq,
+		eventPool: eventPool,
+	}
+}

@@ -138,6 +138,27 @@ func (_u *NodeUpdate) AddStatus(v int32) *NodeUpdate {
 	return _u
 }
 
+// SetWeight sets the "weight" field.
+func (_u *NodeUpdate) SetWeight(v float64) *NodeUpdate {
+	_u.mutation.ResetWeight()
+	_u.mutation.SetWeight(v)
+	return _u
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (_u *NodeUpdate) SetNillableWeight(v *float64) *NodeUpdate {
+	if v != nil {
+		_u.SetWeight(*v)
+	}
+	return _u
+}
+
+// AddWeight adds value to the "weight" field.
+func (_u *NodeUpdate) AddWeight(v float64) *NodeUpdate {
+	_u.mutation.AddWeight(v)
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *NodeUpdate) SetCreatedAt(v time.Time) *NodeUpdate {
 	_u.mutation.SetCreatedAt(v)
@@ -261,6 +282,12 @@ func (_u *NodeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(node.FieldStatus, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.Weight(); ok {
+		_spec.SetField(node.FieldWeight, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedWeight(); ok {
+		_spec.AddField(node.FieldWeight, field.TypeFloat64, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(node.FieldCreatedAt, field.TypeTime, value)
@@ -401,6 +428,27 @@ func (_u *NodeUpdateOne) SetNillableStatus(v *int32) *NodeUpdateOne {
 // AddStatus adds value to the "status" field.
 func (_u *NodeUpdateOne) AddStatus(v int32) *NodeUpdateOne {
 	_u.mutation.AddStatus(v)
+	return _u
+}
+
+// SetWeight sets the "weight" field.
+func (_u *NodeUpdateOne) SetWeight(v float64) *NodeUpdateOne {
+	_u.mutation.ResetWeight()
+	_u.mutation.SetWeight(v)
+	return _u
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (_u *NodeUpdateOne) SetNillableWeight(v *float64) *NodeUpdateOne {
+	if v != nil {
+		_u.SetWeight(*v)
+	}
+	return _u
+}
+
+// AddWeight adds value to the "weight" field.
+func (_u *NodeUpdateOne) AddWeight(v float64) *NodeUpdateOne {
+	_u.mutation.AddWeight(v)
 	return _u
 }
 
@@ -557,6 +605,12 @@ func (_u *NodeUpdateOne) sqlSave(ctx context.Context) (_node *Node, err error) {
 	}
 	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(node.FieldStatus, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.Weight(); ok {
+		_spec.SetField(node.FieldWeight, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedWeight(); ok {
+		_spec.AddField(node.FieldWeight, field.TypeFloat64, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(node.FieldCreatedAt, field.TypeTime, value)

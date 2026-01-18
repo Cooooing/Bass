@@ -84,6 +84,11 @@ func Status(v int32) predicate.Node {
 	return predicate.Node(sql.FieldEQ(FieldStatus, v))
 }
 
+// Weight applies equality check predicate on the "weight" field. It's identical to WeightEQ.
+func Weight(v float64) predicate.Node {
+	return predicate.Node(sql.FieldEQ(FieldWeight, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Node {
 	return predicate.Node(sql.FieldEQ(FieldCreatedAt, v))
@@ -452,6 +457,46 @@ func StatusLT(v int32) predicate.Node {
 // StatusLTE applies the LTE predicate on the "status" field.
 func StatusLTE(v int32) predicate.Node {
 	return predicate.Node(sql.FieldLTE(FieldStatus, v))
+}
+
+// WeightEQ applies the EQ predicate on the "weight" field.
+func WeightEQ(v float64) predicate.Node {
+	return predicate.Node(sql.FieldEQ(FieldWeight, v))
+}
+
+// WeightNEQ applies the NEQ predicate on the "weight" field.
+func WeightNEQ(v float64) predicate.Node {
+	return predicate.Node(sql.FieldNEQ(FieldWeight, v))
+}
+
+// WeightIn applies the In predicate on the "weight" field.
+func WeightIn(vs ...float64) predicate.Node {
+	return predicate.Node(sql.FieldIn(FieldWeight, vs...))
+}
+
+// WeightNotIn applies the NotIn predicate on the "weight" field.
+func WeightNotIn(vs ...float64) predicate.Node {
+	return predicate.Node(sql.FieldNotIn(FieldWeight, vs...))
+}
+
+// WeightGT applies the GT predicate on the "weight" field.
+func WeightGT(v float64) predicate.Node {
+	return predicate.Node(sql.FieldGT(FieldWeight, v))
+}
+
+// WeightGTE applies the GTE predicate on the "weight" field.
+func WeightGTE(v float64) predicate.Node {
+	return predicate.Node(sql.FieldGTE(FieldWeight, v))
+}
+
+// WeightLT applies the LT predicate on the "weight" field.
+func WeightLT(v float64) predicate.Node {
+	return predicate.Node(sql.FieldLT(FieldWeight, v))
+}
+
+// WeightLTE applies the LTE predicate on the "weight" field.
+func WeightLTE(v float64) predicate.Node {
+	return predicate.Node(sql.FieldLTE(FieldWeight, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

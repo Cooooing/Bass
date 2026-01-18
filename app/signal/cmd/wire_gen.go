@@ -57,7 +57,18 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	systemService := service.NewSystemService(baseService, baseDomain, baseRepo)
-	v := service.ProvideServices(systemService)
+	nodeDomain, err := biz.NewNodeDomain(baseDomain)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	nodeRepo := data.NewNodeRepo(baseRepo)
+	nodeService := service.NewNodeService(baseService, nodeDomain, nodeRepo)
+	v := service.ProvideServices(systemService, nodeService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)

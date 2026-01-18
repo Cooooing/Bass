@@ -25,6 +25,8 @@ const (
 	FieldCallbackURL = "callback_url"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldWeight holds the string denoting the weight field in the database.
+	FieldWeight = "weight"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -42,6 +44,7 @@ var Columns = []string{
 	FieldSecret,
 	FieldCallbackURL,
 	FieldStatus,
+	FieldWeight,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -61,6 +64,8 @@ var (
 	NameValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int32
+	// DefaultWeight holds the default value on creation for the "weight" field.
+	DefaultWeight float64
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -103,6 +108,11 @@ func ByCallbackURL(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByWeight orders the results by the weight field.
+func ByWeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWeight, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

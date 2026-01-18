@@ -18,6 +18,7 @@ var (
 		{Name: "secret", Type: field.TypeString, Comment: "节点密钥"},
 		{Name: "callback_url", Type: field.TypeString, Comment: "节点回调公网地址，如 https://example.com/api"},
 		{Name: "status", Type: field.TypeInt32, Comment: "节点状态: 1-正常, 2-禁用", Default: 1},
+		{Name: "weight", Type: field.TypeFloat64, Comment: "节点权重", Default: 1},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
 	}

@@ -85,7 +85,7 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			// 使用请求路径重写 operation
 			if _, ok := tr.(*transporthttp.Transport); ok {
 				// 获取 token
-				token := strings.TrimPrefix(tr.RequestHeader().Get(constant.Authentication), "Bearer ")
+				token := strings.TrimPrefix(tr.RequestHeader().Get(constant.HeaderAuthentication), "Bearer ")
 
 				// 验证 token
 				userInfo, err := tokenRepo.GetToken(ctx, token)

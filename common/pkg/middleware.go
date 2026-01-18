@@ -2,6 +2,7 @@ package pkg
 
 import (
 	v1 "common/api/common/v1"
+	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
@@ -94,7 +95,7 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 				return handler(ctx, req)
 			}
 			// 毫秒级时间戳
-			timestampStr := getHeader(ctx, constant.Timestamp)
+			timestampStr := GetHeader(ctx, constant.HeaderTimestamp)
 			if timestampStr == "" {
 				return nil, v1.ErrorUnauthorized("timestamp is required")
 			}
@@ -116,21 +117,21 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 	}
 }
 
-func NonceMiddleware(tokenRepo *util.TokenRepo, mode string) middleware.Middleware {
+func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			// Todo nonce 是否需要携带更多信息
 			if mode == constant.Dev || true {
 				return handler(ctx, req)
 			}
-			nonce := getHeader(ctx, constant.Nonce)
+			nonce := GetHeader(ctx, constant.HeaderNonce)
 			if nonce == "" {
 				return nil, v1.ErrorUnauthorized("nonce is required")
 			}
 			if len(nonce) > 256 {
 				return nil, v1.ErrorUnauthorized("nonce is too long")
 			}
-			if ok, err := tokenRepo.SaveRequestNonce(ctx, constant.GetKeyRequestNonce(nonce), 15*time.Second); err != nil || !ok {
+			if ok, err := redisClient.Client.SetNX(ctx, constant.GetKeyRequestNonce(nonce), "1", 15*time.Second).Result(); err != nil || !ok {
 				return nil, v1.ErrorUnauthorized("nonce is invalid")
 			}
 			return handler(ctx, req)
@@ -144,7 +145,7 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 
 			const bearerPrefix = "Bearer "
-			token := getHeader(ctx, constant.Authentication)
+			token := GetHeader(ctx, constant.HeaderAuthentication)
 
 			if !strings.HasPrefix(token, bearerPrefix) {
 				return handler(ctx, req)
@@ -167,7 +168,7 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 	}
 }
 
-func getHeader(ctx context.Context, key string) string {
+func GetHeader(ctx context.Context, key string) string {
 	var v string
 	// gRPC
 	if md, ok := metadata.FromIncomingContext(ctx); ok {

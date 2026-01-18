@@ -7,16 +7,30 @@ import (
 
 // Redis key
 var (
-	RequestNonce            = "RequestNonce::{%s}"            // 请求防重放
-	TokenVerifyCode         = "TokenVerifyCode::{%s}::{%s}"   // 验证码 Token
-	Token                   = "Token::{%s}"                   // Token
-	NotificationTemplateMap = "NotificationTemplateMap"       // 通知模板
-	TwoFactorAuthentication = "TwoFactorAuthentication::{%s}" // 2FA 验证码，首次启用 2FA 时使用
+	RequestNonce            = "RequestNonce:{%s}"            // 请求防重放
+	TokenVerifyCode         = "TokenVerifyCode:{%s}:{%s}"    // 验证码 Token
+	Token                   = "Token:{%s}"                   // Token
+	NotificationTemplateMap = "NotificationTemplateMap"      // 通知模板
+	TwoFactorAuthentication = "TwoFactorAuthentication:{%s}" // 2FA 验证码，首次启用 2FA 时使用
+
+	SignalNode     = "HeaderSignalNode:{%s}" // 信令服务 ws节点信息 map
+	SignalNodeRank = "SignalNodeRank"        // 信令服务 ws节点评分排名 zset，用于负载均衡
 )
 
 func GetKeyRequestNonce(nonce string) string {
 	return fmt.Sprintf(RequestNonce, nonce)
 }
+
+type VerifyCodeType string
+
+func (v VerifyCodeType) String() string {
+	return string(v)
+}
+
+const (
+	VerifyCodeTypeRegisterEmail VerifyCodeType = "RegisterEmail"
+	VerifyCodeTypeRegisterPhone VerifyCodeType = "RegisterPhone"
+)
 
 func GetKeyTokenVerityCode(verifyCodeType VerifyCodeType, account string) string {
 	return fmt.Sprintf(TokenVerifyCode, verifyCodeType, account)
@@ -41,13 +55,14 @@ func GetKeyTwoFactorAuthentication(name string) string {
 	return fmt.Sprintf(TwoFactorAuthentication, name)
 }
 
-type VerifyCodeType string
-
-func (v VerifyCodeType) String() string {
-	return string(v)
-}
-
 const (
-	VerifyCodeTypeRegisterEmail VerifyCodeType = "RegisterEmail"
-	VerifyCodeTypeRegisterPhone VerifyCodeType = "RegisterPhone"
+	SignalNodeData               = "data"                // 基础信息
+	SignalNodeCurrentConnections = "current_connections" // 当前连接数
+	SignalNodePingMs             = "ping_ms"             // 节点 ping 耗时
+	SignalNodePowCostMs          = "pow_cost_ms"         // 节点 PoW 耗时
+	SignalNodeLastPingTime       = "last_ping_time"      // 最后一次 ping 时间
 )
+
+func GetKeySignalNode(nodeName string) string {
+	return fmt.Sprintf(SignalNode, nodeName)
+}

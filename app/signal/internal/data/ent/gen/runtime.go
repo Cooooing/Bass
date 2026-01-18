@@ -22,12 +22,16 @@ func init() {
 	nodeDescStatus := nodeFields[6].Descriptor()
 	// node.DefaultStatus holds the default value on creation for the status field.
 	node.DefaultStatus = nodeDescStatus.Default.(int32)
+	// nodeDescWeight is the schema descriptor for weight field.
+	nodeDescWeight := nodeFields[7].Descriptor()
+	// node.DefaultWeight holds the default value on creation for the weight field.
+	node.DefaultWeight = nodeDescWeight.Default.(float64)
 	// nodeDescCreatedAt is the schema descriptor for created_at field.
-	nodeDescCreatedAt := nodeFields[7].Descriptor()
+	nodeDescCreatedAt := nodeFields[8].Descriptor()
 	// node.DefaultCreatedAt holds the default value on creation for the created_at field.
 	node.DefaultCreatedAt = nodeDescCreatedAt.Default.(func() time.Time)
 	// nodeDescUpdatedAt is the schema descriptor for updated_at field.
-	nodeDescUpdatedAt := nodeFields[8].Descriptor()
+	nodeDescUpdatedAt := nodeFields[9].Descriptor()
 	// node.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	node.DefaultUpdatedAt = nodeDescUpdatedAt.Default.(func() time.Time)
 }

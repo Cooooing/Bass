@@ -80,6 +80,20 @@ func (_c *NodeCreate) SetNillableStatus(v *int32) *NodeCreate {
 	return _c
 }
 
+// SetWeight sets the "weight" field.
+func (_c *NodeCreate) SetWeight(v float64) *NodeCreate {
+	_c.mutation.SetWeight(v)
+	return _c
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (_c *NodeCreate) SetNillableWeight(v *float64) *NodeCreate {
+	if v != nil {
+		_c.SetWeight(*v)
+	}
+	return _c
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_c *NodeCreate) SetCreatedAt(v time.Time) *NodeCreate {
 	_c.mutation.SetCreatedAt(v)
@@ -153,6 +167,10 @@ func (_c *NodeCreate) defaults() {
 		v := node.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.Weight(); !ok {
+		v := node.DefaultWeight
+		_c.mutation.SetWeight(v)
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := node.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
@@ -181,6 +199,9 @@ func (_c *NodeCreate) check() error {
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`gen: missing required field "Node.status"`)}
+	}
+	if _, ok := _c.mutation.Weight(); !ok {
+		return &ValidationError{Name: "weight", err: errors.New(`gen: missing required field "Node.weight"`)}
 	}
 	return nil
 }
@@ -237,6 +258,10 @@ func (_c *NodeCreate) createSpec() (*Node, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(node.FieldStatus, field.TypeInt32, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.Weight(); ok {
+		_spec.SetField(node.FieldWeight, field.TypeFloat64, value)
+		_node.Weight = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(node.FieldCreatedAt, field.TypeTime, value)

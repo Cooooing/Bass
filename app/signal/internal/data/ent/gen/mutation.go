@@ -41,6 +41,8 @@ type NodeMutation struct {
 	callback_url  *string
 	status        *int32
 	addstatus     *int32
+	weight        *float64
+	addweight     *float64
 	created_at    *time.Time
 	updated_at    *time.Time
 	clearedFields map[string]struct{}
@@ -436,6 +438,62 @@ func (m *NodeMutation) ResetStatus() {
 	m.addstatus = nil
 }
 
+// SetWeight sets the "weight" field.
+func (m *NodeMutation) SetWeight(f float64) {
+	m.weight = &f
+	m.addweight = nil
+}
+
+// Weight returns the value of the "weight" field in the mutation.
+func (m *NodeMutation) Weight() (r float64, exists bool) {
+	v := m.weight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeight returns the old "weight" field's value of the Node entity.
+// If the Node object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NodeMutation) OldWeight(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
+	}
+	return oldValue.Weight, nil
+}
+
+// AddWeight adds f to the "weight" field.
+func (m *NodeMutation) AddWeight(f float64) {
+	if m.addweight != nil {
+		*m.addweight += f
+	} else {
+		m.addweight = &f
+	}
+}
+
+// AddedWeight returns the value that was added to the "weight" field in this mutation.
+func (m *NodeMutation) AddedWeight() (r float64, exists bool) {
+	v := m.addweight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetWeight resets all changes to the "weight" field.
+func (m *NodeMutation) ResetWeight() {
+	m.weight = nil
+	m.addweight = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *NodeMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -568,7 +626,7 @@ func (m *NodeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NodeMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.owner_id != nil {
 		fields = append(fields, node.FieldOwnerID)
 	}
@@ -586,6 +644,9 @@ func (m *NodeMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, node.FieldStatus)
+	}
+	if m.weight != nil {
+		fields = append(fields, node.FieldWeight)
 	}
 	if m.created_at != nil {
 		fields = append(fields, node.FieldCreatedAt)
@@ -613,6 +674,8 @@ func (m *NodeMutation) Field(name string) (ent.Value, bool) {
 		return m.CallbackURL()
 	case node.FieldStatus:
 		return m.Status()
+	case node.FieldWeight:
+		return m.Weight()
 	case node.FieldCreatedAt:
 		return m.CreatedAt()
 	case node.FieldUpdatedAt:
@@ -638,6 +701,8 @@ func (m *NodeMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCallbackURL(ctx)
 	case node.FieldStatus:
 		return m.OldStatus(ctx)
+	case node.FieldWeight:
+		return m.OldWeight(ctx)
 	case node.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case node.FieldUpdatedAt:
@@ -693,6 +758,13 @@ func (m *NodeMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case node.FieldWeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWeight(v)
+		return nil
 	case node.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -721,6 +793,9 @@ func (m *NodeMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, node.FieldStatus)
 	}
+	if m.addweight != nil {
+		fields = append(fields, node.FieldWeight)
+	}
 	return fields
 }
 
@@ -733,6 +808,8 @@ func (m *NodeMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedOwnerID()
 	case node.FieldStatus:
 		return m.AddedStatus()
+	case node.FieldWeight:
+		return m.AddedWeight()
 	}
 	return nil, false
 }
@@ -755,6 +832,13 @@ func (m *NodeMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
+		return nil
+	case node.FieldWeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddWeight(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Node numeric field %s", name)
@@ -827,6 +911,9 @@ func (m *NodeMutation) ResetField(name string) error {
 		return nil
 	case node.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case node.FieldWeight:
+		m.ResetWeight()
 		return nil
 	case node.FieldCreatedAt:
 		m.ResetCreatedAt()

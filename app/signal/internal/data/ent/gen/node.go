@@ -29,6 +29,8 @@ type Node struct {
 	CallbackURL string `json:"callback_url,omitempty"`
 	// 节点状态: 1-正常, 2-禁用
 	Status int32 `json:"status,omitempty"`
+	// 节点权重
+	Weight float64 `json:"weight,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间
@@ -41,6 +43,8 @@ func (*Node) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case node.FieldWeight:
+			values[i] = new(sql.NullFloat64)
 		case node.FieldID, node.FieldOwnerID, node.FieldStatus:
 			values[i] = new(sql.NullInt64)
 		case node.FieldName, node.FieldDescription, node.FieldSecret, node.FieldCallbackURL:
@@ -105,6 +109,12 @@ func (_m *Node) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = int32(value.Int64)
+			}
+		case node.FieldWeight:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field weight", values[i])
+			} else if value.Valid {
+				_m.Weight = value.Float64
 			}
 		case node.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -177,6 +187,9 @@ func (_m *Node) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("weight=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Weight))
 	builder.WriteString(", ")
 	if v := _m.CreatedAt; v != nil {
 		builder.WriteString("created_at=")

@@ -100,7 +100,7 @@ func (c *EtcdClient) NewGrpcConn(service string) (*grpc.ClientConn, error) {
 					// ---- Token 注入（写在这里）----
 					token, _ := ctx.Value(constant.CtxToken).(string)
 					if token != "" {
-						ctx = metadata.AppendToOutgoingContext(ctx, strings.ToLower(constant.Authentication), fmt.Sprintf("Bearer %s", token))
+						ctx = metadata.AppendToOutgoingContext(ctx, strings.ToLower(constant.HeaderAuthentication), fmt.Sprintf("Bearer %s", token))
 					}
 					// ---- END ----
 					return next(ctx, req)
@@ -127,7 +127,7 @@ func (c *EtcdClient) NewHTTPConn(service string) (*khttp.Client, error) {
 					token, _ := ctx.Value(constant.CtxToken).(string)
 					if token != "" {
 						if r, ok := req.(khttp.Request); ok {
-							r.Header.Add(constant.Authentication, fmt.Sprintf("Bearer %s", token))
+							r.Header.Add(constant.HeaderAuthentication, fmt.Sprintf("Bearer %s", token))
 						}
 					}
 					// ---- END ----

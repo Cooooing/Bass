@@ -7,14 +7,14 @@ import (
 
 // Redis key
 var (
-	RequestNonce            = "RequestNonce:{%s}"            // 请求防重放
-	TokenVerifyCode         = "TokenVerifyCode:{%s}:{%s}"    // 验证码 Token
-	Token                   = "Token:{%s}"                   // Token
-	NotificationTemplateMap = "NotificationTemplateMap"      // 通知模板
-	TwoFactorAuthentication = "TwoFactorAuthentication:{%s}" // 2FA 验证码，首次启用 2FA 时使用
+	RequestNonce            = "Auth:RequestNonce:{%s}"            // 请求防重放
+	TokenVerifyCode         = "Auth:TokenVerifyCode:{%s}:{%s}"    // 验证码 Token
+	Token                   = "Auth:Token:{%s}"                   // Token
+	NotificationTemplateMap = "Notify:NotificationTemplateMap"    // 通知模板
+	TwoFactorAuthentication = "Auth:TwoFactorAuthentication:{%s}" // 2FA 验证码，首次启用 2FA 时使用
 
-	SignalNode     = "HeaderSignalNode:{%s}" // 信令服务 ws节点信息 map
-	SignalNodeRank = "SignalNodeRank"        // 信令服务 ws节点评分排名 zset，用于负载均衡
+	SignalNode     = "Signal:Node:{%s}" // 信令服务 ws节点信息 map
+	SignalNodeRank = "Signal:NodeRank"  // 信令服务 ws节点评分排名 zset，用于负载均衡
 )
 
 func GetKeyRequestNonce(nonce string) string {

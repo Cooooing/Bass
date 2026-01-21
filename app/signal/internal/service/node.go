@@ -2,13 +2,13 @@ package service
 
 import (
 	v1 "common/api/signal/v1"
+	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"context"
 	"fmt"
 	"signal/internal/biz"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-	"signal/internal/data"
 	"signal/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -75,7 +75,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.SignalNodeUpdateReques
 }
 
 func (s *NodeService) GetSecret(ctx context.Context, req *v1.SignalNodeGetSecretRequest) (*v1.SignalNodeGetSecretReply, error) {
-	node, err := s.nodeRepo.GetOne(ctx, s.db, &repo.NodeGetReq{Id: req.Id})
+	node, err := s.nodeRepo.GetOne(ctx, s.db, &repo.NodeGetReq{Id: base.Ptr(req.Id)})
 	if err != nil {
 		return nil, err
 	}
@@ -96,24 +96,8 @@ func (s *NodeService) List(ctx context.Context, req *v1.SignalNodeListRequest) (
 }
 
 func (s *NodeService) Negotiate(ctx context.Context, req *v1.SignalNodeNegotiateRequest) (*v1.SignalNodeNegotiateReply, error) {
-	// 拉取当前可用的节点列表，作为协商候选
-	list, err := s.nodeRepo.GetList(ctx, s.db, &repo.NodeGetReq{})
-	if err != nil {
-		return nil, err
-	}
-	// 将 internal Node 转换为 RPC Node
-	var rpcNodes []*v1.Node
-	for _, n := range list {
-		rpcNodes = append(rpcNodes, n.ConvertToRpc())
-	}
-	// 简单的最佳节点草案：优先选取第一个节点（后续可基于分数排序）
-	var best *v1.Node
-	if len(rpcNodes) > 0 {
-		best = rpcNodes[0]
-		// 计算示例分数，保持与领域逻辑的一致性，实际实现可使用真实指标
-		_ = s.nodeDomain.CalculateNodeScore(1.0, 10, 10, int64(len(rpcNodes)))
-	}
-	return &v1.SignalNodeNegotiateReply{Node: best, Nodes: rpcNodes}, nil
+
+	return &v1.SignalNodeNegotiateReply{}, nil
 }
 
 func (s *NodeService) Register(ctx context.Context, req *v1.SignalNodeRegisterRequest) (*v1.SignalNodeRegisterReply, error) {

@@ -197,7 +197,6 @@ func (r *NodeRepo) Unregister(ctx context.Context, name string) error {
 	pipe.Del(ctx, constant.GetKeySignalNode(name))
 	pipe.ZRem(ctx, constant.SignalNodeRank, name)
 	_, err := pipe.Exec(ctx)
-
 	return err
 }
 

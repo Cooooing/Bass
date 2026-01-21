@@ -11,7 +11,6 @@ import (
 	"connector/internal/biz"
 	"connector/internal/conf"
 	"connector/internal/data"
-	"connector/internal/data/client"
 	"connector/internal/server"
 	"connector/internal/service"
 	"github.com/go-kratos/kratos/v2"
@@ -22,50 +21,19 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	genClient, cleanup, err := client.NewDataBaseClient(helper, bootstrap)
+	baseService := service.NewBaseService(bootstrap, helper)
+	eventPool, cleanup, err := util.NewEventPool(helper)
 	if err != nil {
 		return nil, nil, err
 	}
-	etcdClient, cleanup2, err := data.NewEtcdClient(helper, bootstrap)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
-	if err != nil {
-		cleanup2()
-		cleanup()
-		return nil, nil, err
-	}
-	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
-	if err != nil {
-		cleanup3()
-		cleanup2()
-		cleanup()
-		return nil, nil, err
-	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
-	eventPool, cleanup5, err := util.NewEventPool(helper)
-	if err != nil {
-		cleanup4()
-		cleanup3()
-		cleanup2()
-		cleanup()
-		return nil, nil, err
-	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	baseDomain := biz.NewBaseDomain(bootstrap, helper, eventPool)
+	baseRepo := data.NewBaseRepo(bootstrap, helper)
 	systemService := service.NewSystemService(baseService, baseDomain, baseRepo)
 	v := service.ProvideServices(systemService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
-	app := newApp(logger, grpcServer, httpServer, etcdClient)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v)
+	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup5()
-		cleanup4()
-		cleanup3()
-		cleanup2()
 		cleanup()
 	}, nil
 }

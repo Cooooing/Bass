@@ -15,7 +15,7 @@ import (
 
 func newClient() (*RabbitMQClient, func(), error) {
 	client, f, err := NewRabbitMQClient(log.NewHelper(log.NewStdLogger(os.Stdout)), &model.RabbitmqConf{
-		Url:            "amqp://admin:123456@127.0.0.1:5672/dev_vhost",
+		Url:            "amqp://root:123456@127.0.0.1:5672/admin_vhost",
 		Heartbeat:      durationpb.New(time.Second * 10),
 		DialTimeout:    durationpb.New(time.Second * 5),
 		PrefetchCount:  10,

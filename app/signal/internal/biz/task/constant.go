@@ -3,8 +3,8 @@ package task
 type TaskName string
 
 const (
-	TaskNodePing TaskName = "node_ping"
-	TaskNodePow  TaskName = "node_pow"
+	TaskNodePing TaskName = "node:ping"
+	TaskNodePow  TaskName = "node:pow"
 )
 
 func (t TaskName) String() string {

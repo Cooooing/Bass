@@ -21,8 +21,7 @@ var DataProviderSet = wire.NewSet(
 	NewEtcdClient,
 	NewRedisClient,
 	NewRabbitMQClient,
-	commonClient.NewAsynqServer,
-	commonClient.NewAsynqClient,
+	commonClient.NewHttpClient,
 
 	util.NewTokenRepo,
 

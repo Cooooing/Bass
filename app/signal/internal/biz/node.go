@@ -1,25 +1,41 @@
 package biz
 
 import (
+	"common/pkg/constant"
+	commonBase "common/pkg/cutil/base"
 	"common/pkg/cutil/base/str"
 	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 	"signal/internal/biz/base"
+	"signal/internal/biz/model"
+	"signal/internal/biz/repo"
+	"signal/internal/biz/task"
+	"time"
 
 	"github.com/sony/sonyflake/v2"
 )
 
 type NodeDomain struct {
 	*base.BaseDomain
-	sf *sonyflake.Sonyflake
+	nodeRepo   repo.NodeRepo
+	producer   *Producer
+	httpClient *http.Client
+	sf         *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *base.BaseDomain) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, producer *Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
 	return &NodeDomain{
 		BaseDomain: baseDomain,
+		nodeRepo:   nodeRepo,
+		producer:   producer,
+		httpClient: httpClient,
 		sf:         sf,
 	}, nil
 }
@@ -29,7 +45,61 @@ func (d *NodeDomain) GenerateSecret() string {
 	return str.RandStr(d.sf, 32, true, true, true, false)
 }
 
-func (d *NodeDomain) Register(ctx context.Context) error {
+func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
+	url := fmt.Sprintf("%s://%s/ping", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return 0, err
+	}
+
+	start := time.Now()
+	resp, err := d.httpClient.Do(req)
+	if err != nil {
+		return 0, err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			d.Log.Errorf("failed to close body: %v", err)
+		}
+	}(resp.Body)
+	end := time.Now()
+
+	if resp.StatusCode != http.StatusOK {
+		return 0, fmt.Errorf("failed to ping node[%s]: %s", node.Name, node.CallbackURL)
+	}
+	return end.Sub(start).Milliseconds(), nil
+}
+
+func (d *NodeDomain) Register(ctx context.Context, node *model.Node) error {
+	err := d.nodeRepo.Register(ctx, node)
+	if err != nil {
+		return err
+	}
+	marshal, err := json.Marshal(node)
+	if err != nil {
+		return err
+	}
+	err = d.producer.EnqueueTasks([]*model.Task{
+		{
+			TaskName: task.TaskNodePing.String(),
+			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePing.String(), node.Name),
+			Interval: 10 * time.Second,
+			MaxRetry: 3,
+			Data:     marshal,
+		}, {
+			TaskName: task.TaskNodePow.String(),
+			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePow.String(), node.Name),
+			Interval: 30 * time.Second,
+			MaxRetry: 3,
+			Data:     marshal,
+		},
+	})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

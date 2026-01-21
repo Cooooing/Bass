@@ -10,23 +10,23 @@ import (
 )
 
 type BaseDomain struct {
-	conf      *conf.Bootstrap
-	log       *log.Helper
-	db        *gen.Client
-	etcd      *client.EtcdClient
-	redis     *client.RedisClient
-	rabbitmq  *client.RabbitMQClient
-	eventPool *util.EventPool
+	Conf      *conf.Bootstrap
+	Log       *log.Helper
+	Db        *gen.Client
+	Etcd      *client.EtcdClient
+	Redis     *client.RedisClient
+	Rabbitmq  *client.RabbitMQClient
+	EventPool *util.EventPool
 }
 
 func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
 	return &BaseDomain{
-		conf:      conf,
-		log:       log,
-		db:        db,
-		etcd:      etcd,
-		redis:     redis,
-		rabbitmq:  rabbitmq,
-		eventPool: eventPool,
+		Conf:      conf,
+		Log:       log,
+		Db:        db,
+		Etcd:      etcd,
+		Redis:     redis,
+		Rabbitmq:  rabbitmq,
+		EventPool: eventPool,
 	}
 }

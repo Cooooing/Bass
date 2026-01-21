@@ -1,10 +1,7 @@
 package service
 
 import (
-	"common/pkg/client"
-	"common/pkg/util"
 	"connector/internal/conf"
-	"connector/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -20,24 +17,14 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 type BaseService struct {
-	conf      *conf.Bootstrap
-	log       *log.Helper
-	db        *gen.Client
-	etcd      *client.EtcdClient
-	redis     *client.RedisClient
-	rabbitmq  *client.RabbitMQClient
-	tokenRepo *util.TokenRepo
+	conf *conf.Bootstrap
+	log  *log.Helper
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenRepo *util.TokenRepo) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper) *BaseService {
 	return &BaseService{
-		conf:      conf,
-		log:       logger,
-		db:        db,
-		etcd:      etcd,
-		redis:     redis,
-		rabbitmq:  rabbitmq,
-		tokenRepo: tokenRepo,
+		conf: conf,
+		log:  logger,
 	}
 }
 

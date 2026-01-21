@@ -2,7 +2,6 @@ package main
 
 import (
 	"common/pkg"
-	"common/pkg/client"
 	"common/pkg/constant"
 	"connector/internal/conf"
 	"connector/internal/conf/bootstrap"
@@ -40,7 +39,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.EtcdClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -55,7 +54,6 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.Etcd
 			gs,
 			hs,
 		),
-		kratos.Registrar(es.Registrar()),
 	)
 }
 

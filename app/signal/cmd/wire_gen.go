@@ -7,10 +7,13 @@
 package main
 
 import (
+	client2 "common/pkg/client"
 	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"signal/internal/biz"
+	"signal/internal/biz/base"
+	"signal/internal/biz/task"
 	"signal/internal/conf"
 	"signal/internal/data"
 	"signal/internal/data/client"
@@ -54,10 +57,14 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
 	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	systemService := service.NewSystemService(baseService, baseDomain, baseRepo)
-	nodeDomain, err := biz.NewNodeDomain(baseDomain)
+	nodeRepo := data.NewNodeRepo(baseRepo)
+	asynqClient := task.NewAsynqClient(helper, redisClient)
+	producer := biz.NewProducer(asynqClient)
+	httpClient := client2.NewHttpClient()
+	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, producer, httpClient)
 	if err != nil {
 		cleanup5()
 		cleanup4()
@@ -66,7 +73,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	nodeRepo := data.NewNodeRepo(baseRepo)
 	nodeService := service.NewNodeService(baseService, nodeDomain, nodeRepo)
 	v := service.ProvideServices(systemService, nodeService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)

@@ -185,9 +185,5 @@ func GetHeader(ctx context.Context, key string) string {
 			}
 		}
 	}
-
-	if tr, ok := transport.FromServerContext(ctx); ok {
-		v = tr.RequestHeader().Get(key)
-	}
 	return v
 }

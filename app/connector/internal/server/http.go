@@ -2,7 +2,6 @@ package server
 
 import (
 	"common/pkg"
-	"common/pkg/util"
 	"connector/internal/conf"
 	"connector/internal/service"
 
@@ -17,7 +16,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,7 +26,6 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			pkg.AuthMiddleware(tokenRepo),
 			validate.ProtoValidate(),
 		),
 		http.ResponseEncoder(pkg.HttpResponseEncoder),

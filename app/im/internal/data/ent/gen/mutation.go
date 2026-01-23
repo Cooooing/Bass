@@ -281,7 +281,7 @@ func (m *ChatGroupMutation) Introduction() (r string, exists bool) {
 // OldIntroduction returns the old "introduction" field's value of the ChatGroup entity.
 // If the ChatGroup object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ChatGroupMutation) OldIntroduction(ctx context.Context) (v string, err error) {
+func (m *ChatGroupMutation) OldIntroduction(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIntroduction is only allowed on UpdateOne operations")
 	}
@@ -295,9 +295,22 @@ func (m *ChatGroupMutation) OldIntroduction(ctx context.Context) (v string, err 
 	return oldValue.Introduction, nil
 }
 
+// ClearIntroduction clears the value of the "introduction" field.
+func (m *ChatGroupMutation) ClearIntroduction() {
+	m.introduction = nil
+	m.clearedFields[chatgroup.FieldIntroduction] = struct{}{}
+}
+
+// IntroductionCleared returns if the "introduction" field was cleared in this mutation.
+func (m *ChatGroupMutation) IntroductionCleared() bool {
+	_, ok := m.clearedFields[chatgroup.FieldIntroduction]
+	return ok
+}
+
 // ResetIntroduction resets all changes to the "introduction" field.
 func (m *ChatGroupMutation) ResetIntroduction() {
 	m.introduction = nil
+	delete(m.clearedFields, chatgroup.FieldIntroduction)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -1476,6 +1489,9 @@ func (m *ChatGroupMutation) ClearedFields() []string {
 	if m.FieldCleared(chatgroup.FieldAvatar) {
 		fields = append(fields, chatgroup.FieldAvatar)
 	}
+	if m.FieldCleared(chatgroup.FieldIntroduction) {
+		fields = append(fields, chatgroup.FieldIntroduction)
+	}
 	if m.FieldCleared(chatgroup.FieldLastMessageID) {
 		fields = append(fields, chatgroup.FieldLastMessageID)
 	}
@@ -1513,6 +1529,9 @@ func (m *ChatGroupMutation) ClearField(name string) error {
 	switch name {
 	case chatgroup.FieldAvatar:
 		m.ClearAvatar()
+		return nil
+	case chatgroup.FieldIntroduction:
+		m.ClearIntroduction()
 		return nil
 	case chatgroup.FieldLastMessageID:
 		m.ClearLastMessageID()

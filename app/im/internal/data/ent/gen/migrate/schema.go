@@ -14,7 +14,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "avatar", Type: field.TypeString, Nullable: true},
-		{Name: "introduction", Type: field.TypeString, Default: ""},
+		{Name: "introduction", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeInt64},
 		{Name: "status", Type: field.TypeInt32, Default: 1},
 		{Name: "member_count", Type: field.TypeUint32, Default: 0},

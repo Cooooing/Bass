@@ -308,10 +308,6 @@ func (_c *ChatGroupCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *ChatGroupCreate) defaults() {
-	if _, ok := _c.mutation.Introduction(); !ok {
-		v := chatgroup.DefaultIntroduction
-		_c.mutation.SetIntroduction(v)
-	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := chatgroup.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -343,9 +339,6 @@ func (_c *ChatGroupCreate) check() error {
 		if err := chatgroup.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "ChatGroup.name": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Introduction(); !ok {
-		return &ValidationError{Name: "introduction", err: errors.New(`gen: missing required field "ChatGroup.introduction"`)}
 	}
 	if _, ok := _c.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`gen: missing required field "ChatGroup.owner_id"`)}
@@ -401,7 +394,7 @@ func (_c *ChatGroupCreate) createSpec() (*ChatGroup, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := _c.mutation.Introduction(); ok {
 		_spec.SetField(chatgroup.FieldIntroduction, field.TypeString, value)
-		_node.Introduction = value
+		_node.Introduction = &value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(chatgroup.FieldOwnerID, field.TypeInt64, value)

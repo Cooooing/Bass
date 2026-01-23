@@ -21,10 +21,6 @@ func init() {
 	chatgroupDescName := chatgroupFields[1].Descriptor()
 	// chatgroup.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	chatgroup.NameValidator = chatgroupDescName.Validators[0].(func(string) error)
-	// chatgroupDescIntroduction is the schema descriptor for introduction field.
-	chatgroupDescIntroduction := chatgroupFields[3].Descriptor()
-	// chatgroup.DefaultIntroduction holds the default value on creation for the introduction field.
-	chatgroup.DefaultIntroduction = chatgroupDescIntroduction.Default.(string)
 	// chatgroupDescStatus is the schema descriptor for status field.
 	chatgroupDescStatus := chatgroupFields[5].Descriptor()
 	// chatgroup.DefaultStatus holds the default value on creation for the status field.

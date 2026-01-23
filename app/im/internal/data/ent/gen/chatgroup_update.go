@@ -79,6 +79,12 @@ func (_u *ChatGroupUpdate) SetNillableIntroduction(v *string) *ChatGroupUpdate {
 	return _u
 }
 
+// ClearIntroduction clears the value of the "introduction" field.
+func (_u *ChatGroupUpdate) ClearIntroduction() *ChatGroupUpdate {
+	_u.mutation.ClearIntroduction()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ChatGroupUpdate) SetOwnerID(v int64) *ChatGroupUpdate {
 	_u.mutation.ResetOwnerID()
@@ -516,6 +522,9 @@ func (_u *ChatGroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Introduction(); ok {
 		_spec.SetField(chatgroup.FieldIntroduction, field.TypeString, value)
 	}
+	if _u.mutation.IntroductionCleared() {
+		_spec.ClearField(chatgroup.FieldIntroduction, field.TypeString)
+	}
 	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(chatgroup.FieldOwnerID, field.TypeInt64, value)
 	}
@@ -811,6 +820,12 @@ func (_u *ChatGroupUpdateOne) SetNillableIntroduction(v *string) *ChatGroupUpdat
 	if v != nil {
 		_u.SetIntroduction(*v)
 	}
+	return _u
+}
+
+// ClearIntroduction clears the value of the "introduction" field.
+func (_u *ChatGroupUpdateOne) ClearIntroduction() *ChatGroupUpdateOne {
+	_u.mutation.ClearIntroduction()
 	return _u
 }
 
@@ -1280,6 +1295,9 @@ func (_u *ChatGroupUpdateOne) sqlSave(ctx context.Context) (_node *ChatGroup, er
 	}
 	if value, ok := _u.mutation.Introduction(); ok {
 		_spec.SetField(chatgroup.FieldIntroduction, field.TypeString, value)
+	}
+	if _u.mutation.IntroductionCleared() {
+		_spec.ClearField(chatgroup.FieldIntroduction, field.TypeString)
 	}
 	if value, ok := _u.mutation.OwnerID(); ok {
 		_spec.SetField(chatgroup.FieldOwnerID, field.TypeInt64, value)

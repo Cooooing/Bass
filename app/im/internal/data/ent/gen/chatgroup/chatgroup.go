@@ -114,8 +114,6 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DefaultIntroduction holds the default value on creation for the "introduction" field.
-	DefaultIntroduction string
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int32
 	// DefaultMemberCount holds the default value on creation for the "member_count" field.

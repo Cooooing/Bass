@@ -320,6 +320,16 @@ func IntroductionHasSuffix(v string) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldHasSuffix(FieldIntroduction, v))
 }
 
+// IntroductionIsNil applies the IsNil predicate on the "introduction" field.
+func IntroductionIsNil() predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldIsNull(FieldIntroduction))
+}
+
+// IntroductionNotNil applies the NotNil predicate on the "introduction" field.
+func IntroductionNotNil() predicate.ChatGroup {
+	return predicate.ChatGroup(sql.FieldNotNull(FieldIntroduction))
+}
+
 // IntroductionEqualFold applies the EqualFold predicate on the "introduction" field.
 func IntroductionEqualFold(v string) predicate.ChatGroup {
 	return predicate.ChatGroup(sql.FieldEqualFold(FieldIntroduction, v))

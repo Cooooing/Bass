@@ -23,7 +23,7 @@ type ChatGroup struct {
 	// 群头像
 	Avatar *string `json:"avatar,omitempty"`
 	// 群简介
-	Introduction string `json:"introduction,omitempty"`
+	Introduction *string `json:"introduction,omitempty"`
 	// 群主id
 	OwnerID int64 `json:"owner_id,omitempty"`
 	// 群状态: 1-正常, 2-解散
@@ -154,7 +154,8 @@ func (_m *ChatGroup) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field introduction", values[i])
 			} else if value.Valid {
-				_m.Introduction = value.String
+				_m.Introduction = new(string)
+				*_m.Introduction = value.String
 			}
 		case chatgroup.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -293,8 +294,10 @@ func (_m *ChatGroup) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	builder.WriteString("introduction=")
-	builder.WriteString(_m.Introduction)
+	if v := _m.Introduction; v != nil {
+		builder.WriteString("introduction=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OwnerID))

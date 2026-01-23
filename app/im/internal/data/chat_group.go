@@ -23,8 +23,8 @@ func NewChatGroupRepo(baseRepo *BaseRepo) repo.ChatGroupRepo {
 func (r *ChatGroupRepo) Save(ctx context.Context, tx *gen.Client, chatGroup *model.ChatGroup) (*model.ChatGroup, error) {
 	save, err := tx.ChatGroup.Create().
 		SetName(chatGroup.Name).
-		SetAvatar(chatGroup.Avatar).
-		SetIntroduction(chatGroup.Introduction).
+		SetNillableAvatar(chatGroup.Avatar).
+		SetNillableIntroduction(chatGroup.Introduction).
 		SetOwnerID(chatGroup.OwnerID).
 		SetStatus(int32(v1.ChatGroupStatus_CHAT_GROUP_STATUS_NORMAL)).
 		SetMemberCount(chatGroup.MemberCount).

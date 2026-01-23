@@ -27,7 +27,7 @@ func (ChatGroup) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("name").Comment("群名称").NotEmpty(),
 		field.String("avatar").Comment("群头像").Optional().Nillable(),
-		field.String("introduction").Comment("群简介").Default(""),
+		field.String("introduction").Comment("群简介").Optional().Nillable(),
 		field.Int64("owner_id").Comment("群主id"),
 		field.Int32("status").Comment("群状态: 1-正常, 2-解散").Default(1),
 		field.Uint32("member_count").Comment("群成员数").Default(0),

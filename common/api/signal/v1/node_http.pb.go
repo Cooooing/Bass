@@ -60,8 +60,8 @@ func RegisterSignalNodeServiceHTTPServer(s *http.Server, srv SignalNodeServiceHT
 	r := s.Route("/")
 	r.POST("/v1/node/save", _SignalNodeService_Save0_HTTP_Handler(srv))
 	r.POST("/v1/node/update", _SignalNodeService_Update4_HTTP_Handler(srv))
-	r.POST("/v1/node/get/Secret", _SignalNodeService_GetSecret0_HTTP_Handler(srv))
-	r.POST("/v1/node/update/Secret", _SignalNodeService_UpdateSecret0_HTTP_Handler(srv))
+	r.POST("/v1/node/secret/get", _SignalNodeService_GetSecret0_HTTP_Handler(srv))
+	r.POST("/v1/node/secret/update", _SignalNodeService_UpdateSecret0_HTTP_Handler(srv))
 	r.POST("/v1/node/list", _SignalNodeService_List0_HTTP_Handler(srv))
 	r.POST("/v1/node/negotiate", _SignalNodeService_Negotiate0_HTTP_Handler(srv))
 	r.POST("/v1/node/register", _SignalNodeService_Register0_HTTP_Handler(srv))
@@ -349,7 +349,7 @@ func NewSignalNodeServiceHTTPClient(client *http.Client) SignalNodeServiceHTTPCl
 // GetSecret 获取密钥
 func (c *SignalNodeServiceHTTPClientImpl) GetSecret(ctx context.Context, in *SignalNodeGetSecretRequest, opts ...http.CallOption) (*SignalNodeGetSecretReply, error) {
 	var out SignalNodeGetSecretReply
-	pattern := "/v1/node/get/Secret"
+	pattern := "/v1/node/secret/get"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSignalNodeServiceGetSecret))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -489,7 +489,7 @@ func (c *SignalNodeServiceHTTPClientImpl) Update(ctx context.Context, in *Signal
 // UpdateSecret 更新密钥
 func (c *SignalNodeServiceHTTPClientImpl) UpdateSecret(ctx context.Context, in *SignalNodeUpdateSecretRequest, opts ...http.CallOption) (*SignalNodeUpdateSecretReply, error) {
 	var out SignalNodeUpdateSecretReply
-	pattern := "/v1/node/update/Secret"
+	pattern := "/v1/node/secret/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSignalNodeServiceUpdateSecret))
 	opts = append(opts, http.PathTemplate(pattern))

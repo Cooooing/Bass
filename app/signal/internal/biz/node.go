@@ -1,9 +1,11 @@
 package biz
 
 import (
+	cv1 "common/api/common/v1"
 	"common/pkg/constant"
 	commonBase "common/pkg/cutil/base"
 	"common/pkg/cutil/base/str"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -67,30 +69,34 @@ func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
 	end := time.Now()
 
 	if resp.StatusCode != http.StatusOK {
-		return 0, fmt.Errorf("failed to ping node[%s]: %s", node.Name, node.CallbackURL)
+		return 0, fmt.Errorf("failed to ping node[%s]: %s", node.Key, node.CallbackURL)
 	}
 	return end.Sub(start).Milliseconds(), nil
 }
 
-func (d *NodeDomain) Register(ctx context.Context, node *model.Node) error {
-	err := d.nodeRepo.Register(ctx, node)
+func (d *NodeDomain) Register(ctx context.Context) error {
+	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("node is not allow")
+	}
+	err := d.nodeRepo.Register(ctx, n)
 	if err != nil {
 		return err
 	}
-	marshal, err := json.Marshal(node)
+	marshal, err := json.Marshal(n)
 	if err != nil {
 		return err
 	}
 	err = d.producer.EnqueueTasks([]*model.Task{
 		{
 			TaskName: task.TaskNodePing.String(),
-			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePing.String(), node.Name),
+			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePing.String(), n.Key),
 			Interval: 10 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
 			TaskName: task.TaskNodePow.String(),
-			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePow.String(), node.Name),
+			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePow.String(), n.Key),
 			Interval: 30 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
@@ -104,5 +110,13 @@ func (d *NodeDomain) Register(ctx context.Context, node *model.Node) error {
 }
 
 func (d *NodeDomain) Unregister(ctx context.Context) error {
+	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("node is not allow")
+	}
+	err := d.nodeRepo.Unregister(ctx, n.Key)
+	if err != nil {
+		return err
+	}
 	return nil
 }

@@ -13,10 +13,11 @@ var (
 	SignalNodesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "owner_id", Type: field.TypeInt64, Nullable: true, Comment: "节点拥有者 ID"},
-		{Name: "name", Type: field.TypeString, Comment: "节点名称，节点唯一标识"},
+		{Name: "key", Type: field.TypeString, Comment: "节点标识，请求头唯一标识"},
+		{Name: "name", Type: field.TypeString, Comment: "节点名称"},
 		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "节点描述"},
 		{Name: "secret", Type: field.TypeString, Comment: "节点密钥"},
-		{Name: "callback_url", Type: field.TypeString, Comment: "节点回调公网地址，如 https://example.com/api"},
+		{Name: "callback_url", Type: field.TypeString, Comment: "节点回调公网地址，如 example.com/api"},
 		{Name: "status", Type: field.TypeInt32, Comment: "节点状态: 1-正常, 2-禁用", Default: 1},
 		{Name: "weight", Type: field.TypeFloat64, Comment: "节点权重", Default: 1},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
@@ -27,6 +28,13 @@ var (
 		Name:       "signal_nodes",
 		Columns:    SignalNodesColumns,
 		PrimaryKey: []*schema.Column{SignalNodesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "node_key",
+				Unique:  true,
+				Columns: []*schema.Column{SignalNodesColumns[2]},
+			},
+		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{

@@ -3,7 +3,9 @@ package server
 import (
 	"common/pkg"
 	"common/pkg/util"
+	"signal/internal/biz/repo"
 	"signal/internal/conf"
+	"signal/internal/data/ent/gen"
 	"signal/internal/service"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -16,7 +18,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo, db *gen.Client, nodeRepo repo.NodeRepo) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -27,6 +29,7 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 			),
 			logging.Server(logger),
 			pkg.AuthMiddleware(tokenRepo),
+			SignalAuthMiddleware(db, nodeRepo),
 			validate.ProtoValidate(),
 		),
 	}

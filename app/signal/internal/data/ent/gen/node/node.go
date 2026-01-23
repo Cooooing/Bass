@@ -15,6 +15,8 @@ const (
 	FieldID = "id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldKey holds the string denoting the key field in the database.
+	FieldKey = "key"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -39,6 +41,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldOwnerID,
+	FieldKey,
 	FieldName,
 	FieldDescription,
 	FieldSecret,
@@ -60,6 +63,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// KeyValidator is a validator for the "key" field. It is called by the builders before save.
+	KeyValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
@@ -83,6 +88,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByKey orders the results by the key field.
+func ByKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldKey, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

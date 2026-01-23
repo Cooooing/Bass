@@ -116,6 +116,8 @@ func (m *Node) validate(all bool) error {
 
 	// no validation rules for Id
 
+	// no validation rules for Key
+
 	// no validation rules for Name
 
 	// no validation rules for CallbackUrl

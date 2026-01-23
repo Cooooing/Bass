@@ -34,6 +34,12 @@ func (_c *NodeCreate) SetNillableOwnerID(v *int64) *NodeCreate {
 	return _c
 }
 
+// SetKey sets the "key" field.
+func (_c *NodeCreate) SetKey(v string) *NodeCreate {
+	_c.mutation.SetKey(v)
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *NodeCreate) SetName(v string) *NodeCreate {
 	_c.mutation.SetName(v)
@@ -183,6 +189,14 @@ func (_c *NodeCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *NodeCreate) check() error {
+	if _, ok := _c.mutation.Key(); !ok {
+		return &ValidationError{Name: "key", err: errors.New(`gen: missing required field "Node.key"`)}
+	}
+	if v, ok := _c.mutation.Key(); ok {
+		if err := node.KeyValidator(v); err != nil {
+			return &ValidationError{Name: "key", err: fmt.Errorf(`gen: validator failed for field "Node.key": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`gen: missing required field "Node.name"`)}
 	}
@@ -238,6 +252,10 @@ func (_c *NodeCreate) createSpec() (*Node, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(node.FieldOwnerID, field.TypeInt64, value)
 		_node.OwnerID = &value
+	}
+	if value, ok := _c.mutation.Key(); ok {
+		_spec.SetField(node.FieldKey, field.TypeString, value)
+		_node.Key = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(node.FieldName, field.TypeString, value)

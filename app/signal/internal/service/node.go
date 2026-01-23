@@ -45,6 +45,7 @@ func (s *NodeService) Save(ctx context.Context, req *v1.SignalNodeSaveRequest) (
 	save, err := s.nodeRepo.Save(ctx, s.db, &model.Node{Node: &gen.Node{
 		OwnerID:     req.Node.OwnerId,
 		Name:        req.Node.Name,
+		Key:         req.Node.Key,
 		Description: req.Node.Description,
 		Secret:      s.nodeDomain.GenerateSecret(),
 		CallbackURL: req.Node.CallbackUrl,
@@ -63,6 +64,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.SignalNodeUpdateReques
 	update, err := s.nodeRepo.Update(ctx, s.db, &model.Node{Node: &gen.Node{
 		ID:          req.Node.Id,
 		OwnerID:     req.Node.OwnerId,
+		Key:         req.Node.Key,
 		Name:        req.Node.Name,
 		Description: req.Node.Description,
 		CallbackURL: req.Node.CallbackUrl,
@@ -101,13 +103,13 @@ func (s *NodeService) Negotiate(ctx context.Context, req *v1.SignalNodeNegotiate
 }
 
 func (s *NodeService) Register(ctx context.Context, req *v1.SignalNodeRegisterRequest) (*v1.SignalNodeRegisterReply, error) {
-	// TODO: 实现注册节点的领域逻辑
-	return &v1.SignalNodeRegisterReply{}, nil
+	err := s.nodeDomain.Register(ctx)
+	return &v1.SignalNodeRegisterReply{}, err
 }
 
 func (s *NodeService) Unregister(ctx context.Context, req *v1.SignalNodeUnregisterRequest) (*v1.SignalNodeUnregisterReply, error) {
-	// TODO: 实现注销节点的领域逻辑
-	return &v1.SignalNodeUnregisterReply{}, nil
+	err := s.nodeDomain.Unregister(ctx)
+	return &v1.SignalNodeUnregisterReply{}, err
 }
 
 func (s *NodeService) Online(ctx context.Context, req *v1.SignalNodeOnlineRequest) (*v1.SignalNodeOnlineReply, error) {

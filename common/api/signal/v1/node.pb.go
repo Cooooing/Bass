@@ -1011,8 +1011,8 @@ const file_signal_v1_node_proto_rawDesc = "" +
 	"\x11SignalNodeService\x12x\n" +
 	"\x04Save\x12+.common.api.signal.v1.SignalNodeSaveRequest\x1a).common.api.signal.v1.SignalNodeSaveReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/node/save\x12\x80\x01\n" +
 	"\x06Update\x12-.common.api.signal.v1.SignalNodeUpdateRequest\x1a+.common.api.signal.v1.SignalNodeUpdateReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/node/update\x12\x8d\x01\n" +
-	"\tGetSecret\x120.common.api.signal.v1.SignalNodeGetSecretRequest\x1a..common.api.signal.v1.SignalNodeGetSecretReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/node/get/Secret\x12\x99\x01\n" +
-	"\fUpdateSecret\x123.common.api.signal.v1.SignalNodeUpdateSecretRequest\x1a1.common.api.signal.v1.SignalNodeUpdateSecretReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/node/update/Secret\x12x\n" +
+	"\tGetSecret\x120.common.api.signal.v1.SignalNodeGetSecretRequest\x1a..common.api.signal.v1.SignalNodeGetSecretReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/node/secret/get\x12\x99\x01\n" +
+	"\fUpdateSecret\x123.common.api.signal.v1.SignalNodeUpdateSecretRequest\x1a1.common.api.signal.v1.SignalNodeUpdateSecretReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/node/secret/update\x12x\n" +
 	"\x04List\x12+.common.api.signal.v1.SignalNodeListRequest\x1a).common.api.signal.v1.SignalNodeListReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/node/list\x12\x8c\x01\n" +
 	"\tNegotiate\x120.common.api.signal.v1.SignalNodeNegotiateRequest\x1a..common.api.signal.v1.SignalNodeNegotiateReply\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/node/negotiate\x12\x88\x01\n" +
 	"\bRegister\x12/.common.api.signal.v1.SignalNodeRegisterRequest\x1a-.common.api.signal.v1.SignalNodeRegisterReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/node/register\x12\x90\x01\n" +

@@ -346,7 +346,7 @@ const file_conf_bootstrap_bootstrap_proto_rawDesc = "" +
 	"\x03Log\x12\x16\n" +
 	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\x14\n" +
 	"\x05level\x18\x02 \x01(\tR\x05level\x12\x12\n" +
-	"\x04file\x18\x03 \x01(\tR\x04fileB,Z*connector/internal/conf/bootstrap;bootstrapb\x06proto3"
+	"\x04file\x18\x03 \x01(\tR\x04fileB-Z+connector/internal/conf/bootstrap;bootstrapb\x06proto3"
 
 var (
 	file_conf_bootstrap_bootstrap_proto_rawDescOnce sync.Once

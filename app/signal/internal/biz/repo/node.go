@@ -8,16 +8,16 @@ import (
 )
 
 type NodeRepo interface {
-	Save(ctx context.Context, tx *gen.Client, Node *model.Node) (*model.Node, error)
+	Save(ctx context.Context, tx *gen.Client, node *model.Node) (*model.Node, error)
 
-	Update(ctx context.Context, tx *gen.Client, Node *model.Node) (*model.Node, error)
+	Update(ctx context.Context, tx *gen.Client, node *model.Node) (*model.Node, error)
 	UpdateSecret(ctx context.Context, tx *gen.Client, id int64, secret string) error
 
 	GetOne(ctx context.Context, tx *gen.Client, req *NodeGetReq) (*model.Node, error)
 	GetList(ctx context.Context, tx *gen.Client, req *NodeGetReq) ([]*model.Node, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *NodeGetReq) ([]*model.Node, *cv1.PageReply, error)
 
-	GetByName(ctx context.Context, tx *gen.Client, name string) (*model.Node, error)
+	GetByKey(ctx context.Context, tx *gen.Client, key string) (*model.Node, error)
 
 	Register(ctx context.Context, n *model.Node) error
 	Unregister(ctx context.Context, name string) error
@@ -30,6 +30,7 @@ type NodeRepo interface {
 type NodeGetReq struct {
 	Id      *int64
 	Ids     []int64
+	Key     *string
 	Name    *string
 	OwnerId *int64
 }

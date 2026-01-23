@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // Node 文章实体定义
@@ -26,7 +27,8 @@ func (Node) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("owner_id").Comment("节点拥有者 ID").Optional().Nillable(),
-		field.String("name").Comment("节点名称，节点唯一标识").NotEmpty(),
+		field.String("key").Comment("节点标识，请求头唯一标识").NotEmpty(),
+		field.String("name").Comment("节点名称").NotEmpty(),
 		field.String("description").Comment("节点描述").Optional().Nillable(),
 		field.String("secret").Comment("节点密钥"),
 		field.String("callback_url").Comment("节点回调公网地址，如 example.com/api"),
@@ -35,4 +37,10 @@ func (Node) Fields() []ent.Field {
 	}
 	fields = append(fields, pkg.TimeAuditFields()...)
 	return fields
+}
+
+func (Node) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("key").Unique(),
+	}
 }

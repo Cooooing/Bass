@@ -26,26 +26,28 @@ func NewNodeRepo(baseRepo *BaseRepo) repo.NodeRepo {
 	}
 }
 
-func (r *NodeRepo) Save(ctx context.Context, tx *gen.Client, Node *model.Node) (*model.Node, error) {
+func (r *NodeRepo) Save(ctx context.Context, tx *gen.Client, node *model.Node) (*model.Node, error) {
 	save, err := tx.Node.Create().
-		SetID(Node.ID).
-		SetNillableOwnerID(Node.OwnerID).
-		SetName(Node.Name).
-		SetNillableDescription(Node.Description).
-		SetSecret(Node.Secret).
-		SetCallbackURL(Node.CallbackURL).
-		SetStatus(Node.Status).
+		SetID(node.ID).
+		SetNillableOwnerID(node.OwnerID).
+		SetKey(node.Key).
+		SetName(node.Name).
+		SetNillableDescription(node.Description).
+		SetSecret(node.Secret).
+		SetCallbackURL(node.CallbackURL).
+		SetStatus(node.Status).
 		Save(ctx)
 	return &model.Node{Node: save}, err
 }
 
-func (r *NodeRepo) Update(ctx context.Context, tx *gen.Client, Node *model.Node) (*model.Node, error) {
-	update, err := tx.Node.UpdateOneID(Node.ID).
-		SetNillableOwnerID(Node.OwnerID).
-		SetName(Node.Name).
-		SetNillableDescription(Node.Description).
-		SetCallbackURL(Node.CallbackURL).
-		SetStatus(Node.Status).
+func (r *NodeRepo) Update(ctx context.Context, tx *gen.Client, node *model.Node) (*model.Node, error) {
+	update, err := tx.Node.UpdateOneID(node.ID).
+		SetNillableOwnerID(node.OwnerID).
+		SetKey(node.Key).
+		SetName(node.Name).
+		SetNillableDescription(node.Description).
+		SetCallbackURL(node.CallbackURL).
+		SetStatus(node.Status).
 		Save(ctx)
 	return &model.Node{Node: update}, err
 }
@@ -120,6 +122,9 @@ func (r *NodeRepo) getQuery(query *gen.NodeQuery, req *repo.NodeGetReq) *gen.Nod
 	if req.Ids != nil {
 		query = query.Where(node.IDIn(req.Ids...))
 	}
+	if req.Key != nil {
+		query = query.Where(node.KeyEQ(*req.Key))
+	}
 	if req.Name != nil {
 		query = query.Where(node.NameEQ(*req.Name))
 	}
@@ -129,10 +134,10 @@ func (r *NodeRepo) getQuery(query *gen.NodeQuery, req *repo.NodeGetReq) *gen.Nod
 	return query
 }
 
-func (r *NodeRepo) GetByName(ctx context.Context, tx *gen.Client, name string) (*model.Node, error) {
-	key := constant.GetKeySignalNode(name)
+func (r *NodeRepo) GetByKey(ctx context.Context, tx *gen.Client, key string) (*model.Node, error) {
+	cacheKey := constant.GetKeySignalNode(key)
 
-	data, err := r.redis.Client.HGet(ctx, key, constant.SignalNodeData).Result()
+	data, err := r.redis.Client.HGet(ctx, cacheKey, constant.SignalNodeData).Result()
 	if err == nil {
 		var n model.Node
 		if err := json.Unmarshal([]byte(data), &n); err != nil {
@@ -145,14 +150,14 @@ func (r *NodeRepo) GetByName(ctx context.Context, tx *gen.Client, name string) (
 		return nil, err
 	}
 
-	n, err := tx.Node.Query().Where(node.NameEQ(name)).Only(ctx)
+	n, err := tx.Node.Query().Where(node.KeyEQ(key)).Only(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	b, err := json.Marshal(n)
 	if err == nil {
-		_ = r.redis.Client.HSet(ctx, key, map[string]interface{}{
+		_ = r.redis.Client.HSet(ctx, cacheKey, map[string]interface{}{
 			constant.SignalNodeData:               string(b),
 			constant.SignalNodeCurrentConnections: 0,
 			constant.SignalNodePingMs:             0,
@@ -170,7 +175,7 @@ func (r *NodeRepo) Register(ctx context.Context, n *model.Node) error {
 	if err != nil {
 		return err
 	}
-	_, err = r.redis.Client.HSet(ctx, constant.GetKeySignalNode(n.Name), map[string]interface{}{
+	_, err = r.redis.Client.HSet(ctx, constant.GetKeySignalNode(n.Key), map[string]interface{}{
 		constant.SignalNodeData:               string(marshal),
 		constant.SignalNodeCurrentConnections: 0,
 		constant.SignalNodePingMs:             0,
@@ -184,7 +189,7 @@ func (r *NodeRepo) Register(ctx context.Context, n *model.Node) error {
 	// 初始化 ZSet 排名
 	err = r.redis.Client.ZAdd(ctx, constant.SignalNodeRank, redis.Z{
 		Score:  0,
-		Member: n.Name,
+		Member: n.Key,
 	}).Err()
 	if err != nil {
 		return err
@@ -192,26 +197,26 @@ func (r *NodeRepo) Register(ctx context.Context, n *model.Node) error {
 	return nil
 }
 
-func (r *NodeRepo) Unregister(ctx context.Context, name string) error {
+func (r *NodeRepo) Unregister(ctx context.Context, key string) error {
 	pipe := r.redis.Client.TxPipeline()
-	pipe.Del(ctx, constant.GetKeySignalNode(name))
-	pipe.ZRem(ctx, constant.SignalNodeRank, name)
+	pipe.Del(ctx, constant.GetKeySignalNode(key))
+	pipe.ZRem(ctx, constant.SignalNodeRank, key)
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
-func (r *NodeRepo) UpdateConnections(ctx context.Context, name string, delta int64) error {
-	key := constant.GetKeySignalNode(name)
+func (r *NodeRepo) UpdateConnections(ctx context.Context, key string, delta int64) error {
+	redisKey := constant.GetKeySignalNode(key)
 	pipe := r.redis.Client.TxPipeline()
-	pipe.HIncrBy(ctx, key, constant.SignalNodeCurrentConnections, delta)
-	pipe.HSet(ctx, key, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
+	pipe.HIncrBy(ctx, redisKey, constant.SignalNodeCurrentConnections, delta)
+	pipe.HSet(ctx, redisKey, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
-func (r *NodeRepo) UpdatePing(ctx context.Context, name string, pingMs int64) error {
+func (r *NodeRepo) UpdatePing(ctx context.Context, key string, pingMs int64) error {
 	return r.redis.Client.HSet(ctx,
-		constant.GetKeySignalNode(name),
+		constant.GetKeySignalNode(key),
 		constant.SignalNodePingMs, pingMs,
 		constant.SignalNodeLastPingTime, time.Now().UnixMilli(),
 	).Err()
@@ -226,7 +231,7 @@ func (r *NodeRepo) UpdatePowCost(ctx context.Context, name string, powCostMs int
 }
 
 func (r *NodeRepo) UpdateScore(ctx context.Context, n *model.Node) error {
-	result, err := r.redis.Client.HGetAll(ctx, constant.GetKeySignalNode(n.Name)).Result()
+	result, err := r.redis.Client.HGetAll(ctx, constant.GetKeySignalNode(n.Key)).Result()
 	if err != nil {
 		return err
 	}
@@ -239,7 +244,7 @@ func (r *NodeRepo) UpdateScore(ctx context.Context, n *model.Node) error {
 
 	err = r.redis.Client.ZAdd(ctx, constant.SignalNodeRank, redis.Z{
 		Score:  score,
-		Member: n.Name,
+		Member: n.Key,
 	}).Err()
 
 	return err

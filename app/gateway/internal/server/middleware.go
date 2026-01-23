@@ -19,10 +19,17 @@ import (
 )
 
 var NoAuthEndpoints = map[string]struct{}{
-	"^.*/v1/system/health$":                       {},
+	"^.*/v1/system/health$": {},
+
 	"^/user/v1/authentication/.*$":                {},
 	"^/user/v1/oss/qiniu/uploadCallback$":         {},
 	"^/user/v1/oss/qiniu/incrementAuditCallback$": {},
+
+	"^/signal/v1/node/register":   {},
+	"^/signal/v1/node/unregister": {},
+	"^/signal/v1/node/online":     {},
+	"^/signal/v1/node/offline":    {},
+	"^/signal/v1/node/list":       {},
 }
 
 var QiniuCallbackEndpoints = map[string]struct{}{
@@ -86,6 +93,10 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			if _, ok := tr.(*transporthttp.Transport); ok {
 				// 获取 token
 				token := strings.TrimPrefix(tr.RequestHeader().Get(constant.HeaderAuthentication), "Bearer ")
+
+				if token == "" {
+					return nil, cv1.ErrorUnauthorized("token is not provided")
+				}
 
 				// 验证 token
 				userInfo, err := tokenRepo.GetToken(ctx, token)

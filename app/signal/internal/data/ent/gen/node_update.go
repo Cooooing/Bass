@@ -55,6 +55,20 @@ func (_u *NodeUpdate) ClearOwnerID() *NodeUpdate {
 	return _u
 }
 
+// SetKey sets the "key" field.
+func (_u *NodeUpdate) SetKey(v string) *NodeUpdate {
+	_u.mutation.SetKey(v)
+	return _u
+}
+
+// SetNillableKey sets the "key" field if the given value is not nil.
+func (_u *NodeUpdate) SetNillableKey(v *string) *NodeUpdate {
+	if v != nil {
+		_u.SetKey(*v)
+	}
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *NodeUpdate) SetName(v string) *NodeUpdate {
 	_u.mutation.SetName(v)
@@ -233,6 +247,11 @@ func (_u *NodeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *NodeUpdate) check() error {
+	if v, ok := _u.mutation.Key(); ok {
+		if err := node.KeyValidator(v); err != nil {
+			return &ValidationError{Name: "key", err: fmt.Errorf(`gen: validator failed for field "Node.key": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := node.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Node.name": %w`, err)}
@@ -261,6 +280,9 @@ func (_u *NodeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(node.FieldOwnerID, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.Key(); ok {
+		_spec.SetField(node.FieldKey, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(node.FieldName, field.TypeString, value)
@@ -345,6 +367,20 @@ func (_u *NodeUpdateOne) AddOwnerID(v int64) *NodeUpdateOne {
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *NodeUpdateOne) ClearOwnerID() *NodeUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetKey sets the "key" field.
+func (_u *NodeUpdateOne) SetKey(v string) *NodeUpdateOne {
+	_u.mutation.SetKey(v)
+	return _u
+}
+
+// SetNillableKey sets the "key" field if the given value is not nil.
+func (_u *NodeUpdateOne) SetNillableKey(v *string) *NodeUpdateOne {
+	if v != nil {
+		_u.SetKey(*v)
+	}
 	return _u
 }
 
@@ -539,6 +575,11 @@ func (_u *NodeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *NodeUpdateOne) check() error {
+	if v, ok := _u.mutation.Key(); ok {
+		if err := node.KeyValidator(v); err != nil {
+			return &ValidationError{Name: "key", err: fmt.Errorf(`gen: validator failed for field "Node.key": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := node.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`gen: validator failed for field "Node.name": %w`, err)}
@@ -584,6 +625,9 @@ func (_u *NodeUpdateOne) sqlSave(ctx context.Context) (_node *Node, err error) {
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(node.FieldOwnerID, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.Key(); ok {
+		_spec.SetField(node.FieldKey, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(node.FieldName, field.TypeString, value)

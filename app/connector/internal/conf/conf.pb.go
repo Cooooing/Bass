@@ -813,7 +813,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"enableOtel\x12\x1a\n" +
 	"\bendpoint\x18\x02 \x01(\tR\bendpoint\x12\x1a\n" +
 	"\binsecure\x18\x03 \x01(\bR\binsecure\x12\x18\n" +
-	"\asampler\x18\x04 \x01(\x01R\asamplerB\"Z connector/internal/conf/conf;confb\x06proto3"
+	"\asampler\x18\x04 \x01(\x01R\asamplerB#Z!connector/internal/conf/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once

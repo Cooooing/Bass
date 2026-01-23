@@ -35,6 +35,7 @@ type NodeMutation struct {
 	id            *int64
 	owner_id      *int64
 	addowner_id   *int64
+	key           *string
 	name          *string
 	description   *string
 	secret        *string
@@ -223,6 +224,42 @@ func (m *NodeMutation) ResetOwnerID() {
 	m.owner_id = nil
 	m.addowner_id = nil
 	delete(m.clearedFields, node.FieldOwnerID)
+}
+
+// SetKey sets the "key" field.
+func (m *NodeMutation) SetKey(s string) {
+	m.key = &s
+}
+
+// Key returns the value of the "key" field in the mutation.
+func (m *NodeMutation) Key() (r string, exists bool) {
+	v := m.key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKey returns the old "key" field's value of the Node entity.
+// If the Node object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NodeMutation) OldKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKey: %w", err)
+	}
+	return oldValue.Key, nil
+}
+
+// ResetKey resets all changes to the "key" field.
+func (m *NodeMutation) ResetKey() {
+	m.key = nil
 }
 
 // SetName sets the "name" field.
@@ -626,9 +663,12 @@ func (m *NodeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NodeMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.owner_id != nil {
 		fields = append(fields, node.FieldOwnerID)
+	}
+	if m.key != nil {
+		fields = append(fields, node.FieldKey)
 	}
 	if m.name != nil {
 		fields = append(fields, node.FieldName)
@@ -664,6 +704,8 @@ func (m *NodeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case node.FieldOwnerID:
 		return m.OwnerID()
+	case node.FieldKey:
+		return m.Key()
 	case node.FieldName:
 		return m.Name()
 	case node.FieldDescription:
@@ -691,6 +733,8 @@ func (m *NodeMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case node.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case node.FieldKey:
+		return m.OldKey(ctx)
 	case node.FieldName:
 		return m.OldName(ctx)
 	case node.FieldDescription:
@@ -722,6 +766,13 @@ func (m *NodeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOwnerID(v)
+		return nil
+	case node.FieldKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKey(v)
 		return nil
 	case node.FieldName:
 		v, ok := value.(string)
@@ -896,6 +947,9 @@ func (m *NodeMutation) ResetField(name string) error {
 	switch name {
 	case node.FieldOwnerID:
 		m.ResetOwnerID()
+		return nil
+	case node.FieldKey:
+		m.ResetKey()
 		return nil
 	case node.FieldName:
 		m.ResetName()

@@ -19,13 +19,15 @@ type Node struct {
 	ID int64 `json:"id,omitempty"`
 	// 节点拥有者 ID
 	OwnerID *int64 `json:"owner_id,omitempty"`
-	// 节点名称，节点唯一标识
+	// 节点标识，请求头唯一标识
+	Key string `json:"key,omitempty"`
+	// 节点名称
 	Name string `json:"name,omitempty"`
 	// 节点描述
 	Description *string `json:"description,omitempty"`
 	// 节点密钥
 	Secret string `json:"secret,omitempty"`
-	// 节点回调公网地址，如 https://example.com/api
+	// 节点回调公网地址，如 example.com/api
 	CallbackURL string `json:"callback_url,omitempty"`
 	// 节点状态: 1-正常, 2-禁用
 	Status int32 `json:"status,omitempty"`
@@ -47,7 +49,7 @@ func (*Node) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case node.FieldID, node.FieldOwnerID, node.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case node.FieldName, node.FieldDescription, node.FieldSecret, node.FieldCallbackURL:
+		case node.FieldKey, node.FieldName, node.FieldDescription, node.FieldSecret, node.FieldCallbackURL:
 			values[i] = new(sql.NullString)
 		case node.FieldCreatedAt, node.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -78,6 +80,12 @@ func (_m *Node) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = new(int64)
 				*_m.OwnerID = value.Int64
+			}
+		case node.FieldKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field key", values[i])
+			} else if value.Valid {
+				_m.Key = value.String
 			}
 		case node.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -170,6 +178,9 @@ func (_m *Node) String() string {
 		builder.WriteString("owner_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("key=")
+	builder.WriteString(_m.Key)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

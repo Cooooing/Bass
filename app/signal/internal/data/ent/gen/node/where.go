@@ -59,6 +59,11 @@ func OwnerID(v int64) predicate.Node {
 	return predicate.Node(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// Key applies equality check predicate on the "key" field. It's identical to KeyEQ.
+func Key(v string) predicate.Node {
+	return predicate.Node(sql.FieldEQ(FieldKey, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Node {
 	return predicate.Node(sql.FieldEQ(FieldName, v))
@@ -147,6 +152,71 @@ func OwnerIDIsNil() predicate.Node {
 // OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
 func OwnerIDNotNil() predicate.Node {
 	return predicate.Node(sql.FieldNotNull(FieldOwnerID))
+}
+
+// KeyEQ applies the EQ predicate on the "key" field.
+func KeyEQ(v string) predicate.Node {
+	return predicate.Node(sql.FieldEQ(FieldKey, v))
+}
+
+// KeyNEQ applies the NEQ predicate on the "key" field.
+func KeyNEQ(v string) predicate.Node {
+	return predicate.Node(sql.FieldNEQ(FieldKey, v))
+}
+
+// KeyIn applies the In predicate on the "key" field.
+func KeyIn(vs ...string) predicate.Node {
+	return predicate.Node(sql.FieldIn(FieldKey, vs...))
+}
+
+// KeyNotIn applies the NotIn predicate on the "key" field.
+func KeyNotIn(vs ...string) predicate.Node {
+	return predicate.Node(sql.FieldNotIn(FieldKey, vs...))
+}
+
+// KeyGT applies the GT predicate on the "key" field.
+func KeyGT(v string) predicate.Node {
+	return predicate.Node(sql.FieldGT(FieldKey, v))
+}
+
+// KeyGTE applies the GTE predicate on the "key" field.
+func KeyGTE(v string) predicate.Node {
+	return predicate.Node(sql.FieldGTE(FieldKey, v))
+}
+
+// KeyLT applies the LT predicate on the "key" field.
+func KeyLT(v string) predicate.Node {
+	return predicate.Node(sql.FieldLT(FieldKey, v))
+}
+
+// KeyLTE applies the LTE predicate on the "key" field.
+func KeyLTE(v string) predicate.Node {
+	return predicate.Node(sql.FieldLTE(FieldKey, v))
+}
+
+// KeyContains applies the Contains predicate on the "key" field.
+func KeyContains(v string) predicate.Node {
+	return predicate.Node(sql.FieldContains(FieldKey, v))
+}
+
+// KeyHasPrefix applies the HasPrefix predicate on the "key" field.
+func KeyHasPrefix(v string) predicate.Node {
+	return predicate.Node(sql.FieldHasPrefix(FieldKey, v))
+}
+
+// KeyHasSuffix applies the HasSuffix predicate on the "key" field.
+func KeyHasSuffix(v string) predicate.Node {
+	return predicate.Node(sql.FieldHasSuffix(FieldKey, v))
+}
+
+// KeyEqualFold applies the EqualFold predicate on the "key" field.
+func KeyEqualFold(v string) predicate.Node {
+	return predicate.Node(sql.FieldEqualFold(FieldKey, v))
+}
+
+// KeyContainsFold applies the ContainsFold predicate on the "key" field.
+func KeyContainsFold(v string) predicate.Node {
+	return predicate.Node(sql.FieldContainsFold(FieldKey, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

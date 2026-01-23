@@ -37,6 +37,7 @@ func (n *Node) ConvertToRpc() *v1.Node {
 		CreatedAt:   timestamppb.New(*n.CreatedAt),
 		UpdatedAt:   timestamppb.New(*n.UpdatedAt),
 		Id:          n.ID,
+		Key:         n.Key,
 		Name:        n.Name,
 		Description: n.Description,
 		CallbackUrl: n.CallbackURL,

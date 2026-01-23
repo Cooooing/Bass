@@ -14,24 +14,28 @@ import (
 func init() {
 	nodeFields := schema.Node{}.Fields()
 	_ = nodeFields
+	// nodeDescKey is the schema descriptor for key field.
+	nodeDescKey := nodeFields[2].Descriptor()
+	// node.KeyValidator is a validator for the "key" field. It is called by the builders before save.
+	node.KeyValidator = nodeDescKey.Validators[0].(func(string) error)
 	// nodeDescName is the schema descriptor for name field.
-	nodeDescName := nodeFields[2].Descriptor()
+	nodeDescName := nodeFields[3].Descriptor()
 	// node.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	node.NameValidator = nodeDescName.Validators[0].(func(string) error)
 	// nodeDescStatus is the schema descriptor for status field.
-	nodeDescStatus := nodeFields[6].Descriptor()
+	nodeDescStatus := nodeFields[7].Descriptor()
 	// node.DefaultStatus holds the default value on creation for the status field.
 	node.DefaultStatus = nodeDescStatus.Default.(int32)
 	// nodeDescWeight is the schema descriptor for weight field.
-	nodeDescWeight := nodeFields[7].Descriptor()
+	nodeDescWeight := nodeFields[8].Descriptor()
 	// node.DefaultWeight holds the default value on creation for the weight field.
 	node.DefaultWeight = nodeDescWeight.Default.(float64)
 	// nodeDescCreatedAt is the schema descriptor for created_at field.
-	nodeDescCreatedAt := nodeFields[8].Descriptor()
+	nodeDescCreatedAt := nodeFields[9].Descriptor()
 	// node.DefaultCreatedAt holds the default value on creation for the created_at field.
 	node.DefaultCreatedAt = nodeDescCreatedAt.Default.(func() time.Time)
 	// nodeDescUpdatedAt is the schema descriptor for updated_at field.
-	nodeDescUpdatedAt := nodeFields[9].Descriptor()
+	nodeDescUpdatedAt := nodeFields[10].Descriptor()
 	// node.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	node.DefaultUpdatedAt = nodeDescUpdatedAt.Default.(func() time.Time)
 }

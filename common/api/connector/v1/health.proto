@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package common.api.connector.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+
+option go_package = "common/api/connector/v1;v1";
+
+// Health 服务
+service ConnectorHealthService {
+  // ping
+  rpc Ping(PingRequest) returns (PingResponse) {
+    option (google.api.http) = {
+      post: "/v1/callback/ping"
+      body: "*"
+      additional_bindings {
+        get: "/v1/callback/ping"
+      }
+    };
+  }
+
+  // 工作量证明
+  rpc Pow(PowRequest) returns (PowResponse) {
+    option (google.api.http) = {
+      post: "/v1/callback/pow"
+      body: "*"
+    };
+  }
+}
+
+// 参数
+
+message PingRequest {}
+message PingResponse {}
+
+message PowRequest {
+}
+message PowResponse {
+}
+

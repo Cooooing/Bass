@@ -46,7 +46,7 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		err = h.nodeRepo.UpdatePing(ctx, node.Name, pingMs)
+		err = h.nodeRepo.UpdatePing(ctx, node.Key, pingMs)
 		if err != nil {
 			return err
 		}

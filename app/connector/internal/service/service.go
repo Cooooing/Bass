@@ -13,6 +13,7 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	NewBaseService,
 	NewSystemService,
+	NewHealthService,
 	ProvideServices,
 )
 
@@ -36,8 +37,10 @@ type Service interface {
 
 func ProvideServices(
 	systemService *SystemService,
+	healthService *HealthService,
 ) []Service {
 	return []Service{
 		systemService,
+		healthService,
 	}
 }

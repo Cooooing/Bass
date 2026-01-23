@@ -17,7 +17,7 @@ var (
 	HeaderTimestamp           = "X-Timestamp"            // 时间戳，防止过期请求
 	HeaderNonce               = "X-Nonce"                // 随机数，防止重放攻击
 	HeaderAuthentication      = "Authorization"          // token 请求头名称
-	HeaderSignalNode          = "X-Signal-NodeName"      // 信令服务节点名称
+	HeaderSignalNode          = "X-Signal-NodeKey"       // 信令服务节点 key
 	HeaderSignalNodeSignature = "X-Signal-NodeSignature" // 节点签名
 )
 

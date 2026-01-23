@@ -3,7 +3,9 @@ package server
 import (
 	"common/pkg"
 	"common/pkg/util"
+	"signal/internal/biz/repo"
 	"signal/internal/conf"
+	"signal/internal/data/ent/gen"
 	"signal/internal/service"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -17,7 +19,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo, db *gen.Client, nodeRepo repo.NodeRepo) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -28,6 +30,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 			),
 			logging.Server(logger),
 			pkg.AuthMiddleware(tokenRepo),
+			SignalAuthMiddleware(db, nodeRepo),
 			validate.ProtoValidate(),
 		),
 		http.ResponseEncoder(pkg.HttpResponseEncoder),

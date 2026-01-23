@@ -33,6 +33,8 @@ type Node struct {
 	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 节点id
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 节点 key
+	Key string `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
 	// 节点名称
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// 节点描述
@@ -96,6 +98,13 @@ func (x *Node) GetId() int64 {
 		return x.Id
 	}
 	return 0
+}
+
+func (x *Node) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
 }
 
 func (x *Node) GetName() string {
@@ -190,13 +199,14 @@ var File_signal_v1_model_proto protoreflect.FileDescriptor
 
 const file_signal_v1_model_proto_rawDesc = "" +
 	"\n" +
-	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12user/v1/user.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xc1\x02\n" +
+	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12user/v1/user.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd3\x02\n" +
 	"\x04Node\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x10\n" +
+	"\x03key\x18\x04 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12!\n" +
 	"\fcallback_url\x18\x05 \x01(\tR\vcallbackUrl\x12\x16\n" +

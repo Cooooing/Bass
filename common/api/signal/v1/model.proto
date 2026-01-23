@@ -18,6 +18,8 @@ message Node {
 
   // 节点id
   int64 id = 1;
+  // 节点 key
+  string key = 4;
   // 节点名称
   string name = 2;
   // 节点描述

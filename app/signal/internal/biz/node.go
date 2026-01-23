@@ -50,6 +50,35 @@ func (d *NodeDomain) GenerateSecret() string {
 func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
 	url := fmt.Sprintf("%s://%s/ping", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
+	// Todo 工作量证明参数
+
+	req, err := http.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return 0, err
+	}
+
+	start := time.Now()
+	resp, err := d.httpClient.Do(req)
+	if err != nil {
+		return 0, err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			d.Log.Errorf("failed to close body: %v", err)
+		}
+	}(resp.Body)
+	end := time.Now()
+
+	if resp.StatusCode != http.StatusOK {
+		return 0, fmt.Errorf("failed to ping node[%s]: %s", node.Key, node.CallbackURL)
+	}
+	return end.Sub(start).Milliseconds(), nil
+}
+
+func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
+	url := fmt.Sprintf("%s://%s/pow", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return 0, err
@@ -90,13 +119,11 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	err = d.producer.EnqueueTasks([]*model.Task{
 		{
 			TaskName: task.TaskNodePing.String(),
-			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePing.String(), n.Key),
 			Interval: 10 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
 			TaskName: task.TaskNodePow.String(),
-			TaskId:   fmt.Sprintf("%s:%s", task.TaskNodePow.String(), n.Key),
 			Interval: 30 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
@@ -109,12 +136,15 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	return nil
 }
 
-func (d *NodeDomain) Unregister(ctx context.Context) error {
-	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
-	if !ok {
-		return cv1.ErrorUnauthorized("node is not allow")
+func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
+	if key == "" {
+		n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
+		if !ok {
+			return cv1.ErrorUnauthorized("node is not allow")
+		}
+		key = n.Key
 	}
-	err := d.nodeRepo.Unregister(ctx, n.Key)
+	err := d.nodeRepo.Unregister(ctx, key)
 	if err != nil {
 		return err
 	}

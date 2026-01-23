@@ -24,11 +24,15 @@ func (p *Producer) EnqueueTask(data *model.Task) error {
 	if err != nil {
 		return err
 	}
+	opts := make([]asynq.Option, 0)
+	if data.TaskId != "" {
+		opts = append(opts, asynq.TaskID(data.TaskId))
+	}
 	_, err = p.client.Enqueue(
 		asynq.NewTask(
 			data.TaskName,
 			marshal,
-			asynq.TaskID(data.TaskId),
+			opts...,
 		),
 		asynq.MaxRetry(data.MaxRetry),
 		asynq.ProcessIn(base.If(data.Delay, data.Interval, 0)),

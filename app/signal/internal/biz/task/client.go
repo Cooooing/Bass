@@ -31,6 +31,7 @@ type AsynqServer struct {
 func NewAsynqServer(log *log.Helper, redisClient *commonClient.RedisClient, tasks dict.Map[TaskName, Handler]) *AsynqServer {
 	mux := asynq.NewServeMux()
 	for _, t := range tasks.Values() {
+		log.Infof("register task: %s", t.Name().String())
 		mux.HandleFunc(t.Name().String(), t.Handler())
 	}
 
@@ -46,7 +47,6 @@ func NewAsynqServer(log *log.Helper, redisClient *commonClient.RedisClient, task
 		mux:    mux,
 		Server: server,
 	}
-	s.Run()
 	return s
 }
 

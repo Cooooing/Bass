@@ -108,7 +108,7 @@ func (s *NodeService) Register(ctx context.Context, req *v1.SignalNodeRegisterRe
 }
 
 func (s *NodeService) Unregister(ctx context.Context, req *v1.SignalNodeUnregisterRequest) (*v1.SignalNodeUnregisterReply, error) {
-	err := s.nodeDomain.Unregister(ctx)
+	err := s.nodeDomain.Unregister(ctx, "")
 	return &v1.SignalNodeUnregisterReply{}, err
 }
 

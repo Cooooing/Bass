@@ -28,7 +28,6 @@ func NewNodeRepo(baseRepo *BaseRepo) repo.NodeRepo {
 
 func (r *NodeRepo) Save(ctx context.Context, tx *gen.Client, node *model.Node) (*model.Node, error) {
 	save, err := tx.Node.Create().
-		SetID(node.ID).
 		SetNillableOwnerID(node.OwnerID).
 		SetKey(node.Key).
 		SetName(node.Name).

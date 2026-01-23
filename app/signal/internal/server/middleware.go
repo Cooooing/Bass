@@ -11,7 +11,26 @@ import (
 	"signal/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/middleware"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 )
+
+var NodeEndpoints = map[string]struct{}{
+	"^/signal/v1/node/register":   {},
+	"^/signal/v1/node/unregister": {},
+	"^/signal/v1/node/online":     {},
+	"^/signal/v1/node/offline":    {},
+	"^/signal/v1/node/list":       {},
+}
+
+// NodeEndpointsMatch 七牛回调匹配
+func NodeEndpointsMatch() selector.MatchFunc {
+	return func(ctx context.Context, operation string) bool {
+		if _, exist := NodeEndpoints[operation]; exist {
+			return false
+		}
+		return true
+	}
+}
 
 func SignalAuthMiddleware(db *gen.Client, nodeRepo repo.NodeRepo) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {

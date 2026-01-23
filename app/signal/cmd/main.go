@@ -8,6 +8,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"signal/internal/biz/task"
 	"signal/internal/conf"
 	"signal/internal/conf/bootstrap"
 	"signal/internal/server"
@@ -40,10 +41,12 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.EtcdClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.EtcdClient, asynqServer *task.AsynqServer) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
+
+	asynqServer.Run()
 
 	return kratos.New(
 		kratos.ID(id),

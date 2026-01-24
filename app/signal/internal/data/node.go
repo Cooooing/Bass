@@ -3,6 +3,7 @@ package data
 import (
 	cv1 "common/api/common/v1"
 	"common/pkg/constant"
+	"common/pkg/cutil/collections/dict"
 	"context"
 	"encoding/json"
 	"errors"
@@ -68,9 +69,25 @@ func (r *NodeRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.NodeGet
 	return &model.Node{Node: t}, err
 }
 
+func (r *NodeRepo) GetMap(ctx context.Context, tx *gen.Client, req *repo.NodeGetReq) (dict.Map[string, *model.Node], error) {
+	var err error
+	nodes := dict.New[string, *model.Node](0)
+	query := tx.Node.Query()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range list {
+		nodes.Set(item.Key, &model.Node{Node: item})
+	}
+	return nodes, nil
+}
+
 func (r *NodeRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.NodeGetReq) ([]*model.Node, error) {
 	var (
-		Nodes []*model.Node
+		nodes []*model.Node
 		err   error
 	)
 	query := tx.Node.Query()
@@ -81,14 +98,14 @@ func (r *NodeRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.NodeGe
 	}
 
 	for _, item := range list {
-		Nodes = append(Nodes, &model.Node{Node: item})
+		nodes = append(nodes, &model.Node{Node: item})
 	}
-	return Nodes, nil
+	return nodes, nil
 }
 
 func (r *NodeRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.NodeGetReq) ([]*model.Node, *cv1.PageReply, error) {
 	var (
-		Nodes []*model.Node
+		nodes []*model.Node
 		err   error
 	)
 	page = constant.PageValid(page)
@@ -105,9 +122,9 @@ func (r *NodeRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 	}
 
 	for _, item := range list {
-		Nodes = append(Nodes, &model.Node{Node: item})
+		nodes = append(nodes, &model.Node{Node: item})
 	}
-	return Nodes, &cv1.PageReply{
+	return nodes, &cv1.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,
@@ -204,6 +221,16 @@ func (r *NodeRepo) Unregister(ctx context.Context, key string) error {
 	return err
 }
 
+func (r *NodeRepo) IsOnline(ctx context.Context, key string) (bool, error) {
+	_, err := r.redis.Client.ZScore(ctx, constant.SignalNodeRank, key).Result()
+	if errors.Is(err, redis.Nil) {
+		return false, nil
+	} else if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 func (r *NodeRepo) UpdateConnections(ctx context.Context, key string, delta int64) error {
 	redisKey := constant.GetKeySignalNode(key)
 	pipe := r.redis.Client.TxPipeline()
@@ -221,9 +248,9 @@ func (r *NodeRepo) UpdatePing(ctx context.Context, key string, pingMs int64) err
 	).Err()
 }
 
-func (r *NodeRepo) UpdatePowCost(ctx context.Context, name string, powCostMs int64) error {
+func (r *NodeRepo) UpdatePowCost(ctx context.Context, key string, powCostMs int64) error {
 	return r.redis.Client.HSet(ctx,
-		constant.GetKeySignalNode(name),
+		constant.GetKeySignalNode(key),
 		constant.SignalNodePowCostMs, powCostMs,
 		constant.SignalNodeLastPingTime, time.Now().UnixMilli(),
 	).Err()
@@ -247,4 +274,8 @@ func (r *NodeRepo) UpdateScore(ctx context.Context, n *model.Node) error {
 	}).Err()
 
 	return err
+}
+
+func (r *NodeRepo) GetOnlineNodeKeys(ctx context.Context) ([]string, error) {
+	return r.redis.Client.ZRevRange(ctx, constant.SignalNodeRank, 0, -1).Result()
 }

@@ -98,8 +98,13 @@ func (s *NodeService) List(ctx context.Context, req *v1.SignalNodeListRequest) (
 }
 
 func (s *NodeService) Negotiate(ctx context.Context, req *v1.SignalNodeNegotiateRequest) (*v1.SignalNodeNegotiateReply, error) {
-
-	return &v1.SignalNodeNegotiateReply{}, nil
+	nodes, err := s.nodeDomain.Negotiate(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.SignalNodeNegotiateReply{
+		Nodes: commonModel.ConvertToRpcList(nodes),
+	}, nil
 }
 
 func (s *NodeService) Register(ctx context.Context, req *v1.SignalNodeRegisterRequest) (*v1.SignalNodeRegisterReply, error) {

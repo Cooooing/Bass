@@ -515,10 +515,8 @@ func (*SignalNodeNegotiateRequest) Descriptor() ([]byte, []int) {
 
 type SignalNodeNegotiateReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 推荐节点信息
-	Node *Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
 	// 节点列表
-	Nodes         []*Node `protobuf:"bytes,2,rep,name=nodes,proto3" json:"nodes,omitempty"`
+	Nodes         []*Node `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -551,13 +549,6 @@ func (x *SignalNodeNegotiateReply) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SignalNodeNegotiateReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeNegotiateReply) Descriptor() ([]byte, []int) {
 	return file_signal_v1_node_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *SignalNodeNegotiateReply) GetNode() *Node {
-	if x != nil {
-		return x.Node
-	}
-	return nil
 }
 
 func (x *SignalNodeNegotiateReply) GetNodes() []*Node {
@@ -988,10 +979,9 @@ const file_signal_v1_node_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\x0e2 .common.api.signal.v1.NodeStatusR\x06status\"G\n" +
 	"\x13SignalNodeListReply\x120\n" +
 	"\x05nodes\x18\x01 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1c\n" +
-	"\x1aSignalNodeNegotiateRequest\"|\n" +
-	"\x18SignalNodeNegotiateReply\x12.\n" +
-	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\x120\n" +
-	"\x05nodes\x18\x02 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1b\n" +
+	"\x1aSignalNodeNegotiateRequest\"L\n" +
+	"\x18SignalNodeNegotiateReply\x120\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1b\n" +
 	"\x19SignalNodeRegisterRequest\"\x19\n" +
 	"\x17SignalNodeRegisterReply\"\x1d\n" +
 	"\x1bSignalNodeUnregisterRequest\"\x1b\n" +
@@ -1069,35 +1059,34 @@ var file_signal_v1_node_proto_depIdxs = []int32{
 	22, // 3: common.api.signal.v1.SignalNodeUpdateReply.node:type_name -> common.api.signal.v1.Node
 	23, // 4: common.api.signal.v1.SignalNodeListRequest.status:type_name -> common.api.signal.v1.NodeStatus
 	22, // 5: common.api.signal.v1.SignalNodeListReply.nodes:type_name -> common.api.signal.v1.Node
-	22, // 6: common.api.signal.v1.SignalNodeNegotiateReply.node:type_name -> common.api.signal.v1.Node
-	22, // 7: common.api.signal.v1.SignalNodeNegotiateReply.nodes:type_name -> common.api.signal.v1.Node
-	0,  // 8: common.api.signal.v1.SignalNodeService.Save:input_type -> common.api.signal.v1.SignalNodeSaveRequest
-	2,  // 9: common.api.signal.v1.SignalNodeService.Update:input_type -> common.api.signal.v1.SignalNodeUpdateRequest
-	4,  // 10: common.api.signal.v1.SignalNodeService.GetSecret:input_type -> common.api.signal.v1.SignalNodeGetSecretRequest
-	6,  // 11: common.api.signal.v1.SignalNodeService.UpdateSecret:input_type -> common.api.signal.v1.SignalNodeUpdateSecretRequest
-	8,  // 12: common.api.signal.v1.SignalNodeService.List:input_type -> common.api.signal.v1.SignalNodeListRequest
-	10, // 13: common.api.signal.v1.SignalNodeService.Negotiate:input_type -> common.api.signal.v1.SignalNodeNegotiateRequest
-	12, // 14: common.api.signal.v1.SignalNodeService.Register:input_type -> common.api.signal.v1.SignalNodeRegisterRequest
-	14, // 15: common.api.signal.v1.SignalNodeService.Unregister:input_type -> common.api.signal.v1.SignalNodeUnregisterRequest
-	16, // 16: common.api.signal.v1.SignalNodeService.Online:input_type -> common.api.signal.v1.SignalNodeOnlineRequest
-	18, // 17: common.api.signal.v1.SignalNodeService.Offline:input_type -> common.api.signal.v1.SignalNodeOfflineRequest
-	20, // 18: common.api.signal.v1.SignalNodeService.OnlineList:input_type -> common.api.signal.v1.SignalNodeOnlineListRequest
-	1,  // 19: common.api.signal.v1.SignalNodeService.Save:output_type -> common.api.signal.v1.SignalNodeSaveReply
-	3,  // 20: common.api.signal.v1.SignalNodeService.Update:output_type -> common.api.signal.v1.SignalNodeUpdateReply
-	5,  // 21: common.api.signal.v1.SignalNodeService.GetSecret:output_type -> common.api.signal.v1.SignalNodeGetSecretReply
-	7,  // 22: common.api.signal.v1.SignalNodeService.UpdateSecret:output_type -> common.api.signal.v1.SignalNodeUpdateSecretReply
-	9,  // 23: common.api.signal.v1.SignalNodeService.List:output_type -> common.api.signal.v1.SignalNodeListReply
-	11, // 24: common.api.signal.v1.SignalNodeService.Negotiate:output_type -> common.api.signal.v1.SignalNodeNegotiateReply
-	13, // 25: common.api.signal.v1.SignalNodeService.Register:output_type -> common.api.signal.v1.SignalNodeRegisterReply
-	15, // 26: common.api.signal.v1.SignalNodeService.Unregister:output_type -> common.api.signal.v1.SignalNodeUnregisterReply
-	17, // 27: common.api.signal.v1.SignalNodeService.Online:output_type -> common.api.signal.v1.SignalNodeOnlineReply
-	19, // 28: common.api.signal.v1.SignalNodeService.Offline:output_type -> common.api.signal.v1.SignalNodeOfflineReply
-	21, // 29: common.api.signal.v1.SignalNodeService.OnlineList:output_type -> common.api.signal.v1.SignalNodeOnlineListReply
-	19, // [19:30] is the sub-list for method output_type
-	8,  // [8:19] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	22, // 6: common.api.signal.v1.SignalNodeNegotiateReply.nodes:type_name -> common.api.signal.v1.Node
+	0,  // 7: common.api.signal.v1.SignalNodeService.Save:input_type -> common.api.signal.v1.SignalNodeSaveRequest
+	2,  // 8: common.api.signal.v1.SignalNodeService.Update:input_type -> common.api.signal.v1.SignalNodeUpdateRequest
+	4,  // 9: common.api.signal.v1.SignalNodeService.GetSecret:input_type -> common.api.signal.v1.SignalNodeGetSecretRequest
+	6,  // 10: common.api.signal.v1.SignalNodeService.UpdateSecret:input_type -> common.api.signal.v1.SignalNodeUpdateSecretRequest
+	8,  // 11: common.api.signal.v1.SignalNodeService.List:input_type -> common.api.signal.v1.SignalNodeListRequest
+	10, // 12: common.api.signal.v1.SignalNodeService.Negotiate:input_type -> common.api.signal.v1.SignalNodeNegotiateRequest
+	12, // 13: common.api.signal.v1.SignalNodeService.Register:input_type -> common.api.signal.v1.SignalNodeRegisterRequest
+	14, // 14: common.api.signal.v1.SignalNodeService.Unregister:input_type -> common.api.signal.v1.SignalNodeUnregisterRequest
+	16, // 15: common.api.signal.v1.SignalNodeService.Online:input_type -> common.api.signal.v1.SignalNodeOnlineRequest
+	18, // 16: common.api.signal.v1.SignalNodeService.Offline:input_type -> common.api.signal.v1.SignalNodeOfflineRequest
+	20, // 17: common.api.signal.v1.SignalNodeService.OnlineList:input_type -> common.api.signal.v1.SignalNodeOnlineListRequest
+	1,  // 18: common.api.signal.v1.SignalNodeService.Save:output_type -> common.api.signal.v1.SignalNodeSaveReply
+	3,  // 19: common.api.signal.v1.SignalNodeService.Update:output_type -> common.api.signal.v1.SignalNodeUpdateReply
+	5,  // 20: common.api.signal.v1.SignalNodeService.GetSecret:output_type -> common.api.signal.v1.SignalNodeGetSecretReply
+	7,  // 21: common.api.signal.v1.SignalNodeService.UpdateSecret:output_type -> common.api.signal.v1.SignalNodeUpdateSecretReply
+	9,  // 22: common.api.signal.v1.SignalNodeService.List:output_type -> common.api.signal.v1.SignalNodeListReply
+	11, // 23: common.api.signal.v1.SignalNodeService.Negotiate:output_type -> common.api.signal.v1.SignalNodeNegotiateReply
+	13, // 24: common.api.signal.v1.SignalNodeService.Register:output_type -> common.api.signal.v1.SignalNodeRegisterReply
+	15, // 25: common.api.signal.v1.SignalNodeService.Unregister:output_type -> common.api.signal.v1.SignalNodeUnregisterReply
+	17, // 26: common.api.signal.v1.SignalNodeService.Online:output_type -> common.api.signal.v1.SignalNodeOnlineReply
+	19, // 27: common.api.signal.v1.SignalNodeService.Offline:output_type -> common.api.signal.v1.SignalNodeOfflineReply
+	21, // 28: common.api.signal.v1.SignalNodeService.OnlineList:output_type -> common.api.signal.v1.SignalNodeOnlineListReply
+	18, // [18:29] is the sub-list for method output_type
+	7,  // [7:18] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_signal_v1_node_proto_init() }

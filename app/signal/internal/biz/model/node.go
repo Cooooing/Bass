@@ -2,6 +2,7 @@ package model
 
 import (
 	v1 "common/api/signal/v1"
+	"common/pkg/cutil/base"
 	"math"
 	"signal/internal/data/ent/gen"
 
@@ -22,7 +23,8 @@ func (n *Node) CalculateScore(connections int64, pingMs int64, powCostMs int64) 
 
 	// 处理分母项
 	pPart := float64(pingMs) + alpha
-	cPart := float64(powCostMs) + beta
+	powCostMs = powCostMs - pingMs
+	cPart := base.If(powCostMs < 0, 0, float64(powCostMs)) + beta
 
 	// log10(N + 10) 保证 N=0 时结果为 1
 	nPart := math.Log10(float64(connections) + 10.0)

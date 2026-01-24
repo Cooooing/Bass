@@ -15,20 +15,18 @@ import (
 )
 
 var NodeEndpoints = map[string]struct{}{
-	"^/signal/v1/node/register":   {},
-	"^/signal/v1/node/unregister": {},
-	"^/signal/v1/node/online":     {},
-	"^/signal/v1/node/offline":    {},
-	"^/signal/v1/node/list":       {},
+	"/common.api.signal.v1.SignalNodeService/Register":   {},
+	"/common.api.signal.v1.SignalNodeService/Unregister": {},
+	"/common.api.signal.v1.SignalNodeService/Online":     {},
+	"/common.api.signal.v1.SignalNodeService/Offline":    {},
 }
 
-// NodeEndpointsMatch 七牛回调匹配
+// NodeEndpointsMatch 节点接口鉴权匹配
 func NodeEndpointsMatch() selector.MatchFunc {
 	return func(ctx context.Context, operation string) bool {
-		if _, exist := NodeEndpoints[operation]; exist {
-			return false
-		}
-		return true
+		fmt.Printf("operation: %s\n", operation)
+		_, exist := NodeEndpoints[operation]
+		return exist
 	}
 }
 

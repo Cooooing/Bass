@@ -570,56 +570,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.RegisterPhoneVerifyReply'
-    /v1/callback/ping:
-        get:
-            tags:
-                - ConnectorHealthService
-            description: ping
-            operationId: ConnectorHealthService_Ping
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.connector.v1.PingResponse'
-        post:
-            tags:
-                - ConnectorHealthService
-            description: ping
-            operationId: ConnectorHealthService_Ping
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.connector.v1.PingRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.connector.v1.PingResponse'
-    /v1/callback/pow:
-        post:
-            tags:
-                - ConnectorHealthService
-            description: 工作量证明
-            operationId: ConnectorHealthService_Pow
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.connector.v1.PowRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.connector.v1.PowResponse'
     /v1/chatGroup/create:
         post:
             tags:
@@ -962,6 +912,38 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
+    /v1/health/ping:
+        get:
+            tags:
+                - ConnectorHealthService
+            description: ping
+            operationId: ConnectorHealthService_Ping
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.connector.v1.PingResponse'
+    /v1/health/pow:
+        post:
+            tags:
+                - ConnectorHealthService
+            description: 工作量证明
+            operationId: ConnectorHealthService_Pow
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.connector.v1.PowRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.connector.v1.PowResponse'
     /v1/node/list:
         post:
             tags:
@@ -1649,18 +1631,28 @@ components:
                     type: string
                     description: 结束
                     format: date-time
-        common.api.connector.v1.PingRequest:
-            type: object
-            properties: {}
         common.api.connector.v1.PingResponse:
             type: object
             properties: {}
         common.api.connector.v1.PowRequest:
             type: object
-            properties: {}
+            properties:
+                challenge:
+                    type: string
+                    description: 初始字符串
+                difficulty:
+                    type: integer
+                    description: 难度
+                    format: int32
         common.api.connector.v1.PowResponse:
             type: object
-            properties: {}
+            properties:
+                nonce:
+                    type: string
+                    description: 计算次数
+                hash_hex:
+                    type: string
+                    description: 计算结果
         common.api.content.v1.AcceptAnswerArticleReply:
             type: object
             properties: {}
@@ -3278,10 +3270,6 @@ components:
         common.api.signal.v1.SignalNodeNegotiateReply:
             type: object
             properties:
-                node:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.signal.v1.Node'
-                    description: 推荐节点信息
                 nodes:
                     type: array
                     items:

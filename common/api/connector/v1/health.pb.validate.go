@@ -255,6 +255,28 @@ func (m *PowRequest) validate(all bool) error {
 
 	var errors []error
 
+	if utf8.RuneCountInString(m.GetChallenge()) < 1 {
+		err := PowRequestValidationError{
+			field:  "Challenge",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetDifficulty() <= 0 {
+		err := PowRequestValidationError{
+			field:  "Difficulty",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return PowRequestMultiError(errors)
 	}
@@ -353,6 +375,10 @@ func (m *PowResponse) validate(all bool) error {
 	}
 
 	var errors []error
+
+	// no validation rules for Nonce
+
+	// no validation rules for HashHex
 
 	if len(errors) > 0 {
 		return PowResponseMultiError(errors)

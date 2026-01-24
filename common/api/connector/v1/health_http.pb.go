@@ -31,36 +31,13 @@ type ConnectorHealthServiceHTTPServer interface {
 
 func RegisterConnectorHealthServiceHTTPServer(s *http.Server, srv ConnectorHealthServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/callback/ping", _ConnectorHealthService_Ping0_HTTP_Handler(srv))
-	r.POST("/v1/callback/ping", _ConnectorHealthService_Ping1_HTTP_Handler(srv))
-	r.POST("/v1/callback/pow", _ConnectorHealthService_Pow0_HTTP_Handler(srv))
+	r.GET("/v1/health/ping", _ConnectorHealthService_Ping0_HTTP_Handler(srv))
+	r.POST("/v1/health/pow", _ConnectorHealthService_Pow0_HTTP_Handler(srv))
 }
 
 func _ConnectorHealthService_Ping0_HTTP_Handler(srv ConnectorHealthServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PingRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationConnectorHealthServicePing)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Ping(ctx, req.(*PingRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*PingResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _ConnectorHealthService_Ping1_HTTP_Handler(srv ConnectorHealthServiceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in PingRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -117,11 +94,11 @@ func NewConnectorHealthServiceHTTPClient(client *http.Client) ConnectorHealthSer
 // Ping ping
 func (c *ConnectorHealthServiceHTTPClientImpl) Ping(ctx context.Context, in *PingRequest, opts ...http.CallOption) (*PingResponse, error) {
 	var out PingResponse
-	pattern := "/v1/callback/ping"
-	path := binding.EncodeURL(pattern, in, false)
+	pattern := "/v1/health/ping"
+	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationConnectorHealthServicePing))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +108,7 @@ func (c *ConnectorHealthServiceHTTPClientImpl) Ping(ctx context.Context, in *Pin
 // Pow 工作量证明
 func (c *ConnectorHealthServiceHTTPClientImpl) Pow(ctx context.Context, in *PowRequest, opts ...http.CallOption) (*PowResponse, error) {
 	var out PowResponse
-	pattern := "/v1/callback/pow"
+	pattern := "/v1/health/pow"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationConnectorHealthServicePow))
 	opts = append(opts, http.PathTemplate(pattern))

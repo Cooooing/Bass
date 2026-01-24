@@ -43,6 +43,16 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 		if err := json.Unmarshal(data.Data, node); err != nil {
 			return err
 		}
+
+		// 判断节点是否在线
+		ok, err := h.nodeRepo.IsOnline(ctx, node.Key)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			return nil
+		}
+		// pow
 		powMs, err := h.nodeDomain.Pow(node)
 		if err != nil {
 			return err
@@ -56,6 +66,7 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
+		// 下一次任务
 		data.Delay = true
 		err = h.producer.EnqueueTask(data)
 		if err != nil {
@@ -67,4 +78,20 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 
 func (h *NodePowTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
 	h.Log.Errorf("task %s failed: %v", task.Type(), err)
+	data := new(model.Task)
+	err = json.Unmarshal(task.Payload(), data)
+	if err != nil {
+		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
+		return
+	}
+	node := new(model.Node)
+	if err := json.Unmarshal(data.Data, node); err != nil {
+		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
+		return
+	}
+	err = h.nodeDomain.Unregister(ctx, node.Key)
+	if err != nil {
+		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
+		return
+	}
 }

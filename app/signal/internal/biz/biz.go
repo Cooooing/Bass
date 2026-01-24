@@ -19,14 +19,17 @@ var BizProviderSet = wire.NewSet(
 	ProvideTasks,
 	NewProducer,
 	NewNodePingTaskHandler,
+	NewNodePowTaskHandler,
 
 	NewNodeDomain,
 )
 
 func ProvideTasks(
 	ping *NodePingTaskHandler,
+	pow *NodePowTaskHandler,
 ) dict.Map[task.TaskName, task.Handler] {
 	d := dict.New[task.TaskName, task.Handler](0)
-	d.Set(task.TaskNodePing, ping)
+	d.Set(ping.Name(), ping)
+	d.Set(pow.Name(), pow)
 	return d
 }

@@ -43,6 +43,16 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 		if err := json.Unmarshal(data.Data, node); err != nil {
 			return err
 		}
+
+		// 判断节点是否在线
+		ok, err := h.nodeRepo.IsOnline(ctx, node.Key)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			return nil
+		}
+		// ping
 		pingMs, err := h.nodeDomain.Ping(node)
 		if err != nil {
 			return err
@@ -56,6 +66,7 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
+		// 下一次任务
 		data.Delay = true
 		err = h.producer.EnqueueTask(data)
 		if err != nil {

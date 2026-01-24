@@ -159,10 +159,8 @@ message SignalNodeListReply {
 
 message SignalNodeNegotiateRequest {}
 message SignalNodeNegotiateReply {
-  // 推荐节点信息
-  Node node = 1;
   // 节点列表
-  repeated Node nodes = 2;
+  repeated Node nodes = 1;
 }
 
 message SignalNodeRegisterRequest {}

@@ -14,18 +14,14 @@ service ConnectorHealthService {
   // ping
   rpc Ping(PingRequest) returns (PingResponse) {
     option (google.api.http) = {
-      post: "/v1/callback/ping"
-      body: "*"
-      additional_bindings {
-        get: "/v1/callback/ping"
-      }
+      get: "/v1/health/ping"
     };
   }
 
   // 工作量证明
   rpc Pow(PowRequest) returns (PowResponse) {
     option (google.api.http) = {
-      post: "/v1/callback/pow"
+      post: "/v1/health/pow"
       body: "*"
     };
   }
@@ -37,7 +33,15 @@ message PingRequest {}
 message PingResponse {}
 
 message PowRequest {
+  // 初始字符串
+  string challenge = 1 [(validate.rules).string.min_len = 1];
+  // 难度
+  int32 difficulty = 2 [(validate.rules).int32.gt = 0];
 }
 message PowResponse {
+  // 计算次数
+  string nonce = 1;
+  // 计算结果
+  string hash_hex = 2;
 }
 

@@ -98,7 +98,11 @@ func (*PingResponse) Descriptor() ([]byte, []int) {
 }
 
 type PowRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 初始字符串
+	Challenge string `protobuf:"bytes,1,opt,name=challenge,proto3" json:"challenge,omitempty"`
+	// 难度
+	Difficulty    int32 `protobuf:"varint,2,opt,name=difficulty,proto3" json:"difficulty,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -133,8 +137,26 @@ func (*PowRequest) Descriptor() ([]byte, []int) {
 	return file_connector_v1_health_proto_rawDescGZIP(), []int{2}
 }
 
+func (x *PowRequest) GetChallenge() string {
+	if x != nil {
+		return x.Challenge
+	}
+	return ""
+}
+
+func (x *PowRequest) GetDifficulty() int32 {
+	if x != nil {
+		return x.Difficulty
+	}
+	return 0
+}
+
 type PowResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 计算次数
+	Nonce string `protobuf:"bytes,1,opt,name=nonce,proto3" json:"nonce,omitempty"`
+	// 计算结果
+	HashHex       string `protobuf:"bytes,2,opt,name=hash_hex,json=hashHex,proto3" json:"hash_hex,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -169,19 +191,39 @@ func (*PowResponse) Descriptor() ([]byte, []int) {
 	return file_connector_v1_health_proto_rawDescGZIP(), []int{3}
 }
 
+func (x *PowResponse) GetNonce() string {
+	if x != nil {
+		return x.Nonce
+	}
+	return ""
+}
+
+func (x *PowResponse) GetHashHex() string {
+	if x != nil {
+		return x.HashHex
+	}
+	return ""
+}
+
 var File_connector_v1_health_proto protoreflect.FileDescriptor
 
 const file_connector_v1_health_proto_rawDesc = "" +
 	"\n" +
 	"\x19connector/v1/health.proto\x12\x17common.api.connector.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\r\n" +
 	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse\"\f\n" +
+	"\fPingResponse\"\\\n" +
 	"\n" +
-	"PowRequest\"\r\n" +
-	"\vPowResponse2\x90\x02\n" +
-	"\x16ConnectorHealthService\x12\x86\x01\n" +
-	"\x04Ping\x12$.common.api.connector.v1.PingRequest\x1a%.common.api.connector.v1.PingResponse\"1\x82\xd3\xe4\x93\x02+:\x01*Z\x13\x12\x11/v1/callback/ping\"\x11/v1/callback/ping\x12m\n" +
-	"\x03Pow\x12#.common.api.connector.v1.PowRequest\x1a$.common.api.connector.v1.PowResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/callback/powB\x1cZ\x1acommon/api/connector/v1;v1b\x06proto3"
+	"PowRequest\x12%\n" +
+	"\tchallenge\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\tchallenge\x12'\n" +
+	"\n" +
+	"difficulty\x18\x02 \x01(\x05B\a\xfaB\x04\x1a\x02 \x00R\n" +
+	"difficulty\">\n" +
+	"\vPowResponse\x12\x14\n" +
+	"\x05nonce\x18\x01 \x01(\tR\x05nonce\x12\x19\n" +
+	"\bhash_hex\x18\x02 \x01(\tR\ahashHex2\xf3\x01\n" +
+	"\x16ConnectorHealthService\x12l\n" +
+	"\x04Ping\x12$.common.api.connector.v1.PingRequest\x1a%.common.api.connector.v1.PingResponse\"\x17\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/health/ping\x12k\n" +
+	"\x03Pow\x12#.common.api.connector.v1.PowRequest\x1a$.common.api.connector.v1.PowResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/health/powB\x1cZ\x1acommon/api/connector/v1;v1b\x06proto3"
 
 var (
 	file_connector_v1_health_proto_rawDescOnce sync.Once

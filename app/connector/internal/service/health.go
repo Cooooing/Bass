@@ -5,6 +5,11 @@ import (
 	"connector/internal/biz"
 	"connector/internal/data"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -34,5 +39,24 @@ func (s *HealthService) Ping(ctx context.Context, req *v1.PingRequest) (rsp *v1.
 }
 
 func (s *HealthService) Pow(ctx context.Context, req *v1.PowRequest) (rsp *v1.PowResponse, err error) {
-	return &v1.PowResponse{}, nil
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	for n := 0; ; n++ {
+		msg := req.Challenge + ":" + strconv.Itoa(n)
+		sum := sha256.Sum256([]byte(msg))
+		h := hex.EncodeToString(sum[:])
+
+		if strings.HasPrefix(h, strings.Repeat("0", int(req.Difficulty))) {
+			return &v1.PowResponse{
+				Nonce:   strconv.Itoa(n),
+				HashHex: h,
+			}, nil
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+		}
+	}
 }

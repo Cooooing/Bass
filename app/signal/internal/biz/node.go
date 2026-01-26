@@ -8,33 +8,39 @@ import (
 	"common/pkg/constant"
 	commonBase "common/pkg/cutil/base"
 	"common/pkg/cutil/base/str"
+	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"signal/internal/biz/base"
+	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
 	"signal/internal/biz/task"
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 	"github.com/sony/sonyflake/v2"
 )
 
 type NodeDomain struct {
 	*base.BaseDomain
 	nodeRepo   repo.NodeRepo
+	nodeCache  cache.NodeCache
 	producer   *Producer
 	httpClient *http.Client
 	sf         *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, producer *Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -42,6 +48,7 @@ func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, producer
 	return &NodeDomain{
 		BaseDomain: baseDomain,
 		nodeRepo:   nodeRepo,
+		nodeCache:  nodeCache,
 		producer:   producer,
 		httpClient: httpClient,
 		sf:         sf,
@@ -51,6 +58,29 @@ func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, producer
 // GenerateSecret 生成一个 32 位随机字符串
 func (d *NodeDomain) GenerateSecret() string {
 	return str.RandStr(d.sf, 32, true, true, true, false)
+}
+
+func (d *NodeDomain) GetByKey(ctx context.Context, key string) (*model.Node, error) {
+	cacheKey := constant.GetKeySignalNode(key)
+
+	n, err := d.nodeCache.GetNode(ctx, cacheKey)
+	if err == nil {
+		return n, nil
+	}
+	if !errors.Is(err, redis.Nil) {
+		return nil, err
+	}
+
+	n, err = d.nodeRepo.GetOne(ctx, d.Db, &repo.NodeGetReq{Key: &key})
+	if err != nil {
+		return nil, err
+	}
+
+	err = d.nodeCache.SetNode(ctx, n)
+	if err != nil {
+		return nil, err
+	}
+	return n, nil
 }
 
 func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
@@ -143,7 +173,7 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	}
 
 	// 幂等处理
-	isOnline, err := d.nodeRepo.IsOnline(ctx, n.Key)
+	isOnline, err := d.nodeCache.ExistsNodeRank(ctx, n.Key)
 	if err != nil {
 		return err
 	}
@@ -151,7 +181,11 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 		return nil
 	}
 
-	err = d.nodeRepo.Register(ctx, n)
+	err = d.nodeCache.SetNode(ctx, n)
+	if err != nil {
+		return err
+	}
+	err = d.nodeCache.SetNodeRank(ctx, n.Key, 0)
 	if err != nil {
 		return err
 	}
@@ -187,16 +221,15 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 		}
 		key = n.Key
 	}
-	err := d.nodeRepo.Unregister(ctx, key)
-	if err != nil {
-		return err
-	}
+	d.nodeCache.DelNodeRank(ctx, key)
+	d.nodeCache.DelNode(ctx, key)
+	// Todo 清理缓存
 	return nil
 }
 
 func (d *NodeDomain) Negotiate(ctx context.Context) ([]*model.Node, error) {
 	nodes := make([]*model.Node, 0)
-	keys, err := d.nodeRepo.GetOnlineNodeKeys(ctx)
+	keys, err := d.nodeCache.GetOnlineNodeKeys(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -210,4 +243,69 @@ func (d *NodeDomain) Negotiate(ctx context.Context) ([]*model.Node, error) {
 		}
 	}
 	return nodes, nil
+}
+
+func (d *NodeDomain) Ticket(ctx context.Context) (string, error) {
+	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	if !ok {
+		return "", cv1.ErrorUnauthorized("user not login")
+	}
+	u, err := uuid.NewUUID()
+	if err != nil {
+		return "", err
+	}
+	ticket := u.String()
+	err = d.Redis.Client.SetEx(ctx, constant.GetKeySignalTicket(ticket), user.ID, time.Minute).Err()
+	if err != nil {
+		return "", err
+	}
+	return ticket, nil
+}
+
+func (d *NodeDomain) Online(ctx context.Context, ticket string) (string, error) {
+	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
+	if !ok {
+		return "", cv1.ErrorUnauthorized("node is not allow")
+	}
+	result, err := d.Redis.Client.Get(ctx, constant.GetKeySignalTicket(ticket)).Result()
+	if errors.Is(err, redis.Nil) {
+		return "", cv1.ErrorUnauthorized("ticket is invalid")
+	}
+	if err != nil {
+		return "", err
+	}
+	err = d.Redis.Client.Del(ctx, constant.GetKeySignalTicket(ticket)).Err()
+	if err != nil {
+		return "", err
+	}
+	// Todo 上线操作缓存
+	sessionId := uuid.New().String()
+	_ = n
+	err = d.Redis.Client.Set(ctx, constant.GetKeySignalSession(sessionId), result, 0).Err()
+	if err != nil {
+		return "", err
+	}
+	return sessionId, nil
+}
+
+func (d *NodeDomain) Offline(ctx context.Context, sessionId string) error {
+	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
+	if !ok {
+		return cv1.ErrorUnauthorized("node is not allow")
+	}
+
+	// Todo 下线操作缓存
+	_ = n
+	_, err := d.Redis.Client.Get(ctx, constant.GetKeySignalSession(sessionId)).Result()
+	if errors.Is(err, redis.Nil) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	err = d.Redis.Client.Del(ctx, constant.GetKeySignalSession(sessionId)).Err()
+	if err != nil {
+		return err
+	}
+	return nil
 }

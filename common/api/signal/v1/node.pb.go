@@ -702,19 +702,98 @@ func (*SignalNodeUnregisterReply) Descriptor() ([]byte, []int) {
 	return file_signal_v1_node_proto_rawDescGZIP(), []int{15}
 }
 
+type SignalNodeTicketRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeTicketRequest) Reset() {
+	*x = SignalNodeTicketRequest{}
+	mi := &file_signal_v1_node_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeTicketRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeTicketRequest) ProtoMessage() {}
+
+func (x *SignalNodeTicketRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeTicketRequest.ProtoReflect.Descriptor instead.
+func (*SignalNodeTicketRequest) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{16}
+}
+
+type SignalNodeTicketReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ticket
+	Ticket        string `protobuf:"bytes,1,opt,name=ticket,proto3" json:"ticket,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignalNodeTicketReply) Reset() {
+	*x = SignalNodeTicketReply{}
+	mi := &file_signal_v1_node_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignalNodeTicketReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignalNodeTicketReply) ProtoMessage() {}
+
+func (x *SignalNodeTicketReply) ProtoReflect() protoreflect.Message {
+	mi := &file_signal_v1_node_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignalNodeTicketReply.ProtoReflect.Descriptor instead.
+func (*SignalNodeTicketReply) Descriptor() ([]byte, []int) {
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *SignalNodeTicketReply) GetTicket() string {
+	if x != nil {
+		return x.Ticket
+	}
+	return ""
+}
+
 type SignalNodeOnlineRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 用户 ID
-	UserId int64 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// session ID
-	SessionId     string `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	// ticket
+	Ticket        string `protobuf:"bytes,1,opt,name=ticket,proto3" json:"ticket,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SignalNodeOnlineRequest) Reset() {
 	*x = SignalNodeOnlineRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[16]
+	mi := &file_signal_v1_node_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -726,7 +805,7 @@ func (x *SignalNodeOnlineRequest) String() string {
 func (*SignalNodeOnlineRequest) ProtoMessage() {}
 
 func (x *SignalNodeOnlineRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[16]
+	mi := &file_signal_v1_node_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -739,32 +818,27 @@ func (x *SignalNodeOnlineRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{16}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{18}
 }
 
-func (x *SignalNodeOnlineRequest) GetUserId() int64 {
+func (x *SignalNodeOnlineRequest) GetTicket() string {
 	if x != nil {
-		return x.UserId
-	}
-	return 0
-}
-
-func (x *SignalNodeOnlineRequest) GetSessionId() string {
-	if x != nil {
-		return x.SessionId
+		return x.Ticket
 	}
 	return ""
 }
 
 type SignalNodeOnlineReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// session Id
+	SessionId     string `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SignalNodeOnlineReply) Reset() {
 	*x = SignalNodeOnlineReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[17]
+	mi := &file_signal_v1_node_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -776,7 +850,7 @@ func (x *SignalNodeOnlineReply) String() string {
 func (*SignalNodeOnlineReply) ProtoMessage() {}
 
 func (x *SignalNodeOnlineReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[17]
+	mi := &file_signal_v1_node_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -789,22 +863,27 @@ func (x *SignalNodeOnlineReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{17}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *SignalNodeOnlineReply) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SignalNodeOfflineRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 用户 ID
-	UserId int64 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	// session ID
-	SessionId     string `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	SessionId     string `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SignalNodeOfflineRequest) Reset() {
 	*x = SignalNodeOfflineRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[18]
+	mi := &file_signal_v1_node_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -816,7 +895,7 @@ func (x *SignalNodeOfflineRequest) String() string {
 func (*SignalNodeOfflineRequest) ProtoMessage() {}
 
 func (x *SignalNodeOfflineRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[18]
+	mi := &file_signal_v1_node_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -829,14 +908,7 @@ func (x *SignalNodeOfflineRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOfflineRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeOfflineRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{18}
-}
-
-func (x *SignalNodeOfflineRequest) GetUserId() int64 {
-	if x != nil {
-		return x.UserId
-	}
-	return 0
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *SignalNodeOfflineRequest) GetSessionId() string {
@@ -854,7 +926,7 @@ type SignalNodeOfflineReply struct {
 
 func (x *SignalNodeOfflineReply) Reset() {
 	*x = SignalNodeOfflineReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[19]
+	mi := &file_signal_v1_node_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -866,7 +938,7 @@ func (x *SignalNodeOfflineReply) String() string {
 func (*SignalNodeOfflineReply) ProtoMessage() {}
 
 func (x *SignalNodeOfflineReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[19]
+	mi := &file_signal_v1_node_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -879,7 +951,7 @@ func (x *SignalNodeOfflineReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOfflineReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeOfflineReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{19}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{21}
 }
 
 type SignalNodeOnlineListRequest struct {
@@ -890,7 +962,7 @@ type SignalNodeOnlineListRequest struct {
 
 func (x *SignalNodeOnlineListRequest) Reset() {
 	*x = SignalNodeOnlineListRequest{}
-	mi := &file_signal_v1_node_proto_msgTypes[20]
+	mi := &file_signal_v1_node_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -902,7 +974,7 @@ func (x *SignalNodeOnlineListRequest) String() string {
 func (*SignalNodeOnlineListRequest) ProtoMessage() {}
 
 func (x *SignalNodeOnlineListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[20]
+	mi := &file_signal_v1_node_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -915,7 +987,7 @@ func (x *SignalNodeOnlineListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineListRequest.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineListRequest) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{20}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{22}
 }
 
 type SignalNodeOnlineListReply struct {
@@ -926,7 +998,7 @@ type SignalNodeOnlineListReply struct {
 
 func (x *SignalNodeOnlineListReply) Reset() {
 	*x = SignalNodeOnlineListReply{}
-	mi := &file_signal_v1_node_proto_msgTypes[21]
+	mi := &file_signal_v1_node_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -938,7 +1010,7 @@ func (x *SignalNodeOnlineListReply) String() string {
 func (*SignalNodeOnlineListReply) ProtoMessage() {}
 
 func (x *SignalNodeOnlineListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_signal_v1_node_proto_msgTypes[21]
+	mi := &file_signal_v1_node_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -951,7 +1023,7 @@ func (x *SignalNodeOnlineListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignalNodeOnlineListReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeOnlineListReply) Descriptor() ([]byte, []int) {
-	return file_signal_v1_node_proto_rawDescGZIP(), []int{21}
+	return file_signal_v1_node_proto_rawDescGZIP(), []int{23}
 }
 
 var File_signal_v1_node_proto protoreflect.FileDescriptor
@@ -985,19 +1057,21 @@ const file_signal_v1_node_proto_rawDesc = "" +
 	"\x19SignalNodeRegisterRequest\"\x19\n" +
 	"\x17SignalNodeRegisterReply\"\x1d\n" +
 	"\x1bSignalNodeUnregisterRequest\"\x1b\n" +
-	"\x19SignalNodeUnregisterReply\"Q\n" +
-	"\x17SignalNodeOnlineRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\x19SignalNodeUnregisterReply\"\x19\n" +
+	"\x17SignalNodeTicketRequest\"/\n" +
+	"\x15SignalNodeTicketReply\x12\x16\n" +
+	"\x06ticket\x18\x01 \x01(\tR\x06ticket\"1\n" +
+	"\x17SignalNodeOnlineRequest\x12\x16\n" +
+	"\x06ticket\x18\x01 \x01(\tR\x06ticket\"6\n" +
+	"\x15SignalNodeOnlineReply\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x02 \x01(\tR\tsessionId\"\x17\n" +
-	"\x15SignalNodeOnlineReply\"R\n" +
-	"\x18SignalNodeOfflineRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"9\n" +
+	"\x18SignalNodeOfflineRequest\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x02 \x01(\tR\tsessionId\"\x18\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x18\n" +
 	"\x16SignalNodeOfflineReply\"\x1d\n" +
 	"\x1bSignalNodeOnlineListRequest\"\x1b\n" +
-	"\x19SignalNodeOnlineListReply2\x81\f\n" +
+	"\x19SignalNodeOnlineListReply2\x84\r\n" +
 	"\x11SignalNodeService\x12x\n" +
 	"\x04Save\x12+.common.api.signal.v1.SignalNodeSaveRequest\x1a).common.api.signal.v1.SignalNodeSaveReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/node/save\x12\x80\x01\n" +
 	"\x06Update\x12-.common.api.signal.v1.SignalNodeUpdateRequest\x1a+.common.api.signal.v1.SignalNodeUpdateReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/node/update\x12\x8d\x01\n" +
@@ -1008,6 +1082,7 @@ const file_signal_v1_node_proto_rawDesc = "" +
 	"\bRegister\x12/.common.api.signal.v1.SignalNodeRegisterRequest\x1a-.common.api.signal.v1.SignalNodeRegisterReply\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/node/register\x12\x90\x01\n" +
 	"\n" +
 	"Unregister\x121.common.api.signal.v1.SignalNodeUnregisterRequest\x1a/.common.api.signal.v1.SignalNodeUnregisterReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/node/unregister\x12\x80\x01\n" +
+	"\x06Ticket\x12-.common.api.signal.v1.SignalNodeTicketRequest\x1a+.common.api.signal.v1.SignalNodeTicketReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/node/ticket\x12\x80\x01\n" +
 	"\x06Online\x12-.common.api.signal.v1.SignalNodeOnlineRequest\x1a+.common.api.signal.v1.SignalNodeOnlineReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/node/online\x12\x84\x01\n" +
 	"\aOffline\x12..common.api.signal.v1.SignalNodeOfflineRequest\x1a,.common.api.signal.v1.SignalNodeOfflineReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/node/offline\x12\x91\x01\n" +
 	"\n" +
@@ -1025,7 +1100,7 @@ func file_signal_v1_node_proto_rawDescGZIP() []byte {
 	return file_signal_v1_node_proto_rawDescData
 }
 
-var file_signal_v1_node_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_signal_v1_node_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_signal_v1_node_proto_goTypes = []any{
 	(*SignalNodeSaveRequest)(nil),         // 0: common.api.signal.v1.SignalNodeSaveRequest
 	(*SignalNodeSaveReply)(nil),           // 1: common.api.signal.v1.SignalNodeSaveReply
@@ -1043,23 +1118,25 @@ var file_signal_v1_node_proto_goTypes = []any{
 	(*SignalNodeRegisterReply)(nil),       // 13: common.api.signal.v1.SignalNodeRegisterReply
 	(*SignalNodeUnregisterRequest)(nil),   // 14: common.api.signal.v1.SignalNodeUnregisterRequest
 	(*SignalNodeUnregisterReply)(nil),     // 15: common.api.signal.v1.SignalNodeUnregisterReply
-	(*SignalNodeOnlineRequest)(nil),       // 16: common.api.signal.v1.SignalNodeOnlineRequest
-	(*SignalNodeOnlineReply)(nil),         // 17: common.api.signal.v1.SignalNodeOnlineReply
-	(*SignalNodeOfflineRequest)(nil),      // 18: common.api.signal.v1.SignalNodeOfflineRequest
-	(*SignalNodeOfflineReply)(nil),        // 19: common.api.signal.v1.SignalNodeOfflineReply
-	(*SignalNodeOnlineListRequest)(nil),   // 20: common.api.signal.v1.SignalNodeOnlineListRequest
-	(*SignalNodeOnlineListReply)(nil),     // 21: common.api.signal.v1.SignalNodeOnlineListReply
-	(*Node)(nil),                          // 22: common.api.signal.v1.Node
-	(NodeStatus)(0),                       // 23: common.api.signal.v1.NodeStatus
+	(*SignalNodeTicketRequest)(nil),       // 16: common.api.signal.v1.SignalNodeTicketRequest
+	(*SignalNodeTicketReply)(nil),         // 17: common.api.signal.v1.SignalNodeTicketReply
+	(*SignalNodeOnlineRequest)(nil),       // 18: common.api.signal.v1.SignalNodeOnlineRequest
+	(*SignalNodeOnlineReply)(nil),         // 19: common.api.signal.v1.SignalNodeOnlineReply
+	(*SignalNodeOfflineRequest)(nil),      // 20: common.api.signal.v1.SignalNodeOfflineRequest
+	(*SignalNodeOfflineReply)(nil),        // 21: common.api.signal.v1.SignalNodeOfflineReply
+	(*SignalNodeOnlineListRequest)(nil),   // 22: common.api.signal.v1.SignalNodeOnlineListRequest
+	(*SignalNodeOnlineListReply)(nil),     // 23: common.api.signal.v1.SignalNodeOnlineListReply
+	(*Node)(nil),                          // 24: common.api.signal.v1.Node
+	(NodeStatus)(0),                       // 25: common.api.signal.v1.NodeStatus
 }
 var file_signal_v1_node_proto_depIdxs = []int32{
-	22, // 0: common.api.signal.v1.SignalNodeSaveRequest.node:type_name -> common.api.signal.v1.Node
-	22, // 1: common.api.signal.v1.SignalNodeSaveReply.node:type_name -> common.api.signal.v1.Node
-	22, // 2: common.api.signal.v1.SignalNodeUpdateRequest.node:type_name -> common.api.signal.v1.Node
-	22, // 3: common.api.signal.v1.SignalNodeUpdateReply.node:type_name -> common.api.signal.v1.Node
-	23, // 4: common.api.signal.v1.SignalNodeListRequest.status:type_name -> common.api.signal.v1.NodeStatus
-	22, // 5: common.api.signal.v1.SignalNodeListReply.nodes:type_name -> common.api.signal.v1.Node
-	22, // 6: common.api.signal.v1.SignalNodeNegotiateReply.nodes:type_name -> common.api.signal.v1.Node
+	24, // 0: common.api.signal.v1.SignalNodeSaveRequest.node:type_name -> common.api.signal.v1.Node
+	24, // 1: common.api.signal.v1.SignalNodeSaveReply.node:type_name -> common.api.signal.v1.Node
+	24, // 2: common.api.signal.v1.SignalNodeUpdateRequest.node:type_name -> common.api.signal.v1.Node
+	24, // 3: common.api.signal.v1.SignalNodeUpdateReply.node:type_name -> common.api.signal.v1.Node
+	25, // 4: common.api.signal.v1.SignalNodeListRequest.status:type_name -> common.api.signal.v1.NodeStatus
+	24, // 5: common.api.signal.v1.SignalNodeListReply.nodes:type_name -> common.api.signal.v1.Node
+	24, // 6: common.api.signal.v1.SignalNodeNegotiateReply.nodes:type_name -> common.api.signal.v1.Node
 	0,  // 7: common.api.signal.v1.SignalNodeService.Save:input_type -> common.api.signal.v1.SignalNodeSaveRequest
 	2,  // 8: common.api.signal.v1.SignalNodeService.Update:input_type -> common.api.signal.v1.SignalNodeUpdateRequest
 	4,  // 9: common.api.signal.v1.SignalNodeService.GetSecret:input_type -> common.api.signal.v1.SignalNodeGetSecretRequest
@@ -1068,22 +1145,24 @@ var file_signal_v1_node_proto_depIdxs = []int32{
 	10, // 12: common.api.signal.v1.SignalNodeService.Negotiate:input_type -> common.api.signal.v1.SignalNodeNegotiateRequest
 	12, // 13: common.api.signal.v1.SignalNodeService.Register:input_type -> common.api.signal.v1.SignalNodeRegisterRequest
 	14, // 14: common.api.signal.v1.SignalNodeService.Unregister:input_type -> common.api.signal.v1.SignalNodeUnregisterRequest
-	16, // 15: common.api.signal.v1.SignalNodeService.Online:input_type -> common.api.signal.v1.SignalNodeOnlineRequest
-	18, // 16: common.api.signal.v1.SignalNodeService.Offline:input_type -> common.api.signal.v1.SignalNodeOfflineRequest
-	20, // 17: common.api.signal.v1.SignalNodeService.OnlineList:input_type -> common.api.signal.v1.SignalNodeOnlineListRequest
-	1,  // 18: common.api.signal.v1.SignalNodeService.Save:output_type -> common.api.signal.v1.SignalNodeSaveReply
-	3,  // 19: common.api.signal.v1.SignalNodeService.Update:output_type -> common.api.signal.v1.SignalNodeUpdateReply
-	5,  // 20: common.api.signal.v1.SignalNodeService.GetSecret:output_type -> common.api.signal.v1.SignalNodeGetSecretReply
-	7,  // 21: common.api.signal.v1.SignalNodeService.UpdateSecret:output_type -> common.api.signal.v1.SignalNodeUpdateSecretReply
-	9,  // 22: common.api.signal.v1.SignalNodeService.List:output_type -> common.api.signal.v1.SignalNodeListReply
-	11, // 23: common.api.signal.v1.SignalNodeService.Negotiate:output_type -> common.api.signal.v1.SignalNodeNegotiateReply
-	13, // 24: common.api.signal.v1.SignalNodeService.Register:output_type -> common.api.signal.v1.SignalNodeRegisterReply
-	15, // 25: common.api.signal.v1.SignalNodeService.Unregister:output_type -> common.api.signal.v1.SignalNodeUnregisterReply
-	17, // 26: common.api.signal.v1.SignalNodeService.Online:output_type -> common.api.signal.v1.SignalNodeOnlineReply
-	19, // 27: common.api.signal.v1.SignalNodeService.Offline:output_type -> common.api.signal.v1.SignalNodeOfflineReply
-	21, // 28: common.api.signal.v1.SignalNodeService.OnlineList:output_type -> common.api.signal.v1.SignalNodeOnlineListReply
-	18, // [18:29] is the sub-list for method output_type
-	7,  // [7:18] is the sub-list for method input_type
+	16, // 15: common.api.signal.v1.SignalNodeService.Ticket:input_type -> common.api.signal.v1.SignalNodeTicketRequest
+	18, // 16: common.api.signal.v1.SignalNodeService.Online:input_type -> common.api.signal.v1.SignalNodeOnlineRequest
+	20, // 17: common.api.signal.v1.SignalNodeService.Offline:input_type -> common.api.signal.v1.SignalNodeOfflineRequest
+	22, // 18: common.api.signal.v1.SignalNodeService.OnlineList:input_type -> common.api.signal.v1.SignalNodeOnlineListRequest
+	1,  // 19: common.api.signal.v1.SignalNodeService.Save:output_type -> common.api.signal.v1.SignalNodeSaveReply
+	3,  // 20: common.api.signal.v1.SignalNodeService.Update:output_type -> common.api.signal.v1.SignalNodeUpdateReply
+	5,  // 21: common.api.signal.v1.SignalNodeService.GetSecret:output_type -> common.api.signal.v1.SignalNodeGetSecretReply
+	7,  // 22: common.api.signal.v1.SignalNodeService.UpdateSecret:output_type -> common.api.signal.v1.SignalNodeUpdateSecretReply
+	9,  // 23: common.api.signal.v1.SignalNodeService.List:output_type -> common.api.signal.v1.SignalNodeListReply
+	11, // 24: common.api.signal.v1.SignalNodeService.Negotiate:output_type -> common.api.signal.v1.SignalNodeNegotiateReply
+	13, // 25: common.api.signal.v1.SignalNodeService.Register:output_type -> common.api.signal.v1.SignalNodeRegisterReply
+	15, // 26: common.api.signal.v1.SignalNodeService.Unregister:output_type -> common.api.signal.v1.SignalNodeUnregisterReply
+	17, // 27: common.api.signal.v1.SignalNodeService.Ticket:output_type -> common.api.signal.v1.SignalNodeTicketReply
+	19, // 28: common.api.signal.v1.SignalNodeService.Online:output_type -> common.api.signal.v1.SignalNodeOnlineReply
+	21, // 29: common.api.signal.v1.SignalNodeService.Offline:output_type -> common.api.signal.v1.SignalNodeOfflineReply
+	23, // 30: common.api.signal.v1.SignalNodeService.OnlineList:output_type -> common.api.signal.v1.SignalNodeOnlineListReply
+	19, // [19:31] is the sub-list for method output_type
+	7,  // [7:19] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name
 	7,  // [7:7] is the sub-list for extension extendee
 	0,  // [0:7] is the sub-list for field type_name
@@ -1102,7 +1181,7 @@ func file_signal_v1_node_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_signal_v1_node_proto_rawDesc), len(file_signal_v1_node_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

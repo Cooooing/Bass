@@ -117,13 +117,26 @@ func (s *NodeService) Unregister(ctx context.Context, req *v1.SignalNodeUnregist
 	return &v1.SignalNodeUnregisterReply{}, err
 }
 
+func (s *NodeService) Ticket(ctx context.Context, req *v1.SignalNodeTicketRequest) (*v1.SignalNodeTicketReply, error) {
+	ticket, err := s.nodeDomain.Ticket(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.SignalNodeTicketReply{Ticket: ticket}, nil
+}
+
 func (s *NodeService) Online(ctx context.Context, req *v1.SignalNodeOnlineRequest) (*v1.SignalNodeOnlineReply, error) {
-	// TODO: 实现节点上线的领域逻辑
-	return &v1.SignalNodeOnlineReply{}, nil
+	sessionId, err := s.nodeDomain.Online(ctx, req.Ticket)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.SignalNodeOnlineReply{
+		SessionId: sessionId,
+	}, nil
 }
 
 func (s *NodeService) Offline(ctx context.Context, req *v1.SignalNodeOfflineRequest) (*v1.SignalNodeOfflineReply, error) {
-	// TODO: 实现节点下线的领域逻辑
+
 	return &v1.SignalNodeOfflineReply{}, nil
 }
 

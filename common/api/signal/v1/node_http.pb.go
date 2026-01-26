@@ -27,6 +27,7 @@ const OperationSignalNodeServiceOnline = "/common.api.signal.v1.SignalNodeServic
 const OperationSignalNodeServiceOnlineList = "/common.api.signal.v1.SignalNodeService/OnlineList"
 const OperationSignalNodeServiceRegister = "/common.api.signal.v1.SignalNodeService/Register"
 const OperationSignalNodeServiceSave = "/common.api.signal.v1.SignalNodeService/Save"
+const OperationSignalNodeServiceTicket = "/common.api.signal.v1.SignalNodeService/Ticket"
 const OperationSignalNodeServiceUnregister = "/common.api.signal.v1.SignalNodeService/Unregister"
 const OperationSignalNodeServiceUpdate = "/common.api.signal.v1.SignalNodeService/Update"
 const OperationSignalNodeServiceUpdateSecret = "/common.api.signal.v1.SignalNodeService/UpdateSecret"
@@ -48,6 +49,8 @@ type SignalNodeServiceHTTPServer interface {
 	Register(context.Context, *SignalNodeRegisterRequest) (*SignalNodeRegisterReply, error)
 	// Save 保存节点
 	Save(context.Context, *SignalNodeSaveRequest) (*SignalNodeSaveReply, error)
+	// Ticket 获取 websocket ticket
+	Ticket(context.Context, *SignalNodeTicketRequest) (*SignalNodeTicketReply, error)
 	// Unregister 注销节点
 	Unregister(context.Context, *SignalNodeUnregisterRequest) (*SignalNodeUnregisterReply, error)
 	// Update 更新节点信息
@@ -66,6 +69,7 @@ func RegisterSignalNodeServiceHTTPServer(s *http.Server, srv SignalNodeServiceHT
 	r.POST("/v1/node/negotiate", _SignalNodeService_Negotiate0_HTTP_Handler(srv))
 	r.POST("/v1/node/register", _SignalNodeService_Register0_HTTP_Handler(srv))
 	r.POST("/v1/node/unregister", _SignalNodeService_Unregister0_HTTP_Handler(srv))
+	r.POST("/v1/node/ticket", _SignalNodeService_Ticket0_HTTP_Handler(srv))
 	r.POST("/v1/node/online", _SignalNodeService_Online0_HTTP_Handler(srv))
 	r.POST("/v1/node/offline", _SignalNodeService_Offline0_HTTP_Handler(srv))
 	r.POST("/v1/node/online/list", _SignalNodeService_OnlineList0_HTTP_Handler(srv))
@@ -247,6 +251,28 @@ func _SignalNodeService_Unregister0_HTTP_Handler(srv SignalNodeServiceHTTPServer
 	}
 }
 
+func _SignalNodeService_Ticket0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SignalNodeTicketRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationSignalNodeServiceTicket)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Ticket(ctx, req.(*SignalNodeTicketRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SignalNodeTicketReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _SignalNodeService_Online0_HTTP_Handler(srv SignalNodeServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SignalNodeOnlineRequest
@@ -330,6 +356,8 @@ type SignalNodeServiceHTTPClient interface {
 	Register(ctx context.Context, req *SignalNodeRegisterRequest, opts ...http.CallOption) (rsp *SignalNodeRegisterReply, err error)
 	// Save 保存节点
 	Save(ctx context.Context, req *SignalNodeSaveRequest, opts ...http.CallOption) (rsp *SignalNodeSaveReply, err error)
+	// Ticket 获取 websocket ticket
+	Ticket(ctx context.Context, req *SignalNodeTicketRequest, opts ...http.CallOption) (rsp *SignalNodeTicketReply, err error)
 	// Unregister 注销节点
 	Unregister(ctx context.Context, req *SignalNodeUnregisterRequest, opts ...http.CallOption) (rsp *SignalNodeUnregisterReply, err error)
 	// Update 更新节点信息
@@ -450,6 +478,20 @@ func (c *SignalNodeServiceHTTPClientImpl) Save(ctx context.Context, in *SignalNo
 	pattern := "/v1/node/save"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationSignalNodeServiceSave))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Ticket 获取 websocket ticket
+func (c *SignalNodeServiceHTTPClientImpl) Ticket(ctx context.Context, in *SignalNodeTicketRequest, opts ...http.CallOption) (*SignalNodeTicketReply, error) {
+	var out SignalNodeTicketReply
+	pattern := "/v1/node/ticket"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationSignalNodeServiceTicket))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

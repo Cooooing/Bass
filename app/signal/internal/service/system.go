@@ -4,8 +4,6 @@ import (
 	"common/api/common/v1"
 	"context"
 	"fmt"
-	"signal/internal/biz/base"
-	"signal/internal/data"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -16,7 +14,7 @@ type SystemService struct {
 	*BaseService
 }
 
-func NewSystemService(baseService *BaseService, baseDomain *base.BaseDomain, repo *data.BaseRepo) *SystemService {
+func NewSystemService(baseService *BaseService) *SystemService {
 	return &SystemService{
 		BaseService: baseService,
 	}

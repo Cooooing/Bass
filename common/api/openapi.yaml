@@ -1115,6 +1115,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.signal.v1.SignalNodeUpdateSecretReply'
+    /v1/node/ticket:
+        post:
+            tags:
+                - SignalNodeService
+            description: 获取 websocket ticket
+            operationId: SignalNodeService_Ticket
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.signal.v1.SignalNodeTicketRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.signal.v1.SignalNodeTicketReply'
     /v1/node/unregister:
         post:
             tags:
@@ -3284,9 +3303,6 @@ components:
         common.api.signal.v1.SignalNodeOfflineRequest:
             type: object
             properties:
-                user_id:
-                    type: string
-                    description: 用户 ID
                 session_id:
                     type: string
                     description: session ID
@@ -3298,16 +3314,16 @@ components:
             properties: {}
         common.api.signal.v1.SignalNodeOnlineReply:
             type: object
-            properties: {}
+            properties:
+                session_id:
+                    type: string
+                    description: session Id
         common.api.signal.v1.SignalNodeOnlineRequest:
             type: object
             properties:
-                user_id:
+                ticket:
                     type: string
-                    description: 用户 ID
-                session_id:
-                    type: string
-                    description: session ID
+                    description: ticket
         common.api.signal.v1.SignalNodeRegisterReply:
             type: object
             properties: {}
@@ -3328,6 +3344,15 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.signal.v1.Node'
                     description: 节点信息
+        common.api.signal.v1.SignalNodeTicketReply:
+            type: object
+            properties:
+                ticket:
+                    type: string
+                    description: ticket
+        common.api.signal.v1.SignalNodeTicketRequest:
+            type: object
+            properties: {}
         common.api.signal.v1.SignalNodeUnregisterReply:
             type: object
             properties: {}

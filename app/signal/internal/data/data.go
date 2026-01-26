@@ -5,8 +5,10 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"signal/internal/conf"
+	"signal/internal/data/base"
+	"signal/internal/data/cache"
 	"signal/internal/data/client"
-	"signal/internal/data/ent/gen"
+	"signal/internal/data/repo"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -15,7 +17,7 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	NewBaseRepo,
+	base.NewBaseData,
 
 	client.NewDataBaseClient,
 	NewEtcdClient,
@@ -25,28 +27,9 @@ var DataProviderSet = wire.NewSet(
 
 	util.NewTokenRepo,
 
-	NewNodeRepo,
+	repo.NewNodeRepo,
+	cache.NewNodeCache,
 )
-
-type BaseRepo struct {
-	conf     *conf.Bootstrap
-	log      *log.Helper
-	db       *gen.Client
-	etcd     *commonClient.EtcdClient
-	redis    *commonClient.RedisClient
-	rabbitmq *commonClient.RabbitMQClient
-}
-
-func NewBaseRepo(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseRepo {
-	return &BaseRepo{
-		conf:     conf,
-		log:      log,
-		etcd:     etcd,
-		db:       db,
-		redis:    redis,
-		rabbitmq: rabbitmq,
-	}
-}
 
 func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {
 	c := &commonModel.EtcdConf{}

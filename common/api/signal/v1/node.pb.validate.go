@@ -1864,6 +1864,212 @@ var _ interface {
 	ErrorName() string
 } = SignalNodeUnregisterReplyValidationError{}
 
+// Validate checks the field values on SignalNodeTicketRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeTicketRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeTicketRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeTicketRequestMultiError, or nil if none found.
+func (m *SignalNodeTicketRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeTicketRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return SignalNodeTicketRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeTicketRequestMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeTicketRequest.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeTicketRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeTicketRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeTicketRequestMultiError) AllErrors() []error { return m }
+
+// SignalNodeTicketRequestValidationError is the validation error returned by
+// SignalNodeTicketRequest.Validate if the designated constraints aren't met.
+type SignalNodeTicketRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeTicketRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeTicketRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeTicketRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeTicketRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeTicketRequestValidationError) ErrorName() string {
+	return "SignalNodeTicketRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeTicketRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeTicketRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeTicketRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeTicketRequestValidationError{}
+
+// Validate checks the field values on SignalNodeTicketReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *SignalNodeTicketReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SignalNodeTicketReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SignalNodeTicketReplyMultiError, or nil if none found.
+func (m *SignalNodeTicketReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SignalNodeTicketReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Ticket
+
+	if len(errors) > 0 {
+		return SignalNodeTicketReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SignalNodeTicketReplyMultiError is an error wrapping multiple validation
+// errors returned by SignalNodeTicketReply.ValidateAll() if the designated
+// constraints aren't met.
+type SignalNodeTicketReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SignalNodeTicketReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SignalNodeTicketReplyMultiError) AllErrors() []error { return m }
+
+// SignalNodeTicketReplyValidationError is the validation error returned by
+// SignalNodeTicketReply.Validate if the designated constraints aren't met.
+type SignalNodeTicketReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SignalNodeTicketReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SignalNodeTicketReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SignalNodeTicketReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SignalNodeTicketReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SignalNodeTicketReplyValidationError) ErrorName() string {
+	return "SignalNodeTicketReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SignalNodeTicketReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSignalNodeTicketReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SignalNodeTicketReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SignalNodeTicketReplyValidationError{}
+
 // Validate checks the field values on SignalNodeOnlineRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1886,9 +2092,7 @@ func (m *SignalNodeOnlineRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for UserId
-
-	// no validation rules for SessionId
+	// no validation rules for Ticket
 
 	if len(errors) > 0 {
 		return SignalNodeOnlineRequestMultiError(errors)
@@ -1992,6 +2196,8 @@ func (m *SignalNodeOnlineReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for SessionId
+
 	if len(errors) > 0 {
 		return SignalNodeOnlineReplyMultiError(errors)
 	}
@@ -2093,8 +2299,6 @@ func (m *SignalNodeOfflineRequest) validate(all bool) error {
 	}
 
 	var errors []error
-
-	// no validation rules for UserId
 
 	// no validation rules for SessionId
 

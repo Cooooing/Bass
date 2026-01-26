@@ -27,6 +27,7 @@ const (
 	SignalNodeService_Negotiate_FullMethodName    = "/common.api.signal.v1.SignalNodeService/Negotiate"
 	SignalNodeService_Register_FullMethodName     = "/common.api.signal.v1.SignalNodeService/Register"
 	SignalNodeService_Unregister_FullMethodName   = "/common.api.signal.v1.SignalNodeService/Unregister"
+	SignalNodeService_Ticket_FullMethodName       = "/common.api.signal.v1.SignalNodeService/Ticket"
 	SignalNodeService_Online_FullMethodName       = "/common.api.signal.v1.SignalNodeService/Online"
 	SignalNodeService_Offline_FullMethodName      = "/common.api.signal.v1.SignalNodeService/Offline"
 	SignalNodeService_OnlineList_FullMethodName   = "/common.api.signal.v1.SignalNodeService/OnlineList"
@@ -54,6 +55,8 @@ type SignalNodeServiceClient interface {
 	Register(ctx context.Context, in *SignalNodeRegisterRequest, opts ...grpc.CallOption) (*SignalNodeRegisterReply, error)
 	// 注销节点
 	Unregister(ctx context.Context, in *SignalNodeUnregisterRequest, opts ...grpc.CallOption) (*SignalNodeUnregisterReply, error)
+	// 获取 websocket ticket
+	Ticket(ctx context.Context, in *SignalNodeTicketRequest, opts ...grpc.CallOption) (*SignalNodeTicketReply, error)
 	// 用户上线
 	Online(ctx context.Context, in *SignalNodeOnlineRequest, opts ...grpc.CallOption) (*SignalNodeOnlineReply, error)
 	// 用户下线
@@ -150,6 +153,16 @@ func (c *signalNodeServiceClient) Unregister(ctx context.Context, in *SignalNode
 	return out, nil
 }
 
+func (c *signalNodeServiceClient) Ticket(ctx context.Context, in *SignalNodeTicketRequest, opts ...grpc.CallOption) (*SignalNodeTicketReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignalNodeTicketReply)
+	err := c.cc.Invoke(ctx, SignalNodeService_Ticket_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *signalNodeServiceClient) Online(ctx context.Context, in *SignalNodeOnlineRequest, opts ...grpc.CallOption) (*SignalNodeOnlineReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SignalNodeOnlineReply)
@@ -202,6 +215,8 @@ type SignalNodeServiceServer interface {
 	Register(context.Context, *SignalNodeRegisterRequest) (*SignalNodeRegisterReply, error)
 	// 注销节点
 	Unregister(context.Context, *SignalNodeUnregisterRequest) (*SignalNodeUnregisterReply, error)
+	// 获取 websocket ticket
+	Ticket(context.Context, *SignalNodeTicketRequest) (*SignalNodeTicketReply, error)
 	// 用户上线
 	Online(context.Context, *SignalNodeOnlineRequest) (*SignalNodeOnlineReply, error)
 	// 用户下线
@@ -241,6 +256,9 @@ func (UnimplementedSignalNodeServiceServer) Register(context.Context, *SignalNod
 }
 func (UnimplementedSignalNodeServiceServer) Unregister(context.Context, *SignalNodeUnregisterRequest) (*SignalNodeUnregisterReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Unregister not implemented")
+}
+func (UnimplementedSignalNodeServiceServer) Ticket(context.Context, *SignalNodeTicketRequest) (*SignalNodeTicketReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Ticket not implemented")
 }
 func (UnimplementedSignalNodeServiceServer) Online(context.Context, *SignalNodeOnlineRequest) (*SignalNodeOnlineReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Online not implemented")
@@ -416,6 +434,24 @@ func _SignalNodeService_Unregister_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SignalNodeService_Ticket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignalNodeTicketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SignalNodeServiceServer).Ticket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SignalNodeService_Ticket_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SignalNodeServiceServer).Ticket(ctx, req.(*SignalNodeTicketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SignalNodeService_Online_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SignalNodeOnlineRequest)
 	if err := dec(in); err != nil {
@@ -508,6 +544,10 @@ var SignalNodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Unregister",
 			Handler:    _SignalNodeService_Unregister_Handler,
+		},
+		{
+			MethodName: "Ticket",
+			Handler:    _SignalNodeService_Ticket_Handler,
 		},
 		{
 			MethodName: "Online",

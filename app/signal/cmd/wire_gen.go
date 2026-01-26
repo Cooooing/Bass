@@ -16,7 +16,10 @@ import (
 	"signal/internal/biz/task"
 	"signal/internal/conf"
 	"signal/internal/data"
+	base2 "signal/internal/data/base"
+	"signal/internal/data/cache"
 	"signal/internal/data/client"
+	"signal/internal/data/repo"
 	"signal/internal/server"
 	"signal/internal/service"
 )
@@ -49,6 +52,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
+	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
 		cleanup4()
@@ -58,13 +62,13 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseRepo := data.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	systemService := service.NewSystemService(baseService, baseDomain, baseRepo)
-	nodeRepo := data.NewNodeRepo(baseRepo)
+	baseData := base2.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	nodeRepo := repo.NewNodeRepo(baseData)
+	nodeCache := cache.NewNodeCache(baseData)
 	asynqClient := task.NewAsynqClient(helper, redisClient)
 	producer := biz.NewProducer(asynqClient)
 	httpClient := client2.NewHttpClient()
-	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, producer, httpClient)
+	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, producer, httpClient)
 	if err != nil {
 		cleanup5()
 		cleanup4()

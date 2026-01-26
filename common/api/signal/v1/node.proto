@@ -80,6 +80,14 @@ service SignalNodeService {
     };
   }
 
+  // 获取 websocket ticket
+  rpc Ticket (SignalNodeTicketRequest) returns (SignalNodeTicketReply) {
+    option (google.api.http) = {
+      post: "/v1/node/ticket"
+      body: "*"
+    };
+  }
+
   // 用户上线
   rpc Online (SignalNodeOnlineRequest) returns (SignalNodeOnlineReply) {
     option (google.api.http) = {
@@ -169,19 +177,24 @@ message SignalNodeRegisterReply {}
 message SignalNodeUnregisterRequest {}
 message SignalNodeUnregisterReply {}
 
-message SignalNodeOnlineRequest {
-  // 用户 ID
-  int64 user_id = 1;
-  // session ID
-  string session_id = 2;
+message SignalNodeTicketRequest {}
+message SignalNodeTicketReply {
+  // ticket
+  string ticket = 1;
 }
-message SignalNodeOnlineReply {}
+
+message SignalNodeOnlineRequest {
+  // ticket
+  string ticket = 1;
+}
+message SignalNodeOnlineReply {
+  // session Id
+  string session_id = 1;
+}
 
 message SignalNodeOfflineRequest {
-  // 用户 ID
-  int64 user_id = 1;
   // session ID
-  string session_id = 2;
+  string session_id = 1;
 }
 message SignalNodeOfflineReply {}
 

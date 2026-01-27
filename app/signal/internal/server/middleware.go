@@ -7,8 +7,7 @@ import (
 	"common/pkg/util"
 	"context"
 	"fmt"
-	"signal/internal/biz/repo"
-	"signal/internal/data/ent/gen"
+	"signal/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
@@ -30,7 +29,7 @@ func NodeEndpointsMatch() selector.MatchFunc {
 	}
 }
 
-func SignalAuthMiddleware(db *gen.Client, nodeRepo repo.NodeRepo) middleware.Middleware {
+func SignalAuthMiddleware(nodeDomain *biz.NodeDomain) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			// 验证 signal node
@@ -41,7 +40,7 @@ func SignalAuthMiddleware(db *gen.Client, nodeRepo repo.NodeRepo) middleware.Mid
 			//	return nil, v1.ErrorUnauthorized("node is required")
 			// }
 
-			node, err := nodeRepo.GetByKey(ctx, db, nodeKey)
+			node, err := nodeDomain.GetByKey(ctx, nodeKey)
 			fmt.Printf("node: %+v\n", node)
 			if err != nil {
 				return nil, v1.ErrorUnauthorized("node not found")

@@ -78,6 +78,9 @@ func (r *NodeCache) GetNode(ctx context.Context, key string) (*model.Node, error
 	if err != nil {
 		return nil, err
 	}
+	if len(result) == 0 {
+		return nil, redis.Nil
+	}
 	// 解析字段
 	var node model.Node
 	err = json.Unmarshal([]byte(result[constant.SignalNodeData]), &node)
@@ -119,4 +122,12 @@ func (r *NodeCache) ExistsNodeRank(ctx context.Context, key string) (bool, error
 
 func (r *NodeCache) GetOnlineNodeKeys(ctx context.Context) ([]string, error) {
 	return r.Redis.Client.ZRevRange(ctx, constant.SignalNodeRank, 0, -1).Result()
+}
+
+func (r *NodeCache) CalculateScore(ctx context.Context, key string) (float64, error) {
+	node, err := r.GetNode(ctx, key)
+	if err != nil {
+		return 0, err
+	}
+	return node.CalculateScore(), nil
 }

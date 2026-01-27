@@ -17,4 +17,5 @@ type NodeCache interface {
 	DelNodeRank(ctx context.Context, key string)
 	ExistsNodeRank(ctx context.Context, key string) (bool, error)
 	GetOnlineNodeKeys(ctx context.Context) ([]string, error)
+	CalculateScore(ctx context.Context, key string) (float64, error)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"signal/internal/biz/base"
+	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
 	"signal/internal/biz/task"
@@ -15,14 +16,16 @@ type NodePingTaskHandler struct {
 	*base.BaseDomain
 	nodeDomain *NodeDomain
 	nodeRepo   repo.NodeRepo
+	nodeCache  cache.NodeCache
 	producer   *Producer
 }
 
-func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, producer *Producer) *NodePingTaskHandler {
+func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *Producer) *NodePingTaskHandler {
 	return &NodePingTaskHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,
 		nodeRepo:   nodeRepo,
+		nodeCache:  nodeCache,
 		producer:   producer,
 	}
 }
@@ -45,7 +48,7 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 		}
 
 		// 判断节点是否在线
-		ok, err := h.nodeRepo.IsOnline(ctx, node.Key)
+		ok, err := h.nodeCache.ExistsNodeRank(ctx, node.Key)
 		if err != nil {
 			return err
 		}
@@ -57,11 +60,16 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		err = h.nodeRepo.UpdatePing(ctx, node.Key, pingMs)
+		err = h.nodeCache.UpdateNodePing(ctx, node.Key, pingMs)
 		if err != nil {
 			return err
 		}
-		err = h.nodeRepo.UpdateScore(ctx, node)
+		// 更新节点分数
+		score, err := h.nodeCache.CalculateScore(ctx, node.Key)
+		if err != nil {
+			return err
+		}
+		err = h.nodeCache.SetNodeRank(ctx, node.Key, score)
 		if err != nil {
 			return err
 		}

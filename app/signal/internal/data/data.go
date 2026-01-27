@@ -29,6 +29,7 @@ var DataProviderSet = wire.NewSet(
 
 	repo.NewNodeRepo,
 	cache.NewNodeCache,
+	cache.NewSessionCache,
 )
 
 func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {

@@ -134,22 +134,22 @@ var _ interface {
 	ErrorName() string
 } = PingRequestValidationError{}
 
-// Validate checks the field values on PingResponse with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on PingReply with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *PingResponse) Validate() error {
+func (m *PingReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PingResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PingResponseMultiError, or
-// nil if none found.
-func (m *PingResponse) ValidateAll() error {
+// ValidateAll checks the field values on PingReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PingReplyMultiError, or nil
+// if none found.
+func (m *PingReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PingResponse) validate(all bool) error {
+func (m *PingReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -157,18 +157,18 @@ func (m *PingResponse) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return PingResponseMultiError(errors)
+		return PingReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// PingResponseMultiError is an error wrapping multiple validation errors
-// returned by PingResponse.ValidateAll() if the designated constraints aren't met.
-type PingResponseMultiError []error
+// PingReplyMultiError is an error wrapping multiple validation errors returned
+// by PingReply.ValidateAll() if the designated constraints aren't met.
+type PingReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PingResponseMultiError) Error() string {
+func (m PingReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -177,11 +177,11 @@ func (m PingResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PingResponseMultiError) AllErrors() []error { return m }
+func (m PingReplyMultiError) AllErrors() []error { return m }
 
-// PingResponseValidationError is the validation error returned by
-// PingResponse.Validate if the designated constraints aren't met.
-type PingResponseValidationError struct {
+// PingReplyValidationError is the validation error returned by
+// PingReply.Validate if the designated constraints aren't met.
+type PingReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -189,22 +189,22 @@ type PingResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e PingResponseValidationError) Field() string { return e.field }
+func (e PingReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PingResponseValidationError) Reason() string { return e.reason }
+func (e PingReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PingResponseValidationError) Cause() error { return e.cause }
+func (e PingReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PingResponseValidationError) Key() bool { return e.key }
+func (e PingReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PingResponseValidationError) ErrorName() string { return "PingResponseValidationError" }
+func (e PingReplyValidationError) ErrorName() string { return "PingReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PingResponseValidationError) Error() string {
+func (e PingReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -216,14 +216,14 @@ func (e PingResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPingResponse.%s: %s%s",
+		"invalid %sPingReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PingResponseValidationError{}
+var _ error = PingReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -231,7 +231,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PingResponseValidationError{}
+} = PingReplyValidationError{}
 
 // Validate checks the field values on PowRequest with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
@@ -354,22 +354,22 @@ var _ interface {
 	ErrorName() string
 } = PowRequestValidationError{}
 
-// Validate checks the field values on PowResponse with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on PowReply with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *PowResponse) Validate() error {
+func (m *PowReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on PowResponse with the rules defined in
+// ValidateAll checks the field values on PowReply with the rules defined in
 // the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PowResponseMultiError, or
-// nil if none found.
-func (m *PowResponse) ValidateAll() error {
+// result is a list of violation errors wrapped in PowReplyMultiError, or nil
+// if none found.
+func (m *PowReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *PowResponse) validate(all bool) error {
+func (m *PowReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -381,18 +381,18 @@ func (m *PowResponse) validate(all bool) error {
 	// no validation rules for HashHex
 
 	if len(errors) > 0 {
-		return PowResponseMultiError(errors)
+		return PowReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// PowResponseMultiError is an error wrapping multiple validation errors
-// returned by PowResponse.ValidateAll() if the designated constraints aren't met.
-type PowResponseMultiError []error
+// PowReplyMultiError is an error wrapping multiple validation errors returned
+// by PowReply.ValidateAll() if the designated constraints aren't met.
+type PowReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m PowResponseMultiError) Error() string {
+func (m PowReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -401,11 +401,11 @@ func (m PowResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m PowResponseMultiError) AllErrors() []error { return m }
+func (m PowReplyMultiError) AllErrors() []error { return m }
 
-// PowResponseValidationError is the validation error returned by
-// PowResponse.Validate if the designated constraints aren't met.
-type PowResponseValidationError struct {
+// PowReplyValidationError is the validation error returned by
+// PowReply.Validate if the designated constraints aren't met.
+type PowReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -413,22 +413,22 @@ type PowResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e PowResponseValidationError) Field() string { return e.field }
+func (e PowReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PowResponseValidationError) Reason() string { return e.reason }
+func (e PowReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PowResponseValidationError) Cause() error { return e.cause }
+func (e PowReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PowResponseValidationError) Key() bool { return e.key }
+func (e PowReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PowResponseValidationError) ErrorName() string { return "PowResponseValidationError" }
+func (e PowReplyValidationError) ErrorName() string { return "PowReplyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PowResponseValidationError) Error() string {
+func (e PowReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -440,14 +440,14 @@ func (e PowResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sPowResponse.%s: %s%s",
+		"invalid %sPowReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PowResponseValidationError{}
+var _ error = PowReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -455,4 +455,203 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PowResponseValidationError{}
+} = PowReplyValidationError{}
+
+// Validate checks the field values on SessionRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *SessionRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SessionRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SessionRequestMultiError,
+// or nil if none found.
+func (m *SessionRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SessionRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return SessionRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SessionRequestMultiError is an error wrapping multiple validation errors
+// returned by SessionRequest.ValidateAll() if the designated constraints
+// aren't met.
+type SessionRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SessionRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SessionRequestMultiError) AllErrors() []error { return m }
+
+// SessionRequestValidationError is the validation error returned by
+// SessionRequest.Validate if the designated constraints aren't met.
+type SessionRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SessionRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SessionRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SessionRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SessionRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SessionRequestValidationError) ErrorName() string { return "SessionRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SessionRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSessionRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SessionRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SessionRequestValidationError{}
+
+// Validate checks the field values on SessionReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *SessionReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SessionReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SessionReplyMultiError, or
+// nil if none found.
+func (m *SessionReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SessionReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return SessionReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SessionReplyMultiError is an error wrapping multiple validation errors
+// returned by SessionReply.ValidateAll() if the designated constraints aren't met.
+type SessionReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SessionReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SessionReplyMultiError) AllErrors() []error { return m }
+
+// SessionReplyValidationError is the validation error returned by
+// SessionReply.Validate if the designated constraints aren't met.
+type SessionReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SessionReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SessionReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SessionReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SessionReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SessionReplyValidationError) ErrorName() string { return "SessionReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SessionReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSessionReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SessionReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SessionReplyValidationError{}

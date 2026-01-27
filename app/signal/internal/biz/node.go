@@ -33,25 +33,27 @@ import (
 
 type NodeDomain struct {
 	*base.BaseDomain
-	nodeRepo   repo.NodeRepo
-	nodeCache  cache.NodeCache
-	producer   *Producer
-	httpClient *http.Client
-	sf         *sonyflake.Sonyflake
+	nodeRepo     repo.NodeRepo
+	nodeCache    cache.NodeCache
+	sessionCache cache.SessionCache
+	producer     *Producer
+	httpClient   *http.Client
+	sf           *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
 	return &NodeDomain{
-		BaseDomain: baseDomain,
-		nodeRepo:   nodeRepo,
-		nodeCache:  nodeCache,
-		producer:   producer,
-		httpClient: httpClient,
-		sf:         sf,
+		BaseDomain:   baseDomain,
+		nodeRepo:     nodeRepo,
+		nodeCache:    nodeCache,
+		sessionCache: sessionCache,
+		producer:     producer,
+		httpClient:   httpClient,
+		sf:           sf,
 	}, nil
 }
 
@@ -144,7 +146,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 	}(resp.Body)
 	end := time.Now()
 
-	data := &pkg.Result[*connectorv1.PowResponse]{}
+	data := &pkg.Result[*connectorv1.PowReply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return 0, err
@@ -164,6 +166,41 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 
 	// 耗时包含网络耗时
 	return end.Sub(start).Milliseconds(), nil
+}
+
+func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
+	sessionIds := make([]string, 0)
+	url := fmt.Sprintf("%s://%s/session", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+
+	req, err := http.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return sessionIds, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := d.httpClient.Do(req)
+	if err != nil {
+		return sessionIds, err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			d.Log.Errorf("failed to close body: %v", err)
+		}
+	}(resp.Body)
+
+	data := &pkg.Result[*connectorv1.SessionReply]{}
+	err = json.NewDecoder(resp.Body).Decode(data)
+	if err != nil {
+		return sessionIds, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return sessionIds, fmt.Errorf("failed to session node[%s]: %s", node.Key, node.CallbackURL)
+	}
+
+	return data.Data.SessionIds, nil
 }
 
 func (d *NodeDomain) Register(ctx context.Context) error {
@@ -223,7 +260,6 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 	}
 	d.nodeCache.DelNodeRank(ctx, key)
 	d.nodeCache.DelNode(ctx, key)
-	// Todo 清理缓存
 	return nil
 }
 
@@ -250,12 +286,8 @@ func (d *NodeDomain) Ticket(ctx context.Context) (string, error) {
 	if !ok {
 		return "", cv1.ErrorUnauthorized("user not login")
 	}
-	u, err := uuid.NewUUID()
-	if err != nil {
-		return "", err
-	}
-	ticket := u.String()
-	err = d.Redis.Client.SetEx(ctx, constant.GetKeySignalTicket(ticket), user.ID, time.Minute).Err()
+	ticket := uuid.New().String()
+	err := d.sessionCache.SetTicket(ctx, ticket, user.ID)
 	if err != nil {
 		return "", err
 	}
@@ -267,21 +299,13 @@ func (d *NodeDomain) Online(ctx context.Context, ticket string) (string, error) 
 	if !ok {
 		return "", cv1.ErrorUnauthorized("node is not allow")
 	}
-	result, err := d.Redis.Client.Get(ctx, constant.GetKeySignalTicket(ticket)).Result()
-	if errors.Is(err, redis.Nil) {
-		return "", cv1.ErrorUnauthorized("ticket is invalid")
-	}
+
+	userId, err := d.sessionCache.GetTicket(ctx, ticket)
 	if err != nil {
 		return "", err
 	}
-	err = d.Redis.Client.Del(ctx, constant.GetKeySignalTicket(ticket)).Err()
-	if err != nil {
-		return "", err
-	}
-	// Todo 上线操作缓存
 	sessionId := uuid.New().String()
-	_ = n
-	err = d.Redis.Client.Set(ctx, constant.GetKeySignalSession(sessionId), result, 0).Err()
+	err = d.sessionCache.SetSession(ctx, sessionId, userId, n.Key)
 	if err != nil {
 		return "", err
 	}
@@ -296,16 +320,6 @@ func (d *NodeDomain) Offline(ctx context.Context, sessionId string) error {
 
 	// Todo 下线操作缓存
 	_ = n
-	_, err := d.Redis.Client.Get(ctx, constant.GetKeySignalSession(sessionId)).Result()
-	if errors.Is(err, redis.Nil) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	err = d.Redis.Client.Del(ctx, constant.GetKeySignalSession(sessionId)).Err()
-	if err != nil {
-		return err
-	}
+
 	return nil
 }

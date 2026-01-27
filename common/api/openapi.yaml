@@ -912,38 +912,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.content.v1.UpdateDomainReply'
-    /v1/health/ping:
-        get:
-            tags:
-                - ConnectorHealthService
-            description: ping
-            operationId: ConnectorHealthService_Ping
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.connector.v1.PingResponse'
-    /v1/health/pow:
-        post:
-            tags:
-                - ConnectorHealthService
-            description: 工作量证明
-            operationId: ConnectorHealthService_Pow
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.connector.v1.PowRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.connector.v1.PowResponse'
     /v1/node/list:
         post:
             tags:
@@ -1381,6 +1349,57 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.user.v1.UploadTokenReply'
+    /v1/ping:
+        get:
+            tags:
+                - ConnectorService
+            description: ping
+            operationId: ConnectorService_Ping
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.connector.v1.PingReply'
+    /v1/pow:
+        post:
+            tags:
+                - ConnectorService
+            description: 工作量证明
+            operationId: ConnectorService_Pow
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.connector.v1.PowRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.connector.v1.PowReply'
+    /v1/session:
+        post:
+            tags:
+                - ConnectorService
+            description: Session 会话
+            operationId: ConnectorService_Session
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.connector.v1.SessionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.connector.v1.SessionReply'
     /v1/system/health:
         get:
             tags:
@@ -1650,9 +1669,18 @@ components:
                     type: string
                     description: 结束
                     format: date-time
-        common.api.connector.v1.PingResponse:
+        common.api.connector.v1.PingReply:
             type: object
             properties: {}
+        common.api.connector.v1.PowReply:
+            type: object
+            properties:
+                nonce:
+                    type: string
+                    description: 计算次数
+                hash_hex:
+                    type: string
+                    description: 计算结果
         common.api.connector.v1.PowRequest:
             type: object
             properties:
@@ -1663,15 +1691,17 @@ components:
                     type: integer
                     description: 难度
                     format: int32
-        common.api.connector.v1.PowResponse:
+        common.api.connector.v1.SessionReply:
             type: object
             properties:
-                nonce:
-                    type: string
-                    description: 计算次数
-                hash_hex:
-                    type: string
-                    description: 计算结果
+                session_ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 在线会话 id 列表
+        common.api.connector.v1.SessionRequest:
+            type: object
+            properties: {}
         common.api.content.v1.AcceptAnswerArticleReply:
             type: object
             properties: {}
@@ -4154,8 +4184,8 @@ components:
                     type: string
                     description: 2FA 验证码
 tags:
-    - name: ConnectorHealthService
-      description: Health 服务
+    - name: ConnectorService
+      description: 服务
     - name: ContentArticleService
       description: Article 服务
     - name: ContentCommentService

@@ -65,11 +65,7 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 		// 更新节点分数
-		score, err := h.nodeCache.CalculateScore(ctx, node.Key)
-		if err != nil {
-			return err
-		}
-		err = h.nodeCache.SetNodeRank(ctx, node.Key, score)
+		err = h.nodeCache.UpdateScore(ctx, node.Key)
 		if err != nil {
 			return err
 		}

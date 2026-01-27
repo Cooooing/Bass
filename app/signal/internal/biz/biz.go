@@ -20,6 +20,7 @@ var BizProviderSet = wire.NewSet(
 	NewProducer,
 	NewNodePingTaskHandler,
 	NewNodePowTaskHandler,
+	NewNodeSessionTaskHandler,
 
 	NewNodeDomain,
 )

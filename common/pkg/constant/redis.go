@@ -13,12 +13,12 @@ var (
 	NotificationTemplateMap = "Notify:NotificationTemplateMap"    // 通知模板
 	TwoFactorAuthentication = "Auth:TwoFactorAuthentication:{%s}" // 2FA 验证码，首次启用 2FA 时使用
 
-	SignalNode              = "Signal:Node:{%s}"              // 信令服务 ws节点信息 map
-	SignalNodeRank          = "Signal:NodeRank"               // 信令服务 ws节点评分排名 zset，用于负载均衡
-	SignalTicket            = "Signal:Ticket:{%s}"            // 信令服务 ws 连接一次性认证 ticket
-	SignalSession           = "Signal:Session:{%s}"           // 信令服务 ws 登录会话，已连接的在线会话
-	SignalOnlineUser        = "Signal:OnlineUser"             // 在线用户
-	SignalNodeOnlineSession = "Signal:NodeOnlineSession:{%s}" // 节点在线会话
+	SignalNode            = "Signal:Node:{%s}"            // 信令服务 ws节点信息 map
+	SignalNodeRank        = "Signal:NodeRank"             // 信令服务 ws节点评分排名 zset，用于负载均衡
+	SignalTicket          = "Signal:Ticket:{%s}"          // 信令服务 ws 连接一次性认证 ticket : userId
+	SignalSession         = "Signal:Session:{%d}"         // 信令服务 ws 连接会话 map， userId : sessionId -> nodeKey
+	SignalSessionUser     = "Signal:SessionUser:{%s}"     // 信令服务 ws 连接会话 string， sessionId : userId
+	SignalNodeKeySessions = "Signal:NodeKeySessions:{%s}" // 信令服务 ws 节点标识 set， nodeKey -> sessionId
 )
 
 func GetKeyRequestNonce(nonce string) string {
@@ -75,6 +75,14 @@ func GetKeySignalTicket(ticket string) string {
 	return fmt.Sprintf(SignalTicket, ticket)
 }
 
-func GetKeySignalSession(sessionId string) string {
-	return fmt.Sprintf(SignalSession, sessionId)
+func GetKeySignalSession(userId int64) string {
+	return fmt.Sprintf(SignalSession, userId)
+}
+
+func GetKeySignalSessionUser(sessionId string) string {
+	return fmt.Sprintf(SignalSessionUser, sessionId)
+}
+
+func GetKeySignalNodeKeySessions(nodeKey string) string {
+	return fmt.Sprintf(SignalNodeKeySessions, nodeKey)
 }

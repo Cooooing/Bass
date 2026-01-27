@@ -48,12 +48,23 @@ func (r *NodeCache) DelNode(ctx context.Context, key string) {
 	r.Redis.Client.Del(ctx, constant.GetKeySignalNode(key))
 }
 
-func (r *NodeCache) UpdateNodeConnections(ctx context.Context, key string, delta int64) error {
+func (r *NodeCache) UpdateNodeConnections(ctx context.Context, key string, connections int64) error {
 	redisKey := constant.GetKeySignalNode(key)
-	pipe := r.Redis.Client.TxPipeline()
-	pipe.HIncrBy(ctx, redisKey, constant.SignalNodeCurrentConnections, delta)
-	pipe.HSet(ctx, redisKey, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
-	_, err := pipe.Exec(ctx)
+	_, err := r.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+		pipe.HSet(ctx, redisKey, constant.SignalNodeCurrentConnections, connections)
+		pipe.HSet(ctx, redisKey, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
+		return nil
+	})
+	return err
+}
+
+func (r *NodeCache) UpdateNodeConnectionsDelta(ctx context.Context, key string, delta int64) error {
+	redisKey := constant.GetKeySignalNode(key)
+	_, err := r.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+		pipe.HIncrBy(ctx, redisKey, constant.SignalNodeCurrentConnections, delta)
+		pipe.HSet(ctx, redisKey, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
+		return nil
+	})
 	return err
 }
 
@@ -124,10 +135,11 @@ func (r *NodeCache) GetOnlineNodeKeys(ctx context.Context) ([]string, error) {
 	return r.Redis.Client.ZRevRange(ctx, constant.SignalNodeRank, 0, -1).Result()
 }
 
-func (r *NodeCache) CalculateScore(ctx context.Context, key string) (float64, error) {
+func (r *NodeCache) UpdateScore(ctx context.Context, key string) error {
 	node, err := r.GetNode(ctx, key)
 	if err != nil {
-		return 0, err
+		return err
 	}
-	return node.CalculateScore(), nil
+	score := node.CalculateScore()
+	return r.SetNodeRank(ctx, key, score)
 }

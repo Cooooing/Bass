@@ -19,29 +19,33 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationConnectorHealthServicePing = "/common.api.connector.v1.ConnectorHealthService/Ping"
-const OperationConnectorHealthServicePow = "/common.api.connector.v1.ConnectorHealthService/Pow"
+const OperationConnectorServicePing = "/common.api.connector.v1.ConnectorService/Ping"
+const OperationConnectorServicePow = "/common.api.connector.v1.ConnectorService/Pow"
+const OperationConnectorServiceSession = "/common.api.connector.v1.ConnectorService/Session"
 
-type ConnectorHealthServiceHTTPServer interface {
+type ConnectorServiceHTTPServer interface {
 	// Ping ping
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Ping(context.Context, *PingRequest) (*PingReply, error)
 	// Pow 工作量证明
-	Pow(context.Context, *PowRequest) (*PowResponse, error)
+	Pow(context.Context, *PowRequest) (*PowReply, error)
+	// Session Session 会话
+	Session(context.Context, *SessionRequest) (*SessionReply, error)
 }
 
-func RegisterConnectorHealthServiceHTTPServer(s *http.Server, srv ConnectorHealthServiceHTTPServer) {
+func RegisterConnectorServiceHTTPServer(s *http.Server, srv ConnectorServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/health/ping", _ConnectorHealthService_Ping0_HTTP_Handler(srv))
-	r.POST("/v1/health/pow", _ConnectorHealthService_Pow0_HTTP_Handler(srv))
+	r.GET("/v1/ping", _ConnectorService_Ping0_HTTP_Handler(srv))
+	r.POST("/v1/pow", _ConnectorService_Pow0_HTTP_Handler(srv))
+	r.POST("/v1/session", _ConnectorService_Session0_HTTP_Handler(srv))
 }
 
-func _ConnectorHealthService_Ping0_HTTP_Handler(srv ConnectorHealthServiceHTTPServer) func(ctx http.Context) error {
+func _ConnectorService_Ping0_HTTP_Handler(srv ConnectorServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PingRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationConnectorHealthServicePing)
+		http.SetOperation(ctx, OperationConnectorServicePing)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Ping(ctx, req.(*PingRequest))
 		})
@@ -49,12 +53,12 @@ func _ConnectorHealthService_Ping0_HTTP_Handler(srv ConnectorHealthServiceHTTPSe
 		if err != nil {
 			return err
 		}
-		reply := out.(*PingResponse)
+		reply := out.(*PingReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _ConnectorHealthService_Pow0_HTTP_Handler(srv ConnectorHealthServiceHTTPServer) func(ctx http.Context) error {
+func _ConnectorService_Pow0_HTTP_Handler(srv ConnectorServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PowRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -63,7 +67,7 @@ func _ConnectorHealthService_Pow0_HTTP_Handler(srv ConnectorHealthServiceHTTPSer
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationConnectorHealthServicePow)
+		http.SetOperation(ctx, OperationConnectorServicePow)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Pow(ctx, req.(*PowRequest))
 		})
@@ -71,32 +75,56 @@ func _ConnectorHealthService_Pow0_HTTP_Handler(srv ConnectorHealthServiceHTTPSer
 		if err != nil {
 			return err
 		}
-		reply := out.(*PowResponse)
+		reply := out.(*PowReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-type ConnectorHealthServiceHTTPClient interface {
-	// Ping ping
-	Ping(ctx context.Context, req *PingRequest, opts ...http.CallOption) (rsp *PingResponse, err error)
-	// Pow 工作量证明
-	Pow(ctx context.Context, req *PowRequest, opts ...http.CallOption) (rsp *PowResponse, err error)
+func _ConnectorService_Session0_HTTP_Handler(srv ConnectorServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SessionRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationConnectorServiceSession)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Session(ctx, req.(*SessionRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SessionReply)
+		return ctx.Result(200, reply)
+	}
 }
 
-type ConnectorHealthServiceHTTPClientImpl struct {
+type ConnectorServiceHTTPClient interface {
+	// Ping ping
+	Ping(ctx context.Context, req *PingRequest, opts ...http.CallOption) (rsp *PingReply, err error)
+	// Pow 工作量证明
+	Pow(ctx context.Context, req *PowRequest, opts ...http.CallOption) (rsp *PowReply, err error)
+	// Session Session 会话
+	Session(ctx context.Context, req *SessionRequest, opts ...http.CallOption) (rsp *SessionReply, err error)
+}
+
+type ConnectorServiceHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewConnectorHealthServiceHTTPClient(client *http.Client) ConnectorHealthServiceHTTPClient {
-	return &ConnectorHealthServiceHTTPClientImpl{client}
+func NewConnectorServiceHTTPClient(client *http.Client) ConnectorServiceHTTPClient {
+	return &ConnectorServiceHTTPClientImpl{client}
 }
 
 // Ping ping
-func (c *ConnectorHealthServiceHTTPClientImpl) Ping(ctx context.Context, in *PingRequest, opts ...http.CallOption) (*PingResponse, error) {
-	var out PingResponse
-	pattern := "/v1/health/ping"
+func (c *ConnectorServiceHTTPClientImpl) Ping(ctx context.Context, in *PingRequest, opts ...http.CallOption) (*PingReply, error) {
+	var out PingReply
+	pattern := "/v1/ping"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationConnectorHealthServicePing))
+	opts = append(opts, http.Operation(OperationConnectorServicePing))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -106,11 +134,25 @@ func (c *ConnectorHealthServiceHTTPClientImpl) Ping(ctx context.Context, in *Pin
 }
 
 // Pow 工作量证明
-func (c *ConnectorHealthServiceHTTPClientImpl) Pow(ctx context.Context, in *PowRequest, opts ...http.CallOption) (*PowResponse, error) {
-	var out PowResponse
-	pattern := "/v1/health/pow"
+func (c *ConnectorServiceHTTPClientImpl) Pow(ctx context.Context, in *PowRequest, opts ...http.CallOption) (*PowReply, error) {
+	var out PowReply
+	pattern := "/v1/pow"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationConnectorHealthServicePow))
+	opts = append(opts, http.Operation(OperationConnectorServicePow))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Session Session 会话
+func (c *ConnectorServiceHTTPClientImpl) Session(ctx context.Context, in *SessionRequest, opts ...http.CallOption) (*SessionReply, error) {
+	var out SessionReply
+	pattern := "/v1/session"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationConnectorServiceSession))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

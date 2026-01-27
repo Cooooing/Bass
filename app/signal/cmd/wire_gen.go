@@ -65,10 +65,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	baseData := base2.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	nodeRepo := repo.NewNodeRepo(baseData)
 	nodeCache := cache.NewNodeCache(baseData)
+	sessionCache := cache.NewSessionCache(baseData)
 	asynqClient := task.NewAsynqClient(helper, redisClient)
 	producer := biz.NewProducer(asynqClient)
 	httpClient := client2.NewHttpClient()
-	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, producer, httpClient)
+	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, sessionCache, producer, httpClient)
 	if err != nil {
 		cleanup5()
 		cleanup4()

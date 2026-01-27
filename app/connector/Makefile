@@ -67,7 +67,7 @@ api:
 
 # ============ Generate All Code ============
 .PHONY: gen
-gen: config ent wire api
+gen: config wire api
 
 # ============ Build Service ============
 .PHONY: build

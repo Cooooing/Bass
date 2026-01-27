@@ -61,26 +61,26 @@ func (*PingRequest) Descriptor() ([]byte, []int) {
 	return file_connector_v1_health_proto_rawDescGZIP(), []int{0}
 }
 
-type PingResponse struct {
+type PingReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PingResponse) Reset() {
-	*x = PingResponse{}
+func (x *PingReply) Reset() {
+	*x = PingReply{}
 	mi := &file_connector_v1_health_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PingResponse) String() string {
+func (x *PingReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PingResponse) ProtoMessage() {}
+func (*PingReply) ProtoMessage() {}
 
-func (x *PingResponse) ProtoReflect() protoreflect.Message {
+func (x *PingReply) ProtoReflect() protoreflect.Message {
 	mi := &file_connector_v1_health_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -92,8 +92,8 @@ func (x *PingResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
-func (*PingResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PingReply.ProtoReflect.Descriptor instead.
+func (*PingReply) Descriptor() ([]byte, []int) {
 	return file_connector_v1_health_proto_rawDescGZIP(), []int{1}
 }
 
@@ -151,7 +151,7 @@ func (x *PowRequest) GetDifficulty() int32 {
 	return 0
 }
 
-type PowResponse struct {
+type PowReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 计算次数
 	Nonce string `protobuf:"bytes,1,opt,name=nonce,proto3" json:"nonce,omitempty"`
@@ -161,20 +161,20 @@ type PowResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PowResponse) Reset() {
-	*x = PowResponse{}
+func (x *PowReply) Reset() {
+	*x = PowReply{}
 	mi := &file_connector_v1_health_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PowResponse) String() string {
+func (x *PowReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PowResponse) ProtoMessage() {}
+func (*PowReply) ProtoMessage() {}
 
-func (x *PowResponse) ProtoReflect() protoreflect.Message {
+func (x *PowReply) ProtoReflect() protoreflect.Message {
 	mi := &file_connector_v1_health_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -186,23 +186,104 @@ func (x *PowResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PowResponse.ProtoReflect.Descriptor instead.
-func (*PowResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use PowReply.ProtoReflect.Descriptor instead.
+func (*PowReply) Descriptor() ([]byte, []int) {
 	return file_connector_v1_health_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *PowResponse) GetNonce() string {
+func (x *PowReply) GetNonce() string {
 	if x != nil {
 		return x.Nonce
 	}
 	return ""
 }
 
-func (x *PowResponse) GetHashHex() string {
+func (x *PowReply) GetHashHex() string {
 	if x != nil {
 		return x.HashHex
 	}
 	return ""
+}
+
+type SessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionRequest) Reset() {
+	*x = SessionRequest{}
+	mi := &file_connector_v1_health_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionRequest) ProtoMessage() {}
+
+func (x *SessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_connector_v1_health_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionRequest.ProtoReflect.Descriptor instead.
+func (*SessionRequest) Descriptor() ([]byte, []int) {
+	return file_connector_v1_health_proto_rawDescGZIP(), []int{4}
+}
+
+type SessionReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 在线会话 id 列表
+	SessionIds    []string `protobuf:"bytes,1,rep,name=session_ids,json=sessionIds,proto3" json:"session_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionReply) Reset() {
+	*x = SessionReply{}
+	mi := &file_connector_v1_health_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionReply) ProtoMessage() {}
+
+func (x *SessionReply) ProtoReflect() protoreflect.Message {
+	mi := &file_connector_v1_health_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionReply.ProtoReflect.Descriptor instead.
+func (*SessionReply) Descriptor() ([]byte, []int) {
+	return file_connector_v1_health_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SessionReply) GetSessionIds() []string {
+	if x != nil {
+		return x.SessionIds
+	}
+	return nil
 }
 
 var File_connector_v1_health_proto protoreflect.FileDescriptor
@@ -210,20 +291,26 @@ var File_connector_v1_health_proto protoreflect.FileDescriptor
 const file_connector_v1_health_proto_rawDesc = "" +
 	"\n" +
 	"\x19connector/v1/health.proto\x12\x17common.api.connector.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\r\n" +
-	"\vPingRequest\"\x0e\n" +
-	"\fPingResponse\"\\\n" +
+	"\vPingRequest\"\v\n" +
+	"\tPingReply\"\\\n" +
 	"\n" +
 	"PowRequest\x12%\n" +
 	"\tchallenge\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\tchallenge\x12'\n" +
 	"\n" +
 	"difficulty\x18\x02 \x01(\x05B\a\xfaB\x04\x1a\x02 \x00R\n" +
-	"difficulty\">\n" +
-	"\vPowResponse\x12\x14\n" +
+	"difficulty\";\n" +
+	"\bPowReply\x12\x14\n" +
 	"\x05nonce\x18\x01 \x01(\tR\x05nonce\x12\x19\n" +
-	"\bhash_hex\x18\x02 \x01(\tR\ahashHex2\xf3\x01\n" +
-	"\x16ConnectorHealthService\x12l\n" +
-	"\x04Ping\x12$.common.api.connector.v1.PingRequest\x1a%.common.api.connector.v1.PingResponse\"\x17\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/health/ping\x12k\n" +
-	"\x03Pow\x12#.common.api.connector.v1.PowRequest\x1a$.common.api.connector.v1.PowResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/health/powB\x1cZ\x1acommon/api/connector/v1;v1b\x06proto3"
+	"\bhash_hex\x18\x02 \x01(\tR\ahashHex\"\x10\n" +
+	"\x0eSessionRequest\"/\n" +
+	"\fSessionReply\x12\x1f\n" +
+	"\vsession_ids\x18\x01 \x03(\tR\n" +
+	"sessionIds2\xcc\x02\n" +
+	"\x10ConnectorService\x12b\n" +
+	"\x04Ping\x12$.common.api.connector.v1.PingRequest\x1a\".common.api.connector.v1.PingReply\"\x10\x82\xd3\xe4\x93\x02\n" +
+	"\x12\b/v1/ping\x12a\n" +
+	"\x03Pow\x12#.common.api.connector.v1.PowRequest\x1a!.common.api.connector.v1.PowReply\"\x12\x82\xd3\xe4\x93\x02\f:\x01*\"\a/v1/pow\x12q\n" +
+	"\aSession\x12'.common.api.connector.v1.SessionRequest\x1a%.common.api.connector.v1.SessionReply\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/sessionB\x1cZ\x1acommon/api/connector/v1;v1b\x06proto3"
 
 var (
 	file_connector_v1_health_proto_rawDescOnce sync.Once
@@ -237,20 +324,24 @@ func file_connector_v1_health_proto_rawDescGZIP() []byte {
 	return file_connector_v1_health_proto_rawDescData
 }
 
-var file_connector_v1_health_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_connector_v1_health_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_connector_v1_health_proto_goTypes = []any{
-	(*PingRequest)(nil),  // 0: common.api.connector.v1.PingRequest
-	(*PingResponse)(nil), // 1: common.api.connector.v1.PingResponse
-	(*PowRequest)(nil),   // 2: common.api.connector.v1.PowRequest
-	(*PowResponse)(nil),  // 3: common.api.connector.v1.PowResponse
+	(*PingRequest)(nil),    // 0: common.api.connector.v1.PingRequest
+	(*PingReply)(nil),      // 1: common.api.connector.v1.PingReply
+	(*PowRequest)(nil),     // 2: common.api.connector.v1.PowRequest
+	(*PowReply)(nil),       // 3: common.api.connector.v1.PowReply
+	(*SessionRequest)(nil), // 4: common.api.connector.v1.SessionRequest
+	(*SessionReply)(nil),   // 5: common.api.connector.v1.SessionReply
 }
 var file_connector_v1_health_proto_depIdxs = []int32{
-	0, // 0: common.api.connector.v1.ConnectorHealthService.Ping:input_type -> common.api.connector.v1.PingRequest
-	2, // 1: common.api.connector.v1.ConnectorHealthService.Pow:input_type -> common.api.connector.v1.PowRequest
-	1, // 2: common.api.connector.v1.ConnectorHealthService.Ping:output_type -> common.api.connector.v1.PingResponse
-	3, // 3: common.api.connector.v1.ConnectorHealthService.Pow:output_type -> common.api.connector.v1.PowResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	0, // 0: common.api.connector.v1.ConnectorService.Ping:input_type -> common.api.connector.v1.PingRequest
+	2, // 1: common.api.connector.v1.ConnectorService.Pow:input_type -> common.api.connector.v1.PowRequest
+	4, // 2: common.api.connector.v1.ConnectorService.Session:input_type -> common.api.connector.v1.SessionRequest
+	1, // 3: common.api.connector.v1.ConnectorService.Ping:output_type -> common.api.connector.v1.PingReply
+	3, // 4: common.api.connector.v1.ConnectorService.Pow:output_type -> common.api.connector.v1.PowReply
+	5, // 5: common.api.connector.v1.ConnectorService.Session:output_type -> common.api.connector.v1.SessionReply
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -267,7 +358,7 @@ func file_connector_v1_health_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_connector_v1_health_proto_rawDesc), len(file_connector_v1_health_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

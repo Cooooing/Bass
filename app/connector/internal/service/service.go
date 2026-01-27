@@ -13,7 +13,7 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	NewBaseService,
 	NewSystemService,
-	NewHealthService,
+	NewCallbackService,
 	ProvideServices,
 )
 
@@ -29,7 +29,7 @@ func NewBaseService(conf *conf.Bootstrap, logger *log.Helper) *BaseService {
 	}
 }
 
-// Service 接口，每个 service 实现它
+// CallbackService 接口，每个 service 实现它
 type Service interface {
 	RegisterGrpc(gs *grpc.Server)
 	RegisterHttp(hs *http.Server)
@@ -37,10 +37,10 @@ type Service interface {
 
 func ProvideServices(
 	systemService *SystemService,
-	healthService *HealthService,
+	callbackService *CallbackService,
 ) []Service {
 	return []Service{
 		systemService,
-		healthService,
+		callbackService,
 	}
 }

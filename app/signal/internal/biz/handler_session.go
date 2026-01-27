@@ -12,29 +12,31 @@ import (
 	"github.com/hibiken/asynq"
 )
 
-type NodePowTaskHandler struct {
+type NodeSessionTaskHandler struct {
 	*base.BaseDomain
-	nodeDomain *NodeDomain
-	nodeRepo   repo.NodeRepo
-	nodeCache  cache.NodeCache
-	producer   *Producer
+	nodeDomain   *NodeDomain
+	nodeRepo     repo.NodeRepo
+	nodeCache    cache.NodeCache
+	sessionCache cache.SessionCache
+	producer     *Producer
 }
 
-func NewNodePowTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *Producer) *NodePowTaskHandler {
-	return &NodePowTaskHandler{
-		BaseDomain: baseDomain,
-		nodeDomain: nodeDomain,
-		nodeRepo:   nodeRepo,
-		nodeCache:  nodeCache,
-		producer:   producer,
+func NewNodeSessionTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *Producer) *NodeSessionTaskHandler {
+	return &NodeSessionTaskHandler{
+		BaseDomain:   baseDomain,
+		nodeDomain:   nodeDomain,
+		nodeRepo:     nodeRepo,
+		nodeCache:    nodeCache,
+		sessionCache: sessionCache,
+		producer:     producer,
 	}
 }
 
-func (h *NodePowTaskHandler) Name() task.TaskName {
-	return task.TaskNodePow
+func (h *NodeSessionTaskHandler) Name() task.TaskName {
+	return task.TaskNodeSession
 }
 
-func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
+func (h *NodeSessionTaskHandler) Handler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
 		h.Log.Infof("task %s: %s", task.Type(), string(task.Payload()))
 		data := new(model.Task)
@@ -55,17 +57,13 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 		if !ok {
 			return nil
 		}
-		// pow
-		powMs, err := h.nodeDomain.Pow(node)
+		// 获取在线会话 id
+		sessionIds, err := h.nodeDomain.Session(node)
 		if err != nil {
 			return err
 		}
-		err = h.nodeCache.UpdateNodePowCost(ctx, node.Key, powMs)
-		if err != nil {
-			return err
-		}
-		// 更新节点分数
-		err = h.nodeCache.UpdateScore(ctx, node.Key)
+		// 更新缓存
+		err = h.nodeCache.UpdateNodeConnections(ctx, node.Key, int64(len(sessionIds)))
 		if err != nil {
 			return err
 		}
@@ -80,7 +78,7 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 	}
 }
 
-func (h *NodePowTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
+func (h *NodeSessionTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
 	h.Log.Errorf("task %s failed: %v", task.Type(), err)
 	data := new(model.Task)
 	err = json.Unmarshal(task.Payload(), data)

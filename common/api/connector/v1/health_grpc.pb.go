@@ -19,148 +19,187 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ConnectorHealthService_Ping_FullMethodName = "/common.api.connector.v1.ConnectorHealthService/Ping"
-	ConnectorHealthService_Pow_FullMethodName  = "/common.api.connector.v1.ConnectorHealthService/Pow"
+	ConnectorService_Ping_FullMethodName    = "/common.api.connector.v1.ConnectorService/Ping"
+	ConnectorService_Pow_FullMethodName     = "/common.api.connector.v1.ConnectorService/Pow"
+	ConnectorService_Session_FullMethodName = "/common.api.connector.v1.ConnectorService/Session"
 )
 
-// ConnectorHealthServiceClient is the client API for ConnectorHealthService service.
+// ConnectorServiceClient is the client API for ConnectorService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Health 服务
-type ConnectorHealthServiceClient interface {
+// 服务
+type ConnectorServiceClient interface {
 	// ping
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error)
 	// 工作量证明
-	Pow(ctx context.Context, in *PowRequest, opts ...grpc.CallOption) (*PowResponse, error)
+	Pow(ctx context.Context, in *PowRequest, opts ...grpc.CallOption) (*PowReply, error)
+	// Session 会话
+	Session(ctx context.Context, in *SessionRequest, opts ...grpc.CallOption) (*SessionReply, error)
 }
 
-type connectorHealthServiceClient struct {
+type connectorServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewConnectorHealthServiceClient(cc grpc.ClientConnInterface) ConnectorHealthServiceClient {
-	return &connectorHealthServiceClient{cc}
+func NewConnectorServiceClient(cc grpc.ClientConnInterface) ConnectorServiceClient {
+	return &connectorServiceClient{cc}
 }
 
-func (c *connectorHealthServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *connectorServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, ConnectorHealthService_Ping_FullMethodName, in, out, cOpts...)
+	out := new(PingReply)
+	err := c.cc.Invoke(ctx, ConnectorService_Ping_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *connectorHealthServiceClient) Pow(ctx context.Context, in *PowRequest, opts ...grpc.CallOption) (*PowResponse, error) {
+func (c *connectorServiceClient) Pow(ctx context.Context, in *PowRequest, opts ...grpc.CallOption) (*PowReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PowResponse)
-	err := c.cc.Invoke(ctx, ConnectorHealthService_Pow_FullMethodName, in, out, cOpts...)
+	out := new(PowReply)
+	err := c.cc.Invoke(ctx, ConnectorService_Pow_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ConnectorHealthServiceServer is the server API for ConnectorHealthService service.
-// All implementations must embed UnimplementedConnectorHealthServiceServer
+func (c *connectorServiceClient) Session(ctx context.Context, in *SessionRequest, opts ...grpc.CallOption) (*SessionReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SessionReply)
+	err := c.cc.Invoke(ctx, ConnectorService_Session_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ConnectorServiceServer is the server API for ConnectorService service.
+// All implementations must embed UnimplementedConnectorServiceServer
 // for forward compatibility.
 //
-// Health 服务
-type ConnectorHealthServiceServer interface {
+// 服务
+type ConnectorServiceServer interface {
 	// ping
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	Ping(context.Context, *PingRequest) (*PingReply, error)
 	// 工作量证明
-	Pow(context.Context, *PowRequest) (*PowResponse, error)
-	mustEmbedUnimplementedConnectorHealthServiceServer()
+	Pow(context.Context, *PowRequest) (*PowReply, error)
+	// Session 会话
+	Session(context.Context, *SessionRequest) (*SessionReply, error)
+	mustEmbedUnimplementedConnectorServiceServer()
 }
 
-// UnimplementedConnectorHealthServiceServer must be embedded to have
+// UnimplementedConnectorServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedConnectorHealthServiceServer struct{}
+type UnimplementedConnectorServiceServer struct{}
 
-func (UnimplementedConnectorHealthServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+func (UnimplementedConnectorServiceServer) Ping(context.Context, *PingRequest) (*PingReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedConnectorHealthServiceServer) Pow(context.Context, *PowRequest) (*PowResponse, error) {
+func (UnimplementedConnectorServiceServer) Pow(context.Context, *PowRequest) (*PowReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Pow not implemented")
 }
-func (UnimplementedConnectorHealthServiceServer) mustEmbedUnimplementedConnectorHealthServiceServer() {
+func (UnimplementedConnectorServiceServer) Session(context.Context, *SessionRequest) (*SessionReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Session not implemented")
 }
-func (UnimplementedConnectorHealthServiceServer) testEmbeddedByValue() {}
+func (UnimplementedConnectorServiceServer) mustEmbedUnimplementedConnectorServiceServer() {}
+func (UnimplementedConnectorServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeConnectorHealthServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ConnectorHealthServiceServer will
+// UnsafeConnectorServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ConnectorServiceServer will
 // result in compilation errors.
-type UnsafeConnectorHealthServiceServer interface {
-	mustEmbedUnimplementedConnectorHealthServiceServer()
+type UnsafeConnectorServiceServer interface {
+	mustEmbedUnimplementedConnectorServiceServer()
 }
 
-func RegisterConnectorHealthServiceServer(s grpc.ServiceRegistrar, srv ConnectorHealthServiceServer) {
-	// If the following call panics, it indicates UnimplementedConnectorHealthServiceServer was
+func RegisterConnectorServiceServer(s grpc.ServiceRegistrar, srv ConnectorServiceServer) {
+	// If the following call panics, it indicates UnimplementedConnectorServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&ConnectorHealthService_ServiceDesc, srv)
+	s.RegisterService(&ConnectorService_ServiceDesc, srv)
 }
 
-func _ConnectorHealthService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ConnectorService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ConnectorHealthServiceServer).Ping(ctx, in)
+		return srv.(ConnectorServiceServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ConnectorHealthService_Ping_FullMethodName,
+		FullMethod: ConnectorService_Ping_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConnectorHealthServiceServer).Ping(ctx, req.(*PingRequest))
+		return srv.(ConnectorServiceServer).Ping(ctx, req.(*PingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ConnectorHealthService_Pow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ConnectorService_Pow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ConnectorHealthServiceServer).Pow(ctx, in)
+		return srv.(ConnectorServiceServer).Pow(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ConnectorHealthService_Pow_FullMethodName,
+		FullMethod: ConnectorService_Pow_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConnectorHealthServiceServer).Pow(ctx, req.(*PowRequest))
+		return srv.(ConnectorServiceServer).Pow(ctx, req.(*PowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ConnectorHealthService_ServiceDesc is the grpc.ServiceDesc for ConnectorHealthService service.
+func _ConnectorService_Session_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectorServiceServer).Session(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectorService_Session_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectorServiceServer).Session(ctx, req.(*SessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ConnectorService_ServiceDesc is the grpc.ServiceDesc for ConnectorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ConnectorHealthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "common.api.connector.v1.ConnectorHealthService",
-	HandlerType: (*ConnectorHealthServiceServer)(nil),
+var ConnectorService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "common.api.connector.v1.ConnectorService",
+	HandlerType: (*ConnectorServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Ping",
-			Handler:    _ConnectorHealthService_Ping_Handler,
+			Handler:    _ConnectorService_Ping_Handler,
 		},
 		{
 			MethodName: "Pow",
-			Handler:    _ConnectorHealthService_Pow_Handler,
+			Handler:    _ConnectorService_Pow_Handler,
+		},
+		{
+			MethodName: "Session",
+			Handler:    _ConnectorService_Session_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -34,12 +34,12 @@ type IMChatMessageServiceHTTPServer interface {
 
 func RegisterIMChatMessageServiceHTTPServer(s *http.Server, srv IMChatMessageServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/chatMessage/send", _IMChatMessageService_Send0_HTTP_Handler(srv))
+	r.POST("/v1/chatMessage/send", _IMChatMessageService_Send1_HTTP_Handler(srv))
 	r.POST("/v1/chatMessage/revoke", _IMChatMessageService_Revoke0_HTTP_Handler(srv))
 	r.POST("/v1/chatMessage/page", _IMChatMessageService_Page6_HTTP_Handler(srv))
 }
 
-func _IMChatMessageService_Send0_HTTP_Handler(srv IMChatMessageServiceHTTPServer) func(ctx http.Context) error {
+func _IMChatMessageService_Send1_HTTP_Handler(srv IMChatMessageServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ChatMessageSendRequest
 		if err := ctx.Bind(&in); err != nil {

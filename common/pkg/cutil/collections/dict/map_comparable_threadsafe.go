@@ -9,13 +9,14 @@ import (
 
 type ThreadSafeMap[K comparable, V any] struct {
 	unsafeMap *ComparableMap[K, V]
-	sync.RWMutex
+	mx        sync.RWMutex
 }
 
 func NewSafeMap[K comparable, V any](size int) Map[K, V] {
 	unsafeMap := NewComparableMap[K, V](size)
 	return &ThreadSafeMap[K, V]{
 		unsafeMap: unsafeMap.(*ComparableMap[K, V]),
+		mx:        sync.RWMutex{},
 	}
 }
 
@@ -40,13 +41,13 @@ func (m *ThreadSafeMap[K, V]) Get(key K) (V, bool) {
 
 func (m *ThreadSafeMap[K, V]) Remove(key K) {
 	m.Lock()
-	m.Remove(key)
+	m.unsafeMap.Remove(key)
 	m.Unlock()
 }
 
 func (m *ThreadSafeMap[K, V]) RemoveAll(keys ...K) {
 	m.Lock()
-	m.RemoveAll(keys...)
+	m.unsafeMap.RemoveAll(keys...)
 	m.Unlock()
 }
 
@@ -59,21 +60,21 @@ func (m *ThreadSafeMap[K, V]) Pop(key K) (V, bool) {
 
 func (m *ThreadSafeMap[K, V]) Contains(key K) bool {
 	m.RLock()
-	ok := m.Contains(key)
+	ok := m.unsafeMap.Contains(key)
 	m.RUnlock()
 	return ok
 }
 
 func (m *ThreadSafeMap[K, V]) ContainsAll(keys ...K) bool {
 	m.RLock()
-	ok := m.ContainsAll(keys...)
+	ok := m.unsafeMap.ContainsAll(keys...)
 	m.RUnlock()
 	return ok
 }
 
 func (m *ThreadSafeMap[K, V]) ContainsAny(keys ...K) bool {
 	m.RLock()
-	ok := m.ContainsAny(keys...)
+	ok := m.unsafeMap.ContainsAny(keys...)
 	m.RUnlock()
 	return ok
 }
@@ -101,7 +102,7 @@ func (m *ThreadSafeMap[K, V]) Entries() []*Entry[K, V] {
 
 func (m *ThreadSafeMap[K, V]) Map() map[K]V {
 	m.RLock()
-	m2 := m.Map()
+	m2 := m.unsafeMap.Map()
 	m.RUnlock()
 	return m2
 }
@@ -121,7 +122,7 @@ func (m *ThreadSafeMap[K, V]) Merge(other Map[K, V]) {
 	m.Lock()
 	other.RLock()
 	other.Foreach(func(e *Entry[K, V]) bool {
-		m.Set(e.Key, e.Value)
+		m.unsafeMap.Set(e.Key, e.Value)
 		return true
 	})
 	other.RUnlock()
@@ -131,7 +132,7 @@ func (m *ThreadSafeMap[K, V]) Merge(other Map[K, V]) {
 func (m *ThreadSafeMap[K, V]) Equal(other Map[K, V]) bool {
 	m.RLock()
 	other.RLock()
-	equal := m.Equal(other)
+	equal := m.unsafeMap.Equal(other)
 	other.RUnlock()
 	m.Unlock()
 	return equal
@@ -140,7 +141,7 @@ func (m *ThreadSafeMap[K, V]) Equal(other Map[K, V]) bool {
 func (m *ThreadSafeMap[K, V]) EqualFunc(other Map[K, V], fn base.Equator[V]) bool {
 	m.RLock()
 	other.RLock()
-	equal := m.EqualFunc(other, fn)
+	equal := m.unsafeMap.EqualFunc(other, fn)
 	other.RUnlock()
 	m.Unlock()
 	return equal
@@ -179,17 +180,17 @@ func (m *ThreadSafeMap[K, V]) Stream(ctx context.Context) stream2.Stream[*Entry[
 }
 
 func (m *ThreadSafeMap[K, V]) Lock() {
-	m.Lock()
+	m.mx.Lock()
 }
 
 func (m *ThreadSafeMap[K, V]) Unlock() {
-	m.Unlock()
+	m.mx.Unlock()
 }
 
 func (m *ThreadSafeMap[K, V]) RLock() {
-	m.RLock()
+	m.mx.RLock()
 }
 
 func (m *ThreadSafeMap[K, V]) RUnlock() {
-	m.RUnlock()
+	m.mx.RUnlock()
 }

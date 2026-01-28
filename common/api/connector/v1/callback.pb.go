@@ -2,12 +2,13 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.33.2
-// source: connector/v1/health.proto
+// source: connector/v1/callback.proto
 
 package v1
 
 import (
 	_ "common/api/common/v1"
+	v1 "common/api/signal/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -33,7 +34,7 @@ type PingRequest struct {
 
 func (x *PingRequest) Reset() {
 	*x = PingRequest{}
-	mi := &file_connector_v1_health_proto_msgTypes[0]
+	mi := &file_connector_v1_callback_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +46,7 @@ func (x *PingRequest) String() string {
 func (*PingRequest) ProtoMessage() {}
 
 func (x *PingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_connector_v1_health_proto_msgTypes[0]
+	mi := &file_connector_v1_callback_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +59,7 @@ func (x *PingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
 func (*PingRequest) Descriptor() ([]byte, []int) {
-	return file_connector_v1_health_proto_rawDescGZIP(), []int{0}
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{0}
 }
 
 type PingReply struct {
@@ -69,7 +70,7 @@ type PingReply struct {
 
 func (x *PingReply) Reset() {
 	*x = PingReply{}
-	mi := &file_connector_v1_health_proto_msgTypes[1]
+	mi := &file_connector_v1_callback_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +82,7 @@ func (x *PingReply) String() string {
 func (*PingReply) ProtoMessage() {}
 
 func (x *PingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_connector_v1_health_proto_msgTypes[1]
+	mi := &file_connector_v1_callback_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +95,7 @@ func (x *PingReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PingReply.ProtoReflect.Descriptor instead.
 func (*PingReply) Descriptor() ([]byte, []int) {
-	return file_connector_v1_health_proto_rawDescGZIP(), []int{1}
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{1}
 }
 
 type PowRequest struct {
@@ -109,7 +110,7 @@ type PowRequest struct {
 
 func (x *PowRequest) Reset() {
 	*x = PowRequest{}
-	mi := &file_connector_v1_health_proto_msgTypes[2]
+	mi := &file_connector_v1_callback_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -121,7 +122,7 @@ func (x *PowRequest) String() string {
 func (*PowRequest) ProtoMessage() {}
 
 func (x *PowRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_connector_v1_health_proto_msgTypes[2]
+	mi := &file_connector_v1_callback_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -134,7 +135,7 @@ func (x *PowRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowRequest.ProtoReflect.Descriptor instead.
 func (*PowRequest) Descriptor() ([]byte, []int) {
-	return file_connector_v1_health_proto_rawDescGZIP(), []int{2}
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *PowRequest) GetChallenge() string {
@@ -163,7 +164,7 @@ type PowReply struct {
 
 func (x *PowReply) Reset() {
 	*x = PowReply{}
-	mi := &file_connector_v1_health_proto_msgTypes[3]
+	mi := &file_connector_v1_callback_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -175,7 +176,7 @@ func (x *PowReply) String() string {
 func (*PowReply) ProtoMessage() {}
 
 func (x *PowReply) ProtoReflect() protoreflect.Message {
-	mi := &file_connector_v1_health_proto_msgTypes[3]
+	mi := &file_connector_v1_callback_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -188,7 +189,7 @@ func (x *PowReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowReply.ProtoReflect.Descriptor instead.
 func (*PowReply) Descriptor() ([]byte, []int) {
-	return file_connector_v1_health_proto_rawDescGZIP(), []int{3}
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *PowReply) GetNonce() string {
@@ -213,7 +214,7 @@ type SessionRequest struct {
 
 func (x *SessionRequest) Reset() {
 	*x = SessionRequest{}
-	mi := &file_connector_v1_health_proto_msgTypes[4]
+	mi := &file_connector_v1_callback_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -225,7 +226,7 @@ func (x *SessionRequest) String() string {
 func (*SessionRequest) ProtoMessage() {}
 
 func (x *SessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_connector_v1_health_proto_msgTypes[4]
+	mi := &file_connector_v1_callback_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -238,7 +239,7 @@ func (x *SessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SessionRequest.ProtoReflect.Descriptor instead.
 func (*SessionRequest) Descriptor() ([]byte, []int) {
-	return file_connector_v1_health_proto_rawDescGZIP(), []int{4}
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{4}
 }
 
 type SessionReply struct {
@@ -251,7 +252,7 @@ type SessionReply struct {
 
 func (x *SessionReply) Reset() {
 	*x = SessionReply{}
-	mi := &file_connector_v1_health_proto_msgTypes[5]
+	mi := &file_connector_v1_callback_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -263,7 +264,7 @@ func (x *SessionReply) String() string {
 func (*SessionReply) ProtoMessage() {}
 
 func (x *SessionReply) ProtoReflect() protoreflect.Message {
-	mi := &file_connector_v1_health_proto_msgTypes[5]
+	mi := &file_connector_v1_callback_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +277,7 @@ func (x *SessionReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SessionReply.ProtoReflect.Descriptor instead.
 func (*SessionReply) Descriptor() ([]byte, []int) {
-	return file_connector_v1_health_proto_rawDescGZIP(), []int{5}
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SessionReply) GetSessionIds() []string {
@@ -286,11 +287,92 @@ func (x *SessionReply) GetSessionIds() []string {
 	return nil
 }
 
-var File_connector_v1_health_proto protoreflect.FileDescriptor
+type SendRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 消息
+	Messages      []*v1.Message `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_connector_v1_health_proto_rawDesc = "" +
+func (x *SendRequest) Reset() {
+	*x = SendRequest{}
+	mi := &file_connector_v1_callback_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendRequest) ProtoMessage() {}
+
+func (x *SendRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_connector_v1_callback_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendRequest.ProtoReflect.Descriptor instead.
+func (*SendRequest) Descriptor() ([]byte, []int) {
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SendRequest) GetMessages() []*v1.Message {
+	if x != nil {
+		return x.Messages
+	}
+	return nil
+}
+
+type SendReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendReply) Reset() {
+	*x = SendReply{}
+	mi := &file_connector_v1_callback_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendReply) ProtoMessage() {}
+
+func (x *SendReply) ProtoReflect() protoreflect.Message {
+	mi := &file_connector_v1_callback_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendReply.ProtoReflect.Descriptor instead.
+func (*SendReply) Descriptor() ([]byte, []int) {
+	return file_connector_v1_callback_proto_rawDescGZIP(), []int{7}
+}
+
+var File_connector_v1_callback_proto protoreflect.FileDescriptor
+
+const file_connector_v1_callback_proto_rawDesc = "" +
 	"\n" +
-	"\x19connector/v1/health.proto\x12\x17common.api.connector.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\r\n" +
+	"\x1bconnector/v1/callback.proto\x12\x17common.api.connector.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x15signal/v1/model.proto\"\r\n" +
 	"\vPingRequest\"\v\n" +
 	"\tPingReply\"\\\n" +
 	"\n" +
@@ -305,68 +387,78 @@ const file_connector_v1_health_proto_rawDesc = "" +
 	"\x0eSessionRequest\"/\n" +
 	"\fSessionReply\x12\x1f\n" +
 	"\vsession_ids\x18\x01 \x03(\tR\n" +
-	"sessionIds2\xcc\x02\n" +
+	"sessionIds\"H\n" +
+	"\vSendRequest\x129\n" +
+	"\bmessages\x18\x01 \x03(\v2\x1d.common.api.signal.v1.MessageR\bmessages\"\v\n" +
+	"\tSendReply2\xb3\x03\n" +
 	"\x10ConnectorService\x12b\n" +
 	"\x04Ping\x12$.common.api.connector.v1.PingRequest\x1a\".common.api.connector.v1.PingReply\"\x10\x82\xd3\xe4\x93\x02\n" +
 	"\x12\b/v1/ping\x12a\n" +
 	"\x03Pow\x12#.common.api.connector.v1.PowRequest\x1a!.common.api.connector.v1.PowReply\"\x12\x82\xd3\xe4\x93\x02\f:\x01*\"\a/v1/pow\x12q\n" +
-	"\aSession\x12'.common.api.connector.v1.SessionRequest\x1a%.common.api.connector.v1.SessionReply\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/sessionB\x1cZ\x1acommon/api/connector/v1;v1b\x06proto3"
+	"\aSession\x12'.common.api.connector.v1.SessionRequest\x1a%.common.api.connector.v1.SessionReply\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/session\x12e\n" +
+	"\x04Send\x12$.common.api.connector.v1.SendRequest\x1a\".common.api.connector.v1.SendReply\"\x13\x82\xd3\xe4\x93\x02\r:\x01*\"\b/v1/sendB\x1cZ\x1acommon/api/connector/v1;v1b\x06proto3"
 
 var (
-	file_connector_v1_health_proto_rawDescOnce sync.Once
-	file_connector_v1_health_proto_rawDescData []byte
+	file_connector_v1_callback_proto_rawDescOnce sync.Once
+	file_connector_v1_callback_proto_rawDescData []byte
 )
 
-func file_connector_v1_health_proto_rawDescGZIP() []byte {
-	file_connector_v1_health_proto_rawDescOnce.Do(func() {
-		file_connector_v1_health_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_connector_v1_health_proto_rawDesc), len(file_connector_v1_health_proto_rawDesc)))
+func file_connector_v1_callback_proto_rawDescGZIP() []byte {
+	file_connector_v1_callback_proto_rawDescOnce.Do(func() {
+		file_connector_v1_callback_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_connector_v1_callback_proto_rawDesc), len(file_connector_v1_callback_proto_rawDesc)))
 	})
-	return file_connector_v1_health_proto_rawDescData
+	return file_connector_v1_callback_proto_rawDescData
 }
 
-var file_connector_v1_health_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_connector_v1_health_proto_goTypes = []any{
+var file_connector_v1_callback_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_connector_v1_callback_proto_goTypes = []any{
 	(*PingRequest)(nil),    // 0: common.api.connector.v1.PingRequest
 	(*PingReply)(nil),      // 1: common.api.connector.v1.PingReply
 	(*PowRequest)(nil),     // 2: common.api.connector.v1.PowRequest
 	(*PowReply)(nil),       // 3: common.api.connector.v1.PowReply
 	(*SessionRequest)(nil), // 4: common.api.connector.v1.SessionRequest
 	(*SessionReply)(nil),   // 5: common.api.connector.v1.SessionReply
+	(*SendRequest)(nil),    // 6: common.api.connector.v1.SendRequest
+	(*SendReply)(nil),      // 7: common.api.connector.v1.SendReply
+	(*v1.Message)(nil),     // 8: common.api.signal.v1.Message
 }
-var file_connector_v1_health_proto_depIdxs = []int32{
-	0, // 0: common.api.connector.v1.ConnectorService.Ping:input_type -> common.api.connector.v1.PingRequest
-	2, // 1: common.api.connector.v1.ConnectorService.Pow:input_type -> common.api.connector.v1.PowRequest
-	4, // 2: common.api.connector.v1.ConnectorService.Session:input_type -> common.api.connector.v1.SessionRequest
-	1, // 3: common.api.connector.v1.ConnectorService.Ping:output_type -> common.api.connector.v1.PingReply
-	3, // 4: common.api.connector.v1.ConnectorService.Pow:output_type -> common.api.connector.v1.PowReply
-	5, // 5: common.api.connector.v1.ConnectorService.Session:output_type -> common.api.connector.v1.SessionReply
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+var file_connector_v1_callback_proto_depIdxs = []int32{
+	8, // 0: common.api.connector.v1.SendRequest.messages:type_name -> common.api.signal.v1.Message
+	0, // 1: common.api.connector.v1.ConnectorService.Ping:input_type -> common.api.connector.v1.PingRequest
+	2, // 2: common.api.connector.v1.ConnectorService.Pow:input_type -> common.api.connector.v1.PowRequest
+	4, // 3: common.api.connector.v1.ConnectorService.Session:input_type -> common.api.connector.v1.SessionRequest
+	6, // 4: common.api.connector.v1.ConnectorService.Send:input_type -> common.api.connector.v1.SendRequest
+	1, // 5: common.api.connector.v1.ConnectorService.Ping:output_type -> common.api.connector.v1.PingReply
+	3, // 6: common.api.connector.v1.ConnectorService.Pow:output_type -> common.api.connector.v1.PowReply
+	5, // 7: common.api.connector.v1.ConnectorService.Session:output_type -> common.api.connector.v1.SessionReply
+	7, // 8: common.api.connector.v1.ConnectorService.Send:output_type -> common.api.connector.v1.SendReply
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_connector_v1_health_proto_init() }
-func file_connector_v1_health_proto_init() {
-	if File_connector_v1_health_proto != nil {
+func init() { file_connector_v1_callback_proto_init() }
+func file_connector_v1_callback_proto_init() {
+	if File_connector_v1_callback_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_connector_v1_health_proto_rawDesc), len(file_connector_v1_health_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_connector_v1_callback_proto_rawDesc), len(file_connector_v1_callback_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_connector_v1_health_proto_goTypes,
-		DependencyIndexes: file_connector_v1_health_proto_depIdxs,
-		MessageInfos:      file_connector_v1_health_proto_msgTypes,
+		GoTypes:           file_connector_v1_callback_proto_goTypes,
+		DependencyIndexes: file_connector_v1_callback_proto_depIdxs,
+		MessageInfos:      file_connector_v1_callback_proto_msgTypes,
 	}.Build()
-	File_connector_v1_health_proto = out.File
-	file_connector_v1_health_proto_goTypes = nil
-	file_connector_v1_health_proto_depIdxs = nil
+	File_connector_v1_callback_proto = out.File
+	file_connector_v1_callback_proto_goTypes = nil
+	file_connector_v1_callback_proto_depIdxs = nil
 }

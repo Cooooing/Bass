@@ -232,6 +232,8 @@ func (m *Message) validate(all bool) error {
 
 	// no validation rules for Type
 
+	// no validation rules for SessionId
+
 	if all {
 		switch v := interface{}(m.GetPayload()).(type) {
 		case interface{ ValidateAll() error }:

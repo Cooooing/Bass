@@ -16,7 +16,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, websocket *service.WebsocketService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -42,6 +42,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 	}
 	srv := http.NewServer(opts...)
 	srv.Handle("/metrics", promhttp.Handler())
+	srv.Handle("/ws", websocket.Handler())
 	for _, s := range services {
 		s.RegisterHttp(srv)
 	}

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.9.2
 // - protoc             v6.33.2
-// source: connector/v1/health.proto
+// source: connector/v1/callback.proto
 
 package v1
 
@@ -21,6 +21,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationConnectorServicePing = "/common.api.connector.v1.ConnectorService/Ping"
 const OperationConnectorServicePow = "/common.api.connector.v1.ConnectorService/Pow"
+const OperationConnectorServiceSend = "/common.api.connector.v1.ConnectorService/Send"
 const OperationConnectorServiceSession = "/common.api.connector.v1.ConnectorService/Session"
 
 type ConnectorServiceHTTPServer interface {
@@ -28,6 +29,8 @@ type ConnectorServiceHTTPServer interface {
 	Ping(context.Context, *PingRequest) (*PingReply, error)
 	// Pow 工作量证明
 	Pow(context.Context, *PowRequest) (*PowReply, error)
+	// Send 发送消息
+	Send(context.Context, *SendRequest) (*SendReply, error)
 	// Session Session 会话
 	Session(context.Context, *SessionRequest) (*SessionReply, error)
 }
@@ -37,6 +40,7 @@ func RegisterConnectorServiceHTTPServer(s *http.Server, srv ConnectorServiceHTTP
 	r.GET("/v1/ping", _ConnectorService_Ping0_HTTP_Handler(srv))
 	r.POST("/v1/pow", _ConnectorService_Pow0_HTTP_Handler(srv))
 	r.POST("/v1/session", _ConnectorService_Session0_HTTP_Handler(srv))
+	r.POST("/v1/send", _ConnectorService_Send0_HTTP_Handler(srv))
 }
 
 func _ConnectorService_Ping0_HTTP_Handler(srv ConnectorServiceHTTPServer) func(ctx http.Context) error {
@@ -102,11 +106,35 @@ func _ConnectorService_Session0_HTTP_Handler(srv ConnectorServiceHTTPServer) fun
 	}
 }
 
+func _ConnectorService_Send0_HTTP_Handler(srv ConnectorServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SendRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationConnectorServiceSend)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Send(ctx, req.(*SendRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SendReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ConnectorServiceHTTPClient interface {
 	// Ping ping
 	Ping(ctx context.Context, req *PingRequest, opts ...http.CallOption) (rsp *PingReply, err error)
 	// Pow 工作量证明
 	Pow(ctx context.Context, req *PowRequest, opts ...http.CallOption) (rsp *PowReply, err error)
+	// Send 发送消息
+	Send(ctx context.Context, req *SendRequest, opts ...http.CallOption) (rsp *SendReply, err error)
 	// Session Session 会话
 	Session(ctx context.Context, req *SessionRequest, opts ...http.CallOption) (rsp *SessionReply, err error)
 }
@@ -139,6 +167,20 @@ func (c *ConnectorServiceHTTPClientImpl) Pow(ctx context.Context, in *PowRequest
 	pattern := "/v1/pow"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationConnectorServicePow))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// Send 发送消息
+func (c *ConnectorServiceHTTPClientImpl) Send(ctx context.Context, in *SendRequest, opts ...http.CallOption) (*SendReply, error) {
+	var out SendReply
+	pattern := "/v1/send"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationConnectorServiceSend))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

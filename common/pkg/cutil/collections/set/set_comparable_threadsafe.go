@@ -8,7 +8,7 @@ import (
 // ThreadSafeComparableSet 适用于可比较的类型
 type ThreadSafeComparableSet[T comparable] struct {
 	unsafeSet *ComparableSet[T]
-	sync.RWMutex
+	mx        sync.RWMutex
 }
 
 func NewThreadSafeComparableSet[T comparable](size int, items ...T) Set[T] {
@@ -20,6 +20,7 @@ func newThreadSafeComparableSet[T comparable](size int, items ...T) *ThreadSafeC
 	s.AddAll(items...)
 	return &ThreadSafeComparableSet[T]{
 		unsafeSet: &s,
+		mx:        sync.RWMutex{},
 	}
 }
 
@@ -227,17 +228,17 @@ func (s *ThreadSafeComparableSet[T]) IsProperSuperset(other Set[T]) bool {
 }
 
 func (s *ThreadSafeComparableSet[T]) Lock() {
-	s.Lock()
+	s.mx.Lock()
 }
 
 func (s *ThreadSafeComparableSet[T]) Unlock() {
-	s.Unlock()
+	s.mx.Unlock()
 }
 
 func (s *ThreadSafeComparableSet[T]) RLock() {
-	s.RLock()
+	s.mx.RLock()
 }
 
 func (s *ThreadSafeComparableSet[T]) RUnlock() {
-	s.RUnlock()
+	s.mx.RUnlock()
 }

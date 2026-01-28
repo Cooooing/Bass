@@ -16,15 +16,15 @@ var BizProviderSet = wire.NewSet(
 )
 
 type BaseDomain struct {
-	conf      *conf.Bootstrap
-	log       *log.Helper
-	eventPool *util.EventPool
+	Conf      *conf.Bootstrap
+	Log       *log.Helper
+	EventPool *util.EventPool
 }
 
 func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, eventPool *util.EventPool) *BaseDomain {
 	return &BaseDomain{
-		conf:      conf,
-		log:       log,
-		eventPool: eventPool,
+		Conf:      conf,
+		Log:       log,
+		EventPool: eventPool,
 	}
 }

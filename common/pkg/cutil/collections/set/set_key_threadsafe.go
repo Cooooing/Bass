@@ -8,7 +8,7 @@ import (
 // ThreadSafeKeySet 适用于可比较的类型
 type ThreadSafeKeySet[T Keyer] struct {
 	unsafeSet *KeySet[T]
-	sync.RWMutex
+	mx        sync.RWMutex
 }
 
 func NewThreadSafeKeySet[T Keyer](size int, items ...T) Set[T] {
@@ -20,6 +20,7 @@ func newThreadSafeKeySet[T Keyer](size int, items ...T) *ThreadSafeKeySet[T] {
 	s.AddAll(items...)
 	return &ThreadSafeKeySet[T]{
 		unsafeSet: &s,
+		mx:        sync.RWMutex{},
 	}
 }
 
@@ -227,17 +228,17 @@ func (s *ThreadSafeKeySet[T]) IsProperSuperset(other Set[T]) bool {
 }
 
 func (s *ThreadSafeKeySet[T]) Lock() {
-	s.Lock()
+	s.mx.Lock()
 }
 
 func (s *ThreadSafeKeySet[T]) Unlock() {
-	s.Unlock()
+	s.mx.Unlock()
 }
 
 func (s *ThreadSafeKeySet[T]) RLock() {
-	s.RLock()
+	s.mx.RLock()
 }
 
 func (s *ThreadSafeKeySet[T]) RUnlock() {
-	s.RUnlock()
+	s.mx.RUnlock()
 }

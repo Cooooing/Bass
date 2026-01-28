@@ -144,9 +144,13 @@ func (x *Node) GetOwnerId() int64 {
 
 // Websocket 消息
 type Message struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          MessageType            `protobuf:"varint,1,opt,name=type,proto3,enum=common.api.signal.v1.MessageType" json:"type,omitempty"`
-	Payload       *structpb.Struct       `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 消息类型
+	Type MessageType `protobuf:"varint,1,opt,name=type,proto3,enum=common.api.signal.v1.MessageType" json:"type,omitempty"`
+	// 会话 id
+	SessionId string `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	// 消息体
+	Payload       *structpb.Struct `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -188,6 +192,13 @@ func (x *Message) GetType() MessageType {
 	return MessageType_MESSAGE_TYPE_UNKNOWN
 }
 
+func (x *Message) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 func (x *Message) GetPayload() *structpb.Struct {
 	if x != nil {
 		return x.Payload
@@ -213,10 +224,12 @@ const file_signal_v1_model_proto_rawDesc = "" +
 	"\x06status\x18\x06 \x01(\x05R\x06status\x12\x1e\n" +
 	"\bowner_id\x18\a \x01(\x03H\x01R\aownerId\x88\x01\x01B\x0e\n" +
 	"\f_descriptionB\v\n" +
-	"\t_owner_id\"s\n" +
+	"\t_owner_id\"\x92\x01\n" +
 	"\aMessage\x125\n" +
-	"\x04type\x18\x01 \x01(\x0e2!.common.api.signal.v1.MessageTypeR\x04type\x121\n" +
-	"\apayload\x18\x02 \x01(\v2\x17.google.protobuf.StructR\apayloadB\x19Z\x17common/api/signal/v1;v1b\x06proto3"
+	"\x04type\x18\x01 \x01(\x0e2!.common.api.signal.v1.MessageTypeR\x04type\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x02 \x01(\tR\tsessionId\x121\n" +
+	"\apayload\x18\x03 \x01(\v2\x17.google.protobuf.StructR\apayloadB\x19Z\x17common/api/signal/v1;v1b\x06proto3"
 
 var (
 	file_signal_v1_model_proto_rawDescOnce sync.Once

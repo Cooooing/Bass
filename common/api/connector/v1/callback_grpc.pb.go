@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.0
 // - protoc             v6.33.2
-// source: connector/v1/health.proto
+// source: connector/v1/callback.proto
 
 package v1
 
@@ -22,6 +22,7 @@ const (
 	ConnectorService_Ping_FullMethodName    = "/common.api.connector.v1.ConnectorService/Ping"
 	ConnectorService_Pow_FullMethodName     = "/common.api.connector.v1.ConnectorService/Pow"
 	ConnectorService_Session_FullMethodName = "/common.api.connector.v1.ConnectorService/Session"
+	ConnectorService_Send_FullMethodName    = "/common.api.connector.v1.ConnectorService/Send"
 )
 
 // ConnectorServiceClient is the client API for ConnectorService service.
@@ -36,6 +37,8 @@ type ConnectorServiceClient interface {
 	Pow(ctx context.Context, in *PowRequest, opts ...grpc.CallOption) (*PowReply, error)
 	// Session 会话
 	Session(ctx context.Context, in *SessionRequest, opts ...grpc.CallOption) (*SessionReply, error)
+	// 发送消息
+	Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*SendReply, error)
 }
 
 type connectorServiceClient struct {
@@ -76,6 +79,16 @@ func (c *connectorServiceClient) Session(ctx context.Context, in *SessionRequest
 	return out, nil
 }
 
+func (c *connectorServiceClient) Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*SendReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SendReply)
+	err := c.cc.Invoke(ctx, ConnectorService_Send_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConnectorServiceServer is the server API for ConnectorService service.
 // All implementations must embed UnimplementedConnectorServiceServer
 // for forward compatibility.
@@ -88,6 +101,8 @@ type ConnectorServiceServer interface {
 	Pow(context.Context, *PowRequest) (*PowReply, error)
 	// Session 会话
 	Session(context.Context, *SessionRequest) (*SessionReply, error)
+	// 发送消息
+	Send(context.Context, *SendRequest) (*SendReply, error)
 	mustEmbedUnimplementedConnectorServiceServer()
 }
 
@@ -106,6 +121,9 @@ func (UnimplementedConnectorServiceServer) Pow(context.Context, *PowRequest) (*P
 }
 func (UnimplementedConnectorServiceServer) Session(context.Context, *SessionRequest) (*SessionReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Session not implemented")
+}
+func (UnimplementedConnectorServiceServer) Send(context.Context, *SendRequest) (*SendReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Send not implemented")
 }
 func (UnimplementedConnectorServiceServer) mustEmbedUnimplementedConnectorServiceServer() {}
 func (UnimplementedConnectorServiceServer) testEmbeddedByValue()                          {}
@@ -182,6 +200,24 @@ func _ConnectorService_Session_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ConnectorService_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectorServiceServer).Send(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectorService_Send_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectorServiceServer).Send(ctx, req.(*SendRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ConnectorService_ServiceDesc is the grpc.ServiceDesc for ConnectorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -201,7 +237,11 @@ var ConnectorService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "Session",
 			Handler:    _ConnectorService_Session_Handler,
 		},
+		{
+			MethodName: "Send",
+			Handler:    _ConnectorService_Send_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "connector/v1/health.proto",
+	Metadata: "connector/v1/callback.proto",
 }

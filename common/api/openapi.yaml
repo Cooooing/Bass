@@ -1381,6 +1381,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.connector.v1.PowReply'
+    /v1/send:
+        post:
+            tags:
+                - ConnectorService
+            description: 发送消息
+            operationId: ConnectorService_Send
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.connector.v1.SendRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.connector.v1.SendReply'
     /v1/session:
         post:
             tags:
@@ -1691,6 +1710,17 @@ components:
                     type: integer
                     description: 难度
                     format: int32
+        common.api.connector.v1.SendReply:
+            type: object
+            properties: {}
+        common.api.connector.v1.SendRequest:
+            type: object
+            properties:
+                messages:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.signal.v1.Message'
+                    description: 消息
         common.api.connector.v1.SessionReply:
             type: object
             properties:
@@ -3255,6 +3285,20 @@ components:
                 enable:
                     type: boolean
                     description: 是否启用
+        common.api.signal.v1.Message:
+            type: object
+            properties:
+                type:
+                    type: integer
+                    description: 消息类型
+                    format: enum
+                session_id:
+                    type: string
+                    description: 会话 id
+                payload:
+                    type: object
+                    description: 消息体
+            description: Websocket 消息
         common.api.signal.v1.Node:
             type: object
             properties:

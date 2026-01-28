@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
+import "signal/v1/model.proto";
 
 option go_package = "common/api/connector/v1;v1";
 
@@ -25,11 +26,19 @@ service ConnectorService {
       body: "*"
     };
   }
-  
+
   // Session 会话
   rpc Session(SessionRequest) returns (SessionReply) {
     option (google.api.http) = {
       post: "/v1/session"
+      body: "*"
+    };
+  }
+
+  // 发送消息
+  rpc Send(SendRequest) returns (SendReply) {
+    option (google.api.http) = {
+      post: "/v1/send"
       body: "*"
     };
   }
@@ -58,3 +67,9 @@ message SessionReply {
   // 在线会话 id 列表
   repeated string session_ids = 1;
 }
+
+message SendRequest {
+  // 消息
+  repeated signal.v1.Message messages = 1;
+}
+message SendReply {}

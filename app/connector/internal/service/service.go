@@ -14,6 +14,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewBaseService,
 	NewSystemService,
 	NewCallbackService,
+	NewWebsocketService, // websocket 接口，手动注册
 	ProvideServices,
 )
 

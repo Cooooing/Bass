@@ -67,3 +67,13 @@ func (s *CallbackService) Session(ctx context.Context, req *v1.SessionRequest) (
 		SessionIds: s.GetSessionIds(),
 	}, nil
 }
+
+func (s *CallbackService) Send(ctx context.Context, req *v1.SendRequest) (rsp *v1.SendReply, err error) {
+	for _, m := range req.Messages {
+		err := s.SessionDomain.SendMessage(m.SessionId, m.Type, m.Payload)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &v1.SendReply{}, nil
+}

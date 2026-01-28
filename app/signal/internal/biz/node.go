@@ -118,7 +118,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 	// 生成工作量证明参数
 	challenge := str.RandStr(d.sf, 32, true, true, true, false)
 	var difficulty int32 = 5
-	b, err := json.Marshal(&connectorv1.PowRequest{
+	param, err := json.Marshal(&connectorv1.PowRequest{
 		Challenge:  challenge,
 		Difficulty: difficulty,
 	})
@@ -126,7 +126,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 		return 0, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(b))
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(param))
 	if err != nil {
 		return 0, err
 	}
@@ -239,6 +239,11 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 		}, {
 			TaskName: task.TaskNodePow.String(),
 			Interval: 30 * time.Second,
+			MaxRetry: 3,
+			Data:     marshal,
+		}, {
+			TaskName: task.TaskNodeSession.String(),
+			Interval: 60 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		},

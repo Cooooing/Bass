@@ -1,13 +1,15 @@
 package biz
 
 import (
+	"common/pkg/client"
+	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"context"
 	"encoding/json"
 	"signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-	"signal/internal/biz/task"
 
 	"github.com/hibiken/asynq"
 )
@@ -18,10 +20,10 @@ type NodeSessionTaskHandler struct {
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
-	producer     *Producer
+	producer     *client.Producer
 }
 
-func NewNodeSessionTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *Producer) *NodeSessionTaskHandler {
+func NewNodeSessionTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *client.Producer) *NodeSessionTaskHandler {
 	return &NodeSessionTaskHandler{
 		BaseDomain:   baseDomain,
 		nodeDomain:   nodeDomain,
@@ -32,14 +34,14 @@ func NewNodeSessionTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDoma
 	}
 }
 
-func (h *NodeSessionTaskHandler) Name() task.TaskName {
-	return task.TaskNodeSession
+func (h *NodeSessionTaskHandler) Name() constant.TaskName {
+	return constant.TaskSignalNodeSession
 }
 
 func (h *NodeSessionTaskHandler) Handler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
 		h.Log.Infof("task %s: %s", task.Type(), string(task.Payload()))
-		data := new(model.Task)
+		data := new(commonModel.Task)
 		err := json.Unmarshal(task.Payload(), data)
 		if err != nil {
 			return err
@@ -67,6 +69,10 @@ func (h *NodeSessionTaskHandler) Handler() asynq.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		err = h.sessionCache.SetNodeSessionIds(ctx, node.Key, sessionIds)
+		if err != nil {
+			return err
+		}
 
 		// 下一次任务
 		data.Delay = true
@@ -80,7 +86,7 @@ func (h *NodeSessionTaskHandler) Handler() asynq.HandlerFunc {
 
 func (h *NodeSessionTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
 	h.Log.Errorf("task %s failed: %v", task.Type(), err)
-	data := new(model.Task)
+	data := new(commonModel.Task)
 	err = json.Unmarshal(task.Payload(), data)
 	if err != nil {
 		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)

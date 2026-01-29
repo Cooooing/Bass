@@ -14,7 +14,7 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	NewBaseRepo,
+	NewBaseData,
 
 	client.NewDataBaseClient,
 	NewEtcdClient,
@@ -26,7 +26,7 @@ var DataProviderSet = wire.NewSet(
 	NewNotificationTemplateRepo,
 )
 
-type BaseRepo struct {
+type BaseData struct {
 	conf     *conf.Bootstrap
 	log      *log.Helper
 	db       *gen.Client
@@ -35,8 +35,8 @@ type BaseRepo struct {
 	rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseRepo(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseRepo {
-	return &BaseRepo{
+func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+	return &BaseData{
 		conf:     conf,
 		log:      log,
 		etcd:     etcd,

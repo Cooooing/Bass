@@ -15,13 +15,13 @@ import (
 )
 
 type CommentRepo struct {
-	*BaseRepo
+	*BaseData
 	client *gen.Client
 }
 
-func NewCommentRepo(baseRepo *BaseRepo, client *gen.Client) repo.CommentRepo {
+func NewCommentRepo(BaseData *BaseData, client *gen.Client) repo.CommentRepo {
 	return &CommentRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 		client:   client,
 	}
 }

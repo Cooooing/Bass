@@ -60,8 +60,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseRepo := base.NewBaseRepo(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	userRepo := data.NewUserRepo(baseRepo)
+	BaseData := base.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	userRepo := data.NewUserRepo(BaseData)
 	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
 	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
@@ -84,7 +84,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userService := service.NewUserService(baseService, authenticationDomain, userDomain, userRepo)
-	userRelationRepo := data.NewUserRelationRepo(baseRepo)
+	userRelationRepo := data.NewUserRelationRepo(BaseData)
 	userRelationDomain, err := biz.NewUserRelationDomain(baseDomain, userRelationRepo, userRepo)
 	if err != nil {
 		cleanup5()
@@ -95,9 +95,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
-	objectStorageRepo := data.NewObjectStorageRepo(baseRepo)
+	objectStorageRepo := data.NewObjectStorageRepo(BaseData)
 	minioMinio := minio.NewMinio()
-	qiniuQiniu := qiniu.NewQiniu(baseRepo)
+	qiniuQiniu := qiniu.NewQiniu(BaseData)
 	factory := oss.NewFactory(minioMinio, qiniuQiniu)
 	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
 	ossService := service.NewOssService(baseService, objectStorageDomain)

@@ -9,6 +9,7 @@ package main
 import (
 	"common/pkg/util"
 	"connector/internal/biz"
+	"connector/internal/biz/base"
 	"connector/internal/conf"
 	"connector/internal/data"
 	"connector/internal/server"
@@ -22,21 +23,30 @@ import (
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
 	baseService := service.NewBaseService(bootstrap, helper)
+	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup, err := util.NewEventPool(helper)
 	if err != nil {
 		return nil, nil, err
 	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, eventPool)
-	baseRepo := data.NewBaseRepo(bootstrap, helper)
-	systemService := service.NewSystemService(baseService, baseDomain, baseRepo)
+	baseDomain := base.NewBaseDomain(bootstrap, helper, eventPool)
 	sessionDomain := biz.NewSessionDomain(baseDomain, eventPool)
 	callbackService := service.NewCallbackService(baseService, sessionDomain)
 	v := service.ProvideServices(systemService, callbackService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
 	websocketService := service.NewWebsocketService(baseService, sessionDomain, eventPool)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, websocketService)
-	app := newApp(logger, grpcServer, httpServer)
+	redisClient, cleanup2, err := data.NewRedisClient(helper, bootstrap)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	baseData := data.NewBaseData(bootstrap, helper, redisClient)
+	sessionCache := data.NewSessionCache(baseData)
+	serverDomain, cleanup3 := biz.NewServerDomain(baseDomain, sessionCache)
+	app := newApp(logger, grpcServer, httpServer, serverDomain)
 	return app, func() {
+		cleanup3()
+		cleanup2()
 		cleanup()
 	}, nil
 }

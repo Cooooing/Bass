@@ -37,11 +37,6 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 		conn, err := s.upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			s.log.Errorf("websocket upgrade failed: %v", err)
-			_ = conn.WriteControl(
-				websocket.CloseMessage,
-				websocket.FormatCloseMessage(websocket.ClosePolicyViolation, "websocket upgrade failed"),
-				time.Now().Add(time.Second),
-			)
 			return
 		}
 		defer func() {

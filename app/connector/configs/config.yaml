@@ -8,6 +8,7 @@ server:
   grpc:
     addr: 0.0.0.0:9005
     timeout: 5s
+  cluster: false # 是否集群模式
 data:
   database:
     driver: "postgres"

@@ -5,6 +5,7 @@ import (
 	cv1 "common/api/common/v1"
 	connectorv1 "common/api/connector/v1"
 	"common/pkg"
+	"common/pkg/client"
 	"common/pkg/constant"
 	commonBase "common/pkg/cutil/base"
 	"common/pkg/cutil/base/str"
@@ -22,7 +23,7 @@ import (
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-	"signal/internal/biz/task"
+
 	"strings"
 	"time"
 
@@ -36,12 +37,12 @@ type NodeDomain struct {
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
-	producer     *Producer
+	producer     *client.Producer
 	httpClient   *http.Client
 	sf           *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -63,9 +64,7 @@ func (d *NodeDomain) GenerateSecret() string {
 }
 
 func (d *NodeDomain) GetByKey(ctx context.Context, key string) (*model.Node, error) {
-	cacheKey := constant.GetKeySignalNode(key)
-
-	n, err := d.nodeCache.GetNode(ctx, cacheKey)
+	n, err := d.nodeCache.GetNode(ctx, key)
 	if err == nil {
 		return n, nil
 	}
@@ -230,19 +229,19 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	err = d.producer.EnqueueTasks([]*model.Task{
+	err = d.producer.EnqueueTasks([]*commonModel.Task{
 		{
-			TaskName: task.TaskNodePing.String(),
+			TaskName: constant.TaskSignalNodePing.String(),
 			Interval: 10 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
-			TaskName: task.TaskNodePow.String(),
+			TaskName: constant.TaskSignalNodePow.String(),
 			Interval: 30 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
-			TaskName: task.TaskNodeSession.String(),
+			TaskName: constant.TaskSignalNodeSession.String(),
 			Interval: 60 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,

@@ -12,13 +12,13 @@ import (
 )
 
 type ArticleActionRecordRepo struct {
-	*BaseRepo
+	*BaseData
 	client *gen.Client
 }
 
-func NewArticleActionRecordRepo(baseRepo *BaseRepo, client *gen.Client) repo.ArticleActionRecordRepo {
+func NewArticleActionRecordRepo(BaseData *BaseData, client *gen.Client) repo.ArticleActionRecordRepo {
 	return &ArticleActionRecordRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 		client:   client,
 	}
 }

@@ -11,12 +11,12 @@ import (
 )
 
 type ChatSessionRepo struct {
-	*BaseRepo
+	*BaseData
 }
 
-func NewChatSessionRepo(baseRepo *BaseRepo) repo.ChatSessionRepo {
+func NewChatSessionRepo(BaseData *BaseData) repo.ChatSessionRepo {
 	return &ChatSessionRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 	}
 }
 

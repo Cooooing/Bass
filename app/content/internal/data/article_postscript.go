@@ -8,13 +8,13 @@ import (
 )
 
 type ArticlePostscriptRepo struct {
-	*BaseRepo
+	*BaseData
 	client *gen.Client
 }
 
-func NewArticlePostscriptRepo(baseRepo *BaseRepo, client *gen.Client) repo.ArticlePostscriptRepo {
+func NewArticlePostscriptRepo(BaseData *BaseData, client *gen.Client) repo.ArticlePostscriptRepo {
 	return &ArticlePostscriptRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 		client:   client,
 	}
 }

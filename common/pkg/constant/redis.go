@@ -19,6 +19,8 @@ var (
 	SignalSession         = "Signal:Session:{%d}"         // 信令服务 ws 连接会话 map， userId : sessionId -> nodeKey
 	SignalSessionUser     = "Signal:SessionUser:{%s}"     // 信令服务 ws 连接会话 string， sessionId : userId
 	SignalNodeKeySessions = "Signal:NodeKeySessions:{%s}" // 信令服务 ws 节点标识 set， nodeKey -> sessionId
+
+	ConnectorSession = "Connector:Session" // 连接服务 session set : sessionId
 )
 
 func GetKeyRequestNonce(nonce string) string {

@@ -13,7 +13,6 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"signal/internal/biz"
 	"signal/internal/biz/base"
-	"signal/internal/biz/task"
 	"signal/internal/conf"
 	"signal/internal/data"
 	base2 "signal/internal/data/base"
@@ -66,8 +65,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	nodeRepo := repo.NewNodeRepo(baseData)
 	nodeCache := cache.NewNodeCache(baseData)
 	sessionCache := cache.NewSessionCache(baseData)
-	asynqClient := task.NewAsynqClient(helper, redisClient)
-	producer := biz.NewProducer(asynqClient)
+	asynqClient := client2.NewAsynqClient(helper, redisClient)
+	producer := client2.NewProducer(asynqClient)
 	httpClient := client2.NewHttpClient()
 	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, sessionCache, producer, httpClient)
 	if err != nil {
@@ -84,8 +83,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo, nodeDomain)
 	nodePingTaskHandler := biz.NewNodePingTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, producer)
 	nodePowTaskHandler := biz.NewNodePowTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, producer)
-	dictMap := biz.ProvideTasks(nodePingTaskHandler, nodePowTaskHandler)
-	asynqServer := task.NewAsynqServer(helper, redisClient, dictMap)
+	nodeSessionTaskHandler := biz.NewNodeSessionTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, producer)
+	dictMap := biz.ProvideTasks(nodePingTaskHandler, nodePowTaskHandler, nodeSessionTaskHandler)
+	asynqServer := client2.NewAsynqServer(helper, redisClient, dictMap)
 	app := newApp(logger, grpcServer, httpServer, etcdClient, asynqServer)
 	return app, func() {
 		cleanup5()

@@ -7,6 +7,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
+	"connector/internal/biz/base"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -16,13 +17,13 @@ import (
 )
 
 type SessionDomain struct {
-	*BaseDomain
+	*base.BaseDomain
 	eventPool  *util.EventPool
 	sessionIds dict.Map[string, *websocket.Conn]
 	httpClient *http.Client
 }
 
-func NewSessionDomain(baseDomain *BaseDomain, eventPool *util.EventPool) *SessionDomain {
+func NewSessionDomain(baseDomain *base.BaseDomain, eventPool *util.EventPool) *SessionDomain {
 	return &SessionDomain{
 		BaseDomain: baseDomain,
 		eventPool:  eventPool,

@@ -1,30 +1,34 @@
 package biz
 
 import (
+	"common/pkg/client"
+	"common/pkg/constant"
+	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
-	"connector/internal/conf"
+	"connector/internal/biz/base"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )
 
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
-	NewBaseDomain,
+	base.NewBaseDomain,
 	util.NewEventPool,
+
+	client.NewAsynqServer,
+	client.NewAsynqClient,
+	client.NewProducer,
+	ProvideTasks,
+	NewNodeRegisterTaskHandler,
+
 	NewSessionDomain,
+	NewServerDomain,
 )
 
-type BaseDomain struct {
-	Conf      *conf.Bootstrap
-	Log       *log.Helper
-	EventPool *util.EventPool
-}
-
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, eventPool *util.EventPool) *BaseDomain {
-	return &BaseDomain{
-		Conf:      conf,
-		Log:       log,
-		EventPool: eventPool,
-	}
+func ProvideTasks(
+	register *NodeRegisterTaskHandler,
+) dict.Map[constant.TaskName, client.Handler] {
+	d := dict.New[constant.TaskName, client.Handler](0)
+	d.Set(constant.TaskConnectorRegister, register)
+	return d
 }

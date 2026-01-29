@@ -15,12 +15,12 @@ import (
 )
 
 type UserRepo struct {
-	*base.BaseRepo
+	*base.BaseData
 }
 
-func NewUserRepo(repo *base.BaseRepo) repo.UserRepo {
+func NewUserRepo(repo *base.BaseData) repo.UserRepo {
 	return &UserRepo{
-		BaseRepo: repo,
+		BaseData: repo,
 	}
 }
 

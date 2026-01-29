@@ -21,7 +21,7 @@ import (
 )
 
 type ArticleRepo struct {
-	*BaseRepo
+	*BaseData
 	client         *gen.Client
 	postscriptRepo repo.ArticlePostscriptRepo
 	commentRepo    repo.CommentRepo
@@ -29,9 +29,9 @@ type ArticleRepo struct {
 	tagRepo        repo.TagRepo
 }
 
-func NewArticleRepo(baseRepo *BaseRepo, client *gen.Client, postscriptRepo repo.ArticlePostscriptRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo, tagRepo repo.TagRepo) repo.ArticleRepo {
+func NewArticleRepo(BaseData *BaseData, client *gen.Client, postscriptRepo repo.ArticlePostscriptRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo, tagRepo repo.TagRepo) repo.ArticleRepo {
 	return &ArticleRepo{
-		BaseRepo:       baseRepo,
+		BaseData:       BaseData,
 		client:         client,
 		postscriptRepo: postscriptRepo,
 		commentRepo:    commentRepo,

@@ -12,12 +12,12 @@ import (
 )
 
 type ObjectStorageRepo struct {
-	*base.BaseRepo
+	*base.BaseData
 }
 
-func NewObjectStorageRepo(repo *base.BaseRepo) repo.ObjectStorageRepo {
+func NewObjectStorageRepo(repo *base.BaseData) repo.ObjectStorageRepo {
 	return &ObjectStorageRepo{
-		BaseRepo: repo,
+		BaseData: repo,
 	}
 }
 

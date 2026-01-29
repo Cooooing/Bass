@@ -9,13 +9,13 @@ import (
 )
 
 type CommentActionRecordRepo struct {
-	*BaseRepo
+	*BaseData
 	client *gen.Client
 }
 
-func NewCommentActionRecordRepo(baseRepo *BaseRepo, client *gen.Client) repo.CommentActionRecordRepo {
+func NewCommentActionRecordRepo(BaseData *BaseData, client *gen.Client) repo.CommentActionRecordRepo {
 	return &CommentActionRecordRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 		client:   client,
 	}
 }

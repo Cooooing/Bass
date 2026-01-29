@@ -8,7 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
-type BaseRepo struct {
+type BaseData struct {
 	Conf     *conf.Bootstrap
 	Log      *log.Helper
 	Db       *gen.Client
@@ -17,8 +17,8 @@ type BaseRepo struct {
 	Rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseRepo(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseRepo {
-	return &BaseRepo{
+func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+	return &BaseData{
 		Conf:     conf,
 		Log:      log,
 		Etcd:     etcd,

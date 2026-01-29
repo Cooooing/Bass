@@ -1,13 +1,15 @@
 package biz
 
 import (
+	"common/pkg/client"
+	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"context"
 	"encoding/json"
 	"signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-	"signal/internal/biz/task"
 
 	"github.com/hibiken/asynq"
 )
@@ -17,10 +19,10 @@ type NodePingTaskHandler struct {
 	nodeDomain *NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
-	producer   *Producer
+	producer   *client.Producer
 }
 
-func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *Producer) *NodePingTaskHandler {
+func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *client.Producer) *NodePingTaskHandler {
 	return &NodePingTaskHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,
@@ -30,14 +32,14 @@ func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain,
 	}
 }
 
-func (h *NodePingTaskHandler) Name() task.TaskName {
-	return task.TaskNodePing
+func (h *NodePingTaskHandler) Name() constant.TaskName {
+	return constant.TaskSignalNodePing
 }
 
 func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
 		h.Log.Infof("task %s: %s", task.Type(), string(task.Payload()))
-		data := new(model.Task)
+		data := new(commonModel.Task)
 		err := json.Unmarshal(task.Payload(), data)
 		if err != nil {
 			return err
@@ -82,7 +84,7 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 
 func (h *NodePingTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
 	h.Log.Errorf("task %s failed: %v", task.Type(), err)
-	data := new(model.Task)
+	data := new(commonModel.Task)
 	err = json.Unmarshal(task.Payload(), data)
 	if err != nil {
 		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)

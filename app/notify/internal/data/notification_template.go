@@ -17,12 +17,12 @@ import (
 )
 
 type NotificationTemplateRepo struct {
-	*BaseRepo
+	*BaseData
 }
 
-func NewNotificationTemplateRepo(repo *BaseRepo) repo.NotificationTemplateRepo {
+func NewNotificationTemplateRepo(repo *BaseData) repo.NotificationTemplateRepo {
 	return &NotificationTemplateRepo{
-		BaseRepo: repo,
+		BaseData: repo,
 	}
 }
 

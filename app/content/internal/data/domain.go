@@ -11,12 +11,12 @@ import (
 )
 
 type DomainRepo struct {
-	*BaseRepo
+	*BaseData
 }
 
-func NewDomainRepo(baseRepo *BaseRepo) repo.DomainRepo {
+func NewDomainRepo(BaseData *BaseData) repo.DomainRepo {
 	return &DomainRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 	}
 }
 

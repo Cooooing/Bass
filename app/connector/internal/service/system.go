@@ -2,8 +2,6 @@ package service
 
 import (
 	"common/api/common/v1"
-	"connector/internal/biz"
-	"connector/internal/data"
 	"context"
 	"fmt"
 
@@ -16,7 +14,7 @@ type SystemService struct {
 	*BaseService
 }
 
-func NewSystemService(baseService *BaseService, baseDomain *biz.BaseDomain, repo *data.BaseRepo) *SystemService {
+func NewSystemService(baseService *BaseService) *SystemService {
 	return &SystemService{
 		BaseService: baseService,
 	}

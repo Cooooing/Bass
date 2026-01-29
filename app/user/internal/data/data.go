@@ -15,7 +15,7 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	base.NewBaseRepo,
+	base.NewBaseData,
 
 	client.NewDataBaseClient,
 	NewEtcdClient,

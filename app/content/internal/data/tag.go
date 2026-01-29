@@ -12,12 +12,12 @@ import (
 )
 
 type TagRepo struct {
-	*BaseRepo
+	*BaseData
 }
 
-func NewTagRepo(baseRepo *BaseRepo) repo.TagRepo {
+func NewTagRepo(BaseData *BaseData) repo.TagRepo {
 	return &TagRepo{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 	}
 }
 

@@ -1,10 +1,11 @@
 package biz
 
 import (
+	"common/pkg/client"
+	"common/pkg/constant"
 	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
 	"signal/internal/biz/base"
-	"signal/internal/biz/task"
 
 	"github.com/google/wire"
 )
@@ -14,10 +15,10 @@ var BizProviderSet = wire.NewSet(
 	base.NewBaseDomain,
 	util.NewEventPool,
 
-	task.NewAsynqServer,
-	task.NewAsynqClient,
+	client.NewAsynqServer,
+	client.NewAsynqClient,
+	client.NewProducer,
 	ProvideTasks,
-	NewProducer,
 	NewNodePingTaskHandler,
 	NewNodePowTaskHandler,
 	NewNodeSessionTaskHandler,
@@ -28,9 +29,11 @@ var BizProviderSet = wire.NewSet(
 func ProvideTasks(
 	ping *NodePingTaskHandler,
 	pow *NodePowTaskHandler,
-) dict.Map[task.TaskName, task.Handler] {
-	d := dict.New[task.TaskName, task.Handler](0)
+	session *NodeSessionTaskHandler,
+) dict.Map[constant.TaskName, client.Handler] {
+	d := dict.New[constant.TaskName, client.Handler](0)
 	d.Set(ping.Name(), ping)
 	d.Set(pow.Name(), pow)
+	d.Set(session.Name(), session)
 	return d
 }

@@ -6,7 +6,6 @@ import (
 	"common/pkg/constant"
 	"common/pkg/util"
 	"context"
-	"fmt"
 	"signal/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -23,7 +22,6 @@ var NodeEndpoints = map[string]struct{}{
 // NodeEndpointsMatch 节点接口鉴权匹配
 func NodeEndpointsMatch() selector.MatchFunc {
 	return func(ctx context.Context, operation string) bool {
-		fmt.Printf("operation: %s\n", operation)
 		_, exist := NodeEndpoints[operation]
 		return exist
 	}
@@ -34,14 +32,12 @@ func SignalAuthMiddleware(nodeDomain *biz.NodeDomain) middleware.Middleware {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			// 验证 signal node
 			nodeKey := pkg.GetHeader(ctx, constant.HeaderSignalNode)
-			fmt.Printf("nodeKey: %s\n", nodeKey)
 			// nodeSignature := pkg.GetHeader(ctx, constant.HeaderSignalNodeSignature)
 			// if nodeKey == "" || nodeSignature == "" {
 			//	return nil, v1.ErrorUnauthorized("node is required")
 			// }
 
 			node, err := nodeDomain.GetByKey(ctx, nodeKey)
-			fmt.Printf("node: %+v\n", node)
 			if err != nil {
 				return nil, v1.ErrorUnauthorized("node not found")
 			}

@@ -11,12 +11,12 @@ import (
 )
 
 type NotificationMetaRepo struct {
-	*BaseRepo
+	*BaseData
 }
 
-func NewNotificationMetaRepo(repo *BaseRepo) repo.NotificationMetaRepo {
+func NewNotificationMetaRepo(repo *BaseData) repo.NotificationMetaRepo {
 	return &NotificationMetaRepo{
-		BaseRepo: repo,
+		BaseData: repo,
 	}
 }
 

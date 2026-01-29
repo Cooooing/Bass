@@ -67,6 +67,22 @@ func (c *SessionCache) SetSession(ctx context.Context, sessionId string, userId 
 	return nil
 }
 
+func (c *SessionCache) SetNodeSessionIds(ctx context.Context, nodeKey string, sessionIds []string) error {
+	key := constant.GetKeySignalNodeKeySessions(nodeKey)
+	members := make([]interface{}, 0, len(sessionIds))
+	for _, sid := range sessionIds {
+		members = append(members, sid)
+	}
+	_, err := c.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+		pipe.Del(ctx, key)
+		if len(sessionIds) > 0 {
+			pipe.SAdd(ctx, key, members...)
+		}
+		return nil
+	})
+	return err
+}
+
 func (c *SessionCache) RenewalSessions(ctx context.Context, sessionIds []string) error {
 	if len(sessionIds) == 0 {
 		return nil

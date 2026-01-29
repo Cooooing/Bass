@@ -16,12 +16,12 @@ import (
 )
 
 type Qiniu struct {
-	*base.BaseRepo
+	*base.BaseData
 }
 
-func NewQiniu(baseRepo *base.BaseRepo) *Qiniu {
+func NewQiniu(BaseData *base.BaseData) *Qiniu {
 	return &Qiniu{
-		BaseRepo: baseRepo,
+		BaseData: BaseData,
 	}
 }
 

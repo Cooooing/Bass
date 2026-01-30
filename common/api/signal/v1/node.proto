@@ -167,8 +167,10 @@ message SignalNodeListReply {
 
 message SignalNodeNegotiateRequest {}
 message SignalNodeNegotiateReply {
+  // ticket
+  string ticket = 1;
   // 节点列表
-  repeated Node nodes = 1;
+  repeated Node nodes = 2;
 }
 
 message SignalNodeRegisterRequest {}

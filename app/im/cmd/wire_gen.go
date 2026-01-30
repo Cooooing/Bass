@@ -10,7 +10,6 @@ import (
 	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"im/internal/biz"
 	"im/internal/conf"
 	"im/internal/data"
 	"im/internal/data/client"
@@ -44,25 +43,14 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
-	eventPool, cleanup5, err := util.NewEventPool(helper)
-	if err != nil {
-		cleanup4()
-		cleanup3()
-		cleanup2()
-		cleanup()
-		return nil, nil, err
-	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	BaseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	systemService := service.NewSystemService(baseService, baseDomain, BaseData)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(systemService)
+	tokenRepo := util.NewTokenRepo(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {
-		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()

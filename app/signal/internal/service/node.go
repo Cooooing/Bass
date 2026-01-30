@@ -102,8 +102,13 @@ func (s *NodeService) Negotiate(ctx context.Context, req *v1.SignalNodeNegotiate
 	if err != nil {
 		return nil, err
 	}
+	ticket, err := s.nodeDomain.Ticket(ctx)
+	if err != nil {
+		return nil, err
+	}
 	return &v1.SignalNodeNegotiateReply{
-		Nodes: commonModel.ConvertToRpcList(nodes),
+		Ticket: ticket,
+		Nodes:  commonModel.ConvertToRpcList(nodes),
 	}, nil
 }
 

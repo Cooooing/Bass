@@ -3363,6 +3363,9 @@ components:
         common.api.signal.v1.SignalNodeNegotiateReply:
             type: object
             properties:
+                ticket:
+                    type: string
+                    description: ticket
                 nodes:
                     type: array
                     items:

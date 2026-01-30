@@ -1341,6 +1341,8 @@ func (m *SignalNodeNegotiateReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Ticket
+
 	for idx, item := range m.GetNodes() {
 		_, _ = idx, item
 

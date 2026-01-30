@@ -515,8 +515,10 @@ func (*SignalNodeNegotiateRequest) Descriptor() ([]byte, []int) {
 
 type SignalNodeNegotiateReply struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// ticket
+	Ticket string `protobuf:"bytes,1,opt,name=ticket,proto3" json:"ticket,omitempty"`
 	// 节点列表
-	Nodes         []*Node `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
+	Nodes         []*Node `protobuf:"bytes,2,rep,name=nodes,proto3" json:"nodes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -549,6 +551,13 @@ func (x *SignalNodeNegotiateReply) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SignalNodeNegotiateReply.ProtoReflect.Descriptor instead.
 func (*SignalNodeNegotiateReply) Descriptor() ([]byte, []int) {
 	return file_signal_v1_node_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SignalNodeNegotiateReply) GetTicket() string {
+	if x != nil {
+		return x.Ticket
+	}
+	return ""
 }
 
 func (x *SignalNodeNegotiateReply) GetNodes() []*Node {
@@ -1051,9 +1060,10 @@ const file_signal_v1_node_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\x0e2 .common.api.signal.v1.NodeStatusR\x06status\"G\n" +
 	"\x13SignalNodeListReply\x120\n" +
 	"\x05nodes\x18\x01 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1c\n" +
-	"\x1aSignalNodeNegotiateRequest\"L\n" +
-	"\x18SignalNodeNegotiateReply\x120\n" +
-	"\x05nodes\x18\x01 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1b\n" +
+	"\x1aSignalNodeNegotiateRequest\"d\n" +
+	"\x18SignalNodeNegotiateReply\x12\x16\n" +
+	"\x06ticket\x18\x01 \x01(\tR\x06ticket\x120\n" +
+	"\x05nodes\x18\x02 \x03(\v2\x1a.common.api.signal.v1.NodeR\x05nodes\"\x1b\n" +
 	"\x19SignalNodeRegisterRequest\"\x19\n" +
 	"\x17SignalNodeRegisterReply\"\x1d\n" +
 	"\x1bSignalNodeUnregisterRequest\"\x1b\n" +

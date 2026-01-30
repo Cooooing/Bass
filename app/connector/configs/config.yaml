@@ -9,6 +9,8 @@ server:
     addr: 0.0.0.0:9005
     timeout: 5s
   cluster: false # 是否集群模式
+  key: main # 节点 key
+  matster_url: "127.0.0.1:8000" # 主服务地址
 data:
   database:
     driver: "postgres"

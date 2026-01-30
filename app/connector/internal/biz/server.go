@@ -2,6 +2,9 @@ package biz
 
 import (
 	"common/pkg/client"
+	"common/pkg/constant"
+	commonBase "common/pkg/cutil/base"
+	"common/pkg/model"
 	"connector/internal/biz/base"
 	"connector/internal/biz/cache"
 	"context"
@@ -14,15 +17,16 @@ import (
 type ServerDomain struct {
 	*base.BaseDomain
 	sessionCache cache.SessionCache
-
-	ctx        context.Context
-	httpClient *http.Client
+	producer     *client.Producer
+	ctx          context.Context
+	httpClient   *http.Client
 }
 
-func NewServerDomain(baseDomain *base.BaseDomain, sessionCache cache.SessionCache) (*ServerDomain, func()) {
+func NewServerDomain(baseDomain *base.BaseDomain, sessionCache cache.SessionCache, producer *client.Producer) (*ServerDomain, func()) {
 	s := &ServerDomain{
 		BaseDomain:   baseDomain,
 		sessionCache: sessionCache,
+		producer:     producer,
 		httpClient:   client.NewHttpClient(),
 		ctx:          context.Background(),
 	}
@@ -30,7 +34,7 @@ func NewServerDomain(baseDomain *base.BaseDomain, sessionCache cache.SessionCach
 }
 
 func (d *ServerDomain) Register() error {
-	url := fmt.Sprintf("http://127.0.0.1:8000/api/signal/v1/node/register")
+	url := fmt.Sprintf("%s://%s/api/signal/v1/node/register", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -59,7 +63,7 @@ func (d *ServerDomain) Register() error {
 }
 
 func (d *ServerDomain) Unregister() error {
-	url := fmt.Sprintf("http://127.0.0.1:8000/api/signal/v1/node/unregister")
+	url := fmt.Sprintf("%s://%s/api/signal/v1/node/unregister", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -87,7 +91,6 @@ func (d *ServerDomain) Unregister() error {
 }
 
 func (d *ServerDomain) Run() {
-	// 单机模式 Todo 集群模式需分布式任务
 	f := func() {
 		err := d.Register()
 		if err != nil {
@@ -96,8 +99,20 @@ func (d *ServerDomain) Run() {
 	}
 	interval := 60 * time.Second
 	if d.Conf.Server.Cluster {
-
+		// 集群模式，使用分布式定时任务
+		registerTaskName := fmt.Sprintf("%s-%s", constant.TaskConnectorRegister.String(), d.Conf.Server.Key)
+		version := time.Now().UnixMilli()
+		err := d.producer.EnqueueContextTask(d.ctx, &model.Task{
+			TaskName: registerTaskName,
+			Version:  version,
+			Interval: interval,
+			MaxRetry: 3,
+		})
+		if err != nil {
+			d.Log.Errorf("failed to register node: %v", err)
+		}
 	} else {
+		// 单机模式，使用本地定时任务
 		ticker := time.NewTicker(interval)
 		f()
 		for {

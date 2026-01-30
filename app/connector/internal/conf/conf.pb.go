@@ -98,6 +98,8 @@ type Server struct {
 	Http          *Server_HTTP           `protobuf:"bytes,4,opt,name=http,proto3" json:"http,omitempty"`
 	Grpc          *Server_GRPC           `protobuf:"bytes,5,opt,name=grpc,proto3" json:"grpc,omitempty"`
 	Cluster       bool                   `protobuf:"varint,6,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Key           string                 `protobuf:"bytes,7,opt,name=key,proto3" json:"key,omitempty"`
+	MasterUrl     string                 `protobuf:"bytes,8,opt,name=master_url,json=masterUrl,proto3" json:"master_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -172,6 +174,20 @@ func (x *Server) GetCluster() bool {
 		return x.Cluster
 	}
 	return false
+}
+
+func (x *Server) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *Server) GetMasterUrl() string {
+	if x != nil {
+		return x.MasterUrl
+	}
+	return ""
 }
 
 type Data struct {
@@ -603,14 +619,17 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.conf.ServerR\x06server\x12)\n" +
 	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x125\n" +
 	"\bregistry\x18\x03 \x01(\v2\x19.kratos.api.conf.RegistryR\bregistry\x12,\n" +
-	"\x05trace\x18\x04 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\x9e\x03\n" +
+	"\x05trace\x18\x04 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\xcf\x03\n" +
 	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
 	"\x04mode\x18\x03 \x01(\tR\x04mode\x120\n" +
 	"\x04http\x18\x04 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
 	"\x04grpc\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x12\x18\n" +
-	"\acluster\x18\x06 \x01(\bR\acluster\x1ai\n" +
+	"\acluster\x18\x06 \x01(\bR\acluster\x12\x10\n" +
+	"\x03key\x18\a \x01(\tR\x03key\x12\x1d\n" +
+	"\n" +
+	"master_url\x18\b \x01(\tR\tmasterUrl\x1ai\n" +
 	"\x04HTTP\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +

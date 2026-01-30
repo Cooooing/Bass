@@ -29,6 +29,8 @@ message Server {
   HTTP http = 4;
   GRPC grpc = 5;
   bool cluster = 6;
+  string key = 7;
+  string master_url = 8;
 }
 
 message Data {

@@ -12,6 +12,7 @@ var (
 	Token                   = "Auth:Token:{%s}"                   // Token
 	NotificationTemplateMap = "Notify:NotificationTemplateMap"    // 通知模板
 	TwoFactorAuthentication = "Auth:TwoFactorAuthentication:{%s}" // 2FA 验证码，首次启用 2FA 时使用
+	AsynqTaskVersion        = "Asynq:TaskVersion"                 // Asynq 任务版本号 map， taskname -> version
 
 	SignalNode            = "Signal:Node:{%s}"            // 信令服务 ws节点信息 map
 	SignalNodeRank        = "Signal:NodeRank"             // 信令服务 ws节点评分排名 zset，用于负载均衡

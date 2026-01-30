@@ -229,20 +229,40 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	err = d.producer.RegisterTasks([]*commonModel.Task{
+
+	version := time.Now().UnixMilli()
+	pingTaskName := fmt.Sprintf("%s-%s", constant.TaskSignalNodePing.String(), n.Key)
+	powTaskName := fmt.Sprintf("%s-%s", constant.TaskSignalNodePow.String(), n.Key)
+	sessionTaskName := fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key)
+	err = d.nodeCache.SetAsynqTaskVersion(ctx, pingTaskName, version, 20*time.Second)
+	if err != nil {
+		return err
+	}
+	err = d.nodeCache.SetAsynqTaskVersion(ctx, powTaskName, version, 60*time.Second)
+	if err != nil {
+		return err
+	}
+	err = d.nodeCache.SetAsynqTaskVersion(ctx, sessionTaskName, version, 120*time.Second)
+	if err != nil {
+		return err
+	}
+	err = d.producer.EnqueueContextTasks(ctx, []*commonModel.Task{
 		{
-			TaskName: fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key),
-			Cronspec: "@every 10s",
+			TaskName: pingTaskName,
+			Version:  version,
+			Interval: 10 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
-			TaskName: fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key),
-			Cronspec: "@every 30s",
+			TaskName: powTaskName,
+			Version:  version,
+			Interval: 30 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
-			TaskName: fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key),
-			Cronspec: "@every 60s",
+			TaskName: sessionTaskName,
+			Version:  version,
+			Interval: 60 * time.Second,
 			MaxRetry: 3,
 			Data:     marshal,
 		},
@@ -264,14 +284,6 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 	}
 	d.nodeCache.DelNodeRank(ctx, key)
 	d.nodeCache.DelNode(ctx, key)
-	err := d.producer.UnregisterTasks([]string{
-		fmt.Sprintf("%s-%s", constant.TaskSignalNodePing.String(), key),
-		fmt.Sprintf("%s-%s", constant.TaskSignalNodePow.String(), key),
-		fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), key),
-	})
-	if err != nil {
-		return err
-	}
 	return nil
 }
 

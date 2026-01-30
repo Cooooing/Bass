@@ -89,7 +89,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	nodeSessionTaskHandler := biz.NewNodeSessionTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, producer)
 	dictMap := biz.ProvideTasks(nodePingTaskHandler, nodePowTaskHandler, nodeSessionTaskHandler)
 	asynqServer, cleanup8 := client2.NewAsynqServer(helper, redisClient, dictMap)
-	app := newApp(logger, grpcServer, httpServer, etcdClient, asynqServer, asynqScheduler)
+	app := newApp(logger, grpcServer, httpServer, etcdClient, asynqServer)
 	return app, func() {
 		cleanup8()
 		cleanup7()

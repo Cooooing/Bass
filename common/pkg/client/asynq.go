@@ -2,6 +2,7 @@ package client
 
 import (
 	"common/pkg/constant"
+	"common/pkg/cutil/base"
 	"common/pkg/cutil/collections/dict"
 	"common/pkg/model"
 	"context"
@@ -140,6 +141,7 @@ func (p *Producer) EnqueueContextTask(ctx context.Context, data *model.Task) err
 			opts...,
 		),
 		asynq.MaxRetry(data.MaxRetry),
+		asynq.ProcessIn(base.If(data.Delay, data.Interval, 0)),
 	)
 	if err != nil {
 		return err

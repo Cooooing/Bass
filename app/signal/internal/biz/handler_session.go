@@ -51,12 +51,10 @@ func (h *NodeSessionTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
-		// 判断节点是否在线
-		ok, err := h.nodeCache.ExistsNodeRank(ctx, node.Key)
-		if err != nil {
+		// 判断任务是否存在
+		if version, err := h.nodeCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
 			return err
-		}
-		if !ok {
+		} else if version != data.Version {
 			return nil
 		}
 		// 获取在线会话 id
@@ -74,6 +72,16 @@ func (h *NodeSessionTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
+		// 下一次任务
+		rc, ok1 := asynq.GetRetryCount(ctx)
+		mrc, ok2 := asynq.GetMaxRetry(ctx)
+		if ok1 && ok2 && rc <= mrc {
+			data.Delay = true
+			err = h.producer.EnqueueContextTask(ctx, data)
+			if err != nil {
+				return err
+			}
+		}
 		return nil
 	}
 }

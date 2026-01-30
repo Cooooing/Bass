@@ -229,20 +229,20 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	err = d.producer.EnqueueTasks([]*commonModel.Task{
+	err = d.producer.RegisterTasks([]*commonModel.Task{
 		{
-			TaskName: constant.TaskSignalNodePing.String(),
-			Interval: 10 * time.Second,
+			TaskName: fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key),
+			Cronspec: "@every 10s",
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
-			TaskName: constant.TaskSignalNodePow.String(),
-			Interval: 30 * time.Second,
+			TaskName: fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key),
+			Cronspec: "@every 30s",
 			MaxRetry: 3,
 			Data:     marshal,
 		}, {
-			TaskName: constant.TaskSignalNodeSession.String(),
-			Interval: 60 * time.Second,
+			TaskName: fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key),
+			Cronspec: "@every 60s",
 			MaxRetry: 3,
 			Data:     marshal,
 		},
@@ -264,6 +264,14 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 	}
 	d.nodeCache.DelNodeRank(ctx, key)
 	d.nodeCache.DelNode(ctx, key)
+	err := d.producer.UnregisterTasks([]string{
+		fmt.Sprintf("%s-%s", constant.TaskSignalNodePing.String(), key),
+		fmt.Sprintf("%s-%s", constant.TaskSignalNodePow.String(), key),
+		fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), key),
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

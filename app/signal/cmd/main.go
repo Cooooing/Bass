@@ -41,12 +41,13 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.EtcdClient, asynqServer *client.AsynqServer) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.EtcdClient, asynqServer *client.AsynqServer, asynqScheduler *client.AsynqScheduler) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
 
 	go asynqServer.Run()
+	go asynqScheduler.Run()
 
 	return kratos.New(
 		kratos.ID(id),

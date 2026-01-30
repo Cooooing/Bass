@@ -72,12 +72,6 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
-		// 下一次任务
-		data.Delay = true
-		err = h.producer.EnqueueTask(data)
-		if err != nil {
-			return err
-		}
 		return nil
 	}
 }

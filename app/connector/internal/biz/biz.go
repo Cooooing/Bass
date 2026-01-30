@@ -17,6 +17,7 @@ var BizProviderSet = wire.NewSet(
 
 	client.NewAsynqServer,
 	client.NewAsynqClient,
+	client.NewAsynqScheduler,
 	client.NewProducer,
 	ProvideTasks,
 	NewNodeRegisterTaskHandler,

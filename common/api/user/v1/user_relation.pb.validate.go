@@ -117,7 +117,27 @@ func (m *UserRelation) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Type
+	if _, ok := _UserRelation_Type_NotInLookup[m.GetType()]; ok {
+		err := UserRelationValidationError{
+			field:  "Type",
+			reason: "value must not be in list [USER_RELATION_TYPE_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := UserRelationType_name[int32(m.GetType())]; !ok {
+		err := UserRelationValidationError{
+			field:  "Type",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for ActorId
 
@@ -229,6 +249,10 @@ var _ interface {
 	ErrorName() string
 } = UserRelationValidationError{}
 
+var _UserRelation_Type_NotInLookup = map[UserRelationType]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on UserRelationQueryParams with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -252,7 +276,29 @@ func (m *UserRelationQueryParams) validate(all bool) error {
 	var errors []error
 
 	if m.Type != nil {
-		// no validation rules for Type
+
+		if _, ok := _UserRelationQueryParams_Type_NotInLookup[m.GetType()]; ok {
+			err := UserRelationQueryParamsValidationError{
+				field:  "Type",
+				reason: "value must not be in list [USER_RELATION_TYPE_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := UserRelationType_name[int32(m.GetType())]; !ok {
+			err := UserRelationQueryParamsValidationError{
+				field:  "Type",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -334,6 +380,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UserRelationQueryParamsValidationError{}
+
+var _UserRelationQueryParams_Type_NotInLookup = map[UserRelationType]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on FollowRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

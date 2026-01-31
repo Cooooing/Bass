@@ -7,7 +7,6 @@
 package v1
 
 import (
-	_ "common/api/user/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -148,7 +147,7 @@ type Message struct {
 	// 消息类型
 	Type MessageType `protobuf:"varint,1,opt,name=type,proto3,enum=common.api.signal.v1.MessageType" json:"type,omitempty"`
 	// 会话 id
-	SessionId string `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	SessionId []string `protobuf:"bytes,2,rep,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	// 消息体
 	Payload       *structpb.Struct `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -192,11 +191,11 @@ func (x *Message) GetType() MessageType {
 	return MessageType_MESSAGE_TYPE_UNKNOWN
 }
 
-func (x *Message) GetSessionId() string {
+func (x *Message) GetSessionId() []string {
 	if x != nil {
 		return x.SessionId
 	}
-	return ""
+	return nil
 }
 
 func (x *Message) GetPayload() *structpb.Struct {
@@ -210,7 +209,7 @@ var File_signal_v1_model_proto protoreflect.FileDescriptor
 
 const file_signal_v1_model_proto_rawDesc = "" +
 	"\n" +
-	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12user/v1/user.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd3\x02\n" +
+	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd3\x02\n" +
 	"\x04Node\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -228,7 +227,7 @@ const file_signal_v1_model_proto_rawDesc = "" +
 	"\aMessage\x125\n" +
 	"\x04type\x18\x01 \x01(\x0e2!.common.api.signal.v1.MessageTypeR\x04type\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x02 \x01(\tR\tsessionId\x121\n" +
+	"session_id\x18\x02 \x03(\tR\tsessionId\x121\n" +
 	"\apayload\x18\x03 \x01(\v2\x17.google.protobuf.StructR\apayloadB\x19Z\x17common/api/signal/v1;v1b\x06proto3"
 
 var (

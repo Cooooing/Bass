@@ -79,7 +79,7 @@ func (m *ComparableMap[K, V]) ContainsAny(keys ...K) bool {
 
 func (m *ComparableMap[K, V]) Keys() []K {
 	keys := make([]K, 0, m.Len())
-	for k, _ := range *m {
+	for k := range *m {
 		keys = append(keys, k)
 	}
 	return keys
@@ -156,7 +156,7 @@ func (m *ComparableMap[K, V]) Clone() Map[K, V] {
 }
 
 func (m *ComparableMap[K, V]) Clear() {
-	for k, _ := range *m {
+	for k := range *m {
 		delete(*m, k)
 	}
 }

@@ -28,7 +28,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.EtcdClient, services []service.Service, tokenRepo *util.TokenRepo) *transporthttp.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.EtcdClient, services []service.Service, tokenCache *util.TokenCache) *transporthttp.Server {
 
 	middlewares := []middleware.Middleware{
 		recovery.Recovery(),
@@ -42,7 +42,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 		// 七牛回调验签
 		selector.Server(QiniuCallbackSignMiddleware(c)).Match(QiniuCallbackMatch()).Build(),
 		// 认证鉴权
-		selector.Server(AuthMiddleware(tokenRepo), PermissionMiddleware()).Match(UserAPIMatch()).Build(),
+		selector.Server(AuthMiddleware(tokenCache), PermissionMiddleware()).Match(UserAPIMatch()).Build(),
 
 		validate.ProtoValidate(),
 	}

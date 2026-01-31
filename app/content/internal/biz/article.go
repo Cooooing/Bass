@@ -59,14 +59,14 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 		err  error
 	)
 	status := article.Status
-	article.Status = int32(v1.ArticleStatus_ArticleDrafts) // 默认均为草稿
+	article.Status = int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		save, err = d.articleRepo.Save(ctx, tx, article, tags)
 		if err != nil {
 			return err
 		}
 		// 正常文章，进行发布
-		if status == int32(v1.ArticleStatus_ArticleNormal) {
+		if status == int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) {
 			err = d.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -84,7 +84,7 @@ func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, cont
 		save, err = d.postscriptRepo.Save(ctx, tx, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
 			ArticleID: articleId,
 			Content:   content,
-			Status:    int32(v1.ArticlePostscriptStatus_ArticlePostscriptNormal),
+			Status:    int32(v1.ArticlePostscriptStatus_ARTICLE_POSTSCRIPT_STATUS_NORMAL),
 		}})
 		if err != nil {
 			return err
@@ -106,11 +106,11 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 		err  error
 	)
 	status := article.Status
-	article.Status = int32(v1.ArticleStatus_ArticleDrafts) // 默认均为草稿
+	article.Status = int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) // 默认均为草稿
 	err = ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		exist, err := d.articleRepo.Exist(ctx, tx, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(article.ID),
-			Status:    base.Ptr(v1.ArticleStatus_ArticleDrafts),
+			Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 			CreatedBy: article.CreatedBy,
 		})
 		if err != nil {
@@ -125,7 +125,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 			return err
 		}
 		// 正常文章，进行发布
-		if status == int32(v1.ArticleStatus_ArticleNormal) {
+		if status == int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) {
 			err = d.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -173,7 +173,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	if active {
 		err = d.eventPool.Submit(func() {
 			switch action {
-			case v1.ArticleAction_ArticleActionLike:
+			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
 					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleLike),
@@ -189,7 +189,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 					d.log.Errorf("publish article like event error: %v", err)
 					return
 				}
-			case v1.ArticleAction_ArticleActionThank:
+			case v1.ArticleAction_ARTICLE_ACTION_THANK:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
 					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleThank),
@@ -205,7 +205,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 					d.log.Errorf("publish article thank event error: %v", err)
 					return
 				}
-			case v1.ArticleAction_ArticleActionCollect:
+			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
 					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleCollect),
@@ -221,7 +221,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 					d.log.Errorf("publish article collect event error: %v", err)
 					return
 				}
-			case v1.ArticleAction_ArticleActionWatch:
+			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
 					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleWatch),
@@ -237,7 +237,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 					d.log.Errorf("publish article watch event error: %v", err)
 					return
 				}
-			case v1.ArticleAction_ArticleActionReward:
+			case v1.ArticleAction_ARTICLE_ACTION_REWARD:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
 					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleReward),
@@ -371,7 +371,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	 * 草稿状态的只能查看自己
 	 */
 
-	if reply.Status == int32(v1.ArticleStatus_ArticleDrafts) && !ok && *reply.CreatedBy != user.ID {
+	if reply.Status == int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) && !ok && *reply.CreatedBy != user.ID {
 		return nil, cv1.ErrorUnauthorized("login required to view drafts")
 	}
 
@@ -451,16 +451,4 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		list[i].AuthorUser = base.If(list[i].Anonymous, nil, userAuthorsMap.Users[*list[i].CreatedBy])
 	}
 	return list, pageReply, err
-}
-
-func (d *ArticleDomain) GetReward(ctx context.Context, articleId int64, userId int64) (*model.Article, error) {
-	d.actionRecordRepo.GetOne(ctx, d.db, &repo.ArticleActionRecordReq{
-		ArticleId: base.Ptr(articleId),
-		UserId:    base.Ptr(userId),
-		Type:      base.Ptr(v1.ArticleAction_ArticleActionReward),
-	})
-	one, err := d.articleRepo.GetOne(ctx, d.db, &repo.ArticleGetReq{
-		ArticleId: base.Ptr(articleId),
-	})
-	return one, err
 }

@@ -43,8 +43,8 @@ type Tag struct {
 	Description *string `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	// 所属领域Id
 	DomainId *int64 `protobuf:"varint,5,opt,name=domain_id,json=domainId,proto3,oneof" json:"domain_id,omitempty"`
-	// 标签状态：0-正常，1-禁用
-	Status *int32 `protobuf:"varint,6,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 标签状态：1-正常，2-禁用
+	Status *TagStatus `protobuf:"varint,6,opt,name=status,proto3,enum=common.api.content.v1.TagStatus,oneof" json:"status,omitempty"`
 	// 文章数
 	ArticleCount  int32 `protobuf:"varint,7,opt,name=article_count,json=articleCount,proto3" json:"article_count,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -137,11 +137,11 @@ func (x *Tag) GetDomainId() int64 {
 	return 0
 }
 
-func (x *Tag) GetStatus() int32 {
+func (x *Tag) GetStatus() TagStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return TagStatus_TAG_STATUS_UNSPECIFIED
 }
 
 func (x *Tag) GetArticleCount() int32 {
@@ -157,8 +157,8 @@ type TagSave struct {
 	Id *int64 `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	// 领域Id
 	DomainId *int64 `protobuf:"varint,2,opt,name=domain_id,json=domainId,proto3,oneof" json:"domain_id,omitempty"`
-	// 状态：0-正常，1-禁用
-	Status *int32 `protobuf:"varint,3,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 状态：1-正常，2-禁用
+	Status *TagStatus `protobuf:"varint,3,opt,name=status,proto3,enum=common.api.content.v1.TagStatus,oneof" json:"status,omitempty"`
 	// 标签名称
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	// 标签描述
@@ -211,11 +211,11 @@ func (x *TagSave) GetDomainId() int64 {
 	return 0
 }
 
-func (x *TagSave) GetStatus() int32 {
+func (x *TagSave) GetStatus() TagStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return TagStatus_TAG_STATUS_UNSPECIFIED
 }
 
 func (x *TagSave) GetName() string {
@@ -632,7 +632,7 @@ var File_content_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_v1_tag_proto_rawDesc = "" +
 	"\n" +
-	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xe5\x03\n" +
+	"\x14content/v1/tag.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x15content/v1/enum.proto\"\x93\x04\n" +
 	"\x03Tag\x12?\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampH\x00R\tcreatedAt\x88\x01\x01\x12?\n" +
@@ -645,8 +645,9 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x04 \x01(\tH\x04R\vdescription\x88\x01\x01\x12 \n" +
-	"\tdomain_id\x18\x05 \x01(\x03H\x05R\bdomainId\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\x06 \x01(\x05H\x06R\x06status\x88\x01\x01\x12#\n" +
+	"\tdomain_id\x18\x05 \x01(\x03H\x05R\bdomainId\x88\x01\x01\x12I\n" +
+	"\x06status\x18\x06 \x01(\x0e2 .common.api.content.v1.TagStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x06R\x06status\x88\x01\x01\x12#\n" +
 	"\rarticle_count\x18\a \x01(\x05R\farticleCountB\r\n" +
 	"\v_created_atB\r\n" +
 	"\v_updated_atB\r\n" +
@@ -655,11 +656,12 @@ const file_content_v1_tag_proto_rawDesc = "" +
 	"\f_descriptionB\f\n" +
 	"\n" +
 	"_domain_idB\t\n" +
-	"\a_status\"\xc8\x01\n" +
+	"\a_status\"\xf6\x01\n" +
 	"\aTagSave\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\x03H\x00R\x02id\x88\x01\x01\x12 \n" +
-	"\tdomain_id\x18\x02 \x01(\x03H\x01R\bdomainId\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\x03 \x01(\x05H\x02R\x06status\x88\x01\x01\x12\x12\n" +
+	"\tdomain_id\x18\x02 \x01(\x03H\x01R\bdomainId\x88\x01\x01\x12I\n" +
+	"\x06status\x18\x03 \x01(\x0e2 .common.api.content.v1.TagStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x02R\x06status\x88\x01\x01\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x05 \x01(\tH\x03R\vdescription\x88\x01\x01B\x05\n" +
 	"\x03_idB\f\n" +
@@ -727,33 +729,36 @@ var file_content_v1_tag_proto_goTypes = []any{
 	(*PageTagRequest)(nil),        // 7: common.api.content.v1.PageTagRequest
 	(*PageTagReply)(nil),          // 8: common.api.content.v1.PageTagReply
 	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
-	(*v1.Int32Range)(nil),         // 10: common.api.common.v1.Int32Range
-	(*v1.PageRequest)(nil),        // 11: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),          // 12: common.api.common.v1.PageReply
+	(TagStatus)(0),                // 10: common.api.content.v1.TagStatus
+	(*v1.Int32Range)(nil),         // 11: common.api.common.v1.Int32Range
+	(*v1.PageRequest)(nil),        // 12: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),          // 13: common.api.common.v1.PageReply
 }
 var file_content_v1_tag_proto_depIdxs = []int32{
 	9,  // 0: common.api.content.v1.Tag.created_at:type_name -> google.protobuf.Timestamp
 	9,  // 1: common.api.content.v1.Tag.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 2: common.api.content.v1.TagQueryParams.article_count:type_name -> common.api.common.v1.Int32Range
-	1,  // 3: common.api.content.v1.AddTagsRequest.tags:type_name -> common.api.content.v1.TagSave
-	0,  // 4: common.api.content.v1.AddTagsReply.tags:type_name -> common.api.content.v1.Tag
-	1,  // 5: common.api.content.v1.UpdateTagRequest.tag:type_name -> common.api.content.v1.TagSave
-	0,  // 6: common.api.content.v1.UpdateTagReply.tag:type_name -> common.api.content.v1.Tag
-	11, // 7: common.api.content.v1.PageTagRequest.page:type_name -> common.api.common.v1.PageRequest
-	2,  // 8: common.api.content.v1.PageTagRequest.query:type_name -> common.api.content.v1.TagQueryParams
-	12, // 9: common.api.content.v1.PageTagReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 10: common.api.content.v1.PageTagReply.rows:type_name -> common.api.content.v1.Tag
-	3,  // 11: common.api.content.v1.ContentTagService.Adds:input_type -> common.api.content.v1.AddTagsRequest
-	5,  // 12: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
-	7,  // 13: common.api.content.v1.ContentTagService.Page:input_type -> common.api.content.v1.PageTagRequest
-	4,  // 14: common.api.content.v1.ContentTagService.Adds:output_type -> common.api.content.v1.AddTagsReply
-	6,  // 15: common.api.content.v1.ContentTagService.Update:output_type -> common.api.content.v1.UpdateTagReply
-	8,  // 16: common.api.content.v1.ContentTagService.Page:output_type -> common.api.content.v1.PageTagReply
-	14, // [14:17] is the sub-list for method output_type
-	11, // [11:14] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	10, // 2: common.api.content.v1.Tag.status:type_name -> common.api.content.v1.TagStatus
+	10, // 3: common.api.content.v1.TagSave.status:type_name -> common.api.content.v1.TagStatus
+	11, // 4: common.api.content.v1.TagQueryParams.article_count:type_name -> common.api.common.v1.Int32Range
+	1,  // 5: common.api.content.v1.AddTagsRequest.tags:type_name -> common.api.content.v1.TagSave
+	0,  // 6: common.api.content.v1.AddTagsReply.tags:type_name -> common.api.content.v1.Tag
+	1,  // 7: common.api.content.v1.UpdateTagRequest.tag:type_name -> common.api.content.v1.TagSave
+	0,  // 8: common.api.content.v1.UpdateTagReply.tag:type_name -> common.api.content.v1.Tag
+	12, // 9: common.api.content.v1.PageTagRequest.page:type_name -> common.api.common.v1.PageRequest
+	2,  // 10: common.api.content.v1.PageTagRequest.query:type_name -> common.api.content.v1.TagQueryParams
+	13, // 11: common.api.content.v1.PageTagReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 12: common.api.content.v1.PageTagReply.rows:type_name -> common.api.content.v1.Tag
+	3,  // 13: common.api.content.v1.ContentTagService.Adds:input_type -> common.api.content.v1.AddTagsRequest
+	5,  // 14: common.api.content.v1.ContentTagService.Update:input_type -> common.api.content.v1.UpdateTagRequest
+	7,  // 15: common.api.content.v1.ContentTagService.Page:input_type -> common.api.content.v1.PageTagRequest
+	4,  // 16: common.api.content.v1.ContentTagService.Adds:output_type -> common.api.content.v1.AddTagsReply
+	6,  // 17: common.api.content.v1.ContentTagService.Update:output_type -> common.api.content.v1.UpdateTagReply
+	8,  // 18: common.api.content.v1.ContentTagService.Page:output_type -> common.api.content.v1.PageTagReply
+	16, // [16:19] is the sub-list for method output_type
+	13, // [13:16] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_tag_proto_init() }
@@ -761,6 +766,7 @@ func file_content_v1_tag_proto_init() {
 	if File_content_v1_tag_proto != nil {
 		return
 	}
+	file_content_v1_enum_proto_init()
 	file_content_v1_tag_proto_msgTypes[0].OneofWrappers = []any{}
 	file_content_v1_tag_proto_msgTypes[1].OneofWrappers = []any{}
 	file_content_v1_tag_proto_msgTypes[2].OneofWrappers = []any{}

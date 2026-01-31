@@ -118,7 +118,27 @@ func (m *Domain) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for Status
+	if _, ok := _Domain_Status_NotInLookup[m.GetStatus()]; ok {
+		err := DomainValidationError{
+			field:  "Status",
+			reason: "value must not be in list [DOMAIN_STATUS_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := DomainStatus_name[int32(m.GetStatus())]; !ok {
+		err := DomainValidationError{
+			field:  "Status",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for TagCount
 
@@ -255,6 +275,10 @@ var _ interface {
 	ErrorName() string
 } = DomainValidationError{}
 
+var _Domain_Status_NotInLookup = map[DomainStatus]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on DomainSave with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -288,7 +312,29 @@ func (m *DomainSave) validate(all bool) error {
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _DomainSave_Status_NotInLookup[m.GetStatus()]; ok {
+			err := DomainSaveValidationError{
+				field:  "Status",
+				reason: "value must not be in list [DOMAIN_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := DomainStatus_name[int32(m.GetStatus())]; !ok {
+			err := DomainSaveValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Url != nil {
@@ -376,6 +422,10 @@ var _ interface {
 	ErrorName() string
 } = DomainSaveValidationError{}
 
+var _DomainSave_Status_NotInLookup = map[DomainStatus]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on DomainQueryParams with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -436,7 +486,29 @@ func (m *DomainQueryParams) validate(all bool) error {
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _DomainQueryParams_Status_NotInLookup[m.GetStatus()]; ok {
+			err := DomainQueryParamsValidationError{
+				field:  "Status",
+				reason: "value must not be in list [DOMAIN_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := DomainStatus_name[int32(m.GetStatus())]; !ok {
+			err := DomainQueryParamsValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Url != nil {
@@ -530,6 +602,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DomainQueryParamsValidationError{}
+
+var _DomainQueryParams_Status_NotInLookup = map[DomainStatus]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on AddDomainsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the

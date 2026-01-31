@@ -10,7 +10,7 @@ import (
 type ChatMessageRepo interface {
 	Save(ctx context.Context, tx *gen.Client, chatMessage *model.ChatMessage) (*model.ChatMessage, error)
 
-	//UpdateStatus(ctx context.Context, tx *gen.Client, messageId int64, status model.ChatMessageStatus) (*model.ChatMessage, error)
+	// UpdateStatus(ctx context.Context, tx *gen.Client, messageId int64, status model.ChatMessageStatus) (*model.ChatMessage, error)
 
 	GetOne(ctx context.Context, tx *gen.Client, req *ChatMessageGetReq) (*model.ChatMessage, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ChatMessageGetReq) ([]*model.ChatMessage, error)

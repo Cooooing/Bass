@@ -19,16 +19,16 @@ func (m *Minio) Name() string {
 }
 
 func (m *Minio) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage) (*model.ObjectStorage, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (m *Minio) UploadToken(ctx context.Context, key string) (string, error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (m *Minio) Status(ctx context.Context, key string, enable bool) error {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

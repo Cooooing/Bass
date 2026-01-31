@@ -82,7 +82,7 @@ func (a *Article) ParseRewardContent() (atUserNames set2.Set[string]) {
 // HasRewarded 判断文章是否打赏过，需要查询时使用 WithActionRecords 并按 UserId 过滤
 func (a *Article) HasRewarded() bool {
 	for _, record := range a.Edges.ActionRecords {
-		if record.Type == int32(v1.ArticleAction_ArticleActionReward) {
+		if record.Type == int32(v1.ArticleAction_ARTICLE_ACTION_REWARD) {
 			return true
 		}
 	}

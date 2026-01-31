@@ -14,6 +14,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	base.NewBaseDomain,
 	util.NewEventPool,
+	util.NewAsynqCache,
 
 	client.NewAsynqServer,
 	client.NewAsynqClient,

@@ -17,8 +17,8 @@ var (
 		{Name: "has_postscript", Type: field.TypeBool, Comment: "是否有附言", Default: false},
 		{Name: "reward_content", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "打赏区内容"},
 		{Name: "reward_points", Type: field.TypeInt32, Nullable: true, Comment: "打赏积分", Default: 0},
-		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除", Default: 0},
-		{Name: "type", Type: field.TypeInt32, Comment: "类型 0-普通 1-问答 2-投票 3-抽奖", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 1-正常 2-隐藏 3-锁定 4-草稿 5-删除", Default: 1},
+		{Name: "type", Type: field.TypeInt32, Comment: "类型 1-普通 2-问答 3-投票 4-抽奖", Default: 1},
 		{Name: "statement", Type: field.TypeString, Nullable: true, Comment: "创作声明"},
 		{Name: "commentable", Type: field.TypeBool, Comment: "是否允许评论", Default: true},
 		{Name: "anonymous", Type: field.TypeBool, Comment: "是否匿名", Default: false},
@@ -51,7 +51,7 @@ var (
 	ContentArticleActionRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64, Comment: "执行行为的用户ID"},
-		{Name: "type", Type: field.TypeInt32, Comment: "行为类型 0-点赞 1-感谢 2-收藏 3-关注"},
+		{Name: "type", Type: field.TypeInt32, Comment: "行为类型 1-点赞 2-感谢 3-收藏 4-关注 5-打赏"},
 		{Name: "article_id", Type: field.TypeInt64, Comment: "关联的文章ID"},
 	}
 	// ContentArticleActionRecordsTable holds the schema information for the "content_article_action_records" table.
@@ -91,7 +91,7 @@ var (
 		{Name: "prizes", Type: field.TypeJSON, Nullable: true, Comment: "奖品列表"},
 		{Name: "start_at", Type: field.TypeTime, Nullable: true, Comment: "抽奖开始时间"},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "抽奖结束时间"},
-		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-未开始 1-进行中 2-已结束", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 1-未开始 2-进行中 3-已结束", Default: 1},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
 		{Name: "article_id", Type: field.TypeInt64, Comment: "所属文章ID"},
@@ -159,7 +159,7 @@ var (
 	ContentArticlePostscriptsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647, Comment: "附言内容"},
-		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-正常 1-隐藏", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 1-正常 2-隐藏", Default: 1},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
@@ -236,7 +236,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "content", Type: field.TypeString, Size: 2147483647, Comment: "评论内容"},
 		{Name: "level", Type: field.TypeInt32, Comment: "评论层级"},
-		{Name: "status", Type: field.TypeInt32, Comment: "状态 0-正常 1-隐藏", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "状态 1-正常 2-隐藏", Default: 1},
 		{Name: "thank_count", Type: field.TypeInt32, Comment: "感谢数", Default: 0},
 		{Name: "like_count", Type: field.TypeInt32, Comment: "点赞数", Default: 0},
 		{Name: "collect_count", Type: field.TypeInt32, Comment: "收藏数", Default: 0},
@@ -288,7 +288,7 @@ var (
 	ContentCommentActionRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "user_id", Type: field.TypeInt64, Comment: "执行行为的用户ID"},
-		{Name: "type", Type: field.TypeInt32, Comment: "行为类型 0-点赞 1收藏"},
+		{Name: "type", Type: field.TypeInt32, Comment: "行为类型 1-点赞 2-收藏"},
 		{Name: "comment_id", Type: field.TypeInt64, Comment: "关联的文章ID"},
 	}
 	// ContentCommentActionRecordsTable holds the schema information for the "content_comment_action_records" table.
@@ -327,7 +327,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString, Comment: "域名名称"},
 		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "域名描述"},
-		{Name: "status", Type: field.TypeInt32, Nullable: true, Comment: "状态 0-正常，1-禁用", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Nullable: true, Comment: "状态 1-正常，2-禁用", Default: 1},
 		{Name: "url", Type: field.TypeString, Nullable: true, Comment: "领域地址"},
 		{Name: "icon", Type: field.TypeString, Nullable: true, Comment: "图标"},
 		{Name: "tag_count", Type: field.TypeInt32, Comment: "标签数", Default: 0},
@@ -348,7 +348,7 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "name", Type: field.TypeString, Comment: "标签名称"},
 		{Name: "description", Type: field.TypeString, Nullable: true, Comment: "标签描述"},
-		{Name: "status", Type: field.TypeInt32, Comment: "标签状态：0-正常，1-禁用", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "标签状态：1-正常，2-禁用", Default: 1},
 		{Name: "article_count", Type: field.TypeInt32, Comment: "文章数", Default: 0},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true, Comment: "创建人ID"},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true, Comment: "更新人ID"},

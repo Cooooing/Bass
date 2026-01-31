@@ -22,7 +22,7 @@ type ArticlePostscript struct {
 	ArticleID int64 `json:"article_id,omitempty"`
 	// 附言内容
 	Content string `json:"content,omitempty"`
-	// 状态 0-正常 1-隐藏
+	// 状态 1-正常 2-隐藏
 	Status int32 `json:"status,omitempty"`
 	// 创建人ID
 	CreatedBy *int64 `json:"created_by,omitempty"`

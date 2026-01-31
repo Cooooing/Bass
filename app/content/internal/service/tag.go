@@ -38,12 +38,12 @@ func NewTagService(baseService *BaseService, domainTag *biz.TagDomain) *TagServi
 
 func (s *TagService) Adds(ctx context.Context, req *v1.AddTagsRequest) (*v1.AddTagsReply, error) {
 	tags := make([]*model.Tag, 0, len(req.Tags))
-	for i, tag := range req.Tags {
+	for i, tagSave := range req.Tags {
 		tags[i] = &model.Tag{Tag: &gen.Tag{
-			Name:        tag.Name,
-			Description: tag.Description,
-			DomainID:    tag.DomainId,
-			Status:      base.DerefOrDefault(tag.Status, int32(v1.TagStatus_TagNormal)),
+			Name:        tagSave.Name,
+			Description: tagSave.Description,
+			DomainID:    tagSave.DomainId,
+			Status:      int32(base.DerefOrDefault(tagSave.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
 		}}
 	}
 	saves, err := s.domainTag.Saves(ctx, tags)
@@ -68,7 +68,7 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
-		Status:      base.DerefOrDefault(req.Tag.Status, int32(v1.TagStatus_TagNormal)),
+		Status:      int32(base.DerefOrDefault(req.Tag.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
 	}})
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.Page
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
-		Status:      base.Ptr(v1.TagStatus_TagNormal),
+		Status:      base.Ptr(v1.TagStatus_TAG_STATUS_NORMAL),
 		DomainId:    req.Query.DomainId,
 	}
 	if req.Query.ArticleCount != nil {

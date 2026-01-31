@@ -21,7 +21,7 @@ type Domain struct {
 	Name string `json:"name,omitempty"`
 	// 域名描述
 	Description *string `json:"description,omitempty"`
-	// 状态 0-正常，1-禁用
+	// 状态 1-正常，2-禁用
 	Status int32 `json:"status,omitempty"`
 	// 领域地址
 	URL *string `json:"url,omitempty"`

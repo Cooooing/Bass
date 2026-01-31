@@ -24,7 +24,7 @@ type Tag struct {
 	Description *string `json:"description,omitempty"`
 	// 所属领域id
 	DomainID *int64 `json:"domain_id,omitempty"`
-	// 标签状态：0-正常，1-禁用
+	// 标签状态：1-正常，2-禁用
 	Status int32 `json:"status,omitempty"`
 	// 文章数
 	ArticleCount int32 `json:"article_count,omitempty"`

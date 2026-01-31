@@ -238,7 +238,29 @@ func (m *User) validate(all bool) error {
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _User_Status_NotInLookup[m.GetStatus()]; ok {
+			err := UserValidationError{
+				field:  "Status",
+				reason: "value must not be in list [USER_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := UserStatus_name[int32(m.GetStatus())]; !ok {
+			err := UserValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.FollowCount != nil {
@@ -409,6 +431,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UserValidationError{}
+
+var _User_Status_NotInLookup = map[UserStatus]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on UserQueryParams with the rules defined
 // in the proto definition for this message. If any rules are violated, the

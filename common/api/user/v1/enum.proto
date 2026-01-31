@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package common.api.user.v1;
+
+option go_package = "common/api/user/v1;v1";
+
+enum UserStatus {
+  USER_STATUS_UNSPECIFIED = 0;
+  USER_STATUS_NORMAL = 1; // 正常
+  USER_STATUS_BANNED = 2; // 封禁
+  USER_STATUS_DELETED = 3; // 注销
+}
+
+enum UserStatType {
+  USER_STAT_TYPE_UNSPECIFIED = 0;
+  USER_STAT_TYPE_FOLLOW = 1; // 关注数
+  USER_STAT_TYPE_FOLLOWER = 2; // 粉丝数
+  USER_STAT_TYPE_BLOCK = 3; // 拉黑数
+  USER_STAT_TYPE_BLOCKED = 4; // 被拉黑数
+}
+
+enum UserRelationType {
+  USER_RELATION_TYPE_UNSPECIFIED = 0;
+  USER_RELATION_TYPE_FOLLOW = 1; // 关注
+  USER_RELATION_TYPE_BLOCK = 2; // 拉黑
+}

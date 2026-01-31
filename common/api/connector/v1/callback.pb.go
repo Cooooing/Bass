@@ -7,13 +7,11 @@
 package v1
 
 import (
-	_ "common/api/common/v1"
 	v1 "common/api/signal/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -372,7 +370,7 @@ var File_connector_v1_callback_proto protoreflect.FileDescriptor
 
 const file_connector_v1_callback_proto_rawDesc = "" +
 	"\n" +
-	"\x1bconnector/v1/callback.proto\x12\x17common.api.connector.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x15signal/v1/model.proto\"\r\n" +
+	"\x1bconnector/v1/callback.proto\x12\x17common.api.connector.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x15signal/v1/model.proto\"\r\n" +
 	"\vPingRequest\"\v\n" +
 	"\tPingReply\"\\\n" +
 	"\n" +

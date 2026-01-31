@@ -19,7 +19,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenRepo *util.TokenRepo, nodeDomain *biz.NodeDomain) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache, nodeDomain *biz.NodeDomain) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -29,7 +29,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			pkg.AuthMiddleware(tokenRepo),
+			pkg.AuthMiddleware(tokenCache),
 			selector.Server(SignalAuthMiddleware(nodeDomain)).Match(NodeEndpointsMatch()).Build(),
 			validate.ProtoValidate(),
 		),

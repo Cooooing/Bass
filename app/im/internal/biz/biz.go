@@ -13,7 +13,7 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
-	util.NewTokenRepo,
+	util.NewTokenCache,
 
 	NewChatGroupDomain,
 	NewChatSessionDomain,

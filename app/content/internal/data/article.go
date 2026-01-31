@@ -161,21 +161,21 @@ func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, tx *gen.Client, a
 func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) (*model.Article, error) {
 	updateOne := tx.Article.UpdateOneID(articleId)
 	switch action {
-	case v1.ArticleAction_ArticleActionLike:
+	case v1.ArticleAction_ARTICLE_ACTION_LIKE:
 		updateOne.AddLikeCount(num)
-	case v1.ArticleAction_ArticleActionThank:
+	case v1.ArticleAction_ARTICLE_ACTION_THANK:
 		updateOne.AddThankCount(num)
-	case v1.ArticleAction_ArticleActionCollect:
+	case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
 		updateOne.AddCollectCount(num)
-	case v1.ArticleAction_ArticleActionWatch:
+	case v1.ArticleAction_ARTICLE_ACTION_WATCH:
 		updateOne.AddWatchCount(num)
-	case v1.ArticleAction_ArticleActionReply:
+	case v1.ArticleAction_ARTICLE_ACTION_REPLY:
 		updateOne.AddReplyCount(num)
-	case v1.ArticleAction_ArticleActionVote:
+	case v1.ArticleAction_ARTICLE_ACTION_VOTE:
 		updateOne.AddVoteTotal(num)
-	case v1.ArticleAction_ArticleActionLottery:
+	case v1.ArticleAction_ARTICLE_ACTION_LOTTERY:
 		updateOne.AddLotteryParticipantCount(num)
-	case v1.ArticleAction_ArticleActionLotteryWinner:
+	case v1.ArticleAction_ARTICLE_ACTION_LOTTERY_WINNER:
 		updateOne.AddLotteryWinnerCount(num)
 	default:
 		return nil, fmt.Errorf("unknown action")
@@ -207,11 +207,11 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 		return nil, err
 	}
 
-	if first.Status != int32(v1.ArticleStatus_ArticleDrafts) {
+	if first.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
 		return nil, cv1.ErrorBadRequest("only update draft")
 	}
 
-	err = r.UpdateStatus(ctx, tx, articleId, v1.ArticleStatus_ArticleNormal)
+	err = r.UpdateStatus(ctx, tx, articleId, v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +219,7 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 }
 
 func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {
-	return tx.Article.UpdateOneID(articleId).SetStatus(int32(v1.ArticleStatus_ArticleDeleted)).Exec(ctx)
+	return tx.Article.UpdateOneID(articleId).SetStatus(int32(v1.ArticleStatus_ARTICLE_STATUS_DELETED)).Exec(ctx)
 }
 
 func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (bool, error) {
@@ -231,7 +231,7 @@ func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.Artic
 func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (*model.Article, error) {
 	query := tx.Article.Query().
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
-			q.Where(articlepostscript.StatusEQ(int32(v1.ArticlePostscriptStatus_ArticlePostscriptNormal))).
+			q.Where(articlepostscript.StatusEQ(int32(v1.ArticlePostscriptStatus_ARTICLE_POSTSCRIPT_STATUS_NORMAL))).
 				Order(gen.Asc(articlepostscript.FieldCreatedAt))
 		}).
 		WithTags()
@@ -329,9 +329,9 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 	}
 	if req.Order != nil {
 		switch *req.Order {
-		case v1.ArticleOrder_ArticleOrderNewest:
+		case v1.ArticleOrder_ARTICLE_ORDER_NEWEST:
 			query = query.Order(gen.Desc(article.FieldCreatedAt))
-		case v1.ArticleOrder_ArticleOrderHottest:
+		case v1.ArticleOrder_ARTICLE_ORDER_HOTTEST:
 			query = query.Where(article.CreatedAtGTE(time.Now().Add(-30 * 24 * time.Hour))).
 				Order(func(s *sql.Selector) {
 					s.OrderExpr(sql.Expr(`

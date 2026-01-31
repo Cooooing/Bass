@@ -7,14 +7,9 @@
 package v1
 
 import (
-	_ "common/api/common/v1"
-	_ "common/api/user/v1"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -1039,7 +1034,7 @@ var File_signal_v1_node_proto protoreflect.FileDescriptor
 
 const file_signal_v1_node_proto_rawDesc = "" +
 	"\n" +
-	"\x14signal/v1/node.proto\x12\x14common.api.signal.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\x1a\x15signal/v1/model.proto\x1a\x18signal/v1/constant.proto\"G\n" +
+	"\x14signal/v1/node.proto\x12\x14common.api.signal.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x15signal/v1/model.proto\x1a\x18signal/v1/constant.proto\"G\n" +
 	"\x15SignalNodeSaveRequest\x12.\n" +
 	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\"E\n" +
 	"\x13SignalNodeSaveReply\x12.\n" +

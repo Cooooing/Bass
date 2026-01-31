@@ -55,7 +55,7 @@ func (c *Comment) ConvertToRpc() *v1.Comment {
 		Level:         c.Level,
 		ParentId:      c.ParentID,
 		ReplyId:       c.ReplyID,
-		Status:        c.Status,
+		Status:        v1.CommentStatus(c.Status),
 		ThankCount:    c.ThankCount,
 		LikeCount:     c.LikeCount,
 		CollectCount:  c.CollectCount,

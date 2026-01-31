@@ -4,6 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"signal/internal/biz/base"
@@ -19,15 +20,17 @@ type NodePingTaskHandler struct {
 	nodeDomain *NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
+	asynqCache *util.AsynqCache
 	producer   *client.Producer
 }
 
-func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *client.Producer) *NodePingTaskHandler {
+func NewNodePingTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *NodePingTaskHandler {
 	return &NodePingTaskHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,
 		nodeRepo:   nodeRepo,
 		nodeCache:  nodeCache,
+		asynqCache: asynqCache,
 		producer:   producer,
 	}
 }
@@ -50,7 +53,7 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 		}
 
 		// 判断任务是否存在
-		if version, err := h.nodeCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
+		if version, err := h.asynqCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
 			return err
 		} else if version != data.Version {
 			return nil
@@ -73,7 +76,6 @@ func (h *NodePingTaskHandler) Handler() asynq.HandlerFunc {
 		// 下一次任务
 		rc, ok1 := asynq.GetRetryCount(ctx)
 		mrc, ok2 := asynq.GetMaxRetry(ctx)
-		h.Log.Infof("retry count: %d, max retry: %d", rc, mrc)
 		if ok1 && ok2 && rc <= mrc {
 			data.Delay = true
 			err = h.producer.EnqueueContextTask(ctx, data)

@@ -16,7 +16,7 @@ func (u *UserRelation) ConvertToRpc() *v1.UserRelation {
 		CreatedAt: timestamppb.New(*u.CreatedAt),
 		UpdatedAt: timestamppb.New(*u.UpdatedAt),
 		Id:        u.ID,
-		Type:      u.Type,
+		Type:      v1.UserRelationType(u.Type),
 		ActorId:   u.ActorID,
 		TargetId:  u.TargetID,
 	}

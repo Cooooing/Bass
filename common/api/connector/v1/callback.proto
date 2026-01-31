@@ -4,8 +4,6 @@ package common.api.connector.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
-import "google/protobuf/timestamp.proto";
-import "common/v1/common.proto";
 import "signal/v1/model.proto";
 
 option go_package = "common/api/connector/v1;v1";

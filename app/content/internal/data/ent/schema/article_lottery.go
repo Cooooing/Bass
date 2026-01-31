@@ -30,7 +30,7 @@ func (ArticleLottery) Fields() []ent.Field {
 		field.JSON("prizes", []string{}).Comment("奖品列表").Optional(),
 		field.Time("start_at").Comment("抽奖开始时间").Optional(),
 		field.Time("end_at").Comment("抽奖结束时间").Optional(),
-		field.Int32("status").Comment("状态 0-未开始 1-进行中 2-已结束").Default(0),
+		field.Int32("status").Comment("状态 1-未开始 2-进行中 3-已结束").Default(1),
 	}, pkg.TimeAuditFields()...)
 }
 

@@ -47,7 +47,7 @@ var (
 		{Name: "avatar_url", Type: field.TypeString, Nullable: true, Comment: "头像URL"},
 		{Name: "introduction", Type: field.TypeString, Nullable: true, Comment: "个人简介"},
 		{Name: "mbti", Type: field.TypeString, Nullable: true, Comment: "用户 MBTI 类型"},
-		{Name: "status", Type: field.TypeInt32, Comment: "用户状态：0-正常，1-封禁，2-注销", Default: 0},
+		{Name: "status", Type: field.TypeInt32, Comment: "用户状态：1-正常，2-封禁，3-注销", Default: 1},
 		{Name: "group_name", Type: field.TypeString, Nullable: true, Comment: "用户组名称"},
 		{Name: "follow_count", Type: field.TypeInt32, Comment: "关注数", Default: 0},
 		{Name: "follower_count", Type: field.TypeInt32, Comment: "粉丝数", Default: 0},

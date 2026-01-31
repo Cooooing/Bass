@@ -35,7 +35,7 @@ type User struct {
 	Introduction *string `json:"introduction,omitempty"`
 	// 用户 MBTI 类型
 	Mbti *string `json:"mbti,omitempty"`
-	// 用户状态：0-正常，1-封禁，2-注销
+	// 用户状态：1-正常，2-封禁，3-注销
 	Status *int32 `json:"status,omitempty"`
 	// 用户组名称
 	GroupName string `json:"group_name,omitempty"`

@@ -145,7 +145,29 @@ func (m *Tag) validate(all bool) error {
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _Tag_Status_NotInLookup[m.GetStatus()]; ok {
+			err := TagValidationError{
+				field:  "Status",
+				reason: "value must not be in list [TAG_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := TagStatus_name[int32(m.GetStatus())]; !ok {
+			err := TagValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -225,6 +247,10 @@ var _ interface {
 	ErrorName() string
 } = TagValidationError{}
 
+var _Tag_Status_NotInLookup = map[TagStatus]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on TagSave with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -257,7 +283,29 @@ func (m *TagSave) validate(all bool) error {
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _TagSave_Status_NotInLookup[m.GetStatus()]; ok {
+			err := TagSaveValidationError{
+				field:  "Status",
+				reason: "value must not be in list [TAG_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := TagStatus_name[int32(m.GetStatus())]; !ok {
+			err := TagSaveValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Description != nil {
@@ -340,6 +388,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = TagSaveValidationError{}
+
+var _TagSave_Status_NotInLookup = map[TagStatus]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on TagQueryParams with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

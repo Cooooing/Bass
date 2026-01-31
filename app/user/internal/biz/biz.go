@@ -14,7 +14,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
 
-	util.NewTokenRepo,
+	util.NewTokenCache,
 	NewTokenService,
 	util.NewEventPool,
 

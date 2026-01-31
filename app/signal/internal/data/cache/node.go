@@ -26,25 +26,6 @@ func NewNodeCache(baseData *base.BaseData) cache.NodeCache {
 	}
 }
 
-func (r *NodeCache) SetAsynqTaskVersion(ctx context.Context, taskName string, version int64, expire time.Duration) error {
-	_, err := r.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
-		err := pipe.HSet(ctx, constant.AsynqTaskVersion, taskName, version).Err()
-		if err != nil {
-			return err
-		}
-		err = pipe.Expire(ctx, constant.AsynqTaskVersion, expire).Err()
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	return err
-}
-
-func (r *NodeCache) GetAsynqTaskVersion(ctx context.Context, taskName string) (int64, error) {
-	return r.Redis.Client.HGet(ctx, constant.AsynqTaskVersion, taskName).Int64()
-}
-
 func (r *NodeCache) SetNode(ctx context.Context, n *model.Node) error {
 	marshal, err := json.Marshal(n)
 	if err != nil {

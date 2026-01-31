@@ -29,7 +29,7 @@ func (CommentActionRecord) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("comment_id").Comment("关联的文章ID"),
 		field.Int64("user_id").Comment("执行行为的用户ID"),
-		field.Int32("type").Comment("行为类型 0-点赞 1收藏"),
+		field.Int32("type").Comment("行为类型 1-点赞 2-收藏"),
 	}
 }
 

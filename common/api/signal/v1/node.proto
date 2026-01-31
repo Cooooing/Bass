@@ -3,11 +3,6 @@ syntax = "proto3";
 package common.api.signal.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
-import "google/protobuf/timestamp.proto";
-import "validate/validate.proto";
-import "common/v1/common.proto";
-import "user/v1/user.proto";
 import "signal/v1/model.proto";
 import "signal/v1/constant.proto";
 

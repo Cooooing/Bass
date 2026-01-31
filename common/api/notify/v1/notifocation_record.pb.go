@@ -8,11 +8,9 @@ package v1
 
 import (
 	v1 "common/api/common/v1"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -422,7 +420,7 @@ var File_notify_v1_notifocation_record_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"\n" +
-	"#notify/v1/notifocation_record.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a!notify/v1/notifocation_mete.proto\"\xf4\x02\n" +
+	"#notify/v1/notifocation_record.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a!notify/v1/notifocation_mete.proto\"\xf4\x02\n" +
 	"\x12NotificationRecord\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +

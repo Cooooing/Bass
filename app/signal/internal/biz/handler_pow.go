@@ -4,6 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"signal/internal/biz/base"
@@ -19,15 +20,17 @@ type NodePowTaskHandler struct {
 	nodeDomain *NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
+	asynqCache *util.AsynqCache
 	producer   *client.Producer
 }
 
-func NewNodePowTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, producer *client.Producer) *NodePowTaskHandler {
+func NewNodePowTaskHandler(baseDomain *base.BaseDomain, nodeDomain *NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *NodePowTaskHandler {
 	return &NodePowTaskHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,
 		nodeRepo:   nodeRepo,
 		nodeCache:  nodeCache,
+		asynqCache: asynqCache,
 		producer:   producer,
 	}
 }
@@ -50,7 +53,7 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 		}
 
 		// 判断任务是否存在
-		if version, err := h.nodeCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
+		if version, err := h.asynqCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
 			return err
 		} else if version != data.Version {
 			return nil

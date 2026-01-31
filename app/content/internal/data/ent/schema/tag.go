@@ -28,7 +28,7 @@ func (Tag) Fields() []ent.Field {
 		field.String("name").Comment("标签名称").NotEmpty(),
 		field.String("description").Comment("标签描述").Optional().Nillable(),
 		field.Int64("domain_id").Comment("所属领域id").Optional().Nillable(),
-		field.Int32("status").Comment("标签状态：0-正常，1-禁用").Default(0),
+		field.Int32("status").Comment("标签状态：1-正常，2-禁用").Default(1),
 		field.Int32("article_count").Comment("文章数").Default(0),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)

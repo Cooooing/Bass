@@ -4,6 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
+	"common/pkg/util"
 	"connector/internal/biz/base"
 	"context"
 	"encoding/json"
@@ -13,12 +14,14 @@ import (
 
 type NodeRegisterTaskHandler struct {
 	*base.BaseDomain
-	producer *client.Producer
+	asynqCache *util.AsynqCache
+	producer   *client.Producer
 }
 
-func NewNodeRegisterTaskHandler(baseDomain *base.BaseDomain, producer *client.Producer) *NodeRegisterTaskHandler {
+func NewNodeRegisterTaskHandler(baseDomain *base.BaseDomain, producer *client.Producer, asynqCache *util.AsynqCache) *NodeRegisterTaskHandler {
 	return &NodeRegisterTaskHandler{
 		BaseDomain: baseDomain,
+		asynqCache: asynqCache,
 		producer:   producer,
 	}
 }
@@ -36,22 +39,18 @@ func (h *NodeRegisterTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
-		//// 判断任务是否存在
-		//if version, err := h.nodeCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
-		//	return err
-		//} else if version != data.Version {
-		//	return nil
-		//}
+		// 判断任务是否存在
+		if version, err := h.asynqCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
+			return err
+		} else if version != data.Version {
+			return nil
+		}
 
-		// 下一次任务
-		rc, ok1 := asynq.GetRetryCount(ctx)
-		mrc, ok2 := asynq.GetMaxRetry(ctx)
-		if ok1 && ok2 && rc <= mrc {
-			data.Delay = true
-			err = h.producer.EnqueueContextTask(ctx, data)
-			if err != nil {
-				return err
-			}
+		// 下一次任务，不管成功失败，常驻任务
+		data.Delay = true
+		err = h.producer.EnqueueContextTask(ctx, data)
+		if err != nil {
+			return err
 		}
 		return nil
 	}

@@ -28,7 +28,7 @@ func (ArticlePostscript) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
 		field.Text("content").Comment("附言内容").NotEmpty(),
-		field.Int32("status").Comment("状态 0-正常 1-隐藏").Default(0),
+		field.Int32("status").Comment("状态 1-正常 2-隐藏").Default(1),
 	}
 	fields = append(fields, pkg.UserAuditFields()...)
 	fields = append(fields, pkg.TimeAuditFields()...)

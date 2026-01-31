@@ -12,7 +12,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	NewBaseDomain,
 
-	util.NewTokenRepo,
+	util.NewTokenCache,
 )
 
 type BaseDomain struct {

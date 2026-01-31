@@ -82,7 +82,7 @@ func UserAPIMatch() selector.MatchFunc {
 }
 
 // AuthMiddleware 认证中间件
-func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
+func AuthMiddleware(tokenCache *util.TokenCache) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			tr, ok := transport.FromServerContext(ctx)
@@ -99,7 +99,7 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 				}
 
 				// 验证 token
-				userInfo, err := tokenRepo.GetToken(ctx, token)
+				userInfo, err := tokenCache.GetToken(ctx, token)
 				if err != nil {
 					return nil, err
 				}

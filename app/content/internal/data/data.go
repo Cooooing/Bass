@@ -30,7 +30,7 @@ var DataProviderSet = wire.NewSet(
 	NewDomainRepo,
 	NewTagRepo,
 
-	util.NewTokenRepo,
+	util.NewTokenCache,
 )
 
 type BaseData struct {

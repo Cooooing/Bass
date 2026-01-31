@@ -7,13 +7,10 @@
 package v1
 
 import (
-	_ "common/api/common/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -372,7 +369,7 @@ var File_user_v1_two_factor_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_two_factor_authentication_proto_rawDesc = "" +
 	"\n" +
-	"'user/v1/two_factor_authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"K\n" +
+	"'user/v1/two_factor_authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"K\n" +
 	"*UserTwoFactorAuthenticationValidateRequest\x12\x1d\n" +
 	"\x04code\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18\x06R\x04code\"F\n" +
 	"(UserTwoFactorAuthenticationValidateReply\x12\x1a\n" +
@@ -437,7 +434,6 @@ func file_user_v1_two_factor_authentication_proto_init() {
 	if File_user_v1_two_factor_authentication_proto != nil {
 		return
 	}
-	file_user_v1_user_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

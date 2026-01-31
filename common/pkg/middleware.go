@@ -140,7 +140,7 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 }
 
 // AuthMiddleware 返回一个 Kratos 中间件，用于认证
-func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
+func AuthMiddleware(tokenCache *util.TokenCache) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 
@@ -152,7 +152,7 @@ func AuthMiddleware(tokenRepo *util.TokenRepo) middleware.Middleware {
 			}
 			token = strings.TrimPrefix(token, bearerPrefix)
 
-			userInfo, err := tokenRepo.GetToken(ctx, token)
+			userInfo, err := tokenCache.GetToken(ctx, token)
 			if err != nil {
 				return nil, fmt.Errorf("invalid token: %w", err)
 			}

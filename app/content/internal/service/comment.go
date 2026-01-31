@@ -74,9 +74,9 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 		ArticleId:   req.Query.ArticleId,
 		ArticleIds:  nil,
 		CreatedBy:   req.Query.UserId,
-		Status:      base.Ptr(v1.CommentStatus_CommentNormal),
+		Status:      base.Ptr(v1.CommentStatus_COMMENT_STATUS_NORMAL),
 		Level:       req.Query.Level,
-		Order:       req.Query.Order,
+		Order:       (*int32)(req.Query.Order),
 		WithArticle: req.Query.WithArticle,
 	})
 	return &v1.PageCommentReply{
@@ -86,7 +86,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {
-	// user := s.tokenRepo.GetUserInfo(ctx)
+	// user := s.tokenCache.GetUserInfo(ctx)
 	exist, err := s.commentRepo.Exist(ctx, s.db, &repo.CommentGetReq{CommentId: base.Ptr(req.Id)})
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (
 		return nil, cv1.ErrorBadRequest("comment not exist")
 	}
 
-	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, v1.CommentAction_CommentActionLike, base.If[int32](req.Active, 1, -1))
+	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, base.If[int32](req.Active, 1, -1))
 	return &v1.LikeCommentReply{}, err
 }
 

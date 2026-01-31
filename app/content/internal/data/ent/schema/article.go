@@ -33,8 +33,8 @@ func (Article) Fields() []ent.Field {
 		field.Text("reward_content").Comment("打赏区内容").Nillable().Optional(),
 		field.Int32("reward_points").Comment("打赏积分").Default(0).Nillable().Optional(),
 
-		field.Int32("status").Comment("状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除").Default(0),
-		field.Int32("type").Comment("类型 0-普通 1-问答 2-投票 3-抽奖").Default(0),
+		field.Int32("status").Comment("状态 1-正常 2-隐藏 3-锁定 4-草稿 5-删除").Default(1),
+		field.Int32("type").Comment("类型 1-普通 2-问答 3-投票 4-抽奖").Default(1),
 		field.String("statement").Comment("创作声明").Nillable().Optional(),
 		field.Bool("commentable").Comment("是否允许评论").Default(true),
 		field.Bool("anonymous").Comment("是否匿名").Default(false),

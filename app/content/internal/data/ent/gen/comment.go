@@ -28,7 +28,7 @@ type Comment struct {
 	ParentID *int64 `json:"parent_id,omitempty"`
 	// 回复评论ID
 	ReplyID *int64 `json:"reply_id,omitempty"`
-	// 状态 0-正常 1-隐藏
+	// 状态 1-正常 2-隐藏
 	Status int32 `json:"status,omitempty"`
 	// 感谢数
 	ThankCount int32 `json:"thank_count,omitempty"`

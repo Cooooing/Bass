@@ -7,6 +7,7 @@ import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
 import "content/v1/tag.proto";
+import "content/v1/enum.proto";
 
 option go_package = "common/api/content/v1;v1";
 
@@ -55,8 +56,8 @@ message Domain {
   string name = 4;
   // 描述
   optional string description = 5;
-  // 状态 0-正常，1-禁用
-  int32 status = 6;
+  // 状态 1-正常，2-禁用
+  DomainStatus status = 6 [(validate.rules).enum = {defined_only: true,not_in: [0]}];
   // 链接
   optional string url = 7;
   // 图标
@@ -76,8 +77,8 @@ message DomainSave {
   string name = 2;
   // 描述
   optional string description = 3;
-  // 状态 0-正常，1-禁用
-  optional int32 status = 4;
+  // 状态 1-正常，2-禁用
+  optional DomainStatus status = 4 [(validate.rules).enum = {defined_only: true,not_in: [0]}];
   // 链接
   optional string url = 5;
   // 图标
@@ -95,8 +96,8 @@ message DomainQueryParams {
   optional string name = 3;
   // 描述
   optional string description = 4;
-  // 状态 0-正常，1-禁用
-  optional int64 status = 5;
+  // 状态 1-正常，2-禁用
+  optional DomainStatus status = 5 [(validate.rules).enum = {defined_only: true,not_in: [0]}];
   // 链接
   optional string url = 6;
   // 图标

@@ -46,9 +46,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(systemService)
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
+	tokenCache := util.NewTokenCache(helper, redisClient)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {
 		cleanup4()

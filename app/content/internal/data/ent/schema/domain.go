@@ -27,7 +27,7 @@ func (Domain) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("name").Comment("域名名称").NotEmpty(),
 		field.String("description").Comment("域名描述").Nillable().Optional(),
-		field.Int32("status").Comment("状态 0-正常，1-禁用").Default(0).Optional(),
+		field.Int32("status").Comment("状态 1-正常，2-禁用").Default(1).Optional(),
 		field.String("url").Comment("领域地址").Nillable().Optional(),
 		field.String("icon").Comment("图标").Nillable().Optional(),
 		field.Int32("tag_count").Comment("标签数").Default(0),

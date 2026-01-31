@@ -3,13 +3,9 @@ package cache
 import (
 	"context"
 	"signal/internal/biz/model"
-	"time"
 )
 
 type NodeCache interface {
-	SetAsynqTaskVersion(ctx context.Context, taskName string, version int64, expire time.Duration) error
-	GetAsynqTaskVersion(ctx context.Context, taskName string) (int64, error)
-
 	SetNode(ctx context.Context, n *model.Node) error
 	DelNode(ctx context.Context, key string)
 	UpdateNodeConnections(ctx context.Context, key string, connections int64) error

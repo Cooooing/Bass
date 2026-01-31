@@ -36,9 +36,11 @@ func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func
 	client.Use(pkg.AuditHook())
 
 	cleanup := func() {
-		err := client.Close()
-		if err != nil {
-			log.Errorf("failed to close %s db: %s", conf.Data.Database.Driver, err.Error())
+		if err := client.Close(); err != nil {
+			log.Errorf("failed to close ent client: %v", err)
+		}
+		if err := debugDrv.Close(); err != nil {
+			log.Errorf("failed to close db driver: %v", err)
 		}
 		log.Infof("database client closed")
 	}

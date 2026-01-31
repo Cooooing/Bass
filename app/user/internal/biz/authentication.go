@@ -22,13 +22,13 @@ import (
 type AuthenticationDomain struct {
 	*BaseDomain
 	userRepo     repo.UserRepo
-	tokenRepo    *util.TokenRepo
+	tokenCache   *util.TokenCache
 	tokenService *TokenService
 
 	sf *sonyflake.Sonyflake
 }
 
-func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo *util.TokenRepo, tokenService *TokenService) (*AuthenticationDomain, error) {
+func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenCache *util.TokenCache, tokenService *TokenService) (*AuthenticationDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func NewAuthenticationDomain(base *BaseDomain, userRepo repo.UserRepo, tokenRepo
 	return &AuthenticationDomain{
 		BaseDomain:   base,
 		userRepo:     userRepo,
-		tokenRepo:    tokenRepo,
+		tokenCache:   tokenCache,
 		tokenService: tokenService,
 		sf:           sf,
 	}, nil
@@ -63,7 +63,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 
 	// 该邮箱是否在缓存
-	existEmailCode, err := s.tokenRepo.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email)
+	existEmailCode, err := s.tokenCache.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email)
 	if err != nil {
 		return
 	}
@@ -108,7 +108,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenRepo.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.conf.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -122,7 +122,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 	if err != nil {
 		return
 	}
-	verityCode, saveUser, err := s.tokenRepo.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
+	verityCode, saveUser, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
 	if err != nil {
 		return
 	}
@@ -150,7 +150,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		}
 
 		// 删除 code 缓存
-		err = s.tokenRepo.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
+		err = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
 		if err != nil {
 			return err
 		}
@@ -183,7 +183,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	}
 
 	// 该邮箱是否在缓存
-	existPhoneCode, err := s.tokenRepo.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone)
+	existPhoneCode, err := s.tokenCache.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone)
 	if err != nil {
 		return
 	}
@@ -228,7 +228,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenRepo.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.conf.Jwt.PhoneExpire.AsDuration())
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.conf.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -242,7 +242,7 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 	if err != nil {
 		return
 	}
-	verityCode, saveUser, err := s.tokenRepo.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
+	verityCode, saveUser, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
 	if err != nil {
 		return
 	}
@@ -270,7 +270,7 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 		}
 
 		// 删除 code 缓存
-		err = s.tokenRepo.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
+		err = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
 		if err != nil {
 			return err
 		}
@@ -306,7 +306,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	if err != nil {
 		return
 	}
-	err = s.tokenRepo.SaveToken(ctx, token, saveUser, s.conf.Jwt.Expires.AsDuration())
+	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}
@@ -315,5 +315,5 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 }
 
 func (s *AuthenticationDomain) Logout(ctx context.Context, token string) (err error) {
-	return s.tokenRepo.DelToken(ctx, token)
+	return s.tokenCache.DelToken(ctx, token)
 }

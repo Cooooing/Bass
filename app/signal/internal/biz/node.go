@@ -37,12 +37,13 @@ type NodeDomain struct {
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
+	asynqCache   *util.AsynqCache
 	producer     *client.Producer
 	httpClient   *http.Client
 	sf           *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -52,6 +53,7 @@ func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCach
 		nodeRepo:     nodeRepo,
 		nodeCache:    nodeCache,
 		sessionCache: sessionCache,
+		asynqCache:   asynqCache,
 		producer:     producer,
 		httpClient:   httpClient,
 		sf:           sf,
@@ -234,15 +236,15 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	pingTaskName := fmt.Sprintf("%s-%s", constant.TaskSignalNodePing.String(), n.Key)
 	powTaskName := fmt.Sprintf("%s-%s", constant.TaskSignalNodePow.String(), n.Key)
 	sessionTaskName := fmt.Sprintf("%s-%s", constant.TaskSignalNodeSession.String(), n.Key)
-	err = d.nodeCache.SetAsynqTaskVersion(ctx, pingTaskName, version, 20*time.Second)
+	err = d.asynqCache.SetAsynqTaskVersion(ctx, pingTaskName, version, 20*time.Second)
 	if err != nil {
 		return err
 	}
-	err = d.nodeCache.SetAsynqTaskVersion(ctx, powTaskName, version, 60*time.Second)
+	err = d.asynqCache.SetAsynqTaskVersion(ctx, powTaskName, version, 60*time.Second)
 	if err != nil {
 		return err
 	}
-	err = d.nodeCache.SetAsynqTaskVersion(ctx, sessionTaskName, version, 120*time.Second)
+	err = d.asynqCache.SetAsynqTaskVersion(ctx, sessionTaskName, version, 120*time.Second)
 	if err != nil {
 		return err
 	}

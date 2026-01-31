@@ -25,7 +25,7 @@ func (r *TagRepo) Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*mo
 	save, err := tx.Tag.Create().
 		SetName(tag.Name).
 		SetNillableDomainID(tag.DomainID).
-		SetStatus(int32(v1.TagStatus_TagNormal)).
+		SetStatus(int32(v1.TagStatus_TAG_STATUS_NORMAL)).
 		Save(ctx)
 	return &model.Tag{Tag: save}, err
 }
@@ -37,7 +37,7 @@ func (r *TagRepo) Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) 
 			tx.Tag.Create().
 				SetName(tags[i].Name).
 				SetNillableDomainID(tags[i].DomainID).
-				SetStatus(int32(v1.TagStatus_TagNormal)),
+				SetStatus(int32(v1.TagStatus_TAG_STATUS_NORMAL)),
 		)
 	}
 	save, err := tx.Tag.CreateBulk(creates...).Save(ctx)
@@ -53,7 +53,7 @@ func (r *TagRepo) Update(ctx context.Context, tx *gen.Client, tag *model.Tag) (*
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
-		SetStatus(int32(v1.TagStatus_TagNormal))
+		SetStatus(int32(v1.TagStatus_TAG_STATUS_NORMAL))
 	save, err := update.Save(ctx)
 	if err != nil {
 		return nil, err

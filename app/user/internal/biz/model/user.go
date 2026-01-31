@@ -33,7 +33,7 @@ func (u *User) ConvertToRpc() *v1.User {
 		AvatarUrl:            u.AvatarURL,
 		Introduction:         u.Introduction,
 		Mbti:                 u.Mbti,
-		Status:               u.Status,
+		Status:               (*v1.UserStatus)(u.Status),
 		GroupName:            u.GroupName,
 		FollowCount:          u.FollowCount,
 		FollowerCount:        u.FollowerCount,

@@ -27,7 +27,7 @@ type ArticleLottery struct {
 	StartAt time.Time `json:"start_at,omitempty"`
 	// 抽奖结束时间
 	EndAt time.Time `json:"end_at,omitempty"`
-	// 状态 0-未开始 1-进行中 2-已结束
+	// 状态 1-未开始 2-进行中 3-已结束
 	Status int32 `json:"status,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`

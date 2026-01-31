@@ -2128,8 +2128,8 @@ components:
                     description: 回复评论Id
                 status:
                     type: integer
-                    description: 状态
-                    format: int32
+                    description: 状态 1-正常 2-隐藏
+                    format: enum
                 thank_count:
                     type: integer
                     description: 感谢数量
@@ -2175,8 +2175,8 @@ components:
                     description: 回复评论Id
                 order:
                     type: integer
-                    description: 排序 0-最新 1-最热
-                    format: int32
+                    description: 排序 1-最新 2-最热
+                    format: enum
                 user_id:
                     type: string
                     description: 用户Id
@@ -2224,8 +2224,8 @@ components:
                     description: 描述
                 status:
                     type: integer
-                    description: 状态 0-正常，1-禁用
-                    format: int32
+                    description: 状态 1-正常，2-禁用
+                    format: enum
                 url:
                     type: string
                     description: 链接
@@ -2259,8 +2259,9 @@ components:
                     type: string
                     description: 描述
                 status:
-                    type: string
-                    description: 状态 0-正常，1-禁用
+                    type: integer
+                    description: 状态 1-正常，2-禁用
+                    format: enum
                 url:
                     type: string
                     description: 链接
@@ -2288,8 +2289,8 @@ components:
                     description: 描述
                 status:
                     type: integer
-                    description: 状态 0-正常，1-禁用
-                    format: int32
+                    description: 状态 1-正常，2-禁用
+                    format: enum
                 url:
                     type: string
                     description: 链接
@@ -2477,8 +2478,8 @@ components:
                     description: 所属领域Id
                 status:
                     type: integer
-                    description: 标签状态：0-正常，1-禁用
-                    format: int32
+                    description: 标签状态：1-正常，2-禁用
+                    format: enum
                 article_count:
                     type: integer
                     description: 文章数
@@ -2527,8 +2528,8 @@ components:
                     description: 领域Id
                 status:
                     type: integer
-                    description: 状态：0-正常，1-禁用
-                    format: int32
+                    description: 状态：1-正常，2-禁用
+                    format: enum
                 name:
                     type: string
                     description: 标签名称
@@ -3293,7 +3294,9 @@ components:
                     description: 消息类型
                     format: enum
                 session_id:
-                    type: string
+                    type: array
+                    items:
+                        type: string
                     description: 会话 id
                 payload:
                     type: object
@@ -3522,7 +3525,7 @@ components:
             properties:
                 phone:
                     type: string
-                    description: 手机号
+                    description: 手机号 11 位国内手机号
         common.api.user.v1.ExistUsernameReply:
             type: object
             properties:
@@ -3534,7 +3537,7 @@ components:
             properties:
                 username:
                     type: string
-                    description: 用户名
+                    description: 用户名 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
         common.api.user.v1.FollowReply:
             type: object
             properties: {}
@@ -3879,7 +3882,7 @@ components:
             properties:
                 code:
                     type: string
-                    description: 验证码
+                    description: 验证码 6 位验证码
                 code_token:
                     type: string
                     description: 验证码令牌
@@ -3897,7 +3900,7 @@ components:
             properties:
                 phone:
                     type: string
-                    description: 邮箱
+                    description: 邮箱 11 位国内手机号
                 password:
                     type: string
                     description: 密码
@@ -3915,7 +3918,7 @@ components:
             properties:
                 code:
                     type: string
-                    description: 验证码
+                    description: 验证码 6 位验证码
                 code_token:
                     type: string
                     description: 验证码令牌
@@ -4008,8 +4011,8 @@ components:
                     description: 用户 MBTI 类型
                 status:
                     type: integer
-                    description: 用户状态：0-正常，1-封禁，2-注销
-                    format: int32
+                    description: 用户状态：1-正常，2-封禁，3-注销
+                    format: enum
                 group_name:
                     type: string
                     description: 用户组名称
@@ -4171,8 +4174,8 @@ components:
                     description: 用户关系ID
                 type:
                     type: integer
-                    description: 关系类型 0-follow 1-block
-                    format: int32
+                    description: 关系类型 1-关注 2-拉黑
+                    format: enum
                 actor_id:
                     type: string
                     description: 关系发起者ID
@@ -4189,7 +4192,7 @@ components:
                 type:
                     type: integer
                     description: 关系类型
-                    format: int32
+                    format: enum
         common.api.user.v1.UserTwoFactorAuthenticationConfirmReply:
             type: object
             properties: {}

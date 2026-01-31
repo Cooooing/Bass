@@ -3,9 +3,7 @@ syntax = "proto3";
 package common.api.user.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
 import "validate/validate.proto";
-import "common/v1/common.proto";
 import "user/v1/user.proto";
 
 option go_package = "common/api/user/v1;v1";
@@ -90,15 +88,7 @@ service UserAuthenticationService {
 
 message RegisterEmailRequest {
   // 邮箱
-  string email = 1[
-    (validate.rules) = {
-      string: {
-        min_len: 5,
-        max_len: 320,
-        email: true
-      }
-    }
-  ];
+  string email = 1[(validate.rules) = {string: {min_len: 5,max_len: 320,email: true}}];
   // 密码
   string password = 2;
   // 用户名
@@ -114,32 +104,16 @@ message RegisterEmailReply {
 }
 
 message RegisterEmailVerifyRequest {
-  // 验证码
-  string code = 1 [
-    (validate.rules) = {
-      string: {
-        min_len: 6,
-        max_len: 6,
-        pattern: "^[A-Za-z0-9]+$"  // 6 位验证码
-      }
-    }
-  ];
+  // 验证码 6 位验证码
+  string code = 1 [(validate.rules) = {string: {min_len: 6,max_len: 6,pattern: "^[A-Za-z0-9]+$"}}];
   // 验证码令牌
   string code_token = 2;
 }
 message RegisterEmailVerifyReply {}
 
 message RegisterPhoneRequest {
-  // 邮箱
-  string phone = 1[
-    (validate.rules) = {
-      string: {
-        min_len: 11,
-        max_len: 11,
-        pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$" // 11 位国内手机号
-      }
-    }
-  ];
+  // 邮箱 11 位国内手机号
+  string phone = 1[(validate.rules) = {string: {min_len: 11,max_len: 11,pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$"}}];
   // 密码
   string password = 2;
   // 用户名
@@ -155,16 +129,8 @@ message RegisterPhoneReply {
 }
 
 message RegisterPhoneVerifyRequest {
-  // 验证码
-  string code = 1 [
-    (validate.rules) = {
-      string: {
-        min_len: 6,
-        max_len: 6,
-        pattern: "^[A-Za-z0-9]+$"  // 6 位验证码
-      }
-    }
-  ];
+  // 验证码 6 位验证码
+  string code = 1 [(validate.rules) = {string: {min_len: 6,max_len: 6,pattern: "^[A-Za-z0-9]+$"}}];
   // 验证码令牌
   string code_token = 2;
 }
@@ -188,16 +154,8 @@ message ExistEmailReply {
 }
 
 message ExistUsernameRequest {
-  // 用户名
-  string username = 1[
-    (validate.rules) = {
-      string: {
-        min_len: 2,
-        max_len: 32,
-        pattern: "^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$" // 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
-      }
-    }
-  ];
+  // 用户名 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
+  string username = 1[(validate.rules) = {string: {min_len: 2,max_len: 32,pattern: "^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$"}}];
 }
 message ExistUsernameReply {
   // 是否存在
@@ -205,16 +163,8 @@ message ExistUsernameReply {
 }
 
 message ExistPhoneRequest {
-  // 手机号
-  string phone = 1[
-    (validate.rules) = {
-      string: {
-        min_len: 11,
-        max_len: 11,
-        pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$" // 11 位国内手机号
-      }
-    }
-  ];
+  // 手机号 11 位国内手机号
+  string phone = 1[(validate.rules) = {string: {min_len: 11,max_len: 11,pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$"}}];
 }
 message ExistPhoneReply {
   // 是否存在

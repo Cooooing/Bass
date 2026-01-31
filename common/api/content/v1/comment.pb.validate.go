@@ -124,7 +124,27 @@ func (m *Comment) validate(all bool) error {
 
 	// no validation rules for Level
 
-	// no validation rules for Status
+	if _, ok := _Comment_Status_NotInLookup[m.GetStatus()]; ok {
+		err := CommentValidationError{
+			field:  "Status",
+			reason: "value must not be in list [COMMENT_STATUS_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := CommentStatus_name[int32(m.GetStatus())]; !ok {
+		err := CommentValidationError{
+			field:  "Status",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for ThankCount
 
@@ -322,6 +342,10 @@ var _ interface {
 	ErrorName() string
 } = CommentValidationError{}
 
+var _Comment_Status_NotInLookup = map[CommentStatus]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on CommentQueryParams with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -363,7 +387,29 @@ func (m *CommentQueryParams) validate(all bool) error {
 	}
 
 	if m.Order != nil {
-		// no validation rules for Order
+
+		if _, ok := _CommentQueryParams_Order_NotInLookup[m.GetOrder()]; ok {
+			err := CommentQueryParamsValidationError{
+				field:  "Order",
+				reason: "value must not be in list [COMMENT_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := CommentStatus_name[int32(m.GetOrder())]; !ok {
+			err := CommentQueryParamsValidationError{
+				field:  "Order",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.UserId != nil {
@@ -453,6 +499,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CommentQueryParamsValidationError{}
+
+var _CommentQueryParams_Order_NotInLookup = map[CommentStatus]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on AddCommentRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the

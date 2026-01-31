@@ -3,11 +3,11 @@ syntax = "proto3";
 package common.api.user.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "user/v1/user.proto";
+import "user/v1/enum.proto";
 
 option go_package = "common/api/user/v1;v1";
 
@@ -50,8 +50,8 @@ message UserRelation {
 
   // 用户关系ID
   int64 id = 1;
-  // 关系类型 0-follow 1-block
-  int32 type = 2;
+  // 关系类型 1-关注 2-拉黑
+  UserRelationType type = 2 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
   // 关系发起者ID
   int64 actor_id = 3;
   // 关系目标用户ID
@@ -65,7 +65,7 @@ message UserRelation {
 
 message UserRelationQueryParams {
   // 关系类型
-  optional int32 type = 1;
+  optional UserRelationType type = 1 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
 }
 
 // 请求/响应结构定义

@@ -31,16 +31,16 @@ func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ChatMessageService) Send(ctx context.Context, req *v1.ChatMessageSendRequest) (rsp *v1.ChatMessageSendReply, err error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.ChatMessageRevokeRequest) (rsp *v1.ChatMessageRevokeReply, err error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (s *ChatMessageService) Page(ctx context.Context, req *v1.ChatMessagePageRequest) (rsp *v1.ChatMessagePageReply, err error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

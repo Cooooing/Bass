@@ -32,7 +32,7 @@ func (Comment) Fields() []ent.Field {
 		field.Int32("level").Comment("评论层级"),
 		field.Int64("parent_id").Comment("父级评论ID").Optional().Nillable(),
 		field.Int64("reply_id").Comment("回复评论ID").Optional().Nillable(),
-		field.Int32("status").Comment("状态 0-正常 1-隐藏").Default(0),
+		field.Int32("status").Comment("状态 1-正常 2-隐藏").Default(1),
 
 		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),

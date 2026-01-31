@@ -68,7 +68,7 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 	req.Page = base.OrDefault(req.Page, &cv1.PageRequest{})
 	userRelations, page, err := s.userRelationDomain.Page(ctx, req.Page, &repo.UserRelationGetReq{
 		ActorId:    base.Ptr(user.ID),
-		Type:       (*v1.UserRelationType)(req.Query.Type),
+		Type:       req.Query.Type,
 		WithTarget: true,
 	})
 	if err != nil {

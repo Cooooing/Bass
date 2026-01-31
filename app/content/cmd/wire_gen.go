@@ -14,7 +14,6 @@ import (
 	"content/internal/data/client"
 	"content/internal/server"
 	"content/internal/service"
-
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -45,8 +44,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
+	tokenCache := util.NewTokenCache(helper, redisClient)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
@@ -57,13 +56,13 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	BaseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	articlePostscriptRepo := data.NewArticlePostscriptRepo(BaseData, genClient)
-	commentRepo := data.NewCommentRepo(BaseData, genClient)
-	domainRepo := data.NewDomainRepo(BaseData)
-	tagRepo := data.NewTagRepo(BaseData)
-	articleRepo := data.NewArticleRepo(BaseData, genClient, articlePostscriptRepo, commentRepo, domainRepo, tagRepo)
-	articleActionRecordRepo := data.NewArticleActionRecordRepo(BaseData, genClient)
+	baseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	articlePostscriptRepo := data.NewArticlePostscriptRepo(baseData, genClient)
+	commentRepo := data.NewCommentRepo(baseData, genClient)
+	domainRepo := data.NewDomainRepo(baseData)
+	tagRepo := data.NewTagRepo(baseData)
+	articleRepo := data.NewArticleRepo(baseData, genClient, articlePostscriptRepo, commentRepo, domainRepo, tagRepo)
+	articleActionRecordRepo := data.NewArticleActionRecordRepo(baseData, genClient)
 	articleDomain, err := biz.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, commentRepo, tagRepo, domainRepo)
 	if err != nil {
 		cleanup5()
@@ -76,14 +75,14 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	articleService := service.NewArticleService(baseService, articleDomain, articleRepo)
 	domainDomain := biz.NewDomainDomain(baseDomain, domainRepo)
 	domainService := service.NewDomainService(baseService, domainDomain)
-	commentActionRecordRepo := data.NewCommentActionRecordRepo(BaseData, genClient)
+	commentActionRecordRepo := data.NewCommentActionRecordRepo(baseData, genClient)
 	commentDomain := biz.NewCommentDomain(baseDomain, commentRepo, commentActionRecordRepo, articleRepo)
 	commentService := service.NewCommentService(baseService, commentDomain, commentRepo, articleRepo)
 	tagDomain := biz.NewTagDomain(baseDomain, tagRepo)
 	tagService := service.NewTagService(baseService, tagDomain)
 	v := service.ProvideServices(systemService, articleService, domainService, commentService, tagService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)
 	return app, func() {
 		cleanup5()

@@ -32,8 +32,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	httpServer := server.NewHTTPServer(bootstrap, logger, etcdClient, v, tokenRepo)
+	tokenCache := util.NewTokenCache(helper, redisClient)
+	httpServer := server.NewHTTPServer(bootstrap, logger, etcdClient, v, tokenCache)
 	app := newApp(logger, helper, httpServer, etcdClient)
 	return app, func() {
 		cleanup2()

@@ -44,14 +44,16 @@ func (d *SessionDomain) GetSessionIds() []string {
 	return d.sessionIds.Keys()
 }
 
-func (d *SessionDomain) SendMessage(sessionId string, msgType signalv1.MessageType, message any) error {
-	if conn, ok := d.sessionIds.Get(sessionId); ok {
-		return d.eventPool.Submit(func() {
-			err := conn.WriteJSON(message)
-			if err != nil {
-				d.Log.Error("websocket [%s] send message error: %v", sessionId, err)
-			}
-		})
+func (d *SessionDomain) SendMessage(sessionIds []string, message any) error {
+	for _, sessionId := range sessionIds {
+		if conn, ok := d.sessionIds.Get(sessionId); ok {
+			return d.eventPool.Submit(func() {
+				err := conn.WriteJSON(message)
+				if err != nil {
+					d.Log.Error("websocket [%s] send message error: %v", sessionId, err)
+				}
+			})
+		}
 	}
 	return nil
 }

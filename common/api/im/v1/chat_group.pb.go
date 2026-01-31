@@ -8,13 +8,9 @@ package v1
 
 import (
 	v1 "common/api/common/v1"
-	_ "common/api/user/v1"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -400,7 +396,7 @@ var File_im_v1_chat_group_proto protoreflect.FileDescriptor
 
 const file_im_v1_chat_group_proto_rawDesc = "" +
 	"\n" +
-	"\x16im/v1/chat_group.proto\x12\x10common.api.im.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\x1a\x11im/v1/model.proto\x1a\x14im/v1/constant.proto\"\xcd\x01\n" +
+	"\x16im/v1/chat_group.proto\x12\x10common.api.im.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x16common/v1/common.proto\x1a\x11im/v1/model.proto\"\xcd\x01\n" +
 	"\x14ChatGroupQueryParams\x12\x10\n" +
 	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x14\n" +
 	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x120\n" +
@@ -480,7 +476,6 @@ func file_im_v1_chat_group_proto_init() {
 		return
 	}
 	file_im_v1_model_proto_init()
-	file_im_v1_constant_proto_init()
 	file_im_v1_chat_group_proto_msgTypes[0].OneofWrappers = []any{}
 	file_im_v1_chat_group_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}

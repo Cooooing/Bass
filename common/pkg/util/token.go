@@ -14,13 +14,13 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type TokenRepo struct {
+type TokenCache struct {
 	log   *log.Helper
 	redis *client.RedisClient
 }
 
-func NewTokenRepo(log *log.Helper, redis *client.RedisClient) *TokenRepo {
-	return &TokenRepo{
+func NewTokenCache(log *log.Helper, redis *client.RedisClient) *TokenCache {
+	return &TokenCache{
 		log:   log,
 		redis: redis,
 	}
@@ -31,7 +31,7 @@ type verityCodeTokenData struct {
 	User *model.User `json:"user"`
 }
 
-func (r *TokenRepo) SaveVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string, code string, user *model.User, expires time.Duration) error {
+func (r *TokenCache) SaveVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string, code string, user *model.User, expires time.Duration) error {
 	value, err := json.Marshal(&verityCodeTokenData{
 		Code: code,
 		User: user,
@@ -42,7 +42,7 @@ func (r *TokenRepo) SaveVerityCode(ctx context.Context, verityCodeType constant.
 	return r.redis.Client.Set(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account), value, expires).Err()
 }
 
-func (r *TokenRepo) GetVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (string, *model.User, error) {
+func (r *TokenCache) GetVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (string, *model.User, error) {
 	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", nil, errors.New("email code invalid")
@@ -57,7 +57,7 @@ func (r *TokenRepo) GetVerityCode(ctx context.Context, verityCodeType constant.V
 	return data.Code, data.User, nil
 }
 
-func (r *TokenRepo) ExistVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (bool, error) {
+func (r *TokenCache) ExistVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (bool, error) {
 	result, err := r.redis.Client.Exists(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
 	if err != nil {
 		return false, err
@@ -65,11 +65,11 @@ func (r *TokenRepo) ExistVerityCode(ctx context.Context, verityCodeType constant
 	return result == 1, nil
 }
 
-func (r *TokenRepo) DelVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) error {
+func (r *TokenCache) DelVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) error {
 	return r.redis.Client.Del(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Err()
 }
 
-func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.User, expires time.Duration) error {
+func (r *TokenCache) SaveToken(ctx context.Context, token string, user *model.User, expires time.Duration) error {
 	value, err := json.Marshal(user)
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func (r *TokenRepo) SaveToken(ctx context.Context, token string, user *model.Use
 	return r.redis.Client.Set(ctx, constant.GetKeyToken(token), value, expires).Err()
 }
 
-func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, error) {
+func (r *TokenCache) GetToken(ctx context.Context, token string) (*model.User, error) {
 	value, err := r.redis.Client.Get(ctx, constant.GetKeyToken(token)).Result()
 	if errors.Is(err, redis.Nil) {
 		return nil, nil
@@ -89,6 +89,6 @@ func (r *TokenRepo) GetToken(ctx context.Context, token string) (*model.User, er
 	return &user, json.Unmarshal([]byte(value), &user)
 }
 
-func (r *TokenRepo) DelToken(ctx context.Context, token string) error {
+func (r *TokenCache) DelToken(ctx context.Context, token string) error {
 	return r.redis.Client.Del(ctx, constant.GetKeyToken(token)).Err()
 }

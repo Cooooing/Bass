@@ -48,11 +48,11 @@ func (r *CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, comm
 func (r *CommentRepo) UpdateStat(ctx context.Context, client *gen.Client, commentId int64, action v1.CommentAction, num int32) error {
 	updateOne := client.Comment.UpdateOneID(commentId)
 	switch action {
-	case v1.CommentAction_CommentActionLike:
+	case v1.CommentAction_COMMENT_ACTION_LIKE:
 		updateOne.AddLikeCount(num)
-	case v1.CommentAction_CommentActionCollect:
+	case v1.CommentAction_COMMENT_ACTION_COLLECT:
 		updateOne.AddCollectCount(num)
-	case v1.CommentAction_CommentActionReply:
+	case v1.CommentAction_COMMENT_ACTION_REPLY:
 		updateOne.AddReplyCount(num)
 	}
 	_, err := updateOne.Save(ctx)
@@ -155,9 +155,9 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	}
 	if req.Order != nil {
 		switch *req.Order {
-		case int32(v1.CommentOrder_CommentOrderNewest):
+		case int32(v1.CommentOrder_COMMENT_ORDER_NEWEST):
 			query = query.Order(gen.Desc(comment.FieldCreatedAt))
-		case int32(v1.CommentOrder_CommentOrderHottest):
+		case int32(v1.CommentOrder_COMMENT_ORDER_HOTTEST):
 			query = query.
 				Order(func(s *sql.Selector) {
 					s.OrderExpr(sql.Expr(`
@@ -204,7 +204,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 				sql.As(sql.Max(comment.FieldCreatedAt), "latest_time"),
 			).
 				From(sql.Table(comment.Table)).
-				Where(sql.EQ(comment.FieldStatus, int32(v1.CommentStatus_CommentNormal))).
+				Where(sql.EQ(comment.FieldStatus, int32(v1.CommentStatus_COMMENT_STATUS_NORMAL))).
 				Where(sql.In(comment.FieldArticleID, articleIdsAny...)).
 				GroupBy(comment.FieldArticleID)
 
@@ -215,7 +215,7 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 				s.C(comment.FieldCreatedAt), sub.C("latest_time"),
 			)
 		}).
-		Where(comment.StatusEQ(int32(v1.CommentStatus_CommentNormal))).
+		Where(comment.StatusEQ(int32(v1.CommentStatus_COMMENT_STATUS_NORMAL))).
 		Where(comment.ArticleIDIn(req.ArticleIds...)).
 		All(ctx)
 	if err != nil {

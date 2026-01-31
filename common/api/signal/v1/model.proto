@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.signal.v1;
 
 import "google/protobuf/timestamp.proto";
-import "user/v1/user.proto";
 import "signal/v1/constant.proto";
 import "google/protobuf/struct.proto";
 
@@ -37,7 +36,7 @@ message Message {
   // 消息类型
   MessageType type = 1;
   // 会话 id
-  string session_id = 2;
+  repeated string session_id = 2;
   // 消息体
   google.protobuf.Struct payload = 3;
 }

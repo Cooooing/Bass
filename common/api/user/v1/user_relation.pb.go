@@ -12,7 +12,6 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -34,8 +33,8 @@ type UserRelation struct {
 	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// 用户关系ID
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// 关系类型 0-follow 1-block
-	Type int32 `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	// 关系类型 1-关注 2-拉黑
+	Type UserRelationType `protobuf:"varint,2,opt,name=type,proto3,enum=common.api.user.v1.UserRelationType" json:"type,omitempty"`
 	// 关系发起者ID
 	ActorId int64 `protobuf:"varint,3,opt,name=actor_id,json=actorId,proto3" json:"actor_id,omitempty"`
 	// 关系目标用户ID
@@ -97,11 +96,11 @@ func (x *UserRelation) GetId() int64 {
 	return 0
 }
 
-func (x *UserRelation) GetType() int32 {
+func (x *UserRelation) GetType() UserRelationType {
 	if x != nil {
 		return x.Type
 	}
-	return 0
+	return UserRelationType_USER_RELATION_TYPE_UNSPECIFIED
 }
 
 func (x *UserRelation) GetActorId() int64 {
@@ -128,7 +127,7 @@ func (x *UserRelation) GetUser() *User {
 type UserRelationQueryParams struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 关系类型
-	Type          *int32 `protobuf:"varint,1,opt,name=type,proto3,oneof" json:"type,omitempty"`
+	Type          *UserRelationType `protobuf:"varint,1,opt,name=type,proto3,enum=common.api.user.v1.UserRelationType,oneof" json:"type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -163,11 +162,11 @@ func (*UserRelationQueryParams) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_relation_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *UserRelationQueryParams) GetType() int32 {
+func (x *UserRelationQueryParams) GetType() UserRelationType {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
-	return 0
+	return UserRelationType_USER_RELATION_TYPE_UNSPECIFIED
 }
 
 type FollowRequest struct {
@@ -462,19 +461,21 @@ var File_user_v1_user_relation_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_relation_proto_rawDesc = "" +
 	"\n" +
-	"\x1buser/v1/user_relation.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x90\x02\n" +
+	"\x1buser/v1/user_relation.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\x1a\x12user/v1/enum.proto\"\xc2\x02\n" +
 	"\fUserRelation\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
-	"\x04type\x18\x02 \x01(\x05R\x04type\x12\x19\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12D\n" +
+	"\x04type\x18\x02 \x01(\x0e2$.common.api.user.v1.UserRelationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\x04type\x12\x19\n" +
 	"\bactor_id\x18\x03 \x01(\x03R\aactorId\x12\x1b\n" +
 	"\ttarget_id\x18\x04 \x01(\x03R\btargetId\x12,\n" +
-	"\x04user\x18d \x01(\v2\x18.common.api.user.v1.UserR\x04user\";\n" +
-	"\x17UserRelationQueryParams\x12\x17\n" +
-	"\x04type\x18\x01 \x01(\x05H\x00R\x04type\x88\x01\x01B\a\n" +
+	"\x04user\x18d \x01(\v2\x18.common.api.user.v1.UserR\x04user\"m\n" +
+	"\x17UserRelationQueryParams\x12I\n" +
+	"\x04type\x18\x01 \x01(\x0e2$.common.api.user.v1.UserRelationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x00R\x04type\x88\x01\x01B\a\n" +
 	"\x05_type\"M\n" +
 	"\rFollowRequest\x12\x16\n" +
 	"\x06follow\x18\x01 \x01(\bR\x06follow\x12$\n" +
@@ -519,29 +520,32 @@ var file_user_v1_user_relation_proto_goTypes = []any{
 	(*PageUserRelationRequest)(nil), // 6: common.api.user.v1.PageUserRelationRequest
 	(*PageUserRelationReply)(nil),   // 7: common.api.user.v1.PageUserRelationReply
 	(*timestamppb.Timestamp)(nil),   // 8: google.protobuf.Timestamp
-	(*User)(nil),                    // 9: common.api.user.v1.User
-	(*v1.PageRequest)(nil),          // 10: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),            // 11: common.api.common.v1.PageReply
+	(UserRelationType)(0),           // 9: common.api.user.v1.UserRelationType
+	(*User)(nil),                    // 10: common.api.user.v1.User
+	(*v1.PageRequest)(nil),          // 11: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),            // 12: common.api.common.v1.PageReply
 }
 var file_user_v1_user_relation_proto_depIdxs = []int32{
 	8,  // 0: common.api.user.v1.UserRelation.created_at:type_name -> google.protobuf.Timestamp
 	8,  // 1: common.api.user.v1.UserRelation.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 2: common.api.user.v1.UserRelation.user:type_name -> common.api.user.v1.User
-	10, // 3: common.api.user.v1.PageUserRelationRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 4: common.api.user.v1.PageUserRelationRequest.query:type_name -> common.api.user.v1.UserRelationQueryParams
-	11, // 5: common.api.user.v1.PageUserRelationReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 6: common.api.user.v1.PageUserRelationReply.rows:type_name -> common.api.user.v1.UserRelation
-	2,  // 7: common.api.user.v1.UserUserRelationService.Follow:input_type -> common.api.user.v1.FollowRequest
-	4,  // 8: common.api.user.v1.UserUserRelationService.Block:input_type -> common.api.user.v1.BlockRequest
-	6,  // 9: common.api.user.v1.UserUserRelationService.Page:input_type -> common.api.user.v1.PageUserRelationRequest
-	3,  // 10: common.api.user.v1.UserUserRelationService.Follow:output_type -> common.api.user.v1.FollowReply
-	5,  // 11: common.api.user.v1.UserUserRelationService.Block:output_type -> common.api.user.v1.BlockReply
-	7,  // 12: common.api.user.v1.UserUserRelationService.Page:output_type -> common.api.user.v1.PageUserRelationReply
-	10, // [10:13] is the sub-list for method output_type
-	7,  // [7:10] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	9,  // 2: common.api.user.v1.UserRelation.type:type_name -> common.api.user.v1.UserRelationType
+	10, // 3: common.api.user.v1.UserRelation.user:type_name -> common.api.user.v1.User
+	9,  // 4: common.api.user.v1.UserRelationQueryParams.type:type_name -> common.api.user.v1.UserRelationType
+	11, // 5: common.api.user.v1.PageUserRelationRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 6: common.api.user.v1.PageUserRelationRequest.query:type_name -> common.api.user.v1.UserRelationQueryParams
+	12, // 7: common.api.user.v1.PageUserRelationReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 8: common.api.user.v1.PageUserRelationReply.rows:type_name -> common.api.user.v1.UserRelation
+	2,  // 9: common.api.user.v1.UserUserRelationService.Follow:input_type -> common.api.user.v1.FollowRequest
+	4,  // 10: common.api.user.v1.UserUserRelationService.Block:input_type -> common.api.user.v1.BlockRequest
+	6,  // 11: common.api.user.v1.UserUserRelationService.Page:input_type -> common.api.user.v1.PageUserRelationRequest
+	3,  // 12: common.api.user.v1.UserUserRelationService.Follow:output_type -> common.api.user.v1.FollowReply
+	5,  // 13: common.api.user.v1.UserUserRelationService.Block:output_type -> common.api.user.v1.BlockReply
+	7,  // 14: common.api.user.v1.UserUserRelationService.Page:output_type -> common.api.user.v1.PageUserRelationReply
+	12, // [12:15] is the sub-list for method output_type
+	9,  // [9:12] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_relation_proto_init() }
@@ -550,6 +554,7 @@ func file_user_v1_user_relation_proto_init() {
 		return
 	}
 	file_user_v1_user_proto_init()
+	file_user_v1_enum_proto_init()
 	file_user_v1_user_relation_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

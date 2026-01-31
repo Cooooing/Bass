@@ -25,7 +25,7 @@ var DataProviderSet = wire.NewSet(
 	NewRabbitMQClient,
 	commonClient.NewHttpClient,
 
-	util.NewTokenRepo,
+	util.NewTokenCache,
 
 	repo.NewNodeRepo,
 	cache.NewNodeCache,

@@ -33,13 +33,10 @@ func NewBaseData(conf *conf.Bootstrap, log *log.Helper, redis *commonClient.Redi
 }
 
 func NewRedisClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RedisClient, func(), error) {
-	if conf.Server.Cluster {
-		c := &commonModel.RedisConf{}
-		err := copier.Copy(c, conf.Data.Redis)
-		if err != nil {
-			return nil, nil, err
-		}
-		return commonClient.NewRedisClient(log, c)
+	c := &commonModel.RedisConf{}
+	err := copier.Copy(c, conf.Data.Redis)
+	if err != nil {
+		return nil, nil, err
 	}
-	return nil, func() {}, nil
+	return commonClient.NewRedisClient(log, c)
 }

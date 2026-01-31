@@ -41,8 +41,8 @@ type Domain struct {
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	// 描述
 	Description *string `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	// 状态 0-正常，1-禁用
-	Status int32 `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty"`
+	// 状态 1-正常，2-禁用
+	Status DomainStatus `protobuf:"varint,6,opt,name=status,proto3,enum=common.api.content.v1.DomainStatus" json:"status,omitempty"`
 	// 链接
 	Url *string `protobuf:"bytes,7,opt,name=url,proto3,oneof" json:"url,omitempty"`
 	// 图标
@@ -136,11 +136,11 @@ func (x *Domain) GetDescription() string {
 	return ""
 }
 
-func (x *Domain) GetStatus() int32 {
+func (x *Domain) GetStatus() DomainStatus {
 	if x != nil {
 		return x.Status
 	}
-	return 0
+	return DomainStatus_DOMAIN_STATUS_UNSPECIFIED
 }
 
 func (x *Domain) GetUrl() string {
@@ -186,8 +186,8 @@ type DomainSave struct {
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// 描述
 	Description *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	// 状态 0-正常，1-禁用
-	Status *int32 `protobuf:"varint,4,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 状态 1-正常，2-禁用
+	Status *DomainStatus `protobuf:"varint,4,opt,name=status,proto3,enum=common.api.content.v1.DomainStatus,oneof" json:"status,omitempty"`
 	// 链接
 	Url *string `protobuf:"bytes,5,opt,name=url,proto3,oneof" json:"url,omitempty"`
 	// 图标
@@ -249,11 +249,11 @@ func (x *DomainSave) GetDescription() string {
 	return ""
 }
 
-func (x *DomainSave) GetStatus() int32 {
+func (x *DomainSave) GetStatus() DomainStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return DomainStatus_DOMAIN_STATUS_UNSPECIFIED
 }
 
 func (x *DomainSave) GetUrl() string {
@@ -285,8 +285,8 @@ type DomainQueryParams struct {
 	Name *string `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	// 描述
 	Description *string `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	// 状态 0-正常，1-禁用
-	Status *int64 `protobuf:"varint,5,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 状态 1-正常，2-禁用
+	Status *DomainStatus `protobuf:"varint,5,opt,name=status,proto3,enum=common.api.content.v1.DomainStatus,oneof" json:"status,omitempty"`
 	// 链接
 	Url *string `protobuf:"bytes,6,opt,name=url,proto3,oneof" json:"url,omitempty"`
 	// 图标
@@ -350,11 +350,11 @@ func (x *DomainQueryParams) GetDescription() string {
 	return ""
 }
 
-func (x *DomainQueryParams) GetStatus() int64 {
+func (x *DomainQueryParams) GetStatus() DomainStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return DomainStatus_DOMAIN_STATUS_UNSPECIFIED
 }
 
 func (x *DomainQueryParams) GetUrl() string {
@@ -677,7 +677,7 @@ var File_content_v1_domain_proto protoreflect.FileDescriptor
 
 const file_content_v1_domain_proto_rawDesc = "" +
 	"\n" +
-	"\x17content/v1/domain.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\"\xfe\x03\n" +
+	"\x17content/v1/domain.proto\x12\x15common.api.content.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a\x14content/v1/tag.proto\x1a\x15content/v1/enum.proto\"\xaf\x04\n" +
 	"\x06Domain\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -689,8 +689,9 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"updated_by\x18\xeb\a \x01(\x03H\x01R\tupdatedBy\x88\x01\x01\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x05 \x01(\tH\x02R\vdescription\x88\x01\x01\x12\x16\n" +
-	"\x06status\x18\x06 \x01(\x05R\x06status\x12\x15\n" +
+	"\vdescription\x18\x05 \x01(\tH\x02R\vdescription\x88\x01\x01\x12G\n" +
+	"\x06status\x18\x06 \x01(\x0e2#.common.api.content.v1.DomainStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\x06status\x12\x15\n" +
 	"\x03url\x18\a \x01(\tH\x03R\x03url\x88\x01\x01\x12\x17\n" +
 	"\x04icon\x18\b \x01(\tH\x04R\x04icon\x88\x01\x01\x12\x1a\n" +
 	"\btagCount\x18\t \x01(\x05R\btagCount\x12\x14\n" +
@@ -701,25 +702,27 @@ const file_content_v1_domain_proto_rawDesc = "" +
 	"\v_updated_byB\x0e\n" +
 	"\f_descriptionB\x06\n" +
 	"\x04_urlB\a\n" +
-	"\x05_icon\"\xe6\x01\n" +
+	"\x05_icon\"\x97\x02\n" +
 	"\n" +
 	"DomainSave\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\x04 \x01(\x05H\x01R\x06status\x88\x01\x01\x12\x15\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12L\n" +
+	"\x06status\x18\x04 \x01(\x0e2#.common.api.content.v1.DomainStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x01R\x06status\x88\x01\x01\x12\x15\n" +
 	"\x03url\x18\x05 \x01(\tH\x02R\x03url\x88\x01\x01\x12\x17\n" +
 	"\x04icon\x18\x06 \x01(\tH\x03R\x04icon\x88\x01\x01\x12\x14\n" +
 	"\x05isNav\x18\a \x01(\bR\x05isNavB\x0e\n" +
 	"\f_descriptionB\t\n" +
 	"\a_statusB\x06\n" +
 	"\x04_urlB\a\n" +
-	"\x05_icon\"\xca\x02\n" +
+	"\x05_icon\"\xfb\x02\n" +
 	"\x11DomainQueryParams\x12\x10\n" +
 	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x17\n" +
 	"\x04name\x18\x03 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
-	"\vdescription\x18\x04 \x01(\tH\x01R\vdescription\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\x05 \x01(\x03H\x02R\x06status\x88\x01\x01\x12\x15\n" +
+	"\vdescription\x18\x04 \x01(\tH\x01R\vdescription\x88\x01\x01\x12L\n" +
+	"\x06status\x18\x05 \x01(\x0e2#.common.api.content.v1.DomainStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x02R\x06status\x88\x01\x01\x12\x15\n" +
 	"\x03url\x18\x06 \x01(\tH\x03R\x03url\x88\x01\x01\x12\x17\n" +
 	"\x04icon\x18\a \x01(\tH\x04R\x04icon\x88\x01\x01\x12\x19\n" +
 	"\x05isNav\x18\b \x01(\bH\x05R\x05isNav\x88\x01\x01\x12<\n" +
@@ -775,35 +778,39 @@ var file_content_v1_domain_proto_goTypes = []any{
 	(*PageDomainRequest)(nil),     // 7: common.api.content.v1.PageDomainRequest
 	(*PageDomainReply)(nil),       // 8: common.api.content.v1.PageDomainReply
 	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
-	(*Tag)(nil),                   // 10: common.api.content.v1.Tag
-	(*v1.Int32Range)(nil),         // 11: common.api.common.v1.Int32Range
-	(*v1.PageRequest)(nil),        // 12: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),          // 13: common.api.common.v1.PageReply
+	(DomainStatus)(0),             // 10: common.api.content.v1.DomainStatus
+	(*Tag)(nil),                   // 11: common.api.content.v1.Tag
+	(*v1.Int32Range)(nil),         // 12: common.api.common.v1.Int32Range
+	(*v1.PageRequest)(nil),        // 13: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),          // 14: common.api.common.v1.PageReply
 }
 var file_content_v1_domain_proto_depIdxs = []int32{
 	9,  // 0: common.api.content.v1.Domain.created_at:type_name -> google.protobuf.Timestamp
 	9,  // 1: common.api.content.v1.Domain.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 2: common.api.content.v1.Domain.tags:type_name -> common.api.content.v1.Tag
-	11, // 3: common.api.content.v1.DomainQueryParams.tagCount:type_name -> common.api.common.v1.Int32Range
-	1,  // 4: common.api.content.v1.AddDomainsRequest.domains:type_name -> common.api.content.v1.DomainSave
-	0,  // 5: common.api.content.v1.AddDomainsReply.data:type_name -> common.api.content.v1.Domain
-	1,  // 6: common.api.content.v1.UpdateDomainRequest.domain:type_name -> common.api.content.v1.DomainSave
-	0,  // 7: common.api.content.v1.UpdateDomainReply.data:type_name -> common.api.content.v1.Domain
-	12, // 8: common.api.content.v1.PageDomainRequest.page:type_name -> common.api.common.v1.PageRequest
-	2,  // 9: common.api.content.v1.PageDomainRequest.query:type_name -> common.api.content.v1.DomainQueryParams
-	13, // 10: common.api.content.v1.PageDomainReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 11: common.api.content.v1.PageDomainReply.rows:type_name -> common.api.content.v1.Domain
-	3,  // 12: common.api.content.v1.ContentDomainService.Adds:input_type -> common.api.content.v1.AddDomainsRequest
-	5,  // 13: common.api.content.v1.ContentDomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
-	7,  // 14: common.api.content.v1.ContentDomainService.Page:input_type -> common.api.content.v1.PageDomainRequest
-	4,  // 15: common.api.content.v1.ContentDomainService.Adds:output_type -> common.api.content.v1.AddDomainsReply
-	6,  // 16: common.api.content.v1.ContentDomainService.Update:output_type -> common.api.content.v1.UpdateDomainReply
-	8,  // 17: common.api.content.v1.ContentDomainService.Page:output_type -> common.api.content.v1.PageDomainReply
-	15, // [15:18] is the sub-list for method output_type
-	12, // [12:15] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	10, // 2: common.api.content.v1.Domain.status:type_name -> common.api.content.v1.DomainStatus
+	11, // 3: common.api.content.v1.Domain.tags:type_name -> common.api.content.v1.Tag
+	10, // 4: common.api.content.v1.DomainSave.status:type_name -> common.api.content.v1.DomainStatus
+	10, // 5: common.api.content.v1.DomainQueryParams.status:type_name -> common.api.content.v1.DomainStatus
+	12, // 6: common.api.content.v1.DomainQueryParams.tagCount:type_name -> common.api.common.v1.Int32Range
+	1,  // 7: common.api.content.v1.AddDomainsRequest.domains:type_name -> common.api.content.v1.DomainSave
+	0,  // 8: common.api.content.v1.AddDomainsReply.data:type_name -> common.api.content.v1.Domain
+	1,  // 9: common.api.content.v1.UpdateDomainRequest.domain:type_name -> common.api.content.v1.DomainSave
+	0,  // 10: common.api.content.v1.UpdateDomainReply.data:type_name -> common.api.content.v1.Domain
+	13, // 11: common.api.content.v1.PageDomainRequest.page:type_name -> common.api.common.v1.PageRequest
+	2,  // 12: common.api.content.v1.PageDomainRequest.query:type_name -> common.api.content.v1.DomainQueryParams
+	14, // 13: common.api.content.v1.PageDomainReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 14: common.api.content.v1.PageDomainReply.rows:type_name -> common.api.content.v1.Domain
+	3,  // 15: common.api.content.v1.ContentDomainService.Adds:input_type -> common.api.content.v1.AddDomainsRequest
+	5,  // 16: common.api.content.v1.ContentDomainService.Update:input_type -> common.api.content.v1.UpdateDomainRequest
+	7,  // 17: common.api.content.v1.ContentDomainService.Page:input_type -> common.api.content.v1.PageDomainRequest
+	4,  // 18: common.api.content.v1.ContentDomainService.Adds:output_type -> common.api.content.v1.AddDomainsReply
+	6,  // 19: common.api.content.v1.ContentDomainService.Update:output_type -> common.api.content.v1.UpdateDomainReply
+	8,  // 20: common.api.content.v1.ContentDomainService.Page:output_type -> common.api.content.v1.PageDomainReply
+	18, // [18:21] is the sub-list for method output_type
+	15, // [15:18] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_content_v1_domain_proto_init() }
@@ -812,6 +819,7 @@ func file_content_v1_domain_proto_init() {
 		return
 	}
 	file_content_v1_tag_proto_init()
+	file_content_v1_enum_proto_init()
 	file_content_v1_domain_proto_msgTypes[0].OneofWrappers = []any{}
 	file_content_v1_domain_proto_msgTypes[1].OneofWrappers = []any{}
 	file_content_v1_domain_proto_msgTypes[2].OneofWrappers = []any{}

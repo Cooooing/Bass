@@ -27,13 +27,13 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name string = "notify"
+	Name = "notify"
 	// Version is the version of the compiled software.
-	Version string = "v1.0.0"
+	Version = "v1.0.0"
 	// flagConf is the config flag.
-	flagConf string = "configs"
+	flagConf = "configs"
 	// flagConf is the config flag.
-	flagBootstrap string = "configs"
+	flagBootstrap = "configs"
 )
 
 func init() {
@@ -116,20 +116,18 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 	if bc.Mode == constant.Dev {
 		c, err := loadLocalConfig(bc)
 		return c, bc, cleanup, err
-	} else {
-		c, cli, err := loadEtcdConfig(bc)
+	}
+
+	c, cli, err := loadEtcdConfig(bc)
+	if err != nil {
+		panic(err)
+	}
+	cleanup = func() {
+		err := cli.Close()
 		if err != nil {
 			panic(err)
 		}
-		cleanup = func() {
-			err := cli.Close()
-			if err != nil {
-				panic(err)
-			}
-		}
-		return c, bc, cleanup, nil
 	}
-
 	return c, bc, cleanup, nil
 }
 

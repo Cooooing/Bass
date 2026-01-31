@@ -49,8 +49,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenRepo)
+	tokenCache := util.NewTokenCache(helper, redisClient)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
@@ -65,11 +65,12 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	nodeRepo := repo.NewNodeRepo(baseData)
 	nodeCache := cache.NewNodeCache(baseData)
 	sessionCache := cache.NewSessionCache(baseData)
+	asynqCache := util.NewAsynqCache(helper, redisClient)
 	asynqClient, cleanup6 := client2.NewAsynqClient(helper, redisClient)
 	asynqScheduler, cleanup7 := client2.NewAsynqScheduler(helper, redisClient)
 	producer := client2.NewProducer(asynqClient, asynqScheduler)
 	httpClient := client2.NewHttpClient()
-	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, sessionCache, producer, httpClient)
+	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer, httpClient)
 	if err != nil {
 		cleanup7()
 		cleanup6()
@@ -82,11 +83,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	nodeService := service.NewNodeService(baseService, nodeDomain, nodeRepo)
 	v := service.ProvideServices(systemService, nodeService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo, nodeDomain)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo, nodeDomain)
-	nodePingTaskHandler := biz.NewNodePingTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, producer)
-	nodePowTaskHandler := biz.NewNodePowTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, producer)
-	nodeSessionTaskHandler := biz.NewNodeSessionTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, producer)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache, nodeDomain)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache, nodeDomain)
+	nodePingTaskHandler := biz.NewNodePingTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
+	nodePowTaskHandler := biz.NewNodePowTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
+	nodeSessionTaskHandler := biz.NewNodeSessionTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer)
 	dictMap := biz.ProvideTasks(nodePingTaskHandler, nodePowTaskHandler, nodeSessionTaskHandler)
 	asynqServer, cleanup8 := client2.NewAsynqServer(helper, redisClient, dictMap)
 	app := newApp(logger, grpcServer, httpServer, etcdClient, asynqServer)

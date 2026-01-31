@@ -12,7 +12,6 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -46,8 +45,8 @@ type User struct {
 	Introduction *string `protobuf:"bytes,9,opt,name=introduction,proto3,oneof" json:"introduction,omitempty"`
 	// 用户 MBTI 类型
 	Mbti *string `protobuf:"bytes,10,opt,name=mbti,proto3,oneof" json:"mbti,omitempty"`
-	// 用户状态：0-正常，1-封禁，2-注销
-	Status *int32 `protobuf:"varint,11,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 用户状态：1-正常，2-封禁，3-注销
+	Status *UserStatus `protobuf:"varint,11,opt,name=status,proto3,enum=common.api.user.v1.UserStatus,oneof" json:"status,omitempty"`
 	// 用户组名称
 	GroupName string `protobuf:"bytes,12,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
 	// 关注数
@@ -205,11 +204,11 @@ func (x *User) GetMbti() string {
 	return ""
 }
 
-func (x *User) GetStatus() int32 {
+func (x *User) GetStatus() UserStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return UserStatus_USER_STATUS_UNSPECIFIED
 }
 
 func (x *User) GetGroupName() string {
@@ -1272,7 +1271,7 @@ var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\"\xff\x10\n" +
+	"\x12user/v1/user.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/enum.proto\"\xab\x11\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
@@ -1284,8 +1283,9 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"avatar_url\x18\b \x01(\tH\x04R\tavatarUrl\x88\x01\x01\x12'\n" +
 	"\fintroduction\x18\t \x01(\tH\x05R\fintroduction\x88\x01\x01\x12\x17\n" +
 	"\x04mbti\x18\n" +
-	" \x01(\tH\x06R\x04mbti\x88\x01\x01\x12\x1b\n" +
-	"\x06status\x18\v \x01(\x05H\aR\x06status\x88\x01\x01\x12\x1d\n" +
+	" \x01(\tH\x06R\x04mbti\x88\x01\x01\x12G\n" +
+	"\x06status\x18\v \x01(\x0e2\x1e.common.api.user.v1.UserStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\aR\x06status\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"group_name\x18\f \x01(\tR\tgroupName\x12&\n" +
 	"\ffollow_count\x18\r \x01(\x05H\bR\vfollowCount\x88\x01\x01\x12*\n" +
@@ -1466,47 +1466,49 @@ var file_user_v1_user_proto_goTypes = []any{
 	(*AvatarRequest)(nil),         // 14: common.api.user.v1.AvatarRequest
 	(*AvatarReply)(nil),           // 15: common.api.user.v1.AvatarReply
 	nil,                           // 16: common.api.user.v1.GetMapReply.UsersEntry
-	(*timestamppb.Timestamp)(nil), // 17: google.protobuf.Timestamp
-	(*v1.PageRequest)(nil),        // 18: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),          // 19: common.api.common.v1.PageReply
+	(UserStatus)(0),               // 17: common.api.user.v1.UserStatus
+	(*timestamppb.Timestamp)(nil), // 18: google.protobuf.Timestamp
+	(*v1.PageRequest)(nil),        // 19: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),          // 20: common.api.common.v1.PageReply
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	17, // 0: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
-	17, // 1: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
-	17, // 2: common.api.user.v1.User.twofa_enable_time:type_name -> google.protobuf.Timestamp
-	17, // 3: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	17, // 4: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 5: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
-	0,  // 6: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
-	0,  // 7: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
-	1,  // 8: common.api.user.v1.GetListRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	0,  // 9: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
-	1,  // 10: common.api.user.v1.GetMapRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	16, // 11: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
-	18, // 12: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 13: common.api.user.v1.PageUserRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	19, // 14: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 15: common.api.user.v1.PageUserReply.rows:type_name -> common.api.user.v1.User
-	0,  // 16: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
-	2,  // 17: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
-	4,  // 18: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest
-	6,  // 19: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
-	8,  // 20: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
-	10, // 21: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
-	12, // 22: common.api.user.v1.UserUserService.Page:input_type -> common.api.user.v1.PageUserRequest
-	14, // 23: common.api.user.v1.UserUserService.Avatar:input_type -> common.api.user.v1.AvatarRequest
-	3,  // 24: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
-	5,  // 25: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
-	7,  // 26: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
-	9,  // 27: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
-	11, // 28: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
-	13, // 29: common.api.user.v1.UserUserService.Page:output_type -> common.api.user.v1.PageUserReply
-	15, // 30: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.user.v1.AvatarReply
-	24, // [24:31] is the sub-list for method output_type
-	17, // [17:24] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	17, // 0: common.api.user.v1.User.status:type_name -> common.api.user.v1.UserStatus
+	18, // 1: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
+	18, // 2: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
+	18, // 3: common.api.user.v1.User.twofa_enable_time:type_name -> google.protobuf.Timestamp
+	18, // 4: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	18, // 5: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 6: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
+	0,  // 7: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
+	0,  // 8: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
+	1,  // 9: common.api.user.v1.GetListRequest.query:type_name -> common.api.user.v1.UserQueryParams
+	0,  // 10: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
+	1,  // 11: common.api.user.v1.GetMapRequest.query:type_name -> common.api.user.v1.UserQueryParams
+	16, // 12: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
+	19, // 13: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 14: common.api.user.v1.PageUserRequest.query:type_name -> common.api.user.v1.UserQueryParams
+	20, // 15: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 16: common.api.user.v1.PageUserReply.rows:type_name -> common.api.user.v1.User
+	0,  // 17: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
+	2,  // 18: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
+	4,  // 19: common.api.user.v1.UserUserService.GetCurrentUser:input_type -> common.api.user.v1.GetCurrentUserRequest
+	6,  // 20: common.api.user.v1.UserUserService.GetOne:input_type -> common.api.user.v1.GetOneRequest
+	8,  // 21: common.api.user.v1.UserUserService.GetList:input_type -> common.api.user.v1.GetListRequest
+	10, // 22: common.api.user.v1.UserUserService.GetMap:input_type -> common.api.user.v1.GetMapRequest
+	12, // 23: common.api.user.v1.UserUserService.Page:input_type -> common.api.user.v1.PageUserRequest
+	14, // 24: common.api.user.v1.UserUserService.Avatar:input_type -> common.api.user.v1.AvatarRequest
+	3,  // 25: common.api.user.v1.UserUserService.UpdateSetting:output_type -> common.api.user.v1.UpdateSettingReply
+	5,  // 26: common.api.user.v1.UserUserService.GetCurrentUser:output_type -> common.api.user.v1.GetCurrentUserReply
+	7,  // 27: common.api.user.v1.UserUserService.GetOne:output_type -> common.api.user.v1.GetOneReply
+	9,  // 28: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
+	11, // 29: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
+	13, // 30: common.api.user.v1.UserUserService.Page:output_type -> common.api.user.v1.PageUserReply
+	15, // 31: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.user.v1.AvatarReply
+	25, // [25:32] is the sub-list for method output_type
+	18, // [18:25] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_proto_init() }
@@ -1514,6 +1516,7 @@ func file_user_v1_user_proto_init() {
 	if File_user_v1_user_proto != nil {
 		return
 	}
+	file_user_v1_enum_proto_init()
 	file_user_v1_user_proto_msgTypes[0].OneofWrappers = []any{}
 	file_user_v1_user_proto_msgTypes[1].OneofWrappers = []any{}
 	file_user_v1_user_proto_msgTypes[2].OneofWrappers = []any{}

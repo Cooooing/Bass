@@ -21,7 +21,7 @@ type CommentActionRecord struct {
 	CommentID int64 `json:"comment_id,omitempty"`
 	// 执行行为的用户ID
 	UserID int64 `json:"user_id,omitempty"`
-	// 行为类型 0-点赞 1收藏
+	// 行为类型 1-点赞 2-收藏
 	Type int32 `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CommentActionRecordQuery when eager-loading is set.

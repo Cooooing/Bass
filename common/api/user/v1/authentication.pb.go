@@ -7,12 +7,10 @@
 package v1
 
 import (
-	_ "common/api/common/v1"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -153,7 +151,7 @@ func (x *RegisterEmailReply) GetCode() string {
 
 type RegisterEmailVerifyRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 验证码
+	// 验证码 6 位验证码
 	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
 	// 验证码令牌
 	CodeToken     string `protobuf:"bytes,2,opt,name=code_token,json=codeToken,proto3" json:"code_token,omitempty"`
@@ -243,7 +241,7 @@ func (*RegisterEmailVerifyReply) Descriptor() ([]byte, []int) {
 
 type RegisterPhoneRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 邮箱
+	// 邮箱 11 位国内手机号
 	Phone string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
 	// 密码
 	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
@@ -369,7 +367,7 @@ func (x *RegisterPhoneReply) GetCode() string {
 
 type RegisterPhoneVerifyRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 验证码
+	// 验证码 6 位验证码
 	Code string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
 	// 验证码令牌
 	CodeToken     string `protobuf:"bytes,2,opt,name=code_token,json=codeToken,proto3" json:"code_token,omitempty"`
@@ -549,7 +547,7 @@ func (x *ExistEmailReply) GetExist() bool {
 
 type ExistUsernameRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 用户名
+	// 用户名 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
 	Username      string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -639,7 +637,7 @@ func (x *ExistUsernameReply) GetExist() bool {
 
 type ExistPhoneRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 手机号
+	// 手机号 11 位国内手机号
 	Phone         string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -911,7 +909,7 @@ var File_user_v1_authentication_proto protoreflect.FileDescriptor
 
 const file_user_v1_authentication_proto_rawDesc = "" +
 	"\n" +
-	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x12user/v1/user.proto\"\x98\x01\n" +
+	"\x1cuser/v1/authentication.proto\x12\x12common.api.user.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x12user/v1/user.proto\"\x98\x01\n" +
 	"\x14RegisterEmailRequest\x12\"\n" +
 	"\x05email\x18\x01 \x01(\tB\f\xfaB\tr\a\x10\x05\x18\xc0\x02`\x01R\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x12\n" +

@@ -60,7 +60,7 @@ func NewEventHandler(base *base.BaseDomain, handlerMap dict.Map[string, handlerc
 
 // init Todo 初始化默认模板
 func (h *EventHandler) init() error {
-	//err := ent.WithTx(h.ctx, h.db, func(tx *gen.Client) error {
+	// err := ent.WithTx(h.ctx, h.db, func(tx *gen.Client) error {
 	//	templateMap, err := h.notificationTemplateRepo.GetMap(h.ctx, tx, &repo.NotificationTemplateGetReq{})
 	//	if err != nil {
 	//		return err
@@ -68,10 +68,10 @@ func (h *EventHandler) init() error {
 	//
 	//	templates := make([]*model.NotificationTemplate, 0)
 	//	h.notificationTemplateRepo.Saves(h.ctx, h.db, templates)
-	//})
-	//if err != nil {
+	// })
+	// if err != nil {
 	//	return err
-	//}
+	// }
 	return nil
 }
 

@@ -40,7 +40,7 @@ func (User) Fields() []ent.Field {
 		field.String("mbti").Comment("用户 MBTI 类型").Optional().Nillable(),
 
 		// --- 状态 ---
-		field.Int32("status").Comment("用户状态：0-正常，1-封禁，2-注销").Default(0).Nillable(),
+		field.Int32("status").Comment("用户状态：1-正常，2-封禁，3-注销").Default(1).Nillable(),
 		field.String("group_name").Comment("用户组名称").Optional(),
 
 		// --- 社交信息 ---

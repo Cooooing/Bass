@@ -7,6 +7,7 @@
 package main
 
 import (
+	"common/pkg/client"
 	"common/pkg/util"
 	"connector/internal/biz"
 	"connector/internal/biz/base"
@@ -42,9 +43,15 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseData := data.NewBaseData(bootstrap, helper, redisClient)
 	sessionCache := data.NewSessionCache(baseData)
-	serverDomain, cleanup3 := biz.NewServerDomain(baseDomain, sessionCache)
+	asynqCache := util.NewAsynqCache(helper, redisClient)
+	asynqClient, cleanup3 := client.NewAsynqClient(helper, redisClient)
+	asynqScheduler, cleanup4 := client.NewAsynqScheduler(helper, redisClient)
+	producer := client.NewProducer(asynqClient, asynqScheduler)
+	serverDomain, cleanup5 := biz.NewServerDomain(baseDomain, sessionCache, asynqCache, producer)
 	app := newApp(logger, grpcServer, httpServer, serverDomain)
 	return app, func() {
+		cleanup5()
+		cleanup4()
 		cleanup3()
 		cleanup2()
 		cleanup()

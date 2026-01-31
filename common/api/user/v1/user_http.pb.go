@@ -51,7 +51,7 @@ func RegisterUserUserServiceHTTPServer(s *http.Server, srv UserUserServiceHTTPSe
 	r.POST("/v1/user/getOne", _UserUserService_GetOne0_HTTP_Handler(srv))
 	r.POST("/v1/user/getList", _UserUserService_GetList0_HTTP_Handler(srv))
 	r.POST("/v1/user/getMap", _UserUserService_GetMap0_HTTP_Handler(srv))
-	r.POST("/v1/user/page", _UserUserService_Page0_HTTP_Handler(srv))
+	r.POST("/v1/user/page", _UserUserService_Page1_HTTP_Handler(srv))
 	r.GET("/v1/user/avatar/{name}", _UserUserService_Avatar0_HTTP_Handler(srv))
 }
 
@@ -165,7 +165,7 @@ func _UserUserService_GetMap0_HTTP_Handler(srv UserUserServiceHTTPServer) func(c
 	}
 }
 
-func _UserUserService_Page0_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
+func _UserUserService_Page1_HTTP_Handler(srv UserUserServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PageUserRequest
 		if err := ctx.Bind(&in); err != nil {

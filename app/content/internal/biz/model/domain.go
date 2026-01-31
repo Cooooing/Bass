@@ -20,7 +20,7 @@ func (t *Domain) ConvertToRpc() *v1.Domain {
 		Id:          t.ID,
 		Name:        t.Name,
 		Description: t.Description,
-		Status:      t.Status,
+		Status:      v1.DomainStatus(t.Status),
 		Url:         t.URL,
 		Icon:        t.Icon,
 		TagCount:    t.TagCount,

@@ -45,7 +45,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		// 回复文章
 		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(comment.ArticleID),
-			Status:    base.Ptr(v1.ArticleStatus_ArticleNormal),
+			Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
@@ -60,19 +60,19 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 			replyComment, err = d.commentRepo.GetOne(ctx, tx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
 				ArticleId: base.Ptr(comment.ArticleID),
-				Status:    base.Ptr(v1.CommentStatus_CommentNormal),
+				Status:    base.Ptr(v1.CommentStatus_COMMENT_STATUS_NORMAL),
 			})
 			if err != nil {
 				return err
 			}
 
-			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, v1.CommentAction_CommentActionReply, 1)
+			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
 			if err != nil {
 				return err
 			}
 		}
 
-		_, err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, v1.ArticleAction_ArticleActionReply, 1)
+		_, err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
 		if err != nil {
 			return err
 		}
@@ -188,17 +188,17 @@ func (d *CommentDomain) UpdateStat(ctx context.Context, commentId int64, userId 
 				return err
 			}
 			return nil
-		} else {
-			err = d.commentRepo.UpdateStat(ctx, tx, commentId, action, -1)
-			if err != nil {
-				return err
-			}
-			err = d.commentActionRecordRepo.Delete(ctx, tx, commentId, userId, action)
-			if err != nil {
-				return err
-			}
-			return nil
 		}
+
+		err = d.commentRepo.UpdateStat(ctx, tx, commentId, action, -1)
+		if err != nil {
+			return err
+		}
+		err = d.commentActionRecordRepo.Delete(ctx, tx, commentId, userId, action)
+		if err != nil {
+			return err
+		}
+		return nil
 	})
 	return err
 }

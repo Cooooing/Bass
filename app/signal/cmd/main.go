@@ -27,13 +27,13 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name string = "user"
+	Name = "user"
 	// Version is the version of the compiled software.
-	Version string = "v1.0.0"
+	Version = "v1.0.0"
 	// flagConf is the config flag.
-	flagConf string = "configs"
+	flagConf = "configs"
 	// flagConf is the config flag.
-	flagBootstrap string = "configs"
+	flagBootstrap = "configs"
 )
 
 func init() {

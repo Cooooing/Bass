@@ -22,7 +22,7 @@ func (t *Tag) ConvertToRpc() *v1.Tag {
 		Name:         t.Name,
 		Description:  t.Description,
 		DomainId:     t.DomainID,
-		Status:       base.Ptr(t.Status),
+		Status:       base.Ptr(v1.TagStatus(t.Status)),
 		ArticleCount: t.ArticleCount,
 	}
 }

@@ -60,11 +60,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	BaseData := base.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	userRepo := data.NewUserRepo(BaseData)
-	tokenRepo := util.NewTokenRepo(helper, redisClient)
+	baseData := base.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	userRepo := data.NewUserRepo(baseData)
+	tokenCache := util.NewTokenCache(helper, redisClient)
 	tokenService := biz.NewTokenService(bootstrap)
-	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenRepo, tokenService)
+	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenCache, tokenService)
 	if err != nil {
 		cleanup5()
 		cleanup4()
@@ -84,7 +84,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userService := service.NewUserService(baseService, authenticationDomain, userDomain, userRepo)
-	userRelationRepo := data.NewUserRelationRepo(BaseData)
+	userRelationRepo := data.NewUserRelationRepo(baseData)
 	userRelationDomain, err := biz.NewUserRelationDomain(baseDomain, userRelationRepo, userRepo)
 	if err != nil {
 		cleanup5()
@@ -95,9 +95,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
-	objectStorageRepo := data.NewObjectStorageRepo(BaseData)
+	objectStorageRepo := data.NewObjectStorageRepo(baseData)
 	minioMinio := minio.NewMinio()
-	qiniuQiniu := qiniu.NewQiniu(BaseData)
+	qiniuQiniu := qiniu.NewQiniu(baseData)
 	factory := oss.NewFactory(minioMinio, qiniuQiniu)
 	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
 	ossService := service.NewOssService(baseService, objectStorageDomain)
@@ -112,8 +112,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	twoFactorAuthenticationService := service.NewTwoFactorAuthenticationService(baseService, twoFactorAuthenticationDomain)
 	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, ossService, twoFactorAuthenticationService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenRepo)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenRepo)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)
 	return app, func() {
 		cleanup5()

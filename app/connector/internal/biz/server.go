@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	commonBase "common/pkg/cutil/base"
 	"common/pkg/model"
+	"common/pkg/util"
 	"connector/internal/biz/base"
 	"connector/internal/biz/cache"
 	"context"
@@ -17,15 +18,17 @@ import (
 type ServerDomain struct {
 	*base.BaseDomain
 	sessionCache cache.SessionCache
+	asynqCache   *util.AsynqCache
 	producer     *client.Producer
 	ctx          context.Context
 	httpClient   *http.Client
 }
 
-func NewServerDomain(baseDomain *base.BaseDomain, sessionCache cache.SessionCache, producer *client.Producer) (*ServerDomain, func()) {
+func NewServerDomain(baseDomain *base.BaseDomain, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) (*ServerDomain, func()) {
 	s := &ServerDomain{
 		BaseDomain:   baseDomain,
 		sessionCache: sessionCache,
+		asynqCache:   asynqCache,
 		producer:     producer,
 		httpClient:   client.NewHttpClient(),
 		ctx:          context.Background(),
@@ -102,7 +105,12 @@ func (d *ServerDomain) Run() {
 		// 集群模式，使用分布式定时任务
 		registerTaskName := fmt.Sprintf("%s-%s", constant.TaskConnectorRegister.String(), d.Conf.Server.Key)
 		version := time.Now().UnixMilli()
-		err := d.producer.EnqueueContextTask(d.ctx, &model.Task{
+		err := d.asynqCache.SetAsynqTaskVersion(d.ctx, registerTaskName, version, interval*2)
+		if err != nil {
+			d.Log.Errorf("failed to set asynq task version: %v", err)
+			return
+		}
+		err = d.producer.EnqueueContextTask(d.ctx, &model.Task{
 			TaskName: registerTaskName,
 			Version:  version,
 			Interval: interval,
@@ -110,6 +118,7 @@ func (d *ServerDomain) Run() {
 		})
 		if err != nil {
 			d.Log.Errorf("failed to register node: %v", err)
+			return
 		}
 	} else {
 		// 单机模式，使用本地定时任务

@@ -13,7 +13,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	handler.HandlerSet,
 	base.NewBaseDomain,
-	util.NewTokenRepo,
+	util.NewTokenCache,
 	handler.ProvideHandlers,
 	NewEventHandler,
 	NewNotificationMetaDomain,

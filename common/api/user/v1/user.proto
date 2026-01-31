@@ -3,10 +3,10 @@ syntax = "proto3";
 package common.api.user.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
+import "user/v1/enum.proto";
 
 option go_package = "common/api/user/v1;v1";
 
@@ -96,8 +96,8 @@ message User {
 
   // --- 状态 ---
 
-  // 用户状态：0-正常，1-封禁，2-注销
-  optional int32 status = 11;
+  // 用户状态：1-正常，2-封禁，3-注销
+  optional UserStatus status = 11 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
   // 用户组名称
   string group_name = 12;
 

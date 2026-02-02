@@ -8,10 +8,12 @@ require (
 	github.com/go-kratos/kratos/contrib/config/etcd/v2 v2.0.0-20251217105121-fb8e43efb207
 	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251217105121-fb8e43efb207
 	github.com/go-kratos/kratos/v2 v2.9.2
+	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.7.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/lib/pq v1.10.9
 	github.com/prometheus/client_golang v1.23.2
+	github.com/qiniu/go-sdk/v7 v7.25.6
 	go.etcd.io/etcd/client/v3 v3.6.7
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/metric v1.39.0
@@ -27,8 +29,10 @@ require (
 	cel.dev/expr v0.25.1 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/88250/lute v1.7.6 // indirect
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
+	github.com/alex-ant/gomath v0.0.0-20160516115720-89013a210a82 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -41,17 +45,18 @@ require (
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/gammazero/toposort v0.1.1 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20251217105121-fb8e43efb207 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/go-playground/form/v4 v4.3.0 // indirect
+	github.com/gofrs/flock v0.8.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/cel-go v0.26.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3 // indirect
@@ -96,6 +101,7 @@ require (
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	modernc.org/fileutil v1.0.0 // indirect
 )
 
 tool (

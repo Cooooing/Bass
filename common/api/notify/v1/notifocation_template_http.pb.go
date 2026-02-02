@@ -34,12 +34,12 @@ type NotifyNotificationTemplateServiceHTTPServer interface {
 
 func RegisterNotifyNotificationTemplateServiceHTTPServer(s *http.Server, srv NotifyNotificationTemplateServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notificationTemplate/page", _NotifyNotificationTemplateService_Page10_HTTP_Handler(srv))
+	r.POST("/v1/notificationTemplate/page", _NotifyNotificationTemplateService_Page11_HTTP_Handler(srv))
 	r.POST("/v1/notificationTemplate/add", _NotifyNotificationTemplateService_Add2_HTTP_Handler(srv))
 	r.POST("/v1/notificationTemplate/update", _NotifyNotificationTemplateService_Update3_HTTP_Handler(srv))
 }
 
-func _NotifyNotificationTemplateService_Page10_HTTP_Handler(srv NotifyNotificationTemplateServiceHTTPServer) func(ctx http.Context) error {
+func _NotifyNotificationTemplateService_Page11_HTTP_Handler(srv NotifyNotificationTemplateServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationTemplatePageRequest
 		if err := ctx.Bind(&in); err != nil {

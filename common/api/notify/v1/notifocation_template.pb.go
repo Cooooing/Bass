@@ -8,6 +8,7 @@ package v1
 
 import (
 	v1 "common/api/common/v1"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -33,9 +34,9 @@ type NotificationTemplate struct {
 	// 主键
 	Id int64 `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
 	// 通知类型
-	NotificationType int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3" json:"notification_type,omitempty"`
+	NotificationType NotificationType `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,enum=common.api.notify.v1.NotificationType" json:"notification_type,omitempty"`
 	// 通知渠道
-	Channel int32 `protobuf:"varint,6,opt,name=channel,proto3" json:"channel,omitempty"`
+	Channel NotificationChannel `protobuf:"varint,6,opt,name=channel,proto3,enum=common.api.notify.v1.NotificationChannel" json:"channel,omitempty"`
 	// 模板标题
 	Title string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
 	// 模板内容
@@ -99,18 +100,18 @@ func (x *NotificationTemplate) GetId() int64 {
 	return 0
 }
 
-func (x *NotificationTemplate) GetNotificationType() int32 {
+func (x *NotificationTemplate) GetNotificationType() NotificationType {
 	if x != nil {
 		return x.NotificationType
 	}
-	return 0
+	return NotificationType_NOTIFICATION_TYPE_UNSPECIFIED
 }
 
-func (x *NotificationTemplate) GetChannel() int32 {
+func (x *NotificationTemplate) GetChannel() NotificationChannel {
 	if x != nil {
 		return x.Channel
 	}
-	return 0
+	return NotificationChannel_NOTIFICATION_CHANNEL_UNSPECIFIED
 }
 
 func (x *NotificationTemplate) GetTitle() string {
@@ -146,9 +147,9 @@ type NotificationTemplateQueryParams struct {
 	// 主键
 	Ids []int64 `protobuf:"varint,2,rep,packed,name=ids,proto3" json:"ids,omitempty"`
 	// 通知类型
-	NotificationType *int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,oneof" json:"notification_type,omitempty"`
+	NotificationType *NotificationType `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,enum=common.api.notify.v1.NotificationType,oneof" json:"notification_type,omitempty"`
 	// 通知渠道
-	Channel *int32 `protobuf:"varint,6,opt,name=channel,proto3,oneof" json:"channel,omitempty"`
+	Channel *NotificationChannel `protobuf:"varint,6,opt,name=channel,proto3,enum=common.api.notify.v1.NotificationChannel,oneof" json:"channel,omitempty"`
 	// 模板内容
 	Content *string `protobuf:"bytes,7,opt,name=content,proto3,oneof" json:"content,omitempty"`
 	// 处理器链（有序执行）
@@ -196,18 +197,18 @@ func (x *NotificationTemplateQueryParams) GetIds() []int64 {
 	return nil
 }
 
-func (x *NotificationTemplateQueryParams) GetNotificationType() int32 {
+func (x *NotificationTemplateQueryParams) GetNotificationType() NotificationType {
 	if x != nil && x.NotificationType != nil {
 		return *x.NotificationType
 	}
-	return 0
+	return NotificationType_NOTIFICATION_TYPE_UNSPECIFIED
 }
 
-func (x *NotificationTemplateQueryParams) GetChannel() int32 {
+func (x *NotificationTemplateQueryParams) GetChannel() NotificationChannel {
 	if x != nil && x.Channel != nil {
 		return *x.Channel
 	}
-	return 0
+	return NotificationChannel_NOTIFICATION_CHANNEL_UNSPECIFIED
 }
 
 func (x *NotificationTemplateQueryParams) GetContent() string {
@@ -433,9 +434,9 @@ type NotificationTemplateUpdateRequest struct {
 	// 主键
 	Ids int64 `protobuf:"varint,2,opt,name=ids,proto3" json:"ids,omitempty"`
 	// 通知类型
-	NotificationType *int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,oneof" json:"notification_type,omitempty"`
+	NotificationType *NotificationType `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,enum=common.api.notify.v1.NotificationType,oneof" json:"notification_type,omitempty"`
 	// 通知渠道
-	Channel *int32 `protobuf:"varint,6,opt,name=channel,proto3,oneof" json:"channel,omitempty"`
+	Channel *NotificationChannel `protobuf:"varint,6,opt,name=channel,proto3,enum=common.api.notify.v1.NotificationChannel,oneof" json:"channel,omitempty"`
 	// 模板内容
 	Content *string `protobuf:"bytes,7,opt,name=content,proto3,oneof" json:"content,omitempty"`
 	// 处理器链（有序执行）
@@ -483,18 +484,18 @@ func (x *NotificationTemplateUpdateRequest) GetIds() int64 {
 	return 0
 }
 
-func (x *NotificationTemplateUpdateRequest) GetNotificationType() int32 {
+func (x *NotificationTemplateUpdateRequest) GetNotificationType() NotificationType {
 	if x != nil && x.NotificationType != nil {
 		return *x.NotificationType
 	}
-	return 0
+	return NotificationType_NOTIFICATION_TYPE_UNSPECIFIED
 }
 
-func (x *NotificationTemplateUpdateRequest) GetChannel() int32 {
+func (x *NotificationTemplateUpdateRequest) GetChannel() NotificationChannel {
 	if x != nil && x.Channel != nil {
 		return *x.Channel
 	}
-	return 0
+	return NotificationChannel_NOTIFICATION_CHANNEL_UNSPECIFIED
 }
 
 func (x *NotificationTemplateUpdateRequest) GetContent() string {
@@ -566,25 +567,29 @@ var File_notify_v1_notifocation_template_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"\n" +
-	"%notify/v1/notifocation_template.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xcd\x02\n" +
+	"%notify/v1/notifocation_template.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x14notify/v1/enum.proto\"\xb8\x03\n" +
 	"\x14NotificationTemplate\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
-	"\x02id\x18\x03 \x01(\x03R\x02id\x12+\n" +
-	"\x11notification_type\x18\x05 \x01(\x05R\x10notificationType\x12\x18\n" +
-	"\achannel\x18\x06 \x01(\x05R\achannel\x12\x14\n" +
+	"\x02id\x18\x03 \x01(\x03R\x02id\x12_\n" +
+	"\x11notification_type\x18\x05 \x01(\x0e2&.common.api.notify.v1.NotificationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\x10notificationType\x12O\n" +
+	"\achannel\x18\x06 \x01(\x0e2).common.api.notify.v1.NotificationChannelB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\achannel\x12\x14\n" +
 	"\x05title\x18\x04 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\a \x01(\tR\acontent\x12\x1e\n" +
 	"\n" +
 	"processors\x18\b \x03(\tR\n" +
 	"processors\x12\x16\n" +
-	"\x06enable\x18\t \x01(\bR\x06enable\"\x99\x02\n" +
+	"\x06enable\x18\t \x01(\bR\x06enable\"\x84\x03\n" +
 	"\x1fNotificationTemplateQueryParams\x12\x10\n" +
-	"\x03ids\x18\x02 \x03(\x03R\x03ids\x120\n" +
-	"\x11notification_type\x18\x05 \x01(\x05H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
-	"\achannel\x18\x06 \x01(\x05H\x01R\achannel\x88\x01\x01\x12\x1d\n" +
+	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12d\n" +
+	"\x11notification_type\x18\x05 \x01(\x0e2&.common.api.notify.v1.NotificationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x00R\x10notificationType\x88\x01\x01\x12T\n" +
+	"\achannel\x18\x06 \x01(\x0e2).common.api.notify.v1.NotificationChannelB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x01R\achannel\x88\x01\x01\x12\x1d\n" +
 	"\acontent\x18\a \x01(\tH\x02R\acontent\x88\x01\x01\x12\x1e\n" +
 	"\n" +
 	"processors\x18\b \x03(\tR\n" +
@@ -605,11 +610,13 @@ const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"\x1eNotificationTemplateAddRequest\x12_\n" +
 	"\x15notification_template\x18\x02 \x01(\v2*.common.api.notify.v1.NotificationTemplateR\x14notificationTemplate\"\x7f\n" +
 	"\x1cNotificationTemplateAddReply\x12_\n" +
-	"\x15notification_template\x18\x01 \x01(\v2*.common.api.notify.v1.NotificationTemplateR\x14notificationTemplate\"\x9b\x02\n" +
+	"\x15notification_template\x18\x01 \x01(\v2*.common.api.notify.v1.NotificationTemplateR\x14notificationTemplate\"\x86\x03\n" +
 	"!NotificationTemplateUpdateRequest\x12\x10\n" +
-	"\x03ids\x18\x02 \x01(\x03R\x03ids\x120\n" +
-	"\x11notification_type\x18\x05 \x01(\x05H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
-	"\achannel\x18\x06 \x01(\x05H\x01R\achannel\x88\x01\x01\x12\x1d\n" +
+	"\x03ids\x18\x02 \x01(\x03R\x03ids\x12d\n" +
+	"\x11notification_type\x18\x05 \x01(\x0e2&.common.api.notify.v1.NotificationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x00R\x10notificationType\x88\x01\x01\x12T\n" +
+	"\achannel\x18\x06 \x01(\x0e2).common.api.notify.v1.NotificationChannelB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x01R\achannel\x88\x01\x01\x12\x1d\n" +
 	"\acontent\x18\a \x01(\tH\x02R\acontent\x88\x01\x01\x12\x1e\n" +
 	"\n" +
 	"processors\x18\b \x03(\tR\n" +
@@ -626,7 +633,7 @@ const file_notify_v1_notifocation_template_proto_rawDesc = "" +
 	"!NotifyNotificationTemplateService\x12\x9c\x01\n" +
 	"\x04Page\x125.common.api.notify.v1.NotificationTemplatePageRequest\x1a3.common.api.notify.v1.NotificationTemplatePageReply\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/notificationTemplate/page\x12\x98\x01\n" +
 	"\x03Add\x124.common.api.notify.v1.NotificationTemplateAddRequest\x1a2.common.api.notify.v1.NotificationTemplateAddReply\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/notificationTemplate/add\x12\xa4\x01\n" +
-	"\x06Update\x127.common.api.notify.v1.NotificationTemplateUpdateRequest\x1a5.common.api.notify.v1.NotificationTemplateUpdateReply\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/notificationTemplate/updateB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x06Update\x127.common.api.notify.v1.NotificationTemplateUpdateRequest\x1a5.common.api.notify.v1.NotificationTemplateUpdateReply\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/notificationTemplate/updateB\x19Z\x17common/api/notify/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_template_proto_rawDescOnce sync.Once
@@ -651,30 +658,38 @@ var file_notify_v1_notifocation_template_proto_goTypes = []any{
 	(*NotificationTemplateUpdateRequest)(nil), // 6: common.api.notify.v1.NotificationTemplateUpdateRequest
 	(*NotificationTemplateUpdateReply)(nil),   // 7: common.api.notify.v1.NotificationTemplateUpdateReply
 	(*timestamppb.Timestamp)(nil),             // 8: google.protobuf.Timestamp
-	(*v1.PageRequest)(nil),                    // 9: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),                      // 10: common.api.common.v1.PageReply
+	(NotificationType)(0),                     // 9: common.api.notify.v1.NotificationType
+	(NotificationChannel)(0),                  // 10: common.api.notify.v1.NotificationChannel
+	(*v1.PageRequest)(nil),                    // 11: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),                      // 12: common.api.common.v1.PageReply
 }
 var file_notify_v1_notifocation_template_proto_depIdxs = []int32{
 	8,  // 0: common.api.notify.v1.NotificationTemplate.created_at:type_name -> google.protobuf.Timestamp
 	8,  // 1: common.api.notify.v1.NotificationTemplate.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 2: common.api.notify.v1.NotificationTemplatePageRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 3: common.api.notify.v1.NotificationTemplatePageRequest.query:type_name -> common.api.notify.v1.NotificationTemplateQueryParams
-	10, // 4: common.api.notify.v1.NotificationTemplatePageReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 5: common.api.notify.v1.NotificationTemplatePageReply.rows:type_name -> common.api.notify.v1.NotificationTemplate
-	0,  // 6: common.api.notify.v1.NotificationTemplateAddRequest.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
-	0,  // 7: common.api.notify.v1.NotificationTemplateAddReply.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
-	0,  // 8: common.api.notify.v1.NotificationTemplateUpdateReply.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
-	2,  // 9: common.api.notify.v1.NotifyNotificationTemplateService.Page:input_type -> common.api.notify.v1.NotificationTemplatePageRequest
-	4,  // 10: common.api.notify.v1.NotifyNotificationTemplateService.Add:input_type -> common.api.notify.v1.NotificationTemplateAddRequest
-	6,  // 11: common.api.notify.v1.NotifyNotificationTemplateService.Update:input_type -> common.api.notify.v1.NotificationTemplateUpdateRequest
-	3,  // 12: common.api.notify.v1.NotifyNotificationTemplateService.Page:output_type -> common.api.notify.v1.NotificationTemplatePageReply
-	5,  // 13: common.api.notify.v1.NotifyNotificationTemplateService.Add:output_type -> common.api.notify.v1.NotificationTemplateAddReply
-	7,  // 14: common.api.notify.v1.NotifyNotificationTemplateService.Update:output_type -> common.api.notify.v1.NotificationTemplateUpdateReply
-	12, // [12:15] is the sub-list for method output_type
-	9,  // [9:12] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	9,  // 2: common.api.notify.v1.NotificationTemplate.notification_type:type_name -> common.api.notify.v1.NotificationType
+	10, // 3: common.api.notify.v1.NotificationTemplate.channel:type_name -> common.api.notify.v1.NotificationChannel
+	9,  // 4: common.api.notify.v1.NotificationTemplateQueryParams.notification_type:type_name -> common.api.notify.v1.NotificationType
+	10, // 5: common.api.notify.v1.NotificationTemplateQueryParams.channel:type_name -> common.api.notify.v1.NotificationChannel
+	11, // 6: common.api.notify.v1.NotificationTemplatePageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 7: common.api.notify.v1.NotificationTemplatePageRequest.query:type_name -> common.api.notify.v1.NotificationTemplateQueryParams
+	12, // 8: common.api.notify.v1.NotificationTemplatePageReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 9: common.api.notify.v1.NotificationTemplatePageReply.rows:type_name -> common.api.notify.v1.NotificationTemplate
+	0,  // 10: common.api.notify.v1.NotificationTemplateAddRequest.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
+	0,  // 11: common.api.notify.v1.NotificationTemplateAddReply.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
+	9,  // 12: common.api.notify.v1.NotificationTemplateUpdateRequest.notification_type:type_name -> common.api.notify.v1.NotificationType
+	10, // 13: common.api.notify.v1.NotificationTemplateUpdateRequest.channel:type_name -> common.api.notify.v1.NotificationChannel
+	0,  // 14: common.api.notify.v1.NotificationTemplateUpdateReply.notification_template:type_name -> common.api.notify.v1.NotificationTemplate
+	2,  // 15: common.api.notify.v1.NotifyNotificationTemplateService.Page:input_type -> common.api.notify.v1.NotificationTemplatePageRequest
+	4,  // 16: common.api.notify.v1.NotifyNotificationTemplateService.Add:input_type -> common.api.notify.v1.NotificationTemplateAddRequest
+	6,  // 17: common.api.notify.v1.NotifyNotificationTemplateService.Update:input_type -> common.api.notify.v1.NotificationTemplateUpdateRequest
+	3,  // 18: common.api.notify.v1.NotifyNotificationTemplateService.Page:output_type -> common.api.notify.v1.NotificationTemplatePageReply
+	5,  // 19: common.api.notify.v1.NotifyNotificationTemplateService.Add:output_type -> common.api.notify.v1.NotificationTemplateAddReply
+	7,  // 20: common.api.notify.v1.NotifyNotificationTemplateService.Update:output_type -> common.api.notify.v1.NotificationTemplateUpdateReply
+	18, // [18:21] is the sub-list for method output_type
+	15, // [15:18] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_notify_v1_notifocation_template_proto_init() }
@@ -682,6 +697,7 @@ func file_notify_v1_notifocation_template_proto_init() {
 	if File_notify_v1_notifocation_template_proto != nil {
 		return
 	}
+	file_notify_v1_enum_proto_init()
 	file_notify_v1_notifocation_template_proto_msgTypes[1].OneofWrappers = []any{}
 	file_notify_v1_notifocation_template_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package common.api.im.v1;
+
+option go_package = "common/api/im/v1;v1";
+
+// 群组状态
+enum ChatGroupStatus {
+  CHAT_GROUP_STATUS_UNKNOWN = 0;
+  CHAT_GROUP_STATUS_NORMAL = 1; // 正常
+  CHAT_GROUP_STATUS_DISSOLVE = 2; // 解散
+}
+
+// 群组成员角色
+enum ChatGroupMemberRole {
+  CHAT_GROUP_MEMBER_ROLE_UNKNOWN = 0;
+  CHAT_GROUP_MEMBER_ROLE_MEMBER = 1; // 成员
+  CHAT_GROUP_MEMBER_ROLE_ADMIN = 2; // 管理员
+  CHAT_GROUP_MEMBER_ROLE_OWNER = 3; // 群主
+}
+
+// 消息接收者类型
+enum ReceiverType {
+  RECEIVER_TYPE_UNKNOWN = 0;
+  RECEIVER_TYPE_USER = 1; // 用户
+  RECEIVER_TYPE_GROUP = 2; // 群组
+}
+
+// 消息类型
+enum MessageType {
+  MESSAGE_TYPE_UNKNOWN = 0;
+  MESSAGE_TYPE_NORMAL = 1; // 正常
+}
+
+// 消息状态
+enum MessageStatus {
+  MESSAGE_STATUS_UNKNOWN = 0;
+  MESSAGE_STATUS_NORMAL = 1; // 正常
+  MESSAGE_STATUS_REVOKE = 2; // 撤回
+}

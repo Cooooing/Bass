@@ -6,7 +6,6 @@ import (
 	"user/internal/conf"
 	"user/internal/data/base"
 	"user/internal/data/client"
-	"user/internal/data/oss"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -22,11 +21,8 @@ var DataProviderSet = wire.NewSet(
 	NewRedisClient,
 	NewRabbitMQClient,
 
-	oss.ProviderSet,
-
 	NewUserRepo,
 	NewUserRelationRepo,
-	NewObjectStorageRepo,
 )
 
 func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {

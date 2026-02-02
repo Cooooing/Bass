@@ -2,8 +2,8 @@ package model
 
 import (
 	v1 "common/api/notify/v1"
-	"common/pkg/constant"
 	"common/pkg/cutil/base"
+	"fmt"
 	"notify/internal/data/ent/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -13,8 +13,15 @@ type NotificationTemplate struct {
 	*gen.NotificationTemplate
 }
 
+func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *v1.NotificationChannel) string {
+	if notificationType == nil || channel == nil {
+		return ""
+	}
+	return fmt.Sprintf("%s_%s", notificationType.String(), channel.String())
+}
+
 func (n *NotificationTemplate) GetKey() string {
-	return constant.GetKeyNotificationTemplate(base.Ptr(v1.NotificationType(n.NotificationType)), base.Ptr(v1.NotificationChannel(n.Channel)))
+	return GetKeyNotificationTemplate(base.Ptr(v1.NotificationType(n.NotificationType)), base.Ptr(v1.NotificationChannel(n.Channel)))
 }
 
 func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {
@@ -22,8 +29,8 @@ func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {
 		CreatedAt:        timestamppb.New(*n.CreatedAt),
 		UpdatedAt:        timestamppb.New(*n.UpdatedAt),
 		Id:               n.ID,
-		NotificationType: n.NotificationType,
-		Channel:          n.Channel,
+		NotificationType: v1.NotificationType(n.NotificationType),
+		Channel:          v1.NotificationChannel(n.Channel),
 		Title:            n.Title,
 		Content:          n.Content,
 		Processors:       n.Processors,

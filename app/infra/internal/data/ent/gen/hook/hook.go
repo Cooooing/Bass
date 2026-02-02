@@ -8,16 +8,16 @@ import (
 	"infra/internal/data/ent/gen"
 )
 
-// The infraFunc type is an adapter to allow the use of ordinary
-// function as infra mutator.
-type infraFunc func(context.Context, *gen.infraMutation) (gen.Value, error)
+// The ObjectStorageFunc type is an adapter to allow the use of ordinary
+// function as ObjectStorage mutator.
+type ObjectStorageFunc func(context.Context, *gen.ObjectStorageMutation) (gen.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f infraFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
-	if mv, ok := m.(*gen.infraMutation); ok {
+func (f ObjectStorageFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
+	if mv, ok := m.(*gen.ObjectStorageMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.infraMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.ObjectStorageMutation", m)
 }
 
 // Condition is a hook condition function.

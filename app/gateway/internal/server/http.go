@@ -68,6 +68,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 	srv.HandlePrefix("/api/notify", NewProxyHandler(middlewares, etcdClient, constant.NotifyServiceName.String(), "/api/notify", logger))
 	srv.HandlePrefix("/api/im", NewProxyHandler(middlewares, etcdClient, constant.IMServiceName.String(), "/api/im", logger))
 	srv.HandlePrefix("/api/signal", NewProxyHandler(middlewares, etcdClient, constant.SignalServiceName.String(), "/api/signal", logger))
+	srv.HandlePrefix("/api/infra", NewProxyHandler(middlewares, etcdClient, constant.InfraServiceName.String(), "/api/infra", logger))
 
 	for _, s := range services {
 		s.RegisterHttp(srv)
@@ -116,7 +117,9 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
 			return
 		}
-		defer response.Body.Close()
+		defer func(Body io.ReadCloser) {
+			_ = Body.Close()
+		}(response.Body)
 		// 复制后端 Header（过滤 hop-by-hop headers）
 		for k, vv := range response.Header {
 			if strings.EqualFold(k, "Connection") ||

@@ -205,6 +205,9 @@ func loadEtcdConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, *clientv3.Client,
 	if err := c.Scan(&etcdConf); err != nil {
 		return nil, nil, fmt.Errorf("scan etcd config fail: %w", err)
 	}
+	defer func() {
+		_ = c.Close()
+	}()
 
 	etcdConf.Server.Name = bc.Name
 	etcdConf.Server.Version = bc.Version

@@ -28,10 +28,10 @@ type NotifyNotificationMetaServiceHTTPServer interface {
 
 func RegisterNotifyNotificationMetaServiceHTTPServer(s *http.Server, srv NotifyNotificationMetaServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notificationMeta/page", _NotifyNotificationMetaService_Page8_HTTP_Handler(srv))
+	r.POST("/v1/notificationMeta/page", _NotifyNotificationMetaService_Page9_HTTP_Handler(srv))
 }
 
-func _NotifyNotificationMetaService_Page8_HTTP_Handler(srv NotifyNotificationMetaServiceHTTPServer) func(ctx http.Context) error {
+func _NotifyNotificationMetaService_Page9_HTTP_Handler(srv NotifyNotificationMetaServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationMetaPageRequest
 		if err := ctx.Bind(&in); err != nil {

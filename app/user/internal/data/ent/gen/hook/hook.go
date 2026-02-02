@@ -8,18 +8,6 @@ import (
 	"user/internal/data/ent/gen"
 )
 
-// The ObjectStorageFunc type is an adapter to allow the use of ordinary
-// function as ObjectStorage mutator.
-type ObjectStorageFunc func(context.Context, *gen.ObjectStorageMutation) (gen.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ObjectStorageFunc) Mutate(ctx context.Context, m gen.Mutation) (gen.Value, error) {
-	if mv, ok := m.(*gen.ObjectStorageMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *gen.ObjectStorageMutation", m)
-}
-
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *gen.UserMutation) (gen.Value, error)

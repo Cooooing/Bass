@@ -119,13 +119,53 @@ func (m *NotificationMeta) validate(all bool) error {
 
 	// no validation rules for Uuid
 
-	// no validation rules for NotificationType
+	if _, ok := _NotificationMeta_NotificationType_NotInLookup[m.GetNotificationType()]; ok {
+		err := NotificationMetaValidationError{
+			field:  "NotificationType",
+			reason: "value must not be in list [NOTIFICATION_TYPE_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := NotificationType_name[int32(m.GetNotificationType())]; !ok {
+		err := NotificationMetaValidationError{
+			field:  "NotificationType",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for SenderId
 
 	// no validation rules for Meta
 
-	// no validation rules for Status
+	if _, ok := _NotificationMeta_Status_NotInLookup[m.GetStatus()]; ok {
+		err := NotificationMetaValidationError{
+			field:  "Status",
+			reason: "value must not be in list [NOTIFICATION_STATUS_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := NotificationStatus_name[int32(m.GetStatus())]; !ok {
+		err := NotificationMetaValidationError{
+			field:  "Status",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for ContentRender
 
@@ -207,6 +247,14 @@ var _ interface {
 	ErrorName() string
 } = NotificationMetaValidationError{}
 
+var _NotificationMeta_NotificationType_NotInLookup = map[NotificationType]struct{}{
+	0: {},
+}
+
+var _NotificationMeta_Status_NotInLookup = map[NotificationStatus]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on NotificationMetaQueryParams with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -230,11 +278,55 @@ func (m *NotificationMetaQueryParams) validate(all bool) error {
 	var errors []error
 
 	if m.NotificationType != nil {
-		// no validation rules for NotificationType
+
+		if _, ok := _NotificationMetaQueryParams_NotificationType_NotInLookup[m.GetNotificationType()]; ok {
+			err := NotificationMetaQueryParamsValidationError{
+				field:  "NotificationType",
+				reason: "value must not be in list [NOTIFICATION_TYPE_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationType_name[int32(m.GetNotificationType())]; !ok {
+			err := NotificationMetaQueryParamsValidationError{
+				field:  "NotificationType",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _NotificationMetaQueryParams_Status_NotInLookup[m.GetStatus()]; ok {
+			err := NotificationMetaQueryParamsValidationError{
+				field:  "Status",
+				reason: "value must not be in list [NOTIFICATION_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationStatus_name[int32(m.GetStatus())]; !ok {
+			err := NotificationMetaQueryParamsValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -317,6 +409,14 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NotificationMetaQueryParamsValidationError{}
+
+var _NotificationMetaQueryParams_NotificationType_NotInLookup = map[NotificationType]struct{}{
+	0: {},
+}
+
+var _NotificationMetaQueryParams_Status_NotInLookup = map[NotificationStatus]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on NotificationMetaPageRequest with the
 // rules defined in the proto definition for this message. If any rules are

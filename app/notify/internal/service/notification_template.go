@@ -40,8 +40,8 @@ func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.Notifica
 	req.Query = base.OrDefault(req.Query, &v1.NotificationTemplateQueryParams{})
 	records, page, err := s.notificationTemplateDomain.Page(ctx, req.Page, &repo.NotificationTemplateGetReq{
 		NotificationTemplateIds: req.Query.Ids,
-		NotificationType:        (*v1.NotificationType)(req.Query.NotificationType),
-		Channel:                 (*v1.NotificationChannel)(req.Query.Channel),
+		NotificationType:        req.Query.NotificationType,
+		Channel:                 req.Query.Channel,
 		Enable:                  req.Query.Enable,
 	})
 
@@ -55,15 +55,15 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.Notificat
 	if req.NotificationTemplate == nil {
 		return nil, cv1.ErrorBadRequest("notificationTemplate is required")
 	}
-	if _, ok := v1.NotificationType_name[req.NotificationTemplate.NotificationType]; !ok {
+	if _, ok := v1.NotificationType_name[int32(req.NotificationTemplate.NotificationType)]; !ok {
 		return nil, cv1.ErrorBadRequest("invalid notificationType")
 	}
-	if _, ok := v1.NotificationChannel_name[req.NotificationTemplate.Channel]; !ok {
+	if _, ok := v1.NotificationChannel_name[int32(req.NotificationTemplate.Channel)]; !ok {
 		return nil, cv1.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		NotificationType: req.NotificationTemplate.NotificationType,
-		Channel:          req.NotificationTemplate.Channel,
+		NotificationType: int32(req.NotificationTemplate.NotificationType),
+		Channel:          int32(req.NotificationTemplate.Channel),
 		Content:          req.NotificationTemplate.Content,
 		Processors:       req.NotificationTemplate.Processors,
 		Enable:           req.NotificationTemplate.Enable,
@@ -80,15 +80,15 @@ func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.Notifi
 	if req.NotificationType == nil || req.Channel == nil || req.Content == nil {
 		return nil, cv1.ErrorBadRequest("notificationType, channel, content is required")
 	}
-	if _, ok := v1.NotificationType_name[*req.NotificationType]; !ok {
+	if _, ok := v1.NotificationType_name[int32(*req.NotificationType)]; !ok {
 		return nil, cv1.ErrorBadRequest("invalid notificationType")
 	}
-	if _, ok := v1.NotificationChannel_name[*req.Channel]; !ok {
+	if _, ok := v1.NotificationChannel_name[int32(*req.Channel)]; !ok {
 		return nil, cv1.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		NotificationType: *req.NotificationType,
-		Channel:          *req.Channel,
+		NotificationType: int32(*req.NotificationType),
+		Channel:          int32(*req.Channel),
 		Content:          *req.Content,
 		Processors:       req.Processors,
 		Enable:           base.DerefOrDefault(req.Enable, false),

@@ -111,9 +111,9 @@ func AuthMiddleware(tokenCache *util.TokenCache) middleware.Middleware {
 				ctx = context.WithValue(ctx, constant.Token, token)
 
 				return handler(ctx, req)
-			} else {
-				return nil, errors.New("transport not http")
 			}
+
+			return nil, errors.New("transport not http")
 		}
 	}
 }

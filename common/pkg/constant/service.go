@@ -9,6 +9,7 @@ const (
 	NotifyServiceName  ServiceName = "notify-service"
 	IMServiceName      ServiceName = "im-service"
 	SignalServiceName  ServiceName = "signal-service"
+	InfraServiceName   ServiceName = "infra-service"
 )
 
 func (s ServiceName) String() string {

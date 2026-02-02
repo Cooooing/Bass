@@ -176,14 +176,14 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleLike),
+					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
-					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 				})
 				if err != nil {
 					d.log.Errorf("publish article like event error: %v", err)
@@ -192,14 +192,14 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_THANK:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleThank),
+					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
-					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 				})
 				if err != nil {
 					d.log.Errorf("publish article thank event error: %v", err)
@@ -208,14 +208,14 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleCollect),
+					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
-					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 				})
 				if err != nil {
 					d.log.Errorf("publish article collect event error: %v", err)
@@ -224,14 +224,14 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleWatch),
+					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
-					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 				})
 				if err != nil {
 					d.log.Errorf("publish article watch event error: %v", err)
@@ -240,14 +240,14 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_REWARD:
 				err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleReward),
+					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
-					Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 				})
 				if err != nil {
 					d.log.Errorf("publish article watch event error: %v", err)
@@ -284,14 +284,14 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 		// 广播发布文章事件
 		err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticlePublish),
+			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
 			SenderId:   user.ID,
 			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 			Meta: commonModel.Meta{
 				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 			},
-			Status: notifyv1.NotificationStatus_NotificationStatusNormal,
+			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 		})
 		if err != nil {
 			d.log.Errorf("publish a publish event error: %v", err)
@@ -303,10 +303,10 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 		if atUserNames.Len() > 0 {
 			err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
 				UUID:       uuid.New().String(),
-				Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleAt),
+				Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 				SenderId:   user.ID,
 				SenderName: user.Name,
-				Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+				Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 				Meta: commonModel.Meta{
 					AtUsernames: atUserNames.ToSlice(),
 					Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},

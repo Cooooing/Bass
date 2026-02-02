@@ -11,7 +11,7 @@ import (
 
 	"infra/internal/data/ent/gen/migrate"
 
-	"infra/internal/data/ent/gen/infra"
+	"infra/internal/data/ent/gen/objectstorage"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -23,8 +23,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// infra is the client for interacting with the infra builders.
-	infra *infraClient
+	// ObjectStorage is the client for interacting with the ObjectStorage builders.
+	ObjectStorage *ObjectStorageClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -36,7 +36,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.infra = NewinfraClient(c.config)
+	c.ObjectStorage = NewObjectStorageClient(c.config)
 }
 
 type (
@@ -127,9 +127,9 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		infra:  NewinfraClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		ObjectStorage: NewObjectStorageClient(cfg),
 	}, nil
 }
 
@@ -147,16 +147,16 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		infra:  NewinfraClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		ObjectStorage: NewObjectStorageClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		infra.
+//		ObjectStorage.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -178,126 +178,126 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.infra.Use(hooks...)
+	c.ObjectStorage.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.infra.Intercept(interceptors...)
+	c.ObjectStorage.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *infraMutation:
-		return c.infra.mutate(ctx, m)
+	case *ObjectStorageMutation:
+		return c.ObjectStorage.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("gen: unknown mutation type %T", m)
 	}
 }
 
-// infraClient is a client for the infra schema.
-type infraClient struct {
+// ObjectStorageClient is a client for the ObjectStorage schema.
+type ObjectStorageClient struct {
 	config
 }
 
-// NewinfraClient returns a client for the infra from the given config.
-func NewinfraClient(c config) *infraClient {
-	return &infraClient{config: c}
+// NewObjectStorageClient returns a client for the ObjectStorage from the given config.
+func NewObjectStorageClient(c config) *ObjectStorageClient {
+	return &ObjectStorageClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `infra.Hooks(f(g(h())))`.
-func (c *infraClient) Use(hooks ...Hook) {
-	c.hooks.infra = append(c.hooks.infra, hooks...)
+// A call to `Use(f, g, h)` equals to `objectstorage.Hooks(f(g(h())))`.
+func (c *ObjectStorageClient) Use(hooks ...Hook) {
+	c.hooks.ObjectStorage = append(c.hooks.ObjectStorage, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `infra.Intercept(f(g(h())))`.
-func (c *infraClient) Intercept(interceptors ...Interceptor) {
-	c.inters.infra = append(c.inters.infra, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `objectstorage.Intercept(f(g(h())))`.
+func (c *ObjectStorageClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ObjectStorage = append(c.inters.ObjectStorage, interceptors...)
 }
 
-// Create returns a builder for creating a infra entity.
-func (c *infraClient) Create() *infraCreate {
-	mutation := newinfraMutation(c.config, OpCreate)
-	return &infraCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a ObjectStorage entity.
+func (c *ObjectStorageClient) Create() *ObjectStorageCreate {
+	mutation := newObjectStorageMutation(c.config, OpCreate)
+	return &ObjectStorageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of infra entities.
-func (c *infraClient) CreateBulk(builders ...*infraCreate) *infraCreateBulk {
-	return &infraCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of ObjectStorage entities.
+func (c *ObjectStorageClient) CreateBulk(builders ...*ObjectStorageCreate) *ObjectStorageCreateBulk {
+	return &ObjectStorageCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *infraClient) MapCreateBulk(slice any, setFunc func(*infraCreate, int)) *infraCreateBulk {
+func (c *ObjectStorageClient) MapCreateBulk(slice any, setFunc func(*ObjectStorageCreate, int)) *ObjectStorageCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &infraCreateBulk{err: fmt.Errorf("calling to infraClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &ObjectStorageCreateBulk{err: fmt.Errorf("calling to ObjectStorageClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*infraCreate, rv.Len())
+	builders := make([]*ObjectStorageCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &infraCreateBulk{config: c.config, builders: builders}
+	return &ObjectStorageCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for infra.
-func (c *infraClient) Update() *infraUpdate {
-	mutation := newinfraMutation(c.config, OpUpdate)
-	return &infraUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for ObjectStorage.
+func (c *ObjectStorageClient) Update() *ObjectStorageUpdate {
+	mutation := newObjectStorageMutation(c.config, OpUpdate)
+	return &ObjectStorageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *infraClient) UpdateOne(_m *infra) *infraUpdateOne {
-	mutation := newinfraMutation(c.config, OpUpdateOne, withinfra(_m))
-	return &infraUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ObjectStorageClient) UpdateOne(_m *ObjectStorage) *ObjectStorageUpdateOne {
+	mutation := newObjectStorageMutation(c.config, OpUpdateOne, withObjectStorage(_m))
+	return &ObjectStorageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *infraClient) UpdateOneID(id int) *infraUpdateOne {
-	mutation := newinfraMutation(c.config, OpUpdateOne, withinfraID(id))
-	return &infraUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ObjectStorageClient) UpdateOneID(id int64) *ObjectStorageUpdateOne {
+	mutation := newObjectStorageMutation(c.config, OpUpdateOne, withObjectStorageID(id))
+	return &ObjectStorageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for infra.
-func (c *infraClient) Delete() *infraDelete {
-	mutation := newinfraMutation(c.config, OpDelete)
-	return &infraDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for ObjectStorage.
+func (c *ObjectStorageClient) Delete() *ObjectStorageDelete {
+	mutation := newObjectStorageMutation(c.config, OpDelete)
+	return &ObjectStorageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *infraClient) DeleteOne(_m *infra) *infraDeleteOne {
+func (c *ObjectStorageClient) DeleteOne(_m *ObjectStorage) *ObjectStorageDeleteOne {
 	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *infraClient) DeleteOneID(id int) *infraDeleteOne {
-	builder := c.Delete().Where(infra.ID(id))
+func (c *ObjectStorageClient) DeleteOneID(id int64) *ObjectStorageDeleteOne {
+	builder := c.Delete().Where(objectstorage.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &infraDeleteOne{builder}
+	return &ObjectStorageDeleteOne{builder}
 }
 
-// Query returns a query builder for infra.
-func (c *infraClient) Query() *infraQuery {
-	return &infraQuery{
+// Query returns a query builder for ObjectStorage.
+func (c *ObjectStorageClient) Query() *ObjectStorageQuery {
+	return &ObjectStorageQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: Typeinfra},
+		ctx:    &QueryContext{Type: TypeObjectStorage},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a infra entity by its id.
-func (c *infraClient) Get(ctx context.Context, id int) (*infra, error) {
-	return c.Query().Where(infra.ID(id)).Only(ctx)
+// Get returns a ObjectStorage entity by its id.
+func (c *ObjectStorageClient) Get(ctx context.Context, id int64) (*ObjectStorage, error) {
+	return c.Query().Where(objectstorage.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *infraClient) GetX(ctx context.Context, id int) *infra {
+func (c *ObjectStorageClient) GetX(ctx context.Context, id int64) *ObjectStorage {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -306,36 +306,36 @@ func (c *infraClient) GetX(ctx context.Context, id int) *infra {
 }
 
 // Hooks returns the client hooks.
-func (c *infraClient) Hooks() []Hook {
-	return c.hooks.infra
+func (c *ObjectStorageClient) Hooks() []Hook {
+	return c.hooks.ObjectStorage
 }
 
 // Interceptors returns the client interceptors.
-func (c *infraClient) Interceptors() []Interceptor {
-	return c.inters.infra
+func (c *ObjectStorageClient) Interceptors() []Interceptor {
+	return c.inters.ObjectStorage
 }
 
-func (c *infraClient) mutate(ctx context.Context, m *infraMutation) (Value, error) {
+func (c *ObjectStorageClient) mutate(ctx context.Context, m *ObjectStorageMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&infraCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&ObjectStorageCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&infraUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&ObjectStorageUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&infraUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&ObjectStorageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&infraDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&ObjectStorageDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("gen: unknown infra mutation op: %q", m.Op())
+		return nil, fmt.Errorf("gen: unknown ObjectStorage mutation op: %q", m.Op())
 	}
 }
 
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		infra []ent.Hook
+		ObjectStorage []ent.Hook
 	}
 	inters struct {
-		infra []ent.Interceptor
+		ObjectStorage []ent.Interceptor
 	}
 )

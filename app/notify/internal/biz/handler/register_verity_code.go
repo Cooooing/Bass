@@ -41,13 +41,13 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 	data.ContentRender = buf.String()
 
 	switch data.Channel {
-	case v1.NotificationChannel_NotificationChannelEmail:
+	case v1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL:
 		// 发送邮件
 		err = h.emailDomain.Send([]string{data.Meta.RegisterVerifyCode.Email}, data.Title, data.ContentRender)
 		if err != nil {
 			return nil, err
 		}
-	case v1.NotificationChannel_NotificationChannelSMS:
+	case v1.NotificationChannel_NOTIFICATION_CHANNEL_SMS:
 		// 发送短信
 		err = h.tencentSmsDomain.SendSms(ctx, []string{data.Meta.RegisterVerifyCode.Phone}, []string{data.Meta.RegisterVerifyCode.Code})
 		if err != nil {

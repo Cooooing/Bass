@@ -8,6 +8,7 @@ package v1
 
 import (
 	v1 "common/api/common/v1"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -130,11 +131,11 @@ type NotificationRecordQueryParams struct {
 	// uuid
 	Uuids []string `protobuf:"bytes,3,rep,name=uuids,proto3" json:"uuids,omitempty"`
 	// 通知类型
-	NotificationType *int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,oneof" json:"notification_type,omitempty"`
+	NotificationType *NotificationType `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,enum=common.api.notify.v1.NotificationType,oneof" json:"notification_type,omitempty"`
 	// 发送者ID
 	SenderIds []int64 `protobuf:"varint,6,rep,packed,name=sender_ids,json=senderIds,proto3" json:"sender_ids,omitempty"`
-	// 状态 0-正常 1-被取消
-	Status        *int32 `protobuf:"varint,8,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 状态 1-正常 2-被取消
+	Status        *NotificationStatus `protobuf:"varint,8,opt,name=status,proto3,enum=common.api.notify.v1.NotificationStatus,oneof" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -183,11 +184,11 @@ func (x *NotificationRecordQueryParams) GetUuids() []string {
 	return nil
 }
 
-func (x *NotificationRecordQueryParams) GetNotificationType() int32 {
+func (x *NotificationRecordQueryParams) GetNotificationType() NotificationType {
 	if x != nil && x.NotificationType != nil {
 		return *x.NotificationType
 	}
-	return 0
+	return NotificationType_NOTIFICATION_TYPE_UNSPECIFIED
 }
 
 func (x *NotificationRecordQueryParams) GetSenderIds() []int64 {
@@ -197,11 +198,11 @@ func (x *NotificationRecordQueryParams) GetSenderIds() []int64 {
 	return nil
 }
 
-func (x *NotificationRecordQueryParams) GetStatus() int32 {
+func (x *NotificationRecordQueryParams) GetStatus() NotificationStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return NotificationStatus_NOTIFICATION_STATUS_UNSPECIFIED
 }
 
 type NotificationRecordPageRequest struct {
@@ -420,7 +421,7 @@ var File_notify_v1_notifocation_record_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"\n" +
-	"#notify/v1/notifocation_record.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\x1a!notify/v1/notifocation_mete.proto\"\xf4\x02\n" +
+	"#notify/v1/notifocation_record.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x14notify/v1/enum.proto\x1a!notify/v1/notifocation_mete.proto\"\xf4\x02\n" +
 	"\x12NotificationRecord\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -431,14 +432,16 @@ const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"\vreceiver_id\x18\x05 \x01(\x03R\n" +
 	"receiverId\x127\n" +
 	"\tread_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\breadTime\x12S\n" +
-	"\x11notification_meta\x18\x14 \x01(\v2&.common.api.notify.v1.NotificationMetaR\x10notificationMeta\"\xd6\x01\n" +
+	"\x11notification_meta\x18\x14 \x01(\v2&.common.api.notify.v1.NotificationMetaR\x10notificationMeta\"\xc0\x02\n" +
 	"\x1dNotificationRecordQueryParams\x12\x10\n" +
 	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x14\n" +
-	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x120\n" +
-	"\x11notification_type\x18\x05 \x01(\x05H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
+	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x12d\n" +
+	"\x11notification_type\x18\x05 \x01(\x0e2&.common.api.notify.v1.NotificationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12\x1b\n" +
-	"\x06status\x18\b \x01(\x05H\x01R\x06status\x88\x01\x01B\x14\n" +
+	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12Q\n" +
+	"\x06status\x18\b \x01(\x0e2(.common.api.notify.v1.NotificationStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x01R\x06status\x88\x01\x01B\x14\n" +
 	"\x12_notification_typeB\t\n" +
 	"\a_status\"\xa1\x01\n" +
 	"\x1dNotificationRecordPageRequest\x125\n" +
@@ -455,7 +458,7 @@ const file_notify_v1_notifocation_record_proto_rawDesc = "" +
 	"\x05count\x18\x01 \x01(\x05R\x05count2\xd3\x02\n" +
 	"\x1fNotifyNotificationRecordService\x12\x96\x01\n" +
 	"\x04Page\x123.common.api.notify.v1.NotificationRecordPageRequest\x1a1.common.api.notify.v1.NotificationRecordPageReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/page\x12\x96\x01\n" +
-	"\x04Read\x123.common.api.notify.v1.NotificationRecordReadRequest\x1a1.common.api.notify.v1.NotificationRecordReadReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/readB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x04Read\x123.common.api.notify.v1.NotificationRecordReadRequest\x1a1.common.api.notify.v1.NotificationRecordReadReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/notificationRecord/readB\x19Z\x17common/api/notify/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_record_proto_rawDescOnce sync.Once
@@ -479,29 +482,33 @@ var file_notify_v1_notifocation_record_proto_goTypes = []any{
 	(*NotificationRecordReadReply)(nil),   // 5: common.api.notify.v1.NotificationRecordReadReply
 	(*timestamppb.Timestamp)(nil),         // 6: google.protobuf.Timestamp
 	(*NotificationMeta)(nil),              // 7: common.api.notify.v1.NotificationMeta
-	(*v1.PageRequest)(nil),                // 8: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),                  // 9: common.api.common.v1.PageReply
-	(*v1.TimeRange)(nil),                  // 10: common.api.common.v1.TimeRange
+	(NotificationType)(0),                 // 8: common.api.notify.v1.NotificationType
+	(NotificationStatus)(0),               // 9: common.api.notify.v1.NotificationStatus
+	(*v1.PageRequest)(nil),                // 10: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),                  // 11: common.api.common.v1.PageReply
+	(*v1.TimeRange)(nil),                  // 12: common.api.common.v1.TimeRange
 }
 var file_notify_v1_notifocation_record_proto_depIdxs = []int32{
 	6,  // 0: common.api.notify.v1.NotificationRecord.created_at:type_name -> google.protobuf.Timestamp
 	6,  // 1: common.api.notify.v1.NotificationRecord.updated_at:type_name -> google.protobuf.Timestamp
 	6,  // 2: common.api.notify.v1.NotificationRecord.read_time:type_name -> google.protobuf.Timestamp
 	7,  // 3: common.api.notify.v1.NotificationRecord.notification_meta:type_name -> common.api.notify.v1.NotificationMeta
-	8,  // 4: common.api.notify.v1.NotificationRecordPageRequest.page:type_name -> common.api.common.v1.PageRequest
-	1,  // 5: common.api.notify.v1.NotificationRecordPageRequest.query:type_name -> common.api.notify.v1.NotificationRecordQueryParams
-	9,  // 6: common.api.notify.v1.NotificationRecordPageReply.page:type_name -> common.api.common.v1.PageReply
-	0,  // 7: common.api.notify.v1.NotificationRecordPageReply.rows:type_name -> common.api.notify.v1.NotificationRecord
-	10, // 8: common.api.notify.v1.NotificationRecordReadRequest.read_time_range:type_name -> common.api.common.v1.TimeRange
-	2,  // 9: common.api.notify.v1.NotifyNotificationRecordService.Page:input_type -> common.api.notify.v1.NotificationRecordPageRequest
-	4,  // 10: common.api.notify.v1.NotifyNotificationRecordService.Read:input_type -> common.api.notify.v1.NotificationRecordReadRequest
-	3,  // 11: common.api.notify.v1.NotifyNotificationRecordService.Page:output_type -> common.api.notify.v1.NotificationRecordPageReply
-	5,  // 12: common.api.notify.v1.NotifyNotificationRecordService.Read:output_type -> common.api.notify.v1.NotificationRecordReadReply
-	11, // [11:13] is the sub-list for method output_type
-	9,  // [9:11] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	8,  // 4: common.api.notify.v1.NotificationRecordQueryParams.notification_type:type_name -> common.api.notify.v1.NotificationType
+	9,  // 5: common.api.notify.v1.NotificationRecordQueryParams.status:type_name -> common.api.notify.v1.NotificationStatus
+	10, // 6: common.api.notify.v1.NotificationRecordPageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 7: common.api.notify.v1.NotificationRecordPageRequest.query:type_name -> common.api.notify.v1.NotificationRecordQueryParams
+	11, // 8: common.api.notify.v1.NotificationRecordPageReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 9: common.api.notify.v1.NotificationRecordPageReply.rows:type_name -> common.api.notify.v1.NotificationRecord
+	12, // 10: common.api.notify.v1.NotificationRecordReadRequest.read_time_range:type_name -> common.api.common.v1.TimeRange
+	2,  // 11: common.api.notify.v1.NotifyNotificationRecordService.Page:input_type -> common.api.notify.v1.NotificationRecordPageRequest
+	4,  // 12: common.api.notify.v1.NotifyNotificationRecordService.Read:input_type -> common.api.notify.v1.NotificationRecordReadRequest
+	3,  // 13: common.api.notify.v1.NotifyNotificationRecordService.Page:output_type -> common.api.notify.v1.NotificationRecordPageReply
+	5,  // 14: common.api.notify.v1.NotifyNotificationRecordService.Read:output_type -> common.api.notify.v1.NotificationRecordReadReply
+	13, // [13:15] is the sub-list for method output_type
+	11, // [11:13] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_notify_v1_notifocation_record_proto_init() }
@@ -509,6 +516,7 @@ func file_notify_v1_notifocation_record_proto_init() {
 	if File_notify_v1_notifocation_record_proto != nil {
 		return
 	}
+	file_notify_v1_enum_proto_init()
 	file_notify_v1_notifocation_mete_proto_init()
 	file_notify_v1_notifocation_record_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}

@@ -8,6 +8,7 @@ package v1
 
 import (
 	v1 "common/api/common/v1"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -35,13 +36,13 @@ type NotificationMeta struct {
 	// uuid
 	Uuid string `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	// 通知类型
-	NotificationType int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3" json:"notification_type,omitempty"`
+	NotificationType NotificationType `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,enum=common.api.notify.v1.NotificationType" json:"notification_type,omitempty"`
 	// 发送者ID
 	SenderId int64 `protobuf:"varint,6,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty"`
 	// 通知元数据
 	Meta string `protobuf:"bytes,7,opt,name=meta,proto3" json:"meta,omitempty"`
-	// 状态 0-正常 1-被取消
-	Status int32 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty"`
+	// 状态 1-正常 2-被取消
+	Status NotificationStatus `protobuf:"varint,8,opt,name=status,proto3,enum=common.api.notify.v1.NotificationStatus" json:"status,omitempty"`
 	// 渲染内容
 	ContentRender string `protobuf:"bytes,20,opt,name=content_render,json=contentRender,proto3" json:"content_render,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -106,11 +107,11 @@ func (x *NotificationMeta) GetUuid() string {
 	return ""
 }
 
-func (x *NotificationMeta) GetNotificationType() int32 {
+func (x *NotificationMeta) GetNotificationType() NotificationType {
 	if x != nil {
 		return x.NotificationType
 	}
-	return 0
+	return NotificationType_NOTIFICATION_TYPE_UNSPECIFIED
 }
 
 func (x *NotificationMeta) GetSenderId() int64 {
@@ -127,11 +128,11 @@ func (x *NotificationMeta) GetMeta() string {
 	return ""
 }
 
-func (x *NotificationMeta) GetStatus() int32 {
+func (x *NotificationMeta) GetStatus() NotificationStatus {
 	if x != nil {
 		return x.Status
 	}
-	return 0
+	return NotificationStatus_NOTIFICATION_STATUS_UNSPECIFIED
 }
 
 func (x *NotificationMeta) GetContentRender() string {
@@ -148,11 +149,11 @@ type NotificationMetaQueryParams struct {
 	// uuid
 	Uuids []string `protobuf:"bytes,3,rep,name=uuids,proto3" json:"uuids,omitempty"`
 	// 通知类型
-	NotificationType *int32 `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,oneof" json:"notification_type,omitempty"`
+	NotificationType *NotificationType `protobuf:"varint,5,opt,name=notification_type,json=notificationType,proto3,enum=common.api.notify.v1.NotificationType,oneof" json:"notification_type,omitempty"`
 	// 发送者ID
 	SenderIds []int64 `protobuf:"varint,6,rep,packed,name=sender_ids,json=senderIds,proto3" json:"sender_ids,omitempty"`
-	// 状态 0-正常 1-被取消
-	Status        *int32 `protobuf:"varint,8,opt,name=status,proto3,oneof" json:"status,omitempty"`
+	// 状态 1-正常 2-被取消
+	Status        *NotificationStatus `protobuf:"varint,8,opt,name=status,proto3,enum=common.api.notify.v1.NotificationStatus,oneof" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -201,11 +202,11 @@ func (x *NotificationMetaQueryParams) GetUuids() []string {
 	return nil
 }
 
-func (x *NotificationMetaQueryParams) GetNotificationType() int32 {
+func (x *NotificationMetaQueryParams) GetNotificationType() NotificationType {
 	if x != nil && x.NotificationType != nil {
 		return *x.NotificationType
 	}
-	return 0
+	return NotificationType_NOTIFICATION_TYPE_UNSPECIFIED
 }
 
 func (x *NotificationMetaQueryParams) GetSenderIds() []int64 {
@@ -215,11 +216,11 @@ func (x *NotificationMetaQueryParams) GetSenderIds() []int64 {
 	return nil
 }
 
-func (x *NotificationMetaQueryParams) GetStatus() int32 {
+func (x *NotificationMetaQueryParams) GetStatus() NotificationStatus {
 	if x != nil && x.Status != nil {
 		return *x.Status
 	}
-	return 0
+	return NotificationStatus_NOTIFICATION_STATUS_UNSPECIFIED
 }
 
 type NotificationMetaPageRequest struct {
@@ -334,26 +335,30 @@ var File_notify_v1_notifocation_mete_proto protoreflect.FileDescriptor
 
 const file_notify_v1_notifocation_mete_proto_rawDesc = "" +
 	"\n" +
-	"!notify/v1/notifocation_mete.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x16common/v1/common.proto\"\xcb\x02\n" +
+	"!notify/v1/notifocation_mete.proto\x12\x14common.api.notify.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x14notify/v1/enum.proto\"\xb5\x03\n" +
 	"\x10NotificationMeta\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
 	"\n" +
 	"updated_at\x18\xe9\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\x03R\x02id\x12\x12\n" +
-	"\x04uuid\x18\x04 \x01(\tR\x04uuid\x12+\n" +
-	"\x11notification_type\x18\x05 \x01(\x05R\x10notificationType\x12\x1b\n" +
+	"\x04uuid\x18\x04 \x01(\tR\x04uuid\x12_\n" +
+	"\x11notification_type\x18\x05 \x01(\x0e2&.common.api.notify.v1.NotificationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\x10notificationType\x12\x1b\n" +
 	"\tsender_id\x18\x06 \x01(\x03R\bsenderId\x12\x12\n" +
-	"\x04meta\x18\a \x01(\tR\x04meta\x12\x16\n" +
-	"\x06status\x18\b \x01(\x05R\x06status\x12%\n" +
-	"\x0econtent_render\x18\x14 \x01(\tR\rcontentRender\"\xd4\x01\n" +
+	"\x04meta\x18\a \x01(\tR\x04meta\x12L\n" +
+	"\x06status\x18\b \x01(\x0e2(.common.api.notify.v1.NotificationStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\x06status\x12%\n" +
+	"\x0econtent_render\x18\x14 \x01(\tR\rcontentRender\"\xbe\x02\n" +
 	"\x1bNotificationMetaQueryParams\x12\x10\n" +
 	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x14\n" +
-	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x120\n" +
-	"\x11notification_type\x18\x05 \x01(\x05H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
+	"\x05uuids\x18\x03 \x03(\tR\x05uuids\x12d\n" +
+	"\x11notification_type\x18\x05 \x01(\x0e2&.common.api.notify.v1.NotificationTypeB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x00R\x10notificationType\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12\x1b\n" +
-	"\x06status\x18\b \x01(\x05H\x01R\x06status\x88\x01\x01B\x14\n" +
+	"sender_ids\x18\x06 \x03(\x03R\tsenderIds\x12Q\n" +
+	"\x06status\x18\b \x01(\x0e2(.common.api.notify.v1.NotificationStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x01R\x06status\x88\x01\x01B\x14\n" +
 	"\x12_notification_typeB\t\n" +
 	"\a_status\"\x9d\x01\n" +
 	"\x1bNotificationMetaPageRequest\x125\n" +
@@ -363,7 +368,7 @@ const file_notify_v1_notifocation_mete_proto_rawDesc = "" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12:\n" +
 	"\x04rows\x18\x02 \x03(\v2&.common.api.notify.v1.NotificationMetaR\x04rows2\xb2\x01\n" +
 	"\x1dNotifyNotificationMetaService\x12\x90\x01\n" +
-	"\x04Page\x121.common.api.notify.v1.NotificationMetaPageRequest\x1a/.common.api.notify.v1.NotificationMetaPageReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/notificationMeta/pageB\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x04Page\x121.common.api.notify.v1.NotificationMetaPageRequest\x1a/.common.api.notify.v1.NotificationMetaPageReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/notificationMeta/pageB\x19Z\x17common/api/notify/v1;v1b\x06proto3"
 
 var (
 	file_notify_v1_notifocation_mete_proto_rawDescOnce sync.Once
@@ -384,23 +389,29 @@ var file_notify_v1_notifocation_mete_proto_goTypes = []any{
 	(*NotificationMetaPageRequest)(nil), // 2: common.api.notify.v1.NotificationMetaPageRequest
 	(*NotificationMetaPageReply)(nil),   // 3: common.api.notify.v1.NotificationMetaPageReply
 	(*timestamppb.Timestamp)(nil),       // 4: google.protobuf.Timestamp
-	(*v1.PageRequest)(nil),              // 5: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),                // 6: common.api.common.v1.PageReply
+	(NotificationType)(0),               // 5: common.api.notify.v1.NotificationType
+	(NotificationStatus)(0),             // 6: common.api.notify.v1.NotificationStatus
+	(*v1.PageRequest)(nil),              // 7: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),                // 8: common.api.common.v1.PageReply
 }
 var file_notify_v1_notifocation_mete_proto_depIdxs = []int32{
-	4, // 0: common.api.notify.v1.NotificationMeta.created_at:type_name -> google.protobuf.Timestamp
-	4, // 1: common.api.notify.v1.NotificationMeta.updated_at:type_name -> google.protobuf.Timestamp
-	5, // 2: common.api.notify.v1.NotificationMetaPageRequest.page:type_name -> common.api.common.v1.PageRequest
-	1, // 3: common.api.notify.v1.NotificationMetaPageRequest.query:type_name -> common.api.notify.v1.NotificationMetaQueryParams
-	6, // 4: common.api.notify.v1.NotificationMetaPageReply.page:type_name -> common.api.common.v1.PageReply
-	0, // 5: common.api.notify.v1.NotificationMetaPageReply.rows:type_name -> common.api.notify.v1.NotificationMeta
-	2, // 6: common.api.notify.v1.NotifyNotificationMetaService.Page:input_type -> common.api.notify.v1.NotificationMetaPageRequest
-	3, // 7: common.api.notify.v1.NotifyNotificationMetaService.Page:output_type -> common.api.notify.v1.NotificationMetaPageReply
-	7, // [7:8] is the sub-list for method output_type
-	6, // [6:7] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	4,  // 0: common.api.notify.v1.NotificationMeta.created_at:type_name -> google.protobuf.Timestamp
+	4,  // 1: common.api.notify.v1.NotificationMeta.updated_at:type_name -> google.protobuf.Timestamp
+	5,  // 2: common.api.notify.v1.NotificationMeta.notification_type:type_name -> common.api.notify.v1.NotificationType
+	6,  // 3: common.api.notify.v1.NotificationMeta.status:type_name -> common.api.notify.v1.NotificationStatus
+	5,  // 4: common.api.notify.v1.NotificationMetaQueryParams.notification_type:type_name -> common.api.notify.v1.NotificationType
+	6,  // 5: common.api.notify.v1.NotificationMetaQueryParams.status:type_name -> common.api.notify.v1.NotificationStatus
+	7,  // 6: common.api.notify.v1.NotificationMetaPageRequest.page:type_name -> common.api.common.v1.PageRequest
+	1,  // 7: common.api.notify.v1.NotificationMetaPageRequest.query:type_name -> common.api.notify.v1.NotificationMetaQueryParams
+	8,  // 8: common.api.notify.v1.NotificationMetaPageReply.page:type_name -> common.api.common.v1.PageReply
+	0,  // 9: common.api.notify.v1.NotificationMetaPageReply.rows:type_name -> common.api.notify.v1.NotificationMeta
+	2,  // 10: common.api.notify.v1.NotifyNotificationMetaService.Page:input_type -> common.api.notify.v1.NotificationMetaPageRequest
+	3,  // 11: common.api.notify.v1.NotifyNotificationMetaService.Page:output_type -> common.api.notify.v1.NotificationMetaPageReply
+	11, // [11:12] is the sub-list for method output_type
+	10, // [10:11] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_notify_v1_notifocation_mete_proto_init() }
@@ -408,6 +419,7 @@ func file_notify_v1_notifocation_mete_proto_init() {
 	if File_notify_v1_notifocation_mete_proto != nil {
 		return
 	}
+	file_notify_v1_enum_proto_init()
 	file_notify_v1_notifocation_mete_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

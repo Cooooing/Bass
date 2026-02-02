@@ -13,7 +13,11 @@ import (
 	"infra/internal/biz"
 	"infra/internal/conf"
 	"infra/internal/data"
+	"infra/internal/data/base"
 	"infra/internal/data/client"
+	"infra/internal/data/oss"
+	"infra/internal/data/oss/minio"
+	"infra/internal/data/oss/qiniu"
 	"infra/internal/server"
 	"infra/internal/service"
 )
@@ -46,6 +50,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	tokenCache := util.NewTokenCache(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenCache)
+	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
 		cleanup4()
@@ -55,9 +60,14 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	BaseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	systemService := service.NewSystemService(baseService, baseDomain, BaseData)
-	v := service.ProvideServices(systemService)
+	baseData := base.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	objectStorageRepo := data.NewObjectStorageRepo(baseData)
+	minioMinio := minio.NewMinio()
+	qiniuQiniu := qiniu.NewQiniu(baseData)
+	factory := oss.NewFactory(minioMinio, qiniuQiniu)
+	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
+	ossService := service.NewOssService(baseService, objectStorageDomain)
+	v := service.ProvideServices(systemService, ossService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	app := newApp(logger, grpcServer, httpServer, etcdClient)

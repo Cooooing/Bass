@@ -2,9 +2,12 @@ package server
 
 import (
 	"common/pkg"
+	"common/pkg/constant"
 	"common/pkg/util"
 	"infra/internal/conf"
 	"infra/internal/service"
+	http2 "net/http"
+	"os"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -44,8 +47,32 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 	}
 	srv := http.NewServer(opts...)
 	srv.Handle("/metrics", promhttp.Handler())
+	// 接口文档
+	if c.Server.Mode != constant.Prod {
+		srv.Handle("/openapi.yaml", DocHandler())
+	}
 	for _, s := range services {
 		s.RegisterHttp(srv)
 	}
 	return srv
+}
+
+func DocHandler() http2.Handler {
+	return http2.HandlerFunc(func(w http2.ResponseWriter, r *http2.Request) {
+		// 只允许 GET
+		if r.Method != http2.MethodGet {
+			http2.Error(w, "method not allowed", http2.StatusMethodNotAllowed)
+			return
+		}
+
+		data, err := os.ReadFile("../../common/api/openapi.yaml")
+		if err != nil {
+			http2.Error(w, "swagger file not found", http2.StatusNotFound)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(http2.StatusOK)
+		_, _ = w.Write(data)
+	})
 }

@@ -13,4 +13,5 @@ const (
 	TablePrefixNotify   TablePrefix = "notify_"
 	TablePrefixSignal   TablePrefix = "signal_"
 	TablePrefixIM       TablePrefix = "im_"
+	TablePrefixInfra    TablePrefix = "infra_"
 )

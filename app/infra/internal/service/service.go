@@ -17,6 +17,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewBaseService,
 	NewSystemService,
 	ProvideServices,
+	NewOssService,
 )
 
 type BaseService struct {
@@ -49,8 +50,10 @@ type Service interface {
 
 func ProvideServices(
 	systemService *SystemService,
+	ossService *OssService,
 ) []Service {
 	return []Service{
 		systemService,
+		ossService,
 	}
 }

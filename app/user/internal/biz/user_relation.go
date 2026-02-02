@@ -102,10 +102,10 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 			err := d.rabbitmq.Publish(constant.ExchangeUser.String(), base.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
 				&commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeUserFollow),
+					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
 					SenderId:   u.ID,
 					SenderName: u.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						User: &commonModel.UserMeta{UserId: targetId, UserName: u.Name},
 					},

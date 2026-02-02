@@ -117,9 +117,49 @@ func (m *NotificationTemplate) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for NotificationType
+	if _, ok := _NotificationTemplate_NotificationType_NotInLookup[m.GetNotificationType()]; ok {
+		err := NotificationTemplateValidationError{
+			field:  "NotificationType",
+			reason: "value must not be in list [NOTIFICATION_TYPE_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Channel
+	if _, ok := NotificationType_name[int32(m.GetNotificationType())]; !ok {
+		err := NotificationTemplateValidationError{
+			field:  "NotificationType",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := _NotificationTemplate_Channel_NotInLookup[m.GetChannel()]; ok {
+		err := NotificationTemplateValidationError{
+			field:  "Channel",
+			reason: "value must not be in list [NOTIFICATION_CHANNEL_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := NotificationChannel_name[int32(m.GetChannel())]; !ok {
+		err := NotificationTemplateValidationError{
+			field:  "Channel",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for Title
 
@@ -207,6 +247,14 @@ var _ interface {
 	ErrorName() string
 } = NotificationTemplateValidationError{}
 
+var _NotificationTemplate_NotificationType_NotInLookup = map[NotificationType]struct{}{
+	0: {},
+}
+
+var _NotificationTemplate_Channel_NotInLookup = map[NotificationChannel]struct{}{
+	0: {},
+}
+
 // Validate checks the field values on NotificationTemplateQueryParams with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -230,11 +278,55 @@ func (m *NotificationTemplateQueryParams) validate(all bool) error {
 	var errors []error
 
 	if m.NotificationType != nil {
-		// no validation rules for NotificationType
+
+		if _, ok := _NotificationTemplateQueryParams_NotificationType_NotInLookup[m.GetNotificationType()]; ok {
+			err := NotificationTemplateQueryParamsValidationError{
+				field:  "NotificationType",
+				reason: "value must not be in list [NOTIFICATION_TYPE_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationType_name[int32(m.GetNotificationType())]; !ok {
+			err := NotificationTemplateQueryParamsValidationError{
+				field:  "NotificationType",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Channel != nil {
-		// no validation rules for Channel
+
+		if _, ok := _NotificationTemplateQueryParams_Channel_NotInLookup[m.GetChannel()]; ok {
+			err := NotificationTemplateQueryParamsValidationError{
+				field:  "Channel",
+				reason: "value must not be in list [NOTIFICATION_CHANNEL_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationChannel_name[int32(m.GetChannel())]; !ok {
+			err := NotificationTemplateQueryParamsValidationError{
+				field:  "Channel",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Content != nil {
@@ -325,6 +417,14 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NotificationTemplateQueryParamsValidationError{}
+
+var _NotificationTemplateQueryParams_NotificationType_NotInLookup = map[NotificationType]struct{}{
+	0: {},
+}
+
+var _NotificationTemplateQueryParams_Channel_NotInLookup = map[NotificationChannel]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on NotificationTemplatePageRequest with the
 // rules defined in the proto definition for this message. If any rules are
@@ -943,11 +1043,55 @@ func (m *NotificationTemplateUpdateRequest) validate(all bool) error {
 	// no validation rules for Ids
 
 	if m.NotificationType != nil {
-		// no validation rules for NotificationType
+
+		if _, ok := _NotificationTemplateUpdateRequest_NotificationType_NotInLookup[m.GetNotificationType()]; ok {
+			err := NotificationTemplateUpdateRequestValidationError{
+				field:  "NotificationType",
+				reason: "value must not be in list [NOTIFICATION_TYPE_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationType_name[int32(m.GetNotificationType())]; !ok {
+			err := NotificationTemplateUpdateRequestValidationError{
+				field:  "NotificationType",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Channel != nil {
-		// no validation rules for Channel
+
+		if _, ok := _NotificationTemplateUpdateRequest_Channel_NotInLookup[m.GetChannel()]; ok {
+			err := NotificationTemplateUpdateRequestValidationError{
+				field:  "Channel",
+				reason: "value must not be in list [NOTIFICATION_CHANNEL_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationChannel_name[int32(m.GetChannel())]; !ok {
+			err := NotificationTemplateUpdateRequestValidationError{
+				field:  "Channel",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Content != nil {
@@ -1039,6 +1183,14 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NotificationTemplateUpdateRequestValidationError{}
+
+var _NotificationTemplateUpdateRequest_NotificationType_NotInLookup = map[NotificationType]struct{}{
+	0: {},
+}
+
+var _NotificationTemplateUpdateRequest_Channel_NotInLookup = map[NotificationChannel]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on NotificationTemplateUpdateReply with the
 // rules defined in the proto definition for this message. If any rules are

@@ -6,5 +6,5 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// infra is the predicate function for infra builders.
-type infra func(*sql.Selector)
+// ObjectStorage is the predicate function for objectstorage builders.
+type ObjectStorage func(*sql.Selector)

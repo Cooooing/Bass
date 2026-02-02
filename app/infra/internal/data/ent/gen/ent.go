@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"infra/internal/data/ent/gen/infra"
+	"infra/internal/data/ent/gen/objectstorage"
 	"reflect"
 	"sync"
 
@@ -73,7 +73,7 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			infra.Table: infra.ValidColumn,
+			objectstorage.Table: objectstorage.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

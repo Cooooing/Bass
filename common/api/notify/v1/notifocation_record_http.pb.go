@@ -31,11 +31,11 @@ type NotifyNotificationRecordServiceHTTPServer interface {
 
 func RegisterNotifyNotificationRecordServiceHTTPServer(s *http.Server, srv NotifyNotificationRecordServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/notificationRecord/page", _NotifyNotificationRecordService_Page9_HTTP_Handler(srv))
+	r.POST("/v1/notificationRecord/page", _NotifyNotificationRecordService_Page10_HTTP_Handler(srv))
 	r.POST("/v1/notificationRecord/read", _NotifyNotificationRecordService_Read0_HTTP_Handler(srv))
 }
 
-func _NotifyNotificationRecordService_Page9_HTTP_Handler(srv NotifyNotificationRecordServiceHTTPServer) func(ctx http.Context) error {
+func _NotifyNotificationRecordService_Page10_HTTP_Handler(srv NotifyNotificationRecordServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in NotificationRecordPageRequest
 		if err := ctx.Bind(&in); err != nil {

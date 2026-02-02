@@ -282,11 +282,55 @@ func (m *NotificationRecordQueryParams) validate(all bool) error {
 	var errors []error
 
 	if m.NotificationType != nil {
-		// no validation rules for NotificationType
+
+		if _, ok := _NotificationRecordQueryParams_NotificationType_NotInLookup[m.GetNotificationType()]; ok {
+			err := NotificationRecordQueryParamsValidationError{
+				field:  "NotificationType",
+				reason: "value must not be in list [NOTIFICATION_TYPE_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationType_name[int32(m.GetNotificationType())]; !ok {
+			err := NotificationRecordQueryParamsValidationError{
+				field:  "NotificationType",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _NotificationRecordQueryParams_Status_NotInLookup[m.GetStatus()]; ok {
+			err := NotificationRecordQueryParamsValidationError{
+				field:  "Status",
+				reason: "value must not be in list [NOTIFICATION_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := NotificationStatus_name[int32(m.GetStatus())]; !ok {
+			err := NotificationRecordQueryParamsValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -369,6 +413,14 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NotificationRecordQueryParamsValidationError{}
+
+var _NotificationRecordQueryParams_NotificationType_NotInLookup = map[NotificationType]struct{}{
+	0: {},
+}
+
+var _NotificationRecordQueryParams_Status_NotInLookup = map[NotificationStatus]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on NotificationRecordPageRequest with the
 // rules defined in the proto definition for this message. If any rules are

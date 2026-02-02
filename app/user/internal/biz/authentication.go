@@ -82,10 +82,10 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	err = s.eventPool.Submit(func() {
 		err := s.rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeUserRegisterVerifyCode),
+			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
 			SenderId:   u.ID,
 			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelEmail)},
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Email:  *u.Email,
@@ -202,10 +202,10 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	err = s.eventPool.Submit(func() {
 		err := s.rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeUserRegisterVerifyCode),
+			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
 			SenderId:   u.ID,
 			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelSMS)},
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Phone:  *u.Phone,

@@ -50,11 +50,11 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	BaseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	notificationMetaRepo := data.NewNotificationMetaRepo(BaseData)
+	baseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	notificationMetaRepo := data.NewNotificationMetaRepo(baseData)
 	notificationMetaDomain := biz.NewNotificationMetaDomain(baseDomain, notificationMetaRepo)
 	notificationMetaService := service.NewNotificationMetaService(baseService, notificationMetaDomain)
-	notificationRecordRepo := data.NewNotificationRecordRepo(BaseData)
+	notificationRecordRepo := data.NewNotificationRecordRepo(baseData)
 	notificationRecordDomain := biz.NewNotificationRecordDomain(baseDomain, notificationRecordRepo)
 	notificationRecordService := service.NewNotificationRecordService(baseService, notificationRecordDomain)
 	v := service.ProvideServices(systemService, notificationMetaService, notificationRecordService)
@@ -66,7 +66,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	registerVerifyCode := handler.NewRegisterVerifyCode(emailDomain, tencentSmsDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
 	dictMap := handler.ProvideHandlers(registerVerifyCode, fullHandler)
-	notificationTemplateRepo := data.NewNotificationTemplateRepo(BaseData)
+	notificationTemplateRepo := data.NewNotificationTemplateRepo(baseData)
 	eventHandler, cleanup5, err := biz.NewEventHandler(baseDomain, dictMap, notificationTemplateRepo)
 	if err != nil {
 		cleanup4()

@@ -2,8 +2,28 @@
 
 package gen
 
+import (
+	"infra/internal/data/ent/gen/objectstorage"
+	"infra/internal/data/ent/schema"
+	"time"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	objectstorageFields := schema.ObjectStorage{}.Fields()
+	_ = objectstorageFields
+	// objectstorageDescBlocked is the schema descriptor for blocked field.
+	objectstorageDescBlocked := objectstorageFields[10].Descriptor()
+	// objectstorage.DefaultBlocked holds the default value on creation for the blocked field.
+	objectstorage.DefaultBlocked = objectstorageDescBlocked.Default.(bool)
+	// objectstorageDescCreatedAt is the schema descriptor for created_at field.
+	objectstorageDescCreatedAt := objectstorageFields[15].Descriptor()
+	// objectstorage.DefaultCreatedAt holds the default value on creation for the created_at field.
+	objectstorage.DefaultCreatedAt = objectstorageDescCreatedAt.Default.(func() time.Time)
+	// objectstorageDescUpdatedAt is the schema descriptor for updated_at field.
+	objectstorageDescUpdatedAt := objectstorageFields[16].Descriptor()
+	// objectstorage.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	objectstorage.DefaultUpdatedAt = objectstorageDescUpdatedAt.Default.(func() time.Time)
 }

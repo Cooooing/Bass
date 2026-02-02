@@ -112,23 +112,21 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 		return nil, nil, cleanup, err
 	}
 	var c *conf.Bootstrap
-	if bc.Mode != constant.Dev {
-		c, cli, err := loadEtcdConfig(bc)
-		if err != nil {
-			panic(err)
-		}
-		cleanup = func() {
-			err := cli.Close()
-			if err != nil {
-				panic(err)
-			}
-		}
-		return c, bc, cleanup, nil
-	} else {
+	if bc.Mode == constant.Dev {
 		c, err := loadLocalConfig(bc)
 		return c, bc, cleanup, err
 	}
 
+	c, cli, err := loadEtcdConfig(bc)
+	if err != nil {
+		panic(err)
+	}
+	cleanup = func() {
+		err := cli.Close()
+		if err != nil {
+			panic(err)
+		}
+	}
 	return c, bc, cleanup, nil
 }
 
@@ -206,6 +204,9 @@ func loadEtcdConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, *clientv3.Client,
 	if err := c.Scan(&etcdConf); err != nil {
 		return nil, nil, fmt.Errorf("scan etcd config fail: %w", err)
 	}
+	defer func() {
+		_ = c.Close()
+	}()
 
 	etcdConf.Server.Name = bc.Name
 	etcdConf.Server.Version = bc.Version

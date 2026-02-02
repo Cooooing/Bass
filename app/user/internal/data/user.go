@@ -31,7 +31,7 @@ func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*mo
 		SetNillableEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
-		SetAvatarURL(fmt.Sprintf(r.Conf.Oss.Avatar, u.Name))
+		SetAvatarURL(fmt.Sprintf(r.Conf.Server.Avatar, u.Name))
 	createdUser, err := userCreate.Save(ctx)
 	return &model.User{User: createdUser}, err
 }

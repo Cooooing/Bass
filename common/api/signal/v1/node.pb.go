@@ -1034,7 +1034,7 @@ var File_signal_v1_node_proto protoreflect.FileDescriptor
 
 const file_signal_v1_node_proto_rawDesc = "" +
 	"\n" +
-	"\x14signal/v1/node.proto\x12\x14common.api.signal.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x15signal/v1/model.proto\x1a\x18signal/v1/constant.proto\"G\n" +
+	"\x14signal/v1/node.proto\x12\x14common.api.signal.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x15signal/v1/model.proto\x1a\x14signal/v1/enum.proto\"G\n" +
 	"\x15SignalNodeSaveRequest\x12.\n" +
 	"\x04node\x18\x01 \x01(\v2\x1a.common.api.signal.v1.NodeR\x04node\"E\n" +
 	"\x13SignalNodeSaveReply\x12.\n" +
@@ -1179,7 +1179,7 @@ func file_signal_v1_node_proto_init() {
 		return
 	}
 	file_signal_v1_model_proto_init()
-	file_signal_v1_constant_proto_init()
+	file_signal_v1_enum_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

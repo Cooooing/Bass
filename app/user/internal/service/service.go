@@ -19,7 +19,6 @@ var ServiceProviderSet = wire.NewSet(
 	NewAuthenticationService,
 	NewUserService,
 	NewUserRelationService,
-	NewOssService,
 	NewTwoFactorAuthenticationService,
 	ProvideServices,
 )
@@ -51,7 +50,6 @@ func ProvideServices(
 	authenticationService *AuthenticationService,
 	userService *UserService,
 	userRelationService *UserRelationService,
-	ossService *OssService,
 	twoFactorAuthenticationService *TwoFactorAuthenticationService,
 ) []Service {
 	return []Service{
@@ -59,7 +57,6 @@ func ProvideServices(
 		authenticationService,
 		userService,
 		userRelationService,
-		ossService,
 		twoFactorAuthenticationService,
 	}
 }

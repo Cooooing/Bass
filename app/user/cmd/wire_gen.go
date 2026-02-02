@@ -15,9 +15,6 @@ import (
 	"user/internal/data"
 	"user/internal/data/base"
 	"user/internal/data/client"
-	"user/internal/data/oss"
-	"user/internal/data/oss/minio"
-	"user/internal/data/oss/qiniu"
 	"user/internal/server"
 	"user/internal/service"
 )
@@ -95,12 +92,6 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
-	objectStorageRepo := data.NewObjectStorageRepo(baseData)
-	minioMinio := minio.NewMinio()
-	qiniuQiniu := qiniu.NewQiniu(baseData)
-	factory := oss.NewFactory(minioMinio, qiniuQiniu)
-	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
-	ossService := service.NewOssService(baseService, objectStorageDomain)
 	twoFactorAuthenticationDomain, err := biz.NewTwoFactorAuthenticationDomain(baseDomain, userRepo)
 	if err != nil {
 		cleanup5()
@@ -111,7 +102,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	twoFactorAuthenticationService := service.NewTwoFactorAuthenticationService(baseService, twoFactorAuthenticationDomain)
-	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, ossService, twoFactorAuthenticationService)
+	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, twoFactorAuthenticationService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)

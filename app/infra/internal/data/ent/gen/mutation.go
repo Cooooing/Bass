@@ -6,8 +6,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"infra/internal/data/ent/gen/objectstorage"
 	"infra/internal/data/ent/gen/predicate"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -22,32 +24,51 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	Typeinfra = "infra"
+	TypeObjectStorage = "ObjectStorage"
 )
 
-// infraMutation represents an operation that mutates the infra nodes in the graph.
-type infraMutation struct {
+// ObjectStorageMutation represents an operation that mutates the ObjectStorage nodes in the graph.
+type ObjectStorageMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*infra, error)
-	predicates    []predicate.infra
+	op                   Op
+	typ                  string
+	id                   *int64
+	provider             *string
+	bucket               *string
+	key                  *string
+	mime_type            *string
+	size                 *int64
+	addsize              *int64
+	hash                 *string
+	upload_by            *int64
+	addupload_by         *int64
+	upload_by_name       *string
+	audit_callback_reply *string
+	blocked              *bool
+	blocked_reason       *string
+	blocked_at           *time.Time
+	blocked_by           *int64
+	addblocked_by        *int64
+	blocked_by_name      *string
+	created_at           *time.Time
+	updated_at           *time.Time
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ObjectStorage, error)
+	predicates           []predicate.ObjectStorage
 }
 
-var _ ent.Mutation = (*infraMutation)(nil)
+var _ ent.Mutation = (*ObjectStorageMutation)(nil)
 
-// infraOption allows management of the mutation configuration using functional options.
-type infraOption func(*infraMutation)
+// objectstorageOption allows management of the mutation configuration using functional options.
+type objectstorageOption func(*ObjectStorageMutation)
 
-// newinfraMutation creates new mutation for the infra entity.
-func newinfraMutation(c config, op Op, opts ...infraOption) *infraMutation {
-	m := &infraMutation{
+// newObjectStorageMutation creates new mutation for the ObjectStorage entity.
+func newObjectStorageMutation(c config, op Op, opts ...objectstorageOption) *ObjectStorageMutation {
+	m := &ObjectStorageMutation{
 		config:        c,
 		op:            op,
-		typ:           Typeinfra,
+		typ:           TypeObjectStorage,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -56,20 +77,20 @@ func newinfraMutation(c config, op Op, opts ...infraOption) *infraMutation {
 	return m
 }
 
-// withinfraID sets the ID field of the mutation.
-func withinfraID(id int) infraOption {
-	return func(m *infraMutation) {
+// withObjectStorageID sets the ID field of the mutation.
+func withObjectStorageID(id int64) objectstorageOption {
+	return func(m *ObjectStorageMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *infra
+			value *ObjectStorage
 		)
-		m.oldValue = func(ctx context.Context) (*infra, error) {
+		m.oldValue = func(ctx context.Context) (*ObjectStorage, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().infra.Get(ctx, id)
+					value, err = m.Client().ObjectStorage.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -78,10 +99,10 @@ func withinfraID(id int) infraOption {
 	}
 }
 
-// withinfra sets the old infra of the mutation.
-func withinfra(node *infra) infraOption {
-	return func(m *infraMutation) {
-		m.oldValue = func(context.Context) (*infra, error) {
+// withObjectStorage sets the old ObjectStorage of the mutation.
+func withObjectStorage(node *ObjectStorage) objectstorageOption {
+	return func(m *ObjectStorageMutation) {
+		m.oldValue = func(context.Context) (*ObjectStorage, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -90,7 +111,7 @@ func withinfra(node *infra) infraOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m infraMutation) Client() *Client {
+func (m ObjectStorageMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -98,7 +119,7 @@ func (m infraMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m infraMutation) Tx() (*Tx, error) {
+func (m ObjectStorageMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("gen: mutation is not running in a transaction")
 	}
@@ -107,9 +128,15 @@ func (m infraMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ObjectStorage entities.
+func (m *ObjectStorageMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *infraMutation) ID() (id int, exists bool) {
+func (m *ObjectStorageMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -120,30 +147,758 @@ func (m *infraMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *infraMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ObjectStorageMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().infra.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().ObjectStorage.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
-// Where appends a list predicates to the infraMutation builder.
-func (m *infraMutation) Where(ps ...predicate.infra) {
+// SetProvider sets the "provider" field.
+func (m *ObjectStorageMutation) SetProvider(s string) {
+	m.provider = &s
+}
+
+// Provider returns the value of the "provider" field in the mutation.
+func (m *ObjectStorageMutation) Provider() (r string, exists bool) {
+	v := m.provider
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProvider returns the old "provider" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldProvider(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProvider is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProvider requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProvider: %w", err)
+	}
+	return oldValue.Provider, nil
+}
+
+// ResetProvider resets all changes to the "provider" field.
+func (m *ObjectStorageMutation) ResetProvider() {
+	m.provider = nil
+}
+
+// SetBucket sets the "bucket" field.
+func (m *ObjectStorageMutation) SetBucket(s string) {
+	m.bucket = &s
+}
+
+// Bucket returns the value of the "bucket" field in the mutation.
+func (m *ObjectStorageMutation) Bucket() (r string, exists bool) {
+	v := m.bucket
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBucket returns the old "bucket" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBucket(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBucket is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBucket requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBucket: %w", err)
+	}
+	return oldValue.Bucket, nil
+}
+
+// ResetBucket resets all changes to the "bucket" field.
+func (m *ObjectStorageMutation) ResetBucket() {
+	m.bucket = nil
+}
+
+// SetKey sets the "key" field.
+func (m *ObjectStorageMutation) SetKey(s string) {
+	m.key = &s
+}
+
+// Key returns the value of the "key" field in the mutation.
+func (m *ObjectStorageMutation) Key() (r string, exists bool) {
+	v := m.key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKey returns the old "key" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKey: %w", err)
+	}
+	return oldValue.Key, nil
+}
+
+// ResetKey resets all changes to the "key" field.
+func (m *ObjectStorageMutation) ResetKey() {
+	m.key = nil
+}
+
+// SetMimeType sets the "mime_type" field.
+func (m *ObjectStorageMutation) SetMimeType(s string) {
+	m.mime_type = &s
+}
+
+// MimeType returns the value of the "mime_type" field in the mutation.
+func (m *ObjectStorageMutation) MimeType() (r string, exists bool) {
+	v := m.mime_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMimeType returns the old "mime_type" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldMimeType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMimeType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMimeType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMimeType: %w", err)
+	}
+	return oldValue.MimeType, nil
+}
+
+// ResetMimeType resets all changes to the "mime_type" field.
+func (m *ObjectStorageMutation) ResetMimeType() {
+	m.mime_type = nil
+}
+
+// SetSize sets the "size" field.
+func (m *ObjectStorageMutation) SetSize(i int64) {
+	m.size = &i
+	m.addsize = nil
+}
+
+// Size returns the value of the "size" field in the mutation.
+func (m *ObjectStorageMutation) Size() (r int64, exists bool) {
+	v := m.size
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSize returns the old "size" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldSize(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSize is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSize requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSize: %w", err)
+	}
+	return oldValue.Size, nil
+}
+
+// AddSize adds i to the "size" field.
+func (m *ObjectStorageMutation) AddSize(i int64) {
+	if m.addsize != nil {
+		*m.addsize += i
+	} else {
+		m.addsize = &i
+	}
+}
+
+// AddedSize returns the value that was added to the "size" field in this mutation.
+func (m *ObjectStorageMutation) AddedSize() (r int64, exists bool) {
+	v := m.addsize
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetSize resets all changes to the "size" field.
+func (m *ObjectStorageMutation) ResetSize() {
+	m.size = nil
+	m.addsize = nil
+}
+
+// SetHash sets the "hash" field.
+func (m *ObjectStorageMutation) SetHash(s string) {
+	m.hash = &s
+}
+
+// Hash returns the value of the "hash" field in the mutation.
+func (m *ObjectStorageMutation) Hash() (r string, exists bool) {
+	v := m.hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHash returns the old "hash" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldHash(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHash: %w", err)
+	}
+	return oldValue.Hash, nil
+}
+
+// ResetHash resets all changes to the "hash" field.
+func (m *ObjectStorageMutation) ResetHash() {
+	m.hash = nil
+}
+
+// SetUploadBy sets the "upload_by" field.
+func (m *ObjectStorageMutation) SetUploadBy(i int64) {
+	m.upload_by = &i
+	m.addupload_by = nil
+}
+
+// UploadBy returns the value of the "upload_by" field in the mutation.
+func (m *ObjectStorageMutation) UploadBy() (r int64, exists bool) {
+	v := m.upload_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadBy returns the old "upload_by" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldUploadBy(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadBy: %w", err)
+	}
+	return oldValue.UploadBy, nil
+}
+
+// AddUploadBy adds i to the "upload_by" field.
+func (m *ObjectStorageMutation) AddUploadBy(i int64) {
+	if m.addupload_by != nil {
+		*m.addupload_by += i
+	} else {
+		m.addupload_by = &i
+	}
+}
+
+// AddedUploadBy returns the value that was added to the "upload_by" field in this mutation.
+func (m *ObjectStorageMutation) AddedUploadBy() (r int64, exists bool) {
+	v := m.addupload_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUploadBy resets all changes to the "upload_by" field.
+func (m *ObjectStorageMutation) ResetUploadBy() {
+	m.upload_by = nil
+	m.addupload_by = nil
+}
+
+// SetUploadByName sets the "upload_by_name" field.
+func (m *ObjectStorageMutation) SetUploadByName(s string) {
+	m.upload_by_name = &s
+}
+
+// UploadByName returns the value of the "upload_by_name" field in the mutation.
+func (m *ObjectStorageMutation) UploadByName() (r string, exists bool) {
+	v := m.upload_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadByName returns the old "upload_by_name" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldUploadByName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadByName: %w", err)
+	}
+	return oldValue.UploadByName, nil
+}
+
+// ResetUploadByName resets all changes to the "upload_by_name" field.
+func (m *ObjectStorageMutation) ResetUploadByName() {
+	m.upload_by_name = nil
+}
+
+// SetAuditCallbackReply sets the "audit_callback_reply" field.
+func (m *ObjectStorageMutation) SetAuditCallbackReply(s string) {
+	m.audit_callback_reply = &s
+}
+
+// AuditCallbackReply returns the value of the "audit_callback_reply" field in the mutation.
+func (m *ObjectStorageMutation) AuditCallbackReply() (r string, exists bool) {
+	v := m.audit_callback_reply
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditCallbackReply returns the old "audit_callback_reply" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldAuditCallbackReply(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditCallbackReply is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditCallbackReply requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditCallbackReply: %w", err)
+	}
+	return oldValue.AuditCallbackReply, nil
+}
+
+// ClearAuditCallbackReply clears the value of the "audit_callback_reply" field.
+func (m *ObjectStorageMutation) ClearAuditCallbackReply() {
+	m.audit_callback_reply = nil
+	m.clearedFields[objectstorage.FieldAuditCallbackReply] = struct{}{}
+}
+
+// AuditCallbackReplyCleared returns if the "audit_callback_reply" field was cleared in this mutation.
+func (m *ObjectStorageMutation) AuditCallbackReplyCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldAuditCallbackReply]
+	return ok
+}
+
+// ResetAuditCallbackReply resets all changes to the "audit_callback_reply" field.
+func (m *ObjectStorageMutation) ResetAuditCallbackReply() {
+	m.audit_callback_reply = nil
+	delete(m.clearedFields, objectstorage.FieldAuditCallbackReply)
+}
+
+// SetBlocked sets the "blocked" field.
+func (m *ObjectStorageMutation) SetBlocked(b bool) {
+	m.blocked = &b
+}
+
+// Blocked returns the value of the "blocked" field in the mutation.
+func (m *ObjectStorageMutation) Blocked() (r bool, exists bool) {
+	v := m.blocked
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlocked returns the old "blocked" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBlocked(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlocked is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlocked requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlocked: %w", err)
+	}
+	return oldValue.Blocked, nil
+}
+
+// ResetBlocked resets all changes to the "blocked" field.
+func (m *ObjectStorageMutation) ResetBlocked() {
+	m.blocked = nil
+}
+
+// SetBlockedReason sets the "blocked_reason" field.
+func (m *ObjectStorageMutation) SetBlockedReason(s string) {
+	m.blocked_reason = &s
+}
+
+// BlockedReason returns the value of the "blocked_reason" field in the mutation.
+func (m *ObjectStorageMutation) BlockedReason() (r string, exists bool) {
+	v := m.blocked_reason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlockedReason returns the old "blocked_reason" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBlockedReason(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlockedReason is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlockedReason requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlockedReason: %w", err)
+	}
+	return oldValue.BlockedReason, nil
+}
+
+// ClearBlockedReason clears the value of the "blocked_reason" field.
+func (m *ObjectStorageMutation) ClearBlockedReason() {
+	m.blocked_reason = nil
+	m.clearedFields[objectstorage.FieldBlockedReason] = struct{}{}
+}
+
+// BlockedReasonCleared returns if the "blocked_reason" field was cleared in this mutation.
+func (m *ObjectStorageMutation) BlockedReasonCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldBlockedReason]
+	return ok
+}
+
+// ResetBlockedReason resets all changes to the "blocked_reason" field.
+func (m *ObjectStorageMutation) ResetBlockedReason() {
+	m.blocked_reason = nil
+	delete(m.clearedFields, objectstorage.FieldBlockedReason)
+}
+
+// SetBlockedAt sets the "blocked_at" field.
+func (m *ObjectStorageMutation) SetBlockedAt(t time.Time) {
+	m.blocked_at = &t
+}
+
+// BlockedAt returns the value of the "blocked_at" field in the mutation.
+func (m *ObjectStorageMutation) BlockedAt() (r time.Time, exists bool) {
+	v := m.blocked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlockedAt returns the old "blocked_at" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBlockedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlockedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlockedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlockedAt: %w", err)
+	}
+	return oldValue.BlockedAt, nil
+}
+
+// ClearBlockedAt clears the value of the "blocked_at" field.
+func (m *ObjectStorageMutation) ClearBlockedAt() {
+	m.blocked_at = nil
+	m.clearedFields[objectstorage.FieldBlockedAt] = struct{}{}
+}
+
+// BlockedAtCleared returns if the "blocked_at" field was cleared in this mutation.
+func (m *ObjectStorageMutation) BlockedAtCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldBlockedAt]
+	return ok
+}
+
+// ResetBlockedAt resets all changes to the "blocked_at" field.
+func (m *ObjectStorageMutation) ResetBlockedAt() {
+	m.blocked_at = nil
+	delete(m.clearedFields, objectstorage.FieldBlockedAt)
+}
+
+// SetBlockedBy sets the "blocked_by" field.
+func (m *ObjectStorageMutation) SetBlockedBy(i int64) {
+	m.blocked_by = &i
+	m.addblocked_by = nil
+}
+
+// BlockedBy returns the value of the "blocked_by" field in the mutation.
+func (m *ObjectStorageMutation) BlockedBy() (r int64, exists bool) {
+	v := m.blocked_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlockedBy returns the old "blocked_by" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBlockedBy(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlockedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlockedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlockedBy: %w", err)
+	}
+	return oldValue.BlockedBy, nil
+}
+
+// AddBlockedBy adds i to the "blocked_by" field.
+func (m *ObjectStorageMutation) AddBlockedBy(i int64) {
+	if m.addblocked_by != nil {
+		*m.addblocked_by += i
+	} else {
+		m.addblocked_by = &i
+	}
+}
+
+// AddedBlockedBy returns the value that was added to the "blocked_by" field in this mutation.
+func (m *ObjectStorageMutation) AddedBlockedBy() (r int64, exists bool) {
+	v := m.addblocked_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearBlockedBy clears the value of the "blocked_by" field.
+func (m *ObjectStorageMutation) ClearBlockedBy() {
+	m.blocked_by = nil
+	m.addblocked_by = nil
+	m.clearedFields[objectstorage.FieldBlockedBy] = struct{}{}
+}
+
+// BlockedByCleared returns if the "blocked_by" field was cleared in this mutation.
+func (m *ObjectStorageMutation) BlockedByCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldBlockedBy]
+	return ok
+}
+
+// ResetBlockedBy resets all changes to the "blocked_by" field.
+func (m *ObjectStorageMutation) ResetBlockedBy() {
+	m.blocked_by = nil
+	m.addblocked_by = nil
+	delete(m.clearedFields, objectstorage.FieldBlockedBy)
+}
+
+// SetBlockedByName sets the "blocked_by_name" field.
+func (m *ObjectStorageMutation) SetBlockedByName(s string) {
+	m.blocked_by_name = &s
+}
+
+// BlockedByName returns the value of the "blocked_by_name" field in the mutation.
+func (m *ObjectStorageMutation) BlockedByName() (r string, exists bool) {
+	v := m.blocked_by_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBlockedByName returns the old "blocked_by_name" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldBlockedByName(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBlockedByName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBlockedByName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBlockedByName: %w", err)
+	}
+	return oldValue.BlockedByName, nil
+}
+
+// ClearBlockedByName clears the value of the "blocked_by_name" field.
+func (m *ObjectStorageMutation) ClearBlockedByName() {
+	m.blocked_by_name = nil
+	m.clearedFields[objectstorage.FieldBlockedByName] = struct{}{}
+}
+
+// BlockedByNameCleared returns if the "blocked_by_name" field was cleared in this mutation.
+func (m *ObjectStorageMutation) BlockedByNameCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldBlockedByName]
+	return ok
+}
+
+// ResetBlockedByName resets all changes to the "blocked_by_name" field.
+func (m *ObjectStorageMutation) ResetBlockedByName() {
+	m.blocked_by_name = nil
+	delete(m.clearedFields, objectstorage.FieldBlockedByName)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ObjectStorageMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ObjectStorageMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldCreatedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ObjectStorageMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[objectstorage.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ObjectStorageMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ObjectStorageMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, objectstorage.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ObjectStorageMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ObjectStorageMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ObjectStorage entity.
+// If the ObjectStorage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ObjectStorageMutation) OldUpdatedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ObjectStorageMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[objectstorage.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ObjectStorageMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[objectstorage.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ObjectStorageMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, objectstorage.FieldUpdatedAt)
+}
+
+// Where appends a list predicates to the ObjectStorageMutation builder.
+func (m *ObjectStorageMutation) Where(ps ...predicate.ObjectStorage) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the infraMutation builder. Using this method,
+// WhereP appends storage-level predicates to the ObjectStorageMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *infraMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.infra, len(ps))
+func (m *ObjectStorageMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ObjectStorage, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -151,140 +906,504 @@ func (m *infraMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *infraMutation) Op() Op {
+func (m *ObjectStorageMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *infraMutation) SetOp(op Op) {
+func (m *ObjectStorageMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (infra).
-func (m *infraMutation) Type() string {
+// Type returns the node type of this mutation (ObjectStorage).
+func (m *ObjectStorageMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *infraMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+func (m *ObjectStorageMutation) Fields() []string {
+	fields := make([]string, 0, 16)
+	if m.provider != nil {
+		fields = append(fields, objectstorage.FieldProvider)
+	}
+	if m.bucket != nil {
+		fields = append(fields, objectstorage.FieldBucket)
+	}
+	if m.key != nil {
+		fields = append(fields, objectstorage.FieldKey)
+	}
+	if m.mime_type != nil {
+		fields = append(fields, objectstorage.FieldMimeType)
+	}
+	if m.size != nil {
+		fields = append(fields, objectstorage.FieldSize)
+	}
+	if m.hash != nil {
+		fields = append(fields, objectstorage.FieldHash)
+	}
+	if m.upload_by != nil {
+		fields = append(fields, objectstorage.FieldUploadBy)
+	}
+	if m.upload_by_name != nil {
+		fields = append(fields, objectstorage.FieldUploadByName)
+	}
+	if m.audit_callback_reply != nil {
+		fields = append(fields, objectstorage.FieldAuditCallbackReply)
+	}
+	if m.blocked != nil {
+		fields = append(fields, objectstorage.FieldBlocked)
+	}
+	if m.blocked_reason != nil {
+		fields = append(fields, objectstorage.FieldBlockedReason)
+	}
+	if m.blocked_at != nil {
+		fields = append(fields, objectstorage.FieldBlockedAt)
+	}
+	if m.blocked_by != nil {
+		fields = append(fields, objectstorage.FieldBlockedBy)
+	}
+	if m.blocked_by_name != nil {
+		fields = append(fields, objectstorage.FieldBlockedByName)
+	}
+	if m.created_at != nil {
+		fields = append(fields, objectstorage.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, objectstorage.FieldUpdatedAt)
+	}
 	return fields
 }
 
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *infraMutation) Field(name string) (ent.Value, bool) {
+func (m *ObjectStorageMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case objectstorage.FieldProvider:
+		return m.Provider()
+	case objectstorage.FieldBucket:
+		return m.Bucket()
+	case objectstorage.FieldKey:
+		return m.Key()
+	case objectstorage.FieldMimeType:
+		return m.MimeType()
+	case objectstorage.FieldSize:
+		return m.Size()
+	case objectstorage.FieldHash:
+		return m.Hash()
+	case objectstorage.FieldUploadBy:
+		return m.UploadBy()
+	case objectstorage.FieldUploadByName:
+		return m.UploadByName()
+	case objectstorage.FieldAuditCallbackReply:
+		return m.AuditCallbackReply()
+	case objectstorage.FieldBlocked:
+		return m.Blocked()
+	case objectstorage.FieldBlockedReason:
+		return m.BlockedReason()
+	case objectstorage.FieldBlockedAt:
+		return m.BlockedAt()
+	case objectstorage.FieldBlockedBy:
+		return m.BlockedBy()
+	case objectstorage.FieldBlockedByName:
+		return m.BlockedByName()
+	case objectstorage.FieldCreatedAt:
+		return m.CreatedAt()
+	case objectstorage.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
 	return nil, false
 }
 
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *infraMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	return nil, fmt.Errorf("unknown infra field %s", name)
+func (m *ObjectStorageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case objectstorage.FieldProvider:
+		return m.OldProvider(ctx)
+	case objectstorage.FieldBucket:
+		return m.OldBucket(ctx)
+	case objectstorage.FieldKey:
+		return m.OldKey(ctx)
+	case objectstorage.FieldMimeType:
+		return m.OldMimeType(ctx)
+	case objectstorage.FieldSize:
+		return m.OldSize(ctx)
+	case objectstorage.FieldHash:
+		return m.OldHash(ctx)
+	case objectstorage.FieldUploadBy:
+		return m.OldUploadBy(ctx)
+	case objectstorage.FieldUploadByName:
+		return m.OldUploadByName(ctx)
+	case objectstorage.FieldAuditCallbackReply:
+		return m.OldAuditCallbackReply(ctx)
+	case objectstorage.FieldBlocked:
+		return m.OldBlocked(ctx)
+	case objectstorage.FieldBlockedReason:
+		return m.OldBlockedReason(ctx)
+	case objectstorage.FieldBlockedAt:
+		return m.OldBlockedAt(ctx)
+	case objectstorage.FieldBlockedBy:
+		return m.OldBlockedBy(ctx)
+	case objectstorage.FieldBlockedByName:
+		return m.OldBlockedByName(ctx)
+	case objectstorage.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case objectstorage.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ObjectStorage field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *infraMutation) SetField(name string, value ent.Value) error {
+func (m *ObjectStorageMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case objectstorage.FieldProvider:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProvider(v)
+		return nil
+	case objectstorage.FieldBucket:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBucket(v)
+		return nil
+	case objectstorage.FieldKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKey(v)
+		return nil
+	case objectstorage.FieldMimeType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMimeType(v)
+		return nil
+	case objectstorage.FieldSize:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSize(v)
+		return nil
+	case objectstorage.FieldHash:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHash(v)
+		return nil
+	case objectstorage.FieldUploadBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadBy(v)
+		return nil
+	case objectstorage.FieldUploadByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadByName(v)
+		return nil
+	case objectstorage.FieldAuditCallbackReply:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditCallbackReply(v)
+		return nil
+	case objectstorage.FieldBlocked:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlocked(v)
+		return nil
+	case objectstorage.FieldBlockedReason:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlockedReason(v)
+		return nil
+	case objectstorage.FieldBlockedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlockedAt(v)
+		return nil
+	case objectstorage.FieldBlockedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlockedBy(v)
+		return nil
+	case objectstorage.FieldBlockedByName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBlockedByName(v)
+		return nil
+	case objectstorage.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case objectstorage.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
 	}
-	return fmt.Errorf("unknown infra field %s", name)
+	return fmt.Errorf("unknown ObjectStorage field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *infraMutation) AddedFields() []string {
-	return nil
+func (m *ObjectStorageMutation) AddedFields() []string {
+	var fields []string
+	if m.addsize != nil {
+		fields = append(fields, objectstorage.FieldSize)
+	}
+	if m.addupload_by != nil {
+		fields = append(fields, objectstorage.FieldUploadBy)
+	}
+	if m.addblocked_by != nil {
+		fields = append(fields, objectstorage.FieldBlockedBy)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *infraMutation) AddedField(name string) (ent.Value, bool) {
+func (m *ObjectStorageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case objectstorage.FieldSize:
+		return m.AddedSize()
+	case objectstorage.FieldUploadBy:
+		return m.AddedUploadBy()
+	case objectstorage.FieldBlockedBy:
+		return m.AddedBlockedBy()
+	}
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *infraMutation) AddField(name string, value ent.Value) error {
-	return fmt.Errorf("unknown infra numeric field %s", name)
+func (m *ObjectStorageMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case objectstorage.FieldSize:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSize(v)
+		return nil
+	case objectstorage.FieldUploadBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUploadBy(v)
+		return nil
+	case objectstorage.FieldBlockedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddBlockedBy(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ObjectStorage numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *infraMutation) ClearedFields() []string {
-	return nil
+func (m *ObjectStorageMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(objectstorage.FieldAuditCallbackReply) {
+		fields = append(fields, objectstorage.FieldAuditCallbackReply)
+	}
+	if m.FieldCleared(objectstorage.FieldBlockedReason) {
+		fields = append(fields, objectstorage.FieldBlockedReason)
+	}
+	if m.FieldCleared(objectstorage.FieldBlockedAt) {
+		fields = append(fields, objectstorage.FieldBlockedAt)
+	}
+	if m.FieldCleared(objectstorage.FieldBlockedBy) {
+		fields = append(fields, objectstorage.FieldBlockedBy)
+	}
+	if m.FieldCleared(objectstorage.FieldBlockedByName) {
+		fields = append(fields, objectstorage.FieldBlockedByName)
+	}
+	if m.FieldCleared(objectstorage.FieldCreatedAt) {
+		fields = append(fields, objectstorage.FieldCreatedAt)
+	}
+	if m.FieldCleared(objectstorage.FieldUpdatedAt) {
+		fields = append(fields, objectstorage.FieldUpdatedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *infraMutation) FieldCleared(name string) bool {
+func (m *ObjectStorageMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *infraMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown infra nullable field %s", name)
+func (m *ObjectStorageMutation) ClearField(name string) error {
+	switch name {
+	case objectstorage.FieldAuditCallbackReply:
+		m.ClearAuditCallbackReply()
+		return nil
+	case objectstorage.FieldBlockedReason:
+		m.ClearBlockedReason()
+		return nil
+	case objectstorage.FieldBlockedAt:
+		m.ClearBlockedAt()
+		return nil
+	case objectstorage.FieldBlockedBy:
+		m.ClearBlockedBy()
+		return nil
+	case objectstorage.FieldBlockedByName:
+		m.ClearBlockedByName()
+		return nil
+	case objectstorage.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case objectstorage.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ObjectStorage nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *infraMutation) ResetField(name string) error {
-	return fmt.Errorf("unknown infra field %s", name)
+func (m *ObjectStorageMutation) ResetField(name string) error {
+	switch name {
+	case objectstorage.FieldProvider:
+		m.ResetProvider()
+		return nil
+	case objectstorage.FieldBucket:
+		m.ResetBucket()
+		return nil
+	case objectstorage.FieldKey:
+		m.ResetKey()
+		return nil
+	case objectstorage.FieldMimeType:
+		m.ResetMimeType()
+		return nil
+	case objectstorage.FieldSize:
+		m.ResetSize()
+		return nil
+	case objectstorage.FieldHash:
+		m.ResetHash()
+		return nil
+	case objectstorage.FieldUploadBy:
+		m.ResetUploadBy()
+		return nil
+	case objectstorage.FieldUploadByName:
+		m.ResetUploadByName()
+		return nil
+	case objectstorage.FieldAuditCallbackReply:
+		m.ResetAuditCallbackReply()
+		return nil
+	case objectstorage.FieldBlocked:
+		m.ResetBlocked()
+		return nil
+	case objectstorage.FieldBlockedReason:
+		m.ResetBlockedReason()
+		return nil
+	case objectstorage.FieldBlockedAt:
+		m.ResetBlockedAt()
+		return nil
+	case objectstorage.FieldBlockedBy:
+		m.ResetBlockedBy()
+		return nil
+	case objectstorage.FieldBlockedByName:
+		m.ResetBlockedByName()
+		return nil
+	case objectstorage.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case objectstorage.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ObjectStorage field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *infraMutation) AddedEdges() []string {
+func (m *ObjectStorageMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *infraMutation) AddedIDs(name string) []ent.Value {
+func (m *ObjectStorageMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *infraMutation) RemovedEdges() []string {
+func (m *ObjectStorageMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *infraMutation) RemovedIDs(name string) []ent.Value {
+func (m *ObjectStorageMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *infraMutation) ClearedEdges() []string {
+func (m *ObjectStorageMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *infraMutation) EdgeCleared(name string) bool {
+func (m *ObjectStorageMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *infraMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown infra unique edge %s", name)
+func (m *ObjectStorageMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ObjectStorage unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *infraMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown infra edge %s", name)
+func (m *ObjectStorageMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ObjectStorage edge %s", name)
 }

@@ -18,9 +18,9 @@ func (n *NotificationMeta) ConvertToRpc() *v1.NotificationMeta {
 		UpdatedAt:        timestamppb.New(*n.UpdatedAt),
 		Id:               n.ID,
 		Uuid:             n.UUID,
-		NotificationType: n.NotificationType,
+		NotificationType: v1.NotificationType(n.NotificationType),
 		SenderId:         n.SenderID,
-		Status:           n.Status,
+		Status:           v1.NotificationStatus(n.Status),
 		ContentRender:    n.Content,
 	}
 	s, _ := json.Marshal(n.Meta)

@@ -178,11 +178,11 @@ func Reduce[T any, R any](stream Stream[T], identity R,
 				finalResult = combiner(finalResult, r)
 			}
 			return finalResult, nil
-		} else {
-			err = stream.ForEach(func(item T) {
-				result = accumulator(item, result)
-			})
 		}
+
+		err = stream.ForEach(func(item T) {
+			result = accumulator(item, result)
+		})
 		return result, err
 	}
 }

@@ -388,7 +388,7 @@ var File_im_v1_chat_message_proto protoreflect.FileDescriptor
 
 const file_im_v1_chat_message_proto_rawDesc = "" +
 	"\n" +
-	"\x18im/v1/chat_message.proto\x12\x10common.api.im.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x11im/v1/model.proto\x1a\x14im/v1/constant.proto\"f\n" +
+	"\x18im/v1/chat_message.proto\x12\x10common.api.im.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\x1a\x16common/v1/common.proto\x1a\x11im/v1/model.proto\x1a\x10im/v1/enum.proto\"f\n" +
 	"\x16ChatMessageQueryParams\x12\x10\n" +
 	"\x03ids\x18\x02 \x03(\x03R\x03ids\x12\x1d\n" +
 	"\n" +
@@ -466,7 +466,7 @@ func file_im_v1_chat_message_proto_init() {
 		return
 	}
 	file_im_v1_model_proto_init()
-	file_im_v1_constant_proto_init()
+	file_im_v1_enum_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

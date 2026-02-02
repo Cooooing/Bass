@@ -209,7 +209,7 @@ var File_signal_v1_model_proto protoreflect.FileDescriptor
 
 const file_signal_v1_model_proto_rawDesc = "" +
 	"\n" +
-	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x18signal/v1/constant.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd3\x02\n" +
+	"\x15signal/v1/model.proto\x12\x14common.api.signal.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x14signal/v1/enum.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xd3\x02\n" +
 	"\x04Node\x12:\n" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12:\n" +
@@ -267,7 +267,7 @@ func file_signal_v1_model_proto_init() {
 	if File_signal_v1_model_proto != nil {
 		return
 	}
-	file_signal_v1_constant_proto_init()
+	file_signal_v1_enum_proto_init()
 	file_signal_v1_model_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

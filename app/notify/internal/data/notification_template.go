@@ -86,7 +86,7 @@ func (r *NotificationTemplateRepo) SaveCache(ctx context.Context, records dict.M
 func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationType *v1.NotificationType, channels []*v1.NotificationChannel) (dict.Map[string, *model.NotificationTemplate], error) {
 	keys := make([]string, 0, len(channels))
 	for i := range channels {
-		key := constant.GetKeyNotificationTemplate(notificationType, channels[i])
+		key := model.GetKeyNotificationTemplate(notificationType, channels[i])
 		keys = append(keys, key)
 	}
 	results, err := r.redis.Client.HMGet(ctx, constant.GetKeyNotificationTemplateMap(), keys...).Result()

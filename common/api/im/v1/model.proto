@@ -4,7 +4,7 @@ package common.api.im.v1;
 
 import "google/protobuf/timestamp.proto";
 import "user/v1/user.proto";
-import "im/v1/constant.proto";
+import "im/v1/enum.proto";
 
 option go_package = "common/api/im/v1;v1";
 

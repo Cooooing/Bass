@@ -5,8 +5,9 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"infra/internal/conf"
+	"infra/internal/data/base"
 	"infra/internal/data/client"
-	"infra/internal/data/ent/gen"
+	"infra/internal/data/oss"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -15,35 +16,16 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	NewBaseData,
-
+	base.NewBaseData,
+	oss.ProviderSet,
 	client.NewDataBaseClient,
 	NewEtcdClient,
 	NewRedisClient,
 	NewRabbitMQClient,
+	NewObjectStorageRepo,
 
 	util.NewTokenCache,
 )
-
-type BaseData struct {
-	conf     *conf.Bootstrap
-	log      *log.Helper
-	db       *gen.Client
-	etcd     *commonClient.EtcdClient
-	redis    *commonClient.RedisClient
-	rabbitmq *commonClient.RabbitMQClient
-}
-
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
-	return &BaseData{
-		conf:     conf,
-		log:      log,
-		etcd:     etcd,
-		db:       db,
-		redis:    redis,
-		rabbitmq: rabbitmq,
-	}
-}
 
 func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {
 	c := &commonModel.EtcdConf{}

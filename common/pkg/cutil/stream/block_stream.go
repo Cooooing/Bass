@@ -192,13 +192,13 @@ func (s *BlockStream[T]) Min(comparator base.Comparator[T]) (T, error) {
 		var zero T
 		return zero, errors.New("stream is empty")
 	}
-	min := s.elements[0]
+	m := s.elements[0]
 	for _, v := range s.elements[1:] {
-		if comparator(v, min) < 0 {
-			min = v
+		if comparator(v, m) < 0 {
+			m = v
 		}
 	}
-	return min, nil
+	return m, nil
 }
 
 func (s *BlockStream[T]) Max(comparator base.Comparator[T]) (T, error) {
@@ -206,13 +206,13 @@ func (s *BlockStream[T]) Max(comparator base.Comparator[T]) (T, error) {
 		var zero T
 		return zero, errors.New("stream is empty")
 	}
-	max := s.elements[0]
+	m := s.elements[0]
 	for _, v := range s.elements[1:] {
-		if comparator(v, max) > 0 {
-			max = v
+		if comparator(v, m) > 0 {
+			m = v
 		}
 	}
-	return max, nil
+	return m, nil
 }
 
 func (s *BlockStream[T]) FindFirst() (T, error) {

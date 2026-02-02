@@ -97,10 +97,10 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		atUserNames := c.ParseContent()
 		err = d.rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NotificationTypeArticleAt),
+			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 			SenderId:   user.ID,
 			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NotificationChannelWebSite)},
+			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 			Meta: commonModel.Meta{
 				AtUsernames: atUserNames.ToSlice(),
 				Comment: &commonModel.CommentMeta{

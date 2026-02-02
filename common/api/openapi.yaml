@@ -1257,14 +1257,14 @@ paths:
     /v1/oss/audit:
         post:
             tags:
-                - UserOssService
+                - InfraOssService
             description: 审核 oss 对象
-            operationId: UserOssService_Audit
+            operationId: InfraOssService_Audit
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.user.v1.AuditRequest'
+                            $ref: '#/components/schemas/common.api.infra.v1.AuditRequest'
                 required: true
             responses:
                 "200":
@@ -1272,18 +1272,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.user.v1.AuditReply'
+                                $ref: '#/components/schemas/common.api.infra.v1.AuditReply'
     /v1/oss/page:
         post:
             tags:
-                - UserOssService
+                - InfraOssService
             description: 分页查询 oss 对象
-            operationId: UserOssService_Page
+            operationId: InfraOssService_Page
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.user.v1.PageOssRequest'
+                            $ref: '#/components/schemas/common.api.infra.v1.PageOssRequest'
                 required: true
             responses:
                 "200":
@@ -1291,18 +1291,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.user.v1.PageOssReply'
+                                $ref: '#/components/schemas/common.api.infra.v1.PageOssReply'
     /v1/oss/qiniu/incrementAuditCallback:
         post:
             tags:
-                - UserOssService
+                - InfraOssService
             description: 七牛增量审核回调
-            operationId: UserOssService_QiniuIncrementAuditCallback
+            operationId: InfraOssService_QiniuIncrementAuditCallback
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.user.v1.QiniuIncrementAuditCallbackRequest'
+                            $ref: '#/components/schemas/common.api.infra.v1.QiniuIncrementAuditCallbackRequest'
                 required: true
             responses:
                 "200":
@@ -1310,18 +1310,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.user.v1.QiniuIncrementAuditCallbackReply'
+                                $ref: '#/components/schemas/common.api.infra.v1.QiniuIncrementAuditCallbackReply'
     /v1/oss/qiniu/uploadCallback:
         post:
             tags:
-                - UserOssService
+                - InfraOssService
             description: 七牛上传回调
-            operationId: UserOssService_QiniuUploadCallback
+            operationId: InfraOssService_QiniuUploadCallback
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.user.v1.QiniuUploadCallbackRequest'
+                            $ref: '#/components/schemas/common.api.infra.v1.QiniuUploadCallbackRequest'
                 required: true
             responses:
                 "200":
@@ -1329,18 +1329,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.user.v1.QiniuUploadCallbackReply'
+                                $ref: '#/components/schemas/common.api.infra.v1.QiniuUploadCallbackReply'
     /v1/oss/uploadToken:
         post:
             tags:
-                - UserOssService
+                - InfraOssService
             description: 获取上传文件凭证
-            operationId: UserOssService_UploadToken
+            operationId: InfraOssService_UploadToken
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.user.v1.UploadTokenRequest'
+                            $ref: '#/components/schemas/common.api.infra.v1.UploadTokenRequest'
                 required: true
             responses:
                 "200":
@@ -1348,7 +1348,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.user.v1.UploadTokenReply'
+                                $ref: '#/components/schemas/common.api.infra.v1.UploadTokenReply'
     /v1/ping:
         get:
             tags:
@@ -2979,6 +2979,217 @@ components:
                     items:
                         type: string
                     description: 主键
+        common.api.infra.v1.AuditReply:
+            type: object
+            properties: {}
+        common.api.infra.v1.AuditRequest:
+            type: object
+            properties:
+                key:
+                    type: string
+                    description: 文件key
+                status:
+                    type: boolean
+                    description: 审核状态
+                reason:
+                    type: string
+                    description: 审核原因
+        common.api.infra.v1.Oss:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updated_at:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                id:
+                    type: string
+                    description: id
+                provider:
+                    type: string
+                    description: OSS 提供商，如 minio/qiniu/aliyun/tencent
+                bucket:
+                    type: string
+                    description: bucket 名称
+                key:
+                    type: string
+                    description: 对象 key
+                mime_type:
+                    type: string
+                    description: 文件 MIME 类型
+                size:
+                    type: string
+                    description: 文件大小（字节）
+                hash:
+                    type: string
+                    description: 文件 Hash
+                audit_callback_reply:
+                    type: string
+                    description: 审核回调响应（JSON / 原文）
+                blocked:
+                    type: boolean
+                    description: 是否违规
+                blocked_reason:
+                    type: string
+                    description: 违规原因
+                blocked_at:
+                    type: string
+                    description: 违规时间
+                    format: date-time
+                blocked_by:
+                    type: string
+                    description: 违规处理人
+                blocked_by_name:
+                    type: string
+                    description: 违规处理人名称
+        common.api.infra.v1.OssQueryParams:
+            type: object
+            properties:
+                provider:
+                    type: string
+                    description: provider
+                bucket:
+                    type: string
+                    description: bucket
+                key:
+                    type: string
+                    description: key
+                mime_type:
+                    type: string
+                    description: 文件 MIME 类型
+                size:
+                    allOf:
+                        - $ref: '#/components/schemas/common.api.common.v1.Int64Range'
+                    description: 大小
+                blocked:
+                    type: boolean
+                    description: 是否封禁
+                blocked_by_name:
+                    type: string
+                    description: 违规处理人
+        common.api.infra.v1.PageOssReply:
+            type: object
+            properties:
+                page:
+                    $ref: '#/components/schemas/common.api.common.v1.PageReply'
+                rows:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.infra.v1.Oss'
+        common.api.infra.v1.PageOssRequest:
+            type: object
+            properties:
+                page:
+                    $ref: '#/components/schemas/common.api.common.v1.PageRequest'
+                query:
+                    $ref: '#/components/schemas/common.api.infra.v1.OssQueryParams'
+        common.api.infra.v1.QiniuIncrementAuditCallbackReply:
+            type: object
+            properties: {}
+        common.api.infra.v1.QiniuIncrementAuditCallbackRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                pipeline:
+                    type: string
+                code:
+                    type: integer
+                    format: int32
+                desc:
+                    type: string
+                reqid:
+                    type: string
+                inputBucket:
+                    type: string
+                inputKey:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.infra.v1.QiniuIncrementAuditCallbackRequest_Item'
+        common.api.infra.v1.QiniuIncrementAuditCallbackRequest_Item:
+            type: object
+            properties:
+                cmd:
+                    type: string
+                code:
+                    type: integer
+                    format: int32
+                desc:
+                    type: string
+                result:
+                    $ref: '#/components/schemas/common.api.infra.v1.QiniuIncrementAuditCallbackRequest_ItemResultWrapper'
+                returnOld:
+                    type: integer
+                    format: int32
+        common.api.infra.v1.QiniuIncrementAuditCallbackRequest_ItemResult:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                scenes:
+                    type: object
+                suggestion:
+                    type: string
+        common.api.infra.v1.QiniuIncrementAuditCallbackRequest_ItemResultWrapper:
+            type: object
+            properties:
+                disable:
+                    type: boolean
+                result:
+                    $ref: '#/components/schemas/common.api.infra.v1.QiniuIncrementAuditCallbackRequest_ItemResult'
+        common.api.infra.v1.QiniuUploadCallbackReply:
+            type: object
+            properties: {}
+        common.api.infra.v1.QiniuUploadCallbackRequest:
+            type: object
+            properties:
+                key:
+                    type: string
+                hash:
+                    type: string
+                size:
+                    type: string
+                bucket:
+                    type: string
+                name:
+                    type: string
+                mime_type:
+                    type: string
+                upload_by:
+                    type: string
+                upload_by_name:
+                    type: string
+        common.api.infra.v1.UploadTokenReply:
+            type: object
+            properties:
+                upload_token:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/common.api.infra.v1.UploadTokenReply_UploadToken'
+        common.api.infra.v1.UploadTokenReply_UploadToken:
+            type: object
+            properties:
+                key:
+                    type: string
+                    description: 文件key
+                token:
+                    type: string
+                    description: 上传凭证
+        common.api.infra.v1.UploadTokenRequest:
+            type: object
+            properties:
+                num:
+                    type: integer
+                    description: 上传文件数量
+                    format: int32
         common.api.notify.v1.NotificationMeta:
             type: object
             properties:
@@ -2999,7 +3210,7 @@ components:
                 notification_type:
                     type: integer
                     description: 通知类型
-                    format: int32
+                    format: enum
                 sender_id:
                     type: string
                     description: 发送者ID
@@ -3008,8 +3219,8 @@ components:
                     description: 通知元数据
                 status:
                     type: integer
-                    description: 状态 0-正常 1-被取消
-                    format: int32
+                    description: 状态 1-正常 2-被取消
+                    format: enum
                 content_render:
                     type: string
                     description: 渲染内容
@@ -3052,7 +3263,7 @@ components:
                 notification_type:
                     type: integer
                     description: 通知类型
-                    format: int32
+                    format: enum
                 sender_ids:
                     type: array
                     items:
@@ -3060,8 +3271,8 @@ components:
                     description: 发送者ID
                 status:
                     type: integer
-                    description: 状态 0-正常 1-被取消
-                    format: int32
+                    description: 状态 1-正常 2-被取消
+                    format: enum
         common.api.notify.v1.NotificationRecord:
             type: object
             properties:
@@ -3129,7 +3340,7 @@ components:
                 notification_type:
                     type: integer
                     description: 通知类型
-                    format: int32
+                    format: enum
                 sender_ids:
                     type: array
                     items:
@@ -3137,8 +3348,8 @@ components:
                     description: 发送者ID
                 status:
                     type: integer
-                    description: 状态 0-正常 1-被取消
-                    format: int32
+                    description: 状态 1-正常 2-被取消
+                    format: enum
         common.api.notify.v1.NotificationRecordReadReply:
             type: object
             properties:
@@ -3175,11 +3386,11 @@ components:
                 notification_type:
                     type: integer
                     description: 通知类型
-                    format: int32
+                    format: enum
                 channel:
                     type: integer
                     description: 通知渠道
-                    format: int32
+                    format: enum
                 title:
                     type: string
                     description: 模板标题
@@ -3240,11 +3451,11 @@ components:
                 notification_type:
                     type: integer
                     description: 通知类型
-                    format: int32
+                    format: enum
                 channel:
                     type: integer
                     description: 通知渠道
-                    format: int32
+                    format: enum
                 content:
                     type: string
                     description: 模板内容
@@ -3270,11 +3481,11 @@ components:
                 notification_type:
                     type: integer
                     description: 通知类型
-                    format: int32
+                    format: enum
                 channel:
                     type: integer
                     description: 通知渠道
-                    format: int32
+                    format: enum
                 content:
                     type: string
                     description: 模板内容
@@ -3465,21 +3676,6 @@ components:
                 id:
                     type: string
                     description: 节点 ID
-        common.api.user.v1.AuditReply:
-            type: object
-            properties: {}
-        common.api.user.v1.AuditRequest:
-            type: object
-            properties:
-                key:
-                    type: string
-                    description: 文件key
-                status:
-                    type: boolean
-                    description: 审核状态
-                reason:
-                    type: string
-                    description: 审核原因
         common.api.user.v1.AvatarReply:
             type: object
             properties:
@@ -3631,98 +3827,6 @@ components:
         common.api.user.v1.LogoutRequest:
             type: object
             properties: {}
-        common.api.user.v1.Oss:
-            type: object
-            properties:
-                created_at:
-                    type: string
-                    description: 创建时间
-                    format: date-time
-                updated_at:
-                    type: string
-                    description: 更新时间
-                    format: date-time
-                id:
-                    type: string
-                    description: id
-                provider:
-                    type: string
-                    description: OSS 提供商，如 minio/qiniu/aliyun/tencent
-                bucket:
-                    type: string
-                    description: bucket 名称
-                key:
-                    type: string
-                    description: 对象 key
-                mime_type:
-                    type: string
-                    description: 文件 MIME 类型
-                size:
-                    type: string
-                    description: 文件大小（字节）
-                hash:
-                    type: string
-                    description: 文件 Hash
-                audit_callback_reply:
-                    type: string
-                    description: 审核回调响应（JSON / 原文）
-                blocked:
-                    type: boolean
-                    description: 是否违规
-                blocked_reason:
-                    type: string
-                    description: 违规原因
-                blocked_at:
-                    type: string
-                    description: 违规时间
-                    format: date-time
-                blocked_by:
-                    type: string
-                    description: 违规处理人
-                blocked_by_name:
-                    type: string
-                    description: 违规处理人名称
-        common.api.user.v1.OssQueryParams:
-            type: object
-            properties:
-                provider:
-                    type: string
-                    description: provider
-                bucket:
-                    type: string
-                    description: bucket
-                key:
-                    type: string
-                    description: key
-                mime_type:
-                    type: string
-                    description: 文件 MIME 类型
-                size:
-                    allOf:
-                        - $ref: '#/components/schemas/common.api.common.v1.Int64Range'
-                    description: 大小
-                blocked:
-                    type: boolean
-                    description: 是否封禁
-                blocked_by_name:
-                    type: string
-                    description: 违规处理人
-        common.api.user.v1.PageOssReply:
-            type: object
-            properties:
-                page:
-                    $ref: '#/components/schemas/common.api.common.v1.PageReply'
-                rows:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.user.v1.Oss'
-        common.api.user.v1.PageOssRequest:
-            type: object
-            properties:
-                page:
-                    $ref: '#/components/schemas/common.api.common.v1.PageRequest'
-                query:
-                    $ref: '#/components/schemas/common.api.user.v1.OssQueryParams'
         common.api.user.v1.PageUserRelationReply:
             type: object
             properties:
@@ -3769,87 +3873,6 @@ components:
                     allOf:
                         - $ref: '#/components/schemas/common.api.user.v1.UserQueryParams'
                     description: 查询参数
-        common.api.user.v1.QiniuIncrementAuditCallbackReply:
-            type: object
-            properties: {}
-        common.api.user.v1.QiniuIncrementAuditCallbackRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                pipeline:
-                    type: string
-                code:
-                    type: integer
-                    format: int32
-                desc:
-                    type: string
-                reqid:
-                    type: string
-                inputBucket:
-                    type: string
-                inputKey:
-                    type: string
-                items:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.user.v1.QiniuIncrementAuditCallbackRequest_Item'
-        common.api.user.v1.QiniuIncrementAuditCallbackRequest_Item:
-            type: object
-            properties:
-                cmd:
-                    type: string
-                code:
-                    type: integer
-                    format: int32
-                desc:
-                    type: string
-                result:
-                    $ref: '#/components/schemas/common.api.user.v1.QiniuIncrementAuditCallbackRequest_ItemResultWrapper'
-                returnOld:
-                    type: integer
-                    format: int32
-        common.api.user.v1.QiniuIncrementAuditCallbackRequest_ItemResult:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                scenes:
-                    type: object
-                suggestion:
-                    type: string
-        common.api.user.v1.QiniuIncrementAuditCallbackRequest_ItemResultWrapper:
-            type: object
-            properties:
-                disable:
-                    type: boolean
-                result:
-                    $ref: '#/components/schemas/common.api.user.v1.QiniuIncrementAuditCallbackRequest_ItemResult'
-        common.api.user.v1.QiniuUploadCallbackReply:
-            type: object
-            properties: {}
-        common.api.user.v1.QiniuUploadCallbackRequest:
-            type: object
-            properties:
-                key:
-                    type: string
-                hash:
-                    type: string
-                size:
-                    type: string
-                bucket:
-                    type: string
-                name:
-                    type: string
-                mime_type:
-                    type: string
-                upload_by:
-                    type: string
-                upload_by_name:
-                    type: string
         common.api.user.v1.RegisterEmailReply:
             type: object
             properties:
@@ -3956,29 +3979,6 @@ components:
                 enable_email_subscribe:
                     type: boolean
                     description: 启用邮件订阅
-        common.api.user.v1.UploadTokenReply:
-            type: object
-            properties:
-                upload_token:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/common.api.user.v1.UploadTokenReply_UploadToken'
-        common.api.user.v1.UploadTokenReply_UploadToken:
-            type: object
-            properties:
-                key:
-                    type: string
-                    description: 文件key
-                token:
-                    type: string
-                    description: 上传凭证
-        common.api.user.v1.UploadTokenRequest:
-            type: object
-            properties:
-                num:
-                    type: integer
-                    description: 上传文件数量
-                    format: int32
         common.api.user.v1.User:
             type: object
             properties:
@@ -4250,6 +4250,8 @@ tags:
       description: ChatMessage 服务
     - name: IMChatSessionService
       description: ChatSession 服务
+    - name: InfraOssService
+      description: Oss 服务
     - name: NotifyNotificationMetaService
       description: Notification_Meta 服务
     - name: NotifyNotificationRecordService
@@ -4262,8 +4264,6 @@ tags:
       description: System 服务
     - name: UserAuthenticationService
       description: Authentication 服务
-    - name: UserOssService
-      description: Oss 服务
     - name: UserTwoFactorAuthenticationService
       description: TwoFactorAuthentication 服务
     - name: UserUserRelationService

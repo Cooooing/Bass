@@ -1,7 +1,6 @@
 package constant
 
 import (
-	v1 "common/api/notify/v1"
 	"fmt"
 )
 
@@ -49,13 +48,6 @@ func GetKeyToken(token string) string {
 
 func GetKeyNotificationTemplateMap() string {
 	return NotificationTemplateMap
-}
-
-func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *v1.NotificationChannel) string {
-	if notificationType == nil || channel == nil {
-		return ""
-	}
-	return fmt.Sprintf("%s_%s", notificationType.String(), channel.String())
 }
 
 func GetKeyTwoFactorAuthentication(name string) string {

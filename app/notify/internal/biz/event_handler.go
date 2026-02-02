@@ -79,7 +79,7 @@ func (h *EventHandler) defaultTemplate(notificationType v1.NotificationType, cha
 	switch channel {
 	default:
 		switch notificationType {
-		case v1.NotificationType_NotificationTypeUserRegister:
+		case v1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER:
 
 		}
 	}

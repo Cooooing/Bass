@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
-	"user/internal/data/ent/gen/objectstorage"
 	"user/internal/data/ent/gen/user"
 	"user/internal/data/ent/gen/userrelation"
 
@@ -75,9 +74,8 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			objectstorage.Table: objectstorage.ValidColumn,
-			user.Table:          user.ValidColumn,
-			userrelation.Table:  userrelation.ValidColumn,
+			user.Table:         user.ValidColumn,
+			userrelation.Table: userrelation.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

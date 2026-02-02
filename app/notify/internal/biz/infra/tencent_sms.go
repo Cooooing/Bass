@@ -4,11 +4,12 @@ import (
 	"common/pkg/constant"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"notify/internal/biz/base"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
+	tencentcloud_errors "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111" // 引入sms
 )
@@ -46,10 +47,11 @@ func (d *TencentSmsDomain) SendSms(ctx context.Context, phone []string, params [
 
 	response, err := d.client.SendSms(request)
 	// 处理异常
-	if _, ok := err.(*errors.TencentCloudSDKError); ok {
-		return fmt.Errorf("tencent sms API error has returned: %s", err)
-	}
 	if err != nil {
+		var sdkErr *tencentcloud_errors.TencentCloudSDKError
+		if errors.As(err, &sdkErr) {
+			return fmt.Errorf("tencent sms API error has returned: %s: code=%s, message=%s, requestId=%s", err, sdkErr.GetCode(), sdkErr.GetMessage(), sdkErr.GetRequestId())
+		}
 		return err
 	}
 	b, _ := json.Marshal(response.Response)

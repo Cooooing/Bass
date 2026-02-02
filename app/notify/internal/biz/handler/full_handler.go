@@ -38,30 +38,30 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 	marshal, _ := json.Marshal(data)
 	h.Log.Infof("handle notification: %s", marshal)
 	switch *data.Type {
-	case notifyv1.NotificationType_NotificationTypeArticlePublish:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH:
 		// Todo 查询关注用户
 
-	case notifyv1.NotificationType_NotificationTypeArticleLike:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE:
 		if data.Meta.Article != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeArticleThank:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK:
 		if data.Meta.Article != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeArticleCollect:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT:
 		if data.Meta.Article != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeArticleWatch:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH:
 		if data.Meta.Article != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeArticleReward:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD:
 		if data.Meta.Article != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Article.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeArticleAt:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT:
 		if len(data.Meta.AtUsernames) > 0 {
 			userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 			if err != nil {
@@ -75,26 +75,26 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 				data.ReceiverIds = append(data.ReceiverIds, i.Id)
 			}
 		}
-	case notifyv1.NotificationType_NotificationTypeCommentPublish:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_PUBLISH:
 		if data.Meta.Comment != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.ArticleId)
 			if data.Meta.Comment.ReplyId != nil {
 				data.ReceiverIds = append(data.ReceiverIds, *data.Meta.Comment.ReplyId)
 			}
 		}
-	case notifyv1.NotificationType_NotificationTypeCommentLike:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_LIKE:
 		if data.Meta.Comment != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeCommentThank:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_THANK:
 		if data.Meta.Comment != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeCommentCollect:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_COLLECT:
 		if data.Meta.Comment != nil {
 			data.ReceiverIds = append(data.ReceiverIds, data.Meta.Comment.CreatedBy)
 		}
-	case notifyv1.NotificationType_NotificationTypeCommentAt:
+	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_AT:
 		if len(data.Meta.AtUsernames) > 0 {
 			userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 			if err != nil {
@@ -130,7 +130,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 			SenderID:         data.SenderId,
 			Meta:             data.Meta,
 			Content:          data.ContentRender,
-			Status:           int32(notifyv1.NotificationStatus_NotificationStatusNormal),
+			Status:           int32(notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
 		}})
 		if err != nil {
 			return err

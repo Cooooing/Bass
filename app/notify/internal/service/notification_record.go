@@ -43,9 +43,9 @@ func (s *NotificationRecordService) Page(ctx context.Context, req *v1.Notificati
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	records, page, err := s.notificationRecordDomain.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
-		NotificationType: (*v1.NotificationType)(req.Query.NotificationType),
+		NotificationType: req.Query.NotificationType,
 		ReceiverId:       base.Ptr(user.ID),
-		Status:           base.Ptr(v1.NotificationStatus_NotificationStatusNormal),
+		Status:           base.Ptr(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
 		WithMeta:         true,
 	})
 

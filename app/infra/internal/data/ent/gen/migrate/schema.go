@@ -9,24 +9,40 @@ import (
 )
 
 var (
-	// infrainfrasColumns holds the columns for the "infra_infras" table.
-	infrainfrasColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+	// InfraObjectStoragesColumns holds the columns for the "infra_object_storages" table.
+	InfraObjectStoragesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "provider", Type: field.TypeString, Comment: "OSS 提供商，如 minio/qiniu/aliyun/tencent"},
+		{Name: "bucket", Type: field.TypeString, Comment: "bucket 名称"},
+		{Name: "key", Type: field.TypeString, Comment: "对象 key"},
+		{Name: "mime_type", Type: field.TypeString, Comment: "文件 MIME 类型"},
+		{Name: "size", Type: field.TypeInt64, Comment: "文件大小（字节）"},
+		{Name: "hash", Type: field.TypeString, Comment: "文件 Hash"},
+		{Name: "upload_by", Type: field.TypeInt64, Comment: "上传者ID"},
+		{Name: "upload_by_name", Type: field.TypeString, Comment: "上传者名称"},
+		{Name: "audit_callback_reply", Type: field.TypeString, Nullable: true, Comment: "审核回调响应"},
+		{Name: "blocked", Type: field.TypeBool, Comment: "是否违规", Default: false},
+		{Name: "blocked_reason", Type: field.TypeString, Nullable: true, Comment: "违规原因"},
+		{Name: "blocked_at", Type: field.TypeTime, Nullable: true, Comment: "违规时间"},
+		{Name: "blocked_by", Type: field.TypeInt64, Nullable: true, Comment: "违规处理人"},
+		{Name: "blocked_by_name", Type: field.TypeString, Nullable: true, Comment: "违规处理人名称"},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
 	}
-	// infrainfrasTable holds the schema information for the "infra_infras" table.
-	infrainfrasTable = &schema.Table{
-		Name:       "infra_infras",
-		Columns:    infrainfrasColumns,
-		PrimaryKey: []*schema.Column{infrainfrasColumns[0]},
+	// InfraObjectStoragesTable holds the schema information for the "infra_object_storages" table.
+	InfraObjectStoragesTable = &schema.Table{
+		Name:       "infra_object_storages",
+		Columns:    InfraObjectStoragesColumns,
+		PrimaryKey: []*schema.Column{InfraObjectStoragesColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		infrainfrasTable,
+		InfraObjectStoragesTable,
 	}
 )
 
 func init() {
-	infrainfrasTable.Annotation = &entsql.Annotation{
-		Table: "infra_infras",
+	InfraObjectStoragesTable.Annotation = &entsql.Annotation{
+		Table: "infra_object_storages",
 	}
 }

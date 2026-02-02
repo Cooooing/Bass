@@ -33,7 +33,7 @@ func (NotificationMeta) Fields() []ent.Field {
 		field.Int64("sender_id").Comment("发送者ID"),
 		field.JSON("meta", commonModel.Meta{}).Comment("通知元数据"),
 		field.String("content").Comment("渲染内容"),
-		field.Int32("status").Comment("状态 0-正常 1-被取消"),
+		field.Int32("status").Comment("状态 1-正常 2-被取消"),
 	}
 	fields = append(fields, pkg.TimeAuditFields()...)
 	return fields

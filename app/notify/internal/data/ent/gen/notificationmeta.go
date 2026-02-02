@@ -29,7 +29,7 @@ type NotificationMeta struct {
 	Meta model.Meta `json:"meta,omitempty"`
 	// 渲染内容
 	Content string `json:"content,omitempty"`
-	// 状态 0-正常 1-被取消
+	// 状态 1-正常 2-被取消
 	Status int32 `json:"status,omitempty"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`

@@ -11,7 +11,6 @@ message Bootstrap {
   Registry registry = 3;
   Trace trace = 4;
   Jwt jwt = 5;
-  Oss oss = 6;
 }
 
 message Server {
@@ -31,6 +30,7 @@ message Server {
   }
   HTTP http = 4;
   GRPC grpc = 5;
+  string avatar = 7;
 }
 
 message Data {
@@ -82,24 +82,4 @@ message Jwt {
   google.protobuf.Duration expires = 2;
   google.protobuf.Duration email_expire = 3;
   google.protobuf.Duration phone_expire = 4;
-}
-
-message Oss{
-  string provider = 1;
-  string avatar = 2;
-  message Qiniu{
-    string access_key = 1;
-    string secret_key = 2;
-    string bucket = 3;
-    google.protobuf.Duration timeout = 4;
-    int64 size_min = 5;
-    int64 size_max = 6;
-    string callback_url = 7;
-    bool increment_audit = 8;
-    string increment_audit_callback_url = 9;
-  }
-  Qiniu qiniu = 10;
-  message Minio{
-  }
-  Minio minio = 11;
 }

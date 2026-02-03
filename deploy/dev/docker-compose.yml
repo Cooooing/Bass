@@ -33,7 +33,7 @@ services:
       retries: 5
 
   etcd:
-    image: bitnami/etcd:latest
+    image: bitnami/etcd:3.6.1
     container_name: etcd
     restart: always
     env_file:
@@ -41,8 +41,6 @@ services:
     environment:
       - ETCD_ENABLE_V2=true
       - ALLOW_NONE_AUTHENTICATION=no
-      - ETCD_AUTH_TOKEN_TYPE=jwt
-      - ETCD_AUTH_TOKEN_TTL=86400
     ports:
       - "2379:2379"
       - "2380:2380"

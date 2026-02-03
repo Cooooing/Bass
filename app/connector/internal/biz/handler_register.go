@@ -45,6 +45,10 @@ func (h *NodeRegisterTaskHandler) Handler() asynq.HandlerFunc {
 		} else if version != data.Version {
 			return nil
 		}
+		err = h.asynqCache.SetAsynqTaskExpire(ctx, data.TaskName, data.Interval*2)
+		if err != nil {
+			return err
+		}
 
 		// 下一次任务，不管成功失败，常驻任务
 		data.Delay = true
@@ -56,6 +60,4 @@ func (h *NodeRegisterTaskHandler) Handler() asynq.HandlerFunc {
 	}
 }
 
-func (h *NodeRegisterTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
-	h.Log.Errorf("task %s failed: %v", task.Type(), err)
-}
+func (h *NodeRegisterTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {}

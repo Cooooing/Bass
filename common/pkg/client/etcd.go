@@ -53,10 +53,14 @@ type EtcdClient struct {
 func NewEtcdClient(log *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(), error) {
 	// 初始化 Etcd 客户端
 	cli, err := clientv3.New(clientv3.Config{
-		Endpoints:   conf.Endpoints,
-		Username:    conf.Username,
-		Password:    conf.Password,
-		DialTimeout: conf.Timeout.AsDuration(),
+		Endpoints:            conf.Endpoints,
+		Username:             conf.Username,
+		Password:             conf.Password,
+		DialTimeout:          conf.Timeout.AsDuration(),
+		AutoSyncInterval:     conf.AutoSyncInterval.AsDuration(),
+		DialKeepAliveTime:    conf.DialKeepAliveTime.AsDuration(),
+		DialKeepAliveTimeout: conf.DialKeepAliveTimeout.AsDuration(),
+		PermitWithoutStream:  conf.PermitWithoutStream,
 	})
 	if err != nil {
 		return nil, nil, fmt.Errorf("create etcd client failed: %w", err)

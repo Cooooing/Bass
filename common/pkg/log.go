@@ -79,7 +79,7 @@ func Logger(mode string, level string, file string) log.Logger {
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    zapcore.CapitalLevelEncoder,
 		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.ShortCallerEncoder,
+		EncodeCaller:   zapcore.FullCallerEncoder,
 	}
 
 	levelMap := map[string]zapcore.Level{
@@ -99,7 +99,7 @@ func Logger(mode string, level string, file string) log.Logger {
 	opts := []zap.Option{
 		zap.AddStacktrace(zapcore.ErrorLevel),
 		zap.AddCaller(),
-		zap.AddCallerSkip(2), // 调整为 1，因为 Kratos log 层已包装
+		zap.AddCallerSkip(3), // 调整为 1，因为 Kratos log 层已包装
 	}
 
 	if mode == constant.Dev {

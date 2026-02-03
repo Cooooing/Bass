@@ -7,6 +7,7 @@ import (
 	"common/pkg/model"
 	"context"
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -52,11 +53,13 @@ func NewAsynqServer(log *log.Helper, redisClient *RedisClient, tasks dict.Map[co
 	}
 
 	server := asynq.NewServerFromRedisClient(redisClient.Client, asynq.Config{
-		TaskCheckInterval:        1 * time.Second,
+		Concurrency:              10,
+		TaskCheckInterval:        2 * time.Second,
+		DelayedTaskCheckInterval: 2 * time.Second,
+		ShutdownTimeout:          30 * time.Second,
 		Logger:                   log,
 		LogLevel:                 asynq.InfoLevel,
-		ErrorHandler:             NewGlobalErrHandler(tasks),
-		DelayedTaskCheckInterval: 1 * time.Second,
+		ErrorHandler:             NewGlobalErrHandler(log, tasks),
 	})
 	s := &AsynqServer{
 		log:    log,
@@ -97,18 +100,27 @@ func (s *AsynqScheduler) Run() {
 }
 
 type GlobalErrHandler struct {
+	Log   *log.Helper
 	tasks dict.Map[constant.TaskName, Handler]
 }
 
-func NewGlobalErrHandler(tasks dict.Map[constant.TaskName, Handler]) *GlobalErrHandler {
+func NewGlobalErrHandler(log *log.Helper, tasks dict.Map[constant.TaskName, Handler]) *GlobalErrHandler {
 	return &GlobalErrHandler{
+		Log:   log,
 		tasks: tasks,
 	}
 }
 
 func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, err error) {
-	if t, ok := h.tasks.Get(constant.TaskName(task.Type())); ok {
-		t.ErrHandler(ctx, task, err)
+	h.Log.Errorf("task %s err: %s data: %s", task.Type(), err, string(task.Payload()))
+	// 寻找匹配的 handler
+	for _, taskName := range h.tasks.Keys() {
+		if strings.HasPrefix(task.Type(), string(taskName)) {
+			if t, ok := h.tasks.Get(taskName); ok {
+				t.ErrHandler(ctx, task, err)
+				return
+			}
+		}
 	}
 }
 
@@ -142,6 +154,7 @@ func (p *Producer) EnqueueContextTask(ctx context.Context, data *model.Task) err
 		),
 		asynq.MaxRetry(data.MaxRetry),
 		asynq.ProcessIn(base.If(data.Delay, data.Interval, 0)),
+		asynq.Retention(data.Retention),
 	)
 	if err != nil {
 		return err
@@ -176,6 +189,7 @@ func (p *Producer) RegisterTask(data *model.Task) error {
 			opts...,
 		),
 		asynq.MaxRetry(data.MaxRetry),
+		asynq.Retention(data.Retention),
 	)
 	if err != nil {
 		return err

@@ -28,7 +28,7 @@ func (c *AsynqCache) SetAsynqTaskVersion(ctx context.Context, taskName string, v
 		if err != nil {
 			return err
 		}
-		err = pipe.Expire(ctx, constant.AsynqTaskVersion, expire).Err()
+		err = pipe.HExpire(ctx, constant.AsynqTaskVersion, expire, taskName).Err()
 		if err != nil {
 			return err
 		}
@@ -39,4 +39,8 @@ func (c *AsynqCache) SetAsynqTaskVersion(ctx context.Context, taskName string, v
 
 func (c *AsynqCache) GetAsynqTaskVersion(ctx context.Context, taskName string) (int64, error) {
 	return c.redis.Client.HGet(ctx, constant.AsynqTaskVersion, taskName).Int64()
+}
+
+func (c *AsynqCache) SetAsynqTaskExpire(ctx context.Context, taskName string, expire time.Duration) error {
+	return c.redis.Client.HExpire(ctx, constant.AsynqTaskVersion, expire, taskName).Err()
 }

@@ -143,3 +143,8 @@ func (r *NodeCache) UpdateScore(ctx context.Context, key string) error {
 	score := node.CalculateScore()
 	return r.SetNodeRank(ctx, key, score)
 }
+
+// SetNX 实现分布式锁
+func (r *NodeCache) SetNX(ctx context.Context, key string, value string, expire time.Duration) (bool, error) {
+	return r.Redis.Client.SetNX(ctx, key, value, expire).Result()
+}

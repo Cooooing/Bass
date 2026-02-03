@@ -7,12 +7,14 @@ import (
 	"common/pkg/util"
 	"context"
 	"encoding/json"
+	"errors"
 	"signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
 
 	"github.com/hibiken/asynq"
+	"github.com/redis/go-redis/v9"
 )
 
 type NodePowTaskHandler struct {
@@ -41,7 +43,7 @@ func (h *NodePowTaskHandler) Name() constant.TaskName {
 
 func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
-		h.Log.Infof("task %s: %s", task.Type(), string(task.Payload()))
+		h.Log.Debugf("task %s: %s", task.Type(), string(task.Payload()))
 		data := new(commonModel.Task)
 		err := json.Unmarshal(task.Payload(), data)
 		if err != nil {
@@ -52,12 +54,24 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 			return err
 		}
 
-		// 判断任务是否存在
+		// 幂等
+		exists, _ := h.nodeCache.ExistsNodeRank(ctx, node.Key)
+		if !exists {
+			return nil
+		}
 		if version, err := h.asynqCache.GetAsynqTaskVersion(ctx, data.TaskName); err != nil {
+			if errors.Is(err, redis.Nil) {
+				return nil
+			}
 			return err
 		} else if version != data.Version {
 			return nil
 		}
+		err = h.asynqCache.SetAsynqTaskExpire(ctx, data.TaskName, data.Interval*2)
+		if err != nil {
+			return err
+		}
+
 		// pow
 		powMs, err := h.nodeDomain.Pow(node)
 		if err != nil {
@@ -74,35 +88,30 @@ func (h *NodePowTaskHandler) Handler() asynq.HandlerFunc {
 		}
 
 		// 下一次任务
-		rc, ok1 := asynq.GetRetryCount(ctx)
-		mrc, ok2 := asynq.GetMaxRetry(ctx)
-		if ok1 && ok2 && rc <= mrc {
-			data.Delay = true
-			err = h.producer.EnqueueContextTask(ctx, data)
-			if err != nil {
-				return err
-			}
+		data.Delay = true
+		err = h.producer.EnqueueContextTask(ctx, data)
+		if err != nil {
+			return err
 		}
 		return nil
 	}
 }
 
 func (h *NodePowTaskHandler) ErrHandler(ctx context.Context, task *asynq.Task, err error) {
-	h.Log.Errorf("task %s failed: %v", task.Type(), err)
-	data := new(commonModel.Task)
-	err = json.Unmarshal(task.Payload(), data)
-	if err != nil {
-		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
-		return
-	}
-	node := new(model.Node)
-	if err := json.Unmarshal(data.Data, node); err != nil {
-		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
-		return
-	}
-	err = h.nodeDomain.Unregister(ctx, node.Key)
-	if err != nil {
-		h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
-		return
-	}
+	go func() {
+		data := new(commonModel.Task)
+		err = json.Unmarshal(task.Payload(), data)
+		if err != nil {
+			h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
+			return
+		}
+		node := new(model.Node)
+		if err = json.Unmarshal(data.Data, node); err != nil {
+			h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
+			return
+		}
+		if err := h.nodeDomain.Unregister(ctx, node.Key); err != nil {
+			h.Log.Errorf("task error handler %s failed: %v", task.Type(), err)
+		}
+	}()
 }

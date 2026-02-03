@@ -17,11 +17,17 @@ type RedisClient struct {
 // NewRedisClient 初始化单机 Redis 客户端
 func NewRedisClient(log *log.Helper, conf *model.RedisConf) (*RedisClient, func(), error) {
 	client := redis.NewClient(&redis.Options{
-		Addr:         conf.Addr,
-		Password:     conf.Password,
-		DB:           int(conf.Db),
-		ReadTimeout:  conf.ReadTimeout.AsDuration(),
-		WriteTimeout: conf.WriteTimeout.AsDuration(),
+		Addr:            conf.Addr,
+		Password:        conf.Password,
+		DB:              int(conf.Db),
+		DialTimeout:     conf.DialTimeout.AsDuration(),
+		ReadTimeout:     conf.ReadTimeout.AsDuration(),
+		WriteTimeout:    conf.WriteTimeout.AsDuration(),
+		PoolSize:        int(conf.PoolSize),
+		MinIdleConns:    int(conf.MinIdleConns),
+		PoolTimeout:     conf.PoolTimeout.AsDuration(),
+		ConnMaxIdleTime: conf.ConnMaxIdleTime.AsDuration(),
+		ConnMaxLifetime: conf.ConnMaxLifetime.AsDuration(),
 	})
 	ctx := context.Background()
 

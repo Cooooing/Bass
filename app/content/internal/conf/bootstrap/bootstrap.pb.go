@@ -255,13 +255,17 @@ func (x *Log) GetFile() string {
 }
 
 type Registry_Etcd struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Endpoints     []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
-	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Endpoints            []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
+	Username             string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Password             string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Timeout              *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	AutoSyncInterval     *durationpb.Duration   `protobuf:"bytes,5,opt,name=auto_sync_interval,json=autoSyncInterval,proto3" json:"auto_sync_interval,omitempty"`
+	DialKeepAliveTime    *durationpb.Duration   `protobuf:"bytes,6,opt,name=dial_keep_alive_time,json=dialKeepAliveTime,proto3" json:"dial_keep_alive_time,omitempty"`
+	DialKeepAliveTimeout *durationpb.Duration   `protobuf:"bytes,7,opt,name=dial_keep_alive_timeout,json=dialKeepAliveTimeout,proto3" json:"dial_keep_alive_timeout,omitempty"`
+	PermitWithoutLeader  bool                   `protobuf:"varint,8,opt,name=permit_without_leader,json=permitWithoutLeader,proto3" json:"permit_without_leader,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Registry_Etcd) Reset() {
@@ -322,6 +326,34 @@ func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
 	return nil
 }
 
+func (x *Registry_Etcd) GetAutoSyncInterval() *durationpb.Duration {
+	if x != nil {
+		return x.AutoSyncInterval
+	}
+	return nil
+}
+
+func (x *Registry_Etcd) GetDialKeepAliveTime() *durationpb.Duration {
+	if x != nil {
+		return x.DialKeepAliveTime
+	}
+	return nil
+}
+
+func (x *Registry_Etcd) GetDialKeepAliveTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.DialKeepAliveTimeout
+	}
+	return nil
+}
+
+func (x *Registry_Etcd) GetPermitWithoutLeader() bool {
+	if x != nil {
+		return x.PermitWithoutLeader
+	}
+	return false
+}
+
 var File_conf_bootstrap_bootstrap_proto protoreflect.FileDescriptor
 
 const file_conf_bootstrap_bootstrap_proto_rawDesc = "" +
@@ -333,14 +365,18 @@ const file_conf_bootstrap_bootstrap_proto_rawDesc = "" +
 	"\x04mode\x18\x03 \x01(\tR\x04mode\x12:\n" +
 	"\bregistry\x18\x04 \x01(\v2\x1e.kratos.api.bootstrap.RegistryR\bregistry\x124\n" +
 	"\x06config\x18\x05 \x01(\v2\x1c.kratos.api.bootstrap.ConfigR\x06config\x12+\n" +
-	"\x03log\x18\x06 \x01(\v2\x19.kratos.api.bootstrap.LogR\x03log\"\xd7\x01\n" +
+	"\x03log\x18\x06 \x01(\v2\x19.kratos.api.bootstrap.LogR\x03log\"\xf2\x03\n" +
 	"\bRegistry\x127\n" +
-	"\x04etcd\x18\x01 \x01(\v2#.kratos.api.bootstrap.Registry.EtcdR\x04etcd\x1a\x91\x01\n" +
+	"\x04etcd\x18\x01 \x01(\v2#.kratos.api.bootstrap.Registry.EtcdR\x04etcd\x1a\xac\x03\n" +
 	"\x04Etcd\x12\x1c\n" +
 	"\tendpoints\x18\x01 \x03(\tR\tendpoints\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\x1c\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12G\n" +
+	"\x12auto_sync_interval\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x10autoSyncInterval\x12J\n" +
+	"\x14dial_keep_alive_time\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x11dialKeepAliveTime\x12P\n" +
+	"\x17dial_keep_alive_timeout\x18\a \x01(\v2\x19.google.protobuf.DurationR\x14dialKeepAliveTimeout\x122\n" +
+	"\x15permit_without_leader\x18\b \x01(\bR\x13permitWithoutLeader\"\x1c\n" +
 	"\x06Config\x12\x12\n" +
 	"\x04etcd\x18\x01 \x01(\tR\x04etcd\"G\n" +
 	"\x03Log\x12\x16\n" +
@@ -375,11 +411,14 @@ var file_conf_bootstrap_bootstrap_proto_depIdxs = []int32{
 	3, // 2: kratos.api.bootstrap.Bootstrap.log:type_name -> kratos.api.bootstrap.Log
 	4, // 3: kratos.api.bootstrap.Registry.etcd:type_name -> kratos.api.bootstrap.Registry.Etcd
 	5, // 4: kratos.api.bootstrap.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	5, // 5: kratos.api.bootstrap.Registry.Etcd.auto_sync_interval:type_name -> google.protobuf.Duration
+	5, // 6: kratos.api.bootstrap.Registry.Etcd.dial_keep_alive_time:type_name -> google.protobuf.Duration
+	5, // 7: kratos.api.bootstrap.Registry.Etcd.dial_keep_alive_timeout:type_name -> google.protobuf.Duration
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_conf_bootstrap_bootstrap_proto_init() }

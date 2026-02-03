@@ -41,8 +41,14 @@ message Data {
     string addr = 1;
     string password = 2;
     int32 db = 3;
-    google.protobuf.Duration read_timeout = 4;
-    google.protobuf.Duration write_timeout = 5;
+    google.protobuf.Duration dial_timeout = 4;
+    google.protobuf.Duration read_timeout = 5;
+    google.protobuf.Duration write_timeout = 6;
+    int32 pool_size = 7;
+    int32 min_idle_conns = 8;
+    google.protobuf.Duration pool_timeout = 9;
+    google.protobuf.Duration conn_max_idle_time = 10;
+    google.protobuf.Duration conn_max_life_time = 11;
   }
   message RabbitMQ {
     string url = 1;
@@ -65,6 +71,10 @@ message Registry {
     string username = 2;
     string password = 3;
     google.protobuf.Duration timeout = 4;
+    google.protobuf.Duration auto_sync_interval = 5;
+    google.protobuf.Duration dial_keep_alive_time = 6;
+    google.protobuf.Duration dial_keep_alive_timeout = 7;
+    bool permit_without_leader = 8;
   }
   Etcd etcd = 1;
 }

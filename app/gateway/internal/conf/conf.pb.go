@@ -663,14 +663,20 @@ func (x *Data_Database) GetMerge() bool {
 }
 
 type Data_Redis struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Addr          string                 `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	Db            int32                  `protobuf:"varint,3,opt,name=db,proto3" json:"db,omitempty"`
-	ReadTimeout   *durationpb.Duration   `protobuf:"bytes,4,opt,name=read_timeout,json=readTimeout,proto3" json:"read_timeout,omitempty"`
-	WriteTimeout  *durationpb.Duration   `protobuf:"bytes,5,opt,name=write_timeout,json=writeTimeout,proto3" json:"write_timeout,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Addr            string                 `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
+	Password        string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Db              int32                  `protobuf:"varint,3,opt,name=db,proto3" json:"db,omitempty"`
+	DialTimeout     *durationpb.Duration   `protobuf:"bytes,4,opt,name=dial_timeout,json=dialTimeout,proto3" json:"dial_timeout,omitempty"`
+	ReadTimeout     *durationpb.Duration   `protobuf:"bytes,5,opt,name=read_timeout,json=readTimeout,proto3" json:"read_timeout,omitempty"`
+	WriteTimeout    *durationpb.Duration   `protobuf:"bytes,6,opt,name=write_timeout,json=writeTimeout,proto3" json:"write_timeout,omitempty"`
+	PoolSize        int32                  `protobuf:"varint,7,opt,name=pool_size,json=poolSize,proto3" json:"pool_size,omitempty"`
+	MinIdleConns    int32                  `protobuf:"varint,8,opt,name=min_idle_conns,json=minIdleConns,proto3" json:"min_idle_conns,omitempty"`
+	PoolTimeout     *durationpb.Duration   `protobuf:"bytes,9,opt,name=pool_timeout,json=poolTimeout,proto3" json:"pool_timeout,omitempty"`
+	ConnMaxIdleTime *durationpb.Duration   `protobuf:"bytes,10,opt,name=conn_max_idle_time,json=connMaxIdleTime,proto3" json:"conn_max_idle_time,omitempty"`
+	ConnMaxLifeTime *durationpb.Duration   `protobuf:"bytes,11,opt,name=conn_max_life_time,json=connMaxLifeTime,proto3" json:"conn_max_life_time,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Data_Redis) Reset() {
@@ -724,6 +730,13 @@ func (x *Data_Redis) GetDb() int32 {
 	return 0
 }
 
+func (x *Data_Redis) GetDialTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.DialTimeout
+	}
+	return nil
+}
+
 func (x *Data_Redis) GetReadTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.ReadTimeout
@@ -734,6 +747,41 @@ func (x *Data_Redis) GetReadTimeout() *durationpb.Duration {
 func (x *Data_Redis) GetWriteTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.WriteTimeout
+	}
+	return nil
+}
+
+func (x *Data_Redis) GetPoolSize() int32 {
+	if x != nil {
+		return x.PoolSize
+	}
+	return 0
+}
+
+func (x *Data_Redis) GetMinIdleConns() int32 {
+	if x != nil {
+		return x.MinIdleConns
+	}
+	return 0
+}
+
+func (x *Data_Redis) GetPoolTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.PoolTimeout
+	}
+	return nil
+}
+
+func (x *Data_Redis) GetConnMaxIdleTime() *durationpb.Duration {
+	if x != nil {
+		return x.ConnMaxIdleTime
+	}
+	return nil
+}
+
+func (x *Data_Redis) GetConnMaxLifeTime() *durationpb.Duration {
+	if x != nil {
+		return x.ConnMaxLifeTime
 	}
 	return nil
 }
@@ -831,13 +879,17 @@ func (x *Data_RabbitMQ) GetAutoAck() bool {
 }
 
 type Registry_Etcd struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Endpoints     []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
-	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Endpoints            []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
+	Username             string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Password             string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Timeout              *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	AutoSyncInterval     *durationpb.Duration   `protobuf:"bytes,5,opt,name=auto_sync_interval,json=autoSyncInterval,proto3" json:"auto_sync_interval,omitempty"`
+	DialKeepAliveTime    *durationpb.Duration   `protobuf:"bytes,6,opt,name=dial_keep_alive_time,json=dialKeepAliveTime,proto3" json:"dial_keep_alive_time,omitempty"`
+	DialKeepAliveTimeout *durationpb.Duration   `protobuf:"bytes,7,opt,name=dial_keep_alive_timeout,json=dialKeepAliveTimeout,proto3" json:"dial_keep_alive_timeout,omitempty"`
+	PermitWithoutLeader  bool                   `protobuf:"varint,8,opt,name=permit_without_leader,json=permitWithoutLeader,proto3" json:"permit_without_leader,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Registry_Etcd) Reset() {
@@ -896,6 +948,34 @@ func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
 		return x.Timeout
 	}
 	return nil
+}
+
+func (x *Registry_Etcd) GetAutoSyncInterval() *durationpb.Duration {
+	if x != nil {
+		return x.AutoSyncInterval
+	}
+	return nil
+}
+
+func (x *Registry_Etcd) GetDialKeepAliveTime() *durationpb.Duration {
+	if x != nil {
+		return x.DialKeepAliveTime
+	}
+	return nil
+}
+
+func (x *Registry_Etcd) GetDialKeepAliveTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.DialKeepAliveTimeout
+	}
+	return nil
+}
+
+func (x *Registry_Etcd) GetPermitWithoutLeader() bool {
+	if x != nil {
+		return x.PermitWithoutLeader
+	}
+	return false
 }
 
 type Oss_Qiniu struct {
@@ -1067,7 +1147,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xf1\x05\n" +
+	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xc0\b\n" +
 	"\x04Data\x12:\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x1e.kratos.api.conf.Data.DatabaseR\bdatabase\x121\n" +
 	"\x05redis\x18\x02 \x01(\v2\x1b.kratos.api.conf.Data.RedisR\x05redis\x12:\n" +
@@ -1075,13 +1155,20 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12\x14\n" +
-	"\x05merge\x18\x03 \x01(\bR\x05merge\x1a\xc5\x01\n" +
+	"\x05merge\x18\x03 \x01(\bR\x05merge\x1a\x94\x04\n" +
 	"\x05Redis\x12\x12\n" +
 	"\x04addr\x18\x01 \x01(\tR\x04addr\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x0e\n" +
 	"\x02db\x18\x03 \x01(\x05R\x02db\x12<\n" +
-	"\fread_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vreadTimeout\x12>\n" +
-	"\rwrite_timeout\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x1a\xa3\x02\n" +
+	"\fdial_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vdialTimeout\x12<\n" +
+	"\fread_timeout\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\vreadTimeout\x12>\n" +
+	"\rwrite_timeout\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\x12\x1b\n" +
+	"\tpool_size\x18\a \x01(\x05R\bpoolSize\x12$\n" +
+	"\x0emin_idle_conns\x18\b \x01(\x05R\fminIdleConns\x12<\n" +
+	"\fpool_timeout\x18\t \x01(\v2\x19.google.protobuf.DurationR\vpoolTimeout\x12F\n" +
+	"\x12conn_max_idle_time\x18\n" +
+	" \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxIdleTime\x12F\n" +
+	"\x12conn_max_life_time\x18\v \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxLifeTime\x1a\xa3\x02\n" +
 	"\bRabbitMQ\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x127\n" +
 	"\theartbeat\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\theartbeat\x12<\n" +
@@ -1089,14 +1176,18 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x0eprefetch_count\x18\x04 \x01(\x05R\rprefetchCount\x12'\n" +
 	"\x0fprefetch_global\x18\x05 \x01(\bR\x0eprefetchGlobal\x12#\n" +
 	"\rdelivery_mode\x18\x06 \x01(\x05R\fdeliveryMode\x12\x19\n" +
-	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xd2\x01\n" +
+	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xed\x03\n" +
 	"\bRegistry\x122\n" +
-	"\x04etcd\x18\x01 \x01(\v2\x1e.kratos.api.conf.Registry.EtcdR\x04etcd\x1a\x91\x01\n" +
+	"\x04etcd\x18\x01 \x01(\v2\x1e.kratos.api.conf.Registry.EtcdR\x04etcd\x1a\xac\x03\n" +
 	"\x04Etcd\x12\x1c\n" +
 	"\tendpoints\x18\x01 \x03(\tR\tendpoints\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"z\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12G\n" +
+	"\x12auto_sync_interval\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x10autoSyncInterval\x12J\n" +
+	"\x14dial_keep_alive_time\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x11dialKeepAliveTime\x12P\n" +
+	"\x17dial_keep_alive_timeout\x18\a \x01(\v2\x19.google.protobuf.DurationR\x14dialKeepAliveTimeout\x122\n" +
+	"\x15permit_without_leader\x18\b \x01(\bR\x13permitWithoutLeader\"z\n" +
 	"\x05Trace\x12\x1f\n" +
 	"\venable_otel\x18\x01 \x01(\bR\n" +
 	"enableOtel\x12\x1a\n" +
@@ -1177,17 +1268,24 @@ var file_conf_conf_proto_depIdxs = []int32{
 	14, // 15: kratos.api.conf.Oss.minio:type_name -> kratos.api.conf.Oss.Minio
 	15, // 16: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
 	15, // 17: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	15, // 18: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	15, // 19: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	15, // 20: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
-	15, // 21: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	15, // 22: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
-	15, // 23: kratos.api.conf.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	15, // 18: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
+	15, // 19: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	15, // 20: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	15, // 21: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
+	15, // 22: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
+	15, // 23: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
+	15, // 24: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
+	15, // 25: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
+	15, // 26: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
+	15, // 27: kratos.api.conf.Registry.Etcd.auto_sync_interval:type_name -> google.protobuf.Duration
+	15, // 28: kratos.api.conf.Registry.Etcd.dial_keep_alive_time:type_name -> google.protobuf.Duration
+	15, // 29: kratos.api.conf.Registry.Etcd.dial_keep_alive_timeout:type_name -> google.protobuf.Duration
+	15, // 30: kratos.api.conf.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
+	31, // [31:31] is the sub-list for method output_type
+	31, // [31:31] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }

@@ -114,7 +114,6 @@ func (d *ServerDomain) Run() {
 			TaskName: registerTaskName,
 			Version:  version,
 			Interval: interval,
-			MaxRetry: 3,
 		})
 		if err != nil {
 			d.Log.Errorf("failed to register node: %v", err)

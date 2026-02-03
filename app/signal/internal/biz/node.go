@@ -23,7 +23,6 @@ import (
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-
 	"strings"
 	"time"
 
@@ -253,26 +252,23 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 			TaskName: pingTaskName,
 			Version:  version,
 			Interval: 10 * time.Second,
-			MaxRetry: 3,
 			Data:     marshal,
 		}, {
 			TaskName: powTaskName,
 			Version:  version,
 			Interval: 30 * time.Second,
-			MaxRetry: 3,
 			Data:     marshal,
 		}, {
 			TaskName: sessionTaskName,
 			Version:  version,
 			Interval: 60 * time.Second,
-			MaxRetry: 3,
 			Data:     marshal,
 		},
 	})
 	if err != nil {
 		return err
 	}
-
+	d.Log.Infof("node[%s] register", n.Key)
 	return nil
 }
 
@@ -284,8 +280,15 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 		}
 		key = n.Key
 	}
+	// 尽量保证幂等
+	exists, _ := d.nodeCache.ExistsNodeRank(ctx, key)
+	if !exists {
+		return nil
+	}
+
 	d.nodeCache.DelNodeRank(ctx, key)
 	d.nodeCache.DelNode(ctx, key)
+	d.Log.Infof("node[%s] unregister", key)
 	return nil
 }
 

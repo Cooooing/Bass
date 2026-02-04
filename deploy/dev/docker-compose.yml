@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   postgres:
@@ -10,9 +10,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /opt/docker-data/postgres/data:/var/lib/postgresql/18/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -25,9 +25,9 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - /opt/docker-data/redis:/data
+      - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -45,13 +45,9 @@ services:
       - "2379:2379"
       - "2380:2380"
     volumes:
-      - /opt/docker-data/etcd:/bitnami/etcd
-      # Bitnami 镜像（包括 bitnami/etcd）默认不是用 root 用户运行的。它内部使用 UID 1001 的用户来运行 etcd 服务。需要赋权
-      # sudo mkdir -p /opt/docker-data/etcd
-      # sudo chown -R 1001:1001 /opt/docker-data/etcd
-      # sudo chmod -R 755 /opt/docker-data/etcd
+      - etcd_data:/bitnami/etcd/data
     healthcheck:
-      test: ["CMD", "etcdctl", "--user", "root:${ETCD_ROOT_PASSWORD}", "endpoint", "health"]
+      test: [ "CMD", "etcdctl", "--user", "root:${ETCD_ROOT_PASSWORD}", "endpoint", "health" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -63,12 +59,18 @@ services:
     env_file:
       - .env
     ports:
-      - "5672:5672"   # AMQP 接口
-      - "15672:15672" # Web 管理界面
+      - "5672:5672"
+      - "15672:15672"
     volumes:
-      - /opt/docker-data/rabbitmq:/var/lib/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
+  etcd_data:
+  rabbitmq_data:

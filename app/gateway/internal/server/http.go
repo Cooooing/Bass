@@ -81,7 +81,7 @@ func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.Etc
 	logger := log.NewHelper(l)
 	propagator := propagation.TraceContext{}
 	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		conn, err := etcdClient.NewHTTPConn(serviceName)
+		conn, err := etcdClient.GetHTTPClient(serviceName)
 		if err != nil {
 			logger.Errorf("new http conn error: %v", err)
 			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))

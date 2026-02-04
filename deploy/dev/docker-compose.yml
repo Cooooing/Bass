@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql18/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
       interval: 30s
@@ -41,6 +41,11 @@ services:
     environment:
       - ETCD_ENABLE_V2=true
       - ALLOW_NONE_AUTHENTICATION=no
+      - ETCD_ROOT_PASSWORD=${ETCD_ROOT_PASSWORD}
+      - ETCD_ADVERTISE_CLIENT_URLS=http://${ETCD_ADVERTISE_IP}:2379
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://${ETCD_ADVERTISE_IP}:2380
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
     ports:
       - "2379:2379"
       - "2380:2380"

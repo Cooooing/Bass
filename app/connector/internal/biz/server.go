@@ -58,8 +58,12 @@ func (d *ServerDomain) Register() error {
 		}
 	}(resp.Body)
 
+	bytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("failed to register node: %s", url)
+		return fmt.Errorf("failed to register node: %s %d %s", url, resp.StatusCode, string(bytes))
 	}
 
 	return nil

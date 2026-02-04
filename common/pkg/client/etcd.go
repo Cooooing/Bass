@@ -2,14 +2,12 @@ package client
 
 import (
 	"common/pkg/constant"
+	"common/pkg/model"
 	"context"
 	"fmt"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
-
-	"common/pkg/model"
 
 	etcdregistry "github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -20,38 +18,36 @@ import (
 	khttp "github.com/go-kratos/kratos/v2/transport/http"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-// ConnPool 是 gRPC 客户端连接池
-type ConnPool struct {
-	conns []*grpc.ClientConn
-	next  uint32
-	once  sync.Once // 每个池自己控制只初始化一次
-	err   error
-}
-
-// Get 返回一个轮询的 gRPC 连接
-func (p *ConnPool) Get() *grpc.ClientConn {
-	if len(p.conns) == 0 {
-		return nil
-	}
-	// 使用原子操作保证并发安全轮询
-	n := atomic.AddUint32(&p.next, 1)
-	return p.conns[int(n%uint32(len(p.conns)))]
-}
-
-// EtcdClient 封装 Etcd 和 gRPC 连接池
+// EtcdClient 封装了 Etcd 资源与微服务连接池
 type EtcdClient struct {
-	conf  *model.EtcdConf
-	log   *log.Helper
-	pools sync.Map         // key=serviceName, value=*ConnPool
-	cli   *clientv3.Client // 持久化 Etcd 客户端
+	conf *model.EtcdConf
+	log  *log.Helper
+	cli  *clientv3.Client
+	reg  *etcdregistry.Registry // 单例注册/发现中心
+
+	grpcConns sync.Map // key=serviceName, value=*grpc.ClientConn
+	httpConns sync.Map // key=serviceName, value=*khttp.Client
 }
 
-// NewEtcdClient 创建 EtcdClient 实例
-func NewEtcdClient(log *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(), error) {
-	// 初始化 Etcd 客户端
+// NewEtcdClient 初始化生产级 Etcd 客户端
+func NewEtcdClient(logger *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(), error) {
+	// 配置默认值补全
+	if conf.AutoSyncInterval == nil {
+		conf.AutoSyncInterval = durationpb.New(30 * time.Second)
+	}
+	if conf.DialKeepAliveTime == nil {
+		conf.DialKeepAliveTime = durationpb.New(20 * time.Second)
+	}
+	if conf.DialKeepAliveTimeout == nil {
+		conf.DialKeepAliveTimeout = durationpb.New(10 * time.Second)
+	}
+
+	// 构造 Etcd 客户端
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:            conf.Endpoints,
 		Username:             conf.Username,
@@ -63,142 +59,157 @@ func NewEtcdClient(log *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(), 
 		PermitWithoutStream:  conf.PermitWithoutStream,
 	})
 	if err != nil {
-		return nil, nil, fmt.Errorf("create etcd client failed: %w", err)
+		return nil, nil, fmt.Errorf("failed to create etcd client: %w", err)
 	}
+
+	// 创建单例 Registry
+	reg := etcdregistry.New(cli)
 
 	c := &EtcdClient{
 		conf: conf,
-		log:  log,
+		log:  logger,
 		cli:  cli,
+		reg:  reg,
 	}
 
-	// 测试 Etcd 是否可用
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	// 启动预检
+	// 通过 MemberList 确认连接和 Auth 配置是否正确
+	ctx, cancel := context.WithTimeout(context.Background(), conf.Timeout.AsDuration())
 	defer cancel()
-	if _, err := cli.Get(ctx, "ping_key_not_exist"); err != nil {
-		c.log.Errorf("etcd ping failed: %v", err)
-	} else {
-		c.log.Infof("etcd connected successfully: %+v", conf.Endpoints)
+	if _, err := cli.MemberList(ctx); err != nil {
+		_ = cli.Close()
+		return nil, nil, fmt.Errorf("etcd connection check failed: %w", err)
 	}
 
+	c.log.Infof("etcd connection verified: %v", conf.Endpoints)
 	return c, c.CleanUp, nil
 }
 
-// Registrar 返回 Etcd 服务注册器
+// Registrar 获取服务注册器单例
 func (c *EtcdClient) Registrar() registry.Registrar {
-	return etcdregistry.New(c.cli)
+	return c.reg
 }
 
-// NewGrpcConn 创建 gRPC 连接
-func (c *EtcdClient) NewGrpcConn(service string) (*grpc.ClientConn, error) {
-	dis := etcdregistry.New(c.cli)
-	return kgrpc.DialInsecure(
+// Discovery 获取服务发现器单例
+func (c *EtcdClient) Discovery() registry.Discovery {
+	return c.reg
+}
+
+// GetGrpcConn 获取或创建缓存的 gRPC 连接
+func (c *EtcdClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
+	if val, ok := c.grpcConns.Load(service); ok {
+		return val.(*grpc.ClientConn), nil
+	}
+
+	conn, err := kgrpc.DialInsecure(
 		context.Background(),
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
-		kgrpc.WithDiscovery(dis),
+		kgrpc.WithDiscovery(c.reg),
 		kgrpc.WithTimeout(c.conf.Timeout.AsDuration()),
+		// 设置 gRPC 默认负载均衡策略
+		kgrpc.WithOptions(grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`)),
 		kgrpc.WithMiddleware(
 			tracing.Client(),
-			func(next middleware.Handler) middleware.Handler {
-				return func(ctx context.Context, req interface{}) (interface{}, error) {
-					// ---- Token 注入（写在这里）----
-					token, _ := ctx.Value(constant.CtxToken).(string)
-					if token != "" {
-						ctx = metadata.AppendToOutgoingContext(ctx, strings.ToLower(constant.HeaderAuthentication), fmt.Sprintf("Bearer %s", token))
-					}
-					// ---- END ----
-					return next(ctx, req)
-				}
-			},
+			c.tokenClientMiddleware(),
 		),
+		kgrpc.WithOptions(grpc.WithKeepaliveParams(keepalive.ClientParameters{
+			Time:                c.conf.DialKeepAliveTime.AsDuration(),
+			Timeout:             c.conf.DialKeepAliveTimeout.AsDuration(),
+			PermitWithoutStream: c.conf.PermitWithoutStream,
+		})),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("dial grpc service %s failed: %w", service, err)
+	}
+
+	actual, loaded := c.grpcConns.LoadOrStore(service, conn)
+	if loaded {
+		_ = conn.Close()
+		return actual.(*grpc.ClientConn), nil
+	}
+	return conn, nil
 }
 
-// NewHTTPConn 创建 HTTP 连接（支持服务发现）
-func (c *EtcdClient) NewHTTPConn(service string) (*khttp.Client, error) {
-	dis := etcdregistry.New(c.cli)
-	return khttp.NewClient(
+// GetHTTPClient 获取或创建缓存的 HTTP 客户端
+func (c *EtcdClient) GetHTTPClient(service string) (*khttp.Client, error) {
+	if val, ok := c.httpConns.Load(service); ok {
+		return val.(*khttp.Client), nil
+	}
+
+	client, err := khttp.NewClient(
 		context.Background(),
 		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
-		khttp.WithDiscovery(dis),
+		khttp.WithDiscovery(c.reg),
 		khttp.WithTimeout(c.conf.Timeout.AsDuration()),
-		khttp.WithBlock(),
 		khttp.WithMiddleware(
 			tracing.Client(),
 			func(next middleware.Handler) middleware.Handler {
 				return func(ctx context.Context, req interface{}) (interface{}, error) {
-					// ---- Token 注入（写在这里）----
-					token, _ := ctx.Value(constant.CtxToken).(string)
-					if token != "" {
+					if token, ok := ctx.Value(constant.CtxToken).(string); ok && token != "" {
 						if r, ok := req.(khttp.Request); ok {
-							r.Header.Add(constant.HeaderAuthentication, fmt.Sprintf("Bearer %s", token))
+							// 注入 Token 到 HTTP Header
+							r.Header.Set(constant.HeaderAuthentication, "Bearer "+token)
 						}
 					}
-					// ---- END ----
 					return next(ctx, req)
 				}
 			},
 		),
 	)
-}
-
-// getConnFromPool 获取 gRPC 连接池中的连接，如果池不存在则初始化
-func (c *EtcdClient) getConnFromPool(service string, poolSize int) (*grpc.ClientConn, error) {
-	val, _ := c.pools.LoadOrStore(service, &ConnPool{})
-	pool := val.(*ConnPool)
-
-	pool.once.Do(func() {
-		for i := 0; i < poolSize; i++ {
-			conn, err := c.NewGrpcConn(service)
-			if err != nil {
-				c.log.Errorf("failed to create grpc conn for %s: %v", service, err)
-				pool.err = err
-				continue
-			}
-			pool.conns = append(pool.conns, conn)
-		}
-		if len(pool.conns) == 0 {
-			pool.err = fmt.Errorf("no grpc connections available for service %s", service)
-		} else {
-			c.log.Infof("created connection pool for service %s (size=%d)", service, len(pool.conns))
-		}
-	})
-
-	if pool.err != nil {
-		return nil, pool.err
+	if err != nil {
+		return nil, fmt.Errorf("create http client for %s failed: %w", service, err)
 	}
 
-	return pool.Get(), nil
+	actual, loaded := c.httpConns.LoadOrStore(service, client)
+	if loaded {
+		// Kratos HTTP Client 不直接暴露 Close，旧的会被 GC 回收，
+		// 但 Discovery 里的 Watcher 是基于单例 reg 的，不会泄露
+		return actual.(*khttp.Client), nil
+	}
+	return client, nil
 }
 
-// CleanUp 关闭所有 gRPC 连接和 Etcd 客户端
-func (c *EtcdClient) CleanUp() {
-	// 遍历关闭 gRPC 连接池
-	c.pools.Range(func(key, value any) bool {
-		pool := value.(*ConnPool)
-		for _, conn := range pool.conns {
-			if err := conn.Close(); err != nil {
-				c.log.Warnf("close grpc conn failed (%v): %v", key, err)
+// tokenClientMiddleware gRPC 客户端 Token 注入中间件
+func (c *EtcdClient) tokenClientMiddleware() middleware.Middleware {
+	return func(next middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			if token, ok := ctx.Value(constant.CtxToken).(string); ok && token != "" {
+				// gRPC Metadata Key 必须为小写
+				ctx = metadata.AppendToOutgoingContext(ctx,
+					strings.ToLower(constant.HeaderAuthentication),
+					"Bearer "+token,
+				)
 			}
+			return next(ctx, req)
+		}
+	}
+}
+
+// CleanUp 资源清理
+func (c *EtcdClient) CleanUp() {
+	// 关闭所有 gRPC 连接
+	c.grpcConns.Range(func(key, value any) bool {
+		if conn, ok := value.(*grpc.ClientConn); ok {
+			_ = conn.Close()
 		}
 		return true
 	})
-	// 清空连接池
-	c.pools = sync.Map{}
+
 	// 关闭 Etcd 客户端
 	if c.cli != nil {
-		_ = c.cli.Close()
+		if err := c.cli.Close(); err != nil {
+			c.log.Errorf("failed to close etcd client: %v", err)
+		}
 	}
-	c.log.Info("all grpc connections and etcd client closed")
+	c.log.Info("etcd client and all service connections cleaned up")
 }
 
-// GetServiceClient 泛型客户端工厂，从池中获取连接并返回客户端
+// GetServiceClient 泛型客户端获取方法
 func GetServiceClient[T any](etcd *EtcdClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
-	const poolSize = 3 // 连接池大小，可改为配置
-	conn, err := etcd.getConnFromPool(service, poolSize)
+	conn, err := etcd.GetGrpcConn(service)
 	if err != nil {
 		var zero T
-		return zero, fmt.Errorf("get client conn failed: %w", err)
+		return zero, err
 	}
 	return newClient(conn), nil
 }

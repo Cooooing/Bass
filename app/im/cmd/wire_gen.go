@@ -25,7 +25,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	etcdClient, cleanup2, err := data.NewEtcdClient(helper, bootstrap)
+	consulClient, cleanup2, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -43,13 +43,13 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(systemService)
 	tokenCache := util.NewTokenCache(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, httpServer, etcdClient)
+	app := newApp(logger, grpcServer, httpServer, consulClient)
 	return app, func() {
 		cleanup4()
 		cleanup3()

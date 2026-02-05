@@ -8,7 +8,7 @@ import (
 	"common/pkg/util"
 	"context"
 	"fmt"
-	"user/internal/biz"
+	"user/internal/biz/doamin"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -17,10 +17,10 @@ import (
 type TwoFactorAuthenticationService struct {
 	v1.UnimplementedUserTwoFactorAuthenticationServiceServer
 	*BaseService
-	twoFactorAuthenticationDomain *biz.TwoFactorAuthenticationDomain
+	twoFactorAuthenticationDomain *doamin.TwoFactorAuthenticationDomain
 }
 
-func NewTwoFactorAuthenticationService(baseService *BaseService, userRelationDomain *biz.TwoFactorAuthenticationDomain) *TwoFactorAuthenticationService {
+func NewTwoFactorAuthenticationService(baseService *BaseService, userRelationDomain *doamin.TwoFactorAuthenticationDomain) *TwoFactorAuthenticationService {
 	return &TwoFactorAuthenticationService{
 		BaseService:                   baseService,
 		twoFactorAuthenticationDomain: userRelationDomain,

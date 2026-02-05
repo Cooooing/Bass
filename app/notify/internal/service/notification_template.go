@@ -6,7 +6,7 @@ import (
 	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"context"
-	"notify/internal/biz"
+	"notify/internal/biz/domain"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/data/ent/gen"
@@ -18,10 +18,10 @@ import (
 type NotificationTemplateService struct {
 	v1.UnimplementedNotifyNotificationTemplateServiceServer
 	*BaseService
-	notificationTemplateDomain *biz.NotificationTemplateDomain
+	notificationTemplateDomain *domain.NotificationTemplateDomain
 }
 
-func NewNotificationTemplateService(baseService *BaseService, notificationTemplateDomain *biz.NotificationTemplateDomain) *NotificationTemplateService {
+func NewNotificationTemplateService(baseService *BaseService, notificationTemplateDomain *domain.NotificationTemplateDomain) *NotificationTemplateService {
 	return &NotificationTemplateService{
 		BaseService:                baseService,
 		notificationTemplateDomain: notificationTemplateDomain,

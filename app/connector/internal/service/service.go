@@ -19,14 +19,14 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 type BaseService struct {
-	conf *conf.Bootstrap
-	log  *log.Helper
+	Conf *conf.Bootstrap
+	Log  *log.Helper
 }
 
 func NewBaseService(conf *conf.Bootstrap, logger *log.Helper) *BaseService {
 	return &BaseService{
-		conf: conf,
-		log:  logger,
+		Conf: conf,
+		Log:  logger,
 	}
 }
 

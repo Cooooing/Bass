@@ -3,7 +3,7 @@ package server
 import (
 	"common/pkg"
 	"common/pkg/util"
-	"signal/internal/biz"
+	"signal/internal/biz/domain"
 	"signal/internal/conf"
 	"signal/internal/service"
 
@@ -18,7 +18,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache, nodeDomain *biz.NodeDomain) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache, nodeDomain *domain.NodeDomain) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),

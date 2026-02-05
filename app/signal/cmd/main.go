@@ -36,8 +36,8 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagConf, "conf", "configs/config.yaml", "config path for etcd bootstrap")
-	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
+	flag.StringVar(&flagConf, "conf", "configs/config.yaml", "config path for config.yaml")
+	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bottstrap.yaml")
 }
 
 func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, cc *client.ConsulClient, asynqServer *client.AsynqServer) *kratos.App {

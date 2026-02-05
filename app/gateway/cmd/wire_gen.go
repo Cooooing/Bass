@@ -24,7 +24,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, consulClient)
+	baseService := service.NewBaseService(bootstrap, helper)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(systemService)
 	redisClient, cleanup2, err := data.NewRedisClient(helper, bootstrap)

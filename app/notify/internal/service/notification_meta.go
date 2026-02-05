@@ -3,7 +3,7 @@ package service
 import (
 	v1 "common/api/notify/v1"
 	"context"
-	"notify/internal/biz"
+	"notify/internal/biz/domain"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -12,10 +12,10 @@ import (
 type NotificationMetaService struct {
 	v1.UnimplementedNotifyNotificationMetaServiceServer
 	*BaseService
-	notificationMetaDomain *biz.NotificationMetaDomain
+	notificationMetaDomain *domain.NotificationMetaDomain
 }
 
-func NewNotificationMetaService(baseService *BaseService, notificationMetaDomain *biz.NotificationMetaDomain) *NotificationMetaService {
+func NewNotificationMetaService(baseService *BaseService, notificationMetaDomain *domain.NotificationMetaDomain) *NotificationMetaService {
 	return &NotificationMetaService{
 		BaseService:            baseService,
 		notificationMetaDomain: notificationMetaDomain,

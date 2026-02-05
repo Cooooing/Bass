@@ -7,7 +7,7 @@ import (
 	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"content/internal/biz"
+	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent"
@@ -22,7 +22,7 @@ type ArticleService struct {
 	v1.UnimplementedContentArticleServiceServer
 	*BaseService
 
-	articleDomain *biz.ArticleDomain
+	articleDomain *domain.ArticleDomain
 	articleRepo   repo.ArticleRepo
 }
 
@@ -34,7 +34,7 @@ func (s *ArticleService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentArticleServiceHTTPServer(hs, s)
 }
 
-func NewArticleService(baseService *BaseService, articleDomain *biz.ArticleDomain, articleRepo repo.ArticleRepo) *ArticleService {
+func NewArticleService(baseService *BaseService, articleDomain *domain.ArticleDomain, articleRepo repo.ArticleRepo) *ArticleService {
 	return &ArticleService{
 		BaseService:   baseService,
 		articleDomain: articleDomain,
@@ -147,7 +147,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	// 只有作者可以发布草稿
-	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(req.ArticleId),
 		Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 		CreatedBy: base.Ptr(user.ID),
@@ -158,7 +158,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 	if !exist {
 		return nil, cv1.ErrorBadRequest("article not exist")
 	}
-	err = s.articleDomain.Publish(ctx, s.db, req.ArticleId)
+	err = s.articleDomain.Publish(ctx, s.Db, req.ArticleId)
 	return &v1.PublishArticleReply{}, err
 }
 
@@ -168,7 +168,7 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	// 只有作者可以添加附言
-	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
 		ArticleId: base.Ptr(req.ArticleId),
 		Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		CreatedBy: base.Ptr(user.ID),
@@ -199,9 +199,9 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	err = ent.WithTx(ctx, s.db, func(tx *gen.Client) error {
+	err = ent.WithTx(ctx, s.Db, func(tx *gen.Client) error {
 		// 只有作者可以删除草稿
-		exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
+		exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
 			ArticleId: base.Ptr(req.ArticleId),
 			Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 			CreatedBy: base.Ptr(user.ID),
@@ -212,7 +212,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 		if !exist {
 			return cv1.ErrorBadRequest("article not exist")
 		}
-		err = s.articleRepo.Delete(ctx, s.db, req.ArticleId)
+		err = s.articleRepo.Delete(ctx, s.Db, req.ArticleId)
 		return err
 	})
 	return &v1.DeleteArticleReply{}, err

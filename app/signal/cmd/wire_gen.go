@@ -13,6 +13,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"signal/internal/biz"
 	"signal/internal/biz/base"
+	"signal/internal/biz/domain"
+	"signal/internal/biz/domain/handler"
 	"signal/internal/conf"
 	"signal/internal/data"
 	base2 "signal/internal/data/base"
@@ -70,7 +72,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	asynqScheduler, cleanup7 := client2.NewAsynqScheduler(helper, redisClient)
 	producer := client2.NewProducer(asynqClient, asynqScheduler)
 	httpClient := client2.NewHttpClient()
-	nodeDomain, err := biz.NewNodeDomain(baseDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer, httpClient)
+	nodeDomain, err := domain.NewNodeDomain(baseDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer, httpClient)
 	if err != nil {
 		cleanup7()
 		cleanup6()
@@ -85,10 +87,10 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	v := service.ProvideServices(systemService, nodeService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache, nodeDomain)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache, nodeDomain)
-	nodePingTaskHandler := biz.NewNodePingTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
-	nodePowTaskHandler := biz.NewNodePowTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
-	nodeSessionTaskHandler := biz.NewNodeSessionTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer)
-	dictMap := biz.ProvideTasks(nodePingTaskHandler, nodePowTaskHandler, nodeSessionTaskHandler)
+	pingHandler := handler.NewPingHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
+	powHandler := handler.NewPowHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
+	sessionHandler := handler.NewSessionHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer)
+	dictMap := biz.ProvideTasks(pingHandler, powHandler, sessionHandler)
 	asynqServer, cleanup8 := client2.NewAsynqServer(helper, redisClient, dictMap)
 	app := newApp(logger, grpcServer, httpServer, consulClient, asynqServer)
 	return app, func() {

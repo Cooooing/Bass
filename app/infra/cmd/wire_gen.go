@@ -10,14 +10,16 @@ import (
 	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"infra/internal/biz"
+	"infra/internal/biz/base"
+	"infra/internal/biz/domain"
 	"infra/internal/conf"
 	"infra/internal/data"
-	"infra/internal/data/base"
+	base2 "infra/internal/data/base"
 	"infra/internal/data/client"
 	"infra/internal/data/oss"
 	"infra/internal/data/oss/minio"
 	"infra/internal/data/oss/qiniu"
+	"infra/internal/data/repo"
 	"infra/internal/server"
 	"infra/internal/service"
 )
@@ -30,7 +32,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	etcdClient, cleanup2, err := data.NewEtcdClient(helper, bootstrap)
+	consulClient, cleanup2, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -49,7 +51,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	tokenCache := util.NewTokenCache(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenCache)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
@@ -59,18 +61,18 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseData := base.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	objectStorageRepo := data.NewObjectStorageRepo(baseData)
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, eventPool)
+	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
+	objectStorageRepo := repo.NewObjectStorageRepo(baseData)
 	minioMinio := minio.NewMinio()
 	qiniuQiniu := qiniu.NewQiniu(baseData)
 	factory := oss.NewFactory(minioMinio, qiniuQiniu)
-	objectStorageDomain := biz.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
+	objectStorageDomain := domain.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
 	ossService := service.NewOssService(baseService, objectStorageDomain)
 	v := service.ProvideServices(systemService, ossService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, httpServer, etcdClient)
+	app := newApp(logger, grpcServer, httpServer, consulClient)
 	return app, func() {
 		cleanup5()
 		cleanup4()

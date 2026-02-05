@@ -7,7 +7,7 @@ import (
 	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"content/internal/biz"
+	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -21,7 +21,7 @@ type CommentService struct {
 	v1.UnimplementedContentCommentServiceServer
 	*BaseService
 
-	commentDomain *biz.CommentDomain
+	commentDomain *domain.CommentDomain
 	commentRepo   repo.CommentRepo
 	articleRepo   repo.ArticleRepo
 }
@@ -34,7 +34,7 @@ func (s *CommentService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentCommentServiceHTTPServer(hs, s)
 }
 
-func NewCommentService(baseService *BaseService, commentDomain *biz.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
+func NewCommentService(baseService *BaseService, commentDomain *domain.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
 	return &CommentService{
 		BaseService:   baseService,
 		commentDomain: commentDomain,
@@ -87,7 +87,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {
 	// user := s.tokenCache.GetUserInfo(ctx)
-	exist, err := s.commentRepo.Exist(ctx, s.db, &repo.CommentGetReq{CommentId: base.Ptr(req.Id)})
+	exist, err := s.commentRepo.Exist(ctx, s.Db, &repo.CommentGetReq{CommentId: base.Ptr(req.Id)})
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (
 		return nil, cv1.ErrorBadRequest("comment not exist")
 	}
 
-	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, base.If[int32](req.Active, 1, -1))
+	err = s.commentRepo.UpdateStat(ctx, s.Db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, base.If[int32](req.Active, 1, -1))
 	return &v1.LikeCommentReply{}, err
 }
 

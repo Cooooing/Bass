@@ -1,7 +1,6 @@
 package service
 
 import (
-	commonClient "common/pkg/client"
 	"gateway/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -18,16 +17,14 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 type BaseService struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	consul *commonClient.ConsulClient
+	Conf *conf.Bootstrap
+	Log  *log.Helper
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, consul *commonClient.ConsulClient) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper) *BaseService {
 	return &BaseService{
-		conf:   conf,
-		log:    logger,
-		consul: consul,
+		Conf: conf,
+		Log:  logger,
 	}
 }
 

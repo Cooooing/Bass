@@ -7,7 +7,7 @@ import (
 	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"context"
-	"infra/internal/biz"
+	"infra/internal/biz/domain"
 	"infra/internal/biz/model"
 	"infra/internal/biz/repo"
 	"infra/internal/data/ent/gen"
@@ -20,10 +20,10 @@ import (
 type OssService struct {
 	v1.UnimplementedInfraOssServiceServer
 	*BaseService
-	ossObjectStorageDomain *biz.ObjectStorageDomain
+	ossObjectStorageDomain *domain.ObjectStorageDomain
 }
 
-func NewOssService(baseService *BaseService, ossObjectStorageDomain *biz.ObjectStorageDomain) *OssService {
+func NewOssService(baseService *BaseService, ossObjectStorageDomain *domain.ObjectStorageDomain) *OssService {
 	return &OssService{
 		BaseService:            baseService,
 		ossObjectStorageDomain: ossObjectStorageDomain,
@@ -94,7 +94,7 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 	if err != nil {
 		return nil, err
 	}
-	s.log.Infof("qiniu upload callback: %s", string(bytes))
+	s.Log.Infof("qiniu upload callback: %s", string(bytes))
 
 	err = s.ossObjectStorageDomain.QiniuUploadCallback(ctx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 		Provider:     constant.Qiniu.String(),
@@ -118,7 +118,7 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 	if err != nil {
 		return nil, err
 	}
-	s.log.Infof("qiniu increment audit callback: %s", string(bytes))
+	s.Log.Infof("qiniu increment audit callback: %s", string(bytes))
 
 	suggestion := req.Items[0].Result.Result.Suggestion
 	if suggestion == "block" {

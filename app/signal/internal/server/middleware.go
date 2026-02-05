@@ -6,7 +6,7 @@ import (
 	"common/pkg/constant"
 	"common/pkg/util"
 	"context"
-	"signal/internal/biz"
+	"signal/internal/biz/domain"
 
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
@@ -27,7 +27,7 @@ func NodeEndpointsMatch() selector.MatchFunc {
 	}
 }
 
-func SignalAuthMiddleware(nodeDomain *biz.NodeDomain) middleware.Middleware {
+func SignalAuthMiddleware(nodeDomain *domain.NodeDomain) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			// 验证 signal node

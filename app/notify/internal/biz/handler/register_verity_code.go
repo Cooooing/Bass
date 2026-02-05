@@ -8,16 +8,16 @@ import (
 	"context"
 	"fmt"
 	"html/template"
-	"notify/internal/biz/infra"
+	"notify/internal/biz/domain"
 )
 
 type RegisterVerifyCode struct {
 	*handlerchain.BaseHandler[*commonModel.Notification]
-	emailDomain      *infra.EmailDomain
-	tencentSmsDomain *infra.TencentSmsDomain
+	emailDomain      *domain.EmailDomain
+	tencentSmsDomain *domain.TencentSmsDomain
 }
 
-func NewRegisterVerifyCode(emailDomain *infra.EmailDomain, tencentSmsDomain *infra.TencentSmsDomain) *RegisterVerifyCode {
+func NewRegisterVerifyCode(emailDomain *domain.EmailDomain, tencentSmsDomain *domain.TencentSmsDomain) *RegisterVerifyCode {
 	return &RegisterVerifyCode{
 		BaseHandler:      &handlerchain.BaseHandler[*commonModel.Notification]{Name: "register_verify_code"},
 		emailDomain:      emailDomain,

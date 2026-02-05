@@ -3,7 +3,7 @@ package server
 import (
 	"common/pkg"
 	"common/pkg/util"
-	"signal/internal/biz"
+	"signal/internal/biz/domain"
 	"signal/internal/conf"
 	"signal/internal/service"
 
@@ -19,7 +19,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache, nodeDomain *biz.NodeDomain) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache, nodeDomain *domain.NodeDomain) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

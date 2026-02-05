@@ -2,7 +2,7 @@ package service
 
 import (
 	"common/pkg/util"
-	"connector/internal/biz"
+	"connector/internal/biz/domain"
 	http2 "net/http"
 	"time"
 
@@ -12,12 +12,12 @@ import (
 
 type WebsocketService struct {
 	*BaseService
-	sessionDomain *biz.SessionDomain
+	sessionDomain *domain.SessionDomain
 	eventPool     *util.EventPool
 	upgrader      websocket.Upgrader
 }
 
-func NewWebsocketService(baseService *BaseService, sessionDomain *biz.SessionDomain, eventPool *util.EventPool) *WebsocketService {
+func NewWebsocketService(baseService *BaseService, sessionDomain *domain.SessionDomain, eventPool *util.EventPool) *WebsocketService {
 	return &WebsocketService{
 		BaseService:   baseService,
 		sessionDomain: sessionDomain,
@@ -36,7 +36,7 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 		// 升级 Websocket
 		conn, err := s.upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			s.log.Errorf("websocket upgrade failed: %v", err)
+			s.Log.Errorf("websocket upgrade failed: %v", err)
 			return
 		}
 		defer func() {
@@ -55,7 +55,7 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 
 		sessionId, err := s.sessionDomain.RequestSessionId(ticket)
 		if err != nil {
-			s.log.Errorf("request session id error: %v", err)
+			s.Log.Errorf("request session id error: %v", err)
 			_ = conn.WriteControl(
 				websocket.CloseMessage,
 				websocket.FormatCloseMessage(websocket.ClosePolicyViolation, "invalid ticket"),

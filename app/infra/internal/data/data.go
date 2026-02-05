@@ -8,6 +8,7 @@ import (
 	"infra/internal/data/base"
 	"infra/internal/data/client"
 	"infra/internal/data/oss"
+	"infra/internal/data/repo"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -22,14 +23,14 @@ var DataProviderSet = wire.NewSet(
 	NewConsulClient,
 	NewRedisClient,
 	NewRabbitMQClient,
-	NewObjectStorageRepo,
+	repo.NewObjectStorageRepo,
 
 	util.NewTokenCache,
 )
 
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
 	c := &commonModel.ConsulConf{}
-	err := copier.Copy(c, conf.Registry.Etcd)
+	err := copier.Copy(c, conf.Registry.Consul)
 	if err != nil {
 		return nil, nil, err
 	}

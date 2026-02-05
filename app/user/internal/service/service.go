@@ -1,7 +1,6 @@
 package service
 
 import (
-	commonClient "common/pkg/client"
 	"user/internal/conf"
 	"user/internal/data/ent/gen"
 
@@ -24,18 +23,16 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 type BaseService struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	consul *commonClient.ConsulClient
-	db     *gen.Client
+	Conf *conf.Bootstrap
+	Log  *log.Helper
+	Db   *gen.Client
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, consul *commonClient.ConsulClient, db *gen.Client) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client) *BaseService {
 	return &BaseService{
-		conf:   conf,
-		log:    logger,
-		consul: consul,
-		db:     db,
+		Conf: conf,
+		Log:  logger,
+		Db:   db,
 	}
 }
 

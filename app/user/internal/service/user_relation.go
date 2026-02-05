@@ -8,7 +8,7 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"user/internal/biz"
+	"user/internal/biz/doamin"
 	"user/internal/biz/repo"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -18,10 +18,10 @@ import (
 type UserRelationService struct {
 	v1.UnimplementedUserUserRelationServiceServer
 	*BaseService
-	userRelationDomain *biz.UserRelationDomain
+	userRelationDomain *doamin.UserRelationDomain
 }
 
-func NewUserRelationService(baseService *BaseService, userRelationDomain *biz.UserRelationDomain) *UserRelationService {
+func NewUserRelationService(baseService *BaseService, userRelationDomain *doamin.UserRelationDomain) *UserRelationService {
 	return &UserRelationService{
 		BaseService:        baseService,
 		userRelationDomain: userRelationDomain,

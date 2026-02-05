@@ -4,7 +4,7 @@ import (
 	v1 "common/api/content/v1"
 	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
-	"content/internal/biz"
+	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -17,7 +17,7 @@ import (
 type DomainService struct {
 	v1.UnimplementedContentDomainServiceServer
 	*BaseService
-	domainDomain *biz.DomainDomain
+	domainDomain *domain.DomainDomain
 }
 
 func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
@@ -28,7 +28,7 @@ func (s *DomainService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentDomainServiceHTTPServer(hs, s)
 }
 
-func NewDomainService(baseService *BaseService, domainDomain *biz.DomainDomain) *DomainService {
+func NewDomainService(baseService *BaseService, domainDomain *domain.DomainDomain) *DomainService {
 	return &DomainService{
 		BaseService:  baseService,
 		domainDomain: domainDomain,

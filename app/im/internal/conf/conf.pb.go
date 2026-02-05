@@ -167,11 +167,10 @@ func (x *Server) GetGrpc() *Server_GRPC {
 }
 
 type Data struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 配置多数据源
-	Database      *Data_Database `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
-	Redis         *Data_Redis    `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
-	Rabbitmq      *Data_RabbitMQ `protobuf:"bytes,3,opt,name=rabbitmq,proto3" json:"rabbitmq,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Database      *Data_Database         `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
+	Redis         *Data_Redis            `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
+	Rabbitmq      *Data_RabbitMQ         `protobuf:"bytes,3,opt,name=rabbitmq,proto3" json:"rabbitmq,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -229,7 +228,7 @@ func (x *Data) GetRabbitmq() *Data_RabbitMQ {
 
 type Registry struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Etcd          *Registry_Etcd         `protobuf:"bytes,1,opt,name=etcd,proto3" json:"etcd,omitempty"`
+	Consul        *Registry_Consul       `protobuf:"bytes,1,opt,name=consul,proto3" json:"consul,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -264,9 +263,9 @@ func (*Registry) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Registry) GetEtcd() *Registry_Etcd {
+func (x *Registry) GetConsul() *Registry_Consul {
 	if x != nil {
-		return x.Etcd
+		return x.Consul
 	}
 	return nil
 }
@@ -735,34 +734,30 @@ func (x *Data_RabbitMQ) GetAutoAck() bool {
 	return false
 }
 
-type Registry_Etcd struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	Endpoints            []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
-	Username             string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	Password             string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	DialTimeout          *durationpb.Duration   `protobuf:"bytes,4,opt,name=dial_timeout,json=dialTimeout,proto3" json:"dial_timeout,omitempty"`
-	AutoSyncInterval     *durationpb.Duration   `protobuf:"bytes,5,opt,name=auto_sync_interval,json=autoSyncInterval,proto3" json:"auto_sync_interval,omitempty"`
-	DialKeepAliveTime    *durationpb.Duration   `protobuf:"bytes,6,opt,name=dial_keep_alive_time,json=dialKeepAliveTime,proto3" json:"dial_keep_alive_time,omitempty"`
-	DialKeepAliveTimeout *durationpb.Duration   `protobuf:"bytes,7,opt,name=dial_keep_alive_timeout,json=dialKeepAliveTimeout,proto3" json:"dial_keep_alive_timeout,omitempty"`
-	PermitWithoutLeader  bool                   `protobuf:"varint,8,opt,name=permit_without_leader,json=permitWithoutLeader,proto3" json:"permit_without_leader,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+type Registry_Consul struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Datacenter    string                 `protobuf:"bytes,2,opt,name=datacenter,proto3" json:"datacenter,omitempty"`
+	Token         string                 `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	DialTimeout   *durationpb.Duration   `protobuf:"bytes,4,opt,name=dial_timeout,json=dialTimeout,proto3" json:"dial_timeout,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Registry_Etcd) Reset() {
-	*x = Registry_Etcd{}
+func (x *Registry_Consul) Reset() {
+	*x = Registry_Consul{}
 	mi := &file_conf_conf_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Registry_Etcd) String() string {
+func (x *Registry_Consul) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Registry_Etcd) ProtoMessage() {}
+func (*Registry_Consul) ProtoMessage() {}
 
-func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
+func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -774,65 +769,37 @@ func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Registry_Etcd.ProtoReflect.Descriptor instead.
-func (*Registry_Etcd) Descriptor() ([]byte, []int) {
+// Deprecated: Use Registry_Consul.ProtoReflect.Descriptor instead.
+func (*Registry_Consul) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0}
 }
 
-func (x *Registry_Etcd) GetEndpoints() []string {
+func (x *Registry_Consul) GetAddress() string {
 	if x != nil {
-		return x.Endpoints
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetUsername() string {
-	if x != nil {
-		return x.Username
+		return x.Address
 	}
 	return ""
 }
 
-func (x *Registry_Etcd) GetPassword() string {
+func (x *Registry_Consul) GetDatacenter() string {
 	if x != nil {
-		return x.Password
+		return x.Datacenter
 	}
 	return ""
 }
 
-func (x *Registry_Etcd) GetDialTimeout() *durationpb.Duration {
+func (x *Registry_Consul) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *Registry_Consul) GetDialTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.DialTimeout
 	}
 	return nil
-}
-
-func (x *Registry_Etcd) GetAutoSyncInterval() *durationpb.Duration {
-	if x != nil {
-		return x.AutoSyncInterval
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetDialKeepAliveTime() *durationpb.Duration {
-	if x != nil {
-		return x.DialKeepAliveTime
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetDialKeepAliveTimeout() *durationpb.Duration {
-	if x != nil {
-		return x.DialKeepAliveTimeout
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetPermitWithoutLeader() bool {
-	if x != nil {
-		return x.PermitWithoutLeader
-	}
-	return false
 }
 
 var File_conf_conf_proto protoreflect.FileDescriptor
@@ -887,18 +854,16 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x0eprefetch_count\x18\x04 \x01(\x05R\rprefetchCount\x12'\n" +
 	"\x0fprefetch_global\x18\x05 \x01(\bR\x0eprefetchGlobal\x12#\n" +
 	"\rdelivery_mode\x18\x06 \x01(\x05R\fdeliveryMode\x12\x19\n" +
-	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xf6\x03\n" +
-	"\bRegistry\x122\n" +
-	"\x04etcd\x18\x01 \x01(\v2\x1e.kratos.api.conf.Registry.EtcdR\x04etcd\x1a\xb5\x03\n" +
-	"\x04Etcd\x12\x1c\n" +
-	"\tendpoints\x18\x01 \x03(\tR\tendpoints\x12\x1a\n" +
-	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x12<\n" +
-	"\fdial_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vdialTimeout\x12G\n" +
-	"\x12auto_sync_interval\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x10autoSyncInterval\x12J\n" +
-	"\x14dial_keep_alive_time\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x11dialKeepAliveTime\x12P\n" +
-	"\x17dial_keep_alive_timeout\x18\a \x01(\v2\x19.google.protobuf.DurationR\x14dialKeepAliveTimeout\x122\n" +
-	"\x15permit_without_leader\x18\b \x01(\bR\x13permitWithoutLeader\"z\n" +
+	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xdd\x01\n" +
+	"\bRegistry\x128\n" +
+	"\x06consul\x18\x01 \x01(\v2 .kratos.api.conf.Registry.ConsulR\x06consul\x1a\x96\x01\n" +
+	"\x06Consul\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1e\n" +
+	"\n" +
+	"datacenter\x18\x02 \x01(\tR\n" +
+	"datacenter\x12\x14\n" +
+	"\x05token\x18\x03 \x01(\tR\x05token\x12<\n" +
+	"\fdial_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vdialTimeout\"z\n" +
 	"\x05Trace\x12\x1f\n" +
 	"\venable_otel\x18\x01 \x01(\bR\n" +
 	"enableOtel\x12\x1a\n" +
@@ -930,7 +895,7 @@ var file_conf_conf_proto_goTypes = []any{
 	(*Data_Database)(nil),       // 7: kratos.api.conf.Data.Database
 	(*Data_Redis)(nil),          // 8: kratos.api.conf.Data.Redis
 	(*Data_RabbitMQ)(nil),       // 9: kratos.api.conf.Data.RabbitMQ
-	(*Registry_Etcd)(nil),       // 10: kratos.api.conf.Registry.Etcd
+	(*Registry_Consul)(nil),     // 10: kratos.api.conf.Registry.Consul
 	(*durationpb.Duration)(nil), // 11: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
@@ -943,7 +908,7 @@ var file_conf_conf_proto_depIdxs = []int32{
 	7,  // 6: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
 	8,  // 7: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
 	9,  // 8: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
-	10, // 9: kratos.api.conf.Registry.etcd:type_name -> kratos.api.conf.Registry.Etcd
+	10, // 9: kratos.api.conf.Registry.consul:type_name -> kratos.api.conf.Registry.Consul
 	11, // 10: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
 	11, // 11: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
 	11, // 12: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
@@ -954,15 +919,12 @@ var file_conf_conf_proto_depIdxs = []int32{
 	11, // 17: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
 	11, // 18: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
 	11, // 19: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	11, // 20: kratos.api.conf.Registry.Etcd.dial_timeout:type_name -> google.protobuf.Duration
-	11, // 21: kratos.api.conf.Registry.Etcd.auto_sync_interval:type_name -> google.protobuf.Duration
-	11, // 22: kratos.api.conf.Registry.Etcd.dial_keep_alive_time:type_name -> google.protobuf.Duration
-	11, // 23: kratos.api.conf.Registry.Etcd.dial_keep_alive_timeout:type_name -> google.protobuf.Duration
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	11, // 20: kratos.api.conf.Registry.Consul.dial_timeout:type_name -> google.protobuf.Duration
+	21, // [21:21] is the sub-list for method output_type
+	21, // [21:21] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }

@@ -236,7 +236,7 @@ func (x *Data) GetRedis() *Data_Redis {
 
 type Registry struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Etcd          *Registry_Etcd         `protobuf:"bytes,1,opt,name=etcd,proto3" json:"etcd,omitempty"`
+	Consul        *Registry_Consul       `protobuf:"bytes,1,opt,name=consul,proto3" json:"consul,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -271,9 +271,9 @@ func (*Registry) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Registry) GetEtcd() *Registry_Etcd {
+func (x *Registry) GetConsul() *Registry_Consul {
 	if x != nil {
-		return x.Etcd
+		return x.Consul
 	}
 	return nil
 }
@@ -590,34 +590,30 @@ func (x *Data_Redis) GetConnMaxLifeTime() *durationpb.Duration {
 	return nil
 }
 
-type Registry_Etcd struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	Endpoints            []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
-	Username             string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	Password             string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	DialTimeout          *durationpb.Duration   `protobuf:"bytes,4,opt,name=dial_timeout,json=dialTimeout,proto3" json:"dial_timeout,omitempty"`
-	AutoSyncInterval     *durationpb.Duration   `protobuf:"bytes,5,opt,name=auto_sync_interval,json=autoSyncInterval,proto3" json:"auto_sync_interval,omitempty"`
-	DialKeepAliveTime    *durationpb.Duration   `protobuf:"bytes,6,opt,name=dial_keep_alive_time,json=dialKeepAliveTime,proto3" json:"dial_keep_alive_time,omitempty"`
-	DialKeepAliveTimeout *durationpb.Duration   `protobuf:"bytes,7,opt,name=dial_keep_alive_timeout,json=dialKeepAliveTimeout,proto3" json:"dial_keep_alive_timeout,omitempty"`
-	PermitWithoutLeader  bool                   `protobuf:"varint,8,opt,name=permit_without_leader,json=permitWithoutLeader,proto3" json:"permit_without_leader,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+type Registry_Consul struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Datacenter    string                 `protobuf:"bytes,2,opt,name=datacenter,proto3" json:"datacenter,omitempty"`
+	Token         string                 `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	DialTimeout   *durationpb.Duration   `protobuf:"bytes,4,opt,name=dial_timeout,json=dialTimeout,proto3" json:"dial_timeout,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Registry_Etcd) Reset() {
-	*x = Registry_Etcd{}
+func (x *Registry_Consul) Reset() {
+	*x = Registry_Consul{}
 	mi := &file_conf_conf_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Registry_Etcd) String() string {
+func (x *Registry_Consul) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Registry_Etcd) ProtoMessage() {}
+func (*Registry_Consul) ProtoMessage() {}
 
-func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
+func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -629,65 +625,37 @@ func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Registry_Etcd.ProtoReflect.Descriptor instead.
-func (*Registry_Etcd) Descriptor() ([]byte, []int) {
+// Deprecated: Use Registry_Consul.ProtoReflect.Descriptor instead.
+func (*Registry_Consul) Descriptor() ([]byte, []int) {
 	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0}
 }
 
-func (x *Registry_Etcd) GetEndpoints() []string {
+func (x *Registry_Consul) GetAddress() string {
 	if x != nil {
-		return x.Endpoints
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetUsername() string {
-	if x != nil {
-		return x.Username
+		return x.Address
 	}
 	return ""
 }
 
-func (x *Registry_Etcd) GetPassword() string {
+func (x *Registry_Consul) GetDatacenter() string {
 	if x != nil {
-		return x.Password
+		return x.Datacenter
 	}
 	return ""
 }
 
-func (x *Registry_Etcd) GetDialTimeout() *durationpb.Duration {
+func (x *Registry_Consul) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *Registry_Consul) GetDialTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.DialTimeout
 	}
 	return nil
-}
-
-func (x *Registry_Etcd) GetAutoSyncInterval() *durationpb.Duration {
-	if x != nil {
-		return x.AutoSyncInterval
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetDialKeepAliveTime() *durationpb.Duration {
-	if x != nil {
-		return x.DialKeepAliveTime
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetDialKeepAliveTimeout() *durationpb.Duration {
-	if x != nil {
-		return x.DialKeepAliveTimeout
-	}
-	return nil
-}
-
-func (x *Registry_Etcd) GetPermitWithoutLeader() bool {
-	if x != nil {
-		return x.PermitWithoutLeader
-	}
-	return false
 }
 
 var File_conf_conf_proto protoreflect.FileDescriptor
@@ -732,18 +700,16 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\fpool_timeout\x18\t \x01(\v2\x19.google.protobuf.DurationR\vpoolTimeout\x12F\n" +
 	"\x12conn_max_idle_time\x18\n" +
 	" \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxIdleTime\x12F\n" +
-	"\x12conn_max_life_time\x18\v \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxLifeTime\"\xf6\x03\n" +
-	"\bRegistry\x122\n" +
-	"\x04etcd\x18\x01 \x01(\v2\x1e.kratos.api.conf.Registry.EtcdR\x04etcd\x1a\xb5\x03\n" +
-	"\x04Etcd\x12\x1c\n" +
-	"\tendpoints\x18\x01 \x03(\tR\tendpoints\x12\x1a\n" +
-	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x12<\n" +
-	"\fdial_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vdialTimeout\x12G\n" +
-	"\x12auto_sync_interval\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x10autoSyncInterval\x12J\n" +
-	"\x14dial_keep_alive_time\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x11dialKeepAliveTime\x12P\n" +
-	"\x17dial_keep_alive_timeout\x18\a \x01(\v2\x19.google.protobuf.DurationR\x14dialKeepAliveTimeout\x122\n" +
-	"\x15permit_without_leader\x18\b \x01(\bR\x13permitWithoutLeader\"z\n" +
+	"\x12conn_max_life_time\x18\v \x01(\v2\x19.google.protobuf.DurationR\x0fconnMaxLifeTime\"\xdd\x01\n" +
+	"\bRegistry\x128\n" +
+	"\x06consul\x18\x01 \x01(\v2 .kratos.api.conf.Registry.ConsulR\x06consul\x1a\x96\x01\n" +
+	"\x06Consul\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1e\n" +
+	"\n" +
+	"datacenter\x18\x02 \x01(\tR\n" +
+	"datacenter\x12\x14\n" +
+	"\x05token\x18\x03 \x01(\tR\x05token\x12<\n" +
+	"\fdial_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vdialTimeout\"z\n" +
 	"\x05Trace\x12\x1f\n" +
 	"\venable_otel\x18\x01 \x01(\bR\n" +
 	"enableOtel\x12\x1a\n" +
@@ -773,7 +739,7 @@ var file_conf_conf_proto_goTypes = []any{
 	(*Server_HTTP)(nil),         // 5: kratos.api.conf.Server.HTTP
 	(*Server_GRPC)(nil),         // 6: kratos.api.conf.Server.GRPC
 	(*Data_Redis)(nil),          // 7: kratos.api.conf.Data.Redis
-	(*Registry_Etcd)(nil),       // 8: kratos.api.conf.Registry.Etcd
+	(*Registry_Consul)(nil),     // 8: kratos.api.conf.Registry.Consul
 	(*durationpb.Duration)(nil), // 9: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
@@ -784,7 +750,7 @@ var file_conf_conf_proto_depIdxs = []int32{
 	5,  // 4: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
 	6,  // 5: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
 	7,  // 6: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
-	8,  // 7: kratos.api.conf.Registry.etcd:type_name -> kratos.api.conf.Registry.Etcd
+	8,  // 7: kratos.api.conf.Registry.consul:type_name -> kratos.api.conf.Registry.Consul
 	9,  // 8: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
 	9,  // 9: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
 	9,  // 10: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
@@ -793,15 +759,12 @@ var file_conf_conf_proto_depIdxs = []int32{
 	9,  // 13: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
 	9,  // 14: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
 	9,  // 15: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
-	9,  // 16: kratos.api.conf.Registry.Etcd.dial_timeout:type_name -> google.protobuf.Duration
-	9,  // 17: kratos.api.conf.Registry.Etcd.auto_sync_interval:type_name -> google.protobuf.Duration
-	9,  // 18: kratos.api.conf.Registry.Etcd.dial_keep_alive_time:type_name -> google.protobuf.Duration
-	9,  // 19: kratos.api.conf.Registry.Etcd.dial_keep_alive_timeout:type_name -> google.protobuf.Duration
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	9,  // 16: kratos.api.conf.Registry.Consul.dial_timeout:type_name -> google.protobuf.Duration
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }

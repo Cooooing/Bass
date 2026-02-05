@@ -4,7 +4,7 @@ import (
 	v1 "common/api/content/v1"
 	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
-	"content/internal/biz"
+	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/ent/gen"
@@ -18,7 +18,7 @@ import (
 type TagService struct {
 	v1.UnimplementedContentTagServiceServer
 	*BaseService
-	domainTag *biz.TagDomain
+	domainTag *domain.TagDomain
 }
 
 func (s *TagService) RegisterGrpc(gs *grpc.Server) {
@@ -29,7 +29,7 @@ func (s *TagService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentTagServiceHTTPServer(hs, s)
 }
 
-func NewTagService(baseService *BaseService, domainTag *biz.TagDomain) *TagService {
+func NewTagService(baseService *BaseService, domainTag *domain.TagDomain) *TagService {
 	return &TagService{
 		BaseService: baseService,
 		domainTag:   domainTag,

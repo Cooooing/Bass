@@ -4,6 +4,8 @@ import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
 	"connector/internal/conf"
+	database "connector/internal/data/base"
+	"connector/internal/data/cache"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -12,25 +14,11 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	NewBaseData,
+	database.NewBaseData,
 	NewRedisClient,
 
-	NewSessionCache,
+	cache.NewSessionCache,
 )
-
-type BaseData struct {
-	Conf  *conf.Bootstrap
-	Log   *log.Helper
-	Redis *commonClient.RedisClient
-}
-
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, redis *commonClient.RedisClient) *BaseData {
-	return &BaseData{
-		Conf:  conf,
-		Log:   log,
-		Redis: redis,
-	}
-}
 
 func NewRedisClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RedisClient, func(), error) {
 	c := &commonModel.RedisConf{}

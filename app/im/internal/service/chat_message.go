@@ -3,7 +3,7 @@ package service
 import (
 	v1 "common/api/im/v1"
 	"context"
-	"im/internal/biz"
+	"im/internal/biz/domain"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -12,10 +12,10 @@ import (
 type ChatMessageService struct {
 	v1.UnimplementedIMChatMessageServiceServer
 	*BaseService
-	chatMessageDomain *biz.ChatMessageDomain
+	chatMessageDomain *domain.ChatMessageDomain
 }
 
-func NewChatMessageService(baseService *BaseService, chatMessageDomain *biz.ChatMessageDomain) *ChatMessageService {
+func NewChatMessageService(baseService *BaseService, chatMessageDomain *domain.ChatMessageDomain) *ChatMessageService {
 	return &ChatMessageService{
 		BaseService:       baseService,
 		chatMessageDomain: chatMessageDomain,

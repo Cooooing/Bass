@@ -3,7 +3,7 @@ package tests
 import (
 	"testing"
 	"time"
-	"user/internal/biz"
+	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/conf"
 
@@ -19,7 +19,7 @@ var c = &conf.Bootstrap{
 }
 
 func TestJwt(t *testing.T) {
-	service := biz.NewTokenService(c)
+	service := doamin.NewTokenService(c)
 	token, err := service.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{
 		Account: "2222",
 	}, 5*time.Minute)

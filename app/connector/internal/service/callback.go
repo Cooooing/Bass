@@ -2,7 +2,7 @@ package service
 
 import (
 	v1 "common/api/connector/v1"
-	"connector/internal/biz"
+	"connector/internal/biz/domain"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -17,10 +17,10 @@ import (
 type CallbackService struct {
 	v1.UnimplementedConnectorServiceServer
 	*BaseService
-	*biz.SessionDomain
+	*domain.SessionDomain
 }
 
-func NewCallbackService(baseService *BaseService, sessionDomain *biz.SessionDomain) *CallbackService {
+func NewCallbackService(baseService *BaseService, sessionDomain *domain.SessionDomain) *CallbackService {
 	return &CallbackService{
 		BaseService:   baseService,
 		SessionDomain: sessionDomain,

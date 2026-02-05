@@ -29,5 +29,5 @@ func (s *SystemService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *SystemService) Health(ctx context.Context, req *v1.HealthRequest) (*v1.HealthReply, error) {
-	return &v1.HealthReply{Message: fmt.Sprintf("%s %s is ok", s.conf.Server.Name, s.conf.Server.Version)}, nil
+	return &v1.HealthReply{Message: fmt.Sprintf("%s %s is ok", s.Conf.Server.Name, s.Conf.Server.Version)}, nil
 }

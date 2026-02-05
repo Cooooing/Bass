@@ -34,7 +34,7 @@ var DataProviderSet = wire.NewSet(
 
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
 	c := &commonModel.ConsulConf{}
-	err := copier.Copy(c, conf.Registry.Etcd)
+	err := copier.Copy(c, conf.Registry.Consul)
 	if err != nil {
 		return nil, nil, err
 	}

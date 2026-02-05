@@ -6,7 +6,7 @@ import (
 	commonModel "common/pkg/model"
 	"context"
 	"fmt"
-	"signal/internal/biz"
+	"signal/internal/biz/domain"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
 	"signal/internal/data/ent/gen"
@@ -18,11 +18,11 @@ import (
 type NodeService struct {
 	v1.UnsafeSignalNodeServiceServer
 	*BaseService
-	nodeDomain *biz.NodeDomain
+	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 }
 
-func NewNodeService(baseService *BaseService, nodeDomain *biz.NodeDomain, nodeRepo repo.NodeRepo) *NodeService {
+func NewNodeService(baseService *BaseService, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo) *NodeService {
 	return &NodeService{
 		BaseService: baseService,
 		nodeDomain:  nodeDomain,
@@ -42,7 +42,7 @@ func (s *NodeService) Save(ctx context.Context, req *v1.SignalNodeSaveRequest) (
 	if req.Node == nil {
 		return nil, fmt.Errorf("node is nil")
 	}
-	save, err := s.nodeRepo.Save(ctx, s.db, &model.Node{Node: &gen.Node{
+	save, err := s.nodeRepo.Save(ctx, s.Db, &model.Node{Node: &gen.Node{
 		OwnerID:     req.Node.OwnerId,
 		Name:        req.Node.Name,
 		Key:         req.Node.Key,
@@ -61,7 +61,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.SignalNodeUpdateReques
 	if req.Node == nil {
 		return nil, fmt.Errorf("node is nil")
 	}
-	update, err := s.nodeRepo.Update(ctx, s.db, &model.Node{Node: &gen.Node{
+	update, err := s.nodeRepo.Update(ctx, s.Db, &model.Node{Node: &gen.Node{
 		ID:          req.Node.Id,
 		OwnerID:     req.Node.OwnerId,
 		Key:         req.Node.Key,
@@ -77,7 +77,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.SignalNodeUpdateReques
 }
 
 func (s *NodeService) GetSecret(ctx context.Context, req *v1.SignalNodeGetSecretRequest) (*v1.SignalNodeGetSecretReply, error) {
-	node, err := s.nodeRepo.GetOne(ctx, s.db, &repo.NodeGetReq{Id: base.Ptr(req.Id)})
+	node, err := s.nodeRepo.GetOne(ctx, s.Db, &repo.NodeGetReq{Id: base.Ptr(req.Id)})
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +85,12 @@ func (s *NodeService) GetSecret(ctx context.Context, req *v1.SignalNodeGetSecret
 }
 
 func (s *NodeService) UpdateSecret(ctx context.Context, req *v1.SignalNodeUpdateSecretRequest) (*v1.SignalNodeUpdateSecretReply, error) {
-	err := s.nodeRepo.UpdateSecret(ctx, s.db, req.Id, s.nodeDomain.GenerateSecret())
+	err := s.nodeRepo.UpdateSecret(ctx, s.Db, req.Id, s.nodeDomain.GenerateSecret())
 	return &v1.SignalNodeUpdateSecretReply{}, err
 }
 
 func (s *NodeService) List(ctx context.Context, req *v1.SignalNodeListRequest) (*v1.SignalNodeListReply, error) {
-	list, err := s.nodeRepo.GetList(ctx, s.db, &repo.NodeGetReq{})
+	list, err := s.nodeRepo.GetList(ctx, s.Db, &repo.NodeGetReq{})
 	if err != nil {
 		return nil, err
 	}

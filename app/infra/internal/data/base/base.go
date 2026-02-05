@@ -12,7 +12,7 @@ type BaseData struct {
 	Conf     *conf.Bootstrap
 	Log      *log.Helper
 	Db       *gen.Client
-	consul   *commonClient.ConsulClient
+	Consul   *commonClient.ConsulClient
 	Redis    *commonClient.RedisClient
 	Rabbitmq *commonClient.RabbitMQClient
 }
@@ -21,7 +21,7 @@ func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *
 	return &BaseData{
 		Conf:     conf,
 		Log:      log,
-		Etcd:     etcd,
+		Consul:   consul,
 		Db:       db,
 		Redis:    redis,
 		Rabbitmq: rabbitmq,

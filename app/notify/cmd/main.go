@@ -7,22 +7,20 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"notify/internal/biz"
+	"notify/internal/biz/domain"
 	"notify/internal/conf"
 	"notify/internal/conf/bootstrap"
 	"notify/internal/server"
 	"os"
-	"time"
 
 	consulconfig "github.com/go-kratos/kratos/contrib/config/consul/v2"
-	"github.com/go-kratos/kratos/contrib/config/etcd/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	clientv3 "go.etcd.io/etcd/client/v3"
+	consulapi "github.com/hashicorp/consul/api"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -38,11 +36,11 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagConf, "conf", "configs/config.yaml", "config path for etcd bootstrap")
-	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
+	flag.StringVar(&flagConf, "conf", "configs/config.yaml", "config path for config.yaml")
+	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bottstrap.yaml")
 }
 
-func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server, cc *commonClient.ConsulClient, eventHandler *biz.EventHandler) *kratos.App {
+func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, hs *http.Server, cc *commonClient.ConsulClient, eventHandler *domain.EventHandler) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)

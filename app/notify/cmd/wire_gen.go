@@ -10,13 +10,14 @@ import (
 	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"notify/internal/biz"
 	"notify/internal/biz/base"
+	"notify/internal/biz/domain"
 	"notify/internal/biz/handler"
-	"notify/internal/biz/infra"
 	"notify/internal/conf"
 	"notify/internal/data"
+	base2 "notify/internal/data/base"
 	"notify/internal/data/client"
+	"notify/internal/data/repo"
 	"notify/internal/server"
 	"notify/internal/service"
 )
@@ -25,7 +26,7 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
+	consulClient, cleanup, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -34,7 +35,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient)
+	baseService := service.NewBaseService(bootstrap, helper, consulClient, genClient)
 	systemService := service.NewSystemService(baseService)
 	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
@@ -49,25 +50,25 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	baseData := data.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	notificationMetaRepo := data.NewNotificationMetaRepo(baseData)
-	notificationMetaDomain := biz.NewNotificationMetaDomain(baseDomain, notificationMetaRepo)
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
+	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
+	notificationMetaRepo := repo.NewNotificationMetaRepo(baseData)
+	notificationMetaDomain := domain.NewNotificationMetaDomain(baseDomain, notificationMetaRepo)
 	notificationMetaService := service.NewNotificationMetaService(baseService, notificationMetaDomain)
-	notificationRecordRepo := data.NewNotificationRecordRepo(baseData)
-	notificationRecordDomain := biz.NewNotificationRecordDomain(baseDomain, notificationRecordRepo)
+	notificationRecordRepo := repo.NewNotificationRecordRepo(baseData)
+	notificationRecordDomain := domain.NewNotificationRecordDomain(baseDomain, notificationRecordRepo)
 	notificationRecordService := service.NewNotificationRecordService(baseService, notificationRecordDomain)
 	v := service.ProvideServices(systemService, notificationMetaService, notificationRecordService)
 	tokenCache := util.NewTokenCache(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
-	emailDomain := infra.NewEmailDomain(baseDomain)
-	tencentSmsDomain := infra.NewTencentSmsDomain(baseDomain)
+	emailDomain := domain.NewEmailDomain(baseDomain)
+	tencentSmsDomain := domain.NewTencentSmsDomain(baseDomain)
 	registerVerifyCode := handler.NewRegisterVerifyCode(emailDomain, tencentSmsDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
 	dictMap := handler.ProvideHandlers(registerVerifyCode, fullHandler)
-	notificationTemplateRepo := data.NewNotificationTemplateRepo(baseData)
-	eventHandler, cleanup5, err := biz.NewEventHandler(baseDomain, dictMap, notificationTemplateRepo)
+	notificationTemplateRepo := repo.NewNotificationTemplateRepo(baseData)
+	eventHandler, cleanup5, err := domain.NewEventHandler(baseDomain, dictMap, notificationTemplateRepo)
 	if err != nil {
 		cleanup4()
 		cleanup3()
@@ -75,7 +76,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	app := newApp(logger, helper, grpcServer, httpServer, etcdClient, eventHandler)
+	app := newApp(logger, helper, grpcServer, httpServer, consulClient, eventHandler)
 	return app, func() {
 		cleanup5()
 		cleanup4()

@@ -6,6 +6,8 @@ import (
 	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
 	"connector/internal/biz/base"
+	"connector/internal/biz/domain"
+	"connector/internal/biz/domain/handler"
 
 	"github.com/google/wire"
 )
@@ -21,14 +23,14 @@ var BizProviderSet = wire.NewSet(
 	client.NewAsynqScheduler,
 	client.NewProducer,
 	ProvideTasks,
-	NewNodeRegisterTaskHandler,
+	handler.NewRegisterHandler,
 
-	NewSessionDomain,
-	NewServerDomain,
+	domain.NewSessionDomain,
+	domain.NewServerDomain,
 )
 
 func ProvideTasks(
-	register *NodeRegisterTaskHandler,
+	register *handler.RegisterHandler,
 ) dict.Map[constant.TaskName, client.Handler] {
 	d := dict.New[constant.TaskName, client.Handler](0)
 	d.Set(constant.TaskConnectorRegister, register)

@@ -4,8 +4,9 @@ import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
 	"notify/internal/conf"
+	database "notify/internal/data/base"
 	"notify/internal/data/client"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/repo"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -14,41 +15,21 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	NewBaseData,
+	database.NewBaseData,
 
 	client.NewDataBaseClient,
 	NewConsulClient,
 	NewRedisClient,
 	NewRabbitMQClient,
 
-	NewNotificationMetaRepo,
-	NewNotificationRecordRepo,
-	NewNotificationTemplateRepo,
+	repo.NewNotificationMetaRepo,
+	repo.NewNotificationRecordRepo,
+	repo.NewNotificationTemplateRepo,
 )
-
-type BaseData struct {
-	conf     *conf.Bootstrap
-	log      *log.Helper
-	db       *gen.Client
-	consul   *commonClient.ConsulClient
-	redis    *commonClient.RedisClient
-	rabbitmq *commonClient.RabbitMQClient
-}
-
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
-	return &BaseData{
-		conf:     conf,
-		log:      log,
-		consul:   consul,
-		db:       db,
-		redis:    redis,
-		rabbitmq: rabbitmq,
-	}
-}
 
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
 	c := &commonModel.ConsulConf{}
-	err := copier.Copy(c, conf.Registry.Etcd)
+	err := copier.Copy(c, conf.Registry.Consul)
 	if err != nil {
 		return nil, nil, err
 	}

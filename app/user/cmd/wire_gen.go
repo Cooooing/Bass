@@ -10,11 +10,13 @@ import (
 	"common/pkg/util"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"user/internal/biz"
+	"user/internal/biz/base"
+	"user/internal/biz/doamin"
 	"user/internal/conf"
 	"user/internal/data"
-	"user/internal/data/base"
+	base2 "user/internal/data/base"
 	"user/internal/data/client"
+	"user/internal/data/repo"
 	"user/internal/server"
 	"user/internal/service"
 )
@@ -23,18 +25,18 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
+	genClient, cleanup, err := client.NewDataBaseClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
-	genClient, cleanup2, err := client.NewDataBaseClient(helper, bootstrap)
+	baseService := service.NewBaseService(bootstrap, helper, genClient)
+	systemService := service.NewSystemService(baseService)
+	verifyService := service.NewVerifyService()
+	consulClient, cleanup2, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdClient, genClient)
-	systemService := service.NewSystemService(baseService)
-	verifyService := service.NewVerifyService()
 	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
 	if err != nil {
 		cleanup2()
@@ -56,12 +58,12 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := biz.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseData := base.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
-	userRepo := data.NewUserRepo(baseData)
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, eventPool)
+	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
+	userRepo := repo.NewUserRepo(baseData)
 	tokenCache := util.NewTokenCache(helper, redisClient)
-	tokenService := biz.NewTokenService(bootstrap)
-	authenticationDomain, err := biz.NewAuthenticationDomain(baseDomain, userRepo, tokenCache, tokenService)
+	tokenService := doamin.NewTokenService(bootstrap)
+	authenticationDomain, err := doamin.NewAuthenticationDomain(baseDomain, userRepo, tokenCache, tokenService)
 	if err != nil {
 		cleanup5()
 		cleanup4()
@@ -71,7 +73,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	authenticationService := service.NewAuthenticationService(baseService, verifyService, authenticationDomain, userRepo)
-	userDomain, err := biz.NewUserDomain(baseDomain)
+	userDomain, err := doamin.NewUserDomain(baseDomain)
 	if err != nil {
 		cleanup5()
 		cleanup4()
@@ -81,8 +83,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userService := service.NewUserService(baseService, authenticationDomain, userDomain, userRepo)
-	userRelationRepo := data.NewUserRelationRepo(baseData)
-	userRelationDomain, err := biz.NewUserRelationDomain(baseDomain, userRelationRepo, userRepo)
+	userRelationRepo := repo.NewUserRelationRepo(baseData)
+	userRelationDomain, err := doamin.NewUserRelationDomain(baseDomain, userRelationRepo, userRepo)
 	if err != nil {
 		cleanup5()
 		cleanup4()
@@ -92,7 +94,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	userRelationService := service.NewUserRelationService(baseService, userRelationDomain)
-	twoFactorAuthenticationDomain, err := biz.NewTwoFactorAuthenticationDomain(baseDomain, userRepo)
+	twoFactorAuthenticationDomain, err := doamin.NewTwoFactorAuthenticationDomain(baseDomain, userRepo)
 	if err != nil {
 		cleanup5()
 		cleanup4()
@@ -105,7 +107,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, twoFactorAuthenticationService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, helper, grpcServer, httpServer, etcdClient)
+	app := newApp(logger, helper, grpcServer, httpServer, consulClient)
 	return app, func() {
 		cleanup5()
 		cleanup4()

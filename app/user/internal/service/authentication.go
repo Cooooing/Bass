@@ -7,7 +7,7 @@ import (
 	"common/pkg/cutil/base"
 	"common/pkg/util"
 	"context"
-	"user/internal/biz"
+	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/ent/gen"
@@ -20,11 +20,11 @@ type AuthenticationService struct {
 	v1.UnimplementedUserAuthenticationServiceServer
 	*BaseService
 	*VerifyService
-	authenticationDomain *biz.AuthenticationDomain
+	authenticationDomain *doamin.AuthenticationDomain
 	userRepo             repo.UserRepo
 }
 
-func NewAuthenticationService(baseService *BaseService, verifyService *VerifyService, authenticationDomain *biz.AuthenticationDomain, userRepo repo.UserRepo) *AuthenticationService {
+func NewAuthenticationService(baseService *BaseService, verifyService *VerifyService, authenticationDomain *doamin.AuthenticationDomain, userRepo repo.UserRepo) *AuthenticationService {
 	return &AuthenticationService{
 		BaseService:          baseService,
 		VerifyService:        verifyService,
@@ -90,17 +90,17 @@ func (s *AuthenticationService) RegisterPhoneVerify(ctx context.Context, req *v1
 }
 
 func (s *AuthenticationService) ExistEmail(ctx context.Context, req *v1.ExistEmailRequest) (rsp *v1.ExistEmailReply, err error) {
-	exist, err := s.userRepo.ConstantAccount(ctx, s.db, req.Email)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, req.Email)
 	return &v1.ExistEmailReply{Exist: &exist}, err
 }
 
 func (s *AuthenticationService) ExistPhone(ctx context.Context, req *v1.ExistPhoneRequest) (rsp *v1.ExistPhoneReply, err error) {
-	exist, err := s.userRepo.ConstantAccount(ctx, s.db, req.Phone)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, req.Phone)
 	return &v1.ExistPhoneReply{Exist: &exist}, err
 }
 
 func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.ExistUsernameRequest) (rsp *v1.ExistUsernameReply, err error) {
-	exist, err := s.userRepo.ConstantAccount(ctx, s.db, req.Username)
+	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, req.Username)
 	return &v1.ExistUsernameReply{Exist: &exist}, err
 }
 

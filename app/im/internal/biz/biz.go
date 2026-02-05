@@ -1,43 +1,19 @@
 package biz
 
 import (
-	"common/pkg/client"
 	"common/pkg/util"
-	"im/internal/conf"
-	"im/internal/data/ent/gen"
+	domainbase "im/internal/biz/base"
+	"im/internal/biz/domain"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )
 
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
-	NewBaseDomain,
+	domainbase.NewBaseDomain,
 	util.NewTokenCache,
 
-	NewChatGroupDomain,
-	NewChatSessionDomain,
-	NewChatMessageDomain,
+	domain.NewChatGroupDomain,
+	domain.NewChatSessionDomain,
+	domain.NewChatMessageDomain,
 )
-
-type BaseDomain struct {
-	conf      *conf.Bootstrap
-	log       *log.Helper
-	db        *gen.Client
-	etcd      *client.EtcdClient
-	redis     *client.RedisClient
-	rabbitmq  *client.RabbitMQClient
-	eventPool *util.EventPool
-}
-
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
-	return &BaseDomain{
-		conf:      conf,
-		log:       log,
-		db:        db,
-		consul:    consul,
-		redis:     redis,
-		rabbitmq:  rabbitmq,
-		eventPool: eventPool,
-	}
-}

@@ -8,7 +8,7 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"notify/internal/biz"
+	"notify/internal/biz/domain"
 	"notify/internal/biz/repo"
 	"time"
 
@@ -19,10 +19,10 @@ import (
 type NotificationRecordService struct {
 	v1.UnimplementedNotifyNotificationRecordServiceServer
 	*BaseService
-	notificationRecordDomain *biz.NotificationRecordDomain
+	notificationRecordDomain *domain.NotificationRecordDomain
 }
 
-func NewNotificationRecordService(baseService *BaseService, notificationRecordDomain *biz.NotificationRecordDomain) *NotificationRecordService {
+func NewNotificationRecordService(baseService *BaseService, notificationRecordDomain *domain.NotificationRecordDomain) *NotificationRecordService {
 	return &NotificationRecordService{
 		BaseService:              baseService,
 		notificationRecordDomain: notificationRecordDomain,

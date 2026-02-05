@@ -9,7 +9,7 @@ import (
 	"common/pkg/util"
 	"context"
 	"fmt"
-	"user/internal/biz"
+	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/ent/gen"
@@ -23,12 +23,12 @@ import (
 type UserService struct {
 	v1.UnimplementedUserUserServiceServer
 	*BaseService
-	authenticationDomain *biz.AuthenticationDomain
-	userDomain           *biz.UserDomain
+	authenticationDomain *doamin.AuthenticationDomain
+	userDomain           *doamin.UserDomain
 	userRepo             repo.UserRepo
 }
 
-func NewUserService(baseService *BaseService, authenticationDomain *biz.AuthenticationDomain, userDomain *biz.UserDomain, userRepo repo.UserRepo) *UserService {
+func NewUserService(baseService *BaseService, authenticationDomain *doamin.AuthenticationDomain, userDomain *doamin.UserDomain, userRepo repo.UserRepo) *UserService {
 	return &UserService{
 		BaseService:          baseService,
 		authenticationDomain: authenticationDomain,
@@ -50,7 +50,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	update, err := s.userRepo.Update(ctx, s.db, &model.User{User: &gen.User{
+	update, err := s.userRepo.Update(ctx, s.Db, &model.User{User: &gen.User{
 		ID:                   user.ID,
 		AvatarURL:            req.AvatarUrl,
 		Language:             req.Language,
@@ -74,7 +74,7 @@ func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUser
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	u, err := s.userRepo.GetOne(ctx, s.db, &repo.UserGetReq{UserId: base.Ptr(user.ID)})
+	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: base.Ptr(user.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v
 	res := &v1.GetOneReply{
 		User: &v1.User{},
 	}
-	user, err := s.userRepo.GetOne(ctx, s.db, &repo.UserGetReq{
+	user, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{
 		UserId: req.UserId,
 		Name:   req.Name,
 	})
@@ -113,7 +113,7 @@ func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp 
 	res := &v1.GetListReply{
 		Users: []*v1.User{},
 	}
-	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{
+	list, err := s.userRepo.GetList(ctx, s.Db, &repo.UserGetReq{
 		UserIds:  req.Query.UserIds,
 		Name:     req.Query.Name,
 		Nickname: req.Query.Nickname,
@@ -146,7 +146,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	res := &v1.GetMapReply{
 		Users: make(map[int64]*v1.User),
 	}
-	list, err := s.userRepo.GetList(ctx, s.db, &repo.UserGetReq{
+	list, err := s.userRepo.GetList(ctx, s.Db, &repo.UserGetReq{
 		UserIds:  req.Query.UserIds,
 		Name:     req.Query.Name,
 		Nickname: req.Query.Nickname,
@@ -178,7 +178,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v1.PageUserReply, err error) {
 	req.Query = base.OrDefault(req.Query, &v1.UserQueryParams{})
 	reply := make([]*v1.User, 0)
-	users, page, err := s.userRepo.GetPage(ctx, s.db, req.Page, &repo.UserGetReq{
+	users, page, err := s.userRepo.GetPage(ctx, s.Db, req.Page, &repo.UserGetReq{
 		UserIds:   req.Query.UserIds,
 		Name:      req.Query.Name,
 		Names:     req.Query.Names,

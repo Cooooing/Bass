@@ -9,10 +9,12 @@ package main
 import (
 	"common/pkg/client"
 	"common/pkg/util"
-	"connector/internal/biz"
 	"connector/internal/biz/base"
+	"connector/internal/biz/domain"
 	"connector/internal/conf"
 	"connector/internal/data"
+	base2 "connector/internal/data/base"
+	"connector/internal/data/cache"
 	"connector/internal/server"
 	"connector/internal/service"
 	"github.com/go-kratos/kratos/v2"
@@ -30,7 +32,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := base.NewBaseDomain(bootstrap, helper, eventPool)
-	sessionDomain := biz.NewSessionDomain(baseDomain, eventPool)
+	sessionDomain := domain.NewSessionDomain(baseDomain, eventPool)
 	callbackService := service.NewCallbackService(baseService, sessionDomain)
 	v := service.ProvideServices(systemService, callbackService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
@@ -41,13 +43,13 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseData := data.NewBaseData(bootstrap, helper, redisClient)
-	sessionCache := data.NewSessionCache(baseData)
+	baseData := base2.NewBaseData(bootstrap, helper, redisClient)
+	sessionCache := cache.NewSessionCache(baseData)
 	asynqCache := util.NewAsynqCache(helper, redisClient)
 	asynqClient, cleanup3 := client.NewAsynqClient(helper, redisClient)
 	asynqScheduler, cleanup4 := client.NewAsynqScheduler(helper, redisClient)
 	producer := client.NewProducer(asynqClient, asynqScheduler)
-	serverDomain, cleanup5 := biz.NewServerDomain(baseDomain, sessionCache, asynqCache, producer)
+	serverDomain, cleanup5 := domain.NewServerDomain(baseDomain, sessionCache, asynqCache, producer)
 	app := newApp(logger, grpcServer, httpServer, serverDomain)
 	return app, func() {
 		cleanup5()

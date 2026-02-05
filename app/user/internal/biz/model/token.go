@@ -5,6 +5,5 @@ type TokenVerityCodeAccount struct {
 }
 
 type Token struct {
-	User     *User
-	IsOnline bool `json:"is_online"`
+	Id int64 `json:"id"`
 }

@@ -28,7 +28,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.EtcdClient, services []service.Service, tokenCache *util.TokenCache) *transporthttp.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []service.Service, tokenCache *util.TokenCache) *transporthttp.Server {
 
 	middlewares := []middleware.Middleware{
 		recovery.Recovery(),
@@ -63,12 +63,12 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 	srv := transporthttp.NewServer(opts...)
 	srv.Handle("/metrics", promhttp.Handler())
 	// 代理 handler
-	srv.HandlePrefix("/api/user", NewProxyHandler(middlewares, etcdClient, constant.UserServiceName.String(), "/api/user", logger))
-	srv.HandlePrefix("/api/content", NewProxyHandler(middlewares, etcdClient, constant.ContentServiceName.String(), "/api/content", logger))
-	srv.HandlePrefix("/api/notify", NewProxyHandler(middlewares, etcdClient, constant.NotifyServiceName.String(), "/api/notify", logger))
-	srv.HandlePrefix("/api/im", NewProxyHandler(middlewares, etcdClient, constant.IMServiceName.String(), "/api/im", logger))
-	srv.HandlePrefix("/api/signal", NewProxyHandler(middlewares, etcdClient, constant.SignalServiceName.String(), "/api/signal", logger))
-	srv.HandlePrefix("/api/infra", NewProxyHandler(middlewares, etcdClient, constant.InfraServiceName.String(), "/api/infra", logger))
+	srv.HandlePrefix("/api/user", NewProxyHandler(middlewares, consulClient, constant.UserServiceName.String(), "/api/user", logger))
+	srv.HandlePrefix("/api/content", NewProxyHandler(middlewares, consulClient, constant.ContentServiceName.String(), "/api/content", logger))
+	srv.HandlePrefix("/api/notify", NewProxyHandler(middlewares, consulClient, constant.NotifyServiceName.String(), "/api/notify", logger))
+	srv.HandlePrefix("/api/im", NewProxyHandler(middlewares, consulClient, constant.IMServiceName.String(), "/api/im", logger))
+	srv.HandlePrefix("/api/signal", NewProxyHandler(middlewares, consulClient, constant.SignalServiceName.String(), "/api/signal", logger))
+	srv.HandlePrefix("/api/infra", NewProxyHandler(middlewares, consulClient, constant.InfraServiceName.String(), "/api/infra", logger))
 
 	for _, s := range services {
 		s.RegisterHttp(srv)
@@ -77,11 +77,11 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, etcdClient *client.Etcd
 }
 
 // NewProxyHandler 实现反向代理
-func NewProxyHandler(middlewares []middleware.Middleware, etcdClient *client.EtcdClient, serviceName, prefix string, l log.Logger) http.Handler {
+func NewProxyHandler(middlewares []middleware.Middleware, consulClient *client.ConsulClient, serviceName, prefix string, l log.Logger) http.Handler {
 	logger := log.NewHelper(l)
 	propagator := propagation.TraceContext{}
 	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		conn, err := etcdClient.GetHTTPClient(serviceName)
+		conn, err := consulClient.GetHTTPClient(serviceName)
 		if err != nil {
 			logger.Errorf("new http conn error: %v", err)
 			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))

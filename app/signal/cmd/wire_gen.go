@@ -31,7 +31,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	etcdClient, cleanup2, err := data.NewEtcdClient(helper, bootstrap)
+	consulClient, cleanup2, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -50,7 +50,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	tokenCache := util.NewTokenCache(helper, redisClient)
-	baseService := service.NewBaseService(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, tokenCache)
+	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
 	if err != nil {
@@ -60,8 +60,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient, eventPool)
-	baseData := base2.NewBaseData(bootstrap, helper, genClient, etcdClient, redisClient, rabbitMQClient)
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, eventPool)
+	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	nodeRepo := repo.NewNodeRepo(baseData)
 	nodeCache := cache.NewNodeCache(baseData)
 	sessionCache := cache.NewSessionCache(baseData)
@@ -90,7 +90,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	nodeSessionTaskHandler := biz.NewNodeSessionTaskHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer)
 	dictMap := biz.ProvideTasks(nodePingTaskHandler, nodePowTaskHandler, nodeSessionTaskHandler)
 	asynqServer, cleanup8 := client2.NewAsynqServer(helper, redisClient, dictMap)
-	app := newApp(logger, grpcServer, httpServer, etcdClient, asynqServer)
+	app := newApp(logger, grpcServer, httpServer, consulClient, asynqServer)
 	return app, func() {
 		cleanup8()
 		cleanup7()

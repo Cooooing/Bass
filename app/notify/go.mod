@@ -1,6 +1,6 @@
 module notify
 
-go 1.25
+go 1.25.5
 
 replace common => ../../common
 

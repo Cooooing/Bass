@@ -13,6 +13,7 @@ import (
 	"os"
 	"time"
 
+	consulconfig "github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/go-kratos/kratos/contrib/config/etcd/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -26,7 +27,7 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name = "user"
+	Name = "app"
 	// Version is the version of the compiled software.
 	Version = "v1.0.0"
 	// flagConf is the config flag.
@@ -40,7 +41,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.EtcdClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, cc *client.EtcdClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -55,7 +56,7 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, es *client.Etcd
 			gs,
 			hs,
 		),
-		kratos.Registrar(es.Registrar()),
+		kratos.Registrar(cc.Registrar()),
 	)
 }
 
@@ -104,50 +105,40 @@ func main() {
 
 func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 	bc, err := loadBootstrap()
-	var cleanup func()
+	cleanup := func() {} // 默认空函数
 	if err != nil {
 		return nil, nil, cleanup, err
 	}
-	var c *conf.Bootstrap
-	if bc.Mode == constant.Dev {
-		c, err := loadLocalConfig(bc)
+
+	if bc.Mode == constant.Prod {
+		c, err := loadConsulConfig(bc)
 		return c, bc, cleanup, err
 	}
 
-	c, cli, err := loadEtcdConfig(bc)
+	c, err := loadLocalConfig(bc)
 	if err != nil {
-		panic(err)
+		return nil, nil, cleanup, err
 	}
-	cleanup = func() {
-		err := cli.Close()
-		if err != nil {
-			panic(err)
-		}
-	}
+
+	Name = bc.Name
+	Version = bc.Version
 	return c, bc, cleanup, nil
 }
 
 func loadBootstrap() (*bootstrap.Bootstrap, error) {
 	c := config.New(config.WithSource(file.NewSource(flagBootstrap)))
 	defer func(c config.Config) {
-		err := c.Close()
-		if err != nil {
-			panic(err)
-		}
+		_ = c.Close()
 	}(c)
 
 	if err := c.Load(); err != nil {
-		return nil, fmt.Errorf("load bootstrap.yaml fail: %w", err)
+		return nil, err
 	}
 
 	var bc bootstrap.Bootstrap
 	if err := c.Scan(&bc); err != nil {
-		return nil, fmt.Errorf("scan bootstrap.yaml fail: %w", err)
+		return nil, err
 	}
-
-	Name = bc.Name
-	Version = bc.Version
-
 	return &bc, nil
 }
 
@@ -174,40 +165,37 @@ func loadLocalConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	return &localConf, nil
 }
 
-func loadEtcdConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, *clientv3.Client, error) {
-	timeout := time.Second * 5 // 默认
-	if bc.Registry.Etcd.Timeout != nil {
-		timeout = bc.Registry.Etcd.Timeout.AsDuration()
-	}
-	cli, err := clientv3.New(clientv3.Config{
-		Endpoints:   bc.Registry.Etcd.Endpoints,
-		Username:    bc.Registry.Etcd.Username,
-		Password:    bc.Registry.Etcd.Password,
-		DialTimeout: timeout,
-	})
+func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
+	// 初始化 Consul API 客户端配置
+	cfg := consulapi.DefaultConfig()
+	cfg.Address = bc.Registry.Consul.Address
+	cfg.Token = bc.Registry.Consul.Token
+
+	client, err := consulapi.NewClient(cfg)
 	if err != nil {
-		return nil, nil, fmt.Errorf("connect etcd fail: %w", err)
+		return nil, fmt.Errorf("create consul api client fail: %w", err)
 	}
 
-	etcdSource, err := etcd.New(cli, etcd.WithPath(bc.Config.Etcd))
+	// 创建 Kratos 的 Consul 配置源
+	consulSource, err := consulconfig.New(client, consulconfig.WithPath(bc.Config.Path))
 	if err != nil {
-		return nil, nil, fmt.Errorf("create etcd source fail: %w", err)
+		return nil, fmt.Errorf("create consul source fail: %w", err)
 	}
-	c := config.New(config.WithSource(etcdSource))
+
+	c := config.New(config.WithSource(consulSource))
 	if err := c.Load(); err != nil {
-		return nil, nil, fmt.Errorf("load etcd config fail: %w", err)
+		return nil, fmt.Errorf("load config from consul fail: %w", err)
 	}
-	var etcdConf conf.Bootstrap
-	if err := c.Scan(&etcdConf); err != nil {
-		return nil, nil, fmt.Errorf("scan etcd config fail: %w", err)
+	var consulConf conf.Bootstrap
+	if err := c.Scan(&consulConf); err != nil {
+		return nil, fmt.Errorf("scan consul config fail: %w", err)
 	}
-	defer func() {
+	defer func(c config.Config) {
 		_ = c.Close()
-	}()
+	}(c)
 
-	etcdConf.Server.Name = bc.Name
-	etcdConf.Server.Version = bc.Version
-	etcdConf.Server.Mode = bc.Mode
-
-	return &etcdConf, cli, nil
+	consulConf.Server.Name = bc.Name
+	consulConf.Server.Version = bc.Version
+	consulConf.Server.Mode = bc.Mode
+	return &consulConf, nil
 }

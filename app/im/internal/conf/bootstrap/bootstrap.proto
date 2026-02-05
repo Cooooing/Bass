@@ -16,21 +16,15 @@ message Bootstrap {
 }
 
 message Registry {
-  message Etcd {
-    repeated string endpoints = 1;
-    string username = 2;
-    string password = 3;
-    google.protobuf.Duration timeout = 4;
-    google.protobuf.Duration auto_sync_interval = 5;
-    google.protobuf.Duration dial_keep_alive_time = 6;
-    google.protobuf.Duration dial_keep_alive_timeout = 7;
-    bool permit_without_leader = 8;
+  message Consul {
+    string address = 1;
+    string token = 2;
   }
-  Etcd etcd = 1;
+  Consul consul = 1;
 }
 
 message Config {
-  string etcd = 1;
+  string path = 1;
 }
 
 message Log {

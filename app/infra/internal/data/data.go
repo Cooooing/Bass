@@ -19,7 +19,7 @@ var DataProviderSet = wire.NewSet(
 	base.NewBaseData,
 	oss.ProviderSet,
 	client.NewDataBaseClient,
-	NewEtcdClient,
+	NewConsulClient,
 	NewRedisClient,
 	NewRabbitMQClient,
 	NewObjectStorageRepo,
@@ -27,13 +27,13 @@ var DataProviderSet = wire.NewSet(
 	util.NewTokenCache,
 )
 
-func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {
-	c := &commonModel.EtcdConf{}
+func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
+	c := &commonModel.ConsulConf{}
 	err := copier.Copy(c, conf.Registry.Etcd)
 	if err != nil {
 		return nil, nil, err
 	}
-	return commonClient.NewEtcdClient(log, c)
+	return commonClient.NewConsulClient(log, c)
 }
 
 func NewRedisClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RedisClient, func(), error) {

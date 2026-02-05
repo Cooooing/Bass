@@ -143,7 +143,7 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 			}
 		}
 
-		userService, err := client.GetServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+		userService, err := client.GetEtcdServiceClient(d.etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 		if err != nil {
 			return err
 		}

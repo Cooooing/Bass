@@ -40,7 +40,7 @@ func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, et
 		conf:       conf,
 		log:        logger,
 		db:         db,
-		etcd:       etcd,
+		consul:     consul,
 		redis:      redis,
 		rabbitmq:   rabbitmq,
 		tokenCache: tokenCache,

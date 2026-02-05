@@ -63,7 +63,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 		}
 	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT:
 		if len(data.Meta.AtUsernames) > 0 {
-			userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+			userServiceClient, err := client.GetEtcdServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 			if err != nil {
 				return nil, err
 			}
@@ -96,7 +96,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 		}
 	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_AT:
 		if len(data.Meta.AtUsernames) > 0 {
-			userServiceClient, err := client.GetServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
+			userServiceClient, err := client.GetEtcdServiceClient(h.Etcd, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
 			if err != nil {
 				return nil, err
 			}

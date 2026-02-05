@@ -12,16 +12,16 @@ type BaseData struct {
 	Conf     *conf.Bootstrap
 	Log      *log.Helper
 	Db       *gen.Client
-	Etcd     *commonClient.EtcdClient
+	Consul   *commonClient.ConsulClient
 	Redis    *commonClient.RedisClient
 	Rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
 	return &BaseData{
 		Conf:     conf,
 		Log:      log,
-		Etcd:     etcd,
+		Consul:   consul,
 		Db:       db,
 		Redis:    redis,
 		Rabbitmq: rabbitmq,

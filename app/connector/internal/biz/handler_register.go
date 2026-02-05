@@ -16,13 +16,15 @@ type NodeRegisterTaskHandler struct {
 	*base.BaseDomain
 	asynqCache *util.AsynqCache
 	producer   *client.Producer
+	server     *ServerDomain
 }
 
-func NewNodeRegisterTaskHandler(baseDomain *base.BaseDomain, producer *client.Producer, asynqCache *util.AsynqCache) *NodeRegisterTaskHandler {
+func NewNodeRegisterTaskHandler(baseDomain *base.BaseDomain, producer *client.Producer, asynqCache *util.AsynqCache, server *ServerDomain) *NodeRegisterTaskHandler {
 	return &NodeRegisterTaskHandler{
 		BaseDomain: baseDomain,
 		asynqCache: asynqCache,
 		producer:   producer,
+		server:     server,
 	}
 }
 
@@ -48,6 +50,12 @@ func (h *NodeRegisterTaskHandler) Handler() asynq.HandlerFunc {
 		err = h.asynqCache.SetAsynqTaskExpire(ctx, data.TaskName, data.Interval*2)
 		if err != nil {
 			return err
+		}
+
+		// 处理任务
+		err = h.server.Register()
+		if err != nil {
+			h.Log.Errorf("failed to register node: %v", err)
 		}
 
 		// 下一次任务，不管成功失败，常驻任务

@@ -4,17 +4,6 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-type EtcdConf struct {
-	Endpoints            []string             `json:"endpoints,omitempty"`
-	Username             string               `json:"username,omitempty"`
-	Password             string               `json:"password,omitempty"`
-	Timeout              *durationpb.Duration `json:"timeout,omitempty"`
-	AutoSyncInterval     *durationpb.Duration `json:"auto_sync_interval,omitempty"`
-	DialKeepAliveTime    *durationpb.Duration `json:"dial_keep_alive_time,omitempty"`
-	DialKeepAliveTimeout *durationpb.Duration `json:"dial_keep_alive_timeout,omitempty"`
-	PermitWithoutStream  bool                 `json:"permit_without_stream,omitempty"`
-}
-
 type RedisConf struct {
 	Addr            string               `json:"addr,omitempty"`
 	Password        string               `json:"password,omitempty"`
@@ -37,4 +26,22 @@ type RabbitmqConf struct {
 	PrefetchGlobal bool                 `json:"prefetch_global,omitempty"`
 	DeliveryMode   int32                `json:"delivery_mode,omitempty"`
 	AutoAck        bool                 `json:"auto_ack,omitempty"`
+}
+
+type EtcdConf struct {
+	Endpoints            []string             `json:"endpoints,omitempty"`
+	Username             string               `json:"username,omitempty"`
+	Password             string               `json:"password,omitempty"`
+	DialTimeout          *durationpb.Duration `json:"dial_timeout,omitempty"`
+	AutoSyncInterval     *durationpb.Duration `json:"auto_sync_interval,omitempty"`
+	DialKeepAliveTime    *durationpb.Duration `json:"dial_keep_alive_time,omitempty"`
+	DialKeepAliveTimeout *durationpb.Duration `json:"dial_keep_alive_timeout,omitempty"`
+	PermitWithoutStream  bool                 `json:"permit_without_stream,omitempty"`
+}
+
+type ConsulConf struct {
+	Address     string               `json:"address,omitempty"`
+	Datacenter  string               `json:"datacenter,omitempty"`
+	Token       string               `json:"token,omitempty"`
+	DialTimeout *durationpb.Duration `json:"dial_timeout,omitempty"`
 }

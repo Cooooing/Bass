@@ -18,7 +18,7 @@ var DataProviderSet = wire.NewSet(
 	NewBaseData,
 
 	client.NewDataBaseClient,
-	NewEtcdClient,
+	NewConsulClient,
 	NewRedisClient,
 	NewRabbitMQClient,
 
@@ -37,29 +37,29 @@ type BaseData struct {
 	conf     *conf.Bootstrap
 	log      *log.Helper
 	db       *gen.Client
-	etcd     *commonClient.EtcdClient
+	consul   *commonClient.ConsulClient
 	redis    *commonClient.RedisClient
 	rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
 	return &BaseData{
 		conf:     conf,
 		log:      log,
-		etcd:     etcd,
+		consul:   consul,
 		db:       db,
 		redis:    redis,
 		rabbitmq: rabbitmq,
 	}
 }
 
-func NewEtcdClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.EtcdClient, func(), error) {
-	c := &commonModel.EtcdConf{}
+func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
+	c := &commonModel.ConsulConf{}
 	err := copier.Copy(c, conf.Registry.Etcd)
 	if err != nil {
 		return nil, nil, err
 	}
-	return commonClient.NewEtcdClient(log, c)
+	return commonClient.NewConsulClient(log, c)
 }
 
 func NewRedisClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RedisClient, func(), error) {

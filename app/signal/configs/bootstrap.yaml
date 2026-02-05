@@ -3,16 +3,13 @@ version: 1.0.0
 mode: dev
 
 registry:
-  etcd:
-    endpoints:
-      - "192.168.1.6:2379"
-    username: "root"
-    password: "123456"
-    timeout: 5s
+  consul:
+    address: "127.0.0.1:8500"
+    token: "your-token"
 
 config:
-  etcd: "/config/signal/config.yaml"
+  path: "/config/signal/config.yaml"
 
 log:
-  level: debug
+  level: info
   file: logs/signal-service.log

@@ -35,7 +35,7 @@ func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *
 		conf:      conf,
 		log:       log,
 		db:        db,
-		etcd:      etcd,
+		consul:    consul,
 		redis:     redis,
 		rabbitmq:  rabbitmq,
 		eventPool: eventPool,

@@ -46,13 +46,16 @@ func NewEtcdClient(logger *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(
 	if conf.DialKeepAliveTimeout == nil {
 		conf.DialKeepAliveTimeout = durationpb.New(10 * time.Second)
 	}
+	if conf.DialTimeout == nil {
+		conf.DialTimeout = durationpb.New(5 * time.Second)
+	}
 
 	// 构造 Etcd 客户端
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:            conf.Endpoints,
 		Username:             conf.Username,
 		Password:             conf.Password,
-		DialTimeout:          conf.Timeout.AsDuration(),
+		DialTimeout:          conf.DialTimeout.AsDuration(),
 		AutoSyncInterval:     conf.AutoSyncInterval.AsDuration(),
 		DialKeepAliveTime:    conf.DialKeepAliveTime.AsDuration(),
 		DialKeepAliveTimeout: conf.DialKeepAliveTimeout.AsDuration(),
@@ -74,14 +77,14 @@ func NewEtcdClient(logger *log.Helper, conf *model.EtcdConf) (*EtcdClient, func(
 
 	// 启动预检
 	// 通过 MemberList 确认连接和 Auth 配置是否正确
-	ctx, cancel := context.WithTimeout(context.Background(), conf.Timeout.AsDuration())
+	ctx, cancel := context.WithTimeout(context.Background(), conf.DialTimeout.AsDuration())
 	defer cancel()
 	if _, err := cli.MemberList(ctx); err != nil {
 		_ = cli.Close()
 		return nil, nil, fmt.Errorf("etcd connection check failed: %w", err)
 	}
 
-	c.log.Infof("etcd connection verified: %v", conf.Endpoints)
+	c.log.Infof("etcd connected to [%v]", conf.Endpoints)
 	return c, c.CleanUp, nil
 }
 
@@ -105,7 +108,7 @@ func (c *EtcdClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 		context.Background(),
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		kgrpc.WithDiscovery(c.reg),
-		kgrpc.WithTimeout(c.conf.Timeout.AsDuration()),
+		kgrpc.WithTimeout(c.conf.DialTimeout.AsDuration()),
 		// 设置 gRPC 默认负载均衡策略
 		kgrpc.WithOptions(grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`)),
 		kgrpc.WithMiddleware(
@@ -140,7 +143,7 @@ func (c *EtcdClient) GetHTTPClient(service string) (*khttp.Client, error) {
 		context.Background(),
 		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		khttp.WithDiscovery(c.reg),
-		khttp.WithTimeout(c.conf.Timeout.AsDuration()),
+		khttp.WithTimeout(c.conf.DialTimeout.AsDuration()),
 		khttp.WithMiddleware(
 			tracing.Client(),
 			func(next middleware.Handler) middleware.Handler {
@@ -201,11 +204,14 @@ func (c *EtcdClient) CleanUp() {
 			c.log.Errorf("failed to close etcd client: %v", err)
 		}
 	}
+	// 重置 Map
+	c.grpcConns = sync.Map{}
+	c.httpConns = sync.Map{}
 	c.log.Info("etcd client and all service connections cleaned up")
 }
 
-// GetServiceClient 泛型客户端获取方法
-func GetServiceClient[T any](etcd *EtcdClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
+// GetEtcdServiceClient 泛型客户端获取方法
+func GetEtcdServiceClient[T any](etcd *EtcdClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
 	conn, err := etcd.GetGrpcConn(service)
 	if err != nil {
 		var zero T

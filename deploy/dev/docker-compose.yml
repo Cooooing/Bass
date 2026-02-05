@@ -32,6 +32,47 @@ services:
       timeout: 10s
       retries: 5
 
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    container_name: rabbitmq
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  consul:
+    image: hashicorp/consul:1.16
+    container_name: consul
+    restart: always
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: >
+      consul agent
+      -server
+      -bootstrap-expect=1
+      -ui
+      -client=0.0.0.0
+      -data-dir=/consul/data
+    ports:
+      - "8500:8500"   # HTTP API & UI
+      - "8600:8600/udp" # DNS（可选）
+    volumes:
+      - consul_data:/consul/data
+    healthcheck:
+      test: ["CMD", "consul", "info"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
   etcd:
     image: bitnami/etcd:3.6.1
     container_name: etcd
@@ -57,25 +98,10 @@ services:
       timeout: 10s
       retries: 5
 
-  rabbitmq:
-    image: rabbitmq:4.1-management
-    container_name: rabbitmq
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:
-      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
 volumes:
   postgres_data:
+  mysql_data:
   redis_data:
-  etcd_data:
   rabbitmq_data:
+  consul_data:
+  etcd_data:

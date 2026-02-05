@@ -831,7 +831,7 @@ type Registry_Etcd struct {
 	Endpoints            []string               `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
 	Username             string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Password             string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	Timeout              *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	DialTimeout          *durationpb.Duration   `protobuf:"bytes,4,opt,name=dial_timeout,json=dialTimeout,proto3" json:"dial_timeout,omitempty"`
 	AutoSyncInterval     *durationpb.Duration   `protobuf:"bytes,5,opt,name=auto_sync_interval,json=autoSyncInterval,proto3" json:"auto_sync_interval,omitempty"`
 	DialKeepAliveTime    *durationpb.Duration   `protobuf:"bytes,6,opt,name=dial_keep_alive_time,json=dialKeepAliveTime,proto3" json:"dial_keep_alive_time,omitempty"`
 	DialKeepAliveTimeout *durationpb.Duration   `protobuf:"bytes,7,opt,name=dial_keep_alive_timeout,json=dialKeepAliveTimeout,proto3" json:"dial_keep_alive_timeout,omitempty"`
@@ -891,9 +891,9 @@ func (x *Registry_Etcd) GetPassword() string {
 	return ""
 }
 
-func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
+func (x *Registry_Etcd) GetDialTimeout() *durationpb.Duration {
 	if x != nil {
-		return x.Timeout
+		return x.DialTimeout
 	}
 	return nil
 }
@@ -981,14 +981,14 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x0eprefetch_count\x18\x04 \x01(\x05R\rprefetchCount\x12'\n" +
 	"\x0fprefetch_global\x18\x05 \x01(\bR\x0eprefetchGlobal\x12#\n" +
 	"\rdelivery_mode\x18\x06 \x01(\x05R\fdeliveryMode\x12\x19\n" +
-	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xed\x03\n" +
+	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xf6\x03\n" +
 	"\bRegistry\x122\n" +
-	"\x04etcd\x18\x01 \x01(\v2\x1e.kratos.api.conf.Registry.EtcdR\x04etcd\x1a\xac\x03\n" +
+	"\x04etcd\x18\x01 \x01(\v2\x1e.kratos.api.conf.Registry.EtcdR\x04etcd\x1a\xb5\x03\n" +
 	"\x04Etcd\x12\x1c\n" +
 	"\tendpoints\x18\x01 \x03(\tR\tendpoints\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12G\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12<\n" +
+	"\fdial_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\vdialTimeout\x12G\n" +
 	"\x12auto_sync_interval\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x10autoSyncInterval\x12J\n" +
 	"\x14dial_keep_alive_time\x18\x06 \x01(\v2\x19.google.protobuf.DurationR\x11dialKeepAliveTime\x12P\n" +
 	"\x17dial_keep_alive_timeout\x18\a \x01(\v2\x19.google.protobuf.DurationR\x14dialKeepAliveTimeout\x122\n" +
@@ -1058,7 +1058,7 @@ var file_conf_conf_proto_depIdxs = []int32{
 	12, // 21: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
 	12, // 22: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
 	12, // 23: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	12, // 24: kratos.api.conf.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
+	12, // 24: kratos.api.conf.Registry.Etcd.dial_timeout:type_name -> google.protobuf.Duration
 	12, // 25: kratos.api.conf.Registry.Etcd.auto_sync_interval:type_name -> google.protobuf.Duration
 	12, // 26: kratos.api.conf.Registry.Etcd.dial_keep_alive_time:type_name -> google.protobuf.Duration
 	12, // 27: kratos.api.conf.Registry.Etcd.dial_keep_alive_timeout:type_name -> google.protobuf.Duration

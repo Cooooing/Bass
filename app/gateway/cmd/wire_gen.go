@@ -20,11 +20,11 @@ import (
 
 // wireApp init kratos application.
 func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (*kratos.App, func(), error) {
-	etcdClient, cleanup, err := data.NewEtcdClient(helper, bootstrap)
+	consulClient, cleanup, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		return nil, nil, err
 	}
-	baseService := service.NewBaseService(bootstrap, helper, etcdClient)
+	baseService := service.NewBaseService(bootstrap, helper, consulClient)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(systemService)
 	redisClient, cleanup2, err := data.NewRedisClient(helper, bootstrap)
@@ -33,8 +33,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	tokenCache := util.NewTokenCache(helper, redisClient)
-	httpServer := server.NewHTTPServer(bootstrap, logger, etcdClient, v, tokenCache)
-	app := newApp(logger, helper, httpServer, etcdClient)
+	httpServer := server.NewHTTPServer(bootstrap, logger, consulClient, v, tokenCache)
+	app := newApp(logger, helper, httpServer, consulClient)
 	return app, func() {
 		cleanup2()
 		cleanup()

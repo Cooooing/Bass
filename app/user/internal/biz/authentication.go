@@ -293,10 +293,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 		return token, nil, cv1.ErrorBadRequest("password invalid")
 	}
 	// 生成 token
-	token, err = s.tokenService.TokenGen.Generate(model.Token{
-		User:     user,
-		IsOnline: true,
-	}, s.conf.Jwt.Expires.AsDuration())
+	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}

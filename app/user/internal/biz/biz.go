@@ -34,12 +34,12 @@ type BaseDomain struct {
 	eventPool *util.EventPool
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, etcd *commonClient.EtcdClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
 	return &BaseDomain{
 		conf:      conf,
 		log:       log,
 		db:        db,
-		etcd:      etcd,
+		consul:    consul,
 		redis:     redis,
 		rabbitmq:  rabbitmq,
 		eventPool: eventPool,

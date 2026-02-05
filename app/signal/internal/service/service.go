@@ -25,18 +25,18 @@ type BaseService struct {
 	conf       *conf.Bootstrap
 	log        *log.Helper
 	db         *gen.Client
-	etcd       *client.EtcdClient
+	consul     *client.ConsulClient
 	redis      *client.RedisClient
 	rabbitmq   *client.RabbitMQClient
 	tokenCache *util.TokenCache
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, etcd *client.EtcdClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *util.TokenCache) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *util.TokenCache) *BaseService {
 	return &BaseService{
 		conf:       conf,
 		log:        logger,
 		db:         db,
-		etcd:       etcd,
+		consul:     consul,
 		redis:      redis,
 		rabbitmq:   rabbitmq,
 		tokenCache: tokenCache,

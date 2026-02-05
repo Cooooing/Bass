@@ -55,7 +55,7 @@ message Registry {
     repeated string endpoints = 1;
     string username = 2;
     string password = 3;
-    google.protobuf.Duration timeout = 4;
+    google.protobuf.Duration dial_timeout = 4;
     google.protobuf.Duration auto_sync_interval = 5;
     google.protobuf.Duration dial_keep_alive_time = 6;
     google.protobuf.Duration dial_keep_alive_timeout = 7;

@@ -39,7 +39,7 @@ func NewBaseData(conf *conf.Bootstrap, log *log.Helper, consul *commonClient.Con
 
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
 	c := &commonModel.ConsulConf{}
-	err := copier.Copy(c, conf.Registry.Consul)
+	err := copier.Copy(c, conf.Data.Consul)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -1,15 +1,15 @@
-name: signal-service
-version: 1.0.0
-mode: dev
-
-registry:
-  consul:
-    address: "127.0.0.1:8500"
-    token: "your-token"
+server:
+  name: signal-service
+  version: 1.0.0
+  mode: ${SERVICE_MODE:dev}
 
 config:
-  path: "/config/signal/config.yaml"
+  consul:
+    address: ${CONSUL_ADDR:127.0.0.1:8500}
+    token: ${CONSUL_TOKEN:token}
+    path: config-signal.yaml
+    timeout: 5s
 
 log:
-  level: info
-  file: logs/signal-service.log
+  level: ${LOG_LEVEL:debug}
+  file: ${LOG_FILE:}

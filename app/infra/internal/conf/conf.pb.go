@@ -26,9 +26,7 @@ type Bootstrap struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Server        *Server                `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
 	Data          *Data                  `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	Registry      *Registry              `protobuf:"bytes,3,opt,name=registry,proto3" json:"registry,omitempty"`
-	Trace         *Trace                 `protobuf:"bytes,4,opt,name=trace,proto3" json:"trace,omitempty"`
-	Oss           *Oss                   `protobuf:"bytes,5,opt,name=oss,proto3" json:"oss,omitempty"`
+	Trace         *Trace                 `protobuf:"bytes,3,opt,name=trace,proto3" json:"trace,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -77,13 +75,6 @@ func (x *Bootstrap) GetData() *Data {
 	return nil
 }
 
-func (x *Bootstrap) GetRegistry() *Registry {
-	if x != nil {
-		return x.Registry
-	}
-	return nil
-}
-
 func (x *Bootstrap) GetTrace() *Trace {
 	if x != nil {
 		return x.Trace
@@ -91,22 +82,17 @@ func (x *Bootstrap) GetTrace() *Trace {
 	return nil
 }
 
-func (x *Bootstrap) GetOss() *Oss {
-	if x != nil {
-		return x.Oss
-	}
-	return nil
-}
-
 type Server struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Mode          string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
-	Http          *Server_HTTP           `protobuf:"bytes,4,opt,name=http,proto3" json:"http,omitempty"`
-	Grpc          *Server_GRPC           `protobuf:"bytes,5,opt,name=grpc,proto3" json:"grpc,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Name            string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Version         string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	Mode            string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
+	RegisterAddress string                 `protobuf:"bytes,4,opt,name=register_address,json=registerAddress,proto3" json:"register_address,omitempty"`
+	Http            *Server_HTTP           `protobuf:"bytes,5,opt,name=http,proto3" json:"http,omitempty"`
+	Grpc            *Server_GRPC           `protobuf:"bytes,6,opt,name=grpc,proto3" json:"grpc,omitempty"`
+	Oss             *Server_Oss            `protobuf:"bytes,7,opt,name=oss,proto3" json:"oss,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Server) Reset() {
@@ -160,6 +146,13 @@ func (x *Server) GetMode() string {
 	return ""
 }
 
+func (x *Server) GetRegisterAddress() string {
+	if x != nil {
+		return x.RegisterAddress
+	}
+	return ""
+}
+
 func (x *Server) GetHttp() *Server_HTTP {
 	if x != nil {
 		return x.Http
@@ -174,11 +167,19 @@ func (x *Server) GetGrpc() *Server_GRPC {
 	return nil
 }
 
+func (x *Server) GetOss() *Server_Oss {
+	if x != nil {
+		return x.Oss
+	}
+	return nil
+}
+
 type Data struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Database      *Data_Database         `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
 	Redis         *Data_Redis            `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
 	Rabbitmq      *Data_RabbitMQ         `protobuf:"bytes,3,opt,name=rabbitmq,proto3" json:"rabbitmq,omitempty"`
+	Consul        *Data_Consul           `protobuf:"bytes,4,opt,name=consul,proto3" json:"consul,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -234,44 +235,7 @@ func (x *Data) GetRabbitmq() *Data_RabbitMQ {
 	return nil
 }
 
-type Registry struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Consul        *Registry_Consul       `protobuf:"bytes,1,opt,name=consul,proto3" json:"consul,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Registry) Reset() {
-	*x = Registry{}
-	mi := &file_conf_conf_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Registry) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Registry) ProtoMessage() {}
-
-func (x *Registry) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Registry.ProtoReflect.Descriptor instead.
-func (*Registry) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *Registry) GetConsul() *Registry_Consul {
+func (x *Data) GetConsul() *Data_Consul {
 	if x != nil {
 		return x.Consul
 	}
@@ -290,7 +254,7 @@ type Trace struct {
 
 func (x *Trace) Reset() {
 	*x = Trace{}
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -302,7 +266,7 @@ func (x *Trace) String() string {
 func (*Trace) ProtoMessage() {}
 
 func (x *Trace) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -315,7 +279,7 @@ func (x *Trace) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Trace.ProtoReflect.Descriptor instead.
 func (*Trace) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{4}
+	return file_conf_conf_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Trace) GetEnableOtel() bool {
@@ -346,78 +310,19 @@ func (x *Trace) GetSampler() float64 {
 	return 0
 }
 
-type Oss struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Provider      string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
-	Qiniu         *Oss_Qiniu             `protobuf:"bytes,10,opt,name=qiniu,proto3" json:"qiniu,omitempty"`
-	Minio         *Oss_Minio             `protobuf:"bytes,11,opt,name=minio,proto3" json:"minio,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Oss) Reset() {
-	*x = Oss{}
-	mi := &file_conf_conf_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Oss) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Oss) ProtoMessage() {}
-
-func (x *Oss) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Oss.ProtoReflect.Descriptor instead.
-func (*Oss) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *Oss) GetProvider() string {
-	if x != nil {
-		return x.Provider
-	}
-	return ""
-}
-
-func (x *Oss) GetQiniu() *Oss_Qiniu {
-	if x != nil {
-		return x.Qiniu
-	}
-	return nil
-}
-
-func (x *Oss) GetMinio() *Oss_Minio {
-	if x != nil {
-		return x.Minio
-	}
-	return nil
-}
-
 type Server_HTTP struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	Host          string                 `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -429,7 +334,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -452,11 +357,18 @@ func (x *Server_HTTP) GetNetwork() string {
 	return ""
 }
 
-func (x *Server_HTTP) GetAddr() string {
+func (x *Server_HTTP) GetHost() string {
 	if x != nil {
-		return x.Addr
+		return x.Host
 	}
 	return ""
+}
+
+func (x *Server_HTTP) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
 }
 
 func (x *Server_HTTP) GetTimeout() *durationpb.Duration {
@@ -469,15 +381,16 @@ func (x *Server_HTTP) GetTimeout() *durationpb.Duration {
 type Server_GRPC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	Host          string                 `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -489,7 +402,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -512,11 +425,18 @@ func (x *Server_GRPC) GetNetwork() string {
 	return ""
 }
 
-func (x *Server_GRPC) GetAddr() string {
+func (x *Server_GRPC) GetHost() string {
 	if x != nil {
-		return x.Addr
+		return x.Host
 	}
 	return ""
+}
+
+func (x *Server_GRPC) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
 }
 
 func (x *Server_GRPC) GetTimeout() *durationpb.Duration {
@@ -524,6 +444,210 @@ func (x *Server_GRPC) GetTimeout() *durationpb.Duration {
 		return x.Timeout
 	}
 	return nil
+}
+
+type Server_Oss struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Provider      string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	Qiniu         *Server_Oss_Qiniu      `protobuf:"bytes,10,opt,name=qiniu,proto3" json:"qiniu,omitempty"`
+	Minio         *Server_Oss_Minio      `protobuf:"bytes,11,opt,name=minio,proto3" json:"minio,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Server_Oss) Reset() {
+	*x = Server_Oss{}
+	mi := &file_conf_conf_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_Oss) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_Oss) ProtoMessage() {}
+
+func (x *Server_Oss) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_Oss.ProtoReflect.Descriptor instead.
+func (*Server_Oss) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 2}
+}
+
+func (x *Server_Oss) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *Server_Oss) GetQiniu() *Server_Oss_Qiniu {
+	if x != nil {
+		return x.Qiniu
+	}
+	return nil
+}
+
+func (x *Server_Oss) GetMinio() *Server_Oss_Minio {
+	if x != nil {
+		return x.Minio
+	}
+	return nil
+}
+
+type Server_Oss_Qiniu struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	AccessKey                 string                 `protobuf:"bytes,1,opt,name=access_key,json=accessKey,proto3" json:"access_key,omitempty"`
+	SecretKey                 string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
+	Bucket                    string                 `protobuf:"bytes,3,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	Timeout                   *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	SizeMin                   int64                  `protobuf:"varint,5,opt,name=size_min,json=sizeMin,proto3" json:"size_min,omitempty"`
+	SizeMax                   int64                  `protobuf:"varint,6,opt,name=size_max,json=sizeMax,proto3" json:"size_max,omitempty"`
+	CallbackUrl               string                 `protobuf:"bytes,7,opt,name=callback_url,json=callbackUrl,proto3" json:"callback_url,omitempty"`
+	IncrementAudit            bool                   `protobuf:"varint,8,opt,name=increment_audit,json=incrementAudit,proto3" json:"increment_audit,omitempty"`
+	IncrementAuditCallbackUrl string                 `protobuf:"bytes,9,opt,name=increment_audit_callback_url,json=incrementAuditCallbackUrl,proto3" json:"increment_audit_callback_url,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *Server_Oss_Qiniu) Reset() {
+	*x = Server_Oss_Qiniu{}
+	mi := &file_conf_conf_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_Oss_Qiniu) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_Oss_Qiniu) ProtoMessage() {}
+
+func (x *Server_Oss_Qiniu) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_Oss_Qiniu.ProtoReflect.Descriptor instead.
+func (*Server_Oss_Qiniu) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 2, 0}
+}
+
+func (x *Server_Oss_Qiniu) GetAccessKey() string {
+	if x != nil {
+		return x.AccessKey
+	}
+	return ""
+}
+
+func (x *Server_Oss_Qiniu) GetSecretKey() string {
+	if x != nil {
+		return x.SecretKey
+	}
+	return ""
+}
+
+func (x *Server_Oss_Qiniu) GetBucket() string {
+	if x != nil {
+		return x.Bucket
+	}
+	return ""
+}
+
+func (x *Server_Oss_Qiniu) GetTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.Timeout
+	}
+	return nil
+}
+
+func (x *Server_Oss_Qiniu) GetSizeMin() int64 {
+	if x != nil {
+		return x.SizeMin
+	}
+	return 0
+}
+
+func (x *Server_Oss_Qiniu) GetSizeMax() int64 {
+	if x != nil {
+		return x.SizeMax
+	}
+	return 0
+}
+
+func (x *Server_Oss_Qiniu) GetCallbackUrl() string {
+	if x != nil {
+		return x.CallbackUrl
+	}
+	return ""
+}
+
+func (x *Server_Oss_Qiniu) GetIncrementAudit() bool {
+	if x != nil {
+		return x.IncrementAudit
+	}
+	return false
+}
+
+func (x *Server_Oss_Qiniu) GetIncrementAuditCallbackUrl() string {
+	if x != nil {
+		return x.IncrementAuditCallbackUrl
+	}
+	return ""
+}
+
+type Server_Oss_Minio struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Server_Oss_Minio) Reset() {
+	*x = Server_Oss_Minio{}
+	mi := &file_conf_conf_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_Oss_Minio) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_Oss_Minio) ProtoMessage() {}
+
+func (x *Server_Oss_Minio) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_Oss_Minio.ProtoReflect.Descriptor instead.
+func (*Server_Oss_Minio) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 2, 1}
 }
 
 type Data_Database struct {
@@ -537,7 +661,7 @@ type Data_Database struct {
 
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -549,7 +673,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -605,7 +729,7 @@ type Data_Redis struct {
 
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
-	mi := &file_conf_conf_proto_msgTypes[9]
+	mi := &file_conf_conf_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -617,7 +741,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[9]
+	mi := &file_conf_conf_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -725,7 +849,7 @@ type Data_RabbitMQ struct {
 
 func (x *Data_RabbitMQ) Reset() {
 	*x = Data_RabbitMQ{}
-	mi := &file_conf_conf_proto_msgTypes[10]
+	mi := &file_conf_conf_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -737,7 +861,7 @@ func (x *Data_RabbitMQ) String() string {
 func (*Data_RabbitMQ) ProtoMessage() {}
 
 func (x *Data_RabbitMQ) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[10]
+	mi := &file_conf_conf_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -802,7 +926,7 @@ func (x *Data_RabbitMQ) GetAutoAck() bool {
 	return false
 }
 
-type Registry_Consul struct {
+type Data_Consul struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Datacenter    string                 `protobuf:"bytes,2,opt,name=datacenter,proto3" json:"datacenter,omitempty"`
@@ -812,21 +936,21 @@ type Registry_Consul struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Registry_Consul) Reset() {
-	*x = Registry_Consul{}
-	mi := &file_conf_conf_proto_msgTypes[11]
+func (x *Data_Consul) Reset() {
+	*x = Data_Consul{}
+	mi := &file_conf_conf_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Registry_Consul) String() string {
+func (x *Data_Consul) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Registry_Consul) ProtoMessage() {}
+func (*Data_Consul) ProtoMessage() {}
 
-func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[11]
+func (x *Data_Consul) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -837,212 +961,90 @@ func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Registry_Consul.ProtoReflect.Descriptor instead.
-func (*Registry_Consul) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0}
+// Deprecated: Use Data_Consul.ProtoReflect.Descriptor instead.
+func (*Data_Consul) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{2, 3}
 }
 
-func (x *Registry_Consul) GetAddress() string {
+func (x *Data_Consul) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetDatacenter() string {
+func (x *Data_Consul) GetDatacenter() string {
 	if x != nil {
 		return x.Datacenter
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetToken() string {
+func (x *Data_Consul) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetDialTimeout() *durationpb.Duration {
+func (x *Data_Consul) GetDialTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.DialTimeout
 	}
 	return nil
 }
 
-type Oss_Qiniu struct {
-	state                     protoimpl.MessageState `protogen:"open.v1"`
-	AccessKey                 string                 `protobuf:"bytes,1,opt,name=access_key,json=accessKey,proto3" json:"access_key,omitempty"`
-	SecretKey                 string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
-	Bucket                    string                 `protobuf:"bytes,3,opt,name=bucket,proto3" json:"bucket,omitempty"`
-	Timeout                   *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	SizeMin                   int64                  `protobuf:"varint,5,opt,name=size_min,json=sizeMin,proto3" json:"size_min,omitempty"`
-	SizeMax                   int64                  `protobuf:"varint,6,opt,name=size_max,json=sizeMax,proto3" json:"size_max,omitempty"`
-	CallbackUrl               string                 `protobuf:"bytes,7,opt,name=callback_url,json=callbackUrl,proto3" json:"callback_url,omitempty"`
-	IncrementAudit            bool                   `protobuf:"varint,8,opt,name=increment_audit,json=incrementAudit,proto3" json:"increment_audit,omitempty"`
-	IncrementAuditCallbackUrl string                 `protobuf:"bytes,9,opt,name=increment_audit_callback_url,json=incrementAuditCallbackUrl,proto3" json:"increment_audit_callback_url,omitempty"`
-	unknownFields             protoimpl.UnknownFields
-	sizeCache                 protoimpl.SizeCache
-}
-
-func (x *Oss_Qiniu) Reset() {
-	*x = Oss_Qiniu{}
-	mi := &file_conf_conf_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Oss_Qiniu) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Oss_Qiniu) ProtoMessage() {}
-
-func (x *Oss_Qiniu) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Oss_Qiniu.ProtoReflect.Descriptor instead.
-func (*Oss_Qiniu) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{5, 0}
-}
-
-func (x *Oss_Qiniu) GetAccessKey() string {
-	if x != nil {
-		return x.AccessKey
-	}
-	return ""
-}
-
-func (x *Oss_Qiniu) GetSecretKey() string {
-	if x != nil {
-		return x.SecretKey
-	}
-	return ""
-}
-
-func (x *Oss_Qiniu) GetBucket() string {
-	if x != nil {
-		return x.Bucket
-	}
-	return ""
-}
-
-func (x *Oss_Qiniu) GetTimeout() *durationpb.Duration {
-	if x != nil {
-		return x.Timeout
-	}
-	return nil
-}
-
-func (x *Oss_Qiniu) GetSizeMin() int64 {
-	if x != nil {
-		return x.SizeMin
-	}
-	return 0
-}
-
-func (x *Oss_Qiniu) GetSizeMax() int64 {
-	if x != nil {
-		return x.SizeMax
-	}
-	return 0
-}
-
-func (x *Oss_Qiniu) GetCallbackUrl() string {
-	if x != nil {
-		return x.CallbackUrl
-	}
-	return ""
-}
-
-func (x *Oss_Qiniu) GetIncrementAudit() bool {
-	if x != nil {
-		return x.IncrementAudit
-	}
-	return false
-}
-
-func (x *Oss_Qiniu) GetIncrementAuditCallbackUrl() string {
-	if x != nil {
-		return x.IncrementAuditCallbackUrl
-	}
-	return ""
-}
-
-type Oss_Minio struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Oss_Minio) Reset() {
-	*x = Oss_Minio{}
-	mi := &file_conf_conf_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Oss_Minio) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Oss_Minio) ProtoMessage() {}
-
-func (x *Oss_Minio) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Oss_Minio.ProtoReflect.Descriptor instead.
-func (*Oss_Minio) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{5, 1}
-}
-
 var File_conf_conf_proto protoreflect.FileDescriptor
 
 const file_conf_conf_proto_rawDesc = "" +
 	"\n" +
-	"\x0fconf/conf.proto\x12\x0fkratos.api.conf\x1a\x1egoogle/protobuf/duration.proto\"\xf4\x01\n" +
+	"\x0fconf/conf.proto\x12\x0fkratos.api.conf\x1a\x1egoogle/protobuf/duration.proto\"\x95\x01\n" +
 	"\tBootstrap\x12/\n" +
 	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.conf.ServerR\x06server\x12)\n" +
-	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x125\n" +
-	"\bregistry\x18\x03 \x01(\v2\x19.kratos.api.conf.RegistryR\bregistry\x12,\n" +
-	"\x05trace\x18\x04 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\x12&\n" +
-	"\x03oss\x18\x05 \x01(\v2\x14.kratos.api.conf.OssR\x03oss\"\x84\x03\n" +
+	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x12,\n" +
+	"\x05trace\x18\x03 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\xfd\a\n" +
 	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
-	"\x04mode\x18\x03 \x01(\tR\x04mode\x120\n" +
-	"\x04http\x18\x04 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
-	"\x04grpc\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x1ai\n" +
+	"\x04mode\x18\x03 \x01(\tR\x04mode\x12)\n" +
+	"\x10register_address\x18\x04 \x01(\tR\x0fregisterAddress\x120\n" +
+	"\x04http\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
+	"\x04grpc\x18\x06 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x12-\n" +
+	"\x03oss\x18\a \x01(\v2\x1b.kratos.api.conf.Server.OssR\x03oss\x1a}\n" +
 	"\x04HTTP\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
-	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x1ai\n" +
+	"\x04host\x18\x02 \x01(\tR\x04host\x12\x12\n" +
+	"\x04port\x18\x03 \x01(\x05R\x04port\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x1a}\n" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
-	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xc0\b\n" +
+	"\x04host\x18\x02 \x01(\tR\x04host\x12\x12\n" +
+	"\x04port\x18\x03 \x01(\x05R\x04port\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x1a\xf4\x03\n" +
+	"\x03Oss\x12\x1a\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\x127\n" +
+	"\x05qiniu\x18\n" +
+	" \x01(\v2!.kratos.api.conf.Server.Oss.QiniuR\x05qiniu\x127\n" +
+	"\x05minio\x18\v \x01(\v2!.kratos.api.conf.Server.Oss.MinioR\x05minio\x1a\xd5\x02\n" +
+	"\x05Qiniu\x12\x1d\n" +
+	"\n" +
+	"access_key\x18\x01 \x01(\tR\taccessKey\x12\x1d\n" +
+	"\n" +
+	"secret_key\x18\x02 \x01(\tR\tsecretKey\x12\x16\n" +
+	"\x06bucket\x18\x03 \x01(\tR\x06bucket\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12\x19\n" +
+	"\bsize_min\x18\x05 \x01(\x03R\asizeMin\x12\x19\n" +
+	"\bsize_max\x18\x06 \x01(\x03R\asizeMax\x12!\n" +
+	"\fcallback_url\x18\a \x01(\tR\vcallbackUrl\x12'\n" +
+	"\x0fincrement_audit\x18\b \x01(\bR\x0eincrementAudit\x12?\n" +
+	"\x1cincrement_audit_callback_url\x18\t \x01(\tR\x19incrementAuditCallbackUrl\x1a\a\n" +
+	"\x05Minio\"\x8f\n" +
+	"\n" +
 	"\x04Data\x12:\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x1e.kratos.api.conf.Data.DatabaseR\bdatabase\x121\n" +
 	"\x05redis\x18\x02 \x01(\v2\x1b.kratos.api.conf.Data.RedisR\x05redis\x12:\n" +
-	"\brabbitmq\x18\x03 \x01(\v2\x1e.kratos.api.conf.Data.RabbitMQR\brabbitmq\x1aP\n" +
+	"\brabbitmq\x18\x03 \x01(\v2\x1e.kratos.api.conf.Data.RabbitMQR\brabbitmq\x124\n" +
+	"\x06consul\x18\x04 \x01(\v2\x1c.kratos.api.conf.Data.ConsulR\x06consul\x1aP\n" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12\x14\n" +
@@ -1067,9 +1069,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x0eprefetch_count\x18\x04 \x01(\x05R\rprefetchCount\x12'\n" +
 	"\x0fprefetch_global\x18\x05 \x01(\bR\x0eprefetchGlobal\x12#\n" +
 	"\rdelivery_mode\x18\x06 \x01(\x05R\fdeliveryMode\x12\x19\n" +
-	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xdd\x01\n" +
-	"\bRegistry\x128\n" +
-	"\x06consul\x18\x01 \x01(\v2 .kratos.api.conf.Registry.ConsulR\x06consul\x1a\x96\x01\n" +
+	"\bauto_ack\x18\a \x01(\bR\aautoAck\x1a\x96\x01\n" +
 	"\x06Consul\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1e\n" +
 	"\n" +
@@ -1082,25 +1082,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"enableOtel\x12\x1a\n" +
 	"\bendpoint\x18\x02 \x01(\tR\bendpoint\x12\x1a\n" +
 	"\binsecure\x18\x03 \x01(\bR\binsecure\x12\x18\n" +
-	"\asampler\x18\x04 \x01(\x01R\asampler\"\xe6\x03\n" +
-	"\x03Oss\x12\x1a\n" +
-	"\bprovider\x18\x01 \x01(\tR\bprovider\x120\n" +
-	"\x05qiniu\x18\n" +
-	" \x01(\v2\x1a.kratos.api.conf.Oss.QiniuR\x05qiniu\x120\n" +
-	"\x05minio\x18\v \x01(\v2\x1a.kratos.api.conf.Oss.MinioR\x05minio\x1a\xd5\x02\n" +
-	"\x05Qiniu\x12\x1d\n" +
-	"\n" +
-	"access_key\x18\x01 \x01(\tR\taccessKey\x12\x1d\n" +
-	"\n" +
-	"secret_key\x18\x02 \x01(\tR\tsecretKey\x12\x16\n" +
-	"\x06bucket\x18\x03 \x01(\tR\x06bucket\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12\x19\n" +
-	"\bsize_min\x18\x05 \x01(\x03R\asizeMin\x12\x19\n" +
-	"\bsize_max\x18\x06 \x01(\x03R\asizeMax\x12!\n" +
-	"\fcallback_url\x18\a \x01(\tR\vcallbackUrl\x12'\n" +
-	"\x0fincrement_audit\x18\b \x01(\bR\x0eincrementAudit\x12?\n" +
-	"\x1cincrement_audit_callback_url\x18\t \x01(\tR\x19incrementAuditCallbackUrl\x1a\a\n" +
-	"\x05MinioB\x1fZ\x1dinfra/internal/conf/conf;confb\x06proto3"
+	"\asampler\x18\x04 \x01(\x01R\asamplerB\x1fZ\x1dinfra/internal/conf/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once
@@ -1114,55 +1096,53 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_conf_conf_proto_goTypes = []any{
 	(*Bootstrap)(nil),           // 0: kratos.api.conf.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.conf.Server
 	(*Data)(nil),                // 2: kratos.api.conf.Data
-	(*Registry)(nil),            // 3: kratos.api.conf.Registry
-	(*Trace)(nil),               // 4: kratos.api.conf.Trace
-	(*Oss)(nil),                 // 5: kratos.api.conf.Oss
-	(*Server_HTTP)(nil),         // 6: kratos.api.conf.Server.HTTP
-	(*Server_GRPC)(nil),         // 7: kratos.api.conf.Server.GRPC
-	(*Data_Database)(nil),       // 8: kratos.api.conf.Data.Database
-	(*Data_Redis)(nil),          // 9: kratos.api.conf.Data.Redis
-	(*Data_RabbitMQ)(nil),       // 10: kratos.api.conf.Data.RabbitMQ
-	(*Registry_Consul)(nil),     // 11: kratos.api.conf.Registry.Consul
-	(*Oss_Qiniu)(nil),           // 12: kratos.api.conf.Oss.Qiniu
-	(*Oss_Minio)(nil),           // 13: kratos.api.conf.Oss.Minio
-	(*durationpb.Duration)(nil), // 14: google.protobuf.Duration
+	(*Trace)(nil),               // 3: kratos.api.conf.Trace
+	(*Server_HTTP)(nil),         // 4: kratos.api.conf.Server.HTTP
+	(*Server_GRPC)(nil),         // 5: kratos.api.conf.Server.GRPC
+	(*Server_Oss)(nil),          // 6: kratos.api.conf.Server.Oss
+	(*Server_Oss_Qiniu)(nil),    // 7: kratos.api.conf.Server.Oss.Qiniu
+	(*Server_Oss_Minio)(nil),    // 8: kratos.api.conf.Server.Oss.Minio
+	(*Data_Database)(nil),       // 9: kratos.api.conf.Data.Database
+	(*Data_Redis)(nil),          // 10: kratos.api.conf.Data.Redis
+	(*Data_RabbitMQ)(nil),       // 11: kratos.api.conf.Data.RabbitMQ
+	(*Data_Consul)(nil),         // 12: kratos.api.conf.Data.Consul
+	(*durationpb.Duration)(nil), // 13: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.conf.Bootstrap.server:type_name -> kratos.api.conf.Server
 	2,  // 1: kratos.api.conf.Bootstrap.data:type_name -> kratos.api.conf.Data
-	3,  // 2: kratos.api.conf.Bootstrap.registry:type_name -> kratos.api.conf.Registry
-	4,  // 3: kratos.api.conf.Bootstrap.trace:type_name -> kratos.api.conf.Trace
-	5,  // 4: kratos.api.conf.Bootstrap.oss:type_name -> kratos.api.conf.Oss
-	6,  // 5: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
-	7,  // 6: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
-	8,  // 7: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
-	9,  // 8: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
-	10, // 9: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
-	11, // 10: kratos.api.conf.Registry.consul:type_name -> kratos.api.conf.Registry.Consul
-	12, // 11: kratos.api.conf.Oss.qiniu:type_name -> kratos.api.conf.Oss.Qiniu
-	13, // 12: kratos.api.conf.Oss.minio:type_name -> kratos.api.conf.Oss.Minio
-	14, // 13: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	14, // 14: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	14, // 15: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
-	14, // 16: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	14, // 17: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	14, // 18: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
-	14, // 19: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
-	14, // 20: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
-	14, // 21: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
-	14, // 22: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	14, // 23: kratos.api.conf.Registry.Consul.dial_timeout:type_name -> google.protobuf.Duration
-	14, // 24: kratos.api.conf.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	3,  // 2: kratos.api.conf.Bootstrap.trace:type_name -> kratos.api.conf.Trace
+	4,  // 3: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
+	5,  // 4: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
+	6,  // 5: kratos.api.conf.Server.oss:type_name -> kratos.api.conf.Server.Oss
+	9,  // 6: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
+	10, // 7: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
+	11, // 8: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
+	12, // 9: kratos.api.conf.Data.consul:type_name -> kratos.api.conf.Data.Consul
+	13, // 10: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	13, // 11: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	7,  // 12: kratos.api.conf.Server.Oss.qiniu:type_name -> kratos.api.conf.Server.Oss.Qiniu
+	8,  // 13: kratos.api.conf.Server.Oss.minio:type_name -> kratos.api.conf.Server.Oss.Minio
+	13, // 14: kratos.api.conf.Server.Oss.Qiniu.timeout:type_name -> google.protobuf.Duration
+	13, // 15: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
+	13, // 16: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	13, // 17: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	13, // 18: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
+	13, // 19: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
+	13, // 20: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
+	13, // 21: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
+	13, // 22: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
+	13, // 23: kratos.api.conf.Data.Consul.dial_timeout:type_name -> google.protobuf.Duration
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -1176,7 +1156,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_conf_conf_proto_rawDesc), len(file_conf_conf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

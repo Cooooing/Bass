@@ -8,36 +8,60 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  Registry registry = 3;
-  Trace trace = 4;
-  Email email = 5;
-  SmsConfig sms = 6;
+  Trace trace = 3;
 }
 
 message Server {
   string name = 1;
   string version = 2;
   string mode = 3;
+  string register_address = 4;
+  HTTP http = 5;
   message HTTP {
     string network = 1;
-    string addr = 2;
-    google.protobuf.Duration timeout = 3;
+    string host = 2;
+    int32 port = 3;
+    google.protobuf.Duration timeout = 4;
   }
+  GRPC grpc = 6;
   message GRPC {
     string network = 1;
-    string addr = 2;
-    google.protobuf.Duration timeout = 3;
+    string host = 2;
+    int32 port = 3;
+    google.protobuf.Duration timeout = 4;
   }
-  HTTP http = 4;
-  GRPC grpc = 5;
+  Email email = 7;
+  message Email {
+    bool enable = 1;          // 是否启用邮件
+    string smtp_host = 2;     // SMTP 服务器地址
+    uint32 smtp_port = 3;     // SMTP 端口
+    string username = 4;      // SMTP 用户名
+    string password = 5;      // SMTP 密码
+    string from = 6;          // 发件人邮箱
+  }
+  Sms sms = 8;
+  message Sms {
+    string provider = 1;
+    message TencentSmsConfig {
+      string secret_id = 1;
+      string secret_key = 2;
+      string diyu = 3;
+      string sms_sdk_app_id = 4;
+      string sign_name = 5;
+      string template_id = 6;
+    }
+    TencentSmsConfig tencent = 2;
+  }
 }
 
 message Data {
+  Database database = 1;
   message Database {
     string driver = 1;
     string source = 2;
     bool merge = 3;
   }
+  Redis redis = 2;
   message Redis {
     string addr = 1;
     string password = 2;
@@ -51,6 +75,7 @@ message Data {
     google.protobuf.Duration conn_max_idle_time = 10;
     google.protobuf.Duration conn_max_life_time = 11;
   }
+  RabbitMQ rabbitmq = 3;
   message RabbitMQ {
     string url = 1;
     google.protobuf.Duration heartbeat = 2;
@@ -60,19 +85,13 @@ message Data {
     int32 delivery_mode = 6;
     bool auto_ack = 7;
   }
-  Database database = 1;
-  Redis redis = 2;
-  RabbitMQ rabbitmq = 3;
-}
-
-message Registry {
+  Consul consul = 4;
   message Consul {
     string address = 1;
     string datacenter = 2;
     string token = 3;
     google.protobuf.Duration dial_timeout = 4;
   }
-  Consul consul = 1;
 }
 
 message Trace {
@@ -81,26 +100,3 @@ message Trace {
   bool insecure = 3;
   double sampler = 4;
 }
-
-message Email {
-  bool enable = 1;          // 是否启用邮件
-  string smtp_host = 2;     // SMTP 服务器地址
-  uint32 smtp_port = 3;     // SMTP 端口
-  string username = 4;      // SMTP 用户名
-  string password = 5;      // SMTP 密码
-  string from = 6;          // 发件人邮箱
-}
-
-message SmsConfig {
-  string provider = 1;
-  message TencentSmsConfig {
-    string secret_id = 1;
-    string secret_key = 2;
-    string diyu = 3;
-    string sms_sdk_app_id = 4;
-    string sign_name = 5;
-    string template_id = 6;
-  }
-  TencentSmsConfig tencent = 2;
-}
-

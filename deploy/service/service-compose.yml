@@ -1,0 +1,66 @@
+version: '3.9'
+
+networks:
+  microservice_net:
+    driver: bridge
+
+services:
+  treble:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
+    container_name: treble-service
+    restart: always
+    env_file:
+      - ../infra/.env
+    ports:
+      - "2324:2324"
+    network_mode: "host"
+
+  gateway:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
+    container_name: gateway-service
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - /opt/docker-data/service/gateway/conf:/app/configs
+    network_mode: "host"
+
+  user:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
+    container_name: user-service
+    restart: always
+    ports:
+      - "8001:8001"
+      - "9001:9001"
+    volumes:
+      - /opt/docker-data/service/user/conf:/app/configs
+    network_mode: "host"
+
+  content:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
+    container_name: content-service
+    restart: always
+    ports:
+      - "8002:8002"
+      - "9002:9002"
+    volumes:
+      - /opt/docker-data/service/content/conf:/app/configs
+    network_mode: "host"
+
+  notify:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
+    container_name: notify-service
+    restart: always
+    ports:
+      - "8003:8003"
+      - "9003:9003"
+    volumes:
+      - /opt/docker-data/service/notify/conf:/app/configs
+    network_mode: "host"
+
+#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
+#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
+#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
+#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
+#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest

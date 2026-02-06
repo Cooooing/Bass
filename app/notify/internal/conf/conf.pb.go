@@ -26,10 +26,7 @@ type Bootstrap struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Server        *Server                `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
 	Data          *Data                  `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	Registry      *Registry              `protobuf:"bytes,3,opt,name=registry,proto3" json:"registry,omitempty"`
-	Trace         *Trace                 `protobuf:"bytes,4,opt,name=trace,proto3" json:"trace,omitempty"`
-	Email         *Email                 `protobuf:"bytes,5,opt,name=email,proto3" json:"email,omitempty"`
-	Sms           *SmsConfig             `protobuf:"bytes,6,opt,name=sms,proto3" json:"sms,omitempty"`
+	Trace         *Trace                 `protobuf:"bytes,3,opt,name=trace,proto3" json:"trace,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -78,13 +75,6 @@ func (x *Bootstrap) GetData() *Data {
 	return nil
 }
 
-func (x *Bootstrap) GetRegistry() *Registry {
-	if x != nil {
-		return x.Registry
-	}
-	return nil
-}
-
 func (x *Bootstrap) GetTrace() *Trace {
 	if x != nil {
 		return x.Trace
@@ -92,29 +82,18 @@ func (x *Bootstrap) GetTrace() *Trace {
 	return nil
 }
 
-func (x *Bootstrap) GetEmail() *Email {
-	if x != nil {
-		return x.Email
-	}
-	return nil
-}
-
-func (x *Bootstrap) GetSms() *SmsConfig {
-	if x != nil {
-		return x.Sms
-	}
-	return nil
-}
-
 type Server struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Mode          string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
-	Http          *Server_HTTP           `protobuf:"bytes,4,opt,name=http,proto3" json:"http,omitempty"`
-	Grpc          *Server_GRPC           `protobuf:"bytes,5,opt,name=grpc,proto3" json:"grpc,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Name            string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Version         string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	Mode            string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
+	RegisterAddress string                 `protobuf:"bytes,4,opt,name=register_address,json=registerAddress,proto3" json:"register_address,omitempty"`
+	Http            *Server_HTTP           `protobuf:"bytes,5,opt,name=http,proto3" json:"http,omitempty"`
+	Grpc            *Server_GRPC           `protobuf:"bytes,6,opt,name=grpc,proto3" json:"grpc,omitempty"`
+	Email           *Server_Email          `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
+	Sms             *Server_Sms            `protobuf:"bytes,8,opt,name=sms,proto3" json:"sms,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Server) Reset() {
@@ -168,6 +147,13 @@ func (x *Server) GetMode() string {
 	return ""
 }
 
+func (x *Server) GetRegisterAddress() string {
+	if x != nil {
+		return x.RegisterAddress
+	}
+	return ""
+}
+
 func (x *Server) GetHttp() *Server_HTTP {
 	if x != nil {
 		return x.Http
@@ -182,11 +168,26 @@ func (x *Server) GetGrpc() *Server_GRPC {
 	return nil
 }
 
+func (x *Server) GetEmail() *Server_Email {
+	if x != nil {
+		return x.Email
+	}
+	return nil
+}
+
+func (x *Server) GetSms() *Server_Sms {
+	if x != nil {
+		return x.Sms
+	}
+	return nil
+}
+
 type Data struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Database      *Data_Database         `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
 	Redis         *Data_Redis            `protobuf:"bytes,2,opt,name=redis,proto3" json:"redis,omitempty"`
 	Rabbitmq      *Data_RabbitMQ         `protobuf:"bytes,3,opt,name=rabbitmq,proto3" json:"rabbitmq,omitempty"`
+	Consul        *Data_Consul           `protobuf:"bytes,4,opt,name=consul,proto3" json:"consul,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -242,44 +243,7 @@ func (x *Data) GetRabbitmq() *Data_RabbitMQ {
 	return nil
 }
 
-type Registry struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Consul        *Registry_Consul       `protobuf:"bytes,1,opt,name=consul,proto3" json:"consul,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Registry) Reset() {
-	*x = Registry{}
-	mi := &file_conf_conf_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Registry) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Registry) ProtoMessage() {}
-
-func (x *Registry) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Registry.ProtoReflect.Descriptor instead.
-func (*Registry) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *Registry) GetConsul() *Registry_Consul {
+func (x *Data) GetConsul() *Data_Consul {
 	if x != nil {
 		return x.Consul
 	}
@@ -298,7 +262,7 @@ type Trace struct {
 
 func (x *Trace) Reset() {
 	*x = Trace{}
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -310,7 +274,7 @@ func (x *Trace) String() string {
 func (*Trace) ProtoMessage() {}
 
 func (x *Trace) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +287,7 @@ func (x *Trace) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Trace.ProtoReflect.Descriptor instead.
 func (*Trace) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{4}
+	return file_conf_conf_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Trace) GetEnableOtel() bool {
@@ -354,154 +318,19 @@ func (x *Trace) GetSampler() float64 {
 	return 0
 }
 
-type Email struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enable        bool                   `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`                     // 是否启用邮件
-	SmtpHost      string                 `protobuf:"bytes,2,opt,name=smtp_host,json=smtpHost,proto3" json:"smtp_host,omitempty"`  // SMTP 服务器地址
-	SmtpPort      uint32                 `protobuf:"varint,3,opt,name=smtp_port,json=smtpPort,proto3" json:"smtp_port,omitempty"` // SMTP 端口
-	Username      string                 `protobuf:"bytes,4,opt,name=username,proto3" json:"username,omitempty"`                  // SMTP 用户名
-	Password      string                 `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`                  // SMTP 密码
-	From          string                 `protobuf:"bytes,6,opt,name=from,proto3" json:"from,omitempty"`                          // 发件人邮箱
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Email) Reset() {
-	*x = Email{}
-	mi := &file_conf_conf_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Email) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Email) ProtoMessage() {}
-
-func (x *Email) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Email.ProtoReflect.Descriptor instead.
-func (*Email) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *Email) GetEnable() bool {
-	if x != nil {
-		return x.Enable
-	}
-	return false
-}
-
-func (x *Email) GetSmtpHost() string {
-	if x != nil {
-		return x.SmtpHost
-	}
-	return ""
-}
-
-func (x *Email) GetSmtpPort() uint32 {
-	if x != nil {
-		return x.SmtpPort
-	}
-	return 0
-}
-
-func (x *Email) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *Email) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-func (x *Email) GetFrom() string {
-	if x != nil {
-		return x.From
-	}
-	return ""
-}
-
-type SmsConfig struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Provider      string                      `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
-	Tencent       *SmsConfig_TencentSmsConfig `protobuf:"bytes,2,opt,name=tencent,proto3" json:"tencent,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SmsConfig) Reset() {
-	*x = SmsConfig{}
-	mi := &file_conf_conf_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SmsConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SmsConfig) ProtoMessage() {}
-
-func (x *SmsConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SmsConfig.ProtoReflect.Descriptor instead.
-func (*SmsConfig) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *SmsConfig) GetProvider() string {
-	if x != nil {
-		return x.Provider
-	}
-	return ""
-}
-
-func (x *SmsConfig) GetTencent() *SmsConfig_TencentSmsConfig {
-	if x != nil {
-		return x.Tencent
-	}
-	return nil
-}
-
 type Server_HTTP struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	Host          string                 `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -513,7 +342,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -536,11 +365,18 @@ func (x *Server_HTTP) GetNetwork() string {
 	return ""
 }
 
-func (x *Server_HTTP) GetAddr() string {
+func (x *Server_HTTP) GetHost() string {
 	if x != nil {
-		return x.Addr
+		return x.Host
 	}
 	return ""
+}
+
+func (x *Server_HTTP) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
 }
 
 func (x *Server_HTTP) GetTimeout() *durationpb.Duration {
@@ -553,15 +389,16 @@ func (x *Server_HTTP) GetTimeout() *durationpb.Duration {
 type Server_GRPC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	Host          string                 `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	Port          int32                  `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -573,7 +410,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -596,11 +433,18 @@ func (x *Server_GRPC) GetNetwork() string {
 	return ""
 }
 
-func (x *Server_GRPC) GetAddr() string {
+func (x *Server_GRPC) GetHost() string {
 	if x != nil {
-		return x.Addr
+		return x.Host
 	}
 	return ""
+}
+
+func (x *Server_GRPC) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
 }
 
 func (x *Server_GRPC) GetTimeout() *durationpb.Duration {
@@ -608,6 +452,226 @@ func (x *Server_GRPC) GetTimeout() *durationpb.Duration {
 		return x.Timeout
 	}
 	return nil
+}
+
+type Server_Email struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enable        bool                   `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`                     // 是否启用邮件
+	SmtpHost      string                 `protobuf:"bytes,2,opt,name=smtp_host,json=smtpHost,proto3" json:"smtp_host,omitempty"`  // SMTP 服务器地址
+	SmtpPort      uint32                 `protobuf:"varint,3,opt,name=smtp_port,json=smtpPort,proto3" json:"smtp_port,omitempty"` // SMTP 端口
+	Username      string                 `protobuf:"bytes,4,opt,name=username,proto3" json:"username,omitempty"`                  // SMTP 用户名
+	Password      string                 `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`                  // SMTP 密码
+	From          string                 `protobuf:"bytes,6,opt,name=from,proto3" json:"from,omitempty"`                          // 发件人邮箱
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Server_Email) Reset() {
+	*x = Server_Email{}
+	mi := &file_conf_conf_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_Email) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_Email) ProtoMessage() {}
+
+func (x *Server_Email) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_Email.ProtoReflect.Descriptor instead.
+func (*Server_Email) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 2}
+}
+
+func (x *Server_Email) GetEnable() bool {
+	if x != nil {
+		return x.Enable
+	}
+	return false
+}
+
+func (x *Server_Email) GetSmtpHost() string {
+	if x != nil {
+		return x.SmtpHost
+	}
+	return ""
+}
+
+func (x *Server_Email) GetSmtpPort() uint32 {
+	if x != nil {
+		return x.SmtpPort
+	}
+	return 0
+}
+
+func (x *Server_Email) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *Server_Email) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *Server_Email) GetFrom() string {
+	if x != nil {
+		return x.From
+	}
+	return ""
+}
+
+type Server_Sms struct {
+	state         protoimpl.MessageState       `protogen:"open.v1"`
+	Provider      string                       `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	Tencent       *Server_Sms_TencentSmsConfig `protobuf:"bytes,2,opt,name=tencent,proto3" json:"tencent,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Server_Sms) Reset() {
+	*x = Server_Sms{}
+	mi := &file_conf_conf_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_Sms) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_Sms) ProtoMessage() {}
+
+func (x *Server_Sms) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_Sms.ProtoReflect.Descriptor instead.
+func (*Server_Sms) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 3}
+}
+
+func (x *Server_Sms) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *Server_Sms) GetTencent() *Server_Sms_TencentSmsConfig {
+	if x != nil {
+		return x.Tencent
+	}
+	return nil
+}
+
+type Server_Sms_TencentSmsConfig struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SecretId      string                 `protobuf:"bytes,1,opt,name=secret_id,json=secretId,proto3" json:"secret_id,omitempty"`
+	SecretKey     string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
+	Diyu          string                 `protobuf:"bytes,3,opt,name=diyu,proto3" json:"diyu,omitempty"`
+	SmsSdkAppId   string                 `protobuf:"bytes,4,opt,name=sms_sdk_app_id,json=smsSdkAppId,proto3" json:"sms_sdk_app_id,omitempty"`
+	SignName      string                 `protobuf:"bytes,5,opt,name=sign_name,json=signName,proto3" json:"sign_name,omitempty"`
+	TemplateId    string                 `protobuf:"bytes,6,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Server_Sms_TencentSmsConfig) Reset() {
+	*x = Server_Sms_TencentSmsConfig{}
+	mi := &file_conf_conf_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_Sms_TencentSmsConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_Sms_TencentSmsConfig) ProtoMessage() {}
+
+func (x *Server_Sms_TencentSmsConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_Sms_TencentSmsConfig.ProtoReflect.Descriptor instead.
+func (*Server_Sms_TencentSmsConfig) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 3, 0}
+}
+
+func (x *Server_Sms_TencentSmsConfig) GetSecretId() string {
+	if x != nil {
+		return x.SecretId
+	}
+	return ""
+}
+
+func (x *Server_Sms_TencentSmsConfig) GetSecretKey() string {
+	if x != nil {
+		return x.SecretKey
+	}
+	return ""
+}
+
+func (x *Server_Sms_TencentSmsConfig) GetDiyu() string {
+	if x != nil {
+		return x.Diyu
+	}
+	return ""
+}
+
+func (x *Server_Sms_TencentSmsConfig) GetSmsSdkAppId() string {
+	if x != nil {
+		return x.SmsSdkAppId
+	}
+	return ""
+}
+
+func (x *Server_Sms_TencentSmsConfig) GetSignName() string {
+	if x != nil {
+		return x.SignName
+	}
+	return ""
+}
+
+func (x *Server_Sms_TencentSmsConfig) GetTemplateId() string {
+	if x != nil {
+		return x.TemplateId
+	}
+	return ""
 }
 
 type Data_Database struct {
@@ -886,7 +950,7 @@ func (x *Data_RabbitMQ) GetAutoAck() bool {
 	return false
 }
 
-type Registry_Consul struct {
+type Data_Consul struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Datacenter    string                 `protobuf:"bytes,2,opt,name=datacenter,proto3" json:"datacenter,omitempty"`
@@ -896,20 +960,20 @@ type Registry_Consul struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Registry_Consul) Reset() {
-	*x = Registry_Consul{}
+func (x *Data_Consul) Reset() {
+	*x = Data_Consul{}
 	mi := &file_conf_conf_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Registry_Consul) String() string {
+func (x *Data_Consul) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Registry_Consul) ProtoMessage() {}
+func (*Data_Consul) ProtoMessage() {}
 
-func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
+func (x *Data_Consul) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_conf_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -921,153 +985,92 @@ func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Registry_Consul.ProtoReflect.Descriptor instead.
-func (*Registry_Consul) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{3, 0}
+// Deprecated: Use Data_Consul.ProtoReflect.Descriptor instead.
+func (*Data_Consul) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{2, 3}
 }
 
-func (x *Registry_Consul) GetAddress() string {
+func (x *Data_Consul) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetDatacenter() string {
+func (x *Data_Consul) GetDatacenter() string {
 	if x != nil {
 		return x.Datacenter
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetToken() string {
+func (x *Data_Consul) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetDialTimeout() *durationpb.Duration {
+func (x *Data_Consul) GetDialTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.DialTimeout
 	}
 	return nil
 }
 
-type SmsConfig_TencentSmsConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SecretId      string                 `protobuf:"bytes,1,opt,name=secret_id,json=secretId,proto3" json:"secret_id,omitempty"`
-	SecretKey     string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
-	Diyu          string                 `protobuf:"bytes,3,opt,name=diyu,proto3" json:"diyu,omitempty"`
-	SmsSdkAppId   string                 `protobuf:"bytes,4,opt,name=sms_sdk_app_id,json=smsSdkAppId,proto3" json:"sms_sdk_app_id,omitempty"`
-	SignName      string                 `protobuf:"bytes,5,opt,name=sign_name,json=signName,proto3" json:"sign_name,omitempty"`
-	TemplateId    string                 `protobuf:"bytes,6,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SmsConfig_TencentSmsConfig) Reset() {
-	*x = SmsConfig_TencentSmsConfig{}
-	mi := &file_conf_conf_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SmsConfig_TencentSmsConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SmsConfig_TencentSmsConfig) ProtoMessage() {}
-
-func (x *SmsConfig_TencentSmsConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SmsConfig_TencentSmsConfig.ProtoReflect.Descriptor instead.
-func (*SmsConfig_TencentSmsConfig) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{6, 0}
-}
-
-func (x *SmsConfig_TencentSmsConfig) GetSecretId() string {
-	if x != nil {
-		return x.SecretId
-	}
-	return ""
-}
-
-func (x *SmsConfig_TencentSmsConfig) GetSecretKey() string {
-	if x != nil {
-		return x.SecretKey
-	}
-	return ""
-}
-
-func (x *SmsConfig_TencentSmsConfig) GetDiyu() string {
-	if x != nil {
-		return x.Diyu
-	}
-	return ""
-}
-
-func (x *SmsConfig_TencentSmsConfig) GetSmsSdkAppId() string {
-	if x != nil {
-		return x.SmsSdkAppId
-	}
-	return ""
-}
-
-func (x *SmsConfig_TencentSmsConfig) GetSignName() string {
-	if x != nil {
-		return x.SignName
-	}
-	return ""
-}
-
-func (x *SmsConfig_TencentSmsConfig) GetTemplateId() string {
-	if x != nil {
-		return x.TemplateId
-	}
-	return ""
-}
-
 var File_conf_conf_proto protoreflect.FileDescriptor
 
 const file_conf_conf_proto_rawDesc = "" +
 	"\n" +
-	"\x0fconf/conf.proto\x12\x0fkratos.api.conf\x1a\x1egoogle/protobuf/duration.proto\"\xa8\x02\n" +
+	"\x0fconf/conf.proto\x12\x0fkratos.api.conf\x1a\x1egoogle/protobuf/duration.proto\"\x95\x01\n" +
 	"\tBootstrap\x12/\n" +
 	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.conf.ServerR\x06server\x12)\n" +
-	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x125\n" +
-	"\bregistry\x18\x03 \x01(\v2\x19.kratos.api.conf.RegistryR\bregistry\x12,\n" +
-	"\x05trace\x18\x04 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\x12,\n" +
-	"\x05email\x18\x05 \x01(\v2\x16.kratos.api.conf.EmailR\x05email\x12,\n" +
-	"\x03sms\x18\x06 \x01(\v2\x1a.kratos.api.conf.SmsConfigR\x03sms\"\x84\x03\n" +
+	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x12,\n" +
+	"\x05trace\x18\x03 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\x97\b\n" +
 	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
-	"\x04mode\x18\x03 \x01(\tR\x04mode\x120\n" +
-	"\x04http\x18\x04 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
-	"\x04grpc\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x1ai\n" +
+	"\x04mode\x18\x03 \x01(\tR\x04mode\x12)\n" +
+	"\x10register_address\x18\x04 \x01(\tR\x0fregisterAddress\x120\n" +
+	"\x04http\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
+	"\x04grpc\x18\x06 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x123\n" +
+	"\x05email\x18\a \x01(\v2\x1d.kratos.api.conf.Server.EmailR\x05email\x12-\n" +
+	"\x03sms\x18\b \x01(\v2\x1b.kratos.api.conf.Server.SmsR\x03sms\x1a}\n" +
 	"\x04HTTP\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
-	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x1ai\n" +
+	"\x04host\x18\x02 \x01(\tR\x04host\x12\x12\n" +
+	"\x04port\x18\x03 \x01(\x05R\x04port\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x1a}\n" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
-	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xc0\b\n" +
+	"\x04host\x18\x02 \x01(\tR\x04host\x12\x12\n" +
+	"\x04port\x18\x03 \x01(\x05R\x04port\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x1a\xa5\x01\n" +
+	"\x05Email\x12\x16\n" +
+	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\x1b\n" +
+	"\tsmtp_host\x18\x02 \x01(\tR\bsmtpHost\x12\x1b\n" +
+	"\tsmtp_port\x18\x03 \x01(\rR\bsmtpPort\x12\x1a\n" +
+	"\busername\x18\x04 \x01(\tR\busername\x12\x1a\n" +
+	"\bpassword\x18\x05 \x01(\tR\bpassword\x12\x12\n" +
+	"\x04from\x18\x06 \x01(\tR\x04from\x1a\xb1\x02\n" +
+	"\x03Sms\x12\x1a\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\x12F\n" +
+	"\atencent\x18\x02 \x01(\v2,.kratos.api.conf.Server.Sms.TencentSmsConfigR\atencent\x1a\xc5\x01\n" +
+	"\x10TencentSmsConfig\x12\x1b\n" +
+	"\tsecret_id\x18\x01 \x01(\tR\bsecretId\x12\x1d\n" +
+	"\n" +
+	"secret_key\x18\x02 \x01(\tR\tsecretKey\x12\x12\n" +
+	"\x04diyu\x18\x03 \x01(\tR\x04diyu\x12#\n" +
+	"\x0esms_sdk_app_id\x18\x04 \x01(\tR\vsmsSdkAppId\x12\x1b\n" +
+	"\tsign_name\x18\x05 \x01(\tR\bsignName\x12\x1f\n" +
+	"\vtemplate_id\x18\x06 \x01(\tR\n" +
+	"templateId\"\x8f\n" +
+	"\n" +
 	"\x04Data\x12:\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x1e.kratos.api.conf.Data.DatabaseR\bdatabase\x121\n" +
 	"\x05redis\x18\x02 \x01(\v2\x1b.kratos.api.conf.Data.RedisR\x05redis\x12:\n" +
-	"\brabbitmq\x18\x03 \x01(\v2\x1e.kratos.api.conf.Data.RabbitMQR\brabbitmq\x1aP\n" +
+	"\brabbitmq\x18\x03 \x01(\v2\x1e.kratos.api.conf.Data.RabbitMQR\brabbitmq\x124\n" +
+	"\x06consul\x18\x04 \x01(\v2\x1c.kratos.api.conf.Data.ConsulR\x06consul\x1aP\n" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12\x14\n" +
@@ -1092,9 +1095,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x0eprefetch_count\x18\x04 \x01(\x05R\rprefetchCount\x12'\n" +
 	"\x0fprefetch_global\x18\x05 \x01(\bR\x0eprefetchGlobal\x12#\n" +
 	"\rdelivery_mode\x18\x06 \x01(\x05R\fdeliveryMode\x12\x19\n" +
-	"\bauto_ack\x18\a \x01(\bR\aautoAck\"\xdd\x01\n" +
-	"\bRegistry\x128\n" +
-	"\x06consul\x18\x01 \x01(\v2 .kratos.api.conf.Registry.ConsulR\x06consul\x1a\x96\x01\n" +
+	"\bauto_ack\x18\a \x01(\bR\aautoAck\x1a\x96\x01\n" +
 	"\x06Consul\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1e\n" +
 	"\n" +
@@ -1107,26 +1108,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"enableOtel\x12\x1a\n" +
 	"\bendpoint\x18\x02 \x01(\tR\bendpoint\x12\x1a\n" +
 	"\binsecure\x18\x03 \x01(\bR\binsecure\x12\x18\n" +
-	"\asampler\x18\x04 \x01(\x01R\asampler\"\xa5\x01\n" +
-	"\x05Email\x12\x16\n" +
-	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\x1b\n" +
-	"\tsmtp_host\x18\x02 \x01(\tR\bsmtpHost\x12\x1b\n" +
-	"\tsmtp_port\x18\x03 \x01(\rR\bsmtpPort\x12\x1a\n" +
-	"\busername\x18\x04 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x05 \x01(\tR\bpassword\x12\x12\n" +
-	"\x04from\x18\x06 \x01(\tR\x04from\"\xb6\x02\n" +
-	"\tSmsConfig\x12\x1a\n" +
-	"\bprovider\x18\x01 \x01(\tR\bprovider\x12E\n" +
-	"\atencent\x18\x02 \x01(\v2+.kratos.api.conf.SmsConfig.TencentSmsConfigR\atencent\x1a\xc5\x01\n" +
-	"\x10TencentSmsConfig\x12\x1b\n" +
-	"\tsecret_id\x18\x01 \x01(\tR\bsecretId\x12\x1d\n" +
-	"\n" +
-	"secret_key\x18\x02 \x01(\tR\tsecretKey\x12\x12\n" +
-	"\x04diyu\x18\x03 \x01(\tR\x04diyu\x12#\n" +
-	"\x0esms_sdk_app_id\x18\x04 \x01(\tR\vsmsSdkAppId\x12\x1b\n" +
-	"\tsign_name\x18\x05 \x01(\tR\bsignName\x12\x1f\n" +
-	"\vtemplate_id\x18\x06 \x01(\tR\n" +
-	"templateIdB Z\x1enotify/internal/conf/conf;confb\x06proto3"
+	"\asampler\x18\x04 \x01(\x01R\asamplerB Z\x1enotify/internal/conf/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once
@@ -1140,54 +1122,52 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_conf_conf_proto_goTypes = []any{
-	(*Bootstrap)(nil),                  // 0: kratos.api.conf.Bootstrap
-	(*Server)(nil),                     // 1: kratos.api.conf.Server
-	(*Data)(nil),                       // 2: kratos.api.conf.Data
-	(*Registry)(nil),                   // 3: kratos.api.conf.Registry
-	(*Trace)(nil),                      // 4: kratos.api.conf.Trace
-	(*Email)(nil),                      // 5: kratos.api.conf.Email
-	(*SmsConfig)(nil),                  // 6: kratos.api.conf.SmsConfig
-	(*Server_HTTP)(nil),                // 7: kratos.api.conf.Server.HTTP
-	(*Server_GRPC)(nil),                // 8: kratos.api.conf.Server.GRPC
-	(*Data_Database)(nil),              // 9: kratos.api.conf.Data.Database
-	(*Data_Redis)(nil),                 // 10: kratos.api.conf.Data.Redis
-	(*Data_RabbitMQ)(nil),              // 11: kratos.api.conf.Data.RabbitMQ
-	(*Registry_Consul)(nil),            // 12: kratos.api.conf.Registry.Consul
-	(*SmsConfig_TencentSmsConfig)(nil), // 13: kratos.api.conf.SmsConfig.TencentSmsConfig
-	(*durationpb.Duration)(nil),        // 14: google.protobuf.Duration
+	(*Bootstrap)(nil),                   // 0: kratos.api.conf.Bootstrap
+	(*Server)(nil),                      // 1: kratos.api.conf.Server
+	(*Data)(nil),                        // 2: kratos.api.conf.Data
+	(*Trace)(nil),                       // 3: kratos.api.conf.Trace
+	(*Server_HTTP)(nil),                 // 4: kratos.api.conf.Server.HTTP
+	(*Server_GRPC)(nil),                 // 5: kratos.api.conf.Server.GRPC
+	(*Server_Email)(nil),                // 6: kratos.api.conf.Server.Email
+	(*Server_Sms)(nil),                  // 7: kratos.api.conf.Server.Sms
+	(*Server_Sms_TencentSmsConfig)(nil), // 8: kratos.api.conf.Server.Sms.TencentSmsConfig
+	(*Data_Database)(nil),               // 9: kratos.api.conf.Data.Database
+	(*Data_Redis)(nil),                  // 10: kratos.api.conf.Data.Redis
+	(*Data_RabbitMQ)(nil),               // 11: kratos.api.conf.Data.RabbitMQ
+	(*Data_Consul)(nil),                 // 12: kratos.api.conf.Data.Consul
+	(*durationpb.Duration)(nil),         // 13: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.conf.Bootstrap.server:type_name -> kratos.api.conf.Server
 	2,  // 1: kratos.api.conf.Bootstrap.data:type_name -> kratos.api.conf.Data
-	3,  // 2: kratos.api.conf.Bootstrap.registry:type_name -> kratos.api.conf.Registry
-	4,  // 3: kratos.api.conf.Bootstrap.trace:type_name -> kratos.api.conf.Trace
-	5,  // 4: kratos.api.conf.Bootstrap.email:type_name -> kratos.api.conf.Email
-	6,  // 5: kratos.api.conf.Bootstrap.sms:type_name -> kratos.api.conf.SmsConfig
-	7,  // 6: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
-	8,  // 7: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
-	9,  // 8: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
-	10, // 9: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
-	11, // 10: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
-	12, // 11: kratos.api.conf.Registry.consul:type_name -> kratos.api.conf.Registry.Consul
-	13, // 12: kratos.api.conf.SmsConfig.tencent:type_name -> kratos.api.conf.SmsConfig.TencentSmsConfig
-	14, // 13: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	14, // 14: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	14, // 15: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
-	14, // 16: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	14, // 17: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	14, // 18: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
-	14, // 19: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
-	14, // 20: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
-	14, // 21: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
-	14, // 22: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	14, // 23: kratos.api.conf.Registry.Consul.dial_timeout:type_name -> google.protobuf.Duration
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	3,  // 2: kratos.api.conf.Bootstrap.trace:type_name -> kratos.api.conf.Trace
+	4,  // 3: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
+	5,  // 4: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
+	6,  // 5: kratos.api.conf.Server.email:type_name -> kratos.api.conf.Server.Email
+	7,  // 6: kratos.api.conf.Server.sms:type_name -> kratos.api.conf.Server.Sms
+	9,  // 7: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
+	10, // 8: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
+	11, // 9: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
+	12, // 10: kratos.api.conf.Data.consul:type_name -> kratos.api.conf.Data.Consul
+	13, // 11: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	13, // 12: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	8,  // 13: kratos.api.conf.Server.Sms.tencent:type_name -> kratos.api.conf.Server.Sms.TencentSmsConfig
+	13, // 14: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
+	13, // 15: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	13, // 16: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	13, // 17: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
+	13, // 18: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
+	13, // 19: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
+	13, // 20: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
+	13, // 21: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
+	13, // 22: kratos.api.conf.Data.Consul.dial_timeout:type_name -> google.protobuf.Duration
+	23, // [23:23] is the sub-list for method output_type
+	23, // [23:23] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -1201,7 +1181,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_conf_conf_proto_rawDesc), len(file_conf_conf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

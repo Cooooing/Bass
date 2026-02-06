@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"html/template"
 	"testing"
+
+	"github.com/google/uuid"
 )
 
 func TestNotificationTemplate(t *testing.T) {
@@ -37,7 +39,7 @@ func TestNotificationTemplate(t *testing.T) {
 */
 
 func TestName(t *testing.T) {
-	a1 := make([]int, 3)
-	a2 := a1[:4]
-	fmt.Println(a2)
+	for i := 0; i < 10; i++ {
+		fmt.Println(uuid.New().String())
+	}
 }

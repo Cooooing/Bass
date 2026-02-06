@@ -52,7 +52,7 @@ func QiniuCallbackSignMiddleware(c *conf.Bootstrap) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			errNoAuth := cv1.ErrorForbidden("verify callback failed")
-			mac := auth.New(c.Oss.Qiniu.AccessKey, c.Oss.Qiniu.SecretKey)
+			mac := auth.New(c.Server.Oss.Qiniu.AccessKey, c.Server.Oss.Qiniu.SecretKey)
 			if r, ok := transporthttp.RequestFromServerContext(ctx); ok {
 				verify, err := qbox.VerifyCallback(mac, r)
 				if err != nil {

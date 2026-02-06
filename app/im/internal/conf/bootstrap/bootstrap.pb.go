@@ -9,7 +9,7 @@ package bootstrap
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
+	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -24,12 +24,9 @@ const (
 
 type Bootstrap struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Mode          string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
-	Registry      *Registry              `protobuf:"bytes,4,opt,name=registry,proto3" json:"registry,omitempty"`
-	Config        *Config                `protobuf:"bytes,5,opt,name=config,proto3" json:"config,omitempty"`
-	Log           *Log                   `protobuf:"bytes,6,opt,name=log,proto3" json:"log,omitempty"`
+	Server        *Server                `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Config        *Config                `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	Log           *Log                   `protobuf:"bytes,3,opt,name=log,proto3" json:"log,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -64,30 +61,9 @@ func (*Bootstrap) Descriptor() ([]byte, []int) {
 	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Bootstrap) GetName() string {
+func (x *Bootstrap) GetServer() *Server {
 	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Bootstrap) GetVersion() string {
-	if x != nil {
-		return x.Version
-	}
-	return ""
-}
-
-func (x *Bootstrap) GetMode() string {
-	if x != nil {
-		return x.Mode
-	}
-	return ""
-}
-
-func (x *Bootstrap) GetRegistry() *Registry {
-	if x != nil {
-		return x.Registry
+		return x.Server
 	}
 	return nil
 }
@@ -106,27 +82,29 @@ func (x *Bootstrap) GetLog() *Log {
 	return nil
 }
 
-type Registry struct {
+type Server struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Consul        *Registry_Consul       `protobuf:"bytes,1,opt,name=consul,proto3" json:"consul,omitempty"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	Mode          string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Registry) Reset() {
-	*x = Registry{}
+func (x *Server) Reset() {
+	*x = Server{}
 	mi := &file_conf_bootstrap_bootstrap_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Registry) String() string {
+func (x *Server) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Registry) ProtoMessage() {}
+func (*Server) ProtoMessage() {}
 
-func (x *Registry) ProtoReflect() protoreflect.Message {
+func (x *Server) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_bootstrap_bootstrap_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -138,21 +116,35 @@ func (x *Registry) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Registry.ProtoReflect.Descriptor instead.
-func (*Registry) Descriptor() ([]byte, []int) {
+// Deprecated: Use Server.ProtoReflect.Descriptor instead.
+func (*Server) Descriptor() ([]byte, []int) {
 	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Registry) GetConsul() *Registry_Consul {
+func (x *Server) GetName() string {
 	if x != nil {
-		return x.Consul
+		return x.Name
 	}
-	return nil
+	return ""
+}
+
+func (x *Server) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
+func (x *Server) GetMode() string {
+	if x != nil {
+		return x.Mode
+	}
+	return ""
 }
 
 type Config struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	Consul        *Config_Consul         `protobuf:"bytes,1,opt,name=consul,proto3" json:"consul,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -187,17 +179,17 @@ func (*Config) Descriptor() ([]byte, []int) {
 	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Config) GetPath() string {
+func (x *Config) GetConsul() *Config_Consul {
 	if x != nil {
-		return x.Path
+		return x.Consul
 	}
-	return ""
+	return nil
 }
 
 type Log struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enable        bool                   `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`
-	Level         string                 `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"` // debug, info, warn, error, fatal, panic
+	Level         string                 `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"` // debug, info, warn, error, fatal, panic
+	EnableFile    bool                   `protobuf:"varint,2,opt,name=enable_file,json=enableFile,proto3" json:"enable_file,omitempty"`
 	File          string                 `protobuf:"bytes,3,opt,name=file,proto3" json:"file,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -233,18 +225,18 @@ func (*Log) Descriptor() ([]byte, []int) {
 	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Log) GetEnable() bool {
-	if x != nil {
-		return x.Enable
-	}
-	return false
-}
-
 func (x *Log) GetLevel() string {
 	if x != nil {
 		return x.Level
 	}
 	return ""
+}
+
+func (x *Log) GetEnableFile() bool {
+	if x != nil {
+		return x.EnableFile
+	}
+	return false
 }
 
 func (x *Log) GetFile() string {
@@ -254,28 +246,30 @@ func (x *Log) GetFile() string {
 	return ""
 }
 
-type Registry_Consul struct {
+type Config_Consul struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	Path          string                 `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Registry_Consul) Reset() {
-	*x = Registry_Consul{}
+func (x *Config_Consul) Reset() {
+	*x = Config_Consul{}
 	mi := &file_conf_bootstrap_bootstrap_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Registry_Consul) String() string {
+func (x *Config_Consul) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Registry_Consul) ProtoMessage() {}
+func (*Config_Consul) ProtoMessage() {}
 
-func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
+func (x *Config_Consul) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_bootstrap_bootstrap_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -287,47 +281,63 @@ func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Registry_Consul.ProtoReflect.Descriptor instead.
-func (*Registry_Consul) Descriptor() ([]byte, []int) {
-	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{1, 0}
+// Deprecated: Use Config_Consul.ProtoReflect.Descriptor instead.
+func (*Config_Consul) Descriptor() ([]byte, []int) {
+	return file_conf_bootstrap_bootstrap_proto_rawDescGZIP(), []int{2, 0}
 }
 
-func (x *Registry_Consul) GetAddress() string {
+func (x *Config_Consul) GetAddress() string {
 	if x != nil {
 		return x.Address
 	}
 	return ""
 }
 
-func (x *Registry_Consul) GetToken() string {
+func (x *Config_Consul) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
 	return ""
 }
 
+func (x *Config_Consul) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *Config_Consul) GetTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.Timeout
+	}
+	return nil
+}
+
 var File_conf_bootstrap_bootstrap_proto protoreflect.FileDescriptor
 
 const file_conf_bootstrap_bootstrap_proto_rawDesc = "" +
 	"\n" +
-	"\x1econf/bootstrap/bootstrap.proto\x12\x14kratos.api.bootstrap\x1a\x1egoogle/protobuf/duration.proto\"\xec\x01\n" +
-	"\tBootstrap\x12\x12\n" +
+	"\x1econf/bootstrap/bootstrap.proto\x12\x14kratos.api.bootstrap\x1a\x1egoogle/protobuf/duration.proto\"\xa4\x01\n" +
+	"\tBootstrap\x124\n" +
+	"\x06server\x18\x01 \x01(\v2\x1c.kratos.api.bootstrap.ServerR\x06server\x124\n" +
+	"\x06config\x18\x02 \x01(\v2\x1c.kratos.api.bootstrap.ConfigR\x06config\x12+\n" +
+	"\x03log\x18\x03 \x01(\v2\x19.kratos.api.bootstrap.LogR\x03log\"J\n" +
+	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
-	"\x04mode\x18\x03 \x01(\tR\x04mode\x12:\n" +
-	"\bregistry\x18\x04 \x01(\v2\x1e.kratos.api.bootstrap.RegistryR\bregistry\x124\n" +
-	"\x06config\x18\x05 \x01(\v2\x1c.kratos.api.bootstrap.ConfigR\x06config\x12+\n" +
-	"\x03log\x18\x06 \x01(\v2\x19.kratos.api.bootstrap.LogR\x03log\"\x83\x01\n" +
-	"\bRegistry\x12=\n" +
-	"\x06consul\x18\x01 \x01(\v2%.kratos.api.bootstrap.Registry.ConsulR\x06consul\x1a8\n" +
+	"\x04mode\x18\x03 \x01(\tR\x04mode\"\xc9\x01\n" +
+	"\x06Config\x12;\n" +
+	"\x06consul\x18\x01 \x01(\v2#.kratos.api.bootstrap.Config.ConsulR\x06consul\x1a\x81\x01\n" +
 	"\x06Consul\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05token\x18\x02 \x01(\tR\x05token\"\x1c\n" +
-	"\x06Config\x12\x12\n" +
-	"\x04path\x18\x01 \x01(\tR\x04path\"G\n" +
-	"\x03Log\x12\x16\n" +
-	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\x14\n" +
-	"\x05level\x18\x02 \x01(\tR\x05level\x12\x12\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token\x12\x12\n" +
+	"\x04path\x18\x03 \x01(\tR\x04path\x123\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"P\n" +
+	"\x03Log\x12\x14\n" +
+	"\x05level\x18\x01 \x01(\tR\x05level\x12\x1f\n" +
+	"\venable_file\x18\x02 \x01(\bR\n" +
+	"enableFile\x12\x12\n" +
 	"\x04file\x18\x03 \x01(\tR\x04fileB&Z$im/internal/conf/bootstrap;bootstrapb\x06proto3"
 
 var (
@@ -344,22 +354,24 @@ func file_conf_bootstrap_bootstrap_proto_rawDescGZIP() []byte {
 
 var file_conf_bootstrap_bootstrap_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_conf_bootstrap_bootstrap_proto_goTypes = []any{
-	(*Bootstrap)(nil),       // 0: kratos.api.bootstrap.Bootstrap
-	(*Registry)(nil),        // 1: kratos.api.bootstrap.Registry
-	(*Config)(nil),          // 2: kratos.api.bootstrap.Config
-	(*Log)(nil),             // 3: kratos.api.bootstrap.Log
-	(*Registry_Consul)(nil), // 4: kratos.api.bootstrap.Registry.Consul
+	(*Bootstrap)(nil),           // 0: kratos.api.bootstrap.Bootstrap
+	(*Server)(nil),              // 1: kratos.api.bootstrap.Server
+	(*Config)(nil),              // 2: kratos.api.bootstrap.Config
+	(*Log)(nil),                 // 3: kratos.api.bootstrap.Log
+	(*Config_Consul)(nil),       // 4: kratos.api.bootstrap.Config.Consul
+	(*durationpb.Duration)(nil), // 5: google.protobuf.Duration
 }
 var file_conf_bootstrap_bootstrap_proto_depIdxs = []int32{
-	1, // 0: kratos.api.bootstrap.Bootstrap.registry:type_name -> kratos.api.bootstrap.Registry
+	1, // 0: kratos.api.bootstrap.Bootstrap.server:type_name -> kratos.api.bootstrap.Server
 	2, // 1: kratos.api.bootstrap.Bootstrap.config:type_name -> kratos.api.bootstrap.Config
 	3, // 2: kratos.api.bootstrap.Bootstrap.log:type_name -> kratos.api.bootstrap.Log
-	4, // 3: kratos.api.bootstrap.Registry.consul:type_name -> kratos.api.bootstrap.Registry.Consul
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 3: kratos.api.bootstrap.Config.consul:type_name -> kratos.api.bootstrap.Config.Consul
+	5, // 4: kratos.api.bootstrap.Config.Consul.timeout:type_name -> google.protobuf.Duration
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_conf_bootstrap_bootstrap_proto_init() }

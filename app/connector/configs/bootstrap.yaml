@@ -1,15 +1,15 @@
-name: connector-service
-version: 1.0.0
-mode: dev
-
-registry:
-  consul:
-    address: "127.0.0.1:8500"
-    token: "your-token"
+server:
+  name: connector-service
+  version: 1.0.0
+  mode: ${SERVICE_MODE:dev}
 
 config:
-  path: "/config/connector/config.yaml"
+  consul:
+    address: ${CONSUL_ADDR:127.0.0.1:8500}
+    token: ${CONSUL_TOKEN:token}
+    path: config-connector.yaml
+    timeout: 5s
 
 log:
-  level: debug
-  file: logs/connector-service.log
+  level: ${LOG_LEVEL:debug}
+  file: ${LOG_FILE:}

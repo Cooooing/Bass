@@ -109,7 +109,7 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 		return nil, nil, cleanup, err
 	}
 
-	if bc.Mode == constant.Prod {
+	if bc.Server.Mode == constant.Prod {
 		c, err := loadConsulConfig(bc)
 		return c, bc, cleanup, err
 	}
@@ -119,8 +119,8 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 		return nil, nil, cleanup, err
 	}
 
-	Name = bc.Name
-	Version = bc.Version
+	Name = bc.Server.Name
+	Version = bc.Server.Version
 	return c, bc, cleanup, nil
 }
 
@@ -157,9 +157,9 @@ func loadLocalConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	if err := c.Scan(&localConf); err != nil {
 		return nil, fmt.Errorf("scan local config fail: %w", err)
 	}
-	localConf.Server.Name = bc.Name
-	localConf.Server.Version = bc.Version
-	localConf.Server.Mode = bc.Mode
+	localConf.Server.Name = bc.Server.Name
+	localConf.Server.Version = bc.Server.Version
+	localConf.Server.Mode = bc.Server.Mode
 
 	return &localConf, nil
 }
@@ -167,8 +167,8 @@ func loadLocalConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	// 初始化 Consul API 客户端配置
 	cfg := consulapi.DefaultConfig()
-	cfg.Address = bc.Registry.Consul.Address
-	cfg.Token = bc.Registry.Consul.Token
+	cfg.Address = bc.Config.Consul.Address
+	cfg.Token = bc.Config.Consul.Token
 
 	client, err := consulapi.NewClient(cfg)
 	if err != nil {
@@ -176,7 +176,7 @@ func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	}
 
 	// 创建 Kratos 的 Consul 配置源
-	consulSource, err := consulconfig.New(client, consulconfig.WithPath(bc.Config.Path))
+	consulSource, err := consulconfig.New(client, consulconfig.WithPath(bc.Config.Consul.Path))
 	if err != nil {
 		return nil, fmt.Errorf("create consul source fail: %w", err)
 	}
@@ -193,8 +193,8 @@ func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 		_ = c.Close()
 	}(c)
 
-	consulConf.Server.Name = bc.Name
-	consulConf.Server.Version = bc.Version
-	consulConf.Server.Mode = bc.Mode
+	consulConf.Server.Name = bc.Server.Name
+	consulConf.Server.Version = bc.Server.Version
+	consulConf.Server.Mode = bc.Server.Mode
 	return &consulConf, nil
 }

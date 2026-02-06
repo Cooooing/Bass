@@ -53,8 +53,11 @@ services:
     image: hashicorp/consul:1.16
     container_name: consul
     restart: always
+    env_file:
+      - .env
     environment:
       - CONSUL_BIND_INTERFACE=eth0
+      - CONSUL_HTTP_TOKEN=${CONSUL_ACL_MASTER_TOKEN}
     command: >
       consul agent
       -server
@@ -62,15 +65,26 @@ services:
       -ui
       -client=0.0.0.0
       -data-dir=/consul/data
+      -hcl '
+      disable_update_check = true
+      acl {
+        enabled = true
+        default_policy = "deny"
+        enable_token_persistence = true
+        tokens {
+          initial_management = "${CONSUL_ACL_MASTER_TOKEN}"
+          agent = "${CONSUL_ACL_MASTER_TOKEN}"
+        }
+      }'
     ports:
-      - "8500:8500"   # HTTP API & UI
-      - "8600:8600/udp" # DNS（可选）
+      - "8500:8500"
+      - "8600:8600/udp"
     volumes:
       - consul_data:/consul/data
     healthcheck:
-      test: ["CMD", "consul", "info"]
-      interval: 30s
-      timeout: 10s
+      test: [ "CMD", "consul", "info", "-token=${CONSUL_ACL_MASTER_TOKEN}" ]
+      interval: 10s
+      timeout: 5s
       retries: 5
 
   etcd:

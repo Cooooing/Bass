@@ -6,29 +6,28 @@ option go_package = "content/internal/conf/bootstrap;bootstrap";
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
+  Server server = 1;
+  Config config = 2;
+  Log log = 3;
+}
+
+message Server {
   string name = 1;
   string version = 2;
   string mode = 3;
-
-  Registry registry = 4;
-  Config config = 5;
-  Log log = 6;
-}
-
-message Registry {
-  message Consul {
-    string address = 1;
-    string token = 2;
-  }
-  Consul consul = 1;
 }
 
 message Config {
-  string path = 1;
+  Consul consul = 1;
+  message Consul {
+    string address = 1;
+    string token = 2;
+    string path = 3;
+    google.protobuf.Duration timeout = 4;
+  }
 }
 
 message Log {
-  bool enable = 1;
-  string level = 2; // debug, info, warn, error, fatal, panic
-  string file = 3;
+  string level = 1; // debug, info, warn, error, fatal, panic
+  string file = 2;
 }

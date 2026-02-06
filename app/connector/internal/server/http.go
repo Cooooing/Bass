@@ -31,11 +31,17 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 		http.ResponseEncoder(pkg.HttpResponseEncoder),
 		// http.ErrorEncoder(pkg.HttpErrorEncoder),
 	}
+	if c.Server.RegisterAddress != "" {
+		opts = append(opts, http.Endpoint(&url.URL{
+			Scheme: "http",
+			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Http.Port),
+		}))
+	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, http.Network(c.Server.Http.Network))
 	}
-	if c.Server.Http.Addr != "" {
-		opts = append(opts, http.Address(c.Server.Http.Addr))
+	if c.Server.Http.Host != "" && c.Server.Http.Port != 0 {
+		opts = append(opts, http.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
 	}
 	if c.Server.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Server.Http.Timeout.AsDuration()))

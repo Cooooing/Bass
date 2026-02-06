@@ -7,10 +7,12 @@ import (
 	"common/pkg/util"
 	"context"
 	"errors"
+	"fmt"
 	"gateway/internal/conf"
 	"gateway/internal/service"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -51,11 +53,17 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.Co
 		transporthttp.ResponseEncoder(pkg.HttpResponseEncoder),
 		transporthttp.ErrorEncoder(pkg.HttpErrorEncoder),
 	}
+	if c.Server.RegisterAddress != "" {
+		opts = append(opts, transporthttp.Endpoint(&url.URL{
+			Scheme: "http",
+			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Http.Port),
+		}))
+	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, transporthttp.Network(c.Server.Http.Network))
 	}
-	if c.Server.Http.Addr != "" {
-		opts = append(opts, transporthttp.Address(c.Server.Http.Addr))
+	if c.Server.Http.Host != "" && c.Server.Http.Port != 0 {
+		opts = append(opts, transporthttp.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
 	}
 	if c.Server.Http.Timeout != nil {
 		opts = append(opts, transporthttp.Timeout(c.Server.Http.Timeout.AsDuration()))

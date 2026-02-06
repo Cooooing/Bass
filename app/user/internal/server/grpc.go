@@ -34,15 +34,12 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 	}
 	if c.Server.RegisterAddress != "" {
 		opts = append(opts, grpc.Endpoint(&url.URL{
-			Scheme: "http",
-			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Http.Port),
+			Scheme: "grpc",
+			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Grpc.Port),
 		}))
 	}
-	if c.Server.Grpc.Network != "" {
-		opts = append(opts, grpc.Network(c.Server.Http.Network))
-	}
 	if c.Server.Grpc.Host != "" && c.Server.Http.Port != 0 {
-		opts = append(opts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
+		opts = append(opts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Grpc.Host, c.Server.Grpc.Port)))
 	}
 	if c.Server.Grpc.Timeout != nil {
 		opts = append(opts, grpc.Timeout(c.Server.Grpc.Timeout.AsDuration()))

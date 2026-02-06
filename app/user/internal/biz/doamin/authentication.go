@@ -75,7 +75,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 
 	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.Conf.Jwt.EmailExpire.AsDuration())
+	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.Conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Email:  *u.Email,
 					Code:   code,
-					Expire: s.Conf.Jwt.EmailExpire.AsDuration(),
+					Expire: s.Conf.Server.Jwt.EmailExpire.AsDuration(),
 				},
 			},
 		})
@@ -109,7 +109,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.Conf.Jwt.EmailExpire.AsDuration())
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.Conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -195,7 +195,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 
 	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.Conf.Jwt.PhoneExpire.AsDuration())
+	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.Conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -211,7 +211,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Phone:  *u.Phone,
 					Code:   code,
-					Expire: s.Conf.Jwt.PhoneExpire.AsDuration(),
+					Expire: s.Conf.Server.Jwt.PhoneExpire.AsDuration(),
 				},
 			},
 		})
@@ -229,7 +229,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.Conf.Jwt.PhoneExpire.AsDuration())
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.Conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -294,7 +294,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 		return token, nil, cv1.ErrorBadRequest("password invalid")
 	}
 	// 生成 token
-	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.Conf.Jwt.Expires.AsDuration())
+	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.Conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}
@@ -304,7 +304,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.Conf.Jwt.Expires.AsDuration())
+	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.Conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}

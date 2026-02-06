@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"notify/internal/biz/base"
+	doaminbase "infra/internal/biz/base"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	tencentcloud_errors "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
@@ -15,16 +15,16 @@ import (
 )
 
 type TencentSmsDomain struct {
-	*base.BaseDomain
+	*doaminbase.BaseDomain
 	client *sms.Client
 }
 
-func NewTencentSmsDomain(base *base.BaseDomain) *TencentSmsDomain {
-	if base.Conf.Sms.Provider != constant.SMSTypeTencent.String() {
+func NewTencentSmsDomain(base *doaminbase.BaseDomain) *TencentSmsDomain {
+	if base.Conf.Server.Sms.Provider != constant.SMSTypeTencent.String() {
 		return nil
 	}
 	// SecretId、SecretKey 查询: https://console.cloud.tencent.com/cam/capi
-	credential := common.NewCredential(base.Conf.Sms.Tencent.SecretId, base.Conf.Sms.Tencent.SecretKey)
+	credential := common.NewCredential(base.Conf.Server.Sms.Tencent.SecretId, base.Conf.Server.Sms.Tencent.SecretKey)
 	cpf := profile.NewClientProfile()
 	cpf.HttpProfile.ReqMethod = "POST"
 	cpf.HttpProfile.ReqTimeout = 10
@@ -37,11 +37,11 @@ func NewTencentSmsDomain(base *base.BaseDomain) *TencentSmsDomain {
 	}
 }
 
-func (d *TencentSmsDomain) SendSms(ctx context.Context, phone []string, params []string) error {
+func (d *TencentSmsDomain) Send(ctx context.Context, phone []string, params []string) error {
 	request := sms.NewSendSmsRequest()
-	request.SmsSdkAppId = common.StringPtr(d.Conf.Sms.Tencent.SmsSdkAppId)
-	request.SignName = common.StringPtr(d.Conf.Sms.Tencent.SignName)
-	request.TemplateId = common.StringPtr(d.Conf.Sms.Tencent.TemplateId)
+	request.SmsSdkAppId = common.StringPtr(d.Conf.Server.Sms.Tencent.SmsSdkAppId)
+	request.SignName = common.StringPtr(d.Conf.Server.Sms.Tencent.SignName)
+	request.TemplateId = common.StringPtr(d.Conf.Server.Sms.Tencent.TemplateId)
 	request.TemplateParamSet = common.StringPtrs(params)
 	request.PhoneNumberSet = common.StringPtrs(phone)
 

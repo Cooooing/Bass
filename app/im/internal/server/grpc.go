@@ -3,8 +3,10 @@ package server
 import (
 	"common/pkg"
 	"common/pkg/util"
+	"fmt"
 	"im/internal/conf"
 	"im/internal/service"
+	"net/url"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -30,11 +32,14 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 			validate.ProtoValidate(),
 		),
 	}
-	if c.Server.Grpc.Network != "" {
-		opts = append(opts, grpc.Network(c.Server.Grpc.Network))
+	if c.Server.RegisterAddress != "" {
+		opts = append(opts, grpc.Endpoint(&url.URL{
+			Scheme: "grpc",
+			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Grpc.Port),
+		}))
 	}
-	if c.Server.Grpc.Addr != "" {
-		opts = append(opts, grpc.Address(c.Server.Grpc.Addr))
+	if c.Server.Grpc.Host != "" && c.Server.Http.Port != 0 {
+		opts = append(opts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Grpc.Host, c.Server.Grpc.Port)))
 	}
 	if c.Server.Grpc.Timeout != nil {
 		opts = append(opts, grpc.Timeout(c.Server.Grpc.Timeout.AsDuration()))

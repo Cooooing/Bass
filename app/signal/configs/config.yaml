@@ -5,20 +5,20 @@ server:
   register_address: ${REGISTER_ADDRESS:127.0.0.1} # 服务注册地址
   http:
     host: 0.0.0.0
-    port: 8001
+    port: 8006
     timeout: 5s
   grpc:
     host: 0.0.0.0
-    port: 9001
+    port: 9006
     timeout: 5s
 data:
   database:
     driver: "postgres"
-    source: "postgresql://bass:123456@127.0.0.1:5432/bass?sslmode=disable" # postgresql://<user>:<pass>@<host>/<database>
+    source: "postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable" # postgresql://<user>:<pass>@<host>/<database>
     merge: true # 是否同步表到数据库
   redis:
-    addr: 127.0.0.1:16379
-    password: "123456"
+    addr: "${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}"
+    password: "${REDIS_PASSWORD:123456}"
     dial_timeout: 5s
     db: 0
     read_timeout: 5s
@@ -29,7 +29,7 @@ data:
     conn_max_idle_time: 600s
     conn_max_life_time: 1800s
   rabbitmq:
-    url: "amqp://root:123456@127.0.0.1:5672/admin_vhost"
+    url: "amqp://${RABBITMQ_USER:admin}:${RABBITMQ_PASSWORD:123456}@${RABBITMQ_HOST:127.0.0.1}:${RABBITMQ_PORT:5672}/${RABBITMQ_VHOST:admin_vhost}"
     heartbeat: 10s            # 心跳，秒
     dial_timeout: 5s          # 连接超时，秒
     prefetch_count: 10        # Qos，未确认消息最大数量
@@ -37,9 +37,9 @@ data:
     delivery_mode: 2          # 消息持久化 1: transient, 2: persistent
     auto_ack: false           # 是否自动确认消息
   consul:
-    address: "127.0.0.1:8500"
+    address: "${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}"
     datacenter: "dc1"
-    token: "token"
+    token: "${CONSUL_ACL_APP_TOKEN:token}"
     dial_timeout: "5s"
 trace:
   enable_otel: false # 是否采集上报到 otel

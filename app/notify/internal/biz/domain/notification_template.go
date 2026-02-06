@@ -4,7 +4,7 @@ import (
 	cv1 "common/api/common/v1"
 	"common/pkg/cutil/collections/dict"
 	"context"
-	"notify/internal/biz/base"
+	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/data/ent"
@@ -12,11 +12,11 @@ import (
 )
 
 type NotificationTemplateDomain struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	notificationTemplateRepo repo.NotificationTemplateRepo
 }
 
-func NewNotificationTemplateDomain(base *base.BaseDomain, notificationTemplateRepo repo.NotificationTemplateRepo) *NotificationTemplateDomain {
+func NewNotificationTemplateDomain(base *domainbase.BaseDomain, notificationTemplateRepo repo.NotificationTemplateRepo) *NotificationTemplateDomain {
 	return &NotificationTemplateDomain{
 		BaseDomain:               base,
 		notificationTemplateRepo: notificationTemplateRepo,

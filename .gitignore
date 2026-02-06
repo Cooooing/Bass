@@ -37,4 +37,4 @@ bin/
 
 *.iml
 /deploy/prod*/
-/deploy/infra/.env
+/deploy/.env

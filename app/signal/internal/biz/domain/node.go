@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"signal/internal/biz/base"
+	domainbase "signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
@@ -32,7 +32,7 @@ import (
 )
 
 type NodeDomain struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
@@ -42,7 +42,7 @@ type NodeDomain struct {
 	sf           *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *base.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *domainbase.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err

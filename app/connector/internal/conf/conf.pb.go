@@ -90,7 +90,7 @@ type Server struct {
 	RegisterAddress string                 `protobuf:"bytes,4,opt,name=register_address,json=registerAddress,proto3" json:"register_address,omitempty"`
 	Http            *Server_HTTP           `protobuf:"bytes,5,opt,name=http,proto3" json:"http,omitempty"`
 	Grpc            *Server_GRPC           `protobuf:"bytes,6,opt,name=grpc,proto3" json:"grpc,omitempty"`
-	Cluster         string                 `protobuf:"bytes,7,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Cluster         bool                   `protobuf:"varint,7,opt,name=cluster,proto3" json:"cluster,omitempty"`
 	Key             string                 `protobuf:"bytes,8,opt,name=key,proto3" json:"key,omitempty"`
 	MasterUrl       string                 `protobuf:"bytes,9,opt,name=master_url,json=masterUrl,proto3" json:"master_url,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -169,11 +169,11 @@ func (x *Server) GetGrpc() *Server_GRPC {
 	return nil
 }
 
-func (x *Server) GetCluster() string {
+func (x *Server) GetCluster() bool {
 	if x != nil {
 		return x.Cluster
 	}
-	return ""
+	return false
 }
 
 func (x *Server) GetKey() string {
@@ -578,7 +578,7 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x10register_address\x18\x04 \x01(\tR\x0fregisterAddress\x120\n" +
 	"\x04http\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
 	"\x04grpc\x18\x06 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x12\x18\n" +
-	"\acluster\x18\a \x01(\tR\acluster\x12\x10\n" +
+	"\acluster\x18\a \x01(\bR\acluster\x12\x10\n" +
 	"\x03key\x18\b \x01(\tR\x03key\x12\x1d\n" +
 	"\n" +
 	"master_url\x18\t \x01(\tR\tmasterUrl\x1a}\n" +

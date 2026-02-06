@@ -6,6 +6,44 @@ info:
     title: ""
     version: 0.0.1
 paths:
+  /api/v1/infra/email/send:
+    post:
+      tags:
+        - InfraEmailService
+      description: 发送邮件
+      operationId: InfraEmailService_Send
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/common.api.infra.v1.SendEmailRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common.api.infra.v1.SendEmailReply'
+  /api/v1/infra/sms/send:
+    post:
+      tags:
+        - InfraSmsService
+      description: 发送短信
+      operationId: InfraSmsService_Send
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/common.api.infra.v1.SendSmsRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common.api.infra.v1.SendSmsReply'
     /api/v1/user/2FA/confirm:
         post:
             tags:
@@ -3167,6 +3205,49 @@ components:
                     type: string
                 upload_by_name:
                     type: string
+        common.api.infra.v1.SendEmailReply:
+          type: object
+          properties: { }
+        common.api.infra.v1.SendEmailRequest:
+          type: object
+          properties:
+            title:
+              type: string
+              description: 邮件标题
+            content:
+              type: string
+              description: 邮件内容
+            to:
+              type: array
+              items:
+                type: string
+              description: 接收人
+            cc:
+              type: array
+              items:
+                type: string
+              description: 抄送人
+            bcc:
+              type: array
+              items:
+                type: string
+              description: 密送人
+        common.api.infra.v1.SendSmsReply:
+          type: object
+          properties: { }
+        common.api.infra.v1.SendSmsRequest:
+          type: object
+          properties:
+            phone:
+              type: array
+              items:
+                type: string
+              description: 手机号
+            params:
+              type: array
+              items:
+                type: string
+              description: 参数
         common.api.infra.v1.UploadTokenReply:
             type: object
             properties:
@@ -4250,8 +4331,12 @@ tags:
       description: ChatMessage 服务
     - name: IMChatSessionService
       description: ChatSession 服务
+    - name: InfraEmailService
+      description: Email 服务
     - name: InfraOssService
       description: Oss 服务
+    - name: InfraSmsService
+      description: Sms 服务
     - name: NotifyNotificationMetaService
       description: Notification_Meta 服务
     - name: NotifyNotificationRecordService

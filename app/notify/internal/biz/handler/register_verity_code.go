@@ -2,26 +2,27 @@ package handler
 
 import (
 	"bytes"
+	infrav1 "common/api/infra/v1"
 	v1 "common/api/notify/v1"
+	"common/pkg/client"
+	"common/pkg/constant"
 	"common/pkg/cutil/handlerchain"
 	commonModel "common/pkg/model"
 	"context"
 	"fmt"
 	"html/template"
-	"notify/internal/biz/domain"
+	domainbase "notify/internal/biz/base"
 )
 
 type RegisterVerifyCode struct {
+	*domainbase.BaseDomain
 	*handlerchain.BaseHandler[*commonModel.Notification]
-	emailDomain      *domain.EmailDomain
-	tencentSmsDomain *domain.TencentSmsDomain
 }
 
-func NewRegisterVerifyCode(emailDomain *domain.EmailDomain, tencentSmsDomain *domain.TencentSmsDomain) *RegisterVerifyCode {
+func NewRegisterVerifyCode(baseDomain *domainbase.BaseDomain) *RegisterVerifyCode {
 	return &RegisterVerifyCode{
-		BaseHandler:      &handlerchain.BaseHandler[*commonModel.Notification]{Name: "register_verify_code"},
-		emailDomain:      emailDomain,
-		tencentSmsDomain: tencentSmsDomain,
+		BaseDomain:  baseDomain,
+		BaseHandler: &handlerchain.BaseHandler[*commonModel.Notification]{Name: "register_verify_code"},
 	}
 }
 
@@ -43,13 +44,28 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 	switch data.Channel {
 	case v1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL:
 		// 发送邮件
-		err = h.emailDomain.Send([]string{data.Meta.RegisterVerifyCode.Email}, data.Title, data.ContentRender)
+		infraServiceClient, err := client.GetConsulServiceClient(h.Consul, constant.InfraServiceName.String(), infrav1.NewInfraEmailServiceClient)
+		if err != nil {
+			return nil, err
+		}
+		_, err = infraServiceClient.Send(ctx, &infrav1.SendEmailRequest{
+			Title:   data.Title,
+			Content: data.ContentRender,
+			To:      []string{data.Meta.RegisterVerifyCode.Email},
+		})
 		if err != nil {
 			return nil, err
 		}
 	case v1.NotificationChannel_NOTIFICATION_CHANNEL_SMS:
 		// 发送短信
-		err = h.tencentSmsDomain.SendSms(ctx, []string{data.Meta.RegisterVerifyCode.Phone}, []string{data.Meta.RegisterVerifyCode.Code})
+		infraServiceClient, err := client.GetConsulServiceClient(h.Consul, constant.InfraServiceName.String(), infrav1.NewInfraSmsServiceClient)
+		if err != nil {
+			return nil, err
+		}
+		_, err = infraServiceClient.Send(ctx, &infrav1.SendSmsRequest{
+			Phone:  []string{data.Meta.RegisterVerifyCode.Phone},
+			Params: []string{data.Meta.RegisterVerifyCode.Code},
+		})
 		if err != nil {
 			return nil, err
 		}

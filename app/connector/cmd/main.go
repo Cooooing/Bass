@@ -15,6 +15,7 @@ import (
 	consulconfig "github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
+	"github.com/go-kratos/kratos/v2/config/env"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -125,7 +126,7 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 }
 
 func loadBootstrap() (*bootstrap.Bootstrap, error) {
-	c := config.New(config.WithSource(file.NewSource(flagBootstrap)))
+	c := config.New(config.WithSource(env.NewSource("BASS_"), file.NewSource(flagBootstrap)))
 	defer func(c config.Config) {
 		_ = c.Close()
 	}(c)
@@ -142,7 +143,7 @@ func loadBootstrap() (*bootstrap.Bootstrap, error) {
 }
 
 func loadLocalConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
-	c := config.New(config.WithSource(file.NewSource(flagConf)))
+	c := config.New(config.WithSource(env.NewSource("BASS_"), file.NewSource(flagConf)))
 	defer func(c config.Config) {
 		err := c.Close()
 		if err != nil {

@@ -30,28 +30,6 @@ message Server {
     int32 port = 3;
     google.protobuf.Duration timeout = 4;
   }
-  Email email = 7;
-  message Email {
-    bool enable = 1;          // 是否启用邮件
-    string smtp_host = 2;     // SMTP 服务器地址
-    uint32 smtp_port = 3;     // SMTP 端口
-    string username = 4;      // SMTP 用户名
-    string password = 5;      // SMTP 密码
-    string from = 6;          // 发件人邮箱
-  }
-  Sms sms = 8;
-  message Sms {
-    string provider = 1;
-    message TencentSmsConfig {
-      string secret_id = 1;
-      string secret_key = 2;
-      string diyu = 3;
-      string sms_sdk_app_id = 4;
-      string sign_name = 5;
-      string template_id = 6;
-    }
-    TencentSmsConfig tencent = 2;
-  }
 }
 
 message Data {

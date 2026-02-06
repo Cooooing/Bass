@@ -4,19 +4,19 @@ server:
   mode: dev
   http:
     host: 0.0.0.0
-    port: 8009
+    port: 8007
     timeout: 5s
   grpc:
     host: 0.0.0.0
-    port: 9009
+    port: 9007
     timeout: 5s
   cluster: false # 是否集群模式
   key: main # 节点 key
   master_url: "127.0.0.1:8000" # 主服务地址
 data:
   redis:
-    addr: 127.0.0.1:16379
-    password: "123456"
+    addr: "${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}"
+    password: "${REDIS_PASSWORD:123456}"
     dial_timeout: 5s
     db: 0
     read_timeout: 5s

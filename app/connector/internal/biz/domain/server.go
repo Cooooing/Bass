@@ -6,7 +6,7 @@ import (
 	commonBase "common/pkg/cutil/base"
 	"common/pkg/model"
 	"common/pkg/util"
-	"connector/internal/biz/base"
+	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/cache"
 	"context"
 	"fmt"
@@ -16,7 +16,7 @@ import (
 )
 
 type ServerDomain struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	sessionCache cache.SessionCache
 	asynqCache   *util.AsynqCache
 	producer     *client.Producer
@@ -24,7 +24,7 @@ type ServerDomain struct {
 	httpClient   *http.Client
 }
 
-func NewServerDomain(baseDomain *base.BaseDomain, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) (*ServerDomain, func()) {
+func NewServerDomain(baseDomain *domainbase.BaseDomain, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) (*ServerDomain, func()) {
 	s := &ServerDomain{
 		BaseDomain:   baseDomain,
 		sessionCache: sessionCache,

@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"signal/internal/biz/base"
+	domainbase "signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/domain"
 	"signal/internal/biz/model"
@@ -19,7 +19,7 @@ import (
 )
 
 type SessionHandler struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	nodeDomain   *domain.NodeDomain
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
@@ -28,7 +28,7 @@ type SessionHandler struct {
 	producer     *client.Producer
 }
 
-func NewSessionHandler(baseDomain *base.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) *SessionHandler {
+func NewSessionHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) *SessionHandler {
 	return &SessionHandler{
 		BaseDomain:   baseDomain,
 		nodeDomain:   nodeDomain,

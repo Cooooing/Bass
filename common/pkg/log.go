@@ -22,6 +22,10 @@ import (
 
 var _ log.Logger = (*ZapLogger)(nil)
 
+func init() {
+	log.SetLogger(log.NewFilter(log.NewStdLogger(os.Stdout), log.FilterLevel(log.LevelInfo)))
+}
+
 type ZapLogger struct {
 	log    *zap.Logger
 	msgKey string

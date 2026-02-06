@@ -3,17 +3,17 @@ package domain
 import (
 	cv1 "common/api/common/v1"
 	"context"
-	"notify/internal/biz/base"
+	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 )
 
 type NotificationMetaDomain struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	notificationMetaRepo repo.NotificationMetaRepo
 }
 
-func NewNotificationMetaDomain(base *base.BaseDomain, notificationMetaRepo repo.NotificationMetaRepo) *NotificationMetaDomain {
+func NewNotificationMetaDomain(base *domainbase.BaseDomain, notificationMetaRepo repo.NotificationMetaRepo) *NotificationMetaDomain {
 	return &NotificationMetaDomain{
 		BaseDomain:           base,
 		notificationMetaRepo: notificationMetaRepo,

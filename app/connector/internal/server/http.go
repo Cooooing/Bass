@@ -4,6 +4,8 @@ import (
 	"common/pkg"
 	"connector/internal/conf"
 	"connector/internal/service"
+	"fmt"
+	"net/url"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"

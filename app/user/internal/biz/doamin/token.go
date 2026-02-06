@@ -13,8 +13,8 @@ type TokenService struct {
 }
 
 func NewTokenService(conf *conf.Bootstrap) *TokenService {
-	verityCodeAccountTokenGen := jwt.NewTokenGenerator[model.TokenVerityCodeAccount](conf.Jwt.Secret)
-	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Jwt.Secret)
+	verityCodeAccountTokenGen := jwt.NewTokenGenerator[model.TokenVerityCodeAccount](conf.Server.Jwt.Secret)
+	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Server.Jwt.Secret)
 	return &TokenService{
 		conf:                      conf,
 		VerityCodeAccountTokenGen: verityCodeAccountTokenGen,

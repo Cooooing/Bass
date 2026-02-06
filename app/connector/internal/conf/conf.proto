@@ -30,7 +30,7 @@ message Server {
     int32 port = 3;
     google.protobuf.Duration timeout = 4;
   }
-  string cluster = 7;
+  bool cluster = 7;
   string key = 8;
   string master_url = 9;
 }

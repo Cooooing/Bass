@@ -13,4 +13,6 @@ var BizProviderSet = wire.NewSet(
 	doaminbase.NewBaseDomain,
 	util.NewEventPool,
 	domain.NewObjectStorageDomain,
+	domain.NewTencentSmsDomain,
+	domain.NewEmailDomain,
 )

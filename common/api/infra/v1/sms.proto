@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package common.api.infra.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/api/infra/v1;v1";
+
+// Sms 服务
+service InfraSmsService {
+
+  // 发送短信
+  rpc Send(SendSmsRequest) returns (SendSmsReply) {
+    option (google.api.http) = {
+      post: "/api/v1/infra/sms/send"
+      body: "*"
+    };
+  }
+
+}
+
+message SendSmsRequest {
+  // 手机号
+  repeated string phone = 1;
+  // 参数
+  repeated string params = 2;
+}
+message SendSmsReply {}

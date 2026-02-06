@@ -11,7 +11,7 @@ import (
 	"context"
 	"encoding/json"
 	"html/template"
-	"notify/internal/biz/base"
+	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/data/ent"
@@ -19,13 +19,13 @@ import (
 )
 
 type FullHandler struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	*handlerchain.BaseHandler[*commonModel.Notification]
 	notificationMetaRepo   repo.NotificationMetaRepo
 	notificationRecordRepo repo.NotificationRecordRepo
 }
 
-func NewFullHandler(base *base.BaseDomain, notificationMetaRepo repo.NotificationMetaRepo, notificationRecordRepo repo.NotificationRecordRepo) *FullHandler {
+func NewFullHandler(base *domainbase.BaseDomain, notificationMetaRepo repo.NotificationMetaRepo, notificationRecordRepo repo.NotificationRecordRepo) *FullHandler {
 	return &FullHandler{
 		BaseDomain:             base,
 		BaseHandler:            &handlerchain.BaseHandler[*commonModel.Notification]{Name: "full_handler"},

@@ -1,5 +1,7 @@
 version: '3.9'
 
+name: bass-application
+
 networks:
   microservice_net:
     driver: bridge
@@ -10,7 +12,7 @@ services:
     container_name: treble-service
     restart: always
     env_file:
-      - ../infra/.env
+      - .env
     ports:
       - "2324:2324"
     network_mode: "host"

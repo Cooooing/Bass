@@ -2,7 +2,7 @@ package biz
 
 import (
 	"common/pkg/util"
-	"notify/internal/biz/base"
+	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/domain"
 	"notify/internal/biz/handler"
 
@@ -12,13 +12,11 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	handler.HandlerSet,
-	base.NewBaseDomain,
+	domainbase.NewBaseDomain,
 	util.NewTokenCache,
 	handler.ProvideHandlers,
 	domain.NewEventHandler,
 	domain.NewNotificationMetaDomain,
 	domain.NewNotificationRecordDomain,
 	domain.NewNotificationTemplateDomain,
-	domain.NewTencentSmsDomain,
-	domain.NewEmailDomain,
 )

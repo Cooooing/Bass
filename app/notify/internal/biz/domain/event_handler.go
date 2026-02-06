@@ -8,7 +8,7 @@ import (
 	commonModel "common/pkg/model"
 	"context"
 	"encoding/json"
-	"notify/internal/biz/base"
+	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"runtime/debug"
@@ -18,7 +18,7 @@ import (
 )
 
 type EventHandler struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	handlerMap               dict.Map[string, handlerchain.Handler[*commonModel.Notification]]
 	notificationTemplateRepo repo.NotificationTemplateRepo
 
@@ -28,7 +28,7 @@ type EventHandler struct {
 	cancel      context.CancelFunc
 }
 
-func NewEventHandler(base *base.BaseDomain, handlerMap dict.Map[string, handlerchain.Handler[*commonModel.Notification]], notificationTemplateRepo repo.NotificationTemplateRepo) (*EventHandler, func(), error) {
+func NewEventHandler(base *domainbase.BaseDomain, handlerMap dict.Map[string, handlerchain.Handler[*commonModel.Notification]], notificationTemplateRepo repo.NotificationTemplateRepo) (*EventHandler, func(), error) {
 	workCount := 16
 	pool, err := ants.NewPool(
 		workCount,

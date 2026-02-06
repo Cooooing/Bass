@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"signal/internal/biz/base"
+	domainbase "signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/domain"
 	"signal/internal/biz/model"
@@ -19,7 +19,7 @@ import (
 )
 
 type PowHandler struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
@@ -27,7 +27,7 @@ type PowHandler struct {
 	producer   *client.Producer
 }
 
-func NewPowHandler(baseDomain *base.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *PowHandler {
+func NewPowHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *PowHandler {
 	return &PowHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,

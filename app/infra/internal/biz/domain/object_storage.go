@@ -29,7 +29,7 @@ func NewObjectStorageDomain(base *doaminbase.BaseDomain, objectStorageRepo repo.
 	return &ObjectStorageDomain{
 		BaseDomain:            base,
 		objectStorageRepo:     objectStorageRepo,
-		objectStorageProvider: ossFactory.Get(base.Conf.Oss.Provider),
+		objectStorageProvider: ossFactory.Get(base.Conf.Server.Oss.Provider),
 	}
 }
 

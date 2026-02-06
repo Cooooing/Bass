@@ -5,7 +5,7 @@ import (
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
-	"connector/internal/biz/base"
+	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/domain"
 	"context"
 	"encoding/json"
@@ -14,13 +14,13 @@ import (
 )
 
 type RegisterHandler struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	asynqCache *util.AsynqCache
 	producer   *client.Producer
 	server     *domain.ServerDomain
 }
 
-func NewRegisterHandler(baseDomain *base.BaseDomain, producer *client.Producer, asynqCache *util.AsynqCache, server *domain.ServerDomain) *RegisterHandler {
+func NewRegisterHandler(baseDomain *domainbase.BaseDomain, producer *client.Producer, asynqCache *util.AsynqCache, server *domain.ServerDomain) *RegisterHandler {
 	return &RegisterHandler{
 		BaseDomain: baseDomain,
 		asynqCache: asynqCache,

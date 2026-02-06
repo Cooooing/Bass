@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package common.api.infra.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/api/infra/v1;v1";
+
+// Email 服务
+service InfraEmailService {
+
+  // 发送邮件
+  rpc Send(SendEmailRequest) returns (SendEmailReply) {
+    option (google.api.http) = {
+      post: "/api/v1/infra/email/send"
+      body: "*"
+    };
+  }
+
+}
+
+message SendEmailRequest {
+  // 邮件标题
+  string title = 1;
+  // 邮件内容
+  string content = 2;
+  // 接收人
+  repeated string to = 3;
+  // 抄送人
+  repeated string cc = 4;
+  // 密送人
+  repeated string bcc = 5;
+}
+message SendEmailReply {}

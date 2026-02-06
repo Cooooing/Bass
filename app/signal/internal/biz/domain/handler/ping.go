@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"signal/internal/biz/base"
+	domainbase "signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/domain"
 	"signal/internal/biz/model"
@@ -19,7 +19,7 @@ import (
 )
 
 type PingHandler struct {
-	*base.BaseDomain
+	*domainbase.BaseDomain
 	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
@@ -27,7 +27,7 @@ type PingHandler struct {
 	producer   *client.Producer
 }
 
-func NewPingHandler(baseDomain *base.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *PingHandler {
+func NewPingHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *PingHandler {
 	return &PingHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,

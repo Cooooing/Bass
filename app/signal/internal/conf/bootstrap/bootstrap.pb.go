@@ -189,8 +189,7 @@ func (x *Config) GetConsul() *Config_Consul {
 type Log struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Level         string                 `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"` // debug, info, warn, error, fatal, panic
-	EnableFile    bool                   `protobuf:"varint,2,opt,name=enable_file,json=enableFile,proto3" json:"enable_file,omitempty"`
-	File          string                 `protobuf:"bytes,3,opt,name=file,proto3" json:"file,omitempty"`
+	File          string                 `protobuf:"bytes,2,opt,name=file,proto3" json:"file,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -230,13 +229,6 @@ func (x *Log) GetLevel() string {
 		return x.Level
 	}
 	return ""
-}
-
-func (x *Log) GetEnableFile() bool {
-	if x != nil {
-		return x.EnableFile
-	}
-	return false
 }
 
 func (x *Log) GetFile() string {
@@ -333,12 +325,10 @@ const file_conf_bootstrap_bootstrap_proto_rawDesc = "" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x14\n" +
 	"\x05token\x18\x02 \x01(\tR\x05token\x12\x12\n" +
 	"\x04path\x18\x03 \x01(\tR\x04path\x123\n" +
-	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"P\n" +
+	"\atimeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"/\n" +
 	"\x03Log\x12\x14\n" +
-	"\x05level\x18\x01 \x01(\tR\x05level\x12\x1f\n" +
-	"\venable_file\x18\x02 \x01(\bR\n" +
-	"enableFile\x12\x12\n" +
-	"\x04file\x18\x03 \x01(\tR\x04fileB*Z(signal/internal/conf/bootstrap;bootstrapb\x06proto3"
+	"\x05level\x18\x01 \x01(\tR\x05level\x12\x12\n" +
+	"\x04file\x18\x02 \x01(\tR\x04fileB*Z(signal/internal/conf/bootstrap;bootstrapb\x06proto3"
 
 var (
 	file_conf_bootstrap_bootstrap_proto_rawDescOnce sync.Once

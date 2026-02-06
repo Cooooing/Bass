@@ -18,6 +18,8 @@ var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
 	ProvideServices,
 	NewOssService,
+	NewEmailService,
+	NewSmsService,
 )
 
 type BaseService struct {

@@ -49,7 +49,7 @@ COPY --from=builder /build/app/gateway/configs/ /app/configs/
 ENV TZ=Asia/Shanghai
 
 # 暴露端口
-EXPOSE 8001 9001
+EXPOSE 8000 9000
 
 # 启动命令
 ENTRYPOINT ["/app/server"]

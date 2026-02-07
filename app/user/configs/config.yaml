@@ -2,7 +2,7 @@ server:
   name: user-service
   version: 1.0.0
   mode: dev
-  register_address: ${REGISTER_ADDRESS:127.0.0.1} # 服务注册地址
+  register_address: ${REGISTER_ADDRESS:} # 服务注册地址
   http:
     host: 0.0.0.0
     port: 8002
@@ -12,19 +12,19 @@ server:
     port: 9002
     timeout: 5s
   app: FishPi
-  avatar: "https://treble.sxisa.com/api/user/v1/user/avatar/%s" # /v1/user/avatar/{name}
+  avatar: https://treble.sxisa.com/api/user/v1/user/avatar/%s # /v1/user/avatar/{name}
   jwt:
-    secret: "qbceKQYgXXffTxVBgGrX"
+    secret: qbceKQYgXXffTxVBgGrX
     expires: 864000s
     email_expire: 300s
 data:
   database:
-    driver: "postgres"
-    source: "postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable" # postgresql://<user>:<pass>@<host>/<database>
+    driver: postgres
+    source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable # postgresql://<user>:<pass>@<host>/<database>
     merge: true # 是否同步表到数据库
   redis:
-    addr: "${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}"
-    password: "${REDIS_PASSWORD:123456}"
+    addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:123456}
     dial_timeout: 5s
     db: 0
     read_timeout: 5s
@@ -35,7 +35,7 @@ data:
     conn_max_idle_time: 600s
     conn_max_life_time: 1800s
   rabbitmq:
-    url: "amqp://${RABBITMQ_USER:admin}:${RABBITMQ_PASSWORD:123456}@${RABBITMQ_HOST:127.0.0.1}:${RABBITMQ_PORT:5672}/${RABBITMQ_VHOST:admin_vhost}"
+    url: amqp://${RABBITMQ_USER:admin}:${RABBITMQ_PASSWORD:123456}@${RABBITMQ_HOST:127.0.0.1}:${RABBITMQ_PORT:5672}/${RABBITMQ_VHOST:admin_vhost}
     heartbeat: 10s            # 心跳，秒
     dial_timeout: 5s          # 连接超时，秒
     prefetch_count: 10        # Qos，未确认消息最大数量
@@ -43,12 +43,12 @@ data:
     delivery_mode: 2          # 消息持久化 1: transient, 2: persistent
     auto_ack: false           # 是否自动确认消息
   consul:
-    address: "${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}"
-    datacenter: "dc1"
-    token: "${CONSUL_ACL_APP_TOKEN:token}"
-    dial_timeout: "5s"
+    address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+    datacenter: dc1
+    token: ${CONSUL_ACL_APP_TOKEN:token}
+    dial_timeout: 5s
 trace:
   enable_otel: false # 是否采集上报到 otel
-  endpoint: "127.0.0.1:4317"  # OTel Collector 地址
+  endpoint: 127.0.0.1:4317  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率

@@ -49,7 +49,7 @@ COPY --from=builder /build/app/notify/configs/ /app/configs/
 ENV TZ=Asia/Shanghai
 
 # 暴露端口
-EXPOSE 8003 9003
+EXPOSE 8000 9000
 
 # 启动命令
 ENTRYPOINT ["/app/server"]

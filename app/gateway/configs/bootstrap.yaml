@@ -1,15 +1,15 @@
 server:
   name: gateway-service
   version: 1.0.0
-  mode: "${SERVICE_MODE:dev}"
+  mode: ${SERVICE_MODE:dev}
 
 config:
   consul:
-    address: "${CONSUL_ADDR:127.0.0.1:8500}"
-    token: "${CONSUL_TOKEN:token}"
+    address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+    token: ${CONSUL_ACL_APP_TOKEN:token}
     path: config-gateway.yaml
     timeout: 5s
 
 log:
-  level: "${LOG_LEVEL:debug}"
-  file: "${LOG_FILE:}"
+  level: ${LOG_LEVEL:debug}
+  file: ${LOG_FILE:}

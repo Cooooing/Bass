@@ -10,6 +10,10 @@ $(SERVERS):
 	@echo "===> [$@] $(SUBTARGET)"
 	@$(MAKE) -C $(ROOT_DIR)/app/$@ $(SUBTARGET)
 
+.PHONY: init
+init:
+	@$(MAKE) SUBTARGET=init $(SERVERS)
+
 .PHONY: gen
 gen:
 	@$(MAKE) SUBTARGET=gen $(SERVERS)

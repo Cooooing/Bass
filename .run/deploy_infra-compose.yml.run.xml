@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="deploy/infra-compose.yml" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker-local">
+        <deployment type="docker-compose.yml">
+            <settings>
+                <option name="sourceFilePath" value="deploy/infra-compose.yml"/>
+            </settings>
+        </deployment>
+        <method v="2"/>
+    </configuration>
+</component>

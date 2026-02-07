@@ -12,11 +12,11 @@ server:
     timeout: 5s
   cluster: false # 是否集群模式
   key: main # 节点 key
-  master_url: "127.0.0.1:8000" # 主服务地址
+  master_url: 127.0.0.1:8000 # 主服务地址
 data:
   redis:
-    addr: "${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}"
-    password: "${REDIS_PASSWORD:123456}"
+    addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:123456}
     dial_timeout: 5s
     db: 0
     read_timeout: 5s
@@ -28,6 +28,6 @@ data:
     conn_max_life_time: 1800s
 trace:
   enable_otel: false # 是否采集上报到 otel
-  endpoint: "127.0.0.1:4317"  # OTel Collector 地址
+  endpoint: 127.0.0.1:4317  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率

@@ -5,8 +5,8 @@ server:
 
 config:
   consul:
-    address: ${CONSUL_ADDR:127.0.0.1:8500}
-    token: ${CONSUL_TOKEN:token}
+    address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+    token: ${CONSUL_ACL_APP_TOKEN:token}
     path: config-infra.yaml
     timeout: 5s
 

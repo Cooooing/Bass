@@ -3,7 +3,7 @@ version: '3.9'
 name: bass-application
 
 networks:
-  microservice_net:
+  microservice:
     driver: bridge
 
 services:
@@ -15,7 +15,8 @@ services:
       - .env
     ports:
       - "2324:2324"
-    network_mode: "host"
+    networks:
+      - microservice
 
   gateway:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
@@ -24,45 +25,75 @@ services:
     ports:
       - "8000:8000"
       - "9000:9000"
-    volumes:
-      - /opt/docker-data/service/gateway/conf:/app/configs
-    network_mode: "host"
+    networks:
+      - microservice
+
+  infra:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/infra:latest
+    container_name: infra-service
+    restart: always
+    ports:
+      - "8001:8000"
+      - "9001:9000"
+    networks:
+      - microservice
 
   user:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
     container_name: user-service
     restart: always
     ports:
-      - "8001:8001"
-      - "9001:9001"
-    volumes:
-      - /opt/docker-data/service/user/conf:/app/configs
-    network_mode: "host"
+      - "8002:8000"
+      - "9002:9000"
+    networks:
+      - microservice
 
   content:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
     container_name: content-service
     restart: always
     ports:
-      - "8002:8002"
-      - "9002:9002"
-    volumes:
-      - /opt/docker-data/service/content/conf:/app/configs
-    network_mode: "host"
+      - "8003:8000"
+      - "9003:9000"
+    networks:
+      - microservice
 
   notify:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
     container_name: notify-service
     restart: always
     ports:
-      - "8003:8003"
-      - "9003:9003"
-    volumes:
-      - /opt/docker-data/service/notify/conf:/app/configs
-    network_mode: "host"
+      - "8004:8000"
+      - "9004:9000"
+    networks:
+      - microservice
 
-#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
-#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
-#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
-#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
-#  docker pull registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
+  im:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/im:latest
+    container_name: im-service
+    restart: always
+    ports:
+      - "8005:8000"
+      - "9005:9000"
+    networks:
+      - microservice
+
+  signal:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/signal:latest
+    container_name: signal-service
+    restart: always
+    ports:
+      - "8006:8000"
+      - "9006:9000"
+    networks:
+      - microservice
+
+  connector:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/connector:latest
+    container_name: connector-service
+    restart: always
+    ports:
+      - "8007:8000"
+      - "9007:9000"
+    networks:
+      - microservice

@@ -49,7 +49,7 @@ COPY --from=builder /build/app/connector/configs/ /app/configs/
 ENV TZ=Asia/Shanghai
 
 # 暴露端口
-EXPOSE 8002 9002
+EXPOSE 8000 9000
 
 # 启动命令
 ENTRYPOINT ["/app/server"]

@@ -9,7 +9,7 @@ networks:
 services:
   treble:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
-    container_name: treble-service
+    container_name: treble
     restart: always
     env_file:
       - .env
@@ -20,7 +20,7 @@ services:
 
   gateway:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
-    container_name: gateway-service
+    container_name: gateway
     restart: always
     env_file:
       - .env
@@ -32,7 +32,7 @@ services:
 
   infra:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/infra:latest
-    container_name: infra-service
+    container_name: infra
     restart: always
     env_file:
       - .env
@@ -44,7 +44,7 @@ services:
 
   user:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
-    container_name: user-service
+    container_name: user
     restart: always
     env_file:
       - .env
@@ -56,7 +56,7 @@ services:
 
   content:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
-    container_name: content-service
+    container_name: content
     restart: always
     env_file:
       - .env
@@ -68,7 +68,7 @@ services:
 
   notify:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
-    container_name: notify-service
+    container_name: notify
     restart: always
     env_file:
       - .env
@@ -80,7 +80,7 @@ services:
 
   im:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/im:latest
-    container_name: im-service
+    container_name: im
     restart: always
     env_file:
       - .env
@@ -92,7 +92,7 @@ services:
 
   signal:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/signal:latest
-    container_name: signal-service
+    container_name: signal
     restart: always
     env_file:
       - .env
@@ -104,7 +104,7 @@ services:
 
   connector:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/connector:latest
-    container_name: connector-service
+    container_name: connector
     restart: always
     env_file:
       - .env

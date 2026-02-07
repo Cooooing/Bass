@@ -168,13 +168,13 @@ func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	cfg.Address = bc.Config.Consul.Address
 	cfg.Token = bc.Config.Consul.Token
 
-	client, err := consulapi.NewClient(cfg)
+	consulClient, err := consulapi.NewClient(cfg)
 	if err != nil {
 		return nil, fmt.Errorf("create consul api client fail: %w", err)
 	}
 
 	// 创建 Kratos 的 Consul 配置源
-	consulSource, err := consulconfig.New(client, consulconfig.WithPath(bc.Config.Consul.Path))
+	consulSource, err := consulconfig.New(consulClient, consulconfig.WithPath(bc.Config.Consul.Path))
 	if err != nil {
 		return nil, fmt.Errorf("create consul source fail: %w", err)
 	}
@@ -184,7 +184,7 @@ func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 		return nil, fmt.Errorf("load config from consul fail: %w", err)
 	}
 	consulConf := new(conf.Bootstrap)
-	if err := c.Scan(&consulConf); err != nil {
+	if err := c.Scan(consulConf); err != nil {
 		return nil, fmt.Errorf("scan consul config fail: %w", err)
 	}
 	defer func(c config.Config) {

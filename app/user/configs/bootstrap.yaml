@@ -1,5 +1,5 @@
 server:
-  name: user-service
+  name: user
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
 
@@ -7,7 +7,7 @@ config:
   consul:
     address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
     token: ${CONSUL_ACL_APP_TOKEN:token}
-    path: config/user-service/${SERVICE_MODE:dev}.yaml
+    path: config/user/config.yaml
     timeout: 5s
 
 log:

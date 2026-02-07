@@ -1,5 +1,5 @@
 server:
-  name: connector-service
+  name: connector
   version: 1.0.0
   mode: dev
   http:

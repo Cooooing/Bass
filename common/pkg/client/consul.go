@@ -30,7 +30,7 @@ type ConsulClient struct {
 	conf *model.ConsulConf
 	log  *log.Helper
 
-	client *consulapi.Client
+	Client *consulapi.Client
 	reg    *consulregistry.Registry
 
 	grpcConns sync.Map // map[string]*grpc.ClientConn
@@ -78,7 +78,7 @@ func NewConsulClient(logger *log.Helper, conf *model.ConsulConf) (*ConsulClient,
 	c := &ConsulClient{
 		conf:   conf,
 		log:    logger,
-		client: client,
+		Client: client,
 		reg:    reg,
 	}
 

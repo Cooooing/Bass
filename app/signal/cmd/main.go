@@ -188,7 +188,7 @@ func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	if err := c.Load(); err != nil {
 		return nil, fmt.Errorf("load config from consul fail: %w", err)
 	}
-	var consulConf conf.Bootstrap
+	consulConf := new(conf.Bootstrap)
 	if err := c.Scan(&consulConf); err != nil {
 		return nil, fmt.Errorf("scan consul config fail: %w", err)
 	}
@@ -199,5 +199,5 @@ func loadConsulConfig(bc *bootstrap.Bootstrap) (*conf.Bootstrap, error) {
 	consulConf.Server.Name = bc.Server.Name
 	consulConf.Server.Version = bc.Server.Version
 	consulConf.Server.Mode = bc.Server.Mode
-	return &consulConf, nil
+	return consulConf, nil
 }

@@ -1,7 +1,7 @@
 # ============ Global Variables ============
 GOHOSTOS := $(shell go env GOHOSTOS)
 VERSION := latest
-SERVERS := gateway user content notify im signal connector infra
+SERVERS := gateway infra user content notify im signal connector
 
 ROOT_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 

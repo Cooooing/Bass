@@ -1,5 +1,5 @@
 server:
-  name: content-service
+  name: content
   version: 1.0.0
   mode: dev
   register_address: ${REGISTER_ADDRESS:} # 服务注册地址

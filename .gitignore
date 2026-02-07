@@ -35,3 +35,4 @@ bin/
 .idea/
 *.swp
 
+/deploy/.prod.env

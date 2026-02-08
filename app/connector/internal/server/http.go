@@ -5,7 +5,6 @@ import (
 	"connector/internal/conf"
 	"connector/internal/service"
 	"fmt"
-	"net/url"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -32,12 +31,6 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 		),
 		http.ResponseEncoder(pkg.HttpResponseEncoder),
 		// http.ErrorEncoder(pkg.HttpErrorEncoder),
-	}
-	if c.Server.RegisterAddress != "" {
-		opts = append(opts, http.Endpoint(&url.URL{
-			Scheme: "http",
-			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Http.Port),
-		}))
 	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, http.Network(c.Server.Http.Network))

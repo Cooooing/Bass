@@ -4,7 +4,6 @@ import (
 	"common/pkg"
 	"common/pkg/util"
 	"fmt"
-	"net/url"
 	"user/internal/conf"
 	"user/internal/service"
 
@@ -34,12 +33,6 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 		),
 		http.ResponseEncoder(pkg.HttpResponseEncoder),
 		// http.ErrorEncoder(pkg.HttpErrorEncoder),
-	}
-	if c.Server.RegisterAddress != "" {
-		opts = append(opts, http.Endpoint(&url.URL{
-			Scheme: "http",
-			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Http.Port),
-		}))
 	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, http.Network(c.Server.Http.Network))

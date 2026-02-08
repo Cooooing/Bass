@@ -4,12 +4,12 @@ server:
   mode: dev
   register_address: ${REGISTER_ADDRESS} # 服务注册地址
   http:
-    host: 0.0.0.0
-    port: 8003
+    host: ${HTTP_HOST:0.0.0.0}
+    port: ${HTTP_PORT:8003}
     timeout: 5s
   grpc:
-    host: 0.0.0.0
-    port: 9003
+    host: ${GRPC_HOST:0.0.0.0}
+    port: ${GRPC_PORT:9003}
     timeout: 5s
 data:
   database:

@@ -83,18 +83,17 @@ func (x *Bootstrap) GetTrace() *Trace {
 }
 
 type Server struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	Name            string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version         string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Mode            string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
-	RegisterAddress string                 `protobuf:"bytes,4,opt,name=register_address,json=registerAddress,proto3" json:"register_address,omitempty"`
-	Http            *Server_HTTP           `protobuf:"bytes,5,opt,name=http,proto3" json:"http,omitempty"`
-	Grpc            *Server_GRPC           `protobuf:"bytes,6,opt,name=grpc,proto3" json:"grpc,omitempty"`
-	Oss             *Server_Oss            `protobuf:"bytes,7,opt,name=oss,proto3" json:"oss,omitempty"`
-	Email           *Server_Email          `protobuf:"bytes,8,opt,name=email,proto3" json:"email,omitempty"`
-	Sms             *Server_Sms            `protobuf:"bytes,9,opt,name=sms,proto3" json:"sms,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Version       string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	Mode          string                 `protobuf:"bytes,3,opt,name=mode,proto3" json:"mode,omitempty"`
+	Http          *Server_HTTP           `protobuf:"bytes,5,opt,name=http,proto3" json:"http,omitempty"`
+	Grpc          *Server_GRPC           `protobuf:"bytes,6,opt,name=grpc,proto3" json:"grpc,omitempty"`
+	Oss           *Server_Oss            `protobuf:"bytes,7,opt,name=oss,proto3" json:"oss,omitempty"`
+	Email         *Server_Email          `protobuf:"bytes,8,opt,name=email,proto3" json:"email,omitempty"`
+	Sms           *Server_Sms            `protobuf:"bytes,9,opt,name=sms,proto3" json:"sms,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Server) Reset() {
@@ -144,13 +143,6 @@ func (x *Server) GetVersion() string {
 func (x *Server) GetMode() string {
 	if x != nil {
 		return x.Mode
-	}
-	return ""
-}
-
-func (x *Server) GetRegisterAddress() string {
-	if x != nil {
-		return x.RegisterAddress
 	}
 	return ""
 }
@@ -1238,12 +1230,11 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\tBootstrap\x12/\n" +
 	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.conf.ServerR\x06server\x12)\n" +
 	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x12,\n" +
-	"\x05trace\x18\x03 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\xbd\f\n" +
+	"\x05trace\x18\x03 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\x92\f\n" +
 	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
-	"\x04mode\x18\x03 \x01(\tR\x04mode\x12)\n" +
-	"\x10register_address\x18\x04 \x01(\tR\x0fregisterAddress\x120\n" +
+	"\x04mode\x18\x03 \x01(\tR\x04mode\x120\n" +
 	"\x04http\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
 	"\x04grpc\x18\x06 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x12-\n" +
 	"\x03oss\x18\a \x01(\v2\x1b.kratos.api.conf.Server.OssR\x03oss\x123\n" +

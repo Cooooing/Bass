@@ -15,7 +15,6 @@ message Server {
   string name = 1;
   string version = 2;
   string mode = 3;
-  string register_address = 4;
   HTTP http = 5;
   message HTTP {
     string network = 1;

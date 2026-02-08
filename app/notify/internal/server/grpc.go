@@ -4,7 +4,6 @@ import (
 	"common/pkg"
 	"common/pkg/util"
 	"fmt"
-	"net/url"
 	"notify/internal/conf"
 	"notify/internal/service"
 
@@ -31,12 +30,6 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 			pkg.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
-	}
-	if c.Server.RegisterAddress != "" {
-		opts = append(opts, grpc.Endpoint(&url.URL{
-			Scheme: "grpc",
-			Host:   fmt.Sprintf("%s:%d", c.Server.RegisterAddress, c.Server.Grpc.Port),
-		}))
 	}
 	if c.Server.Grpc.Host != "" && c.Server.Http.Port != 0 {
 		opts = append(opts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Grpc.Host, c.Server.Grpc.Port)))

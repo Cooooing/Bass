@@ -111,6 +111,8 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 	if err != nil {
 		return nil, nil, cleanup, err
 	}
+	Name = bc.Server.Name
+	Version = bc.Server.Version
 
 	if bc.Server.Mode == constant.Prod {
 		c, err := loadConsulConfig(bc)
@@ -122,8 +124,6 @@ func loadConfig() (*conf.Bootstrap, *bootstrap.Bootstrap, func(), error) {
 		return nil, nil, cleanup, err
 	}
 
-	Name = bc.Server.Name
-	Version = bc.Server.Version
 	return c, bc, cleanup, nil
 }
 

@@ -2,6 +2,12 @@ version: "3.9"
 
 name: bass-infra
 
+# docker network create bass
+networks:
+  bass:
+    driver: bridge
+    external: true
+
 services:
   postgres:
     image: postgres:18.0
@@ -13,6 +19,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql18/data
+    networks:
+      - bass
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
       interval: 30s
@@ -30,6 +38,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - bass
     healthcheck:
       test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 30s
@@ -47,6 +57,8 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - bass
     healthcheck:
       test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
       interval: 30s
@@ -54,7 +66,7 @@ services:
       retries: 5
 
   consul:
-    image: hashicorp/consul:1.16
+    image: hashicorp/consul:1.22.3
     container_name: consul
     restart: always
     env_file:
@@ -85,6 +97,8 @@ services:
       - "8600:8600/udp"
     volumes:
       - consul_data:/consul/data
+    networks:
+      - bass
     healthcheck:
       test: [ "CMD", "consul", "info", "-token=${CONSUL_ACL_MASTER_TOKEN}" ]
       interval: 10s

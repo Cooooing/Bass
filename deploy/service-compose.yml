@@ -3,8 +3,9 @@ version: '3.9'
 name: bass-application
 
 networks:
-  microservice:
+  bass:
     driver: bridge
+    external: true
 
 services:
   treble:
@@ -16,7 +17,7 @@ services:
     ports:
       - "2324:2324"
     networks:
-      - microservice
+      - bass
 
   gateway:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
@@ -28,7 +29,7 @@ services:
       - "8000:8000"
       - "9000:9000"
     networks:
-      - microservice
+      - bass
 
   infra:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/infra:latest
@@ -40,7 +41,7 @@ services:
       - "8001:8000"
       - "9001:9000"
     networks:
-      - microservice
+      - bass
 
   user:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
@@ -52,7 +53,7 @@ services:
       - "8002:8000"
       - "9002:9000"
     networks:
-      - microservice
+      - bass
 
   content:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
@@ -64,7 +65,7 @@ services:
       - "8003:8000"
       - "9003:9000"
     networks:
-      - microservice
+      - bass
 
   notify:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
@@ -76,7 +77,7 @@ services:
       - "8004:8000"
       - "9004:9000"
     networks:
-      - microservice
+      - bass
 
   im:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/im:latest
@@ -88,7 +89,7 @@ services:
       - "8005:8000"
       - "9005:9000"
     networks:
-      - microservice
+      - bass
 
   signal:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/signal:latest
@@ -100,7 +101,7 @@ services:
       - "8006:8000"
       - "9006:9000"
     networks:
-      - microservice
+      - bass
 
   connector:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/connector:latest
@@ -112,4 +113,4 @@ services:
       - "8007:8000"
       - "9007:9000"
     networks:
-      - microservice
+      - bass

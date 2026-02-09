@@ -12,7 +12,7 @@ services:
   postgres:
     image: postgres:18.0
     container_name: postgres
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -30,7 +30,7 @@ services:
   redis:
     image: redis:8.2.2
     container_name: redis
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     command: redis-server --requirepass ${REDIS_PASSWORD}
@@ -49,7 +49,7 @@ services:
   rabbitmq:
     image: rabbitmq:4.1-management
     container_name: rabbitmq
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -68,7 +68,7 @@ services:
   consul:
     image: hashicorp/consul:1.22.3
     container_name: consul
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     environment:

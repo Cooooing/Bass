@@ -34,12 +34,18 @@ RUN make all
 # 使用 UPX 压缩
 RUN upx -9 --lzma /build/infra
 
+
+FROM alpine:3.19 AS certs
+RUN apk add --no-cache ca-certificates
+
 # ===================== 第二阶段：制作轻量运行环境 =====================
 FROM scratch
 
 # 设置工作目录
 WORKDIR /app
 
+# 拷贝证书
+COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 # 拷贝编译好的可执行文件（根据 Makefile，输出在项目根目录）
 COPY --from=builder /build/infra /app/server
 # 拷贝配置文件

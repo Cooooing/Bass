@@ -11,7 +11,7 @@ services:
   treble:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
     container_name: treble
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -22,7 +22,7 @@ services:
   gateway:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
     container_name: gateway
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -34,7 +34,7 @@ services:
   infra:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/infra:latest
     container_name: infra
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -46,7 +46,7 @@ services:
   user:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
     container_name: user
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -58,7 +58,7 @@ services:
   content:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
     container_name: content
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -70,7 +70,7 @@ services:
   notify:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
     container_name: notify
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -82,7 +82,7 @@ services:
   im:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/im:latest
     container_name: im
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -94,7 +94,7 @@ services:
   signal:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/signal:latest
     container_name: signal
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:
@@ -106,7 +106,7 @@ services:
   connector:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/connector:latest
     container_name: connector
-    restart: always
+    restart: on-failure:3
     env_file:
       - .env
     ports:

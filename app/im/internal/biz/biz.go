@@ -1,7 +1,7 @@
 package biz
 
 import (
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	domainbase "im/internal/biz/base"
 	"im/internal/biz/domain"
 
@@ -11,7 +11,7 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	domainbase.NewBaseDomain,
-	util.NewTokenCache,
+	jwt.NewTokenCache,
 
 	domain.NewChatGroupDomain,
 	domain.NewChatSessionDomain,

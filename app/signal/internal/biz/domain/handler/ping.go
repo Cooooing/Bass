@@ -4,7 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/task"
 	"context"
 	"encoding/json"
 	"errors"
@@ -23,11 +23,11 @@ type PingHandler struct {
 	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
-	asynqCache *util.AsynqCache
+	asynqCache *task.AsynqCache
 	producer   *client.Producer
 }
 
-func NewPingHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *PingHandler {
+func NewPingHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *task.AsynqCache, producer *client.Producer) *PingHandler {
 	return &PingHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,

@@ -4,8 +4,8 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/user/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
 	"common/pkg/util"
+
 	"context"
 	"user/internal/biz/doamin"
 	"user/internal/biz/model"
@@ -52,7 +52,7 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{User: &gen.User{
-		Email:    base.Ptr(req.Email),
+		Email:    util.Ptr(req.Email),
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
@@ -76,7 +76,7 @@ func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.Regis
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterPhone(ctx, &model.User{User: &gen.User{
-		Phone:    base.Ptr(req.Phone),
+		Phone:    util.Ptr(req.Phone),
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,

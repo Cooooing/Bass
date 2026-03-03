@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -31,8 +31,8 @@ func (Tag) Fields() []ent.Field {
 		field.Int32("status").Comment("标签状态：1-正常，2-禁用").Default(1),
 		field.Int32("article_count").Comment("文章数").Default(0),
 	}
-	fields = append(fields, pkg.UserAuditFields()...)
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.UserAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

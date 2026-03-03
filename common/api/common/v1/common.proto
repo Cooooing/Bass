@@ -42,3 +42,10 @@ message Int64Range {
   // 结束
   optional int64 end = 2;
 }
+
+message ImageReply{
+  // 图片数据
+  bytes data = 1;
+  // 图片类型
+  string content_type = 2;
+}

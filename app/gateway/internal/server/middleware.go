@@ -3,13 +3,20 @@ package server
 import (
 	cv1 "common/api/common/v1"
 	"common/pkg/constant"
+	"common/pkg/model"
 	"common/pkg/util"
+
+	"common/pkg/util/jwt"
 	"context"
+	"encoding/json"
 	"errors"
+	"gateway/internal/biz/domain"
 	"gateway/internal/conf"
+	"net"
 	"regexp"
 	"strings"
 
+	"github.com/go-kratos/kratos/v2/metadata"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport"
@@ -82,7 +89,7 @@ func UserAPIMatch() selector.MatchFunc {
 }
 
 // AuthMiddleware 认证中间件
-func AuthMiddleware(tokenCache *util.TokenCache) middleware.Middleware {
+func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			tr, ok := transport.FromServerContext(ctx)
@@ -107,8 +114,8 @@ func AuthMiddleware(tokenCache *util.TokenCache) middleware.Middleware {
 				// 权限范围 Todo 用户组权限规则后续持久化入库
 
 				// 设置上下文
-				ctx = context.WithValue(ctx, constant.CtxUserInfo, userInfo)
-				ctx = context.WithValue(ctx, constant.Token, token)
+				ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
+				ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
 
 				return handler(ctx, req)
 			}
@@ -123,6 +130,45 @@ func PermissionMiddleware() middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			return handler(ctx, req)
+		}
+	}
+}
+
+// IpMiddleware Ip 中间件
+func IpMiddleware(ipDomain *domain.IpDomain) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			tr, ok := transport.FromServerContext(ctx)
+			if !ok {
+				return nil, errors.New("transport not found")
+			}
+			var ip string
+			if _, ok := tr.(*transporthttp.Transport); ok {
+
+				if xff := tr.RequestHeader().Get("X-Forwarded-For"); xff != "" {
+					ip = strings.TrimSpace(strings.Split(xff, ",")[0])
+				}
+				if ip == "" {
+					ip = tr.RequestHeader().Get("X-Real-IP")
+				}
+				if ip == "" {
+					ip, _, _ = net.SplitHostPort(tr.(*transporthttp.Transport).Request().RemoteAddr)
+				}
+
+				ipInfo, err := ipDomain.GetInfo(ctx, ip)
+				if err != nil {
+					return nil, err
+				}
+				ctx = util.SetContextValue[*model.IpInfo](ctx, constant.CtxIpInfo, ipInfo)
+				ipInfoBytes, err := json.Marshal(ipInfo)
+				if err != nil {
+					return nil, err
+				}
+				ctx = metadata.AppendToClientContext(ctx, constant.CtxIpInfo.String(), string(ipInfoBytes))
+				return handler(ctx, req)
+			}
+
+			return nil, errors.New("transport not http")
 		}
 	}
 }

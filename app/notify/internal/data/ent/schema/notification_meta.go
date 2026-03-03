@@ -1,9 +1,9 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -35,7 +35,7 @@ func (NotificationMeta) Fields() []ent.Field {
 		field.String("content").Comment("渲染内容"),
 		field.Int32("status").Comment("状态 1-正常 2-被取消"),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

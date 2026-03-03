@@ -4,7 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/task"
 	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/domain"
 	"context"
@@ -15,12 +15,12 @@ import (
 
 type RegisterHandler struct {
 	*domainbase.BaseDomain
-	asynqCache *util.AsynqCache
+	asynqCache *task.AsynqCache
 	producer   *client.Producer
 	server     *domain.ServerDomain
 }
 
-func NewRegisterHandler(baseDomain *domainbase.BaseDomain, producer *client.Producer, asynqCache *util.AsynqCache, server *domain.ServerDomain) *RegisterHandler {
+func NewRegisterHandler(baseDomain *domainbase.BaseDomain, producer *client.Producer, asynqCache *task.AsynqCache, server *domain.ServerDomain) *RegisterHandler {
 	return &RegisterHandler{
 		BaseDomain: baseDomain,
 		asynqCache: asynqCache,

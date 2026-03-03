@@ -2,9 +2,10 @@ package server
 
 import (
 	v1 "common/api/common/v1"
-	"common/pkg"
 	"common/pkg/constant"
 	"common/pkg/util"
+	"common/pkg/util/server"
+
 	"context"
 	"signal/internal/biz/domain"
 
@@ -31,7 +32,7 @@ func SignalAuthMiddleware(nodeDomain *domain.NodeDomain) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			// 验证 signal node
-			nodeKey := pkg.GetHeader(ctx, constant.HeaderSignalNode)
+			nodeKey := server.GetHeader(ctx, constant.HeaderSignalNode)
 			// nodeSignature := pkg.GetHeader(ctx, constant.HeaderSignalNodeSignature)
 			// if nodeKey == "" || nodeSignature == "" {
 			//	return nil, v1.ErrorUnauthorized("node is required")

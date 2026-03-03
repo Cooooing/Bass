@@ -8,6 +8,7 @@ package main
 
 import (
 	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"infra/internal/biz/base"
@@ -50,7 +51,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenCache := util.NewTokenCache(helper, redisClient)
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)

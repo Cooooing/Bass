@@ -1,7 +1,7 @@
 server:
   name: gateway
   version: 1.0.0
-  mode: dev
+  mode: ${SERVICE_MODE:dev}
   http:
     host: ${HTTP_HOST:0.0.0.0}
     port: ${HTTP_PORT:8000}
@@ -16,6 +16,10 @@ server:
     qiniu:
       access_key: L8l6DGiYXzmx0IVT0GpIxI-Mj8LqfoIKF6iAnrWa
       secret_key: qY6ohp-qZEtd20NZN94o7TScg3IeEGSZe-ZRsVXW
+  ip_data:
+    enable: true
+    ipv4_xdb_path: ./configs/ip2region_v4.xdb
+    ipv6_xdb_path: ./configs/ip2region_v6.xdb
 data:
   database:
     driver: postgres

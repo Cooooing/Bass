@@ -8,6 +8,7 @@ package main
 
 import (
 	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"user/internal/biz/base"
@@ -61,7 +62,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, eventPool)
 	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	userRepo := repo.NewUserRepo(baseData)
-	tokenCache := util.NewTokenCache(helper, redisClient)
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	tokenService := doamin.NewTokenService(bootstrap)
 	authenticationDomain, err := doamin.NewAuthenticationDomain(baseDomain, userRepo, tokenCache, tokenService)
 	if err != nil {

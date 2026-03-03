@@ -4,8 +4,7 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
-	"common/pkg/cutil/collections/set"
+	"common/pkg/util"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	basedata "content/internal/data/base"
@@ -19,6 +18,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 )
 
 type ArticleRepo struct {
@@ -47,14 +47,16 @@ func (r *ArticleRepo) Save(ctx context.Context, tx *gen.Client, article *model.A
 	bindTagIds := make([]int64, 0)
 	if len(tags) > 0 {
 		saveTags := make([]*model.Tag, 0)
-		tagNames := set.NewFromSlice[*model.Tag, string](tags, func(m *model.Tag) string { return m.Name })
-		constantTags, err := r.tagRepo.GetList(ctx, tx, &repo.TagGetReq{Names: tagNames.ToSlice()})
+		tags = lo.Uniq(tags)
+		tagNames := lo.SliceToMap[*model.Tag, string, struct{}](tags, func(m *model.Tag) (string, struct{}) { return m.Name, struct{}{} })
+		constantTags, err := r.tagRepo.GetList(ctx, tx, &repo.TagGetReq{Names: lo.Keys(tagNames)})
 		if err != nil {
 			return nil, err
 		}
-		constantTagNameSet := set.NewFromSlice[*model.Tag, string](constantTags, func(m *model.Tag) string { return m.Name })
+		constantTags = lo.Uniq(constantTags)
+		constantTagNameSet := lo.SliceToMap[*model.Tag, string, struct{}](constantTags, func(m *model.Tag) (string, struct{}) { return m.Name, struct{}{} })
 		for _, i := range tags {
-			if !constantTagNameSet.Contains(i.Name) {
+			if _, ok := constantTagNameSet[i.Name]; !ok {
 				saveTags = append(saveTags, i)
 			}
 		}
@@ -99,14 +101,16 @@ func (r *ArticleRepo) Update(ctx context.Context, tx *gen.Client, updateArticle 
 	bindTagIds := make([]int64, 0)
 	if len(tags) > 0 {
 		saveTags := make([]*model.Tag, 0)
-		tagNames := set.NewFromSlice[*model.Tag, string](tags, func(m *model.Tag) string { return m.Name })
-		constantTags, err := r.tagRepo.GetList(ctx, tx, &repo.TagGetReq{Names: tagNames.ToSlice()})
+		tags = lo.Uniq(tags)
+		tagNames := lo.SliceToMap[*model.Tag, string, struct{}](tags, func(m *model.Tag) (string, struct{}) { return m.Name, struct{}{} })
+		constantTags, err := r.tagRepo.GetList(ctx, tx, &repo.TagGetReq{Names: lo.Keys(tagNames)})
 		if err != nil {
 			return nil, err
 		}
-		constantTagNameSet := set.NewFromSlice[*model.Tag, string](constantTags, func(m *model.Tag) string { return m.Name })
+		constantTags = lo.Uniq(constantTags)
+		constantTagNameSet := lo.SliceToMap[*model.Tag, string, struct{}](constantTags, func(m *model.Tag) (string, struct{}) { return m.Name, struct{}{} })
 		for _, i := range tags {
-			if !constantTagNameSet.Contains(i.Name) {
+			if _, ok := constantTagNameSet[i.Name]; !ok {
 				saveTags = append(saveTags, i)
 			}
 		}
@@ -186,7 +190,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, articleId int64, commentId int64) (*model.Article, error) {
-	exist, err := r.commentRepo.Exist(ctx, tx, &repo.CommentGetReq{CommentId: base.Ptr(commentId), ArticleId: base.Ptr(articleId)})
+	exist, err := r.commentRepo.Exist(ctx, tx, &repo.CommentGetReq{CommentId: util.Ptr(commentId), ArticleId: util.Ptr(articleId)})
 	if err != nil {
 		return nil, err
 	}
@@ -203,7 +207,7 @@ func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, ar
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) (*model.Article, error) {
-	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: base.Ptr(articleId)})
+	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: util.Ptr(articleId)})
 	if err != nil {
 		return nil, err
 	}

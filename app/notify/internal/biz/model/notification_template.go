@@ -2,7 +2,7 @@ package model
 
 import (
 	v1 "common/api/notify/v1"
-	"common/pkg/cutil/base"
+	"common/pkg/util"
 	"fmt"
 	"notify/internal/data/ent/gen"
 
@@ -21,7 +21,7 @@ func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *
 }
 
 func (n *NotificationTemplate) GetKey() string {
-	return GetKeyNotificationTemplate(base.Ptr(v1.NotificationType(n.NotificationType)), base.Ptr(v1.NotificationChannel(n.Channel)))
+	return GetKeyNotificationTemplate(util.Ptr(v1.NotificationType(n.NotificationType)), util.Ptr(v1.NotificationChannel(n.Channel)))
 }
 
 func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {

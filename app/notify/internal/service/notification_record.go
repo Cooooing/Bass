@@ -4,9 +4,9 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/notify/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+
 	"context"
 	"notify/internal/biz/domain"
 	"notify/internal/biz/repo"
@@ -44,8 +44,8 @@ func (s *NotificationRecordService) Page(ctx context.Context, req *v1.Notificati
 	}
 	records, page, err := s.notificationRecordDomain.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
 		NotificationType: req.Query.NotificationType,
-		ReceiverId:       base.Ptr(user.ID),
-		Status:           base.Ptr(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
+		ReceiverId:       util.Ptr(user.ID),
+		Status:           util.Ptr(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
 		WithMeta:         true,
 	})
 
@@ -67,10 +67,10 @@ func (s *NotificationRecordService) Read(ctx context.Context, req *v1.Notificati
 	)
 	if req.ReadTimeRange != nil {
 		if req.ReadTimeRange.Start != nil {
-			startTime = base.Ptr(req.ReadTimeRange.Start.AsTime())
+			startTime = util.Ptr(req.ReadTimeRange.Start.AsTime())
 		}
 		if req.ReadTimeRange.End != nil {
-			endTime = base.Ptr(req.ReadTimeRange.End.AsTime())
+			endTime = util.Ptr(req.ReadTimeRange.End.AsTime())
 		}
 	}
 

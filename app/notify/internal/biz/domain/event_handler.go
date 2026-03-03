@@ -3,9 +3,8 @@ package domain
 import (
 	v1 "common/api/notify/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/collections/dict"
-	"common/pkg/cutil/handlerchain"
 	commonModel "common/pkg/model"
+	handlerchain2 "common/pkg/util/handlerchain"
 	"context"
 	"encoding/json"
 	domainbase "notify/internal/biz/base"
@@ -15,11 +14,12 @@ import (
 
 	"github.com/panjf2000/ants/v2"
 	"github.com/rabbitmq/amqp091-go"
+	"github.com/samber/lo"
 )
 
 type EventHandler struct {
 	*domainbase.BaseDomain
-	handlerMap               dict.Map[string, handlerchain.Handler[*commonModel.Notification]]
+	handlerMap               map[string]handlerchain2.Handler[*commonModel.Notification]
 	notificationTemplateRepo repo.NotificationTemplateRepo
 
 	workerCount int
@@ -28,7 +28,7 @@ type EventHandler struct {
 	cancel      context.CancelFunc
 }
 
-func NewEventHandler(base *domainbase.BaseDomain, handlerMap dict.Map[string, handlerchain.Handler[*commonModel.Notification]], notificationTemplateRepo repo.NotificationTemplateRepo) (*EventHandler, func(), error) {
+func NewEventHandler(base *domainbase.BaseDomain, handlerMap map[string]handlerchain2.Handler[*commonModel.Notification], notificationTemplateRepo repo.NotificationTemplateRepo) (*EventHandler, func(), error) {
 	workCount := 16
 	pool, err := ants.NewPool(
 		workCount,
@@ -120,7 +120,7 @@ func (h *EventHandler) Handle() {
 						continue
 					}
 
-					var templateMap dict.Map[string, *model.NotificationTemplate]
+					var templateMap map[string]*model.NotificationTemplate
 					templateMap, err = h.notificationTemplateRepo.GetCache(h.ctx, notification.Type, notification.Channels)
 					if err != nil {
 						h.Log.Errorf("get template failed: %v", err)
@@ -129,10 +129,10 @@ func (h *EventHandler) Handle() {
 					}
 
 					// 构建处理器链
-					factory := handlerchain.NewHandlerFactoryWithHandlers(h.handlerMap.Values()...)
+					factory := handlerchain2.NewHandlerFactoryWithHandlers(lo.Values(h.handlerMap)...)
 					// 依次按模板处理消息
-					var handler handlerchain.Handler[*commonModel.Notification]
-					for _, template := range templateMap.Values() {
+					var handler handlerchain2.Handler[*commonModel.Notification]
+					for _, template := range lo.Values(templateMap) {
 						handler, err = factory.BuildChainByNames(template.Processors)
 						if err != nil {
 							break

@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -85,7 +85,7 @@ func (User) Fields() []ent.Field {
 		field.Time("twofa_enable_time").Comment("二步验证启用时间").Optional().Nillable(),
 		field.String("twofa_secret").Comment("二步验证Secret").Default(""),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

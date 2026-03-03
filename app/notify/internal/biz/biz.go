@@ -1,7 +1,7 @@
 package biz
 
 import (
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/domain"
 	"notify/internal/biz/handler"
@@ -13,7 +13,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	handler.HandlerSet,
 	domainbase.NewBaseDomain,
-	util.NewTokenCache,
+	jwt.NewTokenCache,
 	handler.ProvideHandlers,
 	domain.NewEventHandler,
 	domain.NewNotificationMetaDomain,

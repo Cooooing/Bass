@@ -2,8 +2,8 @@ package service
 
 import (
 	v1 "common/api/signal/v1"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"signal/internal/biz/domain"
@@ -77,7 +77,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.SignalNodeUpdateReques
 }
 
 func (s *NodeService) GetSecret(ctx context.Context, req *v1.SignalNodeGetSecretRequest) (*v1.SignalNodeGetSecretReply, error) {
-	node, err := s.nodeRepo.GetOne(ctx, s.Db, &repo.NodeGetReq{Id: base.Ptr(req.Id)})
+	node, err := s.nodeRepo.GetOne(ctx, s.Db, &repo.NodeGetReq{Id: util.Ptr(req.Id)})
 	if err != nil {
 		return nil, err
 	}

@@ -62,7 +62,7 @@ service UserUserService {
   }
 
   // 获取用户默认头像
-  rpc Avatar(AvatarRequest) returns (AvatarReply) {
+  rpc Avatar(AvatarRequest) returns (common.v1.ImageReply) {
     option (google.api.http) = {
       get: "/v1/user/avatar/{name}"
     };
@@ -286,10 +286,4 @@ message PageUserReply{
 message AvatarRequest{
   // 用户名称
   string name = 1;
-}
-message AvatarReply{
-  // 图片数据
-  bytes data = 1;
-  // 图片类型
-  string content_type = 2;
 }

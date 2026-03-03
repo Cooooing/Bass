@@ -2,7 +2,7 @@ package model
 
 import (
 	v1 "common/api/signal/v1"
-	"common/pkg/cutil/base"
+	"common/pkg/util"
 	"math"
 	"signal/internal/data/ent/gen"
 	"time"
@@ -30,7 +30,7 @@ func (n *Node) CalculateScore() float64 {
 	// 处理分母项
 	pPart := float64(n.PingMs) + alpha
 	n.PowCostMs = n.PowCostMs - n.PingMs
-	cPart := base.If(n.PowCostMs < 0, 0, float64(n.PowCostMs)) + beta
+	cPart := util.If(n.PowCostMs < 0, 0, float64(n.PowCostMs)) + beta
 
 	// log10(N + 10) 保证 N=0 时结果为 1
 	nPart := math.Log10(float64(n.Connections) + 10.0)

@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -32,7 +32,7 @@ func (NotificationTemplate) Fields() []ent.Field {
 		field.JSON("processors", []string{}).Comment("处理器链（有序执行）"),
 		field.Bool("enable").Comment("是否启用").Default(false),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

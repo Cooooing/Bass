@@ -3,8 +3,6 @@ package model
 import (
 	v1 "common/api/content/v1"
 	userv1 "common/api/user/v1"
-	"common/pkg/cutil/base"
-	set2 "common/pkg/cutil/collections/set"
 	"common/pkg/util"
 	"content/internal/data/ent/gen"
 	"fmt"
@@ -43,14 +41,14 @@ func (a *Article) FormatContent() {
 }
 
 // ParseContent 解析文章内容
-func (a *Article) ParseContent() (atUserNames set2.Set[string]) {
-	atUserNames = set2.New[string](0)
+func (a *Article) ParseContent() (atUserNames map[string]struct{}) {
+	atUserNames = make(map[string]struct{})
 	tree := parse.Parse(fmt.Sprintf("%s_%d", "article_content", a.ID), []byte(a.Content), parse.NewOptions())
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
 	})
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-		coverImageUrl := base.Ptr("")
+		coverImageUrl := util.Ptr("")
 		status := util.ParseNodeImageCoverImageUrl(n, entering, coverImageUrl)
 		if *coverImageUrl != "" {
 			a.CoverImageUrl = coverImageUrl
@@ -67,14 +65,14 @@ func (a *Article) FormatRewardContent() {
 }
 
 // ParseRewardContent 解析文章打赏区内容
-func (a *Article) ParseRewardContent() (atUserNames set2.Set[string]) {
-	atUserNames = set2.New[string](0)
+func (a *Article) ParseRewardContent() (atUserNames map[string]struct{}) {
+	atUserNames = make(map[string]struct{})
 	if a.RewardContent != nil && len(a.Edges.ActionRecords) > 0 && a.HasRewarded() {
 		tree := parse.Parse(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), []byte(*a.RewardContent), parse.NewOptions())
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
 		})
-		a.RewardContentRender = base.Ptr(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
+		a.RewardContentRender = util.Ptr(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
 	}
 	return atUserNames
 }
@@ -110,7 +108,7 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		RewardContent:           a.RewardContent,
 		RewardContentRender:     a.RewardContentRender,
 		HasPostscript:           a.HasPostscript,
-		HasReward:               base.IsNotNil(a.RewardPoints),
+		HasReward:               util.IsNotNil(a.RewardPoints),
 		RewardPoints:            a.RewardPoints,
 		Status:                  a.Status,
 		Type:                    a.Type,

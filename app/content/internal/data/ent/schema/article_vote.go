@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -33,7 +33,7 @@ func (ArticleVote) Fields() []ent.Field {
 		field.Bool("vote_anonymous").Comment("是否匿名投票").Default(true),
 		field.Int32("total_count").Comment("总投票数").Default(0),
 		field.Time("end_at").Comment("投票截止时间").Optional(),
-	}, pkg.TimeAuditFields()...)
+	}, util.TimeAuditFields()...)
 }
 
 func (ArticleVote) Edges() []ent.Edge {

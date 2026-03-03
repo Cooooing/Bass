@@ -1,7 +1,7 @@
 package doamin
 
 import (
-	"common/pkg/cutil/jwt"
+	"common/pkg/util/jwt"
 	"user/internal/biz/model"
 	"user/internal/conf"
 )

@@ -4,9 +4,9 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/user/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+
 	"context"
 	"user/internal/biz/doamin"
 	"user/internal/biz/repo"
@@ -65,9 +65,9 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	req.Page = base.OrDefault(req.Page, &cv1.PageRequest{})
+	req.Page = util.OrDefault(req.Page, &cv1.PageRequest{})
 	userRelations, page, err := s.userRelationDomain.Page(ctx, req.Page, &repo.UserRelationGetReq{
-		ActorId:    base.Ptr(user.ID),
+		ActorId:    util.Ptr(user.ID),
 		Type:       req.Query.Type,
 		WithTarget: true,
 	})

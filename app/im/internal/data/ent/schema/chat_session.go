@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -41,9 +41,9 @@ func (ChatSession) Fields() []ent.Field {
 		field.Uint32("message_count").Comment("私聊消息数").Default(0),
 		field.Int64("last_message_id").Comment("最后消息 ID").Optional().Nillable(),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
-	fields = append(fields, pkg.UserAuditFields()...)
-	fields = append(fields, pkg.UsernameAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
+	fields = append(fields, util.UserAuditFields()...)
+	fields = append(fields, util.UsernameAuditFields()...)
 	return fields
 }
 

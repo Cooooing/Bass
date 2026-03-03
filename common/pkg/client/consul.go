@@ -1,19 +1,17 @@
 package client
 
 import (
-	"common/pkg/constant"
 	"common/pkg/model"
 	"context"
 	"fmt"
 	"net"
 	"net/http"
-	"strings"
 	"sync"
 	"time"
 
 	consulregistry "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware"
+	metadata2 "github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	kgrpc "github.com/go-kratos/kratos/v2/transport/grpc"
@@ -22,7 +20,6 @@ import (
 
 	consulapi "github.com/hashicorp/consul/api"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 )
 
 // ConsulClient 封装 Consul 客户端
@@ -115,18 +112,8 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 		kgrpc.WithDiscovery(c.reg),
 		kgrpc.WithTimeout(5*time.Second),
 		kgrpc.WithMiddleware(
+			metadata2.Client(),
 			tracing.Client(),
-			func(next middleware.Handler) middleware.Handler {
-				return func(ctx context.Context, req interface{}) (interface{}, error) {
-					if token, ok := ctx.Value(constant.CtxToken).(string); ok && token != "" {
-						ctx = metadata.AppendToOutgoingContext(ctx,
-							strings.ToLower(constant.HeaderAuthentication),
-							"Bearer "+token,
-						)
-					}
-					return next(ctx, req)
-				}
-			},
 		),
 	)
 	if err != nil {
@@ -152,17 +139,8 @@ func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
 		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		khttp.WithDiscovery(c.reg),
 		khttp.WithMiddleware(
+			metadata2.Client(),
 			tracing.Client(),
-			func(next middleware.Handler) middleware.Handler {
-				return func(ctx context.Context, req interface{}) (interface{}, error) {
-					if token, ok := ctx.Value(constant.CtxToken).(string); ok && token != "" {
-						if r, ok := req.(khttp.Request); ok {
-							r.Header.Set(constant.HeaderAuthentication, "Bearer "+token)
-						}
-					}
-					return next(ctx, req)
-				}
-			},
 		),
 	)
 	if err != nil {

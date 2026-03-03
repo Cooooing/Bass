@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -43,7 +43,7 @@ func (ObjectStorage) Fields() []ent.Field {
 		field.Int64("blocked_by").Comment("违规处理人").Optional().Nillable(),
 		field.String("blocked_by_name").Comment("违规处理人名称").Optional().Nillable(),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

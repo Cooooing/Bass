@@ -2,7 +2,7 @@ package model
 
 import (
 	v1 "common/api/user/v1"
-	"common/pkg/cutil/base/str"
+	"common/pkg/util/str"
 	"user/internal/data/ent/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"

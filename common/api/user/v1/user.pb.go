@@ -1213,60 +1213,6 @@ func (x *AvatarRequest) GetName() string {
 	return ""
 }
 
-type AvatarReply struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// 图片数据
-	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	// 图片类型
-	ContentType   string `protobuf:"bytes,2,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AvatarReply) Reset() {
-	*x = AvatarReply{}
-	mi := &file_user_v1_user_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AvatarReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AvatarReply) ProtoMessage() {}
-
-func (x *AvatarReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_v1_user_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AvatarReply.ProtoReflect.Descriptor instead.
-func (*AvatarReply) Descriptor() ([]byte, []int) {
-	return file_user_v1_user_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *AvatarReply) GetData() []byte {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-func (x *AvatarReply) GetContentType() string {
-	if x != nil {
-		return x.ContentType
-	}
-	return ""
-}
-
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -1422,18 +1368,15 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x12,\n" +
 	"\x04rows\x18\x02 \x03(\v2\x18.common.api.user.v1.UserR\x04rows\"#\n" +
 	"\rAvatarRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"D\n" +
-	"\vAvatarReply\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\x12!\n" +
-	"\fcontent_type\x18\x02 \x01(\tR\vcontentType2\xbd\x06\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name2\xbe\x06\n" +
 	"\x0fUserUserService\x12\x84\x01\n" +
 	"\rUpdateSetting\x12(.common.api.user.v1.UpdateSettingRequest\x1a&.common.api.user.v1.UpdateSettingReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/user/updateSetting\x12\x88\x01\n" +
 	"\x0eGetCurrentUser\x12).common.api.user.v1.GetCurrentUserRequest\x1a'.common.api.user.v1.GetCurrentUserReply\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/user/getCurrentUser\x12h\n" +
 	"\x06GetOne\x12!.common.api.user.v1.GetOneRequest\x1a\x1f.common.api.user.v1.GetOneReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getOne\x12l\n" +
 	"\aGetList\x12\".common.api.user.v1.GetListRequest\x1a .common.api.user.v1.GetListReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/user/getList\x12h\n" +
 	"\x06GetMap\x12!.common.api.user.v1.GetMapRequest\x1a\x1f.common.api.user.v1.GetMapReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/user/getMap\x12h\n" +
-	"\x04Page\x12#.common.api.user.v1.PageUserRequest\x1a!.common.api.user.v1.PageUserReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/user/page\x12l\n" +
-	"\x06Avatar\x12!.common.api.user.v1.AvatarRequest\x1a\x1f.common.api.user.v1.AvatarReply\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/user/avatar/{name}B\x17Z\x15common/api/user/v1;v1b\x06proto3"
+	"\x04Page\x12#.common.api.user.v1.PageUserRequest\x1a!.common.api.user.v1.PageUserReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/user/page\x12m\n" +
+	"\x06Avatar\x12!.common.api.user.v1.AvatarRequest\x1a .common.api.common.v1.ImageReply\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/user/avatar/{name}B\x17Z\x15common/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once
@@ -1447,7 +1390,7 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_user_v1_user_proto_goTypes = []any{
 	(*User)(nil),                  // 0: common.api.user.v1.User
 	(*UserQueryParams)(nil),       // 1: common.api.user.v1.UserQueryParams
@@ -1464,30 +1407,30 @@ var file_user_v1_user_proto_goTypes = []any{
 	(*PageUserRequest)(nil),       // 12: common.api.user.v1.PageUserRequest
 	(*PageUserReply)(nil),         // 13: common.api.user.v1.PageUserReply
 	(*AvatarRequest)(nil),         // 14: common.api.user.v1.AvatarRequest
-	(*AvatarReply)(nil),           // 15: common.api.user.v1.AvatarReply
-	nil,                           // 16: common.api.user.v1.GetMapReply.UsersEntry
-	(UserStatus)(0),               // 17: common.api.user.v1.UserStatus
-	(*timestamppb.Timestamp)(nil), // 18: google.protobuf.Timestamp
-	(*v1.PageRequest)(nil),        // 19: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),          // 20: common.api.common.v1.PageReply
+	nil,                           // 15: common.api.user.v1.GetMapReply.UsersEntry
+	(UserStatus)(0),               // 16: common.api.user.v1.UserStatus
+	(*timestamppb.Timestamp)(nil), // 17: google.protobuf.Timestamp
+	(*v1.PageRequest)(nil),        // 18: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),          // 19: common.api.common.v1.PageReply
+	(*v1.ImageReply)(nil),         // 20: common.api.common.v1.ImageReply
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	17, // 0: common.api.user.v1.User.status:type_name -> common.api.user.v1.UserStatus
-	18, // 1: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
-	18, // 2: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
-	18, // 3: common.api.user.v1.User.twofa_enable_time:type_name -> google.protobuf.Timestamp
-	18, // 4: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	18, // 5: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
+	16, // 0: common.api.user.v1.User.status:type_name -> common.api.user.v1.UserStatus
+	17, // 1: common.api.user.v1.User.last_login_time:type_name -> google.protobuf.Timestamp
+	17, // 2: common.api.user.v1.User.last_checkin_time:type_name -> google.protobuf.Timestamp
+	17, // 3: common.api.user.v1.User.twofa_enable_time:type_name -> google.protobuf.Timestamp
+	17, // 4: common.api.user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	17, // 5: common.api.user.v1.User.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 6: common.api.user.v1.UpdateSettingReply.user:type_name -> common.api.user.v1.User
 	0,  // 7: common.api.user.v1.GetCurrentUserReply.user:type_name -> common.api.user.v1.User
 	0,  // 8: common.api.user.v1.GetOneReply.user:type_name -> common.api.user.v1.User
 	1,  // 9: common.api.user.v1.GetListRequest.query:type_name -> common.api.user.v1.UserQueryParams
 	0,  // 10: common.api.user.v1.GetListReply.users:type_name -> common.api.user.v1.User
 	1,  // 11: common.api.user.v1.GetMapRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	16, // 12: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
-	19, // 13: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
+	15, // 12: common.api.user.v1.GetMapReply.users:type_name -> common.api.user.v1.GetMapReply.UsersEntry
+	18, // 13: common.api.user.v1.PageUserRequest.page:type_name -> common.api.common.v1.PageRequest
 	1,  // 14: common.api.user.v1.PageUserRequest.query:type_name -> common.api.user.v1.UserQueryParams
-	20, // 15: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
+	19, // 15: common.api.user.v1.PageUserReply.page:type_name -> common.api.common.v1.PageReply
 	0,  // 16: common.api.user.v1.PageUserReply.rows:type_name -> common.api.user.v1.User
 	0,  // 17: common.api.user.v1.GetMapReply.UsersEntry.value:type_name -> common.api.user.v1.User
 	2,  // 18: common.api.user.v1.UserUserService.UpdateSetting:input_type -> common.api.user.v1.UpdateSettingRequest
@@ -1503,7 +1446,7 @@ var file_user_v1_user_proto_depIdxs = []int32{
 	9,  // 28: common.api.user.v1.UserUserService.GetList:output_type -> common.api.user.v1.GetListReply
 	11, // 29: common.api.user.v1.UserUserService.GetMap:output_type -> common.api.user.v1.GetMapReply
 	13, // 30: common.api.user.v1.UserUserService.Page:output_type -> common.api.user.v1.PageUserReply
-	15, // 31: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.user.v1.AvatarReply
+	20, // 31: common.api.user.v1.UserUserService.Avatar:output_type -> common.api.common.v1.ImageReply
 	25, // [25:32] is the sub-list for method output_type
 	18, // [18:25] is the sub-list for method input_type
 	18, // [18:18] is the sub-list for extension type_name
@@ -1527,7 +1470,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

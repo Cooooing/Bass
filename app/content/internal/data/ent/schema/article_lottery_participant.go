@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -28,7 +28,7 @@ func (ArticleLotteryParticipant) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("lottery_id").Comment("所属抽奖ID"),
 		field.Int64("user_id").Comment("参与用户ID"),
-	}, pkg.TimeAuditFields()...)
+	}, util.TimeAuditFields()...)
 }
 
 func (ArticleLotteryParticipant) Edges() []ent.Edge {

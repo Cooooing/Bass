@@ -3,7 +3,6 @@ package cache
 import (
 	cv1 "common/api/common/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/collections/set"
 	"context"
 	"errors"
 	"signal/internal/biz/cache"
@@ -12,6 +11,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/samber/lo"
 )
 
 type SessionCache struct {
@@ -105,7 +105,7 @@ func (c *SessionCache) RenewalSessions(ctx context.Context, sessionIds []string)
 	}
 
 	// 本地去重 userId
-	userIdsSet := set.New[int64](0)
+	userIdsSet := make(map[int64]struct{})
 	for _, cmd := range getCmds {
 		if errors.Is(cmd.Err(), redis.Nil) {
 			continue
@@ -114,18 +114,17 @@ func (c *SessionCache) RenewalSessions(ctx context.Context, sessionIds []string)
 		if err != nil {
 			continue
 		}
-		userIdsSet.Add(uid)
+		userIdsSet[uid] = struct{}{}
 	}
-	if userIdsSet.Len() == 0 {
+	if len(userIdsSet) == 0 {
 		return nil
 	}
 
 	// Pipeline 批量 Expire user routes
 	_, err = c.Redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
-		userIdsSet.ForEach(func(id int64) bool {
+		for id := range userIdsSet {
 			pipe.Expire(ctx, constant.GetKeySignalSession(id), c.sessionExpire)
-			return true
-		})
+		}
 		for _, id := range sessionIds {
 			pipe.Expire(ctx, id, c.sessionExpire)
 		}
@@ -159,14 +158,14 @@ func (c *SessionCache) GetNodeKeyByUserIds(ctx context.Context, userIds []int64)
 	}
 
 	// 去重 nodeKey
-	nodeKeysSet := set.New[string](0)
+	nodeKeysSet := make(map[string]struct{})
 	for _, cmd := range cmds {
 		if err := cmd.Err(); err != nil && !errors.Is(err, redis.Nil) {
 			continue
 		}
 		for _, nodeKey := range cmd.Val() {
-			nodeKeysSet.Add(nodeKey)
+			nodeKeysSet[nodeKey] = struct{}{}
 		}
 	}
-	return nodeKeysSet.ToSlice(), nil
+	return lo.Keys(nodeKeysSet), nil
 }

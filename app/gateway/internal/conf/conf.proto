@@ -40,6 +40,12 @@ message Server {
       string secret_key = 2;
     }
   }
+  IpData ip_data = 8;
+  message IpData {
+    bool enable = 1;
+    string ipv4_xdb_path = 2;
+    string ipv6_xdb_path = 3;
+  }
 }
 
 message Data {

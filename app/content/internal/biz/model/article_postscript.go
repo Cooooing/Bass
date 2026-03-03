@@ -2,7 +2,6 @@ package model
 
 import (
 	v1 "common/api/content/v1"
-	set2 "common/pkg/cutil/collections/set"
 	"common/pkg/util"
 	"content/internal/data/ent/gen"
 	"fmt"
@@ -23,8 +22,8 @@ func (p *ArticlePostscript) FormatContent() {
 }
 
 // ParseContent 解析文章内容
-func (p *ArticlePostscript) ParseContent() (atUserNames set2.Set[string]) {
-	atUserNames = set2.New[string](0)
+func (p *ArticlePostscript) ParseContent() (atUserNames map[string]struct{}) {
+	atUserNames = make(map[string]struct{})
 	tree := parse.Parse(fmt.Sprintf("article_postscript_%d", p.ID), []byte(p.Content), parse.NewOptions())
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)

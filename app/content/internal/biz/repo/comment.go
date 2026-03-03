@@ -3,7 +3,6 @@ package repo
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
-	"common/pkg/cutil/collections/dict"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
 	"context"
@@ -20,7 +19,7 @@ type CommentRepo interface {
 	GetList(ctx context.Context, tx *gen.Client, req *CommentGetReq) ([]*model.Comment, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *CommentGetReq) ([]*model.Comment, *cv1.PageReply, error)
 	GetArticleLastComment(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
-	GetArticleLastComments(ctx context.Context, tx *gen.Client, req *CommentGetReq) (dict.Map[int64, *model.Comment], error)
+	GetArticleLastComments(ctx context.Context, tx *gen.Client, req *CommentGetReq) (map[int64]*model.Comment, error)
 }
 
 type CommentGetReq struct {

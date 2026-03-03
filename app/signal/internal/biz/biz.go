@@ -3,8 +3,8 @@ package biz
 import (
 	"common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
+	"common/pkg/util/task"
 	"signal/internal/biz/base"
 	"signal/internal/biz/domain"
 	"signal/internal/biz/domain/handler"
@@ -16,7 +16,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	base.NewBaseDomain,
 	util.NewEventPool,
-	util.NewAsynqCache,
+	task.NewAsynqCache,
 
 	client.NewAsynqServer,
 	client.NewAsynqClient,
@@ -34,10 +34,10 @@ func ProvideTasks(
 	ping *handler.PingHandler,
 	pow *handler.PowHandler,
 	session *handler.SessionHandler,
-) dict.Map[constant.TaskName, client.Handler] {
-	d := dict.New[constant.TaskName, client.Handler](0)
-	d.Set(ping.Name(), ping)
-	d.Set(pow.Name(), pow)
-	d.Set(session.Name(), session)
+) map[constant.TaskName]client.Handler {
+	d := make(map[constant.TaskName]client.Handler)
+	d[ping.Name()] = ping
+	d[pow.Name()] = pow
+	d[session.Name()] = session
 	return d
 }

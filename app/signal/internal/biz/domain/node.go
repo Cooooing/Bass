@@ -4,13 +4,13 @@ import (
 	"bytes"
 	cv1 "common/api/common/v1"
 	connectorv1 "common/api/connector/v1"
-	"common/pkg"
 	"common/pkg/client"
 	"common/pkg/constant"
-	commonBase "common/pkg/cutil/base"
-	"common/pkg/cutil/base/str"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"common/pkg/util/server"
+	"common/pkg/util/str"
+	"common/pkg/util/task"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -36,13 +36,13 @@ type NodeDomain struct {
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
-	asynqCache   *util.AsynqCache
+	asynqCache   *task.AsynqCache
 	producer     *client.Producer
 	httpClient   *http.Client
 	sf           *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *domainbase.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(baseDomain *domainbase.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *task.AsynqCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (d *NodeDomain) GetByKey(ctx context.Context, key string) (*model.Node, err
 }
 
 func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
-	url := fmt.Sprintf("%s://%s/ping", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+	url := fmt.Sprintf("%s://%s/ping", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -113,7 +113,7 @@ func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
 }
 
 func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
-	url := fmt.Sprintf("%s://%s/pow", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+	url := fmt.Sprintf("%s://%s/pow", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
 	// 生成工作量证明参数
 	challenge := str.RandStr(d.sf, 32, true, true, true, false)
@@ -146,7 +146,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 	}(resp.Body)
 	end := time.Now()
 
-	data := &pkg.Result[*connectorv1.PowReply]{}
+	data := &server.Result[*connectorv1.PowReply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return 0, err
@@ -170,7 +170,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 
 func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
 	sessionIds := make([]string, 0)
-	url := fmt.Sprintf("%s://%s/session", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+	url := fmt.Sprintf("%s://%s/session", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -190,7 +190,7 @@ func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
 		}
 	}(resp.Body)
 
-	data := &pkg.Result[*connectorv1.SessionReply]{}
+	data := &server.Result[*connectorv1.SessionReply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return sessionIds, err
@@ -303,7 +303,7 @@ func (d *NodeDomain) Negotiate(ctx context.Context) ([]*model.Node, error) {
 		return nil, err
 	}
 	for _, key := range keys {
-		if n, exist := nodeMap.Get(key); exist {
+		if n, exist := nodeMap[key]; exist {
 			nodes = append(nodes, n)
 		}
 	}

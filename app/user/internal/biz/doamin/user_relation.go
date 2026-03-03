@@ -5,9 +5,9 @@ import (
 	notifyv1 "common/api/notify/v1"
 	v1 "common/api/user/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+
 	"context"
 	domainbase "user/internal/biz/base"
 	"user/internal/biz/model"
@@ -38,9 +38,9 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 		var num int32
 
 		exist, err := d.userRelationRepo.Exist(ctx, tx, &repo.UserRelationGetReq{
-			ActorId:  base.Ptr(actorId),
-			TargetId: base.Ptr(targetId),
-			Type:     base.Ptr(relationType),
+			ActorId:  util.Ptr(actorId),
+			TargetId: util.Ptr(targetId),
+			Type:     util.Ptr(relationType),
 		})
 		if err != nil {
 			return err
@@ -100,13 +100,13 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 	// 发送通知，仅关注通知
 	if relationType == v1.UserRelationType_USER_RELATION_TYPE_FOLLOW {
 		err = d.EventPool.Submit(func() {
-			err := d.Rabbitmq.Publish(constant.ExchangeUser.String(), base.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
+			err := d.Rabbitmq.Publish(constant.ExchangeUser.String(), util.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
 				&commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
+					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
 					SenderId:   u.ID,
 					SenderName: u.Name,
-					Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						User: &commonModel.UserMeta{UserId: targetId, UserName: u.Name},
 					},

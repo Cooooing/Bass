@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/pkg"
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"im/internal/conf"
@@ -33,7 +33,7 @@ func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func
 	}
 
 	// 注册审计 Hook
-	client.Use(pkg.AuditHook())
+	client.Use(util.AuditHook())
 
 	cleanup := func() {
 		if err := client.Close(); err != nil {

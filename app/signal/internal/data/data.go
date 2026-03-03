@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"signal/internal/conf"
 	"signal/internal/data/base"
 	"signal/internal/data/cache"
@@ -25,7 +25,7 @@ var DataProviderSet = wire.NewSet(
 	NewRabbitMQClient,
 	commonClient.NewHttpClient,
 
-	util.NewTokenCache,
+	jwt.NewTokenCache,
 
 	repo.NewNodeRepo,
 	cache.NewNodeCache,

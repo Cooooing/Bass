@@ -2,9 +2,8 @@ package client
 
 import (
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
-	"common/pkg/cutil/collections/dict"
 	"common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"strings"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/hibiken/asynq"
+	"github.com/samber/lo"
 )
 
 type Handler interface {
@@ -45,9 +45,9 @@ type AsynqServer struct {
 	Server *asynq.Server
 }
 
-func NewAsynqServer(log *log.Helper, redisClient *RedisClient, tasks dict.Map[constant.TaskName, Handler]) (*AsynqServer, func()) {
+func NewAsynqServer(log *log.Helper, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
 	mux := asynq.NewServeMux()
-	for _, t := range tasks.Values() {
+	for _, t := range lo.Values(tasks) {
 		log.Infof("register task: %s", t.Name().String())
 		mux.HandleFunc(t.Name().String(), t.Handler())
 	}
@@ -101,10 +101,10 @@ func (s *AsynqScheduler) Run() {
 
 type GlobalErrHandler struct {
 	Log   *log.Helper
-	tasks dict.Map[constant.TaskName, Handler]
+	tasks map[constant.TaskName]Handler
 }
 
-func NewGlobalErrHandler(log *log.Helper, tasks dict.Map[constant.TaskName, Handler]) *GlobalErrHandler {
+func NewGlobalErrHandler(log *log.Helper, tasks map[constant.TaskName]Handler) *GlobalErrHandler {
 	return &GlobalErrHandler{
 		Log:   log,
 		tasks: tasks,
@@ -114,9 +114,9 @@ func NewGlobalErrHandler(log *log.Helper, tasks dict.Map[constant.TaskName, Hand
 func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, err error) {
 	h.Log.Errorf("task %s err: %s data: %s", task.Type(), err, string(task.Payload()))
 	// 寻找匹配的 handler
-	for _, taskName := range h.tasks.Keys() {
+	for _, taskName := range lo.Keys(h.tasks) {
 		if strings.HasPrefix(task.Type(), string(taskName)) {
-			if t, ok := h.tasks.Get(taskName); ok {
+			if t, ok := h.tasks[taskName]; ok {
 				t.ErrHandler(ctx, task, err)
 				return
 			}
@@ -153,7 +153,7 @@ func (p *Producer) EnqueueContextTask(ctx context.Context, data *model.Task) err
 			opts...,
 		),
 		asynq.MaxRetry(data.MaxRetry),
-		asynq.ProcessIn(base.If(data.Delay, data.Interval, 0)),
+		asynq.ProcessIn(util.If(data.Delay, data.Interval, 0)),
 		asynq.Retention(data.Retention),
 	)
 	if err != nil {

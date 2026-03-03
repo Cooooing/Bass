@@ -1,9 +1,8 @@
 package handler
 
 import (
-	"common/pkg/cutil/collections/dict"
-	"common/pkg/cutil/handlerchain"
 	commonModel "common/pkg/model"
+	"common/pkg/util/handlerchain"
 
 	"github.com/google/wire"
 )
@@ -16,9 +15,9 @@ var HandlerSet = wire.NewSet(
 func ProvideHandlers(
 	registerVerifyCode *RegisterVerifyCode,
 	fullHandler *FullHandler,
-) dict.Map[string, handlerchain.Handler[*commonModel.Notification]] {
-	m := dict.New[string, handlerchain.Handler[*commonModel.Notification]](0)
-	m.Set(registerVerifyCode.Name(), registerVerifyCode)
-	m.Set(fullHandler.Name(), fullHandler)
+) map[string]handlerchain.Handler[*commonModel.Notification] {
+	m := make(map[string]handlerchain.Handler[*commonModel.Notification])
+	m[registerVerifyCode.Name()] = registerVerifyCode
+	m[fullHandler.Name()] = fullHandler
 	return m
 }

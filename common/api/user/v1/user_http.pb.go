@@ -7,6 +7,7 @@
 package v1
 
 import (
+	v1 "common/api/common/v1"
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
@@ -29,7 +30,7 @@ const OperationUserUserServiceUpdateSetting = "/common.api.user.v1.UserUserServi
 
 type UserUserServiceHTTPServer interface {
 	// Avatar 获取用户默认头像
-	Avatar(context.Context, *AvatarRequest) (*AvatarReply, error)
+	Avatar(context.Context, *AvatarRequest) (*v1.ImageReply, error)
 	// GetCurrentUser 获取当前用户信息
 	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserReply, error)
 	// GetList 查询用户列表（返回数组）
@@ -204,14 +205,14 @@ func _UserUserService_Avatar0_HTTP_Handler(srv UserUserServiceHTTPServer) func(c
 		if err != nil {
 			return err
 		}
-		reply := out.(*AvatarReply)
+		reply := out.(*v1.ImageReply)
 		return ctx.Result(200, reply)
 	}
 }
 
 type UserUserServiceHTTPClient interface {
 	// Avatar 获取用户默认头像
-	Avatar(ctx context.Context, req *AvatarRequest, opts ...http.CallOption) (rsp *AvatarReply, err error)
+	Avatar(ctx context.Context, req *AvatarRequest, opts ...http.CallOption) (rsp *v1.ImageReply, err error)
 	// GetCurrentUser 获取当前用户信息
 	GetCurrentUser(ctx context.Context, req *GetCurrentUserRequest, opts ...http.CallOption) (rsp *GetCurrentUserReply, err error)
 	// GetList 查询用户列表（返回数组）
@@ -235,8 +236,8 @@ func NewUserUserServiceHTTPClient(client *http.Client) UserUserServiceHTTPClient
 }
 
 // Avatar 获取用户默认头像
-func (c *UserUserServiceHTTPClientImpl) Avatar(ctx context.Context, in *AvatarRequest, opts ...http.CallOption) (*AvatarReply, error) {
-	var out AvatarReply
+func (c *UserUserServiceHTTPClientImpl) Avatar(ctx context.Context, in *AvatarRequest, opts ...http.CallOption) (*v1.ImageReply, error) {
+	var out v1.ImageReply
 	pattern := "/v1/user/avatar/{name}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationUserUserServiceAvatar))

@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"content/internal/conf"
 	"content/internal/data/base"
 	"content/internal/data/client"
@@ -31,7 +31,7 @@ var DataProviderSet = wire.NewSet(
 	repo.NewDomainRepo,
 	repo.NewTagRepo,
 
-	util.NewTokenCache,
+	jwt.NewTokenCache,
 )
 
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {

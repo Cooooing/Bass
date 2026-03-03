@@ -7,6 +7,7 @@
 package v1
 
 import (
+	v1 "common/api/common/v1"
 	context "context"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -47,7 +48,7 @@ type UserUserServiceClient interface {
 	// 分页查询用户
 	Page(ctx context.Context, in *PageUserRequest, opts ...grpc.CallOption) (*PageUserReply, error)
 	// 获取用户默认头像
-	Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*AvatarReply, error)
+	Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*v1.ImageReply, error)
 }
 
 type userUserServiceClient struct {
@@ -118,9 +119,9 @@ func (c *userUserServiceClient) Page(ctx context.Context, in *PageUserRequest, o
 	return out, nil
 }
 
-func (c *userUserServiceClient) Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*AvatarReply, error) {
+func (c *userUserServiceClient) Avatar(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*v1.ImageReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AvatarReply)
+	out := new(v1.ImageReply)
 	err := c.cc.Invoke(ctx, UserUserService_Avatar_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -147,7 +148,7 @@ type UserUserServiceServer interface {
 	// 分页查询用户
 	Page(context.Context, *PageUserRequest) (*PageUserReply, error)
 	// 获取用户默认头像
-	Avatar(context.Context, *AvatarRequest) (*AvatarReply, error)
+	Avatar(context.Context, *AvatarRequest) (*v1.ImageReply, error)
 	mustEmbedUnimplementedUserUserServiceServer()
 }
 
@@ -176,7 +177,7 @@ func (UnimplementedUserUserServiceServer) GetMap(context.Context, *GetMapRequest
 func (UnimplementedUserUserServiceServer) Page(context.Context, *PageUserRequest) (*PageUserReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Page not implemented")
 }
-func (UnimplementedUserUserServiceServer) Avatar(context.Context, *AvatarRequest) (*AvatarReply, error) {
+func (UnimplementedUserUserServiceServer) Avatar(context.Context, *AvatarRequest) (*v1.ImageReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Avatar not implemented")
 }
 func (UnimplementedUserUserServiceServer) mustEmbedUnimplementedUserUserServiceServer() {}

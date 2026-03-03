@@ -1,28 +1,17 @@
 package biz
 
 import (
-	"common/pkg/util"
-	"gateway/internal/conf"
+	"common/pkg/util/jwt"
+	domainbase "gateway/internal/biz/base"
+	"gateway/internal/biz/domain"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )
 
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
-	NewBaseDomain,
+	domainbase.NewBaseDomain,
 
-	util.NewTokenCache,
+	jwt.NewTokenCache,
+	domain.NewIpDomain,
 )
-
-type BaseDomain struct {
-	conf *conf.Bootstrap
-	log  *log.Helper
-}
-
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper) *BaseDomain {
-	return &BaseDomain{
-		conf: conf,
-		log:  log,
-	}
-}

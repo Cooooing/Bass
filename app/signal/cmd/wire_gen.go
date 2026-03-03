@@ -9,6 +9,8 @@ package main
 import (
 	client2 "common/pkg/client"
 	"common/pkg/util"
+	"common/pkg/util/jwt"
+	"common/pkg/util/task"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"signal/internal/biz"
@@ -51,7 +53,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenCache := util.NewTokenCache(helper, redisClient)
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
 	eventPool, cleanup5, err := util.NewEventPool(helper)
@@ -67,7 +69,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	nodeRepo := repo.NewNodeRepo(baseData)
 	nodeCache := cache.NewNodeCache(baseData)
 	sessionCache := cache.NewSessionCache(baseData)
-	asynqCache := util.NewAsynqCache(helper, redisClient)
+	asynqCache := task.NewAsynqCache(helper, redisClient)
 	asynqClient, cleanup6 := client2.NewAsynqClient(helper, redisClient)
 	asynqScheduler, cleanup7 := client2.NewAsynqScheduler(helper, redisClient)
 	producer := client2.NewProducer(asynqClient, asynqScheduler)
@@ -90,8 +92,8 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	pingHandler := handler.NewPingHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
 	powHandler := handler.NewPowHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, asynqCache, producer)
 	sessionHandler := handler.NewSessionHandler(baseDomain, nodeDomain, nodeRepo, nodeCache, sessionCache, asynqCache, producer)
-	dictMap := biz.ProvideTasks(pingHandler, powHandler, sessionHandler)
-	asynqServer, cleanup8 := client2.NewAsynqServer(helper, redisClient, dictMap)
+	v2 := biz.ProvideTasks(pingHandler, powHandler, sessionHandler)
+	asynqServer, cleanup8 := client2.NewAsynqServer(helper, redisClient, v2)
 	app := newApp(logger, grpcServer, httpServer, consulClient, asynqServer)
 	return app, func() {
 		cleanup8()

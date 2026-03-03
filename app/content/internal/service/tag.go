@@ -2,8 +2,8 @@ package service
 
 import (
 	v1 "common/api/content/v1"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -43,7 +43,7 @@ func (s *TagService) Adds(ctx context.Context, req *v1.AddTagsRequest) (*v1.AddT
 			Name:        tagSave.Name,
 			Description: tagSave.Description,
 			DomainID:    tagSave.DomainId,
-			Status:      int32(base.DerefOrDefault(tagSave.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
+			Status:      int32(util.DerefOrDefault(tagSave.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
 		}}
 	}
 	saves, err := s.domainTag.Saves(ctx, tags)
@@ -68,7 +68,7 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
-		Status:      int32(base.DerefOrDefault(req.Tag.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
+		Status:      int32(util.DerefOrDefault(req.Tag.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
 	}})
 	if err != nil {
 		return nil, err
@@ -79,14 +79,14 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 }
 
 func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.PageTagReply, error) {
-	req.Query = base.OrDefault(req.Query, &v1.TagQueryParams{})
+	req.Query = util.OrDefault(req.Query, &v1.TagQueryParams{})
 	getReq := &repo.TagGetReq{
 		TagIds:      req.Query.Ids,
 		UserId:      req.Query.UserId,
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
-		Status:      base.Ptr(v1.TagStatus_TAG_STATUS_NORMAL),
+		Status:      util.Ptr(v1.TagStatus_TAG_STATUS_NORMAL),
 		DomainId:    req.Query.DomainId,
 	}
 	if req.Query.ArticleCount != nil {

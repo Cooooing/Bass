@@ -7,7 +7,9 @@
 package main
 
 import (
-	"common/pkg/util"
+	"common/pkg/util/jwt"
+	"gateway/internal/biz/base"
+	"gateway/internal/biz/domain"
 	"gateway/internal/conf"
 	"gateway/internal/data"
 	"gateway/internal/server"
@@ -32,10 +34,18 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	tokenCache := util.NewTokenCache(helper, redisClient)
-	httpServer := server.NewHTTPServer(bootstrap, logger, consulClient, v, tokenCache)
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
+	baseDomain := base.NewBaseDomain(bootstrap, helper)
+	ipDomain, cleanup3, err := domain.NewIpDomain(baseDomain)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	httpServer := server.NewHTTPServer(bootstrap, logger, consulClient, v, tokenCache, ipDomain)
 	app := newApp(logger, helper, httpServer, consulClient)
 	return app, func() {
+		cleanup3()
 		cleanup2()
 		cleanup()
 	}, nil

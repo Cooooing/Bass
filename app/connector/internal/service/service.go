@@ -30,7 +30,7 @@ func NewBaseService(conf *conf.Bootstrap, logger *log.Helper) *BaseService {
 	}
 }
 
-// CallbackService 接口，每个 service 实现它
+// Service 接口，每个 service 实现它
 type Service interface {
 	RegisterGrpc(gs *grpc.Server)
 	RegisterHttp(hs *http.Server)

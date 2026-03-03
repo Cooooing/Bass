@@ -1,9 +1,9 @@
 package server
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
-	"common/pkg/util"
+	"common/pkg/util/jwt"
+	"common/pkg/util/server"
 	"fmt"
 	"infra/internal/conf"
 	"infra/internal/service"
@@ -21,7 +21,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *jwt.TokenCache) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -31,10 +31,10 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			pkg.AuthMiddleware(tokenCache),
+			server.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
-		http.ResponseEncoder(pkg.HttpResponseEncoder),
+		http.ResponseEncoder(server.HttpResponseEncoder),
 		// http.ErrorEncoder(pkg.HttpErrorEncoder),
 	}
 	if c.Server.Http.Network != "" {

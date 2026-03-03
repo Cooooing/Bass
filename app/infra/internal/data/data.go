@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"infra/internal/conf"
 	"infra/internal/data/base"
 	"infra/internal/data/client"
@@ -25,7 +25,7 @@ var DataProviderSet = wire.NewSet(
 	NewRabbitMQClient,
 	repo.NewObjectStorageRepo,
 
-	util.NewTokenCache,
+	jwt.NewTokenCache,
 )
 
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {

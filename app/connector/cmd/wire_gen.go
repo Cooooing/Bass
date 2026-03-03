@@ -9,6 +9,7 @@ package main
 import (
 	"common/pkg/client"
 	"common/pkg/util"
+	"common/pkg/util/task"
 	"connector/internal/biz/base"
 	"connector/internal/biz/domain"
 	"connector/internal/conf"
@@ -45,7 +46,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseData := base2.NewBaseData(bootstrap, helper, redisClient)
 	sessionCache := cache.NewSessionCache(baseData)
-	asynqCache := util.NewAsynqCache(helper, redisClient)
+	asynqCache := task.NewAsynqCache(helper, redisClient)
 	asynqClient, cleanup3 := client.NewAsynqClient(helper, redisClient)
 	asynqScheduler, cleanup4 := client.NewAsynqScheduler(helper, redisClient)
 	producer := client.NewProducer(asynqClient, asynqScheduler)

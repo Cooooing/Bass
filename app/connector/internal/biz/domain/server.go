@@ -3,9 +3,9 @@ package domain
 import (
 	"common/pkg/client"
 	"common/pkg/constant"
-	commonBase "common/pkg/cutil/base"
 	"common/pkg/model"
 	"common/pkg/util"
+	"common/pkg/util/task"
 	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/cache"
 	"context"
@@ -18,13 +18,13 @@ import (
 type ServerDomain struct {
 	*domainbase.BaseDomain
 	sessionCache cache.SessionCache
-	asynqCache   *util.AsynqCache
+	asynqCache   *task.AsynqCache
 	producer     *client.Producer
 	ctx          context.Context
 	httpClient   *http.Client
 }
 
-func NewServerDomain(baseDomain *domainbase.BaseDomain, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) (*ServerDomain, func()) {
+func NewServerDomain(baseDomain *domainbase.BaseDomain, sessionCache cache.SessionCache, asynqCache *task.AsynqCache, producer *client.Producer) (*ServerDomain, func()) {
 	s := &ServerDomain{
 		BaseDomain:   baseDomain,
 		sessionCache: sessionCache,
@@ -37,7 +37,7 @@ func NewServerDomain(baseDomain *domainbase.BaseDomain, sessionCache cache.Sessi
 }
 
 func (d *ServerDomain) Register() error {
-	url := fmt.Sprintf("%s://%s/api/signal/v1/node/register", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
+	url := fmt.Sprintf("%s://%s/api/signal/v1/node/register", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -70,7 +70,7 @@ func (d *ServerDomain) Register() error {
 }
 
 func (d *ServerDomain) Unregister() error {
-	url := fmt.Sprintf("%s://%s/api/signal/v1/node/unregister", commonBase.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
+	url := fmt.Sprintf("%s://%s/api/signal/v1/node/unregister", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {

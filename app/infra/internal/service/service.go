@@ -2,7 +2,7 @@ package service
 
 import (
 	"common/pkg/client"
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"infra/internal/conf"
 	"infra/internal/data/ent/gen"
 
@@ -29,10 +29,10 @@ type BaseService struct {
 	Consul     *client.ConsulClient
 	Redis      *client.RedisClient
 	Rabbitmq   *client.RabbitMQClient
-	TokenCache *util.TokenCache
+	TokenCache *jwt.TokenCache
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *util.TokenCache) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *jwt.TokenCache) *BaseService {
 	return &BaseService{
 		Conf:       conf,
 		Log:        logger,

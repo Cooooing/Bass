@@ -1,7 +1,7 @@
 package server
 
 import (
-	"common/pkg"
+	"common/pkg/util/server"
 	"connector/internal/conf"
 	"connector/internal/service"
 	"fmt"
@@ -29,7 +29,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 			logging.Server(logger),
 			validate.ProtoValidate(),
 		),
-		http.ResponseEncoder(pkg.HttpResponseEncoder),
+		http.ResponseEncoder(server.HttpResponseEncoder),
 		// http.ErrorEncoder(pkg.HttpErrorEncoder),
 	}
 	if c.Server.Http.Network != "" {

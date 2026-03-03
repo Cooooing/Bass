@@ -4,7 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/task"
 	"context"
 	"encoding/json"
 	"errors"
@@ -23,11 +23,11 @@ type PowHandler struct {
 	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 	nodeCache  cache.NodeCache
-	asynqCache *util.AsynqCache
+	asynqCache *task.AsynqCache
 	producer   *client.Producer
 }
 
-func NewPowHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *util.AsynqCache, producer *client.Producer) *PowHandler {
+func NewPowHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *task.AsynqCache, producer *client.Producer) *PowHandler {
 	return &PowHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,

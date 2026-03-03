@@ -3,6 +3,8 @@ package client
 import (
 	"common/pkg/constant"
 	"common/pkg/model"
+	"common/pkg/util"
+
 	"context"
 	"fmt"
 	"strings"
@@ -148,7 +150,7 @@ func (c *EtcdClient) GetHTTPClient(service string) (*khttp.Client, error) {
 			tracing.Client(),
 			func(next middleware.Handler) middleware.Handler {
 				return func(ctx context.Context, req interface{}) (interface{}, error) {
-					if token, ok := ctx.Value(constant.CtxToken).(string); ok && token != "" {
+					if token, ok := util.GetContextValue[string](ctx, constant.CtxToken); ok && token != "" {
 						if r, ok := req.(khttp.Request); ok {
 							// 注入 Token 到 HTTP Header
 							r.Header.Set(constant.HeaderAuthentication, "Bearer "+token)
@@ -176,7 +178,7 @@ func (c *EtcdClient) GetHTTPClient(service string) (*khttp.Client, error) {
 func (c *EtcdClient) tokenClientMiddleware() middleware.Middleware {
 	return func(next middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			if token, ok := ctx.Value(constant.CtxToken).(string); ok && token != "" {
+			if token, ok := util.GetContextValue[string](ctx, constant.CtxToken); ok && token != "" {
 				// gRPC Metadata Key 必须为小写
 				ctx = metadata.AppendToOutgoingContext(ctx,
 					strings.ToLower(constant.HeaderAuthentication),

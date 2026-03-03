@@ -4,10 +4,10 @@ import (
 	cv1 "common/api/common/v1"
 	notifyv1 "common/api/notify/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
-	"common/pkg/cutil/base/str"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"common/pkg/util/jwt"
+	"common/pkg/util/str"
 	"context"
 	domainbase "user/internal/biz/base"
 	"user/internal/biz/model"
@@ -23,13 +23,13 @@ import (
 type AuthenticationDomain struct {
 	*domainbase.BaseDomain
 	userRepo     repo.UserRepo
-	tokenCache   *util.TokenCache
+	tokenCache   *jwt.TokenCache
 	tokenService *TokenService
 
 	sf *sonyflake.Sonyflake
 }
 
-func NewAuthenticationDomain(base *domainbase.BaseDomain, userRepo repo.UserRepo, tokenCache *util.TokenCache, tokenService *TokenService) (*AuthenticationDomain, error) {
+func NewAuthenticationDomain(base *domainbase.BaseDomain, userRepo repo.UserRepo, tokenCache *jwt.TokenCache, tokenService *TokenService) (*AuthenticationDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -83,10 +83,10 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	err = s.EventPool.Submit(func() {
 		err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
+			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
 			SenderId:   u.ID,
 			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
+			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Email:  *u.Email,
@@ -137,9 +137,9 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		// 保存用户信息
 		user := &model.User{User: &gen.User{
 			Name:     saveUser.Name,
-			Nickname: base.Ptr(saveUser.Nickname),
+			Nickname: util.Ptr(saveUser.Nickname),
 			Password: saveUser.Password,
-			Email:    base.Ptr(saveUser.Email),
+			Email:    util.Ptr(saveUser.Email),
 		}}
 		err = user.PasswordEncrypt()
 		if err != nil {
@@ -203,10 +203,10 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	err = s.EventPool.Submit(func() {
 		err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
+			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
 			SenderId:   u.ID,
 			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
+			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Phone:  *u.Phone,
@@ -257,9 +257,9 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 		// 保存用户信息
 		user := &model.User{User: &gen.User{
 			Name:     saveUser.Name,
-			Nickname: base.Ptr(saveUser.Nickname),
+			Nickname: util.Ptr(saveUser.Nickname),
 			Password: saveUser.Password,
-			Phone:    base.Ptr(saveUser.Phone),
+			Phone:    util.Ptr(saveUser.Phone),
 		}}
 		err = user.PasswordEncrypt()
 		if err != nil {

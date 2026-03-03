@@ -7,10 +7,9 @@ import (
 	userv1 "common/api/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
-	"common/pkg/cutil/collections/set"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+
 	domainbase "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -19,6 +18,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 )
 
 type CommentDomain struct {
@@ -45,8 +45,8 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		// 回复文章
 		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
-			ArticleId: base.Ptr(comment.ArticleID),
-			Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+			ArticleId: util.Ptr(comment.ArticleID),
+			Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
@@ -60,8 +60,8 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		if comment.ReplyID != nil {
 			replyComment, err = d.commentRepo.GetOne(ctx, tx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
-				ArticleId: base.Ptr(comment.ArticleID),
-				Status:    base.Ptr(v1.CommentStatus_COMMENT_STATUS_NORMAL),
+				ArticleId: util.Ptr(comment.ArticleID),
+				Status:    util.Ptr(v1.CommentStatus_COMMENT_STATUS_NORMAL),
 			})
 			if err != nil {
 				return err
@@ -81,7 +81,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		save := &model.Comment{Comment: &gen.Comment{ArticleID: comment.ArticleID,
 			Content:  comment.Content,
 			Level:    replyComment.Level + 1,
-			ParentID: base.If(comment.ReplyID == nil, nil, base.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
+			ParentID: util.If(comment.ReplyID == nil, nil, util.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
 			ReplyID:  comment.ReplyID,
 		}}
 		save.FormatContent()
@@ -98,12 +98,12 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		atUserNames := c.ParseContent()
 		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       base.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
+			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 			SenderId:   user.ID,
 			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{base.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 			Meta: commonModel.Meta{
-				AtUsernames: atUserNames.ToSlice(),
+				AtUsernames: lo.Keys(atUserNames),
 				Comment: &commonModel.CommentMeta{
 					CommentId:     c.ID,
 					ArticleId:     c.ArticleID,
@@ -136,11 +136,11 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		if err != nil {
 			return err
 		}
-		userIds := set.New[int64](0)
+		userIds := make(map[int64]struct{})
 		for _, item := range reply {
-			userIds.Add(*item.CreatedBy)
+			userIds[*item.CreatedBy] = struct{}{}
 			if item.Edges.Reply != nil {
-				userIds.Add(*item.Edges.Reply.CreatedBy)
+				userIds[*item.Edges.Reply.CreatedBy] = struct{}{}
 			}
 		}
 
@@ -148,7 +148,7 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		if err != nil {
 			return err
 		}
-		userMap, err := userService.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds.ToSlice()}})
+		userMap, err := userService.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
 		if err != nil {
 			return err
 		}

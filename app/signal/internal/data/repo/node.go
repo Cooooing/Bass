@@ -3,7 +3,6 @@ package repo
 import (
 	cv1 "common/api/common/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/collections/dict"
 	"context"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
@@ -64,9 +63,9 @@ func (r *NodeRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.NodeGet
 	return &model.Node{Node: t}, err
 }
 
-func (r *NodeRepo) GetMap(ctx context.Context, tx *gen.Client, req *repo.NodeGetReq) (dict.Map[string, *model.Node], error) {
+func (r *NodeRepo) GetMap(ctx context.Context, tx *gen.Client, req *repo.NodeGetReq) (map[string]*model.Node, error) {
 	var err error
-	nodes := dict.New[string, *model.Node](0)
+	nodes := make(map[string]*model.Node)
 	query := tx.Node.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -75,7 +74,7 @@ func (r *NodeRepo) GetMap(ctx context.Context, tx *gen.Client, req *repo.NodeGet
 	}
 
 	for _, item := range list {
-		nodes.Set(item.Key, &model.Node{Node: item})
+		nodes[item.Key] = &model.Node{Node: item}
 	}
 	return nodes, nil
 }

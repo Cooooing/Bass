@@ -2,7 +2,6 @@ package repo
 
 import (
 	cv1 "common/api/common/v1"
-	"common/pkg/cutil/collections/dict"
 	"context"
 	"signal/internal/biz/model"
 	"signal/internal/data/ent/gen"
@@ -15,7 +14,7 @@ type NodeRepo interface {
 	UpdateSecret(ctx context.Context, tx *gen.Client, id int64, secret string) error
 
 	GetOne(ctx context.Context, tx *gen.Client, req *NodeGetReq) (*model.Node, error)
-	GetMap(ctx context.Context, tx *gen.Client, req *NodeGetReq) (dict.Map[string, *model.Node], error)
+	GetMap(ctx context.Context, tx *gen.Client, req *NodeGetReq) (map[string]*model.Node, error)
 	GetList(ctx context.Context, tx *gen.Client, req *NodeGetReq) ([]*model.Node, error)
 	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *NodeGetReq) ([]*model.Node, *cv1.PageReply, error)
 }

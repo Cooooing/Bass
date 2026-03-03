@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -31,7 +31,7 @@ func (ArticleLottery) Fields() []ent.Field {
 		field.Time("start_at").Comment("抽奖开始时间").Optional(),
 		field.Time("end_at").Comment("抽奖结束时间").Optional(),
 		field.Int32("status").Comment("状态 1-未开始 2-进行中 3-已结束").Default(1),
-	}, pkg.TimeAuditFields()...)
+	}, util.TimeAuditFields()...)
 }
 
 func (ArticleLottery) Edges() []ent.Edge {

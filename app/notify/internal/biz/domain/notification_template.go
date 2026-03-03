@@ -2,7 +2,6 @@ package domain
 
 import (
 	cv1 "common/api/common/v1"
-	"common/pkg/cutil/collections/dict"
 	"context"
 	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -49,7 +48,7 @@ func (d *NotificationTemplateDomain) Update(ctx context.Context, tpl *model.Noti
 	return update, err
 }
 
-func (d *NotificationTemplateDomain) GetMap(ctx context.Context, req *repo.NotificationTemplateGetReq) (dict.Map[string, *model.NotificationTemplate], error) {
+func (d *NotificationTemplateDomain) GetMap(ctx context.Context, req *repo.NotificationTemplateGetReq) (map[string]*model.NotificationTemplate, error) {
 	return d.notificationTemplateRepo.GetMap(ctx, d.Db, req)
 }
 

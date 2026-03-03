@@ -1,8 +1,8 @@
 package server
 
 import (
-	"common/pkg"
-	"common/pkg/util"
+	"common/pkg/util/jwt"
+	"common/pkg/util/server"
 	"fmt"
 	"im/internal/conf"
 	"im/internal/service"
@@ -17,7 +17,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *util.TokenCache) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *jwt.TokenCache) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -27,7 +27,7 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			pkg.AuthMiddleware(tokenCache),
+			server.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
 	}

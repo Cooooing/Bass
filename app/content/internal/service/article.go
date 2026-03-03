@@ -4,9 +4,9 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+
 	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -45,13 +45,13 @@ func NewArticleService(baseService *BaseService, articleDomain *domain.ArticleDo
 func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rsp *v1.AddArticleReply, err error) {
 	article := req.Article
 	if article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
-		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
+		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
 	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_NORMAL) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_VOTE) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_LOTTERY) {
-		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+		return nil, cv1.ErrorBadRequest("type only be 1(normal), 2(QA), 3(vote), 4(lottery)")
 	}
 	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.BountyPoints != nil {
-		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 1(QA)")
+		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 2(QA)")
 	}
 
 	var tags []*model.Tag
@@ -73,11 +73,11 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		RewardPoints:  article.RewardPoints,
 		Status:        article.Status,
 		Type:          article.Type,
-		BountyPoints:  base.If(article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA), nil, article.BountyPoints),
+		BountyPoints:  util.If(article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA), nil, article.BountyPoints),
 		Statement:     article.Statement,
-		Commentable:   base.DerefOrDefault(article.Commentable, true),
-		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
-		Listable:      base.DerefOrDefault(article.Listable, true),
+		Commentable:   util.DerefOrDefault(article.Commentable, true),
+		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
+		Listable:      util.DerefOrDefault(article.Listable, true),
 	}}, tags)
 	if err != nil {
 		return nil, err
@@ -97,13 +97,13 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		return nil, cv1.ErrorBadRequest("article id is required")
 	}
 	if article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
-		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
+		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
 	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_NORMAL) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_VOTE) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_LOTTERY) {
-		return nil, cv1.ErrorBadRequest("type only be 0(normal), 1(QA), 2(vote), 3(lottery)")
+		return nil, cv1.ErrorBadRequest("type only be 1(normal), 2(QA), 3(vote), 4(lottery)")
 	}
 	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.BountyPoints != nil {
-		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 1(QA)")
+		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 2(QA)")
 	}
 
 	var tags []*model.Tag
@@ -126,12 +126,12 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		RewardPoints:  article.RewardPoints,
 		Status:        article.Status,
 		Type:          article.Type,
-		BountyPoints:  base.If(article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA), nil, article.BountyPoints),
+		BountyPoints:  util.If(article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA), nil, article.BountyPoints),
 		Statement:     article.Statement,
-		Commentable:   base.DerefOrDefault(article.Commentable, true),
-		Anonymous:     base.DerefOrDefault(article.Anonymous, false),
-		Listable:      base.DerefOrDefault(article.Listable, true),
-		CreatedBy:     base.Ptr(user.ID),
+		Commentable:   util.DerefOrDefault(article.Commentable, true),
+		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
+		Listable:      util.DerefOrDefault(article.Listable, true),
+		CreatedBy:     util.Ptr(user.ID),
 	}}, tags)
 	if err != nil {
 		return nil, err
@@ -148,9 +148,9 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 	}
 	// 只有作者可以发布草稿
 	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
-		ArticleId: base.Ptr(req.ArticleId),
-		Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-		CreatedBy: base.Ptr(user.ID),
+		ArticleId: util.Ptr(req.ArticleId),
+		Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+		CreatedBy: util.Ptr(user.ID),
 	})
 	if err != nil {
 		return nil, err
@@ -169,9 +169,9 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	}
 	// 只有作者可以添加附言
 	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
-		ArticleId: base.Ptr(req.ArticleId),
-		Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
-		CreatedBy: base.Ptr(user.ID),
+		ArticleId: util.Ptr(req.ArticleId),
+		Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+		CreatedBy: util.Ptr(user.ID),
 	})
 	if err != nil {
 		return nil, err
@@ -202,9 +202,9 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 	err = ent.WithTx(ctx, s.Db, func(tx *gen.Client) error {
 		// 只有作者可以删除草稿
 		exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
-			ArticleId: base.Ptr(req.ArticleId),
-			Status:    base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-			CreatedBy: base.Ptr(user.ID),
+			ArticleId: util.Ptr(req.ArticleId),
+			Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+			CreatedBy: util.Ptr(user.ID),
 		})
 		if err != nil {
 			return err
@@ -220,7 +220,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 
 func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (rsp *v1.PageArticleReply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	req.Query = base.OrDefault(req.Query, &v1.ArticleQueryParams{})
+	req.Query = util.OrDefault(req.Query, &v1.ArticleQueryParams{})
 
 	/*
 	 * 正常状态的只能查看公开
@@ -228,16 +228,16 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 	 */
 
 	if req.Query.Status != nil && *req.Query.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && *req.Query.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
-		return nil, cv1.ErrorBadRequest("status only be 0(normal) or 3(drafts)")
+		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
-	status := base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
+	status := util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
 	authorId := req.Query.AuthorId
 	if req.Query.Status != nil && *req.Query.Status == int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
 		if !ok {
 			return nil, cv1.ErrorUnauthorized("login required to view drafts")
 		}
 		authorId = &user.ID
-		status = base.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS)
+		status = util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS)
 	}
 
 	reply, page, err := s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
@@ -248,7 +248,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 		Order:    (*v1.ArticleOrder)(req.Query.Order),
 		Type:     (*v1.ArticleType)(req.Query.Type),
 		Keyword:  req.Query.Keyword,
-		Listable: base.Ptr(true),
+		Listable: util.Ptr(true),
 	})
 	return &v1.PageArticleReply{
 		Page: page,

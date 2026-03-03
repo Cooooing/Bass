@@ -4,7 +4,6 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/content/v1"
 	"common/pkg/constant"
-	dict2 "common/pkg/cutil/collections/dict"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	basedata "content/internal/data/base"
@@ -189,7 +188,7 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 	return &model.Comment{Comment: c, WithArticle: req.WithArticle}, err
 }
 
-func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (dict2.Map[int64, *model.Comment], error) {
+func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
 	if len(req.ArticleIds) == 0 {
 		return nil, cv1.ErrorBadRequest("articleIds is required")
 	}
@@ -222,9 +221,9 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 	if err != nil {
 		return nil, err
 	}
-	commentMap := dict2.New[int64, *model.Comment](0)
+	commentMap := make(map[int64]*model.Comment)
 	for _, item := range comments {
-		commentMap.Set(item.ArticleID, &model.Comment{Comment: item, WithArticle: req.WithArticle})
+		commentMap[item.ArticleID] = &model.Comment{Comment: item, WithArticle: req.WithArticle}
 	}
 	return commentMap, err
 }

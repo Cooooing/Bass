@@ -36,3 +36,5 @@ bin/
 *.swp
 
 /deploy/.prod.env
+.claude/
+.gitnexus

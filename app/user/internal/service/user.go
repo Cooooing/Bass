@@ -4,11 +4,10 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/user/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+
 	"context"
-	"fmt"
 	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -74,7 +73,7 @@ func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUser
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: base.Ptr(user.ID)})
+	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: util.Ptr(user.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +175,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 }
 
 func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v1.PageUserReply, err error) {
-	req.Query = base.OrDefault(req.Query, &v1.UserQueryParams{})
+	req.Query = util.OrDefault(req.Query, &v1.UserQueryParams{})
 	reply := make([]*v1.User, 0)
 	users, page, err := s.userRepo.GetPage(ctx, s.Db, req.Page, &repo.UserGetReq{
 		UserIds:   req.Query.UserIds,
@@ -198,19 +197,13 @@ func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v
 	}, nil
 }
 
-func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarRequest) (rsp *v1.AvatarReply, err error) {
+func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarRequest) (rsp *cv1.ImageReply, err error) {
 	buf, err := s.userDomain.Avatar(ctx, req.Name)
 	if err != nil {
 		return nil, err
 	}
-	if w, ok := http.ResponseWriterFromServerContext(ctx); ok {
-		w.Header().Set("Content-Type", "image/png")
-		w.Header().Set("Content-Length", fmt.Sprint(len(buf)))
-		_, err := w.Write(buf)
-		return nil, err
-	}
 
-	return &v1.AvatarReply{
+	return &cv1.ImageReply{
 		Data:        buf,
 		ContentType: "image/png",
 	}, nil

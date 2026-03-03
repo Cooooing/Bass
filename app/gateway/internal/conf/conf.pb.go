@@ -90,6 +90,7 @@ type Server struct {
 	Http          *Server_HTTP           `protobuf:"bytes,5,opt,name=http,proto3" json:"http,omitempty"`
 	Grpc          *Server_GRPC           `protobuf:"bytes,6,opt,name=grpc,proto3" json:"grpc,omitempty"`
 	Oss           *Server_Oss            `protobuf:"bytes,7,opt,name=oss,proto3" json:"oss,omitempty"`
+	IpData        *Server_IpData         `protobuf:"bytes,8,opt,name=ip_data,json=ipData,proto3" json:"ip_data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -162,6 +163,13 @@ func (x *Server) GetGrpc() *Server_GRPC {
 func (x *Server) GetOss() *Server_Oss {
 	if x != nil {
 		return x.Oss
+	}
+	return nil
+}
+
+func (x *Server) GetIpData() *Server_IpData {
+	if x != nil {
+		return x.IpData
 	}
 	return nil
 }
@@ -490,6 +498,66 @@ func (x *Server_Oss) GetQiniu() *Server_Oss_Qiniu {
 	return nil
 }
 
+type Server_IpData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enable        bool                   `protobuf:"varint,1,opt,name=enable,proto3" json:"enable,omitempty"`
+	Ipv4XdbPath   string                 `protobuf:"bytes,2,opt,name=ipv4_xdb_path,json=ipv4XdbPath,proto3" json:"ipv4_xdb_path,omitempty"`
+	Ipv6XdbPath   string                 `protobuf:"bytes,3,opt,name=ipv6_xdb_path,json=ipv6XdbPath,proto3" json:"ipv6_xdb_path,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Server_IpData) Reset() {
+	*x = Server_IpData{}
+	mi := &file_conf_conf_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Server_IpData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Server_IpData) ProtoMessage() {}
+
+func (x *Server_IpData) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Server_IpData.ProtoReflect.Descriptor instead.
+func (*Server_IpData) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1, 3}
+}
+
+func (x *Server_IpData) GetEnable() bool {
+	if x != nil {
+		return x.Enable
+	}
+	return false
+}
+
+func (x *Server_IpData) GetIpv4XdbPath() string {
+	if x != nil {
+		return x.Ipv4XdbPath
+	}
+	return ""
+}
+
+func (x *Server_IpData) GetIpv6XdbPath() string {
+	if x != nil {
+		return x.Ipv6XdbPath
+	}
+	return ""
+}
+
 type Server_Oss_Minio struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -498,7 +566,7 @@ type Server_Oss_Minio struct {
 
 func (x *Server_Oss_Minio) Reset() {
 	*x = Server_Oss_Minio{}
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -510,7 +578,7 @@ func (x *Server_Oss_Minio) String() string {
 func (*Server_Oss_Minio) ProtoMessage() {}
 
 func (x *Server_Oss_Minio) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[7]
+	mi := &file_conf_conf_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -536,7 +604,7 @@ type Server_Oss_Qiniu struct {
 
 func (x *Server_Oss_Qiniu) Reset() {
 	*x = Server_Oss_Qiniu{}
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -548,7 +616,7 @@ func (x *Server_Oss_Qiniu) String() string {
 func (*Server_Oss_Qiniu) ProtoMessage() {}
 
 func (x *Server_Oss_Qiniu) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[8]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -589,7 +657,7 @@ type Data_Database struct {
 
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
-	mi := &file_conf_conf_proto_msgTypes[9]
+	mi := &file_conf_conf_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -601,7 +669,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[9]
+	mi := &file_conf_conf_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -657,7 +725,7 @@ type Data_Redis struct {
 
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
-	mi := &file_conf_conf_proto_msgTypes[10]
+	mi := &file_conf_conf_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -669,7 +737,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[10]
+	mi := &file_conf_conf_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -777,7 +845,7 @@ type Data_RabbitMQ struct {
 
 func (x *Data_RabbitMQ) Reset() {
 	*x = Data_RabbitMQ{}
-	mi := &file_conf_conf_proto_msgTypes[11]
+	mi := &file_conf_conf_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -789,7 +857,7 @@ func (x *Data_RabbitMQ) String() string {
 func (*Data_RabbitMQ) ProtoMessage() {}
 
 func (x *Data_RabbitMQ) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[11]
+	mi := &file_conf_conf_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -866,7 +934,7 @@ type Data_Consul struct {
 
 func (x *Data_Consul) Reset() {
 	*x = Data_Consul{}
-	mi := &file_conf_conf_proto_msgTypes[12]
+	mi := &file_conf_conf_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -878,7 +946,7 @@ func (x *Data_Consul) String() string {
 func (*Data_Consul) ProtoMessage() {}
 
 func (x *Data_Consul) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[12]
+	mi := &file_conf_conf_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -930,14 +998,15 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\tBootstrap\x12/\n" +
 	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.conf.ServerR\x06server\x12)\n" +
 	"\x04data\x18\x02 \x01(\v2\x15.kratos.api.conf.DataR\x04data\x12,\n" +
-	"\x05trace\x18\x03 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\xa5\x05\n" +
+	"\x05trace\x18\x03 \x01(\v2\x16.kratos.api.conf.TraceR\x05trace\"\xc8\x06\n" +
 	"\x06Server\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x12\n" +
 	"\x04mode\x18\x03 \x01(\tR\x04mode\x120\n" +
 	"\x04http\x18\x05 \x01(\v2\x1c.kratos.api.conf.Server.HTTPR\x04http\x120\n" +
 	"\x04grpc\x18\x06 \x01(\v2\x1c.kratos.api.conf.Server.GRPCR\x04grpc\x12-\n" +
-	"\x03oss\x18\a \x01(\v2\x1b.kratos.api.conf.Server.OssR\x03oss\x1a}\n" +
+	"\x03oss\x18\a \x01(\v2\x1b.kratos.api.conf.Server.OssR\x03oss\x127\n" +
+	"\aip_data\x18\b \x01(\v2\x1e.kratos.api.conf.Server.IpDataR\x06ipData\x1a}\n" +
 	"\x04HTTP\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04host\x18\x02 \x01(\tR\x04host\x12\x12\n" +
@@ -956,7 +1025,11 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\n" +
 	"access_key\x18\x01 \x01(\tR\taccessKey\x12\x1d\n" +
 	"\n" +
-	"secret_key\x18\x02 \x01(\tR\tsecretKey\"\x8f\n" +
+	"secret_key\x18\x02 \x01(\tR\tsecretKey\x1ah\n" +
+	"\x06IpData\x12\x16\n" +
+	"\x06enable\x18\x01 \x01(\bR\x06enable\x12\"\n" +
+	"\ripv4_xdb_path\x18\x02 \x01(\tR\vipv4XdbPath\x12\"\n" +
+	"\ripv6_xdb_path\x18\x03 \x01(\tR\vipv6XdbPath\"\x8f\n" +
 	"\n" +
 	"\x04Data\x12:\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x1e.kratos.api.conf.Data.DatabaseR\bdatabase\x121\n" +
@@ -1014,7 +1087,7 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_conf_conf_proto_goTypes = []any{
 	(*Bootstrap)(nil),           // 0: kratos.api.conf.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.conf.Server
@@ -1023,13 +1096,14 @@ var file_conf_conf_proto_goTypes = []any{
 	(*Server_HTTP)(nil),         // 4: kratos.api.conf.Server.HTTP
 	(*Server_GRPC)(nil),         // 5: kratos.api.conf.Server.GRPC
 	(*Server_Oss)(nil),          // 6: kratos.api.conf.Server.Oss
-	(*Server_Oss_Minio)(nil),    // 7: kratos.api.conf.Server.Oss.Minio
-	(*Server_Oss_Qiniu)(nil),    // 8: kratos.api.conf.Server.Oss.Qiniu
-	(*Data_Database)(nil),       // 9: kratos.api.conf.Data.Database
-	(*Data_Redis)(nil),          // 10: kratos.api.conf.Data.Redis
-	(*Data_RabbitMQ)(nil),       // 11: kratos.api.conf.Data.RabbitMQ
-	(*Data_Consul)(nil),         // 12: kratos.api.conf.Data.Consul
-	(*durationpb.Duration)(nil), // 13: google.protobuf.Duration
+	(*Server_IpData)(nil),       // 7: kratos.api.conf.Server.IpData
+	(*Server_Oss_Minio)(nil),    // 8: kratos.api.conf.Server.Oss.Minio
+	(*Server_Oss_Qiniu)(nil),    // 9: kratos.api.conf.Server.Oss.Qiniu
+	(*Data_Database)(nil),       // 10: kratos.api.conf.Data.Database
+	(*Data_Redis)(nil),          // 11: kratos.api.conf.Data.Redis
+	(*Data_RabbitMQ)(nil),       // 12: kratos.api.conf.Data.RabbitMQ
+	(*Data_Consul)(nil),         // 13: kratos.api.conf.Data.Consul
+	(*durationpb.Duration)(nil), // 14: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.conf.Bootstrap.server:type_name -> kratos.api.conf.Server
@@ -1038,28 +1112,29 @@ var file_conf_conf_proto_depIdxs = []int32{
 	4,  // 3: kratos.api.conf.Server.http:type_name -> kratos.api.conf.Server.HTTP
 	5,  // 4: kratos.api.conf.Server.grpc:type_name -> kratos.api.conf.Server.GRPC
 	6,  // 5: kratos.api.conf.Server.oss:type_name -> kratos.api.conf.Server.Oss
-	9,  // 6: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
-	10, // 7: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
-	11, // 8: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
-	12, // 9: kratos.api.conf.Data.consul:type_name -> kratos.api.conf.Data.Consul
-	13, // 10: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	13, // 11: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	7,  // 12: kratos.api.conf.Server.Oss.minio:type_name -> kratos.api.conf.Server.Oss.Minio
-	8,  // 13: kratos.api.conf.Server.Oss.qiniu:type_name -> kratos.api.conf.Server.Oss.Qiniu
-	13, // 14: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
-	13, // 15: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	13, // 16: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	13, // 17: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
-	13, // 18: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
-	13, // 19: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
-	13, // 20: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
-	13, // 21: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
-	13, // 22: kratos.api.conf.Data.Consul.dial_timeout:type_name -> google.protobuf.Duration
-	23, // [23:23] is the sub-list for method output_type
-	23, // [23:23] is the sub-list for method input_type
-	23, // [23:23] is the sub-list for extension type_name
-	23, // [23:23] is the sub-list for extension extendee
-	0,  // [0:23] is the sub-list for field type_name
+	7,  // 6: kratos.api.conf.Server.ip_data:type_name -> kratos.api.conf.Server.IpData
+	10, // 7: kratos.api.conf.Data.database:type_name -> kratos.api.conf.Data.Database
+	11, // 8: kratos.api.conf.Data.redis:type_name -> kratos.api.conf.Data.Redis
+	12, // 9: kratos.api.conf.Data.rabbitmq:type_name -> kratos.api.conf.Data.RabbitMQ
+	13, // 10: kratos.api.conf.Data.consul:type_name -> kratos.api.conf.Data.Consul
+	14, // 11: kratos.api.conf.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	14, // 12: kratos.api.conf.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	8,  // 13: kratos.api.conf.Server.Oss.minio:type_name -> kratos.api.conf.Server.Oss.Minio
+	9,  // 14: kratos.api.conf.Server.Oss.qiniu:type_name -> kratos.api.conf.Server.Oss.Qiniu
+	14, // 15: kratos.api.conf.Data.Redis.dial_timeout:type_name -> google.protobuf.Duration
+	14, // 16: kratos.api.conf.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	14, // 17: kratos.api.conf.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	14, // 18: kratos.api.conf.Data.Redis.pool_timeout:type_name -> google.protobuf.Duration
+	14, // 19: kratos.api.conf.Data.Redis.conn_max_idle_time:type_name -> google.protobuf.Duration
+	14, // 20: kratos.api.conf.Data.Redis.conn_max_life_time:type_name -> google.protobuf.Duration
+	14, // 21: kratos.api.conf.Data.RabbitMQ.heartbeat:type_name -> google.protobuf.Duration
+	14, // 22: kratos.api.conf.Data.RabbitMQ.dial_timeout:type_name -> google.protobuf.Duration
+	14, // 23: kratos.api.conf.Data.Consul.dial_timeout:type_name -> google.protobuf.Duration
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -1073,7 +1148,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_conf_conf_proto_rawDesc), len(file_conf_conf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

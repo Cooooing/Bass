@@ -3,8 +3,8 @@ package biz
 import (
 	"common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
+	"common/pkg/util/task"
 	"connector/internal/biz/base"
 	"connector/internal/biz/domain"
 	"connector/internal/biz/domain/handler"
@@ -16,7 +16,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	base.NewBaseDomain,
 	util.NewEventPool,
-	util.NewAsynqCache,
+	task.NewAsynqCache,
 
 	client.NewAsynqServer,
 	client.NewAsynqClient,
@@ -31,8 +31,8 @@ var BizProviderSet = wire.NewSet(
 
 func ProvideTasks(
 	register *handler.RegisterHandler,
-) dict.Map[constant.TaskName, client.Handler] {
-	d := dict.New[constant.TaskName, client.Handler](0)
-	d.Set(constant.TaskConnectorRegister, register)
+) map[constant.TaskName]client.Handler {
+	d := make(map[constant.TaskName]client.Handler)
+	d[constant.TaskConnectorRegister] = register
 	return d
 }

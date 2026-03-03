@@ -4,8 +4,7 @@ import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/notify/v1"
 	"common/pkg/constant"
-	"common/pkg/cutil/base"
-	"common/pkg/cutil/collections/dict"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -15,6 +14,8 @@ import (
 	"notify/internal/data/ent/gen"
 	"notify/internal/data/ent/gen/notificationtemplate"
 	"time"
+
+	"github.com/samber/lo"
 )
 
 type NotificationTemplateRepo struct {
@@ -64,9 +65,9 @@ func (r *NotificationTemplateRepo) Update(ctx context.Context, tx *gen.Client, u
 	return &model.NotificationTemplate{NotificationTemplate: update}, err
 }
 
-func (r *NotificationTemplateRepo) SaveCache(ctx context.Context, records dict.Map[string, *model.NotificationTemplate]) error {
+func (r *NotificationTemplateRepo) SaveCache(ctx context.Context, records map[string]*model.NotificationTemplate) error {
 	redisData := make(map[string]string)
-	for key, template := range records.Map() {
+	for key, template := range records {
 		data, err := json.Marshal(template)
 		if err != nil {
 			return err
@@ -77,14 +78,14 @@ func (r *NotificationTemplateRepo) SaveCache(ctx context.Context, records dict.M
 	if err != nil {
 		return err
 	}
-	err = r.Redis.Client.HExpire(ctx, constant.GetKeyNotificationTemplateMap(), 1*time.Hour, records.Keys()...).Err()
+	err = r.Redis.Client.HExpire(ctx, constant.GetKeyNotificationTemplateMap(), 1*time.Hour, lo.Keys(records)...).Err()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationType *v1.NotificationType, channels []*v1.NotificationChannel) (dict.Map[string, *model.NotificationTemplate], error) {
+func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationType *v1.NotificationType, channels []*v1.NotificationChannel) (map[string]*model.NotificationTemplate, error) {
 	keys := make([]string, 0, len(channels))
 	for i := range channels {
 		key := model.GetKeyNotificationTemplate(notificationType, channels[i])
@@ -107,7 +108,7 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 		templateMap, dbErr := r.GetMap(ctx, r.Db, &repo.NotificationTemplateGetReq{
 			NotificationType: notificationType,
 			Channels:         channels,
-			Enable:           base.Ptr(true),
+			Enable:           util.Ptr(true),
 		})
 		if dbErr != nil {
 			return nil, dbErr
@@ -121,7 +122,7 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 	}
 
 	// 如果缓存中有数据，反序列化并返回
-	templateMap := dict.New[string, *model.NotificationTemplate](len(results))
+	templateMap := make(map[string]*model.NotificationTemplate, len(results))
 	for i, result := range results {
 		if result == nil {
 			continue
@@ -131,7 +132,7 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal template for key %s: %w", keys[i], err)
 		}
-		templateMap.Set(keys[i], template)
+		templateMap[keys[i]] = template
 	}
 
 	return templateMap, nil
@@ -147,9 +148,9 @@ func (r *NotificationTemplateRepo) GetOne(ctx context.Context, tx *gen.Client, r
 	return &model.NotificationTemplate{NotificationTemplate: n}, err
 }
 
-func (r *NotificationTemplateRepo) GetMap(ctx context.Context, tx *gen.Client, req *repo.NotificationTemplateGetReq) (dict.Map[string, *model.NotificationTemplate], error) {
+func (r *NotificationTemplateRepo) GetMap(ctx context.Context, tx *gen.Client, req *repo.NotificationTemplateGetReq) (map[string]*model.NotificationTemplate, error) {
 	var err error
-	records := dict.New[string, *model.NotificationTemplate](0)
+	records := make(map[string]*model.NotificationTemplate)
 	query := tx.NotificationTemplate.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -158,7 +159,7 @@ func (r *NotificationTemplateRepo) GetMap(ctx context.Context, tx *gen.Client, r
 	}
 	for i := range list {
 		v := &model.NotificationTemplate{NotificationTemplate: list[i]}
-		records.Set(v.GetKey(), v)
+		records[v.GetKey()] = v
 	}
 	return records, nil
 }

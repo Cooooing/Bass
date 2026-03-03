@@ -7,7 +7,7 @@
 package main
 
 import (
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"im/internal/conf"
@@ -46,7 +46,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	systemService := service.NewSystemService(baseService)
 	v := service.ProvideServices(systemService)
-	tokenCache := util.NewTokenCache(helper, redisClient)
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	app := newApp(logger, grpcServer, httpServer, consulClient)

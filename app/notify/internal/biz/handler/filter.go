@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"common/pkg/cutil/handlerchain"
 	commonModel "common/pkg/model"
+	"common/pkg/util/handlerchain"
 	"context"
 )
 

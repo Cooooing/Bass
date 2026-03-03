@@ -3,24 +3,27 @@ package domain
 import (
 	"bytes"
 	signalv1 "common/api/signal/v1"
-	"common/pkg"
 	"common/pkg/client"
-	"common/pkg/cutil/collections/dict"
 	"common/pkg/util"
+	"common/pkg/util/server"
 	domainbase "connector/internal/biz/base"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 
 	"github.com/gorilla/websocket"
+	"github.com/samber/lo"
 )
 
 type SessionDomain struct {
 	*domainbase.BaseDomain
 	eventPool  *util.EventPool
-	sessionIds dict.Map[string, *websocket.Conn]
 	httpClient *http.Client
+
+	sessionIds map[string]*websocket.Conn
+	mu         sync.RWMutex
 }
 
 func NewSessionDomain(baseDomain *domainbase.BaseDomain, eventPool *util.EventPool) *SessionDomain {
@@ -28,25 +31,36 @@ func NewSessionDomain(baseDomain *domainbase.BaseDomain, eventPool *util.EventPo
 		BaseDomain: baseDomain,
 		eventPool:  eventPool,
 		httpClient: client.NewHttpClient(),
-		sessionIds: dict.NewSafeMap[string, *websocket.Conn](0),
+		sessionIds: map[string]*websocket.Conn{},
+		mu:         sync.RWMutex{},
 	}
 }
 
 func (d *SessionDomain) AddSessionId(sessionId string, conn *websocket.Conn) {
-	d.sessionIds.Set(sessionId, conn)
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	d.sessionIds[sessionId] = conn
 }
 
 func (d *SessionDomain) RemoveSessionId(sessionId string) {
-	d.sessionIds.Remove(sessionId)
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	delete(d.sessionIds, sessionId)
 }
 
 func (d *SessionDomain) GetSessionIds() []string {
-	return d.sessionIds.Keys()
+	d.mu.RLock()
+	defer d.mu.RUnlock()
+	return lo.Keys(d.sessionIds)
 }
 
 func (d *SessionDomain) SendMessage(sessionIds []string, message any) error {
+	if len(sessionIds) == 0 {
+		return nil
+	}
+	d.mu.RLock()
 	for _, sessionId := range sessionIds {
-		if conn, ok := d.sessionIds.Get(sessionId); ok {
+		if conn, ok := d.sessionIds[sessionId]; ok {
 			return d.EventPool.Submit(func() {
 				err := conn.WriteJSON(message)
 				if err != nil {
@@ -55,6 +69,7 @@ func (d *SessionDomain) SendMessage(sessionIds []string, message any) error {
 			})
 		}
 	}
+	d.mu.RUnlock()
 	return nil
 }
 
@@ -86,7 +101,7 @@ func (d *SessionDomain) RequestSessionId(ticket string) (string, error) {
 		}
 	}(resp.Body)
 
-	data := &pkg.Result[*signalv1.SignalNodeOnlineReply]{}
+	data := &server.Result[*signalv1.SignalNodeOnlineReply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return sessionId, err

@@ -2,7 +2,7 @@ package model
 
 import (
 	v1 "common/api/content/v1"
-	"common/pkg/cutil/base"
+	"common/pkg/util"
 	"content/internal/data/ent/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -22,7 +22,7 @@ func (t *Tag) ConvertToRpc() *v1.Tag {
 		Name:         t.Name,
 		Description:  t.Description,
 		DomainId:     t.DomainID,
-		Status:       base.Ptr(v1.TagStatus(t.Status)),
+		Status:       util.Ptr(v1.TagStatus(t.Status)),
 		ArticleCount: t.ArticleCount,
 	}
 }

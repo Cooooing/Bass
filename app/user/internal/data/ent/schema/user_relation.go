@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -33,7 +33,7 @@ func (UserRelation) Fields() []ent.Field {
 		field.Int64("target_id").Comment("关系目标用户"),
 		field.Int32("type").Comment("关系类型 0-follow 1-block"),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

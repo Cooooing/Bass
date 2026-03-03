@@ -4,7 +4,7 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
+	"common/pkg/util/task"
 	"context"
 	"encoding/json"
 	"errors"
@@ -24,11 +24,11 @@ type SessionHandler struct {
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
-	asynqCache   *util.AsynqCache
+	asynqCache   *task.AsynqCache
 	producer     *client.Producer
 }
 
-func NewSessionHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *util.AsynqCache, producer *client.Producer) *SessionHandler {
+func NewSessionHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *task.AsynqCache, producer *client.Producer) *SessionHandler {
 	return &SessionHandler{
 		BaseDomain:   baseDomain,
 		nodeDomain:   nodeDomain,

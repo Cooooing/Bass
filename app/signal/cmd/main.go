@@ -1,9 +1,9 @@
 package main
 
 import (
-	"common/pkg"
 	"common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/util"
 	"context"
 	"flag"
 	"fmt"
@@ -74,7 +74,7 @@ func main() {
 	server.InitMetrics(Name)
 
 	ctx := context.Background()
-	shutdownTracing, err := pkg.SetupTracing(
+	shutdownTracing, err := util.SetupTracing(
 		ctx,
 		Name,
 		Version,
@@ -92,7 +92,7 @@ func main() {
 			panic(err)
 		}
 	}()
-	logger := pkg.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
+	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
 	app, cleanup, err := wireApp(c, logger, log.NewHelper(logger).WithContext(ctx))
 	if err != nil {
 		panic(err)

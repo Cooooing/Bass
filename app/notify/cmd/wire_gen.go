@@ -7,7 +7,7 @@
 package main
 
 import (
-	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"notify/internal/biz/base"
@@ -59,14 +59,14 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	notificationRecordDomain := domain.NewNotificationRecordDomain(baseDomain, notificationRecordRepo)
 	notificationRecordService := service.NewNotificationRecordService(baseService, notificationRecordDomain)
 	v := service.ProvideServices(systemService, notificationMetaService, notificationRecordService)
-	tokenCache := util.NewTokenCache(helper, redisClient)
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	registerVerifyCode := handler.NewRegisterVerifyCode(baseDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
-	dictMap := handler.ProvideHandlers(registerVerifyCode, fullHandler)
+	v2 := handler.ProvideHandlers(registerVerifyCode, fullHandler)
 	notificationTemplateRepo := repo.NewNotificationTemplateRepo(baseData)
-	eventHandler, cleanup5, err := domain.NewEventHandler(baseDomain, dictMap, notificationTemplateRepo)
+	eventHandler, cleanup5, err := domain.NewEventHandler(baseDomain, v2, notificationTemplateRepo)
 	if err != nil {
 		cleanup4()
 		cleanup3()

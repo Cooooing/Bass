@@ -2,6 +2,7 @@ package biz
 
 import (
 	"common/pkg/util"
+	"common/pkg/util/jwt"
 	doaminbase "user/internal/biz/base"
 	"user/internal/biz/doamin"
 
@@ -12,7 +13,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	doaminbase.NewBaseDomain,
 
-	util.NewTokenCache,
+	jwt.NewTokenCache,
 	doamin.NewTokenService,
 	util.NewEventPool,
 

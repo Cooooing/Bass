@@ -1,13 +1,17 @@
 package server
 
 import (
-	"common/pkg"
 	"common/pkg/client"
 	"common/pkg/constant"
+	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"common/pkg/util/jwt"
+	"common/pkg/util/server"
+
 	"context"
 	"errors"
 	"fmt"
+	"gateway/internal/biz/domain"
 	"gateway/internal/conf"
 	"gateway/internal/service"
 	"io"
@@ -19,6 +23,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
@@ -29,9 +34,10 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []service.Service, tokenCache *util.TokenCache) *transporthttp.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []service.Service, tokenCache *jwt.TokenCache, ipDomain *domain.IpDomain) *transporthttp.Server {
 
 	middlewares := []middleware.Middleware{
+		metadata.Server(),
 		recovery.Recovery(),
 		tracing.Server(),
 		metrics.Server(
@@ -40,6 +46,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.Co
 		),
 		logging.Server(logger),
 
+		IpMiddleware(ipDomain),
 		// 七牛回调验签
 		selector.Server(QiniuCallbackSignMiddleware(c)).Match(QiniuCallbackMatch()).Build(),
 		// 认证鉴权
@@ -49,8 +56,8 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.Co
 	}
 	var opts = []transporthttp.ServerOption{
 		transporthttp.Middleware(middlewares...),
-		transporthttp.ResponseEncoder(pkg.HttpResponseEncoder),
-		transporthttp.ErrorEncoder(pkg.HttpErrorEncoder),
+		transporthttp.ResponseEncoder(server.HttpResponseEncoder),
+		transporthttp.ErrorEncoder(server.HttpErrorEncoder),
 	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, transporthttp.Network(c.Server.Http.Network))
@@ -81,73 +88,82 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.Co
 func NewProxyHandler(middlewares []middleware.Middleware, consulClient *client.ConsulClient, serviceName, prefix string, l log.Logger) http.Handler {
 	logger := log.NewHelper(l)
 	propagator := propagation.TraceContext{}
-	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		conn, err := consulClient.GetHTTPClient(serviceName)
-		if err != nil {
-			logger.Errorf("new http conn error: %v", err)
-			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
-			return
-		}
-		originalPath := r.URL.Path
-		r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
-		r.RequestURI = ""
-		r.Header.Set("Host", r.Host)
-
-		proxiedPath := r.URL.Path
-		if r.URL.RawQuery != "" {
-			proxiedPath += "?" + r.URL.RawQuery
-		}
-
-		logger.Infof(
-			"proxy -> service=%s method=%s original_path=%s headers=%v",
-			serviceName,
-			r.Method,
-			originalPath,
-			r.Header,
-		)
-
-		response, err := conn.Do(r)
-
-		if err != nil {
-			var e *errors2.Error
-			if errors.As(err, &e) {
-				pkg.HttpErrorEncoder(w, r, errors2.New(int(e.Code), e.Reason, e.Message))
-				return
-			}
-			logger.Errorf("proxy error: %v", err)
-			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
-			return
-		}
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(response.Body)
-		// 复制后端 Header（过滤 hop-by-hop headers）
-		for k, vv := range response.Header {
-			if strings.EqualFold(k, "Connection") ||
-				strings.EqualFold(k, "Proxy-Connection") ||
-				strings.EqualFold(k, "Keep-Alive") ||
-				strings.EqualFold(k, "Transfer-Encoding") ||
-				strings.EqualFold(k, "TE") ||
-				strings.EqualFold(k, "Trailer") ||
-				strings.EqualFold(k, "Upgrade") {
-				continue
-			}
-			for _, v := range vv {
-				w.Header().Add(k, v)
-			}
-		}
-		w.Header().Add("Access-Control-Allow-Origin", "*") // 允许跨域
-		w.WriteHeader(response.StatusCode)
-		_, err = io.Copy(w, response.Body)
-		if err != nil {
-			logger.Errorf("proxy error: %v", err)
-			pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
-			return
-		}
-	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h := middleware.Chain(middlewares...)(func(ctx context.Context, req interface{}) (interface{}, error) {
-			handlerFunc(w, r)
+			http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				conn, err := consulClient.GetHTTPClient(serviceName)
+				if err != nil {
+					logger.Errorf("new http conn error: %v", err)
+					server.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
+					return
+				}
+				originalPath := r.URL.Path
+				r.URL.Path = strings.TrimPrefix(r.URL.Path, prefix)
+				r.RequestURI = ""
+				r.Header.Set("Host", r.Host)
+
+				proxiedPath := r.URL.Path
+				if r.URL.RawQuery != "" {
+					proxiedPath += "?" + r.URL.RawQuery
+				}
+
+				ip, ok := util.GetContextValue[*commonModel.IpInfo](ctx, constant.CtxIpInfo)
+				if !ok {
+					logger.Errorf("proxy error: %v", "ip info not found")
+					server.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
+					return
+				}
+				logger.Infof(
+					"proxy ip:%s [%s-%s-%s] -> service=%s method=%s original_path=%s headers=%v",
+					ip.Ip,
+					ip.Country,
+					ip.Province,
+					ip.City,
+					serviceName,
+					r.Method,
+					originalPath,
+					r.Header,
+				)
+
+				response, err := conn.Do(r)
+
+				if err != nil {
+					var e *errors2.Error
+					if errors.As(err, &e) {
+						server.HttpErrorEncoder(w, r, errors2.New(int(e.Code), e.Reason, e.Message))
+						return
+					}
+					logger.Errorf("proxy error: %v", err)
+					server.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
+					return
+				}
+				defer func(Body io.ReadCloser) {
+					_ = Body.Close()
+				}(response.Body)
+				// 复制后端 Header（过滤 hop-by-hop headers）
+				for k, vv := range response.Header {
+					if strings.EqualFold(k, "Connection") ||
+						strings.EqualFold(k, "Proxy-Connection") ||
+						strings.EqualFold(k, "Keep-Alive") ||
+						strings.EqualFold(k, "Transfer-Encoding") ||
+						strings.EqualFold(k, "TE") ||
+						strings.EqualFold(k, "Trailer") ||
+						strings.EqualFold(k, "Upgrade") {
+						continue
+					}
+					for _, v := range vv {
+						w.Header().Add(k, v)
+					}
+				}
+				w.Header().Add("Access-Control-Allow-Origin", "*") // 允许跨域
+				w.WriteHeader(response.StatusCode)
+				_, err = io.Copy(w, response.Body)
+				if err != nil {
+					logger.Errorf("proxy error: %v", err)
+					server.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", "Internal Server Error"))
+					return
+				}
+			})(w, r)
 			return nil, nil
 		})
 		ctx := r.Context()
@@ -157,9 +173,9 @@ func NewProxyHandler(middlewares []middleware.Middleware, consulClient *client.C
 			// 捕获中间件错误，例如 AuthMiddleware 返回的 401
 			var e *errors2.Error
 			if errors.As(err, &e) {
-				pkg.HttpErrorEncoder(w, r, e)
+				server.HttpErrorEncoder(w, r, e)
 			} else {
-				pkg.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", err.Error()))
+				server.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", err.Error()))
 			}
 		}
 	})

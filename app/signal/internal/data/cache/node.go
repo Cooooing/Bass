@@ -2,7 +2,7 @@ package cache
 
 import (
 	"common/pkg/constant"
-	commonBase "common/pkg/cutil/base"
+	commonBase "common/pkg/util"
 	"context"
 	"encoding/json"
 	"errors"

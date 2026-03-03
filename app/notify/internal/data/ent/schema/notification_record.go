@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -31,7 +31,7 @@ func (NotificationRecord) Fields() []ent.Field {
 		field.Int64("receiver_id").Comment("接收者ID"),
 		field.Time("read_time").Comment("已读时间").Optional().Nillable(),
 	}
-	fields = append(fields, pkg.TimeAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
 	return fields
 }
 

@@ -301,6 +301,60 @@ func (x *Int64Range) GetEnd() int64 {
 	return 0
 }
 
+type ImageReply struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 图片数据
+	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// 图片类型
+	ContentType   string `protobuf:"bytes,2,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImageReply) Reset() {
+	*x = ImageReply{}
+	mi := &file_common_v1_common_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImageReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImageReply) ProtoMessage() {}
+
+func (x *ImageReply) ProtoReflect() protoreflect.Message {
+	mi := &file_common_v1_common_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImageReply.ProtoReflect.Descriptor instead.
+func (*ImageReply) Descriptor() ([]byte, []int) {
+	return file_common_v1_common_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ImageReply) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *ImageReply) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
 var File_common_v1_common_proto protoreflect.FileDescriptor
 
 const file_common_v1_common_proto_rawDesc = "" +
@@ -327,7 +381,11 @@ const file_common_v1_common_proto_rawDesc = "" +
 	"\x05start\x18\x01 \x01(\x03H\x00R\x05start\x88\x01\x01\x12\x15\n" +
 	"\x03end\x18\x02 \x01(\x03H\x01R\x03end\x88\x01\x01B\b\n" +
 	"\x06_startB\x06\n" +
-	"\x04_endB\x19Z\x17common/api/common/v1;v1b\x06proto3"
+	"\x04_end\"C\n" +
+	"\n" +
+	"ImageReply\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12!\n" +
+	"\fcontent_type\x18\x02 \x01(\tR\vcontentTypeB\x19Z\x17common/api/common/v1;v1b\x06proto3"
 
 var (
 	file_common_v1_common_proto_rawDescOnce sync.Once
@@ -341,18 +399,19 @@ func file_common_v1_common_proto_rawDescGZIP() []byte {
 	return file_common_v1_common_proto_rawDescData
 }
 
-var file_common_v1_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_common_v1_common_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_common_v1_common_proto_goTypes = []any{
 	(*PageRequest)(nil),           // 0: common.api.common.v1.PageRequest
 	(*PageReply)(nil),             // 1: common.api.common.v1.PageReply
 	(*TimeRange)(nil),             // 2: common.api.common.v1.TimeRange
 	(*Int32Range)(nil),            // 3: common.api.common.v1.Int32Range
 	(*Int64Range)(nil),            // 4: common.api.common.v1.Int64Range
-	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
+	(*ImageReply)(nil),            // 5: common.api.common.v1.ImageReply
+	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
 }
 var file_common_v1_common_proto_depIdxs = []int32{
-	5, // 0: common.api.common.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
-	5, // 1: common.api.common.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
+	6, // 0: common.api.common.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
+	6, // 1: common.api.common.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -373,7 +432,7 @@ func file_common_v1_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_v1_common_proto_rawDesc), len(file_common_v1_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

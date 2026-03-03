@@ -1,7 +1,6 @@
 package util
 
 import (
-	"common/pkg/cutil/collections/set"
 	"strings"
 
 	"github.com/88250/lute"
@@ -10,7 +9,7 @@ import (
 
 var LuteEngine = lute.New()
 
-func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames set.Set[string]) ast.WalkStatus {
+func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string]struct{}) ast.WalkStatus {
 	if !entering || n.Type != ast.NodeLink {
 		return ast.WalkContinue
 	}
@@ -30,7 +29,7 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames set.Set[st
 	s := text[1:]
 	if strings.HasPrefix(text, "@") {
 		username := s
-		atUsernames.Add(username)
+		atUsernames[username] = struct{}{}
 		return ast.WalkContinue
 	} else if strings.HasPrefix(text, "&") {
 		parts := strings.SplitN(s, ":", 2)

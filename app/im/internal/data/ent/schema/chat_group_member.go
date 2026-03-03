@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"common/pkg"
 	"common/pkg/constant"
+	"common/pkg/util"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -31,9 +31,9 @@ func (ChatGroupMember) Fields() []ent.Field {
 		field.Int32("role").Comment("角色: 1-成员, 2-管理员, 3-群主").Default(1),
 		field.Time("mute_end_at").Comment("禁言结束时间").Optional().Nillable(),
 	}
-	fields = append(fields, pkg.UserAuditFields()...)
-	fields = append(fields, pkg.TimeAuditFields()...)
-	fields = append(fields, pkg.UsernameAuditFields()...)
+	fields = append(fields, util.UserAuditFields()...)
+	fields = append(fields, util.TimeAuditFields()...)
+	fields = append(fields, util.UsernameAuditFields()...)
 	return fields
 }
 

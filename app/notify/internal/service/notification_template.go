@@ -3,8 +3,8 @@ package service
 import (
 	cv1 "common/api/common/v1"
 	v1 "common/api/notify/v1"
-	"common/pkg/cutil/base"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"notify/internal/biz/domain"
 	"notify/internal/biz/model"
@@ -37,7 +37,7 @@ func (s *NotificationTemplateService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.NotificationTemplatePageRequest) (rsp *v1.NotificationTemplatePageReply, err error) {
-	req.Query = base.OrDefault(req.Query, &v1.NotificationTemplateQueryParams{})
+	req.Query = util.OrDefault(req.Query, &v1.NotificationTemplateQueryParams{})
 	records, page, err := s.notificationTemplateDomain.Page(ctx, req.Page, &repo.NotificationTemplateGetReq{
 		NotificationTemplateIds: req.Query.Ids,
 		NotificationType:        req.Query.NotificationType,
@@ -91,7 +91,7 @@ func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.Notifi
 		Channel:          int32(*req.Channel),
 		Content:          *req.Content,
 		Processors:       req.Processors,
-		Enable:           base.DerefOrDefault(req.Enable, false),
+		Enable:           util.DerefOrDefault(req.Enable, false),
 	}})
 	if err != nil {
 		return nil, err

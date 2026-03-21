@@ -722,17 +722,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.im.v1.ChatMessageSendReply'
-    /v1/chatSession/markDisturb:
+    /v1/chatSession/markMuted:
         post:
             tags:
                 - IMChatSessionService
             description: 免打扰
-            operationId: IMChatSessionService_MarkDisturb
+            operationId: IMChatSessionService_MarkMuted
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkDisturbRequest'
+                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkMutedRequest'
                 required: true
             responses:
                 "200":
@@ -740,7 +740,26 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkDisturbReply'
+                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkMutedReply'
+    /v1/chatSession/markPinned:
+        post:
+            tags:
+                - IMChatSessionService
+            description: 置顶
+            operationId: IMChatSessionService_MarkPinned
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkPinnedRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkPinnedReply'
     /v1/chatSession/markRead:
         post:
             tags:
@@ -760,25 +779,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkReadReply'
-    /v1/chatSession/markTop:
-        post:
-            tags:
-                - IMChatSessionService
-            description: 置顶
-            operationId: IMChatSessionService_MarkTop
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkTopRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/common.api.im.v1.ChatSessionMarkTopReply'
     /v1/chatSession/page:
         post:
             tags:
@@ -2957,10 +2957,10 @@ components:
                     type: integer
                     description: 未读数
                     format: uint32
-        common.api.im.v1.ChatSessionMarkDisturbReply:
+        common.api.im.v1.ChatSessionMarkMutedReply:
             type: object
             properties: {}
-        common.api.im.v1.ChatSessionMarkDisturbRequest:
+        common.api.im.v1.ChatSessionMarkMutedRequest:
             type: object
             properties:
                 ids:
@@ -2971,6 +2971,20 @@ components:
                 disturb:
                     type: boolean
                     description: 是否免打扰
+        common.api.im.v1.ChatSessionMarkPinnedReply:
+            type: object
+            properties: {}
+        common.api.im.v1.ChatSessionMarkPinnedRequest:
+            type: object
+            properties:
+                ids:
+                    type: array
+                    items:
+                        type: string
+                    description: 会话ID
+                top:
+                    type: boolean
+                    description: 是否置顶
         common.api.im.v1.ChatSessionMarkReadReply:
             type: object
             properties: {}
@@ -2982,20 +2996,6 @@ components:
                     items:
                         type: string
                     description: 会话ID
-        common.api.im.v1.ChatSessionMarkTopReply:
-            type: object
-            properties: {}
-        common.api.im.v1.ChatSessionMarkTopRequest:
-            type: object
-            properties:
-                ids:
-                    type: array
-                    items:
-                        type: string
-                    description: 会话ID
-                top:
-                    type: boolean
-                    description: 是否置顶
         common.api.im.v1.ChatSessionPageReply:
             type: object
             properties:

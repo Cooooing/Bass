@@ -19,70 +19,70 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationIMChatSessionServiceMarkDisturb = "/common.api.im.v1.IMChatSessionService/MarkDisturb"
+const OperationIMChatSessionServiceMarkMuted = "/common.api.im.v1.IMChatSessionService/MarkMuted"
+const OperationIMChatSessionServiceMarkPinned = "/common.api.im.v1.IMChatSessionService/MarkPinned"
 const OperationIMChatSessionServiceMarkRead = "/common.api.im.v1.IMChatSessionService/MarkRead"
-const OperationIMChatSessionServiceMarkTop = "/common.api.im.v1.IMChatSessionService/MarkTop"
 const OperationIMChatSessionServicePage = "/common.api.im.v1.IMChatSessionService/Page"
 
 type IMChatSessionServiceHTTPServer interface {
-	// MarkDisturb 免打扰
-	MarkDisturb(context.Context, *ChatSessionMarkDisturbRequest) (*ChatSessionMarkDisturbReply, error)
+	// MarkMuted 免打扰
+	MarkMuted(context.Context, *ChatSessionMarkMutedRequest) (*ChatSessionMarkMutedReply, error)
+	// MarkPinned 置顶
+	MarkPinned(context.Context, *ChatSessionMarkPinnedRequest) (*ChatSessionMarkPinnedReply, error)
 	// MarkRead 标为已读
 	MarkRead(context.Context, *ChatSessionMarkReadRequest) (*ChatSessionMarkReadReply, error)
-	// MarkTop 置顶
-	MarkTop(context.Context, *ChatSessionMarkTopRequest) (*ChatSessionMarkTopReply, error)
 	// Page 查询会话数据
 	Page(context.Context, *ChatSessionPageRequest) (*ChatSessionPageReply, error)
 }
 
 func RegisterIMChatSessionServiceHTTPServer(s *http.Server, srv IMChatSessionServiceHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/chatSession/markDisturb", _IMChatSessionService_MarkDisturb0_HTTP_Handler(srv))
-	r.POST("/v1/chatSession/markTop", _IMChatSessionService_MarkTop0_HTTP_Handler(srv))
+	r.POST("/v1/chatSession/markMuted", _IMChatSessionService_MarkMuted0_HTTP_Handler(srv))
+	r.POST("/v1/chatSession/markPinned", _IMChatSessionService_MarkPinned0_HTTP_Handler(srv))
 	r.POST("/v1/chatSession/markRead", _IMChatSessionService_MarkRead0_HTTP_Handler(srv))
 	r.POST("/v1/chatSession/page", _IMChatSessionService_Page7_HTTP_Handler(srv))
 }
 
-func _IMChatSessionService_MarkDisturb0_HTTP_Handler(srv IMChatSessionServiceHTTPServer) func(ctx http.Context) error {
+func _IMChatSessionService_MarkMuted0_HTTP_Handler(srv IMChatSessionServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ChatSessionMarkDisturbRequest
+		var in ChatSessionMarkMutedRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationIMChatSessionServiceMarkDisturb)
+		http.SetOperation(ctx, OperationIMChatSessionServiceMarkMuted)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.MarkDisturb(ctx, req.(*ChatSessionMarkDisturbRequest))
+			return srv.MarkMuted(ctx, req.(*ChatSessionMarkMutedRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ChatSessionMarkDisturbReply)
+		reply := out.(*ChatSessionMarkMutedReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _IMChatSessionService_MarkTop0_HTTP_Handler(srv IMChatSessionServiceHTTPServer) func(ctx http.Context) error {
+func _IMChatSessionService_MarkPinned0_HTTP_Handler(srv IMChatSessionServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ChatSessionMarkTopRequest
+		var in ChatSessionMarkPinnedRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationIMChatSessionServiceMarkTop)
+		http.SetOperation(ctx, OperationIMChatSessionServiceMarkPinned)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.MarkTop(ctx, req.(*ChatSessionMarkTopRequest))
+			return srv.MarkPinned(ctx, req.(*ChatSessionMarkPinnedRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ChatSessionMarkTopReply)
+		reply := out.(*ChatSessionMarkPinnedReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -132,12 +132,12 @@ func _IMChatSessionService_Page7_HTTP_Handler(srv IMChatSessionServiceHTTPServer
 }
 
 type IMChatSessionServiceHTTPClient interface {
-	// MarkDisturb 免打扰
-	MarkDisturb(ctx context.Context, req *ChatSessionMarkDisturbRequest, opts ...http.CallOption) (rsp *ChatSessionMarkDisturbReply, err error)
+	// MarkMuted 免打扰
+	MarkMuted(ctx context.Context, req *ChatSessionMarkMutedRequest, opts ...http.CallOption) (rsp *ChatSessionMarkMutedReply, err error)
+	// MarkPinned 置顶
+	MarkPinned(ctx context.Context, req *ChatSessionMarkPinnedRequest, opts ...http.CallOption) (rsp *ChatSessionMarkPinnedReply, err error)
 	// MarkRead 标为已读
 	MarkRead(ctx context.Context, req *ChatSessionMarkReadRequest, opts ...http.CallOption) (rsp *ChatSessionMarkReadReply, err error)
-	// MarkTop 置顶
-	MarkTop(ctx context.Context, req *ChatSessionMarkTopRequest, opts ...http.CallOption) (rsp *ChatSessionMarkTopReply, err error)
 	// Page 查询会话数据
 	Page(ctx context.Context, req *ChatSessionPageRequest, opts ...http.CallOption) (rsp *ChatSessionPageReply, err error)
 }
@@ -150,12 +150,26 @@ func NewIMChatSessionServiceHTTPClient(client *http.Client) IMChatSessionService
 	return &IMChatSessionServiceHTTPClientImpl{client}
 }
 
-// MarkDisturb 免打扰
-func (c *IMChatSessionServiceHTTPClientImpl) MarkDisturb(ctx context.Context, in *ChatSessionMarkDisturbRequest, opts ...http.CallOption) (*ChatSessionMarkDisturbReply, error) {
-	var out ChatSessionMarkDisturbReply
-	pattern := "/v1/chatSession/markDisturb"
+// MarkMuted 免打扰
+func (c *IMChatSessionServiceHTTPClientImpl) MarkMuted(ctx context.Context, in *ChatSessionMarkMutedRequest, opts ...http.CallOption) (*ChatSessionMarkMutedReply, error) {
+	var out ChatSessionMarkMutedReply
+	pattern := "/v1/chatSession/markMuted"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationIMChatSessionServiceMarkDisturb))
+	opts = append(opts, http.Operation(OperationIMChatSessionServiceMarkMuted))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// MarkPinned 置顶
+func (c *IMChatSessionServiceHTTPClientImpl) MarkPinned(ctx context.Context, in *ChatSessionMarkPinnedRequest, opts ...http.CallOption) (*ChatSessionMarkPinnedReply, error) {
+	var out ChatSessionMarkPinnedReply
+	pattern := "/v1/chatSession/markPinned"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationIMChatSessionServiceMarkPinned))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -170,20 +184,6 @@ func (c *IMChatSessionServiceHTTPClientImpl) MarkRead(ctx context.Context, in *C
 	pattern := "/v1/chatSession/markRead"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationIMChatSessionServiceMarkRead))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
-// MarkTop 置顶
-func (c *IMChatSessionServiceHTTPClientImpl) MarkTop(ctx context.Context, in *ChatSessionMarkTopRequest, opts ...http.CallOption) (*ChatSessionMarkTopReply, error) {
-	var out ChatSessionMarkTopReply
-	pattern := "/v1/chatSession/markTop"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationIMChatSessionServiceMarkTop))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

@@ -33,7 +33,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		return nil, nil, err
 	}
 	baseDomain := base.NewBaseDomain(bootstrap, helper, eventPool)
-	sessionDomain := domain.NewSessionDomain(baseDomain, eventPool)
+	sessionDomain := domain.NewSessionDomain(baseDomain)
 	callbackService := service.NewCallbackService(baseService, sessionDomain)
 	v := service.ProvideServices(systemService, callbackService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v)

@@ -4,39 +4,37 @@ import (
 	"bytes"
 	signalv1 "common/api/signal/v1"
 	"common/pkg/client"
-	"common/pkg/util"
 	"common/pkg/util/server"
 	domainbase "connector/internal/biz/base"
+	"connector/internal/biz/model"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"sync"
 
-	"github.com/gorilla/websocket"
 	"github.com/samber/lo"
 )
 
 type SessionDomain struct {
 	*domainbase.BaseDomain
-	eventPool  *util.EventPool
 	httpClient *http.Client
 
-	sessionIds map[string]*websocket.Conn
+	sessionIds map[string]*model.Connection
 	mu         sync.RWMutex
 }
 
-func NewSessionDomain(baseDomain *domainbase.BaseDomain, eventPool *util.EventPool) *SessionDomain {
+func NewSessionDomain(baseDomain *domainbase.BaseDomain) *SessionDomain {
 	return &SessionDomain{
 		BaseDomain: baseDomain,
-		eventPool:  eventPool,
 		httpClient: client.NewHttpClient(),
-		sessionIds: map[string]*websocket.Conn{},
+		sessionIds: map[string]*model.Connection{},
 		mu:         sync.RWMutex{},
 	}
 }
 
-func (d *SessionDomain) AddSessionId(sessionId string, conn *websocket.Conn) {
+func (d *SessionDomain) AddSessionId(sessionId string, conn *model.Connection) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.sessionIds[sessionId] = conn
@@ -54,19 +52,14 @@ func (d *SessionDomain) GetSessionIds() []string {
 	return lo.Keys(d.sessionIds)
 }
 
-func (d *SessionDomain) SendMessage(sessionIds []string, message any) error {
+func (d *SessionDomain) SendMessage(ctx context.Context, sessionIds []string, message any) error {
 	if len(sessionIds) == 0 {
 		return nil
 	}
 	d.mu.RLock()
 	for _, sessionId := range sessionIds {
 		if conn, ok := d.sessionIds[sessionId]; ok {
-			return d.EventPool.Submit(func() {
-				err := conn.WriteJSON(message)
-				if err != nil {
-					d.Log.Error("websocket [%s] send message error: %v", sessionId, err)
-				}
-			})
+			conn.Send(message)
 		}
 	}
 	d.mu.RUnlock()

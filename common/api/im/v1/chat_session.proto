@@ -12,17 +12,17 @@ option go_package = "common/api/im/v1;v1";
 service IMChatSessionService {
 
   // 免打扰
-  rpc MarkDisturb (ChatSessionMarkDisturbRequest) returns (ChatSessionMarkDisturbReply) {
+  rpc MarkMuted (ChatSessionMarkMutedRequest) returns (ChatSessionMarkMutedReply) {
     option (google.api.http) = {
-      post: "/v1/chatSession/markDisturb"
+      post: "/v1/chatSession/markMuted"
       body: "*"
     };
   }
 
   // 置顶
-  rpc MarkTop (ChatSessionMarkTopRequest) returns (ChatSessionMarkTopReply) {
+  rpc MarkPinned (ChatSessionMarkPinnedRequest) returns (ChatSessionMarkPinnedReply) {
     option (google.api.http) = {
-      post: "/v1/chatSession/markTop"
+      post: "/v1/chatSession/markPinned"
       body: "*"
     };
   }
@@ -55,21 +55,21 @@ message ChatSessionQueryParams {
 
 // 请求/响应结构定义
 
-message ChatSessionMarkDisturbRequest {
+message ChatSessionMarkMutedRequest {
   // 会话ID
   repeated int64 ids = 1;
   // 是否免打扰
   bool disturb = 2;
 }
-message ChatSessionMarkDisturbReply {}
+message ChatSessionMarkMutedReply {}
 
-message ChatSessionMarkTopRequest {
+message ChatSessionMarkPinnedRequest {
   // 会话ID
   repeated int64 ids = 1;
   // 是否置顶
   bool top = 2;
 }
-message ChatSessionMarkTopReply {}
+message ChatSessionMarkPinnedReply {}
 
 message ChatSessionMarkReadRequest {
   // 会话ID

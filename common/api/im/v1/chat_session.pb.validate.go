@@ -137,22 +137,22 @@ var _ interface {
 	ErrorName() string
 } = ChatSessionQueryParamsValidationError{}
 
-// Validate checks the field values on ChatSessionMarkDisturbRequest with the
+// Validate checks the field values on ChatSessionMarkMutedRequest with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ChatSessionMarkDisturbRequest) Validate() error {
+func (m *ChatSessionMarkMutedRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ChatSessionMarkDisturbRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// ChatSessionMarkDisturbRequestMultiError, or nil if none found.
-func (m *ChatSessionMarkDisturbRequest) ValidateAll() error {
+// ValidateAll checks the field values on ChatSessionMarkMutedRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ChatSessionMarkMutedRequestMultiError, or nil if none found.
+func (m *ChatSessionMarkMutedRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ChatSessionMarkDisturbRequest) validate(all bool) error {
+func (m *ChatSessionMarkMutedRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -162,19 +162,19 @@ func (m *ChatSessionMarkDisturbRequest) validate(all bool) error {
 	// no validation rules for Disturb
 
 	if len(errors) > 0 {
-		return ChatSessionMarkDisturbRequestMultiError(errors)
+		return ChatSessionMarkMutedRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// ChatSessionMarkDisturbRequestMultiError is an error wrapping multiple
-// validation errors returned by ChatSessionMarkDisturbRequest.ValidateAll()
-// if the designated constraints aren't met.
-type ChatSessionMarkDisturbRequestMultiError []error
+// ChatSessionMarkMutedRequestMultiError is an error wrapping multiple
+// validation errors returned by ChatSessionMarkMutedRequest.ValidateAll() if
+// the designated constraints aren't met.
+type ChatSessionMarkMutedRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ChatSessionMarkDisturbRequestMultiError) Error() string {
+func (m ChatSessionMarkMutedRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -183,12 +183,12 @@ func (m ChatSessionMarkDisturbRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ChatSessionMarkDisturbRequestMultiError) AllErrors() []error { return m }
+func (m ChatSessionMarkMutedRequestMultiError) AllErrors() []error { return m }
 
-// ChatSessionMarkDisturbRequestValidationError is the validation error
-// returned by ChatSessionMarkDisturbRequest.Validate if the designated
-// constraints aren't met.
-type ChatSessionMarkDisturbRequestValidationError struct {
+// ChatSessionMarkMutedRequestValidationError is the validation error returned
+// by ChatSessionMarkMutedRequest.Validate if the designated constraints
+// aren't met.
+type ChatSessionMarkMutedRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -196,24 +196,24 @@ type ChatSessionMarkDisturbRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatSessionMarkDisturbRequestValidationError) Field() string { return e.field }
+func (e ChatSessionMarkMutedRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatSessionMarkDisturbRequestValidationError) Reason() string { return e.reason }
+func (e ChatSessionMarkMutedRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatSessionMarkDisturbRequestValidationError) Cause() error { return e.cause }
+func (e ChatSessionMarkMutedRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatSessionMarkDisturbRequestValidationError) Key() bool { return e.key }
+func (e ChatSessionMarkMutedRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatSessionMarkDisturbRequestValidationError) ErrorName() string {
-	return "ChatSessionMarkDisturbRequestValidationError"
+func (e ChatSessionMarkMutedRequestValidationError) ErrorName() string {
+	return "ChatSessionMarkMutedRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ChatSessionMarkDisturbRequestValidationError) Error() string {
+func (e ChatSessionMarkMutedRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -225,14 +225,14 @@ func (e ChatSessionMarkDisturbRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatSessionMarkDisturbRequest.%s: %s%s",
+		"invalid %sChatSessionMarkMutedRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatSessionMarkDisturbRequestValidationError{}
+var _ error = ChatSessionMarkMutedRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -240,24 +240,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatSessionMarkDisturbRequestValidationError{}
+} = ChatSessionMarkMutedRequestValidationError{}
 
-// Validate checks the field values on ChatSessionMarkDisturbReply with the
-// rules defined in the proto definition for this message. If any rules are
+// Validate checks the field values on ChatSessionMarkMutedReply with the rules
+// defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ChatSessionMarkDisturbReply) Validate() error {
+func (m *ChatSessionMarkMutedReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ChatSessionMarkDisturbReply with the
+// ValidateAll checks the field values on ChatSessionMarkMutedReply with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ChatSessionMarkDisturbReplyMultiError, or nil if none found.
-func (m *ChatSessionMarkDisturbReply) ValidateAll() error {
+// ChatSessionMarkMutedReplyMultiError, or nil if none found.
+func (m *ChatSessionMarkMutedReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ChatSessionMarkDisturbReply) validate(all bool) error {
+func (m *ChatSessionMarkMutedReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -265,19 +265,19 @@ func (m *ChatSessionMarkDisturbReply) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return ChatSessionMarkDisturbReplyMultiError(errors)
+		return ChatSessionMarkMutedReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// ChatSessionMarkDisturbReplyMultiError is an error wrapping multiple
-// validation errors returned by ChatSessionMarkDisturbReply.ValidateAll() if
-// the designated constraints aren't met.
-type ChatSessionMarkDisturbReplyMultiError []error
+// ChatSessionMarkMutedReplyMultiError is an error wrapping multiple validation
+// errors returned by ChatSessionMarkMutedReply.ValidateAll() if the
+// designated constraints aren't met.
+type ChatSessionMarkMutedReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ChatSessionMarkDisturbReplyMultiError) Error() string {
+func (m ChatSessionMarkMutedReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -286,12 +286,11 @@ func (m ChatSessionMarkDisturbReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ChatSessionMarkDisturbReplyMultiError) AllErrors() []error { return m }
+func (m ChatSessionMarkMutedReplyMultiError) AllErrors() []error { return m }
 
-// ChatSessionMarkDisturbReplyValidationError is the validation error returned
-// by ChatSessionMarkDisturbReply.Validate if the designated constraints
-// aren't met.
-type ChatSessionMarkDisturbReplyValidationError struct {
+// ChatSessionMarkMutedReplyValidationError is the validation error returned by
+// ChatSessionMarkMutedReply.Validate if the designated constraints aren't met.
+type ChatSessionMarkMutedReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -299,24 +298,24 @@ type ChatSessionMarkDisturbReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatSessionMarkDisturbReplyValidationError) Field() string { return e.field }
+func (e ChatSessionMarkMutedReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatSessionMarkDisturbReplyValidationError) Reason() string { return e.reason }
+func (e ChatSessionMarkMutedReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatSessionMarkDisturbReplyValidationError) Cause() error { return e.cause }
+func (e ChatSessionMarkMutedReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatSessionMarkDisturbReplyValidationError) Key() bool { return e.key }
+func (e ChatSessionMarkMutedReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatSessionMarkDisturbReplyValidationError) ErrorName() string {
-	return "ChatSessionMarkDisturbReplyValidationError"
+func (e ChatSessionMarkMutedReplyValidationError) ErrorName() string {
+	return "ChatSessionMarkMutedReplyValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ChatSessionMarkDisturbReplyValidationError) Error() string {
+func (e ChatSessionMarkMutedReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -328,14 +327,14 @@ func (e ChatSessionMarkDisturbReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatSessionMarkDisturbReply.%s: %s%s",
+		"invalid %sChatSessionMarkMutedReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatSessionMarkDisturbReplyValidationError{}
+var _ error = ChatSessionMarkMutedReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -343,24 +342,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatSessionMarkDisturbReplyValidationError{}
+} = ChatSessionMarkMutedReplyValidationError{}
 
-// Validate checks the field values on ChatSessionMarkTopRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on ChatSessionMarkPinnedRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ChatSessionMarkTopRequest) Validate() error {
+func (m *ChatSessionMarkPinnedRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ChatSessionMarkTopRequest with the
+// ValidateAll checks the field values on ChatSessionMarkPinnedRequest with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ChatSessionMarkTopRequestMultiError, or nil if none found.
-func (m *ChatSessionMarkTopRequest) ValidateAll() error {
+// ChatSessionMarkPinnedRequestMultiError, or nil if none found.
+func (m *ChatSessionMarkPinnedRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ChatSessionMarkTopRequest) validate(all bool) error {
+func (m *ChatSessionMarkPinnedRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -370,19 +369,19 @@ func (m *ChatSessionMarkTopRequest) validate(all bool) error {
 	// no validation rules for Top
 
 	if len(errors) > 0 {
-		return ChatSessionMarkTopRequestMultiError(errors)
+		return ChatSessionMarkPinnedRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// ChatSessionMarkTopRequestMultiError is an error wrapping multiple validation
-// errors returned by ChatSessionMarkTopRequest.ValidateAll() if the
-// designated constraints aren't met.
-type ChatSessionMarkTopRequestMultiError []error
+// ChatSessionMarkPinnedRequestMultiError is an error wrapping multiple
+// validation errors returned by ChatSessionMarkPinnedRequest.ValidateAll() if
+// the designated constraints aren't met.
+type ChatSessionMarkPinnedRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ChatSessionMarkTopRequestMultiError) Error() string {
+func (m ChatSessionMarkPinnedRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -391,11 +390,12 @@ func (m ChatSessionMarkTopRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ChatSessionMarkTopRequestMultiError) AllErrors() []error { return m }
+func (m ChatSessionMarkPinnedRequestMultiError) AllErrors() []error { return m }
 
-// ChatSessionMarkTopRequestValidationError is the validation error returned by
-// ChatSessionMarkTopRequest.Validate if the designated constraints aren't met.
-type ChatSessionMarkTopRequestValidationError struct {
+// ChatSessionMarkPinnedRequestValidationError is the validation error returned
+// by ChatSessionMarkPinnedRequest.Validate if the designated constraints
+// aren't met.
+type ChatSessionMarkPinnedRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -403,24 +403,24 @@ type ChatSessionMarkTopRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatSessionMarkTopRequestValidationError) Field() string { return e.field }
+func (e ChatSessionMarkPinnedRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatSessionMarkTopRequestValidationError) Reason() string { return e.reason }
+func (e ChatSessionMarkPinnedRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatSessionMarkTopRequestValidationError) Cause() error { return e.cause }
+func (e ChatSessionMarkPinnedRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatSessionMarkTopRequestValidationError) Key() bool { return e.key }
+func (e ChatSessionMarkPinnedRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatSessionMarkTopRequestValidationError) ErrorName() string {
-	return "ChatSessionMarkTopRequestValidationError"
+func (e ChatSessionMarkPinnedRequestValidationError) ErrorName() string {
+	return "ChatSessionMarkPinnedRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ChatSessionMarkTopRequestValidationError) Error() string {
+func (e ChatSessionMarkPinnedRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -432,14 +432,14 @@ func (e ChatSessionMarkTopRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatSessionMarkTopRequest.%s: %s%s",
+		"invalid %sChatSessionMarkPinnedRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatSessionMarkTopRequestValidationError{}
+var _ error = ChatSessionMarkPinnedRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -447,24 +447,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatSessionMarkTopRequestValidationError{}
+} = ChatSessionMarkPinnedRequestValidationError{}
 
-// Validate checks the field values on ChatSessionMarkTopReply with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on ChatSessionMarkPinnedReply with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ChatSessionMarkTopReply) Validate() error {
+func (m *ChatSessionMarkPinnedReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ChatSessionMarkTopReply with the
+// ValidateAll checks the field values on ChatSessionMarkPinnedReply with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ChatSessionMarkTopReplyMultiError, or nil if none found.
-func (m *ChatSessionMarkTopReply) ValidateAll() error {
+// ChatSessionMarkPinnedReplyMultiError, or nil if none found.
+func (m *ChatSessionMarkPinnedReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ChatSessionMarkTopReply) validate(all bool) error {
+func (m *ChatSessionMarkPinnedReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -472,19 +472,19 @@ func (m *ChatSessionMarkTopReply) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return ChatSessionMarkTopReplyMultiError(errors)
+		return ChatSessionMarkPinnedReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// ChatSessionMarkTopReplyMultiError is an error wrapping multiple validation
-// errors returned by ChatSessionMarkTopReply.ValidateAll() if the designated
-// constraints aren't met.
-type ChatSessionMarkTopReplyMultiError []error
+// ChatSessionMarkPinnedReplyMultiError is an error wrapping multiple
+// validation errors returned by ChatSessionMarkPinnedReply.ValidateAll() if
+// the designated constraints aren't met.
+type ChatSessionMarkPinnedReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ChatSessionMarkTopReplyMultiError) Error() string {
+func (m ChatSessionMarkPinnedReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -493,11 +493,11 @@ func (m ChatSessionMarkTopReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ChatSessionMarkTopReplyMultiError) AllErrors() []error { return m }
+func (m ChatSessionMarkPinnedReplyMultiError) AllErrors() []error { return m }
 
-// ChatSessionMarkTopReplyValidationError is the validation error returned by
-// ChatSessionMarkTopReply.Validate if the designated constraints aren't met.
-type ChatSessionMarkTopReplyValidationError struct {
+// ChatSessionMarkPinnedReplyValidationError is the validation error returned
+// by ChatSessionMarkPinnedReply.Validate if the designated constraints aren't met.
+type ChatSessionMarkPinnedReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -505,24 +505,24 @@ type ChatSessionMarkTopReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatSessionMarkTopReplyValidationError) Field() string { return e.field }
+func (e ChatSessionMarkPinnedReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatSessionMarkTopReplyValidationError) Reason() string { return e.reason }
+func (e ChatSessionMarkPinnedReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatSessionMarkTopReplyValidationError) Cause() error { return e.cause }
+func (e ChatSessionMarkPinnedReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatSessionMarkTopReplyValidationError) Key() bool { return e.key }
+func (e ChatSessionMarkPinnedReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatSessionMarkTopReplyValidationError) ErrorName() string {
-	return "ChatSessionMarkTopReplyValidationError"
+func (e ChatSessionMarkPinnedReplyValidationError) ErrorName() string {
+	return "ChatSessionMarkPinnedReplyValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ChatSessionMarkTopReplyValidationError) Error() string {
+func (e ChatSessionMarkPinnedReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -534,14 +534,14 @@ func (e ChatSessionMarkTopReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatSessionMarkTopReply.%s: %s%s",
+		"invalid %sChatSessionMarkPinnedReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatSessionMarkTopReplyValidationError{}
+var _ error = ChatSessionMarkPinnedReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -549,7 +549,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatSessionMarkTopReplyValidationError{}
+} = ChatSessionMarkPinnedReplyValidationError{}
 
 // Validate checks the field values on ChatSessionMarkReadRequest with the
 // rules defined in the proto definition for this message. If any rules are

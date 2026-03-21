@@ -68,7 +68,7 @@ func (x *ChatSessionQueryParams) GetIds() []int64 {
 	return nil
 }
 
-type ChatSessionMarkDisturbRequest struct {
+type ChatSessionMarkMutedRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 会话ID
 	Ids []int64 `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
@@ -78,20 +78,20 @@ type ChatSessionMarkDisturbRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChatSessionMarkDisturbRequest) Reset() {
-	*x = ChatSessionMarkDisturbRequest{}
+func (x *ChatSessionMarkMutedRequest) Reset() {
+	*x = ChatSessionMarkMutedRequest{}
 	mi := &file_im_v1_chat_session_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChatSessionMarkDisturbRequest) String() string {
+func (x *ChatSessionMarkMutedRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChatSessionMarkDisturbRequest) ProtoMessage() {}
+func (*ChatSessionMarkMutedRequest) ProtoMessage() {}
 
-func (x *ChatSessionMarkDisturbRequest) ProtoReflect() protoreflect.Message {
+func (x *ChatSessionMarkMutedRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_im_v1_chat_session_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -103,45 +103,45 @@ func (x *ChatSessionMarkDisturbRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChatSessionMarkDisturbRequest.ProtoReflect.Descriptor instead.
-func (*ChatSessionMarkDisturbRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChatSessionMarkMutedRequest.ProtoReflect.Descriptor instead.
+func (*ChatSessionMarkMutedRequest) Descriptor() ([]byte, []int) {
 	return file_im_v1_chat_session_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ChatSessionMarkDisturbRequest) GetIds() []int64 {
+func (x *ChatSessionMarkMutedRequest) GetIds() []int64 {
 	if x != nil {
 		return x.Ids
 	}
 	return nil
 }
 
-func (x *ChatSessionMarkDisturbRequest) GetDisturb() bool {
+func (x *ChatSessionMarkMutedRequest) GetDisturb() bool {
 	if x != nil {
 		return x.Disturb
 	}
 	return false
 }
 
-type ChatSessionMarkDisturbReply struct {
+type ChatSessionMarkMutedReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChatSessionMarkDisturbReply) Reset() {
-	*x = ChatSessionMarkDisturbReply{}
+func (x *ChatSessionMarkMutedReply) Reset() {
+	*x = ChatSessionMarkMutedReply{}
 	mi := &file_im_v1_chat_session_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChatSessionMarkDisturbReply) String() string {
+func (x *ChatSessionMarkMutedReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChatSessionMarkDisturbReply) ProtoMessage() {}
+func (*ChatSessionMarkMutedReply) ProtoMessage() {}
 
-func (x *ChatSessionMarkDisturbReply) ProtoReflect() protoreflect.Message {
+func (x *ChatSessionMarkMutedReply) ProtoReflect() protoreflect.Message {
 	mi := &file_im_v1_chat_session_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -153,12 +153,12 @@ func (x *ChatSessionMarkDisturbReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChatSessionMarkDisturbReply.ProtoReflect.Descriptor instead.
-func (*ChatSessionMarkDisturbReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChatSessionMarkMutedReply.ProtoReflect.Descriptor instead.
+func (*ChatSessionMarkMutedReply) Descriptor() ([]byte, []int) {
 	return file_im_v1_chat_session_proto_rawDescGZIP(), []int{2}
 }
 
-type ChatSessionMarkTopRequest struct {
+type ChatSessionMarkPinnedRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// 会话ID
 	Ids []int64 `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
@@ -168,20 +168,20 @@ type ChatSessionMarkTopRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChatSessionMarkTopRequest) Reset() {
-	*x = ChatSessionMarkTopRequest{}
+func (x *ChatSessionMarkPinnedRequest) Reset() {
+	*x = ChatSessionMarkPinnedRequest{}
 	mi := &file_im_v1_chat_session_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChatSessionMarkTopRequest) String() string {
+func (x *ChatSessionMarkPinnedRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChatSessionMarkTopRequest) ProtoMessage() {}
+func (*ChatSessionMarkPinnedRequest) ProtoMessage() {}
 
-func (x *ChatSessionMarkTopRequest) ProtoReflect() protoreflect.Message {
+func (x *ChatSessionMarkPinnedRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_im_v1_chat_session_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -193,45 +193,45 @@ func (x *ChatSessionMarkTopRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChatSessionMarkTopRequest.ProtoReflect.Descriptor instead.
-func (*ChatSessionMarkTopRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChatSessionMarkPinnedRequest.ProtoReflect.Descriptor instead.
+func (*ChatSessionMarkPinnedRequest) Descriptor() ([]byte, []int) {
 	return file_im_v1_chat_session_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ChatSessionMarkTopRequest) GetIds() []int64 {
+func (x *ChatSessionMarkPinnedRequest) GetIds() []int64 {
 	if x != nil {
 		return x.Ids
 	}
 	return nil
 }
 
-func (x *ChatSessionMarkTopRequest) GetTop() bool {
+func (x *ChatSessionMarkPinnedRequest) GetTop() bool {
 	if x != nil {
 		return x.Top
 	}
 	return false
 }
 
-type ChatSessionMarkTopReply struct {
+type ChatSessionMarkPinnedReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChatSessionMarkTopReply) Reset() {
-	*x = ChatSessionMarkTopReply{}
+func (x *ChatSessionMarkPinnedReply) Reset() {
+	*x = ChatSessionMarkPinnedReply{}
 	mi := &file_im_v1_chat_session_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChatSessionMarkTopReply) String() string {
+func (x *ChatSessionMarkPinnedReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChatSessionMarkTopReply) ProtoMessage() {}
+func (*ChatSessionMarkPinnedReply) ProtoMessage() {}
 
-func (x *ChatSessionMarkTopReply) ProtoReflect() protoreflect.Message {
+func (x *ChatSessionMarkPinnedReply) ProtoReflect() protoreflect.Message {
 	mi := &file_im_v1_chat_session_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -243,8 +243,8 @@ func (x *ChatSessionMarkTopReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChatSessionMarkTopReply.ProtoReflect.Descriptor instead.
-func (*ChatSessionMarkTopReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChatSessionMarkPinnedReply.ProtoReflect.Descriptor instead.
+func (*ChatSessionMarkPinnedReply) Descriptor() ([]byte, []int) {
 	return file_im_v1_chat_session_proto_rawDescGZIP(), []int{4}
 }
 
@@ -443,15 +443,15 @@ const file_im_v1_chat_session_proto_rawDesc = "" +
 	"\n" +
 	"\x18im/v1/chat_session.proto\x12\x10common.api.im.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x16common/v1/common.proto\x1a\x11im/v1/model.proto\"*\n" +
 	"\x16ChatSessionQueryParams\x12\x10\n" +
-	"\x03ids\x18\x02 \x03(\x03R\x03ids\"K\n" +
-	"\x1dChatSessionMarkDisturbRequest\x12\x10\n" +
+	"\x03ids\x18\x02 \x03(\x03R\x03ids\"I\n" +
+	"\x1bChatSessionMarkMutedRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12\x18\n" +
-	"\adisturb\x18\x02 \x01(\bR\adisturb\"\x1d\n" +
-	"\x1bChatSessionMarkDisturbReply\"?\n" +
-	"\x19ChatSessionMarkTopRequest\x12\x10\n" +
+	"\adisturb\x18\x02 \x01(\bR\adisturb\"\x1b\n" +
+	"\x19ChatSessionMarkMutedReply\"B\n" +
+	"\x1cChatSessionMarkPinnedRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12\x10\n" +
-	"\x03top\x18\x02 \x01(\bR\x03top\"\x19\n" +
-	"\x17ChatSessionMarkTopReply\".\n" +
+	"\x03top\x18\x02 \x01(\bR\x03top\"\x1c\n" +
+	"\x1aChatSessionMarkPinnedReply\".\n" +
 	"\x1aChatSessionMarkReadRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\x03R\x03ids\"\x1a\n" +
 	"\x18ChatSessionMarkReadReply\"\x8f\x01\n" +
@@ -460,10 +460,11 @@ const file_im_v1_chat_session_proto_rawDesc = "" +
 	"\x05query\x18\x02 \x01(\v2(.common.api.im.v1.ChatSessionQueryParamsR\x05query\"~\n" +
 	"\x14ChatSessionPageReply\x123\n" +
 	"\x04page\x18\x01 \x01(\v2\x1f.common.api.common.v1.PageReplyR\x04page\x121\n" +
-	"\x04rows\x18\x02 \x03(\v2\x1d.common.api.im.v1.ChatSessionR\x04rows2\xbd\x04\n" +
-	"\x14IMChatSessionService\x12\x95\x01\n" +
-	"\vMarkDisturb\x12/.common.api.im.v1.ChatSessionMarkDisturbRequest\x1a-.common.api.im.v1.ChatSessionMarkDisturbReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/v1/chatSession/markDisturb\x12\x85\x01\n" +
-	"\aMarkTop\x12+.common.api.im.v1.ChatSessionMarkTopRequest\x1a).common.api.im.v1.ChatSessionMarkTopReply\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/chatSession/markTop\x12\x89\x01\n" +
+	"\x04rows\x18\x02 \x03(\v2\x1d.common.api.im.v1.ChatSessionR\x04rows2\xc1\x04\n" +
+	"\x14IMChatSessionService\x12\x8d\x01\n" +
+	"\tMarkMuted\x12-.common.api.im.v1.ChatSessionMarkMutedRequest\x1a+.common.api.im.v1.ChatSessionMarkMutedReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/chatSession/markMuted\x12\x91\x01\n" +
+	"\n" +
+	"MarkPinned\x12..common.api.im.v1.ChatSessionMarkPinnedRequest\x1a,.common.api.im.v1.ChatSessionMarkPinnedReply\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/v1/chatSession/markPinned\x12\x89\x01\n" +
 	"\bMarkRead\x12,.common.api.im.v1.ChatSessionMarkReadRequest\x1a*.common.api.im.v1.ChatSessionMarkReadReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/chatSession/markRead\x12y\n" +
 	"\x04Page\x12(.common.api.im.v1.ChatSessionPageRequest\x1a&.common.api.im.v1.ChatSessionPageReply\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/chatSession/pageB\x15Z\x13common/api/im/v1;v1b\x06proto3"
 
@@ -481,30 +482,30 @@ func file_im_v1_chat_session_proto_rawDescGZIP() []byte {
 
 var file_im_v1_chat_session_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_im_v1_chat_session_proto_goTypes = []any{
-	(*ChatSessionQueryParams)(nil),        // 0: common.api.im.v1.ChatSessionQueryParams
-	(*ChatSessionMarkDisturbRequest)(nil), // 1: common.api.im.v1.ChatSessionMarkDisturbRequest
-	(*ChatSessionMarkDisturbReply)(nil),   // 2: common.api.im.v1.ChatSessionMarkDisturbReply
-	(*ChatSessionMarkTopRequest)(nil),     // 3: common.api.im.v1.ChatSessionMarkTopRequest
-	(*ChatSessionMarkTopReply)(nil),       // 4: common.api.im.v1.ChatSessionMarkTopReply
-	(*ChatSessionMarkReadRequest)(nil),    // 5: common.api.im.v1.ChatSessionMarkReadRequest
-	(*ChatSessionMarkReadReply)(nil),      // 6: common.api.im.v1.ChatSessionMarkReadReply
-	(*ChatSessionPageRequest)(nil),        // 7: common.api.im.v1.ChatSessionPageRequest
-	(*ChatSessionPageReply)(nil),          // 8: common.api.im.v1.ChatSessionPageReply
-	(*v1.PageRequest)(nil),                // 9: common.api.common.v1.PageRequest
-	(*v1.PageReply)(nil),                  // 10: common.api.common.v1.PageReply
-	(*ChatSession)(nil),                   // 11: common.api.im.v1.ChatSession
+	(*ChatSessionQueryParams)(nil),       // 0: common.api.im.v1.ChatSessionQueryParams
+	(*ChatSessionMarkMutedRequest)(nil),  // 1: common.api.im.v1.ChatSessionMarkMutedRequest
+	(*ChatSessionMarkMutedReply)(nil),    // 2: common.api.im.v1.ChatSessionMarkMutedReply
+	(*ChatSessionMarkPinnedRequest)(nil), // 3: common.api.im.v1.ChatSessionMarkPinnedRequest
+	(*ChatSessionMarkPinnedReply)(nil),   // 4: common.api.im.v1.ChatSessionMarkPinnedReply
+	(*ChatSessionMarkReadRequest)(nil),   // 5: common.api.im.v1.ChatSessionMarkReadRequest
+	(*ChatSessionMarkReadReply)(nil),     // 6: common.api.im.v1.ChatSessionMarkReadReply
+	(*ChatSessionPageRequest)(nil),       // 7: common.api.im.v1.ChatSessionPageRequest
+	(*ChatSessionPageReply)(nil),         // 8: common.api.im.v1.ChatSessionPageReply
+	(*v1.PageRequest)(nil),               // 9: common.api.common.v1.PageRequest
+	(*v1.PageReply)(nil),                 // 10: common.api.common.v1.PageReply
+	(*ChatSession)(nil),                  // 11: common.api.im.v1.ChatSession
 }
 var file_im_v1_chat_session_proto_depIdxs = []int32{
 	9,  // 0: common.api.im.v1.ChatSessionPageRequest.page:type_name -> common.api.common.v1.PageRequest
 	0,  // 1: common.api.im.v1.ChatSessionPageRequest.query:type_name -> common.api.im.v1.ChatSessionQueryParams
 	10, // 2: common.api.im.v1.ChatSessionPageReply.page:type_name -> common.api.common.v1.PageReply
 	11, // 3: common.api.im.v1.ChatSessionPageReply.rows:type_name -> common.api.im.v1.ChatSession
-	1,  // 4: common.api.im.v1.IMChatSessionService.MarkDisturb:input_type -> common.api.im.v1.ChatSessionMarkDisturbRequest
-	3,  // 5: common.api.im.v1.IMChatSessionService.MarkTop:input_type -> common.api.im.v1.ChatSessionMarkTopRequest
+	1,  // 4: common.api.im.v1.IMChatSessionService.MarkMuted:input_type -> common.api.im.v1.ChatSessionMarkMutedRequest
+	3,  // 5: common.api.im.v1.IMChatSessionService.MarkPinned:input_type -> common.api.im.v1.ChatSessionMarkPinnedRequest
 	5,  // 6: common.api.im.v1.IMChatSessionService.MarkRead:input_type -> common.api.im.v1.ChatSessionMarkReadRequest
 	7,  // 7: common.api.im.v1.IMChatSessionService.Page:input_type -> common.api.im.v1.ChatSessionPageRequest
-	2,  // 8: common.api.im.v1.IMChatSessionService.MarkDisturb:output_type -> common.api.im.v1.ChatSessionMarkDisturbReply
-	4,  // 9: common.api.im.v1.IMChatSessionService.MarkTop:output_type -> common.api.im.v1.ChatSessionMarkTopReply
+	2,  // 8: common.api.im.v1.IMChatSessionService.MarkMuted:output_type -> common.api.im.v1.ChatSessionMarkMutedReply
+	4,  // 9: common.api.im.v1.IMChatSessionService.MarkPinned:output_type -> common.api.im.v1.ChatSessionMarkPinnedReply
 	6,  // 10: common.api.im.v1.IMChatSessionService.MarkRead:output_type -> common.api.im.v1.ChatSessionMarkReadReply
 	8,  // 11: common.api.im.v1.IMChatSessionService.Page:output_type -> common.api.im.v1.ChatSessionPageReply
 	8,  // [8:12] is the sub-list for method output_type

@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	IMChatSessionService_MarkDisturb_FullMethodName = "/common.api.im.v1.IMChatSessionService/MarkDisturb"
-	IMChatSessionService_MarkTop_FullMethodName     = "/common.api.im.v1.IMChatSessionService/MarkTop"
-	IMChatSessionService_MarkRead_FullMethodName    = "/common.api.im.v1.IMChatSessionService/MarkRead"
-	IMChatSessionService_Page_FullMethodName        = "/common.api.im.v1.IMChatSessionService/Page"
+	IMChatSessionService_MarkMuted_FullMethodName  = "/common.api.im.v1.IMChatSessionService/MarkMuted"
+	IMChatSessionService_MarkPinned_FullMethodName = "/common.api.im.v1.IMChatSessionService/MarkPinned"
+	IMChatSessionService_MarkRead_FullMethodName   = "/common.api.im.v1.IMChatSessionService/MarkRead"
+	IMChatSessionService_Page_FullMethodName       = "/common.api.im.v1.IMChatSessionService/Page"
 )
 
 // IMChatSessionServiceClient is the client API for IMChatSessionService service.
@@ -32,9 +32,9 @@ const (
 // ChatSession 服务
 type IMChatSessionServiceClient interface {
 	// 免打扰
-	MarkDisturb(ctx context.Context, in *ChatSessionMarkDisturbRequest, opts ...grpc.CallOption) (*ChatSessionMarkDisturbReply, error)
+	MarkMuted(ctx context.Context, in *ChatSessionMarkMutedRequest, opts ...grpc.CallOption) (*ChatSessionMarkMutedReply, error)
 	// 置顶
-	MarkTop(ctx context.Context, in *ChatSessionMarkTopRequest, opts ...grpc.CallOption) (*ChatSessionMarkTopReply, error)
+	MarkPinned(ctx context.Context, in *ChatSessionMarkPinnedRequest, opts ...grpc.CallOption) (*ChatSessionMarkPinnedReply, error)
 	// 标为已读
 	MarkRead(ctx context.Context, in *ChatSessionMarkReadRequest, opts ...grpc.CallOption) (*ChatSessionMarkReadReply, error)
 	// 查询会话数据
@@ -49,20 +49,20 @@ func NewIMChatSessionServiceClient(cc grpc.ClientConnInterface) IMChatSessionSer
 	return &iMChatSessionServiceClient{cc}
 }
 
-func (c *iMChatSessionServiceClient) MarkDisturb(ctx context.Context, in *ChatSessionMarkDisturbRequest, opts ...grpc.CallOption) (*ChatSessionMarkDisturbReply, error) {
+func (c *iMChatSessionServiceClient) MarkMuted(ctx context.Context, in *ChatSessionMarkMutedRequest, opts ...grpc.CallOption) (*ChatSessionMarkMutedReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ChatSessionMarkDisturbReply)
-	err := c.cc.Invoke(ctx, IMChatSessionService_MarkDisturb_FullMethodName, in, out, cOpts...)
+	out := new(ChatSessionMarkMutedReply)
+	err := c.cc.Invoke(ctx, IMChatSessionService_MarkMuted_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *iMChatSessionServiceClient) MarkTop(ctx context.Context, in *ChatSessionMarkTopRequest, opts ...grpc.CallOption) (*ChatSessionMarkTopReply, error) {
+func (c *iMChatSessionServiceClient) MarkPinned(ctx context.Context, in *ChatSessionMarkPinnedRequest, opts ...grpc.CallOption) (*ChatSessionMarkPinnedReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ChatSessionMarkTopReply)
-	err := c.cc.Invoke(ctx, IMChatSessionService_MarkTop_FullMethodName, in, out, cOpts...)
+	out := new(ChatSessionMarkPinnedReply)
+	err := c.cc.Invoke(ctx, IMChatSessionService_MarkPinned_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,9 +96,9 @@ func (c *iMChatSessionServiceClient) Page(ctx context.Context, in *ChatSessionPa
 // ChatSession 服务
 type IMChatSessionServiceServer interface {
 	// 免打扰
-	MarkDisturb(context.Context, *ChatSessionMarkDisturbRequest) (*ChatSessionMarkDisturbReply, error)
+	MarkMuted(context.Context, *ChatSessionMarkMutedRequest) (*ChatSessionMarkMutedReply, error)
 	// 置顶
-	MarkTop(context.Context, *ChatSessionMarkTopRequest) (*ChatSessionMarkTopReply, error)
+	MarkPinned(context.Context, *ChatSessionMarkPinnedRequest) (*ChatSessionMarkPinnedReply, error)
 	// 标为已读
 	MarkRead(context.Context, *ChatSessionMarkReadRequest) (*ChatSessionMarkReadReply, error)
 	// 查询会话数据
@@ -113,11 +113,11 @@ type IMChatSessionServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedIMChatSessionServiceServer struct{}
 
-func (UnimplementedIMChatSessionServiceServer) MarkDisturb(context.Context, *ChatSessionMarkDisturbRequest) (*ChatSessionMarkDisturbReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method MarkDisturb not implemented")
+func (UnimplementedIMChatSessionServiceServer) MarkMuted(context.Context, *ChatSessionMarkMutedRequest) (*ChatSessionMarkMutedReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method MarkMuted not implemented")
 }
-func (UnimplementedIMChatSessionServiceServer) MarkTop(context.Context, *ChatSessionMarkTopRequest) (*ChatSessionMarkTopReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method MarkTop not implemented")
+func (UnimplementedIMChatSessionServiceServer) MarkPinned(context.Context, *ChatSessionMarkPinnedRequest) (*ChatSessionMarkPinnedReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method MarkPinned not implemented")
 }
 func (UnimplementedIMChatSessionServiceServer) MarkRead(context.Context, *ChatSessionMarkReadRequest) (*ChatSessionMarkReadReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method MarkRead not implemented")
@@ -146,38 +146,38 @@ func RegisterIMChatSessionServiceServer(s grpc.ServiceRegistrar, srv IMChatSessi
 	s.RegisterService(&IMChatSessionService_ServiceDesc, srv)
 }
 
-func _IMChatSessionService_MarkDisturb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChatSessionMarkDisturbRequest)
+func _IMChatSessionService_MarkMuted_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChatSessionMarkMutedRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(IMChatSessionServiceServer).MarkDisturb(ctx, in)
+		return srv.(IMChatSessionServiceServer).MarkMuted(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: IMChatSessionService_MarkDisturb_FullMethodName,
+		FullMethod: IMChatSessionService_MarkMuted_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IMChatSessionServiceServer).MarkDisturb(ctx, req.(*ChatSessionMarkDisturbRequest))
+		return srv.(IMChatSessionServiceServer).MarkMuted(ctx, req.(*ChatSessionMarkMutedRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _IMChatSessionService_MarkTop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChatSessionMarkTopRequest)
+func _IMChatSessionService_MarkPinned_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChatSessionMarkPinnedRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(IMChatSessionServiceServer).MarkTop(ctx, in)
+		return srv.(IMChatSessionServiceServer).MarkPinned(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: IMChatSessionService_MarkTop_FullMethodName,
+		FullMethod: IMChatSessionService_MarkPinned_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(IMChatSessionServiceServer).MarkTop(ctx, req.(*ChatSessionMarkTopRequest))
+		return srv.(IMChatSessionServiceServer).MarkPinned(ctx, req.(*ChatSessionMarkPinnedRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -226,12 +226,12 @@ var IMChatSessionService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*IMChatSessionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "MarkDisturb",
-			Handler:    _IMChatSessionService_MarkDisturb_Handler,
+			MethodName: "MarkMuted",
+			Handler:    _IMChatSessionService_MarkMuted_Handler,
 		},
 		{
-			MethodName: "MarkTop",
-			Handler:    _IMChatSessionService_MarkTop_Handler,
+			MethodName: "MarkPinned",
+			Handler:    _IMChatSessionService_MarkPinned_Handler,
 		},
 		{
 			MethodName: "MarkRead",

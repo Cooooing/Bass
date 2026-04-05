@@ -1,12 +1,11 @@
 package service
 
 import (
-	"common/api/common/v1"
+	"common/gen/common/v1"
 	"context"
 	"fmt"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type SystemService struct {
@@ -22,10 +21,6 @@ func NewSystemService(baseService *BaseService) *SystemService {
 
 func (s *SystemService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterSystemServer(gs, s)
-}
-
-func (s *SystemService) RegisterHttp(hs *http.Server) {
-	v1.RegisterSystemHTTPServer(hs, s)
 }
 
 func (s *SystemService) Health(ctx context.Context, req *v1.HealthRequest) (*v1.HealthReply, error) {

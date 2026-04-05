@@ -1,6 +1,6 @@
 module common
 
-go 1.25.5
+go 1.26.1
 
 require (
 	entgo.io/ent v0.14.5

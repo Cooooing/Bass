@@ -128,8 +128,7 @@ func NewProxyHandler(middlewares []middleware.Middleware, consulClient *client.C
 				response, err := conn.Do(r)
 
 				if err != nil {
-					var e *errors2.Error
-					if errors.As(err, &e) {
+					if e, ok2 := errors.AsType[*errors2.Error](err); ok2 {
 						server.HttpErrorEncoder(w, r, errors2.New(int(e.Code), e.Reason, e.Message))
 						return
 					}
@@ -171,8 +170,7 @@ func NewProxyHandler(middlewares []middleware.Middleware, consulClient *client.C
 		_, err := h(ctx, nil)
 		if err != nil {
 			// 捕获中间件错误，例如 AuthMiddleware 返回的 401
-			var e *errors2.Error
-			if errors.As(err, &e) {
+			if e, ok := errors.AsType[*errors2.Error](err); ok {
 				server.HttpErrorEncoder(w, r, e)
 			} else {
 				server.HttpErrorEncoder(w, r, errors2.New(500, "Internal Server Error", err.Error()))

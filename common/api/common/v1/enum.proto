@@ -2,5 +2,5 @@ syntax = "proto3";
 
 package common.api.common.v1;
 
-option go_package = "common/api/common/v1;v1";
+option go_package = "common/gen/common/v1;v1";
 

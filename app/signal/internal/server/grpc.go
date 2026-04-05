@@ -7,6 +7,7 @@ import (
 	"signal/internal/biz/domain"
 	"signal/internal/conf"
 	"signal/internal/service"
+	"time"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,11 +17,26 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	ggrpc "google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 )
 
 // NewGRPCServer new a gRPC server.
 func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *jwt.TokenCache, nodeDomain *domain.NodeDomain) *grpc.Server {
-	var opts = []grpc.ServerOption{
+	ka := []ggrpc.ServerOption{
+		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
+			MinTime:             10 * time.Second,
+			PermitWithoutStream: false,
+		}),
+		ggrpc.KeepaliveParams(keepalive.ServerParameters{
+			MaxConnectionIdle:     300 * time.Second,
+			MaxConnectionAge:      600 * time.Second,
+			MaxConnectionAgeGrace: 30 * time.Second,
+			Time:                  60 * time.Second,
+			Timeout:               20 * time.Second,
+		}),
+	}
+	var serverOpts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
 			tracing.Server(),
@@ -33,14 +49,15 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Serv
 			selector.Server(SignalAuthMiddleware(nodeDomain)).Match(NodeEndpointsMatch()).Build(),
 			validate.ProtoValidate(),
 		),
+		grpc.Options(ka...),
 	}
 	if c.Server.Grpc.Host != "" && c.Server.Http.Port != 0 {
-		opts = append(opts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Grpc.Host, c.Server.Grpc.Port)))
+		serverOpts = append(serverOpts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Grpc.Host, c.Server.Grpc.Port)))
 	}
 	if c.Server.Grpc.Timeout != nil {
-		opts = append(opts, grpc.Timeout(c.Server.Grpc.Timeout.AsDuration()))
+		serverOpts = append(serverOpts, grpc.Timeout(c.Server.Grpc.Timeout.AsDuration()))
 	}
-	srv := grpc.NewServer(opts...)
+	srv := grpc.NewServer(serverOpts...)
 	for _, s := range services {
 		s.RegisterGrpc(srv)
 	}

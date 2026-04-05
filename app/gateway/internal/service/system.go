@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/api/common/v1"
+	"common/gen/common/v1"
 	"context"
 	"fmt"
 

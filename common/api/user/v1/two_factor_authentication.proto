@@ -2,44 +2,24 @@ syntax = "proto3";
 
 package common.api.user.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "common/api/user/v1;v1";
+option go_package = "common/gen/user/v1;v1";
 
 // TwoFactorAuthentication 服务
 service UserTwoFactorAuthenticationService {
 
   // 验证
-  rpc Validate(UserTwoFactorAuthenticationValidateRequest) returns (UserTwoFactorAuthenticationValidateReply) {
-    option (google.api.http) = {
-      post: "/api/v1/user/2FA/validate"
-      body: "*"
-    };
-  }
+  rpc Validate(UserTwoFactorAuthenticationValidateRequest) returns (UserTwoFactorAuthenticationValidateReply);
 
   // 开启 2FA 验证
-  rpc Enable(UserTwoFactorAuthenticationEnableRequest) returns (UserTwoFactorAuthenticationEnableReply) {
-    option (google.api.http) = {
-      get: "/api/v1/user/2FA/enable"
-    };
-  }
+  rpc Enable(UserTwoFactorAuthenticationEnableRequest) returns (UserTwoFactorAuthenticationEnableReply);
 
   // 关闭 2FA 验证
-  rpc Disable(UserTwoFactorAuthenticationDisableRequest) returns (UserTwoFactorAuthenticationDisableReply) {
-    option (google.api.http) = {
-      post: "/api/v1/user/2FA/disable"
-      body: "*"
-    };
-  }
+  rpc Disable(UserTwoFactorAuthenticationDisableRequest) returns (UserTwoFactorAuthenticationDisableReply);
 
   // 确认 2FA 绑定
-  rpc Confirm(UserTwoFactorAuthenticationConfirmRequest) returns (UserTwoFactorAuthenticationConfirmReply) {
-    option (google.api.http) = {
-      post: "/api/v1/user/2FA/confirm"
-      body: "*"
-    };
-  }
+  rpc Confirm(UserTwoFactorAuthenticationConfirmRequest) returns (UserTwoFactorAuthenticationConfirmReply);
 }
 
 // 实体定义

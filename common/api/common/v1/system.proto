@@ -2,18 +2,12 @@ syntax = "proto3";
 
 package common.api.common.v1;
 
-option go_package = "common/api/common/v1;v1";
-
-import "google/api/annotations.proto";
+option go_package = "common/gen/common/v1;v1";
 
 // System 服务
 service System {
   // 健康检查
-  rpc Health (HealthRequest) returns (HealthReply) {
-    option (google.api.http) = {
-      get: "/v1/system/health"
-    };
-  }
+  rpc Health (HealthRequest) returns (HealthReply);
 }
 
 message HealthRequest {

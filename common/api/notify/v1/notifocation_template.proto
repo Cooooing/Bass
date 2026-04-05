@@ -2,40 +2,24 @@ syntax = "proto3";
 
 package common.api.notify.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "notify/v1/enum.proto";
 
-option go_package = "common/api/notify/v1;v1";
+option go_package = "common/gen/notify/v1;v1";
 
 // Notification_Template 服务
 service NotifyNotificationTemplateService {
 
   // 查询通知模板
-  rpc Page (NotificationTemplatePageRequest) returns (NotificationTemplatePageReply) {
-    option (google.api.http) = {
-      post: "/v1/notificationTemplate/page"
-      body: "*"
-    };
-  }
+  rpc Page (NotificationTemplatePageRequest) returns (NotificationTemplatePageReply);
 
   // 添加通知模板
-  rpc Add (NotificationTemplateAddRequest) returns (NotificationTemplateAddReply) {
-    option (google.api.http) = {
-      post: "/v1/notificationTemplate/add"
-      body: "*"
-    };
-  }
+  rpc Add (NotificationTemplateAddRequest) returns (NotificationTemplateAddReply);
 
   // 更新通知模板
-  rpc Update (NotificationTemplateUpdateRequest) returns (NotificationTemplateUpdateReply) {
-    option (google.api.http) = {
-      post: "/v1/notificationTemplate/update"
-      body: "*"
-    };
-  }
+  rpc Update (NotificationTemplateUpdateRequest) returns (NotificationTemplateUpdateReply);
 
 }
 

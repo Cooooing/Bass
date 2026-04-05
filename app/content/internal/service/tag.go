@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/api/content/v1"
+	v1 "common/gen/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"content/internal/biz/domain"
@@ -12,7 +12,6 @@ import (
 	"errors"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type TagService struct {
@@ -23,10 +22,6 @@ type TagService struct {
 
 func (s *TagService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentTagServiceServer(gs, s)
-}
-
-func (s *TagService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentTagServiceHTTPServer(hs, s)
 }
 
 func NewTagService(baseService *BaseService, domainTag *domain.TagDomain) *TagService {
@@ -86,7 +81,7 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.Page
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
-		Status:      util.Ptr(v1.TagStatus_TAG_STATUS_NORMAL),
+		Status:      new(v1.TagStatus_TAG_STATUS_NORMAL),
 		DomainId:    req.Query.DomainId,
 	}
 	if req.Query.ArticleCount != nil {

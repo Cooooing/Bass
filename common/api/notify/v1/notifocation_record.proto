@@ -2,33 +2,22 @@ syntax = "proto3";
 
 package common.api.notify.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "notify/v1/enum.proto";
 import "notify/v1/notifocation_mete.proto";
 
-option go_package = "common/api/notify/v1;v1";
+option go_package = "common/gen/notify/v1;v1";
 
 // Notification_Record 服务
 service NotifyNotificationRecordService {
 
   // 查询通知详情数据
-  rpc Page (NotificationRecordPageRequest) returns (NotificationRecordPageReply) {
-    option (google.api.http) = {
-      post: "/v1/notificationRecord/page"
-      body: "*"
-    };
-  }
+  rpc Page (NotificationRecordPageRequest) returns (NotificationRecordPageReply);
 
   // 已读
-  rpc Read (NotificationRecordReadRequest) returns (NotificationRecordReadReply) {
-    option (google.api.http) = {
-      post: "/v1/notificationRecord/read"
-      body: "*"
-    };
-  }
+  rpc Read (NotificationRecordReadRequest) returns (NotificationRecordReadReply);
 
 }
 

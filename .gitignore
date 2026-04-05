@@ -35,6 +35,8 @@ bin/
 .idea/
 *.swp
 
+/common/gen/**
+
 /deploy/.prod.env
 .claude/
 .gitnexus

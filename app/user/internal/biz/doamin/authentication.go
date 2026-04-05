@@ -1,11 +1,10 @@
 package doamin
 
 import (
-	cv1 "common/api/common/v1"
-	notifyv1 "common/api/notify/v1"
+	cv1 "common/gen/common/v1"
+	notifyv1 "common/gen/notify/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"common/pkg/util/jwt"
 	"common/pkg/util/str"
 	"context"
@@ -83,10 +82,10 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	err = s.EventPool.Submit(func() {
 		err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
+			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
 			SenderId:   u.ID,
 			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
+			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Email:  *u.Email,
@@ -137,9 +136,9 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		// 保存用户信息
 		user := &model.User{User: &gen.User{
 			Name:     saveUser.Name,
-			Nickname: util.Ptr(saveUser.Nickname),
+			Nickname: new(saveUser.Nickname),
 			Password: saveUser.Password,
-			Email:    util.Ptr(saveUser.Email),
+			Email:    new(saveUser.Email),
 		}}
 		err = user.PasswordEncrypt()
 		if err != nil {
@@ -203,10 +202,10 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	err = s.EventPool.Submit(func() {
 		err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
+			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
 			SenderId:   u.ID,
 			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
+			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
 			Meta: commonModel.Meta{
 				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
 					Phone:  *u.Phone,
@@ -257,9 +256,9 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 		// 保存用户信息
 		user := &model.User{User: &gen.User{
 			Name:     saveUser.Name,
-			Nickname: util.Ptr(saveUser.Nickname),
+			Nickname: new(saveUser.Nickname),
 			Password: saveUser.Password,
-			Phone:    util.Ptr(saveUser.Phone),
+			Phone:    new(saveUser.Phone),
 		}}
 		err = user.PasswordEncrypt()
 		if err != nil {

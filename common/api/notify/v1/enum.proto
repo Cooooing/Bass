@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.notify.v1;
 
-option go_package = "common/api/notify/v1;v1";
+option go_package = "common/gen/notify/v1;v1";
 
 enum NotificationStatus {
   NOTIFICATION_STATUS_UNSPECIFIED = 0; // 未指定

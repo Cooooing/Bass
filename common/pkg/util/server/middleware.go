@@ -1,7 +1,7 @@
 package server
 
 import (
-	v1 "common/api/common/v1"
+	v1 "common/gen/common/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"

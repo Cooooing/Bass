@@ -1,10 +1,9 @@
 package repo
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/notify/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/notify/v1"
 	"common/pkg/constant"
-	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -108,7 +107,7 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 		templateMap, dbErr := r.GetMap(ctx, r.Db, &repo.NotificationTemplateGetReq{
 			NotificationType: notificationType,
 			Channels:         channels,
-			Enable:           util.Ptr(true),
+			Enable:           new(true),
 		})
 		if dbErr != nil {
 			return nil, dbErr

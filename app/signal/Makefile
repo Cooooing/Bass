@@ -3,12 +3,13 @@ GOHOSTOS := $(shell go env GOHOSTOS)
 VERSION := latest
 SERVER := signal
 
-ROOT_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
+ROOT_DIR := $(shell cd $(dir $(lastword $(MAKEFILE_LIST)))/../.. && pwd)
 COMMON_DIR := $(ROOT_DIR)/common
-USER_DIR := $(ROOT_DIR)/app/$(SERVER)
+APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 API_DIR := $(COMMON_DIR)/api
+API_GEN_DIR := $(COMMON_DIR)/gen
 THIRD_PARTY_DIR := $(COMMON_DIR)/third_party
-INTERNAL_DIR := $(USER_DIR)/internal
+INTERNAL_DIR := $(APP_DIR)/internal
 
 # ============ Find Proto Files (Cross-Platform Safe) ============
 INTERNAL_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(INTERNAL_DIR))
@@ -18,7 +19,7 @@ API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DI
 .PHONY: init
 init:
 	@echo "Installing required tools..."
-	@cd $(USER_DIR) && \
+	@cd $(APP_DIR) && \
 	go mod tidy && go mod download
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -42,27 +43,27 @@ config:
 .PHONY: wire
 wire:
 	@echo "Generating go wire..."
-	@cd $(USER_DIR)/cmd && \
+	@cd $(APP_DIR)/cmd && \
 	wire
 
 # ============ Generate Ent Code ============
 .PHONY: ent
 ent:
 	@echo "Generating go ent..."
-	@cd $(USER_DIR) && \
-	ent generate --target=$(USER_DIR)/internal/data/ent/gen ./internal/data/ent/schema
+	@cd $(APP_DIR) && \
+	ent generate --target=$(APP_DIR)/internal/data/ent/gen ./internal/data/ent/schema
 
 # ============ Compile API Proto ============
 .PHONY: api
 api:
 	@echo "Generating API proto files..."
 	protoc -I $(API_DIR) -I $(THIRD_PARTY_DIR) \
-	       --go_out=paths=source_relative:$(API_DIR) \
-	       --go-grpc_out=paths=source_relative:$(API_DIR) \
-	       --go-http_out=paths=source_relative:$(API_DIR) \
-	       --go-errors_out=paths=source_relative:$(API_DIR) \
-	       --openapi_out=fq_schema_naming=true,naming=proto,default_response=false:$(API_DIR) \
-	       --validate_out=lang=go,paths=source_relative:$(API_DIR) \
+	       --go_out=paths=source_relative:$(API_GEN_DIR) \
+	       --go-grpc_out=paths=source_relative:$(API_GEN_DIR) \
+	       --go-http_out=paths=source_relative:$(API_GEN_DIR) \
+	       --go-errors_out=paths=source_relative:$(API_GEN_DIR) \
+	       --openapi_out=fq_schema_naming=true,naming=proto,default_response=false:$(API_GEN_DIR) \
+	       --validate_out=lang=go,paths=source_relative:$(API_GEN_DIR) \
 	       $(API_PROTO_FILES)
 
 # ============ Generate All Code ============
@@ -72,8 +73,8 @@ gen: config ent wire api
 # ============ Build Service ============
 .PHONY: build
 build:
-	@echo "Building signal service..."
-	@cd $(USER_DIR) && \
+	@echo "Building ${SERVER} service..."
+	@cd $(APP_DIR) && \
 	go mod tidy && go mod download && \
 	go build -trimpath -ldflags "-s -w" -o $(ROOT_DIR)/$(SERVER) ./cmd/...
 
@@ -81,4 +82,3 @@ build:
 .PHONY: all
 all: init gen build
 	@echo "Build completed successfully."
-

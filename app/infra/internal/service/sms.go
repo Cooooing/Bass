@@ -1,12 +1,11 @@
 package service
 
 import (
-	v1 "common/api/infra/v1"
+	v1 "common/gen/infra/v1"
 	"context"
 	"infra/internal/biz/domain"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type SmsService struct {
@@ -24,10 +23,6 @@ func NewSmsService(baseService *BaseService, smsDomain *domain.TencentSmsDomain)
 
 func (s *SmsService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterInfraSmsServiceServer(gs, s)
-}
-
-func (s *SmsService) RegisterHttp(hs *http.Server) {
-	v1.RegisterInfraSmsServiceHTTPServer(hs, s)
 }
 
 func (s *SmsService) Send(ctx context.Context, req *v1.SendSmsRequest) (rsp *v1.SendSmsReply, err error) {

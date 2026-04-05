@@ -2,30 +2,19 @@ syntax = "proto3";
 
 package common.api.im.v1;
 
-import "google/api/annotations.proto";
 import "common/v1/common.proto";
 import "im/v1/model.proto";
 
-option go_package = "common/api/im/v1;v1";
+option go_package = "common/gen/im/v1;v1";
 
 // ChatGroup 服务
 service IMChatGroupService {
 
   // 创建群组
-  rpc Create (ChatGroupCreateRequest) returns (ChatGroupCreateReply) {
-    option (google.api.http) = {
-      post: "/v1/chatGroup/create"
-      body: "*"
-    };
-  }
+  rpc Create (ChatGroupCreateRequest) returns (ChatGroupCreateReply);
 
   // 解散群组
-  rpc Dismiss (ChatGroupDismissRequest) returns (ChatGroupDismissReply) {
-    option (google.api.http) = {
-      post: "/v1/chatGroup/dismiss"
-      body: "*"
-    };
-  }
+  rpc Dismiss (ChatGroupDismissRequest) returns (ChatGroupDismissReply);
 
   // 转让群主
   // 踢出群成员
@@ -33,12 +22,7 @@ service IMChatGroupService {
   // 解除禁言群成员
 
   // 查询群组列表
-  rpc Page (ChatGroupPageRequest) returns (ChatGroupPageReply) {
-    option (google.api.http) = {
-      post: "/v1/chatGroup/page"
-      body: "*"
-    };
-  }
+  rpc Page (ChatGroupPageRequest) returns (ChatGroupPageReply);
 
   // 邀请群成员
   // 同意入群邀请

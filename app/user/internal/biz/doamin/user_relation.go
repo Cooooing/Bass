@@ -1,9 +1,9 @@
 package doamin
 
 import (
-	cv1 "common/api/common/v1"
-	notifyv1 "common/api/notify/v1"
-	v1 "common/api/user/v1"
+	cv1 "common/gen/common/v1"
+	notifyv1 "common/gen/notify/v1"
+	v1 "common/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -38,9 +38,9 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 		var num int32
 
 		exist, err := d.userRelationRepo.Exist(ctx, tx, &repo.UserRelationGetReq{
-			ActorId:  util.Ptr(actorId),
-			TargetId: util.Ptr(targetId),
-			Type:     util.Ptr(relationType),
+			ActorId:  new(actorId),
+			TargetId: new(targetId),
+			Type:     new(relationType),
 		})
 		if err != nil {
 			return err
@@ -103,10 +103,10 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 			err := d.Rabbitmq.Publish(constant.ExchangeUser.String(), util.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
 				&commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
+					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
 					SenderId:   u.ID,
 					SenderName: u.Name,
-					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						User: &commonModel.UserMeta{UserId: targetId, UserName: u.Name},
 					},

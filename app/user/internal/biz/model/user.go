@@ -1,7 +1,7 @@
 package model
 
 import (
-	v1 "common/api/user/v1"
+	v1 "common/gen/user/v1"
 	"common/pkg/util/str"
 	"user/internal/data/ent/gen"
 

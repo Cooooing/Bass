@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/api/connector/v1"
+	v1 "common/gen/connector/v1"
 	"connector/internal/biz/domain"
 	"context"
 	"crypto/sha256"
@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type CallbackService struct {
@@ -29,10 +28,6 @@ func NewCallbackService(baseService *BaseService, sessionDomain *domain.SessionD
 
 func (s *CallbackService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterConnectorServiceServer(gs, s)
-}
-
-func (s *CallbackService) RegisterHttp(hs *http.Server) {
-	v1.RegisterConnectorServiceHTTPServer(hs, s)
 }
 
 func (s *CallbackService) Ping(ctx context.Context, req *v1.PingRequest) (rsp *v1.PingReply, err error) {

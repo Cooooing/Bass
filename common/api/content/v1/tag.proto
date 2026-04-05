@@ -2,40 +2,24 @@ syntax = "proto3";
 
 package common.api.content.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
 import "content/v1/enum.proto";
 
-option go_package = "common/api/content/v1;v1";
+option go_package = "common/gen/content/v1;v1";
 
 // 标签服务
 service ContentTagService {
 
   // 批量添加标签
-  rpc Adds (AddTagsRequest) returns (AddTagsReply) {
-    option (google.api.http) = {
-      post: "/v1/tag/adds"
-      body: "*"
-    };
-  }
+  rpc Adds (AddTagsRequest) returns (AddTagsReply);
 
   // 更新标签
-  rpc Update (UpdateTagRequest) returns (UpdateTagReply) {
-    option (google.api.http) = {
-      post: "/v1/tag/update"
-      body: "*"
-    };
-  }
+  rpc Update (UpdateTagRequest) returns (UpdateTagReply);
 
   // 分页获取标签
-  rpc Page (PageTagRequest) returns (PageTagReply) {
-    option (google.api.http) = {
-      post: "/v1/tag/page"
-      body: "*"
-    };
-  }
+  rpc Page (PageTagRequest) returns (PageTagReply);
 }
 
 // 实体定义

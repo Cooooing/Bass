@@ -2,7 +2,6 @@ package cache
 
 import (
 	"common/pkg/constant"
-	commonBase "common/pkg/util"
 	"context"
 	"encoding/json"
 	"errors"
@@ -102,7 +101,7 @@ func (r *NodeCache) GetNode(ctx context.Context, key string) (*model.Node, error
 	node.PingMs, _ = strconv.ParseInt(result[constant.SignalNodePingMs], 10, 64)
 	node.PowCostMs, _ = strconv.ParseInt(result[constant.SignalNodePowCostMs], 10, 64)
 	t, _ := strconv.ParseInt(result[constant.SignalNodeLastPingTime], 10, 64)
-	node.LastPingTime = commonBase.Ptr(time.UnixMilli(t))
+	node.LastPingTime = new(time.UnixMilli(t))
 	return &node, nil
 }
 

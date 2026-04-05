@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/common/v1"
+	cv1 "common/gen/common/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -65,9 +65,9 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 			Key:           key,
 			Blocked:       enable,
 			BlockedReason: reason,
-			BlockedAt:     util.Ptr(time.Now()),
-			BlockedBy:     util.Ptr(infra.ID),
-			BlockedByName: util.Ptr(infra.Name),
+			BlockedAt:     new(time.Now()),
+			BlockedBy:     new(infra.ID),
+			BlockedByName: new(infra.Name),
 		}})
 		return err
 	})
@@ -90,7 +90,7 @@ func (d *ObjectStorageDomain) QiniuIncrementAuditCallback(ctx context.Context, k
 	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		err := d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:                key,
-			AuditCallbackReply: util.Ptr(reply),
+			AuditCallbackReply: new(reply),
 			Blocked:            blocked,
 		}})
 		return err

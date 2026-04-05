@@ -1,11 +1,10 @@
 package domain
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
-	notifyv1 "common/api/notify/v1"
-	userv1 "common/api/user/v1"
-	"common/pkg/client"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/content/v1"
+	notifyv1 "common/gen/notify/v1"
+	userv1 "common/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -109,8 +108,8 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 	article.Status = int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) // 默认均为草稿
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		exist, err := d.articleRepo.Exist(ctx, tx, &repo.ArticleGetReq{
-			ArticleId: util.Ptr(article.ID),
-			Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+			ArticleId: new(article.ID),
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 			CreatedBy: article.CreatedBy,
 		})
 		if err != nil {
@@ -176,10 +175,10 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
 				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
+					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
@@ -192,10 +191,10 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_THANK:
 				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
+					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
@@ -208,10 +207,10 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
 				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
+					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
@@ -224,10 +223,10 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
 				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
+					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
@@ -240,10 +239,10 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 			case v1.ArticleAction_ARTICLE_ACTION_REWARD:
 				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
 					UUID:       uuid.New().String(),
-					Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
+					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
 					SenderId:   user.ID,
 					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 					Meta: commonModel.Meta{
 						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 					},
@@ -284,10 +283,10 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 		// 广播发布文章事件
 		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
+			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
 			SenderId:   user.ID,
 			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 			Meta: commonModel.Meta{
 				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 			},
@@ -303,10 +302,10 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 		if len(atUserNames) > 0 {
 			err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
 				UUID:       uuid.New().String(),
-				Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
+				Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 				SenderId:   user.ID,
 				SenderName: user.Name,
-				Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+				Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 				Meta: commonModel.Meta{
 					AtUsernames: lo.Keys(atUserNames),
 					Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
@@ -327,7 +326,7 @@ func (d *ArticleDomain) AcceptAnswer(ctx context.Context, articleId int64, comme
 		return cv1.ErrorUnauthorized("user not login")
 	}
 	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
-		a, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: util.Ptr(articleId)})
+		a, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 		if err != nil {
 			return err
 		}
@@ -358,7 +357,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 		err   error
 	)
 	reply, err = d.articleRepo.GetOne(ctx, d.Db, &repo.ArticleGetReq{
-		ArticleId: util.Ptr(articleId),
+		ArticleId: new(articleId),
 	})
 	if err != nil {
 		return nil, err
@@ -375,20 +374,16 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 		return nil, cv1.ErrorUnauthorized("login required to view drafts")
 	}
 
-	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.Db, &repo.CommentGetReq{ArticleId: util.Ptr(reply.ID)})
+	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.Db, &repo.CommentGetReq{ArticleId: new(reply.ID)})
 	if err != nil {
 		return nil, err
 	}
 
-	userServiceClient, err := client.GetConsulServiceClient(d.Consul, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-	if err != nil {
-		return nil, err
-	}
 	userIds := []int64{*reply.CreatedBy}
 	if lastReplyComment != nil {
 		userIds = append(userIds, *lastReplyComment.CreatedBy)
 	}
-	userAuthorsMap, err := userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds}})
+	userAuthorsMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds}})
 	if err != nil {
 		return nil, err
 	}
@@ -432,11 +427,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 
 	userAuthorsMap := &userv1.GetMapReply{}
 	if len(userIds) > 0 {
-		userServiceClient, err := client.GetConsulServiceClient(d.Consul, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-		if err != nil {
-			return nil, nil, err
-		}
-		userAuthorsMap, err = userServiceClient.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userAuthorsMap, err = d.UserClient.User.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
 		if err != nil {
 			return nil, nil, err
 		}

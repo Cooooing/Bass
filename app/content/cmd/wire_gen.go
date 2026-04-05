@@ -7,6 +7,7 @@
 package main
 
 import (
+	"common/pkg/client/rpc"
 	"common/pkg/util"
 	"common/pkg/util/jwt"
 	"content/internal/biz/base"
@@ -51,7 +52,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, tokenCache)
 	systemService := service.NewSystemService(baseService)
-	eventPool, cleanup5, err := util.NewEventPool(helper)
+	userClient, cleanup5, err := rpc.ProvideUserClient(consulClient)
 	if err != nil {
 		cleanup4()
 		cleanup3()
@@ -59,7 +60,16 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, eventPool)
+	eventPool, cleanup6, err := util.NewEventPool(helper)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, userClient, redisClient, rabbitMQClient, eventPool)
 	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	articlePostscriptRepo := repo.NewArticlePostscriptRepo(baseData, genClient)
 	commentRepo := repo.NewCommentRepo(baseData, genClient)
@@ -69,6 +79,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	articleActionRecordRepo := repo.NewArticleActionRecordRepo(baseData, genClient)
 	articleDomain, err := domain.NewArticleDomain(baseDomain, articleRepo, articlePostscriptRepo, articleActionRecordRepo, commentRepo, tagRepo, domainRepo)
 	if err != nil {
+		cleanup6()
 		cleanup5()
 		cleanup4()
 		cleanup3()
@@ -86,9 +97,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tagService := service.NewTagService(baseService, tagDomain)
 	v := service.ProvideServices(systemService, articleService, domainService, commentService, tagService)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, httpServer, consulClient)
+	app := newApp(logger, grpcServer, consulClient)
 	return app, func() {
+		cleanup6()
 		cleanup5()
 		cleanup4()
 		cleanup3()

@@ -2,10 +2,8 @@ package handler
 
 import (
 	"bytes"
-	notifyv1 "common/api/notify/v1"
-	userv1 "common/api/user/v1"
-	"common/pkg/client"
-	"common/pkg/constant"
+	notifyv1 "common/gen/notify/v1"
+	userv1 "common/gen/user/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util/handlerchain"
 	"context"
@@ -63,11 +61,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 		}
 	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT:
 		if len(data.Meta.AtUsernames) > 0 {
-			userServiceClient, err := client.GetConsulServiceClient(h.Consul, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-			if err != nil {
-				return nil, err
-			}
-			reply, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
+			reply, err := h.UserClient.User.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
 			if err != nil {
 				return nil, err
 			}
@@ -96,11 +90,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 		}
 	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_AT:
 		if len(data.Meta.AtUsernames) > 0 {
-			userServiceClient, err := client.GetConsulServiceClient(h.Consul, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-			if err != nil {
-				return nil, err
-			}
-			reply, err := userServiceClient.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
+			reply, err := h.UserClient.User.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
 			if err != nil {
 				return nil, err
 			}

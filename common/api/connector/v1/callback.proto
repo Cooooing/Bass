@@ -2,44 +2,24 @@ syntax = "proto3";
 
 package common.api.connector.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "signal/v1/model.proto";
 
-option go_package = "common/api/connector/v1;v1";
+option go_package = "common/gen/connector/v1;v1";
 
 // 服务
 service ConnectorService {
   // ping
-  rpc Ping(PingRequest) returns (PingReply) {
-    option (google.api.http) = {
-      get: "/v1/ping"
-    };
-  }
+  rpc Ping(PingRequest) returns (PingReply);
 
   // 工作量证明
-  rpc Pow(PowRequest) returns (PowReply) {
-    option (google.api.http) = {
-      post: "/v1/pow"
-      body: "*"
-    };
-  }
+  rpc Pow(PowRequest) returns (PowReply);
 
   // Session 会话
-  rpc Session(SessionRequest) returns (SessionReply) {
-    option (google.api.http) = {
-      post: "/v1/session"
-      body: "*"
-    };
-  }
+  rpc Session(SessionRequest) returns (SessionReply);
 
   // 发送消息
-  rpc Send(SendRequest) returns (SendReply) {
-    option (google.api.http) = {
-      post: "/v1/send"
-      body: "*"
-    };
-  }
+  rpc Send(SendRequest) returns (SendReply);
 }
 
 // 参数

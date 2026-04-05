@@ -2,11 +2,10 @@ syntax = "proto3";
 
 package common.api.user.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "user/v1/user.proto";
 
-option go_package = "common/api/user/v1;v1";
+option go_package = "common/gen/user/v1;v1";
 
 // Authentication 服务
 service UserAuthenticationService {
@@ -14,75 +13,30 @@ service UserAuthenticationService {
   // -- 账号注册
 
   // 邮箱注册
-  rpc RegisterEmail (RegisterEmailRequest) returns (RegisterEmailReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/register/email"
-      body: "*"
-    };
-  }
+  rpc RegisterEmail (RegisterEmailRequest) returns (RegisterEmailReply);
   // 邮箱注册验证码验证
-  rpc RegisterEmailVerify (RegisterEmailVerifyRequest) returns (RegisterEmailVerifyReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/register/email/verify"
-      body: "*"
-    };
-  }
+  rpc RegisterEmailVerify (RegisterEmailVerifyRequest) returns (RegisterEmailVerifyReply);
   // 手机号注册
-  rpc RegisterPhone (RegisterPhoneRequest) returns (RegisterPhoneReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/register/phone"
-      body: "*"
-    };
-  }
+  rpc RegisterPhone (RegisterPhoneRequest) returns (RegisterPhoneReply);
   // 手机号注册验证码验证
-  rpc RegisterPhoneVerify (RegisterPhoneVerifyRequest) returns (RegisterPhoneVerifyReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/register/phone/verify"
-      body: "*"
-    };
-  }
+  rpc RegisterPhoneVerify (RegisterPhoneVerifyRequest) returns (RegisterPhoneVerifyReply);
 
   // -- 账号信息查询
 
   // 邮箱是否存在
-  rpc ExistEmail (ExistEmailRequest) returns (ExistEmailReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/exist/email"
-      body: "*"
-    };
-  }
+  rpc ExistEmail (ExistEmailRequest) returns (ExistEmailReply);
   // 手机号是否存在
-  rpc ExistPhone (ExistPhoneRequest) returns (ExistPhoneReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/exist/phone"
-      body: "*"
-    };
-  }
+  rpc ExistPhone (ExistPhoneRequest) returns (ExistPhoneReply);
   // 用户名是否存在
-  rpc ExistUsername (ExistUsernameRequest) returns (ExistUsernameReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/exist/username"
-      body: "*"
-    };
-  }
+  rpc ExistUsername (ExistUsernameRequest) returns (ExistUsernameReply);
 
   // -- 账号登录
 
   // 账号登录（用户名/邮箱）
-  rpc LoginAccount (LoginAccountRequest) returns (LoginAccountReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/login/account"
-      body: "*"
-    };
-  }
+  rpc LoginAccount (LoginAccountRequest) returns (LoginAccountReply);
 
   // 账号登出
-  rpc Logout (LogoutRequest) returns (LogoutReply) {
-    option (google.api.http) = {
-      post: "/v1/authentication/logout"
-      body: "*"
-    };
-  }
+  rpc Logout (LogoutRequest) returns (LogoutReply);
 
 }
 

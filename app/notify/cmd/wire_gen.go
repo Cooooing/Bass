@@ -7,6 +7,7 @@
 package main
 
 import (
+	"common/pkg/client/rpc"
 	"common/pkg/util/jwt"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -37,20 +38,37 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseService := service.NewBaseService(bootstrap, helper, consulClient, genClient)
 	systemService := service.NewSystemService(baseService)
-	redisClient, cleanup3, err := data.NewRedisClient(helper, bootstrap)
+	userClient, cleanup3, err := rpc.ProvideUserClient(consulClient)
 	if err != nil {
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	rabbitMQClient, cleanup4, err := data.NewRabbitMQClient(helper, bootstrap)
+	infraClient, cleanup4, err := rpc.ProvideInfraClient(consulClient)
 	if err != nil {
 		cleanup3()
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
+	redisClient, cleanup5, err := data.NewRedisClient(helper, bootstrap)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	rabbitMQClient, cleanup6, err := data.NewRabbitMQClient(helper, bootstrap)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, userClient, infraClient, redisClient, rabbitMQClient)
 	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	notificationMetaRepo := repo.NewNotificationMetaRepo(baseData)
 	notificationMetaDomain := domain.NewNotificationMetaDomain(baseDomain, notificationMetaRepo)
@@ -61,21 +79,24 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	v := service.ProvideServices(systemService, notificationMetaService, notificationRecordService)
 	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	registerVerifyCode := handler.NewRegisterVerifyCode(baseDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
 	v2 := handler.ProvideHandlers(registerVerifyCode, fullHandler)
 	notificationTemplateRepo := repo.NewNotificationTemplateRepo(baseData)
-	eventHandler, cleanup5, err := domain.NewEventHandler(baseDomain, v2, notificationTemplateRepo)
+	eventHandler, cleanup7, err := domain.NewEventHandler(baseDomain, v2, notificationTemplateRepo)
 	if err != nil {
+		cleanup6()
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
-	app := newApp(logger, helper, grpcServer, httpServer, consulClient, eventHandler)
+	app := newApp(logger, helper, grpcServer, consulClient, eventHandler)
 	return app, func() {
+		cleanup7()
+		cleanup6()
 		cleanup5()
 		cleanup4()
 		cleanup3()

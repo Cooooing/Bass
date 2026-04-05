@@ -2,55 +2,29 @@ syntax = "proto3";
 
 package common.api.infra.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
 import "common/v1/common.proto";
 
-option go_package = "common/api/infra/v1;v1";
+option go_package = "common/gen/infra/v1;v1";
 
 // Oss 服务
 service InfraOssService {
 
   // 获取上传文件凭证
-  rpc UploadToken (UploadTokenRequest) returns (UploadTokenReply) {
-    option (google.api.http) = {
-      post: "/v1/oss/uploadToken"
-      body: "*"
-    };
-  }
+  rpc UploadToken (UploadTokenRequest) returns (UploadTokenReply);
 
   // 审核 oss 对象
-  rpc Audit (AuditRequest) returns (AuditReply) {
-    option (google.api.http) = {
-      post: "/v1/oss/audit"
-      body: "*"
-    };
-  }
+  rpc Audit (AuditRequest) returns (AuditReply);
 
   // 分页查询 oss 对象
-  rpc Page (PageOssRequest) returns (PageOssReply) {
-    option (google.api.http) = {
-      post: "/v1/oss/page"
-      body: "*"
-    };
-  }
+  rpc Page (PageOssRequest) returns (PageOssReply);
 
   // 七牛上传回调
-  rpc QiniuUploadCallback (QiniuUploadCallbackRequest) returns (QiniuUploadCallbackReply) {
-    option (google.api.http) = {
-      post: "/v1/oss/qiniu/uploadCallback"
-      body: "*"
-    };
-  }
+  rpc QiniuUploadCallback (QiniuUploadCallbackRequest) returns (QiniuUploadCallbackReply);
 
   // 七牛增量审核回调
-  rpc QiniuIncrementAuditCallback (QiniuIncrementAuditCallbackRequest) returns (QiniuIncrementAuditCallbackReply) {
-    option (google.api.http) = {
-      post: "/v1/oss/qiniu/incrementAuditCallback"
-      body: "*"
-    };
-  }
+  rpc QiniuIncrementAuditCallback (QiniuIncrementAuditCallbackRequest) returns (QiniuIncrementAuditCallbackReply);
 
 }
 

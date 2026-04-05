@@ -1,12 +1,11 @@
 package service
 
 import (
-	v1 "common/api/im/v1"
+	v1 "common/gen/im/v1"
 	"context"
 	"im/internal/biz/domain"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type ChatMessageService struct {
@@ -24,10 +23,6 @@ func NewChatMessageService(baseService *BaseService, chatMessageDomain *domain.C
 
 func (s *ChatMessageService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterIMChatMessageServiceServer(gs, s)
-}
-
-func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
-	v1.RegisterIMChatMessageServiceHTTPServer(hs, s)
 }
 
 func (s *ChatMessageService) Send(ctx context.Context, req *v1.ChatMessageSendRequest) (rsp *v1.ChatMessageSendReply, err error) {

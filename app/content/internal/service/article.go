@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/content/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -15,7 +15,6 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type ArticleService struct {
@@ -28,10 +27,6 @@ type ArticleService struct {
 
 func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleServiceServer(gs, s)
-}
-
-func (s *ArticleService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentArticleServiceHTTPServer(hs, s)
 }
 
 func NewArticleService(baseService *BaseService, articleDomain *domain.ArticleDomain, articleRepo repo.ArticleRepo) *ArticleService {
@@ -131,7 +126,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 		Listable:      util.DerefOrDefault(article.Listable, true),
-		CreatedBy:     util.Ptr(user.ID),
+		CreatedBy:     new(user.ID),
 	}}, tags)
 	if err != nil {
 		return nil, err
@@ -148,9 +143,9 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 	}
 	// 只有作者可以发布草稿
 	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
-		ArticleId: util.Ptr(req.ArticleId),
-		Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-		CreatedBy: util.Ptr(user.ID),
+		ArticleId: new(req.ArticleId),
+		Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+		CreatedBy: new(user.ID),
 	})
 	if err != nil {
 		return nil, err
@@ -169,9 +164,9 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	}
 	// 只有作者可以添加附言
 	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
-		ArticleId: util.Ptr(req.ArticleId),
-		Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
-		CreatedBy: util.Ptr(user.ID),
+		ArticleId: new(req.ArticleId),
+		Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+		CreatedBy: new(user.ID),
 	})
 	if err != nil {
 		return nil, err
@@ -202,9 +197,9 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 	err = ent.WithTx(ctx, s.Db, func(tx *gen.Client) error {
 		// 只有作者可以删除草稿
 		exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
-			ArticleId: util.Ptr(req.ArticleId),
-			Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-			CreatedBy: util.Ptr(user.ID),
+			ArticleId: new(req.ArticleId),
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+			CreatedBy: new(user.ID),
 		})
 		if err != nil {
 			return err
@@ -230,14 +225,14 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 	if req.Query.Status != nil && *req.Query.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && *req.Query.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
 		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
-	status := util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
+	status := new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
 	authorId := req.Query.AuthorId
 	if req.Query.Status != nil && *req.Query.Status == int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
 		if !ok {
 			return nil, cv1.ErrorUnauthorized("login required to view drafts")
 		}
 		authorId = &user.ID
-		status = util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS)
+		status = new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS)
 	}
 
 	reply, page, err := s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
@@ -248,7 +243,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 		Order:    (*v1.ArticleOrder)(req.Query.Order),
 		Type:     (*v1.ArticleType)(req.Query.Type),
 		Keyword:  req.Query.Keyword,
-		Listable: util.Ptr(true),
+		Listable: new(true),
 	})
 	return &v1.PageArticleReply{
 		Page: page,

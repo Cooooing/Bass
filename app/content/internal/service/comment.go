@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/content/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -14,7 +14,6 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type CommentService struct {
@@ -28,10 +27,6 @@ type CommentService struct {
 
 func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentCommentServiceServer(gs, s)
-}
-
-func (s *CommentService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentCommentServiceHTTPServer(hs, s)
 }
 
 func NewCommentService(baseService *BaseService, commentDomain *domain.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
@@ -74,7 +69,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 		ArticleId:   req.Query.ArticleId,
 		ArticleIds:  nil,
 		CreatedBy:   req.Query.UserId,
-		Status:      util.Ptr(v1.CommentStatus_COMMENT_STATUS_NORMAL),
+		Status:      new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
 		Level:       req.Query.Level,
 		Order:       (*int32)(req.Query.Order),
 		WithArticle: req.Query.WithArticle,
@@ -87,7 +82,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {
 	// user := s.tokenCache.GetUserInfo(ctx)
-	exist, err := s.commentRepo.Exist(ctx, s.Db, &repo.CommentGetReq{CommentId: util.Ptr(req.Id)})
+	exist, err := s.commentRepo.Exist(ctx, s.Db, &repo.CommentGetReq{CommentId: new(req.Id)})
 	if err != nil {
 		return nil, err
 	}

@@ -14,11 +14,18 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
+	NewConsulClient,
 	database.NewBaseData,
 	NewRedisClient,
 
 	cache.NewSessionCache,
 )
+
+func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
+	return nil, func() {
+
+	}, nil
+}
 
 func NewRedisClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RedisClient, func(), error) {
 	c := &commonModel.RedisConf{}

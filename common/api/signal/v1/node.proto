@@ -2,110 +2,49 @@ syntax = "proto3";
 
 package common.api.signal.v1;
 
-import "google/api/annotations.proto";
 import "signal/v1/model.proto";
 import "signal/v1/enum.proto";
 
-option go_package = "common/api/signal/v1;v1";
+option go_package = "common/gen/signal/v1;v1";
 
 // Node 服务
 service SignalNodeService {
 
   // 保存节点
-  rpc Save (SignalNodeSaveRequest) returns (SignalNodeSaveReply) {
-    option (google.api.http) = {
-      post: "/v1/node/save"
-      body: "*"
-    };
-  }
+  rpc Save (SignalNodeSaveRequest) returns (SignalNodeSaveReply);
 
   // 更新节点信息
-  rpc Update (SignalNodeUpdateRequest) returns (SignalNodeUpdateReply) {
-    option (google.api.http) = {
-      post: "/v1/node/update"
-      body: "*"
-    };
-  }
+  rpc Update (SignalNodeUpdateRequest) returns (SignalNodeUpdateReply);
 
   // 获取密钥
-  rpc GetSecret (SignalNodeGetSecretRequest) returns (SignalNodeGetSecretReply) {
-    option (google.api.http) = {
-      post: "/v1/node/secret/get"
-      body: "*"
-    };
-  }
+  rpc GetSecret (SignalNodeGetSecretRequest) returns (SignalNodeGetSecretReply);
 
   // 更新密钥
-  rpc UpdateSecret (SignalNodeUpdateSecretRequest) returns (SignalNodeUpdateSecretReply) {
-    option (google.api.http) = {
-      post: "/v1/node/secret/update"
-      body: "*"
-    };
-  }
+  rpc UpdateSecret (SignalNodeUpdateSecretRequest) returns (SignalNodeUpdateSecretReply);
 
   // 查询节点列表
-  rpc List (SignalNodeListRequest) returns (SignalNodeListReply) {
-    option (google.api.http) = {
-      post: "/v1/node/list"
-      body: "*"
-    };
-  }
+  rpc List (SignalNodeListRequest) returns (SignalNodeListReply);
 
   // 客户端调度/协商
-  rpc Negotiate (SignalNodeNegotiateRequest) returns (SignalNodeNegotiateReply) {
-    option (google.api.http) = {
-      post: "/v1/node/negotiate"
-      body: "*"
-    };
-  }
+  rpc Negotiate (SignalNodeNegotiateRequest) returns (SignalNodeNegotiateReply);
 
   // 注册节点
-  rpc Register (SignalNodeRegisterRequest) returns (SignalNodeRegisterReply) {
-    option (google.api.http) = {
-      post: "/v1/node/register"
-      body: "*"
-    };
-  }
+  rpc Register (SignalNodeRegisterRequest) returns (SignalNodeRegisterReply);
 
   // 注销节点
-  rpc Unregister (SignalNodeUnregisterRequest) returns (SignalNodeUnregisterReply) {
-    option (google.api.http) = {
-      post: "/v1/node/unregister"
-      body: "*"
-    };
-  }
+  rpc Unregister (SignalNodeUnregisterRequest) returns (SignalNodeUnregisterReply);
 
   // 获取 websocket ticket
-  rpc Ticket (SignalNodeTicketRequest) returns (SignalNodeTicketReply) {
-    option (google.api.http) = {
-      post: "/v1/node/ticket"
-      body: "*"
-    };
-  }
+  rpc Ticket (SignalNodeTicketRequest) returns (SignalNodeTicketReply);
 
   // 用户上线
-  rpc Online (SignalNodeOnlineRequest) returns (SignalNodeOnlineReply) {
-    option (google.api.http) = {
-      post: "/v1/node/online"
-      body: "*"
-    };
-  }
+  rpc Online (SignalNodeOnlineRequest) returns (SignalNodeOnlineReply);
 
   // 用户下线
-  rpc Offline (SignalNodeOfflineRequest) returns (SignalNodeOfflineReply) {
-    option (google.api.http) = {
-      post: "/v1/node/offline"
-      body: "*"
-    };
-  }
+  rpc Offline (SignalNodeOfflineRequest) returns (SignalNodeOfflineReply);
 
   // 在线用户列表
-  rpc OnlineList (SignalNodeOnlineListRequest) returns (SignalNodeOnlineListReply) {
-    option (google.api.http) = {
-      post: "/v1/node/online/list"
-      body: "*"
-    };
-  }
+  rpc OnlineList (SignalNodeOnlineListRequest) returns (SignalNodeOnlineListReply);
 
 }
 

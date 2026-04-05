@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/notify/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/notify/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
@@ -12,7 +12,6 @@ import (
 	"notify/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type NotificationTemplateService struct {
@@ -30,10 +29,6 @@ func NewNotificationTemplateService(baseService *BaseService, notificationTempla
 
 func (s *NotificationTemplateService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyNotificationTemplateServiceServer(gs, s)
-}
-
-func (s *NotificationTemplateService) RegisterHttp(hs *http.Server) {
-	v1.RegisterNotifyNotificationTemplateServiceHTTPServer(hs, s)
 }
 
 func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.NotificationTemplatePageRequest) (rsp *v1.NotificationTemplatePageReply, err error) {

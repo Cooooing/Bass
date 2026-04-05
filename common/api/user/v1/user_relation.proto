@@ -2,41 +2,25 @@ syntax = "proto3";
 
 package common.api.user.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "user/v1/user.proto";
 import "user/v1/enum.proto";
 
-option go_package = "common/api/user/v1;v1";
+option go_package = "common/gen/user/v1;v1";
 
 // UserRelation 服务
 service UserUserRelationService {
 
   // 关注用户
-  rpc Follow(FollowRequest) returns (FollowReply) {
-    option (google.api.http) = {
-      post: "/api/v1/userRelation/follow"
-      body: "*"
-    };
-  }
+  rpc Follow(FollowRequest) returns (FollowReply);
 
   // 屏蔽用户
-  rpc Block(BlockRequest) returns (BlockReply) {
-    option (google.api.http) = {
-      post: "/api/v1/userRelation/block"
-      body: "*"
-    };
-  }
+  rpc Block(BlockRequest) returns (BlockReply);
 
   // 查询用户关系
-  rpc Page(PageUserRelationRequest) returns (PageUserRelationReply) {
-    option (google.api.http) = {
-      post: "/api/v1/userRelation/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageUserRelationRequest) returns (PageUserRelationReply);
 
 }
 

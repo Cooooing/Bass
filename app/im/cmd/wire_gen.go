@@ -48,8 +48,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	v := service.ProvideServices(systemService)
 	tokenCache := jwt.NewTokenCache(helper, redisClient)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, httpServer, consulClient)
+	app := newApp(logger, grpcServer, consulClient)
 	return app, func() {
 		cleanup4()
 		cleanup3()

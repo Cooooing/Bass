@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package common.api.content.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
@@ -10,50 +9,25 @@ import "user/v1/user.proto";
 import "content/v1/article.proto";
 import "content/v1/enum.proto";
 
-option go_package = "common/api/content/v1;v1";
+option go_package = "common/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
 
   // 新增评论
-  rpc Add (AddCommentRequest) returns (AddCommentReply) {
-    option (google.api.http) = {
-      post: "/v1/comment/add"
-      body: "*"
-    };
-  }
+  rpc Add (AddCommentRequest) returns (AddCommentReply);
 
   // 查询评论列表
-  rpc Page (PageCommentRequest) returns (PageCommentReply) {
-    option (google.api.http) = {
-      post: "/v1/comment/page"
-      body: "*"
-    };
-  }
+  rpc Page (PageCommentRequest) returns (PageCommentReply);
 
   // 点赞评论
-  rpc Like (LikeCommentRequest) returns (LikeCommentReply) {
-    option (google.api.http) = {
-      post: "/v1/comment/like"
-      body: "*"
-    };
-  }
+  rpc Like (LikeCommentRequest) returns (LikeCommentReply);
 
   // 感谢评论
-  rpc Thank (ThankCommentRequest) returns (ThankCommentReply) {
-    option (google.api.http) = {
-      post: "/v1/comment/thank"
-      body: "*"
-    };
-  }
+  rpc Thank (ThankCommentRequest) returns (ThankCommentReply);
 
   // 修改评论状态
-  rpc UpdateStatus (UpdateStatusCommentRequest) returns (UpdateStatusCommentReply) {
-    option (google.api.http) = {
-      post: "/v1/comment/updateStatus"
-      body: "*"
-    };
-  }
+  rpc UpdateStatus (UpdateStatusCommentRequest) returns (UpdateStatusCommentReply);
 
 }
 

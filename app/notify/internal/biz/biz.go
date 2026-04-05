@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"common/pkg/client/rpc"
 	"common/pkg/util/jwt"
 	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/domain"
@@ -19,4 +20,7 @@ var BizProviderSet = wire.NewSet(
 	domain.NewNotificationMetaDomain,
 	domain.NewNotificationRecordDomain,
 	domain.NewNotificationTemplateDomain,
+
+	rpc.ProvideUserClient,
+	rpc.ProvideInfraClient,
 )

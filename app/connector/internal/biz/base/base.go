@@ -1,6 +1,7 @@
 package base
 
 import (
+	"common/pkg/client/rpc"
 	"common/pkg/util"
 	"connector/internal/conf"
 
@@ -8,15 +9,17 @@ import (
 )
 
 type BaseDomain struct {
-	Conf      *conf.Bootstrap
-	Log       *log.Helper
-	EventPool *util.EventPool
+	Conf             *conf.Bootstrap
+	Log              *log.Helper
+	EventPool        *util.EventPool
+	SignalNodeClient *rpc.SignalNodeClient
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, eventPool *util.EventPool) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, eventPool *util.EventPool, signalNodeClient *rpc.SignalNodeClient) *BaseDomain {
 	return &BaseDomain{
-		Conf:      conf,
-		Log:       log,
-		EventPool: eventPool,
+		Conf:             conf,
+		Log:              log,
+		EventPool:        eventPool,
+		SignalNodeClient: signalNodeClient,
 	}
 }

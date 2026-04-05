@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.user.v1;
 
-option go_package = "common/api/user/v1;v1";
+option go_package = "common/gen/user/v1;v1";
 
 enum UserStatus {
   USER_STATUS_UNSPECIFIED = 0;

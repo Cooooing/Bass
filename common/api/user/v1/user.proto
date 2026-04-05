@@ -2,71 +2,36 @@ syntax = "proto3";
 
 package common.api.user.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "user/v1/enum.proto";
 
-option go_package = "common/api/user/v1;v1";
+option go_package = "common/gen/user/v1;v1";
 
 // User 服务
 service UserUserService {
 
   // 更新用户设置
-  rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply) {
-    option (google.api.http) = {
-      post: "/v1/user/updateSetting"
-      body: "*"
-    };
-  }
+  rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply);
 
   // 获取当前用户信息
-  rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getCurrentUser"
-      body: "*"
-    };
-  }
+  rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserReply);
 
   // 查询单个用户
-  rpc GetOne (GetOneRequest) returns (GetOneReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getOne"
-      body: "*"
-    };
-  }
+  rpc GetOne (GetOneRequest) returns (GetOneReply);
 
   // 查询用户列表（返回数组）
-  rpc GetList (GetListRequest) returns (GetListReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getList"
-      body: "*"
-    };
-  }
+  rpc GetList (GetListRequest) returns (GetListReply);
 
   // 查询用户列表（返回map）
-  rpc GetMap(GetMapRequest) returns (GetMapReply) {
-    option (google.api.http) = {
-      post: "/v1/user/getMap"
-      body: "*"
-    };
-  }
+  rpc GetMap(GetMapRequest) returns (GetMapReply);
 
   // 分页查询用户
-  rpc Page(PageUserRequest) returns (PageUserReply) {
-    option (google.api.http) = {
-      post: "/v1/user/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageUserRequest) returns (PageUserReply);
 
   // 获取用户默认头像
-  rpc Avatar(AvatarRequest) returns (common.v1.ImageReply) {
-    option (google.api.http) = {
-      get: "/v1/user/avatar/{name}"
-    };
-  }
+  rpc Avatar(AvatarRequest) returns (common.v1.ImageReply);
 
 }
 

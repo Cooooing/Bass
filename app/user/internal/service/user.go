@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/user/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -14,7 +14,6 @@ import (
 	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/jinzhu/copier"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -38,10 +37,6 @@ func NewUserService(baseService *BaseService, authenticationDomain *doamin.Authe
 
 func (s *UserService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserUserServiceServer(gs, s)
-}
-
-func (s *UserService) RegisterHttp(hs *http.Server) {
-	v1.RegisterUserUserServiceHTTPServer(hs, s)
 }
 
 func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRequest) (rsp *v1.UpdateSettingReply, err error) {
@@ -73,7 +68,7 @@ func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUser
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
-	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: util.Ptr(user.ID)})
+	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: new(user.ID)})
 	if err != nil {
 		return nil, err
 	}

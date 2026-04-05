@@ -2,10 +2,8 @@ package handler
 
 import (
 	"bytes"
-	infrav1 "common/api/infra/v1"
-	v1 "common/api/notify/v1"
-	"common/pkg/client"
-	"common/pkg/constant"
+	infrav1 "common/gen/infra/v1"
+	v1 "common/gen/notify/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util/handlerchain"
 	"context"
@@ -44,11 +42,7 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 	switch data.Channel {
 	case v1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL:
 		// 发送邮件
-		infraServiceClient, err := client.GetConsulServiceClient(h.Consul, constant.InfraServiceName.String(), infrav1.NewInfraEmailServiceClient)
-		if err != nil {
-			return nil, err
-		}
-		_, err = infraServiceClient.Send(ctx, &infrav1.SendEmailRequest{
+		_, err = h.Infra.Email.Send(ctx, &infrav1.SendEmailRequest{
 			Title:   data.Title,
 			Content: data.ContentRender,
 			To:      []string{data.Meta.RegisterVerifyCode.Email},
@@ -58,11 +52,7 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 		}
 	case v1.NotificationChannel_NOTIFICATION_CHANNEL_SMS:
 		// 发送短信
-		infraServiceClient, err := client.GetConsulServiceClient(h.Consul, constant.InfraServiceName.String(), infrav1.NewInfraSmsServiceClient)
-		if err != nil {
-			return nil, err
-		}
-		_, err = infraServiceClient.Send(ctx, &infrav1.SendSmsRequest{
+		_, err = h.Infra.Sms.Send(ctx, &infrav1.SendSmsRequest{
 			Phone:  []string{data.Meta.RegisterVerifyCode.Phone},
 			Params: []string{data.Meta.RegisterVerifyCode.Code},
 		})

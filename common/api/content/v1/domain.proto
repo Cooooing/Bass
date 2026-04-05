@@ -2,40 +2,24 @@ syntax = "proto3";
 
 package common.api.content.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
 import "content/v1/tag.proto";
 import "content/v1/enum.proto";
 
-option go_package = "common/api/content/v1;v1";
+option go_package = "common/gen/content/v1;v1";
 
 // 领域服务
 service ContentDomainService {
   // 新增领域
-  rpc Adds (AddDomainsRequest) returns (AddDomainsReply) {
-    option (google.api.http) = {
-      post: "/v1/domain/adds"
-      body: "*"
-    };
-  }
+  rpc Adds (AddDomainsRequest) returns (AddDomainsReply);
 
   // 修改领域信息
-  rpc Update (UpdateDomainRequest) returns (UpdateDomainReply) {
-    option (google.api.http) = {
-      post: "/v1/domain/update"
-      body: "*"
-    };
-  }
+  rpc Update (UpdateDomainRequest) returns (UpdateDomainReply);
 
   // 查询领域
-  rpc Page (PageDomainRequest) returns (PageDomainReply) {
-    option (google.api.http) = {
-      post: "/v1/domain/page"
-      body: "*"
-    };
-  }
+  rpc Page (PageDomainRequest) returns (PageDomainReply);
 }
 
 // 实体定义

@@ -2,20 +2,13 @@ syntax = "proto3";
 
 package common.api.infra.v1;
 
-import "google/api/annotations.proto";
-
-option go_package = "common/api/infra/v1;v1";
+option go_package = "common/gen/infra/v1;v1";
 
 // Email 服务
 service InfraEmailService {
 
   // 发送邮件
-  rpc Send(SendEmailRequest) returns (SendEmailReply) {
-    option (google.api.http) = {
-      post: "/api/v1/infra/email/send"
-      body: "*"
-    };
-  }
+  rpc Send(SendEmailRequest) returns (SendEmailReply);
 
 }
 

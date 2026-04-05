@@ -1,11 +1,10 @@
 package domain
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
-	notifyv1 "common/api/notify/v1"
-	userv1 "common/api/user/v1"
-	"common/pkg/client"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/content/v1"
+	notifyv1 "common/gen/notify/v1"
+	userv1 "common/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -45,8 +44,8 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		// 回复文章
 		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
-			ArticleId: util.Ptr(comment.ArticleID),
-			Status:    util.Ptr(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+			ArticleId: new(comment.ArticleID),
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
@@ -60,8 +59,8 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		if comment.ReplyID != nil {
 			replyComment, err = d.commentRepo.GetOne(ctx, tx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
-				ArticleId: util.Ptr(comment.ArticleID),
-				Status:    util.Ptr(v1.CommentStatus_COMMENT_STATUS_NORMAL),
+				ArticleId: new(comment.ArticleID),
+				Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
 			})
 			if err != nil {
 				return err
@@ -98,10 +97,10 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		atUserNames := c.ParseContent()
 		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
 			UUID:       uuid.New().String(),
-			Type:       util.Ptr(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
+			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 			SenderId:   user.ID,
 			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{util.Ptr(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
 			Meta: commonModel.Meta{
 				AtUsernames: lo.Keys(atUserNames),
 				Comment: &commonModel.CommentMeta{
@@ -144,11 +143,7 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 			}
 		}
 
-		userService, err := client.GetConsulServiceClient(d.Consul, constant.UserServiceName.String(), userv1.NewUserUserServiceClient)
-		if err != nil {
-			return err
-		}
-		userMap, err := userService.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
 		if err != nil {
 			return err
 		}

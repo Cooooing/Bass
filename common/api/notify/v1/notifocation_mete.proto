@@ -2,24 +2,18 @@ syntax = "proto3";
 
 package common.api.notify.v1;
 
-import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "notify/v1/enum.proto";
 
-option go_package = "common/api/notify/v1;v1";
+option go_package = "common/gen/notify/v1;v1";
 
 // Notification_Meta 服务
 service NotifyNotificationMetaService {
 
   // 查询通知元数据
-  rpc Page (NotificationMetaPageRequest) returns (NotificationMetaPageReply) {
-    option (google.api.http) = {
-      post: "/v1/notificationMeta/page"
-      body: "*"
-    };
-  }
+  rpc Page (NotificationMetaPageRequest) returns (NotificationMetaPageReply);
 
 }
 

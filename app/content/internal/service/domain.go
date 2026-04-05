@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/api/content/v1"
+	v1 "common/gen/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"content/internal/biz/domain"
@@ -11,7 +11,6 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type DomainService struct {
@@ -22,10 +21,6 @@ type DomainService struct {
 
 func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentDomainServiceServer(gs, s)
-}
-
-func (s *DomainService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentDomainServiceHTTPServer(hs, s)
 }
 
 func NewDomainService(baseService *BaseService, domainDomain *domain.DomainDomain) *DomainService {
@@ -77,14 +72,14 @@ func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v
 		DomainIds:   req.Query.Ids,
 		Name:        req.Query.Name,
 		Description: req.Query.Description,
-		Status:      util.Ptr(v1.DomainStatus_DOMAIN_STATUS_NORMAL),
+		Status:      new(v1.DomainStatus_DOMAIN_STATUS_NORMAL),
 		Url:         req.Query.Url,
 		Icon:        req.Query.Icon,
 		TagCount:    nil,
 		IsNav:       req.Query.IsNav,
 	}
 	if req.Query.Status != nil {
-		getReq.Status = util.Ptr(*req.Query.Status)
+		getReq.Status = new(*req.Query.Status)
 	}
 	if req.Query.TagCount != nil {
 		getReq.TagCount = &commonModel.Range[int32]{

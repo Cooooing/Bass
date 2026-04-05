@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/infra/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/infra/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -13,7 +13,6 @@ import (
 	"infra/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -32,10 +31,6 @@ func NewOssService(baseService *BaseService, ossObjectStorageDomain *domain.Obje
 
 func (s *OssService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterInfraOssServiceServer(gs, s)
-}
-
-func (s *OssService) RegisterHttp(hs *http.Server) {
-	v1.RegisterInfraOssServiceHTTPServer(hs, s)
 }
 
 func (s *OssService) UploadToken(ctx context.Context, req *v1.UploadTokenRequest) (*v1.UploadTokenReply, error) {

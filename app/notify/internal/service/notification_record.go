@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/notify/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/notify/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type NotificationRecordService struct {
@@ -33,10 +32,6 @@ func (s *NotificationRecordService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyNotificationRecordServiceServer(gs, s)
 }
 
-func (s *NotificationRecordService) RegisterHttp(hs *http.Server) {
-	v1.RegisterNotifyNotificationRecordServiceHTTPServer(hs, s)
-}
-
 func (s *NotificationRecordService) Page(ctx context.Context, req *v1.NotificationRecordPageRequest) (rsp *v1.NotificationRecordPageReply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
@@ -44,8 +39,8 @@ func (s *NotificationRecordService) Page(ctx context.Context, req *v1.Notificati
 	}
 	records, page, err := s.notificationRecordDomain.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
 		NotificationType: req.Query.NotificationType,
-		ReceiverId:       util.Ptr(user.ID),
-		Status:           util.Ptr(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
+		ReceiverId:       new(user.ID),
+		Status:           new(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
 		WithMeta:         true,
 	})
 
@@ -67,10 +62,10 @@ func (s *NotificationRecordService) Read(ctx context.Context, req *v1.Notificati
 	)
 	if req.ReadTimeRange != nil {
 		if req.ReadTimeRange.Start != nil {
-			startTime = util.Ptr(req.ReadTimeRange.Start.AsTime())
+			startTime = new(req.ReadTimeRange.Start.AsTime())
 		}
 		if req.ReadTimeRange.End != nil {
-			endTime = util.Ptr(req.ReadTimeRange.End.AsTime())
+			endTime = new(req.ReadTimeRange.End.AsTime())
 		}
 	}
 

@@ -1,8 +1,8 @@
 package repo
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/content/v1"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
 	"context"

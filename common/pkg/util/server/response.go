@@ -13,12 +13,11 @@ type Result[T any] struct {
 }
 
 func NewResult[T any](code int, msg string, data T) *Result[T] {
-	now := time.Now().UTC()
 	return &Result[T]{
 		Code: code,
 		Msg:  msg,
 		Data: data,
-		Time: &now,
+		Time: new(time.Now().UTC()),
 	}
 }
 

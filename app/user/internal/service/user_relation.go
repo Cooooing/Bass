@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/user/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -12,7 +12,6 @@ import (
 	"user/internal/biz/repo"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type UserRelationService struct {
@@ -30,10 +29,6 @@ func NewUserRelationService(baseService *BaseService, userRelationDomain *doamin
 
 func (s *UserRelationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserUserRelationServiceServer(gs, s)
-}
-
-func (s *UserRelationService) RegisterHttp(hs *http.Server) {
-	v1.RegisterUserUserRelationServiceHTTPServer(hs, s)
 }
 
 func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockRequest) (rsp *v1.BlockReply, err error) {
@@ -67,7 +62,7 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 	}
 	req.Page = util.OrDefault(req.Page, &cv1.PageRequest{})
 	userRelations, page, err := s.userRelationDomain.Page(ctx, req.Page, &repo.UserRelationGetReq{
-		ActorId:    util.Ptr(user.ID),
+		ActorId:    new(user.ID),
 		Type:       req.Query.Type,
 		WithTarget: true,
 	})

@@ -1,10 +1,9 @@
 package repo
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/content/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/content/v1"
 	"common/pkg/constant"
-	"common/pkg/util"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	basedata "content/internal/data/base"
@@ -190,7 +189,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, tx *gen.Client, articleId 
 }
 
 func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, articleId int64, commentId int64) (*model.Article, error) {
-	exist, err := r.commentRepo.Exist(ctx, tx, &repo.CommentGetReq{CommentId: util.Ptr(commentId), ArticleId: util.Ptr(articleId)})
+	exist, err := r.commentRepo.Exist(ctx, tx, &repo.CommentGetReq{CommentId: new(commentId), ArticleId: new(articleId)})
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +206,7 @@ func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, ar
 }
 
 func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int64) (*model.Article, error) {
-	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: util.Ptr(articleId)})
+	first, err := r.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 	if err != nil {
 		return nil, err
 	}

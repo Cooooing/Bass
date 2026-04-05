@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "signal/v1/enum.proto";
 import "google/protobuf/struct.proto";
 
-option go_package = "common/api/signal/v1;v1";
+option go_package = "common/gen/signal/v1;v1";
 
 // node 节点
 message Node {

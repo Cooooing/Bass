@@ -1,7 +1,7 @@
 package cache
 
 import (
-	cv1 "common/api/common/v1"
+	cv1 "common/gen/common/v1"
 	"common/pkg/constant"
 	"context"
 	"errors"

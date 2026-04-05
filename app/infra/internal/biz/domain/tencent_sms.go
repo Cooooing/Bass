@@ -39,17 +39,16 @@ func NewTencentSmsDomain(base *doaminbase.BaseDomain) *TencentSmsDomain {
 
 func (d *TencentSmsDomain) Send(ctx context.Context, phone []string, params []string) error {
 	request := sms.NewSendSmsRequest()
-	request.SmsSdkAppId = common.StringPtr(d.Conf.Server.Sms.Tencent.SmsSdkAppId)
-	request.SignName = common.StringPtr(d.Conf.Server.Sms.Tencent.SignName)
-	request.TemplateId = common.StringPtr(d.Conf.Server.Sms.Tencent.TemplateId)
+	request.SmsSdkAppId = new(d.Conf.Server.Sms.Tencent.SmsSdkAppId)
+	request.SignName = new(d.Conf.Server.Sms.Tencent.SignName)
+	request.TemplateId = new(d.Conf.Server.Sms.Tencent.TemplateId)
 	request.TemplateParamSet = common.StringPtrs(params)
 	request.PhoneNumberSet = common.StringPtrs(phone)
 
 	response, err := d.client.SendSms(request)
 	// 处理异常
 	if err != nil {
-		var sdkErr *tencentcloud_errors.TencentCloudSDKError
-		if errors.As(err, &sdkErr) {
+		if sdkErr, ok := errors.AsType[*tencentcloud_errors.TencentCloudSDKError](err); ok {
 			return fmt.Errorf("tencent sms API error has returned: %s: code=%s, message=%s, requestId=%s", err, sdkErr.GetCode(), sdkErr.GetMessage(), sdkErr.GetRequestId())
 		}
 		return err

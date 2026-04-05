@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/api/common/v1"
-	v1 "common/api/user/v1"
+	cv1 "common/gen/common/v1"
+	v1 "common/gen/user/v1"
 	"common/pkg/constant"
 	"common/pkg/util"
 
@@ -13,7 +13,6 @@ import (
 	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type AuthenticationService struct {
@@ -37,10 +36,6 @@ func (s *AuthenticationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserAuthenticationServiceServer(gs, s)
 }
 
-func (s *AuthenticationService) RegisterHttp(hs *http.Server) {
-	v1.RegisterUserAuthenticationServiceHTTPServer(hs, s)
-}
-
 func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailRequest) (rsp *v1.RegisterEmailReply, err error) {
 	if !s.VerifyName(req.Name) {
 		return nil, cv1.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
@@ -52,7 +47,7 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{User: &gen.User{
-		Email:    util.Ptr(req.Email),
+		Email:    new(req.Email),
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
@@ -76,7 +71,7 @@ func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.Regis
 		return nil, cv1.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterPhone(ctx, &model.User{User: &gen.User{
-		Phone:    util.Ptr(req.Phone),
+		Phone:    new(req.Phone),
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,

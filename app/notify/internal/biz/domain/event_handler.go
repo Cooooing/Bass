@@ -1,7 +1,7 @@
 package domain
 
 import (
-	v1 "common/api/notify/v1"
+	v1 "common/gen/notify/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	handlerchain2 "common/pkg/util/handlerchain"

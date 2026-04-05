@@ -1,8 +1,8 @@
 package model
 
 import (
-	v1 "common/api/content/v1"
-	userv1 "common/api/user/v1"
+	v1 "common/gen/content/v1"
+	userv1 "common/gen/user/v1"
 	"common/pkg/util"
 	"content/internal/data/ent/gen"
 	"fmt"
@@ -48,7 +48,7 @@ func (a *Article) ParseContent() (atUserNames map[string]struct{}) {
 		return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
 	})
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-		coverImageUrl := util.Ptr("")
+		coverImageUrl := new("")
 		status := util.ParseNodeImageCoverImageUrl(n, entering, coverImageUrl)
 		if *coverImageUrl != "" {
 			a.CoverImageUrl = coverImageUrl
@@ -72,7 +72,7 @@ func (a *Article) ParseRewardContent() (atUserNames map[string]struct{}) {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
 		})
-		a.RewardContentRender = util.Ptr(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
+		a.RewardContentRender = new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), *a.RewardContent))
 	}
 	return atUserNames
 }

@@ -12,6 +12,7 @@ import (
 	consulregistry "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	metadata2 "github.com/go-kratos/kratos/v2/middleware/metadata"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	kgrpc "github.com/go-kratos/kratos/v2/transport/grpc"
@@ -20,6 +21,7 @@ import (
 
 	consulapi "github.com/hashicorp/consul/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 )
 
 // ConsulClient 封装 Consul 客户端
@@ -105,16 +107,25 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 		return val.(*grpc.ClientConn), nil
 	}
 
-	// 使用全局 Context 进行 Dial
+	ctx, cancel := context.WithTimeout(context.Background(), c.conf.DialTimeout.AsDuration())
+	defer cancel()
+
 	conn, err := kgrpc.DialInsecure(
-		context.Background(),
+		ctx,
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		kgrpc.WithDiscovery(c.reg),
-		kgrpc.WithTimeout(5*time.Second),
+		kgrpc.WithTimeout(c.conf.DialTimeout.AsDuration()),
+		kgrpc.WithOptions(grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`)),
 		kgrpc.WithMiddleware(
-			metadata2.Client(),
+			recovery.Recovery(),
 			tracing.Client(),
+			metadata2.Client(),
 		),
+		kgrpc.WithOptions(grpc.WithKeepaliveParams(keepalive.ClientParameters{
+			Time:                60 * time.Second,
+			Timeout:             20 * time.Second,
+			PermitWithoutStream: true,
+		})),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("dial service %s failed: %w", service, err)

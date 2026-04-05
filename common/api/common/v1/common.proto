@@ -4,7 +4,7 @@ package common.api.common.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "common/api/common/v1;v1";
+option go_package = "common/gen/common/v1;v1";
 
 message PageRequest {
   // 页码

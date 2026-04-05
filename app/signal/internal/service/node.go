@@ -1,9 +1,8 @@
 package service
 
 import (
-	v1 "common/api/signal/v1"
+	v1 "common/gen/signal/v1"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"context"
 	"fmt"
 	"signal/internal/biz/domain"
@@ -12,7 +11,6 @@ import (
 	"signal/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type NodeService struct {
@@ -32,10 +30,6 @@ func NewNodeService(baseService *BaseService, nodeDomain *domain.NodeDomain, nod
 
 func (s *NodeService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterSignalNodeServiceServer(gs, s)
-}
-
-func (s *NodeService) RegisterHttp(hs *http.Server) {
-	v1.RegisterSignalNodeServiceHTTPServer(hs, s)
 }
 
 func (s *NodeService) Save(ctx context.Context, req *v1.SignalNodeSaveRequest) (rsp *v1.SignalNodeSaveReply, err error) {
@@ -77,7 +71,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.SignalNodeUpdateReques
 }
 
 func (s *NodeService) GetSecret(ctx context.Context, req *v1.SignalNodeGetSecretRequest) (*v1.SignalNodeGetSecretReply, error) {
-	node, err := s.nodeRepo.GetOne(ctx, s.Db, &repo.NodeGetReq{Id: util.Ptr(req.Id)})
+	node, err := s.nodeRepo.GetOne(ctx, s.Db, &repo.NodeGetReq{Id: new(req.Id)})
 	if err != nil {
 		return nil, err
 	}

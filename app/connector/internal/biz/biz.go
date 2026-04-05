@@ -2,6 +2,7 @@ package biz
 
 import (
 	"common/pkg/client"
+	"common/pkg/client/rpc"
 	"common/pkg/constant"
 	"common/pkg/util"
 	"common/pkg/util/task"
@@ -24,6 +25,8 @@ var BizProviderSet = wire.NewSet(
 	client.NewProducer,
 	ProvideTasks,
 	handler.NewRegisterHandler,
+
+	rpc.ProvideSignalNodeClient,
 
 	domain.NewSessionDomain,
 	domain.NewServerDomain,

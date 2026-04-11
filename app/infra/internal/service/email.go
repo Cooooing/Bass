@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/gen/infra/v1"
+	v1 "common/api/gen/infra/v1"
 	"context"
 	"infra/internal/biz/domain"
 

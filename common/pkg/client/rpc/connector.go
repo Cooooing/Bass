@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	connectorv1 "common/gen/connector/v1"
+	connectorv1 "common/api/gen/connector/v1"
 
 	"google.golang.org/grpc"
 )

@@ -1,7 +1,7 @@
 package model
 
 import (
-	v1 "common/gen/signal/v1"
+	v1 "common/api/gen/signal/v1"
 	"common/pkg/util"
 	"math"
 	"signal/internal/data/ent/gen"

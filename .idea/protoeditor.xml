@@ -7,7 +7,10 @@
           <option name="location" value="file://$PROJECT_DIR$/common/api" />
         </ImportPathEntry>
         <ImportPathEntry>
-          <option name="location" value="file://$PROJECT_DIR$/common/third_party" />
+          <option name="location" value="file://$PROJECT_DIR$/common/api/app" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/common/api/third_party" />
         </ImportPathEntry>
       </list>
     </option>

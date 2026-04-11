@@ -1,8 +1,8 @@
 package repo
 
 import (
-	cv1 "common/gen/common/v1"
-	v1 "common/gen/notify/v1"
+	cv1 "common/api/gen/common/v1"
+	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/data/ent/gen"

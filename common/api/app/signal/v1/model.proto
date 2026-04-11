@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package common.api.app.signal.v1;
+
+import "google/protobuf/timestamp.proto";
+import "signal/v1/enum.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "common/api/gen/signal/v1;v1";
+
+// node 节点
+message Node {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 创建时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 节点id
+  int64 id = 1;
+  // 节点 key
+  string key = 4;
+  // 节点名称
+  string name = 2;
+  // 节点描述
+  optional string description = 3;
+  // 节点回调公网地址
+  string callback_url = 5;
+  // 状态
+  int32 status = 6;
+  // 节点拥有者 ID
+  optional int64 owner_id = 7;
+}
+
+// Websocket 消息
+message Message {
+  // 消息类型
+  MessageType type = 1;
+  // 会话 id
+  repeated string session_id = 2;
+  // 消息体
+  google.protobuf.Struct payload = 3;
+}

@@ -1,7 +1,7 @@
 package domain
 
 import (
-	signalv1 "common/gen/signal/v1"
+	signalv1 "common/api/gen/signal/v1"
 	"common/pkg/util"
 	domainbase "connector/internal/biz/base"
 	"context"

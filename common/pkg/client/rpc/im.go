@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	imv1 "common/gen/im/v1"
+	imv1 "common/api/gen/im/v1"
 
 	"google.golang.org/grpc"
 )

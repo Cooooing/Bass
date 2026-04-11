@@ -2,8 +2,8 @@ package domain
 
 import (
 	"bytes"
-	cv1 "common/gen/common/v1"
-	connectorv1 "common/gen/connector/v1"
+	cv1 "common/api/gen/common/v1"
+	connectorv1 "common/api/gen/connector/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"

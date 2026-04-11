@@ -2,8 +2,8 @@ package handler
 
 import (
 	"bytes"
-	infrav1 "common/gen/infra/v1"
-	v1 "common/gen/notify/v1"
+	infrav1 "common/api/gen/infra/v1"
+	v1 "common/api/gen/notify/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util/handlerchain"
 	"context"

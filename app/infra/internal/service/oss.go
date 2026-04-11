@@ -1,8 +1,8 @@
 package service
 
 import (
-	cv1 "common/gen/common/v1"
-	v1 "common/gen/infra/v1"
+	cv1 "common/api/gen/common/v1"
+	v1 "common/api/gen/infra/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"

@@ -1,7 +1,7 @@
 package constant
 
 import (
-	v1 "common/gen/common/v1"
+	v1 "common/api/gen/common/v1"
 	"math"
 )
 

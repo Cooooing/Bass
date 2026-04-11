@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/gen/common/v1"
+	cv1 "common/api/gen/common/v1"
 	"context"
 	"signal/internal/biz/model"
 	"signal/internal/data/ent/gen"

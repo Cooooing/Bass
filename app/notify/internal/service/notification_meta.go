@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/gen/notify/v1"
+	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/domain"
 

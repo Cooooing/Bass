@@ -1,8 +1,8 @@
 package model
 
 import (
-	v1 "common/gen/content/v1"
-	userv1 "common/gen/user/v1"
+	v1 "common/api/gen/content/v1"
+	userv1 "common/api/gen/user/v1"
 	"common/pkg/util"
 	"content/internal/data/ent/gen"
 	"fmt"

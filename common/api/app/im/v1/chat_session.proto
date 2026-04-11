@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/v1/common.proto";
+import "im/v1/model.proto";
+
+option go_package = "common/api/gen/im/v1;v1";
+
+// ChatSession 服务
+service IMChatSessionService {
+
+  // 免打扰
+  rpc MarkDisturb (ChatSessionMarkDisturbRequest) returns (ChatSessionMarkDisturbReply);
+
+  // 置顶
+  rpc MarkTop (ChatSessionMarkTopRequest) returns (ChatSessionMarkTopReply);
+
+  // 标为已读
+  rpc MarkRead (ChatSessionMarkReadRequest) returns (ChatSessionMarkReadReply);
+
+  // 查询会话数据
+  rpc Page (ChatSessionPageRequest) returns (ChatSessionPageReply);
+
+}
+
+// 查询参数定义
+
+message ChatSessionQueryParams {
+  // 主键
+  repeated int64 ids = 2;
+
+}
+
+// 请求/响应结构定义
+
+message ChatSessionMarkDisturbRequest {
+  // 会话ID
+  repeated int64 ids = 1;
+  // 是否免打扰
+  bool disturb = 2;
+}
+message ChatSessionMarkDisturbReply {}
+
+message ChatSessionMarkTopRequest {
+  // 会话ID
+  repeated int64 ids = 1;
+  // 是否置顶
+  bool top = 2;
+}
+message ChatSessionMarkTopReply {}
+
+message ChatSessionMarkReadRequest {
+  // 会话ID
+  repeated int64 ids = 1;
+}
+message ChatSessionMarkReadReply {}
+
+message ChatSessionPageRequest {
+  // 分页参数
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  ChatSessionQueryParams query = 2;
+}
+message ChatSessionPageReply {
+  // 分页信息
+  common.v1.PageReply page = 1;
+  // 消息信息
+  repeated ChatSession rows = 2;
+}

@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+import "content/v1/enum.proto";
+
+option go_package = "common/api/gen/content/v1;v1";
+
+// 标签服务
+service ContentTagService {
+
+  // 批量添加标签
+  rpc Adds (AddTagsRequest) returns (AddTagsReply);
+
+  // 更新标签
+  rpc Update (UpdateTagRequest) returns (UpdateTagReply);
+
+  // 分页获取标签
+  rpc Page (PageTagRequest) returns (PageTagReply);
+}
+
+// 实体定义
+
+message Tag {
+  // 创建时间
+  optional google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  optional google.protobuf.Timestamp updated_at = 1001;
+  // 创建人
+  optional int64 created_by = 1002;
+  // 更新人
+  optional int64 updated_by = 1003;
+  // 主键
+  int64 id = 1;
+  // 标签名称
+  string name = 3;
+  // 描述
+  optional string description = 4;
+  // 所属领域Id
+  optional int64 domain_id = 5;
+  // 标签状态：1-正常，2-禁用
+  optional TagStatus status = 6 [(validate.rules).enum = {defined_only: true,not_in: [0]}];
+  // 文章数
+  int32 article_count = 7;
+}
+
+message TagSave {
+  // 主键
+  optional int64 id = 1;
+  // 领域Id
+  optional int64 domain_id = 2;
+  // 状态：1-正常，2-禁用
+  optional TagStatus status = 3 [(validate.rules).enum = {defined_only: true,not_in: [0]}];
+  // 标签名称
+  string name = 4;
+  // 标签描述
+  optional string description = 5;
+}
+
+// 查询参数定义
+
+message TagQueryParams {
+  // 标签Id列表
+  repeated int64 ids = 1;
+  // 用户Id
+  optional int64 user_id = 2;
+  // 标签名称
+  optional string name = 3;
+  // 标签名称列表
+  repeated string names = 4;
+  // 标签描述
+  optional string description = 5;
+  // 标签状态
+  optional int32 status = 6;
+  // 领域Id
+  optional int64 domain_id = 7;
+  // 文章数量范围
+  common.v1.Int32Range article_count = 8;
+}
+
+// 请求/响应结构定义
+
+message AddTagsRequest {
+  // 标签信息
+  repeated TagSave tags = 1;
+}
+message AddTagsReply {
+  // 添加的标签信息
+  repeated Tag tags = 1;
+}
+
+message UpdateTagRequest {
+  // 标签信息
+  TagSave tag = 1;
+}
+message UpdateTagReply {
+  // 更新的标签信息
+  Tag tag = 1;
+}
+
+message PageTagRequest {
+  // 分页
+  optional common.v1.PageRequest page = 1;
+  // 查询参数
+  TagQueryParams query = 2;
+}
+message PageTagReply {
+  // 分页
+  common.v1.PageReply page = 1;
+  // 标签列表
+  repeated Tag rows = 2;
+}

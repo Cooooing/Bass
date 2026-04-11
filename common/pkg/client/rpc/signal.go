@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	signalv1 "common/gen/signal/v1"
+	signalv1 "common/api/gen/signal/v1"
 
 	"google.golang.org/grpc"
 )

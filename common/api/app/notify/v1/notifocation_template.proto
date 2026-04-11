@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "common/v1/common.proto";
+import "notify/v1/enum.proto";
+
+option go_package = "common/api/gen/notify/v1;v1";
+
+// Notification_Template 服务
+service NotifyNotificationTemplateService {
+
+  // 查询通知模板
+  rpc Page (NotificationTemplatePageRequest) returns (NotificationTemplatePageReply);
+
+  // 添加通知模板
+  rpc Add (NotificationTemplateAddRequest) returns (NotificationTemplateAddReply);
+
+  // 更新通知模板
+  rpc Update (NotificationTemplateUpdateRequest) returns (NotificationTemplateUpdateReply);
+
+}
+
+// 实体定义
+
+message NotificationTemplate {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 主键
+  int64 id = 3;
+  // 通知类型
+  NotificationType notification_type = 5 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+  // 通知渠道
+  NotificationChannel channel = 6 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+  // 模板标题
+  string title = 4;
+  // 模板内容
+  string content = 7;
+  // 处理器链（有序执行）
+  repeated string processors = 8;
+  // 是否启用
+  bool enable = 9;
+}
+
+// 查询参数定义
+
+message NotificationTemplateQueryParams {
+  // 主键
+  repeated int64 ids = 2;
+  // 通知类型
+  optional NotificationType notification_type = 5 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+  // 通知渠道
+  optional NotificationChannel channel = 6 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+  // 模板内容
+  optional string content = 7;
+  // 处理器链（有序执行）
+  repeated string processors = 8;
+  // 是否启用
+  optional bool enable = 9;
+}
+
+// 请求/响应结构定义
+
+message NotificationTemplatePageRequest {
+  // 分页参数
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  NotificationTemplateQueryParams query = 2;
+}
+message NotificationTemplatePageReply {
+  // 分页信息
+  common.v1.PageReply page = 1;
+  // 通知元数据信息
+  repeated NotificationTemplate rows = 2;
+}
+
+message NotificationTemplateAddRequest {
+  // 模板信息
+  NotificationTemplate notification_template = 2;
+}
+message NotificationTemplateAddReply {
+  NotificationTemplate notification_template = 1;
+}
+
+message NotificationTemplateUpdateRequest {
+  // 主键
+  int64 ids = 2;
+  // 通知类型
+  optional NotificationType notification_type = 5 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+  // 通知渠道
+  optional NotificationChannel channel = 6 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+  // 模板内容
+  optional string content = 7;
+  // 处理器链（有序执行）
+  repeated string processors = 8;
+  // 是否启用
+  optional bool enable = 9;
+}
+message NotificationTemplateUpdateReply {
+  NotificationTemplate notification_template = 1;
+}

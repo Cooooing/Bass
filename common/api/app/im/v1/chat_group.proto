@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/v1/common.proto";
+import "im/v1/model.proto";
+
+option go_package = "common/api/gen/im/v1;v1";
+
+// ChatGroup 服务
+service IMChatGroupService {
+
+  // 创建群组
+  rpc Create (ChatGroupCreateRequest) returns (ChatGroupCreateReply);
+
+  // 解散群组
+  rpc Dismiss (ChatGroupDismissRequest) returns (ChatGroupDismissReply);
+
+  // 转让群主
+  // 踢出群成员
+  // 禁言群成员
+  // 解除禁言群成员
+
+  // 查询群组列表
+  rpc Page (ChatGroupPageRequest) returns (ChatGroupPageReply);
+
+  // 邀请群成员
+  // 同意入群邀请
+  // 查询邀请列表
+
+}
+
+// 查询参数定义
+
+message ChatGroupQueryParams {
+  // 主键
+  repeated int64 ids = 2;
+  // uuid
+  repeated string uuids = 3;
+  // 通知类型
+  optional int32 notification_type = 5;
+  // 发送者ID
+  repeated int64 sender_ids = 6;
+  // 状态 0-正常 1-被取消
+  optional int32 status = 8;
+}
+
+// 请求/响应结构定义
+
+message ChatGroupCreateRequest{
+  // 群名称
+  string name = 2;
+  // 群头像
+  optional string avatar = 3;
+  // 群简介
+  optional string introduction = 4;
+}
+message ChatGroupCreateReply{}
+
+message ChatGroupDismissRequest{
+  // 群组ID
+  int64 id = 1;
+}
+message ChatGroupDismissReply{}
+
+message ChatGroupPageRequest {
+  // 分页参数
+  common.v1.PageRequest page = 1;
+  // 查询参数
+  ChatGroupQueryParams query = 2;
+}
+message ChatGroupPageReply {
+  // 分页信息
+  common.v1.PageReply page = 1;
+  // 通知元数据信息
+  repeated ChatGroup rows = 2;
+}

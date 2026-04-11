@@ -2,7 +2,7 @@ package doamin
 
 import (
 	"bytes"
-	cv1 "common/gen/common/v1"
+	cv1 "common/api/gen/common/v1"
 	"common/pkg/constant"
 	"context"
 	"image/png"

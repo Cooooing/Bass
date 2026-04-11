@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package common.api.app.signal.v1;
+
+option go_package = "common/api/gen/signal/v1;v1";
+
+// 节点状态
+enum NodeStatus {
+  NODE_STATUS_UNKNOWN = 0;
+  // 正常
+  NODE_STATUS_NORMAL = 1;
+  // 禁用
+  NODE_STATUS_DISABLED = 2;
+}
+
+// 消息类型
+enum MessageType {
+  MESSAGE_TYPE_UNKNOWN = 0;
+  // 通知消息
+  MESSAGE_TYPE_NOTIFY = 1;
+  // IM 消息
+  MESSAGE_TYPE_IM = 2;
+}

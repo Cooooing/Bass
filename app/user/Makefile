@@ -3,17 +3,18 @@ GOHOSTOS := $(shell go env GOHOSTOS)
 VERSION := latest
 SERVER := user
 
-ROOT_DIR := $(shell cd $(dir $(lastword $(MAKEFILE_LIST)))/../.. && pwd)
+ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../)
 COMMON_DIR := $(ROOT_DIR)/common
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
-API_DIR := $(COMMON_DIR)/api
-API_GEN_DIR := $(COMMON_DIR)/gen
-THIRD_PARTY_DIR := $(COMMON_DIR)/third_party
+API_DIR := $(COMMON_DIR)/api/app
+API_GEN_DIR := $(COMMON_DIR)/api/gen
+THIRD_PARTY_DIR := $(COMMON_DIR)/api/third_party
 INTERNAL_DIR := $(APP_DIR)/internal
 
 # ============ Find Proto Files (Cross-Platform Safe) ============
 INTERNAL_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(INTERNAL_DIR))
-API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DIR))
+# Filter out any stray non-proto tokens (e.g., lines like 'root: <path>') emitted by the finder on some platforms
+API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DIR) | sed '/^root:/d')
 
 # ============ Tool Installation ============
 .PHONY: init
@@ -82,4 +83,3 @@ build:
 .PHONY: all
 all: init gen build
 	@echo "Build completed successfully."
-

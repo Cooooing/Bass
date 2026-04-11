@@ -1,7 +1,7 @@
 package model
 
 import (
-	notifyv1 "common/gen/notify/v1"
+	notifyv1 "common/api/gen/notify/v1"
 	"time"
 )
 

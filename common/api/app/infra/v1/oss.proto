@@ -1,0 +1,167 @@
+syntax = "proto3";
+
+package common.api.app.infra.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "common/v1/common.proto";
+
+option go_package = "common/api/gen/infra/v1;v1";
+
+// Oss 服务
+service InfraOssService {
+
+  // 获取上传文件凭证
+  rpc UploadToken (UploadTokenRequest) returns (UploadTokenReply);
+
+  // 审核 oss 对象
+  rpc Audit (AuditRequest) returns (AuditReply);
+
+  // 分页查询 oss 对象
+  rpc Page (PageOssRequest) returns (PageOssReply);
+
+  // 七牛上传回调
+  rpc QiniuUploadCallback (QiniuUploadCallbackRequest) returns (QiniuUploadCallbackReply);
+
+  // 七牛增量审核回调
+  rpc QiniuIncrementAuditCallback (QiniuIncrementAuditCallbackRequest) returns (QiniuIncrementAuditCallbackReply);
+
+}
+
+// 实体定义
+
+message Oss {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // id
+  int64 id = 1;
+  // OSS 提供商，如 minio/qiniu/aliyun/tencent
+  string provider = 2;
+  // bucket 名称
+  string bucket = 3;
+  // 对象 key
+  string key = 4;
+  // 文件 MIME 类型
+  string mime_type = 5;
+  // 文件大小（字节）
+  int64 size = 6;
+  // 文件 Hash
+  string hash = 7;
+
+  // 审核回调响应（JSON / 原文）
+  optional string audit_callback_reply = 8;
+  // 是否违规
+  bool blocked = 9;
+  // 违规原因
+  optional string blocked_reason = 10;
+  // 违规时间
+  google.protobuf.Timestamp blocked_at = 11;
+  // 违规处理人
+  optional int64 blocked_by = 12;
+  // 违规处理人名称
+  optional string blocked_by_name = 13;
+}
+
+// 查询参数定义
+
+message OssQueryParams {
+  // provider
+  optional string provider = 1;
+  // bucket
+  optional string bucket = 2;
+  // key
+  optional string key = 3;
+  // 文件 MIME 类型
+  optional string mime_type = 4;
+  // 大小
+  common.v1.Int64Range size = 7;
+  // 是否封禁
+  optional bool blocked = 5;
+  // 违规处理人
+  optional string blocked_by_name = 6;
+}
+
+// 请求/响应结构定义
+
+message UploadTokenRequest {
+  // 上传文件数量
+  int32 num = 1;
+}
+message UploadTokenReply {
+  message UploadToken {
+    // 文件key
+    string key = 1;
+    // 上传凭证
+    string token = 2;
+  }
+  repeated UploadToken upload_token = 1;
+}
+
+message AuditRequest {
+  // 文件key
+  string key = 1;
+  // 审核状态
+  bool status = 2;
+  // 审核原因
+  optional string reason = 3;
+}
+message AuditReply {}
+
+message PageOssRequest {
+  common.v1.PageRequest page = 1;
+  OssQueryParams query = 2;
+}
+message PageOssReply {
+  common.v1.PageReply page = 1;
+  repeated Oss rows = 2;
+}
+
+message QiniuUploadCallbackRequest{
+  string key = 1;
+  string hash = 2;
+  int64 size = 3;
+  string bucket = 4;
+  string name = 5;
+  string mime_type = 6;
+  int64 upload_by = 7;
+  string upload_by_name = 8;
+}
+message QiniuUploadCallbackReply{}
+
+message QiniuIncrementAuditCallbackRequest {
+
+  string id = 1;
+  string pipeline = 2;
+  int32 code = 3;
+  string desc = 4;
+  string reqid = 5;
+  string inputBucket = 6;
+  string inputKey = 7;
+  repeated Item items = 8;
+
+  /* ---------------- items ---------------- */
+
+  message Item {
+    string cmd = 1;
+    int32 code = 2;
+    string desc = 3;
+    ItemResultWrapper result = 4;
+    int32 returnOld = 5;
+  }
+
+  message ItemResultWrapper {
+    bool disable = 1;
+    ItemResult result = 2;
+  }
+
+  message ItemResult {
+    int32 code = 1;
+    string message = 2;
+    google.protobuf.Struct scenes = 3;
+    string suggestion = 4;
+  }
+}
+message QiniuIncrementAuditCallbackReply{}

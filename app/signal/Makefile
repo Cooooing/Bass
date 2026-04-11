@@ -3,12 +3,12 @@ GOHOSTOS := $(shell go env GOHOSTOS)
 VERSION := latest
 SERVER := signal
 
-ROOT_DIR := $(shell cd $(dir $(lastword $(MAKEFILE_LIST)))/../.. && pwd)
+ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../)
 COMMON_DIR := $(ROOT_DIR)/common
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
-API_DIR := $(COMMON_DIR)/api
-API_GEN_DIR := $(COMMON_DIR)/gen
-THIRD_PARTY_DIR := $(COMMON_DIR)/third_party
+API_DIR := $(COMMON_DIR)/api/app
+API_GEN_DIR := $(COMMON_DIR)/api/gen
+THIRD_PARTY_DIR := $(COMMON_DIR)/api/third_party
 INTERNAL_DIR := $(APP_DIR)/internal
 
 # ============ Find Proto Files (Cross-Platform Safe) ============

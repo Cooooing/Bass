@@ -1,7 +1,7 @@
 package repo
 
 import (
-	v1 "common/gen/content/v1"
+	v1 "common/api/gen/content/v1"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	basedata "content/internal/data/base"

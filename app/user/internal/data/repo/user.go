@@ -1,8 +1,8 @@
 package repo
 
 import (
-	cv1 "common/gen/common/v1"
-	v1 "common/gen/user/v1"
+	cv1 "common/api/gen/common/v1"
+	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"context"
 	"fmt"

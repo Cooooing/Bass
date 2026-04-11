@@ -1,8 +1,8 @@
 package repo
 
 import (
-	cv1 "common/gen/common/v1"
-	v1 "common/gen/notify/v1"
+	cv1 "common/api/gen/common/v1"
+	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	"context"
 	"encoding/json"

@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/gen/content/v1"
+	v1 "common/api/gen/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"content/internal/biz/domain"

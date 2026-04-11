@@ -1,7 +1,7 @@
 package model
 
 import (
-	v1 "common/gen/user/v1"
+	v1 "common/api/gen/user/v1"
 	"user/internal/data/ent/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"

@@ -2,8 +2,8 @@ package handler
 
 import (
 	"bytes"
-	notifyv1 "common/gen/notify/v1"
-	userv1 "common/gen/user/v1"
+	notifyv1 "common/api/gen/notify/v1"
+	userv1 "common/api/gen/user/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util/handlerchain"
 	"context"

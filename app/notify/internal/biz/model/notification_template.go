@@ -1,7 +1,7 @@
 package model
 
 import (
-	v1 "common/gen/notify/v1"
+	v1 "common/api/gen/notify/v1"
 	"fmt"
 	"notify/internal/data/ent/gen"
 

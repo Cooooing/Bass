@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/gen/connector/v1"
+	v1 "common/api/gen/connector/v1"
 	"connector/internal/biz/domain"
 	"context"
 	"crypto/sha256"

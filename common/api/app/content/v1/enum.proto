@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/api/gen/content/v1;v1";
+
+enum DomainStatus {
+  DOMAIN_STATUS_UNSPECIFIED = 0;
+  DOMAIN_STATUS_NORMAL = 1; // 正常
+  DOMAIN_STATUS_DISABLED = 2; // 禁用
+}
+
+enum TagStatus {
+  TAG_STATUS_UNSPECIFIED = 0;
+  TAG_STATUS_NORMAL = 1; // 正常
+  TAG_STATUS_DISABLED = 2; // 禁用
+}
+
+enum CommentStatus {
+  COMMENT_STATUS_UNSPECIFIED = 0;
+  COMMENT_STATUS_NORMAL = 1; // 正常
+  COMMENT_STATUS_HIDDEN = 2; // 隐藏
+}
+
+enum ArticleLotteryStatus {
+  ARTICLE_LOTTERY_STATUS_UNSPECIFIED = 0;
+  ARTICLE_LOTTERY_STATUS_NOT_STARTED = 1; // 未开始
+  ARTICLE_LOTTERY_STATUS_IN_PROGRESS = 2; // 进行中
+  ARTICLE_LOTTERY_STATUS_FINISHED = 3; // 已结束
+}
+
+enum ArticleStatus {
+  ARTICLE_STATUS_UNSPECIFIED = 0;
+  ARTICLE_STATUS_NORMAL = 1; // 正常
+  ARTICLE_STATUS_HIDDEN = 2; // 隐藏
+  ARTICLE_STATUS_LOCKED = 3; // 锁定
+  ARTICLE_STATUS_DRAFTS = 4; // 草稿
+  ARTICLE_STATUS_DELETED = 5; // 删除
+}
+
+enum ArticleType {
+  ARTICLE_TYPE_UNSPECIFIED = 0;
+  ARTICLE_TYPE_NORMAL = 1; // 普通文章
+  ARTICLE_TYPE_QA = 2; // 问答
+  ARTICLE_TYPE_VOTE = 3; // 投票
+  ARTICLE_TYPE_LOTTERY = 4; // 抽奖
+}
+
+enum ArticlePostscriptStatus {
+  ARTICLE_POSTSCRIPT_STATUS_UNSPECIFIED = 0;
+  ARTICLE_POSTSCRIPT_STATUS_NORMAL = 1; // 正常
+  ARTICLE_POSTSCRIPT_STATUS_HIDDEN = 2; // 隐藏
+}
+
+enum ArticleAction {
+  ARTICLE_ACTION_UNSPECIFIED = 0;
+  ARTICLE_ACTION_LIKE = 1; // 点赞
+  ARTICLE_ACTION_THANK = 2; // 感谢
+  ARTICLE_ACTION_COLLECT = 3; // 收藏
+  ARTICLE_ACTION_WATCH = 4; // 关注
+  ARTICLE_ACTION_REWARD = 5; // 打赏
+  ARTICLE_ACTION_REPLY = 6; // 回复
+  ARTICLE_ACTION_VOTE = 7; // 投票
+  ARTICLE_ACTION_LOTTERY = 8; // 抽奖参与
+  ARTICLE_ACTION_LOTTERY_WINNER = 9; // 抽奖中奖
+}
+
+enum ArticleOrder {
+  ARTICLE_ORDER_UNSPECIFIED = 0;
+  ARTICLE_ORDER_NEWEST = 1; // 最新
+  ARTICLE_ORDER_HOTTEST = 2; // 最热
+}
+
+enum CommentAction {
+  COMMENT_ACTION_UNSPECIFIED = 0;
+  COMMENT_ACTION_LIKE = 1; // 点赞
+  COMMENT_ACTION_COLLECT = 2; // 收藏
+  COMMENT_ACTION_REPLY = 3; // 回复
+}
+
+enum CommentOrder {
+  COMMENT_ORDER_UNSPECIFIED = 0;
+  COMMENT_ORDER_NEWEST = 1; // 最新
+  COMMENT_ORDER_HOTTEST = 2; // 最热
+}

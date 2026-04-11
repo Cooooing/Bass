@@ -35,7 +35,7 @@ bin/
 .idea/
 *.swp
 
-/common/gen/**
+/common/api/gen/**
 
 /deploy/.prod.env
 .claude/

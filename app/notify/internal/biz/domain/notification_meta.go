@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/gen/common/v1"
+	cv1 "common/api/gen/common/v1"
 	"context"
 	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"

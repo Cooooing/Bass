@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/gen/signal/v1"
+	v1 "common/api/gen/signal/v1"
 	commonModel "common/pkg/model"
 	"context"
 	"fmt"

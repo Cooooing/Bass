@@ -1,34 +1,40 @@
 package domain
 
 import (
-	signalv1 "common/api/gen/signal/v1"
-	"common/pkg/util"
+	"bytes"
+	signalv1 "common/api/signal/v1"
+	"common/pkg/client"
+	"common/pkg/util/server"
 	domainbase "connector/internal/biz/base"
+	"connector/internal/biz/model"
 	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 	"sync"
 
-	"github.com/gorilla/websocket"
 	"github.com/samber/lo"
 )
 
 type SessionDomain struct {
 	*domainbase.BaseDomain
-	eventPool *util.EventPool
+	httpClient *http.Client
 
-	sessionIds map[string]*websocket.Conn
+	sessionIds map[string]*model.Connection
 	mu         sync.RWMutex
 }
 
-func NewSessionDomain(baseDomain *domainbase.BaseDomain, eventPool *util.EventPool) *SessionDomain {
+func NewSessionDomain(baseDomain *domainbase.BaseDomain) *SessionDomain {
 	return &SessionDomain{
 		BaseDomain: baseDomain,
-		eventPool:  eventPool,
-		sessionIds: map[string]*websocket.Conn{},
+		httpClient: client.NewHttpClient(),
+		sessionIds: map[string]*model.Connection{},
 		mu:         sync.RWMutex{},
 	}
 }
 
-func (d *SessionDomain) AddSessionId(sessionId string, conn *websocket.Conn) {
+func (d *SessionDomain) AddSessionId(sessionId string, conn *model.Connection) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.sessionIds[sessionId] = conn
@@ -46,19 +52,14 @@ func (d *SessionDomain) GetSessionIds() []string {
 	return lo.Keys(d.sessionIds)
 }
 
-func (d *SessionDomain) SendMessage(sessionIds []string, message any) error {
+func (d *SessionDomain) SendMessage(ctx context.Context, sessionIds []string, message any) error {
 	if len(sessionIds) == 0 {
 		return nil
 	}
 	d.mu.RLock()
 	for _, sessionId := range sessionIds {
 		if conn, ok := d.sessionIds[sessionId]; ok {
-			return d.EventPool.Submit(func() {
-				err := conn.WriteJSON(message)
-				if err != nil {
-					d.Log.Error("websocket [%s] send message error: %v", sessionId, err)
-				}
-			})
+			conn.Send(message)
 		}
 	}
 	d.mu.RUnlock()
@@ -66,9 +67,43 @@ func (d *SessionDomain) SendMessage(sessionIds []string, message any) error {
 }
 
 func (d *SessionDomain) RequestSessionId(ticket string) (string, error) {
-	reply, err := d.SignalNodeClient.Online(context.Background(), &signalv1.SignalNodeOnlineRequest{Ticket: ticket})
+	var sessionId string
+
+	url := fmt.Sprintf("http://127.0.0.1:8000/api/signal/v1/node/online")
+
+	param, err := json.Marshal(&signalv1.SignalNodeOnlineRequest{Ticket: ticket})
 	if err != nil {
-		return "", err
+		return sessionId, err
 	}
-	return reply.SessionId, nil
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(param))
+	if err != nil {
+		return sessionId, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("X-Signal-NodeKey", "main")
+
+	resp, err := d.httpClient.Do(req)
+	if err != nil {
+		return sessionId, err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			d.Log.Errorf("failed to close body: %v", err)
+		}
+	}(resp.Body)
+
+	data := &server.Result[*signalv1.SignalNodeOnlineReply]{}
+	err = json.NewDecoder(resp.Body).Decode(data)
+	if err != nil {
+		return sessionId, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return sessionId, fmt.Errorf("failed to get session from %s %s", url, data.Msg)
+	}
+
+	sessionId = data.Data.SessionId
+	return sessionId, nil
 }

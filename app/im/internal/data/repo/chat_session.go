@@ -33,6 +33,7 @@ func (r *ChatSessionRepo) Save(ctx context.Context, tx *gen.Client, chatSession 
 }
 
 func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, tx *gen.Client, chatSessionId int64, messageId int64, operationReadCount int32) (*model.ChatSession, error) {
+	tx.ChatMessage.Query()
 	update, err := tx.ChatSession.UpdateOneID(chatSessionId).
 		SetLastReadMessageID(messageId).
 		AddReadCount(operationReadCount).

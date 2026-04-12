@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
+import "google/api/annotations.proto";
 import "validate/validate.proto";
-import "google/protobuf/timestamp.proto";
 import "common/v1/common.proto";
-import "content/v1/tag.proto";
-import "user/v1/user.proto";
+import "content/v1/model.proto";
+import "content/v1/enum.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
@@ -14,348 +14,264 @@ option go_package = "common/api/gen/content/v1;v1";
 service ContentArticleService {
 
   // 新增文章
-  rpc Add (AddArticleRequest) returns (AddArticleReply);
+  rpc AddArticle (AddArticle.Request) returns (AddArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/add"
+      body: "*"
+    };
+  }
 
   // 更新草稿
-  rpc UpdateDraft (UpdateArticleDraftRequest) returns (UpdateArticleDraftReply);
+  rpc UpdateDraft (UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/update-draft"
+      body: "*"
+    };
+  }
 
   // 发布文章（从草稿发布）
-  rpc Publish (PublishArticleRequest) returns (PublishArticleReply);
+  rpc Publish (PublishArticle.Request) returns (PublishArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/publish"
+      body: "*"
+    };
+  }
 
   // 添加附言
-  rpc AddPostscript (AddPostscriptArticleRequest) returns (AddPostscriptArticleReply);
+  rpc AddPostscript (AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/add-postscript"
+      body: "*"
+    };
+  }
 
   // 修改文章（管理员使用）
-  rpc Update (UpdateArticleRequest) returns (UpdateArticleReply);
+  rpc UpdateArticle (UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/update"
+      body: "*"
+    };
+  }
 
   // 删除文章（仅草稿）
-  rpc Delete (DeleteArticleRequest) returns (DeleteArticleReply);
+  rpc Delete (DeleteArticle.Request) returns (DeleteArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/delete"
+      body: "*"
+    };
+  }
 
   // 查询文章
-  rpc Page (PageArticleRequest) returns (PageArticleReply);
+  rpc Page (PageArticle.Request) returns (PageArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/page"
+      body: "*"
+    };
+  }
 
   // 查询单篇文章
-  rpc GetOne (GetArticleOneRequest) returns (GetArticleOneReply);
+  rpc GetOne (GetOneArticle.Request) returns (GetOneArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/get-one"
+      body: "*"
+    };
+  }
 
   // 点赞文章
-  rpc Like (LikeArticleRequest) returns (LikeArticleReply);
+  rpc Like (LikeArticle.Request) returns (LikeArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/like"
+      body: "*"
+    };
+  }
 
   // 感谢文章
-  rpc Thank (ThankArticleRequest) returns (ThankArticleReply);
+  rpc Thank (ThankArticle.Request) returns (ThankArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/thank"
+      body: "*"
+    };
+  }
 
   // 收藏文章
-  rpc Collect (CollectArticleRequest) returns (CollectArticleReply);
+  rpc Collect (CollectArticle.Request) returns (CollectArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/collect"
+      body: "*"
+    };
+  }
 
   // 关注文章
-  rpc Watch (WatchArticleRequest) returns (WatchArticleReply);
+  rpc Watch (WatchArticle.Request) returns (WatchArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/watch"
+      body: "*"
+    };
+  }
 
   // 打赏文章
-  rpc Reward (RewardArticleRequest) returns (RewardArticleReply);
+  rpc Reward (RewardArticle.Request) returns (RewardArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/reward"
+      body: "*"
+    };
+  }
 
   // 采纳评论
-  rpc AcceptAnswer (AcceptAnswerArticleRequest) returns (AcceptAnswerArticleReply);
+  rpc AcceptAnswer (AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/article/accept-answer"
+      body: "*"
+    };
+  }
 
 }
 
-// 实体定义
-
-message Article {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
-  // 创建人
-  optional int64 created_by = 1002;
-  // 更新人
-  optional int64 updated_by = 1003;
-  // 创建人名称
-  optional string created_by_name = 1004;
-  // 更新人名称
-  optional string updated_by_name = 1005;
-
-  // 唯一Id
-  int64 id = 1;
-  // 标题
-  string title = 3;
-  // 正文内容
-  string content = 4;
-  // 正文内容渲染
-  string content_render = 22;
-
-  // 是否有附言
-  bool has_postscript = 5;
-  // 是否有打赏区
-  bool has_reward = 33;
-  // 打赏区内容（可为空）
-  optional string reward_content = 6;
-  // 打赏内容渲染（可为空）
-  optional string reward_content_render = 23;
-  // 打赏积分
-  optional int32 reward_points = 7;
-
-  // 状态: 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-  int32 status = 8;
-  // 类型: 0-普通 1-问答 2-投票 3-抽奖
-  int32 type = 9;
-  // 创作声明
-  optional string statement = 10;
-  // 是否允许评论
-  bool commentable = 11;
-  // 是否匿名
-  bool anonymous = 30;
-  // 是否在列表展示
-  bool listable = 31;
-
-  // 浏览数
-  int32 view_count = 32;
-  // 感谢数
-  int32 thank_count = 12;
-  // 点赞数
-  int32 like_count = 13;
-  // 收藏数
-  int32 collect_count = 14;
-  // 关注数
-  int32 watch_count = 15;
-  // 回复数
-  int32 reply_count = 16;
-
-  // 悬赏积分
-  optional int32 bounty_points = 17;
-  // 采纳评论Id（可为空）
-  optional int64 accepted_answer_id = 18;
-
-  // 总投票数
-  int32 vote_total = 19;
-  // 抽奖参与人数
-  int32 lottery_participant_count = 20;
-  // 抽奖获奖人数
-  int32 lottery_winner_count = 21;
-
-  // 作者信息
-  user.v1.User author_user = 24;
-  // 最后回复用户
-  user.v1.User last_reply_user = 25;
-  // 最后回复时间
-  google.protobuf.Timestamp last_reply_at = 26;
-
-  // 文章封面图
-  optional string cover_image_url = 27;
-
-  // 附言
-  repeated ArticlePostscript postscripts = 99;
-  // 标签
-  repeated Tag tags = 100;
+message AddArticle {
+  message Request {
+    // 文章信息
+    ArticleSave article = 1;
+  }
+  message Reply {
+    // 文章信息
+    Article article = 1;
+  }
 }
 
-
-// 文章附言
-message ArticlePostscript {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
-  // 创建人
-  optional int64 created_by = 1002;
-  // 更新人
-  optional int64 updated_by = 1003;
-
-  // 主键Id
-  int64 id = 1;
-  // 所属文章Id
-  int64 article_id = 2;
-  // 附言内容
-  string content = 3;
-  // 附言内容渲染
-  string content_render = 4;
+message UpdateDraftArticle {
+  message Request {
+    // 文章信息
+    ArticleSave article = 1;
+  }
+  message Reply {
+    // 文章信息
+    Article article = 1;
+  }
 }
 
-message ArticleSave {
-  // 文章id
-  optional int64 id = 8;
-  // 标题
-  string title = 1 [(validate.rules).string = {min_len: 1, max_len: 100}];
-  // 内容
-  string content = 2 [(validate.rules).string = {min_len: 1}];
-  // 打赏内容
-  optional string reward_content = 3;
-  // 打赏积分
-  optional int32 reward_points = 4 [(validate.rules).int32 = {gte: 0}];
-  // 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-  int32 status = 5;
-  // 类型 0-普通 1-问答 2-投票 3-抽奖
-  int32 type = 6;
-  // 悬赏积分
-  optional int32 bounty_points = 7 [(validate.rules).int32 = {gte: 0}];
-
-  // 创作声明
-  optional string statement = 10;
-  // 是否允许评论
-  optional bool commentable = 11;
-  // 是否匿名
-  optional bool anonymous = 12;
-  // 是否在列表展示
-  optional bool listable = 13;
-
-  // 标签id
-  repeated TagSave tags = 100;
+message PublishArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+  }
+  message Reply {}
 }
 
-// 查询参数
-
-message ArticleQueryParams {
-  // 标签
-  optional int64 tagId = 2;
-  // 领域
-  optional int64 domainId = 3;
-  // 状态 0-正常 3-草稿
-  optional int32 status = 4;
-  // 类型 0-普通 1-问答 2-投票 3-抽奖
-  optional int32 type = 5;
-  // 排序 0-最新 1-最热
-  optional int32 order = 8;
-  // 查询关键词
-  optional string keyword = 9;
-  // 作者Id
-  optional int64 authorId = 10;
+message AddPostscriptArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 附言内容
+    string content = 2 [(validate.rules).string = {min_len: 1}];
+  }
+  message Reply {
+    // 附言信息
+    ArticlePostscript article_postscript = 1;
+  }
 }
 
-// 请求/响应结构定义
-
-message AddArticleRequest {
-  // 文章
-  ArticleSave article = 1;
-}
-message AddArticleReply {
-  // 文章
-  Article article = 1;
-}
-
-message UpdateArticleDraftRequest {
-  // 文章
-  ArticleSave article = 1;
-}
-message UpdateArticleDraftReply {
-  // 文章
-  Article article = 1;
+message UpdateArticleArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 文章状态
+    ArticleStatus status = 2;
+    // 是否允许评论
+    bool commentable = 3;
+    // 是否匿名
+    bool anonymous = 4;
+  }
+  message Reply {}
 }
 
-message PublishArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-}
-message PublishArticleReply {}
-
-message UpdateArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 状态 0-正常 1-隐藏 2-锁定 3-草稿 4-删除
-  int32 status = 2;
-  // 是否允许评论
-  bool commentable = 3;
-  // 是否匿名
-  bool anonymous = 4;
-}
-message UpdateArticleReply {}
-
-message DeleteArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-}
-message DeleteArticleReply {}
-
-message PageArticleRequest {
-  // 分页
-  common.v1.PageRequest page = 1;
-  // 查询参数
-  ArticleQueryParams query = 2;
-}
-message PageArticleReply {
-  // 分页信息
-  common.v1.PageReply page = 2;
-  // 文章列表
-  repeated Article rows = 1;
+message DeleteArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+  }
+  message Reply {}
 }
 
-message GetArticleOneRequest {
-  // 文章Id
-  int64 article_id = 1;
-}
-message GetArticleOneReply {
-  // 文章
-  Article article = 1;
-}
-
-message AddPostscriptArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 内容
-  string content = 2 [(validate.rules).string = {min_len: 1}];
-}
-message AddPostscriptArticleReply {
-  // 附言
-  ArticlePostscript article_postscript = 1;
+message PageArticle {
+  message Request {
+    // 分页参数
+    common.v1.PageRequest page = 1;
+    // 查询参数
+    ArticleQueryParams query = 2;
+  }
+  message Reply {
+    // 分页信息
+    common.v1.PageReply page = 2;
+    // 文章列表
+    repeated Article rows = 1;
+  }
 }
 
-message RewardArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
+message GetOneArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+  }
+  message Reply {
+    // 文章信息
+    Article article = 1;
+  }
 }
-message RewardArticleReply {}
 
-message ThankArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 是否感谢
-  bool active = 2;
+message RewardArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+  }
+  message Reply {}
 }
-message ThankArticleReply {}
 
-message LikeArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 是否点赞
-  bool active = 2;
+message ThankArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 是否感谢
+    bool active = 2;
+  }
+  message Reply {}
 }
-message LikeArticleReply {}
 
-message CollectArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 是否收藏
-  bool active = 2;
+message LikeArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 是否点赞
+    bool active = 2;
+  }
+  message Reply {}
 }
-message CollectArticleReply {}
 
-message WatchArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 是否关注
-  bool active = 2;
+message CollectArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 是否收藏
+    bool active = 2;
+  }
+  message Reply {}
 }
-message WatchArticleReply {}
 
-message AcceptAnswerArticleRequest {
-  // 文章Id
-  int64 article_id = 1;
-  // 评论Id
-  int64 comment_id = 2;
+message WatchArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 是否关注
+    bool active = 2;
+  }
+  message Reply {}
 }
-message AcceptAnswerArticleReply {}
 
-message UpdateStatusArticleRequest {}
-message UpdateStatusArticleReply {}
-
-
-// 文章事件模型
-
-message ArticleEventPublish {
-  int64 article_id = 1;
-  int64 user_id = 2;
-  string title = 3;
-  string content = 4;
-  string reward_content = 5;
-  int32 reward_points = 6;
-  int32 status = 7;
-  int32 type = 8;
-  int32 bounty_points = 9;
+message AcceptAnswerArticle {
+  message Request {
+    // 文章ID
+    int64 article_id = 1;
+    // 评论ID
+    int64 comment_id = 2;
+  }
+  message Reply {}
 }

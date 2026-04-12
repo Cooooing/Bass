@@ -11,6 +11,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type DomainService struct {
@@ -23,6 +24,10 @@ func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentDomainServiceServer(gs, s)
 }
 
+func (s *DomainService) RegisterHttp(hs *http.Server) {
+	v1.RegisterContentDomainServiceHTTPServer(hs, s)
+}
+
 func NewDomainService(baseService *BaseService, domainDomain *domain.DomainDomain) *DomainService {
 	return &DomainService{
 		BaseService:  baseService,
@@ -30,7 +35,7 @@ func NewDomainService(baseService *BaseService, domainDomain *domain.DomainDomai
 	}
 }
 
-func (s *DomainService) Adds(ctx context.Context, req *v1.AddDomainsRequest) (*v1.AddDomainsReply, error) {
+func (s *DomainService) Adds(ctx context.Context, req *v1.AddsDomain_Request) (*v1.AddsDomain_Reply, error) {
 	domains := make([]*model.Domain, len(req.Domains))
 	for i, d := range req.Domains {
 		domains[i] = &model.Domain{Domain: &gen.Domain{
@@ -46,10 +51,10 @@ func (s *DomainService) Adds(ctx context.Context, req *v1.AddDomainsRequest) (*v
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddDomainsReply{}, nil
+	return &v1.AddsDomain_Reply{}, nil
 }
 
-func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest) (*v1.UpdateDomainReply, error) {
+func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Request) (*v1.UpdateDomain_Reply, error) {
 	data, err := s.domainDomain.Update(ctx, &model.Domain{Domain: &gen.Domain{
 		Name:        req.Domain.Name,
 		Description: req.Domain.Description,
@@ -61,12 +66,12 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomainRequest)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdateDomainReply{
+	return &v1.UpdateDomain_Reply{
 		Data: data.ConvertToRpc(),
 	}, err
 }
 
-func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v1.PageDomainReply, error) {
+func (s *DomainService) Page(ctx context.Context, req *v1.PageDomain_Request) (*v1.PageDomain_Reply, error) {
 	req.Query = util.OrDefault(req.Query, &v1.DomainQueryParams{})
 	getReq := &repo.DomainGetReq{
 		DomainIds:   req.Query.Ids,
@@ -92,7 +97,7 @@ func (s *DomainService) Page(ctx context.Context, req *v1.PageDomainRequest) (*v
 	for _, datum := range data {
 		reply = append(reply, datum.ConvertToRpc())
 	}
-	return &v1.PageDomainReply{
+	return &v1.PageDomain_Reply{
 		Page: page,
 		Rows: reply,
 	}, err

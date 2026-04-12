@@ -2,11 +2,9 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "google/protobuf/timestamp.proto";
-import "validate/validate.proto";
+import "google/api/annotations.proto";
 import "common/v1/common.proto";
-import "user/v1/user.proto";
-import "user/v1/enum.proto";
+import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
@@ -14,71 +12,62 @@ option go_package = "common/api/gen/user/v1;v1";
 service UserUserRelationService {
 
   // 关注用户
-  rpc Follow(FollowRequest) returns (FollowReply);
+  rpc Follow(FollowUserRelation.Request) returns (FollowUserRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user-relation/follow"
+      body: "*"
+    };
+  }
 
   // 屏蔽用户
-  rpc Block(BlockRequest) returns (BlockReply);
+  rpc Block(BlockUserRelation.Request) returns (BlockUserRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user-relation/block"
+      body: "*"
+    };
+  }
 
   // 查询用户关系
-  rpc Page(PageUserRelationRequest) returns (PageUserRelationReply);
+  rpc Page(PageUserRelation.Request) returns (PageUserRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user-relation/page"
+      body: "*"
+    };
+  }
 
 }
 
-// 实体定义
-
-message UserRelation {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
-
-  // 用户关系ID
-  int64 id = 1;
-  // 关系类型 1-关注 2-拉黑
-  UserRelationType type = 2 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
-  // 关系发起者ID
-  int64 actor_id = 3;
-  // 关系目标用户ID
-  int64 target_id = 4;
-  // 目标用户信息
-  user.v1.User user = 100;
+message FollowUserRelation {
+  message Request {
+    // 是否关注
+    bool follow = 1;
+    // 被关注用户 ID
+    int64 follow_user_id = 2;
+  }
+  message Reply {}
 }
 
-
-// 查询参数定义
-
-message UserRelationQueryParams {
-  // 关系类型
-  optional UserRelationType type = 1 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+message BlockUserRelation {
+  message Request {
+    // 是否屏蔽
+    bool block = 1;
+    // 被屏蔽用户 ID
+    int64 block_user_id = 2;
+  }
+  message Reply {}
 }
 
-// 请求/响应结构定义
-
-message FollowRequest {
-  // 是否关注
-  bool follow = 1;
-  // 关注用户ID
-  int64 follow_user_id = 2;
-}
-message FollowReply {}
-
-message BlockRequest {
-  // 是否屏蔽
-  bool block = 1;
-  // 屏蔽用户ID
-  int64 block_user_id = 2;
-}
-message BlockReply {}
-
-message PageUserRelationRequest {
-  // 分页参数
-  common.v1.PageRequest page = 1;
-  // 查询参数
-  UserRelationQueryParams query = 2;
-}
-message PageUserRelationReply {
-  // 分页
-  common.v1.PageReply page = 1;
-  // 用户列表
-  repeated UserRelation rows = 2;
+message PageUserRelation {
+  message Request {
+    // 分页参数
+    common.v1.PageRequest page = 1;
+    // 查询条件
+    UserRelationQueryParams query = 2;
+  }
+  message Reply {
+    // 分页信息
+    common.v1.PageReply page = 1;
+    // 用户关系列表
+    repeated UserRelation rows = 2;
+  }
 }

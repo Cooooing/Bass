@@ -14,7 +14,7 @@ INTERNAL_DIR := $(APP_DIR)/internal
 # ============ Find Proto Files (Cross-Platform Safe) ============
 INTERNAL_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(INTERNAL_DIR))
 # Filter out any stray non-proto tokens (e.g., lines like 'root: <path>') emitted by the finder on some platforms
-API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DIR) | sed '/^root:/d')
+API_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(API_DIR))
 
 # ============ Tool Installation ============
 .PHONY: init

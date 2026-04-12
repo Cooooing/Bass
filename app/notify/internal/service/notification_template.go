@@ -12,6 +12,7 @@ import (
 	"notify/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type NotificationTemplateService struct {
@@ -31,7 +32,11 @@ func (s *NotificationTemplateService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyNotificationTemplateServiceServer(gs, s)
 }
 
-func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.NotificationTemplatePageRequest) (rsp *v1.NotificationTemplatePageReply, err error) {
+func (s *NotificationTemplateService) RegisterHttp(hs *http.Server) {
+	v1.RegisterNotifyNotificationTemplateServiceHTTPServer(hs, s)
+}
+
+func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.PageNotificationTemplate_Request) (rsp *v1.PageNotificationTemplate_Reply, err error) {
 	req.Query = util.OrDefault(req.Query, &v1.NotificationTemplateQueryParams{})
 	records, page, err := s.notificationTemplateDomain.Page(ctx, req.Page, &repo.NotificationTemplateGetReq{
 		NotificationTemplateIds: req.Query.Ids,
@@ -40,13 +45,13 @@ func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.Notifica
 		Enable:                  req.Query.Enable,
 	})
 
-	return &v1.NotificationTemplatePageReply{
+	return &v1.PageNotificationTemplate_Reply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(records),
 	}, err
 }
 
-func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.NotificationTemplateAddRequest) (rsp *v1.NotificationTemplateAddReply, err error) {
+func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotificationTemplate_Request) (rsp *v1.AddNotificationTemplate_Reply, err error) {
 	if req.NotificationTemplate == nil {
 		return nil, cv1.ErrorBadRequest("notificationTemplate is required")
 	}
@@ -66,12 +71,12 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.Notificat
 	if err != nil {
 		return nil, err
 	}
-	return &v1.NotificationTemplateAddReply{
+	return &v1.AddNotificationTemplate_Reply{
 		NotificationTemplate: tpl.ConvertToRpc(),
 	}, nil
 }
 
-func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.NotificationTemplateUpdateRequest) (rsp *v1.NotificationTemplateUpdateReply, err error) {
+func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.UpdateNotificationTemplate_Request) (rsp *v1.UpdateNotificationTemplate_Reply, err error) {
 	if req.NotificationType == nil || req.Channel == nil || req.Content == nil {
 		return nil, cv1.ErrorBadRequest("notificationType, channel, content is required")
 	}
@@ -91,7 +96,7 @@ func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.Notifi
 	if err != nil {
 		return nil, err
 	}
-	return &v1.NotificationTemplateUpdateReply{
+	return &v1.UpdateNotificationTemplate_Reply{
 		NotificationTemplate: tpl.ConvertToRpc(),
 	}, nil
 }

@@ -96,8 +96,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	tagDomain := domain.NewTagDomain(baseDomain, tagRepo)
 	tagService := service.NewTagService(baseService, tagDomain)
 	v := service.ProvideServices(systemService, articleService, domainService, commentService, tagService)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, consulClient)
+	app := newApp(logger, httpServer, grpcServer, consulClient)
 	return app, func() {
 		cleanup6()
 		cleanup5()

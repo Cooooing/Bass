@@ -78,6 +78,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	notificationRecordService := service.NewNotificationRecordService(baseService, notificationRecordDomain)
 	v := service.ProvideServices(systemService, notificationMetaService, notificationRecordService)
 	tokenCache := jwt.NewTokenCache(helper, redisClient)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
 	registerVerifyCode := handler.NewRegisterVerifyCode(baseDomain)
 	fullHandler := handler.NewFullHandler(baseDomain, notificationMetaRepo, notificationRecordRepo)
@@ -93,7 +94,7 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 		cleanup()
 		return nil, nil, err
 	}
-	app := newApp(logger, helper, grpcServer, consulClient, eventHandler)
+	app := newApp(logger, helper, httpServer, grpcServer, consulClient, eventHandler)
 	return app, func() {
 		cleanup7()
 		cleanup6()

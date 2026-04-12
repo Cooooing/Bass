@@ -12,6 +12,7 @@ import (
 	"user/internal/biz/repo"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type UserRelationService struct {
@@ -31,7 +32,11 @@ func (s *UserRelationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserUserRelationServiceServer(gs, s)
 }
 
-func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockRequest) (rsp *v1.BlockReply, err error) {
+func (s *UserRelationService) RegisterHttp(hs *http.Server) {
+	v1.RegisterUserUserRelationServiceHTTPServer(hs, s)
+}
+
+func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockUserRelation_Request) (rsp *v1.BlockUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -40,10 +45,10 @@ func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockRequest) (
 		return nil, cv1.ErrorBadRequest("can not block yourself")
 	}
 	err = s.userRelationDomain.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_BLOCK, req.Block, user.ID, req.BlockUserId)
-	return &v1.BlockReply{}, err
+	return &v1.BlockUserRelation_Reply{}, err
 }
 
-func (s *UserRelationService) Follow(ctx context.Context, req *v1.FollowRequest) (rsp *v1.FollowReply, err error) {
+func (s *UserRelationService) Follow(ctx context.Context, req *v1.FollowUserRelation_Request) (rsp *v1.FollowUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -52,10 +57,10 @@ func (s *UserRelationService) Follow(ctx context.Context, req *v1.FollowRequest)
 		return nil, cv1.ErrorBadRequest("can not follow yourself")
 	}
 	err = s.userRelationDomain.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_FOLLOW, req.Follow, user.ID, req.FollowUserId)
-	return &v1.FollowReply{}, err
+	return &v1.FollowUserRelation_Reply{}, err
 }
 
-func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelationRequest) (rsp *v1.PageUserRelationReply, err error) {
+func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation_Request) (rsp *v1.PageUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -69,7 +74,7 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 	if err != nil {
 		return nil, err
 	}
-	return &v1.PageUserRelationReply{
+	return &v1.PageUserRelation_Reply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(userRelations),
 	}, nil

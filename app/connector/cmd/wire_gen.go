@@ -8,7 +8,9 @@ package main
 
 import (
 	"common/pkg/client"
+	"common/pkg/client/rpc"
 	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"common/pkg/util/task"
 	"connector/internal/biz/base"
 	"connector/internal/biz/domain"
@@ -32,27 +34,42 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	if err != nil {
 		return nil, nil, err
 	}
-	baseDomain := base.NewBaseDomain(bootstrap, helper, eventPool)
-	sessionDomain := domain.NewSessionDomain(baseDomain)
-	callbackService := service.NewCallbackService(baseService, sessionDomain)
-	v := service.ProvideServices(systemService, callbackService)
-	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
-	websocketService := service.NewWebsocketService(baseService, sessionDomain, eventPool)
-	httpServer := server.NewHTTPServer(bootstrap, logger, v, websocketService)
-	redisClient, cleanup2, err := data.NewRedisClient(helper, bootstrap)
+	consulClient, cleanup2, err := data.NewConsulClient(helper, bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
+	signalNodeClient, cleanup3, err := rpc.ProvideSignalNodeClient(consulClient)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := base.NewBaseDomain(bootstrap, helper, eventPool, signalNodeClient)
+	sessionDomain := domain.NewSessionDomain(baseDomain)
+	callbackService := service.NewCallbackService(baseService, sessionDomain)
+	v := service.ProvideServices(systemService, callbackService)
+	redisClient, cleanup4, err := data.NewRedisClient(helper, bootstrap)
+	if err != nil {
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	tokenCache := jwt.NewTokenCache(helper, redisClient)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
+	grpcServer := server.NewGRPCServer(bootstrap, logger, v)
 	baseData := base2.NewBaseData(bootstrap, helper, redisClient)
 	sessionCache := cache.NewSessionCache(baseData)
 	asynqCache := task.NewAsynqCache(helper, redisClient)
-	asynqClient, cleanup3 := client.NewAsynqClient(helper, redisClient)
-	asynqScheduler, cleanup4 := client.NewAsynqScheduler(helper, redisClient)
+	asynqClient, cleanup5 := client.NewAsynqClient(helper, redisClient)
+	asynqScheduler, cleanup6 := client.NewAsynqScheduler(helper, redisClient)
 	producer := client.NewProducer(asynqClient, asynqScheduler)
-	serverDomain, cleanup5 := domain.NewServerDomain(baseDomain, sessionCache, asynqCache, producer)
-	app := newApp(logger, grpcServer, httpServer, serverDomain)
+	serverDomain, cleanup7 := domain.NewServerDomain(baseDomain, sessionCache, asynqCache, producer)
+	app := newApp(logger, httpServer, grpcServer, serverDomain)
 	return app, func() {
+		cleanup7()
+		cleanup6()
 		cleanup5()
 		cleanup4()
 		cleanup3()

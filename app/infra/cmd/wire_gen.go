@@ -71,8 +71,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	objectStorageDomain := domain.NewObjectStorageDomain(baseDomain, objectStorageRepo, factory)
 	ossService := service.NewOssService(baseService, objectStorageDomain)
 	v := service.ProvideServices(systemService, ossService)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, consulClient)
+	app := newApp(logger, httpServer, grpcServer, consulClient)
 	return app, func() {
 		cleanup5()
 		cleanup4()

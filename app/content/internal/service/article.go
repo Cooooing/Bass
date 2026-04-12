@@ -15,6 +15,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type ArticleService struct {
@@ -29,6 +30,10 @@ func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleServiceServer(gs, s)
 }
 
+func (s *ArticleService) RegisterHttp(hs *http.Server) {
+	v1.RegisterContentArticleServiceHTTPServer(hs, s)
+}
+
 func NewArticleService(baseService *BaseService, articleDomain *domain.ArticleDomain, articleRepo repo.ArticleRepo) *ArticleService {
 	return &ArticleService{
 		BaseService:   baseService,
@@ -37,15 +42,15 @@ func NewArticleService(baseService *BaseService, articleDomain *domain.ArticleDo
 	}
 }
 
-func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rsp *v1.AddArticleReply, err error) {
+func (s *ArticleService) AddArticle(ctx context.Context, req *v1.AddArticle_Request) (rsp *v1.AddArticle_Reply, err error) {
 	article := req.Article
-	if article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
+	if article.Status != v1.ArticleStatus_ARTICLE_STATUS_NORMAL && article.Status != v1.ArticleStatus_ARTICLE_STATUS_DRAFTS {
 		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
-	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_NORMAL) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_VOTE) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_LOTTERY) {
+	if article.Type != v1.ArticleType_ARTICLE_TYPE_NORMAL && article.Type != v1.ArticleType_ARTICLE_TYPE_QA && article.Type != v1.ArticleType_ARTICLE_TYPE_VOTE && article.Type != v1.ArticleType_ARTICLE_TYPE_LOTTERY {
 		return nil, cv1.ErrorBadRequest("type only be 1(normal), 2(QA), 3(vote), 4(lottery)")
 	}
-	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.BountyPoints != nil {
+	if article.Type != v1.ArticleType_ARTICLE_TYPE_QA && article.BountyPoints != nil {
 		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 2(QA)")
 	}
 
@@ -66,9 +71,9 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
 		RewardPoints:  article.RewardPoints,
-		Status:        article.Status,
-		Type:          article.Type,
-		BountyPoints:  util.If(article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA), nil, article.BountyPoints),
+		Status:        int32(article.Status),
+		Type:          int32(article.Type),
+		BountyPoints:  util.If(article.Type != v1.ArticleType_ARTICLE_TYPE_QA, nil, article.BountyPoints),
 		Statement:     article.Statement,
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
@@ -77,12 +82,12 @@ func (s *ArticleService) Add(ctx context.Context, req *v1.AddArticleRequest) (rs
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddArticleReply{
+	return &v1.AddArticle_Reply{
 		Article: save.ConvertToRpc(),
 	}, nil
 }
 
-func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleDraftRequest) (rsp *v1.UpdateArticleDraftReply, err error) {
+func (s *ArticleService) UpdateDraftArticle(ctx context.Context, req *v1.UpdateDraftArticle_Request) (rsp *v1.UpdateDraftArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -91,13 +96,13 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 	if article.Id == nil {
 		return nil, cv1.ErrorBadRequest("article id is required")
 	}
-	if article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && article.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
+	if article.Status != v1.ArticleStatus_ARTICLE_STATUS_NORMAL && article.Status != v1.ArticleStatus_ARTICLE_STATUS_DRAFTS {
 		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
-	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_NORMAL) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_VOTE) && article.Type != int32(v1.ArticleType_ARTICLE_TYPE_LOTTERY) {
+	if article.Type != v1.ArticleType_ARTICLE_TYPE_NORMAL && article.Type != v1.ArticleType_ARTICLE_TYPE_QA && article.Type != v1.ArticleType_ARTICLE_TYPE_VOTE && article.Type != v1.ArticleType_ARTICLE_TYPE_LOTTERY {
 		return nil, cv1.ErrorBadRequest("type only be 1(normal), 2(QA), 3(vote), 4(lottery)")
 	}
-	if article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA) && article.BountyPoints != nil {
+	if article.Type != v1.ArticleType_ARTICLE_TYPE_QA && article.BountyPoints != nil {
 		return nil, cv1.ErrorBadRequest("bounty points only be set when type is 2(QA)")
 	}
 
@@ -119,9 +124,9 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
 		RewardPoints:  article.RewardPoints,
-		Status:        article.Status,
-		Type:          article.Type,
-		BountyPoints:  util.If(article.Type != int32(v1.ArticleType_ARTICLE_TYPE_QA), nil, article.BountyPoints),
+		Status:        int32(article.Status),
+		Type:          int32(article.Type),
+		BountyPoints:  util.If(article.Type != v1.ArticleType_ARTICLE_TYPE_QA, nil, article.BountyPoints),
 		Statement:     article.Statement,
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
@@ -131,12 +136,12 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateArticleD
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdateArticleDraftReply{
+	return &v1.UpdateDraftArticle_Reply{
 		Article: update.ConvertToRpc(),
 	}, nil
 }
 
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequest) (rsp *v1.PublishArticleReply, err error) {
+func (s *ArticleService) PublishArticle(ctx context.Context, req *v1.PublishArticle_Request) (rsp *v1.PublishArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -154,10 +159,10 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticleRequ
 		return nil, cv1.ErrorBadRequest("article not exist")
 	}
 	err = s.articleDomain.Publish(ctx, s.Db, req.ArticleId)
-	return &v1.PublishArticleReply{}, err
+	return &v1.PublishArticle_Reply{}, err
 }
 
-func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticleRequest) (rsp *v1.AddPostscriptArticleReply, err error) {
+func (s *ArticleService) AddPostscriptArticle(ctx context.Context, req *v1.AddPostscriptArticle_Request) (rsp *v1.AddPostscriptArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -179,17 +184,17 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddPostscriptArticleReply{
+	return &v1.AddPostscriptArticle_Reply{
 		ArticlePostscript: save.ConvertToRpc(),
 	}, err
 }
 
-func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticleRequest) (rsp *v1.UpdateArticleReply, err error) {
+func (s *ArticleService) UpdateArticleArticle(ctx context.Context, req *v1.UpdateArticleArticle_Request) (rsp *v1.UpdateArticleArticle_Reply, err error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleRequest) (rsp *v1.DeleteArticleReply, err error) {
+func (s *ArticleService) DeleteArticle(ctx context.Context, req *v1.DeleteArticle_Request) (rsp *v1.DeleteArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -210,10 +215,10 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticleReques
 		err = s.articleRepo.Delete(ctx, s.Db, req.ArticleId)
 		return err
 	})
-	return &v1.DeleteArticleReply{}, err
+	return &v1.DeleteArticle_Reply{}, err
 }
 
-func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (rsp *v1.PageArticleReply, err error) {
+func (s *ArticleService) PageArticle(ctx context.Context, req *v1.PageArticle_Request) (rsp *v1.PageArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	req.Query = util.OrDefault(req.Query, &v1.ArticleQueryParams{})
 
@@ -222,89 +227,89 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticleRequest) (
 	 * 草稿状态的只能查看自己
 	 */
 
-	if req.Query.Status != nil && *req.Query.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) && *req.Query.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
+	if req.Query.Status != nil && *req.Query.Status != v1.ArticleStatus_ARTICLE_STATUS_NORMAL && *req.Query.Status != v1.ArticleStatus_ARTICLE_STATUS_DRAFTS {
 		return nil, cv1.ErrorBadRequest("status only be 1(normal) or 4(drafts)")
 	}
-	status := new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
+	status := v1.ArticleStatus_ARTICLE_STATUS_NORMAL
 	authorId := req.Query.AuthorId
-	if req.Query.Status != nil && *req.Query.Status == int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
+	if req.Query.Status != nil && *req.Query.Status == v1.ArticleStatus_ARTICLE_STATUS_DRAFTS {
 		if !ok {
 			return nil, cv1.ErrorUnauthorized("login required to view drafts")
 		}
 		authorId = &user.ID
-		status = new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS)
+		status = v1.ArticleStatus_ARTICLE_STATUS_DRAFTS
 	}
 
 	reply, page, err := s.articleDomain.Page(ctx, req.Page, &repo.ArticleGetReq{
 		TagId:    req.Query.TagId,
 		DomainId: req.Query.DomainId,
-		Status:   status,
+		Status:   &status,
 		AuthorId: authorId,
-		Order:    (*v1.ArticleOrder)(req.Query.Order),
-		Type:     (*v1.ArticleType)(req.Query.Type),
+		Order:    req.Query.Order,
+		Type:     req.Query.Type,
 		Keyword:  req.Query.Keyword,
 		Listable: new(true),
 	})
-	return &v1.PageArticleReply{
+	return &v1.PageArticle_Reply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(reply),
 	}, err
 }
 
-func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetArticleOneRequest) (rsp *v1.GetArticleOneReply, err error) {
+func (s *ArticleService) GetOneArticle(ctx context.Context, req *v1.GetOneArticle_Request) (rsp *v1.GetOneArticle_Reply, err error) {
 	one, err := s.articleDomain.GetOne(ctx, req.ArticleId)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.GetArticleOneReply{Article: one.ConvertToRpc()}, err
+	return &v1.GetOneArticle_Reply{Article: one.ConvertToRpc()}, err
 }
 
-func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticleRequest) (rsp *v1.RewardArticleReply, err error) {
+func (s *ArticleService) RewardArticle(ctx context.Context, req *v1.RewardArticle_Request) (rsp *v1.RewardArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ARTICLE_ACTION_REWARD, true)
-	return &v1.RewardArticleReply{}, nil
+	return &v1.RewardArticle_Reply{}, nil
 }
 
-func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticleRequest) (rsp *v1.LikeArticleReply, err error) {
+func (s *ArticleService) LikeArticle(ctx context.Context, req *v1.LikeArticle_Request) (rsp *v1.LikeArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ARTICLE_ACTION_LIKE, req.Active)
-	return &v1.LikeArticleReply{}, err
+	return &v1.LikeArticle_Reply{}, err
 }
 
-func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticleRequest) (rsp *v1.ThankArticleReply, err error) {
+func (s *ArticleService) ThankArticle(ctx context.Context, req *v1.ThankArticle_Request) (rsp *v1.ThankArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ARTICLE_ACTION_THANK, req.Active)
-	return &v1.ThankArticleReply{}, nil
+	return &v1.ThankArticle_Reply{}, nil
 }
 
-func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticleRequest) (rsp *v1.CollectArticleReply, err error) {
+func (s *ArticleService) CollectArticle(ctx context.Context, req *v1.CollectArticle_Request) (rsp *v1.CollectArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ARTICLE_ACTION_COLLECT, req.Active)
-	return &v1.CollectArticleReply{}, err
+	return &v1.CollectArticle_Reply{}, err
 }
 
-func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticleRequest) (rsp *v1.WatchArticleReply, err error) {
+func (s *ArticleService) WatchArticle(ctx context.Context, req *v1.WatchArticle_Request) (rsp *v1.WatchArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	err = s.articleDomain.Action(ctx, req.ArticleId, user.ID, v1.ArticleAction_ARTICLE_ACTION_WATCH, req.Active)
-	return &v1.WatchArticleReply{}, err
+	return &v1.WatchArticle_Reply{}, err
 }
 
-func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticleRequest) (rsp *v1.AcceptAnswerArticleReply, err error) {
+func (s *ArticleService) AcceptAnswerArticle(ctx context.Context, req *v1.AcceptAnswerArticle_Request) (rsp *v1.AcceptAnswerArticle_Reply, err error) {
 	err = s.articleDomain.AcceptAnswer(ctx, req.ArticleId, req.CommentId)
-	return &v1.AcceptAnswerArticleReply{}, err
+	return &v1.AcceptAnswerArticle_Reply{}, err
 }

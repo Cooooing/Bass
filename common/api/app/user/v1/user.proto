@@ -2,10 +2,9 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "google/protobuf/timestamp.proto";
-import "validate/validate.proto";
+import "google/api/annotations.proto";
 import "common/v1/common.proto";
-import "user/v1/enum.proto";
+import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
@@ -13,242 +12,148 @@ option go_package = "common/api/gen/user/v1;v1";
 service UserUserService {
 
   // 更新用户设置
-  rpc UpdateSetting (UpdateSettingRequest) returns (UpdateSettingReply);
+  rpc UpdateSetting (UpdateSettingUser.Request) returns (UpdateSettingUser.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/update-setting"
+      body: "*"
+    };
+  }
 
   // 获取当前用户信息
-  rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserReply);
+  rpc GetCurrentUser (GetCurrentUserUser.Request) returns (GetCurrentUserUser.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/current"
+      body:"*"
+    };
+  }
 
   // 查询单个用户
-  rpc GetOne (GetOneRequest) returns (GetOneReply);
+  rpc GetOne (GetOneUser.Request) returns (GetOneUser.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/get-one"
+      body:"*"
+    };
+  }
 
   // 查询用户列表（返回数组）
-  rpc GetList (GetListRequest) returns (GetListReply);
+  rpc GetList (GetListUser.Request) returns (GetListUser.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/list"
+      body: "*"
+    };
+  }
 
   // 查询用户列表（返回map）
-  rpc GetMap(GetMapRequest) returns (GetMapReply);
+  rpc GetMap(GetMapUser.Request) returns (GetMapUser.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/map"
+      body: "*"
+    };
+  }
 
   // 分页查询用户
-  rpc Page(PageUserRequest) returns (PageUserReply);
+  rpc Page(PageUser.Request) returns (PageUser.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/page"
+      body: "*"
+    };
+  }
 
   // 获取用户默认头像
-  rpc Avatar(AvatarRequest) returns (common.v1.ImageReply);
+  rpc Avatar(AvatarUser.Request) returns (common.v1.ImageReply){
+    option (google.api.http) = {
+      get: "/v1/user/avatar"
+    };
+  };
 
 }
 
-// 实体定义
-
-message User {
-  // --- 基础信息 ---
-
-  // 用户Id
-  int64 id = 1;
-  // 用户名
-  string name = 2;
-  // 昵称
-  optional string nickname = 3;
-  // 邮箱
-  optional string email = 5;
-  // 手机号
-  optional string phone = 6;
-  // 用户个人主页链接
-  optional string url = 7;
-  // 头像URL
-  optional string avatar_url = 8;
-  // 个人简介
-  optional string introduction = 9;
-  // 用户 MBTI 类型
-  optional string mbti = 10;
-
-  // --- 状态 ---
-
-  // 用户状态：1-正常，2-封禁，3-注销
-  optional UserStatus status = 11 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
-  // 用户组名称
-  string group_name = 12;
-
-  // --- 社交信息 ---
-
-  // 关注数
-  optional int32 follow_count = 13;
-  // 粉丝数
-  optional int32 follower_count = 14;
-  // 屏蔽数
-  optional int32 block_count = 40;
-  // 被屏蔽数
-  optional int32 blocked_count = 41;
-
-  // --- 登录信息 ---
-
-  // 最近登录时间
-  google.protobuf.Timestamp last_login_time = 15;
-  // 最近登录IP
-  optional string last_login_ip = 16;
-
-  // --- 行为统计 ---
-
-  // 在线总时长（分钟）
-  optional int32 online_minutes = 17;
-  // 最近签到时间
-  google.protobuf.Timestamp last_checkin_time = 18;
-  // 当前连续签到天数
-  optional int32 current_checkin_streak = 19;
-  // 最长连续签到天数
-  optional int32 longest_checkin_streak = 20;
-
-  // --- 用户偏好设置 ---
-
-  // 用户语言
-  optional string language = 21;
-  // 时区
-  optional string timezone = 22;
-  // 皮肤主题
-  optional string theme = 23;
-  // 移动端皮肤主题
-  optional string mobile_theme = 24;
-  // 启用Web通知
-  optional bool enable_web_notify = 25;
-  // 启用邮件订阅
-  optional bool enable_email_subscribe = 26;
-
-  // --- 隐私设置 ---
-
-  // 是否公开积分榜
-  optional bool public_points = 27;
-  // 是否公开粉丝列表
-  optional bool public_followers = 28;
-  // 是否公开帖子列表
-  optional bool public_articles = 29;
-  // 是否公开评论列表
-  optional bool public_comments = 30;
-  // 是否公开在线状态
-  optional bool public_online_status = 31;
-
-  // --- 地理信息 ---
-
-  // 所在国家
-  optional string country = 32;
-  // 所在省份
-  optional string province = 33;
-  // 所在城市
-  optional string city = 34;
-  // 是否公开地理位置
-  optional bool public_location = 35;
-
-  // --- 其他 ---
-
-  // 是否二步验证
-  bool twofa_enable = 36;
-  // 二步验证启用时间
-  google.protobuf.Timestamp twofa_enable_time = 37;
-
-  // --- 审计字段 ---
-
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
+message UpdateSettingUser {
+  message Request {
+    // 用户头像 URL
+    optional string avatar_url = 10;
+    // 昵称
+    optional string nickname = 7;
+    // 语言偏好
+    optional string language = 1;
+    // 时区
+    optional string timezone = 2;
+    // 桌面主题
+    optional string theme = 3;
+    // 移动端主题
+    optional string mobile_theme = 4;
+    // 启用 web 通知
+    optional bool enable_web_notify = 5;
+    // 启用邮件订阅
+    optional bool enable_email_subscribe = 6;
+  }
+  message Reply {
+    // 更新后的用户信息
+    User user = 1;
+  }
 }
 
-
-// 查询参数定义
-
-message UserQueryParams {
-  // 用户Id
-  optional int64 user_id = 10;
-  // 用户Id列表
-  repeated int64 user_ids = 1;
-  // 用户名
-  optional string name = 2;
-  // 用户名列表
-  repeated string names = 3;
-  // 昵称
-  optional string nickname = 4;
-  // 昵称列表
-  repeated string nicknames = 5;
-  // 邮箱
-  optional string email = 6;
-  // 邮箱列表
-  repeated string emails = 7;
-  // 手机号
-  optional string phone = 8;
-  // 手机号列表
-  repeated string phones = 9;
+message GetCurrentUserUser {
+  message Request {}
+  message Reply {
+    // 当前用户信息
+    User user = 1;
+  }
 }
 
-// 请求/响应结构定义
-
-message UpdateSettingRequest{
-  // 头像URL
-  optional string avatar_url = 10;
-  // 昵称
-  optional string nickname = 7;
-  // 用户语言
-  optional string language = 1;
-  // 时区
-  optional string timezone = 2;
-  // 皮肤主题
-  optional string theme = 3;
-  // 移动端皮肤主题
-  optional string mobile_theme = 4;
-  // 启用Web通知
-  optional bool enable_web_notify = 5;
-  // 启用邮件订阅
-  optional bool enable_email_subscribe = 6;
-}
-message UpdateSettingReply {
-  // 用户信息
-  User user = 1;
+message GetOneUser {
+  message Request {
+    // 用户 ID
+    optional int64 user_id = 1;
+    // 用户名
+    optional string name = 2;
+  }
+  message Reply {
+    // 用户信息
+    User user = 1;
+  }
 }
 
-message GetCurrentUserRequest{}
-message GetCurrentUserReply {
-  // 用户信息
-  User user = 1;
+message GetListUser {
+  message Request {
+    // 查询条件
+    UserQueryParams query = 2;
+  }
+  message Reply {
+    // 用户列表
+    repeated User users = 1;
+  }
 }
 
-message GetOneRequest {
-  // 用户Id
-  optional int64 user_id = 1;
-  // 名称
-  optional string name = 2;
-}
-message GetOneReply {
-  // 用户信息
-  User user = 1;
-}
-
-message GetListRequest {
-  // 查询参数
-  UserQueryParams query = 2;
-}
-message GetListReply {
-  // 用户列表
-  repeated User users = 1;
+message GetMapUser {
+  message Request {
+    // 查询条件
+    UserQueryParams query = 2;
+  }
+  message Reply {
+    // 用户 map，key 为用户 ID
+    map<int64, User> users = 1;
+  }
 }
 
-message GetMapRequest {
-  // 查询参数
-  UserQueryParams query = 2;
-}
-message GetMapReply {
-  // 用户Id -> 用户信息
-  map<int64, User> users = 1;
-}
-
-message PageUserRequest{
-  // 分页参数
-  common.v1.PageRequest page = 1;
-  // 查询参数
-  UserQueryParams query = 2;
-}
-message PageUserReply{
-  // 分页
-  common.v1.PageReply page = 1;
-  // 用户列表
-  repeated User rows = 2;
+message PageUser {
+  message Request {
+    // 分页参数
+    common.v1.PageRequest page = 1;
+    // 查询条件
+    UserQueryParams query = 2;
+  }
+  message Reply {
+    // 分页信息
+    common.v1.PageReply page = 1;
+    // 用户列表
+    repeated User rows = 2;
+  }
 }
 
-message AvatarRequest{
-  // 用户名称
-  string name = 1;
+message AvatarUser {
+  message Request {
+    // 用户名
+    string name = 1;
+  }
 }

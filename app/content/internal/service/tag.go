@@ -12,6 +12,7 @@ import (
 	"errors"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type TagService struct {
@@ -24,6 +25,10 @@ func (s *TagService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentTagServiceServer(gs, s)
 }
 
+func (s *TagService) RegisterHttp(hs *http.Server) {
+	v1.RegisterContentTagServiceHTTPServer(hs, s)
+}
+
 func NewTagService(baseService *BaseService, domainTag *domain.TagDomain) *TagService {
 	return &TagService{
 		BaseService: baseService,
@@ -31,7 +36,7 @@ func NewTagService(baseService *BaseService, domainTag *domain.TagDomain) *TagSe
 	}
 }
 
-func (s *TagService) Adds(ctx context.Context, req *v1.AddTagsRequest) (*v1.AddTagsReply, error) {
+func (s *TagService) Adds(ctx context.Context, req *v1.AddsTag_Request) (*v1.AddsTag_Reply, error) {
 	tags := make([]*model.Tag, 0, len(req.Tags))
 	for i, tagSave := range req.Tags {
 		tags[i] = &model.Tag{Tag: &gen.Tag{
@@ -49,12 +54,12 @@ func (s *TagService) Adds(ctx context.Context, req *v1.AddTagsRequest) (*v1.AddT
 	for i, save := range saves {
 		reply[i] = save.ConvertToRpc()
 	}
-	return &v1.AddTagsReply{
+	return &v1.AddsTag_Reply{
 		Tags: reply,
 	}, err
 }
 
-func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.UpdateTagReply, error) {
+func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1.UpdateTag_Reply, error) {
 	if req.Tag.Id == nil {
 		return nil, errors.New("tag id is nil")
 	}
@@ -68,12 +73,12 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTagRequest) (*v1.
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdateTagReply{
+	return &v1.UpdateTag_Reply{
 		Tag: update.ConvertToRpc(),
 	}, nil
 }
 
-func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.PageTagReply, error) {
+func (s *TagService) Page(ctx context.Context, req *v1.PageTag_Request) (*v1.PageTag_Reply, error) {
 	req.Query = util.OrDefault(req.Query, &v1.TagQueryParams{})
 	getReq := &repo.TagGetReq{
 		TagIds:      req.Query.Ids,
@@ -92,7 +97,7 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTagRequest) (*v1.Page
 	for i, datum := range data {
 		reply[i] = datum.ConvertToRpc()
 	}
-	return &v1.PageTagReply{
+	return &v1.PageTag_Reply{
 		Page: page,
 		Rows: reply,
 	}, err

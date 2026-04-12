@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
+import "google/api/annotations.proto";
 import "validate/validate.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
@@ -10,47 +11,72 @@ option go_package = "common/api/gen/user/v1;v1";
 service UserTwoFactorAuthenticationService {
 
   // 验证
-  rpc Validate(UserTwoFactorAuthenticationValidateRequest) returns (UserTwoFactorAuthenticationValidateReply);
+  rpc Validate(ValidateTwoFactorAuthentication.Request) returns (ValidateTwoFactorAuthentication.Reply) {
+    option (google.api.http) = {
+      post: "/v1/two-factor-authentication/validate"
+      body: "*"
+    };
+  }
 
   // 开启 2FA 验证
-  rpc Enable(UserTwoFactorAuthenticationEnableRequest) returns (UserTwoFactorAuthenticationEnableReply);
+  rpc Enable(EnableTwoFactorAuthentication.Request) returns (EnableTwoFactorAuthentication.Reply) {
+    option (google.api.http) = {
+      post: "/v1/two-factor-authentication/enable"
+      body: "*"
+    };
+  }
 
   // 关闭 2FA 验证
-  rpc Disable(UserTwoFactorAuthenticationDisableRequest) returns (UserTwoFactorAuthenticationDisableReply);
+  rpc Disable(DisableTwoFactorAuthentication.Request) returns (DisableTwoFactorAuthentication.Reply) {
+    option (google.api.http) = {
+      post: "/v1/two-factor-authentication/disable"
+      body: "*"
+    };
+  }
 
   // 确认 2FA 绑定
-  rpc Confirm(UserTwoFactorAuthenticationConfirmRequest) returns (UserTwoFactorAuthenticationConfirmReply);
+  rpc Confirm(ConfirmTwoFactorAuthentication.Request) returns (ConfirmTwoFactorAuthentication.Reply) {
+    option (google.api.http) = {
+      post: "/v1/two-factor-authentication/confirm"
+      body: "*"
+    };
+  }
+
 }
 
-// 实体定义
-
-// 查询参数定义
-
-message UserTwoFactorAuthenticationValidateRequest {
-  // 2FA 验证码
-  string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
-}
-message UserTwoFactorAuthenticationValidateReply {
-  // 验证结果
-  bool verified = 1;
+message ValidateTwoFactorAuthentication {
+  message Request {
+    // 2FA 验证码
+    string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+  }
+  message Reply {
+    // 验证结果
+    bool verified = 1;
+  }
 }
 
-message UserTwoFactorAuthenticationEnableRequest {}
-message UserTwoFactorAuthenticationEnableReply {
-  // 图片数据
-  bytes data = 1;
-  // 图片类型
-  string content_type = 2;
+message EnableTwoFactorAuthentication {
+  message Request {}
+  message Reply {
+    // 图片数据
+    bytes data = 1;
+    // 图片类型
+    string content_type = 2;
+  }
 }
 
-message UserTwoFactorAuthenticationDisableRequest {
-  // 2FA 验证码
-  string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+message DisableTwoFactorAuthentication {
+  message Request {
+    // 2FA 验证码
+    string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+  }
+  message Reply {}
 }
-message UserTwoFactorAuthenticationDisableReply {}
 
-message UserTwoFactorAuthenticationConfirmRequest {
-  // 2FA 验证码
-  string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+message ConfirmTwoFactorAuthentication {
+  message Request {
+    // 2FA 验证码
+    string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+  }
+  message Reply {}
 }
-message UserTwoFactorAuthenticationConfirmReply {}

@@ -61,7 +61,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 		}
 	case notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT:
 		if len(data.Meta.AtUsernames) > 0 {
-			reply, err := h.UserClient.User.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
+			reply, err := h.UserClient.User.GetList(ctx, &userv1.GetListUser_Request{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
 			if err != nil {
 				return nil, err
 			}
@@ -90,7 +90,7 @@ func (h *FullHandler) Handle(ctx context.Context, data *commonModel.Notification
 		}
 	case notifyv1.NotificationType_NOTIFICATION_TYPE_COMMENT_AT:
 		if len(data.Meta.AtUsernames) > 0 {
-			reply, err := h.UserClient.User.GetList(ctx, &userv1.GetListRequest{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
+			reply, err := h.UserClient.User.GetList(ctx, &userv1.GetListUser_Request{Query: &userv1.UserQueryParams{Names: data.Meta.AtUsernames}})
 			if err != nil {
 				return nil, err
 			}

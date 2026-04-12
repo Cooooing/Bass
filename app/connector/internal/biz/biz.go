@@ -5,6 +5,7 @@ import (
 	"common/pkg/client/rpc"
 	"common/pkg/constant"
 	"common/pkg/util"
+	"common/pkg/util/jwt"
 	"common/pkg/util/task"
 	"connector/internal/biz/base"
 	"connector/internal/biz/domain"
@@ -18,6 +19,8 @@ var BizProviderSet = wire.NewSet(
 	base.NewBaseDomain,
 	util.NewEventPool,
 	task.NewAsynqCache,
+
+	jwt.NewTokenCache,
 
 	client.NewAsynqServer,
 	client.NewAsynqClient,

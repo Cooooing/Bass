@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type NotificationRecordService struct {
@@ -32,25 +33,28 @@ func (s *NotificationRecordService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyNotificationRecordServiceServer(gs, s)
 }
 
-func (s *NotificationRecordService) Page(ctx context.Context, req *v1.NotificationRecordPageRequest) (rsp *v1.NotificationRecordPageReply, err error) {
+func (s *NotificationRecordService) RegisterHttp(hs *http.Server) {
+	v1.RegisterNotifyNotificationRecordServiceHTTPServer(hs, s)
+}
+
+func (s *NotificationRecordService) Page(ctx context.Context, req *v1.PageNotificationRecord_Request) (rsp *v1.PageNotificationRecord_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	records, page, err := s.notificationRecordDomain.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
-		NotificationType: req.Query.NotificationType,
-		ReceiverId:       new(user.ID),
-		Status:           new(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
-		WithMeta:         true,
+		ReceiverId: new(user.ID),
+		Status:     new(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
+		WithMeta:   true,
 	})
 
-	return &v1.NotificationRecordPageReply{
+	return &v1.PageNotificationRecord_Reply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(records),
 	}, err
 }
 
-func (s *NotificationRecordService) Read(ctx context.Context, req *v1.NotificationRecordReadRequest) (rsp *v1.NotificationRecordReadReply, err error) {
+func (s *NotificationRecordService) Read(ctx context.Context, req *v1.ReadNotificationRecord_Request) (rsp *v1.ReadNotificationRecord_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -70,7 +74,7 @@ func (s *NotificationRecordService) Read(ctx context.Context, req *v1.Notificati
 	}
 
 	count, err := s.notificationRecordDomain.Read(ctx, user.ID, startTime, endTime, req.NotificationRecordIds)
-	return &v1.NotificationRecordReadReply{
+	return &v1.ReadNotificationRecord_Reply{
 		Count: int32(count),
 	}, err
 }

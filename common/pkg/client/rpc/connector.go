@@ -7,11 +7,11 @@ import (
 )
 
 type ConnectorClient struct {
-	connectorv1.ConnectorServiceClient
+	connectorv1.ConnectorCallbackServiceClient
 }
 
 func NewConnectorClient(conn *grpc.ClientConn) *ConnectorClient {
 	return &ConnectorClient{
-		ConnectorServiceClient: connectorv1.NewConnectorServiceClient(conn),
+		ConnectorCallbackServiceClient: connectorv1.NewConnectorCallbackServiceClient(conn),
 	}
 }

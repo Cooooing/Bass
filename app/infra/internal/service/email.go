@@ -25,12 +25,12 @@ func (s *EmailService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterInfraEmailServiceServer(gs, s)
 }
 
-func (s *EmailService) Send(ctx context.Context, req *v1.SendEmailRequest) (rsp *v1.SendEmailReply, err error) {
+func (s *EmailService) Send(ctx context.Context, req *v1.SendEmail_Request) (rsp *v1.SendEmail_Reply, err error) {
 	if len(req.To) > 0 {
 		err = s.emailDomain.Send(ctx, req.To, req.Title, req.Content)
 		if err != nil {
 			return nil, err
 		}
 	}
-	return &v1.SendEmailReply{}, nil
+	return &v1.SendEmail_Reply{}, nil
 }

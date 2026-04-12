@@ -2,7 +2,7 @@ package domain
 
 import (
 	"bytes"
-	signalv1 "common/api/signal/v1"
+	signalv1 "common/api/gen/signal/v1"
 	"common/pkg/client"
 	"common/pkg/util/server"
 	domainbase "connector/internal/biz/base"
@@ -71,7 +71,7 @@ func (d *SessionDomain) RequestSessionId(ticket string) (string, error) {
 
 	url := fmt.Sprintf("http://127.0.0.1:8000/api/signal/v1/node/online")
 
-	param, err := json.Marshal(&signalv1.SignalNodeOnlineRequest{Ticket: ticket})
+	param, err := json.Marshal(&signalv1.OnlineSignalNode_Request{Ticket: ticket})
 	if err != nil {
 		return sessionId, err
 	}
@@ -94,7 +94,7 @@ func (d *SessionDomain) RequestSessionId(ticket string) (string, error) {
 		}
 	}(resp.Body)
 
-	data := &server.Result[*signalv1.SignalNodeOnlineReply]{}
+	data := &server.Result[*signalv1.OnlineSignalNode_Reply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return sessionId, err

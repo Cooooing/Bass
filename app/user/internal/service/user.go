@@ -14,6 +14,7 @@ import (
 	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/jinzhu/copier"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -39,7 +40,11 @@ func (s *UserService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserUserServiceServer(gs, s)
 }
 
-func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRequest) (rsp *v1.UpdateSettingReply, err error) {
+func (s *UserService) RegisterHttp(hs *http.Server) {
+	v1.RegisterUserUserServiceHTTPServer(hs, s)
+}
+
+func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingUser_Request) (rsp *v1.UpdateSettingUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -58,12 +63,12 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingRe
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdateSettingReply{
+	return &v1.UpdateSettingUser_Reply{
 		User: update.ConvertToRpc(),
 	}, err
 }
 
-func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserRequest) (rsp *v1.GetCurrentUserReply, err error) {
+func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserUser_Request) (rsp *v1.GetCurrentUserUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -72,13 +77,13 @@ func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUser
 	if err != nil {
 		return nil, err
 	}
-	return &v1.GetCurrentUserReply{
+	return &v1.GetCurrentUserUser_Reply{
 		User: u.ConvertToRpc(),
 	}, err
 }
 
-func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v1.GetOneReply, err error) {
-	res := &v1.GetOneReply{
+func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneUser_Request) (rsp *v1.GetOneUser_Reply, err error) {
+	res := &v1.GetOneUser_Reply{
 		User: &v1.User{},
 	}
 	user, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{
@@ -103,8 +108,8 @@ func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneRequest) (rsp *v
 	return res, nil
 }
 
-func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp *v1.GetListReply, err error) {
-	res := &v1.GetListReply{
+func (s *UserService) GetList(ctx context.Context, req *v1.GetListUser_Request) (rsp *v1.GetListUser_Reply, err error) {
+	res := &v1.GetListUser_Reply{
 		Users: []*v1.User{},
 	}
 	list, err := s.userRepo.GetList(ctx, s.Db, &repo.UserGetReq{
@@ -136,8 +141,8 @@ func (s *UserService) GetList(ctx context.Context, req *v1.GetListRequest) (rsp 
 	return res, nil
 }
 
-func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v1.GetMapReply, err error) {
-	res := &v1.GetMapReply{
+func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapUser_Request) (rsp *v1.GetMapUser_Reply, err error) {
+	res := &v1.GetMapUser_Reply{
 		Users: make(map[int64]*v1.User),
 	}
 	list, err := s.userRepo.GetList(ctx, s.Db, &repo.UserGetReq{
@@ -169,7 +174,7 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapRequest) (rsp *v
 	return res, nil
 }
 
-func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v1.PageUserReply, err error) {
+func (s *UserService) Page(ctx context.Context, req *v1.PageUser_Request) (rsp *v1.PageUser_Reply, err error) {
 	req.Query = util.OrDefault(req.Query, &v1.UserQueryParams{})
 	reply := make([]*v1.User, 0)
 	users, page, err := s.userRepo.GetPage(ctx, s.Db, req.Page, &repo.UserGetReq{
@@ -186,13 +191,13 @@ func (s *UserService) Page(ctx context.Context, req *v1.PageUserRequest) (rsp *v
 	for _, user := range users {
 		reply = append(reply, user.ConvertToRpc())
 	}
-	return &v1.PageUserReply{
+	return &v1.PageUser_Reply{
 		Page: page,
 		Rows: reply,
 	}, nil
 }
 
-func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarRequest) (rsp *cv1.ImageReply, err error) {
+func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarUser_Request) (rsp *cv1.ImageReply, err error) {
 	buf, err := s.userDomain.Avatar(ctx, req.Name)
 	if err != nil {
 		return nil, err

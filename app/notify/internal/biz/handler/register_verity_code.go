@@ -42,7 +42,7 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 	switch data.Channel {
 	case v1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL:
 		// 发送邮件
-		_, err = h.Infra.Email.Send(ctx, &infrav1.SendEmailRequest{
+		_, err = h.Infra.Email.Send(ctx, &infrav1.SendEmail_Request{
 			Title:   data.Title,
 			Content: data.ContentRender,
 			To:      []string{data.Meta.RegisterVerifyCode.Email},
@@ -52,7 +52,7 @@ func (h *RegisterVerifyCode) Handle(ctx context.Context, data *commonModel.Notif
 		}
 	case v1.NotificationChannel_NOTIFICATION_CHANNEL_SMS:
 		// 发送短信
-		_, err = h.Infra.Sms.Send(ctx, &infrav1.SendSmsRequest{
+		_, err = h.Infra.Sms.Send(ctx, &infrav1.SendSms_Request{
 			Phone:  []string{data.Meta.RegisterVerifyCode.Phone},
 			Params: []string{data.Meta.RegisterVerifyCode.Code},
 		})

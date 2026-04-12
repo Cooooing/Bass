@@ -23,7 +23,7 @@ func (a *ChatGroupMember) ConvertToRpc() *v1.ChatGroupMember {
 		GroupId:   a.GroupID,
 		Member:    a.Member,
 		Nickname:  a.Nickname,
-		Role:      a.Role,
+		Role:      v1.ChatGroupMemberRole(a.Role),
 	}
 	if a.MuteEndAt != nil {
 		groupMember.MuteEndAt = timestamppb.New(*a.MuteEndAt)

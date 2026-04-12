@@ -8,14 +8,16 @@ option go_package = "common/api/gen/infra/v1;v1";
 service InfraSmsService {
 
   // 发送短信
-  rpc Send(SendSmsRequest) returns (SendSmsReply);
+  rpc Send (SendSms.Request) returns (SendSms.Reply);
 
 }
 
-message SendSmsRequest {
-  // 手机号
-  repeated string phone = 1;
-  // 参数
-  repeated string params = 2;
+message SendSms {
+  message Request {
+    // 手机号
+    repeated string phone = 1;
+    // 参数
+    repeated string params = 2;
+  }
+  message Reply {}
 }
-message SendSmsReply {}

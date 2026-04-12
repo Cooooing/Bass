@@ -13,6 +13,7 @@ import (
 	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type AuthenticationService struct {
@@ -36,7 +37,11 @@ func (s *AuthenticationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserAuthenticationServiceServer(gs, s)
 }
 
-func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailRequest) (rsp *v1.RegisterEmailReply, err error) {
+func (s *AuthenticationService) RegisterHttp(hs *http.Server) {
+	v1.RegisterUserAuthenticationServiceHTTPServer(hs, s)
+}
+
+func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailAuth_Request) (rsp *v1.RegisterEmailAuth_Reply, err error) {
 	if !s.VerifyName(req.Name) {
 		return nil, cv1.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
 	}
@@ -52,15 +57,15 @@ func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.Regis
 		Name:     req.Name,
 		Nickname: req.Nickname,
 	}})
-	return &v1.RegisterEmailReply{Code: code, CodeToken: token}, err
+	return &v1.RegisterEmailAuth_Reply{Code: code, CodeToken: token}, err
 }
 
-func (s *AuthenticationService) RegisterEmailVerify(ctx context.Context, req *v1.RegisterEmailVerifyRequest) (rsp *v1.RegisterEmailVerifyReply, err error) {
+func (s *AuthenticationService) RegisterEmailVerify(ctx context.Context, req *v1.RegisterEmailVerifyAuth_Request) (rsp *v1.RegisterEmailVerifyAuth_Reply, err error) {
 	err = s.authenticationDomain.RegisterEmailVerify(ctx, req.CodeToken, req.Code)
-	return &v1.RegisterEmailVerifyReply{}, err
+	return &v1.RegisterEmailVerifyAuth_Reply{}, err
 }
 
-func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.RegisterPhoneRequest) (rsp *v1.RegisterPhoneReply, err error) {
+func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.RegisterPhoneAuth_Request) (rsp *v1.RegisterPhoneAuth_Reply, err error) {
 	if !s.VerifyName(req.Name) {
 		return nil, cv1.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
 	}
@@ -76,45 +81,45 @@ func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.Regis
 		Name:     req.Name,
 		Nickname: req.Nickname,
 	}})
-	return &v1.RegisterPhoneReply{Code: code, CodeToken: token}, err
+	return &v1.RegisterPhoneAuth_Reply{Code: code, CodeToken: token}, err
 }
 
-func (s *AuthenticationService) RegisterPhoneVerify(ctx context.Context, req *v1.RegisterPhoneVerifyRequest) (rsp *v1.RegisterPhoneVerifyReply, err error) {
+func (s *AuthenticationService) RegisterPhoneVerify(ctx context.Context, req *v1.RegisterPhoneVerifyAuth_Request) (rsp *v1.RegisterPhoneVerifyAuth_Reply, err error) {
 	err = s.authenticationDomain.RegisterPhoneVerify(ctx, req.CodeToken, req.Code)
-	return &v1.RegisterPhoneVerifyReply{}, err
+	return &v1.RegisterPhoneVerifyAuth_Reply{}, err
 }
 
-func (s *AuthenticationService) ExistEmail(ctx context.Context, req *v1.ExistEmailRequest) (rsp *v1.ExistEmailReply, err error) {
+func (s *AuthenticationService) ExistEmail(ctx context.Context, req *v1.ExistEmailAuth_Request) (rsp *v1.ExistEmailAuth_Reply, err error) {
 	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, req.Email)
-	return &v1.ExistEmailReply{Exist: &exist}, err
+	return &v1.ExistEmailAuth_Reply{Exist: &exist}, err
 }
 
-func (s *AuthenticationService) ExistPhone(ctx context.Context, req *v1.ExistPhoneRequest) (rsp *v1.ExistPhoneReply, err error) {
+func (s *AuthenticationService) ExistPhone(ctx context.Context, req *v1.ExistPhoneAuth_Request) (rsp *v1.ExistPhoneAuth_Reply, err error) {
 	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, req.Phone)
-	return &v1.ExistPhoneReply{Exist: &exist}, err
+	return &v1.ExistPhoneAuth_Reply{Exist: &exist}, err
 }
 
-func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.ExistUsernameRequest) (rsp *v1.ExistUsernameReply, err error) {
+func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.ExistUsernameAuth_Request) (rsp *v1.ExistUsernameAuth_Reply, err error) {
 	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, req.Username)
-	return &v1.ExistUsernameReply{Exist: &exist}, err
+	return &v1.ExistUsernameAuth_Reply{Exist: &exist}, err
 }
 
-func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginAccountRequest) (rsp *v1.LoginAccountReply, err error) {
+func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginAccountAuth_Request) (rsp *v1.LoginAccountAuth_Reply, err error) {
 	token, user, err := s.authenticationDomain.LoginAccount(ctx, req.Account, req.Password)
 	if err != nil {
 		return nil, cv1.ErrorBadRequest("account not exist or password is incorrect").WithCause(err)
 	}
-	return &v1.LoginAccountReply{
+	return &v1.LoginAccountAuth_Reply{
 		Token: token,
 		User:  user.ConvertToRpc(),
 	}, err
 }
 
-func (s *AuthenticationService) Logout(ctx context.Context, req *v1.LogoutRequest) (rsp *v1.LogoutReply, err error) {
+func (s *AuthenticationService) Logout(ctx context.Context, req *v1.LogoutAuth_Request) (rsp *v1.LogoutAuth_Reply, err error) {
 	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
 	}
 	err = s.authenticationDomain.Logout(ctx, token)
-	return &v1.LogoutReply{}, err
+	return &v1.LogoutAuth_Reply{}, err
 }

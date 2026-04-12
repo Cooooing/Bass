@@ -25,12 +25,12 @@ func (s *SmsService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterInfraSmsServiceServer(gs, s)
 }
 
-func (s *SmsService) Send(ctx context.Context, req *v1.SendSmsRequest) (rsp *v1.SendSmsReply, err error) {
+func (s *SmsService) Send(ctx context.Context, req *v1.SendSms_Request) (rsp *v1.SendSms_Reply, err error) {
 	if len(req.Phone) > 0 {
 		err = s.smsDomain.Send(ctx, req.Phone, req.Params)
 		if err != nil {
 			return nil, err
 		}
 	}
-	return &v1.SendSmsReply{}, nil
+	return &v1.SendSms_Reply{}, nil
 }

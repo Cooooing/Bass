@@ -1,91 +1,89 @@
 syntax = "proto3";
 
-package common.api.im.v1;
+package common.api.app.im.v1;
 
 import "google/api/annotations.proto";
 import "common/v1/common.proto";
 import "im/v1/model.proto";
 
-option go_package = "common/api/im/v1;v1";
+option go_package = "common/api/gen/im/v1;v1";
 
 // ChatSession 服务
 service IMChatSessionService {
 
   // 免打扰
-  rpc MarkMuted (ChatSessionMarkMutedRequest) returns (ChatSessionMarkMutedReply) {
+  rpc MarkMuted (MarkMutedChatSession.Request) returns (MarkMutedChatSession.Reply) {
     option (google.api.http) = {
-      post: "/v1/chatSession/markMuted"
+      post: "/v1/chat-session/mute"
       body: "*"
     };
   }
 
   // 置顶
-  rpc MarkPinned (ChatSessionMarkPinnedRequest) returns (ChatSessionMarkPinnedReply) {
+  rpc MarkPinned (MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Reply) {
     option (google.api.http) = {
-      post: "/v1/chatSession/markPinned"
+      post: "/v1/chat-session/pin"
       body: "*"
     };
   }
 
   // 标为已读
-  rpc MarkRead (ChatSessionMarkReadRequest) returns (ChatSessionMarkReadReply) {
+  rpc MarkRead (MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {
     option (google.api.http) = {
-      post: "/v1/chatSession/markRead"
+      post: "/v1/chat-session/read"
       body: "*"
     };
   }
 
   // 查询会话数据
-  rpc Page (ChatSessionPageRequest) returns (ChatSessionPageReply) {
+  rpc Page (PageChatSession.Request) returns (PageChatSession.Reply) {
     option (google.api.http) = {
-      post: "/v1/chatSession/page"
+      post: "/v1/chat-session/page"
       body: "*"
     };
   }
 
 }
 
-// 查询参数定义
-
-message ChatSessionQueryParams {
-  // 主键
-  repeated int64 ids = 2;
-
+message MarkMutedChatSession {
+  message Request {
+    // 会话ID
+    repeated int64 ids = 1;
+    // 是否免打扰
+    bool disturb = 2;
+  }
+  message Reply {}
 }
 
-// 请求/响应结构定义
-
-message ChatSessionMarkMutedRequest {
-  // 会话ID
-  repeated int64 ids = 1;
-  // 是否免打扰
-  bool disturb = 2;
+message MarkPinnedChatSession {
+  message Request {
+    // 会话ID
+    repeated int64 ids = 1;
+    // 是否置顶
+    bool top = 2;
+  }
+  message Reply {}
 }
-message ChatSessionMarkMutedReply {}
 
-message ChatSessionMarkPinnedRequest {
-  // 会话ID
-  repeated int64 ids = 1;
-  // 是否置顶
-  bool top = 2;
+message MarkReadChatSession {
+  message Request {
+    // 会话ID
+    repeated int64 ids = 1;
+  }
+  message Reply {}
 }
-message ChatSessionMarkPinnedReply {}
 
-message ChatSessionMarkReadRequest {
-  // 会话ID
-  repeated int64 ids = 1;
-}
-message ChatSessionMarkReadReply {}
-
-message ChatSessionPageRequest {
-  // 分页参数
-  common.v1.PageRequest page = 1;
-  // 查询参数
-  ChatSessionQueryParams query = 2;
-}
-message ChatSessionPageReply {
-  // 分页信息
-  common.v1.PageReply page = 1;
-  // 消息信息
-  repeated ChatSession rows = 2;
+message PageChatSession {
+  message Request {
+    // 分页参数
+    common.v1.PageRequest page = 1;
+    // 查询参数
+    ChatSessionQueryParams query = 2;
+  }
+  message Reply {
+    // 分页信息
+    common.v1.PageReply page = 1;
+    // 消息信息
+    repeated ChatSession rows = 2;
+  }
 }

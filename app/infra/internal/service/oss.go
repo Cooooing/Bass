@@ -13,6 +13,7 @@ import (
 	"infra/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -33,32 +34,36 @@ func (s *OssService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterInfraOssServiceServer(gs, s)
 }
 
-func (s *OssService) UploadToken(ctx context.Context, req *v1.UploadTokenRequest) (*v1.UploadTokenReply, error) {
+func (s *OssService) RegisterHttp(hs *http.Server) {
+	v1.RegisterInfraOssServiceHTTPServer(hs, s)
+}
+
+func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenOss_Request) (*v1.GetUploadTokenOss_Reply, error) {
 	tokens, err := s.ossObjectStorageDomain.UploadToken(ctx, int(req.Num))
 	if err != nil {
 		return nil, err
 	}
-	uploadTokens := make([]*v1.UploadTokenReply_UploadToken, 0, len(tokens))
+	uploadTokens := make([]*v1.UploadToken, 0, len(tokens))
 	for _, token := range tokens {
-		uploadTokens = append(uploadTokens, &v1.UploadTokenReply_UploadToken{
+		uploadTokens = append(uploadTokens, &v1.UploadToken{
 			Key:   token.Key,
 			Token: token.Token,
 		})
 	}
-	return &v1.UploadTokenReply{
+	return &v1.GetUploadTokenOss_Reply{
 		UploadToken: uploadTokens,
 	}, nil
 }
 
-func (s *OssService) Audit(ctx context.Context, req *v1.AuditRequest) (*v1.AuditReply, error) {
+func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Request) (*v1.AuditOss_Reply, error) {
 	err := s.ossObjectStorageDomain.UpdateAudit(ctx, req.Key, req.Status, req.Reason)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AuditReply{}, nil
+	return &v1.AuditOss_Reply{}, nil
 }
 
-func (s *OssService) Page(ctx context.Context, req *v1.PageOssRequest) (*v1.PageOssReply, error) {
+func (s *OssService) Page(ctx context.Context, req *v1.PageOssOss_Request) (*v1.PageOssOss_Reply, error) {
 	req.Page = util.OrDefault(req.Page, &cv1.PageRequest{})
 	req.Query = util.OrDefault(req.Query, &v1.OssQueryParams{})
 	ObjectStorages, page, err := s.ossObjectStorageDomain.Page(ctx, req.Page, &repo.ObjectStorageGetReq{
@@ -73,13 +78,13 @@ func (s *OssService) Page(ctx context.Context, req *v1.PageOssRequest) (*v1.Page
 	if err != nil {
 		return nil, err
 	}
-	return &v1.PageOssReply{
+	return &v1.PageOssOss_Reply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(ObjectStorages),
 	}, nil
 }
 
-func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploadCallbackRequest) (*v1.QiniuUploadCallbackReply, error) {
+func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploadCallbackOss_Request) (*v1.QiniuUploadCallbackOss_Reply, error) {
 	var err error
 
 	opts := protojson.MarshalOptions{
@@ -101,10 +106,10 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 		UploadBy:     req.UploadBy,
 		UploadByName: req.UploadByName,
 	}})
-	return &v1.QiniuUploadCallbackReply{}, err
+	return &v1.QiniuUploadCallbackOss_Reply{}, err
 }
 
-func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.QiniuIncrementAuditCallbackRequest) (*v1.QiniuIncrementAuditCallbackReply, error) {
+func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.QiniuIncrementAuditCallbackOss_Request) (*v1.QiniuIncrementAuditCallbackOss_Reply, error) {
 	var err error
 	opts := protojson.MarshalOptions{
 		EmitUnpopulated: true,
@@ -118,7 +123,7 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 	suggestion := req.Items[0].Result.Result.Suggestion
 	if suggestion == "block" {
 		err := s.ossObjectStorageDomain.QiniuIncrementAuditCallback(ctx, req.InputKey, string(bytes), true)
-		return &v1.QiniuIncrementAuditCallbackReply{}, err
+		return &v1.QiniuIncrementAuditCallbackOss_Reply{}, err
 	}
-	return &v1.QiniuIncrementAuditCallbackReply{}, err
+	return &v1.QiniuIncrementAuditCallbackOss_Reply{}, err
 }

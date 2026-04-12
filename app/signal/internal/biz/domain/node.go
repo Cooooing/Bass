@@ -118,7 +118,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 	// 生成工作量证明参数
 	challenge := str.RandStr(d.sf, 32, true, true, true, false)
 	var difficulty int32 = 5
-	param, err := json.Marshal(&connectorv1.PowRequest{
+	param, err := json.Marshal(&connectorv1.PowConnector_Request{
 		Challenge:  challenge,
 		Difficulty: difficulty,
 	})
@@ -146,7 +146,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 	}(resp.Body)
 	end := time.Now()
 
-	data := &server.Result[*connectorv1.PowReply]{}
+	data := &server.Result[*connectorv1.PowConnector_Reply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return 0, err
@@ -190,7 +190,7 @@ func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
 		}
 	}(resp.Body)
 
-	data := &server.Result[*connectorv1.SessionReply]{}
+	data := &server.Result[*connectorv1.SessionConnector_Reply]{}
 	err = json.NewDecoder(resp.Body).Decode(data)
 	if err != nil {
 		return sessionIds, err

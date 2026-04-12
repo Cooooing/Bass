@@ -6,10 +6,11 @@ import (
 	"fmt"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type SystemService struct {
-	v1.UnimplementedSystemServer
+	v1.UnimplementedCommonSystemServiceServer
 	*BaseService
 }
 
@@ -20,9 +21,13 @@ func NewSystemService(baseService *BaseService) *SystemService {
 }
 
 func (s *SystemService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterSystemServer(gs, s)
+	v1.RegisterCommonSystemServiceServer(gs, s)
 }
 
-func (s *SystemService) Health(ctx context.Context, req *v1.HealthRequest) (*v1.HealthReply, error) {
-	return &v1.HealthReply{Message: fmt.Sprintf("%s %s is ok", s.Conf.Server.Name, s.Conf.Server.Version)}, nil
+func (s *SystemService) RegisterHttp(hs *http.Server) {
+	v1.RegisterCommonSystemServiceHTTPServer(hs, s)
+}
+
+func (s *SystemService) Health(ctx context.Context, req *v1.HealthSystem_Request) (*v1.HealthSystem_Reply, error) {
+	return &v1.HealthSystem_Reply{Message: fmt.Sprintf("%s %s is ok", s.Conf.Server.Name, s.Conf.Server.Version)}, nil
 }

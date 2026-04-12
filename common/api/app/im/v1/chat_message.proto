@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package common.api.app.im.v1;
 
+import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "common/v1/common.proto";
 import "im/v1/model.proto";
@@ -13,58 +14,64 @@ option go_package = "common/api/gen/im/v1;v1";
 service IMChatMessageService {
 
   // 发送消息
-  rpc Send (ChatMessageSendRequest) returns (ChatMessageSendReply);
+  rpc Send (SendChatMessage.Request) returns (SendChatMessage.Reply) {
+    option (google.api.http) = {
+      post: "/v1/chat-message/send"
+      body: "*"
+    };
+  }
 
   // 撤回消息
-  rpc Revoke (ChatMessageRevokeRequest) returns (ChatMessageRevokeReply);
+  rpc Revoke (RevokeChatMessage.Request) returns (RevokeChatMessage.Reply) {
+    option (google.api.http) = {
+      post: "/v1/chat-message/revoke"
+      body: "*"
+    };
+  }
 
   // 查询消息数据
-  rpc Page (ChatMessagePageRequest) returns (ChatMessagePageReply);
+  rpc Page (PageChatMessage.Request) returns (PageChatMessage.Reply) {
+    option (google.api.http) = {
+      post: "/v1/chat-message/page"
+      body: "*"
+    };
+  }
 
 }
 
-// 查询参数定义
-
-message ChatMessageQueryParams {
-  // 主键
-  repeated int64 ids = 2;
-  // 会话id
-  int64 session_id = 3;
-  // senderId
-  int64 sender_id = 4;
-
+message SendChatMessage {
+  message Request {
+    // receiverId
+    int64 receiver_id = 1;
+    // 接收者类型
+    ReceiverType receiver_type = 2 [(validate.rules).enum = {defined_only: true}];
+    // 消息类型
+    MessageType type = 5 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+    // 内容
+    string content = 6;
+  }
+  message Reply {}
 }
 
-// 请求/响应结构定义
-
-message ChatMessageSendRequest {
-  // receiverId
-  int64 receiver_id = 1;
-  // 接收者类型
-  ReceiverType receiver_type = 2 [(validate.rules).enum = {defined_only: true}];
-  // 消息类型
-  int32 type = 5 [(validate.rules).int32 = {gt: 0}];
-  // 内容
-  string content = 6;
-}
-message ChatMessageSendReply {}
-
-message ChatMessageRevokeRequest {
-  // 主键
-  int64 id = 1;
-}
-message ChatMessageRevokeReply {}
-
-message ChatMessagePageRequest {
-  // 分页参数
-  common.v1.PageRequest page = 1;
-  // 查询参数
-  ChatMessageQueryParams query = 2;
+message RevokeChatMessage {
+  message Request {
+    // 主键
+    int64 id = 1;
+  }
+  message Reply {}
 }
 
-message ChatMessagePageReply {
-  // 分页信息
-  common.v1.PageReply page = 1;
-  // 消息信息
-  repeated ChatMessage rows = 2;
+message PageChatMessage {
+  message Request {
+    // 分页参数
+    common.v1.PageRequest page = 1;
+    // 查询参数
+    ChatMessageQueryParams query = 2;
+  }
+  message Reply {
+    // 分页信息
+    common.v1.PageReply page = 1;
+    // 消息信息
+    repeated ChatMessage rows = 2;
+  }
 }

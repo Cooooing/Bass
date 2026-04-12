@@ -20,6 +20,7 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	consulapi "github.com/hashicorp/consul/api"
 )
 
@@ -40,7 +41,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bottstrap.yaml")
 }
 
-func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, cc *commonClient.ConsulClient, eventHandler *domain.EventHandler) *kratos.App {
+func newApp(logger log.Logger, log *log.Helper, hs *http.Server, gs *grpc.Server, cc *commonClient.ConsulClient, eventHandler *domain.EventHandler) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -55,6 +56,7 @@ func newApp(logger log.Logger, log *log.Helper, gs *grpc.Server, cc *commonClien
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
 		kratos.Server(
+			hs,
 			gs,
 		),
 		kratos.Registrar(cc.Registrar()),

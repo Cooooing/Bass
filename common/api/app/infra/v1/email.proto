@@ -8,20 +8,22 @@ option go_package = "common/api/gen/infra/v1;v1";
 service InfraEmailService {
 
   // 发送邮件
-  rpc Send(SendEmailRequest) returns (SendEmailReply);
+  rpc Send (SendEmail.Request) returns (SendEmail.Reply);
 
 }
 
-message SendEmailRequest {
-  // 邮件标题
-  string title = 1;
-  // 邮件内容
-  string content = 2;
-  // 接收人
-  repeated string to = 3;
-  // 抄送人
-  repeated string cc = 4;
-  // 密送人
-  repeated string bcc = 5;
+message SendEmail {
+  message Request {
+    // 邮件标题
+    string title = 1;
+    // 邮件内容
+    string content = 2;
+    // 接收人
+    repeated string to = 3;
+    // 抄送人
+    repeated string cc = 4;
+    // 密送人
+    repeated string bcc = 5;
+  }
+  message Reply {}
 }
-message SendEmailReply {}

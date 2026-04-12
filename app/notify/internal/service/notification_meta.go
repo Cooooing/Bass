@@ -6,6 +6,7 @@ import (
 	"notify/internal/biz/domain"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type NotificationMetaService struct {
@@ -25,7 +26,11 @@ func (s *NotificationMetaService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyNotificationMetaServiceServer(gs, s)
 }
 
-func (s *NotificationMetaService) Page(ctx context.Context, req *v1.NotificationMetaPageRequest) (rsp *v1.NotificationMetaPageReply, err error) {
+func (s *NotificationMetaService) RegisterHttp(hs *http.Server) {
+	v1.RegisterNotifyNotificationMetaServiceHTTPServer(hs, s)
+}
 
-	return &v1.NotificationMetaPageReply{}, nil
+func (s *NotificationMetaService) Page(ctx context.Context, req *v1.PageNotificationMetaMeta_Request) (rsp *v1.PageNotificationMetaMeta_Reply, err error) {
+
+	return &v1.PageNotificationMetaMeta_Reply{}, nil
 }

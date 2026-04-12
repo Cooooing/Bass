@@ -14,6 +14,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type CommentService struct {
@@ -29,6 +30,10 @@ func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentCommentServiceServer(gs, s)
 }
 
+func (s *CommentService) RegisterHttp(hs *http.Server) {
+	v1.RegisterContentCommentServiceHTTPServer(hs, s)
+}
+
 func NewCommentService(baseService *BaseService, commentDomain *domain.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
 	return &CommentService{
 		BaseService:   baseService,
@@ -38,7 +43,7 @@ func NewCommentService(baseService *BaseService, commentDomain *domain.CommentDo
 	}
 }
 
-func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rsp *v1.AddCommentReply, err error) {
+func (s *CommentService) AddComment(ctx context.Context, req *v1.AddComment_Request) (rsp *v1.AddComment_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cv1.ErrorUnauthorized("user not login")
@@ -54,12 +59,12 @@ func (s *CommentService) Add(ctx context.Context, req *v1.AddCommentRequest) (rs
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddCommentReply{
+	return &v1.AddComment_Reply{
 		Comment: comment.ConvertToRpc(),
 	}, err
 }
 
-func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (*v1.PageCommentReply, error) {
+func (s *CommentService) Page(ctx context.Context, req *v1.PageComment_Request) (*v1.PageComment_Reply, error) {
 	req.Query = util.OrDefault(req.Query, &v1.CommentQueryParams{})
 	page, comments, err := s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
 		CommentId:   req.Query.CommentId,
@@ -74,13 +79,13 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageCommentRequest) (
 		Order:       (*int32)(req.Query.Order),
 		WithArticle: req.Query.WithArticle,
 	})
-	return &v1.PageCommentReply{
+	return &v1.PageComment_Reply{
 		Page: page,
 		Rows: commonModel.ConvertToRpcList(comments),
 	}, err
 }
 
-func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (rsp *v1.LikeCommentReply, err error) {
+func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) (rsp *v1.LikeComment_Reply, err error) {
 	// user := s.tokenCache.GetUserInfo(ctx)
 	exist, err := s.commentRepo.Exist(ctx, s.Db, &repo.CommentGetReq{CommentId: new(req.Id)})
 	if err != nil {
@@ -91,15 +96,15 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeCommentRequest) (
 	}
 
 	err = s.commentRepo.UpdateStat(ctx, s.Db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, util.If[int32](req.Active, 1, -1))
-	return &v1.LikeCommentReply{}, err
+	return &v1.LikeComment_Reply{}, err
 }
 
-func (s *CommentService) Thank(ctx context.Context, req *v1.ThankCommentRequest) (rsp *v1.ThankCommentReply, err error) {
+func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Request) (rsp *v1.ThankComment_Reply, err error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (s *CommentService) UpdateStatus(ctx context.Context, req *v1.UpdateStatusCommentRequest) (rsp *v1.UpdateStatusCommentReply, err error) {
+func (s *CommentService) UpdateStatus(ctx context.Context, req *v1.UpdateStatusComment_Request) (rsp *v1.UpdateStatusComment_Reply, err error) {
 	// TODO implement me
 	panic("implement me")
 }

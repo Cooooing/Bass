@@ -106,8 +106,9 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	twoFactorAuthenticationService := service.NewTwoFactorAuthenticationService(baseService, twoFactorAuthenticationDomain)
 	v := service.ProvideServices(systemService, authenticationService, userService, userRelationService, twoFactorAuthenticationService)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, helper, grpcServer, consulClient)
+	app := newApp(logger, helper, httpServer, grpcServer, consulClient)
 	return app, func() {
 		cleanup5()
 		cleanup4()

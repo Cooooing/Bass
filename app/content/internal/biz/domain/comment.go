@@ -143,7 +143,7 @@ func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 			}
 		}
 
-		userMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
 		if err != nil {
 			return err
 		}

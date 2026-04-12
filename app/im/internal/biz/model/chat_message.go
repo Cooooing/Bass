@@ -27,9 +27,9 @@ func (a *ChatMessage) ConvertToRpc() *v1.ChatMessage {
 		UpdatedByName: a.UpdatedByName,
 		Id:            a.ID,
 		Sender:        a.SenderUser,
-		Type:          a.Type,
+		Type:          v1.MessageType(a.Type),
 		Content:       a.Content,
-		Status:        a.Status,
+		Status:        v1.MessageStatus(a.Status),
 	}
 	if a.ReceiverID != nil {
 		message.ReceiverUserId = *a.ReceiverID

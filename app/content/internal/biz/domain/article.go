@@ -383,7 +383,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	if lastReplyComment != nil {
 		userIds = append(userIds, *lastReplyComment.CreatedBy)
 	}
-	userAuthorsMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: userIds}})
+	userAuthorsMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: userIds}})
 	if err != nil {
 		return nil, err
 	}
@@ -425,9 +425,9 @@ func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *re
 		}
 	}
 
-	userAuthorsMap := &userv1.GetMapReply{}
+	userAuthorsMap := &userv1.GetMapUser_Reply{}
 	if len(userIds) > 0 {
-		userAuthorsMap, err = d.UserClient.User.GetMap(ctx, &userv1.GetMapRequest{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userAuthorsMap, err = d.UserClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
 		if err != nil {
 			return nil, nil, err
 		}

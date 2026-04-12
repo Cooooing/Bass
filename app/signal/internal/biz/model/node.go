@@ -49,7 +49,7 @@ func (n *Node) ConvertToRpc() *v1.Node {
 		Name:        n.Name,
 		Description: n.Description,
 		CallbackUrl: n.CallbackURL,
-		Status:      n.Status,
+		Status:      v1.NodeStatus(n.Status),
 	}
 	return group
 }

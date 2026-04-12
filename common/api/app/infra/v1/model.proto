@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package common.api.app.infra.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "common/v1/common.proto";
+
+option go_package = "common/api/gen/infra/v1;v1";
+
+// Oss 实体
+message Oss {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // id
+  int64 id = 1;
+  // OSS 提供商，如 minio/qiniu/aliyun/tencent
+  string provider = 2;
+  // bucket 名称
+  string bucket = 3;
+  // 对象 key
+  string key = 4;
+  // 文件 MIME 类型
+  string mime_type = 5;
+  // 文件大小（字节）
+  int64 size = 6;
+  // 文件 Hash
+  string hash = 7;
+
+  // 审核回调响应（JSON / 原文）
+  optional string audit_callback_reply = 8;
+  // 是否违规
+  bool blocked = 9;
+  // 违规原因
+  optional string blocked_reason = 10;
+  // 违规时间
+  google.protobuf.Timestamp blocked_at = 11;
+  // 违规处理人
+  optional int64 blocked_by = 12;
+  // 违规处理人名称
+  optional string blocked_by_name = 13;
+}
+
+message UploadToken {
+  // 文件key
+  string key = 1;
+  // 上传凭证
+  string token = 2;
+}
+
+message Item {
+  // 命令
+  string cmd = 1;
+  // 状态码
+  int32 code = 2;
+  // 描述
+  string desc = 3;
+  // 结果包装
+  ItemResultWrapper result = 4;
+  // 是否返回旧数据
+  int32 returnOld = 5;
+}
+
+message ItemResultWrapper {
+  // 是否禁用
+  bool disable = 1;
+  // 审核结果
+  ItemResult result = 2;
+}
+
+message ItemResult {
+  // 状态码
+  int32 code = 1;
+  // 消息
+  string message = 2;
+  // 场景
+  google.protobuf.Struct scenes = 3;
+  // 建议
+  string suggestion = 4;
+}
+message OssQueryParams {
+  // provider
+  optional string provider = 1;
+  // bucket
+  optional string bucket = 2;
+  // key
+  optional string key = 3;
+  // 文件 MIME 类型
+  optional string mime_type = 4;
+  // 大小
+  common.v1.Int64Range size = 7;
+  // 是否封禁
+  optional bool blocked = 5;
+  // 违规处理人
+  optional string blocked_by_name = 6;
+}

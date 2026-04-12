@@ -7,12 +7,17 @@
 package main
 
 import (
+	"common/pkg/util"
 	"common/pkg/util/jwt"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"im/internal/biz/base"
+	"im/internal/biz/domain"
 	"im/internal/conf"
 	"im/internal/data"
+	base2 "im/internal/data/base"
 	"im/internal/data/client"
+	"im/internal/data/repo"
 	"im/internal/server"
 	"im/internal/service"
 )
@@ -45,11 +50,44 @@ func wireApp(bootstrap *conf.Bootstrap, logger log.Logger, helper *log.Helper) (
 	}
 	baseService := service.NewBaseService(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
 	systemService := service.NewSystemService(baseService)
-	v := service.ProvideServices(systemService)
+	eventPool, cleanup5, err := util.NewEventPool(helper)
+	if err != nil {
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	baseDomain := base.NewBaseDomain(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient, eventPool)
+	baseData := base2.NewBaseData(bootstrap, helper, genClient, consulClient, redisClient, rabbitMQClient)
+	chatSessionRepo := repo.NewChatSessionRepo(baseData)
+	chatSessionDomain, err := domain.NewChatSessionDomain(baseDomain, chatSessionRepo)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	chatSessionService := service.NewChatSessionService(baseService, chatSessionDomain)
+	chatMessageDomain, err := domain.NewChatMessageDomain(baseDomain)
+	if err != nil {
+		cleanup5()
+		cleanup4()
+		cleanup3()
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	chatMessageService := service.NewChatMessageService(baseService, chatMessageDomain)
+	v := service.ProvideServices(systemService, chatSessionService, chatMessageService)
 	tokenCache := jwt.NewTokenCache(helper, redisClient)
+	httpServer := server.NewHTTPServer(bootstrap, logger, v, tokenCache)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, v, tokenCache)
-	app := newApp(logger, grpcServer, consulClient)
+	app := newApp(logger, httpServer, grpcServer, consulClient)
 	return app, func() {
+		cleanup5()
 		cleanup4()
 		cleanup3()
 		cleanup2()

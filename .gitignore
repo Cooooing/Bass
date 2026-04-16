@@ -36,7 +36,10 @@ bin/
 *.swp
 
 /common/api/gen/**
+!/common/api/gen/.gitkeep
 
 /deploy/.prod.env
 .claude/
 .gitnexus
+AGENTS.md
+CLAUDE.md

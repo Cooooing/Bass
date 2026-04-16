@@ -18,7 +18,7 @@ server:
     password: example
     from: example@example.com
   sms:
-    provider: 
+    provider:
 data:
   database:
     driver: postgres

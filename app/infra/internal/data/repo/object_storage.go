@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/constant"
 	"context"
 	"infra/internal/biz/model"
@@ -83,7 +83,7 @@ func (r *ObjectStorageRepo) GetList(ctx context.Context, tx *gen.Client, req *re
 	return records, nil
 }
 
-func (r *ObjectStorageRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *cv1.PageReply, error) {
+func (r *ObjectStorageRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
 	var (
 		notificationRecords []*model.ObjectStorage
 		err                 error
@@ -104,7 +104,7 @@ func (r *ObjectStorageRepo) GetPage(ctx context.Context, tx *gen.Client, page *c
 	for _, item := range list {
 		notificationRecords = append(notificationRecords, &model.ObjectStorage{ObjectStorage: item})
 	}
-	return notificationRecords, &cv1.PageReply{
+	return notificationRecords, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

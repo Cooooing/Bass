@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -92,7 +92,7 @@ func (r *DomainRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Domai
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("domain is not found")
+		return nil, common.ErrorBadRequest("domain is not found")
 	}
 	return &model.Domain{Domain: d}, err
 }
@@ -114,7 +114,7 @@ func (r *DomainRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Doma
 	return domains, nil
 }
 
-func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *cv1.PageReply, error) {
+func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
 	var (
 		domains []*model.Domain
 		err     error
@@ -135,7 +135,7 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Page
 	for i := range list {
 		domains = append(domains, &model.Domain{Domain: list[i]})
 	}
-	return domains, &cv1.PageReply{
+	return domains, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

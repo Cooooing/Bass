@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
@@ -17,7 +17,7 @@ type CommentRepo interface {
 	Exist(ctx context.Context, tx *gen.Client, req *CommentGetReq) (bool, error)
 	GetOne(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
 	GetList(ctx context.Context, tx *gen.Client, req *CommentGetReq) ([]*model.Comment, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *CommentGetReq) ([]*model.Comment, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *CommentGetReq) ([]*model.Comment, *common.PageReply, error)
 	GetArticleLastComment(ctx context.Context, tx *gen.Client, req *CommentGetReq) (*model.Comment, error)
 	GetArticleLastComments(ctx context.Context, tx *gen.Client, req *CommentGetReq) (map[int64]*model.Comment, error)
 }

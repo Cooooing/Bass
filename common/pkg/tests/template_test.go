@@ -7,7 +7,7 @@ import (
 	"html/template"
 	"testing"
 
-	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestNotificationTemplate(t *testing.T) {
@@ -39,7 +39,7 @@ func TestNotificationTemplate(t *testing.T) {
 */
 
 func TestName(t *testing.T) {
-	for i := 0; i < 10; i++ {
-		fmt.Println(uuid.New().String())
-	}
+	password := "Qq111111"
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
+	fmt.Printf("%s", string(bytes))
 }

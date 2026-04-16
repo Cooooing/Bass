@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/user/v1"
 	"context"
 	"user/internal/biz/model"
@@ -21,7 +21,7 @@ type UserRepo interface {
 	GetOne(ctx context.Context, tx *gen.Client, req *UserGetReq) (*model.User, error)
 	GetByAccount(ctx context.Context, tx *gen.Client, account string) (*model.User, error)
 	GetList(ctx context.Context, tx *gen.Client, req *UserGetReq) ([]*model.User, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *UserGetReq) ([]*model.User, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *UserGetReq) ([]*model.User, *common.PageReply, error)
 }
 
 type UserGetReq struct {

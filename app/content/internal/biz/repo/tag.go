@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	commonModel "common/pkg/model"
 	"content/internal/biz/model"
@@ -16,7 +16,7 @@ type TagRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *TagGetReq) (*model.Tag, error)
 	GetList(ctx context.Context, tx *gen.Client, req *TagGetReq) ([]*model.Tag, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *TagGetReq) ([]*model.Tag, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *TagGetReq) ([]*model.Tag, *common.PageReply, error)
 }
 
 type TagGetReq struct {

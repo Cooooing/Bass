@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"context"
 	"signal/internal/biz/model"
 	"signal/internal/data/ent/gen"
@@ -16,7 +16,7 @@ type NodeRepo interface {
 	GetOne(ctx context.Context, tx *gen.Client, req *NodeGetReq) (*model.Node, error)
 	GetMap(ctx context.Context, tx *gen.Client, req *NodeGetReq) (map[string]*model.Node, error)
 	GetList(ctx context.Context, tx *gen.Client, req *NodeGetReq) ([]*model.Node, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *NodeGetReq) ([]*model.Node, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *NodeGetReq) ([]*model.Node, *common.PageReply, error)
 }
 
 type NodeGetReq struct {

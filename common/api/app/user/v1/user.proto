@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.user.v1;
 
 import "google/api/annotations.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
@@ -60,7 +60,7 @@ service UserUserService {
   }
 
   // 获取用户默认头像
-  rpc Avatar(AvatarUser.Request) returns (common.v1.ImageReply){
+  rpc Avatar(AvatarUser.Request) returns (common.ImageReply){
     option (google.api.http) = {
       get: "/v1/user/avatar"
     };
@@ -139,13 +139,13 @@ message GetMapUser {
 message PageUser {
   message Request {
     // 分页参数
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     // 查询条件
     UserQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 用户列表
     repeated User rows = 2;
   }

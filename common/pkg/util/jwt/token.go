@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	v1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
@@ -83,7 +83,7 @@ func (r *TokenCache) GetToken(ctx context.Context, token string) (*model.User, e
 		return nil, nil
 	}
 	if err != nil {
-		return nil, v1.ErrorUnauthorized("token is invalid")
+		return nil, common.ErrorUnauthorized("token is invalid")
 	}
 	var user model.User
 	return &user, json.Unmarshal([]byte(value), &user)

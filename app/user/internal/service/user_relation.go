@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -39,10 +39,10 @@ func (s *UserRelationService) RegisterHttp(hs *http.Server) {
 func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockUserRelation_Request) (rsp *v1.BlockUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	if user.ID == req.BlockUserId {
-		return nil, cv1.ErrorBadRequest("can not block yourself")
+		return nil, common.ErrorBadRequest("can not block yourself")
 	}
 	err = s.userRelationDomain.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_BLOCK, req.Block, user.ID, req.BlockUserId)
 	return &v1.BlockUserRelation_Reply{}, err
@@ -51,10 +51,10 @@ func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockUserRelati
 func (s *UserRelationService) Follow(ctx context.Context, req *v1.FollowUserRelation_Request) (rsp *v1.FollowUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	if user.ID == req.FollowUserId {
-		return nil, cv1.ErrorBadRequest("can not follow yourself")
+		return nil, common.ErrorBadRequest("can not follow yourself")
 	}
 	err = s.userRelationDomain.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_FOLLOW, req.Follow, user.ID, req.FollowUserId)
 	return &v1.FollowUserRelation_Reply{}, err
@@ -63,9 +63,9 @@ func (s *UserRelationService) Follow(ctx context.Context, req *v1.FollowUserRela
 func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation_Request) (rsp *v1.PageUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
-	req.Page = util.OrDefault(req.Page, &cv1.PageRequest{})
+	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
 	userRelations, page, err := s.userRelationDomain.Page(ctx, req.Page, &repo.UserRelationGetReq{
 		ActorId:    new(user.ID),
 		Type:       req.Query.Type,

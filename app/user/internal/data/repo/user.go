@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"context"
@@ -95,7 +95,7 @@ func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGet
 	query = r.getQuery(query, req)
 	u, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("user is not found")
+		return nil, common.ErrorBadRequest("user is not found")
 	}
 	return &model.User{User: u}, err
 }
@@ -122,7 +122,7 @@ func (r *UserRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.UserGe
 	}
 	return res, nil
 }
-func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.UserGetReq) ([]*model.User, *cv1.PageReply, error) {
+func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.UserGetReq) ([]*model.User, *common.PageReply, error) {
 	var (
 		users []*model.User
 		err   error
@@ -143,7 +143,7 @@ func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 	for _, u := range list {
 		users = append(users, &model.User{User: u})
 	}
-	return users, &cv1.PageReply{
+	return users, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

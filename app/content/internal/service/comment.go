@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -46,7 +46,7 @@ func NewCommentService(baseService *BaseService, commentDomain *domain.CommentDo
 func (s *CommentService) AddComment(ctx context.Context, req *v1.AddComment_Request) (rsp *v1.AddComment_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	comment, err := s.commentDomain.Add(ctx, &model.Comment{
 		Comment: &gen.Comment{
@@ -92,7 +92,7 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) 
 		return nil, err
 	}
 	if !exist {
-		return nil, cv1.ErrorBadRequest("comment not exist")
+		return nil, common.ErrorBadRequest("comment not exist")
 	}
 
 	err = s.commentRepo.UpdateStat(ctx, s.Db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, util.If[int32](req.Active, 1, -1))

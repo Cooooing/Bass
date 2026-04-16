@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"context"
 	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -20,6 +20,6 @@ func NewNotificationMetaDomain(base *domainbase.BaseDomain, notificationMetaRepo
 	}
 }
 
-func (d *NotificationMetaDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.NotificationMetaGetReq) ([]*model.NotificationMeta, *cv1.PageReply, error) {
+func (d *NotificationMetaDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationMetaGetReq) ([]*model.NotificationMeta, *common.PageReply, error) {
 	return d.notificationMetaRepo.GetPage(ctx, d.Db, page, req)
 }

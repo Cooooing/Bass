@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	commonModel "common/pkg/model"
 	"content/internal/biz/model"
@@ -16,7 +16,7 @@ type DomainRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *DomainGetReq) (*model.Domain, error)
 	GetList(ctx context.Context, tx *gen.Client, req *DomainGetReq) ([]*model.Domain, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *DomainGetReq) ([]*model.Domain, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *DomainGetReq) ([]*model.Domain, *common.PageReply, error)
 }
 
 type DomainGetReq struct {

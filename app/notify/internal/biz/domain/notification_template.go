@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"context"
 	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -52,6 +52,6 @@ func (d *NotificationTemplateDomain) GetMap(ctx context.Context, req *repo.Notif
 	return d.notificationTemplateRepo.GetMap(ctx, d.Db, req)
 }
 
-func (d *NotificationTemplateDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *cv1.PageReply, error) {
+func (d *NotificationTemplateDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *common.PageReply, error) {
 	return d.notificationTemplateRepo.GetPage(ctx, d.Db, page, req)
 }

@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	notifyv1 "common/api/gen/notify/v1"
 	userv1 "common/api/gen/user/v1"
@@ -116,7 +116,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 			return err
 		}
 		if !exist {
-			return cv1.ErrorBadRequest("article not exist")
+			return common.ErrorBadRequest("article not exist")
 		}
 
 		save, err = d.articleRepo.Update(ctx, tx, article, tags)
@@ -138,7 +138,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return cv1.ErrorUnauthorized("user not login")
+		return common.ErrorUnauthorized("user not login")
 	}
 
 	var a *model.Article
@@ -263,7 +263,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return cv1.ErrorUnauthorized("user not login")
+		return common.ErrorUnauthorized("user not login")
 	}
 
 	var err error
@@ -323,7 +323,7 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 func (d *ArticleDomain) AcceptAnswer(ctx context.Context, articleId int64, commentId int64) error {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return cv1.ErrorUnauthorized("user not login")
+		return common.ErrorUnauthorized("user not login")
 	}
 	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		a, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: new(articleId)})
@@ -331,10 +331,10 @@ func (d *ArticleDomain) AcceptAnswer(ctx context.Context, articleId int64, comme
 			return err
 		}
 		if *a.CreatedBy != user.ID {
-			return cv1.ErrorForbidden("you are not the author of this article")
+			return common.ErrorForbidden("you are not the author of this article")
 		}
 		if a.AcceptedAnswerID != nil {
-			return cv1.ErrorBadRequest("article already accepted answer")
+			return common.ErrorBadRequest("article already accepted answer")
 		}
 		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, tx, articleId, commentId)
 		if err != nil {
@@ -371,7 +371,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	 */
 
 	if reply.Status == int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) && !ok && *reply.CreatedBy != user.ID {
-		return nil, cv1.ErrorUnauthorized("login required to view drafts")
+		return nil, common.ErrorUnauthorized("login required to view drafts")
 	}
 
 	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.Db, &repo.CommentGetReq{ArticleId: new(reply.ID)})
@@ -396,10 +396,10 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	return reply, err
 }
 
-func (d *ArticleDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *cv1.PageReply, error) {
+func (d *ArticleDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
 	var (
 		list      []*model.Article
-		pageReply *cv1.PageReply
+		pageReply *common.PageReply
 		err       error
 	)
 	req.IsSummary = true

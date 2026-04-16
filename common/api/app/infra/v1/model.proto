@@ -4,7 +4,7 @@ package common.api.app.infra.v1;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 
 option go_package = "common/api/gen/infra/v1;v1";
 
@@ -91,7 +91,7 @@ message OssQueryParams {
   // 文件 MIME 类型
   optional string mime_type = 4;
   // 大小
-  common.v1.Int64Range size = 7;
+  common.Int64Range size = 7;
   // 是否封禁
   optional bool blocked = 5;
   // 违规处理人

@@ -1,7 +1,7 @@
 package doamin
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	notifyv1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -45,18 +45,18 @@ func NewAuthenticationDomain(base *domainbase.BaseDomain, userRepo repo.UserRepo
 func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User) (code string, token string, err error) {
 	// 验证数据
 	if u.Email == nil {
-		return "", "", cv1.ErrorBadRequest("email can not be empty")
+		return "", "", common.ErrorBadRequest("email can not be empty")
 	}
 	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, *u.Email)
 	if exist {
-		err = cv1.ErrorBadRequest("email already exists")
+		err = common.ErrorBadRequest("email already exists")
 	}
 	if err != nil {
 		return
 	}
 	exist, err = s.userRepo.ConstantAccount(ctx, s.Db, u.Name)
 	if exist {
-		err = cv1.ErrorBadRequest("name already exists")
+		err = common.ErrorBadRequest("name already exists")
 	}
 	if err != nil {
 		return
@@ -68,7 +68,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 		return
 	}
 	if existEmailCode {
-		err = cv1.ErrorBadRequest("email verification code has been sent")
+		err = common.ErrorBadRequest("email verification code has been sent")
 		return
 	}
 
@@ -128,7 +128,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 	}
 	// 验证 code
 	if verityCode != code {
-		err = cv1.ErrorBadRequest("email code invalid")
+		err = common.ErrorBadRequest("email code invalid")
 		return
 	}
 
@@ -165,18 +165,18 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User) (code string, token string, err error) {
 	// 验证数据
 	if u.Phone == nil {
-		return "", "", cv1.ErrorBadRequest("phone can not be empty")
+		return "", "", common.ErrorBadRequest("phone can not be empty")
 	}
 	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, *u.Phone)
 	if exist {
-		err = cv1.ErrorBadRequest("phone already exists")
+		err = common.ErrorBadRequest("phone already exists")
 	}
 	if err != nil {
 		return
 	}
 	exist, err = s.userRepo.ConstantAccount(ctx, s.Db, u.Name)
 	if exist {
-		err = cv1.ErrorBadRequest("name already exists")
+		err = common.ErrorBadRequest("name already exists")
 	}
 	if err != nil {
 		return
@@ -188,7 +188,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 		return
 	}
 	if existPhoneCode {
-		err = cv1.ErrorBadRequest("phone verification code has been sent")
+		err = common.ErrorBadRequest("phone verification code has been sent")
 		return
 	}
 
@@ -248,7 +248,7 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 	}
 	// 验证 code
 	if verityCode != code {
-		err = cv1.ErrorBadRequest("phone code invalid")
+		err = common.ErrorBadRequest("phone code invalid")
 		return
 	}
 
@@ -290,7 +290,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	}
 	// 验证密码
 	if !user.PasswordVerify(password) {
-		return token, nil, cv1.ErrorBadRequest("password invalid")
+		return token, nil, common.ErrorBadRequest("password invalid")
 	}
 	// 生成 token
 	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.Conf.Server.Jwt.Expires.AsDuration())

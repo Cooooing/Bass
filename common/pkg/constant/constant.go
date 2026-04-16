@@ -1,7 +1,7 @@
 package constant
 
 import (
-	v1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"math"
 )
 
@@ -24,7 +24,7 @@ var (
 var page uint32 = 1
 var size uint32 = 10
 
-func PageValid(p *v1.PageRequest) *v1.PageRequest {
+func PageValid(p *common.PageRequest) *common.PageRequest {
 	if p == nil {
 		return GetPageDefault()
 	}
@@ -36,14 +36,14 @@ func PageValid(p *v1.PageRequest) *v1.PageRequest {
 	}
 	return p
 }
-func GetPageDefault() *v1.PageRequest {
-	return &v1.PageRequest{
+func GetPageDefault() *common.PageRequest {
+	return &common.PageRequest{
 		Page: page,
 		Size: size,
 	}
 }
-func GetPageMax() *v1.PageRequest {
-	return &v1.PageRequest{
+func GetPageMax() *common.PageRequest {
+	return &common.PageRequest{
 		Page: page,
 		Size: math.MaxUint32,
 	}

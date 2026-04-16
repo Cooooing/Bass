@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/notify/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -53,13 +53,13 @@ func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.PageNoti
 
 func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotificationTemplate_Request) (rsp *v1.AddNotificationTemplate_Reply, err error) {
 	if req.NotificationTemplate == nil {
-		return nil, cv1.ErrorBadRequest("notificationTemplate is required")
+		return nil, common.ErrorBadRequest("notificationTemplate is required")
 	}
 	if _, ok := v1.NotificationType_name[int32(req.NotificationTemplate.NotificationType)]; !ok {
-		return nil, cv1.ErrorBadRequest("invalid notificationType")
+		return nil, common.ErrorBadRequest("invalid notificationType")
 	}
 	if _, ok := v1.NotificationChannel_name[int32(req.NotificationTemplate.Channel)]; !ok {
-		return nil, cv1.ErrorBadRequest("invalid channel")
+		return nil, common.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
 		NotificationType: int32(req.NotificationTemplate.NotificationType),
@@ -78,13 +78,13 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotifi
 
 func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.UpdateNotificationTemplate_Request) (rsp *v1.UpdateNotificationTemplate_Reply, err error) {
 	if req.NotificationType == nil || req.Channel == nil || req.Content == nil {
-		return nil, cv1.ErrorBadRequest("notificationType, channel, content is required")
+		return nil, common.ErrorBadRequest("notificationType, channel, content is required")
 	}
 	if _, ok := v1.NotificationType_name[int32(*req.NotificationType)]; !ok {
-		return nil, cv1.ErrorBadRequest("invalid notificationType")
+		return nil, common.ErrorBadRequest("invalid notificationType")
 	}
 	if _, ok := v1.NotificationChannel_name[int32(*req.Channel)]; !ok {
-		return nil, cv1.ErrorBadRequest("invalid channel")
+		return nil, common.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
 		NotificationType: int32(*req.NotificationType),

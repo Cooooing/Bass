@@ -33,3 +33,9 @@ config:
 .PHONY: api
 api:
 	@$(MAKE) SUBTARGET=api $(SERVERS)
+
+.PHONY: tidy
+tidy:
+	for i in $(SERVERS); do \
+		( cd $(ROOT_DIR)/app/$$i && go mod tidy ); \
+	done

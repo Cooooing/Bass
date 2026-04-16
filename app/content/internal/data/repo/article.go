@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -212,7 +212,7 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 	}
 
 	if first.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
-		return nil, cv1.ErrorBadRequest("only update draft")
+		return nil, common.ErrorBadRequest("only update draft")
 	}
 
 	err = r.UpdateStatus(ctx, tx, articleId, v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
@@ -242,7 +242,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Arti
 	query = r.getQuery(query, req)
 	a, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("article is not found")
+		return nil, common.ErrorBadRequest("article is not found")
 	}
 	return &model.Article{Article: a, IsSummary: req.IsSummary}, err
 }
@@ -264,7 +264,7 @@ func (r *ArticleRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Art
 	return articles, nil
 }
 
-func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *cv1.PageReply, error) {
+func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
 	var (
 		articles []*model.Article
 		err      error
@@ -285,7 +285,7 @@ func (r *ArticleRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 	for i := range list {
 		articles = append(articles, &model.Article{Article: list[i], IsSummary: req.IsSummary})
 	}
-	return articles, &cv1.PageReply{
+	return articles, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

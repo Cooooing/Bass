@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.notify.v1;
 
 import "google/api/annotations.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "notify/v1/model.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
@@ -32,13 +32,13 @@ service NotifyNotificationRecordService {
 message PageNotificationRecord {
   message Request {
     // 分页参数
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     // 查询条件
     NotificationRecordQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 通知记录列表
     repeated NotificationRecord rows = 2;
   }
@@ -49,7 +49,7 @@ message ReadNotificationRecord {
     // 通知 ID 列表
     repeated int64 ids = 1;
     // 已读时间范围
-    common.v1.TimeRange read_time_range = 2;
+    common.TimeRange read_time_range = 2;
     // 通知记录 ID 列表
     repeated int64 notification_record_ids = 3;
   }

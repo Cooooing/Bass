@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	common "common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -67,7 +67,7 @@ func (r *TagRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.TagGetRe
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("tag is not found")
+		return nil, common.ErrorBadRequest("tag is not found")
 	}
 	return &model.Tag{Tag: t}, err
 }
@@ -90,7 +90,7 @@ func (r *TagRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.TagGetR
 	return tags, nil
 }
 
-func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *cv1.PageReply, error) {
+func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
 	var (
 		tags []*model.Tag
 		err  error
@@ -111,7 +111,7 @@ func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageReq
 	for _, item := range list {
 		tags = append(tags, &model.Tag{Tag: item})
 	}
-	return tags, &cv1.PageReply{
+	return tags, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

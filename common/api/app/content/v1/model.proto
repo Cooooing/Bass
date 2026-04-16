@@ -4,7 +4,7 @@ package common.api.app.content.v1;
 
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "content/v1/enum.proto";
 import "user/v1/model.proto";
 
@@ -292,7 +292,7 @@ message TagQueryParams {
   // 领域Id
   optional int64 domain_id = 7;
   // 文章数量范围
-  common.v1.Int32Range article_count = 8;
+  common.Int32Range article_count = 8;
 }
 
 message DomainQueryParams {
@@ -311,7 +311,7 @@ message DomainQueryParams {
   // 是否导航
   optional bool isNav = 8;
   // 标签数量范围
-  common.v1.Int32Range tagCount = 9;
+  common.Int32Range tagCount = 9;
 }
 
 // =====================

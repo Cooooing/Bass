@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package common.api.app.common.v1;
+package common.api.app.common;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "common/api/gen/common/v1;v1";
+option go_package = "common/api/gen/common;common";
 
 message PageRequest {
   // 页码

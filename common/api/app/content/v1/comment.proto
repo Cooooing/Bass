@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.content.v1;
 
 import "google/api/annotations.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "content/v1/model.proto";
 import "content/v1/enum.proto";
 
@@ -72,13 +72,13 @@ message AddComment {
 message PageComment {
   message Request {
     // 分页参数
-    optional common.v1.PageRequest page = 1;
+    optional common.PageRequest page = 1;
     // 查询参数
     CommentQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 评论列表
     repeated Comment rows = 2;
   }

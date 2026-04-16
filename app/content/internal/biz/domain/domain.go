@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	domainbase "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -46,6 +46,6 @@ func (d *DomainDomain) Update(ctx context.Context, domain *model.Domain) (*model
 	return reply, err
 }
 
-func (d *DomainDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *cv1.PageReply, error) {
+func (d *DomainDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
 	return d.domainRepo.GetPage(ctx, d.Db, page, req)
 }

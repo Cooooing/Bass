@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.content.v1;
 
 import "google/api/annotations.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "content/v1/model.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
@@ -61,13 +61,13 @@ message UpdateTag {
 message PageTag {
   message Request {
     // 分页参数
-    optional common.v1.PageRequest page = 1;
+    optional common.PageRequest page = 1;
     // 查询参数
     TagQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 标签列表
     repeated Tag rows = 2;
   }

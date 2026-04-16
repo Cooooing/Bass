@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/constant"
 	"context"
 	"notify/internal/biz/model"
@@ -41,7 +41,7 @@ func (r *NotificationMetaRepo) GetOne(ctx context.Context, tx *gen.Client, req *
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("notification meta is not found")
+		return nil, common.ErrorBadRequest("notification meta is not found")
 	}
 	return &model.NotificationMeta{NotificationMeta: t}, err
 }
@@ -64,7 +64,7 @@ func (r *NotificationMetaRepo) GetList(ctx context.Context, tx *gen.Client, req 
 	return records, nil
 }
 
-func (r *NotificationMetaRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.NotificationMetaGetReq) ([]*model.NotificationMeta, *cv1.PageReply, error) {
+func (r *NotificationMetaRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.NotificationMetaGetReq) ([]*model.NotificationMeta, *common.PageReply, error) {
 	var (
 		notificationMetas []*model.NotificationMeta
 		err               error
@@ -85,7 +85,7 @@ func (r *NotificationMetaRepo) GetPage(ctx context.Context, tx *gen.Client, page
 	for _, item := range list {
 		notificationMetas = append(notificationMetas, &model.NotificationMeta{NotificationMeta: item})
 	}
-	return notificationMetas, &cv1.PageReply{
+	return notificationMetas, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

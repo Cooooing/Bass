@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.infra.v1;
 
 import "google/api/annotations.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "infra/v1/model.proto";
 
 option go_package = "common/api/gen/infra/v1;v1";
@@ -78,11 +78,11 @@ message AuditOss {
 
 message PageOssOss {
   message Request {
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     OssQueryParams query = 2;
   }
   message Reply {
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     repeated Oss rows = 2;
   }
 }

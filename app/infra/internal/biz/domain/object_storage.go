@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -53,7 +53,7 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 	var err error
 	infra, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return cv1.ErrorUnauthorized("infra not login")
+		return common.ErrorUnauthorized("infra not login")
 	}
 
 	err = d.objectStorageProvider.Status(ctx, key, enable)
@@ -74,7 +74,7 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 	return err
 }
 
-func (d *ObjectStorageDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *cv1.PageReply, error) {
+func (d *ObjectStorageDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
 	return d.objectStorageRepo.GetPage(ctx, d.Db, page, req)
 }
 

@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -47,7 +47,7 @@ func (s *UserService) RegisterHttp(hs *http.Server) {
 func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingUser_Request) (rsp *v1.UpdateSettingUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	update, err := s.userRepo.Update(ctx, s.Db, &model.User{User: &gen.User{
 		ID:                   user.ID,
@@ -71,7 +71,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingUs
 func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserUser_Request) (rsp *v1.GetCurrentUserUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: new(user.ID)})
 	if err != nil {
@@ -197,13 +197,13 @@ func (s *UserService) Page(ctx context.Context, req *v1.PageUser_Request) (rsp *
 	}, nil
 }
 
-func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarUser_Request) (rsp *cv1.ImageReply, err error) {
+func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarUser_Request) (rsp *common.ImageReply, err error) {
 	buf, err := s.userDomain.Avatar(ctx, req.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	return &cv1.ImageReply{
+	return &common.ImageReply{
 		Data:        buf,
 		ContentType: "image/png",
 	}, nil

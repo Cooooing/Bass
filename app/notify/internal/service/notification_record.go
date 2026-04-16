@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -40,7 +40,7 @@ func (s *NotificationRecordService) RegisterHttp(hs *http.Server) {
 func (s *NotificationRecordService) Page(ctx context.Context, req *v1.PageNotificationRecord_Request) (rsp *v1.PageNotificationRecord_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	records, page, err := s.notificationRecordDomain.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
 		ReceiverId: new(user.ID),
@@ -57,7 +57,7 @@ func (s *NotificationRecordService) Page(ctx context.Context, req *v1.PageNotifi
 func (s *NotificationRecordService) Read(ctx context.Context, req *v1.ReadNotificationRecord_Request) (rsp *v1.ReadNotificationRecord_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 
 	var (

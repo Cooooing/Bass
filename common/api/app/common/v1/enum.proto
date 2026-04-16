@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-package common.api.app.common.v1;
-
-option go_package = "common/api/gen/common/v1;v1";
-

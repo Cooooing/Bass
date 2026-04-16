@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/model"
@@ -17,7 +17,7 @@ type NotificationRecordRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *NotificationRecordGetReq) (*model.NotificationRecord, error)
 	GetList(ctx context.Context, tx *gen.Client, req *NotificationRecordGetReq) ([]*model.NotificationRecord, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *NotificationRecordGetReq) ([]*model.NotificationRecord, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *NotificationRecordGetReq) ([]*model.NotificationRecord, *common.PageReply, error)
 }
 
 type NotificationRecordGetReq struct {

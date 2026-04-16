@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/constant"
 	"context"
 	"signal/internal/biz/model"
@@ -58,7 +58,7 @@ func (r *NodeRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.NodeGet
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("Node is not found")
+		return nil, common.ErrorBadRequest("Node is not found")
 	}
 	return &model.Node{Node: t}, err
 }
@@ -97,7 +97,7 @@ func (r *NodeRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.NodeGe
 	return nodes, nil
 }
 
-func (r *NodeRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.NodeGetReq) ([]*model.Node, *cv1.PageReply, error) {
+func (r *NodeRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.NodeGetReq) ([]*model.Node, *common.PageReply, error) {
 	var (
 		nodes []*model.Node
 		err   error
@@ -118,7 +118,7 @@ func (r *NodeRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRe
 	for _, item := range list {
 		nodes = append(nodes, &model.Node{Node: item})
 	}
-	return nodes, &cv1.PageReply{
+	return nodes, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	common "common/api/gen/common"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -38,7 +38,7 @@ func (s *TwoFactorAuthenticationService) RegisterHttp(hs *http.Server) {
 func (s *TwoFactorAuthenticationService) Validate(ctx context.Context, req *v1.ValidateTwoFactorAuthentication_Request) (rsp *v1.ValidateTwoFactorAuthentication_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	validate := s.twoFactorAuthenticationDomain.Validate(ctx, user.TwofaSecret, req.Code)
 	return &v1.ValidateTwoFactorAuthentication_Reply{
@@ -49,10 +49,10 @@ func (s *TwoFactorAuthenticationService) Validate(ctx context.Context, req *v1.V
 func (s *TwoFactorAuthenticationService) Enable(ctx context.Context, req *v1.EnableTwoFactorAuthentication_Request) (rsp *v1.EnableTwoFactorAuthentication_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	if user.TwofaEnable {
-		return nil, cv1.ErrorBadRequest("2FA already enabled")
+		return nil, common.ErrorBadRequest("2FA already enabled")
 	}
 	buf, err := s.twoFactorAuthenticationDomain.Enable(ctx, user.Name)
 	if err != nil {
@@ -68,10 +68,10 @@ func (s *TwoFactorAuthenticationService) Enable(ctx context.Context, req *v1.Ena
 func (s *TwoFactorAuthenticationService) Disable(ctx context.Context, req *v1.DisableTwoFactorAuthentication_Request) (rsp *v1.DisableTwoFactorAuthentication_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	if !user.TwofaEnable {
-		return nil, cv1.ErrorBadRequest("2FA already disabled")
+		return nil, common.ErrorBadRequest("2FA already disabled")
 	}
 	err = s.twoFactorAuthenticationDomain.Disable(ctx, user.Name, user.TwofaSecret, req.Code)
 	return &v1.DisableTwoFactorAuthentication_Reply{}, err
@@ -80,7 +80,7 @@ func (s *TwoFactorAuthenticationService) Disable(ctx context.Context, req *v1.Di
 func (s *TwoFactorAuthenticationService) Confirm(ctx context.Context, req *v1.ConfirmTwoFactorAuthentication_Request) (rsp *v1.ConfirmTwoFactorAuthentication_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	err = s.twoFactorAuthenticationDomain.Confirm(ctx, user.Name, req.Code)
 	return &v1.ConfirmTwoFactorAuthentication_Reply{}, err

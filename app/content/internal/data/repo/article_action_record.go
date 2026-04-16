@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -47,7 +47,7 @@ func (r *ArticleActionRecordRepo) GetOne(ctx context.Context, tx *gen.Client, re
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("article action record is not found")
+		return nil, common.ErrorBadRequest("article action record is not found")
 	}
 	return &model.ArticleActionRecord{ArticleActionRecord: c}, err
 }
@@ -69,7 +69,7 @@ func (r *ArticleActionRecordRepo) GetList(ctx context.Context, tx *gen.Client, r
 	return articleActionRecords, nil
 }
 
-func (r *ArticleActionRecordRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, *cv1.PageReply, error) {
+func (r *ArticleActionRecordRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error) {
 	var (
 		articleActionRecords []*model.ArticleActionRecord
 		err                  error
@@ -90,7 +90,7 @@ func (r *ArticleActionRecordRepo) GetPage(ctx context.Context, tx *gen.Client, p
 	for i := range list {
 		articleActionRecords = append(articleActionRecords, &model.ArticleActionRecord{ArticleActionRecord: list[i]})
 	}
-	return articleActionRecords, &cv1.PageReply{
+	return articleActionRecords, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

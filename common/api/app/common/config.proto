@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package common.api.app.common;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "common/api/gen/common;common";
+
+message Bootstrap {
+  message Server {
+    string name = 1;
+    string version = 2;
+    string mode = 3;
+  }
+  Server server = 1;
+  message Config {
+    Consul consul = 1;
+    message Consul {
+      string address = 1;
+      string token = 2;
+      string path = 3;
+      google.protobuf.Duration timeout = 4;
+    }
+  }
+  Config config = 2;
+  message Log {
+    string level = 1; // debug, info, warn, error, fatal, panic
+    string file = 2;
+  }
+  Log log = 3;
+}
+
+message HTTP {
+  string network = 1;
+  string host = 2;
+  int32 port = 3;
+  google.protobuf.Duration timeout = 4;
+}
+
+message GRPC {
+  string network = 1;
+  string host = 2;
+  int32 port = 3;
+  google.protobuf.Duration timeout = 4;
+}
+

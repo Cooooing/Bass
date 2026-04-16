@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"context"
 	"infra/internal/biz/model"
 	"infra/internal/data/ent/gen"
@@ -18,7 +18,7 @@ type ObjectStorageRepo interface {
 
 	Exist(ctx context.Context, tx *gen.Client, req *ObjectStorageGetReq) (bool, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ObjectStorageGetReq) ([]*model.ObjectStorage, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ObjectStorageGetReq) ([]*model.ObjectStorage, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error)
 }
 
 type ObjectStorageGetReq struct {
@@ -26,7 +26,7 @@ type ObjectStorageGetReq struct {
 	Bucket        *string
 	Key           *string
 	MimeType      *string
-	Size          *cv1.Int64Range
+	Size          *common.Int64Range
 	Blocked       *bool
 	BlockedByName *string
 }

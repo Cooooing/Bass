@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/constant"
 	"context"
 	"user/internal/biz/model"
@@ -67,7 +67,7 @@ func (r *UserRelationRepo) GetList(ctx context.Context, tx *gen.Client, req *rep
 	return records, nil
 }
 
-func (r *UserRelationRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *cv1.PageReply, error) {
+func (r *UserRelationRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error) {
 	var (
 		notificationRecords []*model.UserRelation
 		err                 error
@@ -88,7 +88,7 @@ func (r *UserRelationRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv
 	for _, item := range list {
 		notificationRecords = append(notificationRecords, &model.UserRelation{UserRelation: item})
 	}
-	return notificationRecords, &cv1.PageReply{
+	return notificationRecords, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

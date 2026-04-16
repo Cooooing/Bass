@@ -4,7 +4,7 @@ package common.api.app.notify.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "notify/v1/model.proto";
 import "notify/v1/enum.proto";
 
@@ -42,13 +42,13 @@ service NotifyNotificationTemplateService {
 message PageNotificationTemplate {
   message Request {
     // 分页参数
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     // 查询条件
     NotificationTemplateQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 模板列表
     repeated NotificationTemplate rows = 2;
   }

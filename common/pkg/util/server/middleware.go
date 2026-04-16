@@ -1,7 +1,7 @@
 package server
 
 import (
-	v1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
@@ -48,7 +48,7 @@ func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error
 	}
 
 	// --- 图片响应 ---
-	if imageReply, ok := data.(*v1.ImageReply); ok {
+	if imageReply, ok := data.(*common.ImageReply); ok {
 		w.Header().Set("Content-Type", imageReply.ContentType)
 		w.WriteHeader(http.StatusOK)
 		_, err := w.Write(imageReply.Data)
@@ -110,11 +110,11 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 			// 毫秒级时间戳
 			timestampStr := GetHeader(ctx, constant.HeaderTimestamp)
 			if timestampStr == "" {
-				return nil, v1.ErrorUnauthorized("timestamp is required")
+				return nil, common.ErrorUnauthorized("timestamp is required")
 			}
 			timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
 			if err != nil {
-				return nil, v1.ErrorUnauthorized("invalid timestamp format")
+				return nil, common.ErrorUnauthorized("invalid timestamp format")
 			}
 
 			diff := time.Now().Sub(time.UnixMilli(timestamp))
@@ -123,7 +123,7 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 			}
 
 			if diff > 10*time.Second {
-				return nil, v1.ErrorUnauthorized("timestamp is expired or clock unsynced")
+				return nil, common.ErrorUnauthorized("timestamp is expired or clock unsynced")
 			}
 			return handler(ctx, req)
 		}
@@ -139,13 +139,13 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 			}
 			nonce := GetHeader(ctx, constant.HeaderNonce)
 			if nonce == "" {
-				return nil, v1.ErrorUnauthorized("nonce is required")
+				return nil, common.ErrorUnauthorized("nonce is required")
 			}
 			if len(nonce) > 256 {
-				return nil, v1.ErrorUnauthorized("nonce is too long")
+				return nil, common.ErrorUnauthorized("nonce is too long")
 			}
 			if ok, err := redisClient.Client.SetNX(ctx, constant.GetKeyRequestNonce(nonce), "1", 15*time.Second).Result(); err != nil || !ok {
-				return nil, v1.ErrorUnauthorized("nonce is invalid")
+				return nil, common.ErrorUnauthorized("nonce is invalid")
 			}
 			return handler(ctx, req)
 		}
@@ -170,7 +170,7 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 				return nil, fmt.Errorf("invalid token: %w", err)
 			}
 			if token != "" && userInfo == nil {
-				return nil, v1.ErrorUnauthorized("token is invalid")
+				return nil, common.ErrorUnauthorized("token is invalid")
 			}
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)

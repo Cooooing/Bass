@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -71,7 +71,7 @@ func (r *CommentRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Comm
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("comment is not found")
+		return nil, common.ErrorBadRequest("comment is not found")
 	}
 	return &model.Comment{Comment: c, WithArticle: req.WithArticle}, err
 }
@@ -93,7 +93,7 @@ func (r *CommentRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.Com
 	return comments, nil
 }
 
-func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *cv1.PageReply, error) {
+func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *common.PageReply, error) {
 	var (
 		comments []*model.Comment
 		err      error
@@ -114,7 +114,7 @@ func (r *CommentRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.Pag
 	for i := range list {
 		comments = append(comments, &model.Comment{Comment: list[i], WithArticle: req.WithArticle})
 	}
-	return comments, &cv1.PageReply{
+	return comments, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
@@ -177,7 +177,7 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 
 func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, req *repo.CommentGetReq) (*model.Comment, error) {
 	if req.ArticleId == nil {
-		return nil, cv1.ErrorBadRequest("articleId is required")
+		return nil, common.ErrorBadRequest("articleId is required")
 	}
 	query := client.Comment.Query()
 	query = r.getQuery(query, req)
@@ -190,7 +190,7 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 
 func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
 	if len(req.ArticleIds) == 0 {
-		return nil, cv1.ErrorBadRequest("articleIds is required")
+		return nil, common.ErrorBadRequest("articleIds is required")
 	}
 	articleIdsAny := make([]any, len(req.ArticleIds))
 	for i, v := range req.ArticleIds {

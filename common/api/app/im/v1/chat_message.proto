@@ -4,7 +4,7 @@ package common.api.app.im.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "im/v1/model.proto";
 import "im/v1/enum.proto";
 
@@ -64,13 +64,13 @@ message RevokeChatMessage {
 message PageChatMessage {
   message Request {
     // 分页参数
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     // 查询参数
     ChatMessageQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 消息信息
     repeated ChatMessage rows = 2;
   }

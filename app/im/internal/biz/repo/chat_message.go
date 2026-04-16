@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	"context"
 	"im/internal/biz/model"
 	"im/internal/data/ent/gen"
@@ -14,7 +14,7 @@ type ChatMessageRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *ChatMessageGetReq) (*model.ChatMessage, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ChatMessageGetReq) ([]*model.ChatMessage, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ChatMessageGetReq) ([]*model.ChatMessage, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ChatMessageGetReq) ([]*model.ChatMessage, *common.PageReply, error)
 }
 
 type ChatMessageGetReq struct {

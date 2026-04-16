@@ -1,7 +1,7 @@
 package doamin
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	notifyv1 "common/api/gen/notify/v1"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
@@ -46,7 +46,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 			return err
 		}
 		if exist {
-			return cv1.ErrorBadRequest("relation already exists")
+			return common.ErrorBadRequest("relation already exists")
 		}
 
 		if isAdd {
@@ -95,7 +95,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 
 	u, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return cv1.ErrorUnauthorized("user not login")
+		return common.ErrorUnauthorized("user not login")
 	}
 	// 发送通知，仅关注通知
 	if relationType == v1.UserRelationType_USER_RELATION_TYPE_FOLLOW {
@@ -123,6 +123,6 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 	return nil
 }
 
-func (d *UserRelationDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *cv1.PageReply, error) {
+func (d *UserRelationDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error) {
 	return d.userRelationRepo.GetPage(ctx, d.Db, page, req)
 }

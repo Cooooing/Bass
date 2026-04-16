@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "google/api/annotations.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "im/v1/model.proto";
 
 option go_package = "common/api/gen/im/v1;v1";
@@ -60,13 +60,13 @@ message DismissChatGroup {
 message PageChatGroup {
   message Request {
     // 分页参数
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     // 查询参数
     ChatGroupQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 1;
+    common.PageReply page = 1;
     // 群组列表
     repeated ChatGroup rows = 2;
   }

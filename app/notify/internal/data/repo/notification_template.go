@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	"context"
@@ -178,7 +178,7 @@ func (r *NotificationTemplateRepo) GetList(ctx context.Context, tx *gen.Client, 
 	return records, nil
 }
 
-func (r *NotificationTemplateRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *cv1.PageReply, error) {
+func (r *NotificationTemplateRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *common.PageReply, error) {
 	var err error
 	notificationTemplates := make([]*model.NotificationTemplate, 0)
 	page = constant.PageValid(page)
@@ -197,7 +197,7 @@ func (r *NotificationTemplateRepo) GetPage(ctx context.Context, tx *gen.Client, 
 	for _, item := range list {
 		notificationTemplates = append(notificationTemplates, &model.NotificationTemplate{NotificationTemplate: item})
 	}
-	return notificationTemplates, &cv1.PageReply{
+	return notificationTemplates, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

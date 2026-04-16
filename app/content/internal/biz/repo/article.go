@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"content/internal/biz/model"
 	"content/internal/data/ent/gen"
@@ -24,7 +24,7 @@ type ArticleRepo interface {
 	Exist(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (bool, error)
 	GetOne(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (*model.Article, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ArticleGetReq) ([]*model.Article, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ArticleGetReq) ([]*model.Article, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ArticleGetReq) ([]*model.Article, *common.PageReply, error)
 }
 
 type ArticleGetReq struct {
@@ -54,7 +54,7 @@ type ArticleActionRecordRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *ArticleActionRecordReq) (*model.ArticleActionRecord, error)
 	GetList(ctx context.Context, tx *gen.Client, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, *cv1.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error)
 }
 
 type ArticleActionRecordReq struct {

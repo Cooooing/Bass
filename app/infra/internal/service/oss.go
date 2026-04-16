@@ -1,7 +1,7 @@
 package service
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/infra/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -64,7 +64,7 @@ func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Request) (*v1.A
 }
 
 func (s *OssService) Page(ctx context.Context, req *v1.PageOssOss_Request) (*v1.PageOssOss_Reply, error) {
-	req.Page = util.OrDefault(req.Page, &cv1.PageRequest{})
+	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
 	req.Query = util.OrDefault(req.Query, &v1.OssQueryParams{})
 	ObjectStorages, page, err := s.ossObjectStorageDomain.Page(ctx, req.Page, &repo.ObjectStorageGetReq{
 		Provider:      req.Query.Provider,

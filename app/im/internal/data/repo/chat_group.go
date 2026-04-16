@@ -1,7 +1,7 @@
 package repo
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/im/v1"
 	"common/pkg/constant"
 	"context"
@@ -74,7 +74,7 @@ func (r *ChatGroupRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Ch
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cv1.ErrorBadRequest("chatGroup is not found")
+		return nil, common.ErrorBadRequest("chatGroup is not found")
 	}
 	return &model.ChatGroup{ChatGroup: t}, err
 }
@@ -97,7 +97,7 @@ func (r *ChatGroupRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.C
 	return chatGroups, nil
 }
 
-func (r *ChatGroupRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.PageRequest, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, *cv1.PageReply, error) {
+func (r *ChatGroupRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, *common.PageReply, error) {
 	var (
 		chatGroups []*model.ChatGroup
 		err        error
@@ -118,7 +118,7 @@ func (r *ChatGroupRepo) GetPage(ctx context.Context, tx *gen.Client, page *cv1.P
 	for _, item := range list {
 		chatGroups = append(chatGroups, &model.ChatGroup{ChatGroup: item})
 	}
-	return chatGroups, &cv1.PageReply{
+	return chatGroups, &common.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

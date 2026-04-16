@@ -1,7 +1,7 @@
 package domain
 
 import (
-	cv1 "common/api/gen/common/v1"
+	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	notifyv1 "common/api/gen/notify/v1"
 	userv1 "common/api/gen/user/v1"
@@ -39,7 +39,7 @@ func NewCommentDomain(baseDomain *domainbase.BaseDomain, commentRepo repo.Commen
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *model.Comment, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cv1.ErrorUnauthorized("user not login")
+		return nil, common.ErrorUnauthorized("user not login")
 	}
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		// 回复文章
@@ -51,7 +51,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 			return err
 		}
 		if !exist.Commentable {
-			return cv1.ErrorBadRequest("article not commentable")
+			return common.ErrorBadRequest("article not commentable")
 		}
 
 		// 回复评论
@@ -124,9 +124,9 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 	return c, err
 }
 
-func (d *CommentDomain) Page(ctx context.Context, page *cv1.PageRequest, req *repo.CommentGetReq) (*cv1.PageReply, []*model.Comment, error) {
+func (d *CommentDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.CommentGetReq) (*common.PageReply, []*model.Comment, error) {
 	var (
-		pageReply *cv1.PageReply
+		pageReply *common.PageReply
 		reply     []*model.Comment
 		err       error
 	)

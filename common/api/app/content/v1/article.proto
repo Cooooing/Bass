@@ -4,7 +4,7 @@ package common.api.app.content.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
-import "common/v1/common.proto";
+import "common/common.proto";
 import "content/v1/model.proto";
 import "content/v1/enum.proto";
 
@@ -195,13 +195,13 @@ message DeleteArticle {
 message PageArticle {
   message Request {
     // 分页参数
-    common.v1.PageRequest page = 1;
+    common.PageRequest page = 1;
     // 查询参数
     ArticleQueryParams query = 2;
   }
   message Reply {
     // 分页信息
-    common.v1.PageReply page = 2;
+    common.PageReply page = 2;
     // 文章列表
     repeated Article rows = 1;
   }

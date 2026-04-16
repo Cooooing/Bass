@@ -3,16 +3,15 @@ syntax = "proto3";
 package common.api.app.signal.v1;
 
 import "google/api/annotations.proto";
-import "signal/v1/model.proto";
 import "signal/v1/enum.proto";
+import "signal/v1/model.proto";
 
 option go_package = "common/api/gen/signal/v1;v1";
 
 // Node 服务
 service SignalNodeService {
-
   // 保存节点
-  rpc Save (SaveSignalNode.Request) returns (SaveSignalNode.Reply) {
+  rpc Save(SaveSignalNode.Request) returns (SaveSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/save"
       body: "*"
@@ -20,7 +19,7 @@ service SignalNodeService {
   }
 
   // 更新节点信息
-  rpc Update (UpdateSignalNode.Request) returns (UpdateSignalNode.Reply) {
+  rpc Update(UpdateSignalNode.Request) returns (UpdateSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/update"
       body: "*"
@@ -28,7 +27,7 @@ service SignalNodeService {
   }
 
   // 获取密钥
-  rpc GetSecret (GetSecretSignalNode.Request) returns (GetSecretSignalNode.Reply) {
+  rpc GetSecret(GetSecretSignalNode.Request) returns (GetSecretSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/secret"
       body: "*"
@@ -36,7 +35,7 @@ service SignalNodeService {
   }
 
   // 更新密钥
-  rpc UpdateSecret (UpdateSecretSignalNode.Request) returns (UpdateSecretSignalNode.Reply) {
+  rpc UpdateSecret(UpdateSecretSignalNode.Request) returns (UpdateSecretSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/update-secret"
       body: "*"
@@ -44,7 +43,7 @@ service SignalNodeService {
   }
 
   // 查询节点列表
-  rpc List (ListSignalNode.Request) returns (ListSignalNode.Reply) {
+  rpc List(ListSignalNode.Request) returns (ListSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/list"
       body: "*"
@@ -52,7 +51,7 @@ service SignalNodeService {
   }
 
   // 客户端调度/协商
-  rpc Negotiate (NegotiateSignalNode.Request) returns (NegotiateSignalNode.Reply) {
+  rpc Negotiate(NegotiateSignalNode.Request) returns (NegotiateSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/negotiate"
       body: "*"
@@ -60,7 +59,7 @@ service SignalNodeService {
   }
 
   // 注册节点
-  rpc Register (RegisterSignalNode.Request) returns (RegisterSignalNode.Reply) {
+  rpc Register(RegisterSignalNode.Request) returns (RegisterSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/register"
       body: "*"
@@ -68,7 +67,7 @@ service SignalNodeService {
   }
 
   // 注销节点
-  rpc Unregister (UnregisterSignalNode.Request) returns (UnregisterSignalNode.Reply) {
+  rpc Unregister(UnregisterSignalNode.Request) returns (UnregisterSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/unregister"
       body: "*"
@@ -76,7 +75,7 @@ service SignalNodeService {
   }
 
   // 获取 websocket ticket
-  rpc Ticket (TicketSignalNode.Request) returns (TicketSignalNode.Reply) {
+  rpc Ticket(TicketSignalNode.Request) returns (TicketSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/ticket"
       body: "*"
@@ -84,7 +83,7 @@ service SignalNodeService {
   }
 
   // 用户上线
-  rpc Online (OnlineSignalNode.Request) returns (OnlineSignalNode.Reply) {
+  rpc Online(OnlineSignalNode.Request) returns (OnlineSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/online"
       body: "*"
@@ -92,7 +91,7 @@ service SignalNodeService {
   }
 
   // 用户下线
-  rpc Offline (OfflineSignalNode.Request) returns (OfflineSignalNode.Reply) {
+  rpc Offline(OfflineSignalNode.Request) returns (OfflineSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/offline"
       body: "*"
@@ -100,16 +99,13 @@ service SignalNodeService {
   }
 
   // 在线用户列表
-  rpc OnlineList (OnlineListSignalNode.Request) returns (OnlineListSignalNode.Reply) {
+  rpc OnlineList(OnlineListSignalNode.Request) returns (OnlineListSignalNode.Reply) {
     option (google.api.http) = {
       post: "/v1/signal-node/online-list"
-      body:"*"
+      body: "*"
     };
   }
-
 }
-
-
 
 message SaveSignalNode {
   message Request {

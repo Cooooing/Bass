@@ -37,8 +37,12 @@ bin/
 
 /common/api/gen/**
 !/common/api/gen/.gitkeep
+/common/buf.lock
+
 
 /deploy/.prod.env
+
+
 .claude/
 .gitnexus
 AGENTS.md

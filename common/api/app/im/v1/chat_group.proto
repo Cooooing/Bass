@@ -2,17 +2,16 @@ syntax = "proto3";
 
 package common.api.app.im.v1;
 
-import "google/api/annotations.proto";
 import "common/common.proto";
+import "google/api/annotations.proto";
 import "im/v1/model.proto";
 
 option go_package = "common/api/gen/im/v1;v1";
 
 // ChatGroup 服务
 service IMChatGroupService {
-
   // 创建群组
-  rpc Create (CreateChatGroup.Request) returns (CreateChatGroup.Reply) {
+  rpc Create(CreateChatGroup.Request) returns (CreateChatGroup.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-group/create"
       body: "*"
@@ -20,7 +19,7 @@ service IMChatGroupService {
   }
 
   // 解散群组
-  rpc Dismiss (DismissChatGroup.Request) returns (DismissChatGroup.Reply) {
+  rpc Dismiss(DismissChatGroup.Request) returns (DismissChatGroup.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-group/dismiss"
       body: "*"
@@ -28,13 +27,12 @@ service IMChatGroupService {
   }
 
   // 查询群组列表
-  rpc Page (PageChatGroup.Request) returns (PageChatGroup.Reply) {
+  rpc Page(PageChatGroup.Request) returns (PageChatGroup.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-group/page"
       body: "*"
     };
   }
-
 }
 
 message CreateChatGroup {

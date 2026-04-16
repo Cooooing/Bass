@@ -2,19 +2,18 @@ syntax = "proto3";
 
 package common.api.app.im.v1;
 
-import "google/api/annotations.proto";
-import "validate/validate.proto";
 import "common/common.proto";
-import "im/v1/model.proto";
+import "google/api/annotations.proto";
 import "im/v1/enum.proto";
+import "im/v1/model.proto";
+import "validate/validate.proto";
 
 option go_package = "common/api/gen/im/v1;v1";
 
 // ChatMessage 服务
 service IMChatMessageService {
-
   // 发送消息
-  rpc Send (SendChatMessage.Request) returns (SendChatMessage.Reply) {
+  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-message/send"
       body: "*"
@@ -22,7 +21,7 @@ service IMChatMessageService {
   }
 
   // 撤回消息
-  rpc Revoke (RevokeChatMessage.Request) returns (RevokeChatMessage.Reply) {
+  rpc Revoke(RevokeChatMessage.Request) returns (RevokeChatMessage.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-message/revoke"
       body: "*"
@@ -30,13 +29,12 @@ service IMChatMessageService {
   }
 
   // 查询消息数据
-  rpc Page (PageChatMessage.Request) returns (PageChatMessage.Reply) {
+  rpc Page(PageChatMessage.Request) returns (PageChatMessage.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-message/page"
       body: "*"
     };
   }
-
 }
 
 message SendChatMessage {
@@ -46,7 +44,10 @@ message SendChatMessage {
     // 接收者类型
     ReceiverType receiver_type = 2 [(validate.rules).enum = {defined_only: true}];
     // 消息类型
-    MessageType type = 5 [(validate.rules).enum = {defined_only: true, not_in: [0]}];
+    MessageType type = 5 [(validate.rules).enum = {
+      defined_only: true
+      not_in: [0]
+    }];
     // 内容
     string content = 6;
   }

@@ -2,17 +2,16 @@ syntax = "proto3";
 
 package common.api.app.im.v1;
 
-import "google/api/annotations.proto";
 import "common/common.proto";
+import "google/api/annotations.proto";
 import "im/v1/model.proto";
 
 option go_package = "common/api/gen/im/v1;v1";
 
 // ChatSession 服务
 service IMChatSessionService {
-
   // 免打扰
-  rpc MarkMuted (MarkMutedChatSession.Request) returns (MarkMutedChatSession.Reply) {
+  rpc MarkMuted(MarkMutedChatSession.Request) returns (MarkMutedChatSession.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-session/mute"
       body: "*"
@@ -20,7 +19,7 @@ service IMChatSessionService {
   }
 
   // 置顶
-  rpc MarkPinned (MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Reply) {
+  rpc MarkPinned(MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-session/pin"
       body: "*"
@@ -28,7 +27,7 @@ service IMChatSessionService {
   }
 
   // 标为已读
-  rpc MarkRead (MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {
+  rpc MarkRead(MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-session/read"
       body: "*"
@@ -36,13 +35,12 @@ service IMChatSessionService {
   }
 
   // 查询会话数据
-  rpc Page (PageChatSession.Request) returns (PageChatSession.Reply) {
+  rpc Page(PageChatSession.Request) returns (PageChatSession.Reply) {
     option (google.api.http) = {
       post: "/v1/chat-session/page"
       body: "*"
     };
   }
-
 }
 
 message MarkMutedChatSession {

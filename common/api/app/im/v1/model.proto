@@ -3,8 +3,8 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "google/protobuf/timestamp.proto";
-import "user/v1/model.proto";
 import "im/v1/enum.proto";
+import "user/v1/model.proto";
 
 option go_package = "common/api/gen/im/v1;v1";
 

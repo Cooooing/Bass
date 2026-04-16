@@ -6,10 +6,8 @@ option go_package = "common/api/gen/infra/v1;v1";
 
 // Sms 服务
 service InfraSmsService {
-
   // 发送短信
-  rpc Send (SendSms.Request) returns (SendSms.Reply);
-
+  rpc Send(SendSms.Request) returns (SendSms.Reply);
 }
 
 message SendSms {

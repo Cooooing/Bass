@@ -2,19 +2,18 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
+import "common/common.proto";
+import "content/v1/enum.proto";
+import "content/v1/model.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
-import "common/common.proto";
-import "content/v1/model.proto";
-import "content/v1/enum.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
 // Article 服务
 service ContentArticleService {
-
   // 新增文章
-  rpc AddArticle (AddArticle.Request) returns (AddArticle.Reply) {
+  rpc AddArticle(AddArticle.Request) returns (AddArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/add"
       body: "*"
@@ -22,7 +21,7 @@ service ContentArticleService {
   }
 
   // 更新草稿
-  rpc UpdateDraft (UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {
+  rpc UpdateDraft(UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/update-draft"
       body: "*"
@@ -30,7 +29,7 @@ service ContentArticleService {
   }
 
   // 发布文章（从草稿发布）
-  rpc Publish (PublishArticle.Request) returns (PublishArticle.Reply) {
+  rpc Publish(PublishArticle.Request) returns (PublishArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/publish"
       body: "*"
@@ -38,7 +37,7 @@ service ContentArticleService {
   }
 
   // 添加附言
-  rpc AddPostscript (AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {
+  rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/add-postscript"
       body: "*"
@@ -46,7 +45,7 @@ service ContentArticleService {
   }
 
   // 修改文章（管理员使用）
-  rpc UpdateArticle (UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {
+  rpc UpdateArticle(UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/update"
       body: "*"
@@ -54,7 +53,7 @@ service ContentArticleService {
   }
 
   // 删除文章（仅草稿）
-  rpc Delete (DeleteArticle.Request) returns (DeleteArticle.Reply) {
+  rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/delete"
       body: "*"
@@ -62,7 +61,7 @@ service ContentArticleService {
   }
 
   // 查询文章
-  rpc Page (PageArticle.Request) returns (PageArticle.Reply) {
+  rpc Page(PageArticle.Request) returns (PageArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/page"
       body: "*"
@@ -70,7 +69,7 @@ service ContentArticleService {
   }
 
   // 查询单篇文章
-  rpc GetOne (GetOneArticle.Request) returns (GetOneArticle.Reply) {
+  rpc GetOne(GetOneArticle.Request) returns (GetOneArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/get-one"
       body: "*"
@@ -78,7 +77,7 @@ service ContentArticleService {
   }
 
   // 点赞文章
-  rpc Like (LikeArticle.Request) returns (LikeArticle.Reply) {
+  rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/like"
       body: "*"
@@ -86,7 +85,7 @@ service ContentArticleService {
   }
 
   // 感谢文章
-  rpc Thank (ThankArticle.Request) returns (ThankArticle.Reply) {
+  rpc Thank(ThankArticle.Request) returns (ThankArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/thank"
       body: "*"
@@ -94,7 +93,7 @@ service ContentArticleService {
   }
 
   // 收藏文章
-  rpc Collect (CollectArticle.Request) returns (CollectArticle.Reply) {
+  rpc Collect(CollectArticle.Request) returns (CollectArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/collect"
       body: "*"
@@ -102,7 +101,7 @@ service ContentArticleService {
   }
 
   // 关注文章
-  rpc Watch (WatchArticle.Request) returns (WatchArticle.Reply) {
+  rpc Watch(WatchArticle.Request) returns (WatchArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/watch"
       body: "*"
@@ -110,7 +109,7 @@ service ContentArticleService {
   }
 
   // 打赏文章
-  rpc Reward (RewardArticle.Request) returns (RewardArticle.Reply) {
+  rpc Reward(RewardArticle.Request) returns (RewardArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/reward"
       body: "*"
@@ -118,13 +117,12 @@ service ContentArticleService {
   }
 
   // 采纳评论
-  rpc AcceptAnswer (AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {
+  rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/article/accept-answer"
       body: "*"
     };
   }
-
 }
 
 message AddArticle {

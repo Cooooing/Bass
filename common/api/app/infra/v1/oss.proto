@@ -2,17 +2,16 @@ syntax = "proto3";
 
 package common.api.app.infra.v1;
 
-import "google/api/annotations.proto";
 import "common/common.proto";
+import "google/api/annotations.proto";
 import "infra/v1/model.proto";
 
 option go_package = "common/api/gen/infra/v1;v1";
 
 // Oss 服务
 service InfraOssService {
-
   // 获取上传文件凭证
-  rpc GetUploadToken (GetUploadTokenOss.Request) returns (GetUploadTokenOss.Reply) {
+  rpc GetUploadToken(GetUploadTokenOss.Request) returns (GetUploadTokenOss.Reply) {
     option (google.api.http) = {
       post: "/v1/oss/get-upload-token"
       body: "*"
@@ -20,7 +19,7 @@ service InfraOssService {
   }
 
   // 审核 oss 对象
-  rpc Audit (AuditOss.Request) returns (AuditOss.Reply) {
+  rpc Audit(AuditOss.Request) returns (AuditOss.Reply) {
     option (google.api.http) = {
       post: "/v1/oss/audit"
       body: "*"
@@ -28,7 +27,7 @@ service InfraOssService {
   }
 
   // 分页查询 oss 对象
-  rpc Page (PageOssOss.Request) returns (PageOssOss.Reply) {
+  rpc Page(PageOssOss.Request) returns (PageOssOss.Reply) {
     option (google.api.http) = {
       post: "/v1/oss/page"
       body: "*"
@@ -36,7 +35,7 @@ service InfraOssService {
   }
 
   // 七牛上传回调
-  rpc QiniuUploadCallback (QiniuUploadCallbackOss.Request) returns (QiniuUploadCallbackOss.Reply) {
+  rpc QiniuUploadCallback(QiniuUploadCallbackOss.Request) returns (QiniuUploadCallbackOss.Reply) {
     option (google.api.http) = {
       post: "/v1/oss/qiniu/upload-callback"
       body: "*"
@@ -44,13 +43,12 @@ service InfraOssService {
   }
 
   // 七牛增量审核回调
-  rpc QiniuIncrementAuditCallback (QiniuIncrementAuditCallbackOss.Request) returns (QiniuIncrementAuditCallbackOss.Reply) {
+  rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Request) returns (QiniuIncrementAuditCallbackOss.Reply) {
     option (google.api.http) = {
       post: "/v1/oss/qiniu/increment-audit-callback"
       body: "*"
     };
   }
-
 }
 
 message GetUploadTokenOss {

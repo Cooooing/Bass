@@ -6,7 +6,7 @@ replace common => ../../common
 
 require (
 	common v0.0.0-00010101000000-000000000000
-	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260105075216-c7a58ff59f80
+	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260404020628-f149714c1d54
 	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251106012513-9262193e351a
 	github.com/go-kratos/kratos/v2 v2.9.2
 	github.com/google/wire v0.7.0

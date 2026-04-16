@@ -2,18 +2,17 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
-import "google/api/annotations.proto";
 import "common/common.proto";
-import "content/v1/model.proto";
 import "content/v1/enum.proto";
+import "content/v1/model.proto";
+import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
-
   // 新增评论
-  rpc AddComment (AddComment.Request) returns (AddComment.Reply) {
+  rpc AddComment(AddComment.Request) returns (AddComment.Reply) {
     option (google.api.http) = {
       post: "/v1/comment/add"
       body: "*"
@@ -21,7 +20,7 @@ service ContentCommentService {
   }
 
   // 查询评论列表
-  rpc Page (PageComment.Request) returns (PageComment.Reply) {
+  rpc Page(PageComment.Request) returns (PageComment.Reply) {
     option (google.api.http) = {
       post: "/v1/comment/page"
       body: "*"
@@ -29,7 +28,7 @@ service ContentCommentService {
   }
 
   // 点赞评论
-  rpc Like (LikeComment.Request) returns (LikeComment.Reply) {
+  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {
     option (google.api.http) = {
       post: "/v1/comment/like"
       body: "*"
@@ -37,7 +36,7 @@ service ContentCommentService {
   }
 
   // 感谢评论
-  rpc Thank (ThankComment.Request) returns (ThankComment.Reply) {
+  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {
     option (google.api.http) = {
       post: "/v1/comment/thank"
       body: "*"
@@ -45,13 +44,12 @@ service ContentCommentService {
   }
 
   // 修改评论状态
-  rpc UpdateStatus (UpdateStatusComment.Request) returns (UpdateStatusComment.Reply) {
+  rpc UpdateStatus(UpdateStatusComment.Request) returns (UpdateStatusComment.Reply) {
     option (google.api.http) = {
       post: "/v1/comment/update-status"
       body: "*"
     };
   }
-
 }
 
 message AddComment {

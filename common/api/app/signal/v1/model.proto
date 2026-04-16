@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package common.api.app.signal.v1;
 
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 import "signal/v1/enum.proto";
 
 option go_package = "common/api/gen/signal/v1;v1";

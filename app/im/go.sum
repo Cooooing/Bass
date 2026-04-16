@@ -88,6 +88,7 @@ github.com/go-kratos/aegis v0.2.0 h1:dObzCDWn3XVjUkgxyBp6ZeWtx/do0DPZ7LY3yNSJLUQ
 github.com/go-kratos/aegis v0.2.0/go.mod h1:v0R2m73WgEEYB3XYu6aE2WcMwsZkJ/Rzuf5eVccm7bI=
 github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260105075216-c7a58ff59f80 h1:6D7AlyRlkhm6Rp3dfUY9FJ3OnE2OvD4w7MZJzM5eKlU=
 github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260105075216-c7a58ff59f80/go.mod h1:9w5VlLpnyOAeTmdXxARfrvVuoNXZvUzypK+DwsvMSXY=
+github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260404020628-f149714c1d54/go.mod h1:9w5VlLpnyOAeTmdXxARfrvVuoNXZvUzypK+DwsvMSXY=
 github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251217105121-fb8e43efb207 h1:mcDGdZGKxVgai7rcd+tNZZmk8RW5bYgExnENQWrIlQM=
 github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251217105121-fb8e43efb207/go.mod h1:ndKCtYSDbGN8ibl+vrknphv6ejJ5eSKfA36VndrzANo=
 github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20260105075216-c7a58ff59f80 h1:I9c5ML9lfYovkI1j+w/Vdh63kM61gFHFQMkUZsC8d84=

@@ -2,23 +2,21 @@ syntax = "proto3";
 
 package common.api.app.notify.v1;
 
-import "google/api/annotations.proto";
 import "common/common.proto";
+import "google/api/annotations.proto";
 import "notify/v1/model.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
 
 // NotificationMeta 服务
 service NotifyNotificationMetaService {
-
   // 查询通知元数据
-  rpc Page (PageNotificationMetaMeta.Request) returns (PageNotificationMetaMeta.Reply) {
+  rpc Page(PageNotificationMetaMeta.Request) returns (PageNotificationMetaMeta.Reply) {
     option (google.api.http) = {
       post: "/v1/notification-meta/page"
       body: "*"
     };
   }
-
 }
 
 message PageNotificationMetaMeta {

@@ -2,17 +2,16 @@ syntax = "proto3";
 
 package common.api.app.notify.v1;
 
-import "google/api/annotations.proto";
 import "common/common.proto";
+import "google/api/annotations.proto";
 import "notify/v1/model.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
 
 // NotificationRecord 服务
 service NotifyNotificationRecordService {
-
   // 查询通知详情数据
-  rpc Page (PageNotificationRecord.Request) returns (PageNotificationRecord.Reply) {
+  rpc Page(PageNotificationRecord.Request) returns (PageNotificationRecord.Reply) {
     option (google.api.http) = {
       post: "/v1/notification-record/page"
       body: "*"
@@ -20,13 +19,12 @@ service NotifyNotificationRecordService {
   }
 
   // 已读
-  rpc Read (ReadNotificationRecord.Request) returns (ReadNotificationRecord.Reply) {
+  rpc Read(ReadNotificationRecord.Request) returns (ReadNotificationRecord.Reply) {
     option (google.api.http) = {
       post: "/v1/notification-record/read"
       body: "*"
     };
   }
-
 }
 
 message PageNotificationRecord {

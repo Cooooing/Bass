@@ -1,9 +1,9 @@
 syntax = "proto3";
 package kratos.api.conf;
 
-option go_package = "infra/internal/conf/conf;conf";
-
 import "google/protobuf/duration.proto";
+
+option go_package = "infra/internal/conf/conf;conf";
 
 message Bootstrap {
   Server server = 1;
@@ -30,9 +30,9 @@ message Server {
     google.protobuf.Duration timeout = 4;
   }
   Oss oss = 7;
-  message Oss{
+  message Oss {
     string provider = 1;
-    message Qiniu{
+    message Qiniu {
       string access_key = 1;
       string secret_key = 2;
       string bucket = 3;
@@ -44,18 +44,17 @@ message Server {
       string increment_audit_callback_url = 9;
     }
     Qiniu qiniu = 10;
-    message Minio{
-    }
+    message Minio {}
     Minio minio = 11;
   }
   Email email = 8;
   message Email {
-    bool enable = 1;          // 是否启用邮件
-    string smtp_host = 2;     // SMTP 服务器地址
-    uint32 smtp_port = 3;     // SMTP 端口
-    string username = 4;      // SMTP 用户名
-    string password = 5;      // SMTP 密码
-    string from = 6;          // 发件人邮箱
+    bool enable = 1; // 是否启用邮件
+    string smtp_host = 2; // SMTP 服务器地址
+    uint32 smtp_port = 3; // SMTP 端口
+    string username = 4; // SMTP 用户名
+    string password = 5; // SMTP 密码
+    string from = 6; // 发件人邮箱
   }
   Sms sms = 9;
   message Sms {

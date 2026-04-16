@@ -43,7 +43,7 @@ message Int64Range {
   optional int64 end = 2;
 }
 
-message ImageReply{
+message ImageReply {
   // 图片数据
   bytes data = 1;
   // 图片类型

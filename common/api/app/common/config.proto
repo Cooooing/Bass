@@ -43,4 +43,3 @@ message GRPC {
   int32 port = 3;
   google.protobuf.Duration timeout = 4;
 }
-

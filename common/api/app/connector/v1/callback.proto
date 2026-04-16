@@ -3,8 +3,8 @@ syntax = "proto3";
 package common.api.app.connector.v1;
 
 import "google/api/annotations.proto";
-import "validate/validate.proto";
 import "signal/v1/model.proto";
+import "validate/validate.proto";
 
 option go_package = "common/api/gen/connector/v1;v1";
 
@@ -14,7 +14,7 @@ service ConnectorCallbackService {
   rpc Ping(PingConnector.Request) returns (PingConnector.Reply) {
     option (google.api.http) = {
       post: "/v1/connector/ping"
-      body:"*"
+      body: "*"
     };
   }
 
@@ -30,7 +30,7 @@ service ConnectorCallbackService {
   rpc Session(SessionConnector.Request) returns (SessionConnector.Reply) {
     option (google.api.http) = {
       post: "/v1/connector/session"
-      body:"*"
+      body: "*"
     };
   }
 

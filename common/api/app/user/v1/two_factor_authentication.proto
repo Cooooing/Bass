@@ -9,7 +9,6 @@ option go_package = "common/api/gen/user/v1;v1";
 
 // TwoFactorAuthentication 服务
 service UserTwoFactorAuthenticationService {
-
   // 验证
   rpc Validate(ValidateTwoFactorAuthentication.Request) returns (ValidateTwoFactorAuthentication.Reply) {
     option (google.api.http) = {
@@ -41,13 +40,15 @@ service UserTwoFactorAuthenticationService {
       body: "*"
     };
   }
-
 }
 
 message ValidateTwoFactorAuthentication {
   message Request {
     // 2FA 验证码
-    string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+    string code = 1 [(validate.rules).string = {
+      min_len: 6
+      max_len: 6
+    }];
   }
   message Reply {
     // 验证结果
@@ -68,7 +69,10 @@ message EnableTwoFactorAuthentication {
 message DisableTwoFactorAuthentication {
   message Request {
     // 2FA 验证码
-    string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+    string code = 1 [(validate.rules).string = {
+      min_len: 6
+      max_len: 6
+    }];
   }
   message Reply {}
 }
@@ -76,7 +80,10 @@ message DisableTwoFactorAuthentication {
 message ConfirmTwoFactorAuthentication {
   message Request {
     // 2FA 验证码
-    string code = 1 [(validate.rules).string = {min_len: 6, max_len: 6}];
+    string code = 1 [(validate.rules).string = {
+      min_len: 6
+      max_len: 6
+    }];
   }
   message Reply {}
 }

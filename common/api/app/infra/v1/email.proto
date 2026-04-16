@@ -6,10 +6,8 @@ option go_package = "common/api/gen/infra/v1;v1";
 
 // Email 服务
 service InfraEmailService {
-
   // 发送邮件
-  rpc Send (SendEmail.Request) returns (SendEmail.Reply);
-
+  rpc Send(SendEmail.Request) returns (SendEmail.Reply);
 }
 
 message SendEmail {

@@ -1,9 +1,9 @@
 syntax = "proto3";
 package kratos.api.conf;
 
-option go_package = "content/internal/conf/conf;conf";
-
 import "google/protobuf/duration.proto";
+
+option go_package = "content/internal/conf/conf;conf";
 
 message Bootstrap {
   Server server = 1;

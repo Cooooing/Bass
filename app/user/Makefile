@@ -32,6 +32,8 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go install entgo.io/ent/cmd/ent@latest
 
+	go install github.com/bufbuild/buf/cmd/buf@latest
+
 # ============ Compile config Proto ============
 .PHONY: config
 config:

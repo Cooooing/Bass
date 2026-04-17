@@ -14,14 +14,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends protobuf-compil
 
 WORKDIR /build
 
-COPY common/make/ ./common/make/
-COPY common/go.mod common/go.sum ./common/
+COPY common/make/ /build/common/make/
+COPY common/go.mod common/go.sum /build/common/
 COPY app/${APP_NAME}/go.mod app/${APP_NAME}/go.sum app/${APP_NAME}/Makefile /build/app/${APP_NAME}/
 RUN cd /build/common && go mod download && cd /build/app/${APP_NAME} && go mod download && make init
 
-COPY common common
-COPY app/${APP_NAME} /build/app/${APP_NAME}
-RUN ls /go/bin && cd app/${APP_NAME} && make gen && make build && upx -9 --lzma /build/app/${APP_NAME}/server -o /build/server
+COPY common/ /build/common/
+COPY app/${APP_NAME}/ /build/app/${APP_NAME}/
+RUN cd /build/app/${APP_NAME} && make gen && make build
+RUN upx -9 --lzma /build/app/${APP_NAME}/server -o /build/server
 
 # ===================== 第二阶段：制作轻量运行环境 =====================
 FROM scratch

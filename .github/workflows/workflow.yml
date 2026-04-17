@@ -44,7 +44,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          # 动态引用矩阵中的服务名，寻找对应的 Dockerfile
           file: common/Dockerfile
           push: true
           build-args: |

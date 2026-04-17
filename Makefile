@@ -20,7 +20,7 @@ $(SERVERS):
 wire ent config tidy gen all:
 	@$(MAKE) SUBTARGET=$@ $(SERVERS)
 
-include $(ROOT_DIR)/infra/make/common.mk
+include $(ROOT_DIR)/common/make/common.mk
 
 # help
 .PHONY: help

@@ -13,7 +13,7 @@ PROTO_THIRD_PARTY_DIR := $(COMMON_DIR)/api/third_party
 APP_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(INTERNAL_DIR))
 
 # Include common makefile
-include $(ROOT_DIR)/infra/make/common.mk
+include $(ROOT_DIR)/common/make/common.mk
 
 IGNORE_ERROR ?= 0 # 0: exit when error, 1: ignore error
 
@@ -56,7 +56,7 @@ build:
 	@echo "Building ${SERVER} service..."
 	@cd $(APP_DIR) && \
 	go mod tidy && go mod download && \
-	go build -trimpath -ldflags "-s -w" -o $(APP_DIR)/app ./cmd/...
+	go build -trimpath -ldflags "-s -w" -o $(APP_DIR)/server ./cmd/...
 
 # generate all code
 .PHONY: gen
@@ -64,5 +64,5 @@ gen: config ent wire api
 
 # run all of targets
 .PHONY: all
-all: init gen build
+all: init tidy gen build
 	@echo "Build completed successfully."

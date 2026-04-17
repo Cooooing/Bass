@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="infra/infra-compose.yml: Compose 部署" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker-local">
+  <configuration default="false" name="common/infra-compose.yml: Compose 部署" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker-local">
     <deployment type="docker-compose.yml">
       <settings>
-        <option name="sourceFilePath" value="infra/infra-compose.yml" />
+        <option name="sourceFilePath" value="common/infra-compose.yml" />
       </settings>
     </deployment>
     <method v="2" />

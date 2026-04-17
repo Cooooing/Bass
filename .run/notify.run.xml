@@ -9,7 +9,7 @@
             <option name="IS_IGNORE_MISSING_FILES" value="false"/>
             <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false"/>
             <ENTRIES>
-                <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH="infra/.env"/>
+                <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="false" PATH="common/.env"/>
                 <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false"/>
             </ENTRIES>
         </EXTENSION>

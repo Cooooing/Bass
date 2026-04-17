@@ -4,19 +4,17 @@ go 1.26.1
 
 require (
 	common v0.0.0-00010101000000-000000000000
-	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260404020628-f149714c1d54
 	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251217105121-fb8e43efb207
 	github.com/go-kratos/kratos/v2 v2.9.2
 	github.com/google/wire v0.7.0
 	github.com/gorilla/websocket v1.5.0
-	github.com/hashicorp/consul/api v1.33.2
 	github.com/hibiken/asynq v0.25.1
 	github.com/jinzhu/copier v0.4.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/samber/lo v1.53.0
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/metric v1.39.0
-	google.golang.org/grpc v1.77.0
+	google.golang.org/grpc v1.79.3
 	google.golang.org/protobuf v1.36.11
 )
 
@@ -43,6 +41,7 @@ require (
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
+	github.com/go-kratos/kratos/contrib/config/consul/v2 v2.0.0-20260404020628-f149714c1d54 // indirect
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20260105075216-c7a58ff59f80 // indirect
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20251217105121-fb8e43efb207 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
@@ -57,6 +56,7 @@ require (
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3 // indirect
+	github.com/hashicorp/consul/api v1.33.2 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.5.0 // indirect

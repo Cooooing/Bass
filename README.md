@@ -62,7 +62,7 @@ Bass/                          # 项目根目录
 
 ### 使用 Docker 启动
 
-环境变量在 `deploy/.env` 文件中，按实际需要修改。
+环境变量在 `infra/.env` 文件中，按实际需要修改。
 
 ```shell
 cd deploy

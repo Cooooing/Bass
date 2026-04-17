@@ -16,8 +16,8 @@ $(SERVERS):
 	@$(MAKE) -C $(ROOT_DIR)/app/$@ $(SUBTARGET) IGNORE_ERROR=$(IGNORE_ERROR)
 
 # target
-.PHONY: wire ent config tidy gen all
-wire ent config tidy gen all:
+.PHONY: wire wire-clean ent ent-clean config config-clean tidy gen all clean
+wire wire-clean ent ent-clean config config-clean tidy gen all clean:
 	@$(MAKE) SUBTARGET=$@ $(SERVERS)
 
 include $(ROOT_DIR)/common/make/common.mk

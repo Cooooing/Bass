@@ -37,6 +37,9 @@ bin/
 
 /common/api/gen/**
 !/common/api/gen/.gitkeep
+/app/**/wire_gen.go
+/app/**/conf.pb.go
+/app/**/ent/gen/
 /common/buf.lock
 
 

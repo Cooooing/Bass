@@ -60,7 +60,7 @@ build:
 
 # generate all code
 .PHONY: gen
-gen: config ent wire api
+gen: config api wire ent
 
 # run all of targets
 .PHONY: all

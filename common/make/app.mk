@@ -84,7 +84,7 @@ clean: api-clean config-clean wire-clean ent-clean
 
 # generate all code
 .PHONY: gen
-gen: config api wire ent
+gen: config api ent wire
 
 # run all of targets
 .PHONY: all

@@ -2,7 +2,7 @@ package doamin
 
 import (
 	"bytes"
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"context"
 	"image/png"
@@ -59,7 +59,7 @@ func (d *TwoFactorAuthenticationDomain) Enable(ctx context.Context, name string)
 
 func (d *TwoFactorAuthenticationDomain) Disable(ctx context.Context, name string, secret string, code string) error {
 	if !totp.Validate(code, secret) {
-		return common.ErrorBadRequest("2FA code invalid")
+		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
 	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		_, err := d.userRepo.DisableTwoFactorAuthentication(ctx, tx, name)
@@ -77,7 +77,7 @@ func (d *TwoFactorAuthenticationDomain) Confirm(ctx context.Context, name string
 		return err
 	}
 	if !totp.Validate(code, secret) {
-		return common.ErrorBadRequest("2FA code invalid")
+		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		_, err = d.userRepo.EnableTwoFactorAuthentication(ctx, tx, name, secret)

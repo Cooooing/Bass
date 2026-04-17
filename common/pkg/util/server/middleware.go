@@ -2,6 +2,7 @@ package server
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
@@ -110,11 +111,11 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 			// 毫秒级时间戳
 			timestampStr := GetHeader(ctx, constant.HeaderTimestamp)
 			if timestampStr == "" {
-				return nil, common.ErrorUnauthorized("timestamp is required")
+				return nil, cerrors.ErrorUnauthorized("timestamp is required")
 			}
 			timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
 			if err != nil {
-				return nil, common.ErrorUnauthorized("invalid timestamp format")
+				return nil, cerrors.ErrorUnauthorized("invalid timestamp format")
 			}
 
 			diff := time.Now().Sub(time.UnixMilli(timestamp))
@@ -123,7 +124,7 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 			}
 
 			if diff > 10*time.Second {
-				return nil, common.ErrorUnauthorized("timestamp is expired or clock unsynced")
+				return nil, cerrors.ErrorUnauthorized("timestamp is expired or clock unsynced")
 			}
 			return handler(ctx, req)
 		}
@@ -139,13 +140,13 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 			}
 			nonce := GetHeader(ctx, constant.HeaderNonce)
 			if nonce == "" {
-				return nil, common.ErrorUnauthorized("nonce is required")
+				return nil, cerrors.ErrorUnauthorized("nonce is required")
 			}
 			if len(nonce) > 256 {
-				return nil, common.ErrorUnauthorized("nonce is too long")
+				return nil, cerrors.ErrorUnauthorized("nonce is too long")
 			}
 			if ok, err := redisClient.Client.SetNX(ctx, constant.GetKeyRequestNonce(nonce), "1", 15*time.Second).Result(); err != nil || !ok {
-				return nil, common.ErrorUnauthorized("nonce is invalid")
+				return nil, cerrors.ErrorUnauthorized("nonce is invalid")
 			}
 			return handler(ctx, req)
 		}
@@ -170,7 +171,7 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 				return nil, fmt.Errorf("invalid token: %w", err)
 			}
 			if token != "" && userInfo == nil {
-				return nil, common.ErrorUnauthorized("token is invalid")
+				return nil, cerrors.ErrorUnauthorized("token is invalid")
 			}
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)

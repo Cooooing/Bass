@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"context"
 	"signal/internal/biz/model"
@@ -58,7 +59,7 @@ func (r *NodeRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.NodeGet
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("Node is not found")
+		return nil, cerrors.ErrorBadRequest("Node is not found")
 	}
 	return &model.Node{Node: t}, err
 }

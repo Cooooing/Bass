@@ -1,7 +1,7 @@
 package server
 
 import (
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"common/pkg/util"
 	"common/pkg/util/server"
@@ -40,7 +40,7 @@ func SignalAuthMiddleware(nodeDomain *domain.NodeDomain) middleware.Middleware {
 
 			node, err := nodeDomain.GetByKey(ctx, nodeKey)
 			if err != nil {
-				return nil, common.ErrorUnauthorized("node not found")
+				return nil, cerrors.ErrorUnauthorized("node not found")
 			}
 
 			// Todo 通过 secret 进行节点认证

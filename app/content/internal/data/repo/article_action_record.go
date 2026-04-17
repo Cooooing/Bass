@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -47,7 +48,7 @@ func (r *ArticleActionRecordRepo) GetOne(ctx context.Context, tx *gen.Client, re
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("article action record is not found")
+		return nil, cerrors.ErrorBadRequest("article action record is not found")
 	}
 	return &model.ArticleActionRecord{ArticleActionRecord: c}, err
 }

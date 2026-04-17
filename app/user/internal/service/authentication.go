@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"common/pkg/util"
@@ -43,13 +43,13 @@ func (s *AuthenticationService) RegisterHttp(hs *http.Server) {
 
 func (s *AuthenticationService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailAuth_Request) (rsp *v1.RegisterEmailAuth_Reply, err error) {
 	if !s.VerifyName(req.Name) {
-		return nil, common.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
+		return nil, cerrors.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
 	}
 	if req.Nickname != nil && !s.VerifyNickname(*req.Nickname) {
-		return nil, common.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
+		return nil, cerrors.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
 	}
 	if !s.VerifyPassword(req.Password) {
-		return nil, common.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
+		return nil, cerrors.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterEmail(ctx, &model.User{User: &gen.User{
 		Email:    new(req.Email),
@@ -67,13 +67,13 @@ func (s *AuthenticationService) RegisterEmailVerify(ctx context.Context, req *v1
 
 func (s *AuthenticationService) RegisterPhone(ctx context.Context, req *v1.RegisterPhoneAuth_Request) (rsp *v1.RegisterPhoneAuth_Reply, err error) {
 	if !s.VerifyName(req.Name) {
-		return nil, common.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
+		return nil, cerrors.ErrorBadRequest("name must be 4-32 characters long, only letters, numbers, and single '-' allowed (cannot start or end with '-')")
 	}
 	if req.Nickname != nil && !s.VerifyNickname(*req.Nickname) {
-		return nil, common.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
+		return nil, cerrors.ErrorBadRequest("nickname must be 2-32 characters long, contain at least one non-digit character, and may include letters, numbers, '_', '-', or Unicode characters (emoji, Chinese, etc.)")
 	}
 	if !s.VerifyPassword(req.Password) {
-		return nil, common.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
+		return nil, cerrors.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
 	code, token, err := s.authenticationDomain.RegisterPhone(ctx, &model.User{User: &gen.User{
 		Phone:    new(req.Phone),
@@ -107,7 +107,7 @@ func (s *AuthenticationService) ExistUsername(ctx context.Context, req *v1.Exist
 func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginAccountAuth_Request) (rsp *v1.LoginAccountAuth_Reply, err error) {
 	token, user, err := s.authenticationDomain.LoginAccount(ctx, req.Account, req.Password)
 	if err != nil {
-		return nil, common.ErrorBadRequest("account not exist or password is incorrect").WithCause(err)
+		return nil, cerrors.ErrorBadRequest("account not exist or password is incorrect").WithCause(err)
 	}
 	return &v1.LoginAccountAuth_Reply{
 		Token: token,
@@ -118,7 +118,7 @@ func (s *AuthenticationService) LoginAccount(ctx context.Context, req *v1.LoginA
 func (s *AuthenticationService) Logout(ctx context.Context, req *v1.LogoutAuth_Request) (rsp *v1.LogoutAuth_Reply, err error) {
 	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
 	if !ok {
-		return nil, common.ErrorUnauthorized("user not login")
+		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	err = s.authenticationDomain.Logout(ctx, token)
 	return &v1.LogoutAuth_Reply{}, err

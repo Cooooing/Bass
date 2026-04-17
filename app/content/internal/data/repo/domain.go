@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -92,7 +93,7 @@ func (r *DomainRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Domai
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("domain is not found")
+		return nil, cerrors.ErrorBadRequest("domain is not found")
 	}
 	return &model.Domain{Domain: d}, err
 }

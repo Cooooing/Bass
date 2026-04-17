@@ -1,7 +1,7 @@
 package server
 
 import (
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
@@ -58,7 +58,7 @@ func QiniuCallbackMatch() selector.MatchFunc {
 func QiniuCallbackSignMiddleware(c *conf.Bootstrap) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			errNoAuth := common.ErrorForbidden("verify callback failed")
+			errNoAuth := cerrors.ErrorForbidden("verify callback failed")
 			mac := auth.New(c.Server.Oss.Qiniu.AccessKey, c.Server.Oss.Qiniu.SecretKey)
 			if r, ok := transporthttp.RequestFromServerContext(ctx); ok {
 				verify, err := qbox.VerifyCallback(mac, r)
@@ -102,7 +102,7 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 				token := strings.TrimPrefix(tr.RequestHeader().Get(constant.HeaderAuthentication), "Bearer ")
 
 				if token == "" {
-					return nil, common.ErrorUnauthorized("token is not provided")
+					return nil, cerrors.ErrorUnauthorized("token is not provided")
 				}
 
 				// 验证 token

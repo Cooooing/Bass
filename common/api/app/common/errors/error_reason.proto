@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package common.api.app.common;
 
-import "common/errors/errors.proto";
+import "errors/errors.proto";
 
-option go_package = "common/api/gen/common;common";
+option go_package = "common/api/gen/common/errors;errors";
 
 enum ErrorReason {
   // 默认错误码（未定义的错误情况）

@@ -2,6 +2,7 @@ package service
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -47,7 +48,7 @@ func (s *UserService) RegisterHttp(hs *http.Server) {
 func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingUser_Request) (rsp *v1.UpdateSettingUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, common.ErrorUnauthorized("user not login")
+		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	update, err := s.userRepo.Update(ctx, s.Db, &model.User{User: &gen.User{
 		ID:                   user.ID,
@@ -71,7 +72,7 @@ func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingUs
 func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserUser_Request) (rsp *v1.GetCurrentUserUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, common.ErrorUnauthorized("user not login")
+		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: new(user.ID)})
 	if err != nil {

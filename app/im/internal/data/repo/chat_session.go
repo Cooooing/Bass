@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"context"
 	"fmt"
@@ -60,7 +61,7 @@ func (r *ChatSessionRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("chatSession is not found")
+		return nil, cerrors.ErrorBadRequest("chatSession is not found")
 	}
 	return &model.ChatSession{ChatSession: t}, err
 }

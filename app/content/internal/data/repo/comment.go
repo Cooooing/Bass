@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -71,7 +72,7 @@ func (r *CommentRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Comm
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("comment is not found")
+		return nil, cerrors.ErrorBadRequest("comment is not found")
 	}
 	return &model.Comment{Comment: c, WithArticle: req.WithArticle}, err
 }
@@ -177,7 +178,7 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 
 func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Client, req *repo.CommentGetReq) (*model.Comment, error) {
 	if req.ArticleId == nil {
-		return nil, common.ErrorBadRequest("articleId is required")
+		return nil, cerrors.ErrorBadRequest("articleId is required")
 	}
 	query := client.Comment.Query()
 	query = r.getQuery(query, req)
@@ -190,7 +191,7 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 
 func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
 	if len(req.ArticleIds) == 0 {
-		return nil, common.ErrorBadRequest("articleIds is required")
+		return nil, cerrors.ErrorBadRequest("articleIds is required")
 	}
 	articleIdsAny := make([]any, len(req.ArticleIds))
 	for i, v := range req.ArticleIds {

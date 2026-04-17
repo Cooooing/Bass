@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"context"
@@ -95,7 +96,7 @@ func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGet
 	query = r.getQuery(query, req)
 	u, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("user is not found")
+		return nil, cerrors.ErrorBadRequest("user is not found")
 	}
 	return &model.User{User: u}, err
 }

@@ -1,7 +1,7 @@
 package qiniu
 
 import (
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -47,7 +47,7 @@ func (q *Qiniu) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 func (q *Qiniu) UploadToken(ctx context.Context, key string) (string, error) {
 	infra, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return "", common.ErrorUnauthorized("infra not login")
+		return "", cerrors.ErrorUnauthorized("infra not login")
 	}
 	mac := auth.New(q.Conf.Server.Oss.Qiniu.AccessKey, q.Conf.Server.Oss.Qiniu.SecretKey)
 	putPolicy := storage.PutPolicy{

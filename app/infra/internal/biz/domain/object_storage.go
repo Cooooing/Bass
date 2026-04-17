@@ -2,6 +2,7 @@ package domain
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
@@ -53,7 +54,7 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 	var err error
 	infra, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return common.ErrorUnauthorized("infra not login")
+		return cerrors.ErrorUnauthorized("infra not login")
 	}
 
 	err = d.objectStorageProvider.Status(ctx, key, enable)

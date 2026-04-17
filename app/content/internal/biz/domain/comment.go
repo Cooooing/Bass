@@ -2,6 +2,7 @@ package domain
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	notifyv1 "common/api/gen/notify/v1"
 	userv1 "common/api/gen/user/v1"
@@ -39,7 +40,7 @@ func NewCommentDomain(baseDomain *domainbase.BaseDomain, commentRepo repo.Commen
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *model.Comment, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, common.ErrorUnauthorized("user not login")
+		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		// 回复文章
@@ -51,7 +52,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 			return err
 		}
 		if !exist.Commentable {
-			return common.ErrorBadRequest("article not commentable")
+			return cerrors.ErrorBadRequest("article not commentable")
 		}
 
 		// 回复评论

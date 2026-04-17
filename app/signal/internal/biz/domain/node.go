@@ -2,7 +2,7 @@ package domain
 
 import (
 	"bytes"
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	connectorv1 "common/api/gen/connector/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
@@ -206,7 +206,7 @@ func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
 func (d *NodeDomain) Register(ctx context.Context) error {
 	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
 	if !ok {
-		return common.ErrorUnauthorized("node is not allow")
+		return cerrors.ErrorUnauthorized("node is not allow")
 	}
 
 	// 幂等处理
@@ -276,7 +276,7 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 	if key == "" {
 		n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
 		if !ok {
-			return common.ErrorUnauthorized("node is not allow")
+			return cerrors.ErrorUnauthorized("node is not allow")
 		}
 		key = n.Key
 	}
@@ -313,7 +313,7 @@ func (d *NodeDomain) Negotiate(ctx context.Context) ([]*model.Node, error) {
 func (d *NodeDomain) Ticket(ctx context.Context) (string, error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return "", common.ErrorUnauthorized("user not login")
+		return "", cerrors.ErrorUnauthorized("user not login")
 	}
 	ticket := uuid.New().String()
 	err := d.sessionCache.SetTicket(ctx, ticket, user.ID)
@@ -326,7 +326,7 @@ func (d *NodeDomain) Ticket(ctx context.Context) (string, error) {
 func (d *NodeDomain) Online(ctx context.Context, ticket string) (string, error) {
 	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
 	if !ok {
-		return "", common.ErrorUnauthorized("node is not allow")
+		return "", cerrors.ErrorUnauthorized("node is not allow")
 	}
 
 	userId, err := d.sessionCache.GetTicket(ctx, ticket)
@@ -344,7 +344,7 @@ func (d *NodeDomain) Online(ctx context.Context, ticket string) (string, error) 
 func (d *NodeDomain) Offline(ctx context.Context, sessionId string) error {
 	n, ok := util.GetContextValue[*model.Node](ctx, constant.CtxNodeInfo)
 	if !ok {
-		return common.ErrorUnauthorized("node is not allow")
+		return cerrors.ErrorUnauthorized("node is not allow")
 	}
 
 	// Todo 下线操作缓存

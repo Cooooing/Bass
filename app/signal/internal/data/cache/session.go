@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	"context"
 	"errors"
@@ -34,7 +34,7 @@ func (c *SessionCache) SetTicket(ctx context.Context, ticket string, userId int6
 func (c *SessionCache) GetTicket(ctx context.Context, ticket string) (int64, error) {
 	result, err := c.Redis.Client.Get(ctx, constant.GetKeySignalTicket(ticket)).Result()
 	if errors.Is(err, redis.Nil) {
-		return 0, common.ErrorUnauthorized("ticket is invalid")
+		return 0, cerrors.ErrorUnauthorized("ticket is invalid")
 	}
 	if err != nil {
 		return 0, err

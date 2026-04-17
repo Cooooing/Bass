@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	"common/pkg/constant"
 	"content/internal/biz/model"
@@ -212,7 +213,7 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 	}
 
 	if first.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
-		return nil, common.ErrorBadRequest("only update draft")
+		return nil, cerrors.ErrorBadRequest("only update draft")
 	}
 
 	err = r.UpdateStatus(ctx, tx, articleId, v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
@@ -242,7 +243,7 @@ func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.Arti
 	query = r.getQuery(query, req)
 	a, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, common.ErrorBadRequest("article is not found")
+		return nil, cerrors.ErrorBadRequest("article is not found")
 	}
 	return &model.Article{Article: a, IsSummary: req.IsSummary}, err
 }

@@ -24,9 +24,15 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go install entgo.io/ent/cmd/ent@latest
 
+# clean API proto files
+.PHONY: api-clean
+api-clean:
+	@echo "clean API proto files..."
+	@cd $(PROTO_GEN_DIR) && find . -type f ! -name ".gitkeep" -delete 2>/dev/null || true && find . -type d -empty -delete 2>/dev/null || true
+
 # generate API proto files
 .PHONY: api
-api:
+api: api-clean
 	@echo "generating API proto files..."
 	@protoc -I $(PROTO_DIR) -I $(PROTO_THIRD_PARTY_DIR) \
 	       --go_out=paths=source_relative:$(PROTO_GEN_DIR) \

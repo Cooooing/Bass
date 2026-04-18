@@ -45,8 +45,9 @@ bin/
 
 /deploy/.prod.env
 
-
+# AI
 .claude/
 .gitnexus
+.agents
 AGENTS.md
 CLAUDE.md

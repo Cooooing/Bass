@@ -31,3 +31,10 @@ tmp/
 # OS
 .DS_Store
 Thumbs.db
+
+# AI
+.claude/
+.gitnexus
+.agents
+AGENTS.md
+CLAUDE.md

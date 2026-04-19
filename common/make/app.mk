@@ -36,7 +36,7 @@ config-clean:
 config: config-clean
 	@echo "generating internal proto files..."
 	@cd $(APP_DIR) && \
-	protoc -I $(INTERNAL_DIR) -I $(PROTO_THIRD_PARTY_DIR) \
+	protoc -I $(INTERNAL_DIR) -I $(PROTO_THIRD_PARTY_DIR) -I $(ROOT_DIR) \
 	       --go_out=paths=source_relative:$(INTERNAL_DIR) \
 	       $(APP_PROTO_FILES) || \
 	{ echo "[ERROR] generate config proto failed"; [ "$(IGNORE_ERROR)" = "1" ]; }

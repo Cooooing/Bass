@@ -1,8 +1,8 @@
 package main
 
 import (
+	"common/api/gen/common"
 	"common/pkg/client"
-	"common/pkg/model"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -19,7 +19,7 @@ var services = []string{"gateway", "infra", "user", "content", "notify", "im", "
 
 func main() {
 	// 初始化 Consul 客户端
-	c, f, err := client.NewConsulClient(log.NewHelper(log.GetLogger()), &model.ConsulConf{
+	c, f, err := client.NewConsulClient(log.NewHelper(log.GetLogger()), &common.Consul{
 		Address:     fmt.Sprintf("%s:%s", os.Getenv("CONSUL_HOST"), os.Getenv("CONSUL_PORT")),
 		Datacenter:  "dc1",
 		Token:       os.Getenv("CONSUL_ACL_MASTER_TOKEN"),

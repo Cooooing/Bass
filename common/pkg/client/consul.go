@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/pkg/model"
+	"common/api/gen/common"
 	"context"
 	"fmt"
 	"net"
@@ -26,18 +26,18 @@ import (
 
 // ConsulClient 封装 Consul 客户端
 type ConsulClient struct {
-	conf *model.ConsulConf
+	conf *common.Consul
 	log  *log.Helper
 
-	Client *consulapi.Client
-	reg    *consulregistry.Registry
-
+	reg       *consulregistry.Registry
 	grpcConns sync.Map // map[string]*grpc.ClientConn
 	httpConns sync.Map // map[string]*khttp.Client
+
+	Client *consulapi.Client
 }
 
 // NewConsulClient 初始化 Consul 客户端
-func NewConsulClient(logger *log.Helper, conf *model.ConsulConf) (*ConsulClient, func(), error) {
+func NewConsulClient(logger *log.Helper, conf *common.Consul) (*ConsulClient, func(), error) {
 	// 默认参数处理
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)

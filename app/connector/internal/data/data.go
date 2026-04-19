@@ -21,6 +21,18 @@ var DataProviderSet = wire.NewSet(
 	cache.NewSessionCache,
 )
 
+func ProvideRedis(c *conf.Bootstrap) *common.Redis {
+	return c.Data.Redis
+}
+
+func ProvideConsul(c *conf.Bootstrap) *common.Consul {
+	return c.Data.Consul
+}
+
+func ProvideRabbitMQ(c *conf.Bootstrap) *common.RabbitMQ {
+	return c.Data.Rabbitmq
+}
+
 func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
 	return nil, func() {
 

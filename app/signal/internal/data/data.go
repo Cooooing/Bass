@@ -1,8 +1,8 @@
 package data
 
 import (
+	"common/api/gen/common"
 	commonClient "common/pkg/client"
-	commonModel "common/pkg/model"
 	"common/pkg/util/jwt"
 	"signal/internal/conf"
 	"signal/internal/data/base"
@@ -10,9 +10,7 @@ import (
 	"signal/internal/data/client"
 	"signal/internal/data/repo"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"github.com/jinzhu/copier"
 )
 
 // DataProviderSet is data providers.
@@ -20,9 +18,12 @@ var DataProviderSet = wire.NewSet(
 	base.NewBaseData,
 
 	client.NewDataBaseClient,
-	NewConsulClient,
-	NewRedisClient,
-	NewRabbitMQClient,
+	ProvideRedis,
+	ProvideConsul,
+	ProvideRabbitMQ,
+	commonClient.NewConsulClient,
+	commonClient.NewRedisClient,
+	commonClient.NewRabbitMQClient,
 	commonClient.NewHttpClient,
 
 	jwt.NewTokenCache,
@@ -32,29 +33,14 @@ var DataProviderSet = wire.NewSet(
 	cache.NewSessionCache,
 )
 
-func NewConsulClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.ConsulClient, func(), error) {
-	c := &commonModel.ConsulConf{}
-	err := copier.Copy(c, conf.Data.Consul)
-	if err != nil {
-		return nil, nil, err
-	}
-	return commonClient.NewConsulClient(log, c)
+func ProvideRedis(c *conf.Bootstrap) *common.Redis {
+	return c.Data.Redis
 }
 
-func NewRedisClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RedisClient, func(), error) {
-	c := &commonModel.RedisConf{}
-	err := copier.Copy(c, conf.Data.Redis)
-	if err != nil {
-		return nil, nil, err
-	}
-	return commonClient.NewRedisClient(log, c)
+func ProvideConsul(c *conf.Bootstrap) *common.Consul {
+	return c.Data.Consul
 }
 
-func NewRabbitMQClient(log *log.Helper, conf *conf.Bootstrap) (*commonClient.RabbitMQClient, func(), error) {
-	c := &commonModel.RabbitmqConf{}
-	err := copier.Copy(c, conf.Data.Rabbitmq)
-	if err != nil {
-		return nil, nil, err
-	}
-	return commonClient.NewRabbitMQClient(log, c)
+func ProvideRabbitMQ(c *conf.Bootstrap) *common.RabbitMQ {
+	return c.Data.Rabbitmq
 }

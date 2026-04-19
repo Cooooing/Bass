@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/pkg/model"
+	"common/api/gen/common"
 	"context"
 	"fmt"
 
@@ -15,7 +15,7 @@ type RedisClient struct {
 }
 
 // NewRedisClient 初始化单机 Redis 客户端
-func NewRedisClient(log *log.Helper, conf *model.RedisConf) (*RedisClient, func(), error) {
+func NewRedisClient(log *log.Helper, conf *common.Redis) (*RedisClient, func(), error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:            conf.Addr,
 		Password:        conf.Password,
@@ -27,7 +27,7 @@ func NewRedisClient(log *log.Helper, conf *model.RedisConf) (*RedisClient, func(
 		MinIdleConns:    int(conf.MinIdleConns),
 		PoolTimeout:     conf.PoolTimeout.AsDuration(),
 		ConnMaxIdleTime: conf.ConnMaxIdleTime.AsDuration(),
-		ConnMaxLifetime: conf.ConnMaxLifetime.AsDuration(),
+		ConnMaxLifetime: conf.ConnMaxLifeTime.AsDuration(),
 	})
 	ctx := context.Background()
 

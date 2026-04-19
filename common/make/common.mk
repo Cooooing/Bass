@@ -6,7 +6,7 @@ PROTO_GEN_DIR := $(COMMON_DIR)/api/gen
 PROTO_THIRD_PARTY_DIR := $(COMMON_DIR)/api/third_party
 
 # find proto files
-COMMON_PROTO_FILES = $(shell go run $(COMMON_DIR)/build_tools/findproto.go $(PROTO_DIR))
+COMMON_PROTO_FILES := $(shell find $(COMMON_DIR) -type f -name "*.proto" | sort)
 
 # tools install
 .PHONY: init

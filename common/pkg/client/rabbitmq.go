@@ -1,8 +1,8 @@
 package client
 
 import (
+	"common/api/gen/common"
 	"common/pkg/constant"
-	"common/pkg/model"
 	"encoding/json"
 	"fmt"
 
@@ -12,13 +12,13 @@ import (
 
 type RabbitMQClient struct {
 	log    *log.Helper
-	conf   *model.RabbitmqConf
+	conf   *common.RabbitMQ
 	conn   *amqp.Connection
 	chPool chan *amqp.Channel // 固定大小 channel 池
 }
 
 // NewRabbitMQClient 初始化 RabbitMQ 单机客户端
-func NewRabbitMQClient(log *log.Helper, conf *model.RabbitmqConf) (*RabbitMQClient, func(), error) {
+func NewRabbitMQClient(log *log.Helper, conf *common.RabbitMQ) (*RabbitMQClient, func(), error) {
 	conn, err := amqp.DialConfig(conf.Url, amqp.Config{
 		Heartbeat: conf.Heartbeat.AsDuration(),
 		Dial:      amqp.DefaultDial(conf.DialTimeout.AsDuration()),

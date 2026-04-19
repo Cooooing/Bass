@@ -2,6 +2,7 @@ syntax = "proto3";
 package kratos.api.conf;
 
 import "google/protobuf/duration.proto";
+import "common/api/app/common/config.proto";
 
 option go_package = "infra/internal/conf/conf;conf";
 
@@ -72,43 +73,10 @@ message Server {
 }
 
 message Data {
-  Database database = 1;
-  message Database {
-    string driver = 1;
-    string source = 2;
-    bool merge = 3;
-  }
-  Redis redis = 2;
-  message Redis {
-    string addr = 1;
-    string password = 2;
-    int32 db = 3;
-    google.protobuf.Duration dial_timeout = 4;
-    google.protobuf.Duration read_timeout = 5;
-    google.protobuf.Duration write_timeout = 6;
-    int32 pool_size = 7;
-    int32 min_idle_conns = 8;
-    google.protobuf.Duration pool_timeout = 9;
-    google.protobuf.Duration conn_max_idle_time = 10;
-    google.protobuf.Duration conn_max_life_time = 11;
-  }
-  RabbitMQ rabbitmq = 3;
-  message RabbitMQ {
-    string url = 1;
-    google.protobuf.Duration heartbeat = 2;
-    google.protobuf.Duration dial_timeout = 3;
-    int32 prefetch_count = 4;
-    bool prefetch_global = 5;
-    int32 delivery_mode = 6;
-    bool auto_ack = 7;
-  }
-  Consul consul = 4;
-  message Consul {
-    string address = 1;
-    string datacenter = 2;
-    string token = 3;
-    google.protobuf.Duration dial_timeout = 4;
-  }
+  common.api.app.common.Database database = 1;
+  common.api.app.common.Redis redis = 2;
+  common.api.app.common.Consul consul = 3;
+  common.api.app.common.RabbitMQ rabbitmq = 4;
 }
 
 message Trace {

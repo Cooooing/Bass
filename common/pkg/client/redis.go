@@ -15,7 +15,7 @@ type RedisClient struct {
 }
 
 // NewRedisClient 初始化单机 Redis 客户端
-func NewRedisClient(log *log.Helper, conf *common.Redis) (*RedisClient, func(), error) {
+func NewRedisClient(logger log.Logger, conf *common.Redis) (*RedisClient, func(), error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:            conf.Addr,
 		Password:        conf.Password,
@@ -37,7 +37,7 @@ func NewRedisClient(log *log.Helper, conf *common.Redis) (*RedisClient, func(), 
 	}
 
 	r := &RedisClient{
-		log:    log,
+		log:    log.NewHelper(logger),
 		Client: client,
 	}
 	log.Infof("redis: connected to [%s]", conf.Addr)

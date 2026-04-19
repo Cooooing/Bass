@@ -21,10 +21,10 @@ type BaseService struct {
 	Log  *log.Helper
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger) *BaseService {
 	return &BaseService{
 		Conf: conf,
-		Log:  logger,
+		Log:  log.NewHelper(logger),
 	}
 }
 

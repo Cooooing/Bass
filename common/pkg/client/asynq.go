@@ -25,9 +25,9 @@ type AsynqClient struct {
 	Client *asynq.Client
 }
 
-func NewAsynqClient(log *log.Helper, redisClient *RedisClient) (*AsynqClient, func()) {
+func NewAsynqClient(logger log.Logger, redisClient *RedisClient) (*AsynqClient, func()) {
 	c := &AsynqClient{
-		log:    log,
+		log:    log.NewHelper(logger),
 		Client: asynq.NewClientFromRedisClient(redisClient.Client),
 	}
 	cleanup := func() {
@@ -45,7 +45,8 @@ type AsynqServer struct {
 	Server *asynq.Server
 }
 
-func NewAsynqServer(log *log.Helper, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
+func NewAsynqServer(logger log.Logger, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
+	l := log.NewHelper(logger)
 	mux := asynq.NewServeMux()
 	for _, t := range lo.Values(tasks) {
 		log.Infof("register task: %s", t.Name().String())
@@ -57,12 +58,12 @@ func NewAsynqServer(log *log.Helper, redisClient *RedisClient, tasks map[constan
 		TaskCheckInterval:        2 * time.Second,
 		DelayedTaskCheckInterval: 2 * time.Second,
 		ShutdownTimeout:          30 * time.Second,
-		Logger:                   log,
+		Logger:                   l,
 		LogLevel:                 asynq.InfoLevel,
-		ErrorHandler:             NewGlobalErrHandler(log, tasks),
+		ErrorHandler:             NewGlobalErrHandler(l, tasks),
 	})
 	s := &AsynqServer{
-		log:    log,
+		log:    l,
 		mux:    mux,
 		Server: server,
 	}
@@ -80,14 +81,15 @@ type AsynqScheduler struct {
 	Scheduler *asynq.Scheduler
 }
 
-func NewAsynqScheduler(log *log.Helper, redisClient *RedisClient) (*AsynqScheduler, func()) {
+func NewAsynqScheduler(logger log.Logger, redisClient *RedisClient) (*AsynqScheduler, func()) {
+	l := log.NewHelper(logger)
 	scheduler := asynq.NewSchedulerFromRedisClient(redisClient.Client, &asynq.SchedulerOpts{
-		Logger:   log,
+		Logger:   l,
 		LogLevel: asynq.InfoLevel,
 		Location: time.Local,
 	})
 	s := &AsynqScheduler{
-		log:       log,
+		log:       l,
 		Scheduler: scheduler,
 	}
 	return s, s.Scheduler.Shutdown

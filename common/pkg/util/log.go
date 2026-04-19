@@ -33,7 +33,7 @@ type ZapLogger struct {
 
 // TraceIDValuer 返回一个能从 context 中获取 trace_id 的 Valuer
 func TraceIDValuer() log.Valuer {
-	return func(ctx context.Context) interface{} {
+	return func(ctx context.Context) any {
 		if span := trace.SpanContextFromContext(ctx); span.HasTraceID() {
 			return span.TraceID().String()
 		}
@@ -43,7 +43,7 @@ func TraceIDValuer() log.Valuer {
 
 // SpanIDValuer 返回一个能从 context 中获取 span_id 的 Valuer
 func SpanIDValuer() log.Valuer {
-	return func(ctx context.Context) interface{} {
+	return func(ctx context.Context) any {
 		if span := trace.SpanContextFromContext(ctx); span.HasSpanID() {
 			return span.SpanID().String()
 		}
@@ -56,7 +56,7 @@ func NewLogger(name string, version string, mode string, level string, file stri
 	zapLogger := Logger(mode, level, file)
 
 	// 添加全局字段（With 包装）
-	l := log.With(zapLogger,
+	return log.With(zapLogger,
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.name", name,
@@ -64,8 +64,6 @@ func NewLogger(name string, version string, mode string, level string, file stri
 		"trace_id", TraceIDValuer(), // 自动注入 trace_id
 		"span_id", SpanIDValuer(), // 自动注入 span_id
 	)
-	log.SetLogger(l)
-	return log.GetLogger()
 }
 
 // Logger 配置zap日志,将zap日志库引入
@@ -76,7 +74,7 @@ func Logger(mode string, level string, file string) log.Logger {
 		LevelKey:       "level",
 		NameKey:        "logger",
 		CallerKey:      "caller",
-		MessageKey:     "message",
+		MessageKey:     "msg",
 		StacktraceKey:  "stack",
 		EncodeTime:     zapcore.ISO8601TimeEncoder,
 		LineEnding:     zapcore.DefaultLineEnding,
@@ -101,11 +99,11 @@ func Logger(mode string, level string, file string) log.Logger {
 
 	opts := []zap.Option{
 		zap.AddStacktrace(zapcore.ErrorLevel),
-		zap.AddCaller(),
-		zap.AddCallerSkip(3), // 调整为 1，因为 Kratos log 层已包装
 	}
 
 	if mode == constant.Dev {
+		opts = append(opts, zap.AddCaller())
+		opts = append(opts, zap.AddCallerSkip(3))
 		opts = append(opts, zap.Development()) // dev 模式添加开发友好字段
 	}
 
@@ -146,13 +144,13 @@ func NewZapLogger(mode string, file string, encoder zapcore.EncoderConfig, level
 	zapLogger := zap.New(core, opts...)
 	return &ZapLogger{
 		log:    zapLogger,
-		msgKey: "msg", // 统一 msgKey
+		msgKey: "msg",
 		Sync:   zapLogger.Sync,
 	}
 }
 
 // Log 实现log接口
-func (l *ZapLogger) Log(level log.Level, keyvals ...interface{}) error {
+func (l *ZapLogger) Log(level log.Level, keyvals ...any) error {
 	if zapcore.Level(level) < zapcore.DPanicLevel && !l.log.Core().Enabled(zapcore.Level(level)) {
 		return nil
 	}
@@ -167,11 +165,12 @@ func (l *ZapLogger) Log(level log.Level, keyvals ...interface{}) error {
 
 	data := make([]zap.Field, 0, (keylen/2)+1)
 	for i := 0; i < keylen; i += 2 {
-		if keyvals[i].(string) == l.msgKey {
+		k := fmt.Sprint(keyvals[i])
+		if k == l.msgKey {
 			msg, _ = keyvals[i+1].(string)
 			continue
 		}
-		data = append(data, zap.Any(fmt.Sprint(keyvals[i]), keyvals[i+1]))
+		data = append(data, zap.Any(k, keyvals[i+1]))
 	}
 
 	switch level {
@@ -211,7 +210,7 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 		return func(context.Context) error { return nil }, nil
 	}
 
-	// --- enableOtel == true 的正常上报逻辑 ---
+	// enableOtel == true 的正常上报逻辑
 	opts := []otlptracegrpc.Option{
 		otlptracegrpc.WithEndpoint(endpoint),
 	}

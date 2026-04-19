@@ -34,19 +34,19 @@ func ProvideRabbitMQ(c *conf.Bootstrap) *common.RabbitMQ {
 }
 
 type BaseData struct {
-	conf     *conf.Bootstrap
-	log      *log.Helper
-	consul   *commonClient.ConsulClient
-	redis    *commonClient.RedisClient
-	rabbitmq *commonClient.RabbitMQClient
+	Conf     *conf.Bootstrap
+	Log      *log.Helper
+	Consul   *commonClient.ConsulClient
+	Redis    *commonClient.RedisClient
+	Rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+func NewBaseData(conf *conf.Bootstrap, logger log.Logger, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
 	return &BaseData{
-		conf:     conf,
-		log:      log,
-		consul:   consul,
-		redis:    redis,
-		rabbitmq: rabbitmq,
+		Conf:     conf,
+		Log:      log.NewHelper(logger),
+		Consul:   consul,
+		Redis:    redis,
+		Rabbitmq: rabbitmq,
 	}
 }

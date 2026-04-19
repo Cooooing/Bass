@@ -7,6 +7,7 @@ import (
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
+	"runtime"
 
 	"common/pkg/util/jwt"
 	"context"
@@ -176,6 +177,12 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
 			ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
+
+			_, file, line, ok := runtime.Caller(2)
+			if !ok {
+				return nil, cerrors.ErrorUnauthorized("unknown caller")
+			}
+			ctx = context.WithValue(ctx, "caller", fmt.Sprintf("%s:%d", file, line))
 
 			return handler(ctx, req)
 		}

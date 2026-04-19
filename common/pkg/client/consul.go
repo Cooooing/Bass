@@ -37,7 +37,7 @@ type ConsulClient struct {
 }
 
 // NewConsulClient 初始化 Consul 客户端
-func NewConsulClient(logger *log.Helper, conf *common.Consul) (*ConsulClient, func(), error) {
+func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, func(), error) {
 	// 默认参数处理
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)
@@ -76,7 +76,7 @@ func NewConsulClient(logger *log.Helper, conf *common.Consul) (*ConsulClient, fu
 
 	c := &ConsulClient{
 		conf:   conf,
-		log:    logger,
+		log:    log.NewHelper(logger),
 		Client: client,
 		reg:    reg,
 	}

@@ -35,10 +35,10 @@ type BaseService struct {
 	TokenCache *jwt.TokenCache
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *jwt.TokenCache) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *jwt.TokenCache) *BaseService {
 	return &BaseService{
 		Conf:       conf,
-		Log:        logger,
+		Log:        log.NewHelper(logger),
 		Db:         db,
 		Consul:     consul,
 		Redis:      redis,

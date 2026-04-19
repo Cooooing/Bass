@@ -13,10 +13,10 @@ type BaseData struct {
 	Redis *commonClient.RedisClient
 }
 
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, redis *commonClient.RedisClient) *BaseData {
+func NewBaseData(conf *conf.Bootstrap, logger log.Logger, redis *commonClient.RedisClient) *BaseData {
 	return &BaseData{
 		Conf:  conf,
-		Log:   log,
+		Log:   log.NewHelper(logger),
 		Redis: redis,
 	}
 }

@@ -19,9 +19,9 @@ type TokenCache struct {
 	redis *client.RedisClient
 }
 
-func NewTokenCache(log *log.Helper, redis *client.RedisClient) *TokenCache {
+func NewTokenCache(logger log.Logger, redis *client.RedisClient) *TokenCache {
 	return &TokenCache{
-		log:   log,
+		log:   log.NewHelper(logger),
 		redis: redis,
 	}
 }

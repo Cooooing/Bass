@@ -12,14 +12,15 @@ type EventPool struct {
 	size int
 }
 
-func NewEventPool(log *log.Helper) (*EventPool, func(), error) {
+func NewEventPool(logger log.Logger) (*EventPool, func(), error) {
+	l := log.NewHelper(logger)
 	size := 16
 	pool, err := ants.NewPool(
 		size,
 		ants.WithNonblocking(false),
 		ants.WithPanicHandler(func(err interface{}) {
 			// 错误兜底逻辑
-			log.Errorf("[ants] worker panic recovered: %v\n%s", err, debug.Stack())
+			l.Errorf("[ants] worker panic recovered: %v\n%s", err, debug.Stack())
 		}),
 	)
 	e := &EventPool{

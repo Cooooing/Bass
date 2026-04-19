@@ -18,7 +18,7 @@ type RabbitMQClient struct {
 }
 
 // NewRabbitMQClient 初始化 RabbitMQ 单机客户端
-func NewRabbitMQClient(log *log.Helper, conf *common.RabbitMQ) (*RabbitMQClient, func(), error) {
+func NewRabbitMQClient(logger log.Logger, conf *common.RabbitMQ) (*RabbitMQClient, func(), error) {
 	conn, err := amqp.DialConfig(conf.Url, amqp.Config{
 		Heartbeat: conf.Heartbeat.AsDuration(),
 		Dial:      amqp.DefaultDial(conf.DialTimeout.AsDuration()),
@@ -28,7 +28,7 @@ func NewRabbitMQClient(log *log.Helper, conf *common.RabbitMQ) (*RabbitMQClient,
 	}
 
 	client := &RabbitMQClient{
-		log:    log,
+		log:    log.NewHelper(logger),
 		conn:   conn,
 		conf:   conf,
 		chPool: make(chan *amqp.Channel, 16), // 固定大小 channel 池

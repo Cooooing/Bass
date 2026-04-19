@@ -27,10 +27,10 @@ type BaseService struct {
 	Db     *gen.Client
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, consul *commonClient.ConsulClient, db *gen.Client) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger, consul *commonClient.ConsulClient, db *gen.Client) *BaseService {
 	return &BaseService{
 		Conf:   conf,
-		Log:    logger,
+		Log:    log.NewHelper(logger),
 		Consul: consul,
 		Db:     db,
 	}

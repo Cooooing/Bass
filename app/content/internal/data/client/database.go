@@ -13,17 +13,18 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func(), error) {
+func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
+	l := log.NewHelper(logger)
 	drv, err := sql.Open(conf.Data.Database.Driver, conf.Data.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)
 	}
 	debugDrv := dialect.DebugWithContext(drv, func(ctx context.Context, args ...any) {
 		text := fmt.Sprint(args...)
-		log.WithContext(ctx).Debugf("%s", text)
+		l.WithContext(ctx).Debugf("%s", text)
 	})
 	client := gen.NewClient(gen.Driver(debugDrv))
-	log.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
+	l.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
 	// 可选：自动迁移
 	if conf.Data.Database.Merge {
 		ctx := context.Background()
@@ -37,12 +38,12 @@ func NewDataBaseClient(log *log.Helper, conf *conf.Bootstrap) (*gen.Client, func
 
 	cleanup := func() {
 		if err := client.Close(); err != nil {
-			log.Errorf("failed to close ent client: %v", err)
+			l.Errorf("failed to close ent client: %v", err)
 		}
 		if err := debugDrv.Close(); err != nil {
-			log.Errorf("failed to close db driver: %v", err)
+			l.Errorf("failed to close db driver: %v", err)
 		}
-		log.Infof("database client closed")
+		l.Infof("database client closed")
 	}
 	return client, cleanup, nil
 }

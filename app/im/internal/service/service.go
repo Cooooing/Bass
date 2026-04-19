@@ -30,10 +30,10 @@ type BaseService struct {
 	Rabbitmq *client.RabbitMQClient
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger *log.Helper, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient) *BaseService {
 	return &BaseService{
 		Conf:     conf,
-		Log:      logger,
+		Log:      log.NewHelper(logger),
 		Db:       db,
 		Consul:   consul,
 		Redis:    redis,

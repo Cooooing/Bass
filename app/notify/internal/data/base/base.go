@@ -17,10 +17,10 @@ type BaseData struct {
 	Rabbitmq *commonClient.RabbitMQClient
 }
 
-func NewBaseData(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+func NewBaseData(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
 	return &BaseData{
 		Conf:     conf,
-		Log:      log,
+		Log:      log.NewHelper(logger),
 		Consul:   consul,
 		Db:       db,
 		Redis:    redis,

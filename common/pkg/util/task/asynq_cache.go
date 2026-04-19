@@ -15,9 +15,9 @@ type AsynqCache struct {
 	redis *client.RedisClient
 }
 
-func NewAsynqCache(log *log.Helper, redis *client.RedisClient) *AsynqCache {
+func NewAsynqCache(logger log.Logger, redis *client.RedisClient) *AsynqCache {
 	return &AsynqCache{
-		log:   log,
+		log:   log.NewHelper(logger),
 		redis: redis,
 	}
 }

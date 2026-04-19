@@ -35,7 +35,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bottstrap.yaml")
 }
 
-func newApp(logger log.Logger, log *log.Helper, hs *http.Server, gs *grpc.Server, cc *commonClient.ConsulClient, eventHandler *domain.EventHandler) *kratos.App {
+func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, cc *commonClient.ConsulClient, eventHandler *domain.EventHandler) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -90,7 +90,7 @@ func main() {
 		}
 	}()
 	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	app, cleanup, err := wireApp(c, logger, log.NewHelper(logger).WithContext(ctx))
+	app, cleanup, err := wireApp(c, logger)
 	if err != nil {
 		panic(err)
 	}

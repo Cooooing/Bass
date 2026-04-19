@@ -15,10 +15,10 @@ type BaseDomain struct {
 	EventPool *util.EventPool
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, eventPool *util.EventPool) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, eventPool *util.EventPool) *BaseDomain {
 	return &BaseDomain{
 		Conf:      conf,
-		Log:       log,
+		Log:       log.NewHelper(logger),
 		Db:        db,
 		EventPool: eventPool,
 	}

@@ -20,10 +20,10 @@ type BaseDomain struct {
 	Rabbitmq   *client.RabbitMQClient
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper, db *gen.Client, consul *client.ConsulClient, userClient *rpc.UserClient, infra *rpc.InfraClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, userClient *rpc.UserClient, infra *rpc.InfraClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient) *BaseDomain {
 	return &BaseDomain{
 		Conf:       conf,
-		Log:        log,
+		Log:        log.NewHelper(logger),
 		Db:         db,
 		Consul:     consul,
 		UserClient: userClient,

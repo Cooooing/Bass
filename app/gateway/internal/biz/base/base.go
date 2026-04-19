@@ -11,9 +11,9 @@ type BaseDomain struct {
 	Log  *log.Helper
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, log *log.Helper) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger) *BaseDomain {
 	return &BaseDomain{
 		Conf: conf,
-		Log:  log,
+		Log:  log.NewHelper(logger),
 	}
 }

@@ -18,7 +18,6 @@ var DataProviderSet = wire.NewSet(
 	ProvideRabbitMQ,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
-	commonClient.NewRabbitMQClient,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {
@@ -34,19 +33,17 @@ func ProvideRabbitMQ(c *conf.Bootstrap) *common.RabbitMQ {
 }
 
 type BaseData struct {
-	Conf     *conf.Bootstrap
-	Log      *log.Helper
-	Consul   *commonClient.ConsulClient
-	Redis    *commonClient.RedisClient
-	Rabbitmq *commonClient.RabbitMQClient
+	Conf   *conf.Bootstrap
+	Log    *log.Helper
+	Consul *commonClient.ConsulClient
+	Redis  *commonClient.RedisClient
 }
 
-func NewBaseData(conf *conf.Bootstrap, logger log.Logger, consul *commonClient.ConsulClient, redis *commonClient.RedisClient, rabbitmq *commonClient.RabbitMQClient) *BaseData {
+func NewBaseData(conf *conf.Bootstrap, logger log.Logger, consul *commonClient.ConsulClient, redis *commonClient.RedisClient) *BaseData {
 	return &BaseData{
-		Conf:     conf,
-		Log:      log.NewHelper(logger),
-		Consul:   consul,
-		Redis:    redis,
-		Rabbitmq: rabbitmq,
+		Conf:   conf,
+		Log:    log.NewHelper(logger),
+		Consul: consul,
+		Redis:  redis,
 	}
 }

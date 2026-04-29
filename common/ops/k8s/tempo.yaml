@@ -1,0 +1,74 @@
+# tempo.yaml
+# 开发环境用 Tempo（单体模式）
+
+tempo:
+  reportingEnabled: false
+
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+      wal:
+        path: /var/tempo/wal
+
+  # 接收端配置：支持 OTLP gRPC/HTTP、Zipkin、Jaeger
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+    zipkin:
+      endpoint: 0.0.0.0:9411
+    jaeger:
+      protocols:
+        thrift_http:
+          endpoint: 0.0.0.0:14268
+        grpc:
+          endpoint: 0.0.0.0:14250
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+# NodePort 暴露：
+# 30100 -> OTLP gRPC (4317)  - 开发应用通过此端口上报 Trace
+# 30101 -> OTLP HTTP (4318)  - 开发应用通过此端口上报 Trace（HTTP）
+service:
+  type: NodePort
+  annotations: {}
+
+# 用 extraPorts 暴露接收端口
+# grafana/tempo chart 的 service 默认只暴露 3100(query) 和 4317/4318
+# 通过 nodePort 字段指定端口
+extraPorts:
+  - name: otlp-grpc
+    port: 4317
+    targetPort: 4317
+    nodePort: 30100
+    protocol: TCP
+  - name: otlp-http
+    port: 4318
+    targetPort: 4318
+    nodePort: 30101
+    protocol: TCP
+  - name: zipkin
+    port: 9411
+    targetPort: 9411
+    nodePort: 30102
+    protocol: TCP
+  - name: jaeger-http
+    port: 14268
+    targetPort: 14268
+    nodePort: 30103
+    protocol: TCP

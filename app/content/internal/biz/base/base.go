@@ -17,11 +17,10 @@ type BaseDomain struct {
 	Consul     *client.ConsulClient
 	UserClient *rpc.UserClient
 	Redis      *client.RedisClient
-	Rabbitmq   *client.RabbitMQClient
 	EventPool  *util.EventPool
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, userClient *rpc.UserClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, eventPool *util.EventPool) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, userClient *rpc.UserClient, redis *client.RedisClient, eventPool *util.EventPool) *BaseDomain {
 	return &BaseDomain{
 		Conf:       conf,
 		Log:        log.NewHelper(logger),
@@ -29,7 +28,6 @@ func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, cons
 		Consul:     consul,
 		UserClient: userClient,
 		Redis:      redis,
-		Rabbitmq:   rabbitmq,
 		EventPool:  eventPool,
 	}
 }

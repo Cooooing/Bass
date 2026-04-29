@@ -1,0 +1,18 @@
+grafana:
+  enabled: true
+  service:
+    type: NodePort
+    nodePort: 30100
+
+loki:
+  enabled: true
+  service:
+    type: NodePort
+    nodePort: 30101
+
+promtail:
+  enabled: true
+
+# helm uninstall monitoring -n bass-test
+# helm upgrade --install monitoring grafana/loki-stack -n bass-test --create-namespace -f ./monitoring.yaml
+# kubectl get secret --namespace bass-test monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo

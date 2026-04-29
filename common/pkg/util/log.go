@@ -21,10 +21,6 @@ import (
 
 var _ log.Logger = (*ZapLogger)(nil)
 
-func init() {
-	log.SetLogger(log.NewFilter(log.NewStdLogger(os.Stdout), log.FilterLevel(log.LevelInfo)))
-}
-
 type ZapLogger struct {
 	log    *zap.Logger
 	msgKey string
@@ -57,8 +53,6 @@ func NewLogger(name string, version string, mode string, level string, file stri
 
 	// 添加全局字段（With 包装）
 	return log.With(zapLogger,
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
 		"service.name", name,
 		"service.version", version,
 		"trace_id", TraceIDValuer(), // 自动注入 trace_id

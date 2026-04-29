@@ -3,20 +3,13 @@ package doamin
 import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
-	notifyv1 "common/api/gen/notify/v1"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
-
 	"context"
 	domainbase "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/ent"
 	"user/internal/data/ent/gen"
-
-	"github.com/google/uuid"
 )
 
 type UserRelationDomain struct {
@@ -94,28 +87,28 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 		return err
 	}
 
-	u, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return cerrors.ErrorUnauthorized("user not login")
-	}
+	//u, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	//if !ok {
+	//	return cerrors.ErrorUnauthorized("user not login")
+	//}
 	// 发送通知，仅关注通知
 	if relationType == v1.UserRelationType_USER_RELATION_TYPE_FOLLOW {
 		err = d.EventPool.Submit(func() {
-			err := d.Rabbitmq.Publish(constant.ExchangeUser.String(), util.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
-				&commonModel.Notification{
-					UUID:       uuid.New().String(),
-					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
-					SenderId:   u.ID,
-					SenderName: u.Name,
-					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-					Meta: commonModel.Meta{
-						User: &commonModel.UserMeta{UserId: targetId, UserName: u.Name},
-					},
-				},
-			)
-			if err != nil {
-				d.Log.Errorf("publish user follow event error: %v", err)
-			}
+			//err := d.Rabbitmq.Publish(constant.ExchangeUser.String(), util.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
+			//	&commonModel.Notification{
+			//		UUID:       uuid.New().String(),
+			//		Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
+			//		SenderId:   u.ID,
+			//		SenderName: u.Name,
+			//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+			//		Meta: commonModel.Meta{
+			//			User: &commonModel.UserMeta{UserId: targetId, UserName: u.Name},
+			//		},
+			//	},
+			//)
+			//if err != nil {
+			//	d.Log.Errorf("publish user follow event error: %v", err)
+			//}
 		})
 		if err != nil {
 			return err

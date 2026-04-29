@@ -4,10 +4,7 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
-	notifyv1 "common/api/gen/notify/v1"
 	userv1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
 
 	domainbase "content/internal/biz/base"
@@ -17,7 +14,6 @@ import (
 	"content/internal/data/ent/gen"
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/samber/lo"
 )
 
@@ -38,10 +34,10 @@ func NewCommentDomain(baseDomain *domainbase.BaseDomain, commentRepo repo.Commen
 }
 
 func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *model.Comment, err error) {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
+	//user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	//if !ok {
+	//	return nil, cerrors.ErrorUnauthorized("user not login")
+	//}
 	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
 		// 回复文章
 		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
@@ -95,25 +91,25 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		return nil, err
 	}
 	err = d.EventPool.Submit(func() {
-		atUserNames := c.ParseContent()
-		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
-			UUID:       uuid.New().String(),
-			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
-			SenderId:   user.ID,
-			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-			Meta: commonModel.Meta{
-				AtUsernames: lo.Keys(atUserNames),
-				Comment: &commonModel.CommentMeta{
-					CommentId:     c.ID,
-					ArticleId:     c.ArticleID,
-					Content:       c.Content,
-					ReplyId:       c.ReplyID,
-					CreatedBy:     *c.CreatedBy,
-					CreatedByName: *c.CreatedByName,
-				},
-			},
-		})
+		//atUserNames := c.ParseContent()
+		//err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
+		//	UUID:       uuid.New().String(),
+		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
+		//	SenderId:   user.ID,
+		//	SenderName: user.Name,
+		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+		//	Meta: commonModel.Meta{
+		//		AtUsernames: lo.Keys(atUserNames),
+		//		Comment: &commonModel.CommentMeta{
+		//			CommentId:     c.ID,
+		//			ArticleId:     c.ArticleID,
+		//			Content:       c.Content,
+		//			ReplyId:       c.ReplyID,
+		//			CreatedBy:     *c.CreatedBy,
+		//			CreatedByName: *c.CreatedByName,
+		//		},
+		//	},
+		//})
 		if err != nil {
 			d.Log.Errorf("publish a at event error: %v", err)
 			return

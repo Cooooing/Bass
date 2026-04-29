@@ -33,7 +33,7 @@ func NewAsynqClient(logger log.Logger, redisClient *RedisClient) (*AsynqClient, 
 	cleanup := func() {
 		err := c.Client.Close()
 		if err != nil {
-			log.Error(err)
+			c.log.Error(err)
 		}
 	}
 	return c, cleanup
@@ -49,7 +49,7 @@ func NewAsynqServer(logger log.Logger, redisClient *RedisClient, tasks map[const
 	l := log.NewHelper(logger)
 	mux := asynq.NewServeMux()
 	for _, t := range lo.Values(tasks) {
-		log.Infof("register task: %s", t.Name().String())
+		l.Infof("register task: %s", t.Name().String())
 		mux.HandleFunc(t.Name().String(), t.Handler())
 	}
 

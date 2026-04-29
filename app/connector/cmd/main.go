@@ -87,6 +87,7 @@ func main() {
 		}
 	}()
 	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
+	log.SetLogger(logger)
 	app, cleanup, err := wireApp(c, logger)
 	if err != nil {
 		panic(err)

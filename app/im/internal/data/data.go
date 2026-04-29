@@ -21,7 +21,6 @@ var DataProviderSet = wire.NewSet(
 	ProvideRabbitMQ,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
-	commonClient.NewRabbitMQClient,
 
 	repo.NewChatGroupRepo,
 	repo.NewChatSessionRepo,

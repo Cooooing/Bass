@@ -87,7 +87,7 @@ func (s *ArticleService) AddArticle(ctx context.Context, req *v1.AddArticle_Requ
 	}, nil
 }
 
-func (s *ArticleService) UpdateDraftArticle(ctx context.Context, req *v1.UpdateDraftArticle_Request) (rsp *v1.UpdateDraftArticle_Reply, err error) {
+func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArticle_Request) (rsp *v1.UpdateDraftArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -141,7 +141,7 @@ func (s *ArticleService) UpdateDraftArticle(ctx context.Context, req *v1.UpdateD
 	}, nil
 }
 
-func (s *ArticleService) PublishArticle(ctx context.Context, req *v1.PublishArticle_Request) (rsp *v1.PublishArticle_Reply, err error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (rsp *v1.PublishArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -162,7 +162,7 @@ func (s *ArticleService) PublishArticle(ctx context.Context, req *v1.PublishArti
 	return &v1.PublishArticle_Reply{}, err
 }
 
-func (s *ArticleService) AddPostscriptArticle(ctx context.Context, req *v1.AddPostscriptArticle_Request) (rsp *v1.AddPostscriptArticle_Reply, err error) {
+func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticle_Request) (rsp *v1.AddPostscriptArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -189,12 +189,12 @@ func (s *ArticleService) AddPostscriptArticle(ctx context.Context, req *v1.AddPo
 	}, err
 }
 
-func (s *ArticleService) UpdateArticleArticle(ctx context.Context, req *v1.UpdateArticleArticle_Request) (rsp *v1.UpdateArticleArticle_Reply, err error) {
+func (s *ArticleService) UpdateArticle(ctx context.Context, req *v1.UpdateArticleArticle_Request) (rsp *v1.UpdateArticleArticle_Reply, err error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (s *ArticleService) DeleteArticle(ctx context.Context, req *v1.DeleteArticle_Request) (rsp *v1.DeleteArticle_Reply, err error) {
+func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticle_Request) (rsp *v1.DeleteArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -218,7 +218,7 @@ func (s *ArticleService) DeleteArticle(ctx context.Context, req *v1.DeleteArticl
 	return &v1.DeleteArticle_Reply{}, err
 }
 
-func (s *ArticleService) PageArticle(ctx context.Context, req *v1.PageArticle_Request) (rsp *v1.PageArticle_Reply, err error) {
+func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticle_Request) (rsp *v1.PageArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	req.Query = util.OrDefault(req.Query, &v1.ArticleQueryParams{})
 
@@ -256,7 +256,7 @@ func (s *ArticleService) PageArticle(ctx context.Context, req *v1.PageArticle_Re
 	}, err
 }
 
-func (s *ArticleService) GetOneArticle(ctx context.Context, req *v1.GetOneArticle_Request) (rsp *v1.GetOneArticle_Reply, err error) {
+func (s *ArticleService) GetOne(ctx context.Context, req *v1.GetOneArticle_Request) (rsp *v1.GetOneArticle_Reply, err error) {
 	one, err := s.articleDomain.GetOne(ctx, req.ArticleId)
 	if err != nil {
 		return nil, err
@@ -264,7 +264,7 @@ func (s *ArticleService) GetOneArticle(ctx context.Context, req *v1.GetOneArticl
 	return &v1.GetOneArticle_Reply{Article: one.ConvertToRpc()}, err
 }
 
-func (s *ArticleService) RewardArticle(ctx context.Context, req *v1.RewardArticle_Request) (rsp *v1.RewardArticle_Reply, err error) {
+func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Request) (rsp *v1.RewardArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -273,7 +273,7 @@ func (s *ArticleService) RewardArticle(ctx context.Context, req *v1.RewardArticl
 	return &v1.RewardArticle_Reply{}, nil
 }
 
-func (s *ArticleService) LikeArticle(ctx context.Context, req *v1.LikeArticle_Request) (rsp *v1.LikeArticle_Reply, err error) {
+func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Request) (rsp *v1.LikeArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -282,7 +282,7 @@ func (s *ArticleService) LikeArticle(ctx context.Context, req *v1.LikeArticle_Re
 	return &v1.LikeArticle_Reply{}, err
 }
 
-func (s *ArticleService) ThankArticle(ctx context.Context, req *v1.ThankArticle_Request) (rsp *v1.ThankArticle_Reply, err error) {
+func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Request) (rsp *v1.ThankArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -291,7 +291,7 @@ func (s *ArticleService) ThankArticle(ctx context.Context, req *v1.ThankArticle_
 	return &v1.ThankArticle_Reply{}, nil
 }
 
-func (s *ArticleService) CollectArticle(ctx context.Context, req *v1.CollectArticle_Request) (rsp *v1.CollectArticle_Reply, err error) {
+func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Request) (rsp *v1.CollectArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -300,7 +300,7 @@ func (s *ArticleService) CollectArticle(ctx context.Context, req *v1.CollectArti
 	return &v1.CollectArticle_Reply{}, err
 }
 
-func (s *ArticleService) WatchArticle(ctx context.Context, req *v1.WatchArticle_Request) (rsp *v1.WatchArticle_Reply, err error) {
+func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Request) (rsp *v1.WatchArticle_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -309,7 +309,7 @@ func (s *ArticleService) WatchArticle(ctx context.Context, req *v1.WatchArticle_
 	return &v1.WatchArticle_Reply{}, err
 }
 
-func (s *ArticleService) AcceptAnswerArticle(ctx context.Context, req *v1.AcceptAnswerArticle_Request) (rsp *v1.AcceptAnswerArticle_Reply, err error) {
+func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticle_Request) (rsp *v1.AcceptAnswerArticle_Reply, err error) {
 	err = s.articleDomain.AcceptAnswer(ctx, req.ArticleId, req.CommentId)
 	return &v1.AcceptAnswerArticle_Reply{}, err
 }

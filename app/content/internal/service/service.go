@@ -31,18 +31,16 @@ type BaseService struct {
 	Db         *gen.Client
 	Consul     *client.ConsulClient
 	Redis      *client.RedisClient
-	Rabbitmq   *client.RabbitMQClient
 	TokenCache *jwt.TokenCache
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient, tokenCache *jwt.TokenCache) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, tokenCache *jwt.TokenCache) *BaseService {
 	return &BaseService{
 		Conf:       conf,
 		Log:        log.NewHelper(logger),
 		Db:         db,
 		Consul:     consul,
 		Redis:      redis,
-		Rabbitmq:   rabbitmq,
 		TokenCache: tokenCache,
 	}
 }

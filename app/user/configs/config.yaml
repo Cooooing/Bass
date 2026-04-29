@@ -21,6 +21,7 @@ data:
     driver: postgres
     source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable # postgresql://<user>:<pass>@<host>/<database>
     merge: true # 是否同步表到数据库
+    debug: true
   redis:
     addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:123456}

@@ -22,22 +22,20 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 type BaseService struct {
-	Conf     *conf.Bootstrap
-	Log      *log.Helper
-	Db       *gen.Client
-	Consul   *client.ConsulClient
-	Redis    *client.RedisClient
-	Rabbitmq *client.RabbitMQClient
+	Conf   *conf.Bootstrap
+	Log    *log.Helper
+	Db     *gen.Client
+	Consul *client.ConsulClient
+	Redis  *client.RedisClient
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient, rabbitmq *client.RabbitMQClient) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient) *BaseService {
 	return &BaseService{
-		Conf:     conf,
-		Log:      log.NewHelper(logger),
-		Db:       db,
-		Consul:   consul,
-		Redis:    redis,
-		Rabbitmq: rabbitmq,
+		Conf:   conf,
+		Log:    log.NewHelper(logger),
+		Db:     db,
+		Consul: consul,
+		Redis:  redis,
 	}
 }
 

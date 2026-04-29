@@ -4,7 +4,6 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
-	notifyv1 "common/api/gen/notify/v1"
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -18,7 +17,6 @@ import (
 	"content/internal/data/ent/gen"
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/samber/lo"
 	"github.com/sony/sonyflake/v2"
 )
@@ -137,187 +135,188 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 }
 
 func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return cerrors.ErrorUnauthorized("user not login")
-	}
+	var err error
+	//user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	//if !ok {
+	//	return cerrors.ErrorUnauthorized("user not login")
+	//}
 
-	var a *model.Article
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
-		var err error
-		if active {
-			a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
-			if err != nil {
-				return err
-			}
-			_, err = d.actionRecordRepo.Save(ctx, tx, &model.ArticleActionRecord{ArticleActionRecord: &gen.ArticleActionRecord{
-				ArticleID: articleId,
-				UserID:    userId,
-				Type:      int32(action),
-			}})
-			if err != nil {
-				return err
-			}
-		} else {
-			a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, -1)
-			if err != nil {
-				return err
-			}
-			err = d.actionRecordRepo.Delete(ctx, tx, articleId, userId, action)
-			if err != nil {
-				return err
-			}
-		}
-		return err
-	})
-	if active {
-		err = d.EventPool.Submit(func() {
-			switch action {
-			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
-				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
-					UUID:       uuid.New().String(),
-					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
-					SenderId:   user.ID,
-					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-					Meta: commonModel.Meta{
-						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-					},
-					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-				})
-				if err != nil {
-					d.Log.Errorf("publish article like event error: %v", err)
-					return
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_THANK:
-				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
-					UUID:       uuid.New().String(),
-					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
-					SenderId:   user.ID,
-					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-					Meta: commonModel.Meta{
-						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-					},
-					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-				})
-				if err != nil {
-					d.Log.Errorf("publish article thank event error: %v", err)
-					return
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
-				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
-					UUID:       uuid.New().String(),
-					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
-					SenderId:   user.ID,
-					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-					Meta: commonModel.Meta{
-						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-					},
-					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-				})
-				if err != nil {
-					d.Log.Errorf("publish article collect event error: %v", err)
-					return
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
-				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
-					UUID:       uuid.New().String(),
-					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
-					SenderId:   user.ID,
-					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-					Meta: commonModel.Meta{
-						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-					},
-					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-				})
-				if err != nil {
-					d.Log.Errorf("publish article watch event error: %v", err)
-					return
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_REWARD:
-				err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
-					UUID:       uuid.New().String(),
-					Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
-					SenderId:   user.ID,
-					SenderName: user.Name,
-					Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-					Meta: commonModel.Meta{
-						Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-					},
-					Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-				})
-				if err != nil {
-					d.Log.Errorf("publish article watch event error: %v", err)
-					return
-				}
-			default:
-				return
-			}
-		})
-	}
+	//var a *model.Article
+	//err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	//	var err error
+	//	if active {
+	//		a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
+	//		if err != nil {
+	//			return err
+	//		}
+	//		_, err = d.actionRecordRepo.Save(ctx, tx, &model.ArticleActionRecord{ArticleActionRecord: &gen.ArticleActionRecord{
+	//			ArticleID: articleId,
+	//			UserID:    userId,
+	//			Type:      int32(action),
+	//		}})
+	//		if err != nil {
+	//			return err
+	//		}
+	//	} else {
+	//		a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, -1)
+	//		if err != nil {
+	//			return err
+	//		}
+	//		err = d.actionRecordRepo.Delete(ctx, tx, articleId, userId, action)
+	//		if err != nil {
+	//			return err
+	//		}
+	//	}
+	//	return err
+	//})
+	//if active {
+	//err = d.EventPool.Submit(func() {
+	//	switch action {
+	//	case v1.ArticleAction_ARTICLE_ACTION_LIKE:
+	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
+	//			UUID:       uuid.New().String(),
+	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
+	//			SenderId:   user.ID,
+	//			SenderName: user.Name,
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Meta: commonModel.Meta{
+	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//			},
+	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
+	//		})
+	//		if err != nil {
+	//			d.Log.Errorf("publish article like event error: %v", err)
+	//			return
+	//		}
+	//	case v1.ArticleAction_ARTICLE_ACTION_THANK:
+	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
+	//			UUID:       uuid.New().String(),
+	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
+	//			SenderId:   user.ID,
+	//			SenderName: user.Name,
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Meta: commonModel.Meta{
+	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//			},
+	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
+	//		})
+	//		if err != nil {
+	//			d.Log.Errorf("publish article thank event error: %v", err)
+	//			return
+	//		}
+	//	case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
+	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
+	//			UUID:       uuid.New().String(),
+	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
+	//			SenderId:   user.ID,
+	//			SenderName: user.Name,
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Meta: commonModel.Meta{
+	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//			},
+	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
+	//		})
+	//		if err != nil {
+	//			d.Log.Errorf("publish article collect event error: %v", err)
+	//			return
+	//		}
+	//	case v1.ArticleAction_ARTICLE_ACTION_WATCH:
+	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
+	//			UUID:       uuid.New().String(),
+	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
+	//			SenderId:   user.ID,
+	//			SenderName: user.Name,
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Meta: commonModel.Meta{
+	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//			},
+	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
+	//		})
+	//		if err != nil {
+	//			d.Log.Errorf("publish article watch event error: %v", err)
+	//			return
+	//		}
+	//	case v1.ArticleAction_ARTICLE_ACTION_REWARD:
+	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
+	//			UUID:       uuid.New().String(),
+	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
+	//			SenderId:   user.ID,
+	//			SenderName: user.Name,
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Meta: commonModel.Meta{
+	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//			},
+	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
+	//		})
+	//		if err != nil {
+	//			d.Log.Errorf("publish article watch event error: %v", err)
+	//			return
+	//		}
+	//	default:
+	//		return
+	//	}
+	//})
+	//}
 	return err
 }
 
 func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return cerrors.ErrorUnauthorized("user not login")
-	}
+	//user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
+	//if !ok {
+	//	return cerrors.ErrorUnauthorized("user not login")
+	//}
 
 	var err error
-	var a *model.Article
-	err = ent.WithTx(ctx, tx, func(tx *gen.Client) error {
-		a, err = d.articleRepo.Publish(ctx, tx, articleId)
-		if err != nil {
-			return err
-		}
-		return err
-	})
-	if err != nil {
-		return err
-	}
-	err = d.EventPool.Submit(func() {
-
-		// 广播发布文章事件
-		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
-			UUID:       uuid.New().String(),
-			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
-			SenderId:   user.ID,
-			SenderName: user.Name,
-			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-			Meta: commonModel.Meta{
-				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-			},
-			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-		})
-		if err != nil {
-			d.Log.Errorf("publish a publish event error: %v", err)
-			return
-		}
-
-		// 广播@用户通知
-		atUserNames := a.ParseContent()
-		if len(atUserNames) > 0 {
-			err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
-				UUID:       uuid.New().String(),
-				Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
-				SenderId:   user.ID,
-				SenderName: user.Name,
-				Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
-				Meta: commonModel.Meta{
-					AtUsernames: lo.Keys(atUserNames),
-					Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-				},
-			})
-			if err != nil {
-				d.Log.Errorf("publish a at event error: %v", err)
-				return
-			}
-		}
-	})
+	//var a *model.Article
+	//err = ent.WithTx(ctx, tx, func(tx *gen.Client) error {
+	//	a, err = d.articleRepo.Publish(ctx, tx, articleId)
+	//	if err != nil {
+	//		return err
+	//	}
+	//	return err
+	//})
+	//if err != nil {
+	//	return err
+	//}
+	//err = d.EventPool.Submit(func() {
+	//
+	//	// 广播发布文章事件
+	//	err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
+	//		UUID:       uuid.New().String(),
+	//		Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
+	//		SenderId:   user.ID,
+	//		SenderName: user.Name,
+	//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//		Meta: commonModel.Meta{
+	//			Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//		},
+	//		Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
+	//	})
+	//	if err != nil {
+	//		d.Log.Errorf("publish a publish event error: %v", err)
+	//		return
+	//	}
+	//
+	//	// 广播@用户通知
+	//	atUserNames := a.ParseContent()
+	//	if len(atUserNames) > 0 {
+	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
+	//			UUID:       uuid.New().String(),
+	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
+	//			SenderId:   user.ID,
+	//			SenderName: user.Name,
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Meta: commonModel.Meta{
+	//				AtUsernames: lo.Keys(atUserNames),
+	//				Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
+	//			},
+	//		})
+	//		if err != nil {
+	//			d.Log.Errorf("publish a at event error: %v", err)
+	//			return
+	//		}
+	//	}
+	//})
 	return err
 }
 

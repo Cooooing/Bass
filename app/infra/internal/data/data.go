@@ -23,7 +23,6 @@ var DataProviderSet = wire.NewSet(
 	ProvideRabbitMQ,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
-	commonClient.NewRabbitMQClient,
 	repo.NewObjectStorageRepo,
 
 	jwt.NewTokenCache,

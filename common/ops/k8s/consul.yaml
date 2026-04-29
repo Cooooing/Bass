@@ -1,0 +1,23 @@
+global:
+  name: consul
+  datacenter: dc1
+  acls:
+    # 获取 token
+    # kubectl get secret consul-bootstrap-acl-token -n bass-test -o jsonpath='{.data.token}' | base64 -d
+    manageSystemACLs: true
+server:
+  replicas: 3
+  bootstrapExpect: 3
+  storage: 5Gi
+
+ui:
+  enabled: true
+  service:
+    type: NodePort
+    nodePort:
+      http: 30080
+
+connectInject:
+  enabled: false
+
+# helm upgrade --install consul hashicorp/consul -n bass-test --create-namespace -f ./consul.yaml

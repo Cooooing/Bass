@@ -48,6 +48,9 @@ message Database {
   string driver = 1;
   string source = 2;
   bool merge = 3;
+  bool debug = 4;
+  google.protobuf.Duration slow_sql_threshold = 5;
+  double sample_rate = 6;
 }
 message Redis {
   string addr = 1;

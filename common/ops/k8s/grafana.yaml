@@ -1,0 +1,107 @@
+# grafana.yaml
+# Grafana：可视化面板，通过 NodePort 30104 暴露给开发环境
+
+adminUser: admin
+adminPassword: admin123  # 请修改为安全密码
+
+service:
+  type: NodePort
+  nodePort: 30104
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+persistence:
+  enabled: true
+  size: 2Gi
+
+# 预配置数据源：Loki + Tempo
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        uid: loki
+        url: http://loki:3100
+        access: proxy
+        isDefault: false
+        jsonData:
+          maxLines: 1000
+          derivedFields:
+            # 从日志中提取 traceID 并联动跳转到 Tempo
+            - datasourceUid: tempo
+              matcherRegex: "traceID=(\\w+)"
+              name: TraceID
+              url: "$${__value.raw}"
+
+      - name: Tempo
+        type: tempo
+        uid: tempo
+        url: http://tempo:3100
+        access: proxy
+        isDefault: false
+        jsonData:
+          tracesToLogsV2:
+            datasourceUid: loki
+            spanStartTimeShift: "-1m"
+            spanEndTimeShift: "1m"
+            filterByTraceID: true
+            filterBySpanID: false
+          serviceMap:
+            datasourceUid: prometheus
+          nodeGraph:
+            enabled: true
+
+# 预置 Dashboard（可选，按需保留）
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+dashboards:
+  default:
+    # Loki 日志查看面板
+    loki-logs:
+      gnetId: 13639
+      revision: 2
+      datasource: Loki
+    # Kubernetes 集群日志
+    k8s-logs:
+      gnetId: 15141
+      revision: 1
+      datasource: Loki
+
+grafana.ini:
+  server:
+    root_url: "%(protocol)s://%(domain)s:30104"
+  auth.anonymous:
+    enabled: false
+  # 开发环境可开启匿名访问（取消注释）
+  # auth.anonymous:
+  #   enabled: true
+  #   org_role: Viewer
+
+# helm install loki grafana/loki -n bass-test -f ./loki.yaml
+# helm install tempo grafana/tempo -n bass-test -f ./tempo.yaml
+# helm install alloy grafana/alloy -n bass-test -f ./alloy.yaml
+# helm install grafana grafana/grafana -n bass-test -f ./grafana.yaml
+
+# helm uninstall loki -n bass-test
+# helm uninstall tempo -n bass-test
+# helm uninstall alloy -n bass-test
+# helm uninstall grafana -n bass-test
+

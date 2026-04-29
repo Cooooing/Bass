@@ -34,8 +34,8 @@ func ProvideTasks(
 	ping *handler.PingHandler,
 	pow *handler.PowHandler,
 	session *handler.SessionHandler,
-) map[constant.TaskName]client.Handler {
-	d := make(map[constant.TaskName]client.Handler)
+) map[constant.TaskName]client.MessageHandler {
+	d := make(map[constant.TaskName]client.MessageHandler)
 	d[ping.Name()] = ping
 	d[pow.Name()] = pow
 	d[session.Name()] = session

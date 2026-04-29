@@ -40,14 +40,14 @@ func NewRedisClient(logger log.Logger, conf *common.Redis) (*RedisClient, func()
 		log:    log.NewHelper(logger),
 		Client: client,
 	}
-	log.Infof("redis: connected to [%s]", conf.Addr)
+	r.log.Infof("redis: connected to [%s]", conf.Addr)
 
 	// 清理函数
 	cleanup := func() {
-		if err := client.Close(); err != nil {
-			log.Errorf("failed to close redis client: %s", err.Error())
+		if err := r.Client.Close(); err != nil {
+			r.log.Errorf("failed to close redis client: %s", err.Error())
 		} else {
-			log.Infof("redis client closed")
+			r.log.Infof("redis client closed")
 		}
 	}
 

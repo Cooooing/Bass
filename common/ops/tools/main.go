@@ -19,7 +19,7 @@ var services = []string{"gateway", "infra", "user", "content", "notify", "im", "
 
 func main() {
 	// 初始化 Consul 客户端
-	c, f, err := client.NewConsulClient(log.NewHelper(log.GetLogger()), &common.Consul{
+	c, f, err := client.NewConsulClient(log.GetLogger(), &common.Consul{
 		Address:     fmt.Sprintf("%s:%s", os.Getenv("CONSUL_HOST"), os.Getenv("CONSUL_PORT")),
 		Datacenter:  "dc1",
 		Token:       os.Getenv("CONSUL_ACL_MASTER_TOKEN"),

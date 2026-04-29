@@ -2,7 +2,6 @@ package doamin
 
 import (
 	cerrors "common/api/gen/common/errors"
-	notifyv1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util/jwt"
@@ -14,7 +13,6 @@ import (
 	"user/internal/data/ent"
 	"user/internal/data/ent/gen"
 
-	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
 )
@@ -80,23 +78,23 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 	// 发送邮件验证码通知
 	err = s.EventPool.Submit(func() {
-		err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
-			UUID:       uuid.New().String(),
-			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
-			SenderId:   u.ID,
-			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
-			Meta: commonModel.Meta{
-				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
-					Email:  *u.Email,
-					Code:   code,
-					Expire: s.Conf.Server.Jwt.EmailExpire.AsDuration(),
-				},
-			},
-		})
-		if err != nil {
-			s.Log.Errorf("publish user register verfity code event error: %v", err)
-		}
+		//err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
+		//	UUID:       uuid.New().String(),
+		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
+		//	SenderId:   u.ID,
+		//	SenderName: u.Name,
+		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
+		//	Meta: commonModel.Meta{
+		//		RegisterVerifyCode: &commonModel.RegisterVerifyCode{
+		//			Email:  *u.Email,
+		//			Code:   code,
+		//			Expire: s.Conf.Server.Jwt.EmailExpire.AsDuration(),
+		//		},
+		//	},
+		//})
+		//if err != nil {
+		//	s.Log.Errorf("publish user register verfity code event error: %v", err)
+		//}
 	})
 	if err != nil {
 		return
@@ -200,23 +198,23 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	}
 	// 发送邮件验证码通知
 	err = s.EventPool.Submit(func() {
-		err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
-			UUID:       uuid.New().String(),
-			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
-			SenderId:   u.ID,
-			SenderName: u.Name,
-			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
-			Meta: commonModel.Meta{
-				RegisterVerifyCode: &commonModel.RegisterVerifyCode{
-					Phone:  *u.Phone,
-					Code:   code,
-					Expire: s.Conf.Server.Jwt.PhoneExpire.AsDuration(),
-				},
-			},
-		})
-		if err != nil {
-			s.Log.Errorf("publish user register verfity code event error: %v", err)
-		}
+		//err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
+		//	UUID:       uuid.New().String(),
+		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
+		//	SenderId:   u.ID,
+		//	SenderName: u.Name,
+		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
+		//	Meta: commonModel.Meta{
+		//		RegisterVerifyCode: &commonModel.RegisterVerifyCode{
+		//			Phone:  *u.Phone,
+		//			Code:   code,
+		//			Expire: s.Conf.Server.Jwt.PhoneExpire.AsDuration(),
+		//		},
+		//	},
+		//})
+		//if err != nil {
+		//	s.Log.Errorf("publish user register verfity code event error: %v", err)
+		//}
 	})
 	if err != nil {
 		return

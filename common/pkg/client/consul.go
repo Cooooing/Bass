@@ -24,26 +24,32 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-// ConsulClient 封装 Consul 客户端
+// ConsulClient manages Consul-based service registration and discovery.
 type ConsulClient struct {
-	conf *common.Consul
-	log  *log.Helper
+	conf   *common.Consul
+	logger *log.Helper
 
-	reg       *consulregistry.Registry
-	grpcConns sync.Map // map[string]*grpc.ClientConn
-	httpConns sync.Map // map[string]*khttp.Client
-
+	// Client is the raw Consul API client, exposed for advanced usage.
 	Client *consulapi.Client
+	reg    *consulregistry.Registry
+
+	// Long-lived connection pools.
+	// gRPC reconnection is handled internally via resolver + keepalive.
+	grpcConns sync.Map // service -> *grpc.ClientConn
+	httpConns sync.Map // service -> *khttp.Client
+
+	// Tracks registered service IDs for automatic deregistration on shutdown.
+	mu       sync.Mutex
+	services []string
 }
 
-// NewConsulClient 初始化 Consul 客户端
+// NewConsulClient creates a ConsulClient and returns a cleanup function.
 func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, func(), error) {
-	// 默认参数处理
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)
 	}
 
-	// 构造标准 Consul 配置
+	// Build Consul API config
 	cfg := consulapi.DefaultConfig()
 	cfg.Address = conf.Address
 	if conf.Token != "" {
@@ -52,8 +58,6 @@ func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, fun
 	if conf.Datacenter != "" {
 		cfg.Datacenter = conf.Datacenter
 	}
-
-	// 自定义底层传输超时，防止 Consul 响应慢卡死进程
 	cfg.HttpClient = &http.Client{
 		Timeout: conf.DialTimeout.AsDuration(),
 		Transport: &http.Transport{
@@ -63,72 +67,82 @@ func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, fun
 		},
 	}
 
-	client, err := consulapi.NewClient(cfg)
+	apiClient, err := consulapi.NewClient(cfg)
 	if err != nil {
-		return nil, nil, fmt.Errorf("create consul client failed: %w", err)
+		return nil, nil, fmt.Errorf("create consul client: %w", err)
 	}
 
-	// 创建 Kratos 注册器/发现器单例
-	reg := consulregistry.New(client,
-		consulregistry.WithHealthCheck(true),
-		consulregistry.WithHeartbeat(true), // 开启心跳上报
+	reg := consulregistry.New(apiClient,
+		consulregistry.WithHealthCheck(false),
+		consulregistry.WithHeartbeat(true),
 	)
+
+	// Connectivity pre-check
+	if _, err = apiClient.Catalog().Datacenters(); err != nil {
+		return nil, nil, fmt.Errorf("consul unreachable: %w", err)
+	}
 
 	c := &ConsulClient{
 		conf:   conf,
-		log:    log.NewHelper(logger),
-		Client: client,
+		logger: log.NewHelper(logger),
+		Client: apiClient,
 		reg:    reg,
 	}
 
-	// 连通性预检 (获取当前 DC 列表)
-	_, err = client.Catalog().Datacenters()
-	if err != nil {
-		return nil, nil, fmt.Errorf("consul connection check failed: %w", err)
+	c.logger.Infof("consul connected: %s (dc=%s)", conf.Address, cfg.Datacenter)
+	return c, c.Close, nil
+}
+
+// Registrar returns the Kratos Registrar backed by Consul.
+func (c *ConsulClient) Registrar() registry.Registrar { return c.reg }
+
+// Discovery returns the Kratos Discovery backed by Consul.
+func (c *ConsulClient) Discovery() registry.Discovery { return c.reg }
+
+// RegisterService registers a service with Consul.
+// The service will be automatically deregistered when Close is called.
+func (c *ConsulClient) RegisterService(svc *consulapi.AgentServiceRegistration) error {
+	if err := c.Client.Agent().ServiceRegister(svc); err != nil {
+		return fmt.Errorf("register %s: %w", svc.ID, err)
 	}
-
-	c.log.Infof("consul connected to [%v], datacenter: %v", conf.Address, cfg.Datacenter)
-	return c, c.CleanUp, nil
+	c.mu.Lock()
+	c.services = append(c.services, svc.ID)
+	c.mu.Unlock()
+	c.logger.Infof("registered: %s", svc.ID)
+	return nil
 }
 
-// Registrar 返回单例注册器
-func (c *ConsulClient) Registrar() registry.Registrar {
-	return c.reg
-}
-
-// Discovery 返回单例发现器
-func (c *ConsulClient) Discovery() registry.Discovery {
-	return c.reg
-}
-
-// GetGrpcConn 获取并缓存 gRPC 连接 (线程安全)
+// GetGrpcConn returns a cached gRPC connection for the named service.
+// Connections are long-lived: gRPC handles reconnection, the Consul resolver
+// handles endpoint updates, and keepalive probes detect dead connections.
 func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
-	if val, ok := c.grpcConns.Load(service); ok {
-		return val.(*grpc.ClientConn), nil
+	if v, ok := c.grpcConns.Load(service); ok {
+		return v.(*grpc.ClientConn), nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), c.conf.DialTimeout.AsDuration())
 	defer cancel()
 
-	conn, err := kgrpc.DialInsecure(
-		ctx,
+	conn, err := kgrpc.DialInsecure(ctx,
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		kgrpc.WithDiscovery(c.reg),
 		kgrpc.WithTimeout(c.conf.DialTimeout.AsDuration()),
-		kgrpc.WithOptions(grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`)),
+		kgrpc.WithOptions(
+			grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
+			grpc.WithKeepaliveParams(keepalive.ClientParameters{
+				Time:                30 * time.Second,
+				Timeout:             10 * time.Second,
+				PermitWithoutStream: true,
+			}),
+		),
 		kgrpc.WithMiddleware(
 			recovery.Recovery(),
 			tracing.Client(),
 			metadata2.Client(),
 		),
-		kgrpc.WithOptions(grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:                60 * time.Second,
-			Timeout:             20 * time.Second,
-			PermitWithoutStream: true,
-		})),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("dial service %s failed: %w", service, err)
+		return nil, fmt.Errorf("dial %s: %w", service, err)
 	}
 
 	actual, loaded := c.grpcConns.LoadOrStore(service, conn)
@@ -136,17 +150,18 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 		_ = conn.Close()
 		return actual.(*grpc.ClientConn), nil
 	}
+
+	c.logger.Infof("grpc conn: %s", service)
 	return conn, nil
 }
 
-// GetHTTPClient 获取并缓存 HTTP Client
+// GetHTTPClient returns a cached HTTP client for the named service.
 func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
-	if val, ok := c.httpConns.Load(service); ok {
-		return val.(*khttp.Client), nil
+	if v, ok := c.httpConns.Load(service); ok {
+		return v.(*khttp.Client), nil
 	}
 
-	client, err := khttp.NewClient(
-		context.Background(),
+	cl, err := khttp.NewClient(context.Background(),
 		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		khttp.WithDiscovery(c.reg),
 		khttp.WithMiddleware(
@@ -155,36 +170,46 @@ func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
 		),
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("http client %s: %w", service, err)
 	}
 
-	actual, loaded := c.httpConns.LoadOrStore(service, client)
+	actual, loaded := c.httpConns.LoadOrStore(service, cl)
 	if loaded {
+		_ = cl.Close()
 		return actual.(*khttp.Client), nil
 	}
-	return client, nil
+
+	c.logger.Infof("http client: %s", service)
+	return cl, nil
 }
 
-// CleanUp 资源清理
-func (c *ConsulClient) CleanUp() {
-	c.grpcConns.Range(func(key, value any) bool {
-		if conn, ok := value.(*grpc.ClientConn); ok {
-			_ = conn.Close()
-			c.log.Infof("closed grpc connection to %v", key)
+// Close deregisters all services and closes all connections.
+func (c *ConsulClient) Close() {
+	// Deregister services
+	c.mu.Lock()
+	ids := c.services
+	c.services = nil
+	c.mu.Unlock()
+
+	for _, id := range ids {
+		if err := c.Client.Agent().ServiceDeregister(id); err != nil {
+			c.logger.Warnf("deregister %s: %v", id, err)
+		} else {
+			c.logger.Infof("deregistered: %s", id)
 		}
+	}
+
+	// Close gRPC connections
+	c.grpcConns.Range(func(_, v any) bool {
+		_ = v.(*grpc.ClientConn).Close()
 		return true
 	})
-	// 重置 Map
-	c.grpcConns = sync.Map{}
-	c.httpConns = sync.Map{}
-	c.log.Info("consul client connections cleaned up")
-}
 
-func GetConsulServiceClient[T any](consul *ConsulClient, service string, newClient func(grpc.ClientConnInterface) T) (T, error) {
-	conn, err := consul.GetGrpcConn(service)
-	if err != nil {
-		var zero T
-		return zero, err
-	}
-	return newClient(conn), nil
+	// Close HTTP clients
+	c.httpConns.Range(func(_, v any) bool {
+		_ = v.(*khttp.Client).Close()
+		return true
+	})
+
+	c.logger.Info("consul client closed")
 }

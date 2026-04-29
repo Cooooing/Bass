@@ -4,18 +4,21 @@ import (
 	"common/api/gen/common"
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
 )
 
+// RedisClient 封装 Redis 客户端
 type RedisClient struct {
 	log    *log.Helper
 	Client *redis.Client
 }
 
-// NewRedisClient 初始化单机 Redis 客户端
+// NewRedisClient 初始化 Redis 客户端
 func NewRedisClient(logger log.Logger, conf *common.Redis) (*RedisClient, func(), error) {
+	helper := log.NewHelper(logger)
 	client := redis.NewClient(&redis.Options{
 		Addr:            conf.Addr,
 		Password:        conf.Password,
@@ -28,28 +31,35 @@ func NewRedisClient(logger log.Logger, conf *common.Redis) (*RedisClient, func()
 		PoolTimeout:     conf.PoolTimeout.AsDuration(),
 		ConnMaxIdleTime: conf.ConnMaxIdleTime.AsDuration(),
 		ConnMaxLifetime: conf.ConnMaxLifeTime.AsDuration(),
+		MaxRetries:      3,                      // 网络闪断自动重试
+		MinRetryBackoff: 100 * time.Millisecond, // 重试退避下限
+		MaxRetryBackoff: 500 * time.Millisecond, // 重试退避上限
+		OnConnect: func(ctx context.Context, conn *redis.Conn) error {
+			helper.Infof("redis conn created: %s", conn.String())
+			return nil
+		},
 	})
-	ctx := context.Background()
 
-	// 测试连接
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	if err := client.Ping(ctx).Err(); err != nil {
-		return nil, nil, fmt.Errorf("failed to ping redis: %w", err)
+		_ = client.Close()
+		return nil, nil, fmt.Errorf("redis ping [%s]: %w", conf.Addr, err)
 	}
+
+	helper.Infof("redis connected: %s (db=%d)", conf.Addr, conf.Db)
 
 	r := &RedisClient{
-		log:    log.NewHelper(logger),
+		log:    helper,
 		Client: client,
 	}
-	r.log.Infof("redis: connected to [%s]", conf.Addr)
 
-	// 清理函数
-	cleanup := func() {
-		if err := r.Client.Close(); err != nil {
-			r.log.Errorf("failed to close redis client: %s", err.Error())
+	return r, func() {
+		if err := client.Close(); err != nil {
+			helper.Errorf("redis close: %s", err)
 		} else {
-			r.log.Infof("redis client closed")
+			helper.Infof("redis closed: %s", conf.Addr)
 		}
-	}
-
-	return r, cleanup, nil
+	}, nil
 }

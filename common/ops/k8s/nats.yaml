@@ -5,10 +5,21 @@ config:
       pvc:
         enabled: true
         size: 5Gi
+    merge:
+      max_mem: "1G"
+      max_file: "10G"
+
   cluster:
-    enabled: false
+    enabled: true
+    merge:
+      port: 6222
+      name: "nats-cluster"
+
   monitor:
     enabled: true
+
+statefulSet:
+  replicas: 3
 
 promExporter:
   enabled: true

@@ -2,18 +2,17 @@ package constant
 
 import (
 	"common/api/gen/common"
-	"math"
 )
 
 // 服务启动模式定义
-var (
+const (
 	Dev  = "dev"
 	Test = "test"
 	Prod = "prod"
 )
 
 // 请求头 key 定义
-var (
+const (
 	HeaderTimestamp           = "X-Timestamp"            // 时间戳，防止过期请求
 	HeaderNonce               = "X-Nonce"                // 随机数，防止重放攻击
 	HeaderAuthentication      = "Authorization"          // token 请求头名称
@@ -21,30 +20,36 @@ var (
 	HeaderSignalNodeSignature = "X-Signal-NodeSignature" // 节点签名
 )
 
-var page uint32 = 1
-var size uint32 = 10
+const (
+	defaultPage uint32 = 1
+	defaultSize uint32 = 10
+	maxPageSize uint32 = 1000
+)
 
 func PageValid(p *common.PageRequest) *common.PageRequest {
 	if p == nil {
 		return GetPageDefault()
 	}
 	if p.Page <= 0 {
-		p.Page = page
+		p.Page = defaultPage
 	}
 	if p.Size <= 0 {
-		p.Size = size
+		p.Size = defaultSize
+	}
+	if p.Size > maxPageSize {
+		p.Size = maxPageSize
 	}
 	return p
 }
 func GetPageDefault() *common.PageRequest {
 	return &common.PageRequest{
-		Page: page,
-		Size: size,
+		Page: defaultPage,
+		Size: defaultSize,
 	}
 }
 func GetPageMax() *common.PageRequest {
 	return &common.PageRequest{
-		Page: page,
-		Size: math.MaxUint32,
+		Page: defaultPage,
+		Size: maxPageSize,
 	}
 }

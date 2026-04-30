@@ -7,12 +7,10 @@ import (
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
-	"runtime"
 
 	"common/pkg/util/jwt"
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -106,7 +104,7 @@ func HttpErrorEncoder(w http.ResponseWriter, r *http.Request, err error) {
 func TimestampMiddleware(mode string) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			if mode == constant.Dev || true {
+			if mode == constant.Dev {
 				return handler(ctx, req)
 			}
 			// 毫秒级时间戳
@@ -135,8 +133,7 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			// Todo nonce 是否需要携带更多信息
-			if mode == constant.Dev || true {
+			if mode == constant.Dev {
 				return handler(ctx, req)
 			}
 			nonce := GetHeader(ctx, constant.HeaderNonce)
@@ -169,7 +166,7 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 
 			userInfo, err := tokenCache.GetToken(ctx, token)
 			if err != nil {
-				return nil, fmt.Errorf("invalid token: %w", err)
+				return nil, cerrors.ErrorUnauthorized("token is invalid")
 			}
 			if token != "" && userInfo == nil {
 				return nil, cerrors.ErrorUnauthorized("token is invalid")
@@ -177,12 +174,6 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
 			ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
-
-			_, file, line, ok := runtime.Caller(2)
-			if !ok {
-				return nil, cerrors.ErrorUnauthorized("unknown caller")
-			}
-			ctx = context.WithValue(ctx, "caller", fmt.Sprintf("%s:%d", file, line))
 
 			return handler(ctx, req)
 		}

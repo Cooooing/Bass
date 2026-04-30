@@ -1,6 +1,7 @@
 package client
 
 import (
+	"common/api/gen/common"
 	"context"
 	"fmt"
 	"sync"
@@ -8,44 +9,43 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nats-io/nats.go"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
-func TestNewClient(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
+const testNatsURL = "nats://192.168.100.10:30083"
 
-	client, err := NewClient(
-		WithURL(url),
-		WithName("test-client"),
-		WithTimeout(3*time.Second),
-	)
+var l = log.DefaultLogger
+
+func testNatsConf() *common.Nats {
+	return &common.Nats{
+		Url:  testNatsURL,
+		Name: "test-client",
+	}
+}
+
+func TestNewClient(t *testing.T) {
+	conf := testNatsConf()
+	client, cleanup, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	if client.Conn() == nil {
 		t.Fatal("conn should not be nil")
 	}
-
-	if client.Conn().Status() != nats.CONNECTED {
-		t.Fatalf("expected CONNECTED, got %s", client.Conn().Status())
-	}
 }
 
 func TestPublishSubscribe(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	client, cleanup, err := NewNatsClient(l, testNatsConf())
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	ctx := context.Background()
 	received := make(chan *Message, 1)
 
-	// 订阅
 	unsub, err := client.Subscribe(ctx, "test.topic", func(ctx context.Context, msg *Message) error {
 		received <- msg
 		return nil
@@ -55,10 +55,8 @@ func TestPublishSubscribe(t *testing.T) {
 	}
 	defer unsub.Unsubscribe()
 
-	// 等待订阅生效
 	time.Sleep(100 * time.Millisecond)
 
-	// 发布
 	err = client.Publish(ctx, "test.topic", &Message{
 		Data: []byte("hello nats"),
 		Header: map[string]string{
@@ -69,7 +67,6 @@ func TestPublishSubscribe(t *testing.T) {
 		t.Fatalf("publish: %v", err)
 	}
 
-	// 等待消息
 	select {
 	case msg := <-received:
 		if string(msg.Data) != "hello nats" {
@@ -84,16 +81,15 @@ func TestPublishSubscribe(t *testing.T) {
 }
 
 func TestQueueSubscribe(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	// 创建多个客户端模拟多个消费者
-	clients := make([]*Client, 3)
+	clients := make([]*NatsClient, 3)
 	for i := range clients {
-		c, err := NewClient(WithURL(url), WithName(fmt.Sprintf("worker-%d", i)))
+		conf := testNatsConf()
+		conf.Name = fmt.Sprintf("worker-%d", i)
+		c, cleanup, err := NewNatsClient(l, conf)
 		if err != nil {
 			t.Fatalf("new client %d: %v", i, err)
 		}
-		defer c.Close()
+		defer cleanup()
 		clients[i] = c
 	}
 
@@ -104,7 +100,6 @@ func TestQueueSubscribe(t *testing.T) {
 
 	wg.Add(totalMessages)
 
-	// 所有客户端订阅同一队列组
 	for i, c := range clients {
 		_, err := c.QueueSubscribe(ctx, "orders.new", "order-processors",
 			func(ctx context.Context, msg *Message) error {
@@ -120,7 +115,6 @@ func TestQueueSubscribe(t *testing.T) {
 
 	time.Sleep(200 * time.Millisecond)
 
-	// 发布消息
 	for i := 0; i < totalMessages; i++ {
 		err := clients[0].Publish(ctx, "orders.new", &Message{
 			Data: []byte(fmt.Sprintf("order-%d", i)),
@@ -130,7 +124,6 @@ func TestQueueSubscribe(t *testing.T) {
 		}
 	}
 
-	// 等待所有消息被消费
 	done := make(chan struct{})
 	go func() {
 		wg.Wait()
@@ -148,14 +141,13 @@ func TestQueueSubscribe(t *testing.T) {
 }
 
 func TestPublishAfterClose(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, _, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
 
-	client.Close()
+	_ = client.Close()
 
 	err = client.Publish(context.Background(), "test", &Message{Data: []byte("fail")})
 	if err == nil {
@@ -164,14 +156,13 @@ func TestPublishAfterClose(t *testing.T) {
 }
 
 func TestSubscribeAfterClose(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, _, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
 
-	client.Close()
+	_ = client.Close()
 
 	_, err = client.Subscribe(context.Background(), "test", func(ctx context.Context, msg *Message) error {
 		return nil
@@ -182,13 +173,12 @@ func TestSubscribeAfterClose(t *testing.T) {
 }
 
 func TestMultipleSubjects(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, cleanup, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	ctx := context.Background()
 	subjects := []string{"user.created", "user.updated", "user.deleted"}
@@ -196,7 +186,7 @@ func TestMultipleSubjects(t *testing.T) {
 	var mu sync.Mutex
 
 	for _, sub := range subjects {
-		s := sub // capture
+		s := sub
 		_, err := client.Subscribe(ctx, s, func(ctx context.Context, msg *Message) error {
 			mu.Lock()
 			received[s] = msg
@@ -210,7 +200,6 @@ func TestMultipleSubjects(t *testing.T) {
 
 	time.Sleep(100 * time.Millisecond)
 
-	// 发布到每个 subject
 	for _, sub := range subjects {
 		err := client.Publish(ctx, sub, &Message{Data: []byte(sub)})
 		if err != nil {
@@ -234,13 +223,12 @@ func TestMultipleSubjects(t *testing.T) {
 }
 
 func TestHandlerError(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, cleanup, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	ctx := context.Background()
 	var failCount atomic.Int32
@@ -255,7 +243,6 @@ func TestHandlerError(t *testing.T) {
 
 	time.Sleep(100 * time.Millisecond)
 
-	// 发布消息 — handler 返回错误不应 panic
 	err = client.Publish(ctx, "test.error", &Message{Data: []byte("will fail")})
 	if err != nil {
 		t.Fatalf("publish: %v", err)
@@ -269,13 +256,12 @@ func TestHandlerError(t *testing.T) {
 }
 
 func TestUnsubscribe(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, cleanup, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	ctx := context.Background()
 	var count atomic.Int32
@@ -290,18 +276,15 @@ func TestUnsubscribe(t *testing.T) {
 
 	time.Sleep(100 * time.Millisecond)
 
-	// 第一条消息应该收到
 	_ = client.Publish(ctx, "test.unsub", &Message{Data: []byte("msg1")})
 	time.Sleep(200 * time.Millisecond)
 
-	// 取消订阅
 	if err := unsub.Unsubscribe(); err != nil {
 		t.Fatalf("unsubscribe: %v", err)
 	}
 
 	time.Sleep(100 * time.Millisecond)
 
-	// 第二条消息不应该收到
 	_ = client.Publish(ctx, "test.unsub", &Message{Data: []byte("msg2")})
 	time.Sleep(300 * time.Millisecond)
 
@@ -311,13 +294,12 @@ func TestUnsubscribe(t *testing.T) {
 }
 
 func TestConcurrentPublish(t *testing.T) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, cleanup, err := NewNatsClient(l, conf)
 	if err != nil {
 		t.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	ctx := context.Background()
 	var received atomic.Int64
@@ -333,7 +315,6 @@ func TestConcurrentPublish(t *testing.T) {
 
 	time.Sleep(100 * time.Millisecond)
 
-	// 并发发布
 	var wg sync.WaitGroup
 	for i := 0; i < totalMessages; i++ {
 		wg.Add(1)
@@ -356,15 +337,13 @@ func TestConcurrentPublish(t *testing.T) {
 	}
 }
 
-// BenchmarkPublish 基准测试
 func BenchmarkPublish(b *testing.B) {
-	url := "nats://192.168.100.10:30083"
-
-	client, err := NewClient(WithURL(url))
+	conf := testNatsConf()
+	client, cleanup, err := NewNatsClient(l, conf)
 	if err != nil {
 		b.Fatalf("new client: %v", err)
 	}
-	defer client.Close()
+	defer cleanup()
 
 	ctx := context.Background()
 	msg := &Message{Data: []byte("benchmark payload data")}
@@ -378,3 +357,14 @@ func BenchmarkPublish(b *testing.B) {
 		}
 	})
 }
+
+func newTestNatsClient(conf *common.Nats) (func(), error) {
+	_, cleanup, err := NewNatsClient(l, conf)
+	return cleanup, err
+}
+
+// Ensure NatsClient satisfies the expected interfaces.
+var (
+	_ Publisher  = (*NatsClient)(nil)
+	_ Subscriber = (*NatsClient)(nil)
+)

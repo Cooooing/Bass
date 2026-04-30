@@ -20,7 +20,7 @@ type RegisterVerifyCode struct {
 func NewRegisterVerifyCode(baseDomain *domainbase.BaseDomain) *RegisterVerifyCode {
 	return &RegisterVerifyCode{
 		BaseDomain:  baseDomain,
-		BaseHandler: &handlerchain.BaseHandler[*commonModel.Notification]{Name: "register_verify_code"},
+		BaseHandler: new(handlerchain.NewBaseHandler[*commonModel.Notification]("register_verify_code")),
 	}
 }
 
@@ -71,5 +71,5 @@ func (h *RegisterVerifyCode) SetNext(next handlerchain.Handler[*commonModel.Noti
 }
 
 func (h *RegisterVerifyCode) Name() string {
-	return h.BaseHandler.GetName()
+	return h.BaseHandler.Name()
 }

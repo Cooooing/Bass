@@ -14,7 +14,7 @@ type Handler[T any] interface {
 // BaseHandler 提供基础链实现，可嵌入具体 Handler
 type BaseHandler[T any] struct {
 	next Handler[T]
-	Name string
+	name string
 }
 
 // SetNext 设置下一个 Handler
@@ -31,11 +31,11 @@ func (b *BaseHandler[T]) Next(ctx context.Context, data T) (T, error) {
 }
 
 // Name 返回 Handler 名称
-func (b *BaseHandler[T]) GetName() string {
-	return b.Name
+func (b *BaseHandler[T]) Name() string {
+	return b.name
 }
 
 // NewBaseHandler 创建一个带名字的 BaseHandler
 func NewBaseHandler[T any](name string) BaseHandler[T] {
-	return BaseHandler[T]{Name: name}
+	return BaseHandler[T]{name: name}
 }

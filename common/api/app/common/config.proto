@@ -65,18 +65,21 @@ message Redis {
   google.protobuf.Duration conn_max_idle_time = 10;
   google.protobuf.Duration conn_max_life_time = 11;
 }
-message RabbitMQ {
-  string url = 1;
-  google.protobuf.Duration heartbeat = 2;
-  google.protobuf.Duration dial_timeout = 3;
-  int32 prefetch_count = 4;
-  bool prefetch_global = 5;
-  int32 delivery_mode = 6;
-  bool auto_ack = 7;
-}
 message Consul {
   string address = 1;
   string datacenter = 2;
   string token = 3;
   google.protobuf.Duration dial_timeout = 4;
+}
+message Nats {
+  string url = 1;
+  string name = 2;
+  google.protobuf.Duration timeout = 3;
+  int32 max_reconnects = 4;
+  google.protobuf.Duration reconnect_wait = 5;
+  google.protobuf.Duration ping_interval = 6;
+  google.protobuf.Duration flusher_timeout = 7;
+  bool enable_jet_stream = 8;
+  string stream_name = 9;
+  string jet_stream_domain = 10;
 }

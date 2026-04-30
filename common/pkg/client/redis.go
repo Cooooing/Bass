@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
+	"google.golang.org/protobuf/types/known/durationpb"
 )
 
 // RedisClient 封装 Redis 客户端
@@ -19,6 +20,30 @@ type RedisClient struct {
 // NewRedisClient 初始化 Redis 客户端
 func NewRedisClient(logger log.Logger, conf *common.Redis) (*RedisClient, func(), error) {
 	helper := log.NewHelper(logger)
+
+	// 默认值
+	if conf.DialTimeout == nil {
+		conf.DialTimeout = durationpb.New(5 * time.Second)
+	}
+	if conf.ReadTimeout == nil {
+		conf.ReadTimeout = durationpb.New(3 * time.Second)
+	}
+	if conf.WriteTimeout == nil {
+		conf.WriteTimeout = durationpb.New(3 * time.Second)
+	}
+	if conf.PoolSize == 0 {
+		conf.PoolSize = 10
+	}
+	if conf.PoolTimeout == nil {
+		conf.PoolTimeout = durationpb.New(5 * time.Second)
+	}
+	if conf.ConnMaxIdleTime == nil {
+		conf.ConnMaxIdleTime = durationpb.New(10 * time.Minute)
+	}
+	if conf.ConnMaxLifeTime == nil {
+		conf.ConnMaxLifeTime = durationpb.New(30 * time.Minute)
+	}
+
 	client := redis.NewClient(&redis.Options{
 		Addr:            conf.Addr,
 		Password:        conf.Password,

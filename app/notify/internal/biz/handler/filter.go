@@ -11,7 +11,7 @@ type Filter struct {
 }
 
 func NewFilter() *Filter {
-	return &Filter{BaseHandler: &handlerchain.BaseHandler[*commonModel.Notification]{Name: "filter"}}
+	return &Filter{BaseHandler: new(handlerchain.NewBaseHandler[*commonModel.Notification]("filter"))}
 }
 
 func (h *Filter) Handle(ctx context.Context, data *commonModel.Notification) (*commonModel.Notification, error) {
@@ -24,5 +24,5 @@ func (h *Filter) SetNext(next handlerchain.Handler[*commonModel.Notification]) {
 }
 
 func (h *Filter) Name() string {
-	return h.BaseHandler.GetName()
+	return h.BaseHandler.Name()
 }

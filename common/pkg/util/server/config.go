@@ -52,10 +52,7 @@ func loadBootstrap(path string) (*common.Bootstrap, error) {
 func loadLocalConfig[T any](bc *common.Bootstrap, path string) (*T, error) {
 	c := config.New(config.WithSource(env.NewSource(""), file.NewSource(path)))
 	defer func(c config.Config) {
-		err := c.Close()
-		if err != nil {
-			panic(err)
-		}
+		_ = c.Close()
 	}(c)
 
 	if err := c.Load(); err != nil {

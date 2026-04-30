@@ -15,6 +15,9 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string
 	}
 
 	text := n.Text()
+	if len(text) == 0 {
+		return ast.WalkContinue
+	}
 
 	/*
 		@username
@@ -26,18 +29,13 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string
 		#tag/domain
 		[#tag/domain](tag's link)
 	*/
-	s := text[1:]
 	if strings.HasPrefix(text, "@") {
-		username := s
-		atUsernames[username] = struct{}{}
-		return ast.WalkContinue
+		atUsernames[text[1:]] = struct{}{}
 	} else if strings.HasPrefix(text, "&") {
-		parts := strings.SplitN(s, ":", 2)
+		parts := strings.SplitN(text[1:], ":", 2)
 		if len(parts) == 2 {
-			return ast.WalkContinue
+			// parsed username:title
 		}
-	} else if strings.HasPrefix(text, "#") {
-		return ast.WalkContinue
 	}
 
 	return ast.WalkContinue

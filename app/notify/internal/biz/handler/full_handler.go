@@ -26,7 +26,7 @@ type FullHandler struct {
 func NewFullHandler(base *domainbase.BaseDomain, notificationMetaRepo repo.NotificationMetaRepo, notificationRecordRepo repo.NotificationRecordRepo) *FullHandler {
 	return &FullHandler{
 		BaseDomain:             base,
-		BaseHandler:            &handlerchain.BaseHandler[*commonModel.Notification]{Name: "full_handler"},
+		BaseHandler:            new(handlerchain.NewBaseHandler[*commonModel.Notification]("full_handler")),
 		notificationMetaRepo:   notificationMetaRepo,
 		notificationRecordRepo: notificationRecordRepo,
 	}
@@ -156,5 +156,5 @@ func (h *FullHandler) SetNext(next handlerchain.Handler[*commonModel.Notificatio
 }
 
 func (h *FullHandler) Name() string {
-	return h.BaseHandler.GetName()
+	return h.BaseHandler.Name()
 }

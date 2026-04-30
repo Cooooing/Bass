@@ -3,9 +3,6 @@ package str
 import (
 	"strings"
 	"unicode"
-
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 // ToUpperCamelCase 将字符串转换为大驼峰命名
@@ -16,7 +13,7 @@ func ToUpperCamelCase(s string) string {
 			continue
 		}
 		// 每个单词首字母大写，其余小写
-		words[i] = cases.Title(language.English).String(strings.ToLower(word))
+		words[i] = titleCase(strings.ToLower(word))
 	}
 	return strings.Join(words, "")
 }
@@ -33,7 +30,7 @@ func ToLowerCamelCase(s string) string {
 			words[i] = strings.ToLower(word)
 		} else {
 			// 其他单词首字母大写
-			words[i] = cases.Title(language.English).String(strings.ToLower(word))
+			words[i] = titleCase(strings.ToLower(word))
 		}
 	}
 	return strings.Join(words, "")
@@ -63,6 +60,16 @@ func ToKebabCase(s string) string {
 		words[i] = strings.ToLower(word)
 	}
 	return strings.Join(words, "-")
+}
+
+// titleCase 将单词首字母大写，其余小写
+func titleCase(s string) string {
+	if s == "" {
+		return s
+	}
+	r := []rune(s)
+	r[0] = unicode.ToUpper(r[0])
+	return string(r)
 }
 
 // splitWords 将输入字符串按下划线、短横线、空格或驼峰规则分割为单词

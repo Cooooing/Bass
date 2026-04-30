@@ -27,6 +27,7 @@ func VerifyPassword(hashed string, plain string) bool {
 }
 
 // MD5Hash 返回输入字符串的 32 位小写 MD5 加密结果
+// 注意：MD5 不具有抗碰撞性，不得用于密码、token 等安全场景，仅用于非安全性的校验和/指纹计算。
 func MD5Hash(text string) string {
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])

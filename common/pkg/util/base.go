@@ -3,7 +3,6 @@ package util
 import "reflect"
 
 // Ptr 返回一个指向 v 的指针
-// Deprecated: 从 Go 1.26 开始，请使用内置函数 new(v) 对值取地址。
 func Ptr[T any](v T) *T {
 	return &v
 }
@@ -43,12 +42,13 @@ func OrDefault[T any](v T, defaultValue T) T {
 	return v
 }
 
-// PtrOrDefault 如果 v 为 nil，返回 defaultValue，否则返回 v 的指针
-func PtrOrDefault[T any, U *T](v T, defaultValue U) U {
-	if IsNil(v) {
+// PtrOrDefault 如果 v 为零值，返回 defaultValue，否则返回 v 的指针
+func PtrOrDefault[T comparable](v T, defaultValue *T) *T {
+	var zero T
+	if v == zero {
 		return defaultValue
 	}
-	return new(v)
+	return &v
 }
 
 // DerefOrDefault 如果指针 v 为 nil，返回 defaultValue，否则返回 *v

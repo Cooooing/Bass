@@ -45,8 +45,12 @@ type ConsulClient struct {
 
 // NewConsulClient creates a ConsulClient and returns a cleanup function.
 func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, func(), error) {
+	// 默认值
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)
+	}
+	if conf.Datacenter == "" {
+		conf.Datacenter = "dc1"
 	}
 
 	// Build Consul API config

@@ -12,7 +12,7 @@ type User struct {
 	// 昵称
 	Nickname string `json:"nickname,omitempty"`
 	// 密码
-	Password string `json:"password,omitempty"`
+	Password string `json:"-"`
 	// 邮箱
 	Email string `json:"email,omitempty"`
 	// 手机号
@@ -80,7 +80,7 @@ type User struct {
 	// 二步验证启用时间
 	TwofaEnableTime *time.Time `json:"twofa_enable_time,omitempty"`
 	// 二步验证Secret
-	TwofaSecret string `json:"twofa_secret,omitempty"`
+	TwofaSecret string `json:"-"`
 	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// 更新时间

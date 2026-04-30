@@ -5,7 +5,6 @@ import (
 	"common/pkg/model"
 
 	"context"
-	"errors"
 	"time"
 
 	"entgo.io/ent"
@@ -77,19 +76,13 @@ func AuditHook() ent.Hook {
 				}
 
 				// 用户ID字段
-				if us, ok := m.(UserAuditSetter); ok {
-					if !userOk {
-						return nil, errors.New("cannot get user info from context for UserAudit fields")
-					}
+				if us, ok := m.(UserAuditSetter); ok && userOk {
 					us.SetCreatedBy(userID)
 					us.SetUpdatedBy(userID)
 				}
 
 				// 用户名字段
-				if uns, ok := m.(UsernameAuditSetter); ok {
-					if !userOk {
-						return nil, errors.New("cannot get user info from context for UsernameAudit fields")
-					}
+				if uns, ok := m.(UsernameAuditSetter); ok && userOk {
 					uns.SetCreatedByName(username)
 					uns.SetUpdatedByName(username)
 				}
@@ -101,18 +94,12 @@ func AuditHook() ent.Hook {
 				}
 
 				// 用户ID字段
-				if us, ok := m.(UserAuditSetter); ok {
-					if !userOk {
-						return nil, errors.New("cannot get user info from context for UserAudit fields")
-					}
+				if us, ok := m.(UserAuditSetter); ok && userOk {
 					us.SetUpdatedBy(userID)
 				}
 
 				// 用户名字段
-				if uns, ok := m.(UsernameAuditSetter); ok {
-					if !userOk {
-						return nil, errors.New("cannot get user info from context for UsernameAudit fields")
-					}
+				if uns, ok := m.(UsernameAuditSetter); ok && userOk {
 					uns.SetUpdatedByName(username)
 				}
 

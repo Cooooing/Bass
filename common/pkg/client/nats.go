@@ -1,6 +1,7 @@
 package client
 
 import (
+	"common/api/gen/common"
 	"context"
 	"fmt"
 	"sync"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/nats-io/nats.go"
+	"google.golang.org/protobuf/types/known/durationpb"
 )
 
 // Message 封装消息体，解耦外部依赖
@@ -40,80 +42,9 @@ type Unsubscriber interface {
 	Unsubscribe() error
 }
 
-// Option 是 NATS 客户端的函数选项
-type Option func(*options)
-
-type options struct {
-	name    string
-	url     string
-	logger  log.Logger
-	timeout time.Duration
-
-	// 连接选项
-	maxReconnects  int
-	reconnectWait  time.Duration
-	pingInterval   time.Duration
-	flusherTimeout time.Duration
-
-	// JetStream 选项（可选）
-	enableJetStream bool
-	streamName      string
-}
-
-func defaultOptions() *options {
-	return &options{
-		name:           "nats-client",
-		url:            nats.DefaultURL,
-		timeout:        5 * time.Second,
-		maxReconnects:  10,
-		reconnectWait:  2 * time.Second,
-		pingInterval:   30 * time.Second,
-		flusherTimeout: 5 * time.Second,
-	}
-}
-
-func WithName(name string) Option {
-	return func(o *options) { o.name = name }
-}
-
-func WithURL(url string) Option {
-	return func(o *options) { o.url = url }
-}
-
-func WithLogger(l log.Logger) Option {
-	return func(o *options) { o.logger = l }
-}
-
-func WithTimeout(d time.Duration) Option {
-	return func(o *options) { o.timeout = d }
-}
-
-func WithMaxReconnects(n int) Option {
-	return func(o *options) { o.maxReconnects = n }
-}
-
-func WithReconnectWait(d time.Duration) Option {
-	return func(o *options) { o.reconnectWait = d }
-}
-
-func WithPingInterval(d time.Duration) Option {
-	return func(o *options) { o.pingInterval = d }
-}
-
-func WithFlusherTimeout(d time.Duration) Option {
-	return func(o *options) { o.flusherTimeout = d }
-}
-
-func WithJetStream(streamName string) Option {
-	return func(o *options) {
-		o.enableJetStream = true
-		o.streamName = streamName
-	}
-}
-
-// Client 是 NATS 客户端，同时实现 Publisher 和 Subscriber
-type Client struct {
-	opts   *options
+// NatsClient 封装 NATS 客户端
+type NatsClient struct {
+	conf   *common.Nats
 	conn   *nats.Conn
 	js     nats.JetStreamContext
 	mu     sync.RWMutex
@@ -122,74 +53,123 @@ type Client struct {
 	subs   []*nats.Subscription
 }
 
-// NewClient 创建并连接 NATS 客户端
-func NewClient(opts ...Option) (*Client, error) {
-	o := defaultOptions()
-	for _, opt := range opts {
-		opt(o)
+// NewNatsClient 初始化 NATS 客户端
+func NewNatsClient(logger log.Logger, conf *common.Nats) (*NatsClient, func(), error) {
+	helper := log.NewHelper(logger)
+
+	// 默认值
+	if conf.Url == "" {
+		conf.Url = nats.DefaultURL
+	}
+	if conf.Name == "" {
+		conf.Name = "nats-client"
+	}
+	if conf.Timeout.AsDuration() == 0 {
+		conf.Timeout = durationpb.New(5 * time.Second)
+	}
+	if conf.MaxReconnects == 0 {
+		conf.MaxReconnects = 10
+	}
+	if conf.ReconnectWait.AsDuration() == 0 {
+		conf.ReconnectWait = durationpb.New(2 * time.Second)
+	}
+	if conf.PingInterval.AsDuration() == 0 {
+		conf.PingInterval = durationpb.New(30 * time.Second)
+	}
+	if conf.FlusherTimeout.AsDuration() == 0 {
+		conf.FlusherTimeout = durationpb.New(5 * time.Second)
 	}
 
-	logger := o.logger
-	if logger == nil {
-		logger = log.DefaultLogger
+	opts := []nats.Option{
+		nats.Name(conf.Name),
+		nats.MaxReconnects(int(conf.MaxReconnects)),
+		nats.ReconnectWait(conf.ReconnectWait.AsDuration()),
+		nats.PingInterval(conf.PingInterval.AsDuration()),
+		nats.FlusherTimeout(conf.FlusherTimeout.AsDuration()),
+		nats.DisconnectErrHandler(func(_ *nats.Conn, err error) {
+			helper.Warnf("nats disconnected: %v", err)
+		}),
+		nats.ReconnectHandler(func(c *nats.Conn) {
+			helper.Infof("nats reconnected to: %s", c.ConnectedUrl())
+		}),
+		nats.ClosedHandler(func(_ *nats.Conn) {
+			helper.Info("nats connection closed")
+		}),
+		nats.ErrorHandler(func(_ *nats.Conn, sub *nats.Subscription, err error) {
+			helper.Errorf("nats error: subject=%s err=%v", sub.Subject, err)
+		}),
 	}
 
-	c := &Client{
-		opts: o,
-		log:  log.NewHelper(log.With(logger, "module", "nats/"+o.name)),
-	}
-
-	if err := c.connect(); err != nil {
-		return nil, err
-	}
-
-	return c, nil
-}
-
-func (c *Client) connect() error {
-	c.log.Infof("connecting to nats: %s", c.opts.url)
-
-	nc, err := nats.Connect(c.opts.url,
-		nats.Name(c.opts.name),
-		nats.MaxReconnects(c.opts.maxReconnects),
-		nats.ReconnectWait(c.opts.reconnectWait),
-		nats.PingInterval(c.opts.pingInterval),
-		nats.FlusherTimeout(c.opts.flusherTimeout),
-		nats.DisconnectErrHandler(func(conn *nats.Conn, err error) {
-			c.log.Warnf("nats disconnected: %v", err)
-		}),
-		nats.ReconnectHandler(func(conn *nats.Conn) {
-			c.log.Infof("nats reconnected to: %s", conn.ConnectedUrl())
-		}),
-		nats.ClosedHandler(func(conn *nats.Conn) {
-			c.log.Info("nats connection closed")
-		}),
-		nats.ErrorHandler(func(conn *nats.Conn, sub *nats.Subscription, err error) {
-			c.log.Errorf("nats error: subject=%s err=%v", sub.Subject, err)
-		}),
-	)
+	helper.Infof("connecting to nats: %s", conf.Url)
+	nc, err := nats.Connect(conf.Url, opts...)
 	if err != nil {
-		return fmt.Errorf("nats connect: %w", err)
+		return nil, nil, fmt.Errorf("nats connect [%s]: %w", conf.Url, err)
 	}
 
-	c.conn = nc
+	c := &NatsClient{
+		conf: conf,
+		conn: nc,
+		log:  helper,
+	}
 
-	if c.opts.enableJetStream {
+	if conf.EnableJetStream {
 		js, err := nc.JetStream()
 		if err != nil {
 			nc.Close()
-			return fmt.Errorf("nats jetstream: %w", err)
+			return nil, nil, fmt.Errorf("nats jetstream: %w", err)
 		}
 		c.js = js
-		c.log.Infof("jetstream enabled, stream=%s", c.opts.streamName)
+		helper.Infof("jetstream enabled: domain=%s stream=%s", conf.JetStreamDomain, conf.StreamName)
 	}
 
-	c.log.Infof("nats connected: %s", nc.ConnectedUrl())
+	helper.Infof("nats connected: %s", nc.ConnectedUrl())
+	return c, func() {
+		if err := c.Close(); err != nil {
+			helper.Errorf("nats close: %s", err)
+		}
+	}, nil
+}
+
+// Conn 返回底层 nats.Conn，用于高级场景
+func (c *NatsClient) Conn() *nats.Conn {
+	return c.conn
+}
+
+// JetStream 返回 JetStream 上下文
+func (c *NatsClient) JetStream() nats.JetStreamContext {
+	return c.js
+}
+
+// Close 关闭客户端
+func (c *NatsClient) Close() error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed {
+		return nil
+	}
+	c.closed = true
+
+	for _, sub := range c.subs {
+		if sub.IsValid() {
+			if err := sub.Drain(); err != nil {
+				c.log.Errorf("drain subscription: %v", err)
+			}
+		}
+	}
+
+	if c.conn != nil {
+		_ = c.conn.Drain()
+		time.Sleep(500 * time.Millisecond)
+		c.conn.Close()
+	}
+
+	c.log.Info("nats client closed")
 	return nil
 }
 
 // Publish 发布消息到指定 subject
-func (c *Client) Publish(ctx context.Context, subject string, msg *Message) error {
+func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) error {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
@@ -197,7 +177,7 @@ func (c *Client) Publish(ctx context.Context, subject string, msg *Message) erro
 		return fmt.Errorf("client is closed")
 	}
 
-	if c.js != nil && c.opts.streamName != "" {
+	if c.js != nil && c.conf.StreamName != "" {
 		return c.publishJetStream(subject, msg)
 	}
 
@@ -211,10 +191,10 @@ func (c *Client) Publish(ctx context.Context, subject string, msg *Message) erro
 		return fmt.Errorf("nats publish to %s: %w", subject, err)
 	}
 
-	return c.conn.FlushTimeout(c.opts.timeout)
+	return c.conn.FlushTimeout(c.conf.Timeout.AsDuration())
 }
 
-func (c *Client) publishJetStream(subject string, msg *Message) error {
+func (c *NatsClient) publishJetStream(subject string, msg *Message) error {
 	natsMsg := &nats.Msg{
 		Subject: subject,
 		Data:    msg.Data,
@@ -231,7 +211,7 @@ func (c *Client) publishJetStream(subject string, msg *Message) error {
 }
 
 // Subscribe 订阅 subject，返回 Unsubscriber 用于取消
-func (c *Client) Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error) {
+func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -239,12 +219,12 @@ func (c *Client) Subscribe(ctx context.Context, subject string, handler MessageH
 		return nil, fmt.Errorf("client is closed")
 	}
 
-	if c.js != nil && c.opts.streamName != "" {
+	if c.js != nil && c.conf.StreamName != "" {
 		return c.subscribeJetStream(subject, handler)
 	}
 
 	sub, err := c.conn.Subscribe(subject, func(m *nats.Msg) {
-		c.handleMsg(ctx, m, handler, false) // ← core NATS，不需要 ack
+		c.handleMsg(ctx, m, handler, false)
 	})
 	if err != nil {
 		return nil, fmt.Errorf("nats subscribe %s: %w", subject, err)
@@ -257,7 +237,7 @@ func (c *Client) Subscribe(ctx context.Context, subject string, handler MessageH
 }
 
 // QueueSubscribe 使用队列组订阅（负载均衡）
-func (c *Client) QueueSubscribe(ctx context.Context, subject, queue string, handler MessageHandler) (Unsubscriber, error) {
+func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -265,12 +245,12 @@ func (c *Client) QueueSubscribe(ctx context.Context, subject, queue string, hand
 		return nil, fmt.Errorf("client is closed")
 	}
 
-	if c.js != nil && c.opts.streamName != "" {
+	if c.js != nil && c.conf.StreamName != "" {
 		return c.queueSubscribeJetStream(subject, queue, handler)
 	}
 
 	sub, err := c.conn.QueueSubscribe(subject, queue, func(m *nats.Msg) {
-		c.handleMsg(ctx, m, handler, false) // ← core NATS
+		c.handleMsg(ctx, m, handler, false)
 	})
 	if err != nil {
 		return nil, fmt.Errorf("nats queue subscribe %s[%s]: %w", subject, queue, err)
@@ -282,7 +262,7 @@ func (c *Client) QueueSubscribe(ctx context.Context, subject, queue string, hand
 	return &subscription{sub: sub}, nil
 }
 
-func (c *Client) subscribeJetStream(subject string, handler MessageHandler) (Unsubscriber, error) {
+func (c *NatsClient) subscribeJetStream(subject string, handler MessageHandler) (Unsubscriber, error) {
 	sub, err := c.js.Subscribe(subject, func(m *nats.Msg) {
 		c.handleMsg(context.Background(), m, handler, true)
 	}, nats.DeliverAll(), nats.AckExplicit())
@@ -294,7 +274,7 @@ func (c *Client) subscribeJetStream(subject string, handler MessageHandler) (Uns
 	return &subscription{sub: sub}, nil
 }
 
-func (c *Client) queueSubscribeJetStream(subject, queue string, handler MessageHandler) (Unsubscriber, error) {
+func (c *NatsClient) queueSubscribeJetStream(subject, queue string, handler MessageHandler) (Unsubscriber, error) {
 	sub, err := c.js.QueueSubscribe(subject, queue, func(m *nats.Msg) {
 		c.handleMsg(context.Background(), m, handler, true)
 	}, nats.DeliverAll(), nats.AckExplicit())
@@ -306,14 +286,13 @@ func (c *Client) queueSubscribeJetStream(subject, queue string, handler MessageH
 	return &subscription{sub: sub}, nil
 }
 
-func (c *Client) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool) {
+func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool) {
 	msg := &Message{
 		Subject: m.Subject,
 		Data:    m.Data,
 		Header:  fromNatsHeader(m.Header),
 	}
 
-	// JetStream 消息需要 Ack/Nack，包装为统一签名
 	if isJetStream {
 		msg.Ack = func() error { return m.Ack() }
 		msg.Nack = func() error { return m.Nak() }
@@ -336,45 +315,6 @@ func (c *Client) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHand
 	}
 }
 
-// Conn 返回底层 nats.Conn，用于高级场景
-func (c *Client) Conn() *nats.Conn {
-	return c.conn
-}
-
-// JetStream 返回 JetStream 上下文
-func (c *Client) JetStream() nats.JetStreamContext {
-	return c.js
-}
-
-// Close 关闭客户端
-func (c *Client) Close() error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	if c.closed {
-		return nil
-	}
-	c.closed = true
-
-	for _, sub := range c.subs {
-		if sub.IsValid() {
-			if err := sub.Drain(); err != nil {
-				c.log.Errorf("drain subscription: %v", err)
-			}
-		}
-	}
-
-	if c.conn != nil {
-		c.conn.Drain()
-		// 等待 Drain 完成
-		time.Sleep(500 * time.Millisecond)
-		c.conn.Close()
-	}
-
-	c.log.Info("nats client closed")
-	return nil
-}
-
 // subscription 实现 Unsubscriber
 type subscription struct {
 	sub *nats.Subscription
@@ -387,7 +327,6 @@ func (s *subscription) Unsubscribe() error {
 	return nil
 }
 
-// 辅助函数：nats.Header <-> map[string]string
 func toNatsHeader(h map[string]string) nats.Header {
 	if len(h) == 0 {
 		return nil

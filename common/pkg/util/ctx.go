@@ -10,10 +10,14 @@ func SetContextValue[T any](ctx context.Context, key constant.CtxKey, value T) c
 }
 
 func GetContextValue[T any](ctx context.Context, key constant.CtxKey) (T, bool) {
+	var zero T
 	value := ctx.Value(key)
 	if IsNil(value) {
-		var t T
-		return t, false
+		return zero, false
 	}
-	return value.(T), true
+	t, ok := value.(T)
+	if !ok {
+		return zero, false
+	}
+	return t, true
 }

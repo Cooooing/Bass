@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+option go_package = "common/api/gen/notify/v1;v1";
+
+service NotifyEmailService {
+  rpc Send(SendEmail.Request) returns (SendEmail.Reply);
+}
+
+message SendEmail {
+  message Request {
+    string title = 1;
+    string content = 2;
+    repeated string to = 3;
+    repeated string cc = 4;
+    repeated string bcc = 5;
+  }
+  message Reply {}
+}

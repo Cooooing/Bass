@@ -29,18 +29,6 @@ services:
     networks:
       - bass
 
-  infra:
-    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/infra:latest
-    container_name: infra
-    restart: on-failure:3
-    env_file:
-      - .env
-    ports:
-      - "8001:8000"
-      - "9001:9000"
-    networks:
-      - bass
-
   user:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
     container_name: user

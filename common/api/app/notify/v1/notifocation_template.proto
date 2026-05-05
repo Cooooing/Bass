@@ -79,8 +79,6 @@ message UpdateNotificationTemplate {
     }];
     // 内容模板
     optional string content = 7;
-    // 处理器列表
-    repeated string processors = 8;
     // 是否启用
     optional bool enable = 9;
   }

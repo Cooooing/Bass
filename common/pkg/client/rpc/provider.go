@@ -19,12 +19,8 @@ func ProvideIMClient(consul *client.ConsulClient) (*IMClient, error) {
 	return newServiceClient(consul, constant.IMServiceName.String(), NewIMClient)
 }
 
-func ProvideInfraClient(consul *client.ConsulClient) (*InfraClient, error) {
-	return newServiceClient(consul, constant.InfraServiceName.String(), NewInfraClient)
-}
-
 func ProvideNotifyClient(consul *client.ConsulClient) (*NotifyClient, error) {
-	return newServiceClient(consul, constant.NotifyServiceName.String(), NewNotifyClient)
+	return newServiceClient(consul, constant.MsgCenterServiceName.String(), NewNotifyClient)
 }
 
 func ProvideSignalNodeClient(consul *client.ConsulClient) (*SignalNodeClient, error) {

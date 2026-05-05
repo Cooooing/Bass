@@ -20,7 +20,7 @@ func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *
 }
 
 func (n *NotificationTemplate) GetKey() string {
-	return GetKeyNotificationTemplate(new(v1.NotificationType(n.NotificationType)), new(v1.NotificationChannel(n.Channel)))
+	return fmt.Sprintf("%s_%s", n.NotificationType, n.Channel)
 }
 
 func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {
@@ -28,11 +28,10 @@ func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {
 		CreatedAt:        timestamppb.New(*n.CreatedAt),
 		UpdatedAt:        timestamppb.New(*n.UpdatedAt),
 		Id:               n.ID,
-		NotificationType: v1.NotificationType(n.NotificationType),
-		Channel:          v1.NotificationChannel(n.Channel),
+		NotificationType: v1.NotificationType(v1.NotificationType_value[n.NotificationType]),
+		Channel:          v1.NotificationChannel(v1.NotificationChannel_value[n.Channel]),
 		Title:            n.Title,
 		Content:          n.Content,
-		Processors:       n.Processors,
 		Enable:           n.Enable,
 	}
 }

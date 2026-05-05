@@ -21,10 +21,48 @@ type NotificationTemplateRepo struct {
 	*database.BaseData
 }
 
-func NewNotificationTemplateRepo(repo *database.BaseData) repo.NotificationTemplateRepo {
-	return &NotificationTemplateRepo{
+func NewNotificationTemplateRepo(repo *database.BaseData) (repo.NotificationTemplateRepo, error) {
+	r := &NotificationTemplateRepo{
 		BaseData: repo,
 	}
+	err := r.init()
+	return r, err
+}
+
+func (r *NotificationTemplateRepo) init() error {
+	ctx := context.Background()
+
+	templates := []*model.NotificationTemplate{
+		{
+			NotificationTemplate: &gen.NotificationTemplate{
+				NotificationType: v1.NotificationType_NOTIFICATION_TYPE_NORMAL.String(),
+				Channel:          v1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL.String(),
+				Title:            "欢迎注册",
+				Content:          "你好 {{.username}}，欢迎注册！",
+				Enable:           true,
+			},
+		},
+	}
+
+	existList, err := r.Db.NotificationTemplate.Query().Where(notificationtemplate.Enable(true)).All(ctx)
+	if err != nil {
+		return err
+	}
+	existSet := make(map[string]struct{}, len(existList))
+	for _, e := range existList {
+		existSet[fmt.Sprintf("%s_%s", e.NotificationType, e.Channel)] = struct{}{}
+	}
+
+	for _, tpl := range templates {
+		key := fmt.Sprintf("%s_%s", tpl.NotificationType, tpl.Channel)
+		if _, ok := existSet[key]; ok {
+			continue
+		}
+		if _, err := r.Save(ctx, r.Db, tpl); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (r *NotificationTemplateRepo) Save(ctx context.Context, tx *gen.Client, u *model.NotificationTemplate) (*model.NotificationTemplate, error) {
@@ -40,8 +78,8 @@ func (r *NotificationTemplateRepo) Save(ctx context.Context, tx *gen.Client, u *
 	save, err := tx.NotificationTemplate.Create().
 		SetNotificationType(u.NotificationType).
 		SetChannel(u.Channel).
+		SetTitle(u.Title).
 		SetContent(u.Content).
-		SetProcessors(u.Processors).
 		SetEnable(u.Enable).
 		Save(ctx)
 	if err != nil {
@@ -94,7 +132,6 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 	if err != nil {
 		return nil, err
 	}
-	// 判断是否全部 nil
 	allNil := true
 	for _, v := range results {
 		if v != nil {
@@ -103,7 +140,6 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 		}
 	}
 	if allNil {
-		// 如果缓存中没有，则从数据库获取
 		templateMap, dbErr := r.GetMap(ctx, r.Db, &repo.NotificationTemplateGetReq{
 			NotificationType: notificationType,
 			Channels:         channels,
@@ -112,7 +148,6 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 		if dbErr != nil {
 			return nil, dbErr
 		}
-		// 将数据库中查询到的数据存入缓存
 		cacheErr := r.SaveCache(ctx, templateMap)
 		if cacheErr != nil {
 			return nil, cacheErr
@@ -120,7 +155,6 @@ func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationTyp
 		return templateMap, nil
 	}
 
-	// 如果缓存中有数据，反序列化并返回
 	templateMap := make(map[string]*model.NotificationTemplate, len(results))
 	for i, result := range results {
 		if result == nil {
@@ -212,20 +246,20 @@ func (r *NotificationTemplateRepo) getQuery(query *gen.NotificationTemplateQuery
 		query = query.Where(notificationtemplate.IDIn(req.NotificationTemplateIds...))
 	}
 	if req.NotificationType != nil {
-		query = query.Where(notificationtemplate.NotificationTypeEQ(int32(*req.NotificationType)))
+		query = query.Where(notificationtemplate.NotificationTypeEQ(v1.NotificationType_name[int32(*req.NotificationType)]))
 	}
 	if req.Channel != nil {
-		query = query.Where(notificationtemplate.ChannelEQ(int32(*req.Channel)))
+		query = query.Where(notificationtemplate.ChannelEQ(v1.NotificationChannel_name[int32(*req.Channel)]))
 	}
 	if len(req.Channels) > 0 {
-		var channelsInt32 []int32
+		var channels []string
 		for _, channel := range req.Channels {
 			if channel == nil {
 				continue
 			}
-			channelsInt32 = append(channelsInt32, int32(*channel))
+			channels = append(channels, v1.NotificationChannel_name[int32(*channel)])
 		}
-		query = query.Where(notificationtemplate.ChannelIn(channelsInt32...))
+		query = query.Where(notificationtemplate.ChannelIn(channels...))
 	}
 	if req.Enable != nil {
 		query = query.Where(notificationtemplate.EnableEQ(*req.Enable))

@@ -34,14 +34,17 @@ data:
     pool_timeout: 2s
     conn_max_idle_time: 600s
     conn_max_life_time: 1800s
-  rabbitmq:
-    url: amqp://${RABBITMQ_DEFAULT_USER:admin}:${RABBITMQ_DEFAULT_PASS:123456}@${RABBITMQ_HOST:127.0.0.1}:${RABBITMQ_PORT:5672}/${RABBITMQ_DEFAULT_VHOST:admin_vhost}
-    heartbeat: 10s            # 心跳，秒
-    dial_timeout: 5s          # 连接超时，秒
-    prefetch_count: 10        # Qos，未确认消息最大数量
-    prefetch_global: false    # Qos 是否全局
-    delivery_mode: 2          # 消息持久化 1: transient, 2: persistent
-    auto_ack: false           # 是否自动确认消息
+  nats:
+    url: nats://${NATS_HOST:127.0.0.1}:${NATS_PORT:4222}
+    name: nats-client
+    timeout: 5s
+    max_reconnects: 10
+    reconnect_wait: 2s
+    ping_interval: 30s
+    flusher_timeout: 5s
+    enable_jet_stream: false
+    stream_name: ""
+    jet_stream_domain: ""
   consul:
     address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
     datacenter: dc1

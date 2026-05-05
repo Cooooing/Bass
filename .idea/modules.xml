@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/content/content.iml" filepath="$PROJECT_DIR$/app/content/content.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/gateway/gateway.iml" filepath="$PROJECT_DIR$/app/gateway/gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/im/im.iml" filepath="$PROJECT_DIR$/app/im/im.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/infra/infra.iml" filepath="$PROJECT_DIR$/app/infra/infra.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/signal/signal.iml" filepath="$PROJECT_DIR$/app/signal/signal.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml" />

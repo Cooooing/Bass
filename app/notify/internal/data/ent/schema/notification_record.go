@@ -19,7 +19,7 @@ type NotificationRecord struct {
 
 func (NotificationRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_record"},
+		entsql.Annotation{Table: constant.TablePrefixMsgCenter.String() + "notification_record"},
 	}
 }
 

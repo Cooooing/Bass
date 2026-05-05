@@ -19,9 +19,10 @@ var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,
-	ProvideRabbitMQ,
+	ProvideNats,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
+	commonClient.NewNatsClient,
 
 	repo.NewArticleRepo,
 	repo.NewCommentRepo,
@@ -42,6 +43,6 @@ func ProvideConsul(c *conf.Bootstrap) *common.Consul {
 	return c.Data.Consul
 }
 
-func ProvideRabbitMQ(c *conf.Bootstrap) *common.RabbitMQ {
-	return c.Data.Rabbitmq
+func ProvideNats(c *conf.Bootstrap) *common.Nats {
+	return c.Data.Nats
 }

@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	"context"
 	"notify/internal/biz/model"
@@ -146,10 +147,10 @@ func (r *NotificationRecordRepo) getQuery(query *gen.NotificationRecordQuery, re
 		query = query.Where(notificationrecord.ReceiverIDEQ(*req.ReceiverId))
 	}
 	if req.Status != nil {
-		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.StatusEQ(int32(*req.Status))))
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.StatusEQ(v1.NotificationStatus_name[int32(*req.Status)])))
 	}
 	if req.NotificationType != nil {
-		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.NotificationTypeEQ(int32(*req.NotificationType))))
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.NotificationTypeEQ(v1.NotificationType_name[int32(*req.NotificationType)])))
 	}
 	if req.WithMeta {
 		query = query.WithNotificationMeta()

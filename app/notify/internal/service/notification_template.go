@@ -62,10 +62,10 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotifi
 		return nil, cerrors.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		NotificationType: int32(req.NotificationTemplate.NotificationType),
-		Channel:          int32(req.NotificationTemplate.Channel),
+		NotificationType: req.NotificationTemplate.NotificationType.String(),
+		Channel:          req.NotificationTemplate.Channel.String(),
+		Title:            req.NotificationTemplate.Title,
 		Content:          req.NotificationTemplate.Content,
-		Processors:       req.NotificationTemplate.Processors,
 		Enable:           req.NotificationTemplate.Enable,
 	}})
 	if err != nil {
@@ -87,10 +87,9 @@ func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.Update
 		return nil, cerrors.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		NotificationType: int32(*req.NotificationType),
-		Channel:          int32(*req.Channel),
+		NotificationType: req.NotificationType.String(),
+		Channel:          req.Channel.String(),
 		Content:          *req.Content,
-		Processors:       req.Processors,
 		Enable:           util.DerefOrDefault(req.Enable, false),
 	}})
 	if err != nil {

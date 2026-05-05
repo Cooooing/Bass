@@ -17,6 +17,10 @@ var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
 	NewNotificationMetaService,
 	NewNotificationRecordService,
+	NewNotificationTemplateService,
+	NewEmailService,
+	NewSmsService,
+	NewOssService,
 	ProvideServices,
 )
 
@@ -46,10 +50,18 @@ func ProvideServices(
 	systemService *SystemService,
 	notificationMetaService *NotificationMetaService,
 	notificationRecordService *NotificationRecordService,
+	notificationTemplateService *NotificationTemplateService,
+	emailService *EmailService,
+	smsService *SmsService,
+	ossService *OssService,
 ) []Service {
 	return []Service{
 		systemService,
 		notificationMetaService,
 		notificationRecordService,
+		notificationTemplateService,
+		emailService,
+		smsService,
+		ossService,
 	}
 }

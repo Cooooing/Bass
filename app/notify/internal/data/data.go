@@ -6,6 +6,7 @@ import (
 	"notify/internal/conf"
 	database "notify/internal/data/base"
 	"notify/internal/data/client"
+	"notify/internal/data/oss"
 	"notify/internal/data/repo"
 
 	"github.com/google/wire"
@@ -18,13 +19,16 @@ var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,
-	ProvideRabbitMQ,
+	ProvideNats,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
+	commonClient.NewNatsClient,
 
 	repo.NewNotificationMetaRepo,
 	repo.NewNotificationRecordRepo,
 	repo.NewNotificationTemplateRepo,
+	repo.NewObjectStorageRepo,
+	oss.ProviderSet,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {
@@ -35,6 +39,6 @@ func ProvideConsul(c *conf.Bootstrap) *common.Consul {
 	return c.Data.Consul
 }
 
-func ProvideRabbitMQ(c *conf.Bootstrap) *common.RabbitMQ {
-	return c.Data.Rabbitmq
+func ProvideNats(c *conf.Bootstrap) *common.Nats {
+	return c.Data.Nats
 }

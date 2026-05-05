@@ -73,10 +73,9 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.Co
 	// 代理 handler
 	srv.HandlePrefix("/api/user", NewProxyHandler(middlewares, consulClient, constant.UserServiceName.String(), "/api/user", logger))
 	srv.HandlePrefix("/api/content", NewProxyHandler(middlewares, consulClient, constant.ContentServiceName.String(), "/api/content", logger))
-	srv.HandlePrefix("/api/notify", NewProxyHandler(middlewares, consulClient, constant.NotifyServiceName.String(), "/api/notify", logger))
+	srv.HandlePrefix("/api/notify", NewProxyHandler(middlewares, consulClient, constant.MsgCenterServiceName.String(), "/api/notify", logger))
 	srv.HandlePrefix("/api/im", NewProxyHandler(middlewares, consulClient, constant.IMServiceName.String(), "/api/im", logger))
 	srv.HandlePrefix("/api/signal", NewProxyHandler(middlewares, consulClient, constant.SignalServiceName.String(), "/api/signal", logger))
-	srv.HandlePrefix("/api/infra", NewProxyHandler(middlewares, consulClient, constant.InfraServiceName.String(), "/api/infra", logger))
 
 	for _, s := range services {
 		s.RegisterHttp(srv)

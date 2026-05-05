@@ -4,7 +4,6 @@ import (
 	"common/api/gen/common"
 	"common/pkg/client"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -15,7 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-var services = []string{"gateway", "infra", "user", "content", "notify", "im", "signal", "connector"}
+var services = []string{"gateway", "user", "content", "notify", "im", "signal", "connector"}
 
 func main() {
 	// 初始化 Consul 客户端
@@ -36,7 +35,7 @@ func main() {
 
 		// 读取本地原始 YAML 文件
 		filePath := filepath.Join("..", "app", service, "configs", "config.yaml")
-		rawBytes, err := ioutil.ReadFile(filePath)
+		rawBytes, err := os.ReadFile(filePath)
 		if err != nil {
 			log.Errorf("读取文件失败 %s: %v", filePath, err)
 			continue

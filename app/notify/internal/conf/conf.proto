@@ -30,13 +30,53 @@ message Server {
     int32 port = 3;
     google.protobuf.Duration timeout = 4;
   }
+  Oss oss = 7;
+  message Oss {
+    string provider = 1;
+    message Qiniu {
+      string access_key = 1;
+      string secret_key = 2;
+      string bucket = 3;
+      google.protobuf.Duration timeout = 4;
+      int64 size_min = 5;
+      int64 size_max = 6;
+      string callback_url = 7;
+      bool increment_audit = 8;
+      string increment_audit_callback_url = 9;
+    }
+    Qiniu qiniu = 10;
+    message Minio {}
+    Minio minio = 11;
+  }
+  Email email = 8;
+  message Email {
+    bool enable = 1;
+    string smtp_host = 2;
+    uint32 smtp_port = 3;
+    string username = 4;
+    string password = 5;
+    string from = 6;
+  }
+  Sms sms = 9;
+  message Sms {
+    string provider = 1;
+    message TencentSmsConfig {
+      string secret_id = 1;
+      string secret_key = 2;
+      string diyu = 3;
+      string sms_sdk_app_id = 4;
+      string sign_name = 5;
+      string template_id = 6;
+    }
+    TencentSmsConfig tencent = 2;
+  }
 }
 
 message Data {
   common.api.app.common.Database database = 1;
   common.api.app.common.Redis redis = 2;
   common.api.app.common.Consul consul = 3;
-  common.api.app.common.RabbitMQ rabbitmq = 4;
+  common.api.app.common.Nats nats = 4;
 }
 
 message Trace {

@@ -18,7 +18,7 @@ jobs:
     strategy:
       # 矩阵配置：列出所有需要打包的服务名
       matrix:
-        service: [gateway, user, content, notify, im, signal, connector, infra]
+        service: [gateway, user, content, notify, im, signal, connector]
       # 即使一个服务失败，其他服务也继续构建
       fail-fast: false
 

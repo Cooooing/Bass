@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // NotificationTemplate 通知记录表
@@ -17,7 +18,7 @@ type NotificationTemplate struct {
 
 func (NotificationTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_template"},
+		entsql.Annotation{Table: constant.TablePrefixMsgCenter.String() + "notification_template"},
 	}
 }
 
@@ -25,11 +26,10 @@ func (NotificationTemplate) Annotations() []schema.Annotation {
 func (NotificationTemplate) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Int32("notification_type").Comment("通知类型"),
-		field.Int32("channel").Comment("通知渠道"),
-		field.String("title").Comment("标题").Default(""), // 暂时仅用于邮件主题
+		field.String("notification_type").Comment("通知类型"),
+		field.String("channel").Comment("通知渠道"),
+		field.String("title").Comment("标题").Default(""),
 		field.String("content").Comment("模板内容"),
-		field.JSON("processors", []string{}).Comment("处理器链（有序执行）"),
 		field.Bool("enable").Comment("是否启用").Default(false),
 	}
 	fields = append(fields, util.TimeAuditFields()...)
@@ -37,7 +37,9 @@ func (NotificationTemplate) Fields() []ent.Field {
 }
 
 func (NotificationTemplate) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("notification_type", "channel", "enable"),
+	}
 }
 
 func (NotificationTemplate) Edges() []ent.Edge {

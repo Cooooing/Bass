@@ -2,7 +2,7 @@
 GOHOSTOS := $(shell go env GOHOSTOS)
 VERSION := latest
 
-SERVERS := gateway infra user content notify im signal connector
+SERVERS := gateway user content notify im signal connector
 ROOT_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
 .DEFAULT_GOAL := help # default target

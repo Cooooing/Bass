@@ -3,6 +3,7 @@ package repo
 import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
+	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
 	"context"
 	"notify/internal/biz/model"
@@ -28,7 +29,9 @@ func (r *NotificationMetaRepo) Save(ctx context.Context, tx *gen.Client, u *mode
 		SetNotificationType(u.NotificationType).
 		SetSenderID(u.SenderID).
 		SetMeta(u.Meta).
+		SetTitle(u.Title).
 		SetContent(u.Content).
+		SetIsGlobal(u.IsGlobal).
 		SetStatus(u.Status).
 		Save(ctx)
 	if err != nil {
@@ -107,7 +110,7 @@ func (r *NotificationMetaRepo) getQuery(query *gen.NotificationMetaQuery, req *r
 		query = query.Where(notificationmeta.UUIDIn(req.UUIDs...))
 	}
 	if req.NotificationMetaType != nil {
-		query = query.Where(notificationmeta.NotificationTypeEQ(int32(*req.NotificationMetaType)))
+		query = query.Where(notificationmeta.NotificationTypeEQ(v1.NotificationType_name[int32(*req.NotificationMetaType)]))
 	}
 	if req.SenderId != nil {
 		query = query.Where(notificationmeta.SenderIDEQ(*req.SenderId))
@@ -116,7 +119,7 @@ func (r *NotificationMetaRepo) getQuery(query *gen.NotificationMetaQuery, req *r
 		query = query.Where(notificationmeta.SenderIDIn(req.SenderIds...))
 	}
 	if req.Status != nil {
-		query = query.Where(notificationmeta.StatusEQ(int32(*req.Status)))
+		query = query.Where(notificationmeta.StatusEQ(v1.NotificationStatus_name[int32(*req.Status)]))
 	}
 	return query
 }

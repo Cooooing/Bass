@@ -1,13 +1,13 @@
 package client
 
 import (
+	"common/pkg/client/db/driver"
 	"common/pkg/util"
 	"context"
 	"fmt"
 	"notify/internal/conf"
 	"notify/internal/data/ent/gen"
 
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	_ "github.com/lib/pq"
@@ -19,10 +19,7 @@ func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, fu
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)
 	}
-	debugDrv := dialect.DebugWithContext(drv, func(ctx context.Context, args ...any) {
-		text := fmt.Sprint(args...)
-		l.WithContext(ctx).Debugf("%s", text)
-	})
+	debugDrv := driver.NewDriver(logger, conf.Server.Mode, drv, conf.Data.Database)
 	client := gen.NewClient(gen.Driver(debugDrv))
 	l.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
 	// 可选：自动迁移

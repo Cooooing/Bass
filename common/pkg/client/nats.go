@@ -58,6 +58,9 @@ func NewNatsClient(logger log.Logger, conf *common.Nats) (*NatsClient, func(), e
 	helper := log.NewHelper(logger)
 
 	// 默认值
+	if conf == nil {
+		conf = &common.Nats{}
+	}
 	if conf.Url == "" {
 		conf.Url = nats.DefaultURL
 	}

@@ -20,7 +20,7 @@ type NotificationMeta struct {
 
 func (NotificationMeta) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_meta"},
+		entsql.Annotation{Table: constant.TablePrefixMsgCenter.String() + "notification_meta"},
 	}
 }
 
@@ -29,11 +29,13 @@ func (NotificationMeta) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("uuid").Comment("唯一标识 幂等").Unique(),
-		field.Int32("notification_type").Comment("通知类型"),
+		field.String("notification_type").Comment("通知类型"),
 		field.Int64("sender_id").Comment("发送者ID"),
 		field.JSON("meta", commonModel.Meta{}).Comment("通知元数据"),
+		field.String("title").Comment("渲染标题").Default(""),
 		field.String("content").Comment("渲染内容"),
-		field.Int32("status").Comment("状态 1-正常 2-被取消"),
+		field.Bool("is_global").Comment("是否全站广播").Default(false),
+		field.String("status").Comment("状态 1-正常"),
 	}
 	fields = append(fields, util.TimeAuditFields()...)
 	return fields

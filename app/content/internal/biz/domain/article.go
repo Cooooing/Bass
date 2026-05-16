@@ -178,7 +178,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
 	//			SenderId:   user.ID,
 	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//			Meta: commonModel.Meta{
 	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 	//			},
@@ -194,7 +194,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
 	//			SenderId:   user.ID,
 	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//			Meta: commonModel.Meta{
 	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 	//			},
@@ -210,7 +210,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
 	//			SenderId:   user.ID,
 	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//			Meta: commonModel.Meta{
 	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 	//			},
@@ -226,7 +226,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
 	//			SenderId:   user.ID,
 	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//			Meta: commonModel.Meta{
 	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 	//			},
@@ -242,7 +242,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
 	//			SenderId:   user.ID,
 	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//			Meta: commonModel.Meta{
 	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 	//			},
@@ -286,7 +286,7 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 	//		Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
 	//		SenderId:   user.ID,
 	//		SenderName: user.Name,
-	//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//		Meta: commonModel.Meta{
 	//			Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
 	//		},
@@ -305,7 +305,7 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 	//			SenderId:   user.ID,
 	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 	//			Meta: commonModel.Meta{
 	//				AtUsernames: lo.Keys(atUserNames),
 	//				Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},

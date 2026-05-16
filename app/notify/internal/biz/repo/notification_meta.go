@@ -1,7 +1,8 @@
 package repo
 
 import (
-	"common/api/gen/common"
+	commonv1 "common/api/gen/common"
+	"common/api/gen/common/enums"
 	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/model"
@@ -13,16 +14,16 @@ type NotificationMetaRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *NotificationMetaGetReq) (*model.NotificationMeta, error)
 	GetList(ctx context.Context, tx *gen.Client, req *NotificationMetaGetReq) ([]*model.NotificationMeta, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *NotificationMetaGetReq) ([]*model.NotificationMeta, *common.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *commonv1.PageRequest, req *NotificationMetaGetReq) ([]*model.NotificationMeta, *commonv1.PageReply, error)
 }
 
 type NotificationMetaGetReq struct {
-	NotificationMetaId   *int64
-	NotificationMeraIds  []int64
-	UUID                 *string
-	UUIDs                []string
-	NotificationMetaType *v1.NotificationType
-	SenderId             *int64
-	SenderIds            []int64
-	Status               *v1.NotificationStatus
+	NotificationMetaId  *int64
+	NotificationMeraIds []int64
+	UUID                *string
+	UUIDs               []string
+	EventType           *enums.EventType
+	SenderId            *int64
+	SenderIds           []int64
+	Status              *v1.NotificationStatus
 }

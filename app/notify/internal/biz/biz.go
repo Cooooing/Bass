@@ -13,6 +13,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	domainbase.NewBaseDomain,
 	jwt.NewTokenCache,
+
 	domain.NewEventHandler,
 	domain.NewNotificationMetaDomain,
 	domain.NewNotificationRecordDomain,
@@ -22,4 +23,5 @@ var BizProviderSet = wire.NewSet(
 	domain.NewObjectStorageDomain,
 
 	rpc.ProvideUserClient,
+	rpc.ProvideContentClient,
 )

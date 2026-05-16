@@ -11,13 +11,11 @@ import (
 
 type ChatSessionService struct {
 	v1.UnimplementedIMChatSessionServiceServer
-	*BaseService
 	chatSessionDomain *domain.ChatSessionDomain
 }
 
-func NewChatSessionService(baseService *BaseService, chatSessionDomain *domain.ChatSessionDomain) *ChatSessionService {
+func NewChatSessionService(chatSessionDomain *domain.ChatSessionDomain) *ChatSessionService {
 	return &ChatSessionService{
-		BaseService:       baseService,
 		chatSessionDomain: chatSessionDomain,
 	}
 }

@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	"common/pkg/enum"
 	"common/pkg/util"
 
 	"entgo.io/ent"
@@ -11,14 +12,14 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// NotificationTemplate 通知记录表
+// NotificationTemplate 通知模板表
 type NotificationTemplate struct {
 	ent.Schema
 }
 
 func (NotificationTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixMsgCenter.String() + "notification_template"},
+		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_template"},
 	}
 }
 
@@ -26,8 +27,10 @@ func (NotificationTemplate) Annotations() []schema.Annotation {
 func (NotificationTemplate) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.String("notification_type").Comment("通知类型"),
-		field.String("channel").Comment("通知渠道"),
+		field.Enum("event_type").Comment("事件类型").
+			GoType(enum.EventType("")),
+		field.Enum("channel").Comment("通知渠道").
+			GoType(enum.NotificationChannel("")),
 		field.String("title").Comment("标题").Default(""),
 		field.String("content").Comment("模板内容"),
 		field.Bool("enable").Comment("是否启用").Default(false),
@@ -38,7 +41,7 @@ func (NotificationTemplate) Fields() []ent.Field {
 
 func (NotificationTemplate) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("notification_type", "channel", "enable"),
+		index.Fields("event_type", "channel", "enable"),
 	}
 }
 

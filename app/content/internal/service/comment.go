@@ -19,7 +19,6 @@ import (
 
 type CommentService struct {
 	v1.UnimplementedContentCommentServiceServer
-	*BaseService
 
 	commentDomain *domain.CommentDomain
 	commentRepo   repo.CommentRepo
@@ -34,9 +33,8 @@ func (s *CommentService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentCommentServiceHTTPServer(hs, s)
 }
 
-func NewCommentService(baseService *BaseService, commentDomain *domain.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
+func NewCommentService(commentDomain *domain.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
 	return &CommentService{
-		BaseService:   baseService,
 		commentDomain: commentDomain,
 		commentRepo:   commentRepo,
 		articleRepo:   articleRepo,

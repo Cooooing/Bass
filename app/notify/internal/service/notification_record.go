@@ -18,13 +18,11 @@ import (
 
 type NotificationRecordService struct {
 	v1.UnimplementedNotifyNotificationRecordServiceServer
-	*BaseService
 	notificationRecordDomain *domain.NotificationRecordDomain
 }
 
-func NewNotificationRecordService(baseService *BaseService, notificationRecordDomain *domain.NotificationRecordDomain) *NotificationRecordService {
+func NewNotificationRecordService(notificationRecordDomain *domain.NotificationRecordDomain) *NotificationRecordService {
 	return &NotificationRecordService{
-		BaseService:              baseService,
 		notificationRecordDomain: notificationRecordDomain,
 	}
 }

@@ -16,13 +16,11 @@ import (
 
 type TwoFactorAuthenticationService struct {
 	v1.UnimplementedUserTwoFactorAuthenticationServiceServer
-	*BaseService
 	twoFactorAuthenticationDomain *doamin.TwoFactorAuthenticationDomain
 }
 
-func NewTwoFactorAuthenticationService(baseService *BaseService, userRelationDomain *doamin.TwoFactorAuthenticationDomain) *TwoFactorAuthenticationService {
+func NewTwoFactorAuthenticationService(userRelationDomain *doamin.TwoFactorAuthenticationDomain) *TwoFactorAuthenticationService {
 	return &TwoFactorAuthenticationService{
-		BaseService:                   baseService,
 		twoFactorAuthenticationDomain: userRelationDomain,
 	}
 }

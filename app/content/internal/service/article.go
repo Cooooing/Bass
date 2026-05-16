@@ -20,7 +20,6 @@ import (
 
 type ArticleService struct {
 	v1.UnimplementedContentArticleServiceServer
-	*BaseService
 
 	articleDomain *domain.ArticleDomain
 	articleRepo   repo.ArticleRepo
@@ -34,9 +33,8 @@ func (s *ArticleService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentArticleServiceHTTPServer(hs, s)
 }
 
-func NewArticleService(baseService *BaseService, articleDomain *domain.ArticleDomain, articleRepo repo.ArticleRepo) *ArticleService {
+func NewArticleService(articleDomain *domain.ArticleDomain, articleRepo repo.ArticleRepo) *ArticleService {
 	return &ArticleService{
-		BaseService:   baseService,
 		articleDomain: articleDomain,
 		articleRepo:   articleRepo,
 	}

@@ -3,12 +3,12 @@ package constant
 type ServiceName string
 
 const (
-	GatewayServiceName   ServiceName = "gateway"
-	UserServiceName      ServiceName = "user"
-	ContentServiceName   ServiceName = "content"
-	MsgCenterServiceName ServiceName = "msg_center"
-	IMServiceName        ServiceName = "im"
-	SignalServiceName    ServiceName = "signal"
+	GatewayServiceName ServiceName = "gateway"
+	UserServiceName    ServiceName = "user"
+	ContentServiceName ServiceName = "content"
+	NotifyServiceName  ServiceName = "notify"
+	IMServiceName      ServiceName = "im"
+	SignalServiceName  ServiceName = "signal"
 )
 
 func (s ServiceName) String() string {
@@ -22,9 +22,9 @@ func (t TablePrefix) String() string {
 }
 
 const (
-	TablePrefixUser      TablePrefix = TablePrefix(UserServiceName + "_")
-	TablePrefixContent   TablePrefix = TablePrefix(ContentServiceName + "_")
-	TablePrefixMsgCenter TablePrefix = TablePrefix(MsgCenterServiceName + "_")
-	TablePrefixSignal    TablePrefix = TablePrefix(SignalServiceName + "_")
-	TablePrefixIM        TablePrefix = TablePrefix(IMServiceName + "_")
+	TablePrefixUser    TablePrefix = TablePrefix(UserServiceName + "_")
+	TablePrefixContent TablePrefix = TablePrefix(ContentServiceName + "_")
+	TablePrefixNotify  TablePrefix = TablePrefix(NotifyServiceName + "_")
+	TablePrefixSignal  TablePrefix = TablePrefix(SignalServiceName + "_")
+	TablePrefixIM      TablePrefix = TablePrefix(IMServiceName + "_")
 )

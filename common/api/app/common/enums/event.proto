@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+import "common/enums/event_payload.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/api/gen/common/enums;enums";
+
+// 事件类型 — 每个服务预留 1000，内部按业务细分
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+
+  // user (1000-1999)
+  EVENT_TYPE_USER_FOLLOW_CREATED = 1001; // 关注
+  EVENT_TYPE_USER_FOLLOW_DELETED = 1002; // 取消关注
+
+  // content - article (2000-2099)
+  EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
+  EVENT_TYPE_ARTICLE_LIKED = 2002;     // 点赞文章
+  EVENT_TYPE_ARTICLE_THANKED = 2003;   // 感谢文章
+  EVENT_TYPE_ARTICLE_COLLECTED = 2004; // 收藏文章
+  EVENT_TYPE_ARTICLE_WATCHED = 2005;   // 关注文章
+
+  // content - comment (2100-2199)
+  EVENT_TYPE_COMMENT_PUBLISHED = 2101; // 发布评论
+  EVENT_TYPE_COMMENT_LIKED = 2102;     // 点赞评论
+
+  // im (3000-3999)
+
+  // platform (4000-4999)
+}
+
+// 事件消息 — 业务服务通过 MQ 发布的标准事件
+message Event {
+  // 幂等标识
+  string event_id = 1;
+  // 事件类型
+  EventType type = 2;
+  // 事件发生时间
+  google.protobuf.Timestamp timestamp = 3;
+  // 接收者 ID 列表（由生产者填好）
+  repeated int64 receiver_ids = 4;
+  // 业务数据，类型与 type 对应
+  oneof payload {
+    UserFollowCreatedPayload  user_follow_created  = 10;
+    UserFollowDeletedPayload  user_follow_deleted  = 11;
+    ArticlePublishedPayload   article_published    = 12;
+    ArticleLikedPayload       article_liked        = 13;
+    ArticleThankedPayload     article_thanked      = 14;
+    ArticleCollectedPayload   article_collected    = 15;
+    ArticleWatchedPayload     article_watched      = 16;
+    CommentPublishedPayload   comment_published    = 17;
+    CommentLikedPayload       comment_liked        = 18;
+  }
+}

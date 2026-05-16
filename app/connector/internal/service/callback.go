@@ -16,13 +16,11 @@ import (
 
 type CallbackService struct {
 	v1.UnimplementedConnectorCallbackServiceServer
-	*BaseService
 	*domain.SessionDomain
 }
 
-func NewCallbackService(baseService *BaseService, sessionDomain *domain.SessionDomain) *CallbackService {
+func NewCallbackService(sessionDomain *domain.SessionDomain) *CallbackService {
 	return &CallbackService{
-		BaseService:   baseService,
 		SessionDomain: sessionDomain,
 	}
 }

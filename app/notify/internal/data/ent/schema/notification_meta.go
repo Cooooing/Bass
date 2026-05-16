@@ -1,8 +1,9 @@
 package schema
 
 import (
+	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
-	commonModel "common/pkg/model"
+	"common/pkg/enum"
 	"common/pkg/util"
 
 	"entgo.io/ent"
@@ -20,7 +21,7 @@ type NotificationMeta struct {
 
 func (NotificationMeta) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixMsgCenter.String() + "notification_meta"},
+		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_meta"},
 	}
 }
 
@@ -29,13 +30,15 @@ func (NotificationMeta) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("uuid").Comment("唯一标识 幂等").Unique(),
-		field.String("notification_type").Comment("通知类型"),
+		field.Enum("event_type").Comment("事件类型").
+			GoType(enum.EventType("")),
 		field.Int64("sender_id").Comment("发送者ID"),
-		field.JSON("meta", commonModel.Meta{}).Comment("通知元数据"),
+		field.JSON("meta", &v1.NotificationMeta{}).Comment("通知元数据"),
 		field.String("title").Comment("渲染标题").Default(""),
 		field.String("content").Comment("渲染内容"),
 		field.Bool("is_global").Comment("是否全站广播").Default(false),
-		field.String("status").Comment("状态 1-正常"),
+		field.Enum("status").Comment("状态").
+			GoType(enum.NotificationStatus("")),
 	}
 	fields = append(fields, util.TimeAuditFields()...)
 	return fields
@@ -43,7 +46,7 @@ func (NotificationMeta) Fields() []ent.Field {
 
 func (NotificationMeta) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("notification_type", "status"),
+		index.Fields("event_type", "status"),
 		index.Fields("sender_id"),
 	}
 }

@@ -1,8 +1,10 @@
 package service
 
 import (
+	"common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/notify/v1"
+	"common/pkg/enum"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
@@ -17,13 +19,11 @@ import (
 
 type NotificationTemplateService struct {
 	v1.UnimplementedNotifyNotificationTemplateServiceServer
-	*BaseService
 	notificationTemplateDomain *domain.NotificationTemplateDomain
 }
 
-func NewNotificationTemplateService(baseService *BaseService, notificationTemplateDomain *domain.NotificationTemplateDomain) *NotificationTemplateService {
+func NewNotificationTemplateService(notificationTemplateDomain *domain.NotificationTemplateDomain) *NotificationTemplateService {
 	return &NotificationTemplateService{
-		BaseService:                baseService,
 		notificationTemplateDomain: notificationTemplateDomain,
 	}
 }
@@ -40,7 +40,7 @@ func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.PageNoti
 	req.Query = util.OrDefault(req.Query, &v1.NotificationTemplateQueryParams{})
 	records, page, err := s.notificationTemplateDomain.Page(ctx, req.Page, &repo.NotificationTemplateGetReq{
 		NotificationTemplateIds: req.Query.Ids,
-		NotificationType:        req.Query.NotificationType,
+		EventType:               req.Query.EventType,
 		Channel:                 req.Query.Channel,
 		Enable:                  req.Query.Enable,
 	})
@@ -55,18 +55,18 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotifi
 	if req.NotificationTemplate == nil {
 		return nil, cerrors.ErrorBadRequest("notificationTemplate is required")
 	}
-	if _, ok := v1.NotificationType_name[int32(req.NotificationTemplate.NotificationType)]; !ok {
-		return nil, cerrors.ErrorBadRequest("invalid notificationType")
+	if _, ok := enums.EventType_name[int32(req.NotificationTemplate.EventType)]; !ok {
+		return nil, cerrors.ErrorBadRequest("invalid eventType")
 	}
 	if _, ok := v1.NotificationChannel_name[int32(req.NotificationTemplate.Channel)]; !ok {
 		return nil, cerrors.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		NotificationType: req.NotificationTemplate.NotificationType.String(),
-		Channel:          req.NotificationTemplate.Channel.String(),
-		Title:            req.NotificationTemplate.Title,
-		Content:          req.NotificationTemplate.Content,
-		Enable:           req.NotificationTemplate.Enable,
+		EventType: enum.EventType(req.NotificationTemplate.EventType.String()),
+		Channel:   enum.NotificationChannel(req.NotificationTemplate.Channel.String()),
+		Title:     req.NotificationTemplate.Title,
+		Content:   req.NotificationTemplate.Content,
+		Enable:    req.NotificationTemplate.Enable,
 	}})
 	if err != nil {
 		return nil, err
@@ -77,20 +77,20 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotifi
 }
 
 func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.UpdateNotificationTemplate_Request) (rsp *v1.UpdateNotificationTemplate_Reply, err error) {
-	if req.NotificationType == nil || req.Channel == nil || req.Content == nil {
-		return nil, cerrors.ErrorBadRequest("notificationType, channel, content is required")
+	if req.EventType == nil || req.Channel == nil || req.Content == nil {
+		return nil, cerrors.ErrorBadRequest("eventType, channel, content is required")
 	}
-	if _, ok := v1.NotificationType_name[int32(*req.NotificationType)]; !ok {
-		return nil, cerrors.ErrorBadRequest("invalid notificationType")
+	if _, ok := enums.EventType_name[int32(*req.EventType)]; !ok {
+		return nil, cerrors.ErrorBadRequest("invalid eventType")
 	}
 	if _, ok := v1.NotificationChannel_name[int32(*req.Channel)]; !ok {
 		return nil, cerrors.ErrorBadRequest("invalid channel")
 	}
 	tpl, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		NotificationType: req.NotificationType.String(),
-		Channel:          req.Channel.String(),
-		Content:          *req.Content,
-		Enable:           util.DerefOrDefault(req.Enable, false),
+		EventType: enum.EventType(req.EventType.String()),
+		Channel:   enum.NotificationChannel(req.Channel.String()),
+		Content:   *req.Content,
+		Enable:    util.DerefOrDefault(req.Enable, false),
 	}})
 	if err != nil {
 		return nil, err

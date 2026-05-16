@@ -18,15 +18,13 @@ import (
 
 type AuthenticationService struct {
 	v1.UnimplementedUserAuthenticationServiceServer
-	*BaseService
 	*VerifyService
 	authenticationDomain *doamin.AuthenticationDomain
 	userRepo             repo.UserRepo
 }
 
-func NewAuthenticationService(baseService *BaseService, verifyService *VerifyService, authenticationDomain *doamin.AuthenticationDomain, userRepo repo.UserRepo) *AuthenticationService {
+func NewAuthenticationService(verifyService *VerifyService, authenticationDomain *doamin.AuthenticationDomain, userRepo repo.UserRepo) *AuthenticationService {
 	return &AuthenticationService{
-		BaseService:          baseService,
 		VerifyService:        verifyService,
 		authenticationDomain: authenticationDomain,
 		userRepo:             userRepo,

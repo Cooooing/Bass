@@ -1,6 +1,7 @@
 package model
 
 import (
+	"common/api/gen/common/enums"
 	v1 "common/api/gen/notify/v1"
 	"fmt"
 	"notify/internal/data/ent/gen"
@@ -12,26 +13,19 @@ type NotificationTemplate struct {
 	*gen.NotificationTemplate
 }
 
-func GetKeyNotificationTemplate(notificationType *v1.NotificationType, channel *v1.NotificationChannel) string {
-	if notificationType == nil || channel == nil {
-		return ""
-	}
-	return fmt.Sprintf("%s_%s", notificationType.String(), channel.String())
-}
-
 func (n *NotificationTemplate) GetKey() string {
-	return fmt.Sprintf("%s_%s", n.NotificationType, n.Channel)
+	return fmt.Sprintf("%s_%s", n.EventType, n.Channel)
 }
 
 func (n *NotificationTemplate) ConvertToRpc() *v1.NotificationTemplate {
 	return &v1.NotificationTemplate{
-		CreatedAt:        timestamppb.New(*n.CreatedAt),
-		UpdatedAt:        timestamppb.New(*n.UpdatedAt),
-		Id:               n.ID,
-		NotificationType: v1.NotificationType(v1.NotificationType_value[n.NotificationType]),
-		Channel:          v1.NotificationChannel(v1.NotificationChannel_value[n.Channel]),
-		Title:            n.Title,
-		Content:          n.Content,
-		Enable:           n.Enable,
+		CreatedAt: timestamppb.New(*n.CreatedAt),
+		UpdatedAt: timestamppb.New(*n.UpdatedAt),
+		Id:        n.ID,
+		EventType: enums.EventType(enums.EventType_value[string(n.EventType)]),
+		Channel:   v1.NotificationChannel(v1.NotificationChannel_value[string(n.Channel)]),
+		Title:     n.Title,
+		Content:   n.Content,
+		Enable:    n.Enable,
 	}
 }

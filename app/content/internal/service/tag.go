@@ -17,7 +17,6 @@ import (
 
 type TagService struct {
 	v1.UnimplementedContentTagServiceServer
-	*BaseService
 	domainTag *domain.TagDomain
 }
 
@@ -29,10 +28,9 @@ func (s *TagService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentTagServiceHTTPServer(hs, s)
 }
 
-func NewTagService(baseService *BaseService, domainTag *domain.TagDomain) *TagService {
+func NewTagService(domainTag *domain.TagDomain) *TagService {
 	return &TagService{
-		BaseService: baseService,
-		domainTag:   domainTag,
+		domainTag: domainTag,
 	}
 }
 

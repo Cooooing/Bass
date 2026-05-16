@@ -18,13 +18,11 @@ import (
 
 type UserRelationService struct {
 	v1.UnimplementedUserUserRelationServiceServer
-	*BaseService
 	userRelationDomain *doamin.UserRelationDomain
 }
 
-func NewUserRelationService(baseService *BaseService, userRelationDomain *doamin.UserRelationDomain) *UserRelationService {
+func NewUserRelationService(userRelationDomain *doamin.UserRelationDomain) *UserRelationService {
 	return &UserRelationService{
-		BaseService:        baseService,
 		userRelationDomain: userRelationDomain,
 	}
 }

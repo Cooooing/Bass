@@ -1,9 +1,11 @@
 package repo
 
 import (
-	"common/api/gen/common"
+	commonv1 "common/api/gen/common"
+	"common/api/gen/common/enums"
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
+	"common/pkg/enum"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -13,8 +15,6 @@ import (
 	"notify/internal/data/ent/gen"
 	"notify/internal/data/ent/gen/notificationtemplate"
 	"time"
-
-	"github.com/samber/lo"
 )
 
 type NotificationTemplateRepo struct {
@@ -35,11 +35,11 @@ func (r *NotificationTemplateRepo) init() error {
 	templates := []*model.NotificationTemplate{
 		{
 			NotificationTemplate: &gen.NotificationTemplate{
-				NotificationType: v1.NotificationType_NOTIFICATION_TYPE_NORMAL.String(),
-				Channel:          v1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL.String(),
-				Title:            "欢迎注册",
-				Content:          "你好 {{.username}}，欢迎注册！",
-				Enable:           true,
+				EventType: enum.EventTypeArticlePublished,
+				Channel:   enum.NotificationChannelEmail,
+				Title:     "欢迎注册",
+				Content:   "你好 {{.username}}，欢迎注册！",
+				Enable:    true,
 			},
 		},
 	}
@@ -50,11 +50,11 @@ func (r *NotificationTemplateRepo) init() error {
 	}
 	existSet := make(map[string]struct{}, len(existList))
 	for _, e := range existList {
-		existSet[fmt.Sprintf("%s_%s", e.NotificationType, e.Channel)] = struct{}{}
+		existSet[fmt.Sprintf("%s_%s", e.EventType, e.Channel)] = struct{}{}
 	}
 
 	for _, tpl := range templates {
-		key := fmt.Sprintf("%s_%s", tpl.NotificationType, tpl.Channel)
+		key := fmt.Sprintf("%s_%s", tpl.EventType, tpl.Channel)
 		if _, ok := existSet[key]; ok {
 			continue
 		}
@@ -69,14 +69,14 @@ func (r *NotificationTemplateRepo) Save(ctx context.Context, tx *gen.Client, u *
 	if u.Enable {
 		_, err := tx.NotificationTemplate.Update().
 			SetEnable(false).
-			Where(notificationtemplate.NotificationTypeEQ(u.NotificationType), notificationtemplate.ChannelEQ(u.Channel)).
+			Where(notificationtemplate.EventTypeEQ(u.EventType), notificationtemplate.ChannelEQ(u.Channel)).
 			Save(ctx)
 		if err != nil {
 			return nil, err
 		}
 	}
 	save, err := tx.NotificationTemplate.Create().
-		SetNotificationType(u.NotificationType).
+		SetEventType(u.EventType).
 		SetChannel(u.Channel).
 		SetTitle(u.Title).
 		SetContent(u.Content).
@@ -92,7 +92,7 @@ func (r *NotificationTemplateRepo) Update(ctx context.Context, tx *gen.Client, u
 	if u.Enable {
 		_, err := tx.NotificationTemplate.Update().
 			SetEnable(false).
-			Where(notificationtemplate.NotificationTypeEQ(u.NotificationType), notificationtemplate.ChannelEQ(u.Channel)).
+			Where(notificationtemplate.EventTypeEQ(u.EventType), notificationtemplate.ChannelEQ(u.Channel)).
 			Save(ctx)
 		if err != nil {
 			return nil, err
@@ -102,73 +102,35 @@ func (r *NotificationTemplateRepo) Update(ctx context.Context, tx *gen.Client, u
 	return &model.NotificationTemplate{NotificationTemplate: update}, err
 }
 
-func (r *NotificationTemplateRepo) SaveCache(ctx context.Context, records map[string]*model.NotificationTemplate) error {
-	redisData := make(map[string]string)
-	for key, template := range records {
-		data, err := json.Marshal(template)
-		if err != nil {
-			return err
-		}
-		redisData[key] = string(data)
-	}
-	err := r.Redis.Client.HSet(ctx, constant.GetKeyNotificationTemplateMap(), redisData).Err()
-	if err != nil {
-		return err
-	}
-	err = r.Redis.Client.HExpire(ctx, constant.GetKeyNotificationTemplateMap(), 1*time.Hour, lo.Keys(records)...).Err()
-	if err != nil {
-		return err
-	}
-	return nil
-}
+func (r *NotificationTemplateRepo) GetTemplates(ctx context.Context, eventType enums.EventType) ([]*model.NotificationTemplate, error) {
+	cacheKey := fmt.Sprintf("notify:tpl:%s", eventType)
 
-func (r *NotificationTemplateRepo) GetCache(ctx context.Context, notificationType *v1.NotificationType, channels []*v1.NotificationChannel) (map[string]*model.NotificationTemplate, error) {
-	keys := make([]string, 0, len(channels))
-	for i := range channels {
-		key := model.GetKeyNotificationTemplate(notificationType, channels[i])
-		keys = append(keys, key)
+	// 1. 查缓存
+	cached, err := r.Redis.Client.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var list []*model.NotificationTemplate
+		if json.Unmarshal([]byte(cached), &list) == nil {
+			return list, nil
+		}
 	}
-	results, err := r.Redis.Client.HMGet(ctx, constant.GetKeyNotificationTemplateMap(), keys...).Result()
+
+	// 2. 查 DB
+	list, err := r.GetList(ctx, r.Db, &repo.NotificationTemplateGetReq{
+		EventType: &eventType,
+		Enable:    new(true),
+	})
 	if err != nil {
 		return nil, err
 	}
-	allNil := true
-	for _, v := range results {
-		if v != nil {
-			allNil = false
-			break
+
+	// 3. 回填缓存
+	if len(list) > 0 {
+		if b, err := json.Marshal(list); err == nil {
+			r.Redis.Client.Set(ctx, cacheKey, b, time.Hour)
 		}
-	}
-	if allNil {
-		templateMap, dbErr := r.GetMap(ctx, r.Db, &repo.NotificationTemplateGetReq{
-			NotificationType: notificationType,
-			Channels:         channels,
-			Enable:           new(true),
-		})
-		if dbErr != nil {
-			return nil, dbErr
-		}
-		cacheErr := r.SaveCache(ctx, templateMap)
-		if cacheErr != nil {
-			return nil, cacheErr
-		}
-		return templateMap, nil
 	}
 
-	templateMap := make(map[string]*model.NotificationTemplate, len(results))
-	for i, result := range results {
-		if result == nil {
-			continue
-		}
-		template := &model.NotificationTemplate{}
-		err = json.Unmarshal([]byte(result.(string)), template)
-		if err != nil {
-			return nil, fmt.Errorf("failed to unmarshal template for key %s: %w", keys[i], err)
-		}
-		templateMap[keys[i]] = template
-	}
-
-	return templateMap, nil
+	return list, nil
 }
 
 func (r *NotificationTemplateRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.NotificationTemplateGetReq) (*model.NotificationTemplate, error) {
@@ -212,7 +174,7 @@ func (r *NotificationTemplateRepo) GetList(ctx context.Context, tx *gen.Client, 
 	return records, nil
 }
 
-func (r *NotificationTemplateRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *common.PageReply, error) {
+func (r *NotificationTemplateRepo) GetPage(ctx context.Context, tx *gen.Client, page *commonv1.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *commonv1.PageReply, error) {
 	var err error
 	notificationTemplates := make([]*model.NotificationTemplate, 0)
 	page = constant.PageValid(page)
@@ -231,7 +193,7 @@ func (r *NotificationTemplateRepo) GetPage(ctx context.Context, tx *gen.Client, 
 	for _, item := range list {
 		notificationTemplates = append(notificationTemplates, &model.NotificationTemplate{NotificationTemplate: item})
 	}
-	return notificationTemplates, &common.PageReply{
+	return notificationTemplates, &commonv1.PageReply{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,
@@ -245,19 +207,19 @@ func (r *NotificationTemplateRepo) getQuery(query *gen.NotificationTemplateQuery
 	if len(req.NotificationTemplateIds) > 0 {
 		query = query.Where(notificationtemplate.IDIn(req.NotificationTemplateIds...))
 	}
-	if req.NotificationType != nil {
-		query = query.Where(notificationtemplate.NotificationTypeEQ(v1.NotificationType_name[int32(*req.NotificationType)]))
+	if req.EventType != nil {
+		query = query.Where(notificationtemplate.EventTypeEQ(enum.EventType(req.EventType.String())))
 	}
 	if req.Channel != nil {
-		query = query.Where(notificationtemplate.ChannelEQ(v1.NotificationChannel_name[int32(*req.Channel)]))
+		query = query.Where(notificationtemplate.ChannelEQ(enum.NotificationChannel(v1.NotificationChannel_name[int32(*req.Channel)])))
 	}
 	if len(req.Channels) > 0 {
-		var channels []string
+		var channels []enum.NotificationChannel
 		for _, channel := range req.Channels {
 			if channel == nil {
 				continue
 			}
-			channels = append(channels, v1.NotificationChannel_name[int32(*channel)])
+			channels = append(channels, enum.NotificationChannel(v1.NotificationChannel_name[int32(*channel)]))
 		}
 		query = query.Where(notificationtemplate.ChannelIn(channels...))
 	}

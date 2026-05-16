@@ -20,7 +20,7 @@ func ProvideIMClient(consul *client.ConsulClient) (*IMClient, error) {
 }
 
 func ProvideNotifyClient(consul *client.ConsulClient) (*NotifyClient, error) {
-	return newServiceClient(consul, constant.MsgCenterServiceName.String(), NewNotifyClient)
+	return newServiceClient(consul, constant.NotifyServiceName.String(), NewNotifyClient)
 }
 
 func ProvideSignalNodeClient(consul *client.ConsulClient) (*SignalNodeClient, error) {

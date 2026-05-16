@@ -2,9 +2,11 @@ package repo
 
 import (
 	"common/api/gen/common"
+	"common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
+	"common/pkg/enum"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
@@ -26,7 +28,7 @@ func NewNotificationMetaRepo(repo *database.BaseData) repo.NotificationMetaRepo 
 func (r *NotificationMetaRepo) Save(ctx context.Context, tx *gen.Client, u *model.NotificationMeta) (*model.NotificationMeta, error) {
 	save, err := tx.NotificationMeta.Create().
 		SetUUID(u.UUID).
-		SetNotificationType(u.NotificationType).
+		SetEventType(u.EventType).
 		SetSenderID(u.SenderID).
 		SetMeta(u.Meta).
 		SetTitle(u.Title).
@@ -109,8 +111,8 @@ func (r *NotificationMetaRepo) getQuery(query *gen.NotificationMetaQuery, req *r
 	if len(req.UUIDs) > 0 {
 		query = query.Where(notificationmeta.UUIDIn(req.UUIDs...))
 	}
-	if req.NotificationMetaType != nil {
-		query = query.Where(notificationmeta.NotificationTypeEQ(v1.NotificationType_name[int32(*req.NotificationMetaType)]))
+	if req.EventType != nil {
+		query = query.Where(notificationmeta.EventTypeEQ(enum.EventType(enums.EventType_name[int32(*req.EventType)])))
 	}
 	if req.SenderId != nil {
 		query = query.Where(notificationmeta.SenderIDEQ(*req.SenderId))
@@ -119,7 +121,7 @@ func (r *NotificationMetaRepo) getQuery(query *gen.NotificationMetaQuery, req *r
 		query = query.Where(notificationmeta.SenderIDIn(req.SenderIds...))
 	}
 	if req.Status != nil {
-		query = query.Where(notificationmeta.StatusEQ(v1.NotificationStatus_name[int32(*req.Status)]))
+		query = query.Where(notificationmeta.StatusEQ(enum.NotificationStatus(v1.NotificationStatus_name[int32(*req.Status)])))
 	}
 	return query
 }

@@ -3,6 +3,7 @@ package util
 import (
 	"common/pkg/constant"
 	"common/pkg/model"
+	"fmt"
 
 	"context"
 	"time"
@@ -107,4 +108,22 @@ func AuditHook() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}
+}
+
+func Reverse[K comparable, V comparable](m map[K]V) map[V]K {
+	r := make(map[V]K, len(m))
+	for k, v := range m {
+		r[v] = k
+	}
+	return r
+}
+
+func ToString(src any) (string, error) {
+	if s, ok := src.(string); ok {
+		return s, nil
+	}
+	if b, ok := src.([]byte); ok {
+		return string(b), nil
+	}
+	return "", fmt.Errorf("unsupported type: %T", src)
 }

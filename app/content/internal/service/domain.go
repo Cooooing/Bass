@@ -16,7 +16,6 @@ import (
 
 type DomainService struct {
 	v1.UnimplementedContentDomainServiceServer
-	*BaseService
 	domainDomain *domain.DomainDomain
 }
 
@@ -28,9 +27,8 @@ func (s *DomainService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentDomainServiceHTTPServer(hs, s)
 }
 
-func NewDomainService(baseService *BaseService, domainDomain *domain.DomainDomain) *DomainService {
+func NewDomainService(domainDomain *domain.DomainDomain) *DomainService {
 	return &DomainService{
-		BaseService:  baseService,
 		domainDomain: domainDomain,
 	}
 }

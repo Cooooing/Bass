@@ -100,7 +100,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 			//		Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_FOLLOW),
 			//		SenderId:   u.ID,
 			//		SenderName: u.Name,
-			//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+			//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 			//		Meta: commonModel.Meta{
 			//			User: &commonModel.UserMeta{UserId: targetId, UserName: u.Name},
 			//		},

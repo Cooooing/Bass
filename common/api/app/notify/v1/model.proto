@@ -3,6 +3,7 @@ syntax = "proto3";
 package common.api.app.notify.v1;
 
 import "google/protobuf/timestamp.proto";
+import "common/enums/event.proto";
 import "notify/v1/enum.proto";
 import "validate/validate.proto";
 
@@ -20,8 +21,8 @@ message NotificationTemplate {
 
   // 主键
   int64 id = 3;
-  // 通知类型
-  NotificationType notification_type = 5 [(validate.rules).enum = {
+  // 事件类型
+  common.enums.EventType event_type = 5 [(validate.rules).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -67,8 +68,8 @@ message NotificationMeta {
   int64 id = 3;
   // uuid
   string uuid = 4;
-  // 通知类型
-  NotificationType notification_type = 5 [(validate.rules).enum = {
+  // 事件类型
+  common.enums.EventType event_type = 5 [(validate.rules).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -93,8 +94,8 @@ message NotificationMeta {
 message NotificationTemplateQueryParams {
   // 主键
   repeated int64 ids = 2;
-  // 通知类型
-  optional NotificationType notification_type = 5 [(validate.rules).enum = {
+  // 事件类型
+  optional common.enums.EventType event_type = 5 [(validate.rules).enum = {
     defined_only: true
     not_in: [0]
   }];
@@ -121,8 +122,8 @@ message NotificationMetaQueryParams {
   repeated int64 ids = 2;
   // uuid
   repeated string uuids = 3;
-  // 通知类型
-  optional NotificationType notification_type = 5 [(validate.rules).enum = {
+  // 事件类型
+  optional common.enums.EventType event_type = 5 [(validate.rules).enum = {
     defined_only: true
     not_in: [0]
   }];

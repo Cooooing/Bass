@@ -12,7 +12,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
-const testNatsURL = "nats://192.168.100.10:30083"
+const testNatsURL = "nats://127.0.0.1:42222"
 
 var l = log.DefaultLogger
 
@@ -77,6 +77,49 @@ func TestPublishSubscribe(t *testing.T) {
 		}
 	case <-time.After(3 * time.Second):
 		t.Fatal("timeout waiting for message")
+	}
+}
+
+func TestBroadcast(t *testing.T) {
+	conf := testNatsConf()
+	publisher, cleanup1, _ := NewNatsClient(l, conf)
+	defer cleanup1()
+
+	ctx := context.Background()
+	subscriberCount := 5
+	received := make([]atomic.Int32, subscriberCount)
+	unsubs := make([]Unsubscriber, subscriberCount)
+
+	for i := 0; i < subscriberCount; i++ {
+		idx := i
+		sub, cleanup, _ := NewNatsClient(l, &common.Nats{
+			Url:  testNatsURL,
+			Name: fmt.Sprintf("sub-%d", i),
+		})
+		defer cleanup()
+
+		unsub, _ := sub.Subscribe(ctx, "broadcast.topic",
+			func(ctx context.Context, msg *Message) error {
+				received[idx].Add(1)
+				return nil
+			})
+		unsubs[i] = unsub
+	}
+
+	time.Sleep(200 * time.Millisecond)
+
+	// 发一条消息
+	err := publisher.Publish(ctx, "broadcast.topic", &Message{Data: []byte("hi all")})
+	if err != nil {
+		t.Fatalf("publish: %v", err)
+	}
+	time.Sleep(500 * time.Millisecond)
+
+	// 所有订阅者都应该收到
+	for i := 0; i < subscriberCount; i++ {
+		if got := received[i].Load(); got != 1 {
+			t.Errorf("subscriber %d: expected 1, got %d", i, got)
+		}
 	}
 }
 

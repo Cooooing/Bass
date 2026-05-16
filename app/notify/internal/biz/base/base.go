@@ -10,21 +10,23 @@ import (
 )
 
 type BaseDomain struct {
-	Conf       *conf.Bootstrap
-	Log        *log.Helper
-	Db         *gen.Client
-	Consul     *client.ConsulClient
-	UserClient *rpc.UserClient
-	Redis      *client.RedisClient
+	Conf          *conf.Bootstrap
+	Log           *log.Helper
+	Db            *gen.Client
+	Consul        *client.ConsulClient
+	UserClient    *rpc.UserClient
+	ContentClient *rpc.ContentClient
+	Redis         *client.RedisClient
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, userClient *rpc.UserClient, redis *client.RedisClient) *BaseDomain {
+func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, userClient *rpc.UserClient, contentClient *rpc.ContentClient, redis *client.RedisClient) *BaseDomain {
 	return &BaseDomain{
-		Conf:       conf,
-		Log:        log.NewHelper(logger),
-		Db:         db,
-		Consul:     consul,
-		UserClient: userClient,
-		Redis:      redis,
+		Conf:          conf,
+		Log:           log.NewHelper(logger),
+		Db:            db,
+		Consul:        consul,
+		UserClient:    userClient,
+		ContentClient: contentClient,
+		Redis:         redis,
 	}
 }

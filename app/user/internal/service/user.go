@@ -22,15 +22,13 @@ import (
 
 type UserService struct {
 	v1.UnimplementedUserUserServiceServer
-	*BaseService
 	authenticationDomain *doamin.AuthenticationDomain
 	userDomain           *doamin.UserDomain
 	userRepo             repo.UserRepo
 }
 
-func NewUserService(baseService *BaseService, authenticationDomain *doamin.AuthenticationDomain, userDomain *doamin.UserDomain, userRepo repo.UserRepo) *UserService {
+func NewUserService(authenticationDomain *doamin.AuthenticationDomain, userDomain *doamin.UserDomain, userRepo repo.UserRepo) *UserService {
 	return &UserService{
-		BaseService:          baseService,
 		authenticationDomain: authenticationDomain,
 		userDomain:           userDomain,
 		userRepo:             userRepo,

@@ -11,13 +11,11 @@ import (
 
 type NotificationMetaService struct {
 	v1.UnimplementedNotifyNotificationMetaServiceServer
-	*BaseService
 	notificationMetaDomain *domain.NotificationMetaDomain
 }
 
-func NewNotificationMetaService(baseService *BaseService, notificationMetaDomain *domain.NotificationMetaDomain) *NotificationMetaService {
+func NewNotificationMetaService(notificationMetaDomain *domain.NotificationMetaDomain) *NotificationMetaService {
 	return &NotificationMetaService{
-		BaseService:            baseService,
 		notificationMetaDomain: notificationMetaDomain,
 	}
 }

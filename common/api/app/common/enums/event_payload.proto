@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+option go_package = "common/api/gen/common/enums;enums";
+
+// ==================== user ====================
+
+message UserFollowCreatedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 followed_id = 3;
+}
+
+message UserFollowDeletedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 followed_id = 3;
+}
+
+// ==================== article ====================
+
+message ArticlePublishedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 article_id = 3;
+  string title = 4;
+}
+
+message ArticleLikedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 article_id = 3;
+  int64 author_id = 4;
+  string title = 5;
+}
+
+message ArticleThankedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 article_id = 3;
+  int64 author_id = 4;
+  string title = 5;
+}
+
+message ArticleCollectedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 article_id = 3;
+  int64 author_id = 4;
+  string title = 5;
+}
+
+message ArticleWatchedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 article_id = 3;
+  int64 author_id = 4;
+  string title = 5;
+}
+
+// ==================== comment ====================
+
+message CommentPublishedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 comment_id = 3;
+  int64 article_id = 4;
+  int64 author_id = 5;
+  string content = 6;
+}
+
+message CommentLikedPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 comment_id = 3;
+  int64 article_id = 4;
+  int64 comment_author_id = 5;
+}

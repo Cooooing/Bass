@@ -1,11 +1,6 @@
 package service
 
 import (
-	commonClient "common/pkg/client"
-	"notify/internal/conf"
-	"notify/internal/data/ent/gen"
-
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
@@ -13,32 +8,13 @@ import (
 
 // ServiceProviderSet is service providers.
 var ServiceProviderSet = wire.NewSet(
-	NewBaseService,
 	NewSystemService,
 	NewNotificationMetaService,
 	NewNotificationRecordService,
 	NewNotificationTemplateService,
-	NewEmailService,
-	NewSmsService,
 	NewOssService,
 	ProvideServices,
 )
-
-type BaseService struct {
-	Conf   *conf.Bootstrap
-	Log    *log.Helper
-	Consul *commonClient.ConsulClient
-	Db     *gen.Client
-}
-
-func NewBaseService(conf *conf.Bootstrap, logger log.Logger, consul *commonClient.ConsulClient, db *gen.Client) *BaseService {
-	return &BaseService{
-		Conf:   conf,
-		Log:    log.NewHelper(logger),
-		Consul: consul,
-		Db:     db,
-	}
-}
 
 // Service 接口，每个 service 实现它
 type Service interface {
@@ -51,8 +27,6 @@ func ProvideServices(
 	notificationMetaService *NotificationMetaService,
 	notificationRecordService *NotificationRecordService,
 	notificationTemplateService *NotificationTemplateService,
-	emailService *EmailService,
-	smsService *SmsService,
 	ossService *OssService,
 ) []Service {
 	return []Service{
@@ -60,8 +34,6 @@ func ProvideServices(
 		notificationMetaService,
 		notificationRecordService,
 		notificationTemplateService,
-		emailService,
-		smsService,
 		ossService,
 	}
 }

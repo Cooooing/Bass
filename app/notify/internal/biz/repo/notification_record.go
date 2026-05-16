@@ -1,7 +1,8 @@
 package repo
 
 import (
-	"common/api/gen/common"
+	commonv1 "common/api/gen/common"
+	"common/api/gen/common/enums"
 	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/model"
@@ -17,11 +18,11 @@ type NotificationRecordRepo interface {
 
 	GetOne(ctx context.Context, tx *gen.Client, req *NotificationRecordGetReq) (*model.NotificationRecord, error)
 	GetList(ctx context.Context, tx *gen.Client, req *NotificationRecordGetReq) ([]*model.NotificationRecord, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *NotificationRecordGetReq) ([]*model.NotificationRecord, *common.PageReply, error)
+	GetPage(ctx context.Context, tx *gen.Client, page *commonv1.PageRequest, req *NotificationRecordGetReq) ([]*model.NotificationRecord, *commonv1.PageReply, error)
 }
 
 type NotificationRecordGetReq struct {
-	NotificationType      *v1.NotificationType
+	EventType             *enums.EventType
 	NotificationRecordId  *int64
 	NotificationRecordIds []int64
 	NotificationMetaId    *int64

@@ -97,7 +97,7 @@ func (d *CommentDomain) Add(ctx context.Context, comment *model.Comment) (c *mod
 		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
 		//	SenderId:   user.ID,
 		//	SenderName: user.Name,
-		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_WEBSITE)},
+		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
 		//	Meta: commonModel.Meta{
 		//		AtUsernames: lo.Keys(atUserNames),
 		//		Comment: &commonModel.CommentMeta{

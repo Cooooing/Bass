@@ -12,6 +12,7 @@ import (
 	"notify/internal/biz/repo"
 	"notify/internal/data/ent/gen"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -19,13 +20,16 @@ import (
 
 type OssService struct {
 	v1.UnimplementedNotifyOssServiceServer
-	*BaseService
+	log                    *log.Helper
 	ossObjectStorageDomain *domain.ObjectStorageDomain
 }
 
-func NewOssService(baseService *BaseService, ossObjectStorageDomain *domain.ObjectStorageDomain) *OssService {
+func NewOssService(
+	logger log.Logger,
+	ossObjectStorageDomain *domain.ObjectStorageDomain,
+) *OssService {
 	return &OssService{
-		BaseService:            baseService,
+		log:                    log.NewHelper(logger),
 		ossObjectStorageDomain: ossObjectStorageDomain,
 	}
 }
@@ -92,7 +96,7 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 	if err != nil {
 		return nil, err
 	}
-	s.Log.Infof("qiniu upload callback: %s", string(bytes))
+	s.log.Infof("qiniu upload callback: %s", string(bytes))
 
 	err = s.ossObjectStorageDomain.QiniuUploadCallback(ctx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 		Provider:     constant.Qiniu.String(),
@@ -115,7 +119,7 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 	if err != nil {
 		return nil, err
 	}
-	s.Log.Infof("qiniu increment audit callback: %s", string(bytes))
+	s.log.Infof("qiniu increment audit callback: %s", string(bytes))
 
 	suggestion := req.Items[0].Result.Result.Suggestion
 	if suggestion == "block" {

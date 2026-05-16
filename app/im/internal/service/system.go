@@ -11,13 +11,10 @@ import (
 
 type SystemService struct {
 	v1.UnimplementedCommonSystemServiceServer
-	*BaseService
 }
 
 func NewSystemService(baseService *BaseService) *SystemService {
-	return &SystemService{
-		BaseService: baseService,
-	}
+	return &SystemService{}
 }
 
 func (s *SystemService) RegisterGrpc(gs *grpc.Server) {

@@ -14,7 +14,9 @@ type NotificationRecordDomain struct {
 	notificationRecordRepo repo.NotificationRecordRepo
 }
 
-func NewNotificationRecordDomain(base *domainbase.BaseDomain, notificationRecordRepo repo.NotificationRecordRepo) *NotificationRecordDomain {
+func NewNotificationRecordDomain(
+	base *domainbase.BaseDomain,
+	notificationRecordRepo repo.NotificationRecordRepo) *NotificationRecordDomain {
 	return &NotificationRecordDomain{
 		BaseDomain:             base,
 		notificationRecordRepo: notificationRecordRepo,

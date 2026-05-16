@@ -24,7 +24,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
-	commonClient.NewHTTPClient(),
+	commonClient.NewHttpClient(),
 
 	jwt.NewTokenCache,
 

@@ -37,8 +37,8 @@ var BizProviderSet = wire.NewSet(
 
 func ProvideTasks(
 	register *handler.RegisterHandler,
-) map[constant.TaskName]client.MessageHandler {
-	d := make(map[constant.TaskName]client.MessageHandler)
+) map[constant.TaskName]client.Handler {
+	d := make(map[constant.TaskName]client.Handler)
 	d[constant.TaskConnectorRegister] = register
 	return d
 }

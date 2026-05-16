@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -24,7 +24,7 @@ func (ArticleVote) Annotations() []schema.Annotation {
 }
 
 func (ArticleVote) Fields() []ent.Field {
-	return append([]ent.Field{
+	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
 		field.JSON("vote_options", []string{}).Comment("投票选项").Optional(),
@@ -33,7 +33,13 @@ func (ArticleVote) Fields() []ent.Field {
 		field.Bool("vote_anonymous").Comment("是否匿名投票").Default(true),
 		field.Int32("total_count").Comment("总投票数").Default(0),
 		field.Time("end_at").Comment("投票截止时间").Optional(),
-	}, util.TimeAuditFields()...)
+	}
+}
+
+func (ArticleVote) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (ArticleVote) Edges() []ent.Edge {

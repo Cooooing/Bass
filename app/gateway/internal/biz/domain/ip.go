@@ -16,15 +16,21 @@ type IpDomain struct {
 	ip2region *service.Ip2Region
 }
 
-func NewIpDomain(baseDomain *domainbase.BaseDomain) (*IpDomain, func(), error) {
+func NewIpDomain(
+	baseDomain *domainbase.BaseDomain) (*IpDomain,
+	func(),
+	error,
+) {
 	var ip2region *service.Ip2Region
 	var cleanup func()
 	if baseDomain.Conf.Server.IpData.Enable {
-		v4Config, err := service.NewV4Config(service.VIndexCache, baseDomain.Conf.Server.IpData.Ipv4XdbPath, 20)
+		v4Config, err := service.NewV4Config(service.VIndexCache, baseDomain.Conf.Server.IpData.Ipv4XdbPath,
+			20)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to create v4 config: %s", err)
 		}
-		v6Config, err := service.NewV6Config(service.VIndexCache, baseDomain.Conf.Server.IpData.Ipv6XdbPath, 20)
+		v6Config, err := service.NewV6Config(service.VIndexCache, baseDomain.Conf.Server.IpData.Ipv6XdbPath,
+			20)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to create v6 config: %s", err)
 		}

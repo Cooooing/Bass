@@ -13,7 +13,8 @@ type UserDomain struct {
 	*domainbase.BaseDomain
 }
 
-func NewUserDomain(base *domainbase.BaseDomain) (*UserDomain, error) {
+func NewUserDomain(
+	base *domainbase.BaseDomain) (*UserDomain, error) {
 	return &UserDomain{
 		BaseDomain: base,
 	}, nil

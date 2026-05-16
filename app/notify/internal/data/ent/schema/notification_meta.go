@@ -3,6 +3,8 @@ package schema
 import (
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
+	commonModel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	"common/pkg/enum"
 	"common/pkg/util"
 
@@ -40,8 +42,13 @@ func (NotificationMeta) Fields() []ent.Field {
 		field.Enum("status").Comment("状态").
 			GoType(enum.NotificationStatus("")),
 	}
-	fields = append(fields, util.TimeAuditFields()...)
 	return fields
+}
+
+func (NotificationMeta) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationMeta) Indexes() []ent.Index {

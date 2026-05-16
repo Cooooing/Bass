@@ -15,7 +15,9 @@ type DomainDomain struct {
 	domainRepo repo.DomainRepo
 }
 
-func NewDomainDomain(baseDomain *domainbase.BaseDomain, domainRepo repo.DomainRepo) *DomainDomain {
+func NewDomainDomain(
+	baseDomain *domainbase.BaseDomain,
+	domainRepo repo.DomainRepo) *DomainDomain {
 	return &DomainDomain{
 		BaseDomain: baseDomain,
 		domainRepo: domainRepo,

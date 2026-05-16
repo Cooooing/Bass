@@ -1,0 +1,143 @@
+# user.yaml
+# user 微服务 K8s 部署（Deployment + Service + ConfigMap）
+#
+# 构建镜像：
+#   docker build -f common/Dockerfile --build-arg APP_NAME=user -t bass/user:latest .
+#   # 如果用 k3s 内置 containerd：
+#   docker build -f common/Dockerfile --build-arg APP_NAME=user -t bass/user:latest .
+#   docker save bass/user:latest | k3s ctr images import -
+#
+# 部署：
+#   kubectl apply -f ./user.yaml -n bass-test
+# 删除：
+#   kubectl delete -f ./user.yaml -n bass-test
+
+---
+# ConfigMap：bootstrap 配置（覆盖镜像内 /app/configs/bootstrap.yaml）
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-bootstrap
+  namespace: bass-test
+data:
+  bootstrap.yaml: |
+    server:
+      name: user
+      version: 1.0.0
+      mode: prod
+
+    config:
+      consul:
+        address: consul.bass-test.svc.cluster.local:8500
+        token: ""
+        path: config/user/config.yaml
+        timeout: 5s
+
+    log:
+      level: info
+      file: ""
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  namespace: bass-test
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+        app.kubernetes.io/name: user
+        app.kubernetes.io/metrics: "true"  # 启用 Prometheus 指标采集
+    spec:
+      containers:
+        - name: user
+          image: bass/user:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8002
+            - name: grpc
+              containerPort: 9002
+          env:
+            # 数据库（ClusterIP：postgresql.bass-test.svc.cluster.local）
+            - name: POSTGRES_HOST
+              value: postgresql.bass-test.svc.cluster.local
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: "123456"
+            - name: POSTGRES_DB
+              value: bass
+            # Redis（ClusterIP：redis.bass-test.svc.cluster.local）
+            - name: REDIS_HOST
+              value: redis-master.bass-test.svc.cluster.local
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: "123456"
+            # NATS（ClusterIP：nats.bass-test.svc.cluster.local）
+            - name: NATS_HOST
+              value: nats.bass-test.svc.cluster.local
+            - name: NATS_PORT
+              value: "4222"
+            # OTel Collector（Helm 创建的 ClusterIP Service）
+            - name: OTEL_ENDPOINT
+              value: otel-collector-opentelemetry-collector.bass-test.svc.cluster.local:4317
+          volumeMounts:
+            - name: bootstrap
+              mountPath: /app/configs/bootstrap.yaml
+              subPath: bootstrap.yaml
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: bootstrap
+          configMap:
+            name: user-bootstrap
+
+---
+# Service：ClusterIP（集群内访问）
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  namespace: bass-test
+  labels:
+    app: user
+spec:
+  type: ClusterIP
+  selector:
+    app: user
+  ports:
+    - name: http
+      port: 8002
+      targetPort: http
+    - name: grpc
+      port: 9002
+      targetPort: grpc

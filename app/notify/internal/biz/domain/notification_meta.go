@@ -13,7 +13,9 @@ type NotificationMetaDomain struct {
 	notificationMetaRepo repo.NotificationMetaRepo
 }
 
-func NewNotificationMetaDomain(base *domainbase.BaseDomain, notificationMetaRepo repo.NotificationMetaRepo) *NotificationMetaDomain {
+func NewNotificationMetaDomain(
+	base *domainbase.BaseDomain,
+	notificationMetaRepo repo.NotificationMetaRepo) *NotificationMetaDomain {
 	return &NotificationMetaDomain{
 		BaseDomain:           base,
 		notificationMetaRepo: notificationMetaRepo,

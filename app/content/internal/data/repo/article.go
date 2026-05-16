@@ -30,7 +30,8 @@ type ArticleRepo struct {
 	tagRepo        repo.TagRepo
 }
 
-func NewArticleRepo(BaseData *basedata.BaseData, client *gen.Client, postscriptRepo repo.ArticlePostscriptRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo, tagRepo repo.TagRepo) repo.ArticleRepo {
+func NewArticleRepo(BaseData *basedata.BaseData, client *gen.Client, postscriptRepo repo.ArticlePostscriptRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo,
+	tagRepo repo.TagRepo) repo.ArticleRepo {
 	return &ArticleRepo{
 		BaseData:       BaseData,
 		client:         client,

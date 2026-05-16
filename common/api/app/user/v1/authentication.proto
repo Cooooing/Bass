@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "google/api/annotations.proto";
 import "user/v1/model.proto";
 import "validate/validate.proto";
 
@@ -13,80 +12,35 @@ service UserAuthenticationService {
   // -- 账号注册
 
   // 邮箱注册
-  rpc RegisterEmail(RegisterEmailAuth.Request) returns (RegisterEmailAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/register/email"
-      body: "*"
-    };
-  }
+  rpc RegisterEmail(RegisterEmailAuth.Request) returns (RegisterEmailAuth.Reply) {}
 
   // 邮箱注册验证码验证
-  rpc RegisterEmailVerify(RegisterEmailVerifyAuth.Request) returns (RegisterEmailVerifyAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/register/email/verify"
-      body: "*"
-    };
-  }
+  rpc RegisterEmailVerify(RegisterEmailVerifyAuth.Request) returns (RegisterEmailVerifyAuth.Reply) {}
 
   // 手机号注册
-  rpc RegisterPhone(RegisterPhoneAuth.Request) returns (RegisterPhoneAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/register/phone"
-      body: "*"
-    };
-  }
+  rpc RegisterPhone(RegisterPhoneAuth.Request) returns (RegisterPhoneAuth.Reply) {}
 
   // 手机号注册验证码验证
-  rpc RegisterPhoneVerify(RegisterPhoneVerifyAuth.Request) returns (RegisterPhoneVerifyAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/register/phone/verify"
-      body: "*"
-    };
-  }
+  rpc RegisterPhoneVerify(RegisterPhoneVerifyAuth.Request) returns (RegisterPhoneVerifyAuth.Reply) {}
 
   // -- 账号信息查询
 
   // 邮箱是否存在
-  rpc ExistEmail(ExistEmailAuth.Request) returns (ExistEmailAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/exist/email"
-      body: "*"
-    };
-  }
+  rpc ExistEmail(ExistEmailAuth.Request) returns (ExistEmailAuth.Reply) {}
 
   // 手机号是否存在
-  rpc ExistPhone(ExistPhoneAuth.Request) returns (ExistPhoneAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/exist/phone"
-      body: "*"
-    };
-  }
+  rpc ExistPhone(ExistPhoneAuth.Request) returns (ExistPhoneAuth.Reply) {}
 
   // 用户名是否存在
-  rpc ExistUsername(ExistUsernameAuth.Request) returns (ExistUsernameAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/exist/name"
-      body: "*"
-    };
-  }
+  rpc ExistUsername(ExistUsernameAuth.Request) returns (ExistUsernameAuth.Reply) {}
 
   // -- 账号登录
 
   // 账号登录（用户名/邮箱）
-  rpc LoginAccount(LoginAccountAuth.Request) returns (LoginAccountAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/login"
-      body: "*"
-    };
-  }
+  rpc LoginAccount(LoginAccountAuth.Request) returns (LoginAccountAuth.Reply) {}
 
   // 账号登出
-  rpc Logout(LogoutAuth.Request) returns (LogoutAuth.Reply) {
-    option (google.api.http) = {
-      post: "/v1/auth/logout"
-      body: "*"
-    };
-  }
+  rpc Logout(LogoutAuth.Request) returns (LogoutAuth.Reply) {}
 }
 
 message RegisterEmailAuth {

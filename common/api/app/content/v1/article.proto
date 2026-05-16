@@ -5,7 +5,6 @@ package common.api.app.content.v1;
 import "common/common.proto";
 import "content/v1/enum.proto";
 import "content/v1/model.proto";
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
@@ -13,116 +12,46 @@ option go_package = "common/api/gen/content/v1;v1";
 // Article 服务
 service ContentArticleService {
   // 新增文章
-  rpc AddArticle(AddArticle.Request) returns (AddArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/add"
-      body: "*"
-    };
-  }
+  rpc AddArticle(AddArticle.Request) returns (AddArticle.Reply) {}
 
   // 更新草稿
-  rpc UpdateDraft(UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/update-draft"
-      body: "*"
-    };
-  }
+  rpc UpdateDraft(UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {}
 
   // 发布文章（从草稿发布）
-  rpc Publish(PublishArticle.Request) returns (PublishArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/publish"
-      body: "*"
-    };
-  }
+  rpc Publish(PublishArticle.Request) returns (PublishArticle.Reply) {}
 
   // 添加附言
-  rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/add-postscript"
-      body: "*"
-    };
-  }
+  rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {}
 
   // 修改文章（管理员使用）
-  rpc UpdateArticle(UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/update"
-      body: "*"
-    };
-  }
+  rpc UpdateArticle(UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {}
 
   // 删除文章（仅草稿）
-  rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/delete"
-      body: "*"
-    };
-  }
+  rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {}
 
   // 查询文章
-  rpc Page(PageArticle.Request) returns (PageArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageArticle.Request) returns (PageArticle.Reply) {}
 
   // 查询单篇文章
-  rpc GetOne(GetOneArticle.Request) returns (GetOneArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/get-one"
-      body: "*"
-    };
-  }
+  rpc GetOne(GetOneArticle.Request) returns (GetOneArticle.Reply) {}
 
   // 点赞文章
-  rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/like"
-      body: "*"
-    };
-  }
+  rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {}
 
   // 感谢文章
-  rpc Thank(ThankArticle.Request) returns (ThankArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/thank"
-      body: "*"
-    };
-  }
+  rpc Thank(ThankArticle.Request) returns (ThankArticle.Reply) {}
 
   // 收藏文章
-  rpc Collect(CollectArticle.Request) returns (CollectArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/collect"
-      body: "*"
-    };
-  }
+  rpc Collect(CollectArticle.Request) returns (CollectArticle.Reply) {}
 
   // 关注文章
-  rpc Watch(WatchArticle.Request) returns (WatchArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/watch"
-      body: "*"
-    };
-  }
+  rpc Watch(WatchArticle.Request) returns (WatchArticle.Reply) {}
 
   // 打赏文章
-  rpc Reward(RewardArticle.Request) returns (RewardArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/reward"
-      body: "*"
-    };
-  }
+  rpc Reward(RewardArticle.Request) returns (RewardArticle.Reply) {}
 
   // 采纳评论
-  rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {
-    option (google.api.http) = {
-      post: "/v1/article/accept-answer"
-      body: "*"
-    };
-  }
+  rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {}
 }
 
 message AddArticle {

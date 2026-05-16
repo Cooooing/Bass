@@ -4,35 +4,19 @@ package common.api.app.content.v1;
 
 import "common/common.proto";
 import "content/v1/model.proto";
-import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
 // 领域服务
 service ContentDomainService {
   // 新增领域
-  rpc Adds(AddsDomain.Request) returns (AddsDomain.Reply) {
-    option (google.api.http) = {
-      post: "/v1/domain/adds"
-      body: "*"
-    };
-  }
+  rpc Adds(AddsDomain.Request) returns (AddsDomain.Reply) {}
 
   // 修改领域信息
-  rpc Update(UpdateDomain.Request) returns (UpdateDomain.Reply) {
-    option (google.api.http) = {
-      post: "/v1/domain/update"
-      body: "*"
-    };
-  }
+  rpc Update(UpdateDomain.Request) returns (UpdateDomain.Reply) {}
 
   // 分页查询领域
-  rpc Page(PageDomain.Request) returns (PageDomain.Reply) {
-    option (google.api.http) = {
-      post: "/v1/domain/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageDomain.Request) returns (PageDomain.Reply) {}
 }
 
 message AddsDomain {

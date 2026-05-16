@@ -15,7 +15,9 @@ type TagDomain struct {
 	tagRepo repo.TagRepo
 }
 
-func NewTagDomain(baseDomain *domainbase.BaseDomain, tagRepo repo.TagRepo) *TagDomain {
+func NewTagDomain(
+	baseDomain *domainbase.BaseDomain,
+	tagRepo repo.TagRepo) *TagDomain {
 	return &TagDomain{
 		BaseDomain: baseDomain,
 		tagRepo:    tagRepo,

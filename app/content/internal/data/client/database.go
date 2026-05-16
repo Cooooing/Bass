@@ -2,7 +2,6 @@ package client
 
 import (
 	"common/pkg/client/db/driver"
-	"common/pkg/util"
 	"content/internal/conf"
 	"content/internal/data/ent/gen"
 	"context"
@@ -29,9 +28,6 @@ func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, fu
 			return nil, nil, fmt.Errorf("failed creating schema resources: %w", err)
 		}
 	}
-
-	// 注册审计 Hook
-	client.Use(util.AuditHook())
 
 	cleanup := func() {
 		if err := client.Close(); err != nil {

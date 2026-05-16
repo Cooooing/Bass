@@ -12,13 +12,16 @@ import (
 )
 
 type WebsocketService struct {
+	*BaseService
 	sessionDomain *domain.SessionDomain
 	eventPool     *util.EventPool
 	upgrader      websocket.Upgrader
 }
 
-func NewWebsocketService(sessionDomain *domain.SessionDomain, eventPool *util.EventPool) *WebsocketService {
+func NewWebsocketService(baseService *BaseService, sessionDomain *domain.SessionDomain,
+	eventPool *util.EventPool) *WebsocketService {
 	return &WebsocketService{
+		BaseService:   baseService,
 		sessionDomain: sessionDomain,
 		eventPool:     eventPool,
 		upgrader: websocket.Upgrader{

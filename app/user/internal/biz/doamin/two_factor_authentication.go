@@ -9,21 +9,25 @@ import (
 	"time"
 	domainbase "user/internal/biz/base"
 	"user/internal/biz/repo"
-	"user/internal/data/ent"
-	"user/internal/data/ent/gen"
 
 	"github.com/pquerna/otp/totp"
 )
 
 type TwoFactorAuthenticationDomain struct {
 	*domainbase.BaseDomain
-	userRepo repo.UserRepo
+	userRepo    repo.UserRepo
+	userTfaRepo repo.UserTfaRepo
 }
 
-func NewTwoFactorAuthenticationDomain(base *domainbase.BaseDomain, userRepo repo.UserRepo) (*TwoFactorAuthenticationDomain, error) {
+func NewTwoFactorAuthenticationDomain(
+	base *domainbase.BaseDomain,
+	userRepo repo.UserRepo,
+	userTfaRepo repo.UserTfaRepo,
+) (*TwoFactorAuthenticationDomain, error) {
 	return &TwoFactorAuthenticationDomain{
-		BaseDomain: base,
-		userRepo:   userRepo,
+		BaseDomain:  base,
+		userRepo:    userRepo,
+		userTfaRepo: userTfaRepo,
 	}, nil
 }
 
@@ -61,14 +65,15 @@ func (d *TwoFactorAuthenticationDomain) Disable(ctx context.Context, name string
 	if !totp.Validate(code, secret) {
 		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
-		_, err := d.userRepo.DisableTwoFactorAuthentication(ctx, tx, name)
+	err := d.TxRunner(ctx, func(ctx context.Context) error {
+		u, err := d.userRepo.GetByAccount(ctx, name)
+		if err != nil {
+			return err
+		}
+		_, err = d.userTfaRepo.Disable(ctx, u.ID)
 		return err
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (d *TwoFactorAuthenticationDomain) Confirm(ctx context.Context, name string, code string) error {
@@ -79,12 +84,13 @@ func (d *TwoFactorAuthenticationDomain) Confirm(ctx context.Context, name string
 	if !totp.Validate(code, secret) {
 		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
-	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
-		_, err = d.userRepo.EnableTwoFactorAuthentication(ctx, tx, name, secret)
+	err = d.TxRunner(ctx, func(ctx context.Context) error {
+		u, err := d.userRepo.GetByAccount(ctx, name)
+		if err != nil {
+			return err
+		}
+		_, err = d.userTfaRepo.Enable(ctx, u.ID, secret)
 		return err
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

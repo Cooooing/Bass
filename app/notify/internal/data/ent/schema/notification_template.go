@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	"common/pkg/enum"
 	"common/pkg/util"
 
@@ -35,8 +36,13 @@ func (NotificationTemplate) Fields() []ent.Field {
 		field.String("content").Comment("模板内容"),
 		field.Bool("enable").Comment("是否启用").Default(false),
 	}
-	fields = append(fields, util.TimeAuditFields()...)
 	return fields
+}
+
+func (NotificationTemplate) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationTemplate) Indexes() []ent.Index {

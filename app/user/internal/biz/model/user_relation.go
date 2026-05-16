@@ -2,22 +2,20 @@ package model
 
 import (
 	v1 "common/api/gen/user/v1"
-	"user/internal/data/ent/gen"
-
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"time"
 )
 
 type UserRelation struct {
-	*gen.UserRelation
-}
-
-func (u *UserRelation) ConvertToRpc() *v1.UserRelation {
-	return &v1.UserRelation{
-		CreatedAt: timestamppb.New(*u.CreatedAt),
-		UpdatedAt: timestamppb.New(*u.UpdatedAt),
-		Id:        u.ID,
-		Type:      v1.UserRelationType(u.Type),
-		ActorId:   u.ActorID,
-		TargetId:  u.TargetID,
-	}
+	// 用户关系ID
+	ID int64
+	// 关系类型 0-follow 1-block
+	Type v1.UserRelationType
+	// 关系发起者
+	ActorID int64
+	// 关系目标用户
+	TargetID int64
+	// 创建时间
+	CreatedAt *time.Time
+	// 更新时间
+	UpdatedAt *time.Time
 }

@@ -42,7 +42,15 @@ type NodeDomain struct {
 	sf           *sonyflake.Sonyflake
 }
 
-func NewNodeDomain(baseDomain *domainbase.BaseDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *task.AsynqCache, producer *client.Producer, httpClient *http.Client) (*NodeDomain, error) {
+func NewNodeDomain(
+	baseDomain *domainbase.BaseDomain,
+	nodeRepo repo.NodeRepo,
+	nodeCache cache.NodeCache,
+	sessionCache cache.SessionCache,
+	asynqCache *task.AsynqCache,
+	producer *client.Producer,
+	httpClient *http.Client,
+) (*NodeDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err

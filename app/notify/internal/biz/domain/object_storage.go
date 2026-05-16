@@ -25,7 +25,10 @@ type ObjectStorageDomain struct {
 	objectStorageProvider repo.ObjectStorageProvider
 }
 
-func NewObjectStorageDomain(base *domainbase.BaseDomain, objectStorageRepo repo.ObjectStorageRepo, ossFactory *oss.Factory) *ObjectStorageDomain {
+func NewObjectStorageDomain(
+	base *domainbase.BaseDomain,
+	objectStorageRepo repo.ObjectStorageRepo,
+	ossFactory *oss.Factory) *ObjectStorageDomain {
 	return &ObjectStorageDomain{
 		BaseDomain:            base,
 		objectStorageRepo:     objectStorageRepo,

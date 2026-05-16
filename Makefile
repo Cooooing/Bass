@@ -1,26 +1,52 @@
-# global variables
-GOHOSTOS := $(shell go env GOHOSTOS)
-VERSION := latest
+.DEFAULT_GOAL := help
 
-SERVERS := gateway user content notify im signal connector
-ROOT_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+APP_DIR := $(ROOT_DIR)/app
 
-.DEFAULT_GOAL := help # default target
+# Auto-discover modules that have a Makefile
+SERVERS := $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
 
 IGNORE_ERROR ?= 1
 
-# dispatch
+include $(ROOT_DIR)/common/make/common.mk
+
+# Dispatch to single module: make user gen
 .PHONY: $(SERVERS)
 $(SERVERS):
 	@echo "===> [$@] $(SUBTARGET)"
-	@$(MAKE) -C $(ROOT_DIR)/app/$@ $(SUBTARGET) IGNORE_ERROR=$(IGNORE_ERROR)
+	@$(MAKE) -C $(APP_DIR)/$@ $(SUBTARGET) IGNORE_ERROR=$(IGNORE_ERROR)
 
-# target
-.PHONY: wire wire-clean ent ent-clean config config-clean tidy gen all clean
-wire wire-clean ent ent-clean config config-clean tidy gen all clean:
-	@$(MAKE) SUBTARGET=$@ $(SERVERS)
+# gen: api once, then gen each module (ROOT_LEVEL=1 skips api per-module)
+.PHONY: gen
+gen: api
+	@for module in $(SERVERS); do \
+		echo "===> [$$module] gen"; \
+		$(MAKE) -C $(APP_DIR)/$$module gen IGNORE_ERROR=$(IGNORE_ERROR) ROOT_LEVEL=1 || exit 1; \
+	done
 
-include $(ROOT_DIR)/common/make/common.mk
+# clean: api-clean once, then clean each module
+.PHONY: clean
+clean: api-clean
+	@for module in $(SERVERS); do \
+		echo "===> [$$module] clean"; \
+		$(MAKE) -C $(APP_DIR)/$$module clean IGNORE_ERROR=$(IGNORE_ERROR) ROOT_LEVEL=1 || exit 1; \
+	done
+
+# all: init+api once, then all each module
+.PHONY: all
+all: init api
+	@for module in $(SERVERS); do \
+		echo "===> [$$module] all"; \
+		$(MAKE) -C $(APP_DIR)/$$module all IGNORE_ERROR=$(IGNORE_ERROR) ROOT_LEVEL=1 || exit 1; \
+	done
+
+# Per-module targets: dispatch to each module directly
+.PHONY: tidy build config config-clean wire wire-clean ent ent-clean
+tidy build config config-clean wire wire-clean ent ent-clean:
+	@for module in $(SERVERS); do \
+		echo "===> [$$module] $@"; \
+		$(MAKE) -C $(APP_DIR)/$$module $@ IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
 
 # help
 .PHONY: help
@@ -33,6 +59,10 @@ help:
 	@echo "  make ent      - generate ent codes"
 	@echo "  make api      - generate proto API codes"
 	@echo "  make gen      - generate all codes"
+	@echo "  make build    - build all services"
+	@echo "  make clean    - clean all generated files"
+	@echo "  make all      - init + gen + build all"
 	@echo ""
-	@echo "Parallel example:"
-	@echo "  make -j8 tidy"
+	@echo "Single module:"
+	@echo "  make user gen       - gen for user module only"
+	@echo "  make user SUBTARGET=build - build user module"

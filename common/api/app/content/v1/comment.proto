@@ -5,51 +5,25 @@ package common.api.app.content.v1;
 import "common/common.proto";
 import "content/v1/enum.proto";
 import "content/v1/model.proto";
-import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
   // 新增评论
-  rpc AddComment(AddComment.Request) returns (AddComment.Reply) {
-    option (google.api.http) = {
-      post: "/v1/comment/add"
-      body: "*"
-    };
-  }
+  rpc AddComment(AddComment.Request) returns (AddComment.Reply) {}
 
   // 查询评论列表
-  rpc Page(PageComment.Request) returns (PageComment.Reply) {
-    option (google.api.http) = {
-      post: "/v1/comment/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageComment.Request) returns (PageComment.Reply) {}
 
   // 点赞评论
-  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {
-    option (google.api.http) = {
-      post: "/v1/comment/like"
-      body: "*"
-    };
-  }
+  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {}
 
   // 感谢评论
-  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {
-    option (google.api.http) = {
-      post: "/v1/comment/thank"
-      body: "*"
-    };
-  }
+  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {}
 
   // 修改评论状态
-  rpc UpdateStatus(UpdateStatusComment.Request) returns (UpdateStatusComment.Reply) {
-    option (google.api.http) = {
-      post: "/v1/comment/update-status"
-      body: "*"
-    };
-  }
+  rpc UpdateStatus(UpdateStatusComment.Request) returns (UpdateStatusComment.Reply) {}
 }
 
 message AddComment {

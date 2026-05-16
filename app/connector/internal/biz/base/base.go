@@ -15,7 +15,11 @@ type BaseDomain struct {
 	SignalNodeClient *rpc.SignalNodeClient
 }
 
-func NewBaseDomain(conf *conf.Bootstrap, logger log.Logger, eventPool *util.EventPool, signalNodeClient *rpc.SignalNodeClient) *BaseDomain {
+func NewBaseDomain(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	eventPool *util.EventPool,
+	signalNodeClient *rpc.SignalNodeClient) *BaseDomain {
 	return &BaseDomain{
 		Conf:             conf,
 		Log:              log.NewHelper(logger),

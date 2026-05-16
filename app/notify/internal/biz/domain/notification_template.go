@@ -15,7 +15,9 @@ type NotificationTemplateDomain struct {
 	notificationTemplateRepo repo.NotificationTemplateRepo
 }
 
-func NewNotificationTemplateDomain(base *domainbase.BaseDomain, notificationTemplateRepo repo.NotificationTemplateRepo) *NotificationTemplateDomain {
+func NewNotificationTemplateDomain(
+	base *domainbase.BaseDomain,
+	notificationTemplateRepo repo.NotificationTemplateRepo) *NotificationTemplateDomain {
 	return &NotificationTemplateDomain{
 		BaseDomain:               base,
 		notificationTemplateRepo: notificationTemplateRepo,

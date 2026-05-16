@@ -29,9 +29,7 @@ func (s *TwoFactorAuthenticationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserTwoFactorAuthenticationServiceServer(gs, s)
 }
 
-func (s *TwoFactorAuthenticationService) RegisterHttp(hs *http.Server) {
-	v1.RegisterUserTwoFactorAuthenticationServiceHTTPServer(hs, s)
-}
+func (s *TwoFactorAuthenticationService) RegisterHttp(hs *http.Server) {}
 
 func (s *TwoFactorAuthenticationService) Validate(ctx context.Context, req *v1.ValidateTwoFactorAuthentication_Request) (rsp *v1.ValidateTwoFactorAuthentication_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)

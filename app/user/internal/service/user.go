@@ -12,26 +12,42 @@ import (
 	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/jinzhu/copier"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type UserService struct {
 	v1.UnimplementedUserUserServiceServer
+	*BaseService
 	authenticationDomain *doamin.AuthenticationDomain
 	userDomain           *doamin.UserDomain
 	userRepo             repo.UserRepo
+	userPreferencesRepo  repo.UserPreferencesRepo
+	userPrivacyRepo      repo.UserPrivacyRepo
+	userLocationRepo     repo.UserLocationRepo
+	userTfaRepo          repo.UserTfaRepo
+	userCheckinRepo      repo.UserCheckinRepo
 }
 
-func NewUserService(authenticationDomain *doamin.AuthenticationDomain, userDomain *doamin.UserDomain, userRepo repo.UserRepo) *UserService {
+func NewUserService(baseService *BaseService, authenticationDomain *doamin.AuthenticationDomain,
+	userDomain *doamin.UserDomain,
+	userRepo repo.UserRepo,
+	userPreferencesRepo repo.UserPreferencesRepo,
+	userPrivacyRepo repo.UserPrivacyRepo,
+	userLocationRepo repo.UserLocationRepo,
+	userTfaRepo repo.UserTfaRepo,
+	userCheckinRepo repo.UserCheckinRepo) *UserService {
 	return &UserService{
+		BaseService:          baseService,
 		authenticationDomain: authenticationDomain,
 		userDomain:           userDomain,
 		userRepo:             userRepo,
+		userPreferencesRepo:  userPreferencesRepo,
+		userPrivacyRepo:      userPrivacyRepo,
+		userLocationRepo:     userLocationRepo,
+		userTfaRepo:          userTfaRepo,
+		userCheckinRepo:      userCheckinRepo,
 	}
 }
 
@@ -39,32 +55,45 @@ func (s *UserService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserUserServiceServer(gs, s)
 }
 
-func (s *UserService) RegisterHttp(hs *http.Server) {
-	v1.RegisterUserUserServiceHTTPServer(hs, s)
-}
+func (s *UserService) RegisterHttp(hs *http.Server) {}
 
 func (s *UserService) UpdateSetting(ctx context.Context, req *v1.UpdateSettingUser_Request) (rsp *v1.UpdateSettingUser_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	update, err := s.userRepo.Update(ctx, s.Db, &model.User{User: &gen.User{
-		ID:                   user.ID,
-		AvatarURL:            req.AvatarUrl,
-		Language:             req.Language,
-		Nickname:             req.Nickname,
-		Timezone:             req.Timezone,
-		Theme:                req.Theme,
-		MobileTheme:          req.MobileTheme,
-		EnableWebNotify:      req.EnableWebNotify,
-		EnableEmailSubscribe: req.EnableEmailSubscribe,
-	}})
+	// Update base user fields
+	_, err = s.userRepo.Update(ctx, &model.User{
+		ID:        user.ID,
+		AvatarURL: req.AvatarUrl,
+		Nickname:  req.Nickname,
+	})
+	if err != nil {
+		return nil, err
+	}
+	// Update user preferences
+	prefs, err := s.userPreferencesRepo.GetByUserID(ctx, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	prefs.Language = req.Language
+	prefs.Timezone = req.Timezone
+	prefs.Theme = req.Theme
+	prefs.MobileTheme = req.MobileTheme
+	prefs.EnableWebNotify = req.EnableWebNotify
+	prefs.EnableEmailSubscribe = req.EnableEmailSubscribe
+	_, err = s.userPreferencesRepo.Update(ctx, prefs)
+	if err != nil {
+		return nil, err
+	}
+	// Re-fetch user with edges for a complete reply
+	fullUser, err := s.userRepo.GetOne(ctx, &repo.UserGetReq{UserId: &user.ID})
 	if err != nil {
 		return nil, err
 	}
 	return &v1.UpdateSettingUser_Reply{
-		User: update.ConvertToRpc(),
-	}, err
+		User: assembleUserProto(ctx, fullUser, s.userPreferencesRepo, s.userPrivacyRepo, s.userLocationRepo, s.userTfaRepo, s.userCheckinRepo),
+	}, nil
 }
 
 func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUserUser_Request) (rsp *v1.GetCurrentUserUser_Reply, err error) {
@@ -72,46 +101,30 @@ func (s *UserService) GetCurrentUser(ctx context.Context, req *v1.GetCurrentUser
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	u, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{UserId: new(user.ID)})
+	u, err := s.userRepo.GetOne(ctx, &repo.UserGetReq{UserId: new(user.ID)})
 	if err != nil {
 		return nil, err
 	}
 	return &v1.GetCurrentUserUser_Reply{
-		User: u.ConvertToRpc(),
+		User: assembleUserProto(ctx, u, s.userPreferencesRepo, s.userPrivacyRepo, s.userLocationRepo, s.userTfaRepo, s.userCheckinRepo),
 	}, err
 }
 
 func (s *UserService) GetOne(ctx context.Context, req *v1.GetOneUser_Request) (rsp *v1.GetOneUser_Reply, err error) {
-	res := &v1.GetOneUser_Reply{
-		User: &v1.User{},
-	}
-	user, err := s.userRepo.GetOne(ctx, s.Db, &repo.UserGetReq{
+	user, err := s.userRepo.GetOne(ctx, &repo.UserGetReq{
 		UserId: req.UserId,
 		Name:   req.Name,
 	})
 	if err != nil {
 		return nil, err
 	}
-	err = copier.Copy(res.User, user)
-	if err != nil {
-		return nil, err
-	}
-	if user.LastLoginTime != nil {
-		res.User.LastLoginTime = timestamppb.New(*user.LastLoginTime)
-	}
-	if user.LastCheckinTime != nil {
-		res.User.LastCheckinTime = timestamppb.New(*user.LastCheckinTime)
-	}
-	res.User.CreatedAt = timestamppb.New(*user.CreatedAt)
-	res.User.UpdatedAt = timestamppb.New(*user.UpdatedAt)
-	return res, nil
+	return &v1.GetOneUser_Reply{
+		User: assembleUserProto(ctx, user, s.userPreferencesRepo, s.userPrivacyRepo, s.userLocationRepo, s.userTfaRepo, s.userCheckinRepo),
+	}, nil
 }
 
 func (s *UserService) GetList(ctx context.Context, req *v1.GetListUser_Request) (rsp *v1.GetListUser_Reply, err error) {
-	res := &v1.GetListUser_Reply{
-		Users: []*v1.User{},
-	}
-	list, err := s.userRepo.GetList(ctx, s.Db, &repo.UserGetReq{
+	list, err := s.userRepo.GetList(ctx, &repo.UserGetReq{
 		UserIds:  req.Query.UserIds,
 		Name:     req.Query.Name,
 		Nickname: req.Query.Nickname,
@@ -121,30 +134,15 @@ func (s *UserService) GetList(ctx context.Context, req *v1.GetListUser_Request) 
 	if err != nil {
 		return nil, err
 	}
-	for i := range list {
-		item := &v1.User{}
-		err = copier.Copy(item, list[i])
-		if err != nil {
-			return nil, err
-		}
-		if list[i].LastLoginTime != nil {
-			item.LastLoginTime = timestamppb.New(*list[i].LastLoginTime)
-		}
-		if list[i].LastCheckinTime != nil {
-			item.LastCheckinTime = timestamppb.New(*list[i].LastCheckinTime)
-		}
-		item.CreatedAt = timestamppb.New(*list[i].CreatedAt)
-		item.UpdatedAt = timestamppb.New(*list[i].UpdatedAt)
-		res.Users = append(res.Users, item)
+	users := make([]*v1.User, 0, len(list))
+	for _, u := range list {
+		users = append(users, assembleUserProto(ctx, u, s.userPreferencesRepo, s.userPrivacyRepo, s.userLocationRepo, s.userTfaRepo, s.userCheckinRepo))
 	}
-	return res, nil
+	return &v1.GetListUser_Reply{Users: users}, nil
 }
 
 func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapUser_Request) (rsp *v1.GetMapUser_Reply, err error) {
-	res := &v1.GetMapUser_Reply{
-		Users: make(map[int64]*v1.User),
-	}
-	list, err := s.userRepo.GetList(ctx, s.Db, &repo.UserGetReq{
+	list, err := s.userRepo.GetList(ctx, &repo.UserGetReq{
 		UserIds:  req.Query.UserIds,
 		Name:     req.Query.Name,
 		Nickname: req.Query.Nickname,
@@ -154,29 +152,17 @@ func (s *UserService) GetMap(ctx context.Context, req *v1.GetMapUser_Request) (r
 	if err != nil {
 		return nil, err
 	}
-	for i := range list {
-		item := &v1.User{}
-		err = copier.Copy(item, list[i])
-		if err != nil {
-			return nil, err
-		}
-		if list[i].LastLoginTime != nil {
-			item.LastLoginTime = timestamppb.New(*list[i].LastLoginTime)
-		}
-		if list[i].LastCheckinTime != nil {
-			item.LastCheckinTime = timestamppb.New(*list[i].LastCheckinTime)
-		}
-		item.CreatedAt = timestamppb.New(*list[i].CreatedAt)
-		item.UpdatedAt = timestamppb.New(*list[i].UpdatedAt)
-		res.Users[list[i].ID] = item
+	users := make(map[int64]*v1.User)
+	for _, u := range list {
+		users[u.ID] = assembleUserProto(ctx, u, s.userPreferencesRepo, s.userPrivacyRepo, s.userLocationRepo, s.userTfaRepo, s.userCheckinRepo)
 	}
-	return res, nil
+	return &v1.GetMapUser_Reply{Users: users}, nil
 }
 
 func (s *UserService) Page(ctx context.Context, req *v1.PageUser_Request) (rsp *v1.PageUser_Reply, err error) {
 	req.Query = util.OrDefault(req.Query, &v1.UserQueryParams{})
 	reply := make([]*v1.User, 0)
-	users, page, err := s.userRepo.GetPage(ctx, s.Db, req.Page, &repo.UserGetReq{
+	users, page, err := s.userRepo.GetPage(ctx, req.Page, &repo.UserGetReq{
 		UserIds:   req.Query.UserIds,
 		Name:      req.Query.Name,
 		Names:     req.Query.Names,
@@ -188,7 +174,7 @@ func (s *UserService) Page(ctx context.Context, req *v1.PageUser_Request) (rsp *
 		Phones:    req.Query.Phones,
 	})
 	for _, user := range users {
-		reply = append(reply, user.ConvertToRpc())
+		reply = append(reply, assembleUserProto(ctx, user, s.userPreferencesRepo, s.userPrivacyRepo, s.userLocationRepo, s.userTfaRepo, s.userCheckinRepo))
 	}
 	return &v1.PageUser_Reply{
 		Page: page,

@@ -2,44 +2,33 @@ package ent
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"user/internal/data/ent/gen"
+
+	utilent "common/pkg/util/ent"
 )
 
-func WithTx(ctx context.Context, client *gen.Client, fn func(tx *gen.Client) error) error {
-	tx, err := client.Tx(ctx)
-	// 如果已经存在事务，则直接使用传入的client执行
-	if errors.Is(err, gen.ErrTxStarted) {
-		return fn(client)
-	}
-	if err != nil {
-		return errors.Join(err, fmt.Errorf("create tx failed"))
-	}
+// genTxWrapper 将 gen.Tx 适配为 util.Tx 接口
+type genTxWrapper struct{ tx *gen.Tx }
 
-	defer func() {
-		if p := recover(); p != nil {
-			// 如果发生 panic，尝试回滚并继续抛出
-			if rbErr := tx.Rollback(); rbErr != nil {
-				panic(errors.Join(rbErr, fmt.Errorf("tx panic: %v", p)))
-			}
-			panic(p)
+func (w *genTxWrapper) Commit() error       { return w.tx.Commit() }
+func (w *genTxWrapper) Rollback() error     { return w.tx.Rollback() }
+func (w *genTxWrapper) Client() interface{} { return w.tx.Client() }
+
+// WithTx 开启事务，支持事务传播
+func WithTx(ctx context.Context, client *gen.Client, fn func(tx *gen.Client) error, opts ...utilent.TxOption) error {
+	starter := func(ctx context.Context) (utilent.Tx, error) {
+		tx, err := client.Tx(ctx)
+		if err != nil {
+			return nil, err
 		}
-	}()
+		return &genTxWrapper{tx: tx}, nil
+	}
 
-	// 执行业务逻辑
-	if err := fn(tx.Client()); err != nil {
-		// 出错时回滚
-		if rbErr := tx.Rollback(); rbErr != nil {
-			return errors.Join(rbErr, fmt.Errorf("tx commit failed: %v", err))
+	return utilent.WithTx(ctx, starter, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return fn(client)
 		}
-		return err
-	}
-
-	// 正常提交
-	if err := tx.Commit(); err != nil {
-		return errors.Join(err, fmt.Errorf("tx commit failed"))
-	}
-
-	return nil
+		return fn(c)
+	}, opts...)
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"common/pkg/util/server"
 	"connector/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -38,8 +39,8 @@ type Service interface {
 func ProvideServices(
 	systemService *SystemService,
 	callbackService *CallbackService,
-) []Service {
-	return []Service{
+) []server.Service {
+	return []server.Service{
 		systemService,
 		callbackService,
 	}

@@ -10,8 +10,6 @@ import (
 	domainbase "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/ent"
-	"user/internal/data/ent/gen"
 
 	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
@@ -26,7 +24,12 @@ type AuthenticationDomain struct {
 	sf *sonyflake.Sonyflake
 }
 
-func NewAuthenticationDomain(base *domainbase.BaseDomain, userRepo repo.UserRepo, tokenCache *jwt.TokenCache, tokenService *TokenService) (*AuthenticationDomain, error) {
+func NewAuthenticationDomain(
+	base *domainbase.BaseDomain,
+	userRepo repo.UserRepo,
+	tokenCache *jwt.TokenCache,
+	tokenService *TokenService,
+) (*AuthenticationDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
@@ -45,14 +48,14 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if u.Email == nil {
 		return "", "", cerrors.ErrorBadRequest("email can not be empty")
 	}
-	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, *u.Email)
+	exist, err := s.userRepo.ConstantAccount(ctx, *u.Email)
 	if exist {
 		err = cerrors.ErrorBadRequest("email already exists")
 	}
 	if err != nil {
 		return
 	}
-	exist, err = s.userRepo.ConstantAccount(ctx, s.Db, u.Name)
+	exist, err = s.userRepo.ConstantAccount(ctx, u.Name)
 	if exist {
 		err = cerrors.ErrorBadRequest("name already exists")
 	}
@@ -78,23 +81,6 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	}
 	// 发送邮件验证码通知
 	err = s.EventPool.Submit(func() {
-		//err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
-		//	UUID:       uuid.New().String(),
-		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
-		//	SenderId:   u.ID,
-		//	SenderName: u.Name,
-		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL)},
-		//	Meta: commonModel.Meta{
-		//		RegisterVerifyCode: &commonModel.RegisterVerifyCode{
-		//			Email:  *u.Email,
-		//			Code:   code,
-		//			Expire: s.Conf.Server.Jwt.EmailExpire.AsDuration(),
-		//		},
-		//	},
-		//})
-		//if err != nil {
-		//	s.Log.Errorf("publish user register verfity code event error: %v", err)
-		//}
 	})
 	if err != nil {
 		return
@@ -130,19 +116,19 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		return
 	}
 
-	err = ent.WithTx(ctx, s.Db, func(tx *gen.Client) error {
+	err = s.TxRunner(ctx, func(ctx context.Context) error {
 		// 保存用户信息
-		user := &model.User{User: &gen.User{
+		user := &model.User{
 			Name:     saveUser.Name,
-			Nickname: new(saveUser.Nickname),
+			Nickname: &saveUser.Nickname,
 			Password: saveUser.Password,
-			Email:    new(saveUser.Email),
-		}}
-		err = user.PasswordEncrypt()
+			Email:    &saveUser.Email,
+		}
+		user.Password, err = str.HashPassword(user.Password)
 		if err != nil {
 			return err
 		}
-		_, err = s.userRepo.Save(ctx, tx, user)
+		_, err = s.userRepo.Save(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -165,14 +151,14 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	if u.Phone == nil {
 		return "", "", cerrors.ErrorBadRequest("phone can not be empty")
 	}
-	exist, err := s.userRepo.ConstantAccount(ctx, s.Db, *u.Phone)
+	exist, err := s.userRepo.ConstantAccount(ctx, *u.Phone)
 	if exist {
 		err = cerrors.ErrorBadRequest("phone already exists")
 	}
 	if err != nil {
 		return
 	}
-	exist, err = s.userRepo.ConstantAccount(ctx, s.Db, u.Name)
+	exist, err = s.userRepo.ConstantAccount(ctx, u.Name)
 	if exist {
 		err = cerrors.ErrorBadRequest("name already exists")
 	}
@@ -198,23 +184,6 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	}
 	// 发送邮件验证码通知
 	err = s.EventPool.Submit(func() {
-		//err := s.Rabbitmq.Publish(constant.ExchangeUser.String(), constant.RoutingKeyUserRegisterVerifyCode.String(), &commonModel.Notification{
-		//	UUID:       uuid.New().String(),
-		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_USER_REGISTER_VERIFY_CODE),
-		//	SenderId:   u.ID,
-		//	SenderName: u.Name,
-		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_SMS)},
-		//	Meta: commonModel.Meta{
-		//		RegisterVerifyCode: &commonModel.RegisterVerifyCode{
-		//			Phone:  *u.Phone,
-		//			Code:   code,
-		//			Expire: s.Conf.Server.Jwt.PhoneExpire.AsDuration(),
-		//		},
-		//	},
-		//})
-		//if err != nil {
-		//	s.Log.Errorf("publish user register verfity code event error: %v", err)
-		//}
 	})
 	if err != nil {
 		return
@@ -250,19 +219,19 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 		return
 	}
 
-	err = ent.WithTx(ctx, s.Db, func(tx *gen.Client) error {
+	err = s.TxRunner(ctx, func(ctx context.Context) error {
 		// 保存用户信息
-		user := &model.User{User: &gen.User{
+		user := &model.User{
 			Name:     saveUser.Name,
-			Nickname: new(saveUser.Nickname),
+			Nickname: &saveUser.Nickname,
 			Password: saveUser.Password,
-			Phone:    new(saveUser.Phone),
-		}}
-		err = user.PasswordEncrypt()
+			Phone:    &saveUser.Phone,
+		}
+		user.Password, err = str.HashPassword(user.Password)
 		if err != nil {
 			return err
 		}
-		_, err = s.userRepo.Save(ctx, tx, user)
+		_, err = s.userRepo.Save(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -282,12 +251,12 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 
 func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string, password string) (token string, user *model.User, err error) {
 	// 获取用户信息
-	user, err = s.userRepo.GetByAccount(ctx, s.Db, account)
+	user, err = s.userRepo.GetByAccount(ctx, account)
 	if err != nil {
 		return
 	}
 	// 验证密码
-	if !user.PasswordVerify(password) {
+	if !str.VerifyPassword(user.Password, password) {
 		return token, nil, cerrors.ErrorBadRequest("password invalid")
 	}
 	// 生成 token

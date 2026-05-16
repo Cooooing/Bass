@@ -2,6 +2,7 @@ package service
 
 import (
 	"common/pkg/client"
+	"common/pkg/util/server"
 	"im/internal/conf"
 	"im/internal/data/ent/gen"
 
@@ -49,8 +50,8 @@ func ProvideServices(
 	systemService *SystemService,
 	chatSessionService *ChatSessionService,
 	chatMessageService *ChatMessageService,
-) []Service {
-	return []Service{
+) []server.Service {
+	return []server.Service{
 		systemService,
 		chatSessionService,
 		chatMessageService,

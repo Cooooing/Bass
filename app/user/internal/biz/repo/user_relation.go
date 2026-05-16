@@ -5,17 +5,16 @@ import (
 	v1 "common/api/gen/user/v1"
 	"context"
 	"user/internal/biz/model"
-	"user/internal/data/ent/gen"
 )
 
 type UserRelationRepo interface {
-	Save(ctx context.Context, tx *gen.Client, u *model.UserRelation) (*model.UserRelation, error)
+	Save(ctx context.Context, u *model.UserRelation) (*model.UserRelation, error)
 
-	Delete(ctx context.Context, tx *gen.Client, u *model.UserRelation) (int, error)
+	Delete(ctx context.Context, u *model.UserRelation) (int, error)
 
-	Exist(ctx context.Context, tx *gen.Client, req *UserRelationGetReq) (bool, error)
-	GetList(ctx context.Context, tx *gen.Client, req *UserRelationGetReq) ([]*model.UserRelation, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error)
+	Exist(ctx context.Context, req *UserRelationGetReq) (bool, error)
+	GetList(ctx context.Context, req *UserRelationGetReq) ([]*model.UserRelation, error)
+	GetPage(ctx context.Context, page *common.PageRequest, req *UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error)
 }
 
 type UserRelationGetReq struct {

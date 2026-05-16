@@ -3,12 +3,11 @@ package service
 import (
 	"common/pkg/client"
 	"common/pkg/util/jwt"
+	"common/pkg/util/server"
 	"signal/internal/conf"
 	"signal/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 )
 
@@ -41,17 +40,11 @@ func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, con
 	}
 }
 
-// Service 接口，每个 service 实现它
-type Service interface {
-	RegisterGrpc(gs *grpc.Server)
-	RegisterHttp(hs *http.Server)
-}
-
 func ProvideServices(
 	systemService *SystemService,
 	nodeService *NodeService,
-) []Service {
-	return []Service{
+) []server.Service {
+	return []server.Service{
 		systemService,
 		nodeService,
 	}

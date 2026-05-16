@@ -7,12 +7,13 @@ import (
 	"common/pkg/constant"
 	"context"
 	"fmt"
-	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/base"
 	"user/internal/data/ent/gen"
 	"user/internal/data/ent/gen/user"
+
+	utilent "common/pkg/util/ent"
 )
 
 type UserRepo struct {
@@ -25,38 +26,71 @@ func NewUserRepo(repo *base.BaseData) repo.UserRepo {
 	}
 }
 
-func (r *UserRepo) Save(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error) {
-	userCreate := tx.User.Create().
+func (r *UserRepo) getClient(ctx context.Context) *gen.Client {
+	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return c
+	}
+	return r.Db
+}
+
+func toDomain(u *gen.User) *model.User {
+	return &model.User{
+		ID:            u.ID,
+		Name:          u.Name,
+		Nickname:      u.Nickname,
+		Password:      u.Password,
+		Email:         u.Email,
+		Phone:         u.Phone,
+		URL:           u.URL,
+		AvatarURL:     u.AvatarURL,
+		Introduction:  u.Introduction,
+		Mbti:          u.Mbti,
+		Status:        u.Status,
+		GroupName:     u.GroupName,
+		FollowCount:   u.FollowCount,
+		FollowerCount: u.FollowerCount,
+		BlockCount:    u.BlockCount,
+		BlockedCount:  u.BlockedCount,
+		LastLoginTime: u.LastLoginTime,
+		LastLoginIP:   u.LastLoginIP,
+		CreatedAt:     u.CreatedAt,
+		UpdatedAt:     u.UpdatedAt,
+	}
+}
+
+func (r *UserRepo) Save(ctx context.Context, u *model.User) (*model.User, error) {
+	tx := r.getClient(ctx)
+	created, err := tx.User.Create().
 		SetName(u.Name).
 		SetPassword(u.Password).
 		SetNillableEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
-		SetAvatarURL(fmt.Sprintf(r.Conf.Server.Avatar, u.Name))
-	createdUser, err := userCreate.Save(ctx)
-	return &model.User{User: createdUser}, err
+		SetAvatarURL(fmt.Sprintf(r.Conf.Server.Avatar, u.Name)).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Create default sub-table records
+	_, _ = tx.UserPreferences.Create().SetUserID(created.ID).Save(ctx)
+	_, _ = tx.UserPrivacy.Create().SetUserID(created.ID).Save(ctx)
+	return toDomain(created), nil
 }
 
-func (r *UserRepo) Update(ctx context.Context, tx *gen.Client, u *model.User) (*model.User, error) {
-	update := tx.User.UpdateOneID(u.ID)
-	update.SetNillableAvatarURL(u.AvatarURL)
-	update.SetNillableNickname(u.Nickname)
-	update.SetNillableLanguage(u.Language)
-	update.SetNillableTimezone(u.Timezone)
-	update.SetNillableTheme(u.Theme)
-	update.SetNillableMobileTheme(u.MobileTheme)
-	update.SetNillableEnableWebNotify(u.EnableWebNotify)
-	update.SetNillableEnableEmailSubscribe(u.EnableEmailSubscribe)
-	update.SetNillablePublicPoints(u.PublicPoints)
-	update.SetNillablePublicFollowers(u.PublicFollowers)
-	update.SetNillablePublicArticles(u.PublicArticles)
-	update.SetNillablePublicComments(u.PublicComments)
-	update.SetNillablePublicOnlineStatus(u.PublicOnlineStatus)
-	save, err := update.Save(ctx)
-	return &model.User{User: save}, err
+func (r *UserRepo) Update(ctx context.Context, u *model.User) (*model.User, error) {
+	tx := r.getClient(ctx)
+	updated, err := tx.User.UpdateOneID(u.ID).
+		SetNillableAvatarURL(u.AvatarURL).
+		SetNillableNickname(u.Nickname).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return toDomain(updated), nil
 }
 
-func (r *UserRepo) UpdateStat(ctx context.Context, tx *gen.Client, userId int64, statType v1.UserStatType, num int32) (*model.User, error) {
+func (r *UserRepo) UpdateStat(ctx context.Context, userId int64, statType v1.UserStatType, num int32) (*model.User, error) {
+	tx := r.getClient(ctx)
 	updateOne := tx.User.UpdateOneID(userId)
 	switch statType {
 	case v1.UserStatType_USER_STAT_TYPE_FOLLOW:
@@ -70,81 +104,112 @@ func (r *UserRepo) UpdateStat(ctx context.Context, tx *gen.Client, userId int64,
 	default:
 		return nil, fmt.Errorf("unknown statType")
 	}
-	save, err := updateOne.Save(ctx)
-	return &model.User{User: save}, err
+	saved, err := updateOne.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return toDomain(saved), nil
 }
 
-func (r *UserRepo) EnableTwoFactorAuthentication(ctx context.Context, tx *gen.Client, name string, secret string) (int, error) {
-	return tx.User.Update().
-		Where(user.NameEQ(name)).
-		SetTwofaEnable(true).
-		SetTwofaEnableTime(time.Now()).
-		SetTwofaSecret(secret).
-		Save(ctx)
+func (r *UserRepo) ConstantAccount(ctx context.Context, account string) (bool, error) {
+	tx := r.getClient(ctx)
+	return tx.User.Query().
+		Where(user.Or(
+			user.NameEQ(account),
+			user.EmailEQ(account),
+			user.PhoneEQ(account),
+		)).
+		Exist(ctx)
 }
 
-func (r *UserRepo) DisableTwoFactorAuthentication(ctx context.Context, tx *gen.Client, name string) (int, error) {
-	return tx.User.Update().
-		Where(user.NameEQ(name)).
-		SetTwofaEnable(false).
-		SetTwofaSecret("").
-		Save(ctx)
-}
-
-func (r *UserRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) (*model.User, error) {
-	query := tx.User.Query()
+func (r *UserRepo) GetOne(ctx context.Context, req *repo.UserGetReq) (*model.User, error) {
+	tx := r.getClient(ctx)
+	query := tx.User.Query().
+		WithPreferences().
+		WithPrivacy().
+		WithLocation().
+		WithTfa().
+		WithCheckinStat()
 	query = r.getQuery(query, req)
 	u, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cerrors.ErrorBadRequest("user is not found")
 	}
-	return &model.User{User: u}, err
-}
-
-func (r *UserRepo) GetByAccount(ctx context.Context, tx *gen.Client, account string) (*model.User, error) {
-	queryUser, err := tx.User.Query().Where(user.Or(user.NameEQ(account), user.EmailEQ(account), user.PhoneEQ(account))).Only(ctx)
-	return &model.User{User: queryUser}, err
-}
-
-func (r *UserRepo) ConstantAccount(ctx context.Context, tx *gen.Client, account string) (bool, error) {
-	return tx.User.Query().Where(user.Or(user.NameEQ(account), user.EmailEQ(account), user.PhoneEQ(account))).Exist(ctx)
-}
-
-func (r *UserRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.UserGetReq) ([]*model.User, error) {
-	res := make([]*model.User, 0)
-	query := tx.User.Query()
-	query = r.getQuery(query, req)
-	users, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	for _, u := range users {
-		res = append(res, &model.User{User: u})
-	}
-	return res, nil
+	return toDomain(u), nil
 }
-func (r *UserRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.UserGetReq) ([]*model.User, *common.PageReply, error) {
-	var (
-		users []*model.User
-		err   error
-		total int
-	)
-	page = constant.PageValid(page)
-	query := tx.User.Query()
+
+func (r *UserRepo) GetByAccount(ctx context.Context, account string) (*model.User, error) {
+	tx := r.getClient(ctx)
+	u, err := tx.User.Query().
+		WithPreferences().
+		WithPrivacy().
+		WithLocation().
+		WithTfa().
+		WithCheckinStat().
+		Where(user.Or(
+			user.NameEQ(account),
+			user.EmailEQ(account),
+			user.PhoneEQ(account),
+		)).
+		Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return toDomain(u), nil
+}
+
+func (r *UserRepo) GetList(ctx context.Context, req *repo.UserGetReq) ([]*model.User, error) {
+	tx := r.getClient(ctx)
+	query := tx.User.Query().
+		WithPreferences().
+		WithPrivacy().
+		WithLocation().
+		WithTfa().
+		WithCheckinStat()
 	query = r.getQuery(query, req)
-	countQuery := query.Clone()
-	total, err = countQuery.Count(ctx)
+	list, err := query.All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
-	if err != nil {
-		return nil, nil, err
-	}
+	result := make([]*model.User, 0, len(list))
 	for _, u := range list {
-		users = append(users, &model.User{User: u})
+		result = append(result, toDomain(u))
 	}
-	return users, &common.PageReply{
+	return result, nil
+}
+
+func (r *UserRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.UserGetReq) ([]*model.User, *common.PageReply, error) {
+	tx := r.getClient(ctx)
+	page = constant.PageValid(page)
+	query := tx.User.Query().
+		WithPreferences().
+		WithPrivacy().
+		WithLocation().
+		WithTfa().
+		WithCheckinStat()
+	query = r.getQuery(query, req)
+
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := make([]*model.User, 0, len(list))
+	for _, u := range list {
+		result = append(result, toDomain(u))
+	}
+	return result, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

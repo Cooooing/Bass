@@ -24,7 +24,12 @@ type ServerDomain struct {
 	httpClient   *http.Client
 }
 
-func NewServerDomain(baseDomain *domainbase.BaseDomain, sessionCache cache.SessionCache, asynqCache *task.AsynqCache, producer *client.Producer) (*ServerDomain, func()) {
+func NewServerDomain(
+	baseDomain *domainbase.BaseDomain,
+	sessionCache cache.SessionCache,
+	asynqCache *task.AsynqCache,
+	producer *client.Producer,
+) (*ServerDomain, func()) {
 	s := &ServerDomain{
 		BaseDomain:   baseDomain,
 		sessionCache: sessionCache,

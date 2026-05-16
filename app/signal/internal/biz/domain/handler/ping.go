@@ -27,7 +27,12 @@ type PingHandler struct {
 	producer   *client.Producer
 }
 
-func NewPingHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *task.AsynqCache, producer *client.Producer) *PingHandler {
+func NewPingHandler(baseDomain *domainbase.BaseDomain,
+	nodeDomain *domain.NodeDomain,
+	nodeRepo repo.NodeRepo,
+	nodeCache cache.NodeCache,
+	asynqCache *task.AsynqCache,
+	producer *client.Producer) *PingHandler {
 	return &PingHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,

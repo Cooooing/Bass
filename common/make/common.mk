@@ -1,14 +1,19 @@
-# global variables
-ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../)
+ifndef COMMON_MK_INCLUDED
+COMMON_MK_INCLUDED := 1
+
+# --- Variables ---
+COMMON_MAKE_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+ROOT_DIR := $(abspath $(COMMON_MAKE_DIR)/../..)
 COMMON_DIR := $(ROOT_DIR)/common
+
+# Proto paths (shared API protos)
 PROTO_DIR := $(COMMON_DIR)/api/app
 PROTO_GEN_DIR := $(COMMON_DIR)/api/gen
 PROTO_THIRD_PARTY_DIR := $(COMMON_DIR)/api/third_party
-
-# find proto files
 COMMON_PROTO_FILES := $(shell find $(COMMON_DIR) -type f -name "*.proto" | sort)
 
-# tools install
+# --- Run-once targets ---
+
 .PHONY: init
 init:
 	@echo "installing required tools..."
@@ -24,13 +29,11 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go install entgo.io/ent/cmd/ent@latest
 
-# clean API proto files
 .PHONY: api-clean
 api-clean:
 	@echo "clean API proto files..."
 	@cd $(PROTO_GEN_DIR) && find . -type f ! -name ".gitkeep" -delete 2>/dev/null || true && find . -type d -empty -delete 2>/dev/null || true
 
-# generate API proto files
 .PHONY: api
 api: api-clean
 	@echo "generating API proto files..."
@@ -42,3 +45,5 @@ api: api-clean
 	       --openapi_out=fq_schema_naming=true,naming=proto,default_response=false:$(PROTO_GEN_DIR) \
 	       --validate_out=lang=go,paths=source_relative:$(PROTO_GEN_DIR) \
 	       $(COMMON_PROTO_FILES)
+
+endif

@@ -4,7 +4,6 @@ import (
 	"common/pkg/util/jwt"
 	"common/pkg/util/server"
 	"connector/internal/conf"
-	"connector/internal/service"
 	"fmt"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -18,7 +17,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []service.Service, tokenCache *jwt.TokenCache) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.Service, tokenCache *jwt.TokenCache) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

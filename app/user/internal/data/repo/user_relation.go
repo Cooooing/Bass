@@ -2,6 +2,7 @@ package repo
 
 import (
 	"common/api/gen/common"
+	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"context"
 	"user/internal/biz/model"
@@ -9,6 +10,8 @@ import (
 	"user/internal/data/base"
 	"user/internal/data/ent/gen"
 	"user/internal/data/ent/gen/userrelation"
+
+	utilent "common/pkg/util/ent"
 )
 
 type UserRelationRepo struct {
@@ -21,77 +24,101 @@ func NewUserRelationRepo(repo *base.BaseData) repo.UserRelationRepo {
 	}
 }
 
-func (r *UserRelationRepo) Save(ctx context.Context, tx *gen.Client, u *model.UserRelation) (*model.UserRelation, error) {
-	userRelationCreate, err := tx.UserRelation.Create().
-		SetActorID(u.ActorID).
-		SetTargetID(u.TargetID).
-		SetType(u.Type).
-		Save(ctx)
-	return &model.UserRelation{UserRelation: userRelationCreate}, err
+func (r *UserRelationRepo) getClient(ctx context.Context) *gen.Client {
+	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return c
+	}
+	return r.Db
 }
 
-func (r *UserRelationRepo) Delete(ctx context.Context, tx *gen.Client, u *model.UserRelation) (int, error) {
+func toRelationDomain(rel *gen.UserRelation) *model.UserRelation {
+	return &model.UserRelation{
+		ID:        rel.ID,
+		Type:      v1.UserRelationType(rel.Type),
+		ActorID:   rel.ActorID,
+		TargetID:  rel.TargetID,
+		CreatedAt: rel.CreatedAt,
+		UpdatedAt: rel.UpdatedAt,
+	}
+}
+
+func (r *UserRelationRepo) Save(ctx context.Context, u *model.UserRelation) (*model.UserRelation, error) {
+	tx := r.getClient(ctx)
+	created, err := tx.UserRelation.Create().
+		SetActorID(u.ActorID).
+		SetTargetID(u.TargetID).
+		SetType(int32(u.Type)).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return toRelationDomain(created), nil
+}
+
+func (r *UserRelationRepo) Delete(ctx context.Context, u *model.UserRelation) (int, error) {
 	if u == nil {
 		return 0, nil
 	}
+	tx := r.getClient(ctx)
 	if u.ID != 0 {
 		return 1, tx.UserRelation.DeleteOneID(u.ID).Exec(ctx)
 	}
 	return tx.UserRelation.Delete().
 		Where(userrelation.ActorIDEQ(u.ActorID)).
 		Where(userrelation.TargetIDEQ(u.TargetID)).
-		Where(userrelation.TypeEQ(u.Type)).
+		Where(userrelation.TypeEQ(int32(u.Type))).
 		Exec(ctx)
 }
 
-func (r *UserRelationRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.UserRelationGetReq) (bool, error) {
+func (r *UserRelationRepo) Exist(ctx context.Context, req *repo.UserRelationGetReq) (bool, error) {
+	tx := r.getClient(ctx)
 	query := tx.UserRelation.Query()
 	query = r.getQuery(query, req)
 	return query.Exist(ctx)
 }
 
-func (r *UserRelationRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.UserRelationGetReq) ([]*model.UserRelation, error) {
-	var (
-		records []*model.UserRelation
-		err     error
-	)
+func (r *UserRelationRepo) GetList(ctx context.Context, req *repo.UserRelationGetReq) ([]*model.UserRelation, error) {
+	tx := r.getClient(ctx)
 	query := tx.UserRelation.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	for i := range list {
-		records = append(records, &model.UserRelation{UserRelation: list[i]})
+	result := make([]*model.UserRelation, 0, len(list))
+	for _, rel := range list {
+		result = append(result, toRelationDomain(rel))
 	}
-	return records, nil
+	return result, nil
 }
 
-func (r *UserRelationRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error) {
-	var (
-		notificationRecords []*model.UserRelation
-		err                 error
-	)
+func (r *UserRelationRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error) {
+	tx := r.getClient(ctx)
 	page = constant.PageValid(page)
 	query := tx.UserRelation.Query()
 	query = r.getQuery(query, req)
-	countQuery := query.Clone()
-	count, err := countQuery.Count(ctx)
-	if err != nil {
-		return nil, nil, err
-	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+
+	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	for _, item := range list {
-		notificationRecords = append(notificationRecords, &model.UserRelation{UserRelation: item})
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
 	}
-	return notificationRecords, &common.PageReply{
-		Total: uint32(count),
-		Size:  page.Size,
+
+	result := make([]*model.UserRelation, 0, len(list))
+	for _, rel := range list {
+		result = append(result, toRelationDomain(rel))
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
 		Page:  page.Page,
+		Size:  page.Size,
 	}, nil
 }
 

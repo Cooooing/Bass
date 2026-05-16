@@ -1,8 +1,8 @@
 package server
 
 import (
+	"common/pkg/util/server"
 	"connector/internal/conf"
-	"connector/internal/service"
 	"fmt"
 	"time"
 
@@ -18,7 +18,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []service.Service) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.Service) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,

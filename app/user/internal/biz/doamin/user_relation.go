@@ -8,8 +8,6 @@ import (
 	domainbase "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/ent"
-	"user/internal/data/ent/gen"
 )
 
 type UserRelationDomain struct {
@@ -18,7 +16,11 @@ type UserRelationDomain struct {
 	userRepo         repo.UserRepo
 }
 
-func NewUserRelationDomain(base *domainbase.BaseDomain, userRelationRepo repo.UserRelationRepo, userRepo repo.UserRepo) (*UserRelationDomain, error) {
+func NewUserRelationDomain(
+	base *domainbase.BaseDomain,
+	userRelationRepo repo.UserRelationRepo,
+	userRepo repo.UserRepo,
+) (*UserRelationDomain, error) {
 	return &UserRelationDomain{
 		BaseDomain:       base,
 		userRelationRepo: userRelationRepo,
@@ -27,11 +29,11 @@ func NewUserRelationDomain(base *domainbase.BaseDomain, userRelationRepo repo.Us
 }
 
 func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationType v1.UserRelationType, isAdd bool, actorId int64, targetId int64) error {
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	err := d.TxRunner(ctx, func(ctx context.Context) error {
 		var err error
 		var num int32
 
-		exist, err := d.userRelationRepo.Exist(ctx, tx, &repo.UserRelationGetReq{
+		exist, err := d.userRelationRepo.Exist(ctx, &repo.UserRelationGetReq{
 			ActorId:  new(actorId),
 			TargetId: new(targetId),
 			Type:     new(relationType),
@@ -45,38 +47,38 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 
 		if isAdd {
 			num = 1
-			_, err = d.userRelationRepo.Save(ctx, tx, &model.UserRelation{UserRelation: &gen.UserRelation{
+			_, err = d.userRelationRepo.Save(ctx, &model.UserRelation{
 				ActorID:  actorId,
 				TargetID: targetId,
-				Type:     int32(relationType),
-			}})
+				Type:     relationType,
+			})
 			if err != nil {
 				return err
 			}
 		} else {
 			num = -1
-			_, err = d.userRelationRepo.Delete(ctx, tx, &model.UserRelation{UserRelation: &gen.UserRelation{
+			_, err = d.userRelationRepo.Delete(ctx, &model.UserRelation{
 				ActorID:  actorId,
 				TargetID: targetId,
-				Type:     int32(relationType),
-			}})
+				Type:     relationType,
+			})
 		}
 		switch relationType {
 		case v1.UserRelationType_USER_RELATION_TYPE_FOLLOW:
-			_, err = d.userRepo.UpdateStat(ctx, tx, actorId, v1.UserStatType_USER_STAT_TYPE_FOLLOW, num)
+			_, err = d.userRepo.UpdateStat(ctx, actorId, v1.UserStatType_USER_STAT_TYPE_FOLLOW, num)
 			if err != nil {
 				return err
 			}
-			_, err = d.userRepo.UpdateStat(ctx, tx, targetId, v1.UserStatType_USER_STAT_TYPE_FOLLOWER, num)
+			_, err = d.userRepo.UpdateStat(ctx, targetId, v1.UserStatType_USER_STAT_TYPE_FOLLOWER, num)
 			if err != nil {
 				return err
 			}
 		case v1.UserRelationType_USER_RELATION_TYPE_BLOCK:
-			_, err = d.userRepo.UpdateStat(ctx, tx, actorId, v1.UserStatType_USER_STAT_TYPE_BLOCK, num)
+			_, err = d.userRepo.UpdateStat(ctx, actorId, v1.UserStatType_USER_STAT_TYPE_BLOCK, num)
 			if err != nil {
 				return err
 			}
-			_, err = d.userRepo.UpdateStat(ctx, tx, targetId, v1.UserStatType_USER_STAT_TYPE_BLOCKED, num)
+			_, err = d.userRepo.UpdateStat(ctx, targetId, v1.UserStatType_USER_STAT_TYPE_BLOCKED, num)
 			if err != nil {
 				return err
 			}
@@ -118,5 +120,5 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 }
 
 func (d *UserRelationDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.UserRelationGetReq) ([]*model.UserRelation, *common.PageReply, error) {
-	return d.userRelationRepo.GetPage(ctx, d.Db, page, req)
+	return d.userRelationRepo.GetPage(ctx, page, req)
 }

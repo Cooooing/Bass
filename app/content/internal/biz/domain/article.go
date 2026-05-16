@@ -32,7 +32,15 @@ type ArticleDomain struct {
 	sf               *sonyflake.Sonyflake
 }
 
-func NewArticleDomain(base *domainbase.BaseDomain, articleRepo repo.ArticleRepo, postscriptRepo repo.ArticlePostscriptRepo, actionRecordRepo repo.ArticleActionRecordRepo, commentRepo repo.CommentRepo, tagRepo repo.TagRepo, domainRepo repo.DomainRepo) (*ArticleDomain, error) {
+func NewArticleDomain(
+	base *domainbase.BaseDomain,
+	articleRepo repo.ArticleRepo,
+	postscriptRepo repo.ArticlePostscriptRepo,
+	actionRecordRepo repo.ArticleActionRecordRepo,
+	commentRepo repo.CommentRepo,
+	tagRepo repo.TagRepo,
+	domainRepo repo.DomainRepo,
+) (*ArticleDomain, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err

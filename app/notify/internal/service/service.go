@@ -1,6 +1,12 @@
 package service
 
 import (
+	commonClient "common/pkg/client"
+	"common/pkg/util/server"
+	"notify/internal/conf"
+	"notify/internal/data/ent/gen"
+
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
@@ -28,8 +34,8 @@ func ProvideServices(
 	notificationRecordService *NotificationRecordService,
 	notificationTemplateService *NotificationTemplateService,
 	ossService *OssService,
-) []Service {
-	return []Service{
+) []server.Service {
+	return []server.Service{
 		systemService,
 		notificationMetaService,
 		notificationRecordService,

@@ -33,7 +33,12 @@ func (s *CommentService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentCommentServiceHTTPServer(hs, s)
 }
 
-func NewCommentService(commentDomain *domain.CommentDomain, commentRepo repo.CommentRepo, articleRepo repo.ArticleRepo) *CommentService {
+func NewCommentService(
+	baseService *BaseService,
+	commentDomain *domain.CommentDomain,
+	commentRepo repo.CommentRepo,
+	articleRepo repo.ArticleRepo,
+) *CommentService {
 	return &CommentService{
 		commentDomain: commentDomain,
 		commentRepo:   commentRepo,

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1;v1";
+
+// BBS 服务
+service BbsService {
+  // 健康检查
+  rpc Ping(PingBbs.Request) returns (PingBbs.Reply) {
+    option (google.api.http) = {
+      get: "/v1/bbs/ping"
+    };
+  }
+}
+
+message PingBbs {
+  message Request {}
+  message Reply {
+    string message = 1;
+  }
+}

@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -31,8 +31,13 @@ func (NotificationRecord) Fields() []ent.Field {
 		field.Int64("receiver_id").Comment("接收者ID"),
 		field.Time("read_time").Comment("已读时间").Optional().Nillable(),
 	}
-	fields = append(fields, util.TimeAuditFields()...)
 	return fields
+}
+
+func (NotificationRecord) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationRecord) Indexes() []ent.Index {

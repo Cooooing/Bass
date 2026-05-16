@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// NewHTTPClient 创建一个单例 HTTP 客户端。
-func NewHTTPClient() *http.Client {
+// NewHttpClient 创建一个单例 HTTP 客户端。
+func NewHttpClient() *http.Client {
 	return &http.Client{
 		Transport: &http.Transport{
 			// 连接池：限制总量，防止单个目标打满

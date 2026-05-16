@@ -31,9 +31,7 @@ func (s *UserRelationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterUserUserRelationServiceServer(gs, s)
 }
 
-func (s *UserRelationService) RegisterHttp(hs *http.Server) {
-	v1.RegisterUserUserRelationServiceHTTPServer(hs, s)
-}
+func (s *UserRelationService) RegisterHttp(hs *http.Server) {}
 
 func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockUserRelation_Request) (rsp *v1.BlockUserRelation_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
@@ -75,6 +73,6 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 	}
 	return &v1.PageUserRelation_Reply{
 		Page: page,
-		Rows: commonModel.ConvertToRpcList(userRelations),
+		Rows: userRelationsToProto(userRelations),
 	}, nil
 }

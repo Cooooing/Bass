@@ -27,7 +27,10 @@ func (s *DomainService) RegisterHttp(hs *http.Server) {
 	v1.RegisterContentDomainServiceHTTPServer(hs, s)
 }
 
-func NewDomainService(domainDomain *domain.DomainDomain) *DomainService {
+func NewDomainService(
+	baseService *BaseService,
+	domainDomain *domain.DomainDomain,
+) *DomainService {
 	return &DomainService{
 		domainDomain: domainDomain,
 	}

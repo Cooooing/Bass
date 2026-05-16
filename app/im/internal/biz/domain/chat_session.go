@@ -12,7 +12,10 @@ type ChatSessionDomain struct {
 	chatSessionRepo repo.ChatSessionRepo
 }
 
-func NewChatSessionDomain(base *domainbase.BaseDomain, chatSessionRepo repo.ChatSessionRepo) (*ChatSessionDomain, error) {
+func NewChatSessionDomain(
+	base *domainbase.BaseDomain,
+	chatSessionRepo repo.ChatSessionRepo,
+) (*ChatSessionDomain, error) {
 	return &ChatSessionDomain{
 		BaseDomain:      base,
 		chatSessionRepo: chatSessionRepo,

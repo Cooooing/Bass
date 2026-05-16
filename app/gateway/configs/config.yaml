@@ -54,7 +54,7 @@ data:
     token: ${CONSUL_ACL_APP_TOKEN:token}
     dial_timeout: 5s
 trace:
-  enable_otel: false # 是否采集上报到 otel
-  endpoint: 127.0.0.1:4317  # OTel Collector 地址
+  enable_otel: true # 是否采集上报到 otel
+  endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率

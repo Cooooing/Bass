@@ -6,7 +6,8 @@ type ChatGroupDomain struct {
 	*domainbase.BaseDomain
 }
 
-func NewChatGroupDomain(base *domainbase.BaseDomain) (*ChatGroupDomain, error) {
+func NewChatGroupDomain(
+	base *domainbase.BaseDomain) (*ChatGroupDomain, error) {
 	return &ChatGroupDomain{
 		BaseDomain: base,
 	}, nil

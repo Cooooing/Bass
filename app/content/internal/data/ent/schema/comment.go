@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -39,10 +39,14 @@ func (Comment) Fields() []ent.Field {
 		field.Int32("collect_count").Comment("收藏数").Default(0),
 		field.Int32("reply_count").Comment("回复数").Default(0),
 	}
-	fields = append(fields, util.UserAuditFields()...)
-	fields = append(fields, util.TimeAuditFields()...)
-	fields = append(fields, util.UsernameAuditFields()...)
 	return fields
+}
+
+func (Comment) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+		utilent.UserAuditMixin{},
+	}
 }
 
 func (Comment) Edges() []ent.Edge {

@@ -28,7 +28,13 @@ type SessionHandler struct {
 	producer     *client.Producer
 }
 
-func NewSessionHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, sessionCache cache.SessionCache, asynqCache *task.AsynqCache, producer *client.Producer) *SessionHandler {
+func NewSessionHandler(baseDomain *domainbase.BaseDomain,
+	nodeDomain *domain.NodeDomain,
+	nodeRepo repo.NodeRepo,
+	nodeCache cache.NodeCache,
+	sessionCache cache.SessionCache,
+	asynqCache *task.AsynqCache,
+	producer *client.Producer) *SessionHandler {
 	return &SessionHandler{
 		BaseDomain:   baseDomain,
 		nodeDomain:   nodeDomain,

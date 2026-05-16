@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -52,41 +52,14 @@ func (User) Fields() []ent.Field {
 		// --- 登录信息 ---
 		field.Time("last_login_time").Comment("最近登录时间").Optional().Nillable(),
 		field.String("last_login_ip").Comment("最近登录IP").Optional().Nillable(),
-
-		// --- 行为统计 ---
-		field.Int32("online_minutes").Comment("在线总时长（分钟）").Default(0).Nillable(),
-		field.Time("last_checkin_time").Comment("最近签到时间").Optional().Nillable(),
-		field.Int32("current_checkin_streak").Comment("当前连续签到天数").Default(0).Nillable(),
-		field.Int32("longest_checkin_streak").Comment("最长连续签到天数").Default(0).Nillable(),
-
-		// --- 用户偏好设置 ---
-		field.String("language").Comment("用户语言").Default("zh-CN").Nillable(),
-		field.String("timezone").Comment("时区").Default("Asia/Shanghai").Nillable(),
-		field.String("theme").Comment("皮肤主题").Default("default").Nillable(),
-		field.String("mobile_theme").Comment("移动端皮肤主题").Default("default").Nillable(),
-		field.Bool("enable_web_notify").Comment("启用Web通知").Default(true).Nillable(),
-		field.Bool("enable_email_subscribe").Comment("启用邮件订阅").Default(true).Nillable(),
-
-		// --- 隐私设置 ---
-		field.Bool("public_points").Comment("是否公开积分榜").Default(true).Nillable(),
-		field.Bool("public_followers").Comment("是否公开粉丝列表").Default(true).Nillable(),
-		field.Bool("public_articles").Comment("是否公开帖子列表").Default(true).Nillable(),
-		field.Bool("public_comments").Comment("是否公开评论列表").Default(true).Nillable(),
-		field.Bool("public_online_status").Comment("是否公开在线状态").Default(true).Nillable(),
-
-		// --- 地理信息 ---
-		field.String("country").Comment("所在国家").Optional().Nillable(),
-		field.String("province").Comment("所在省份").Optional().Nillable(),
-		field.String("city").Comment("所在城市").Optional().Nillable(),
-		field.Bool("public_location").Comment("是否公开地理位置").Default(true).Nillable(),
-
-		// --- 其他 ---
-		field.Bool("twofa_enable").Comment("是否开启二步验证").Default(false),
-		field.Time("twofa_enable_time").Comment("二步验证启用时间").Optional().Nillable(),
-		field.String("twofa_secret").Comment("二步验证Secret").Default(""),
 	}
-	fields = append(fields, util.TimeAuditFields()...)
 	return fields
+}
+
+func (User) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (User) Indexes() []ent.Index {
@@ -103,5 +76,17 @@ func (User) Edges() []ent.Edge {
 		edge.To("relations_as_actor", UserRelation.Type),
 		// 关联用户关系目标 一对多
 		edge.To("relations_as_target", UserRelation.Type),
+		// 用户偏好设置 一对一
+		edge.To("preferences", UserPreferences.Type),
+		// 用户隐私设置 一对一
+		edge.To("privacy", UserPrivacy.Type),
+		// 用户地理信息 一对一
+		edge.To("location", UserLocation.Type),
+		// 用户二步验证 一对一
+		edge.To("tfa", UserTFA.Type),
+		// 用户签到记录 一对多
+		edge.To("checkin_records", UserCheckinRecord.Type),
+		// 用户签到聚合统计 一对一
+		edge.To("checkin_stat", UserCheckinStat.Type),
 	}
 }

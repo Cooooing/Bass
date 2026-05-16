@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -31,10 +31,13 @@ func (ChatGroupMember) Fields() []ent.Field {
 		field.Int32("role").Comment("角色: 1-成员, 2-管理员, 3-群主").Default(1),
 		field.Time("mute_end_at").Comment("禁言结束时间").Optional().Nillable(),
 	}
-	fields = append(fields, util.UserAuditFields()...)
-	fields = append(fields, util.TimeAuditFields()...)
-	fields = append(fields, util.UsernameAuditFields()...)
 	return fields
+}
+
+func (ChatGroupMember) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.UserAuditMixin{},
+	}
 }
 
 func (ChatGroupMember) Edges() []ent.Edge {

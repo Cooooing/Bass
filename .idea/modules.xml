@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/Bass.iml" filepath="$PROJECT_DIR$/Bass.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/connector/connector.iml" filepath="$PROJECT_DIR$/app/connector/connector.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/content/content.iml" filepath="$PROJECT_DIR$/app/content/content.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/gateway/gateway.iml" filepath="$PROJECT_DIR$/app/gateway/gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/im/im.iml" filepath="$PROJECT_DIR$/app/im/im.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/signal/signal.iml" filepath="$PROJECT_DIR$/app/signal/signal.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml" />
-    </modules>
-  </component>
+    <component name="ProjectModuleManager">
+        <modules>
+            <module fileurl="file://$PROJECT_DIR$/Bass.iml" filepath="$PROJECT_DIR$/Bass.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/bbs/bbs.iml" filepath="$PROJECT_DIR$/app/bbs/bbs.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/connector/connector.iml" filepath="$PROJECT_DIR$/app/connector/connector.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/content/content.iml" filepath="$PROJECT_DIR$/app/content/content.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/gateway/gateway.iml" filepath="$PROJECT_DIR$/app/gateway/gateway.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/im/im.iml" filepath="$PROJECT_DIR$/app/im/im.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/signal/signal.iml" filepath="$PROJECT_DIR$/app/signal/signal.iml"/>
+            <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml"/>
+        </modules>
+    </component>
 </project>

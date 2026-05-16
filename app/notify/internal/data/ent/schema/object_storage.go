@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -41,8 +41,13 @@ func (ObjectStorage) Fields() []ent.Field {
 		field.Int64("blocked_by").Comment("违规处理人").Optional().Nillable(),
 		field.String("blocked_by_name").Comment("违规处理人名称").Optional().Nillable(),
 	}
-	fields = append(fields, util.TimeAuditFields()...)
 	return fields
+}
+
+func (ObjectStorage) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (ObjectStorage) Indexes() []ent.Index {

@@ -24,7 +24,11 @@ type CommentDomain struct {
 	articleRepo             repo.ArticleRepo
 }
 
-func NewCommentDomain(baseDomain *domainbase.BaseDomain, commentRepo repo.CommentRepo, commentActionRecordRepo repo.CommentActionRecordRepo, articleRepo repo.ArticleRepo) *CommentDomain {
+func NewCommentDomain(
+	baseDomain *domainbase.BaseDomain,
+	commentRepo repo.CommentRepo,
+	commentActionRecordRepo repo.CommentActionRecordRepo,
+	articleRepo repo.ArticleRepo) *CommentDomain {
 	return &CommentDomain{
 		BaseDomain:              baseDomain,
 		commentRepo:             commentRepo,

@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.user.v1;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
@@ -11,57 +10,25 @@ option go_package = "common/api/gen/user/v1;v1";
 // User 服务
 service UserUserService {
   // 更新用户设置
-  rpc UpdateSetting(UpdateSettingUser.Request) returns (UpdateSettingUser.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user/update-setting"
-      body: "*"
-    };
-  }
+  rpc UpdateSetting(UpdateSettingUser.Request) returns (UpdateSettingUser.Reply) {}
 
   // 获取当前用户信息
-  rpc GetCurrentUser(GetCurrentUserUser.Request) returns (GetCurrentUserUser.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user/current"
-      body: "*"
-    };
-  }
+  rpc GetCurrentUser(GetCurrentUserUser.Request) returns (GetCurrentUserUser.Reply) {}
 
   // 查询单个用户
-  rpc GetOne(GetOneUser.Request) returns (GetOneUser.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user/get-one"
-      body: "*"
-    };
-  }
+  rpc GetOne(GetOneUser.Request) returns (GetOneUser.Reply) {}
 
   // 查询用户列表（返回数组）
-  rpc GetList(GetListUser.Request) returns (GetListUser.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user/list"
-      body: "*"
-    };
-  }
+  rpc GetList(GetListUser.Request) returns (GetListUser.Reply) {}
 
   // 查询用户列表（返回map）
-  rpc GetMap(GetMapUser.Request) returns (GetMapUser.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user/map"
-      body: "*"
-    };
-  }
+  rpc GetMap(GetMapUser.Request) returns (GetMapUser.Reply) {}
 
   // 分页查询用户
-  rpc Page(PageUser.Request) returns (PageUser.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageUser.Request) returns (PageUser.Reply) {}
 
   // 获取用户默认头像
-  rpc Avatar(AvatarUser.Request) returns (common.ImageReply) {
-    option (google.api.http) = {get: "/v1/user/avatar"};
-  }
+  rpc Avatar(AvatarUser.Request) returns (common.ImageReply) {}
 }
 
 message UpdateSettingUser {

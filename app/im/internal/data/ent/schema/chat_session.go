@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -41,10 +41,14 @@ func (ChatSession) Fields() []ent.Field {
 		field.Uint32("message_count").Comment("私聊消息数").Default(0),
 		field.Int64("last_message_id").Comment("最后消息 ID").Optional().Nillable(),
 	}
-	fields = append(fields, util.TimeAuditFields()...)
-	fields = append(fields, util.UserAuditFields()...)
-	fields = append(fields, util.UsernameAuditFields()...)
 	return fields
+}
+
+func (ChatSession) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+		utilent.UserAuditMixin{},
+	}
 }
 
 func (ChatSession) Edges() []ent.Edge {

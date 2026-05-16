@@ -4,35 +4,19 @@ package common.api.app.content.v1;
 
 import "common/common.proto";
 import "content/v1/model.proto";
-import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
 // 标签服务
 service ContentTagService {
   // 批量添加标签
-  rpc Adds(AddsTag.Request) returns (AddsTag.Reply) {
-    option (google.api.http) = {
-      post: "/v1/tag/adds"
-      body: "*"
-    };
-  }
+  rpc Adds(AddsTag.Request) returns (AddsTag.Reply) {}
 
   // 更新标签
-  rpc Update(UpdateTag.Request) returns (UpdateTag.Reply) {
-    option (google.api.http) = {
-      post: "/v1/tag/update"
-      body: "*"
-    };
-  }
+  rpc Update(UpdateTag.Request) returns (UpdateTag.Reply) {}
 
   // 分页获取标签
-  rpc Page(PageTag.Request) returns (PageTag.Reply) {
-    option (google.api.http) = {
-      post: "/v1/tag/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageTag.Request) returns (PageTag.Reply) {}
 }
 
 message AddsTag {

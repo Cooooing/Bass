@@ -1,12 +1,10 @@
 package service
 
 import (
+	"common/pkg/util/server"
 	"user/internal/conf"
-	"user/internal/data/ent/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 )
 
@@ -25,21 +23,13 @@ var ServiceProviderSet = wire.NewSet(
 type BaseService struct {
 	Conf *conf.Bootstrap
 	Log  *log.Helper
-	Db   *gen.Client
 }
 
-func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client) *BaseService {
+func NewBaseService(conf *conf.Bootstrap, logger log.Logger) *BaseService {
 	return &BaseService{
 		Conf: conf,
 		Log:  log.NewHelper(logger),
-		Db:   db,
 	}
-}
-
-// Service 接口，每个 service 实现它
-type Service interface {
-	RegisterGrpc(gs *grpc.Server)
-	RegisterHttp(hs *http.Server)
 }
 
 func ProvideServices(
@@ -48,8 +38,8 @@ func ProvideServices(
 	userService *UserService,
 	userRelationService *UserRelationService,
 	twoFactorAuthenticationService *TwoFactorAuthenticationService,
-) []Service {
-	return []Service{
+) []server.Service {
+	return []server.Service{
 		systemService,
 		authenticationService,
 		userService,

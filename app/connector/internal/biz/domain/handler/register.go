@@ -20,7 +20,10 @@ type RegisterHandler struct {
 	server     *domain.ServerDomain
 }
 
-func NewRegisterHandler(baseDomain *domainbase.BaseDomain, producer *client.Producer, asynqCache *task.AsynqCache, server *domain.ServerDomain) *RegisterHandler {
+func NewRegisterHandler(baseDomain *domainbase.BaseDomain,
+	producer *client.Producer,
+	asynqCache *task.AsynqCache,
+	server *domain.ServerDomain) *RegisterHandler {
 	return &RegisterHandler{
 		BaseDomain: baseDomain,
 		asynqCache: asynqCache,

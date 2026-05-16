@@ -16,14 +16,17 @@ import (
 
 type NodeService struct {
 	v1.UnsafeSignalNodeServiceServer
+	*BaseService
 	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 }
 
-func NewNodeService(nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo) *NodeService {
+func NewNodeService(baseService *BaseService, nodeDomain *domain.NodeDomain,
+	nodeRepo repo.NodeRepo) *NodeService {
 	return &NodeService{
-		nodeDomain: nodeDomain,
-		nodeRepo:   nodeRepo,
+		BaseService: baseService,
+		nodeDomain:  nodeDomain,
+		nodeRepo:    nodeRepo,
 	}
 }
 

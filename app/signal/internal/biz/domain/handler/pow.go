@@ -27,7 +27,12 @@ type PowHandler struct {
 	producer   *client.Producer
 }
 
-func NewPowHandler(baseDomain *domainbase.BaseDomain, nodeDomain *domain.NodeDomain, nodeRepo repo.NodeRepo, nodeCache cache.NodeCache, asynqCache *task.AsynqCache, producer *client.Producer) *PowHandler {
+func NewPowHandler(baseDomain *domainbase.BaseDomain,
+	nodeDomain *domain.NodeDomain,
+	nodeRepo repo.NodeRepo,
+	nodeCache cache.NodeCache,
+	asynqCache *task.AsynqCache,
+	producer *client.Producer) *PowHandler {
 	return &PowHandler{
 		BaseDomain: baseDomain,
 		nodeDomain: nodeDomain,

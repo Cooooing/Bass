@@ -13,7 +13,6 @@ import (
 	"fmt"
 	"gateway/internal/biz/domain"
 	"gateway/internal/conf"
-	"gateway/internal/service"
 	"io"
 	"net/http"
 	"strings"
@@ -34,7 +33,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []service.Service, tokenCache *jwt.TokenCache, ipDomain *domain.IpDomain) *transporthttp.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []server.Service, tokenCache *jwt.TokenCache, ipDomain *domain.IpDomain) *transporthttp.Server {
 
 	middlewares := []middleware.Middleware{
 		metadata.Server(),

@@ -3,6 +3,7 @@ package service
 import (
 	"common/pkg/client"
 	"common/pkg/util/jwt"
+	"common/pkg/util/server"
 	"content/internal/conf"
 	"content/internal/data/ent/gen"
 
@@ -57,8 +58,8 @@ func ProvideServices(
 	domainService *DomainService,
 	commentService *CommentService,
 	tagService *TagService,
-) []Service {
-	return []Service{
+) []server.Service {
+	return []server.Service{
 		systemService,
 		articleService,
 		domainService,

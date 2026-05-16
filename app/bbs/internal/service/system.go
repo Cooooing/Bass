@@ -1,0 +1,34 @@
+package service
+
+import (
+	"bbs/internal/conf"
+	"common/api/gen/common/v1"
+	"context"
+	"fmt"
+
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
+)
+
+type SystemService struct {
+	v1.UnimplementedCommonSystemServiceServer
+	Conf *conf.Bootstrap
+}
+
+func NewSystemService(conf *conf.Bootstrap) *SystemService {
+	return &SystemService{
+		Conf: conf,
+	}
+}
+
+func (s *SystemService) RegisterGrpc(gs *grpc.Server) {
+	v1.RegisterCommonSystemServiceServer(gs, s)
+}
+
+func (s *SystemService) RegisterHttp(hs *http.Server) {
+	v1.RegisterCommonSystemServiceHTTPServer(hs, s)
+}
+
+func (s *SystemService) Health(ctx context.Context, req *v1.HealthSystem_Request) (*v1.HealthSystem_Reply, error) {
+	return &v1.HealthSystem_Reply{Message: fmt.Sprintf("%s %s is ok", s.Conf.Server.Name, s.Conf.Server.Version)}, nil
+}

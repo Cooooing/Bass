@@ -2,7 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -24,14 +24,20 @@ func (ArticleLottery) Annotations() []schema.Annotation {
 }
 
 func (ArticleLottery) Fields() []ent.Field {
-	return append([]ent.Field{
+	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
 		field.JSON("prizes", []string{}).Comment("奖品列表").Optional(),
 		field.Time("start_at").Comment("抽奖开始时间").Optional(),
 		field.Time("end_at").Comment("抽奖结束时间").Optional(),
 		field.Int32("status").Comment("状态 1-未开始 2-进行中 3-已结束").Default(1),
-	}, util.TimeAuditFields()...)
+	}
+}
+
+func (ArticleLottery) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (ArticleLottery) Edges() []ent.Edge {

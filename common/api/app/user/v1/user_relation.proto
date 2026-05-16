@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.user.v1;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
@@ -11,28 +10,14 @@ option go_package = "common/api/gen/user/v1;v1";
 // UserRelation 服务
 service UserUserRelationService {
   // 关注用户
-  rpc Follow(FollowUserRelation.Request) returns (FollowUserRelation.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user-relation/follow"
-      body: "*"
-    };
-  }
+  rpc Follow(FollowUserRelation.Request) returns (FollowUserRelation.Reply) {}
 
   // 屏蔽用户
-  rpc Block(BlockUserRelation.Request) returns (BlockUserRelation.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user-relation/block"
-      body: "*"
-    };
-  }
+  rpc Block(BlockUserRelation.Request) returns (BlockUserRelation.Reply) {}
 
   // 查询用户关系
-  rpc Page(PageUserRelation.Request) returns (PageUserRelation.Reply) {
-    option (google.api.http) = {
-      post: "/v1/user-relation/page"
-      body: "*"
-    };
-  }
+  rpc Page(PageUserRelation.Request) returns (PageUserRelation.Reply) {}
+
 }
 
 message FollowUserRelation {

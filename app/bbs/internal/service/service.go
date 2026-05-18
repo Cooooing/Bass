@@ -14,8 +14,8 @@ var ServiceProviderSet = wire.NewSet(
 
 func ProvideServices(
 	systemService *SystemService,
-) []server.Service {
-	return []server.Service{
+) []server.GrpcService {
+	return []server.GrpcService{
 		systemService,
 	}
 }

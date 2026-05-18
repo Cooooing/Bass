@@ -5,7 +5,7 @@ import (
 	v1 "common/api/gen/im/v1"
 	"context"
 	"im/internal/biz/model"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 )
 
 type ChatGroupRepo interface {

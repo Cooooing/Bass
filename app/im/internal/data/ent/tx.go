@@ -2,7 +2,7 @@ package ent
 
 import (
 	"context"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 
 	utilent "common/pkg/util/ent"
 )

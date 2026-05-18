@@ -8,7 +8,7 @@ package main
 import (
 	"connector/internal/biz"
 	"connector/internal/conf"
-	"connector/internal/data"
+	"connector/internal/data/gen"
 	"connector/internal/server"
 	"connector/internal/service"
 

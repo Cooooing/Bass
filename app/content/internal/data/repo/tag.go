@@ -3,23 +3,40 @@ package repo
 import (
 	common "common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/content/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	basedata "content/internal/data/base"
-	"content/internal/data/ent/gen"
-	"content/internal/data/ent/gen/tag"
+	"content/internal/conf"
+	"content/internal/data/gen"
+	tagent "content/internal/data/gen/tag"
+	"content/internal/enum"
 	"context"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type TagRepo struct {
-	*basedata.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewTagRepo(BaseData *basedata.BaseData) repo.TagRepo {
+func NewTagRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.TagRepo {
 	return &TagRepo{
-		BaseData: BaseData,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -27,7 +44,7 @@ func (r *TagRepo) Save(ctx context.Context, tx *gen.Client, tag *model.Tag) (*mo
 	save, err := tx.Tag.Create().
 		SetName(tag.Name).
 		SetNillableDomainID(tag.DomainID).
-		SetStatus(int32(v1.TagStatus_TAG_STATUS_NORMAL)).
+		SetStatus(tagent.StatusNormal).
 		Save(ctx)
 	return &model.Tag{Tag: save}, err
 }
@@ -39,7 +56,7 @@ func (r *TagRepo) Saves(ctx context.Context, tx *gen.Client, tags []*model.Tag) 
 			tx.Tag.Create().
 				SetName(tags[i].Name).
 				SetNillableDomainID(tags[i].DomainID).
-				SetStatus(int32(v1.TagStatus_TAG_STATUS_NORMAL)),
+				SetStatus(tagent.StatusNormal),
 		)
 	}
 	save, err := tx.Tag.CreateBulk(creates...).Save(ctx)
@@ -55,7 +72,7 @@ func (r *TagRepo) Update(ctx context.Context, tx *gen.Client, tag *model.Tag) (*
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
-		SetStatus(int32(v1.TagStatus_TAG_STATUS_NORMAL))
+		SetStatus(tagent.StatusNormal)
 	save, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
@@ -121,35 +138,36 @@ func (r *TagRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.Page
 
 func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQuery {
 	if req.TagId != nil {
-		query = query.Where(tag.IDEQ(*req.TagId))
+		query = query.Where(tagent.IDEQ(*req.TagId))
 	}
 	if req.TagIds != nil {
-		query = query.Where(tag.IDIn(req.TagIds...))
+		query = query.Where(tagent.IDIn(req.TagIds...))
 	}
 	if req.UserId != nil {
-		query = query.Where(tag.CreatedBy(*req.UserId))
+		query = query.Where(tagent.CreatedBy(*req.UserId))
 	}
 	if req.Name != nil {
-		query = query.Where(tag.NameContains(*req.Name))
+		query = query.Where(tagent.NameContains(*req.Name))
 	}
 	if len(req.Names) > 0 {
-		query = query.Where(tag.NameIn(req.Names...))
+		query = query.Where(tagent.NameIn(req.Names...))
 	}
 	if req.Description != nil {
-		query = query.Where(tag.DescriptionContains(*req.Description))
+		query = query.Where(tagent.DescriptionContains(*req.Description))
 	}
 	if req.Status != nil {
-		query = query.Where(tag.StatusEQ(int32(*req.Status)))
+		dbStatus, _ := enum.TagStatusMap.ToEnum(*req.Status)
+		query = query.Where(tagent.StatusEQ(tagent.Status(dbStatus)))
 	}
 	if req.DomainId != nil {
-		query = query.Where(tag.DomainIDEQ(*req.DomainId))
+		query = query.Where(tagent.DomainIDEQ(*req.DomainId))
 	}
 	if req.ArticleCount != nil {
 		if req.ArticleCount.Start != nil {
-			query = query.Where(tag.ArticleCountGTE(*req.ArticleCount.Start))
+			query = query.Where(tagent.ArticleCountGTE(*req.ArticleCount.Start))
 		}
 		if req.ArticleCount.End != nil {
-			query = query.Where(tag.ArticleCountLTE(*req.ArticleCount.End))
+			query = query.Where(tagent.ArticleCountLTE(*req.ArticleCount.End))
 		}
 	}
 	return query

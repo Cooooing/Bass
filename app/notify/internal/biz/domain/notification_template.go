@@ -3,30 +3,30 @@ package domain
 import (
 	"common/api/gen/common"
 	"context"
-	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/data/ent"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/client"
+	"notify/internal/data/gen"
 )
 
 type NotificationTemplateDomain struct {
-	*domainbase.BaseDomain
+	db                       *gen.Client
 	notificationTemplateRepo repo.NotificationTemplateRepo
 }
 
 func NewNotificationTemplateDomain(
-	base *domainbase.BaseDomain,
-	notificationTemplateRepo repo.NotificationTemplateRepo) *NotificationTemplateDomain {
+	db *gen.Client,
+	notificationTemplateRepo repo.NotificationTemplateRepo,
+) *NotificationTemplateDomain {
 	return &NotificationTemplateDomain{
-		BaseDomain:               base,
+		db:                       db,
 		notificationTemplateRepo: notificationTemplateRepo,
 	}
 }
 
 func (d *NotificationTemplateDomain) Add(ctx context.Context, tpl *model.NotificationTemplate) (*model.NotificationTemplate, error) {
 	var update *model.NotificationTemplate
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
 		update, err = d.notificationTemplateRepo.Save(ctx, tx, tpl)
 		if err != nil {
@@ -39,7 +39,7 @@ func (d *NotificationTemplateDomain) Add(ctx context.Context, tpl *model.Notific
 
 func (d *NotificationTemplateDomain) Update(ctx context.Context, tpl *model.NotificationTemplate) (*model.NotificationTemplate, error) {
 	var update *model.NotificationTemplate
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
 		update, err = d.notificationTemplateRepo.Update(ctx, tx, tpl)
 		if err != nil {
@@ -51,9 +51,9 @@ func (d *NotificationTemplateDomain) Update(ctx context.Context, tpl *model.Noti
 }
 
 func (d *NotificationTemplateDomain) GetMap(ctx context.Context, req *repo.NotificationTemplateGetReq) (map[string]*model.NotificationTemplate, error) {
-	return d.notificationTemplateRepo.GetMap(ctx, d.Db, req)
+	return d.notificationTemplateRepo.GetMap(ctx, d.db, req)
 }
 
 func (d *NotificationTemplateDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *common.PageReply, error) {
-	return d.notificationTemplateRepo.GetPage(ctx, d.Db, page, req)
+	return d.notificationTemplateRepo.GetPage(ctx, d.db, page, req)
 }

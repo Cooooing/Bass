@@ -9,20 +9,41 @@ import (
 	"fmt"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/base"
-	"user/internal/data/ent/gen"
-	"user/internal/data/ent/gen/user"
+	"user/internal/conf"
+	"user/internal/data/gen"
+	"user/internal/data/gen/user"
+	"user/internal/enum"
 
+	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type UserRepo struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewUserRepo(repo *base.BaseData) repo.UserRepo {
+func NewUserRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.UserRepo {
 	return &UserRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -30,7 +51,7 @@ func (r *UserRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
-	return r.Db
+	return r.db
 }
 
 func toDomain(u *gen.User) *model.User {
@@ -45,7 +66,7 @@ func toDomain(u *gen.User) *model.User {
 		AvatarURL:     u.AvatarURL,
 		Introduction:  u.Introduction,
 		Mbti:          u.Mbti,
-		Status:        u.Status,
+		Status:        (*enum.UserStatus)(u.Status),
 		GroupName:     u.GroupName,
 		FollowCount:   u.FollowCount,
 		FollowerCount: u.FollowerCount,
@@ -66,7 +87,7 @@ func (r *UserRepo) Save(ctx context.Context, u *model.User) (*model.User, error)
 		SetNillableEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
-		SetAvatarURL(fmt.Sprintf(r.Conf.Server.Avatar, u.Name)).
+		SetAvatarURL(fmt.Sprintf(r.conf.Server.Avatar, u.Name)).
 		Save(ctx)
 	if err != nil {
 		return nil, err

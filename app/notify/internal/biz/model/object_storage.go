@@ -2,7 +2,7 @@ package model
 
 import (
 	v1 "common/api/gen/notify/v1"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

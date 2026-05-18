@@ -7,32 +7,36 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
+	"notify/internal/data/client"
+	"notify/internal/data/oss"
 
-	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/data/ent"
-	"notify/internal/data/ent/gen"
-	"notify/internal/data/oss"
+	"notify/internal/conf"
+	"notify/internal/data/gen"
 	"time"
 
 	"github.com/google/uuid"
 )
 
 type ObjectStorageDomain struct {
-	*domainbase.BaseDomain
+	conf                  *conf.Bootstrap
+	db                    *gen.Client
 	objectStorageRepo     repo.ObjectStorageRepo
 	objectStorageProvider repo.ObjectStorageProvider
 }
 
 func NewObjectStorageDomain(
-	base *domainbase.BaseDomain,
+	conf *conf.Bootstrap,
+	db *gen.Client,
 	objectStorageRepo repo.ObjectStorageRepo,
-	ossFactory *oss.Factory) *ObjectStorageDomain {
+	ossFactory *oss.Factory,
+) *ObjectStorageDomain {
 	return &ObjectStorageDomain{
-		BaseDomain:            base,
+		conf:                  conf,
+		db:                    db,
 		objectStorageRepo:     objectStorageRepo,
-		objectStorageProvider: ossFactory.Get(base.Conf.Server.Oss.Provider),
+		objectStorageProvider: ossFactory.Get(conf.Server.Oss.Provider),
 	}
 }
 
@@ -62,7 +66,7 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 	if err != nil {
 		return err
 	}
-	return ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	return client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		return d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:           key,
 			Blocked:       enable,
@@ -75,18 +79,18 @@ func (d *ObjectStorageDomain) UpdateAudit(ctx context.Context, key string, enabl
 }
 
 func (d *ObjectStorageDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
-	return d.objectStorageRepo.GetPage(ctx, d.Db, page, req)
+	return d.objectStorageRepo.GetPage(ctx, d.db, page, req)
 }
 
 func (d *ObjectStorageDomain) QiniuUploadCallback(ctx context.Context, o *model.ObjectStorage) error {
-	return ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	return client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		_, err := d.objectStorageRepo.Save(ctx, tx, o)
 		return err
 	})
 }
 
 func (d *ObjectStorageDomain) QiniuIncrementAuditCallback(ctx context.Context, key string, reply string, blocked bool) error {
-	return ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	return client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		return d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:                key,
 			AuditCallbackReply: new(reply),

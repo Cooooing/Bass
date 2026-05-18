@@ -39,7 +39,7 @@ bin/
 !/common/api/gen/.gitkeep
 /app/**/wire_gen.go
 /app/**/conf.pb.go
-/app/**/ent/gen/
+/app/**/gen/
 /common/buf.lock
 
 

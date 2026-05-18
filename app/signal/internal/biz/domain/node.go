@@ -19,20 +19,25 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	domainbase "signal/internal/biz/base"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
+	"signal/internal/conf"
+	"signal/internal/data/gen"
 	"strings"
 	"time"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"github.com/sony/sonyflake/v2"
 )
 
 type NodeDomain struct {
-	*domainbase.BaseDomain
+	conf *conf.Bootstrap
+	log  *log.Helper
+	db   *gen.Client
+
 	nodeRepo     repo.NodeRepo
 	nodeCache    cache.NodeCache
 	sessionCache cache.SessionCache
@@ -43,7 +48,9 @@ type NodeDomain struct {
 }
 
 func NewNodeDomain(
-	baseDomain *domainbase.BaseDomain,
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
 	nodeRepo repo.NodeRepo,
 	nodeCache cache.NodeCache,
 	sessionCache cache.SessionCache,
@@ -56,7 +63,9 @@ func NewNodeDomain(
 		return nil, err
 	}
 	return &NodeDomain{
-		BaseDomain:   baseDomain,
+		conf:         conf,
+		log:          log.NewHelper(logger),
+		db:           db,
 		nodeRepo:     nodeRepo,
 		nodeCache:    nodeCache,
 		sessionCache: sessionCache,
@@ -81,7 +90,7 @@ func (d *NodeDomain) GetByKey(ctx context.Context, key string) (*model.Node, err
 		return nil, err
 	}
 
-	n, err = d.nodeRepo.GetOne(ctx, d.Db, &repo.NodeGetReq{Key: &key})
+	n, err = d.nodeRepo.GetOne(ctx, d.db, &repo.NodeGetReq{Key: &key})
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +103,7 @@ func (d *NodeDomain) GetByKey(ctx context.Context, key string) (*model.Node, err
 }
 
 func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
-	url := fmt.Sprintf("%s://%s/ping", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+	url := fmt.Sprintf("%s://%s/ping", util.If(d.conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -109,7 +118,7 @@ func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			d.Log.Errorf("failed to close body: %v", err)
+			d.log.Errorf("failed to close body: %v", err)
 		}
 	}(resp.Body)
 	end := time.Now()
@@ -121,7 +130,7 @@ func (d *NodeDomain) Ping(node *model.Node) (int64, error) {
 }
 
 func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
-	url := fmt.Sprintf("%s://%s/pow", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+	url := fmt.Sprintf("%s://%s/pow", util.If(d.conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
 	// 生成工作量证明参数
 	challenge := str.RandStr(d.sf, 32, true, true, true, false)
@@ -149,7 +158,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			d.Log.Errorf("failed to close body: %v", err)
+			d.log.Errorf("failed to close body: %v", err)
 		}
 	}(resp.Body)
 	end := time.Now()
@@ -178,7 +187,7 @@ func (d *NodeDomain) Pow(node *model.Node) (int64, error) {
 
 func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
 	sessionIds := make([]string, 0)
-	url := fmt.Sprintf("%s://%s/session", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
+	url := fmt.Sprintf("%s://%s/session", util.If(d.conf.Server.Mode == constant.Dev, "http", "https"), node.CallbackURL)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -194,7 +203,7 @@ func (d *NodeDomain) Session(node *model.Node) ([]string, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			d.Log.Errorf("failed to close body: %v", err)
+			d.log.Errorf("failed to close body: %v", err)
 		}
 	}(resp.Body)
 
@@ -276,7 +285,7 @@ func (d *NodeDomain) Register(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	d.Log.Infof("node[%s] register", n.Key)
+	d.log.Infof("node[%s] register", n.Key)
 	return nil
 }
 
@@ -296,7 +305,7 @@ func (d *NodeDomain) Unregister(ctx context.Context, key string) error {
 
 	d.nodeCache.DelNodeRank(ctx, key)
 	d.nodeCache.DelNode(ctx, key)
-	d.Log.Infof("node[%s] unregister", key)
+	d.log.Infof("node[%s] unregister", key)
 	return nil
 }
 
@@ -306,7 +315,7 @@ func (d *NodeDomain) Negotiate(ctx context.Context) ([]*model.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	nodeMap, err := d.nodeRepo.GetMap(ctx, d.Db, &repo.NodeGetReq{Keys: keys})
+	nodeMap, err := d.nodeRepo.GetMap(ctx, d.db, &repo.NodeGetReq{Keys: keys})
 	if err != nil {
 		return nil, err
 	}

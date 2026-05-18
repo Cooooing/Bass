@@ -8,7 +8,7 @@ package main
 import (
 	"im/internal/biz"
 	"im/internal/conf"
-	"im/internal/data"
+	"im/internal/data/gen"
 	"im/internal/server"
 	"im/internal/service"
 

@@ -7,9 +7,8 @@ import (
 	"context"
 	bizbase "user/internal/biz/base"
 	"user/internal/conf"
-	database "user/internal/data/base"
 	"user/internal/data/client"
-	"user/internal/data/ent/gen"
+	"user/internal/data/gen"
 	"user/internal/data/repo"
 
 	"github.com/google/wire"
@@ -17,8 +16,6 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	database.NewBaseData,
-
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,

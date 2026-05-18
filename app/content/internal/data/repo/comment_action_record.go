@@ -2,22 +2,37 @@ package repo
 
 import (
 	v1 "common/api/gen/content/v1"
+	commonClient "common/pkg/client"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	basedata "content/internal/data/base"
-	"content/internal/data/ent/gen"
+	"content/internal/conf"
+	"content/internal/data/gen"
 	"context"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type CommentActionRecordRepo struct {
-	*basedata.BaseData
-	client *gen.Client
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewCommentActionRecordRepo(BaseData *basedata.BaseData, client *gen.Client) repo.CommentActionRecordRepo {
+func NewCommentActionRecordRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.CommentActionRecordRepo {
 	return &CommentActionRecordRepo{
-		BaseData: BaseData,
-		client:   client,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 

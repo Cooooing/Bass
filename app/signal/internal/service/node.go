@@ -8,7 +8,7 @@ import (
 	"signal/internal/biz/domain"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-	"signal/internal/data/ent/gen"
+	"signal/internal/data/gen"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -16,17 +16,17 @@ import (
 
 type NodeService struct {
 	v1.UnsafeSignalNodeServiceServer
-	*BaseService
+	db         *gen.Client
 	nodeDomain *domain.NodeDomain
 	nodeRepo   repo.NodeRepo
 }
 
-func NewNodeService(baseService *BaseService, nodeDomain *domain.NodeDomain,
+func NewNodeService(db *gen.Client, nodeDomain *domain.NodeDomain,
 	nodeRepo repo.NodeRepo) *NodeService {
 	return &NodeService{
-		BaseService: baseService,
-		nodeDomain:  nodeDomain,
-		nodeRepo:    nodeRepo,
+		db:         db,
+		nodeDomain: nodeDomain,
+		nodeRepo:   nodeRepo,
 	}
 }
 
@@ -42,7 +42,7 @@ func (s *NodeService) Save(ctx context.Context, req *v1.SaveSignalNode_Request) 
 	if req.Node == nil {
 		return nil, fmt.Errorf("node is nil")
 	}
-	save, err := s.nodeRepo.Save(ctx, s.Db, &model.Node{Node: &gen.Node{
+	save, err := s.nodeRepo.Save(ctx, s.db, &model.Node{Node: &gen.Node{
 		OwnerID:     req.Node.OwnerId,
 		Name:        req.Node.Name,
 		Key:         req.Node.Key,
@@ -61,7 +61,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.UpdateSignalNode_Reque
 	if req.Node == nil {
 		return nil, fmt.Errorf("node is nil")
 	}
-	update, err := s.nodeRepo.Update(ctx, s.Db, &model.Node{Node: &gen.Node{
+	update, err := s.nodeRepo.Update(ctx, s.db, &model.Node{Node: &gen.Node{
 		ID:          req.Node.Id,
 		OwnerID:     req.Node.OwnerId,
 		Key:         req.Node.Key,
@@ -77,7 +77,7 @@ func (s *NodeService) Update(ctx context.Context, req *v1.UpdateSignalNode_Reque
 }
 
 func (s *NodeService) GetSecret(ctx context.Context, req *v1.GetSecretSignalNode_Request) (*v1.GetSecretSignalNode_Reply, error) {
-	node, err := s.nodeRepo.GetOne(ctx, s.Db, &repo.NodeGetReq{Id: new(req.Id)})
+	node, err := s.nodeRepo.GetOne(ctx, s.db, &repo.NodeGetReq{Id: new(req.Id)})
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +85,12 @@ func (s *NodeService) GetSecret(ctx context.Context, req *v1.GetSecretSignalNode
 }
 
 func (s *NodeService) UpdateSecret(ctx context.Context, req *v1.UpdateSecretSignalNode_Request) (*v1.UpdateSecretSignalNode_Reply, error) {
-	err := s.nodeRepo.UpdateSecret(ctx, s.Db, req.Id, s.nodeDomain.GenerateSecret())
+	err := s.nodeRepo.UpdateSecret(ctx, s.db, req.Id, s.nodeDomain.GenerateSecret())
 	return &v1.UpdateSecretSignalNode_Reply{}, err
 }
 
 func (s *NodeService) List(ctx context.Context, req *v1.ListSignalNode_Request) (*v1.ListSignalNode_Reply, error) {
-	list, err := s.nodeRepo.GetList(ctx, s.Db, &repo.NodeGetReq{})
+	list, err := s.nodeRepo.GetList(ctx, s.db, &repo.NodeGetReq{})
 	if err != nil {
 		return nil, err
 	}

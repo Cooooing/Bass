@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"im/internal/conf"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"

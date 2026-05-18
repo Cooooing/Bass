@@ -1,19 +1,30 @@
 package cache
 
 import (
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"connector/internal/biz/cache"
-	database "connector/internal/data/base"
+	"connector/internal/conf"
 	"context"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type SessionCache struct {
-	*database.BaseData
+	conf  *conf.Bootstrap
+	log   *log.Helper
+	redis *commonClient.RedisClient
 }
 
-func NewSessionCache(BaseData *database.BaseData) cache.SessionCache {
+func NewSessionCache(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	redis *commonClient.RedisClient,
+) cache.SessionCache {
 	return &SessionCache{
-		BaseData: BaseData,
+		conf:  conf,
+		log:   log.NewHelper(logger),
+		redis: redis,
 	}
 }
 
@@ -22,7 +33,7 @@ func (c *SessionCache) SetSessions(ctx context.Context, sessionIds []string) err
 	for i, sessionId := range sessionIds {
 		members[i] = sessionId
 	}
-	return c.Redis.Client.SAdd(ctx, constant.ConnectorSession, members...).Err()
+	return c.redis.Client.SAdd(ctx, constant.ConnectorSession, members...).Err()
 }
 
 func (c *SessionCache) RemoveSessions(ctx context.Context, sessionIds []string) error {
@@ -30,5 +41,5 @@ func (c *SessionCache) RemoveSessions(ctx context.Context, sessionIds []string) 
 	for i, sessionId := range sessionIds {
 		members[i] = sessionId
 	}
-	return c.Redis.Client.SRem(ctx, constant.ConnectorSession, members...).Err()
+	return c.redis.Client.SRem(ctx, constant.ConnectorSession, members...).Err()
 }

@@ -4,8 +4,7 @@ import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
 	"connector/internal/conf"
-	database "connector/internal/data/base"
-	"connector/internal/data/cache"
+	"connector/internal/data/gen/cache"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -16,7 +15,6 @@ var DataProviderSet = wire.NewSet(
 	NewConsulClient,
 
 	ProvideRedis,
-	database.NewBaseData,
 	commonClient.NewRedisClient,
 
 	cache.NewSessionCache,

@@ -10,7 +10,7 @@ import (
 	"notify/internal/biz/domain"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"

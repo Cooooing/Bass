@@ -6,7 +6,7 @@ import (
 	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/model"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 )
 
 type NotificationMetaRepo interface {
@@ -23,7 +23,5 @@ type NotificationMetaGetReq struct {
 	UUID                *string
 	UUIDs               []string
 	EventType           *enums.EventType
-	SenderId            *int64
-	SenderIds           []int64
 	Status              *v1.NotificationStatus
 }

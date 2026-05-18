@@ -5,20 +5,40 @@ import (
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/base"
-	"user/internal/data/ent/gen"
-	"user/internal/data/ent/gen/usertfa"
+	"user/internal/conf"
+	"user/internal/data/gen"
+	"user/internal/data/gen/usertfa"
 
+	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type UserTfaRepo struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewUserTfaRepo(repo *base.BaseData) repo.UserTfaRepo {
+func NewUserTfaRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.UserTfaRepo {
 	return &UserTfaRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -26,7 +46,7 @@ func (r *UserTfaRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
-	return r.Db
+	return r.db
 }
 
 func tfaToDomain(t *gen.UserTFA) *model.UserTFA {

@@ -1,17 +1,17 @@
 package service
 
 import (
-	"common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/notify/v1"
-	"common/pkg/enum"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"notify/internal/biz/domain"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
+	notificationtemplate "notify/internal/data/gen/notificationtemplate"
+	notifyenum "notify/internal/enum"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -55,24 +55,27 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotifi
 	if req.NotificationTemplate == nil {
 		return nil, cerrors.ErrorBadRequest("notificationTemplate is required")
 	}
-	if _, ok := enums.EventType_name[int32(req.NotificationTemplate.EventType)]; !ok {
+	tpl := &gen.NotificationTemplate{
+		Title:   req.NotificationTemplate.Title,
+		Content: req.NotificationTemplate.Content,
+		Enable:  req.NotificationTemplate.Enable,
+	}
+	dbEventType, ok := notifyenum.EventTypeMap.ToEnum(req.NotificationTemplate.EventType)
+	if !ok {
 		return nil, cerrors.ErrorBadRequest("invalid eventType")
 	}
-	if _, ok := v1.NotificationChannel_name[int32(req.NotificationTemplate.Channel)]; !ok {
+	dbChannel, ok := notifyenum.NotificationChannelMap.ToEnum(req.NotificationTemplate.Channel)
+	if !ok {
 		return nil, cerrors.ErrorBadRequest("invalid channel")
 	}
-	tpl, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		EventType: enum.EventType(req.NotificationTemplate.EventType.String()),
-		Channel:   enum.NotificationChannel(req.NotificationTemplate.Channel.String()),
-		Title:     req.NotificationTemplate.Title,
-		Content:   req.NotificationTemplate.Content,
-		Enable:    req.NotificationTemplate.Enable,
-	}})
+	tpl.EventType = notificationtemplate.EventType(dbEventType)
+	tpl.Channel = notificationtemplate.Channel(dbChannel)
+	save, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: tpl})
 	if err != nil {
 		return nil, err
 	}
 	return &v1.AddNotificationTemplate_Reply{
-		NotificationTemplate: tpl.ConvertToRpc(),
+		NotificationTemplate: save.ConvertToRpc(),
 	}, nil
 }
 
@@ -80,22 +83,25 @@ func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.Update
 	if req.EventType == nil || req.Channel == nil || req.Content == nil {
 		return nil, cerrors.ErrorBadRequest("eventType, channel, content is required")
 	}
-	if _, ok := enums.EventType_name[int32(*req.EventType)]; !ok {
+	tpl := &gen.NotificationTemplate{
+		Content: *req.Content,
+		Enable:  util.DerefOrDefault(req.Enable, false),
+	}
+	dbEventType, ok := notifyenum.EventTypeMap.ToEnum(*req.EventType)
+	if !ok {
 		return nil, cerrors.ErrorBadRequest("invalid eventType")
 	}
-	if _, ok := v1.NotificationChannel_name[int32(*req.Channel)]; !ok {
+	dbChannel, ok := notifyenum.NotificationChannelMap.ToEnum(*req.Channel)
+	if !ok {
 		return nil, cerrors.ErrorBadRequest("invalid channel")
 	}
-	tpl, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: &gen.NotificationTemplate{
-		EventType: enum.EventType(req.EventType.String()),
-		Channel:   enum.NotificationChannel(req.Channel.String()),
-		Content:   *req.Content,
-		Enable:    util.DerefOrDefault(req.Enable, false),
-	}})
+	tpl.EventType = notificationtemplate.EventType(dbEventType)
+	tpl.Channel = notificationtemplate.Channel(dbChannel)
+	save, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: tpl})
 	if err != nil {
 		return nil, err
 	}
 	return &v1.UpdateNotificationTemplate_Reply{
-		NotificationTemplate: tpl.ConvertToRpc(),
+		NotificationTemplate: save.ConvertToRpc(),
 	}, nil
 }

@@ -5,27 +5,29 @@ import (
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util/task"
-	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/domain"
 	"context"
 	"encoding/json"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/hibiken/asynq"
 )
 
 type RegisterHandler struct {
-	*domainbase.BaseDomain
+	log        *log.Helper
 	asynqCache *task.AsynqCache
 	producer   *client.Producer
 	server     *domain.ServerDomain
 }
 
-func NewRegisterHandler(baseDomain *domainbase.BaseDomain,
+func NewRegisterHandler(
+	logger log.Logger,
 	producer *client.Producer,
 	asynqCache *task.AsynqCache,
-	server *domain.ServerDomain) *RegisterHandler {
+	server *domain.ServerDomain,
+) *RegisterHandler {
 	return &RegisterHandler{
-		BaseDomain: baseDomain,
+		log:        log.NewHelper(logger),
 		asynqCache: asynqCache,
 		producer:   producer,
 		server:     server,
@@ -38,7 +40,7 @@ func (h *RegisterHandler) Name() constant.TaskName {
 
 func (h *RegisterHandler) Handler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
-		h.Log.Infof("task %s: %s", task.Type(), string(task.Payload()))
+		h.log.Infof("task %s: %s", task.Type(), string(task.Payload()))
 		data := new(model.Task)
 		err := json.Unmarshal(task.Payload(), data)
 		if err != nil {
@@ -59,7 +61,7 @@ func (h *RegisterHandler) Handler() asynq.HandlerFunc {
 		// 处理任务
 		err = h.server.Register()
 		if err != nil {
-			h.Log.Errorf("failed to register node: %v", err)
+			h.log.Errorf("failed to register node: %v", err)
 		}
 
 		// 下一次任务，不管成功失败，常驻任务

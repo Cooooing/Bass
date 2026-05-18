@@ -3,22 +3,40 @@ package repo
 import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	basedata "content/internal/data/base"
-	"content/internal/data/ent/gen"
-	"content/internal/data/ent/gen/domain"
+	"content/internal/conf"
+	"content/internal/data/gen"
+	"content/internal/data/gen/domain"
+	"content/internal/enum"
 	"context"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type DomainRepo struct {
-	*basedata.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewDomainRepo(BaseData *basedata.BaseData) repo.DomainRepo {
+func NewDomainRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.DomainRepo {
 	return &DomainRepo{
-		BaseData: BaseData,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -157,7 +175,8 @@ func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *g
 		query = query.Where(domain.DescriptionContains(*req.Description))
 	}
 	if req.Status != nil {
-		query = query.Where(domain.StatusEQ(int32(*req.Status)))
+		dbStatus, _ := enum.DomainStatusMap.ToEnum(*req.Status)
+		query = query.Where(domain.StatusEQ(domain.Status(dbStatus)))
 	}
 	if req.Url != nil {
 		query = query.Where(domain.URLContains(*req.Url))

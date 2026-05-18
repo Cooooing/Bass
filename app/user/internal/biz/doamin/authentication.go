@@ -4,19 +4,23 @@ import (
 	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"common/pkg/util/jwt"
 	"common/pkg/util/str"
 	"context"
-	domainbase "user/internal/biz/base"
+	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/conf"
 
 	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
 )
 
 type AuthenticationDomain struct {
-	*domainbase.BaseDomain
+	conf         *conf.Bootstrap
+	txRunner     base.TxRunner
+	eventPool    *util.EventPool
 	userRepo     repo.UserRepo
 	tokenCache   *jwt.TokenCache
 	tokenService *TokenService
@@ -25,7 +29,9 @@ type AuthenticationDomain struct {
 }
 
 func NewAuthenticationDomain(
-	base *domainbase.BaseDomain,
+	conf *conf.Bootstrap,
+	txRunner base.TxRunner,
+	eventPool *util.EventPool,
 	userRepo repo.UserRepo,
 	tokenCache *jwt.TokenCache,
 	tokenService *TokenService,
@@ -35,7 +41,9 @@ func NewAuthenticationDomain(
 		return nil, err
 	}
 	return &AuthenticationDomain{
-		BaseDomain:   base,
+		conf:         conf,
+		txRunner:     txRunner,
+		eventPool:    eventPool,
 		userRepo:     userRepo,
 		tokenCache:   tokenCache,
 		tokenService: tokenService,
@@ -75,12 +83,12 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 
 	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.Conf.Server.Jwt.EmailExpire.AsDuration())
+	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
 	// 发送邮件验证码通知
-	err = s.EventPool.Submit(func() {
+	err = s.eventPool.Submit(func() {
 	})
 	if err != nil {
 		return
@@ -92,7 +100,7 @@ func (s *AuthenticationDomain) RegisterEmail(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.Conf.Server.Jwt.EmailExpire.AsDuration())
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -116,7 +124,7 @@ func (s *AuthenticationDomain) RegisterEmailVerify(ctx context.Context, codeToke
 		return
 	}
 
-	err = s.TxRunner(ctx, func(ctx context.Context) error {
+	err = s.txRunner(ctx, func(ctx context.Context) error {
 		// 保存用户信息
 		user := &model.User{
 			Name:     saveUser.Name,
@@ -178,12 +186,12 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 
 	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.Conf.Server.Jwt.PhoneExpire.AsDuration())
+	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
 	// 发送邮件验证码通知
-	err = s.EventPool.Submit(func() {
+	err = s.eventPool.Submit(func() {
 	})
 	if err != nil {
 		return
@@ -195,7 +203,7 @@ func (s *AuthenticationDomain) RegisterPhone(ctx context.Context, u *model.User)
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.Conf.Server.Jwt.PhoneExpire.AsDuration())
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -219,7 +227,7 @@ func (s *AuthenticationDomain) RegisterPhoneVerify(ctx context.Context, codeToke
 		return
 	}
 
-	err = s.TxRunner(ctx, func(ctx context.Context) error {
+	err = s.txRunner(ctx, func(ctx context.Context) error {
 		// 保存用户信息
 		user := &model.User{
 			Name:     saveUser.Name,
@@ -260,7 +268,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 		return token, nil, cerrors.ErrorBadRequest("password invalid")
 	}
 	// 生成 token
-	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.Conf.Server.Jwt.Expires.AsDuration())
+	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}
@@ -270,7 +278,7 @@ func (s *AuthenticationDomain) LoginAccount(ctx context.Context, account string,
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.Conf.Server.Jwt.Expires.AsDuration())
+	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}

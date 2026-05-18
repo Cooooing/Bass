@@ -4,7 +4,7 @@ import (
 	"common/api/gen/common"
 	"context"
 	"signal/internal/biz/model"
-	"signal/internal/data/ent/gen"
+	"signal/internal/data/gen"
 )
 
 type NodeRepo interface {

@@ -4,21 +4,41 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/base"
-	"user/internal/data/ent/gen"
-	"user/internal/data/ent/gen/usercheckinrecord"
-	"user/internal/data/ent/gen/usercheckinstat"
+	"user/internal/conf"
+	"user/internal/data/gen"
+	"user/internal/data/gen/usercheckinrecord"
+	"user/internal/data/gen/usercheckinstat"
 
+	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type UserCheckinRepo struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewUserCheckinRepo(repo *base.BaseData) repo.UserCheckinRepo {
+func NewUserCheckinRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.UserCheckinRepo {
 	return &UserCheckinRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -26,7 +46,7 @@ func (r *UserCheckinRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
-	return r.Db
+	return r.db
 }
 
 func checkinStatToDomain(s *gen.UserCheckinStat) *model.UserCheckinStat {

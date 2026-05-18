@@ -2,27 +2,42 @@ package repo
 
 import (
 	"common/api/gen/common"
-	"common/api/gen/common/enums"
-	v1 "common/api/gen/notify/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/enum"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	database "notify/internal/data/base"
-	"notify/internal/data/ent/gen"
-	"notify/internal/data/ent/gen/notificationmeta"
-	"notify/internal/data/ent/gen/notificationrecord"
+	"notify/internal/conf"
+	"notify/internal/data/gen"
+	"notify/internal/data/gen/notificationmeta"
+	"notify/internal/data/gen/notificationrecord"
+	notifyenum "notify/internal/enum"
 	"time"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type NotificationRecordRepo struct {
-	*database.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 }
 
-func NewNotificationRecordRepo(repo *database.BaseData) repo.NotificationRecordRepo {
+func NewNotificationRecordRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) repo.NotificationRecordRepo {
 	return &NotificationRecordRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
 	}
 }
 
@@ -142,17 +157,16 @@ func (r *NotificationRecordRepo) getQuery(query *gen.NotificationRecordQuery, re
 	if len(req.NotificationMetaIds) > 0 {
 		query = query.Where(notificationrecord.NotificationIDIn(req.NotificationMetaIds...))
 	}
-	if req.SenderId != nil {
-		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.SenderIDEQ(*req.SenderId)))
-	}
 	if req.ReceiverId != nil {
 		query = query.Where(notificationrecord.ReceiverIDEQ(*req.ReceiverId))
 	}
 	if req.Status != nil {
-		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.StatusEQ(enum.NotificationStatus(v1.NotificationStatus_name[int32(*req.Status)]))))
+		dbStatus, _ := notifyenum.NotificationStatusMap.ToEnum(*req.Status)
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.StatusEQ(notificationmeta.Status(dbStatus))))
 	}
 	if req.EventType != nil {
-		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.EventTypeEQ(enum.EventType(enums.EventType_name[int32(*req.EventType)]))))
+		dbEventType, _ := notifyenum.EventTypeMap.ToEnum(*req.EventType)
+		query = query.Where(notificationrecord.HasNotificationMetaWith(notificationmeta.EventTypeEQ(notificationmeta.EventType(dbEventType))))
 	}
 	if req.WithMeta {
 		query = query.WithNotificationMeta()

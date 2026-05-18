@@ -3,27 +3,43 @@ package repo
 import (
 	commonv1 "common/api/gen/common"
 	"common/api/gen/common/enums"
-	v1 "common/api/gen/notify/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/enum"
 	"context"
 	"encoding/json"
 	"fmt"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	database "notify/internal/data/base"
-	"notify/internal/data/ent/gen"
-	"notify/internal/data/ent/gen/notificationtemplate"
+	"notify/internal/conf"
+	"notify/internal/data/gen"
+	"notify/internal/data/gen/notificationtemplate"
+	notifyenum "notify/internal/enum"
 	"time"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type NotificationTemplateRepo struct {
-	*database.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 }
 
-func NewNotificationTemplateRepo(repo *database.BaseData) (repo.NotificationTemplateRepo, error) {
+func NewNotificationTemplateRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) (repo.NotificationTemplateRepo, error) {
 	r := &NotificationTemplateRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
 	}
 	err := r.init()
 	return r, err
@@ -35,8 +51,8 @@ func (r *NotificationTemplateRepo) init() error {
 	templates := []*model.NotificationTemplate{
 		{
 			NotificationTemplate: &gen.NotificationTemplate{
-				EventType: enum.EventTypeArticlePublished,
-				Channel:   enum.NotificationChannelEmail,
+				EventType: "EVENT_TYPE_ARTICLE_PUBLISHED",
+				Channel:   "NOTIFICATION_CHANNEL_EMAIL",
 				Title:     "欢迎注册",
 				Content:   "你好 {{.username}}，欢迎注册！",
 				Enable:    true,
@@ -44,7 +60,7 @@ func (r *NotificationTemplateRepo) init() error {
 		},
 	}
 
-	existList, err := r.Db.NotificationTemplate.Query().Where(notificationtemplate.Enable(true)).All(ctx)
+	existList, err := r.db.NotificationTemplate.Query().Where(notificationtemplate.Enable(true)).All(ctx)
 	if err != nil {
 		return err
 	}
@@ -58,7 +74,7 @@ func (r *NotificationTemplateRepo) init() error {
 		if _, ok := existSet[key]; ok {
 			continue
 		}
-		if _, err := r.Save(ctx, r.Db, tpl); err != nil {
+		if _, err := r.Save(ctx, r.db, tpl); err != nil {
 			return err
 		}
 	}
@@ -102,11 +118,11 @@ func (r *NotificationTemplateRepo) Update(ctx context.Context, tx *gen.Client, u
 	return &model.NotificationTemplate{NotificationTemplate: update}, err
 }
 
-func (r *NotificationTemplateRepo) GetTemplates(ctx context.Context, eventType enums.EventType) ([]*model.NotificationTemplate, error) {
-	cacheKey := fmt.Sprintf("notify:tpl:%s", eventType)
+func (r *NotificationTemplateRepo) GetTemplates(ctx context.Context, eventType enums.EventType, language string) ([]*model.NotificationTemplate, error) {
+	cacheKey := fmt.Sprintf("notify:tpl:%s:%s", eventType, language)
 
 	// 1. 查缓存
-	cached, err := r.Redis.Client.Get(ctx, cacheKey).Result()
+	cached, err := r.redis.Client.Get(ctx, cacheKey).Result()
 	if err == nil {
 		var list []*model.NotificationTemplate
 		if json.Unmarshal([]byte(cached), &list) == nil {
@@ -115,8 +131,9 @@ func (r *NotificationTemplateRepo) GetTemplates(ctx context.Context, eventType e
 	}
 
 	// 2. 查 DB
-	list, err := r.GetList(ctx, r.Db, &repo.NotificationTemplateGetReq{
+	list, err := r.GetList(ctx, r.db, &repo.NotificationTemplateGetReq{
 		EventType: &eventType,
+		Language:  &language,
 		Enable:    new(true),
 	})
 	if err != nil {
@@ -126,7 +143,7 @@ func (r *NotificationTemplateRepo) GetTemplates(ctx context.Context, eventType e
 	// 3. 回填缓存
 	if len(list) > 0 {
 		if b, err := json.Marshal(list); err == nil {
-			r.Redis.Client.Set(ctx, cacheKey, b, time.Hour)
+			r.redis.Client.Set(ctx, cacheKey, b, time.Hour)
 		}
 	}
 
@@ -208,20 +225,26 @@ func (r *NotificationTemplateRepo) getQuery(query *gen.NotificationTemplateQuery
 		query = query.Where(notificationtemplate.IDIn(req.NotificationTemplateIds...))
 	}
 	if req.EventType != nil {
-		query = query.Where(notificationtemplate.EventTypeEQ(enum.EventType(req.EventType.String())))
+		dbEventType, _ := notifyenum.EventTypeMap.ToEnum(*req.EventType)
+		query = query.Where(notificationtemplate.EventTypeEQ(notificationtemplate.EventType(dbEventType)))
 	}
 	if req.Channel != nil {
-		query = query.Where(notificationtemplate.ChannelEQ(enum.NotificationChannel(v1.NotificationChannel_name[int32(*req.Channel)])))
+		dbChannel, _ := notifyenum.NotificationChannelMap.ToEnum(*req.Channel)
+		query = query.Where(notificationtemplate.ChannelEQ(notificationtemplate.Channel(dbChannel)))
 	}
 	if len(req.Channels) > 0 {
-		var channels []enum.NotificationChannel
+		var channels []notificationtemplate.Channel
 		for _, channel := range req.Channels {
 			if channel == nil {
 				continue
 			}
-			channels = append(channels, enum.NotificationChannel(v1.NotificationChannel_name[int32(*channel)]))
+			dbChannel, _ := notifyenum.NotificationChannelMap.ToEnum(*channel)
+			channels = append(channels, notificationtemplate.Channel(dbChannel))
 		}
 		query = query.Where(notificationtemplate.ChannelIn(channels...))
+	}
+	if req.Language != nil {
+		query = query.Where(notificationtemplate.LanguageEQ(notificationtemplate.Language(*req.Language)))
 	}
 	if req.Enable != nil {
 		query = query.Where(notificationtemplate.EnableEQ(*req.Enable))

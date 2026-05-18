@@ -5,7 +5,6 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/util/jwt"
 	"content/internal/conf"
-	"content/internal/data/base"
 	"content/internal/data/client"
 	"content/internal/data/repo"
 
@@ -14,8 +13,6 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	base.NewBaseData,
-
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,

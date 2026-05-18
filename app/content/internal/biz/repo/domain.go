@@ -5,7 +5,7 @@ import (
 	v1 "common/api/gen/content/v1"
 	commonModel "common/pkg/model"
 	"content/internal/biz/model"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
 	"context"
 )
 

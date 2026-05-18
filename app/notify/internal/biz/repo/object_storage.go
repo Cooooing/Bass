@@ -4,7 +4,7 @@ import (
 	"common/api/gen/common"
 	"context"
 	"notify/internal/biz/model"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 )
 
 type ObjectStorageRepo interface {

@@ -78,7 +78,7 @@ func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, fun
 
 	reg := consulregistry.New(apiClient,
 		consulregistry.WithHealthCheck(false),
-		consulregistry.WithHeartbeat(true),
+		consulregistry.WithHeartbeat(false),
 	)
 
 	// Connectivity pre-check
@@ -136,7 +136,7 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 			grpc.WithKeepaliveParams(keepalive.ClientParameters{
 				Time:                30 * time.Second,
 				Timeout:             10 * time.Second,
-				PermitWithoutStream: true,
+				PermitWithoutStream: false,
 			}),
 		),
 		kgrpc.WithMiddleware(

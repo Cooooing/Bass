@@ -103,7 +103,6 @@ func NewNatsClient(logger log.Logger, conf *common.Nats) (*NatsClient, func(), e
 		}),
 	}
 
-	helper.Infof("connecting to nats: %s", conf.Url)
 	nc, err := nats.Connect(conf.Url, opts...)
 	if err != nil {
 		return nil, nil, fmt.Errorf("nats connect [%s]: %w", conf.Url, err)

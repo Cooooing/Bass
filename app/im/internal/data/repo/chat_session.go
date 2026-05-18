@@ -8,18 +8,14 @@ import (
 	"fmt"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
-	database "im/internal/data/base"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 )
 
 type ChatSessionRepo struct {
-	*database.BaseData
 }
 
-func NewChatSessionRepo(BaseData *database.BaseData) repo.ChatSessionRepo {
-	return &ChatSessionRepo{
-		BaseData: BaseData,
-	}
+func NewChatSessionRepo() repo.ChatSessionRepo {
+	return &ChatSessionRepo{}
 }
 
 func (r *ChatSessionRepo) Save(ctx context.Context, tx *gen.Client, chatSession *model.ChatSession) (*model.ChatSession, error) {

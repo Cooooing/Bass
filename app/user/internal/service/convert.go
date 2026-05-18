@@ -4,6 +4,7 @@ import (
 	v1 "common/api/gen/user/v1"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/enum"
 
 	"context"
 
@@ -37,13 +38,16 @@ func userToProto(
 		AvatarUrl:     u.AvatarURL,
 		Introduction:  u.Introduction,
 		Mbti:          u.Mbti,
-		Status:        (*v1.UserStatus)(u.Status),
 		GroupName:     u.GroupName,
 		FollowCount:   u.FollowCount,
 		FollowerCount: u.FollowerCount,
 		BlockCount:    u.BlockCount,
 		BlockedCount:  u.BlockedCount,
 		LastLoginIp:   u.LastLoginIP,
+	}
+	if u.Status != nil {
+		v := enum.UserStatusMap.MustToProto(*u.Status)
+		reply.Status = &v
 	}
 	if u.LastLoginTime != nil {
 		reply.LastLoginTime = timestamppb.New(*u.LastLoginTime)
@@ -100,7 +104,7 @@ func userRelationsToProto(relations []*model.UserRelation) []*v1.UserRelation {
 func relationToProto(r *model.UserRelation) *v1.UserRelation {
 	reply := &v1.UserRelation{
 		Id:       r.ID,
-		Type:     r.Type,
+		Type:     enum.UserRelationTypeMap.MustToProto(r.Type),
 		ActorId:  r.ActorID,
 		TargetId: r.TargetID,
 	}

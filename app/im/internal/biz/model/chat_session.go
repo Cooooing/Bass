@@ -1,7 +1,7 @@
 package model
 
 import (
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 )
 
 type ChatSession struct {

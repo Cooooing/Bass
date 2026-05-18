@@ -5,7 +5,6 @@ import (
 	"common/pkg/constant"
 	"common/pkg/util"
 	"common/pkg/util/task"
-	"signal/internal/biz/base"
 	"signal/internal/biz/domain"
 	"signal/internal/biz/domain/handler"
 
@@ -14,7 +13,6 @@ import (
 
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
-	base.NewBaseDomain,
 	util.NewEventPool,
 	task.NewAsynqCache,
 

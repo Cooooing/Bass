@@ -7,12 +7,13 @@ import (
 	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	tagent "content/internal/data/gen/tag"
+	"content/internal/enum"
 	"context"
 	"errors"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type TagService struct {
@@ -24,10 +25,6 @@ func (s *TagService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentTagServiceServer(gs, s)
 }
 
-func (s *TagService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentTagServiceHTTPServer(hs, s)
-}
-
 func NewTagService(domainTag *domain.TagDomain) *TagService {
 	return &TagService{
 		domainTag: domainTag,
@@ -37,11 +34,12 @@ func NewTagService(domainTag *domain.TagDomain) *TagService {
 func (s *TagService) Adds(ctx context.Context, req *v1.AddsTag_Request) (*v1.AddsTag_Reply, error) {
 	tags := make([]*model.Tag, 0, len(req.Tags))
 	for i, tagSave := range req.Tags {
+		tagStatus, _ := enum.TagStatusMap.ToEnum(util.DerefOrDefault(tagSave.Status, v1.TagStatus_TAG_STATUS_NORMAL))
 		tags[i] = &model.Tag{Tag: &gen.Tag{
 			Name:        tagSave.Name,
 			Description: tagSave.Description,
 			DomainID:    tagSave.DomainId,
-			Status:      int32(util.DerefOrDefault(tagSave.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
+			Status:      tagent.Status(tagStatus),
 		}}
 	}
 	saves, err := s.domainTag.Saves(ctx, tags)
@@ -61,12 +59,13 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1
 	if req.Tag.Id == nil {
 		return nil, errors.New("tag id is nil")
 	}
+	updateTagStatus, _ := enum.TagStatusMap.ToEnum(util.DerefOrDefault(req.Tag.Status, v1.TagStatus_TAG_STATUS_NORMAL))
 	update, err := s.domainTag.Update(ctx, &model.Tag{Tag: &gen.Tag{
 		ID:          *req.Tag.Id,
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
-		Status:      int32(util.DerefOrDefault(req.Tag.Status, v1.TagStatus_TAG_STATUS_NORMAL)),
+		Status:      tagent.Status(updateTagStatus),
 	}})
 	if err != nil {
 		return nil, err

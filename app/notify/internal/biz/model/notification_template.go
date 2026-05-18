@@ -4,7 +4,7 @@ import (
 	"common/api/gen/common/enums"
 	v1 "common/api/gen/notify/v1"
 	"fmt"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

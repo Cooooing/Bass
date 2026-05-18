@@ -19,7 +19,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.Service, tokenCache *jwt.TokenCache) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcService, tokenCache *jwt.TokenCache) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,

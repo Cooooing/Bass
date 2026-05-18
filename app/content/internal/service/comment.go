@@ -10,11 +10,10 @@ import (
 	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type CommentService struct {
@@ -23,26 +22,24 @@ type CommentService struct {
 	commentDomain *domain.CommentDomain
 	commentRepo   repo.CommentRepo
 	articleRepo   repo.ArticleRepo
+	db            *gen.Client
 }
 
 func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentCommentServiceServer(gs, s)
 }
 
-func (s *CommentService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentCommentServiceHTTPServer(hs, s)
-}
-
 func NewCommentService(
-	baseService *BaseService,
 	commentDomain *domain.CommentDomain,
 	commentRepo repo.CommentRepo,
 	articleRepo repo.ArticleRepo,
+	db *gen.Client,
 ) *CommentService {
 	return &CommentService{
 		commentDomain: commentDomain,
 		commentRepo:   commentRepo,
 		articleRepo:   articleRepo,
+		db:            db,
 	}
 }
 
@@ -90,7 +87,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComment_Request) 
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) (rsp *v1.LikeComment_Reply, err error) {
 	// user := s.tokenCache.GetUserInfo(ctx)
-	exist, err := s.commentRepo.Exist(ctx, s.Db, &repo.CommentGetReq{CommentId: new(req.Id)})
+	exist, err := s.commentRepo.Exist(ctx, s.db, &repo.CommentGetReq{CommentId: new(req.Id)})
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +95,7 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) 
 		return nil, cerrors.ErrorBadRequest("comment not exist")
 	}
 
-	err = s.commentRepo.UpdateStat(ctx, s.Db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, util.If[int32](req.Active, 1, -1))
+	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, util.If[int32](req.Active, 1, -1))
 	return &v1.LikeComment_Reply{}, err
 }
 

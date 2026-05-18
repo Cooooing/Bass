@@ -10,14 +10,17 @@ import (
 	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/conf"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type AuthenticationService struct {
 	v1.UnimplementedUserAuthenticationServiceServer
-	*BaseService
+	conf *conf.Bootstrap
+	log  *log.Helper
 	*VerifyService
 	authenticationDomain *doamin.AuthenticationDomain
 	userRepo             repo.UserRepo
@@ -28,7 +31,7 @@ type AuthenticationService struct {
 	userCheckinRepo      repo.UserCheckinRepo
 }
 
-func NewAuthenticationService(baseService *BaseService, verifyService *VerifyService, authenticationDomain *doamin.AuthenticationDomain,
+func NewAuthenticationService(conf *conf.Bootstrap, logger log.Logger, verifyService *VerifyService, authenticationDomain *doamin.AuthenticationDomain,
 	userRepo repo.UserRepo,
 	userPreferencesRepo repo.UserPreferencesRepo,
 	userPrivacyRepo repo.UserPrivacyRepo,
@@ -36,7 +39,8 @@ func NewAuthenticationService(baseService *BaseService, verifyService *VerifySer
 	userTfaRepo repo.UserTfaRepo,
 	userCheckinRepo repo.UserCheckinRepo) *AuthenticationService {
 	return &AuthenticationService{
-		BaseService:          baseService,
+		conf:                 conf,
+		log:                  log.NewHelper(logger),
 		VerifyService:        verifyService,
 		authenticationDomain: authenticationDomain,
 		userRepo:             userRepo,

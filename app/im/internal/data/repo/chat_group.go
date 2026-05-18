@@ -8,18 +8,14 @@ import (
 	"context"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
-	database "im/internal/data/base"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 )
 
 type ChatGroupRepo struct {
-	*database.BaseData
 }
 
-func NewChatGroupRepo(BaseData *database.BaseData) repo.ChatGroupRepo {
-	return &ChatGroupRepo{
-		BaseData: BaseData,
-	}
+func NewChatGroupRepo() repo.ChatGroupRepo {
+	return &ChatGroupRepo{}
 }
 
 func (r *ChatGroupRepo) Save(ctx context.Context, tx *gen.Client, chatGroup *model.ChatGroup) (*model.ChatGroup, error) {

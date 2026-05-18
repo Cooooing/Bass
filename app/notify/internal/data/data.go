@@ -4,7 +4,6 @@ import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
 	"notify/internal/conf"
-	database "notify/internal/data/base"
 	"notify/internal/data/client"
 	"notify/internal/data/oss"
 	"notify/internal/data/repo"
@@ -14,8 +13,6 @@ import (
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	database.NewBaseData,
-
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,
@@ -27,6 +24,7 @@ var DataProviderSet = wire.NewSet(
 	repo.NewNotificationMetaRepo,
 	repo.NewNotificationRecordRepo,
 	repo.NewNotificationTemplateRepo,
+	repo.NewNotificationSettingRepo,
 	repo.NewObjectStorageRepo,
 	oss.ProviderSet,
 )

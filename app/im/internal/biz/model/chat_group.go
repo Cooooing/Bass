@@ -3,7 +3,7 @@ package model
 import (
 	v1 "common/api/gen/im/v1"
 	userv1 "common/api/gen/user/v1"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

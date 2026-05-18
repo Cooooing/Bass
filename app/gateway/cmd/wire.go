@@ -9,7 +9,7 @@ package main
 import (
 	"gateway/internal/biz"
 	"gateway/internal/conf"
-	"gateway/internal/data"
+	"gateway/internal/data/gen"
 	"gateway/internal/server"
 	"gateway/internal/service"
 

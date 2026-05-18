@@ -2,7 +2,7 @@ package ent
 
 import (
 	"context"
-	"signal/internal/data/ent/gen"
+	"signal/internal/data/gen"
 
 	utilent "common/pkg/util/ent"
 )

@@ -4,24 +4,28 @@ import (
 	"common/pkg/util"
 	"connector/internal/biz/domain"
 	"connector/internal/biz/model"
+	"connector/internal/conf"
 	http2 "net/http"
 	"time"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/gorilla/websocket"
 )
 
 type WebsocketService struct {
-	*BaseService
+	conf          *conf.Bootstrap
+	log           *log.Helper
 	sessionDomain *domain.SessionDomain
 	eventPool     *util.EventPool
 	upgrader      websocket.Upgrader
 }
 
-func NewWebsocketService(baseService *BaseService, sessionDomain *domain.SessionDomain,
+func NewWebsocketService(conf *conf.Bootstrap, logger log.Logger, sessionDomain *domain.SessionDomain,
 	eventPool *util.EventPool) *WebsocketService {
 	return &WebsocketService{
-		BaseService:   baseService,
+		conf:          conf,
+		log:           log.NewHelper(logger),
 		sessionDomain: sessionDomain,
 		eventPool:     eventPool,
 		upgrader: websocket.Upgrader{
@@ -38,7 +42,7 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 		// 升级 Websocket
 		conn, err := s.upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			s.Log.Errorf("websocket upgrade failed: %v", err)
+			s.log.Errorf("websocket upgrade failed: %v", err)
 			return
 		}
 		defer func() {
@@ -57,7 +61,7 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 
 		sessionId, err := s.sessionDomain.RequestSessionId(ticket)
 		if err != nil {
-			s.Log.Errorf("request session id error: %v", err)
+			s.log.Errorf("request session id error: %v", err)
 			_ = conn.WriteControl(
 				websocket.CloseMessage,
 				websocket.FormatCloseMessage(websocket.ClosePolicyViolation, "invalid ticket"),
@@ -65,7 +69,7 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 			)
 			return
 		}
-		s.Log.Infof("websocket [%s] connected", sessionId)
+		s.log.Infof("websocket [%s] connected", sessionId)
 
 		// 设置连接参数
 		conn.SetReadLimit(1024 * 1024) // 1MB
@@ -85,7 +89,7 @@ func (s *WebsocketService) Handler() http2.HandlerFunc {
 
 		for {
 			if _, _, err := conn.ReadMessage(); err != nil {
-				s.Log.Errorf("websocket read message error: %v", err)
+				s.log.Errorf("websocket read message error: %v", err)
 				return
 			}
 			_ = conn.SetReadDeadline(time.Now().Add(60 * time.Second))

@@ -2,7 +2,8 @@ package model
 
 import (
 	v1 "common/api/gen/content/v1"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	"content/internal/enum"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -21,7 +22,7 @@ func (t *Tag) ConvertToRpc() *v1.Tag {
 		Name:         t.Name,
 		Description:  t.Description,
 		DomainId:     t.DomainID,
-		Status:       new(v1.TagStatus(t.Status)),
+		Status:       new(enum.TagStatusMap.MustToProto(enum.TagStatus(t.Status))),
 		ArticleCount: t.ArticleCount,
 	}
 }

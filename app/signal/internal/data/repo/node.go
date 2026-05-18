@@ -3,22 +3,39 @@ package repo
 import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"context"
 	"signal/internal/biz/model"
 	"signal/internal/biz/repo"
-	"signal/internal/data/base"
-	"signal/internal/data/ent/gen"
-	"signal/internal/data/ent/gen/node"
+	"signal/internal/conf"
+	"signal/internal/data/gen"
+	"signal/internal/data/gen/node"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type NodeRepo struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 }
 
-func NewNodeRepo(baseData *base.BaseData) repo.NodeRepo {
+func NewNodeRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) repo.NodeRepo {
 	return &NodeRepo{
-		BaseData: baseData,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
 	}
 }
 

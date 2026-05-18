@@ -2,26 +2,41 @@ package repo
 
 import (
 	"common/api/gen/common"
-	"common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/notify/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/enum"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	database "notify/internal/data/base"
-	"notify/internal/data/ent/gen"
-	"notify/internal/data/ent/gen/notificationmeta"
+	"notify/internal/conf"
+	"notify/internal/data/gen"
+	"notify/internal/data/gen/notificationmeta"
+	notifyenum "notify/internal/enum"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type NotificationMetaRepo struct {
-	*database.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 }
 
-func NewNotificationMetaRepo(repo *database.BaseData) repo.NotificationMetaRepo {
+func NewNotificationMetaRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) repo.NotificationMetaRepo {
 	return &NotificationMetaRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
 	}
 }
 
@@ -29,7 +44,6 @@ func (r *NotificationMetaRepo) Save(ctx context.Context, tx *gen.Client, u *mode
 	save, err := tx.NotificationMeta.Create().
 		SetUUID(u.UUID).
 		SetEventType(u.EventType).
-		SetSenderID(u.SenderID).
 		SetMeta(u.Meta).
 		SetTitle(u.Title).
 		SetContent(u.Content).
@@ -112,16 +126,12 @@ func (r *NotificationMetaRepo) getQuery(query *gen.NotificationMetaQuery, req *r
 		query = query.Where(notificationmeta.UUIDIn(req.UUIDs...))
 	}
 	if req.EventType != nil {
-		query = query.Where(notificationmeta.EventTypeEQ(enum.EventType(enums.EventType_name[int32(*req.EventType)])))
-	}
-	if req.SenderId != nil {
-		query = query.Where(notificationmeta.SenderIDEQ(*req.SenderId))
-	}
-	if len(req.SenderIds) > 0 {
-		query = query.Where(notificationmeta.SenderIDIn(req.SenderIds...))
+		dbEventType, _ := notifyenum.EventTypeMap.ToEnum(*req.EventType)
+		query = query.Where(notificationmeta.EventTypeEQ(notificationmeta.EventType(dbEventType)))
 	}
 	if req.Status != nil {
-		query = query.Where(notificationmeta.StatusEQ(enum.NotificationStatus(v1.NotificationStatus_name[int32(*req.Status)])))
+		dbStatus, _ := notifyenum.NotificationStatusMap.ToEnum(*req.Status)
+		query = query.Where(notificationmeta.StatusEQ(notificationmeta.Status(dbStatus)))
 	}
 	return query
 }

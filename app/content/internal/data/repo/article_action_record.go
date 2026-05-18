@@ -4,24 +4,40 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	basedata "content/internal/data/base"
-	"content/internal/data/ent/gen"
-	"content/internal/data/ent/gen/articleactionrecord"
+	"content/internal/conf"
+	"content/internal/data/gen"
+	"content/internal/data/gen/articleactionrecord"
+	"content/internal/enum"
 	"context"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type ArticleActionRecordRepo struct {
-	*basedata.BaseData
-	client *gen.Client
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewArticleActionRecordRepo(BaseData *basedata.BaseData, client *gen.Client) repo.ArticleActionRecordRepo {
+func NewArticleActionRecordRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.ArticleActionRecordRepo {
 	return &ArticleActionRecordRepo{
-		BaseData: BaseData,
-		client:   client,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -38,7 +54,10 @@ func (r *ArticleActionRecordRepo) Delete(ctx context.Context, tx *gen.Client, ar
 	_, err := tx.ArticleActionRecord.Delete().
 		Where(articleactionrecord.ArticleIDEQ(articleId)).
 		Where(articleactionrecord.UserIDEQ(userId)).
-		Where(articleactionrecord.TypeEQ(int32(action))).
+		Where(articleactionrecord.TypeEQ(func() articleactionrecord.Type {
+			v, _ := enum.ArticleActionMap.ToEnum(action)
+			return articleactionrecord.Type(v)
+		}())).
 		Exec(ctx)
 	return err
 }
@@ -106,7 +125,8 @@ func (r *ArticleActionRecordRepo) getQuery(query *gen.ArticleActionRecordQuery, 
 		query = query.Where(articleactionrecord.UserIDEQ(*req.UserId))
 	}
 	if req.Type != nil {
-		query = query.Where(articleactionrecord.TypeEQ(int32(*req.Type)))
+		dbType, _ := enum.ArticleActionMap.ToEnum(*req.Type)
+		query = query.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(dbType)))
 	}
 	return query
 }

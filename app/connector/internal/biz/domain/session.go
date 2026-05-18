@@ -5,7 +5,6 @@ import (
 	signalv1 "common/api/gen/signal/v1"
 	"common/pkg/client"
 	"common/pkg/util/server"
-	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/model"
 	"context"
 	"encoding/json"
@@ -14,20 +13,23 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/samber/lo"
 )
 
 type SessionDomain struct {
-	*domainbase.BaseDomain
+	log        *log.Helper
 	httpClient *http.Client
 
 	sessionIds map[string]*model.Connection
 	mu         sync.RWMutex
 }
 
-func NewSessionDomain(baseDomain *domainbase.BaseDomain) *SessionDomain {
+func NewSessionDomain(
+	logger log.Logger,
+) *SessionDomain {
 	return &SessionDomain{
-		BaseDomain: baseDomain,
+		log:        log.NewHelper(logger),
 		httpClient: client.NewHttpClient(),
 		sessionIds: map[string]*model.Connection{},
 		mu:         sync.RWMutex{},
@@ -90,7 +92,7 @@ func (d *SessionDomain) RequestSessionId(ticket string) (string, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			d.Log.Errorf("failed to close body: %v", err)
+			d.log.Errorf("failed to close body: %v", err)
 		}
 	}(resp.Body)
 

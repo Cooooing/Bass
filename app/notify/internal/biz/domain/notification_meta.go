@@ -3,25 +3,26 @@ package domain
 import (
 	"common/api/gen/common"
 	"context"
-	domainbase "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
+	"notify/internal/data/gen"
 )
 
 type NotificationMetaDomain struct {
-	*domainbase.BaseDomain
+	db                   *gen.Client
 	notificationMetaRepo repo.NotificationMetaRepo
 }
 
 func NewNotificationMetaDomain(
-	base *domainbase.BaseDomain,
-	notificationMetaRepo repo.NotificationMetaRepo) *NotificationMetaDomain {
+	db *gen.Client,
+	notificationMetaRepo repo.NotificationMetaRepo,
+) *NotificationMetaDomain {
 	return &NotificationMetaDomain{
-		BaseDomain:           base,
+		db:                   db,
 		notificationMetaRepo: notificationMetaRepo,
 	}
 }
 
 func (d *NotificationMetaDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationMetaGetReq) ([]*model.NotificationMeta, *common.PageReply, error) {
-	return d.notificationMetaRepo.GetPage(ctx, d.Db, page, req)
+	return d.notificationMetaRepo.GetPage(ctx, d.db, page, req)
 }

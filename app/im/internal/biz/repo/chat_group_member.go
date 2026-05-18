@@ -4,7 +4,7 @@ import (
 	"common/api/gen/common"
 	"context"
 	"im/internal/biz/model"
-	"im/internal/data/ent/gen"
+	"im/internal/data/gen"
 	"time"
 )
 

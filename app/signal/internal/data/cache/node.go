@@ -1,6 +1,7 @@
 package cache
 
 import (
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"context"
 	"encoding/json"
@@ -8,20 +9,36 @@ import (
 	"math"
 	"signal/internal/biz/cache"
 	"signal/internal/biz/model"
-	"signal/internal/data/base"
+	"signal/internal/conf"
+	"signal/internal/data/gen"
 	"strconv"
 	"time"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
 )
 
 type NodeCache struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 }
 
-func NewNodeCache(baseData *base.BaseData) cache.NodeCache {
+func NewNodeCache(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) cache.NodeCache {
 	return &NodeCache{
-		BaseData: baseData,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
 	}
 }
 
@@ -30,7 +47,7 @@ func (r *NodeCache) SetNode(ctx context.Context, n *model.Node) error {
 	if err != nil {
 		return err
 	}
-	_, err = r.Redis.Client.HSet(ctx, constant.GetKeySignalNode(n.Key), map[string]interface{}{
+	_, err = r.redis.Client.HSet(ctx, constant.GetKeySignalNode(n.Key), map[string]interface{}{
 		constant.SignalNodeData:               string(marshal),
 		constant.SignalNodeCurrentConnections: 0,
 		constant.SignalNodePingMs:             math.MaxInt64,
@@ -44,12 +61,12 @@ func (r *NodeCache) SetNode(ctx context.Context, n *model.Node) error {
 }
 
 func (r *NodeCache) DelNode(ctx context.Context, key string) {
-	r.Redis.Client.Del(ctx, constant.GetKeySignalNode(key))
+	r.redis.Client.Del(ctx, constant.GetKeySignalNode(key))
 }
 
 func (r *NodeCache) UpdateNodeConnections(ctx context.Context, key string, connections int64) error {
 	redisKey := constant.GetKeySignalNode(key)
-	_, err := r.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err := r.redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
 		pipe.HSet(ctx, redisKey, constant.SignalNodeCurrentConnections, connections)
 		pipe.HSet(ctx, redisKey, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
 		return nil
@@ -59,7 +76,7 @@ func (r *NodeCache) UpdateNodeConnections(ctx context.Context, key string, conne
 
 func (r *NodeCache) UpdateNodeConnectionsDelta(ctx context.Context, key string, delta int64) error {
 	redisKey := constant.GetKeySignalNode(key)
-	_, err := r.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err := r.redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
 		pipe.HIncrBy(ctx, redisKey, constant.SignalNodeCurrentConnections, delta)
 		pipe.HSet(ctx, redisKey, constant.SignalNodeLastPingTime, time.Now().UnixMilli())
 		return nil
@@ -68,7 +85,7 @@ func (r *NodeCache) UpdateNodeConnectionsDelta(ctx context.Context, key string, 
 }
 
 func (r *NodeCache) UpdateNodePing(ctx context.Context, key string, pingMs int64) error {
-	return r.Redis.Client.HSet(ctx,
+	return r.redis.Client.HSet(ctx,
 		constant.GetKeySignalNode(key),
 		constant.SignalNodePingMs, pingMs,
 		constant.SignalNodeLastPingTime, time.Now().UnixMilli(),
@@ -76,7 +93,7 @@ func (r *NodeCache) UpdateNodePing(ctx context.Context, key string, pingMs int64
 }
 
 func (r *NodeCache) UpdateNodePowCost(ctx context.Context, key string, powCostMs int64) error {
-	return r.Redis.Client.HSet(ctx,
+	return r.redis.Client.HSet(ctx,
 		constant.GetKeySignalNode(key),
 		constant.SignalNodePowCostMs, powCostMs,
 		constant.SignalNodeLastPingTime, time.Now().UnixMilli(),
@@ -84,7 +101,7 @@ func (r *NodeCache) UpdateNodePowCost(ctx context.Context, key string, powCostMs
 }
 
 func (r *NodeCache) GetNode(ctx context.Context, key string) (*model.Node, error) {
-	result, err := r.Redis.Client.HGetAll(ctx, constant.GetKeySignalNode(key)).Result()
+	result, err := r.redis.Client.HGetAll(ctx, constant.GetKeySignalNode(key)).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +123,7 @@ func (r *NodeCache) GetNode(ctx context.Context, key string) (*model.Node, error
 }
 
 func (r *NodeCache) SetNodeRank(ctx context.Context, key string, score float64) error {
-	err := r.Redis.Client.ZAdd(ctx, constant.SignalNodeRank, redis.Z{
+	err := r.redis.Client.ZAdd(ctx, constant.SignalNodeRank, redis.Z{
 		Score:  score,
 		Member: key,
 	}).Err()
@@ -117,11 +134,11 @@ func (r *NodeCache) SetNodeRank(ctx context.Context, key string, score float64) 
 }
 
 func (r *NodeCache) DelNodeRank(ctx context.Context, key string) {
-	r.Redis.Client.ZRem(ctx, constant.SignalNodeRank, key)
+	r.redis.Client.ZRem(ctx, constant.SignalNodeRank, key)
 }
 
 func (r *NodeCache) ExistsNodeRank(ctx context.Context, key string) (bool, error) {
-	_, err := r.Redis.Client.ZScore(ctx, constant.SignalNodeRank, key).Result()
+	_, err := r.redis.Client.ZScore(ctx, constant.SignalNodeRank, key).Result()
 	if errors.Is(err, redis.Nil) {
 		return false, nil
 	} else if err != nil {
@@ -131,7 +148,7 @@ func (r *NodeCache) ExistsNodeRank(ctx context.Context, key string) (bool, error
 }
 
 func (r *NodeCache) GetOnlineNodeKeys(ctx context.Context) ([]string, error) {
-	return r.Redis.Client.ZRevRange(ctx, constant.SignalNodeRank, 0, -1).Result()
+	return r.redis.Client.ZRevRange(ctx, constant.SignalNodeRank, 0, -1).Result()
 }
 
 func (r *NodeCache) UpdateScore(ctx context.Context, key string) error {
@@ -145,5 +162,5 @@ func (r *NodeCache) UpdateScore(ctx context.Context, key string) error {
 
 // SetNX 实现分布式锁
 func (r *NodeCache) SetNX(ctx context.Context, key string, value string, expire time.Duration) (bool, error) {
-	return r.Redis.Client.SetNX(ctx, key, value, expire).Result()
+	return r.redis.Client.SetNX(ctx, key, value, expire).Result()
 }

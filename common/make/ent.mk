@@ -11,14 +11,14 @@ clean: ent-clean
 .PHONY: ent-clean
 ent-clean:
 	@echo "clean go ent products..."
-	@rm -rf $(APP_DIR)/internal/data/ent/gen 2>/dev/null || true
+	@rm -rf $(APP_DIR)/internal/data/gen 2>/dev/null || true
 
 # generate ent
 .PHONY: ent
 ent: ent-clean
 	@echo "generating go ent..."
 	@cd $(APP_DIR) && \
-	ent generate --target=$(APP_DIR)/internal/data/ent/gen ./internal/data/ent/schema || \
+	ent generate --target=$(APP_DIR)/internal/data/gen ./internal/data/schema || \
 	{ echo "[ERROR] generate ent failed"; [ "$(IGNORE_ERROR)" = "1" ]; }
 
 endif

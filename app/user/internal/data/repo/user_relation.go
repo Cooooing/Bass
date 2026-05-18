@@ -2,25 +2,45 @@ package repo
 
 import (
 	"common/api/gen/common"
-	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/data/base"
-	"user/internal/data/ent/gen"
-	"user/internal/data/ent/gen/userrelation"
+	"user/internal/conf"
+	"user/internal/data/gen"
+	"user/internal/data/gen/userrelation"
+	"user/internal/enum"
 
+	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type UserRelationRepo struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewUserRelationRepo(repo *base.BaseData) repo.UserRelationRepo {
+func NewUserRelationRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.UserRelationRepo {
 	return &UserRelationRepo{
-		BaseData: repo,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -28,13 +48,13 @@ func (r *UserRelationRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
-	return r.Db
+	return r.db
 }
 
 func toRelationDomain(rel *gen.UserRelation) *model.UserRelation {
 	return &model.UserRelation{
 		ID:        rel.ID,
-		Type:      v1.UserRelationType(rel.Type),
+		Type:      enum.UserRelationType(rel.Type),
 		ActorID:   rel.ActorID,
 		TargetID:  rel.TargetID,
 		CreatedAt: rel.CreatedAt,
@@ -47,7 +67,7 @@ func (r *UserRelationRepo) Save(ctx context.Context, u *model.UserRelation) (*mo
 	created, err := tx.UserRelation.Create().
 		SetActorID(u.ActorID).
 		SetTargetID(u.TargetID).
-		SetType(int32(u.Type)).
+		SetType(userrelation.Type(u.Type)).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -66,7 +86,7 @@ func (r *UserRelationRepo) Delete(ctx context.Context, u *model.UserRelation) (i
 	return tx.UserRelation.Delete().
 		Where(userrelation.ActorIDEQ(u.ActorID)).
 		Where(userrelation.TargetIDEQ(u.TargetID)).
-		Where(userrelation.TypeEQ(int32(u.Type))).
+		Where(userrelation.TypeEQ(userrelation.Type(u.Type))).
 		Exec(ctx)
 }
 
@@ -136,7 +156,8 @@ func (r *UserRelationRepo) getQuery(query *gen.UserRelationQuery, req *repo.User
 		))
 	}
 	if req.Type != nil {
-		query = query.Where(userrelation.TypeEQ(int32(*req.Type)))
+		dbVal, _ := enum.UserRelationTypeMap.ToEnum(*req.Type)
+		query = query.Where(userrelation.TypeEQ(userrelation.Type(dbVal)))
 	}
 	if req.WithActor {
 		query = query.WithActor()

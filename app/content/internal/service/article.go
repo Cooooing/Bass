@@ -6,16 +6,18 @@ import (
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"content/internal/data/client"
 
 	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/ent"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	articleent "content/internal/data/gen/article"
+	tagent "content/internal/data/gen/tag"
+	"content/internal/enum"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type ArticleService struct {
@@ -23,24 +25,22 @@ type ArticleService struct {
 
 	articleDomain *domain.ArticleDomain
 	articleRepo   repo.ArticleRepo
+	db            *gen.Client
 }
 
 func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleServiceServer(gs, s)
 }
 
-func (s *ArticleService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentArticleServiceHTTPServer(hs, s)
-}
-
 func NewArticleService(
-	baseService *BaseService,
 	articleDomain *domain.ArticleDomain,
 	articleRepo repo.ArticleRepo,
+	db *gen.Client,
 ) *ArticleService {
 	return &ArticleService{
 		articleDomain: articleDomain,
 		articleRepo:   articleRepo,
+		db:            db,
 	}
 }
 
@@ -62,19 +62,21 @@ func (s *ArticleService) AddArticle(ctx context.Context, req *v1.AddArticle_Requ
 			tags = append(tags, &model.Tag{Tag: &gen.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
-				Status:       int32(v1.TagStatus_TAG_STATUS_NORMAL),
+				Status:       tagent.StatusNormal,
 				ArticleCount: 1,
 			}})
 		}
 	}
 
+	dbStatus, _ := enum.ArticleStatusMap.ToEnum(article.Status)
+	dbType, _ := enum.ArticleTypeMap.ToEnum(article.Type)
 	save, err := s.articleDomain.Add(ctx, &model.Article{Article: &gen.Article{
 		Title:         article.Title,
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
 		RewardPoints:  article.RewardPoints,
-		Status:        int32(article.Status),
-		Type:          int32(article.Type),
+		Status:        articleent.Status(dbStatus),
+		Type:          articleent.Type(dbType),
 		BountyPoints:  util.If(article.Type != v1.ArticleType_ARTICLE_TYPE_QA, nil, article.BountyPoints),
 		Statement:     article.Statement,
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
@@ -114,20 +116,22 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 			tags = append(tags, &model.Tag{Tag: &gen.Tag{
 				Name:         tag.Name,
 				Description:  tag.Description,
-				Status:       int32(v1.TagStatus_TAG_STATUS_NORMAL),
+				Status:       tagent.StatusNormal,
 				ArticleCount: 1,
 			}})
 		}
 	}
 
+	dbStatus2, _ := enum.ArticleStatusMap.ToEnum(article.Status)
+	dbType2, _ := enum.ArticleTypeMap.ToEnum(article.Type)
 	update, err := s.articleDomain.UpdateDraft(ctx, &model.Article{Article: &gen.Article{
 		ID:            *req.Article.Id,
 		Title:         article.Title,
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
 		RewardPoints:  article.RewardPoints,
-		Status:        int32(article.Status),
-		Type:          int32(article.Type),
+		Status:        articleent.Status(dbStatus2),
+		Type:          articleent.Type(dbType2),
 		BountyPoints:  util.If(article.Type != v1.ArticleType_ARTICLE_TYPE_QA, nil, article.BountyPoints),
 		Statement:     article.Statement,
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
@@ -149,7 +153,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	// 只有作者可以发布草稿
-	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
+	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 		ArticleId: new(req.ArticleId),
 		Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 		CreatedBy: new(user.ID),
@@ -160,7 +164,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 	if !exist {
 		return nil, cerrors.ErrorBadRequest("article not exist")
 	}
-	err = s.articleDomain.Publish(ctx, s.Db, req.ArticleId)
+	err = s.articleDomain.Publish(ctx, s.db, req.ArticleId)
 	return &v1.PublishArticle_Reply{}, err
 }
 
@@ -170,7 +174,7 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	// 只有作者可以添加附言
-	exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
+	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 		ArticleId: new(req.ArticleId),
 		Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		CreatedBy: new(user.ID),
@@ -201,9 +205,9 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticle_Reque
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	err = ent.WithTx(ctx, s.Db, func(tx *gen.Client) error {
+	err = client.WithTx(ctx, s.db, func(tx *gen.Client) error {
 		// 只有作者可以删除草稿
-		exist, err := s.articleRepo.Exist(ctx, s.Db, &repo.ArticleGetReq{
+		exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
 			ArticleId: new(req.ArticleId),
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 			CreatedBy: new(user.ID),
@@ -214,7 +218,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticle_Reque
 		if !exist {
 			return cerrors.ErrorBadRequest("article not exist")
 		}
-		err = s.articleRepo.Delete(ctx, s.Db, req.ArticleId)
+		err = s.articleRepo.Delete(ctx, s.db, req.ArticleId)
 		return err
 	})
 	return &v1.DeleteArticle_Reply{}, err

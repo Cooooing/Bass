@@ -4,37 +4,55 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	basedata "content/internal/data/base"
-	"content/internal/data/ent/gen"
-	"content/internal/data/ent/gen/article"
-	"content/internal/data/ent/gen/articleactionrecord"
-	"content/internal/data/ent/gen/articlepostscript"
-	"content/internal/data/ent/gen/tag"
+	"content/internal/conf"
+	"content/internal/data/gen"
+	"content/internal/data/gen/article"
+	"content/internal/data/gen/articleactionrecord"
+	"content/internal/data/gen/articlepostscript"
+	"content/internal/data/gen/tag"
+	"content/internal/enum"
 	"context"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/samber/lo"
 )
 
 type ArticleRepo struct {
-	*basedata.BaseData
-	client         *gen.Client
+	conf           *conf.Bootstrap
+	log            *log.Helper
+	consul         *commonClient.ConsulClient
+	redis          *commonClient.RedisClient
+	nats           *commonClient.NatsClient
 	postscriptRepo repo.ArticlePostscriptRepo
 	commentRepo    repo.CommentRepo
 	domainRepo     repo.DomainRepo
 	tagRepo        repo.TagRepo
 }
 
-func NewArticleRepo(BaseData *basedata.BaseData, client *gen.Client, postscriptRepo repo.ArticlePostscriptRepo, commentRepo repo.CommentRepo, domainRepo repo.DomainRepo,
-	tagRepo repo.TagRepo) repo.ArticleRepo {
+func NewArticleRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+	postscriptRepo repo.ArticlePostscriptRepo,
+	commentRepo repo.CommentRepo,
+	domainRepo repo.DomainRepo,
+	tagRepo repo.TagRepo,
+) repo.ArticleRepo {
 	return &ArticleRepo{
-		BaseData:       BaseData,
-		client:         client,
+		conf:           conf,
+		log:            log.NewHelper(logger),
+		consul:         consul,
+		redis:          redis,
+		nats:           nats,
 		postscriptRepo: postscriptRepo,
 		commentRepo:    commentRepo,
 		domainRepo:     domainRepo,
@@ -153,8 +171,9 @@ func (r *ArticleRepo) UpdateContent(ctx context.Context, tx *gen.Client, article
 		Exec(ctx)
 }
 func (r *ArticleRepo) UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status v1.ArticleStatus) error {
+	dbStatus, _ := enum.ArticleStatusMap.ToEnum(status)
 	return tx.Article.UpdateOneID(articleId).
-		SetStatus(int32(status)).
+		SetStatus(article.Status(dbStatus)).
 		Exec(ctx)
 }
 
@@ -213,7 +232,7 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 		return nil, err
 	}
 
-	if first.Status != int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) {
+	if first.Status != article.StatusDrafts {
 		return nil, cerrors.ErrorBadRequest("only update draft")
 	}
 
@@ -225,7 +244,7 @@ func (r *ArticleRepo) Publish(ctx context.Context, tx *gen.Client, articleId int
 }
 
 func (r *ArticleRepo) Delete(ctx context.Context, tx *gen.Client, articleId int64) error {
-	return tx.Article.UpdateOneID(articleId).SetStatus(int32(v1.ArticleStatus_ARTICLE_STATUS_DELETED)).Exec(ctx)
+	return tx.Article.UpdateOneID(articleId).SetStatus(article.StatusDeleted).Exec(ctx)
 }
 
 func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (bool, error) {
@@ -237,7 +256,7 @@ func (r *ArticleRepo) Exist(ctx context.Context, tx *gen.Client, req *repo.Artic
 func (r *ArticleRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.ArticleGetReq) (*model.Article, error) {
 	query := tx.Article.Query().
 		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
-			q.Where(articlepostscript.StatusEQ(int32(v1.ArticlePostscriptStatus_ARTICLE_POSTSCRIPT_STATUS_NORMAL))).
+			q.Where(articlepostscript.StatusEQ(articlepostscript.StatusNormal)).
 				Order(gen.Asc(articlepostscript.FieldCreatedAt))
 		}).
 		WithTags()
@@ -308,13 +327,15 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		query = query.Where(article.HasTagsWith(tag.DomainIDEQ(*req.DomainId)))
 	}
 	if req.Status != nil {
-		query = query.Where(article.StatusEQ(int32(*req.Status)))
+		dbStatus, _ := enum.ArticleStatusMap.ToEnum(*req.Status)
+		query = query.Where(article.StatusEQ(article.Status(dbStatus)))
 	}
 	if req.AuthorId != nil {
 		query = query.Where(article.CreatedByEQ(*req.AuthorId))
 	}
 	if req.Type != nil {
-		query = query.Where(article.TypeEQ(int32(*req.Type)))
+		dbType, _ := enum.ArticleTypeMap.ToEnum(*req.Type)
+		query = query.Where(article.TypeEQ(article.Type(dbType)))
 	}
 	if req.QueryUserId != nil {
 		query = query.WithActionRecords(func(query *gen.ArticleActionRecordQuery) {

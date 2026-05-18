@@ -8,7 +8,7 @@ package main
 import (
 	"signal/internal/biz"
 	"signal/internal/conf"
-	"signal/internal/data"
+	"signal/internal/data/gen"
 	"signal/internal/server"
 	"signal/internal/service"
 

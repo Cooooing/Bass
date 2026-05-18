@@ -1,14 +1,26 @@
 package domain
 
-import domainbase "im/internal/biz/base"
+import (
+	"im/internal/conf"
+	"im/internal/data/gen"
+
+	"github.com/go-kratos/kratos/v2/log"
+)
 
 type ChatMessageDomain struct {
-	*domainbase.BaseDomain
+	conf *conf.Bootstrap
+	log  *log.Helper
+	db   *gen.Client
 }
 
 func NewChatMessageDomain(
-	base *domainbase.BaseDomain) (*ChatMessageDomain, error) {
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+) (*ChatMessageDomain, error) {
 	return &ChatMessageDomain{
-		BaseDomain: base,
+		conf: conf,
+		log:  log.NewHelper(logger),
+		db:   db,
 	}, nil
 }

@@ -3,7 +3,7 @@ package client
 import (
 	"common/pkg/client/db/driver"
 	"content/internal/conf"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
 	"context"
 	"fmt"
 

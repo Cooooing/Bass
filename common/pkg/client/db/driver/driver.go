@@ -416,7 +416,7 @@ func shouldSkip(funcName, file string) bool {
 		return true
 	}
 	// ent generated code: function names look like
-	//   github.com/project/internal/data/ent.(*UserCreate).Save
+	//   github.com/project/internal/data/gen/ent.(*UserCreate).Save
 	// The "/ent." pattern matches the package boundary reliably.
 	if strings.Contains(funcName, "/ent.") {
 		return true

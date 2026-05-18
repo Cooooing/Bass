@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"signal/internal/conf"
-	"signal/internal/data/ent/gen"
+	"signal/internal/data/gen"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"

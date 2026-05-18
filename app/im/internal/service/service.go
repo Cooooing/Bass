@@ -1,20 +1,13 @@
 package service
 
 import (
-	"common/pkg/client"
 	"common/pkg/util/server"
-	"im/internal/conf"
-	"im/internal/data/ent/gen"
 
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/wire"
 )
 
 // ServiceProviderSet is service providers.
 var ServiceProviderSet = wire.NewSet(
-	NewBaseService,
 	NewSystemService,
 	ProvideServices,
 
@@ -22,36 +15,12 @@ var ServiceProviderSet = wire.NewSet(
 	NewChatMessageService,
 )
 
-type BaseService struct {
-	Conf   *conf.Bootstrap
-	Log    *log.Helper
-	Db     *gen.Client
-	Consul *client.ConsulClient
-	Redis  *client.RedisClient
-}
-
-func NewBaseService(conf *conf.Bootstrap, logger log.Logger, db *gen.Client, consul *client.ConsulClient, redis *client.RedisClient) *BaseService {
-	return &BaseService{
-		Conf:   conf,
-		Log:    log.NewHelper(logger),
-		Db:     db,
-		Consul: consul,
-		Redis:  redis,
-	}
-}
-
-// Service 接口，每个 service 实现它
-type Service interface {
-	RegisterGrpc(gs *grpc.Server)
-	RegisterHttp(gs *http.Server)
-}
-
 func ProvideServices(
 	systemService *SystemService,
 	chatSessionService *ChatSessionService,
 	chatMessageService *ChatMessageService,
-) []server.Service {
-	return []server.Service{
+) []server.GrpcService {
+	return []server.GrpcService{
 		systemService,
 		chatSessionService,
 		chatMessageService,

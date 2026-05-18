@@ -4,7 +4,9 @@ import (
 	v1 "common/api/gen/content/v1"
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/util"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	"content/internal/data/gen/articleactionrecord"
+	"content/internal/enum"
 	"fmt"
 	"time"
 
@@ -80,7 +82,7 @@ func (a *Article) ParseRewardContent() (atUserNames map[string]struct{}) {
 // HasRewarded 判断文章是否打赏过，需要查询时使用 WithActionRecords 并按 UserId 过滤
 func (a *Article) HasRewarded() bool {
 	for _, record := range a.Edges.ActionRecords {
-		if record.Type == int32(v1.ArticleAction_ARTICLE_ACTION_REWARD) {
+		if record.Type == articleactionrecord.TypeReward {
 			return true
 		}
 	}
@@ -99,8 +101,6 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		UpdatedAt:               timestamppb.New(*a.UpdatedAt),
 		CreatedBy:               a.CreatedBy,
 		UpdatedBy:               a.UpdatedBy,
-		CreatedByName:           a.CreatedByName,
-		UpdatedByName:           a.UpdatedByName,
 		Id:                      a.ID,
 		Title:                   a.Title,
 		Content:                 a.Content,
@@ -110,8 +110,8 @@ func (a *Article) ConvertToRpc() *v1.Article {
 		HasPostscript:           a.HasPostscript,
 		HasReward:               util.IsNotNil(a.RewardPoints),
 		RewardPoints:            a.RewardPoints,
-		Status:                  v1.ArticleStatus(a.Status),
-		Type:                    v1.ArticleType(a.Type),
+		Status:                  enum.ArticleStatusMap.MustToProto(enum.ArticleStatus(a.Status)),
+		Type:                    enum.ArticleTypeMap.MustToProto(enum.ArticleType(a.Type)),
 		Statement:               a.Statement,
 		Commentable:             a.Commentable,
 		Anonymous:               a.Anonymous,

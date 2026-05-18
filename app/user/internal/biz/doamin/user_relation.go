@@ -4,34 +4,41 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
+	"common/pkg/util"
 	"context"
-	domainbase "user/internal/biz/base"
+	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/enum"
 )
 
 type UserRelationDomain struct {
-	*domainbase.BaseDomain
+	txRunner         base.TxRunner
+	eventPool        *util.EventPool
 	userRelationRepo repo.UserRelationRepo
 	userRepo         repo.UserRepo
 }
 
 func NewUserRelationDomain(
-	base *domainbase.BaseDomain,
+	txRunner base.TxRunner,
+	eventPool *util.EventPool,
 	userRelationRepo repo.UserRelationRepo,
 	userRepo repo.UserRepo,
 ) (*UserRelationDomain, error) {
 	return &UserRelationDomain{
-		BaseDomain:       base,
+		txRunner:         txRunner,
+		eventPool:        eventPool,
 		userRelationRepo: userRelationRepo,
 		userRepo:         userRepo,
 	}, nil
 }
 
 func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationType v1.UserRelationType, isAdd bool, actorId int64, targetId int64) error {
-	err := d.TxRunner(ctx, func(ctx context.Context) error {
+	err := d.txRunner(ctx, func(ctx context.Context) error {
 		var err error
 		var num int32
+
+		dbRelationType, _ := enum.UserRelationTypeMap.ToEnum(relationType)
 
 		exist, err := d.userRelationRepo.Exist(ctx, &repo.UserRelationGetReq{
 			ActorId:  new(actorId),
@@ -50,7 +57,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 			_, err = d.userRelationRepo.Save(ctx, &model.UserRelation{
 				ActorID:  actorId,
 				TargetID: targetId,
-				Type:     relationType,
+				Type:     dbRelationType,
 			})
 			if err != nil {
 				return err
@@ -60,7 +67,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 			_, err = d.userRelationRepo.Delete(ctx, &model.UserRelation{
 				ActorID:  actorId,
 				TargetID: targetId,
-				Type:     relationType,
+				Type:     dbRelationType,
 			})
 		}
 		switch relationType {
@@ -95,7 +102,7 @@ func (d *UserRelationDomain) UpdateUserRelation(ctx context.Context, relationTyp
 	//}
 	// 发送通知，仅关注通知
 	if relationType == v1.UserRelationType_USER_RELATION_TYPE_FOLLOW {
-		err = d.EventPool.Submit(func() {
+		err = d.eventPool.Submit(func() {
 			//err := d.Rabbitmq.Publish(constant.ExchangeUser.String(), util.If[string](isAdd, constant.RoutingKeyUserFollow.String(), constant.RoutingKeyUserUnfollow.String()),
 			//	&commonModel.Notification{
 			//		UUID:       uuid.New().String(),

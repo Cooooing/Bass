@@ -34,8 +34,8 @@ type TimeAuditMixin struct{}
 
 func (TimeAuditMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("created_at").Comment("创建时间").Default(time.Now).Nillable().Optional(),
-		field.Time("updated_at").Comment("更新时间").Default(time.Now).Nillable().Optional(),
+		field.Time("created_at").Comment("创建时间").Nillable().Optional(),
+		field.Time("updated_at").Comment("更新时间").Nillable().Optional(),
 	}
 }
 

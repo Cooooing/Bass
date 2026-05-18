@@ -5,7 +5,9 @@ import (
 	"context"
 	"fmt"
 	"notify/internal/conf"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
+
+	_ "notify/internal/data/gen/runtime"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"

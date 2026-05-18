@@ -2,25 +2,26 @@ package domain
 
 import (
 	"common/api/gen/common"
-	domainbase "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/ent"
-	"content/internal/data/ent/gen"
+	"content/internal/data/client"
+	"content/internal/data/gen"
 	"context"
 )
 
 type TagDomain struct {
-	*domainbase.BaseDomain
+	db *gen.Client
+
 	tagRepo repo.TagRepo
 }
 
 func NewTagDomain(
-	baseDomain *domainbase.BaseDomain,
-	tagRepo repo.TagRepo) *TagDomain {
+	db *gen.Client,
+	tagRepo repo.TagRepo,
+) *TagDomain {
 	return &TagDomain{
-		BaseDomain: baseDomain,
-		tagRepo:    tagRepo,
+		db:      db,
+		tagRepo: tagRepo,
 	}
 }
 
@@ -29,7 +30,7 @@ func (t *TagDomain) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag,
 		reply []*model.Tag
 		err   error
 	)
-	err = ent.WithTx(ctx, t.Db, func(tx *gen.Client) error {
+	err = client.WithTx(ctx, t.db, func(tx *gen.Client) error {
 		reply, err = t.tagRepo.Saves(ctx, tx, tags)
 		return err
 	})
@@ -41,7 +42,7 @@ func (t *TagDomain) Update(ctx context.Context, tag *model.Tag) (*model.Tag, err
 		reply *model.Tag
 		err   error
 	)
-	err = ent.WithTx(ctx, t.Db, func(tx *gen.Client) error {
+	err = client.WithTx(ctx, t.db, func(tx *gen.Client) error {
 		reply, err = t.tagRepo.Update(ctx, tx, tag)
 		return err
 	})
@@ -49,5 +50,5 @@ func (t *TagDomain) Update(ctx context.Context, tag *model.Tag) (*model.Tag, err
 }
 
 func (t *TagDomain) Page(ctx context.Context, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
-	return t.tagRepo.GetPage(ctx, t.Db, page, req)
+	return t.tagRepo.GetPage(ctx, t.db, page, req)
 }

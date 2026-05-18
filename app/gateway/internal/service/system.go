@@ -5,16 +5,24 @@ import (
 	"context"
 	"fmt"
 
+	"gateway/internal/conf"
+
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type SystemService struct {
 	v1.UnimplementedCommonSystemServiceServer
+	conf *conf.Bootstrap
+	log  *log.Helper
 }
 
-func NewSystemService(baseService *BaseService) *SystemService {
-	return &SystemService{}
+func NewSystemService(conf *conf.Bootstrap, logger log.Logger) *SystemService {
+	return &SystemService{
+		conf: conf,
+		log:  log.NewHelper(logger),
+	}
 }
 
 func (s *SystemService) RegisterGrpc(gs *grpc.Server) {
@@ -26,5 +34,5 @@ func (s *SystemService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *SystemService) Health(ctx context.Context, req *v1.HealthSystem_Request) (*v1.HealthSystem_Reply, error) {
-	return &v1.HealthSystem_Reply{Message: fmt.Sprintf("%s %s is ok", s.Conf.Server.Name, s.Conf.Server.Version)}, nil
+	return &v1.HealthSystem_Reply{Message: fmt.Sprintf("%s %s is ok", s.conf.Server.Name, s.conf.Server.Version)}, nil
 }

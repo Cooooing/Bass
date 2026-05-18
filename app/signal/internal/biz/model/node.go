@@ -4,7 +4,7 @@ import (
 	v1 "common/api/gen/signal/v1"
 	"common/pkg/util"
 	"math"
-	"signal/internal/data/ent/gen"
+	"signal/internal/data/gen"
 	"time"
 
 	"google.golang.org/protobuf/types/known/timestamppb"

@@ -12,14 +12,17 @@ import (
 	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/conf"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type UserService struct {
 	v1.UnimplementedUserUserServiceServer
-	*BaseService
+	conf                 *conf.Bootstrap
+	log                  *log.Helper
 	authenticationDomain *doamin.AuthenticationDomain
 	userDomain           *doamin.UserDomain
 	userRepo             repo.UserRepo
@@ -30,7 +33,7 @@ type UserService struct {
 	userCheckinRepo      repo.UserCheckinRepo
 }
 
-func NewUserService(baseService *BaseService, authenticationDomain *doamin.AuthenticationDomain,
+func NewUserService(conf *conf.Bootstrap, logger log.Logger, authenticationDomain *doamin.AuthenticationDomain,
 	userDomain *doamin.UserDomain,
 	userRepo repo.UserRepo,
 	userPreferencesRepo repo.UserPreferencesRepo,
@@ -39,7 +42,8 @@ func NewUserService(baseService *BaseService, authenticationDomain *doamin.Authe
 	userTfaRepo repo.UserTfaRepo,
 	userCheckinRepo repo.UserCheckinRepo) *UserService {
 	return &UserService{
-		BaseService:          baseService,
+		conf:                 conf,
+		log:                  log.NewHelper(logger),
 		authenticationDomain: authenticationDomain,
 		userDomain:           userDomain,
 		userRepo:             userRepo,

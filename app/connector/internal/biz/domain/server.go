@@ -6,17 +6,20 @@ import (
 	"common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/task"
-	domainbase "connector/internal/biz/base"
 	"connector/internal/biz/cache"
+	"connector/internal/conf"
 	"context"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type ServerDomain struct {
-	*domainbase.BaseDomain
+	conf         *conf.Bootstrap
+	log          *log.Helper
 	sessionCache cache.SessionCache
 	asynqCache   *task.AsynqCache
 	producer     *client.Producer
@@ -25,13 +28,15 @@ type ServerDomain struct {
 }
 
 func NewServerDomain(
-	baseDomain *domainbase.BaseDomain,
+	conf *conf.Bootstrap,
+	logger log.Logger,
 	sessionCache cache.SessionCache,
 	asynqCache *task.AsynqCache,
 	producer *client.Producer,
 ) (*ServerDomain, func()) {
 	s := &ServerDomain{
-		BaseDomain:   baseDomain,
+		conf:         conf,
+		log:          log.NewHelper(logger),
 		sessionCache: sessionCache,
 		asynqCache:   asynqCache,
 		producer:     producer,
@@ -42,7 +47,7 @@ func NewServerDomain(
 }
 
 func (d *ServerDomain) Register() error {
-	url := fmt.Sprintf("%s://%s/api/signal/v1/node/register", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
+	url := fmt.Sprintf("%s://%s/api/signal/v1/node/register", util.If(d.conf.Server.Mode == constant.Dev, "http", "https"), d.conf.Server.MasterUrl)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -59,7 +64,7 @@ func (d *ServerDomain) Register() error {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			d.Log.Errorf("failed to close body: %v", err)
+			d.log.Errorf("failed to close body: %v", err)
 		}
 	}(resp.Body)
 
@@ -75,7 +80,7 @@ func (d *ServerDomain) Register() error {
 }
 
 func (d *ServerDomain) Unregister() error {
-	url := fmt.Sprintf("%s://%s/api/signal/v1/node/unregister", util.If(d.Conf.Server.Mode == constant.Dev, "http", "https"), d.Conf.Server.MasterUrl)
+	url := fmt.Sprintf("%s://%s/api/signal/v1/node/unregister", util.If(d.conf.Server.Mode == constant.Dev, "http", "https"), d.conf.Server.MasterUrl)
 
 	req, err := http.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -92,7 +97,7 @@ func (d *ServerDomain) Unregister() error {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			d.Log.Errorf("failed to close body: %v", err)
+			d.log.Errorf("failed to close body: %v", err)
 		}
 	}(resp.Body)
 
@@ -106,17 +111,17 @@ func (d *ServerDomain) Run() {
 	f := func() {
 		err := d.Register()
 		if err != nil {
-			d.Log.Errorf("failed to register node: %v", err)
+			d.log.Errorf("failed to register node: %v", err)
 		}
 	}
 	interval := 60 * time.Second
-	if d.Conf.Server.Cluster {
+	if d.conf.Server.Cluster {
 		// 集群模式，使用分布式定时任务
-		registerTaskName := fmt.Sprintf("%s-%s", constant.TaskConnectorRegister.String(), d.Conf.Server.Key)
+		registerTaskName := fmt.Sprintf("%s-%s", constant.TaskConnectorRegister.String(), d.conf.Server.Key)
 		version := time.Now().UnixMilli()
 		err := d.asynqCache.SetAsynqTaskVersion(d.ctx, registerTaskName, version, interval*2)
 		if err != nil {
-			d.Log.Errorf("failed to set asynq task version: %v", err)
+			d.log.Errorf("failed to set asynq task version: %v", err)
 			return
 		}
 		err = d.producer.EnqueueContextTask(d.ctx, &model.Task{
@@ -125,7 +130,7 @@ func (d *ServerDomain) Run() {
 			Interval: interval,
 		})
 		if err != nil {
-			d.Log.Errorf("failed to register node: %v", err)
+			d.log.Errorf("failed to register node: %v", err)
 			return
 		}
 	} else {
@@ -147,6 +152,6 @@ func (d *ServerDomain) cleanup() {
 	d.ctx.Done()
 	err := d.Unregister()
 	if err != nil {
-		d.Log.Errorf("failed to unregister node: %v", err)
+		d.log.Errorf("failed to unregister node: %v", err)
 	}
 }

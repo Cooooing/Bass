@@ -4,19 +4,24 @@ import (
 	"bytes"
 	"context"
 	"image/png"
-	domainbase "user/internal/biz/base"
+	"user/internal/conf"
 
 	"github.com/MuhammadSaim/goavatar"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type UserDomain struct {
-	*domainbase.BaseDomain
+	conf *conf.Bootstrap
+	log  *log.Helper
 }
 
 func NewUserDomain(
-	base *domainbase.BaseDomain) (*UserDomain, error) {
+	conf *conf.Bootstrap,
+	logger log.Logger,
+) (*UserDomain, error) {
 	return &UserDomain{
-		BaseDomain: base,
+		conf: conf,
+		log:  log.NewHelper(logger),
 	}, nil
 }
 

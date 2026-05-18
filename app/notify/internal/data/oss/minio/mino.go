@@ -4,7 +4,7 @@ import (
 	"common/pkg/constant"
 	"context"
 	"notify/internal/biz/model"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 )
 
 type Minio struct {

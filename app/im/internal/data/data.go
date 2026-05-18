@@ -4,17 +4,14 @@ import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
 	"im/internal/conf"
-	database "im/internal/data/base"
-	"im/internal/data/client"
-	"im/internal/data/repo"
+	"im/internal/data/gen/client"
+	"im/internal/data/gen/repo"
 
 	"github.com/google/wire"
 )
 
 // DataProviderSet is data providers.
 var DataProviderSet = wire.NewSet(
-	database.NewBaseData,
-
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,

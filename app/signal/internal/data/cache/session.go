@@ -2,44 +2,61 @@ package cache
 
 import (
 	cerrors "common/api/gen/common/errors"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"context"
 	"errors"
 	"signal/internal/biz/cache"
-	"signal/internal/data/base"
+	"signal/internal/conf"
+	"signal/internal/data/gen"
 	"strconv"
 	"time"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/lo"
 )
 
 type SessionCache struct {
-	*base.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 
 	sessionExpire time.Duration
 }
 
-func NewSessionCache(baseData *base.BaseData) cache.SessionCache {
+func NewSessionCache(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) cache.SessionCache {
 	return &SessionCache{
-		BaseData:      baseData,
+		conf:          conf,
+		log:           log.NewHelper(logger),
+		db:            db,
+		consul:        consul,
+		redis:         redis,
 		sessionExpire: 3 * time.Minute,
 	}
 }
 
 func (c *SessionCache) SetTicket(ctx context.Context, ticket string, userId int64) error {
-	return c.Redis.Client.SetEx(ctx, constant.GetKeySignalTicket(ticket), userId, time.Minute).Err()
+	return c.redis.Client.SetEx(ctx, constant.GetKeySignalTicket(ticket), userId, time.Minute).Err()
 }
 
 func (c *SessionCache) GetTicket(ctx context.Context, ticket string) (int64, error) {
-	result, err := c.Redis.Client.Get(ctx, constant.GetKeySignalTicket(ticket)).Result()
+	result, err := c.redis.Client.Get(ctx, constant.GetKeySignalTicket(ticket)).Result()
 	if errors.Is(err, redis.Nil) {
 		return 0, cerrors.ErrorUnauthorized("ticket is invalid")
 	}
 	if err != nil {
 		return 0, err
 	}
-	err = c.Redis.Client.Del(ctx, constant.GetKeySignalTicket(ticket)).Err()
+	err = c.redis.Client.Del(ctx, constant.GetKeySignalTicket(ticket)).Err()
 	if err != nil {
 		return 0, err
 	}
@@ -52,7 +69,7 @@ func (c *SessionCache) GetTicket(ctx context.Context, ticket string) (int64, err
 
 func (c *SessionCache) SetSession(ctx context.Context, sessionId string, userId int64, nodeKey string) error {
 	key := constant.GetKeySignalSession(userId)
-	_, err := c.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err := c.redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
 		pipe.HSet(ctx, key, map[string]interface{}{
 			sessionId: nodeKey,
 		})
@@ -73,7 +90,7 @@ func (c *SessionCache) SetNodeSessionIds(ctx context.Context, nodeKey string, se
 	for _, sid := range sessionIds {
 		members = append(members, sid)
 	}
-	_, err := c.Redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err := c.redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
 		pipe.Del(ctx, key)
 		if len(sessionIds) > 0 {
 			pipe.SAdd(ctx, key, members...)
@@ -91,7 +108,7 @@ func (c *SessionCache) RenewalSessions(ctx context.Context, sessionIds []string)
 
 	// Pipeline 批量 Get session -> user
 	getCmds := make([]*redis.StringCmd, 0, len(sessionIds))
-	_, err = c.Redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err = c.redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
 		for _, sessionId := range sessionIds {
 			getCmds = append(getCmds, pipe.Get(ctx, constant.GetKeySignalSessionUser(sessionId)))
 		}
@@ -121,7 +138,7 @@ func (c *SessionCache) RenewalSessions(ctx context.Context, sessionIds []string)
 	}
 
 	// Pipeline 批量 Expire user routes
-	_, err = c.Redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err = c.redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
 		for id := range userIdsSet {
 			pipe.Expire(ctx, constant.GetKeySignalSession(id), c.sessionExpire)
 		}
@@ -144,7 +161,7 @@ func (c *SessionCache) GetNodeKeyByUserIds(ctx context.Context, userIds []int64)
 
 	// Pipeline 批量 HGETALL
 	cmds := make([]*redis.MapStringStringCmd, 0, len(userIds))
-	_, err = c.Redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err = c.redis.Client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
 		for _, uid := range userIds {
 			cmds = append(cmds, pipe.HGetAll(ctx, constant.GetKeySignalSession(uid)))
 		}

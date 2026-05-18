@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"time"
+	"user/internal/enum"
+)
 
 type User struct {
 	// 用户ID
@@ -23,8 +26,8 @@ type User struct {
 	Introduction *string
 	// 用户 MBTI 类型
 	Mbti *string
-	// 用户状态：1-正常，2-封禁，3-注销
-	Status *int32
+	// 用户状态
+	Status *enum.UserStatus
 	// 用户组名称
 	GroupName string
 	// 关注数

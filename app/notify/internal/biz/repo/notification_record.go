@@ -6,7 +6,7 @@ import (
 	v1 "common/api/gen/notify/v1"
 	"context"
 	"notify/internal/biz/model"
-	"notify/internal/data/ent/gen"
+	"notify/internal/data/gen"
 	"time"
 )
 
@@ -27,7 +27,6 @@ type NotificationRecordGetReq struct {
 	NotificationRecordIds []int64
 	NotificationMetaId    *int64
 	NotificationMetaIds   []int64
-	SenderId              *int64
 	ReceiverId            *int64
 	Status                *v1.NotificationStatus
 

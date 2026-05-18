@@ -4,26 +4,41 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	basedata "content/internal/data/base"
-	"content/internal/data/ent/gen"
-	"content/internal/data/ent/gen/comment"
+	"content/internal/conf"
+	"content/internal/data/gen"
+	commentent "content/internal/data/gen/comment"
+	"content/internal/enum"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type CommentRepo struct {
-	*basedata.BaseData
-	client *gen.Client
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
+	nats   *commonClient.NatsClient
 }
 
-func NewCommentRepo(BaseData *basedata.BaseData, client *gen.Client) repo.CommentRepo {
+func NewCommentRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+	nats *commonClient.NatsClient,
+) repo.CommentRepo {
 	return &CommentRepo{
-		BaseData: BaseData,
-		client:   client,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		consul: consul,
+		redis:  redis,
+		nats:   nats,
 	}
 }
 
@@ -34,14 +49,15 @@ func (r *CommentRepo) Save(ctx context.Context, client *gen.Client, comment *mod
 		SetLevel(comment.Level).
 		SetNillableParentID(comment.ParentID).
 		SetNillableReplyID(comment.ReplyID).
-		SetStatus(0).
+		SetStatus(commentent.StatusNormal).
 		Save(ctx)
 	return &model.Comment{Comment: save}, err
 }
 
 func (r *CommentRepo) UpdateStatus(ctx context.Context, client *gen.Client, commentId int64, status v1.CommentStatus) error {
+	dbStatus, _ := enum.CommentStatusMap.ToEnum(status)
 	_, err := client.Comment.UpdateOneID(commentId).
-		SetStatus(int32(status)).
+		SetStatus(commentent.Status(dbStatus)).
 		Save(ctx)
 	return err
 }
@@ -128,36 +144,37 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	}
 
 	if req.ParentId != nil {
-		query = query.Where(comment.ParentIDEQ(*req.ParentId))
+		query = query.Where(commentent.ParentIDEQ(*req.ParentId))
 	}
 	if req.ReplyId != nil {
-		query = query.Where(comment.ReplyIDEQ(*req.ReplyId))
+		query = query.Where(commentent.ReplyIDEQ(*req.ReplyId))
 	}
 	if req.CommentId != nil {
-		query = query.Where(comment.IDEQ(*req.CommentId))
+		query = query.Where(commentent.IDEQ(*req.CommentId))
 	}
 	if len(req.CommentIds) > 0 {
-		query = query.Where(comment.IDIn(req.CommentIds...))
+		query = query.Where(commentent.IDIn(req.CommentIds...))
 	}
 	if req.ArticleId != nil {
-		query = query.Where(comment.ArticleIDEQ(*req.ArticleId))
+		query = query.Where(commentent.ArticleIDEQ(*req.ArticleId))
 	}
 	if len(req.ArticleIds) > 0 {
-		query = query.Where(comment.ArticleIDIn(req.ArticleIds...))
+		query = query.Where(commentent.ArticleIDIn(req.ArticleIds...))
 	}
 	if req.CreatedBy != nil {
-		query = query.Where(comment.CreatedByEQ(*req.CreatedBy))
+		query = query.Where(commentent.CreatedByEQ(*req.CreatedBy))
 	}
 	if req.Status != nil {
-		query = query.Where(comment.StatusEQ(int32(*req.Status)))
+		dbStatus, _ := enum.CommentStatusMap.ToEnum(*req.Status)
+		query = query.Where(commentent.StatusEQ(commentent.Status(dbStatus)))
 	}
 	if req.Level != nil {
-		query = query.Where(comment.LevelEQ(*req.Level))
+		query = query.Where(commentent.LevelEQ(*req.Level))
 	}
 	if req.Order != nil {
 		switch *req.Order {
 		case int32(v1.CommentOrder_COMMENT_ORDER_NEWEST):
-			query = query.Order(gen.Desc(comment.FieldCreatedAt))
+			query = query.Order(gen.Desc(commentent.FieldCreatedAt))
 		case int32(v1.CommentOrder_COMMENT_ORDER_HOTTEST):
 			query = query.
 				Order(func(s *sql.Selector) {
@@ -171,7 +188,7 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 		}
 
 	} else {
-		query = query.Order(gen.Desc(comment.FieldCreatedAt))
+		query = query.Order(gen.Desc(commentent.FieldCreatedAt))
 	}
 	return query
 }
@@ -182,7 +199,7 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, client *gen.Cli
 	}
 	query := client.Comment.Query()
 	query = r.getQuery(query, req)
-	c, err := query.Order(gen.Desc(comment.FieldCreatedAt)).First(ctx)
+	c, err := query.Order(gen.Desc(commentent.FieldCreatedAt)).First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -201,23 +218,23 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, tx *gen.Client
 		Where(func(s *sql.Selector) {
 			// 子查询 SELECT article_id, MAX(created_at)
 			sub := sql.Select(
-				comment.FieldArticleID,
-				sql.As(sql.Max(comment.FieldCreatedAt), "latest_time"),
+				commentent.FieldArticleID,
+				sql.As(sql.Max(commentent.FieldCreatedAt), "latest_time"),
 			).
-				From(sql.Table(comment.Table)).
-				Where(sql.EQ(comment.FieldStatus, int32(v1.CommentStatus_COMMENT_STATUS_NORMAL))).
-				Where(sql.In(comment.FieldArticleID, articleIdsAny...)).
-				GroupBy(comment.FieldArticleID)
+				From(sql.Table(commentent.Table)).
+				Where(sql.EQ(commentent.FieldStatus, string(commentent.StatusNormal))).
+				Where(sql.In(commentent.FieldArticleID, articleIdsAny...)).
+				GroupBy(commentent.FieldArticleID)
 
 			// JOIN 子查询
 			s.Join(sub).On(
-				s.C(comment.FieldArticleID), sub.C(comment.FieldArticleID),
+				s.C(commentent.FieldArticleID), sub.C(commentent.FieldArticleID),
 			).On(
-				s.C(comment.FieldCreatedAt), sub.C("latest_time"),
+				s.C(commentent.FieldCreatedAt), sub.C("latest_time"),
 			)
 		}).
-		Where(comment.StatusEQ(int32(v1.CommentStatus_COMMENT_STATUS_NORMAL))).
-		Where(comment.ArticleIDIn(req.ArticleIds...)).
+		Where(commentent.StatusEQ(commentent.StatusNormal)).
+		Where(commentent.ArticleIDIn(req.ArticleIds...)).
 		All(ctx)
 	if err != nil {
 		return nil, err

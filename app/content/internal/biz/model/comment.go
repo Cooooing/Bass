@@ -4,7 +4,8 @@ import (
 	v1 "common/api/gen/content/v1"
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/util"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	"content/internal/enum"
 	"fmt"
 
 	"github.com/88250/lute/ast"
@@ -45,8 +46,6 @@ func (c *Comment) ConvertToRpc() *v1.Comment {
 		UpdatedAt:     timestamppb.New(*c.UpdatedAt),
 		CreatedBy:     c.CreatedBy,
 		UpdatedBy:     c.UpdatedBy,
-		CreatedByName: c.CreatedByName,
-		UpdatedByName: c.UpdatedByName,
 		Id:            c.ID,
 		ArticleId:     c.ArticleID,
 		Content:       c.Content,
@@ -54,7 +53,7 @@ func (c *Comment) ConvertToRpc() *v1.Comment {
 		Level:         c.Level,
 		ParentId:      c.ParentID,
 		ReplyId:       c.ReplyID,
-		Status:        v1.CommentStatus(c.Status),
+		Status:        enum.CommentStatusMap.MustToProto(enum.CommentStatus(c.Status)),
 		ThankCount:    c.ThankCount,
 		LikeCount:     c.LikeCount,
 		CollectCount:  c.CollectCount,
@@ -64,9 +63,8 @@ func (c *Comment) ConvertToRpc() *v1.Comment {
 	}
 	if c.WithArticle {
 		comment.Article = &v1.Article{
-			Title:         c.Edges.Article.Title,
-			CreatedBy:     c.Edges.Article.CreatedBy,
-			CreatedByName: c.Edges.Article.CreatedByName,
+			Title:     c.Edges.Article.Title,
+			CreatedBy: c.Edges.Article.CreatedBy,
 		}
 	}
 	return comment

@@ -3,7 +3,7 @@ package model
 import (
 	v1 "common/api/gen/content/v1"
 	"common/pkg/util"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
 	"fmt"
 
 	"github.com/88250/lute/ast"

@@ -10,11 +10,12 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-const testNatsURL = "nats://127.0.0.1:42222"
+const testNatsURL = "nats://192.168.100.10:30083"
 
 func newTestNats(t *testing.T) (*client.NatsClient, func()) {
 	t.Helper()
@@ -46,7 +47,7 @@ func TestPublishArticlePublished(t *testing.T) {
 	defer cleanup()
 
 	publishEvent(t, c, "content.article.published", &enums.Event{
-		EventId:     "test-article-001",
+		EventId:     uuid.New().String(),
 		Type:        enums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED,
 		Timestamp:   timestamppb.Now(),
 		ReceiverIds: []int64{1, 2, 3},
@@ -70,13 +71,12 @@ func TestPublishArticleLiked(t *testing.T) {
 		Type:        enums.EventType_EVENT_TYPE_ARTICLE_LIKED,
 		Timestamp:   timestamppb.Now(),
 		ReceiverIds: []int64{42},
-		Payload: &enums.Event_ArticleLiked{
-			ArticleLiked: &enums.ArticleLikedPayload{
-				SenderId:   7,
-				SenderName: "liker",
-				ArticleId:  1001,
-				AuthorId:   42,
-				Title:      "测试文章",
+		Payload: &enums.Event_ArticlePublished{
+			ArticlePublished: &enums.ArticlePublishedPayload{
+				SenderId:   1,
+				SenderName: "222",
+				ArticleId:  0,
+				Title:      "222",
 			},
 		},
 	})

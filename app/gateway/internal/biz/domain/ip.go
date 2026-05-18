@@ -6,30 +6,34 @@ import (
 	"fmt"
 	"strings"
 
-	domainbase "gateway/internal/biz/base"
+	"gateway/internal/conf"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/lionsoul2014/ip2region/binding/golang/service"
 )
 
 type IpDomain struct {
-	*domainbase.BaseDomain
+	conf      *conf.Bootstrap
+	log       *log.Helper
 	ip2region *service.Ip2Region
 }
 
 func NewIpDomain(
-	baseDomain *domainbase.BaseDomain) (*IpDomain,
+	conf *conf.Bootstrap,
+	logger log.Logger,
+) (*IpDomain,
 	func(),
 	error,
 ) {
 	var ip2region *service.Ip2Region
 	var cleanup func()
-	if baseDomain.Conf.Server.IpData.Enable {
-		v4Config, err := service.NewV4Config(service.VIndexCache, baseDomain.Conf.Server.IpData.Ipv4XdbPath,
+	if conf.Server.IpData.Enable {
+		v4Config, err := service.NewV4Config(service.VIndexCache, conf.Server.IpData.Ipv4XdbPath,
 			20)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to create v4 config: %s", err)
 		}
-		v6Config, err := service.NewV6Config(service.VIndexCache, baseDomain.Conf.Server.IpData.Ipv6XdbPath,
+		v6Config, err := service.NewV6Config(service.VIndexCache, conf.Server.IpData.Ipv6XdbPath,
 			20)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to create v6 config: %s", err)
@@ -41,8 +45,9 @@ func NewIpDomain(
 		cleanup = ip2region.Close
 	}
 	return &IpDomain{
-		BaseDomain: baseDomain,
-		ip2region:  ip2region,
+		conf:      conf,
+		log:       log.NewHelper(logger),
+		ip2region: ip2region,
 	}, cleanup, nil
 }
 

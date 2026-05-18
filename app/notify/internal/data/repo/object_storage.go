@@ -2,22 +2,39 @@ package repo
 
 import (
 	"common/api/gen/common"
+	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	database "notify/internal/data/base"
-	"notify/internal/data/ent/gen"
-	"notify/internal/data/ent/gen/objectstorage"
+	"notify/internal/conf"
+	"notify/internal/data/gen"
+	"notify/internal/data/gen/objectstorage"
+
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type ObjectStorageRepo struct {
-	*database.BaseData
+	conf   *conf.Bootstrap
+	log    *log.Helper
+	db     *gen.Client
+	consul *commonClient.ConsulClient
+	redis  *commonClient.RedisClient
 }
 
-func NewObjectStorageRepo(base *database.BaseData) repo.ObjectStorageRepo {
+func NewObjectStorageRepo(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	db *gen.Client,
+	consul *commonClient.ConsulClient,
+	redis *commonClient.RedisClient,
+) repo.ObjectStorageRepo {
 	return &ObjectStorageRepo{
-		BaseData: base,
+		conf:   conf,
+		log:    log.NewHelper(logger),
+		db:     db,
+		consul: consul,
+		redis:  redis,
 	}
 }
 

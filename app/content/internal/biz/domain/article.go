@@ -5,16 +5,19 @@ import (
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	userv1 "common/api/gen/user/v1"
+	"common/pkg/client/rpc"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"content/internal/data/client"
 
 	"common/pkg/util/str"
-	domainbase "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/ent"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	articleent "content/internal/data/gen/article"
+	"content/internal/data/gen/articlepostscript"
+	"content/internal/enum"
 	"context"
 
 	"github.com/samber/lo"
@@ -22,7 +25,9 @@ import (
 )
 
 type ArticleDomain struct {
-	*domainbase.BaseDomain
+	db         *gen.Client
+	userClient *rpc.UserClient
+
 	articleRepo      repo.ArticleRepo
 	postscriptRepo   repo.ArticlePostscriptRepo
 	actionRecordRepo repo.ArticleActionRecordRepo
@@ -33,7 +38,8 @@ type ArticleDomain struct {
 }
 
 func NewArticleDomain(
-	base *domainbase.BaseDomain,
+	db *gen.Client,
+	userClient *rpc.UserClient,
 	articleRepo repo.ArticleRepo,
 	postscriptRepo repo.ArticlePostscriptRepo,
 	actionRecordRepo repo.ArticleActionRecordRepo,
@@ -46,7 +52,8 @@ func NewArticleDomain(
 		return nil, err
 	}
 	return &ArticleDomain{
-		BaseDomain:       base,
+		db:               db,
+		userClient:       userClient,
 		articleRepo:      articleRepo,
 		postscriptRepo:   postscriptRepo,
 		actionRecordRepo: actionRecordRepo,
@@ -65,14 +72,14 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 		err  error
 	)
 	status := article.Status
-	article.Status = int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) // 默认均为草稿
-	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	article.Status = articleent.StatusDrafts // 默认均为草稿
+	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		save, err = d.articleRepo.Save(ctx, tx, article, tags)
 		if err != nil {
 			return err
 		}
 		// 正常文章，进行发布
-		if status == int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) {
+		if enum.ArticleStatus(status) == enum.ArticleStatusNormal {
 			err = d.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -85,12 +92,12 @@ func (d *ArticleDomain) Add(ctx context.Context, article *model.Article, tags []
 
 func (d *ArticleDomain) AddPostscript(ctx context.Context, articleId int64, content string) (*model.ArticlePostscript, error) {
 	var save *model.ArticlePostscript
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		var err error
 		save, err = d.postscriptRepo.Save(ctx, tx, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
 			ArticleID: articleId,
 			Content:   content,
-			Status:    int32(v1.ArticlePostscriptStatus_ARTICLE_POSTSCRIPT_STATUS_NORMAL),
+			Status:    articlepostscript.StatusNormal,
 		}})
 		if err != nil {
 			return err
@@ -112,8 +119,8 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 		err  error
 	)
 	status := article.Status
-	article.Status = int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) // 默认均为草稿
-	err = ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	article.Status = articleent.StatusDrafts // 默认均为草稿
+	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		exist, err := d.articleRepo.Exist(ctx, tx, &repo.ArticleGetReq{
 			ArticleId: new(article.ID),
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
@@ -131,7 +138,7 @@ func (d *ArticleDomain) UpdateDraft(ctx context.Context, article *model.Article,
 			return err
 		}
 		// 正常文章，进行发布
-		if status == int32(v1.ArticleStatus_ARTICLE_STATUS_NORMAL) {
+		if enum.ArticleStatus(status) == enum.ArticleStatusNormal {
 			err = d.Publish(ctx, tx, save.ID)
 			if err != nil {
 				return err
@@ -150,7 +157,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//}
 
 	//var a *model.Article
-	//err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	//err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
 	//	var err error
 	//	if active {
 	//		a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
@@ -178,7 +185,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//	return err
 	//})
 	//if active {
-	//err = d.EventPool.Submit(func() {
+	//err = d.eventPool.Submit(func() {
 	//	switch action {
 	//	case v1.ArticleAction_ARTICLE_ACTION_LIKE:
 	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
@@ -193,7 +200,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 	//		})
 	//		if err != nil {
-	//			d.Log.Errorf("publish article like event error: %v", err)
+	//			d.log.Errorf("publish article like event error: %v", err)
 	//			return
 	//		}
 	//	case v1.ArticleAction_ARTICLE_ACTION_THANK:
@@ -209,7 +216,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 	//		})
 	//		if err != nil {
-	//			d.Log.Errorf("publish article thank event error: %v", err)
+	//			d.log.Errorf("publish article thank event error: %v", err)
 	//			return
 	//		}
 	//	case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
@@ -225,7 +232,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 	//		})
 	//		if err != nil {
-	//			d.Log.Errorf("publish article collect event error: %v", err)
+	//			d.log.Errorf("publish article collect event error: %v", err)
 	//			return
 	//		}
 	//	case v1.ArticleAction_ARTICLE_ACTION_WATCH:
@@ -241,7 +248,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 	//		})
 	//		if err != nil {
-	//			d.Log.Errorf("publish article watch event error: %v", err)
+	//			d.log.Errorf("publish article watch event error: %v", err)
 	//			return
 	//		}
 	//	case v1.ArticleAction_ARTICLE_ACTION_REWARD:
@@ -257,7 +264,7 @@ func (d *ArticleDomain) Action(ctx context.Context, articleId int64, userId int6
 	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 	//		})
 	//		if err != nil {
-	//			d.Log.Errorf("publish article watch event error: %v", err)
+	//			d.log.Errorf("publish article watch event error: %v", err)
 	//			return
 	//		}
 	//	default:
@@ -286,7 +293,7 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 	//if err != nil {
 	//	return err
 	//}
-	//err = d.EventPool.Submit(func() {
+	//err = d.eventPool.Submit(func() {
 	//
 	//	// 广播发布文章事件
 	//	err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
@@ -301,7 +308,7 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 	//		Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
 	//	})
 	//	if err != nil {
-	//		d.Log.Errorf("publish a publish event error: %v", err)
+	//		d.log.Errorf("publish a publish event error: %v", err)
 	//		return
 	//	}
 	//
@@ -320,7 +327,7 @@ func (d *ArticleDomain) Publish(ctx context.Context, tx *gen.Client, articleId i
 	//			},
 	//		})
 	//		if err != nil {
-	//			d.Log.Errorf("publish a at event error: %v", err)
+	//			d.log.Errorf("publish a at event error: %v", err)
 	//			return
 	//		}
 	//	}
@@ -333,7 +340,7 @@ func (d *ArticleDomain) AcceptAnswer(ctx context.Context, articleId int64, comme
 	if !ok {
 		return cerrors.ErrorUnauthorized("user not login")
 	}
-	err := ent.WithTx(ctx, d.Db, func(tx *gen.Client) error {
+	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
 		a, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 		if err != nil {
 			return err
@@ -364,7 +371,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 		reply *model.Article
 		err   error
 	)
-	reply, err = d.articleRepo.GetOne(ctx, d.Db, &repo.ArticleGetReq{
+	reply, err = d.articleRepo.GetOne(ctx, d.db, &repo.ArticleGetReq{
 		ArticleId: new(articleId),
 	})
 	if err != nil {
@@ -378,11 +385,11 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	 * 草稿状态的只能查看自己
 	 */
 
-	if reply.Status == int32(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS) && !ok && *reply.CreatedBy != user.ID {
+	if enum.ArticleStatus(reply.Status) == enum.ArticleStatusDrafts && !ok && *reply.CreatedBy != user.ID {
 		return nil, cerrors.ErrorUnauthorized("login required to view drafts")
 	}
 
-	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.Db, &repo.CommentGetReq{ArticleId: new(reply.ID)})
+	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.db, &repo.CommentGetReq{ArticleId: new(reply.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -391,7 +398,7 @@ func (d *ArticleDomain) GetOne(ctx context.Context, articleId int64) (*model.Art
 	if lastReplyComment != nil {
 		userIds = append(userIds, *lastReplyComment.CreatedBy)
 	}
-	userAuthorsMap, err := d.UserClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: userIds}})
+	userAuthorsMap, err := d.userClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: userIds}})
 	if err != nil {
 		return nil, err
 	}
@@ -411,7 +418,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *common.PageRequest, req 
 		err       error
 	)
 	req.IsSummary = true
-	list, pageReply, err = d.articleRepo.GetPage(ctx, d.Db, page, req)
+	list, pageReply, err = d.articleRepo.GetPage(ctx, d.db, page, req)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -424,7 +431,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *common.PageRequest, req 
 
 	lastCommentMap := make(map[int64]*model.Comment)
 	if len(articleIds) > 0 {
-		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.Db, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIds)})
+		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIds)})
 		if err != nil {
 			return nil, nil, err
 		}
@@ -435,7 +442,7 @@ func (d *ArticleDomain) Page(ctx context.Context, page *common.PageRequest, req 
 
 	userAuthorsMap := &userv1.GetMapUser_Reply{}
 	if len(userIds) > 0 {
-		userAuthorsMap, err = d.UserClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userAuthorsMap, err = d.userClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
 		if err != nil {
 			return nil, nil, err
 		}

@@ -7,11 +7,12 @@ import (
 	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/ent/gen"
+	"content/internal/data/gen"
+	domainent "content/internal/data/gen/domain"
+	"content/internal/enum"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 type DomainService struct {
@@ -23,12 +24,7 @@ func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentDomainServiceServer(gs, s)
 }
 
-func (s *DomainService) RegisterHttp(hs *http.Server) {
-	v1.RegisterContentDomainServiceHTTPServer(hs, s)
-}
-
 func NewDomainService(
-	baseService *BaseService,
 	domainDomain *domain.DomainDomain,
 ) *DomainService {
 	return &DomainService{
@@ -39,10 +35,11 @@ func NewDomainService(
 func (s *DomainService) Adds(ctx context.Context, req *v1.AddsDomain_Request) (*v1.AddsDomain_Reply, error) {
 	domains := make([]*model.Domain, len(req.Domains))
 	for i, d := range req.Domains {
+		domainStatus, _ := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(d.Status, v1.DomainStatus_DOMAIN_STATUS_NORMAL))
 		domains[i] = &model.Domain{Domain: &gen.Domain{
 			Name:        d.Name,
 			Description: d.Description,
-			Status:      int32(util.DerefOrDefault(d.Status, v1.DomainStatus_DOMAIN_STATUS_NORMAL)),
+			Status:      domainent.Status(domainStatus),
 			URL:         d.Url,
 			Icon:        d.Icon,
 			IsNav:       d.IsNav,
@@ -56,10 +53,11 @@ func (s *DomainService) Adds(ctx context.Context, req *v1.AddsDomain_Request) (*
 }
 
 func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Request) (*v1.UpdateDomain_Reply, error) {
+	domainStatus, _ := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(req.Domain.Status, v1.DomainStatus_DOMAIN_STATUS_NORMAL))
 	data, err := s.domainDomain.Update(ctx, &model.Domain{Domain: &gen.Domain{
 		Name:        req.Domain.Name,
 		Description: req.Domain.Description,
-		Status:      int32(util.DerefOrDefault(req.Domain.Status, v1.DomainStatus_DOMAIN_STATUS_NORMAL)),
+		Status:      domainent.Status(domainStatus),
 		URL:         req.Domain.Url,
 		Icon:        req.Domain.Icon,
 		IsNav:       req.Domain.IsNav,

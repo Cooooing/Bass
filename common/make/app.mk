@@ -25,7 +25,7 @@ tidy:
 .PHONY: config-clean
 config-clean:
 	@echo "clean internal proto files products..."
-	@cd $(APP_DIR) && find . -type f \( -name "*.pb.go" -o -name "*.pb.validate.go" -o -name "*.pb.gw.go" \) -delete 2>/dev/null || true
+	@cd $(APP_DIR) && find . -type f \( -name "*.pb.go" -o -name "*.pb.validate.go" -o -name "*.pb.gw.go" \) -delete || true
 
 .PHONY: config
 config: config-clean
@@ -39,7 +39,7 @@ config: config-clean
 .PHONY: wire-clean
 wire-clean:
 	@echo "clean go wire products..."
-	@cd $(APP_DIR)/cmd && find . -type f -name "wire_gen.go" -delete 2>/dev/null || true
+	@cd $(APP_DIR)/cmd && find . -type f -name "wire_gen.go" -delete || true
 
 .PHONY: wire
 wire: wire-clean

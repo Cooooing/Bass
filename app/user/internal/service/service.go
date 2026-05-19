@@ -19,14 +19,14 @@ var ServiceProviderSet = wire.NewSet(
 
 func ProvideServices(
 	systemService *SystemService,
-	authenticationService *AuthService,
+	authService *AuthService,
 	userService *UserService,
 	userRelationService *UserRelationService,
 	twoFactorAuthService *TwoFactorAuthService,
 ) []server.GrpcService {
 	return []server.GrpcService{
 		systemService,
-		authenticationService,
+		authService,
 		userService,
 		userRelationService,
 		twoFactorAuthService,

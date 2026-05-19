@@ -28,7 +28,7 @@ import (
 var NoAuthEndpoints = map[string]struct{}{
 	"^.*/v1/system/health$": {},
 
-	"^/user/v1/authentication/.*$":                {},
+	"^/user/v1/auth/.*$":                          {},
 	"^/user/v1/oss/qiniu/uploadCallback$":         {},
 	"^/user/v1/oss/qiniu/incrementAuditCallback$": {},
 

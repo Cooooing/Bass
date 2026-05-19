@@ -6,6 +6,7 @@ APP_DIR := $(ROOT_DIR)/app
 # Auto-discover modules that have a Makefile
 #SERVERS := $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
 SERVERS := bbs user content notify
+BFF_SERVERS := bbs
 
 IGNORE_ERROR ?= 1
 
@@ -49,6 +50,14 @@ tidy build config config-clean wire wire-clean ent ent-clean:
 		$(MAKE) -C $(APP_DIR)/$$module $@ IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
+# BFF-only targets: only iterate BFF services
+.PHONY: doc doc-clean
+doc doc-clean:
+	@for module in $(BFF_SERVERS); do \
+		echo "===> [$$module] $@"; \
+		$(MAKE) -C $(APP_DIR)/$$module $@ IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
 # help
 .PHONY: help
 help:
@@ -59,6 +68,7 @@ help:
 	@echo "  make wire     - generate wire codes"
 	@echo "  make ent      - generate ent codes"
 	@echo "  make api      - generate proto API codes"
+	@echo "  make doc      - generate BFF OpenAPI docs"
 	@echo "  make gen      - generate all codes"
 	@echo "  make build    - build all services"
 	@echo "  make clean    - clean all generated files"
@@ -66,4 +76,5 @@ help:
 	@echo ""
 	@echo "Single module:"
 	@echo "  make user gen       - gen for user module only"
+	@echo "  make bbs doc        - gen openapi for bbs only"
 	@echo "  make user SUBTARGET=build - build user module"

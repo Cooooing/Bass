@@ -21,19 +21,19 @@ import (
 
 type UserService struct {
 	v1.UnimplementedUserUserServiceServer
-	conf                  *conf.Bootstrap
-	log                   *log.Helper
-	authenticationUsecase *usecase.AuthUsecase
-	userUsecase           *usecase.UserUsecase
-	userRepo              repo.UserRepo
-	userPreferencesRepo   repo.UserPreferencesRepo
-	userPrivacyRepo       repo.UserPrivacyRepo
-	userLocationRepo      repo.UserLocationRepo
-	userTfaRepo           repo.UserTfaRepo
-	userCheckinRepo       repo.UserCheckinRepo
+	conf                *conf.Bootstrap
+	log                 *log.Helper
+	authUsecase         *usecase.AuthUsecase
+	userUsecase         *usecase.UserUsecase
+	userRepo            repo.UserRepo
+	userPreferencesRepo repo.UserPreferencesRepo
+	userPrivacyRepo     repo.UserPrivacyRepo
+	userLocationRepo    repo.UserLocationRepo
+	userTfaRepo         repo.UserTfaRepo
+	userCheckinRepo     repo.UserCheckinRepo
 }
 
-func NewUserService(conf *conf.Bootstrap, logger log.Logger, authenticationUsecase *usecase.AuthUsecase,
+func NewUserService(conf *conf.Bootstrap, logger log.Logger, authUsecase *usecase.AuthUsecase,
 	userUsecase *usecase.UserUsecase,
 	userRepo repo.UserRepo,
 	userPreferencesRepo repo.UserPreferencesRepo,
@@ -42,16 +42,16 @@ func NewUserService(conf *conf.Bootstrap, logger log.Logger, authenticationUseca
 	userTfaRepo repo.UserTfaRepo,
 	userCheckinRepo repo.UserCheckinRepo) *UserService {
 	return &UserService{
-		conf:                  conf,
-		log:                   log.NewHelper(logger),
-		authenticationUsecase: authenticationUsecase,
-		userUsecase:           userUsecase,
-		userRepo:              userRepo,
-		userPreferencesRepo:   userPreferencesRepo,
-		userPrivacyRepo:       userPrivacyRepo,
-		userLocationRepo:      userLocationRepo,
-		userTfaRepo:           userTfaRepo,
-		userCheckinRepo:       userCheckinRepo,
+		conf:                conf,
+		log:                 log.NewHelper(logger),
+		authUsecase:         authUsecase,
+		userUsecase:         userUsecase,
+		userRepo:            userRepo,
+		userPreferencesRepo: userPreferencesRepo,
+		userPrivacyRepo:     userPrivacyRepo,
+		userLocationRepo:    userLocationRepo,
+		userTfaRepo:         userTfaRepo,
+		userCheckinRepo:     userCheckinRepo,
 	}
 }
 

@@ -11,7 +11,7 @@ clean: ent-clean
 .PHONY: ent-clean
 ent-clean:
 	@echo "clean go ent products..."
-	@rm -rf $(APP_DIR)/internal/data/gen 2>/dev/null || true
+	@rm -rf $(APP_DIR)/internal/data/gen || true
 
 # generate ent
 .PHONY: ent

@@ -22,16 +22,16 @@ type AuthService struct {
 	conf *conf.Bootstrap
 	log  *log.Helper
 	*VerifyService
-	authenticationUsecase *usecase.AuthUsecase
-	userRepo              repo.UserRepo
-	userPreferencesRepo   repo.UserPreferencesRepo
-	userPrivacyRepo       repo.UserPrivacyRepo
-	userLocationRepo      repo.UserLocationRepo
-	userTfaRepo           repo.UserTfaRepo
-	userCheckinRepo       repo.UserCheckinRepo
+	authUsecase         *usecase.AuthUsecase
+	userRepo            repo.UserRepo
+	userPreferencesRepo repo.UserPreferencesRepo
+	userPrivacyRepo     repo.UserPrivacyRepo
+	userLocationRepo    repo.UserLocationRepo
+	userTfaRepo         repo.UserTfaRepo
+	userCheckinRepo     repo.UserCheckinRepo
 }
 
-func NewAuthService(conf *conf.Bootstrap, logger log.Logger, verifyService *VerifyService, authenticationUsecase *usecase.AuthUsecase,
+func NewAuthService(conf *conf.Bootstrap, logger log.Logger, verifyService *VerifyService, authUsecase *usecase.AuthUsecase,
 	userRepo repo.UserRepo,
 	userPreferencesRepo repo.UserPreferencesRepo,
 	userPrivacyRepo repo.UserPrivacyRepo,
@@ -39,16 +39,16 @@ func NewAuthService(conf *conf.Bootstrap, logger log.Logger, verifyService *Veri
 	userTfaRepo repo.UserTfaRepo,
 	userCheckinRepo repo.UserCheckinRepo) *AuthService {
 	return &AuthService{
-		conf:                  conf,
-		log:                   log.NewHelper(logger),
-		VerifyService:         verifyService,
-		authenticationUsecase: authenticationUsecase,
-		userRepo:              userRepo,
-		userPreferencesRepo:   userPreferencesRepo,
-		userPrivacyRepo:       userPrivacyRepo,
-		userLocationRepo:      userLocationRepo,
-		userTfaRepo:           userTfaRepo,
-		userCheckinRepo:       userCheckinRepo,
+		conf:                conf,
+		log:                 log.NewHelper(logger),
+		VerifyService:       verifyService,
+		authUsecase:         authUsecase,
+		userRepo:            userRepo,
+		userPreferencesRepo: userPreferencesRepo,
+		userPrivacyRepo:     userPrivacyRepo,
+		userLocationRepo:    userLocationRepo,
+		userTfaRepo:         userTfaRepo,
+		userCheckinRepo:     userCheckinRepo,
 	}
 }
 
@@ -68,7 +68,7 @@ func (s *AuthService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailAu
 	if !s.VerifyPassword(req.Password) {
 		return nil, cerrors.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
-	code, token, err := s.authenticationUsecase.RegisterEmail(ctx, &model.User{
+	code, token, err := s.authUsecase.RegisterEmail(ctx, &model.User{
 		Email:    &req.Email,
 		Password: req.Password,
 		Name:     req.Name,
@@ -78,7 +78,7 @@ func (s *AuthService) RegisterEmail(ctx context.Context, req *v1.RegisterEmailAu
 }
 
 func (s *AuthService) RegisterEmailVerify(ctx context.Context, req *v1.RegisterEmailVerifyAuth_Request) (rsp *v1.RegisterEmailVerifyAuth_Reply, err error) {
-	err = s.authenticationUsecase.RegisterEmailVerify(ctx, req.CodeToken, req.Code)
+	err = s.authUsecase.RegisterEmailVerify(ctx, req.CodeToken, req.Code)
 	return &v1.RegisterEmailVerifyAuth_Reply{}, err
 }
 
@@ -92,7 +92,7 @@ func (s *AuthService) RegisterPhone(ctx context.Context, req *v1.RegisterPhoneAu
 	if !s.VerifyPassword(req.Password) {
 		return nil, cerrors.ErrorBadRequest("password must be 6-64 characters long, contain at least one letter and one number, and may include letters, numbers, and special symbols @#$%^&*!()_+-=[]{};:'\",.<>/?`~|\\")
 	}
-	code, token, err := s.authenticationUsecase.RegisterPhone(ctx, &model.User{
+	code, token, err := s.authUsecase.RegisterPhone(ctx, &model.User{
 		Phone:    &req.Phone,
 		Password: req.Password,
 		Name:     req.Name,
@@ -102,7 +102,7 @@ func (s *AuthService) RegisterPhone(ctx context.Context, req *v1.RegisterPhoneAu
 }
 
 func (s *AuthService) RegisterPhoneVerify(ctx context.Context, req *v1.RegisterPhoneVerifyAuth_Request) (rsp *v1.RegisterPhoneVerifyAuth_Reply, err error) {
-	err = s.authenticationUsecase.RegisterPhoneVerify(ctx, req.CodeToken, req.Code)
+	err = s.authUsecase.RegisterPhoneVerify(ctx, req.CodeToken, req.Code)
 	return &v1.RegisterPhoneVerifyAuth_Reply{}, err
 }
 
@@ -122,7 +122,7 @@ func (s *AuthService) ExistUsername(ctx context.Context, req *v1.ExistUsernameAu
 }
 
 func (s *AuthService) LoginAccount(ctx context.Context, req *v1.LoginAccountAuth_Request) (rsp *v1.LoginAccountAuth_Reply, err error) {
-	token, user, err := s.authenticationUsecase.LoginAccount(ctx, req.Account, req.Password)
+	token, user, err := s.authUsecase.LoginAccount(ctx, req.Account, req.Password)
 	if err != nil {
 		return nil, cerrors.ErrorBadRequest("account not exist or password is incorrect").WithCause(err)
 	}
@@ -137,6 +137,6 @@ func (s *AuthService) Logout(ctx context.Context, req *v1.LogoutAuth_Request) (r
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	err = s.authenticationUsecase.Logout(ctx, token)
+	err = s.authUsecase.Logout(ctx, token)
 	return &v1.LogoutAuth_Reply{}, err
 }

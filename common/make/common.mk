@@ -8,6 +8,7 @@ COMMON_DIR := $(ROOT_DIR)/common
 
 # Proto paths (shared API protos)
 PROTO_DIR := $(COMMON_DIR)/api/app
+COMMON_PROTO_DIR := $(COMMON_DIR)/api/app/common
 PROTO_GEN_DIR := $(COMMON_DIR)/api/gen
 PROTO_THIRD_PARTY_DIR := $(COMMON_DIR)/api/third_party
 COMMON_PROTO_FILES := $(shell find $(COMMON_DIR) -type f -name "*.proto" | sort)
@@ -32,7 +33,7 @@ init:
 .PHONY: api-clean
 api-clean:
 	@echo "clean API proto files..."
-	@cd $(PROTO_GEN_DIR) && find . -type f ! -name ".gitkeep" -delete 2>/dev/null || true && find . -type d -empty -delete 2>/dev/null || true
+	@cd $(PROTO_GEN_DIR) && find . -type f ! -name ".gitkeep" -delete || true && find . -type d -empty -delete || true
 
 .PHONY: api
 api: api-clean
@@ -42,7 +43,6 @@ api: api-clean
 	       --go-grpc_out=paths=source_relative:$(PROTO_GEN_DIR) \
 	       --go-http_out=paths=source_relative:$(PROTO_GEN_DIR) \
 	       --go-errors_out=paths=source_relative:$(PROTO_GEN_DIR) \
-	       --openapi_out=fq_schema_naming=true,naming=proto,default_response=false:$(PROTO_GEN_DIR) \
 	       --validate_out=lang=go,paths=source_relative:$(PROTO_GEN_DIR) \
 	       $(COMMON_PROTO_FILES)
 

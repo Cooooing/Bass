@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1;
+
+import "openapi/v3/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1;v1";
+
+// BBS 社区服务 API 文档元信息
+option (openapi.v3.document) = {
+  info: {
+    title: "BBS 社区服务 API"
+    description: "BBS 社区服务接口文档，包含帖子、版块等社区功能"
+    version: "1.0"
+    contact: {
+      name: "Bass Team"
+    }
+  }
+  tags: {
+    name: "BbsService"
+    description: "BBS 社区服务"
+  }
+  external_docs: {
+    description: "项目文档"
+    url: "https://docs.example.com/bass"
+  }
+};

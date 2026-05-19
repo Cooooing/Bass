@@ -5,8 +5,11 @@ import (
 	"common/api/gen/common/enums"
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/client/rpc"
+	utilent "common/pkg/util/ent"
 	"context"
+	"errors"
 	"html/template"
+	base "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase/sender"
@@ -34,7 +37,7 @@ type DeliveryRequest struct {
 // NotifyUsecase 纯投递服务
 type NotifyUsecase struct {
 	log                      *log.Helper
-	db                       *gen.Client
+	tx                       base.Tx
 	notificationMetaRepo     repo.NotificationMetaRepo
 	notificationRecordRepo   repo.NotificationRecordRepo
 	notificationTemplateRepo repo.NotificationTemplateRepo
@@ -46,7 +49,7 @@ type NotifyUsecase struct {
 
 func NewNotifyUsecase(
 	logger log.Logger,
-	db *gen.Client,
+	tx base.Tx,
 	notificationMetaRepo repo.NotificationMetaRepo,
 	notificationRecordRepo repo.NotificationRecordRepo,
 	notificationTemplateRepo repo.NotificationTemplateRepo,
@@ -57,7 +60,7 @@ func NewNotifyUsecase(
 ) *NotifyUsecase {
 	return &NotifyUsecase{
 		log:                      log.NewHelper(logger),
-		db:                       db,
+		tx:                       tx,
 		notificationMetaRepo:     notificationMetaRepo,
 		notificationRecordRepo:   notificationRecordRepo,
 		notificationTemplateRepo: notificationTemplateRepo,
@@ -81,8 +84,12 @@ func (s *NotifyUsecase) Deliver(ctx context.Context, req *DeliveryRequest) error
 	}
 
 	// 2. 创建 notification_meta（uuid 唯一约束保证幂等）
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return errors.New("no client in context")
+	}
 	dbEventType, _ := notifyenum.EventTypeMap.ToEnum(req.EventType)
-	meta, err := s.notificationMetaRepo.Save(ctx, s.db, &model.NotificationMeta{
+	meta, err := s.notificationMetaRepo.Save(ctx, c, &model.NotificationMeta{
 		NotificationMeta: &gen.NotificationMeta{
 			UUID:      req.EventId,
 			EventType: notificationmeta.EventType(dbEventType),
@@ -183,7 +190,12 @@ func (s *NotifyUsecase) deliverToReceiver(
 	}
 
 	// 8. 创建 notification_record
-	_, err = s.notificationRecordRepo.Save(ctx, s.db, &model.NotificationRecord{
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		s.log.Errorf("no client in context for notification record")
+		return
+	}
+	_, err = s.notificationRecordRepo.Save(ctx, c, &model.NotificationRecord{
 		NotificationRecord: &gen.NotificationRecord{
 			NotificationID: metaID,
 			ReceiverID:     receiverID,

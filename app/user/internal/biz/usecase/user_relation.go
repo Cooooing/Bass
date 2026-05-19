@@ -13,20 +13,20 @@ import (
 )
 
 type UserRelationUsecase struct {
-	txRunner         base.TxRunner
+	tx               base.Tx
 	eventPool        *util.EventPool
 	userRelationRepo repo.UserRelationRepo
 	userRepo         repo.UserRepo
 }
 
 func NewUserRelationUsecase(
-	txRunner base.TxRunner,
+	tx base.Tx,
 	eventPool *util.EventPool,
 	userRelationRepo repo.UserRelationRepo,
 	userRepo repo.UserRepo,
 ) (*UserRelationUsecase, error) {
 	return &UserRelationUsecase{
-		txRunner:         txRunner,
+		tx:               tx,
 		eventPool:        eventPool,
 		userRelationRepo: userRelationRepo,
 		userRepo:         userRepo,
@@ -34,7 +34,7 @@ func NewUserRelationUsecase(
 }
 
 func (d *UserRelationUsecase) UpdateUserRelation(ctx context.Context, relationType v1.UserRelationType, isAdd bool, actorId int64, targetId int64) error {
-	err := d.txRunner(ctx, func(ctx context.Context) error {
+	err := d.tx(ctx, func(ctx context.Context) error {
 		var err error
 		var num int32
 

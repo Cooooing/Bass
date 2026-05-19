@@ -6,10 +6,12 @@ import (
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 	"context"
-	"notify/internal/data/client"
+	"errors"
 	"notify/internal/data/oss"
 
+	base "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/conf"
@@ -21,20 +23,20 @@ import (
 
 type ObjectStorageUsecase struct {
 	conf                  *conf.Bootstrap
-	db                    *gen.Client
+	tx                    base.Tx
 	objectStorageRepo     repo.ObjectStorageRepo
 	objectStorageProvider repo.ObjectStorageProvider
 }
 
 func NewObjectStorageUsecase(
 	conf *conf.Bootstrap,
-	db *gen.Client,
+	tx base.Tx,
 	objectStorageRepo repo.ObjectStorageRepo,
 	ossFactory *oss.Factory,
 ) *ObjectStorageUsecase {
 	return &ObjectStorageUsecase{
 		conf:                  conf,
-		db:                    db,
+		tx:                    tx,
 		objectStorageRepo:     objectStorageRepo,
 		objectStorageProvider: ossFactory.Get(conf.Server.Oss.Provider),
 	}
@@ -66,8 +68,12 @@ func (d *ObjectStorageUsecase) UpdateAudit(ctx context.Context, key string, enab
 	if err != nil {
 		return err
 	}
-	return client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		return d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
+	return d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		return d.objectStorageRepo.UpdateAudit(ctx, c, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:           key,
 			Blocked:       enable,
 			BlockedReason: reason,
@@ -79,19 +85,31 @@ func (d *ObjectStorageUsecase) UpdateAudit(ctx context.Context, key string, enab
 }
 
 func (d *ObjectStorageUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
-	return d.objectStorageRepo.GetPage(ctx, d.db, page, req)
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, nil, errors.New("no client in context")
+	}
+	return d.objectStorageRepo.GetPage(ctx, c, page, req)
 }
 
 func (d *ObjectStorageUsecase) QiniuUploadCallback(ctx context.Context, o *model.ObjectStorage) error {
-	return client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		_, err := d.objectStorageRepo.Save(ctx, tx, o)
+	return d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		_, err := d.objectStorageRepo.Save(ctx, c, o)
 		return err
 	})
 }
 
 func (d *ObjectStorageUsecase) QiniuIncrementAuditCallback(ctx context.Context, key string, reply string, blocked bool) error {
-	return client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		return d.objectStorageRepo.UpdateAudit(ctx, tx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
+	return d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		return d.objectStorageRepo.UpdateAudit(ctx, c, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
 			Key:                key,
 			AuditCallbackReply: new(reply),
 			Blocked:            blocked,

@@ -2,33 +2,39 @@ package usecase
 
 import (
 	"common/api/gen/common"
+	utilent "common/pkg/util/ent"
 	"context"
+	"errors"
+	base "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/data/client"
 	"notify/internal/data/gen"
 )
 
 type NotificationTemplateUsecase struct {
-	db                       *gen.Client
+	tx                       base.Tx
 	notificationTemplateRepo repo.NotificationTemplateRepo
 }
 
 func NewNotificationTemplateUsecase(
-	db *gen.Client,
+	tx base.Tx,
 	notificationTemplateRepo repo.NotificationTemplateRepo,
 ) *NotificationTemplateUsecase {
 	return &NotificationTemplateUsecase{
-		db:                       db,
+		tx:                       tx,
 		notificationTemplateRepo: notificationTemplateRepo,
 	}
 }
 
 func (d *NotificationTemplateUsecase) Add(ctx context.Context, tpl *model.NotificationTemplate) (*model.NotificationTemplate, error) {
 	var update *model.NotificationTemplate
-	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
+	err := d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
 		var err error
-		update, err = d.notificationTemplateRepo.Save(ctx, tx, tpl)
+		update, err = d.notificationTemplateRepo.Save(ctx, c, tpl)
 		if err != nil {
 			return err
 		}
@@ -39,9 +45,13 @@ func (d *NotificationTemplateUsecase) Add(ctx context.Context, tpl *model.Notifi
 
 func (d *NotificationTemplateUsecase) Update(ctx context.Context, tpl *model.NotificationTemplate) (*model.NotificationTemplate, error) {
 	var update *model.NotificationTemplate
-	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
+	err := d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
 		var err error
-		update, err = d.notificationTemplateRepo.Update(ctx, tx, tpl)
+		update, err = d.notificationTemplateRepo.Update(ctx, c, tpl)
 		if err != nil {
 			return err
 		}
@@ -51,9 +61,17 @@ func (d *NotificationTemplateUsecase) Update(ctx context.Context, tpl *model.Not
 }
 
 func (d *NotificationTemplateUsecase) GetMap(ctx context.Context, req *repo.NotificationTemplateGetReq) (map[string]*model.NotificationTemplate, error) {
-	return d.notificationTemplateRepo.GetMap(ctx, d.db, req)
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, errors.New("no client in context")
+	}
+	return d.notificationTemplateRepo.GetMap(ctx, c, req)
 }
 
 func (d *NotificationTemplateUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationTemplateGetReq) ([]*model.NotificationTemplate, *common.PageReply, error) {
-	return d.notificationTemplateRepo.GetPage(ctx, d.db, page, req)
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, nil, errors.New("no client in context")
+	}
+	return d.notificationTemplateRepo.GetPage(ctx, c, page, req)
 }

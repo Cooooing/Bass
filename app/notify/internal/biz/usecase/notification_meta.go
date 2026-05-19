@@ -2,27 +2,34 @@ package usecase
 
 import (
 	"common/api/gen/common"
+	utilent "common/pkg/util/ent"
 	"context"
+	"errors"
+	base "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/data/gen"
 )
 
 type NotificationMetaUsecase struct {
-	db                   *gen.Client
+	tx                   base.Tx
 	notificationMetaRepo repo.NotificationMetaRepo
 }
 
 func NewNotificationMetaUsecase(
-	db *gen.Client,
+	tx base.Tx,
 	notificationMetaRepo repo.NotificationMetaRepo,
 ) *NotificationMetaUsecase {
 	return &NotificationMetaUsecase{
-		db:                   db,
+		tx:                   tx,
 		notificationMetaRepo: notificationMetaRepo,
 	}
 }
 
 func (d *NotificationMetaUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationMetaGetReq) ([]*model.NotificationMeta, *common.PageReply, error) {
-	return d.notificationMetaRepo.GetPage(ctx, d.db, page, req)
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, nil, errors.New("no client in context")
+	}
+	return d.notificationMetaRepo.GetPage(ctx, c, page, req)
 }

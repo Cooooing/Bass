@@ -6,7 +6,6 @@ import (
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"content/internal/data/client"
 
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -24,8 +23,6 @@ type ArticleService struct {
 	v1.UnimplementedContentArticleServiceServer
 
 	articleDomain *usecase.ArticleUsecase
-	articleRepo   repo.ArticleRepo
-	db            *gen.Client
 }
 
 func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
@@ -34,13 +31,9 @@ func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 
 func NewArticleService(
 	articleDomain *usecase.ArticleUsecase,
-	articleRepo repo.ArticleRepo,
-	db *gen.Client,
 ) *ArticleService {
 	return &ArticleService{
 		articleDomain: articleDomain,
-		articleRepo:   articleRepo,
-		db:            db,
 	}
 }
 
@@ -152,19 +145,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	// 只有作者可以发布草稿
-	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
-		ArticleId: new(req.ArticleId),
-		Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-		CreatedBy: new(user.ID),
-	})
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, cerrors.ErrorBadRequest("article not exist")
-	}
-	err = s.articleDomain.Publish(ctx, s.db, req.ArticleId)
+	err = s.articleDomain.Publish(ctx, req.ArticleId, user.ID)
 	return &v1.PublishArticle_Reply{}, err
 }
 
@@ -173,20 +154,7 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	// 只有作者可以添加附言
-	exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
-		ArticleId: new(req.ArticleId),
-		Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
-		CreatedBy: new(user.ID),
-	})
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, cerrors.ErrorBadRequest("article not exist")
-	}
-
-	save, err := s.articleDomain.AddPostscript(ctx, req.ArticleId, req.Content)
+	save, err := s.articleDomain.AddPostscript(ctx, req.ArticleId, user.ID, req.Content)
 	if err != nil {
 		return nil, err
 	}
@@ -205,22 +173,7 @@ func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticle_Reque
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	err = client.WithTx(ctx, s.db, func(tx *gen.Client) error {
-		// 只有作者可以删除草稿
-		exist, err := s.articleRepo.Exist(ctx, s.db, &repo.ArticleGetReq{
-			ArticleId: new(req.ArticleId),
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-			CreatedBy: new(user.ID),
-		})
-		if err != nil {
-			return err
-		}
-		if !exist {
-			return cerrors.ErrorBadRequest("article not exist")
-		}
-		err = s.articleRepo.Delete(ctx, s.db, req.ArticleId)
-		return err
-	})
+	err = s.articleDomain.Delete(ctx, req.ArticleId, user.ID)
 	return &v1.DeleteArticle_Reply{}, err
 }
 

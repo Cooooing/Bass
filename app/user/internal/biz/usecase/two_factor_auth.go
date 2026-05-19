@@ -18,7 +18,7 @@ import (
 type TwoFactorAuthUsecase struct {
 	conf        *conf.Bootstrap
 	redis       *client.RedisClient
-	txRunner    base.TxRunner
+	tx          base.Tx
 	userRepo    repo.UserRepo
 	userTfaRepo repo.UserTfaRepo
 }
@@ -26,14 +26,14 @@ type TwoFactorAuthUsecase struct {
 func NewTwoFactorAuthUsecase(
 	conf *conf.Bootstrap,
 	redis *client.RedisClient,
-	txRunner base.TxRunner,
+	tx base.Tx,
 	userRepo repo.UserRepo,
 	userTfaRepo repo.UserTfaRepo,
 ) (*TwoFactorAuthUsecase, error) {
 	return &TwoFactorAuthUsecase{
 		conf:        conf,
 		redis:       redis,
-		txRunner:    txRunner,
+		tx:          tx,
 		userRepo:    userRepo,
 		userTfaRepo: userTfaRepo,
 	}, nil
@@ -73,7 +73,7 @@ func (d *TwoFactorAuthUsecase) Disable(ctx context.Context, name string, secret 
 	if !totp.Validate(code, secret) {
 		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
-	err := d.txRunner(ctx, func(ctx context.Context) error {
+	err := d.tx(ctx, func(ctx context.Context) error {
 		u, err := d.userRepo.GetByAccount(ctx, name)
 		if err != nil {
 			return err
@@ -92,7 +92,7 @@ func (d *TwoFactorAuthUsecase) Confirm(ctx context.Context, name string, code st
 	if !totp.Validate(code, secret) {
 		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
-	err = d.txRunner(ctx, func(ctx context.Context) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
 		u, err := d.userRepo.GetByAccount(ctx, name)
 		if err != nil {
 			return err

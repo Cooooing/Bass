@@ -2,25 +2,27 @@ package usecase
 
 import (
 	"common/api/gen/common"
+	utilent "common/pkg/util/ent"
+	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/client"
 	"content/internal/data/gen"
 	"context"
+	"errors"
 )
 
 type ContentUsecase struct {
-	db *gen.Client
+	tx base.Tx
 
 	domainRepo repo.DomainRepo
 }
 
 func NewContentUsecase(
-	db *gen.Client,
+	tx base.Tx,
 	domainRepo repo.DomainRepo,
 ) *ContentUsecase {
 	return &ContentUsecase{
-		db:         db,
+		tx:         tx,
 		domainRepo: domainRepo,
 	}
 }
@@ -30,8 +32,12 @@ func (d *ContentUsecase) Adds(ctx context.Context, domains []*model.Domain) ([]*
 		reply []*model.Domain
 		err   error
 	)
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		reply, err = d.domainRepo.Saves(ctx, tx, domains)
+	err = d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		reply, err = d.domainRepo.Saves(ctx, c, domains)
 		return err
 	})
 	return reply, err
@@ -42,13 +48,21 @@ func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*mod
 		reply *model.Domain
 		err   error
 	)
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		reply, err = d.domainRepo.Update(ctx, tx, domain)
+	err = d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		reply, err = d.domainRepo.Update(ctx, c, domain)
 		return err
 	})
 	return reply, err
 }
 
 func (d *ContentUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
-	return d.domainRepo.GetPage(ctx, d.db, page, req)
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, nil, errors.New("no client in context")
+	}
+	return d.domainRepo.GetPage(ctx, c, page, req)
 }

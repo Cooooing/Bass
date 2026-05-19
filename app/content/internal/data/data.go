@@ -21,6 +21,8 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
 
+	client.ProvideTx,
+
 	repo.NewArticleRepo,
 	repo.NewCommentRepo,
 	repo.NewCommentActionRecordRepo,

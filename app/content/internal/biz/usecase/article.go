@@ -9,9 +9,10 @@ import (
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"content/internal/data/client"
+	utilent "common/pkg/util/ent"
 
 	"common/pkg/util/str"
+	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
@@ -19,13 +20,14 @@ import (
 	"content/internal/data/gen/articlepostscript"
 	"content/internal/enum"
 	"context"
+	"errors"
 
 	"github.com/samber/lo"
 	"github.com/sony/sonyflake/v2"
 )
 
 type ArticleUsecase struct {
-	db         *gen.Client
+	tx         base.Tx
 	userClient *rpc.UserClient
 
 	articleRepo      repo.ArticleRepo
@@ -38,7 +40,7 @@ type ArticleUsecase struct {
 }
 
 func NewArticleUsecase(
-	db *gen.Client,
+	tx base.Tx,
 	userClient *rpc.UserClient,
 	articleRepo repo.ArticleRepo,
 	postscriptRepo repo.ArticlePostscriptRepo,
@@ -52,7 +54,7 @@ func NewArticleUsecase(
 		return nil, err
 	}
 	return &ArticleUsecase{
-		db:               db,
+		tx:               tx,
 		userClient:       userClient,
 		articleRepo:      articleRepo,
 		postscriptRepo:   postscriptRepo,
@@ -73,14 +75,18 @@ func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tags [
 	)
 	status := article.Status
 	article.Status = articleent.StatusDrafts // 默认均为草稿
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		save, err = d.articleRepo.Save(ctx, tx, article, tags)
+	err = d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		save, err = d.articleRepo.Save(ctx, c, article, tags)
 		if err != nil {
 			return err
 		}
 		// 正常文章，进行发布
 		if enum.ArticleStatus(status) == enum.ArticleStatusNormal {
-			err = d.Publish(ctx, tx, save.ID)
+			err = d.Publish(ctx, save.ID, *save.CreatedBy)
 			if err != nil {
 				return err
 			}
@@ -90,11 +96,25 @@ func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tags [
 	return save, err
 }
 
-func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, content string) (*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, userId int64, content string) (*model.ArticlePostscript, error) {
 	var save *model.ArticlePostscript
-	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		var err error
-		save, err = d.postscriptRepo.Save(ctx, tx, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
+	err := d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+			ArticleId: &articleId,
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+			CreatedBy: &userId,
+		})
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return cerrors.ErrorBadRequest("article not exist")
+		}
+		save, err = d.postscriptRepo.Save(ctx, c, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
 			ArticleID: articleId,
 			Content:   content,
 			Status:    articlepostscript.StatusNormal,
@@ -102,7 +122,7 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, con
 		if err != nil {
 			return err
 		}
-		err = d.articleRepo.UpdateHasPostscript(ctx, tx, articleId, true)
+		err = d.articleRepo.UpdateHasPostscript(ctx, c, articleId, true)
 		if err != nil {
 			return err
 		}
@@ -120,8 +140,12 @@ func (d *ArticleUsecase) UpdateDraft(ctx context.Context, article *model.Article
 	)
 	status := article.Status
 	article.Status = articleent.StatusDrafts // 默认均为草稿
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		exist, err := d.articleRepo.Exist(ctx, tx, &repo.ArticleGetReq{
+	err = d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
 			ArticleId: new(article.ID),
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 			CreatedBy: article.CreatedBy,
@@ -133,13 +157,13 @@ func (d *ArticleUsecase) UpdateDraft(ctx context.Context, article *model.Article
 			return cerrors.ErrorBadRequest("article not exist")
 		}
 
-		save, err = d.articleRepo.Update(ctx, tx, article, tags)
+		save, err = d.articleRepo.Update(ctx, c, article, tags)
 		if err != nil {
 			return err
 		}
 		// 正常文章，进行发布
 		if enum.ArticleStatus(status) == enum.ArticleStatusNormal {
-			err = d.Publish(ctx, tx, save.ID)
+			err = d.Publish(ctx, save.ID, *save.CreatedBy)
 			if err != nil {
 				return err
 			}
@@ -275,64 +299,26 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 	return err
 }
 
-func (d *ArticleUsecase) Publish(ctx context.Context, tx *gen.Client, articleId int64) error {
-	//user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	//if !ok {
-	//	return cerrors.ErrorUnauthorized("user not login")
-	//}
-
-	var err error
-	//var a *model.Article
-	//err = ent.WithTx(ctx, tx, func(tx *gen.Client) error {
-	//	a, err = d.articleRepo.Publish(ctx, tx, articleId)
-	//	if err != nil {
-	//		return err
-	//	}
-	//	return err
-	//})
-	//if err != nil {
-	//	return err
-	//}
-	//err = d.eventPool.Submit(func() {
-	//
-	//	// 广播发布文章事件
-	//	err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticlePublish.String(), &commonModel.Notification{
-	//		UUID:       uuid.New().String(),
-	//		Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_PUBLISH),
-	//		SenderId:   user.ID,
-	//		SenderName: user.Name,
-	//		Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//		Meta: commonModel.Meta{
-	//			Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//		},
-	//		Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-	//	})
-	//	if err != nil {
-	//		d.log.Errorf("publish a publish event error: %v", err)
-	//		return
-	//	}
-	//
-	//	// 广播@用户通知
-	//	atUserNames := a.ParseContent()
-	//	if len(atUserNames) > 0 {
-	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
-	//			UUID:       uuid.New().String(),
-	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
-	//			SenderId:   user.ID,
-	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//			Meta: commonModel.Meta{
-	//				AtUsernames: lo.Keys(atUserNames),
-	//				Article:     &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//			},
-	//		})
-	//		if err != nil {
-	//			d.log.Errorf("publish a at event error: %v", err)
-	//			return
-	//		}
-	//	}
-	//})
-	return err
+func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId int64) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+			ArticleId: &articleId,
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+			CreatedBy: &userId,
+		})
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return cerrors.ErrorBadRequest("article not exist")
+		}
+		// TODO: 实现发布逻辑
+		return nil
+	})
 }
 
 func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, commentId int64) error {
@@ -340,8 +326,12 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, comm
 	if !ok {
 		return cerrors.ErrorUnauthorized("user not login")
 	}
-	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		a, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+	err := d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		a, err := d.articleRepo.GetOne(ctx, c, &repo.ArticleGetReq{ArticleId: new(articleId)})
 		if err != nil {
 			return err
 		}
@@ -351,7 +341,7 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, comm
 		if a.AcceptedAnswerID != nil {
 			return cerrors.ErrorBadRequest("article already accepted answer")
 		}
-		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, tx, articleId, commentId)
+		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, c, articleId, commentId)
 		if err != nil {
 			return err
 		}
@@ -371,7 +361,11 @@ func (d *ArticleUsecase) GetOne(ctx context.Context, articleId int64) (*model.Ar
 		reply *model.Article
 		err   error
 	)
-	reply, err = d.articleRepo.GetOne(ctx, d.db, &repo.ArticleGetReq{
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, errors.New("no client in context")
+	}
+	reply, err = d.articleRepo.GetOne(ctx, c, &repo.ArticleGetReq{
 		ArticleId: new(articleId),
 	})
 	if err != nil {
@@ -389,7 +383,7 @@ func (d *ArticleUsecase) GetOne(ctx context.Context, articleId int64) (*model.Ar
 		return nil, cerrors.ErrorUnauthorized("login required to view drafts")
 	}
 
-	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, d.db, &repo.CommentGetReq{ArticleId: new(reply.ID)})
+	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, c, &repo.CommentGetReq{ArticleId: new(reply.ID)})
 	if err != nil {
 		return nil, err
 	}
@@ -417,8 +411,12 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 		pageReply *common.PageReply
 		err       error
 	)
+	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+	if !ok {
+		return nil, nil, errors.New("no client in context")
+	}
 	req.IsSummary = true
-	list, pageReply, err = d.articleRepo.GetPage(ctx, d.db, page, req)
+	list, pageReply, err = d.articleRepo.GetPage(ctx, c, page, req)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -431,7 +429,7 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 
 	lastCommentMap := make(map[int64]*model.Comment)
 	if len(articleIds) > 0 {
-		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, d.db, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIds)})
+		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, c, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIds)})
 		if err != nil {
 			return nil, nil, err
 		}
@@ -456,4 +454,25 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 		list[i].AuthorUser = util.If(list[i].Anonymous, nil, userAuthorsMap.Users[*list[i].CreatedBy])
 	}
 	return list, pageReply, err
+}
+
+func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64, userId int64) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+			ArticleId: &articleId,
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
+			CreatedBy: &userId,
+		})
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return cerrors.ErrorBadRequest("article not exist")
+		}
+		return d.articleRepo.Delete(ctx, c, articleId)
+	})
 }

@@ -7,14 +7,16 @@ import (
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
 	"common/pkg/util"
-	"content/internal/data/client"
+	utilent "common/pkg/util/ent"
 
+	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	"content/internal/data/gen/commentactionrecord"
 	"content/internal/enum"
 	"context"
+	"errors"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/samber/lo"
@@ -22,7 +24,7 @@ import (
 
 type CommentUsecase struct {
 	log        *log.Helper
-	db         *gen.Client
+	tx         base.Tx
 	userClient *rpc.UserClient
 	eventPool  *util.EventPool
 
@@ -33,7 +35,7 @@ type CommentUsecase struct {
 
 func NewCommentUsecase(
 	logger log.Logger,
-	db *gen.Client,
+	tx base.Tx,
 	userClient *rpc.UserClient,
 	eventPool *util.EventPool,
 	commentRepo repo.CommentRepo,
@@ -42,7 +44,7 @@ func NewCommentUsecase(
 ) *CommentUsecase {
 	return &CommentUsecase{
 		log:                     log.NewHelper(logger),
-		db:                      db,
+		tx:                      tx,
 		userClient:              userClient,
 		eventPool:               eventPool,
 		commentRepo:             commentRepo,
@@ -56,9 +58,13 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (c *mo
 	//if !ok {
 	//	return nil, cerrors.ErrorUnauthorized("user not login")
 	//}
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
+		cl, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
 		// 回复文章
-		exist, err := d.articleRepo.GetOne(ctx, tx, &repo.ArticleGetReq{
+		exist, err := d.articleRepo.GetOne(ctx, cl, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
@@ -72,7 +78,7 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (c *mo
 		// 回复评论
 		replyComment := &model.Comment{Comment: &gen.Comment{}}
 		if comment.ReplyID != nil {
-			replyComment, err = d.commentRepo.GetOne(ctx, tx, &repo.CommentGetReq{
+			replyComment, err = d.commentRepo.GetOne(ctx, cl, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
 				ArticleId: new(comment.ArticleID),
 				Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
@@ -81,13 +87,13 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (c *mo
 				return err
 			}
 
-			err = d.commentRepo.UpdateStat(ctx, tx, replyComment.ID, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
+			err = d.commentRepo.UpdateStat(ctx, cl, replyComment.ID, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
 			if err != nil {
 				return err
 			}
 		}
 
-		_, err = d.articleRepo.UpdateStat(ctx, tx, exist.ID, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
+		_, err = d.articleRepo.UpdateStat(ctx, cl, exist.ID, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
 		if err != nil {
 			return err
 		}
@@ -99,7 +105,7 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (c *mo
 			ReplyID:  comment.ReplyID,
 		}}
 		save.FormatContent()
-		c, err = d.commentRepo.Save(ctx, tx, save)
+		c, err = d.commentRepo.Save(ctx, cl, save)
 		if err != nil {
 			return err
 		}
@@ -145,8 +151,12 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 		reply     []*model.Comment
 		err       error
 	)
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		reply, pageReply, err = d.commentRepo.GetPage(ctx, tx, page, req)
+	err = d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		reply, pageReply, err = d.commentRepo.GetPage(ctx, c, page, req)
 		if err != nil {
 			return err
 		}
@@ -176,21 +186,29 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 }
 
 func (d *CommentUsecase) UpdateStatus(ctx context.Context, commentId int64, status v1.CommentStatus) error {
-	err := client.WithTx(ctx, d.db, func(tx *gen.Client) error {
-		return d.commentRepo.UpdateStatus(ctx, tx, commentId, status)
+	err := d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
+		return d.commentRepo.UpdateStatus(ctx, c, commentId, status)
 	})
 	return err
 }
 
 func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId int64, action v1.CommentAction, active bool) error {
 	var err error
-	err = client.WithTx(ctx, d.db, func(tx *gen.Client) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
+		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+		if !ok {
+			return errors.New("no transaction in context")
+		}
 		if active {
-			err = d.commentRepo.UpdateStat(ctx, tx, commentId, action, 1)
+			err = d.commentRepo.UpdateStat(ctx, c, commentId, action, 1)
 			if err != nil {
 				return err
 			}
-			_, err = d.commentActionRecordRepo.Save(ctx, tx, &model.CommentActionRecord{
+			_, err = d.commentActionRecordRepo.Save(ctx, c, &model.CommentActionRecord{
 				CommentID: commentId,
 				UserID:    userId,
 				Type: func() commentactionrecord.Type {
@@ -204,11 +222,11 @@ func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId
 			return nil
 		}
 
-		err = d.commentRepo.UpdateStat(ctx, tx, commentId, action, -1)
+		err = d.commentRepo.UpdateStat(ctx, c, commentId, action, -1)
 		if err != nil {
 			return err
 		}
-		err = d.commentActionRecordRepo.Delete(ctx, tx, commentId, userId, action)
+		err = d.commentActionRecordRepo.Delete(ctx, c, commentId, userId, action)
 		if err != nil {
 			return err
 		}

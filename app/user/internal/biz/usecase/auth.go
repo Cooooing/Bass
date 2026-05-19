@@ -19,7 +19,7 @@ import (
 
 type AuthUsecase struct {
 	conf         *conf.Bootstrap
-	txRunner     base.TxRunner
+	tx           base.Tx
 	eventPool    *util.EventPool
 	userRepo     repo.UserRepo
 	tokenCache   *jwt.TokenCache
@@ -30,7 +30,7 @@ type AuthUsecase struct {
 
 func NewAuthUsecase(
 	conf *conf.Bootstrap,
-	txRunner base.TxRunner,
+	tx base.Tx,
 	eventPool *util.EventPool,
 	userRepo repo.UserRepo,
 	tokenCache *jwt.TokenCache,
@@ -42,7 +42,7 @@ func NewAuthUsecase(
 	}
 	return &AuthUsecase{
 		conf:         conf,
-		txRunner:     txRunner,
+		tx:           tx,
 		eventPool:    eventPool,
 		userRepo:     userRepo,
 		tokenCache:   tokenCache,
@@ -124,7 +124,7 @@ func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string,
 		return
 	}
 
-	err = s.txRunner(ctx, func(ctx context.Context) error {
+	err = s.tx(ctx, func(ctx context.Context) error {
 		// 保存用户信息
 		user := &model.User{
 			Name:     saveUser.Name,
@@ -227,7 +227,7 @@ func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string,
 		return
 	}
 
-	err = s.txRunner(ctx, func(ctx context.Context) error {
+	err = s.tx(ctx, func(ctx context.Context) error {
 		// 保存用户信息
 		user := &model.User{
 			Name:     saveUser.Name,

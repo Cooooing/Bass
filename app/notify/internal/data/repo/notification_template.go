@@ -19,6 +19,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.NotificationTemplateRepo = (*NotificationTemplateRepo)(nil)
+
 type NotificationTemplateRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper
@@ -33,7 +35,7 @@ func NewNotificationTemplateRepo(
 	db *gen.Client,
 	consul *commonClient.ConsulClient,
 	redis *commonClient.RedisClient,
-) (repo.NotificationTemplateRepo, error) {
+) repo.NotificationTemplateRepo {
 	r := &NotificationTemplateRepo{
 		conf:   conf,
 		log:    log.NewHelper(logger),
@@ -41,44 +43,7 @@ func NewNotificationTemplateRepo(
 		consul: consul,
 		redis:  redis,
 	}
-	err := r.init()
-	return r, err
-}
-
-func (r *NotificationTemplateRepo) init() error {
-	ctx := context.Background()
-
-	templates := []*model.NotificationTemplate{
-		{
-			NotificationTemplate: &gen.NotificationTemplate{
-				EventType: "EVENT_TYPE_ARTICLE_PUBLISHED",
-				Channel:   "NOTIFICATION_CHANNEL_EMAIL",
-				Title:     "欢迎注册",
-				Content:   "你好 {{.username}}，欢迎注册！",
-				Enable:    true,
-			},
-		},
-	}
-
-	existList, err := r.db.NotificationTemplate.Query().Where(notificationtemplate.Enable(true)).All(ctx)
-	if err != nil {
-		return err
-	}
-	existSet := make(map[string]struct{}, len(existList))
-	for _, e := range existList {
-		existSet[fmt.Sprintf("%s_%s", e.EventType, e.Channel)] = struct{}{}
-	}
-
-	for _, tpl := range templates {
-		key := fmt.Sprintf("%s_%s", tpl.EventType, tpl.Channel)
-		if _, ok := existSet[key]; ok {
-			continue
-		}
-		if _, err := r.Save(ctx, r.db, tpl); err != nil {
-			return err
-		}
-	}
-	return nil
+	return r
 }
 
 func (r *NotificationTemplateRepo) Save(ctx context.Context, tx *gen.Client, u *model.NotificationTemplate) (*model.NotificationTemplate, error) {

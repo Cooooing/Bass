@@ -10,7 +10,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"gateway/internal/biz/domain"
+	"gateway/internal/biz/usecase"
 	"gateway/internal/conf"
 	"net"
 	"regexp"
@@ -135,7 +135,7 @@ func PermissionMiddleware() middleware.Middleware {
 }
 
 // IpMiddleware Ip 中间件
-func IpMiddleware(ipDomain *domain.IpDomain) middleware.Middleware {
+func IpMiddleware(ipUsecase *usecase.IpUsecase) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			tr, ok := transport.FromServerContext(ctx)
@@ -155,7 +155,7 @@ func IpMiddleware(ipDomain *domain.IpDomain) middleware.Middleware {
 					ip, _, _ = net.SplitHostPort(tr.(*transporthttp.Transport).Request().RemoteAddr)
 				}
 
-				ipInfo, err := ipDomain.GetInfo(ctx, ip)
+				ipInfo, err := ipUsecase.GetInfo(ctx, ip)
 				if err != nil {
 					return nil, err
 				}

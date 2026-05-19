@@ -10,25 +10,25 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	NewVerifyService,
 	NewSystemService,
-	NewAuthenticationService,
+	NewAuthService,
 	NewUserService,
 	NewUserRelationService,
-	NewTwoFactorAuthenticationService,
+	NewTwoFactorAuthService,
 	ProvideServices,
 )
 
 func ProvideServices(
 	systemService *SystemService,
-	authenticationService *AuthenticationService,
+	authenticationService *AuthService,
 	userService *UserService,
 	userRelationService *UserRelationService,
-	twoFactorAuthenticationService *TwoFactorAuthenticationService,
+	twoFactorAuthService *TwoFactorAuthService,
 ) []server.GrpcService {
 	return []server.GrpcService{
 		systemService,
 		authenticationService,
 		userService,
 		userRelationService,
-		twoFactorAuthenticationService,
+		twoFactorAuthService,
 	}
 }

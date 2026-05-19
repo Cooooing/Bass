@@ -9,7 +9,7 @@ package main
 import (
 	"bbs/internal/biz"
 	"bbs/internal/conf"
-	"bbs/internal/data/gen"
+	"bbs/internal/data"
 	"bbs/internal/server"
 	"bbs/internal/service"
 

@@ -2,7 +2,6 @@ package server
 
 import (
 	"bbs/internal/conf"
-	"common/pkg/util/jwt"
 	"common/pkg/util/server"
 	"fmt"
 
@@ -17,7 +16,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcService, tokenCache *jwt.TokenCache) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,7 +26,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcS
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			server.AuthMiddleware(tokenCache),
+			//server.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
 		http.ResponseEncoder(server.HttpResponseEncoder),

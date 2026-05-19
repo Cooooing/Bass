@@ -4,9 +4,9 @@ import (
 	v1 "common/api/gen/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/biz/usecase"
 	"content/internal/data/gen"
 	tagent "content/internal/data/gen/tag"
 	"content/internal/enum"
@@ -18,14 +18,14 @@ import (
 
 type TagService struct {
 	v1.UnimplementedContentTagServiceServer
-	domainTag *domain.TagDomain
+	domainTag *usecase.TagUsecase
 }
 
 func (s *TagService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentTagServiceServer(gs, s)
 }
 
-func NewTagService(domainTag *domain.TagDomain) *TagService {
+func NewTagService(domainTag *usecase.TagUsecase) *TagService {
 	return &TagService{
 		domainTag: domainTag,
 	}

@@ -8,8 +8,8 @@ import (
 	"common/pkg/util"
 
 	"context"
-	"notify/internal/biz/domain"
 	"notify/internal/biz/repo"
+	"notify/internal/biz/usecase"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -18,12 +18,12 @@ import (
 
 type NotificationRecordService struct {
 	v1.UnimplementedNotifyNotificationRecordServiceServer
-	notificationRecordDomain *domain.NotificationRecordDomain
+	notificationRecordUsecase *usecase.NotificationRecordUsecase
 }
 
-func NewNotificationRecordService(notificationRecordDomain *domain.NotificationRecordDomain) *NotificationRecordService {
+func NewNotificationRecordService(notificationRecordUsecase *usecase.NotificationRecordUsecase) *NotificationRecordService {
 	return &NotificationRecordService{
-		notificationRecordDomain: notificationRecordDomain,
+		notificationRecordUsecase: notificationRecordUsecase,
 	}
 }
 
@@ -40,7 +40,7 @@ func (s *NotificationRecordService) Page(ctx context.Context, req *v1.PageNotifi
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	records, page, err := s.notificationRecordDomain.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
+	records, page, err := s.notificationRecordUsecase.Page(ctx, req.Page, &repo.NotificationRecordGetReq{
 		ReceiverId: new(user.ID),
 		Status:     new(v1.NotificationStatus_NOTIFICATION_STATUS_NORMAL),
 		WithMeta:   true,
@@ -71,7 +71,7 @@ func (s *NotificationRecordService) Read(ctx context.Context, req *v1.ReadNotifi
 		}
 	}
 
-	count, err := s.notificationRecordDomain.Read(ctx, user.ID, startTime, endTime, req.NotificationRecordIds)
+	count, err := s.notificationRecordUsecase.Read(ctx, user.ID, startTime, endTime, req.NotificationRecordIds)
 	return &v1.ReadNotificationRecord_Reply{
 		Count: int32(count),
 	}, err

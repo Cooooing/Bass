@@ -5,7 +5,7 @@ APP_DIR := $(ROOT_DIR)/app
 
 # Auto-discover modules that have a Makefile
 #SERVERS := $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
-SERVERS := user content notify
+SERVERS := bbs user content notify
 
 IGNORE_ERROR ?= 1
 

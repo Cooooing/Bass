@@ -6,23 +6,23 @@ import "validate/validate.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
-// TwoFactorAuthentication 服务
-service UserTwoFactorAuthenticationService {
+// TwoFactorAuth 服务
+service UserTwoFactorAuthService {
   // 验证
-  rpc Validate(ValidateTwoFactorAuthentication.Request) returns (ValidateTwoFactorAuthentication.Reply) {}
+  rpc Validate(ValidateTwoFactorAuth.Request) returns (ValidateTwoFactorAuth.Reply) {}
 
   // 开启 2FA 验证
-  rpc Enable(EnableTwoFactorAuthentication.Request) returns (EnableTwoFactorAuthentication.Reply) {}
+  rpc Enable(EnableTwoFactorAuth.Request) returns (EnableTwoFactorAuth.Reply) {}
 
   // 关闭 2FA 验证
-  rpc Disable(DisableTwoFactorAuthentication.Request) returns (DisableTwoFactorAuthentication.Reply) {}
+  rpc Disable(DisableTwoFactorAuth.Request) returns (DisableTwoFactorAuth.Reply) {}
 
   // 确认 2FA 绑定
-  rpc Confirm(ConfirmTwoFactorAuthentication.Request) returns (ConfirmTwoFactorAuthentication.Reply) {}
+  rpc Confirm(ConfirmTwoFactorAuth.Request) returns (ConfirmTwoFactorAuth.Reply) {}
 
 }
 
-message ValidateTwoFactorAuthentication {
+message ValidateTwoFactorAuth {
   message Request {
     // 2FA 验证码
     string code = 1 [(validate.rules).string = {
@@ -36,7 +36,7 @@ message ValidateTwoFactorAuthentication {
   }
 }
 
-message EnableTwoFactorAuthentication {
+message EnableTwoFactorAuth {
   message Request {}
   message Reply {
     // 图片数据
@@ -46,7 +46,7 @@ message EnableTwoFactorAuthentication {
   }
 }
 
-message DisableTwoFactorAuthentication {
+message DisableTwoFactorAuth {
   message Request {
     // 2FA 验证码
     string code = 1 [(validate.rules).string = {
@@ -57,7 +57,7 @@ message DisableTwoFactorAuthentication {
   message Reply {}
 }
 
-message ConfirmTwoFactorAuthentication {
+message ConfirmTwoFactorAuth {
   message Request {
     // 2FA 验证码
     string code = 1 [(validate.rules).string = {

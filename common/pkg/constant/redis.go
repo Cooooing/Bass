@@ -6,12 +6,12 @@ import (
 
 // Redis key
 var (
-	RequestNonce            = "Auth:RequestNonce:{%s}"            // 请求防重放
-	TokenVerifyCode         = "Auth:TokenVerifyCode:{%s}:{%s}"    // 验证码 Token
-	Token                   = "Auth:Token:{%s}"                   // Token
-	NotificationTemplateMap = "Notify:NotificationTemplateMap"    // 通知模板
-	TwoFactorAuthentication = "Auth:TwoFactorAuthentication:{%s}" // 2FA 验证码，首次启用 2FA 时使用
-	AsynqTaskVersion        = "Asynq:TaskVersion"                 // Asynq 任务版本号 map， taskname -> version
+	RequestNonce            = "Auth:RequestNonce:{%s}"         // 请求防重放
+	TokenVerifyCode         = "Auth:TokenVerifyCode:{%s}:{%s}" // 验证码 Token
+	Token                   = "Auth:Token:{%s}"                // Token
+	NotificationTemplateMap = "Notify:NotificationTemplateMap" // 通知模板
+	TwoFactorAuth           = "Auth:TwoFactorAuth:{%s}"        // 2FA 验证码，首次启用 2FA 时使用
+	AsynqTaskVersion        = "Asynq:TaskVersion"              // Asynq 任务版本号 map， taskname -> version
 
 	SignalNode            = "Signal:Node:{%s}"            // 信令服务 ws节点信息 map
 	SignalNodeRank        = "Signal:NodeRank"             // 信令服务 ws节点评分排名 zset，用于负载均衡
@@ -50,8 +50,8 @@ func GetKeyNotificationTemplateMap() string {
 	return NotificationTemplateMap
 }
 
-func GetKeyTwoFactorAuthentication(name string) string {
-	return fmt.Sprintf(TwoFactorAuthentication, name)
+func GetKeyTwoFactorAuth(name string) string {
+	return fmt.Sprintf(TwoFactorAuth, name)
 }
 
 const (

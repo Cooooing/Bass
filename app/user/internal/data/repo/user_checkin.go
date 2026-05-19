@@ -15,6 +15,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.UserCheckinRepo = (*UserCheckinRepo)(nil)
+
 type UserCheckinRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

@@ -11,6 +11,8 @@ import (
 	"im/internal/data/gen"
 )
 
+var _ repo.ChatGroupRepo = (*ChatGroupRepo)(nil)
+
 type ChatGroupRepo struct {
 }
 

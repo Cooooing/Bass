@@ -11,6 +11,8 @@ import (
 	"im/internal/data/gen"
 )
 
+var _ repo.ChatSessionRepo = (*ChatSessionRepo)(nil)
+
 type ChatSessionRepo struct {
 }
 

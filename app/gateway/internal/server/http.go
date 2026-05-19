@@ -11,7 +11,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gateway/internal/biz/domain"
+	"gateway/internal/biz/usecase"
 	"gateway/internal/conf"
 	"io"
 	"net/http"
@@ -33,7 +33,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []server.GrpcService, tokenCache *jwt.TokenCache, ipDomain *domain.IpDomain) *transporthttp.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []server.HttpService, tokenCache *jwt.TokenCache, ipUsecase *usecase.IpUsecase) *transporthttp.Server {
 
 	middlewares := []middleware.Middleware{
 		metadata.Server(),
@@ -45,7 +45,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.Co
 		),
 		logging.Server(logger),
 
-		IpMiddleware(ipDomain),
+		IpMiddleware(ipUsecase),
 		// 七牛回调验签
 		selector.Server(QiniuCallbackSignMiddleware(c)).Match(QiniuCallbackMatch()).Build(),
 		// 认证鉴权

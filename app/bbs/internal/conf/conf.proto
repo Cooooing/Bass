@@ -26,9 +26,7 @@ message Server {
 }
 
 message Data {
-  common.api.app.common.Redis redis = 2;
   common.api.app.common.Consul consul = 3;
-  common.api.app.common.Nats nats = 4;
 }
 
 message Trace {

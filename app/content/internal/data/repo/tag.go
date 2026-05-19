@@ -16,6 +16,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.TagRepo = (*TagRepo)(nil)
+
 type TagRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

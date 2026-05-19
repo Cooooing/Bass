@@ -3,10 +3,10 @@ package biz
 import (
 	"common/pkg/client/rpc"
 	"common/pkg/util/jwt"
-	"notify/internal/biz/domain"
-	"notify/internal/biz/domain/consumer"
-	"notify/internal/biz/domain/handler"
-	"notify/internal/biz/domain/sender"
+	"notify/internal/biz/usecase"
+	"notify/internal/biz/usecase/consumer"
+	"notify/internal/biz/usecase/handler"
+	"notify/internal/biz/usecase/sender"
 
 	"github.com/google/wire"
 )
@@ -18,9 +18,9 @@ var BizProviderSet = wire.NewSet(
 	consumer.NewConsumer,
 	handler.NewDispatcher,
 	sender.ProvideRegistry,
-	domain.NewNotifyService,
-	domain.NewRPCUserResolver,
-	wire.Bind(new(domain.UserResolver), new(*domain.RPCUserResolver)),
+	usecase.NewNotifyUsecase,
+	usecase.NewRPCUserResolver,
+	wire.Bind(new(usecase.UserResolver), new(*usecase.RPCUserResolver)),
 
 	sender.NewSmtpSender,
 	sender.NewTencentSmsSender,
@@ -32,10 +32,10 @@ var BizProviderSet = wire.NewSet(
 	handler.NewCommentActionHandler,
 	handler.NewDefaultHandler,
 
-	domain.NewNotificationMetaDomain,
-	domain.NewNotificationRecordDomain,
-	domain.NewNotificationTemplateDomain,
-	domain.NewObjectStorageDomain,
+	usecase.NewNotificationMetaUsecase,
+	usecase.NewNotificationRecordUsecase,
+	usecase.NewNotificationTemplateUsecase,
+	usecase.NewObjectStorageUsecase,
 
 	rpc.ProvideUserClient,
 	rpc.ProvideContentClient,

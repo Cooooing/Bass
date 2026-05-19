@@ -7,7 +7,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	consumerPkg "notify/internal/biz/domain/consumer"
+	consumerPkg "notify/internal/biz/usecase/consumer"
 	"notify/internal/conf"
 	"notify/internal/server"
 	"os"
@@ -24,9 +24,9 @@ var (
 	// Version is the version of the compiled software.
 	Version = "v1.0.0"
 	// flagConf is the config flag.
-	flagConf = "configs"
+	flagConf = "configs/config.yaml"
 	// flagConf is the config flag.
-	flagBootstrap = "configs"
+	flagBootstrap = "configs/bootstrap.yaml"
 )
 
 func init() {

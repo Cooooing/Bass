@@ -3,7 +3,7 @@ package service
 import (
 	v1 "common/api/gen/im/v1"
 	"context"
-	"im/internal/biz/domain"
+	"im/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -11,12 +11,12 @@ import (
 
 type ChatMessageService struct {
 	v1.UnimplementedIMChatMessageServiceServer
-	chatMessageDomain *domain.ChatMessageDomain
+	chatMessageUsecase *usecase.ChatMessageUsecase
 }
 
-func NewChatMessageService(chatMessageDomain *domain.ChatMessageDomain) *ChatMessageService {
+func NewChatMessageService(chatMessageUsecase *usecase.ChatMessageUsecase) *ChatMessageService {
 	return &ChatMessageService{
-		chatMessageDomain: chatMessageDomain,
+		chatMessageUsecase: chatMessageUsecase,
 	}
 }
 

@@ -7,8 +7,8 @@ import "validate/validate.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
-// Authentication 服务
-service UserAuthenticationService {
+// Auth 服务
+service UserAuthService {
   // -- 账号注册
 
   // 邮箱注册

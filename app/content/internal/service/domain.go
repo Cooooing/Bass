@@ -4,9 +4,9 @@ import (
 	v1 "common/api/gen/content/v1"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/biz/usecase"
 	"content/internal/data/gen"
 	domainent "content/internal/data/gen/domain"
 	"content/internal/enum"
@@ -17,7 +17,7 @@ import (
 
 type DomainService struct {
 	v1.UnimplementedContentDomainServiceServer
-	domainDomain *domain.DomainDomain
+	domainDomain *usecase.ContentUsecase
 }
 
 func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
@@ -25,7 +25,7 @@ func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func NewDomainService(
-	domainDomain *domain.DomainDomain,
+	domainDomain *usecase.ContentUsecase,
 ) *DomainService {
 	return &DomainService{
 		domainDomain: domainDomain,

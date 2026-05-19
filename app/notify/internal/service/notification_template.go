@@ -6,9 +6,9 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"notify/internal/biz/domain"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
+	"notify/internal/biz/usecase"
 	"notify/internal/data/gen"
 	notificationtemplate "notify/internal/data/gen/notificationtemplate"
 	notifyenum "notify/internal/enum"
@@ -19,12 +19,12 @@ import (
 
 type NotificationTemplateService struct {
 	v1.UnimplementedNotifyNotificationTemplateServiceServer
-	notificationTemplateDomain *domain.NotificationTemplateDomain
+	notificationTemplateUsecase *usecase.NotificationTemplateUsecase
 }
 
-func NewNotificationTemplateService(notificationTemplateDomain *domain.NotificationTemplateDomain) *NotificationTemplateService {
+func NewNotificationTemplateService(notificationTemplateUsecase *usecase.NotificationTemplateUsecase) *NotificationTemplateService {
 	return &NotificationTemplateService{
-		notificationTemplateDomain: notificationTemplateDomain,
+		notificationTemplateUsecase: notificationTemplateUsecase,
 	}
 }
 
@@ -38,7 +38,7 @@ func (s *NotificationTemplateService) RegisterHttp(hs *http.Server) {
 
 func (s *NotificationTemplateService) Page(ctx context.Context, req *v1.PageNotificationTemplate_Request) (rsp *v1.PageNotificationTemplate_Reply, err error) {
 	req.Query = util.OrDefault(req.Query, &v1.NotificationTemplateQueryParams{})
-	records, page, err := s.notificationTemplateDomain.Page(ctx, req.Page, &repo.NotificationTemplateGetReq{
+	records, page, err := s.notificationTemplateUsecase.Page(ctx, req.Page, &repo.NotificationTemplateGetReq{
 		NotificationTemplateIds: req.Query.Ids,
 		EventType:               req.Query.EventType,
 		Channel:                 req.Query.Channel,
@@ -70,7 +70,7 @@ func (s *NotificationTemplateService) Add(ctx context.Context, req *v1.AddNotifi
 	}
 	tpl.EventType = notificationtemplate.EventType(dbEventType)
 	tpl.Channel = notificationtemplate.Channel(dbChannel)
-	save, err := s.notificationTemplateDomain.Add(ctx, &model.NotificationTemplate{NotificationTemplate: tpl})
+	save, err := s.notificationTemplateUsecase.Add(ctx, &model.NotificationTemplate{NotificationTemplate: tpl})
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (s *NotificationTemplateService) Update(ctx context.Context, req *v1.Update
 	}
 	tpl.EventType = notificationtemplate.EventType(dbEventType)
 	tpl.Channel = notificationtemplate.Channel(dbChannel)
-	save, err := s.notificationTemplateDomain.Update(ctx, &model.NotificationTemplate{NotificationTemplate: tpl})
+	save, err := s.notificationTemplateUsecase.Update(ctx, &model.NotificationTemplate{NotificationTemplate: tpl})
 	if err != nil {
 		return nil, err
 	}

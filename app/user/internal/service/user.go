@@ -9,9 +9,9 @@ import (
 	"common/pkg/util"
 
 	"context"
-	"user/internal/biz/doamin"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/biz/usecase"
 	"user/internal/conf"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -21,20 +21,20 @@ import (
 
 type UserService struct {
 	v1.UnimplementedUserUserServiceServer
-	conf                 *conf.Bootstrap
-	log                  *log.Helper
-	authenticationDomain *doamin.AuthenticationDomain
-	userDomain           *doamin.UserDomain
-	userRepo             repo.UserRepo
-	userPreferencesRepo  repo.UserPreferencesRepo
-	userPrivacyRepo      repo.UserPrivacyRepo
-	userLocationRepo     repo.UserLocationRepo
-	userTfaRepo          repo.UserTfaRepo
-	userCheckinRepo      repo.UserCheckinRepo
+	conf                  *conf.Bootstrap
+	log                   *log.Helper
+	authenticationUsecase *usecase.AuthUsecase
+	userUsecase           *usecase.UserUsecase
+	userRepo              repo.UserRepo
+	userPreferencesRepo   repo.UserPreferencesRepo
+	userPrivacyRepo       repo.UserPrivacyRepo
+	userLocationRepo      repo.UserLocationRepo
+	userTfaRepo           repo.UserTfaRepo
+	userCheckinRepo       repo.UserCheckinRepo
 }
 
-func NewUserService(conf *conf.Bootstrap, logger log.Logger, authenticationDomain *doamin.AuthenticationDomain,
-	userDomain *doamin.UserDomain,
+func NewUserService(conf *conf.Bootstrap, logger log.Logger, authenticationUsecase *usecase.AuthUsecase,
+	userUsecase *usecase.UserUsecase,
 	userRepo repo.UserRepo,
 	userPreferencesRepo repo.UserPreferencesRepo,
 	userPrivacyRepo repo.UserPrivacyRepo,
@@ -42,16 +42,16 @@ func NewUserService(conf *conf.Bootstrap, logger log.Logger, authenticationDomai
 	userTfaRepo repo.UserTfaRepo,
 	userCheckinRepo repo.UserCheckinRepo) *UserService {
 	return &UserService{
-		conf:                 conf,
-		log:                  log.NewHelper(logger),
-		authenticationDomain: authenticationDomain,
-		userDomain:           userDomain,
-		userRepo:             userRepo,
-		userPreferencesRepo:  userPreferencesRepo,
-		userPrivacyRepo:      userPrivacyRepo,
-		userLocationRepo:     userLocationRepo,
-		userTfaRepo:          userTfaRepo,
-		userCheckinRepo:      userCheckinRepo,
+		conf:                  conf,
+		log:                   log.NewHelper(logger),
+		authenticationUsecase: authenticationUsecase,
+		userUsecase:           userUsecase,
+		userRepo:              userRepo,
+		userPreferencesRepo:   userPreferencesRepo,
+		userPrivacyRepo:       userPrivacyRepo,
+		userLocationRepo:      userLocationRepo,
+		userTfaRepo:           userTfaRepo,
+		userCheckinRepo:       userCheckinRepo,
 	}
 }
 
@@ -187,7 +187,7 @@ func (s *UserService) Page(ctx context.Context, req *v1.PageUser_Request) (rsp *
 }
 
 func (s *UserService) Avatar(ctx context.Context, req *v1.AvatarUser_Request) (rsp *common.ImageReply, err error) {
-	buf, err := s.userDomain.Avatar(ctx, req.Name)
+	buf, err := s.userUsecase.Avatar(ctx, req.Name)
 	if err != nil {
 		return nil, err
 	}

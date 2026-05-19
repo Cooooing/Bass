@@ -17,6 +17,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.ArticleActionRecordRepo = (*ArticleActionRecordRepo)(nil)
+
 type ArticleActionRecordRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

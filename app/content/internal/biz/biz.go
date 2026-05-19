@@ -3,7 +3,7 @@ package biz
 import (
 	"common/pkg/client/rpc"
 	"common/pkg/util"
-	"content/internal/biz/domain"
+	"content/internal/biz/usecase"
 
 	"github.com/google/wire"
 )
@@ -14,8 +14,8 @@ var BizProviderSet = wire.NewSet(
 
 	rpc.ProvideUserClient,
 
-	domain.NewArticleDomain,
-	domain.NewCommentDomain,
-	domain.NewDomainDomain,
-	domain.NewTagDomain,
+	usecase.NewArticleUsecase,
+	usecase.NewCommentUsecase,
+	usecase.NewContentUsecase,
+	usecase.NewTagUsecase,
 )

@@ -11,6 +11,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.ArticlePostscriptRepo = (*ArticlePostscriptRepo)(nil)
+
 type ArticlePostscriptRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

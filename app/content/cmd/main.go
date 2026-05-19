@@ -1,7 +1,7 @@
 package main
 
 import (
-	"common/pkg/client"
+	commonClient "common/pkg/client"
 	"common/pkg/util"
 	commonServer "common/pkg/util/server"
 	"content/internal/conf"
@@ -23,9 +23,9 @@ var (
 	// Version is the version of the compiled software.
 	Version = "v1.0.0"
 	// flagConf is the config flag.
-	flagConf = "configs"
+	flagConf = "configs/config.yaml"
 	// flagConf is the config flag.
-	flagBootstrap = "configs"
+	flagBootstrap = "configs/bootstrap.yaml"
 )
 
 func init() {
@@ -33,7 +33,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, cc *client.ConsulClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)

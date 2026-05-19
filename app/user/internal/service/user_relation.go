@@ -9,8 +9,8 @@ import (
 	"common/pkg/util"
 
 	"context"
-	"user/internal/biz/doamin"
 	"user/internal/biz/repo"
+	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -18,12 +18,12 @@ import (
 
 type UserRelationService struct {
 	v1.UnimplementedUserUserRelationServiceServer
-	userRelationDomain *doamin.UserRelationDomain
+	userRelationUsecase *usecase.UserRelationUsecase
 }
 
-func NewUserRelationService(userRelationDomain *doamin.UserRelationDomain) *UserRelationService {
+func NewUserRelationService(userRelationUsecase *usecase.UserRelationUsecase) *UserRelationService {
 	return &UserRelationService{
-		userRelationDomain: userRelationDomain,
+		userRelationUsecase: userRelationUsecase,
 	}
 }
 
@@ -41,7 +41,7 @@ func (s *UserRelationService) Block(ctx context.Context, req *v1.BlockUserRelati
 	if user.ID == req.BlockUserId {
 		return nil, cerrors.ErrorBadRequest("can not block yourself")
 	}
-	err = s.userRelationDomain.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_BLOCK, req.Block, user.ID, req.BlockUserId)
+	err = s.userRelationUsecase.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_BLOCK, req.Block, user.ID, req.BlockUserId)
 	return &v1.BlockUserRelation_Reply{}, err
 }
 
@@ -53,7 +53,7 @@ func (s *UserRelationService) Follow(ctx context.Context, req *v1.FollowUserRela
 	if user.ID == req.FollowUserId {
 		return nil, cerrors.ErrorBadRequest("can not follow yourself")
 	}
-	err = s.userRelationDomain.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_FOLLOW, req.Follow, user.ID, req.FollowUserId)
+	err = s.userRelationUsecase.UpdateUserRelation(ctx, v1.UserRelationType_USER_RELATION_TYPE_FOLLOW, req.Follow, user.ID, req.FollowUserId)
 	return &v1.FollowUserRelation_Reply{}, err
 }
 
@@ -63,7 +63,7 @@ func (s *UserRelationService) Page(ctx context.Context, req *v1.PageUserRelation
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	userRelations, page, err := s.userRelationDomain.Page(ctx, req.Page, &repo.UserRelationGetReq{
+	userRelations, page, err := s.userRelationUsecase.Page(ctx, req.Page, &repo.UserRelationGetReq{
 		ActorId:    new(user.ID),
 		Type:       req.Query.Type,
 		WithTarget: true,

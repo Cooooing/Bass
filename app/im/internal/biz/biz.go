@@ -3,7 +3,7 @@ package biz
 import (
 	"common/pkg/util"
 	"common/pkg/util/jwt"
-	"im/internal/biz/domain"
+	"im/internal/biz/usecase"
 
 	"github.com/google/wire"
 )
@@ -13,7 +13,7 @@ var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 	util.NewEventPool,
 
-	domain.NewChatGroupDomain,
-	domain.NewChatSessionDomain,
-	domain.NewChatMessageDomain,
+	usecase.NewChatGroupUsecase,
+	usecase.NewChatSessionUsecase,
+	usecase.NewChatMessageUsecase,
 )

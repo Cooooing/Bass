@@ -8,41 +8,41 @@ import (
 	"common/pkg/util"
 
 	"context"
-	"user/internal/biz/doamin"
+	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
-type TwoFactorAuthenticationService struct {
-	v1.UnimplementedUserTwoFactorAuthenticationServiceServer
-	twoFactorAuthenticationDomain *doamin.TwoFactorAuthenticationDomain
+type TwoFactorAuthService struct {
+	v1.UnimplementedUserTwoFactorAuthServiceServer
+	twoFactorAuthUsecase *usecase.TwoFactorAuthUsecase
 }
 
-func NewTwoFactorAuthenticationService(userRelationDomain *doamin.TwoFactorAuthenticationDomain) *TwoFactorAuthenticationService {
-	return &TwoFactorAuthenticationService{
-		twoFactorAuthenticationDomain: userRelationDomain,
+func NewTwoFactorAuthService(twoFactorAuthUsecase *usecase.TwoFactorAuthUsecase) *TwoFactorAuthService {
+	return &TwoFactorAuthService{
+		twoFactorAuthUsecase: twoFactorAuthUsecase,
 	}
 }
 
-func (s *TwoFactorAuthenticationService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterUserTwoFactorAuthenticationServiceServer(gs, s)
+func (s *TwoFactorAuthService) RegisterGrpc(gs *grpc.Server) {
+	v1.RegisterUserTwoFactorAuthServiceServer(gs, s)
 }
 
-func (s *TwoFactorAuthenticationService) RegisterHttp(hs *http.Server) {}
+func (s *TwoFactorAuthService) RegisterHttp(hs *http.Server) {}
 
-func (s *TwoFactorAuthenticationService) Validate(ctx context.Context, req *v1.ValidateTwoFactorAuthentication_Request) (rsp *v1.ValidateTwoFactorAuthentication_Reply, err error) {
+func (s *TwoFactorAuthService) Validate(ctx context.Context, req *v1.ValidateTwoFactorAuth_Request) (rsp *v1.ValidateTwoFactorAuth_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	validate := s.twoFactorAuthenticationDomain.Validate(ctx, user.TwofaSecret, req.Code)
-	return &v1.ValidateTwoFactorAuthentication_Reply{
+	validate := s.twoFactorAuthUsecase.Validate(ctx, user.TwofaSecret, req.Code)
+	return &v1.ValidateTwoFactorAuth_Reply{
 		Verified: validate,
 	}, nil
 }
 
-func (s *TwoFactorAuthenticationService) Enable(ctx context.Context, req *v1.EnableTwoFactorAuthentication_Request) (rsp *v1.EnableTwoFactorAuthentication_Reply, err error) {
+func (s *TwoFactorAuthService) Enable(ctx context.Context, req *v1.EnableTwoFactorAuth_Request) (rsp *v1.EnableTwoFactorAuth_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -50,18 +50,18 @@ func (s *TwoFactorAuthenticationService) Enable(ctx context.Context, req *v1.Ena
 	if user.TwofaEnable {
 		return nil, cerrors.ErrorBadRequest("2FA already enabled")
 	}
-	buf, err := s.twoFactorAuthenticationDomain.Enable(ctx, user.Name)
+	buf, err := s.twoFactorAuthUsecase.Enable(ctx, user.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	return &v1.EnableTwoFactorAuthentication_Reply{
+	return &v1.EnableTwoFactorAuth_Reply{
 		Data:        buf,
 		ContentType: "image/png",
 	}, nil
 }
 
-func (s *TwoFactorAuthenticationService) Disable(ctx context.Context, req *v1.DisableTwoFactorAuthentication_Request) (rsp *v1.DisableTwoFactorAuthentication_Reply, err error) {
+func (s *TwoFactorAuthService) Disable(ctx context.Context, req *v1.DisableTwoFactorAuth_Request) (rsp *v1.DisableTwoFactorAuth_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -69,15 +69,15 @@ func (s *TwoFactorAuthenticationService) Disable(ctx context.Context, req *v1.Di
 	if !user.TwofaEnable {
 		return nil, cerrors.ErrorBadRequest("2FA already disabled")
 	}
-	err = s.twoFactorAuthenticationDomain.Disable(ctx, user.Name, user.TwofaSecret, req.Code)
-	return &v1.DisableTwoFactorAuthentication_Reply{}, err
+	err = s.twoFactorAuthUsecase.Disable(ctx, user.Name, user.TwofaSecret, req.Code)
+	return &v1.DisableTwoFactorAuth_Reply{}, err
 }
 
-func (s *TwoFactorAuthenticationService) Confirm(ctx context.Context, req *v1.ConfirmTwoFactorAuthentication_Request) (rsp *v1.ConfirmTwoFactorAuthentication_Reply, err error) {
+func (s *TwoFactorAuthService) Confirm(ctx context.Context, req *v1.ConfirmTwoFactorAuth_Request) (rsp *v1.ConfirmTwoFactorAuth_Reply, err error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	err = s.twoFactorAuthenticationDomain.Confirm(ctx, user.Name, req.Code)
-	return &v1.ConfirmTwoFactorAuthentication_Reply{}, err
+	err = s.twoFactorAuthUsecase.Confirm(ctx, user.Name, req.Code)
+	return &v1.ConfirmTwoFactorAuth_Reply{}, err
 }

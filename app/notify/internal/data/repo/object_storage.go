@@ -14,6 +14,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.ObjectStorageRepo = (*ObjectStorageRepo)(nil)
+
 type ObjectStorageRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

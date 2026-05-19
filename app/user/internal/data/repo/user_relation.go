@@ -17,6 +17,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.UserRelationRepo = (*UserRelationRepo)(nil)
+
 type UserRelationRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

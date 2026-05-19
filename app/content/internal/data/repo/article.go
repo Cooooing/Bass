@@ -24,6 +24,8 @@ import (
 	"github.com/samber/lo"
 )
 
+var _ repo.ArticleRepo = (*ArticleRepo)(nil)
+
 type ArticleRepo struct {
 	conf           *conf.Bootstrap
 	log            *log.Helper

@@ -7,9 +7,9 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 
-	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/biz/usecase"
 	"content/internal/data/gen"
 	"context"
 
@@ -19,7 +19,7 @@ import (
 type CommentService struct {
 	v1.UnimplementedContentCommentServiceServer
 
-	commentDomain *domain.CommentDomain
+	commentDomain *usecase.CommentUsecase
 	commentRepo   repo.CommentRepo
 	articleRepo   repo.ArticleRepo
 	db            *gen.Client
@@ -30,7 +30,7 @@ func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func NewCommentService(
-	commentDomain *domain.CommentDomain,
+	commentDomain *usecase.CommentUsecase,
 	commentRepo repo.CommentRepo,
 	articleRepo repo.ArticleRepo,
 	db *gen.Client,

@@ -8,9 +8,9 @@ import (
 	"common/pkg/util"
 	"content/internal/data/client"
 
-	"content/internal/biz/domain"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/biz/usecase"
 	"content/internal/data/gen"
 	articleent "content/internal/data/gen/article"
 	tagent "content/internal/data/gen/tag"
@@ -23,7 +23,7 @@ import (
 type ArticleService struct {
 	v1.UnimplementedContentArticleServiceServer
 
-	articleDomain *domain.ArticleDomain
+	articleDomain *usecase.ArticleUsecase
 	articleRepo   repo.ArticleRepo
 	db            *gen.Client
 }
@@ -33,7 +33,7 @@ func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func NewArticleService(
-	articleDomain *domain.ArticleDomain,
+	articleDomain *usecase.ArticleUsecase,
 	articleRepo repo.ArticleRepo,
 	db *gen.Client,
 ) *ArticleService {

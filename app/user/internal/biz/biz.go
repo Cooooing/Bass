@@ -3,7 +3,7 @@ package biz
 import (
 	"common/pkg/util"
 	"common/pkg/util/jwt"
-	"user/internal/biz/doamin"
+	"user/internal/biz/usecase"
 
 	"github.com/google/wire"
 )
@@ -11,11 +11,11 @@ import (
 // BizProviderSet is biz providers.
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
-	doamin.NewTokenService,
+	usecase.NewTokenUsecase,
 	util.NewEventPool,
 
-	doamin.NewAuthenticationDomain,
-	doamin.NewUserDomain,
-	doamin.NewUserRelationDomain,
-	doamin.NewTwoFactorAuthenticationDomain,
+	usecase.NewAuthUsecase,
+	usecase.NewUserUsecase,
+	usecase.NewUserRelationUsecase,
+	usecase.NewTwoFactorAuthUsecase,
 )

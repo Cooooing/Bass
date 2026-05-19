@@ -17,6 +17,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+var _ repo.NotificationRecordRepo = (*NotificationRecordRepo)(nil)
+
 type NotificationRecordRepo struct {
 	conf   *conf.Bootstrap
 	log    *log.Helper

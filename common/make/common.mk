@@ -17,7 +17,7 @@ COMMON_PROTO_FILES := $(shell find $(COMMON_DIR) -type f -name "*.proto" | sort)
 
 .PHONY: init
 init:
-	@echo "installing required tools..."
+	@echo "[init] installing tools..."
 	@cd $(COMMON_DIR) && \
 	go mod tidy && go mod download
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
@@ -32,18 +32,19 @@ init:
 
 .PHONY: api-clean
 api-clean:
-	@echo "clean API proto files..."
-	@cd $(PROTO_GEN_DIR) && find . -type f ! -name ".gitkeep" -delete || true && find . -type d -empty -delete || true
+	@echo "[api-clean] removing generated go files..."
+	@cd $(PROTO_GEN_DIR) 2>/dev/null && find . -name "*.go" -type f -delete 2>/dev/null; true
+	@cd $(PROTO_GEN_DIR) 2>/dev/null && find . -type d -empty -delete 2>/dev/null; true
 
 .PHONY: api
 api: api-clean
-	@echo "generating API proto files..."
+	@echo "[api] protoc..."
+	@mkdir -p $(PROTO_GEN_DIR)
 	@protoc -I $(PROTO_DIR) -I $(PROTO_THIRD_PARTY_DIR) \
 	       --go_out=paths=source_relative:$(PROTO_GEN_DIR) \
 	       --go-grpc_out=paths=source_relative:$(PROTO_GEN_DIR) \
 	       --go-http_out=paths=source_relative:$(PROTO_GEN_DIR) \
 	       --go-errors_out=paths=source_relative:$(PROTO_GEN_DIR) \
-	       --validate_out=lang=go,paths=source_relative:$(PROTO_GEN_DIR) \
 	       $(COMMON_PROTO_FILES)
 
 endif

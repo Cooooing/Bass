@@ -40,6 +40,7 @@ bin/
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/gen/
+/app/**/server
 /common/buf.lock
 
 

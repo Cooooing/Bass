@@ -4,7 +4,6 @@ package common.api.app.bbs.v1;
 
 import "common/common.proto";
 import "google/api/annotations.proto";
-import "google/api/field_behavior.proto";
 
 option go_package = "common/api/gen/bbs/v1;v1";
 
@@ -64,13 +63,13 @@ message PingBbs {
 message GetBoardBbs {
   message Request {
     // 版块 ID
-    int64 board_id = 1 [(google.api.field_behavior) = REQUIRED];
+    int64 board_id = 1;
     // 是否包含统计数据
-    bool include_stats = 2 [(google.api.field_behavior) = OPTIONAL];
+    bool include_stats = 2;
   }
   message Reply {
     // 版块 ID（仅响应返回）
-    int64 id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+    int64 id = 1;
     // 版块名称
     string name = 2;
     // 版块描述
@@ -85,23 +84,23 @@ message GetBoardBbs {
 message CreatePostBbs {
   message Request {
     // 版块 ID
-    int64 board_id = 1 [(google.api.field_behavior) = REQUIRED];
+    int64 board_id = 1;
     // 帖子标题
-    string title = 2 [(google.api.field_behavior) = REQUIRED];
+    string title = 2;
     // 帖子内容
-    string content = 3 [(google.api.field_behavior) = REQUIRED];
+    string content = 3;
     // 作者昵称（选填，不填则使用当前用户昵称）
-    string author_name = 4 [(google.api.field_behavior) = OPTIONAL];
+    string author_name = 4;
     // 标签列表（选填）
-    repeated string tags = 5 [(google.api.field_behavior) = OPTIONAL];
+    repeated string tags = 5;
     // 审核备注（仅请求使用，响应不返回）
-    string audit_note = 6 [(google.api.field_behavior) = INPUT_ONLY];
+    string audit_note = 6;
   }
   message Reply {
     // 帖子 ID（仅响应返回）
-    int64 id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+    int64 id = 1;
     // 创建时间（仅响应返回）
-    string created_at = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+    string created_at = 2;
   }
 }
 
@@ -112,9 +111,9 @@ message ListPostsBbs {
     // 分页参数
     common.PageRequest page = 1;
     // 版块 ID（选填，不填则查全部）
-    int64 board_id = 2 [(google.api.field_behavior) = OPTIONAL];
+    int64 board_id = 2;
     // 搜索关键词（选填）
-    string keyword = 3 [(google.api.field_behavior) = OPTIONAL];
+    string keyword = 3;
   }
   message Reply {
     // 分页信息
@@ -129,7 +128,7 @@ message ListPostsBbs {
 message DeletePostBbs {
   message Request {
     // 帖子 ID
-    int64 post_id = 1 [(google.api.field_behavior) = REQUIRED];
+    int64 post_id = 1;
   }
   message Reply {}
 }

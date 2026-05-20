@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.user.v1;
 
 import "user/v1/model.proto";
-import "validate/validate.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
@@ -46,13 +45,7 @@ service UserAuthService {
 message RegisterEmailAuth {
   message Request {
     // 邮箱
-    string email = 1 [(validate.rules) = {
-      string: {
-        min_len: 5
-        max_len: 320
-        email: true
-      }
-    }];
+    string email = 1;
     // 密码
     string password = 2;
     // 用户名
@@ -71,13 +64,7 @@ message RegisterEmailAuth {
 message RegisterEmailVerifyAuth {
   message Request {
     // 验证码 6 位验证码
-    string code = 1 [(validate.rules) = {
-      string: {
-        min_len: 6
-        max_len: 6
-        pattern: "^[A-Za-z0-9]+$"
-      }
-    }];
+    string code = 1;
     // 验证码令牌
     string code_token = 2;
   }
@@ -87,13 +74,7 @@ message RegisterEmailVerifyAuth {
 message RegisterPhoneAuth {
   message Request {
     // 邮箱 11 位国内手机号
-    string phone = 1 [(validate.rules) = {
-      string: {
-        min_len: 11
-        max_len: 11
-        pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$"
-      }
-    }];
+    string phone = 1;
     // 密码
     string password = 2;
     // 用户名
@@ -112,13 +93,7 @@ message RegisterPhoneAuth {
 message RegisterPhoneVerifyAuth {
   message Request {
     // 验证码 6 位验证码
-    string code = 1 [(validate.rules) = {
-      string: {
-        min_len: 6
-        max_len: 6
-        pattern: "^[A-Za-z0-9]+$"
-      }
-    }];
+    string code = 1;
     // 验证码令牌
     string code_token = 2;
   }
@@ -128,13 +103,7 @@ message RegisterPhoneVerifyAuth {
 message ExistEmailAuth {
   message Request {
     // 邮箱
-    string email = 1 [(validate.rules) = {
-      string: {
-        min_len: 5
-        max_len: 320
-        email: true
-      }
-    }];
+    string email = 1;
   }
   message Reply {
     // 是否存在
@@ -145,13 +114,7 @@ message ExistEmailAuth {
 message ExistUsernameAuth {
   message Request {
     // 用户名 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
-    string username = 1 [(validate.rules) = {
-      string: {
-        min_len: 2
-        max_len: 32
-        pattern: "^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$"
-      }
-    }];
+    string username = 1;
   }
   message Reply {
     // 是否存在
@@ -162,13 +125,7 @@ message ExistUsernameAuth {
 message ExistPhoneAuth {
   message Request {
     // 手机号 11 位国内手机号
-    string phone = 1 [(validate.rules) = {
-      string: {
-        min_len: 11
-        max_len: 11
-        pattern: "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$"
-      }
-    }];
+    string phone = 1;
   }
   message Reply {
     // 是否存在

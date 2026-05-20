@@ -3,78 +3,79 @@
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 APP_DIR := $(ROOT_DIR)/app
 
-# Auto-discover modules that have a Makefile
-#SERVERS := $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
-SERVERS := bbs user content notify
-BFF_SERVERS := bbs
+# Auto-discover modules (all directories with a Makefile under app/)
+MODULES ?= $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
+BFF_SERVERS ?= bbs
 
 IGNORE_ERROR ?= 1
 
 include $(ROOT_DIR)/common/make/common.mk
 
-# Dispatch to single module: make user gen
-.PHONY: $(SERVERS)
-$(SERVERS):
-	@echo "===> [$@] $(SUBTARGET)"
-	@$(MAKE) -C $(APP_DIR)/$@ $(SUBTARGET) IGNORE_ERROR=$(IGNORE_ERROR)
+# --- Root-only targets (unique names, no module collision) ---
 
-# gen: api once, then gen each module (ROOT_LEVEL=1 skips api per-module)
-.PHONY: gen
-gen: api
-	@for module in $(SERVERS); do \
-		echo "===> [$$module] gen"; \
-		$(MAKE) -C $(APP_DIR)/$$module gen IGNORE_ERROR=$(IGNORE_ERROR) ROOT_LEVEL=1 || exit 1; \
-	done
-
-# clean: api-clean once, then clean each module
-.PHONY: clean
-clean: api-clean
-	@for module in $(SERVERS); do \
-		echo "===> [$$module] clean"; \
-		$(MAKE) -C $(APP_DIR)/$$module clean IGNORE_ERROR=$(IGNORE_ERROR) ROOT_LEVEL=1 || exit 1; \
-	done
-
-# all: init+api once, then all each module
 .PHONY: all
 all: init api
-	@for module in $(SERVERS); do \
-		echo "===> [$$module] all"; \
-		$(MAKE) -C $(APP_DIR)/$$module all IGNORE_ERROR=$(IGNORE_ERROR) ROOT_LEVEL=1 || exit 1; \
+	@for module in $(MODULES); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module all IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-# Per-module targets: dispatch to each module directly
-.PHONY: tidy build config config-clean wire wire-clean ent ent-clean
-tidy build config config-clean wire wire-clean ent ent-clean:
-	@for module in $(SERVERS); do \
-		echo "===> [$$module] $@"; \
-		$(MAKE) -C $(APP_DIR)/$$module $@ IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+.PHONY: gen-all
+gen-all: api
+	@for module in $(MODULES); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module gen IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-# BFF-only targets: only iterate BFF services
-.PHONY: doc doc-clean
-doc doc-clean:
+.PHONY: clean-all
+clean-all: api-clean
+	@for module in $(MODULES); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
+.PHONY: tidy-all build-all
+tidy-all build-all:
+	@for module in $(MODULES); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module $(patsubst %-all,%,$@) IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
+.PHONY: doc-all
+doc-all:
 	@for module in $(BFF_SERVERS); do \
-		echo "===> [$$module] $@"; \
-		$(MAKE) -C $(APP_DIR)/$$module $@ IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module doc IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-# help
+# --- help ---
 .PHONY: help
 help:
 	@echo "Available targets:"
-	@echo "  make init     - install tools"
-	@echo "  make tidy     - run go mod tidy"
-	@echo "  make config   - generate proto config codes"
-	@echo "  make wire     - generate wire codes"
-	@echo "  make ent      - generate ent codes"
-	@echo "  make api      - generate proto API codes"
-	@echo "  make doc      - generate BFF OpenAPI docs"
-	@echo "  make gen      - generate all codes"
-	@echo "  make build    - build all services"
-	@echo "  make clean    - clean all generated files"
-	@echo "  make all      - init + gen + build all"
 	@echo ""
-	@echo "Single module:"
-	@echo "  make user gen       - gen for user module only"
-	@echo "  make bbs doc        - gen openapi for bbs only"
-	@echo "  make user SUBTARGET=build - build user module"
+	@echo "Root-level (run once for all modules):"
+	@echo "  make init         - install tools"
+	@echo "  make api          - generate shared API proto codes"
+	@echo "  make api-clean    - clean shared API proto codes"
+	@echo "  make all          - full pipeline: init + api + gen + build"
+	@echo ""
+	@echo "Batch (run across all modules):"
+	@echo "  make gen-all      - generate all codes (api + per-module)"
+	@echo "  make clean-all    - clean all generated files"
+	@echo "  make tidy-all     - run go mod tidy for all modules"
+	@echo "  make build-all    - build all services"
+	@echo "  make doc-all      - generate BFF OpenAPI docs"
+	@echo ""
+	@echo "Single module (make -C app/<module> <target>):"
+	@echo "  make -C app/<module> gen       - generate codes for one module"
+	@echo "  make -C app/<module> clean     - clean one module"
+	@echo "  make -C app/<module> build     - build one module"
+	@echo "  make -C app/<module> tidy      - go mod tidy for one module"
+	@echo "  make -C app/<module> ent       - generate ent codes (if ent.mk included)"
+	@echo "  make -C app/<module> doc       - generate openapi docs (if doc.mk included)"
+	@echo ""
+	@echo "  Examples:"
+	@echo "    make -C app/bbs gen"
+	@echo "    make -C app/user build"
+	@echo "    make -C app/bbs ent"
+	@echo "    make -C app/bbs doc"

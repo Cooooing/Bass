@@ -5,7 +5,6 @@ package common.api.app.notify.v1;
 import "google/protobuf/timestamp.proto";
 import "common/enums/event.proto";
 import "notify/v1/enum.proto";
-import "validate/validate.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
 
@@ -22,15 +21,9 @@ message NotificationTemplate {
   // 主键
   int64 id = 3;
   // 事件类型
-  common.enums.EventType event_type = 5 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  common.enums.EventType event_type = 5;
   // 通知渠道
-  NotificationChannel channel = 6 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  NotificationChannel channel = 6;
   // 模板标题
   string title = 4;
   // 模板内容
@@ -69,19 +62,13 @@ message NotificationMeta {
   // uuid
   string uuid = 4;
   // 事件类型
-  common.enums.EventType event_type = 5 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  common.enums.EventType event_type = 5;
   // 发送者ID
   int64 sender_id = 6;
   // 通知元数据
   string meta = 7;
   // 状态 1-正常 2-被取消
-  NotificationStatus status = 8 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  NotificationStatus status = 8;
 
   // 渲染内容
   string content_render = 20;
@@ -95,15 +82,9 @@ message NotificationTemplateQueryParams {
   // 主键
   repeated int64 ids = 2;
   // 事件类型
-  optional common.enums.EventType event_type = 5 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional common.enums.EventType event_type = 5;
   // 通知渠道
-  optional NotificationChannel channel = 6 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional NotificationChannel channel = 6;
   // 是否启用
   optional bool enable = 9;
 }
@@ -123,15 +104,9 @@ message NotificationMetaQueryParams {
   // uuid
   repeated string uuids = 3;
   // 事件类型
-  optional common.enums.EventType event_type = 5 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional common.enums.EventType event_type = 5;
   // 发送者ID
   repeated int64 sender_ids = 6;
   // 状态 1-正常 2-被取消
-  optional NotificationStatus status = 8 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional NotificationStatus status = 8;
 }

@@ -6,7 +6,6 @@ import "common/common.proto";
 import "content/v1/enum.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/model.proto";
-import "validate/validate.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
@@ -152,10 +151,7 @@ message Tag {
   // 所属领域Id
   optional int64 domain_id = 5;
   // 标签状态：1-正常，2-禁用
-  optional TagStatus status = 6 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional TagStatus status = 6;
   // 文章数
   int32 article_count = 7;
 }
@@ -177,10 +173,7 @@ message Domain {
   // 描述
   optional string description = 5;
   // 状态 1-正常，2-禁用
-  DomainStatus status = 6 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  DomainStatus status = 6;
   // 链接
   optional string url = 7;
   // 图标
@@ -222,10 +215,7 @@ message Comment {
   // 回复评论Id
   optional int64 reply_id = 7;
   // 状态 1-正常 2-隐藏
-  CommentStatus status = 8 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  CommentStatus status = 8;
   // 感谢数量
   int32 thank_count = 13;
   // 点赞数量
@@ -275,10 +265,7 @@ message CommentQueryParams {
   // 回复评论Id
   optional int64 reply_id = 5;
   // 排序 1-最新 2-最热
-  optional CommentStatus order = 6 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional CommentStatus order = 6;
   // 用户Id
   optional int64 user_id = 7;
   // 层级
@@ -315,10 +302,7 @@ message DomainQueryParams {
   // 描述
   optional string description = 4;
   // 状态 1-正常，2-禁用
-  optional DomainStatus status = 5 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional DomainStatus status = 5;
   // 链接
   optional string url = 6;
   // 图标
@@ -337,22 +321,19 @@ message ArticleSave {
   // 文章id
   optional int64 id = 8;
   // 标题
-  string title = 1 [(validate.rules).string = {
-    min_len: 1
-    max_len: 100
-  }];
+  string title = 1;
   // 内容
-  string content = 2 [(validate.rules).string = {min_len: 1}];
+  string content = 2;
   // 打赏内容
   optional string reward_content = 3;
   // 打赏积分
-  optional int32 reward_points = 4 [(validate.rules).int32 = {gte: 0}];
+  optional int32 reward_points = 4;
   // 状态
   ArticleStatus status = 5;
   // 类型
   ArticleType type = 6;
   // 悬赏积分
-  optional int32 bounty_points = 7 [(validate.rules).int32 = {gte: 0}];
+  optional int32 bounty_points = 7;
 
   // 创作声明
   optional string statement = 10;
@@ -373,10 +354,7 @@ message TagSave {
   // 领域Id
   optional int64 domain_id = 2;
   // 状态：1-正常，2-禁用
-  optional TagStatus status = 3 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional TagStatus status = 3;
   // 标签名称
   string name = 4;
   // 标签描述
@@ -391,10 +369,7 @@ message DomainSave {
   // 描述
   optional string description = 3;
   // 状态 1-正常，2-禁用
-  optional DomainStatus status = 4 [(validate.rules).enum = {
-    defined_only: true
-    not_in: [0]
-  }];
+  optional DomainStatus status = 4;
   // 链接
   optional string url = 5;
   // 图标

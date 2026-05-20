@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "validate/validate.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
@@ -25,10 +24,7 @@ service UserTwoFactorAuthService {
 message ValidateTwoFactorAuth {
   message Request {
     // 2FA 验证码
-    string code = 1 [(validate.rules).string = {
-      min_len: 6
-      max_len: 6
-    }];
+    string code = 1;
   }
   message Reply {
     // 验证结果
@@ -49,10 +45,7 @@ message EnableTwoFactorAuth {
 message DisableTwoFactorAuth {
   message Request {
     // 2FA 验证码
-    string code = 1 [(validate.rules).string = {
-      min_len: 6
-      max_len: 6
-    }];
+    string code = 1;
   }
   message Reply {}
 }
@@ -60,10 +53,7 @@ message DisableTwoFactorAuth {
 message ConfirmTwoFactorAuth {
   message Request {
     // 2FA 验证码
-    string code = 1 [(validate.rules).string = {
-      min_len: 6
-      max_len: 6
-    }];
+    string code = 1;
   }
   message Reply {}
 }

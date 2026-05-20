@@ -7,7 +7,6 @@ import "google/api/annotations.proto";
 import "common/enums/event.proto";
 import "notify/v1/enum.proto";
 import "notify/v1/model.proto";
-import "validate/validate.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
 
@@ -69,15 +68,9 @@ message UpdateNotificationTemplate {
     // 模板 ID
     int64 id = 1;
     // 事件类型
-    optional common.enums.EventType event_type = 5 [(validate.rules).enum = {
-      defined_only: true
-      not_in: [0]
-    }];
+    optional common.enums.EventType event_type = 5;
     // 通知渠道
-    optional NotificationChannel channel = 6 [(validate.rules).enum = {
-      defined_only: true
-      not_in: [0]
-    }];
+    optional NotificationChannel channel = 6;
     // 内容模板
     optional string content = 7;
     // 是否启用

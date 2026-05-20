@@ -5,7 +5,6 @@ package common.api.app.content.v1;
 import "common/common.proto";
 import "content/v1/enum.proto";
 import "content/v1/model.proto";
-import "validate/validate.proto";
 
 option go_package = "common/api/gen/content/v1;v1";
 
@@ -89,7 +88,7 @@ message AddPostscriptArticle {
     // 文章ID
     int64 article_id = 1;
     // 附言内容
-    string content = 2 [(validate.rules).string = {min_len: 1}];
+    string content = 2;
   }
   message Reply {
     // 附言信息

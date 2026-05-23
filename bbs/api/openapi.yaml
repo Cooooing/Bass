@@ -1,0 +1,1369 @@
+openapi: 3.0.3
+info:
+  title: ""
+  version: 0.0.1
+servers:
+- url: /
+tags:
+- name: AccountService
+- name: AuthService
+- name: LocationService
+- name: PreferencesService
+- name: PrivacySettingService
+- name: RelationService
+- name: TfaService
+paths:
+  /v1/user/account/batch-get-profile:
+    post:
+      description: 批量获取账号展示资料
+      operationId: AccountService_BatchGetProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetProfileAccount_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetProfileAccount_Reply"
+          description: OK
+      tags:
+      - AccountService
+  /v1/user/account/get-current:
+    post:
+      description: 获取当前登录账号的完整资料
+      operationId: AccountService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentAccount_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentAccount_Reply"
+          description: OK
+      tags:
+      - AccountService
+  /v1/user/account/get-profile:
+    post:
+      description: 按账号 ID 获取账号展示资料
+      operationId: AccountService_GetProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetProfileAccount_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetProfileAccount_Reply"
+          description: OK
+      tags:
+      - AccountService
+  /v1/user/account/update-profile:
+    post:
+      description: 更新当前登录账号的展示资料
+      operationId: AccountService_UpdateProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdateProfileAccount_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdateProfileAccount_Reply"
+          description: OK
+      tags:
+      - AccountService
+  /v1/user/auth/login-password:
+    post:
+      description: 使用密码登录账号
+      operationId: AuthService_LoginPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.LoginPassword_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.LoginPassword_Reply"
+          description: OK
+      tags:
+      - AuthService
+  /v1/user/auth/logout:
+    post:
+      description: 登出当前登录账号
+      operationId: AuthService_Logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.Logout_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.Logout_Reply"
+          description: OK
+      tags:
+      - AuthService
+  /v1/user/auth/register-email:
+    post:
+      description: 使用邮箱发起账号注册
+      operationId: AuthService_RegisterEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterEmail_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterEmail_Reply"
+          description: OK
+      tags:
+      - AuthService
+  /v1/user/auth/register-phone:
+    post:
+      description: 使用手机号发起账号注册
+      operationId: AuthService_RegisterPhone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterPhone_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterPhone_Reply"
+          description: OK
+      tags:
+      - AuthService
+  /v1/user/auth/verify-email-register:
+    post:
+      description: 校验邮箱注册验证码
+      operationId: AuthService_VerifyEmailRegister
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyEmailRegister_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyEmailRegister_Reply"
+          description: OK
+      tags:
+      - AuthService
+  /v1/user/auth/verify-phone-register:
+    post:
+      description: 校验手机号注册验证码
+      operationId: AuthService_VerifyPhoneRegister
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyPhoneRegister_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyPhoneRegister_Reply"
+          description: OK
+      tags:
+      - AuthService
+  /v1/user/location/get-current:
+    post:
+      description: 获取当前登录账号的地理资料
+      operationId: LocationService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentLocation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentLocation_Reply"
+          description: OK
+      tags:
+      - LocationService
+  /v1/user/location/upsert-current:
+    post:
+      description: 更新当前登录账号的地理资料
+      operationId: LocationService_Upsert
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpsertLocation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpsertLocation_Reply"
+          description: OK
+      tags:
+      - LocationService
+  /v1/user/preference/get-current:
+    post:
+      description: 获取当前登录账号的偏好设置
+      operationId: PreferencesService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPreferences_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPreferences_Reply"
+          description: OK
+      tags:
+      - PreferencesService
+  /v1/user/preference/update-current:
+    post:
+      description: 更新当前登录账号的偏好设置
+      operationId: PreferencesService_Update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePreferences_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePreferences_Reply"
+          description: OK
+      tags:
+      - PreferencesService
+  /v1/user/privacy-setting/get-current:
+    post:
+      description: 获取当前登录账号的隐私设置
+      operationId: PrivacySettingService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Reply"
+          description: OK
+      tags:
+      - PrivacySettingService
+  /v1/user/privacy-setting/update-current:
+    post:
+      description: 更新当前登录账号的隐私设置
+      operationId: PrivacySettingService_Update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePrivacySetting_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePrivacySetting_Reply"
+          description: OK
+      tags:
+      - PrivacySettingService
+  /v1/user/relation/batch-get-status:
+    post:
+      description: 批量查询当前账号与多个目标账号之间的关系状态
+      operationId: RelationService_BatchGetStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetStatusRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetStatusRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/block:
+    post:
+      description: 当前账号拉黑目标账号
+      operationId: RelationService_Block
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BlockRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BlockRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/follow:
+    post:
+      description: 当前账号关注目标账号
+      operationId: RelationService_Follow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.FollowRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.FollowRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/page-blocked:
+    post:
+      description: 分页查询当前账号拉黑的账号列表
+      operationId: RelationService_PageBlocked
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageBlockedRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageBlockedRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/page-followers:
+    post:
+      description: 分页查询当前账号的粉丝账号列表
+      operationId: RelationService_PageFollowers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowersRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowersRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/page-following:
+    post:
+      description: 分页查询当前账号关注的账号列表
+      operationId: RelationService_PageFollowing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowingRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowingRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/unblock:
+    post:
+      description: 当前账号取消拉黑目标账号
+      operationId: RelationService_Unblock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnblockRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnblockRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/unfollow:
+    post:
+      description: 当前账号取消关注目标账号
+      operationId: RelationService_Unfollow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnfollowRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnfollowRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/tfa/begin-enable:
+    post:
+      description: 开始启用二步验证
+      operationId: TfaService_BeginEnable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BeginEnableTfa_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BeginEnableTfa_Reply"
+          description: OK
+      tags:
+      - TfaService
+  /v1/user/tfa/confirm-enable:
+    post:
+      description: 确认二步验证码并正式启用二步验证
+      operationId: TfaService_ConfirmEnable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.ConfirmEnableTfa_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.ConfirmEnableTfa_Reply"
+          description: OK
+      tags:
+      - TfaService
+  /v1/user/tfa/disable:
+    post:
+      description: 校验二步验证码并关闭二步验证
+      operationId: TfaService_Disable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.DisableTfa_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.DisableTfa_Reply"
+          description: OK
+      tags:
+      - TfaService
+  /v1/user/tfa/get-current:
+    post:
+      description: 获取当前登录账号的二步验证状态
+      operationId: TfaService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentTfa_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentTfa_Reply"
+          description: OK
+      tags:
+      - TfaService
+  /v1/user/tfa/validate:
+    post:
+      description: 校验当前登录账号的二步验证码
+      operationId: TfaService_Validate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/common.api.app.bbs.v1.user.ValidateTfa_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/common.api.app.bbs.v1.user.ValidateTfa_Reply"
+          description: OK
+      tags:
+      - TfaService
+components:
+  schemas:
+    common.api.app.bbs.v1.user.Account:
+      description: 当前账号完整资料
+      example:
+        profile:
+          group_name: group_name
+          created_at: created_at
+          follower_count: 1
+          url: url
+          blocked_count: 5
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 6
+          name: name
+          nickname: nickname
+          mbti: mbti
+          block_count: 5
+          id: id
+          introduction: introduction
+          status: 0
+        contact:
+          user_id: user_id
+          phone: phone
+          email: email
+      properties:
+        profile:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+        contact:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountContact"
+      type: object
+    common.api.app.bbs.v1.user.AccountContact:
+      description: 当前账号联系方式
+      example:
+        user_id: user_id
+        phone: phone
+        email: email
+      properties:
+        user_id:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.AccountProfile:
+      description: 账号展示资料
+      example:
+        group_name: group_name
+        created_at: created_at
+        follower_count: 1
+        url: url
+        blocked_count: 5
+        avatar_url: avatar_url
+        updated_at: updated_at
+        follow_count: 6
+        name: name
+        nickname: nickname
+        mbti: mbti
+        block_count: 5
+        id: id
+        introduction: introduction
+        status: 0
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+        url:
+          type: string
+        avatar_url:
+          type: string
+        introduction:
+          type: string
+        mbti:
+          type: string
+        status:
+          format: enum
+          type: integer
+        group_name:
+          type: string
+        follow_count:
+          format: int32
+          type: integer
+        follower_count:
+          format: int32
+          type: integer
+        block_count:
+          format: int32
+          type: integer
+        blocked_count:
+          format: int32
+          type: integer
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.BatchGetProfileAccount_Reply:
+      example:
+        profiles:
+          key:
+            group_name: group_name
+            created_at: created_at
+            follower_count: 1
+            url: url
+            blocked_count: 5
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 6
+            name: name
+            nickname: nickname
+            mbti: mbti
+            block_count: 5
+            id: id
+            introduction: introduction
+            status: 0
+      properties:
+        profiles:
+          additionalProperties:
+            $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+          type: object
+      type: object
+    common.api.app.bbs.v1.user.BatchGetProfileAccount_Request:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+      type: object
+    common.api.app.bbs.v1.user.BatchGetStatusRelation_Reply:
+      example:
+        statuses:
+          key:
+            followed_by: true
+            blocking: true
+            blocked_by: true
+            following: true
+            target_id: target_id
+      properties:
+        statuses:
+          additionalProperties:
+            $ref: "#/components/schemas/common.api.app.bbs.v1.user.RelationStatus"
+          type: object
+      type: object
+    common.api.app.bbs.v1.user.BatchGetStatusRelation_Request:
+      properties:
+        target_ids:
+          items:
+            type: string
+          type: array
+      type: object
+    common.api.app.bbs.v1.user.BeginEnableTfa_Reply:
+      example:
+        data: data
+        content_type: content_type
+      properties:
+        data:
+          format: bytes
+          type: string
+        content_type:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.BeginEnableTfa_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.BlockRelation_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.BlockRelation_Request:
+      properties:
+        target_id:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.ConfirmEnableTfa_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.ConfirmEnableTfa_Request:
+      properties:
+        code:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.DisableTfa_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.DisableTfa_Request:
+      properties:
+        code:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.FollowRelation_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.FollowRelation_Request:
+      properties:
+        target_id:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentAccount_Reply:
+      example:
+        account:
+          profile:
+            group_name: group_name
+            created_at: created_at
+            follower_count: 1
+            url: url
+            blocked_count: 5
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 6
+            name: name
+            nickname: nickname
+            mbti: mbti
+            block_count: 5
+            id: id
+            introduction: introduction
+            status: 0
+          contact:
+            user_id: user_id
+            phone: phone
+            email: email
+      properties:
+        account:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Account"
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentAccount_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentLocation_Reply:
+      example:
+        location:
+          country: country
+          province: province
+          user_id: user_id
+          city: city
+      properties:
+        location:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Location"
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentLocation_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentPreferences_Reply:
+      example:
+        preference:
+          mobile_theme: mobile_theme
+          user_id: user_id
+          enable_web_notify: true
+          timezone: timezone
+          language: language
+          theme: theme
+          enable_email_subscribe: true
+      properties:
+        preference:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Preference"
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentPreferences_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Reply:
+      example:
+        privacy_setting:
+          public_followers: true
+          public_points: true
+          user_id: user_id
+          public_location: true
+          public_articles: true
+          public_comments: true
+          public_online_status: true
+      properties:
+        privacy_setting:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PrivacySetting"
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentTfa_Reply:
+      example:
+        tfa:
+          user_id: user_id
+          enable: true
+          enable_time: enable_time
+      properties:
+        tfa:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Tfa"
+      type: object
+    common.api.app.bbs.v1.user.GetCurrentTfa_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.GetProfileAccount_Reply:
+      example:
+        profile:
+          group_name: group_name
+          created_at: created_at
+          follower_count: 1
+          url: url
+          blocked_count: 5
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 6
+          name: name
+          nickname: nickname
+          mbti: mbti
+          block_count: 5
+          id: id
+          introduction: introduction
+          status: 0
+      properties:
+        profile:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+      type: object
+    common.api.app.bbs.v1.user.GetProfileAccount_Request:
+      properties:
+        user_id:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.Location:
+      description: 账号地理资料
+      example:
+        country: country
+        province: province
+        user_id: user_id
+        city: city
+      properties:
+        user_id:
+          type: string
+        country:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.LoginPassword_Reply:
+      example:
+        account:
+          profile:
+            group_name: group_name
+            created_at: created_at
+            follower_count: 1
+            url: url
+            blocked_count: 5
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 6
+            name: name
+            nickname: nickname
+            mbti: mbti
+            block_count: 5
+            id: id
+            introduction: introduction
+            status: 0
+          contact:
+            user_id: user_id
+            phone: phone
+            email: email
+        token: token
+      properties:
+        token:
+          type: string
+        account:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Account"
+      type: object
+    common.api.app.bbs.v1.user.LoginPassword_Request:
+      properties:
+        account:
+          type: string
+        password:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.Logout_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.Logout_Request:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.PageBlockedRelation_Reply:
+      example:
+        page:
+          current: current
+          total: total
+          page_size: page_size
+        rows:
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/common.api.app.bbs.v1.user.Relation"
+          type: array
+      type: object
+    common.api.app.bbs.v1.user.PageBlockedRelation_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageRequest"
+      type: object
+    common.api.app.bbs.v1.user.PageFollowersRelation_Reply:
+      example:
+        page:
+          current: current
+          total: total
+          page_size: page_size
+        rows:
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/common.api.app.bbs.v1.user.Relation"
+          type: array
+      type: object
+    common.api.app.bbs.v1.user.PageFollowersRelation_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageRequest"
+      type: object
+    common.api.app.bbs.v1.user.PageFollowingRelation_Reply:
+      example:
+        page:
+          current: current
+          total: total
+          page_size: page_size
+        rows:
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/common.api.app.bbs.v1.user.Relation"
+          type: array
+      type: object
+    common.api.app.bbs.v1.user.PageFollowingRelation_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageRequest"
+      type: object
+    common.api.app.bbs.v1.user.PageReply:
+      description: 分页响应
+      example:
+        current: current
+        total: total
+        page_size: page_size
+      properties:
+        current:
+          type: string
+        page_size:
+          type: string
+        total:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.PageRequest:
+      description: 分页请求
+      properties:
+        current:
+          type: string
+        page_size:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.Preference:
+      description: 账号偏好设置
+      example:
+        mobile_theme: mobile_theme
+        user_id: user_id
+        enable_web_notify: true
+        timezone: timezone
+        language: language
+        theme: theme
+        enable_email_subscribe: true
+      properties:
+        user_id:
+          type: string
+        language:
+          type: string
+        timezone:
+          type: string
+        theme:
+          type: string
+        mobile_theme:
+          type: string
+        enable_web_notify:
+          type: boolean
+        enable_email_subscribe:
+          type: boolean
+      type: object
+    common.api.app.bbs.v1.user.PrivacySetting:
+      description: 账号隐私设置
+      example:
+        public_followers: true
+        public_points: true
+        user_id: user_id
+        public_location: true
+        public_articles: true
+        public_comments: true
+        public_online_status: true
+      properties:
+        user_id:
+          type: string
+        public_points:
+          type: boolean
+        public_followers:
+          type: boolean
+        public_articles:
+          type: boolean
+        public_comments:
+          type: boolean
+        public_online_status:
+          type: boolean
+        public_location:
+          type: boolean
+      type: object
+    common.api.app.bbs.v1.user.RegisterEmail_Reply:
+      example:
+        code_token: code_token
+      properties:
+        code_token:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.RegisterEmail_Request:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.RegisterPhone_Reply:
+      example:
+        code_token: code_token
+      properties:
+        code_token:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.RegisterPhone_Request:
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.Relation:
+      description: 账号关系记录
+      example:
+        updated_at: updated_at
+        created_at: created_at
+        target_id: target_id
+        id: id
+        actor_id: actor_id
+        type: 0
+      properties:
+        id:
+          type: string
+        type:
+          format: int32
+          type: integer
+        actor_id:
+          type: string
+        target_id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.RelationStatus:
+      description: 当前账号与目标账号的关系状态
+      example:
+        followed_by: true
+        blocking: true
+        blocked_by: true
+        following: true
+        target_id: target_id
+      properties:
+        target_id:
+          type: string
+        following:
+          type: boolean
+        followed_by:
+          type: boolean
+        blocking:
+          type: boolean
+        blocked_by:
+          type: boolean
+      type: object
+    common.api.app.bbs.v1.user.Tfa:
+      description: 二步验证状态
+      example:
+        user_id: user_id
+        enable: true
+        enable_time: enable_time
+      properties:
+        user_id:
+          type: string
+        enable:
+          type: boolean
+        enable_time:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.UnblockRelation_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.UnblockRelation_Request:
+      properties:
+        target_id:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.UnfollowRelation_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.UnfollowRelation_Request:
+      properties:
+        target_id:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.UpdatePreferences_Reply:
+      example:
+        preference:
+          mobile_theme: mobile_theme
+          user_id: user_id
+          enable_web_notify: true
+          timezone: timezone
+          language: language
+          theme: theme
+          enable_email_subscribe: true
+      properties:
+        preference:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Preference"
+      type: object
+    common.api.app.bbs.v1.user.UpdatePreferences_Request:
+      properties:
+        language:
+          type: string
+        timezone:
+          type: string
+        theme:
+          type: string
+        mobile_theme:
+          type: string
+        enable_web_notify:
+          type: boolean
+        enable_email_subscribe:
+          type: boolean
+      type: object
+    common.api.app.bbs.v1.user.UpdatePrivacySetting_Reply:
+      example:
+        privacy_setting:
+          public_followers: true
+          public_points: true
+          user_id: user_id
+          public_location: true
+          public_articles: true
+          public_comments: true
+          public_online_status: true
+      properties:
+        privacy_setting:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PrivacySetting"
+      type: object
+    common.api.app.bbs.v1.user.UpdatePrivacySetting_Request:
+      properties:
+        public_points:
+          type: boolean
+        public_followers:
+          type: boolean
+        public_articles:
+          type: boolean
+        public_comments:
+          type: boolean
+        public_online_status:
+          type: boolean
+        public_location:
+          type: boolean
+      type: object
+    common.api.app.bbs.v1.user.UpdateProfileAccount_Reply:
+      example:
+        profile:
+          group_name: group_name
+          created_at: created_at
+          follower_count: 1
+          url: url
+          blocked_count: 5
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 6
+          name: name
+          nickname: nickname
+          mbti: mbti
+          block_count: 5
+          id: id
+          introduction: introduction
+          status: 0
+      properties:
+        profile:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+      type: object
+    common.api.app.bbs.v1.user.UpdateProfileAccount_Request:
+      properties:
+        avatar_url:
+          type: string
+        nickname:
+          type: string
+        url:
+          type: string
+        introduction:
+          type: string
+        mbti:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.UpsertLocation_Reply:
+      example:
+        location:
+          country: country
+          province: province
+          user_id: user_id
+          city: city
+      properties:
+        location:
+          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Location"
+      type: object
+    common.api.app.bbs.v1.user.UpsertLocation_Request:
+      properties:
+        country:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.ValidateTfa_Reply:
+      example:
+        verified: true
+      properties:
+        verified:
+          type: boolean
+      type: object
+    common.api.app.bbs.v1.user.ValidateTfa_Request:
+      properties:
+        code:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.VerifyEmailRegister_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.VerifyEmailRegister_Request:
+      properties:
+        code:
+          type: string
+        code_token:
+          type: string
+      type: object
+    common.api.app.bbs.v1.user.VerifyPhoneRegister_Reply:
+      properties: {}
+      type: object
+    common.api.app.bbs.v1.user.VerifyPhoneRegister_Request:
+      properties:
+        code:
+          type: string
+        code_token:
+          type: string
+      type: object

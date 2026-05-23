@@ -8,7 +8,11 @@ import (
 )
 
 type NotificationSettingRepo interface {
-	GetByUser(ctx context.Context, userID int64) ([]*model.NotificationSetting, error)
-	GetByUserAndEvent(ctx context.Context, userID int64, eventType enums.EventType) ([]*model.NotificationSetting, error)
+	List(ctx context.Context, req *NotificationSettingGetReq) ([]*model.NotificationSetting, error)
 	Save(ctx context.Context, tx *gen.Client, pref *model.NotificationSetting) (*model.NotificationSetting, error)
+}
+
+type NotificationSettingGetReq struct {
+	UserID    *int64
+	EventType *enums.EventType
 }

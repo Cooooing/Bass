@@ -3,8 +3,8 @@ syntax = "proto3";
 package common.api.app.notify.v1;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "common/enums/event.proto";
+import "google/api/annotations.proto";
 import "notify/v1/enum.proto";
 import "notify/v1/model.proto";
 

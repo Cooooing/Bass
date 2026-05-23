@@ -17,8 +17,8 @@ type Comment struct {
 	*gen.Comment
 	ContentRender string `json:"content_render"`
 
-	User      *userv1.User `json:"user"`
-	ReplyUser *userv1.User `json:"reply_user"`
+	User      *userv1.AccountBasic `json:"user"`
+	ReplyUser *userv1.AccountBasic `json:"reply_user"`
 
 	WithArticle bool `json:"-"`
 }

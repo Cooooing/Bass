@@ -1,28 +1,30 @@
 ifndef APP_MK_INCLUDED
 APP_MK_INCLUDED := 1
 
-# Include common.mk (run-once targets + shared variables)
+# Include common.mk for one-time targets and shared variables.
 MAKE_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 include $(MAKE_DIR)/common.mk
 
-# --- Per-module variables ---
+# --- Module variables ---
 SERVER := $(notdir $(CURDIR))
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 INTERNAL_DIR := $(APP_DIR)/internal
 APP_PROTO_FILES := $(shell find $(INTERNAL_DIR) -type f -name "*.proto" | sort)
+BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/api/app"},{"path":"app/$(SERVER)"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]},"breaking":{"use":["FILE"]}}'
 
 IGNORE_ERROR ?= 0
+MODULE_GEN_TARGETS := config wire
 
-# run: error-handling wrapper (defined at parse time via ifeq, not $(if))
-# Usage: $(call run,shell-command,error-label)
-# Suppresses command echo (@), prints label to stderr on failure.
+# run is an error handling wrapper selected at parse time by ifeq.
+# Usage: $(call run,command,error-label)
+# Commands are hidden by default. Failures print labels to stderr.
 ifeq ($(IGNORE_ERROR),1)
 run = @$(1) || echo "[ERROR] $(2) failed" >&2
 else
 run = @$(1) || { echo "[ERROR] $(2) failed" >&2; exit 1; }
 endif
 
-# --- Per-module targets ---
+# --- Module targets ---
 
 .PHONY: tidy
 tidy:
@@ -31,17 +33,17 @@ tidy:
 
 .PHONY: config-clean
 config-clean:
-	@echo "[config-clean] removing proto go files..."
+	@echo "[config-clean] cleaning proto generated Go files..."
 	@cd $(APP_DIR) 2>/dev/null && find . -type f \( -name "*.pb.go" -o -name "*.pb.validate.go" -o -name "*.pb.gw.go" \) -delete 2>/dev/null; true
 
 .PHONY: config
 config: config-clean
-	@echo "[config] protoc..."
-	$(call run,cd $(APP_DIR) && protoc -I $(INTERNAL_DIR) -I $(PROTO_THIRD_PARTY_DIR) -I $(ROOT_DIR) --go_out=paths=source_relative:$(INTERNAL_DIR) $(APP_PROTO_FILES),[config] protoc)
+	@echo "[config] buf generate..."
+	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/conf/conf.proto --output app/$(SERVER),[config] buf generate)
 
 .PHONY: wire-clean
 wire-clean:
-	@echo "[wire-clean] removing wire_gen.go..."
+	@echo "[wire-clean] cleaning wire_gen.go..."
 	@cd $(APP_DIR)/cmd 2>/dev/null && find . -type f -name "wire_gen.go" -delete 2>/dev/null; true
 
 .PHONY: wire
@@ -56,7 +58,7 @@ build:
 
 .PHONY: build-clean
 build-clean:
-	@echo "[build-clean] removing server binary..."
+	@echo "[build-clean] cleaning service binary..."
 	@rm -f $(APP_DIR)/server 2>/dev/null; true
 
 .PHONY: clean
@@ -65,8 +67,10 @@ clean: wire-clean
 clean: build-clean
 
 .PHONY: gen
-gen: config
-gen: wire
+gen:
+	@for target in $(MODULE_GEN_TARGETS); do \
+		$(MAKE) $$target IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
 
 .PHONY: all
 all: init api tidy gen build

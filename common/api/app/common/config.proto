@@ -8,78 +8,78 @@ option go_package = "common/api/gen/common;common";
 
 message Bootstrap {
   message Server {
-    string name = 1;    // 服务名称
+    string name = 1; // 服务名称
     string version = 2; // 服务版本
-    string mode = 3;    // 运行模式: dev, prod
+    string mode = 3; // 运行模式: dev, prod
   }
-  Server server = 1;  // 服务基本信息
+  Server server = 1; // 服务基本信息
   message Config {
-    Consul consul = 1;  // 用于从 Consul KV 加载配置
+    Consul consul = 1; // 用于从 Consul KV 加载配置
     message Consul {
-      string address = 1;                     // Consul 地址，格式 host:port
-      string token = 2;                       // Consul ACL Token
-      string path = 3;                        // Consul KV 中的配置路径
-      google.protobuf.Duration timeout = 4;   // 连接超时
+      string address = 1; // Consul 地址，格式 host:port
+      string token = 2; // Consul ACL Token
+      string path = 3; // Consul KV 中的配置路径
+      google.protobuf.Duration timeout = 4; // 连接超时
     }
   }
-  Config config = 2;  // 配置加载来源
+  Config config = 2; // 配置加载来源
   message Log {
     string level = 1; // 日志级别: debug, info, warn, error, fatal, panic
-    string file = 2;  // 日志文件路径，为空则输出到 stdout
+    string file = 2; // 日志文件路径，为空则输出到 stdout
   }
-  Log log = 3;       // 日志配置
+  Log log = 3; // 日志配置
 }
 
 message HTTP {
-  string network = 1;                         // 网络类型: tcp
-  string host = 2;                            // 监听地址
-  int32 port = 3;                             // 监听端口
-  google.protobuf.Duration timeout = 4;       // 请求超时
+  string network = 1; // 网络类型: tcp
+  string host = 2; // 监听地址
+  int32 port = 3; // 监听端口
+  google.protobuf.Duration timeout = 4; // 请求超时
 }
 
 message GRPC {
-  string network = 1;                         // 网络类型: tcp
-  string host = 2;                            // 监听地址
-  int32 port = 3;                             // 监听端口
-  google.protobuf.Duration timeout = 4;       // 请求超时
+  string network = 1; // 网络类型: tcp
+  string host = 2; // 监听地址
+  int32 port = 3; // 监听端口
+  google.protobuf.Duration timeout = 4; // 请求超时
 }
 
 message Database {
-  string driver = 1;                          // 数据库驱动: postgres, mysql
-  string source = 2;                          // 连接字符串
-  bool merge = 3;                             // 是否自动同步表结构
-  bool debug = 4;                             // 是否开启 SQL 调试日志
+  string driver = 1; // 数据库驱动: postgres, mysql
+  string source = 2; // 连接字符串
+  bool merge = 3; // 是否自动同步表结构
+  bool debug = 4; // 是否开启 SQL 调试日志
   google.protobuf.Duration slow_sql_threshold = 5; // 慢查询阈值
-  double sample_rate = 6;                     // SQL 日志采样率，0-1
+  double sample_rate = 6; // SQL 日志采样率，0-1
 }
 message Redis {
-  string addr = 1;                            // 地址，格式 host:port
-  string password = 2;                        // 密码
-  google.protobuf.Duration dial_timeout = 3;  // 连接超时
-  int32 db = 4;                               // 数据库编号
-  google.protobuf.Duration read_timeout = 5;  // 读超时
+  string addr = 1; // 地址，格式 host:port
+  string password = 2; // 密码
+  google.protobuf.Duration dial_timeout = 3; // 连接超时
+  int32 db = 4; // 数据库编号
+  google.protobuf.Duration read_timeout = 5; // 读超时
   google.protobuf.Duration write_timeout = 6; // 写超时
-  int32 pool_size = 7;                        // 连接池大小
-  int32 min_idle_conns = 8;                   // 最小空闲连接数
-  google.protobuf.Duration pool_timeout = 9;  // 连接池获取超时
-  google.protobuf.Duration conn_max_idle_time = 10;  // 连接最大空闲时间
-  google.protobuf.Duration conn_max_life_time = 11;  // 连接最大存活时间
+  int32 pool_size = 7; // 连接池大小
+  int32 min_idle_conns = 8; // 最小空闲连接数
+  google.protobuf.Duration pool_timeout = 9; // 连接池获取超时
+  google.protobuf.Duration conn_max_idle_time = 10; // 连接最大空闲时间
+  google.protobuf.Duration conn_max_life_time = 11; // 连接最大存活时间
 }
 message Consul {
-  string address = 1;                         // 地址，格式 host:port
-  string datacenter = 2;                      // 数据中心
-  string token = 3;                           // ACL Token
-  google.protobuf.Duration dial_timeout = 4;  // 连接超时
+  string address = 1; // 地址，格式 host:port
+  string datacenter = 2; // 数据中心
+  string token = 3; // ACL Token
+  google.protobuf.Duration dial_timeout = 4; // 连接超时
 }
 message Nats {
-  string url = 1;                             // 连接地址，格式 nats://host:port
-  string name = 2;                            // 客户端名称，用于连接标识和日志
-  google.protobuf.Duration timeout = 3;       // 连接超时，同时用作 Flush 超时
-  int32 max_reconnects = 4;                   // 最大重连次数，-1 为无限重连
+  string url = 1; // 连接地址，格式 nats://host:port
+  string name = 2; // 客户端名称，用于连接标识和日志
+  google.protobuf.Duration timeout = 3; // 连接超时，同时用作 Flush 超时
+  int32 max_reconnects = 4; // 最大重连次数，-1 为无限重连
   google.protobuf.Duration reconnect_wait = 5; // 重连间隔
-  google.protobuf.Duration ping_interval = 6;  // 心跳间隔，用于检测连接是否存活
+  google.protobuf.Duration ping_interval = 6; // 心跳间隔，用于检测连接是否存活
   google.protobuf.Duration flusher_timeout = 7; // 内部 flusher 超时，发布积压时触发
-  bool enable_jet_stream = 8;                 // 是否启用 JetStream 持久化
-  string stream_name = 9;                     // JetStream 流名称，启用后发布和订阅均走 JetStream
-  string jet_stream_domain = 10;              // JetStream 域名，用于多域隔离
+  bool enable_jet_stream = 8; // 是否启用 JetStream 持久化
+  string stream_name = 9; // JetStream 流名称，启用后发布和订阅均走 JetStream
+  string jet_stream_domain = 10; // JetStream 域名，用于多域隔离
 }

@@ -6,149 +6,78 @@ import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
-// Auth 服务
-service UserAuthService {
-  // -- 账号注册
+service AuthService {
+  // 使用邮箱发起账号注册，成功后返回验证码令牌。
+  rpc RegisterEmail(RegisterEmail.Request) returns (RegisterEmail.Reply) {}
 
-  // 邮箱注册
-  rpc RegisterEmail(RegisterEmailAuth.Request) returns (RegisterEmailAuth.Reply) {}
+  // 校验邮箱注册验证码并创建账号。
+  rpc VerifyEmailRegister(VerifyEmailRegister.Request) returns (VerifyEmailRegister.Reply) {}
 
-  // 邮箱注册验证码验证
-  rpc RegisterEmailVerify(RegisterEmailVerifyAuth.Request) returns (RegisterEmailVerifyAuth.Reply) {}
+  // 使用手机号发起账号注册，成功后返回验证码令牌。
+  rpc RegisterPhone(RegisterPhone.Request) returns (RegisterPhone.Reply) {}
 
-  // 手机号注册
-  rpc RegisterPhone(RegisterPhoneAuth.Request) returns (RegisterPhoneAuth.Reply) {}
+  // 校验手机号注册验证码并创建账号。
+  rpc VerifyPhoneRegister(VerifyPhoneRegister.Request) returns (VerifyPhoneRegister.Reply) {}
 
-  // 手机号注册验证码验证
-  rpc RegisterPhoneVerify(RegisterPhoneVerifyAuth.Request) returns (RegisterPhoneVerifyAuth.Reply) {}
+  // 使用账号名、邮箱或手机号加密码登录。
+  rpc LoginPassword(LoginPassword.Request) returns (LoginPassword.Reply) {}
 
-  // -- 账号信息查询
-
-  // 邮箱是否存在
-  rpc ExistEmail(ExistEmailAuth.Request) returns (ExistEmailAuth.Reply) {}
-
-  // 手机号是否存在
-  rpc ExistPhone(ExistPhoneAuth.Request) returns (ExistPhoneAuth.Reply) {}
-
-  // 用户名是否存在
-  rpc ExistUsername(ExistUsernameAuth.Request) returns (ExistUsernameAuth.Reply) {}
-
-  // -- 账号登录
-
-  // 账号登录（用户名/邮箱）
-  rpc LoginAccount(LoginAccountAuth.Request) returns (LoginAccountAuth.Reply) {}
-
-  // 账号登出
-  rpc Logout(LogoutAuth.Request) returns (LogoutAuth.Reply) {}
+  // 登出当前登录账号并清理当前令牌。
+  rpc Logout(Logout.Request) returns (Logout.Reply) {}
 }
 
-message RegisterEmailAuth {
+message RegisterEmail {
   message Request {
-    // 邮箱
     string email = 1;
-    // 密码
     string password = 2;
-    // 用户名
     string name = 3;
-    // 昵称
     optional string nickname = 4;
   }
   message Reply {
-    // 验证码令牌
     string code_token = 1;
-    // 验证码（仅供调试使用）
-    string code = 2;
   }
 }
 
-message RegisterEmailVerifyAuth {
+message VerifyEmailRegister {
   message Request {
-    // 验证码 6 位验证码
     string code = 1;
-    // 验证码令牌
     string code_token = 2;
   }
   message Reply {}
 }
 
-message RegisterPhoneAuth {
+message RegisterPhone {
   message Request {
-    // 邮箱 11 位国内手机号
     string phone = 1;
-    // 密码
     string password = 2;
-    // 用户名
     string name = 3;
-    // 昵称
     optional string nickname = 4;
   }
   message Reply {
-    // 验证码令牌
     string code_token = 1;
-    // 验证码（仅供调试使用）
-    string code = 2;
   }
 }
 
-message RegisterPhoneVerifyAuth {
+message VerifyPhoneRegister {
   message Request {
-    // 验证码 6 位验证码
     string code = 1;
-    // 验证码令牌
     string code_token = 2;
   }
   message Reply {}
 }
 
-message ExistEmailAuth {
+message LoginPassword {
   message Request {
-    // 邮箱
-    string email = 1;
-  }
-  message Reply {
-    // 是否存在
-    optional bool exist = 1;
-  }
-}
-
-message ExistUsernameAuth {
-  message Request {
-    // 用户名 4-32位 只能包含字母数字字符或单个连字符，不能以连字符开头或结尾
-    string username = 1;
-  }
-  message Reply {
-    // 是否存在
-    optional bool exist = 1;
-  }
-}
-
-message ExistPhoneAuth {
-  message Request {
-    // 手机号 11 位国内手机号
-    string phone = 1;
-  }
-  message Reply {
-    // 是否存在
-    optional bool exist = 1;
-  }
-}
-
-message LoginAccountAuth {
-  message Request {
-    // 账号（用户名/邮箱）
     string account = 1;
-    // 密码
     string password = 2;
   }
   message Reply {
-    // 登录令牌
     string token = 1;
-    // 用户信息
-    user.v1.User user = 2;
+    Account account = 2;
   }
 }
 
-message LogoutAuth {
+message Logout {
   message Request {}
   message Reply {}
 }

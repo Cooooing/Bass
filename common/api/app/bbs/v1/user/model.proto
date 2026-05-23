@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+option go_package = "common/api/gen/bbs/v1/user;user";
+
+// 账号状态
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_STATUS_NORMAL = 1; // 正常
+  ACCOUNT_STATUS_BANNED = 2; // 封禁
+  ACCOUNT_STATUS_DELETED = 3; // 注销
+}
+
+// 账号展示资料
+message AccountProfile {
+  int64 id = 1;
+  string name = 2;
+  optional string nickname = 3;
+  optional string url = 4;
+  optional string avatar_url = 5;
+  optional string introduction = 6;
+  optional string mbti = 7;
+  AccountStatus status = 8;
+  string group_name = 9;
+  optional int32 follow_count = 10;
+  optional int32 follower_count = 11;
+  optional int32 block_count = 12;
+  optional int32 blocked_count = 13;
+  string created_at = 1000;
+  string updated_at = 1001;
+}
+
+// 当前账号联系方式
+message AccountContact {
+  int64 user_id = 1;
+  optional string email = 2;
+  optional string phone = 3;
+}
+
+// 当前账号完整资料
+message Account {
+  AccountProfile profile = 1;
+  AccountContact contact = 2;
+}
+
+// 账号偏好设置
+message Preference {
+  int64 user_id = 1;
+  optional string language = 2;
+  optional string timezone = 3;
+  optional string theme = 4;
+  optional string mobile_theme = 5;
+  optional bool enable_web_notify = 6;
+  optional bool enable_email_subscribe = 7;
+}
+
+// 账号隐私设置
+message PrivacySetting {
+  int64 user_id = 1;
+  optional bool public_points = 2;
+  optional bool public_followers = 3;
+  optional bool public_articles = 4;
+  optional bool public_comments = 5;
+  optional bool public_online_status = 6;
+  optional bool public_location = 7;
+}
+
+// 账号地理资料
+message Location {
+  int64 user_id = 1;
+  optional string country = 2;
+  optional string province = 3;
+  optional string city = 4;
+}
+
+// 二步验证状态
+message Tfa {
+  int64 user_id = 1;
+  bool enable = 2;
+  string enable_time = 3;
+}
+
+// 账号关系记录
+message Relation {
+  int64 id = 1;
+  int32 type = 2;
+  int64 actor_id = 3;
+  int64 target_id = 4;
+  string created_at = 1000;
+  string updated_at = 1001;
+}
+
+// 当前账号与目标账号的关系状态
+message RelationStatus {
+  int64 target_id = 1;
+  bool following = 2;
+  bool followed_by = 3;
+  bool blocking = 4;
+  bool blocked_by = 5;
+}
+
+// 分页请求
+message PageRequest {
+  int64 current = 1;
+  int64 page_size = 2;
+}
+
+// 分页响应
+message PageReply {
+  int64 current = 1;
+  int64 page_size = 2;
+  int64 total = 3;
+}

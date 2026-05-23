@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package common.api.app.notify.v1;
 
-import "google/protobuf/timestamp.proto";
 import "common/enums/event.proto";
+import "google/protobuf/timestamp.proto";
 import "notify/v1/enum.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
@@ -59,7 +59,7 @@ message NotificationMeta {
 
   // 主键
   int64 id = 3;
-  // uuid
+  // UUID
   string uuid = 4;
   // 事件类型
   common.enums.EventType event_type = 5;
@@ -101,7 +101,7 @@ message NotificationRecordQueryParams {
 message NotificationMetaQueryParams {
   // 主键
   repeated int64 ids = 2;
-  // uuid
+  // UUID 列表
   repeated string uuids = 3;
   // 事件类型
   optional common.enums.EventType event_type = 5;

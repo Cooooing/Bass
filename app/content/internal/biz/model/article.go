@@ -21,11 +21,11 @@ type Article struct {
 	RewardContentRender *string `json:"reward_content_render"`
 	CoverImageUrl       *string `json:"cover_image_url"`
 
-	AuthorUser           *userv1.User `json:"author_user"`
-	LastReplyCommentUser *userv1.User `json:"last_reply_user"`
-	LastReplyCommentAt   *time.Time   `json:"last_replied_at"`
+	AuthorUser           *userv1.AccountBasic `json:"author_user"`
+	LastReplyCommentUser *userv1.AccountBasic `json:"last_reply_user"`
+	LastReplyCommentAt   *time.Time           `json:"last_replied_at"`
 
-	// option
+	// 可选项
 	IsSummary bool `json:"-"`
 }
 

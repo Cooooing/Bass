@@ -7,17 +7,23 @@ import (
 )
 
 type UserClient struct {
-	User     userv1.UserUserServiceClient
-	Auth     userv1.UserAuthServiceClient
-	Relation userv1.UserUserRelationServiceClient
-	TwoFA    userv1.UserTwoFactorAuthServiceClient
+	Account        userv1.AccountServiceClient
+	Auth           userv1.AuthServiceClient
+	Relation       userv1.RelationServiceClient
+	Preferences    userv1.PreferencesServiceClient
+	PrivacySetting userv1.PrivacySettingServiceClient
+	Location       userv1.LocationServiceClient
+	Tfa            userv1.TfaServiceClient
 }
 
 func NewUserClient(conn *grpc.ClientConn) *UserClient {
 	return &UserClient{
-		User:     userv1.NewUserUserServiceClient(conn),
-		Auth:     userv1.NewUserAuthServiceClient(conn),
-		Relation: userv1.NewUserUserRelationServiceClient(conn),
-		TwoFA:    userv1.NewUserTwoFactorAuthServiceClient(conn),
+		Account:        userv1.NewAccountServiceClient(conn),
+		Auth:           userv1.NewAuthServiceClient(conn),
+		Relation:       userv1.NewRelationServiceClient(conn),
+		Preferences:    userv1.NewPreferencesServiceClient(conn),
+		PrivacySetting: userv1.NewPrivacySettingServiceClient(conn),
+		Location:       userv1.NewLocationServiceClient(conn),
+		Tfa:            userv1.NewTfaServiceClient(conn),
 	}
 }

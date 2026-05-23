@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+import "bbs/v1/user/model.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/user;user";
+
+service AccountService {
+  // 获取当前登录账号的完整资料
+  rpc GetCurrent(GetCurrentAccount.Request) returns (GetCurrentAccount.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/account/get-current"
+      body: "*"
+    };
+  }
+
+  // 按账号 ID 获取账号展示资料
+  rpc GetProfile(GetProfileAccount.Request) returns (GetProfileAccount.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/account/get-profile"
+      body: "*"
+    };
+  }
+
+  // 批量获取账号展示资料
+  rpc BatchGetProfile(BatchGetProfileAccount.Request) returns (BatchGetProfileAccount.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/account/batch-get-profile"
+      body: "*"
+    };
+  }
+
+  // 更新当前登录账号的展示资料
+  rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-profile"
+      body: "*"
+    };
+  }
+}
+
+message GetCurrentAccount {
+  message Request {}
+  message Reply {
+    Account account = 1;
+  }
+}
+
+message GetProfileAccount {
+  message Request {
+    int64 user_id = 1;
+  }
+  message Reply {
+    AccountProfile profile = 1;
+  }
+}
+
+message BatchGetProfileAccount {
+  message Request {
+    repeated int64 user_ids = 1;
+  }
+  message Reply {
+    map<int64, AccountProfile> profiles = 1;
+  }
+}
+
+message UpdateProfileAccount {
+  message Request {
+    optional string avatar_url = 1;
+    optional string nickname = 2;
+    optional string url = 3;
+    optional string introduction = 4;
+    optional string mbti = 5;
+  }
+  message Reply {
+    AccountProfile profile = 1;
+  }
+}

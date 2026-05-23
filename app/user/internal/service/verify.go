@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 )
 
-// VerifyService 参数校验
+// VerifyService 在请求进入认证 usecase 前校验账号输入。
 type VerifyService struct {
 	passRe   *regexp.Regexp
 	letterRe *regexp.Regexp
@@ -13,7 +13,7 @@ type VerifyService struct {
 	nameRe   *regexp.Regexp
 }
 
-// NewVerifyService 预编译正则
+// NewVerifyService 预编译服务使用的校验表达式。
 func NewVerifyService() *VerifyService {
 	return &VerifyService{
 		passRe:   regexp.MustCompile(`^[!-~]+$`),
@@ -23,8 +23,7 @@ func NewVerifyService() *VerifyService {
 	}
 }
 
-// VerifyPassword 校验密码
-// 规则：长度 4-64，允许字符集，至少包含一个字母和一个数字
+// VerifyPassword 校验密码是否为可打印 ASCII，且至少包含一个字母和一个数字。
 func (s *VerifyService) VerifyPassword(password string) bool {
 	length := utf8.RuneCountInString(password)
 	return length >= 4 && length <= 64 &&
@@ -33,16 +32,14 @@ func (s *VerifyService) VerifyPassword(password string) bool {
 		s.numRe.MatchString(password)
 }
 
-// VerifyName 校验用户名
-// 规则：长度 1-32，字母数字或单连字符，不能以连字符开头或结尾
+// VerifyName 校验登录和注册使用的账号名格式。
 func (s *VerifyService) VerifyName(name string) bool {
 	length := utf8.RuneCountInString(name)
 	return length >= 1 && length <= 32 &&
 		s.nameRe.MatchString(name)
 }
 
-// VerifyNickname 校验昵称
-// 规则：长度 1-32
+// VerifyNickname 校验展示昵称长度。
 func (s *VerifyService) VerifyNickname(nickname string) bool {
 	length := utf8.RuneCountInString(nickname)
 	return length >= 1 && length <= 32

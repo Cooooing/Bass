@@ -21,7 +21,7 @@ func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, fu
 	debugDrv := driver.NewDriver(logger, conf.Server.Mode, drv, conf.Data.Database)
 	client := gen.NewClient(gen.Driver(debugDrv))
 	l.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
-	// 可选：自动迁移
+	// 鍙€夛細鑷姩杩佺Щ
 	if conf.Data.Database.Merge {
 		ctx := context.Background()
 		if err := client.Schema.Create(ctx); err != nil {

@@ -170,7 +170,7 @@ func (c *NatsClient) Close() error {
 	return nil
 }
 
-// Publish 发布消息到指定 subject
+// Publish 发布消息到指定主题。
 func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) error {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
@@ -212,7 +212,7 @@ func (c *NatsClient) publishJetStream(subject string, msg *Message) error {
 	return nil
 }
 
-// Subscribe 订阅 subject，返回 Unsubscriber 用于取消
+// Subscribe 订阅主题，返回 Unsubscriber 用于取消。
 func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -317,7 +317,7 @@ func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler Message
 	}
 }
 
-// subscription 实现 Unsubscriber
+// subscription 实现 Unsubscriber。
 type subscription struct {
 	sub *nats.Subscription
 }

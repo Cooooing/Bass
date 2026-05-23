@@ -7,7 +7,7 @@ import (
 	"github.com/google/wire"
 )
 
-// BizProviderSet is biz providers.
+// BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 	usecase.NewIpUsecase,

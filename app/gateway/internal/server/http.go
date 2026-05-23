@@ -32,7 +32,7 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 )
 
-// NewHTTPServer new an HTTP server.
+// NewHTTPServer 创建 HTTP 服务。
 func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, consulClient *client.ConsulClient, services []server.HttpService, tokenCache *jwt.TokenCache, ipUsecase *usecase.IpUsecase) *transporthttp.Server {
 
 	middlewares := []middleware.Middleware{

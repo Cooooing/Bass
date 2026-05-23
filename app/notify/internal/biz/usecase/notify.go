@@ -207,7 +207,10 @@ func (s *NotifyUsecase) deliverToReceiver(
 }
 
 func (s *NotifyUsecase) getUserPrefs(ctx context.Context, userID int64, eventType enums.EventType) ([]*model.NotificationSetting, error) {
-	return s.notificationSettingRepo.GetByUserAndEvent(ctx, userID, eventType)
+	return s.notificationSettingRepo.List(ctx, &repo.NotificationSettingGetReq{
+		UserID:    &userID,
+		EventType: &eventType,
+	})
 }
 
 func (s *NotifyUsecase) render(tplStr string, variables any) string {

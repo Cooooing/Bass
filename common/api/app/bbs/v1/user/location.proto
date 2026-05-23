@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+import "bbs/v1/user/model.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/user;user";
+
+service LocationService {
+  // 获取当前登录账号的地理资料
+  rpc GetCurrent(GetCurrentLocation.Request) returns (GetCurrentLocation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/location/get-current"
+      body: "*"
+    };
+  }
+
+  // 更新当前登录账号的地理资料
+  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/location/upsert-current"
+      body: "*"
+    };
+  }
+}
+
+message GetCurrentLocation {
+  message Request {}
+  message Reply {
+    Location location = 1;
+  }
+}
+
+message UpsertLocation {
+  message Request {
+    optional string country = 1;
+    optional string province = 2;
+    optional string city = 3;
+  }
+  message Reply {
+    Location location = 1;
+  }
+}

@@ -1,0 +1,73 @@
+package usecase
+
+import (
+	"bytes"
+	"context"
+	"image/png"
+	base "user/internal/biz/base"
+	"user/internal/biz/model"
+	"user/internal/biz/repo"
+	"user/internal/conf"
+
+	"github.com/MuhammadSaim/goavatar"
+	"github.com/go-kratos/kratos/v2/log"
+)
+
+type AccountUsecase struct {
+	conf            *conf.Bootstrap
+	log             *log.Helper
+	tx              base.Tx
+	accountRepo     repo.AccountRepo
+	preferencesRepo repo.PreferencesRepo
+}
+
+func NewAccountUsecase(
+	conf *conf.Bootstrap,
+	logger log.Logger,
+	tx base.Tx,
+	accountRepo repo.AccountRepo,
+	preferencesRepo repo.PreferencesRepo,
+) (*AccountUsecase, error) {
+	return &AccountUsecase{
+		conf:            conf,
+		log:             log.NewHelper(logger),
+		tx:              tx,
+		accountRepo:     accountRepo,
+		preferencesRepo: preferencesRepo,
+	}, nil
+}
+
+// UpdateSetting 在同一事务中更新账号资料和偏好设置。
+func (s *AccountUsecase) UpdateSetting(ctx context.Context, userID int64, account *model.Account, prefs *model.Preferences) (*model.Account, error) {
+	var fullAccount *model.Account
+	err := s.tx(ctx, func(ctx context.Context) error {
+		account.ID = userID
+		if _, err := s.accountRepo.Update(ctx, account); err != nil {
+			return err
+		}
+
+		prefs.UserID = userID
+		if _, err := s.preferencesRepo.UpsertByUserID(ctx, prefs); err != nil {
+			return err
+		}
+
+		var err error
+		fullAccount, err = s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &userID})
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+	return fullAccount, nil
+}
+
+// Avatar 生成注册时使用的默认账号头像。
+func (s *AccountUsecase) Avatar(ctx context.Context, name string) ([]byte, error) {
+	buf := &bytes.Buffer{}
+	avatar := goavatar.Make(name, goavatar.WithSize(512))
+	err := png.Encode(buf, avatar)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}

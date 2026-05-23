@@ -1,0 +1,18 @@
+version: v2
+
+modules:
+  - path: .
+
+deps:
+  - buf.build/googleapis/googleapis
+
+lint:
+  use:
+    - MINIMAL
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_SAME_DIRECTORY
+
+breaking:
+  use:
+    - FILE

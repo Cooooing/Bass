@@ -4,23 +4,34 @@ package common.api.app.user.v1;
 
 option go_package = "common/api/gen/user/v1;v1";
 
-enum UserStatus {
-  USER_STATUS_UNSPECIFIED = 0;
-  USER_STATUS_NORMAL = 1; // 正常
-  USER_STATUS_BANNED = 2; // 封禁
-  USER_STATUS_DELETED = 3; // 注销
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_STATUS_NORMAL = 1; // 正常
+  ACCOUNT_STATUS_BANNED = 2; // 封禁
+  ACCOUNT_STATUS_DELETED = 3; // 注销
 }
 
-enum UserStatType {
-  USER_STAT_TYPE_UNSPECIFIED = 0;
-  USER_STAT_TYPE_FOLLOW = 1; // 关注数
-  USER_STAT_TYPE_FOLLOWER = 2; // 粉丝数
-  USER_STAT_TYPE_BLOCK = 3; // 拉黑数
-  USER_STAT_TYPE_BLOCKED = 4; // 被拉黑数
+enum AccountStatType {
+  ACCOUNT_STAT_TYPE_UNSPECIFIED = 0;
+  ACCOUNT_STAT_TYPE_FOLLOW = 1; // 关注数
+  ACCOUNT_STAT_TYPE_FOLLOWER = 2; // 粉丝数
+  ACCOUNT_STAT_TYPE_BLOCK = 3; // 拉黑数
+  ACCOUNT_STAT_TYPE_BLOCKED = 4; // 被拉黑数
 }
 
-enum UserRelationType {
-  USER_RELATION_TYPE_UNSPECIFIED = 0;
-  USER_RELATION_TYPE_FOLLOW = 1; // 关注
-  USER_RELATION_TYPE_BLOCK = 2; // 拉黑
+enum RelationType {
+  RELATION_TYPE_UNSPECIFIED = 0;
+  RELATION_TYPE_FOLLOW = 1; // 关注
+  RELATION_TYPE_BLOCK = 2; // 拉黑
+}
+
+enum LoginMethod {
+  LOGIN_METHOD_UNSPECIFIED = 0;
+  LOGIN_METHOD_PASSWORD = 1; // 密码登录
+}
+
+enum LoginStatus {
+  LOGIN_STATUS_UNSPECIFIED = 0;
+  LOGIN_STATUS_SUCCESS = 1; // 登录成功
+  LOGIN_STATUS_FAILED = 2; // 登录失败
 }

@@ -1,0 +1,7 @@
+{
+  "packageName": "bbs",
+  "moduleName": "github.com/bass/sdk-go/bbs",
+  "withGoMod": true,
+  "enumClassPrefix": true,
+  "generateInterfaces": true
+}

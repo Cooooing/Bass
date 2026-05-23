@@ -18,7 +18,7 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-// NewGRPCServer new a gRPC server.
+// NewGRPCServer 创建 gRPC 服务。
 func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcService, tokenCache *jwt.TokenCache) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{

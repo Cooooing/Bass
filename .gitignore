@@ -1,54 +1,53 @@
-# Reference https://github.com/github/gitignore/blob/master/Go.gitignore
-# Binaries for programs and plugins
+# 参考 https://github.com/github/gitignore/blob/master/Go.gitignore
+# 程序和插件二进制文件
 *.exe
 *.exe~
 *.dll
 *.dylib
 
-# Test binary, built with `go test -c`
+# `go test -c` 构建出的测试二进制文件
 *.test
 
-# Output of the go coverage tool, specifically when used with LiteIDE
+# Go 覆盖率工具输出，尤其是 LiteIDE 使用时生成的文件
 *.out
 
-# Dependency directories (remove the comment below to include it)
+# 依赖目录
 vendor/
 
-# Compiled Object files, Static and Dynamic libs (Shared Objects)
+# 编译产物、静态库、动态库
 *.o
 *.a
 *.so
 
-# OS General
+# 操作系统通用文件
 Thumbs.db
 .DS_Store
 
-# project
+# 项目文件
 *.cert
 *.key
 *.log
 **/logs/
 bin/
 
-# Develop tools
+# 开发工具
 .vscode/
 .idea/
 *.swp
 
 /common/api/gen/**
 !/common/api/gen/.gitkeep
+/common/api/gen-ts/**
+/common/api/gen-go/**
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/gen/
 /app/**/server
-/common/buf.lock
 
 
 /deploy/.prod.env
 
-# AI
+# AI 工具
 .claude/
 .gitnexus
 .agents
-AGENTS.md
-CLAUDE.md

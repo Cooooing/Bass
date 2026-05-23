@@ -1,0 +1,10 @@
+version: v2
+
+plugins:
+  - local: protoc-gen-openapi
+    out: .
+    strategy: all
+    opt:
+      - fq_schema_naming=true
+      - naming=proto
+      - default_response=false

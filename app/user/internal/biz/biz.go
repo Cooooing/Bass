@@ -8,14 +8,14 @@ import (
 	"github.com/google/wire"
 )
 
-// BizProviderSet is biz providers.
+// BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 	usecase.NewTokenUsecase,
 	util.NewEventPool,
 
 	usecase.NewAuthUsecase,
-	usecase.NewUserUsecase,
-	usecase.NewUserRelationUsecase,
-	usecase.NewTwoFactorAuthUsecase,
+	usecase.NewAccountUsecase,
+	usecase.NewRelationUsecase,
+	usecase.NewTfaUsecase,
 )

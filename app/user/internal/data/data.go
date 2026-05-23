@@ -10,7 +10,7 @@ import (
 	"github.com/google/wire"
 )
 
-// DataProviderSet is data providers.
+// DataProviderSet 是 data 层依赖集合。
 var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	ProvideRedis,
@@ -22,13 +22,14 @@ var DataProviderSet = wire.NewSet(
 
 	client.ProvideTx,
 
-	repo.NewUserRepo,
-	repo.NewUserRelationRepo,
-	repo.NewUserPreferencesRepo,
-	repo.NewUserPrivacyRepo,
-	repo.NewUserLocationRepo,
-	repo.NewUserTfaRepo,
-	repo.NewUserCheckinRepo,
+	repo.NewAccountRepo,
+	repo.NewRelationRepo,
+	repo.NewPreferencesRepo,
+	repo.NewPrivacySettingRepo,
+	repo.NewLocationRepo,
+	repo.NewTfaRepo,
+	repo.NewCheckinRepo,
+	repo.NewLoginLogRepo,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {

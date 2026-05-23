@@ -38,7 +38,7 @@ service IMChatMessageService {
 
 message SendChatMessage {
   message Request {
-    // receiverId
+    // 接收者 ID
     int64 receiver_id = 1;
     // 接收者类型
     ReceiverType receiver_type = 2;

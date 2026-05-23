@@ -8,5 +8,5 @@ enum Language {
   LANGUAGE_UNSPECIFIED = 0;
   LANGUAGE_ZH_CN = 1; // 简体中文
   LANGUAGE_ZH_TW = 2; // 繁体中文
-  LANGUAGE_EN = 3;    // 英文
+  LANGUAGE_EN = 3; // 英文
 }

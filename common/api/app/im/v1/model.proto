@@ -26,7 +26,7 @@ message ChatGroup {
   // 群状态
   ChatGroupStatus status = 5;
   // 群主信息
-  user.v1.User owner = 6;
+  user.v1.AccountBasic owner = 6;
   // 群成员数
   uint32 member_count = 7;
   // 最后一条消息
@@ -44,7 +44,7 @@ message ChatGroupMember {
   // 群组
   int64 group_id = 2;
   // 成员
-  user.v1.User member = 3;
+  user.v1.AccountBasic member = 3;
   // 群内昵称
   optional string nickname = 4;
   // 角色
@@ -92,13 +92,15 @@ message ChatMessage {
 
   // 主键
   int64 id = 1;
-  // sender
-  user.v1.User sender = 2;
-  // receiver_user
+  // 发送者
+  user.v1.AccountBasic sender = 2;
+  // 接收用户 ID
   int64 receiver_user_id = 3;
-  user.v1.User receiver_user = 4;
-  // receiver_group
+  // 接收用户
+  user.v1.AccountBasic receiver_user = 4;
+  // 接收群组 ID
   int64 receiver_group_id = 5;
+  // 接收群组
   ChatGroup receiver_group = 6;
   // 消息类型
   MessageType type = 7;
@@ -118,14 +120,14 @@ message ChatMessageQueryParams {
   repeated int64 ids = 2;
   // 会话id
   int64 session_id = 3;
-  // senderId
+  // 发送者 ID
   int64 sender_id = 4;
 }
 
 message ChatGroupQueryParams {
   // 主键
   repeated int64 ids = 2;
-  // uuid
+  // UUID 列表
   repeated string uuids = 3;
   // 通知类型
   optional int32 notification_type = 5;

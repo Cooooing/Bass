@@ -15,7 +15,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// NewHTTPServer new an HTTP server.
+// NewHTTPServer 创建 HTTP 服务。
 func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(

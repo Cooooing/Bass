@@ -7,160 +7,120 @@ import "user/v1/enum.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
-message User {
-  // --- 基础信息 ---
-
-  // 用户Id
+message AccountBasic {
   int64 id = 1;
-  // 用户名
   string name = 2;
-  // 昵称
   optional string nickname = 3;
-  // 邮箱
-  optional string email = 5;
-  // 手机号
-  optional string phone = 6;
-  // 用户个人主页链接
-  optional string url = 7;
-  // 头像URL
-  optional string avatar_url = 8;
-  // 个人简介
-  optional string introduction = 9;
-  // 用户 MBTI 类型
-  optional string mbti = 10;
-
-  // --- 状态 ---
-
-  // 用户状态：1-正常，2-封禁，3-注销
-  optional UserStatus status = 11;
-  // 用户组名称
-  string group_name = 12;
-
-  // --- 社交信息 ---
-
-  // 关注数
-  optional int32 follow_count = 13;
-  // 粉丝数
-  optional int32 follower_count = 14;
-  // 屏蔽数
-  optional int32 block_count = 40;
-  // 被屏蔽数
-  optional int32 blocked_count = 41;
-
-  // --- 登录信息 ---
-
-  // 最近登录时间
-  google.protobuf.Timestamp last_login_time = 15;
-  // 最近登录IP
-  optional string last_login_ip = 16;
-
-  // --- 行为统计 ---
-
-  // 在线总时长（分钟）
-  optional int32 online_minutes = 17;
-  // 最近签到时间
-  google.protobuf.Timestamp last_checkin_time = 18;
-  // 当前连续签到天数
-  optional int32 current_checkin_streak = 19;
-  // 最长连续签到天数
-  optional int32 longest_checkin_streak = 20;
-
-  // --- 用户偏好设置 ---
-
-  // 用户语言
-  optional string language = 21;
-  // 时区
-  optional string timezone = 22;
-  // 皮肤主题
-  optional string theme = 23;
-  // 移动端皮肤主题
-  optional string mobile_theme = 24;
-  // 启用Web通知
-  optional bool enable_web_notify = 25;
-  // 启用邮件订阅
-  optional bool enable_email_subscribe = 26;
-
-  // --- 隐私设置 ---
-
-  // 是否公开积分榜
-  optional bool public_points = 27;
-  // 是否公开粉丝列表
-  optional bool public_followers = 28;
-  // 是否公开帖子列表
-  optional bool public_articles = 29;
-  // 是否公开评论列表
-  optional bool public_comments = 30;
-  // 是否公开在线状态
-  optional bool public_online_status = 31;
-
-  // --- 地理信息 ---
-
-  // 所在国家
-  optional string country = 32;
-  // 所在省份
-  optional string province = 33;
-  // 所在城市
-  optional string city = 34;
-  // 是否公开地理位置
-  optional bool public_location = 35;
-
-  // --- 其他 ---
-
-  // 是否二步验证
-  bool twofa_enable = 36;
-  // 二步验证启用时间
-  google.protobuf.Timestamp twofa_enable_time = 37;
-
-  // --- 审计字段 ---
-
-  // 创建时间
+  optional string url = 4;
+  optional string avatar_url = 5;
+  optional string introduction = 6;
+  optional string mbti = 7;
+  AccountStatus status = 8;
+  string group_name = 9;
+  optional int32 follow_count = 10;
+  optional int32 follower_count = 11;
+  optional int32 block_count = 12;
+  optional int32 blocked_count = 13;
   google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
   google.protobuf.Timestamp updated_at = 1001;
 }
 
-message UserRelation {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
+message AccountContact {
+  int64 user_id = 1;
+  optional string email = 2;
+  optional string phone = 3;
+}
 
-  // 用户关系ID
+message Account {
+  AccountBasic basic = 1;
+  AccountContact contact = 2;
+}
+
+message Preferences {
+  int64 user_id = 1;
+  optional string language = 2;
+  optional string timezone = 3;
+  optional string theme = 4;
+  optional string mobile_theme = 5;
+  optional bool enable_web_notify = 6;
+  optional bool enable_email_subscribe = 7;
+}
+
+message PrivacySetting {
+  int64 user_id = 1;
+  optional bool public_points = 2;
+  optional bool public_followers = 3;
+  optional bool public_articles = 4;
+  optional bool public_comments = 5;
+  optional bool public_online_status = 6;
+  optional bool public_location = 7;
+}
+
+message Location {
+  int64 user_id = 1;
+  optional string country = 2;
+  optional string province = 3;
+  optional string city = 4;
+}
+
+message Tfa {
+  int64 user_id = 1;
+  bool enable = 2;
+  google.protobuf.Timestamp enable_time = 3;
+}
+
+message CheckinRecord {
   int64 id = 1;
-  // 关系类型 1-关注 2-拉黑
-  UserRelationType type = 2;
-  // 关系发起者ID
+  int64 user_id = 2;
+  google.protobuf.Timestamp date = 3;
+  optional int32 online_minutes = 4;
+  optional int32 activity = 5;
+  bool checked = 6;
+}
+
+message CheckinStat {
+  int64 user_id = 1;
+  optional int32 total_online_minutes = 2;
+  optional int32 current_streak = 3;
+  optional int32 longest_streak = 4;
+}
+
+message LoginLog {
+  int64 id = 1;
+  optional int64 user_id = 2;
+  string account = 3;
+  LoginMethod login_method = 4;
+  LoginStatus status = 5;
+  optional string failure_reason = 6;
+  optional string ip = 7;
+  optional string country = 8;
+  optional string country_code = 9;
+  optional string province = 10;
+  optional string city = 11;
+  optional string isp = 12;
+  optional string user_agent = 13;
+  optional string device_id = 14;
+  optional string device_name = 15;
+  optional string platform = 16;
+  optional string os = 17;
+  optional string browser = 18;
+  optional string request_id = 19;
+  google.protobuf.Timestamp created_at = 1000;
+}
+
+message Relation {
+  int64 id = 1;
+  RelationType type = 2;
   int64 actor_id = 3;
-  // 关系目标用户ID
   int64 target_id = 4;
-  // 目标用户信息
-  User user = 100;
+  google.protobuf.Timestamp created_at = 1000;
+  google.protobuf.Timestamp updated_at = 1001;
 }
 
-message UserQueryParams {
-  // 用户Id
-  optional int64 user_id = 10;
-  // 用户Id列表
-  repeated int64 user_ids = 1;
-  // 用户名
-  optional string name = 2;
-  // 用户名列表
-  repeated string names = 3;
-  // 昵称
-  optional string nickname = 4;
-  // 昵称列表
-  repeated string nicknames = 5;
-  // 邮箱
-  optional string email = 6;
-  // 邮箱列表
-  repeated string emails = 7;
-  // 手机号
-  optional string phone = 8;
-  // 手机号列表
-  repeated string phones = 9;
-}
-
-message UserRelationQueryParams {
-  // 关系类型
-  optional UserRelationType type = 1;
+message RelationStatus {
+  int64 target_id = 1;
+  bool following = 2;
+  bool followed_by = 3;
+  bool blocking = 4;
+  bool blocked_by = 5;
 }

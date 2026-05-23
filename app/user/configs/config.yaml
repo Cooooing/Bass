@@ -11,7 +11,7 @@ server:
     port: ${GRPC_PORT:9002}
     timeout: 5s
   app: FishPi
-  avatar: https://treble.sxisa.com/api/user/v1/user/avatar/%s # /v1/user/avatar/{name}
+  avatar: https://treble.sxisa.com/api/user/v1/user/avatar/%s # 头像地址模板
   jwt:
     secret: qbceKQYgXXffTxVBgGrX
     expires: 864000s
@@ -19,7 +19,7 @@ server:
 data:
   database:
     driver: postgres
-    source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable # postgresql://<user>:<pass>@<host>/<database>
+    source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable # 数据库连接串模板
     merge: true # 是否同步表到数据库
     debug: true
   redis:
@@ -51,7 +51,7 @@ data:
     token: ${CONSUL_ACL_APP_TOKEN:token}
     dial_timeout: 5s
 trace:
-  enable_otel: true # 是否采集上报到 otel
+  enable_otel: true # 是否采集并上报链路数据
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率

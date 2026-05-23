@@ -17,15 +17,15 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
-// go build -ldflags "-X main.Version=x.y.z"
+// 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
 var (
-	// Name is the name of the compiled software.
+	// Name 是编译产物名称。
 	Name = "app"
-	// Version is the version of the compiled software.
+	// Version 是编译产物版本。
 	Version = "v1.0.0"
-	// flagConf is the config flag.
+	// flagConf 是业务配置文件路径参数。
 	flagConf = "configs"
-	// flagConf is the config flag.
+	// flagBootstrap 是启动配置文件路径参数。
 	flagBootstrap = "configs"
 )
 
@@ -93,7 +93,7 @@ func main() {
 	}
 	defer cleanup()
 
-	// start and wait for stop signal
+	// 启动应用并等待停止信号。
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"common/api/gen/common/enums"
 	commonClient "common/pkg/client"
 	"context"
 	"notify/internal/biz/model"
@@ -40,28 +39,16 @@ func NewNotificationSettingRepo(
 	}
 }
 
-func (r *NotificationSettingRepo) GetByUser(ctx context.Context, userID int64) ([]*model.NotificationSetting, error) {
-	list, err := r.db.NotificationSetting.Query().
-		Where(notificationsetting.UserIDEQ(userID)).
-		All(ctx)
-	if err != nil {
-		return nil, err
+func (r *NotificationSettingRepo) List(ctx context.Context, req *repo.NotificationSettingGetReq) ([]*model.NotificationSetting, error) {
+	query := r.db.NotificationSetting.Query()
+	if req != nil && req.UserID != nil {
+		query = query.Where(notificationsetting.UserIDEQ(*req.UserID))
 	}
-	result := make([]*model.NotificationSetting, 0, len(list))
-	for _, item := range list {
-		result = append(result, &model.NotificationSetting{NotificationSetting: item})
+	if req != nil && req.EventType != nil {
+		dbEventType, _ := notifyenum.EventTypeMap.ToEnum(*req.EventType)
+		query = query.Where(notificationsetting.EventTypeEQ(notificationsetting.EventType(dbEventType)))
 	}
-	return result, nil
-}
-
-func (r *NotificationSettingRepo) GetByUserAndEvent(ctx context.Context, userID int64, eventType enums.EventType) ([]*model.NotificationSetting, error) {
-	dbEventType, _ := notifyenum.EventTypeMap.ToEnum(eventType)
-	list, err := r.db.NotificationSetting.Query().
-		Where(
-			notificationsetting.UserIDEQ(userID),
-			notificationsetting.EventTypeEQ(notificationsetting.EventType(dbEventType)),
-		).
-		All(ctx)
+	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}

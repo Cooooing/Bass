@@ -4,6 +4,7 @@ import (
 	"context"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
+	"im/internal/data/gen"
 )
 
 type ChatSessionUsecase struct {

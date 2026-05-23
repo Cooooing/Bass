@@ -164,7 +164,7 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 }
 
 func (s *ArticleService) UpdateArticle(ctx context.Context, req *v1.UpdateArticleArticle_Request) (rsp *v1.UpdateArticleArticle_Reply, err error) {
-	// TODO implement me
+	// TODO: 待实现。
 	panic("implement me")
 }
 

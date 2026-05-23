@@ -20,21 +20,24 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string
 	}
 
 	/*
+		匹配用户链接：
 		@username
-		[@username](user's home page link)
+		[@username](用户主页链接)
 
+		匹配文章链接：
 		&username:title
-		[&username:title](article's link)
+		[&username:title](文章链接)
 
+		匹配标签链接：
 		#tag/domain
-		[#tag/domain](tag's link)
+		[#tag/domain](标签链接)
 	*/
 	if strings.HasPrefix(text, "@") {
 		atUsernames[text[1:]] = struct{}{}
 	} else if strings.HasPrefix(text, "&") {
 		parts := strings.SplitN(text[1:], ":", 2)
 		if len(parts) == 2 {
-			// parsed username:title
+			// 解析 username:title。
 		}
 	}
 
@@ -45,11 +48,11 @@ func ParseNodeImageCoverImageUrl(n *ast.Node, entering bool, coverImageUrl *stri
 	if !entering || n.Type != ast.NodeImage {
 		return ast.WalkContinue
 	}
-	// 如果已经有第一张图片了，跳过
+	// 已经找到第一张图片时直接停止遍历。
 	if coverImageUrl != nil && *coverImageUrl != "" {
-		return ast.WalkStop // 停止遍历，后面的图片不会再处理
+		return ast.WalkStop
 	}
-	// 解析图片 URL
+	// 解析图片 URL。
 	if coverImageUrl != nil {
 		dest := n.ChildByType(ast.NodeLinkDest)
 		if dest != nil {

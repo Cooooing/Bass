@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "user/v1/model.proto";
+
+option go_package = "common/api/gen/user/v1;v1";
+
+service AccountService {
+  // 获取当前登录账号的完整资料，包含基础资料和联系方式。
+  rpc GetCurrent(GetCurrentAccount.Request) returns (GetCurrentAccount.Reply) {}
+
+  // 按账号 ID 获取单个账号基础资料，供内部服务聚合展示信息使用。
+  rpc GetBasic(GetBasicAccount.Request) returns (GetBasicAccount.Reply) {}
+
+  // 批量获取账号基础资料，供 content、notify 等内部服务高频聚合使用。
+  rpc BatchGetBasic(BatchGetBasicAccount.Request) returns (BatchGetBasicAccount.Reply) {}
+
+  // 批量获取账号联系方式，仅供需要触达用户的受控内部服务使用。
+  rpc BatchGetContact(BatchGetContactAccount.Request) returns (BatchGetContactAccount.Reply) {}
+
+  // 检查邮箱是否已被账号占用，仅供注册流程或受控内部调用使用。
+  rpc ExistsEmail(ExistsEmail.Request) returns (ExistsEmail.Reply) {}
+
+  // 检查手机号是否已被账号占用，仅供注册流程或受控内部调用使用。
+  rpc ExistsPhone(ExistsPhone.Request) returns (ExistsPhone.Reply) {}
+
+  // 检查账号名是否已被占用，仅供注册流程或受控内部调用使用。
+  rpc ExistsName(ExistsName.Request) returns (ExistsName.Reply) {}
+
+  // 更新当前登录账号的展示资料。
+  rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Reply) {}
+}
+
+message GetCurrentAccount {
+  message Request {}
+  message Reply {
+    Account account = 1;
+  }
+}
+
+message GetBasicAccount {
+  message Request {
+    int64 user_id = 1;
+  }
+  message Reply {
+    AccountBasic account = 1;
+  }
+}
+
+message BatchGetBasicAccount {
+  message Request {
+    repeated int64 user_ids = 1;
+  }
+  message Reply {
+    map<int64, AccountBasic> accounts = 1;
+  }
+}
+
+message BatchGetContactAccount {
+  message Request {
+    repeated int64 user_ids = 1;
+  }
+  message Reply {
+    map<int64, AccountContact> contacts = 1;
+  }
+}
+
+message ExistsEmail {
+  message Request {
+    string email = 1;
+  }
+  message Reply {
+    bool exists = 1;
+  }
+}
+
+message ExistsPhone {
+  message Request {
+    string phone = 1;
+  }
+  message Reply {
+    bool exists = 1;
+  }
+}
+
+message ExistsName {
+  message Request {
+    string name = 1;
+  }
+  message Reply {
+    bool exists = 1;
+  }
+}
+
+message UpdateProfileAccount {
+  message Request {
+    optional string avatar_url = 1;
+    optional string nickname = 2;
+    optional string url = 3;
+    optional string introduction = 4;
+    optional string mbti = 5;
+  }
+  message Reply {
+    AccountBasic account = 1;
+  }
+}

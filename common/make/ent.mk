@@ -1,22 +1,25 @@
 ifndef ENT_MK_INCLUDED
 ENT_MK_INCLUDED := 1
 
-# Requires app.mk to be included first (provides APP_DIR, IGNORE_ERROR, run)
+# Requires app.mk for APP_DIR, IGNORE_ERROR, run, and MODULE_GEN_TARGETS.
 
-# Append to composite targets (prerequisites are accumulated, no recipe conflict)
-gen: ent
+MODULE_GEN_TARGETS := config ent wire
+
+ENT_SCHEMA_DIR ?= $(if $(wildcard $(APP_DIR)/internal/data/schema),./internal/data/schema,./internal/data/ent/schema)
+ENT_GEN_DIR ?= $(APP_DIR)/internal/data/gen
+
 clean: ent-clean
 
-# clean ent products
+# Clean Ent generated artifacts.
 .PHONY: ent-clean
 ent-clean:
-	@echo "[ent-clean] removing ent gen..."
+	@echo "[ent-clean] cleaning Ent generated code..."
 	@rm -rf $(APP_DIR)/internal/data/gen 2>/dev/null; true
 
-# generate ent
+# Generate Ent code.
 .PHONY: ent
 ent: ent-clean
 	@echo "[ent] ent generate..."
-	$(call run,cd $(APP_DIR) && ent generate --target=$(APP_DIR)/internal/data/gen ./internal/data/schema,[ent] ent generate)
+	$(call run,cd $(APP_DIR) && ent generate --target=$(ENT_GEN_DIR) $(ENT_SCHEMA_DIR),[ent] ent generate)
 
 endif

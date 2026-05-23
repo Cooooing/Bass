@@ -7,7 +7,7 @@ import (
 	"go.opentelemetry.io/otel/metric"
 )
 
-// ServerProviderSet is server providers.
+// ServerProviderSet 是 server 层依赖集合。
 var ServerProviderSet = wire.NewSet(
 	NewGRPCServer,
 )

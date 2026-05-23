@@ -5,84 +5,84 @@ import (
 )
 
 type User struct {
-	// ID of the ent.
+	// ID 是实体 ID。
 	ID int64 `json:"id,omitempty"`
-	// 用户名
+	// Name 是用户名。
 	Name string `json:"name,omitempty"`
-	// 昵称
+	// Nickname 是昵称。
 	Nickname string `json:"nickname,omitempty"`
-	// 密码
+	// Password 是密码哈希。
 	Password string `json:"-"`
-	// 邮箱
+	// Email 是邮箱。
 	Email string `json:"email,omitempty"`
-	// 手机号
+	// Phone 是手机号。
 	Phone string `json:"phone,omitempty"`
-	// 用户个人主页链接
+	// URL 是用户个人主页链接。
 	URL string `json:"url,omitempty"`
-	// 头像URL
+	// AvatarURL 是头像 URL。
 	AvatarURL string `json:"avatar_url,omitempty"`
-	// 个人简介
+	// Introduction 是个人简介。
 	Introduction string `json:"introduction,omitempty"`
-	// 用户 MBTI 类型
+	// Mbti 是用户 MBTI 类型。
 	Mbti string `json:"mbti,omitempty"`
-	// 用户状态：0-正常，1-封禁，2-注销
+	// Status 是用户状态，0 表示正常，1 表示封禁，2 表示注销。
 	Status int32 `json:"status,omitempty"`
-	// 用户角色
+	// Role 是用户角色。
 	Role string `json:"role,omitempty"`
-	// 关注数
+	// FollowCount 是关注数。
 	FollowCount int32 `json:"follow_count,omitempty"`
-	// 粉丝数
+	// FollowerCount 是粉丝数。
 	FollowerCount int32 `json:"follower_count,omitempty"`
-	// 最近登录时间
+	// LastLoginTime 是最近登录时间。
 	LastLoginTime *time.Time `json:"last_login_time,omitempty"`
-	// 最近登录IP
+	// LastLoginIP 是最近登录 IP。
 	LastLoginIP string `json:"last_login_ip,omitempty"`
-	// 在线总时长（分钟）
+	// OnlineMinutes 是在线总时长，单位为分钟。
 	OnlineMinutes int32 `json:"online_minutes,omitempty"`
-	// 最近签到时间
+	// LastCheckinTime 是最近签到时间。
 	LastCheckinTime *time.Time `json:"last_checkin_time,omitempty"`
-	// 当前连续签到天数
+	// CurrentCheckinStreak 是当前连续签到天数。
 	CurrentCheckinStreak int32 `json:"current_checkin_streak,omitempty"`
-	// 最长连续签到天数
+	// LongestCheckinStreak 是最长连续签到天数。
 	LongestCheckinStreak int32 `json:"longest_checkin_streak,omitempty"`
-	// 用户语言
+	// Language 是用户语言。
 	Language string `json:"language,omitempty"`
-	// 时区
+	// Timezone 是时区。
 	Timezone string `json:"timezone,omitempty"`
-	// 皮肤主题
+	// Theme 是桌面端主题。
 	Theme string `json:"theme,omitempty"`
-	// 移动端皮肤主题
+	// MobileTheme 是移动端主题。
 	MobileTheme string `json:"mobile_theme,omitempty"`
-	// 启用Web通知
+	// EnableWebNotify 表示是否启用 Web 通知。
 	EnableWebNotify bool `json:"enable_web_notify,omitempty"`
-	// 启用邮件订阅
+	// EnableEmailSubscribe 表示是否启用邮件订阅。
 	EnableEmailSubscribe bool `json:"enable_email_subscribe,omitempty"`
-	// 是否公开积分榜
+	// PublicPoints 表示是否公开积分概况。
 	PublicPoints bool `json:"public_points,omitempty"`
-	// 是否公开粉丝列表
+	// PublicFollowers 表示是否公开粉丝列表。
 	PublicFollowers bool `json:"public_followers,omitempty"`
-	// 是否公开帖子列表
+	// PublicArticles 表示是否公开文章列表。
 	PublicArticles bool `json:"public_articles,omitempty"`
-	// 是否公开评论列表
+	// PublicComments 表示是否公开评论列表。
 	PublicComments bool `json:"public_comments,omitempty"`
-	// 是否公开在线状态
+	// PublicOnlineStatus 表示是否公开在线状态。
 	PublicOnlineStatus bool `json:"public_online_status,omitempty"`
-	// 所在国家
+	// Country 是所在国家。
 	Country string `json:"country,omitempty"`
-	// 所在省份
+	// Province 是所在省份。
 	Province string `json:"province,omitempty"`
-	// 所在城市
+	// City 是所在城市。
 	City string `json:"city,omitempty"`
-	// 是否公开地理位置
+	// PublicLocation 表示是否公开地理位置。
 	PublicLocation bool `json:"public_location,omitempty"`
-	// 是否开启二步验证
+	// TwofaEnable 表示是否启用双因素认证。
 	TwofaEnable bool `json:"twofa_enable,omitempty"`
-	// 二步验证启用时间
+	// TwofaEnableTime 是双因素认证启用时间。
 	TwofaEnableTime *time.Time `json:"twofa_enable_time,omitempty"`
-	// 二步验证Secret
+	// TwofaSecret 是双因素认证密钥。
 	TwofaSecret string `json:"-"`
-	// 创建时间
+	// CreatedAt 是创建时间。
 	CreatedAt *time.Time `json:"created_at,omitempty"`
-	// 更新时间
+	// UpdatedAt 是更新时间。
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }

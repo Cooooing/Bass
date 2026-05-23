@@ -406,7 +406,7 @@ func newTestNatsClient(conf *common.Nats) (func(), error) {
 	return cleanup, err
 }
 
-// Ensure NatsClient satisfies the expected interfaces.
+// 确认 NatsClient 满足预期接口。
 var (
 	_ Publisher  = (*NatsClient)(nil)
 	_ Subscriber = (*NatsClient)(nil)

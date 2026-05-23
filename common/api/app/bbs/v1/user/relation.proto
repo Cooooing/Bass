@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+import "bbs/v1/user/model.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/user;user";
+
+service RelationService {
+  // 当前账号关注目标账号
+  rpc Follow(FollowRelation.Request) returns (FollowRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/follow"
+      body: "*"
+    };
+  }
+
+  // 当前账号取消关注目标账号
+  rpc Unfollow(UnfollowRelation.Request) returns (UnfollowRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/unfollow"
+      body: "*"
+    };
+  }
+
+  // 当前账号拉黑目标账号
+  rpc Block(BlockRelation.Request) returns (BlockRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/block"
+      body: "*"
+    };
+  }
+
+  // 当前账号取消拉黑目标账号
+  rpc Unblock(UnblockRelation.Request) returns (UnblockRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/unblock"
+      body: "*"
+    };
+  }
+
+  // 分页查询当前账号关注的账号列表
+  rpc PageFollowing(PageFollowingRelation.Request) returns (PageFollowingRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/page-following"
+      body: "*"
+    };
+  }
+
+  // 分页查询当前账号的粉丝账号列表
+  rpc PageFollowers(PageFollowersRelation.Request) returns (PageFollowersRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/page-followers"
+      body: "*"
+    };
+  }
+
+  // 分页查询当前账号拉黑的账号列表
+  rpc PageBlocked(PageBlockedRelation.Request) returns (PageBlockedRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/page-blocked"
+      body: "*"
+    };
+  }
+
+  // 批量查询当前账号与多个目标账号之间的关系状态
+  rpc BatchGetStatus(BatchGetStatusRelation.Request) returns (BatchGetStatusRelation.Reply) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/batch-get-status"
+      body: "*"
+    };
+  }
+}
+
+message FollowRelation {
+  message Request {
+    int64 target_id = 1;
+  }
+  message Reply {}
+}
+
+message UnfollowRelation {
+  message Request {
+    int64 target_id = 1;
+  }
+  message Reply {}
+}
+
+message BlockRelation {
+  message Request {
+    int64 target_id = 1;
+  }
+  message Reply {}
+}
+
+message UnblockRelation {
+  message Request {
+    int64 target_id = 1;
+  }
+  message Reply {}
+}
+
+message PageFollowingRelation {
+  message Request {
+    PageRequest page = 1;
+  }
+  message Reply {
+    PageReply page = 1;
+    repeated Relation rows = 2;
+  }
+}
+
+message PageFollowersRelation {
+  message Request {
+    PageRequest page = 1;
+  }
+  message Reply {
+    PageReply page = 1;
+    repeated Relation rows = 2;
+  }
+}
+
+message PageBlockedRelation {
+  message Request {
+    PageRequest page = 1;
+  }
+  message Reply {
+    PageReply page = 1;
+    repeated Relation rows = 2;
+  }
+}
+
+message BatchGetStatusRelation {
+  message Request {
+    repeated int64 target_ids = 1;
+  }
+  message Reply {
+    map<int64, RelationStatus> statuses = 1;
+  }
+}

@@ -6,7 +6,7 @@ import (
 	"github.com/google/wire"
 )
 
-// ServiceProviderSet is service providers.
+// ServiceProviderSet 是 service 层依赖集合。
 var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
 	ProvideServices,

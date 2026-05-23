@@ -168,11 +168,11 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 			}
 		}
 
-		userMap, err := d.userClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userMap, err := d.userClient.Account.BatchGetBasic(ctx, &userv1.BatchGetBasicAccount_Request{UserIds: lo.Keys(userIds)})
 		if err != nil {
 			return err
 		}
-		users := userMap.Users
+		users := userMap.Accounts
 
 		for i := range reply {
 			reply[i].User = users[*reply[i].CreatedBy]

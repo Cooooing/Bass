@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-// --- Setter interfaces ---
+// --- 设置器接口 ---
 
 type TimeAuditSetter interface {
 	SetCreatedAt(time.Time)

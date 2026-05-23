@@ -8,7 +8,7 @@ import (
 	"github.com/google/wire"
 )
 
-// DataProviderSet is data providers.
+// DataProviderSet 是 data 层依赖集合。
 var DataProviderSet = wire.NewSet(
 	ProvideRedis,
 	ProvideConsul,

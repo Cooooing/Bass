@@ -111,7 +111,7 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 					return nil, err
 				}
 
-				// 权限范围 Todo 用户组权限规则后续持久化入库
+				// TODO: 权限范围中的用户组权限规则后续持久化入库。
 
 				// 设置上下文
 				ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)

@@ -30,7 +30,7 @@ func (NotificationMeta) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("uuid").Comment("唯一标识 幂等").Unique(),
 		field.Enum("event_type").Values(notifyenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
-		field.JSON("meta", []byte{}).Comment("事件 payload JSON"),
+		field.JSON("meta", []byte{}).Comment("事件载荷 JSON"),
 		field.String("title").Comment("渲染标题").Default(""),
 		field.String("content").Comment("渲染内容"),
 		field.Bool("is_global").Comment("是否全站广播").Default(false),

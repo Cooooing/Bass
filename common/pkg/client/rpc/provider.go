@@ -23,10 +23,6 @@ func ProvideNotifyClient(consul *client.ConsulClient) (*NotifyClient, error) {
 	return newServiceClient(consul, constant.NotifyServiceName.String(), NewNotifyClient)
 }
 
-func ProvideSignalNodeClient(consul *client.ConsulClient) (*SignalNodeClient, error) {
-	return newServiceClient(consul, constant.SignalServiceName.String(), NewSignalNodeClient)
-}
-
 func newServiceClient[T any](consul *client.ConsulClient, service string, newFn func(*grpc.ClientConn) T) (T, error) {
 	conn, err := consul.GetGrpcConn(service)
 	if err != nil {

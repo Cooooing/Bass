@@ -112,7 +112,7 @@ func (f *failingSavableTx) TxExec(_ context.Context, sql string, _ ...any) error
 	return nil
 }
 
-// --- helpers ---
+// --- 辅助函数 ---
 
 func newStarter(tx Tx) TxStarter {
 	return func(_ context.Context) (Tx, error) { return tx, nil }
@@ -388,7 +388,7 @@ func TestNested_NoExistingTx_CreatesTx(t *testing.T) {
 }
 
 func TestNested_NonSaver_Fallback(t *testing.T) {
-	// mockTx 不实现 TxExec，退化为 flatten
+	// mockTx 不实现 TxExec，退化为扁平事务。
 	outer := newMockTx("outer")
 	ctx := withTx(context.Background(), outer)
 
@@ -429,7 +429,7 @@ func TestNotSupported_WithExistingTx_Suspends(t *testing.T) {
 		fnCalled = true
 		// NotSupported 挂起事务，fn 在无事务上下文中执行
 		// 但 suspendedTx 仍实现 Tx 接口，ClientFromCtx 可以提取到 client
-		// 关键验证：starter 不被调用，outer 不被 commit/rollback
+		// 关键验证：starter 不被调用，外层事务不被提交或回滚。
 		return nil
 	}, WithPropagation(PropagationNotSupported))
 	if err != nil {
@@ -599,7 +599,7 @@ func TestNestedScenario_RequiresNew_InnerFailOuterSucceeds(t *testing.T) {
 		_ = WithTx(ctx, newStarter(inner), func(ctx context.Context) error {
 			return errors.New("inner fail")
 		}, WithPropagation(PropagationRequiresNew))
-		return nil // outer continues
+		return nil // 外层事务继续执行。
 	})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -620,7 +620,7 @@ func TestNestedScenario_NestedSavepoint_PartialRollback(t *testing.T) {
 			return errors.New("inner fail")
 		}, WithPropagation(PropagationNested))
 
-		// outer continues successfully
+		// 外层事务继续成功执行。
 		return nil
 	})
 	if err != nil {
@@ -646,9 +646,9 @@ func TestNestedScenario_ThreeLevelsDeep(t *testing.T) {
 	l2 := newSavableTx("l2")
 
 	err := WithTx(context.Background(), newStarter(l1), func(ctx context.Context) error {
-		// level 2: RequiresNew
+		// 第二层：RequiresNew。
 		return WithTx(ctx, newStarter(l2), func(ctx context.Context) error {
-			// level 3: Nested (savepoint on l2)
+			// 第三层：Nested，在第二层事务上创建 savepoint。
 			return WithTx(ctx, newStarter(newMockTx("unused")), func(ctx context.Context) error {
 				c, _ := ClientFromCtx[string](ctx)
 				if c != "l2" {
@@ -667,7 +667,7 @@ func TestNestedScenario_ThreeLevelsDeep(t *testing.T) {
 	if !l2.isCommitted() {
 		t.Fatal("l2 should be committed")
 	}
-	// l2 应该有 savepoint SQL
+	// 第二层事务应该有 savepoint SQL。
 	sqls := l2.getSQLs()
 	if len(sqls) < 2 {
 		t.Fatalf("l2 should have savepoint SQLs, got: %v", sqls)

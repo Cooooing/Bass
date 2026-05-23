@@ -41,7 +41,7 @@ func NewRegistry(senders ...ChannelSender) *Registry {
 	return &Registry{senders: m}
 }
 
-// ProvideRegistry wire provider
+// ProvideRegistry 提供 wire 依赖。
 func ProvideRegistry(smtp *SmtpSender, sms *TencentSmsSender) *Registry {
 	var senders []ChannelSender
 	senders = append(senders, NewStationSender())
@@ -69,12 +69,12 @@ func (r *Registry) Send(ctx context.Context, channel v1.NotificationChannel, req
 	return s.Send(ctx, req)
 }
 
-// ChannelToProto 将 ent enum (string) 转为 proto enum (int32)
+// ChannelToProto 将 ent 字符串枚举转换为 proto 数值枚举。
 func ChannelToProto(ch string) v1.NotificationChannel {
 	return v1.NotificationChannel(v1.NotificationChannel_value[ch])
 }
 
-// StatusToProto 将 ent enum (string) 转为 proto enum (int32)
+// StatusToProto 将 ent 字符串枚举转换为 proto 数值枚举。
 func StatusToProto(s string) v1.NotificationStatus {
 	return v1.NotificationStatus(v1.NotificationStatus_value[s])
 }

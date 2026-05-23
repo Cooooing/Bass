@@ -345,7 +345,7 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		})
 	}
 	if req.Keyword != nil {
-		// Todo 后续考虑使用 zhparser 全文搜索拓展实现
+		// TODO: 后续考虑使用 zhparser 全文搜索扩展实现。
 		query = query.Where(
 			article.Or(
 				article.TitleContains(*req.Keyword),

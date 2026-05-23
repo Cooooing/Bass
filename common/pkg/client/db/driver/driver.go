@@ -18,7 +18,7 @@ import (
 )
 
 // ============================================================
-// Config
+// 配置
 // ============================================================
 
 type Config interface {
@@ -28,7 +28,7 @@ type Config interface {
 }
 
 // ============================================================
-// Driver
+// 驱动
 // ============================================================
 
 type driver struct {
@@ -90,7 +90,7 @@ func (d *driver) Dialect() string {
 }
 
 // ============================================================
-// Tx
+// 事务
 // ============================================================
 
 type tx struct {
@@ -150,7 +150,7 @@ func (t *tx) Rollback() error {
 }
 
 // ============================================================
-// Log Decision
+// 日志判定
 // ============================================================
 
 const defaultSlowThreshold = 500 * time.Millisecond
@@ -180,7 +180,7 @@ func shouldLog(cfg Config, cost time.Duration) bool {
 }
 
 // ============================================================
-// Log Output
+// 日志输出
 // ============================================================
 
 var whitespaceReplacer = strings.NewReplacer("\n", " ", "\r", " ", "\t", " ")
@@ -208,7 +208,7 @@ func logSQL(ctx context.Context, l *log.Helper, mode string, cost time.Duration,
 		return
 	}
 
-	// prod: structured JSON
+	// 生产环境：结构化 JSON。
 	if err != nil {
 		l.WithContext(ctx).Warnw("sql executed",
 			"cost_ms", cost.Milliseconds(),
@@ -230,7 +230,7 @@ func logSQL(ctx context.Context, l *log.Helper, mode string, cost time.Duration,
 }
 
 // ============================================================
-// SQL Argument Formatting
+// SQL 参数格式化
 // ============================================================
 
 func formatSQLArgs(query string, args []any) string {
@@ -245,7 +245,7 @@ func formatSQLArgs(query string, args []any) string {
 	for i := 0; i < len(query); {
 		c := query[i]
 
-		// PostgreSQL: $1, $2, ...
+		// PostgreSQL 占位符：$1、$2 等。
 		if c == '$' {
 			j := i + 1
 			num := 0
@@ -260,7 +260,7 @@ func formatSQLArgs(query string, args []any) string {
 			}
 		}
 
-		// MySQL: ?
+		// MySQL 占位符：?。
 		if c == '?' && argIdx < len(args) {
 			buf.WriteString(formatArg(args[argIdx]))
 			argIdx++
@@ -321,12 +321,12 @@ func formatArg(arg any) string {
 }
 
 // ============================================================
-// Caller Resolution
+// 调用方解析
 // ============================================================
 
 var (
-	callerCache sync.Map // map[uintptr]callerInfo
-	selfPkg     string   // this package's import path, detected at init
+	callerCache sync.Map // 程序计数器到调用方信息的缓存
+	selfPkg     string   // 当前包导入路径，初始化时检测
 )
 
 type callerInfo struct {
@@ -334,7 +334,7 @@ type callerInfo struct {
 	line int
 }
 
-// Detect this package's import path once at startup.
+// 启动时检测当前包导入路径。
 func init() {
 	pc, _, _, _ := runtime.Caller(0)
 	fn := runtime.FuncForPC(pc)
@@ -346,14 +346,13 @@ func init() {
 	}
 }
 
-// getCaller walks the call stack to find the data-layer frame that
-// triggered the SQL. Skips runtime, this package, third-party modules,
-// ent generated code, and stdlib database packages.
+// getCaller 遍历调用栈，查找触发 SQL 的 data 层栈帧。
+// 会跳过 runtime、当前包、第三方模块、ent 生成代码和标准库数据库包。
 //
-// Typical call chain:
+// 典型调用链：
 //
 //	service.Register
-//	  → repo.Create          ← we want this
+//	  → repo.Create          ← 目标调用方
 //	    → ent.UserCreate.Save
 //	      → ent.UserCreate.sqlExec
 //	        → driver.Exec
@@ -362,7 +361,7 @@ func init() {
 //	              → runtime.Callers
 func getCaller() (string, int) {
 	var pcs [32]uintptr
-	n := runtime.Callers(2, pcs[:]) // skip runtime.Callers + getCaller
+	n := runtime.Callers(2, pcs[:]) // 跳过 runtime.Callers 和 getCaller。
 
 	for i := 0; i < n; i++ {
 		pc := pcs[i]
@@ -392,36 +391,36 @@ func getCaller() (string, int) {
 	return "unknown", 0
 }
 
-// shouldSkip decides whether a stack frame should be skipped.
+// shouldSkip 判断某个栈帧是否应被跳过。
 //
-// Skip order (top → bottom of stack):
-//  1. runtime internals
-//  2. this driver package
-//  3. third-party modules (go/pkg/mod)
-//  4. ent generated code (project's ent/ directory)
-//  5. stdlib database packages
+// 跳过顺序（从栈顶到栈底）：
+//  1. runtime 内部栈帧
+//  2. 当前 driver 包
+//  3. 第三方模块（go/pkg/mod）
+//  4. ent 生成代码
+//  5. 标准库数据库包
 //
-// The first frame that passes all checks is the user's data-layer code.
+// 第一个通过检查的栈帧就是用户 data 层代码。
 func shouldSkip(funcName, file string) bool {
-	// runtime internals
+	// runtime 内部栈帧。
 	if strings.HasPrefix(funcName, "runtime.") || strings.HasPrefix(funcName, "runtime/") {
 		return true
 	}
-	// this driver package
+	// 当前 driver 包。
 	if selfPkg != "" && strings.HasPrefix(funcName, selfPkg+".") {
 		return true
 	}
-	// third-party modules in module cache
+	// 模块缓存中的第三方模块。
 	if strings.Contains(file, "/go/pkg/mod/") {
 		return true
 	}
-	// ent generated code: function names look like
+	// ent 生成代码：函数名通常类似：
 	//   github.com/project/internal/data/gen/ent.(*UserCreate).Save
-	// The "/ent." pattern matches the package boundary reliably.
+	// "/ent." 模式可以稳定匹配包边界。
 	if strings.Contains(funcName, "/ent.") {
 		return true
 	}
-	// stdlib database packages
+	// 标准库数据库包。
 	if strings.HasPrefix(funcName, "database/") {
 		return true
 	}

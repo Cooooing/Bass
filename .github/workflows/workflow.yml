@@ -1,6 +1,6 @@
 name: Service Build
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 on:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       # 矩阵配置：列出所有需要打包的服务名
       matrix:
-        service: [gateway, user, content, notify, im, signal, connector]
+        service: [user, content, notify]
       # 即使一个服务失败，其他服务也继续构建
       fail-fast: false
 
@@ -53,3 +53,78 @@ jobs:
             ghcr.io/cooooing/${{ matrix.service }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  generate-sdk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - language: typescript
+            make-target: sdk-ts
+            output-dir: common/api/gen-ts
+            branch: sdk/typescript
+          - language: go
+            make-target: sdk-go
+            output-dir: common/api/gen-go
+            branch: sdk/go
+      fail-fast: false
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Buf
+        uses: bufbuild/buf-setup-action@v1
+
+      - name: Generate SDK
+        run: make -C app/bbs ${{ matrix.make-target }}
+
+      - name: Push SDK Branch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          output_dir="${{ matrix.output-dir }}"
+          branch="${{ matrix.branch }}"
+          publish_dir="$(mktemp -d)"
+
+          if [ ! -d "$output_dir" ]; then
+            echo "[ERROR] SDK output directory does not exist: $output_dir" >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "$branch"
+            git worktree add "$publish_dir" "origin/$branch"
+          else
+            git worktree add --detach "$publish_dir"
+            git -C "$publish_dir" checkout --orphan "$branch"
+          fi
+
+          find "$publish_dir" -mindepth 1 ! -name .git -exec rm -rf {} +
+          cp -R "$output_dir"/. "$publish_dir"/
+
+          git -C "$publish_dir" add -A
+          if git -C "$publish_dir" diff --cached --quiet; then
+            echo "[sdk] no changes for $branch"
+            exit 0
+          fi
+
+          git -C "$publish_dir" commit -m "chore: update ${{ matrix.language }} sdk"
+          git -C "$publish_dir" push origin "HEAD:$branch"

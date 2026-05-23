@@ -39,11 +39,11 @@ func NewCommentActionRecordRepo(
 }
 
 func (a CommentActionRecordRepo) Save(ctx context.Context, client *gen.Client, record *model.CommentActionRecord) (*model.CommentActionRecord, error) {
-	// TODO implement me
+	// TODO: 待实现。
 	panic("implement me")
 }
 
 func (a CommentActionRecordRepo) Delete(ctx context.Context, client *gen.Client, commentId int64, userId int64, action v1.CommentAction) error {
-	// TODO implement me
+	// TODO: 待实现。
 	panic("implement me")
 }

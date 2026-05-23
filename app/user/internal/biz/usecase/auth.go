@@ -6,22 +6,28 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/jwt"
+	serverutil "common/pkg/util/server"
 	"common/pkg/util/str"
 	"context"
+	"strings"
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/conf"
+	"user/internal/enum"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
 )
 
 type AuthUsecase struct {
 	conf         *conf.Bootstrap
+	log          *log.Helper
 	tx           base.Tx
 	eventPool    *util.EventPool
-	userRepo     repo.UserRepo
+	accountRepo  repo.AccountRepo
+	loginLogRepo repo.LoginLogRepo
 	tokenCache   *jwt.TokenCache
 	tokenService *TokenUsecase
 
@@ -30,9 +36,11 @@ type AuthUsecase struct {
 
 func NewAuthUsecase(
 	conf *conf.Bootstrap,
+	logger log.Logger,
 	tx base.Tx,
 	eventPool *util.EventPool,
-	userRepo repo.UserRepo,
+	accountRepo repo.AccountRepo,
+	loginLogRepo repo.LoginLogRepo,
 	tokenCache *jwt.TokenCache,
 	tokenService *TokenUsecase,
 ) (*AuthUsecase, error) {
@@ -42,28 +50,29 @@ func NewAuthUsecase(
 	}
 	return &AuthUsecase{
 		conf:         conf,
+		log:          log.NewHelper(logger),
 		tx:           tx,
 		eventPool:    eventPool,
-		userRepo:     userRepo,
+		accountRepo:  accountRepo,
+		loginLogRepo: loginLogRepo,
 		tokenCache:   tokenCache,
 		tokenService: tokenService,
 		sf:           sf,
 	}, nil
 }
 
-func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.User) (code string, token string, err error) {
-	// 验证数据
+func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.Account) (code string, token string, err error) {
 	if u.Email == nil {
 		return "", "", cerrors.ErrorBadRequest("email can not be empty")
 	}
-	exist, err := s.userRepo.ConstantAccount(ctx, *u.Email)
+	exist, err := s.accountRepo.ExistsByAccount(ctx, *u.Email)
 	if exist {
 		err = cerrors.ErrorBadRequest("email already exists")
 	}
 	if err != nil {
 		return
 	}
-	exist, err = s.userRepo.ConstantAccount(ctx, u.Name)
+	exist, err = s.accountRepo.ExistsByAccount(ctx, u.Name)
 	if exist {
 		err = cerrors.ErrorBadRequest("name already exists")
 	}
@@ -71,7 +80,6 @@ func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.User) (code st
 		return
 	}
 
-	// 该邮箱是否在缓存
 	existEmailCode, err := s.tokenCache.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email)
 	if err != nil {
 		return
@@ -81,20 +89,16 @@ func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.User) (code st
 		return
 	}
 
-	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
 	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
-	// 发送邮件验证码通知
-	err = s.eventPool.Submit(func() {
-	})
+	err = s.eventPool.Submit(func() {})
 	if err != nil {
 		return
 	}
 
-	// 保存 code 到缓存
 	saveUser := &commonModel.User{}
 	err = copier.Copy(saveUser, u)
 	if err != nil {
@@ -109,7 +113,6 @@ func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.User) (code st
 }
 
 func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string, code string) (err error) {
-	// 通过 token 获取 code
 	token, err := s.tokenService.VerityCodeAccountTokenGen.Parse(codeToken)
 	if err != nil {
 		return
@@ -118,15 +121,13 @@ func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string,
 	if err != nil {
 		return
 	}
-	// 验证 code
 	if verityCode != code {
 		err = cerrors.ErrorBadRequest("email code invalid")
 		return
 	}
 
 	err = s.tx(ctx, func(ctx context.Context) error {
-		// 保存用户信息
-		user := &model.User{
+		user := &model.Account{
 			Name:     saveUser.Name,
 			Nickname: &saveUser.Nickname,
 			Password: saveUser.Password,
@@ -136,12 +137,10 @@ func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string,
 		if err != nil {
 			return err
 		}
-		_, err = s.userRepo.Save(ctx, user)
+		_, err = s.accountRepo.Create(ctx, user)
 		if err != nil {
 			return err
 		}
-
-		// 删除 code 缓存
 		err = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
 		if err != nil {
 			return err
@@ -154,19 +153,18 @@ func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string,
 	return
 }
 
-func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.User) (code string, token string, err error) {
-	// 验证数据
+func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.Account) (code string, token string, err error) {
 	if u.Phone == nil {
 		return "", "", cerrors.ErrorBadRequest("phone can not be empty")
 	}
-	exist, err := s.userRepo.ConstantAccount(ctx, *u.Phone)
+	exist, err := s.accountRepo.ExistsByAccount(ctx, *u.Phone)
 	if exist {
 		err = cerrors.ErrorBadRequest("phone already exists")
 	}
 	if err != nil {
 		return
 	}
-	exist, err = s.userRepo.ConstantAccount(ctx, u.Name)
+	exist, err = s.accountRepo.ExistsByAccount(ctx, u.Name)
 	if exist {
 		err = cerrors.ErrorBadRequest("name already exists")
 	}
@@ -174,7 +172,6 @@ func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.User) (code st
 		return
 	}
 
-	// 该邮箱是否在缓存
 	existPhoneCode, err := s.tokenCache.ExistVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone)
 	if err != nil {
 		return
@@ -184,20 +181,16 @@ func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.User) (code st
 		return
 	}
 
-	// 生成 code
 	code = str.RandStr(s.sf, 6, true, true, true, false)
 	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
-	// 发送邮件验证码通知
-	err = s.eventPool.Submit(func() {
-	})
+	err = s.eventPool.Submit(func() {})
 	if err != nil {
 		return
 	}
 
-	// 保存 code 到缓存
 	saveUser := &commonModel.User{}
 	err = copier.Copy(saveUser, u)
 	if err != nil {
@@ -212,7 +205,6 @@ func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.User) (code st
 }
 
 func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string, code string) (err error) {
-	// 通过 token 获取 code
 	token, err := s.tokenService.VerityCodeAccountTokenGen.Parse(codeToken)
 	if err != nil {
 		return
@@ -221,15 +213,13 @@ func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string,
 	if err != nil {
 		return
 	}
-	// 验证 code
 	if verityCode != code {
 		err = cerrors.ErrorBadRequest("phone code invalid")
 		return
 	}
 
 	err = s.tx(ctx, func(ctx context.Context) error {
-		// 保存用户信息
-		user := &model.User{
+		user := &model.Account{
 			Name:     saveUser.Name,
 			Nickname: &saveUser.Nickname,
 			Password: saveUser.Password,
@@ -239,12 +229,10 @@ func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string,
 		if err != nil {
 			return err
 		}
-		_, err = s.userRepo.Save(ctx, user)
+		_, err = s.accountRepo.Create(ctx, user)
 		if err != nil {
 			return err
 		}
-
-		// 删除 code 缓存
 		err = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
 		if err != nil {
 			return err
@@ -257,35 +245,99 @@ func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string,
 	return
 }
 
-func (s *AuthUsecase) LoginAccount(ctx context.Context, account string, password string) (token string, user *model.User, err error) {
-	// 获取用户信息
-	user, err = s.userRepo.GetByAccount(ctx, account)
+func (s *AuthUsecase) LoginAccount(ctx context.Context, account string, password string) (token string, user *model.Account, err error) {
+	user, err = s.accountRepo.GetByAccount(ctx, account)
 	if err != nil {
+		s.recordLoginLog(ctx, nil, account, enum.LoginStatusFailed, "account lookup failed")
 		return
 	}
-	// 验证密码
 	if !str.VerifyPassword(user.Password, password) {
+		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "password invalid")
 		return token, nil, cerrors.ErrorBadRequest("password invalid")
 	}
-	// 生成 token
+
 	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
+		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "token generate failed")
 		return
 	}
-	// 保存 token 到缓存
 	saveUser := &commonModel.User{}
 	err = copier.Copy(saveUser, user)
 	if err != nil {
+		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "token user copy failed")
 		return
 	}
 	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
+		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "token cache save failed")
 		return
 	}
+	s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusSuccess, "")
 
 	return token, user, nil
 }
 
 func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
 	return s.tokenCache.DelToken(ctx, token)
+}
+
+func (s *AuthUsecase) recordLoginLog(ctx context.Context, userID *int64, account string, status enum.LoginStatus, reason string) {
+	loginLog := &model.LoginLog{
+		UserID:      userID,
+		Account:     account,
+		LoginMethod: enum.LoginMethodPassword,
+		Status:      status,
+	}
+	if reason != "" {
+		loginLog.FailureReason = stringPtr(reason)
+	}
+
+	if ipInfo, ok := util.GetContextValue[*commonModel.IpInfo](ctx, constant.CtxIpInfo); ok && ipInfo != nil {
+		loginLog.IP = stringPtr(ipInfo.Ip)
+		loginLog.Country = stringPtr(ipInfo.Country)
+		loginLog.CountryCode = stringPtr(ipInfo.CountryCode)
+		loginLog.Province = stringPtr(ipInfo.Province)
+		loginLog.City = stringPtr(ipInfo.City)
+		loginLog.ISP = stringPtr(ipInfo.ISP)
+	}
+	if loginLog.IP == nil {
+		loginLog.IP = stringPtr(firstHeaderValue(
+			serverutil.GetHeader(ctx, "X-Forwarded-For"),
+			serverutil.GetHeader(ctx, "X-Real-IP"),
+			serverutil.GetHeader(ctx, "X-Client-IP"),
+		))
+	}
+	loginLog.UserAgent = stringPtr(serverutil.GetHeader(ctx, "User-Agent"))
+	loginLog.DeviceID = stringPtr(serverutil.GetHeader(ctx, "X-Device-ID"))
+	loginLog.DeviceName = stringPtr(serverutil.GetHeader(ctx, "X-Device-Name"))
+	loginLog.Platform = stringPtr(serverutil.GetHeader(ctx, "X-Platform"))
+	loginLog.OS = stringPtr(serverutil.GetHeader(ctx, "X-OS"))
+	loginLog.Browser = stringPtr(serverutil.GetHeader(ctx, "X-Browser"))
+	loginLog.RequestID = stringPtr(firstHeaderValue(
+		serverutil.GetHeader(ctx, "X-Request-ID"),
+		serverutil.GetHeader(ctx, "X-Trace-ID"),
+	))
+
+	if _, err := s.loginLogRepo.Create(ctx, loginLog); err != nil {
+		s.log.Warnf("record login log failed: %v", err)
+	}
+}
+
+func firstHeaderValue(values ...string) string {
+	for _, value := range values {
+		for _, item := range strings.Split(value, ",") {
+			item = strings.TrimSpace(item)
+			if item != "" {
+				return item
+			}
+		}
+	}
+	return ""
+}
+
+func stringPtr(value string) *string {
+	if value == "" {
+		return nil
+	}
+	return &value
 }

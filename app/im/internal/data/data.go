@@ -4,13 +4,13 @@ import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
 	"im/internal/conf"
-	"im/internal/data/gen/client"
-	"im/internal/data/gen/repo"
+	"im/internal/data/client"
+	"im/internal/data/repo"
 
 	"github.com/google/wire"
 )
 
-// DataProviderSet is data providers.
+// DataProviderSet 是 data 层依赖集合。
 var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	ProvideRedis,

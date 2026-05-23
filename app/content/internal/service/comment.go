@@ -100,11 +100,11 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) 
 }
 
 func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Request) (rsp *v1.ThankComment_Reply, err error) {
-	// TODO implement me
+	// TODO: 待实现。
 	panic("implement me")
 }
 
 func (s *CommentService) UpdateStatus(ctx context.Context, req *v1.UpdateStatusComment_Request) (rsp *v1.UpdateStatusComment_Reply, err error) {
-	// TODO implement me
+	// TODO: 待实现。
 	panic("implement me")
 }

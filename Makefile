@@ -3,7 +3,7 @@
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 APP_DIR := $(ROOT_DIR)/app
 
-# Auto-discover modules (all directories with a Makefile under app/)
+# Auto-discover modules with Makefile under app.
 MODULES ?= $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
 BFF_SERVERS ?= bbs
 
@@ -11,7 +11,7 @@ IGNORE_ERROR ?= 1
 
 include $(ROOT_DIR)/common/make/common.mk
 
-# --- Root-only targets (unique names, no module collision) ---
+# --- Root-only targets, avoiding module target collisions. ---
 
 .PHONY: all
 all: init api
@@ -48,33 +48,52 @@ doc-all:
 		$(MAKE) -C $(APP_DIR)/$$module doc IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-# --- help ---
+.PHONY: sdk-validate-all
+sdk-validate-all:
+	@for module in $(BFF_SERVERS); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module sdk-validate IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
+.PHONY: sdk-all
+sdk-all:
+	@for module in $(BFF_SERVERS); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module sdk IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
+# --- Help ---
 .PHONY: help
 help:
 	@echo "Available targets:"
 	@echo ""
-	@echo "Root-level (run once for all modules):"
-	@echo "  make init         - install tools"
-	@echo "  make api          - generate shared API proto codes"
-	@echo "  make api-clean    - clean shared API proto codes"
-	@echo "  make all          - full pipeline: init + api + gen + build"
+	@echo "Root targets:"
+	@echo "  make init         - install development tools"
+	@echo "  make api          - generate shared API proto code"
+	@echo "  make api-dep      - update Buf dependencies"
+	@echo "  make api-lint     - lint shared API proto with Buf"
+	@echo "  make api-clean    - clean shared API generated code"
+	@echo "  make all          - run init, api, gen, and build"
 	@echo ""
-	@echo "Batch (run across all modules):"
-	@echo "  make gen-all      - generate all codes (api + per-module)"
-	@echo "  make clean-all    - clean all generated files"
+	@echo "Batch targets:"
+	@echo "  make gen-all      - generate code for all modules"
+	@echo "  make clean-all    - clean generated files for all modules"
 	@echo "  make tidy-all     - run go mod tidy for all modules"
 	@echo "  make build-all    - build all services"
-	@echo "  make doc-all      - generate BFF OpenAPI docs"
+	@echo "  make doc-all      - generate BFF OpenAPI documents"
+	@echo "  make sdk-validate-all - validate BFF OpenAPI documents"
+	@echo "  make sdk-all      - generate BFF SDKs from OpenAPI"
 	@echo ""
-	@echo "Single module (make -C app/<module> <target>):"
-	@echo "  make -C app/<module> gen       - generate codes for one module"
+	@echo "Single module targets:"
+	@echo "  make -C app/<module> gen       - generate code for one module"
 	@echo "  make -C app/<module> clean     - clean one module"
 	@echo "  make -C app/<module> build     - build one module"
-	@echo "  make -C app/<module> tidy      - go mod tidy for one module"
-	@echo "  make -C app/<module> ent       - generate ent codes (if ent.mk included)"
-	@echo "  make -C app/<module> doc       - generate openapi docs (if doc.mk included)"
+	@echo "  make -C app/<module> tidy      - run go mod tidy for one module"
+	@echo "  make -C app/<module> ent       - generate Ent code"
+	@echo "  make -C app/<module> doc       - generate OpenAPI document"
+	@echo "  make -C app/<module> sdk       - generate BFF TypeScript and Go SDKs"
 	@echo ""
-	@echo "  Examples:"
+	@echo "Examples:"
 	@echo "    make -C app/bbs gen"
 	@echo "    make -C app/user build"
 	@echo "    make -C app/bbs ent"

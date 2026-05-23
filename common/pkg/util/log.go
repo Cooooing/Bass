@@ -115,7 +115,7 @@ func NewZapLogger(mode string, file string, encoder zapcore.EncoderConfig, level
 			Filename:   file,
 			MaxSize:    1024, // MB
 			MaxBackups: 5,
-			MaxAge:     30, // days
+			MaxAge:     30, // 天
 			Compress:   true,
 		}
 		writers = append(writers, zapcore.AddSync(lumberJackLogger))
@@ -204,7 +204,7 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 		return func(context.Context) error { return nil }, nil
 	}
 
-	// enableOtel == true 的正常上报逻辑
+	// enableOtel 为 true 时执行正常上报逻辑。
 	opts := []otlptracegrpc.Option{
 		otlptracegrpc.WithEndpoint(endpoint),
 	}
@@ -229,7 +229,7 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 		return nil, err
 	}
 
-	// TracerProvider
+	// 创建 TracerProvider。
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(res),

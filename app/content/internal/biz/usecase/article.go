@@ -350,7 +350,7 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, comm
 	if err != nil {
 		return err
 	}
-	// Todo 发送通知
+	// TODO: 发送通知。
 	return nil
 }
 
@@ -392,16 +392,16 @@ func (d *ArticleUsecase) GetOne(ctx context.Context, articleId int64) (*model.Ar
 	if lastReplyComment != nil {
 		userIds = append(userIds, *lastReplyComment.CreatedBy)
 	}
-	userAuthorsMap, err := d.userClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: userIds}})
+	userAuthorsMap, err := d.userClient.Account.BatchGetBasic(ctx, &userv1.BatchGetBasicAccount_Request{UserIds: userIds})
 	if err != nil {
 		return nil, err
 	}
 
 	if lastReplyComment != nil {
 		reply.LastReplyCommentAt = lastReplyComment.CreatedAt
-		reply.LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
+		reply.LastReplyCommentUser = userAuthorsMap.Accounts[*lastReplyComment.CreatedBy]
 	}
-	reply.AuthorUser = util.If(reply.Anonymous, nil, userAuthorsMap.Users[*reply.CreatedBy])
+	reply.AuthorUser = util.If(reply.Anonymous, nil, userAuthorsMap.Accounts[*reply.CreatedBy])
 	return reply, err
 }
 
@@ -438,9 +438,9 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 		}
 	}
 
-	userAuthorsMap := &userv1.GetMapUser_Reply{}
+	userAuthorsMap := &userv1.BatchGetBasicAccount_Reply{Accounts: map[int64]*userv1.AccountBasic{}}
 	if len(userIds) > 0 {
-		userAuthorsMap, err = d.userClient.User.GetMap(ctx, &userv1.GetMapUser_Request{Query: &userv1.UserQueryParams{UserIds: lo.Keys(userIds)}})
+		userAuthorsMap, err = d.userClient.Account.BatchGetBasic(ctx, &userv1.BatchGetBasicAccount_Request{UserIds: lo.Keys(userIds)})
 		if err != nil {
 			return nil, nil, err
 		}
@@ -449,9 +449,9 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 	for i := range list {
 		if lastReplyComment, ok := lastCommentMap[list[i].ID]; ok {
 			list[i].LastReplyCommentAt = lastReplyComment.CreatedAt
-			list[i].LastReplyCommentUser = userAuthorsMap.Users[*lastReplyComment.CreatedBy]
+			list[i].LastReplyCommentUser = userAuthorsMap.Accounts[*lastReplyComment.CreatedBy]
 		}
-		list[i].AuthorUser = util.If(list[i].Anonymous, nil, userAuthorsMap.Users[*list[i].CreatedBy])
+		list[i].AuthorUser = util.If(list[i].Anonymous, nil, userAuthorsMap.Accounts[*list[i].CreatedBy])
 	}
 	return list, pageReply, err
 }

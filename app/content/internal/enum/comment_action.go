@@ -8,13 +8,13 @@ import (
 type CommentAction string
 
 const (
-	CommentActionLike    CommentAction = "like"
-	CommentActionCollect CommentAction = "collect"
-	CommentActionReply   CommentAction = "reply"
+	CommentActionLike  CommentAction = "like"
+	CommentActionReply CommentAction = "reply"
+	CommentActionThank CommentAction = "thank"
 )
 
 var CommentActionMap = enum.NewMapping[CommentAction, v1.CommentAction](map[CommentAction]enum.Entry[CommentAction, v1.CommentAction]{
-	CommentActionLike:    {Proto: v1.CommentAction_COMMENT_ACTION_LIKE},
-	CommentActionCollect: {Proto: v1.CommentAction_COMMENT_ACTION_COLLECT},
-	CommentActionReply:   {Proto: v1.CommentAction_COMMENT_ACTION_REPLY},
+	CommentActionLike:  {Proto: v1.CommentAction_COMMENT_ACTION_LIKE},
+	CommentActionReply: {Proto: v1.CommentAction_COMMENT_ACTION_REPLY},
+	CommentActionThank: {Proto: v1.CommentAction_COMMENT_ACTION_THANK},
 })

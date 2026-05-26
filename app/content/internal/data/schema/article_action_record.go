@@ -47,8 +47,6 @@ func (ArticleActionRecord) Indexes() []ent.Index {
 	return []ent.Index{
 		// 一个用户对一篇文章的某种行为只能有一条记录
 		index.Fields("article_id", "user_id", "type").Unique(),
-		// 常用查询索引
-		index.Fields("article_id"),
 		index.Fields("user_id"),
 	}
 }

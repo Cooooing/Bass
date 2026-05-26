@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+import "bbs/v1/content/model.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/content;content";
+
+service DomainService {
+  rpc List(ListDomains.Request) returns (ListDomains.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/domain/list"
+      body: "*"
+    };
+  }
+}
+
+message ListDomains {
+  message Request {
+    common.PageRequest page = 1;
+    DomainQuery query = 2;
+  }
+  message Reply {
+    common.PageReply page = 1;
+    repeated Domain rows = 2;
+  }
+}

@@ -13,38 +13,23 @@ import (
 	"user/internal/data/gen/account"
 	"user/internal/enum"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.AccountRepo = (*AccountRepo)(nil)
 
 type AccountRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	conf *conf.Bootstrap
+	db   *gen.Client
 }
 
 func NewAccountRepo(
 	conf *conf.Bootstrap,
-	logger log.Logger,
 	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
 ) repo.AccountRepo {
 	return &AccountRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		conf: conf,
+		db:   db,
 	}
 }
 
@@ -53,29 +38,6 @@ func (r *AccountRepo) getClient(ctx context.Context) *gen.Client {
 		return c
 	}
 	return r.db
-}
-
-func toDomain(u *gen.Account) *model.Account {
-	return &model.Account{
-		ID:            u.ID,
-		Name:          u.Name,
-		Nickname:      u.Nickname,
-		Password:      u.Password,
-		Email:         u.Email,
-		Phone:         u.Phone,
-		URL:           u.URL,
-		AvatarURL:     u.AvatarURL,
-		Introduction:  u.Introduction,
-		Mbti:          u.Mbti,
-		Status:        (*enum.AccountStatus)(u.Status),
-		GroupName:     u.GroupName,
-		FollowCount:   u.FollowCount,
-		FollowerCount: u.FollowerCount,
-		BlockCount:    u.BlockCount,
-		BlockedCount:  u.BlockedCount,
-		CreatedAt:     u.CreatedAt,
-		UpdatedAt:     u.UpdatedAt,
-	}
 }
 
 func (r *AccountRepo) Create(ctx context.Context, u *model.Account) (*model.Account, error) {
@@ -91,7 +53,23 @@ func (r *AccountRepo) Create(ctx context.Context, u *model.Account) (*model.Acco
 	if err != nil {
 		return nil, err
 	}
-	return toDomain(created), nil
+	return &model.Account{
+		ID:            created.ID,
+		Name:          created.Name,
+		Nickname:      created.Nickname,
+		Password:      created.Password,
+		Email:         created.Email,
+		Phone:         created.Phone,
+		URL:           created.URL,
+		AvatarURL:     created.AvatarURL,
+		Introduction:  created.Introduction,
+		Mbti:          (*enum.MBTI)(created.Mbti),
+		Status:        (*enum.AccountStatus)(created.Status),
+		FollowCount:   created.FollowCount,
+		FollowerCount: created.FollowerCount,
+		CreatedAt:     created.CreatedAt,
+		UpdatedAt:     created.UpdatedAt,
+	}, nil
 }
 
 func (r *AccountRepo) Update(ctx context.Context, u *model.Account) (*model.Account, error) {
@@ -103,7 +81,89 @@ func (r *AccountRepo) Update(ctx context.Context, u *model.Account) (*model.Acco
 	if err != nil {
 		return nil, err
 	}
-	return toDomain(updated), nil
+	return &model.Account{
+		ID:            updated.ID,
+		Name:          updated.Name,
+		Nickname:      updated.Nickname,
+		Password:      updated.Password,
+		Email:         updated.Email,
+		Phone:         updated.Phone,
+		URL:           updated.URL,
+		AvatarURL:     updated.AvatarURL,
+		Introduction:  updated.Introduction,
+		Mbti:          (*enum.MBTI)(updated.Mbti),
+		Status:        (*enum.AccountStatus)(updated.Status),
+		FollowCount:   updated.FollowCount,
+		FollowerCount: updated.FollowerCount,
+		CreatedAt:     updated.CreatedAt,
+		UpdatedAt:     updated.UpdatedAt,
+	}, nil
+}
+
+func (r *AccountRepo) UpdateProfile(ctx context.Context, patch *repo.AccountProfilePatch) (*model.Account, error) {
+	if !patch.HasChanges() {
+		return r.Get(ctx, &repo.AccountGetReq{UserID: &patch.UserID})
+	}
+
+	tx := r.getClient(ctx)
+	update := tx.Account.UpdateOneID(patch.UserID)
+	if patch.AvatarURL.Set {
+		if patch.AvatarURL.Value == "" {
+			update.ClearAvatarURL()
+		} else {
+			update.SetAvatarURL(patch.AvatarURL.Value)
+		}
+	}
+	if patch.Nickname.Set {
+		if patch.Nickname.Value == "" {
+			update.ClearNickname()
+		} else {
+			update.SetNickname(patch.Nickname.Value)
+		}
+	}
+	if patch.URL.Set {
+		if patch.URL.Value == "" {
+			update.ClearURL()
+		} else {
+			update.SetURL(patch.URL.Value)
+		}
+	}
+	if patch.Introduction.Set {
+		if patch.Introduction.Value == "" {
+			update.ClearIntroduction()
+		} else {
+			update.SetIntroduction(patch.Introduction.Value)
+		}
+	}
+	if patch.Mbti.Set {
+		if patch.Mbti.Clear {
+			update.ClearMbti()
+		} else {
+			update.SetMbti(account.Mbti(patch.Mbti.Value))
+		}
+	}
+
+	updated, err := update.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Account{
+		ID:            updated.ID,
+		Name:          updated.Name,
+		Nickname:      updated.Nickname,
+		Password:      updated.Password,
+		Email:         updated.Email,
+		Phone:         updated.Phone,
+		URL:           updated.URL,
+		AvatarURL:     updated.AvatarURL,
+		Introduction:  updated.Introduction,
+		Mbti:          (*enum.MBTI)(updated.Mbti),
+		Status:        (*enum.AccountStatus)(updated.Status),
+		FollowCount:   updated.FollowCount,
+		FollowerCount: updated.FollowerCount,
+		CreatedAt:     updated.CreatedAt,
+		UpdatedAt:     updated.UpdatedAt,
+	}, nil
 }
 
 func (r *AccountRepo) AddStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error) {
@@ -118,16 +178,28 @@ func (r *AccountRepo) AddStat(ctx context.Context, userId int64, statType enum.A
 		updateOne.AddFollowCount(num)
 	case enum.AccountStatTypeFollower:
 		updateOne.AddFollowerCount(num)
-	case enum.AccountStatTypeBlock:
-		updateOne.AddBlockCount(num)
-	case enum.AccountStatTypeBlocked:
-		updateOne.AddBlockedCount(num)
 	}
 	saved, err := updateOne.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return toDomain(saved), nil
+	return &model.Account{
+		ID:            saved.ID,
+		Name:          saved.Name,
+		Nickname:      saved.Nickname,
+		Password:      saved.Password,
+		Email:         saved.Email,
+		Phone:         saved.Phone,
+		URL:           saved.URL,
+		AvatarURL:     saved.AvatarURL,
+		Introduction:  saved.Introduction,
+		Mbti:          (*enum.MBTI)(saved.Mbti),
+		Status:        (*enum.AccountStatus)(saved.Status),
+		FollowCount:   saved.FollowCount,
+		FollowerCount: saved.FollowerCount,
+		CreatedAt:     saved.CreatedAt,
+		UpdatedAt:     saved.UpdatedAt,
+	}, nil
 }
 
 func (r *AccountRepo) ExistsByAccount(ctx context.Context, accountValue string) (bool, error) {
@@ -152,7 +224,23 @@ func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*model.
 	if err != nil {
 		return nil, err
 	}
-	return toDomain(u), nil
+	return &model.Account{
+		ID:            u.ID,
+		Name:          u.Name,
+		Nickname:      u.Nickname,
+		Password:      u.Password,
+		Email:         u.Email,
+		Phone:         u.Phone,
+		URL:           u.URL,
+		AvatarURL:     u.AvatarURL,
+		Introduction:  u.Introduction,
+		Mbti:          (*enum.MBTI)(u.Mbti),
+		Status:        (*enum.AccountStatus)(u.Status),
+		FollowCount:   u.FollowCount,
+		FollowerCount: u.FollowerCount,
+		CreatedAt:     u.CreatedAt,
+		UpdatedAt:     u.UpdatedAt,
+	}, nil
 }
 
 func (r *AccountRepo) GetByAccount(ctx context.Context, accountValue string) (*model.Account, error) {
@@ -167,7 +255,23 @@ func (r *AccountRepo) GetByAccount(ctx context.Context, accountValue string) (*m
 	if err != nil {
 		return nil, err
 	}
-	return toDomain(u), nil
+	return &model.Account{
+		ID:            u.ID,
+		Name:          u.Name,
+		Nickname:      u.Nickname,
+		Password:      u.Password,
+		Email:         u.Email,
+		Phone:         u.Phone,
+		URL:           u.URL,
+		AvatarURL:     u.AvatarURL,
+		Introduction:  u.Introduction,
+		Mbti:          (*enum.MBTI)(u.Mbti),
+		Status:        (*enum.AccountStatus)(u.Status),
+		FollowCount:   u.FollowCount,
+		FollowerCount: u.FollowerCount,
+		CreatedAt:     u.CreatedAt,
+		UpdatedAt:     u.UpdatedAt,
+	}, nil
 }
 
 func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) ([]*model.Account, error) {
@@ -180,7 +284,23 @@ func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) ([]*mod
 	}
 	result := make([]*model.Account, 0, len(list))
 	for _, u := range list {
-		result = append(result, toDomain(u))
+		result = append(result, &model.Account{
+			ID:            u.ID,
+			Name:          u.Name,
+			Nickname:      u.Nickname,
+			Password:      u.Password,
+			Email:         u.Email,
+			Phone:         u.Phone,
+			URL:           u.URL,
+			AvatarURL:     u.AvatarURL,
+			Introduction:  u.Introduction,
+			Mbti:          (*enum.MBTI)(u.Mbti),
+			Status:        (*enum.AccountStatus)(u.Status),
+			FollowCount:   u.FollowCount,
+			FollowerCount: u.FollowerCount,
+			CreatedAt:     u.CreatedAt,
+			UpdatedAt:     u.UpdatedAt,
+		})
 	}
 	return result, nil
 }
@@ -206,7 +326,23 @@ func (r *AccountRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 
 	result := make([]*model.Account, 0, len(list))
 	for _, u := range list {
-		result = append(result, toDomain(u))
+		result = append(result, &model.Account{
+			ID:            u.ID,
+			Name:          u.Name,
+			Nickname:      u.Nickname,
+			Password:      u.Password,
+			Email:         u.Email,
+			Phone:         u.Phone,
+			URL:           u.URL,
+			AvatarURL:     u.AvatarURL,
+			Introduction:  u.Introduction,
+			Mbti:          (*enum.MBTI)(u.Mbti),
+			Status:        (*enum.AccountStatus)(u.Status),
+			FollowCount:   u.FollowCount,
+			FollowerCount: u.FollowerCount,
+			CreatedAt:     u.CreatedAt,
+			UpdatedAt:     u.UpdatedAt,
+		})
 	}
 	return result, &common.PageReply{
 		Total: uint32(total),

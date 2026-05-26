@@ -1,0 +1,213 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+import "bbs/v1/user/model.proto";
+
+option go_package = "common/api/gen/bbs/v1/content;content";
+
+enum DomainStatus {
+  DOMAIN_STATUS_UNSPECIFIED = 0;
+  DOMAIN_STATUS_NORMAL = 1;
+  DOMAIN_STATUS_DISABLED = 2;
+}
+
+enum TagStatus {
+  TAG_STATUS_UNSPECIFIED = 0;
+  TAG_STATUS_NORMAL = 1;
+  TAG_STATUS_DISABLED = 2;
+}
+
+enum CommentStatus {
+  COMMENT_STATUS_UNSPECIFIED = 0;
+  COMMENT_STATUS_NORMAL = 1;
+  COMMENT_STATUS_HIDDEN = 2;
+}
+
+enum ArticleStatus {
+  ARTICLE_STATUS_UNSPECIFIED = 0;
+  ARTICLE_STATUS_NORMAL = 1;
+  ARTICLE_STATUS_HIDDEN = 2;
+  ARTICLE_STATUS_LOCKED = 3;
+  ARTICLE_STATUS_DRAFTS = 4;
+  ARTICLE_STATUS_DELETED = 5;
+}
+
+enum ArticleType {
+  ARTICLE_TYPE_UNSPECIFIED = 0;
+  ARTICLE_TYPE_NORMAL = 1;
+  ARTICLE_TYPE_QA = 2;
+}
+
+enum ArticleOrder {
+  ARTICLE_ORDER_UNSPECIFIED = 0;
+  ARTICLE_ORDER_NEWEST = 1;
+  ARTICLE_ORDER_HOTTEST = 2;
+}
+
+enum CommentOrder {
+  COMMENT_ORDER_UNSPECIFIED = 0;
+  COMMENT_ORDER_NEWEST = 1;
+  COMMENT_ORDER_HOTTEST = 2;
+}
+
+message Article {
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+  string content_render = 4;
+  bool has_postscript = 5;
+  bool has_reward = 6;
+  optional string reward_content = 7;
+  optional string reward_content_render = 8;
+  optional int32 reward_points = 9;
+  ArticleStatus status = 10;
+  ArticleType type = 11;
+  optional string statement = 12;
+  bool commentable = 13;
+  bool anonymous = 14;
+  bool listable = 15;
+  int32 view_count = 16;
+  int32 thank_count = 17;
+  int32 like_count = 18;
+  int32 collect_count = 19;
+  int32 watch_count = 20;
+  int32 reply_count = 21;
+  optional int32 bounty_points = 22;
+  optional int64 accepted_answer_id = 23;
+  common.api.app.bbs.v1.user.AccountProfile author_user = 24;
+  common.api.app.bbs.v1.user.AccountProfile last_reply_user = 25;
+  string last_reply_at = 26;
+  optional string cover_image_url = 27;
+  optional int64 created_by = 1002;
+  optional int64 updated_by = 1003;
+  string created_at = 1000;
+  string updated_at = 1001;
+  repeated ArticlePostscript postscripts = 100;
+  repeated Tag tags = 101;
+}
+
+message ArticlePostscript {
+  int64 id = 1;
+  int64 article_id = 2;
+  string content = 3;
+  string content_render = 4;
+  optional int64 created_by = 1002;
+  optional int64 updated_by = 1003;
+  string created_at = 1000;
+  string updated_at = 1001;
+}
+
+message Comment {
+  int64 id = 1;
+  int64 article_id = 2;
+  string content = 3;
+  string content_render = 4;
+  int32 level = 5;
+  optional int64 parent_id = 6;
+  optional int64 reply_id = 7;
+  CommentStatus status = 8;
+  int32 reply_count = 9;
+  int32 like_count = 10;
+  int32 thank_count = 11;
+  common.api.app.bbs.v1.user.AccountProfile user = 12;
+  common.api.app.bbs.v1.user.AccountProfile reply_user = 13;
+  Article article = 14;
+  optional int64 created_by = 1002;
+  optional int64 updated_by = 1003;
+  string created_at = 1000;
+  string updated_at = 1001;
+}
+
+message Tag {
+  int64 id = 1;
+  string name = 2;
+  optional string description = 3;
+  optional int64 domain_id = 4;
+  optional TagStatus status = 5;
+  optional int64 created_by = 1002;
+  optional int64 updated_by = 1003;
+  string created_at = 1000;
+  string updated_at = 1001;
+}
+
+message Domain {
+  int64 id = 1;
+  string name = 2;
+  optional string description = 3;
+  DomainStatus status = 4;
+  optional string url = 5;
+  optional string icon = 6;
+  bool is_nav = 7;
+  optional int64 created_by = 1002;
+  optional int64 updated_by = 1003;
+  string created_at = 1000;
+  string updated_at = 1001;
+  repeated Tag tags = 100;
+}
+
+message ArticleSave {
+  optional int64 id = 1;
+  string title = 2;
+  string content = 3;
+  optional string reward_content = 4;
+  optional int32 reward_points = 5;
+  ArticleStatus status = 6;
+  ArticleType type = 7;
+  optional int32 bounty_points = 8;
+  optional string statement = 9;
+  optional bool commentable = 10;
+  optional bool anonymous = 11;
+  optional bool listable = 12;
+  repeated TagSave tags = 100;
+}
+
+message TagSave {
+  optional int64 id = 1;
+  optional int64 domain_id = 2;
+  optional TagStatus status = 3;
+  string name = 4;
+  optional string description = 5;
+}
+
+message ArticleQuery {
+  optional int64 tag_id = 1;
+  optional int64 domain_id = 2;
+  optional ArticleStatus status = 3;
+  optional ArticleType type = 4;
+  optional ArticleOrder order = 5;
+  optional string keyword = 6;
+  optional int64 author_id = 7;
+  optional bool listable = 8;
+}
+
+message CommentQuery {
+  optional int64 comment_id = 1;
+  optional int64 article_id = 2;
+  optional int64 parent_id = 3;
+  optional int64 reply_id = 4;
+  optional CommentOrder order = 5;
+  optional int64 user_id = 6;
+  optional int32 level = 7;
+  optional CommentStatus status = 8;
+  bool with_article = 100;
+}
+
+message TagQuery {
+  repeated int64 ids = 1;
+  optional string name = 2;
+  repeated string names = 3;
+  optional string description = 4;
+  optional TagStatus status = 5;
+  optional int64 domain_id = 6;
+}
+
+message DomainQuery {
+  repeated int64 ids = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional DomainStatus status = 4;
+  optional string url = 5;
+  optional string icon = 6;
+  optional bool is_nav = 7;
+}

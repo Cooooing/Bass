@@ -6,43 +6,22 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/relation"
 	"user/internal/enum"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.RelationRepo = (*RelationRepo)(nil)
 
 type RelationRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewRelationRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.RelationRepo {
+func NewRelationRepo(db *gen.Client) repo.RelationRepo {
 	return &RelationRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		db: db,
 	}
 }
 
@@ -51,17 +30,6 @@ func (r *RelationRepo) getClient(ctx context.Context) *gen.Client {
 		return c
 	}
 	return r.db
-}
-
-func toRelationDomain(rel *gen.Relation) *model.Relation {
-	return &model.Relation{
-		ID:        rel.ID,
-		Type:      enum.RelationType(rel.Type),
-		ActorID:   rel.ActorID,
-		TargetID:  rel.TargetID,
-		CreatedAt: rel.CreatedAt,
-		UpdatedAt: rel.UpdatedAt,
-	}
 }
 
 func (r *RelationRepo) Create(ctx context.Context, u *model.Relation) (*model.Relation, error) {
@@ -74,7 +42,14 @@ func (r *RelationRepo) Create(ctx context.Context, u *model.Relation) (*model.Re
 	if err != nil {
 		return nil, err
 	}
-	return toRelationDomain(created), nil
+	return &model.Relation{
+		ID:        created.ID,
+		Type:      enum.RelationType(created.Type),
+		ActorID:   created.ActorID,
+		TargetID:  created.TargetID,
+		CreatedAt: created.CreatedAt,
+		UpdatedAt: created.UpdatedAt,
+	}, nil
 }
 
 func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) (int, error) {
@@ -103,7 +78,14 @@ func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*m
 	}
 	result := make([]*model.Relation, 0, len(list))
 	for _, rel := range list {
-		result = append(result, toRelationDomain(rel))
+		result = append(result, &model.Relation{
+			ID:        rel.ID,
+			Type:      enum.RelationType(rel.Type),
+			ActorID:   rel.ActorID,
+			TargetID:  rel.TargetID,
+			CreatedAt: rel.CreatedAt,
+			UpdatedAt: rel.UpdatedAt,
+		})
 	}
 	return result, nil
 }
@@ -129,7 +111,14 @@ func (r *RelationRepo) Page(ctx context.Context, page *common.PageRequest, req *
 
 	result := make([]*model.Relation, 0, len(list))
 	for _, rel := range list {
-		result = append(result, toRelationDomain(rel))
+		result = append(result, &model.Relation{
+			ID:        rel.ID,
+			Type:      enum.RelationType(rel.Type),
+			ActorID:   rel.ActorID,
+			TargetID:  rel.TargetID,
+			CreatedAt: rel.CreatedAt,
+			UpdatedAt: rel.UpdatedAt,
+		})
 	}
 	return result, &common.PageReply{
 		Total: uint32(total),

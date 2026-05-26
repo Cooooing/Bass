@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
 	notifyenum "notify/internal/enum"
 
@@ -27,7 +28,7 @@ func (NotificationTemplate) Annotations() []schema.Annotation {
 func (NotificationTemplate) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Enum("event_type").Values(notifyenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
+		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
 		field.Enum("channel").Values(notifyenum.NotificationChannelMap.EnumValues()...).Comment("通知渠道"),
 		field.Enum("language").Values(notifyenum.LanguageMap.EnumValues()...).Default(string(notifyenum.LanguageZhCN)).Comment("语言"),
 		field.String("title").Comment("标题").Default(""),

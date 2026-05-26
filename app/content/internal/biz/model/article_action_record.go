@@ -1,7 +1,10 @@
 package model
 
-import "content/internal/data/gen"
+import "content/internal/enum"
 
 type ArticleActionRecord struct {
-	*gen.ArticleActionRecord
+	ID        int64
+	ArticleID int64
+	UserID    int64
+	Type      enum.ArticleAction
 }

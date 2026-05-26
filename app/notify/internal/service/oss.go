@@ -4,33 +4,32 @@ import (
 	"common/api/gen/common"
 	v1 "common/api/gen/notify/v1"
 	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
-	"notify/internal/data/gen"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type OssService struct {
 	v1.UnimplementedNotifyOssServiceServer
-	log                     *log.Helper
-	ossObjectStorageUsecase *usecase.ObjectStorageUsecase
+	log                  *log.Helper
+	objectStorageUsecase *usecase.ObjectStorageUsecase
 }
 
 func NewOssService(
 	logger log.Logger,
-	ossObjectStorageUsecase *usecase.ObjectStorageUsecase,
+	objectStorageUsecase *usecase.ObjectStorageUsecase,
 ) *OssService {
 	return &OssService{
-		log:                     log.NewHelper(logger),
-		ossObjectStorageUsecase: ossObjectStorageUsecase,
+		log:                  log.NewHelper(logger),
+		objectStorageUsecase: objectStorageUsecase,
 	}
 }
 
@@ -43,7 +42,7 @@ func (s *OssService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenOss_Request) (*v1.GetUploadTokenOss_Reply, error) {
-	tokens, err := s.ossObjectStorageUsecase.UploadToken(ctx, int(req.Num))
+	tokens, err := s.objectStorageUsecase.UploadToken(ctx, int(req.Num))
 	if err != nil {
 		return nil, err
 	}
@@ -60,17 +59,17 @@ func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenO
 }
 
 func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Request) (*v1.AuditOss_Reply, error) {
-	err := s.ossObjectStorageUsecase.UpdateAudit(ctx, req.Key, req.Status, req.Reason)
+	err := s.objectStorageUsecase.UpdateAudit(ctx, req.Key, req.Status, req.Reason)
 	if err != nil {
 		return nil, err
 	}
 	return &v1.AuditOss_Reply{}, nil
 }
 
-func (s *OssService) Page(ctx context.Context, req *v1.PageOssOss_Request) (*v1.PageOssOss_Reply, error) {
+func (s *OssService) List(ctx context.Context, req *v1.ListOss_Request) (*v1.ListOss_Reply, error) {
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
 	req.Query = util.OrDefault(req.Query, &v1.OssQueryParams{})
-	items, page, err := s.ossObjectStorageUsecase.Page(ctx, req.Page, &repo.ObjectStorageGetReq{
+	items, page, err := s.objectStorageUsecase.Page(ctx, req.Page, &repo.ObjectStorageGetReq{
 		Provider:      req.Query.Provider,
 		Bucket:        req.Query.Bucket,
 		Key:           req.Query.Key,
@@ -82,9 +81,32 @@ func (s *OssService) Page(ctx context.Context, req *v1.PageOssOss_Request) (*v1.
 	if err != nil {
 		return nil, err
 	}
-	return &v1.PageOssOss_Reply{
+	rows := make([]*v1.Oss, 0, len(items))
+	for _, item := range items {
+		row := &v1.Oss{
+			CreatedAt:          timestamppb.New(*item.CreatedAt),
+			UpdatedAt:          timestamppb.New(*item.UpdatedAt),
+			Id:                 item.ID,
+			Provider:           item.Provider,
+			Bucket:             item.Bucket,
+			Key:                item.Key,
+			MimeType:           item.MimeType,
+			Size:               item.Size,
+			Hash:               item.Hash,
+			AuditCallbackReply: item.AuditCallbackReply,
+			Blocked:            item.Blocked,
+			BlockedReason:      item.BlockedReason,
+			BlockedBy:          item.BlockedBy,
+			BlockedByName:      item.BlockedByName,
+		}
+		if item.BlockedAt != nil {
+			row.BlockedAt = timestamppb.New(*item.BlockedAt)
+		}
+		rows = append(rows, row)
+	}
+	return &v1.ListOss_Reply{
 		Page: page,
-		Rows: commonModel.ConvertToRpcList(items),
+		Rows: rows,
 	}, nil
 }
 
@@ -98,7 +120,7 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 	}
 	s.log.Infof("qiniu upload callback: %s", string(bytes))
 
-	err = s.ossObjectStorageUsecase.QiniuUploadCallback(ctx, &model.ObjectStorage{ObjectStorage: &gen.ObjectStorage{
+	err = s.objectStorageUsecase.QiniuUploadCallback(ctx, &model.ObjectStorage{
 		Provider:     constant.Qiniu.String(),
 		Bucket:       req.Bucket,
 		Key:          req.Key,
@@ -107,7 +129,7 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 		Hash:         req.Hash,
 		UploadBy:     req.UploadBy,
 		UploadByName: req.UploadByName,
-	}})
+	})
 	return &v1.QiniuUploadCallbackOss_Reply{}, err
 }
 
@@ -123,7 +145,7 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 
 	suggestion := req.Items[0].Result.Result.Suggestion
 	if suggestion == "block" {
-		err := s.ossObjectStorageUsecase.QiniuIncrementAuditCallback(ctx, req.InputKey, string(bytes), true)
+		err := s.objectStorageUsecase.QiniuIncrementAuditCallback(ctx, req.InputKey, string(bytes), true)
 		return &v1.QiniuIncrementAuditCallbackOss_Reply{}, err
 	}
 	return &v1.QiniuIncrementAuditCallbackOss_Reply{}, err

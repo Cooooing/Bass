@@ -1,8 +1,10 @@
 package usecase
 
 import (
+	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/jwt"
@@ -10,6 +12,7 @@ import (
 	"common/pkg/util/str"
 	"context"
 	"strings"
+	"time"
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -17,7 +20,6 @@ import (
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/jinzhu/copier"
 	"github.com/sony/sonyflake/v2"
 )
 
@@ -25,24 +27,32 @@ type AuthUsecase struct {
 	conf         *conf.Bootstrap
 	log          *log.Helper
 	tx           base.Tx
-	eventPool    *util.EventPool
 	accountRepo  repo.AccountRepo
 	loginLogRepo repo.LoginLogRepo
+	outboxRepo   repo.OutboxEventRepo
 	tokenCache   *jwt.TokenCache
-	tokenService *TokenUsecase
+	tokenUsecase *TokenUsecase
 
 	sf *sonyflake.Sonyflake
+}
+
+type registerAccountCache struct {
+	Name     string  `json:"name"`
+	Nickname *string `json:"nickname,omitempty"`
+	Password string  `json:"password"`
+	Email    *string `json:"email,omitempty"`
+	Phone    *string `json:"phone,omitempty"`
 }
 
 func NewAuthUsecase(
 	conf *conf.Bootstrap,
 	logger log.Logger,
 	tx base.Tx,
-	eventPool *util.EventPool,
 	accountRepo repo.AccountRepo,
 	loginLogRepo repo.LoginLogRepo,
+	outboxRepo repo.OutboxEventRepo,
 	tokenCache *jwt.TokenCache,
-	tokenService *TokenUsecase,
+	tokenUsecase *TokenUsecase,
 ) (*AuthUsecase, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
@@ -52,16 +62,16 @@ func NewAuthUsecase(
 		conf:         conf,
 		log:          log.NewHelper(logger),
 		tx:           tx,
-		eventPool:    eventPool,
 		accountRepo:  accountRepo,
 		loginLogRepo: loginLogRepo,
+		outboxRepo:   outboxRepo,
 		tokenCache:   tokenCache,
-		tokenService: tokenService,
+		tokenUsecase: tokenUsecase,
 		sf:           sf,
 	}, nil
 }
 
-func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.Account) (code string, token string, err error) {
+func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Account) (code string, token string, err error) {
 	if u.Email == nil {
 		return "", "", cerrors.ErrorBadRequest("email can not be empty")
 	}
@@ -90,34 +100,41 @@ func (s *AuthUsecase) RegisterEmail(ctx context.Context, u *model.Account) (code
 	}
 
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Server.Jwt.EmailExpire.AsDuration())
-	if err != nil {
-		return
-	}
-	err = s.eventPool.Submit(func() {})
+	token, err = s.tokenUsecase.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
 
-	saveUser := &commonModel.User{}
-	err = copier.Copy(saveUser, u)
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, &registerAccountCache{
+		Name:     u.Name,
+		Nickname: u.Nickname,
+		Password: u.Password,
+		Email:    u.Email,
+	}, s.conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, saveUser, s.conf.Server.Jwt.EmailExpire.AsDuration())
+	err = s.saveRegisterOutbox(ctx, &commonenums.UserRegisterPayload{
+		ContactType:    commonenums.UserRegisterContactType_USER_REGISTER_CONTACT_TYPE_EMAIL,
+		Email:          *u.Email,
+		Code:           code,
+		ExpiresSeconds: int64(s.conf.Server.Jwt.EmailExpire.AsDuration() / time.Second),
+	})
 	if err != nil {
+		_ = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email)
 		return
 	}
 
 	return code, token, nil
 }
 
-func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string, code string) (err error) {
-	token, err := s.tokenService.VerityCodeAccountTokenGen.Parse(codeToken)
+func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, codeToken string, code string) (err error) {
+	token, err := s.tokenUsecase.VerityCodeAccountTokenGen.Parse(codeToken)
 	if err != nil {
 		return
 	}
-	verityCode, saveUser, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account)
+	saveUser := &registerAccountCache{}
+	verityCode, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account, saveUser)
 	if err != nil {
 		return
 	}
@@ -129,9 +146,9 @@ func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string,
 	err = s.tx(ctx, func(ctx context.Context) error {
 		user := &model.Account{
 			Name:     saveUser.Name,
-			Nickname: &saveUser.Nickname,
+			Nickname: saveUser.Nickname,
 			Password: saveUser.Password,
-			Email:    &saveUser.Email,
+			Email:    saveUser.Email,
 		}
 		user.Password, err = str.HashPassword(user.Password)
 		if err != nil {
@@ -153,7 +170,7 @@ func (s *AuthUsecase) RegisterEmailVerify(ctx context.Context, codeToken string,
 	return
 }
 
-func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.Account) (code string, token string, err error) {
+func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Account) (code string, token string, err error) {
 	if u.Phone == nil {
 		return "", "", cerrors.ErrorBadRequest("phone can not be empty")
 	}
@@ -182,34 +199,41 @@ func (s *AuthUsecase) RegisterPhone(ctx context.Context, u *model.Account) (code
 	}
 
 	code = str.RandStr(s.sf, 6, true, true, true, false)
-	token, err = s.tokenService.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
-	if err != nil {
-		return
-	}
-	err = s.eventPool.Submit(func() {})
+	token, err = s.tokenUsecase.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
 
-	saveUser := &commonModel.User{}
-	err = copier.Copy(saveUser, u)
+	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, &registerAccountCache{
+		Name:     u.Name,
+		Nickname: u.Nickname,
+		Password: u.Password,
+		Phone:    u.Phone,
+	}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
-	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, saveUser, s.conf.Server.Jwt.PhoneExpire.AsDuration())
+	err = s.saveRegisterOutbox(ctx, &commonenums.UserRegisterPayload{
+		ContactType:    commonenums.UserRegisterContactType_USER_REGISTER_CONTACT_TYPE_PHONE,
+		Phone:          *u.Phone,
+		Code:           code,
+		ExpiresSeconds: int64(s.conf.Server.Jwt.PhoneExpire.AsDuration() / time.Second),
+	})
 	if err != nil {
+		_ = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone)
 		return
 	}
 
 	return code, token, nil
 }
 
-func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string, code string) (err error) {
-	token, err := s.tokenService.VerityCodeAccountTokenGen.Parse(codeToken)
+func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, codeToken string, code string) (err error) {
+	token, err := s.tokenUsecase.VerityCodeAccountTokenGen.Parse(codeToken)
 	if err != nil {
 		return
 	}
-	verityCode, saveUser, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account)
+	saveUser := &registerAccountCache{}
+	verityCode, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account, saveUser)
 	if err != nil {
 		return
 	}
@@ -221,9 +245,9 @@ func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string,
 	err = s.tx(ctx, func(ctx context.Context) error {
 		user := &model.Account{
 			Name:     saveUser.Name,
-			Nickname: &saveUser.Nickname,
+			Nickname: saveUser.Nickname,
 			Password: saveUser.Password,
-			Phone:    &saveUser.Phone,
+			Phone:    saveUser.Phone,
 		}
 		user.Password, err = str.HashPassword(user.Password)
 		if err != nil {
@@ -245,78 +269,125 @@ func (s *AuthUsecase) RegisterPhoneVerify(ctx context.Context, codeToken string,
 	return
 }
 
-func (s *AuthUsecase) LoginAccount(ctx context.Context, account string, password string) (token string, user *model.Account, err error) {
+func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, password string) (token string, user *model.Account, err error) {
 	user, err = s.accountRepo.GetByAccount(ctx, account)
 	if err != nil {
-		s.recordLoginLog(ctx, nil, account, enum.LoginStatusFailed, "account lookup failed")
+		s.recordLoginLog(ctx, nil, enum.LoginStatusFailed)
 		return
 	}
 	if !str.VerifyPassword(user.Password, password) {
-		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "password invalid")
+		s.recordLoginLog(ctx, &user.ID, enum.LoginStatusFailed)
 		return token, nil, cerrors.ErrorBadRequest("password invalid")
 	}
 
-	token, err = s.tokenService.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Server.Jwt.Expires.AsDuration())
+	token, err = s.tokenUsecase.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
-		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "token generate failed")
+		s.recordLoginLog(ctx, &user.ID, enum.LoginStatusFailed)
 		return
 	}
-	saveUser := &commonModel.User{}
-	err = copier.Copy(saveUser, user)
-	if err != nil {
-		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "token user copy failed")
-		return
+	saveUser := &commonModel.User{
+		ID:   user.ID,
+		Name: user.Name,
+	}
+	if user.Nickname != nil {
+		saveUser.Nickname = *user.Nickname
 	}
 	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
-		s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusFailed, "token cache save failed")
+		s.recordLoginLog(ctx, &user.ID, enum.LoginStatusFailed)
 		return
 	}
-	s.recordLoginLog(ctx, &user.ID, account, enum.LoginStatusSuccess, "")
+	s.recordLoginLog(ctx, &user.ID, enum.LoginStatusSuccess)
+	loginPayload := &commonenums.UserLoginPayload{
+		UserId:    user.ID,
+		Name:      user.Name,
+		Account:   account,
+		UserAgent: serverutil.GetHeader(ctx, "User-Agent"),
+		DeviceId:  serverutil.GetHeader(ctx, "X-Device-ID"),
+		Platform:  serverutil.GetHeader(ctx, "X-Platform"),
+		RequestId: firstHeaderValue(
+			serverutil.GetHeader(ctx, "X-Request-ID"),
+			serverutil.GetHeader(ctx, "X-Trace-ID"),
+		),
+	}
+	if ipInfo, ok := util.GetContextValue[*commonModel.IpInfo](ctx, constant.CtxIpInfo); ok && ipInfo != nil {
+		loginPayload.Ip = ipInfo.Ip
+	}
+	if loginPayload.Ip == "" {
+		loginPayload.Ip = firstHeaderValue(
+			serverutil.GetHeader(ctx, "X-Forwarded-For"),
+			serverutil.GetHeader(ctx, "X-Real-IP"),
+			serverutil.GetHeader(ctx, "X-Client-IP"),
+		)
+	}
+	if outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		EventType: commonenum.EventTypeUserLogin,
+		Subject:   commonenum.EventSubjectUserLogin,
+		Event: &commonenums.Event{
+			Payload: &commonenums.Event_UserLogin{
+				UserLogin: loginPayload,
+			},
+		},
+	}); outboxErr != nil {
+		s.log.Warnf("create login outbox failed: %v", outboxErr)
+	}
 
 	return token, user, nil
 }
 
 func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
-	return s.tokenCache.DelToken(ctx, token)
+	tokenUser, getErr := s.tokenCache.GetToken(ctx, token)
+	err = s.tokenCache.DelToken(ctx, token)
+	if err != nil {
+		return err
+	}
+	if getErr != nil {
+		s.log.Warnf("get logout token user failed: %v", getErr)
+		return nil
+	}
+	if tokenUser != nil {
+		if outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			EventType: commonenum.EventTypeUserLogout,
+			Subject:   commonenum.EventSubjectUserLogout,
+			Event: &commonenums.Event{
+				Payload: &commonenums.Event_UserLogout{
+					UserLogout: &commonenums.UserLogoutPayload{
+						UserId: tokenUser.ID,
+						Name:   tokenUser.Name,
+					},
+				},
+			},
+		}); outboxErr != nil {
+			s.log.Warnf("create logout outbox failed: %v", outboxErr)
+		}
+	}
+	return nil
 }
 
-func (s *AuthUsecase) recordLoginLog(ctx context.Context, userID *int64, account string, status enum.LoginStatus, reason string) {
+func (s *AuthUsecase) recordLoginLog(ctx context.Context, userID *int64, status enum.LoginStatus) {
 	loginLog := &model.LoginLog{
 		UserID:      userID,
-		Account:     account,
 		LoginMethod: enum.LoginMethodPassword,
 		Status:      status,
 	}
-	if reason != "" {
-		loginLog.FailureReason = stringPtr(reason)
-	}
 
 	if ipInfo, ok := util.GetContextValue[*commonModel.IpInfo](ctx, constant.CtxIpInfo); ok && ipInfo != nil {
-		loginLog.IP = stringPtr(ipInfo.Ip)
-		loginLog.Country = stringPtr(ipInfo.Country)
-		loginLog.CountryCode = stringPtr(ipInfo.CountryCode)
-		loginLog.Province = stringPtr(ipInfo.Province)
-		loginLog.City = stringPtr(ipInfo.City)
-		loginLog.ISP = stringPtr(ipInfo.ISP)
+		loginLog.IP = optionalString(ipInfo.Ip)
+		loginLog.Country = optionalString(ipInfo.Country)
+		loginLog.CountryCode = optionalString(ipInfo.CountryCode)
+		loginLog.Province = optionalString(ipInfo.Province)
+		loginLog.City = optionalString(ipInfo.City)
+		loginLog.ISP = optionalString(ipInfo.ISP)
 	}
 	if loginLog.IP == nil {
-		loginLog.IP = stringPtr(firstHeaderValue(
+		loginLog.IP = optionalString(firstHeaderValue(
 			serverutil.GetHeader(ctx, "X-Forwarded-For"),
 			serverutil.GetHeader(ctx, "X-Real-IP"),
 			serverutil.GetHeader(ctx, "X-Client-IP"),
 		))
 	}
-	loginLog.UserAgent = stringPtr(serverutil.GetHeader(ctx, "User-Agent"))
-	loginLog.DeviceID = stringPtr(serverutil.GetHeader(ctx, "X-Device-ID"))
-	loginLog.DeviceName = stringPtr(serverutil.GetHeader(ctx, "X-Device-Name"))
-	loginLog.Platform = stringPtr(serverutil.GetHeader(ctx, "X-Platform"))
-	loginLog.OS = stringPtr(serverutil.GetHeader(ctx, "X-OS"))
-	loginLog.Browser = stringPtr(serverutil.GetHeader(ctx, "X-Browser"))
-	loginLog.RequestID = stringPtr(firstHeaderValue(
-		serverutil.GetHeader(ctx, "X-Request-ID"),
-		serverutil.GetHeader(ctx, "X-Trace-ID"),
-	))
+	loginLog.UserAgent = optionalString(serverutil.GetHeader(ctx, "User-Agent"))
+	loginLog.DeviceID = optionalString(serverutil.GetHeader(ctx, "X-Device-ID"))
 
 	if _, err := s.loginLogRepo.Create(ctx, loginLog); err != nil {
 		s.log.Warnf("record login log failed: %v", err)
@@ -335,9 +406,21 @@ func firstHeaderValue(values ...string) string {
 	return ""
 }
 
-func stringPtr(value string) *string {
+func optionalString(value string) *string {
 	if value == "" {
 		return nil
 	}
-	return &value
+	return new(value)
+}
+
+func (s *AuthUsecase) saveRegisterOutbox(ctx context.Context, payload *commonenums.UserRegisterPayload) error {
+	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		EventType: commonenum.EventTypeUserRegister,
+		Subject:   commonenum.EventSubjectUserRegister,
+		Event: &commonenums.Event{
+			Payload: &commonenums.Event_UserRegister{
+				UserRegister: payload,
+			},
+		},
+	})
 }

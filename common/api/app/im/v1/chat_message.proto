@@ -28,9 +28,9 @@ service IMChatMessageService {
   }
 
   // 查询消息数据
-  rpc Page(PageChatMessage.Request) returns (PageChatMessage.Reply) {
+  rpc List(ListChatMessages.Request) returns (ListChatMessages.Reply) {
     option (google.api.http) = {
-      post: "/v1/chat-message/page"
+      post: "/v1/chat-message/list"
       body: "*"
     };
   }
@@ -58,7 +58,7 @@ message RevokeChatMessage {
   message Reply {}
 }
 
-message PageChatMessage {
+message ListChatMessages {
   message Request {
     // 分页参数
     common.PageRequest page = 1;

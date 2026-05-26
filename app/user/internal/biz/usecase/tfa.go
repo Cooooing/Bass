@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"bytes"
+	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	"common/pkg/client"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	"context"
 	"image/png"
 	"time"
@@ -17,25 +19,28 @@ import (
 
 type TfaUsecase struct {
 	conf        *conf.Bootstrap
-	redis       *client.RedisClient
+	redisClient *client.RedisClient
 	tx          base.Tx
 	accountRepo repo.AccountRepo
 	tfaRepo     repo.TfaRepo
+	outboxRepo  repo.OutboxEventRepo
 }
 
 func NewTfaUsecase(
 	conf *conf.Bootstrap,
-	redis *client.RedisClient,
+	redisClient *client.RedisClient,
 	tx base.Tx,
 	accountRepo repo.AccountRepo,
 	tfaRepo repo.TfaRepo,
+	outboxRepo repo.OutboxEventRepo,
 ) (*TfaUsecase, error) {
 	return &TfaUsecase{
 		conf:        conf,
-		redis:       redis,
+		redisClient: redisClient,
 		tx:          tx,
 		accountRepo: accountRepo,
 		tfaRepo:     tfaRepo,
+		outboxRepo:  outboxRepo,
 	}, nil
 }
 
@@ -53,7 +58,7 @@ func (d *TfaUsecase) Enable(ctx context.Context, name string) ([]byte, error) {
 		return nil, err
 	}
 
-	err = d.redis.Client.SetEx(ctx, constant.GetKeyTwoFactorAuth(name), generate.Secret(), 5*time.Minute).Err()
+	err = d.redisClient.Client.SetEx(ctx, constant.GetKeyTwoFactorAuth(name), generate.Secret(), 5*time.Minute).Err()
 	if err != nil {
 		return nil, err
 	}
@@ -79,13 +84,27 @@ func (d *TfaUsecase) Disable(ctx context.Context, name string, secret string, co
 			return err
 		}
 		_, err = d.tfaRepo.DisableByUserID(ctx, u.ID)
-		return err
+		if err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			EventType: commonenum.EventTypeUserTfaDisable,
+			Subject:   commonenum.EventSubjectUserTfaDisable,
+			Event: &commonenums.Event{
+				Payload: &commonenums.Event_UserTfaDisable{
+					UserTfaDisable: &commonenums.UserTfaDisablePayload{
+						UserId: u.ID,
+						Name:   u.Name,
+					},
+				},
+			},
+		})
 	})
 	return err
 }
 
 func (d *TfaUsecase) Confirm(ctx context.Context, name string, code string) error {
-	secret, err := d.redis.Client.Get(ctx, constant.GetKeyTwoFactorAuth(name)).Result()
+	secret, err := d.redisClient.Client.Get(ctx, constant.GetKeyTwoFactorAuth(name)).Result()
 	if err != nil {
 		return err
 	}
@@ -98,7 +117,21 @@ func (d *TfaUsecase) Confirm(ctx context.Context, name string, code string) erro
 			return err
 		}
 		_, err = d.tfaRepo.UpsertEnabledByUserID(ctx, u.ID, secret)
-		return err
+		if err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			EventType: commonenum.EventTypeUserTfaEnable,
+			Subject:   commonenum.EventSubjectUserTfaEnable,
+			Event: &commonenums.Event{
+				Payload: &commonenums.Event_UserTfaEnable{
+					UserTfaEnable: &commonenums.UserTfaEnablePayload{
+						UserId: u.ID,
+						Name:   u.Name,
+					},
+				},
+			},
+		})
 	})
 	return err
 }

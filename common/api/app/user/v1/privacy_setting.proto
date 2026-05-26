@@ -11,7 +11,7 @@ service PrivacySettingService {
   rpc GetCurrent(GetCurrentPrivacySetting.Request) returns (GetCurrentPrivacySetting.Reply) {}
 
   // 更新当前登录账号的隐私设置；缺省扩展表使用 upsert 创建。
-  rpc Update(UpdatePrivacySetting.Request) returns (UpdatePrivacySetting.Reply) {}
+  rpc UpdateCurrent(UpdateCurrentPrivacySetting.Request) returns (UpdateCurrentPrivacySetting.Reply) {}
 }
 
 message GetCurrentPrivacySetting {
@@ -21,7 +21,7 @@ message GetCurrentPrivacySetting {
   }
 }
 
-message UpdatePrivacySetting {
+message UpdateCurrentPrivacySetting {
   message Request {
     optional bool public_points = 1;
     optional bool public_followers = 2;

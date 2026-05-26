@@ -28,7 +28,7 @@ func (s *NotificationMetaService) RegisterHttp(hs *http.Server) {
 	v1.RegisterNotifyNotificationMetaServiceHTTPServer(hs, s)
 }
 
-func (s *NotificationMetaService) Page(ctx context.Context, req *v1.PageNotificationMetaMeta_Request) (rsp *v1.PageNotificationMetaMeta_Reply, err error) {
+func (s *NotificationMetaService) List(ctx context.Context, req *v1.ListNotificationMetas_Request) (rsp *v1.ListNotificationMetas_Reply, err error) {
 
-	return &v1.PageNotificationMetaMeta_Reply{}, nil
+	return &v1.ListNotificationMetas_Reply{}, nil
 }

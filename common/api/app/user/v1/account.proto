@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
+import "user/v1/enum.proto";
 import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
@@ -99,7 +100,7 @@ message UpdateProfileAccount {
     optional string nickname = 2;
     optional string url = 3;
     optional string introduction = 4;
-    optional string mbti = 5;
+    optional MBTI mbti = 5;
   }
   message Reply {
     AccountBasic account = 1;

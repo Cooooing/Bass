@@ -1,35 +1,27 @@
 package model
 
 import (
-	v1 "common/api/gen/im/v1"
-	userv1 "common/api/gen/user/v1"
-	"im/internal/data/gen"
+	"time"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
+	userv1 "common/api/gen/user/v1"
+	"im/internal/enum"
 )
 
 type ChatGroup struct {
-	*gen.ChatGroup
+	ID            int64
+	Name          string
+	Avatar        *string
+	Introduction  *string
+	OwnerID       int64
+	Status        enum.ChatGroupStatus
+	MemberCount   uint32
+	MessageCount  uint32
+	LastMessageID *int64
+	CreatedAt     *time.Time
+	UpdatedAt     *time.Time
+	CreatedBy     *int64
+	UpdatedBy     *int64
 
 	WithOwner bool
-	Owner     *userv1.User
-}
-
-// ConvertToRpc 转换为RPC返回格式
-func (a *ChatGroup) ConvertToRpc() *v1.ChatGroup {
-	group := &v1.ChatGroup{
-		CreatedAt:    timestamppb.New(*a.CreatedAt),
-		UpdatedAt:    timestamppb.New(*a.UpdatedAt),
-		Id:           a.ID,
-		Name:         a.Name,
-		Avatar:       a.Avatar,
-		Introduction: a.Introduction,
-		Status:       v1.ChatGroupStatus(a.Status),
-		Owner:        a.Owner,
-		MemberCount:  a.MemberCount,
-	}
-	if a.Edges.LastMessageOfGroup != nil {
-		group.LastMessage = (&ChatMessage{ChatMessage: a.Edges.LastMessageOfGroup}).ConvertToRpc()
-	}
-	return group
+	Owner     *userv1.AccountBasic
 }

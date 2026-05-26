@@ -2,13 +2,10 @@ package usecase
 
 import (
 	"common/api/gen/common"
-	utilent "common/pkg/util/ent"
 	"context"
-	"errors"
 	base "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/data/gen"
 	"time"
 )
 
@@ -28,17 +25,34 @@ func NewNotificationRecordUsecase(
 }
 
 func (d *NotificationRecordUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.NotificationRecordGetReq) ([]*model.NotificationRecord, *common.PageReply, error) {
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return nil, nil, errors.New("no client in context")
-	}
-	return d.notificationRecordRepo.GetPage(ctx, c, page, req)
+	var (
+		rows      []*model.NotificationRecord
+		pageReply *common.PageReply
+	)
+	err := d.tx(ctx, func(ctx context.Context) error {
+		var err error
+		rows, pageReply, err = d.notificationRecordRepo.GetPage(ctx, page, req)
+		return err
+	})
+	return rows, pageReply, err
 }
 
-func (d *NotificationRecordUsecase) Read(ctx context.Context, receiverId int64, startTime *time.Time, endTime *time.Time, notificationRecordIds []int64) (int, error) {
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return 0, errors.New("no client in context")
-	}
-	return d.notificationRecordRepo.Read(ctx, c, receiverId, startTime, endTime, notificationRecordIds)
+func (d *NotificationRecordUsecase) MarkRead(ctx context.Context, receiverId int64, startTime *time.Time, endTime *time.Time, notificationRecordIds []int64) (int, error) {
+	var count int
+	err := d.tx(ctx, func(ctx context.Context) error {
+		var err error
+		count, err = d.notificationRecordRepo.Read(ctx, receiverId, startTime, endTime, notificationRecordIds)
+		return err
+	})
+	return count, err
+}
+
+func (d *NotificationRecordUsecase) CountUnread(ctx context.Context, receiverId int64) (int, error) {
+	var count int
+	err := d.tx(ctx, func(ctx context.Context) error {
+		var err error
+		count, err = d.notificationRecordRepo.UnreadCount(ctx, receiverId)
+		return err
+	})
+	return count, err
 }

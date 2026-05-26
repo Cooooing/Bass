@@ -32,15 +32,15 @@ type Config interface {
 // ============================================================
 
 type driver struct {
-	l       *log.Helper
+	log     *log.Helper
 	wrapped dialect.Driver
 	config  Config
 	mode    string
 }
 
-func NewDriver(l log.Logger, mode string, drv dialect.Driver, config Config) dialect.Driver {
+func NewDriver(logger log.Logger, mode string, drv dialect.Driver, config Config) dialect.Driver {
 	return &driver{
-		l:       log.NewHelper(l),
+		log:     log.NewHelper(logger),
 		wrapped: drv,
 		config:  config,
 		mode:    mode,
@@ -52,7 +52,7 @@ func (d *driver) Exec(ctx context.Context, query string, args, v any) (err error
 	err = d.wrapped.Exec(ctx, query, args, v)
 	cost := time.Since(start)
 	if shouldLog(d.config, cost) {
-		logSQL(ctx, d.l, d.mode, cost, query, args, err, "")
+		logSQL(ctx, d.log, d.mode, cost, query, args, err, "")
 	}
 	return
 }
@@ -62,7 +62,7 @@ func (d *driver) Query(ctx context.Context, query string, args, v any) (err erro
 	err = d.wrapped.Query(ctx, query, args, v)
 	cost := time.Since(start)
 	if shouldLog(d.config, cost) {
-		logSQL(ctx, d.l, d.mode, cost, query, args, err, "")
+		logSQL(ctx, d.log, d.mode, cost, query, args, err, "")
 	}
 	return
 }
@@ -73,7 +73,7 @@ func (d *driver) Tx(ctx context.Context) (dialect.Tx, error) {
 		return nil, err
 	}
 	return &tx{
-		l:      d.l,
+		log:    d.log,
 		Tx:     t,
 		config: d.config,
 		mode:   d.mode,
@@ -94,7 +94,7 @@ func (d *driver) Dialect() string {
 // ============================================================
 
 type tx struct {
-	l *log.Helper
+	log *log.Helper
 	dialect.Tx
 	config Config
 	mode   string
@@ -106,7 +106,7 @@ func (t *tx) Exec(ctx context.Context, query string, args, v any) (err error) {
 	err = t.Tx.Exec(ctx, query, args, v)
 	cost := time.Since(start)
 	if shouldLog(t.config, cost) {
-		logSQL(ctx, t.l, t.mode, cost, query, args, err, t.txID)
+		logSQL(ctx, t.log, t.mode, cost, query, args, err, t.txID)
 	}
 	return
 }
@@ -116,7 +116,7 @@ func (t *tx) Query(ctx context.Context, query string, args, v any) (err error) {
 	err = t.Tx.Query(ctx, query, args, v)
 	cost := time.Since(start)
 	if shouldLog(t.config, cost) {
-		logSQL(ctx, t.l, t.mode, cost, query, args, err, t.txID)
+		logSQL(ctx, t.log, t.mode, cost, query, args, err, t.txID)
 	}
 	return
 }
@@ -126,7 +126,7 @@ func (t *tx) Commit() error {
 	err := t.Tx.Commit()
 	cost := time.Since(start)
 	if err != nil || cost > slowThreshold(t.config) {
-		t.l.Warnw("tx commit",
+		t.log.Warnw("tx commit",
 			"tx_id", t.txID,
 			"cost_ms", cost.Milliseconds(),
 			"error", err,
@@ -140,7 +140,7 @@ func (t *tx) Rollback() error {
 	err := t.Tx.Rollback()
 	cost := time.Since(start)
 	if err != nil {
-		t.l.Warnw("tx rollback",
+		t.log.Warnw("tx rollback",
 			"tx_id", t.txID,
 			"cost_ms", cost.Milliseconds(),
 			"error", err,
@@ -185,7 +185,7 @@ func shouldLog(cfg Config, cost time.Duration) bool {
 
 var whitespaceReplacer = strings.NewReplacer("\n", " ", "\r", " ", "\t", " ")
 
-func logSQL(ctx context.Context, l *log.Helper, mode string, cost time.Duration, query string, args any, err error, txID string) {
+func logSQL(ctx context.Context, helper *log.Helper, mode string, cost time.Duration, query string, args any, err error, txID string) {
 	argv, _ := args.([]any)
 	sql := formatSQLArgs(query, argv)
 	sql = whitespaceReplacer.Replace(sql)
@@ -199,10 +199,10 @@ func logSQL(ctx context.Context, l *log.Helper, mode string, cost time.Duration,
 
 	if mode == constant.Dev {
 		if err != nil {
-			l.WithContext(ctx).Warnf("[SQL] %dms | %s:%d | %sExec: err=%v | %s",
+			helper.WithContext(ctx).Warnf("[SQL] %dms | %s:%d | %sExec: err=%v | %s",
 				cost.Milliseconds(), file, line, txPrefix, err, sql)
 		} else {
-			l.WithContext(ctx).Debugf("[SQL] %dms | %s:%d | %sExec: %s",
+			helper.WithContext(ctx).Debugf("[SQL] %dms | %s:%d | %sExec: %s",
 				cost.Milliseconds(), file, line, txPrefix, sql)
 		}
 		return
@@ -210,7 +210,7 @@ func logSQL(ctx context.Context, l *log.Helper, mode string, cost time.Duration,
 
 	// 生产环境：结构化 JSON。
 	if err != nil {
-		l.WithContext(ctx).Warnw("sql executed",
+		helper.WithContext(ctx).Warnw("sql executed",
 			"cost_ms", cost.Milliseconds(),
 			"sql", sql,
 			"file", file,
@@ -219,7 +219,7 @@ func logSQL(ctx context.Context, l *log.Helper, mode string, cost time.Duration,
 			"error", err,
 		)
 	} else {
-		l.WithContext(ctx).Debugw("sql executed",
+		helper.WithContext(ctx).Debugw("sql executed",
 			"cost_ms", cost.Milliseconds(),
 			"sql", sql,
 			"file", file,

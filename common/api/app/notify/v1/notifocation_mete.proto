@@ -11,15 +11,15 @@ option go_package = "common/api/gen/notify/v1;v1";
 // NotificationMeta 服务
 service NotifyNotificationMetaService {
   // 查询通知元数据
-  rpc Page(PageNotificationMetaMeta.Request) returns (PageNotificationMetaMeta.Reply) {
+  rpc List(ListNotificationMetas.Request) returns (ListNotificationMetas.Reply) {
     option (google.api.http) = {
-      post: "/v1/notification-meta/page"
+      post: "/v1/notification-meta/list"
       body: "*"
     };
   }
 }
 
-message PageNotificationMetaMeta {
+message ListNotificationMetas {
   message Request {
     // 分页参数
     common.PageRequest page = 1;

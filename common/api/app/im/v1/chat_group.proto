@@ -27,9 +27,9 @@ service IMChatGroupService {
   }
 
   // 查询群组列表
-  rpc Page(PageChatGroup.Request) returns (PageChatGroup.Reply) {
+  rpc List(ListChatGroups.Request) returns (ListChatGroups.Reply) {
     option (google.api.http) = {
-      post: "/v1/chat-group/page"
+      post: "/v1/chat-group/list"
       body: "*"
     };
   }
@@ -55,7 +55,7 @@ message DismissChatGroup {
   message Reply {}
 }
 
-message PageChatGroup {
+message ListChatGroups {
   message Request {
     // 分页参数
     common.PageRequest page = 1;

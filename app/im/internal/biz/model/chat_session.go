@@ -1,17 +1,22 @@
 package model
 
-import (
-	"im/internal/data/gen"
-)
+import "time"
 
 type ChatSession struct {
-	*gen.ChatSession
+	ID                int64
+	ReceiverID        *int64
+	GroupID           *int64
+	IsMuted           bool
+	IsPinned          bool
+	LastReadMessageID *int64
+	ReadCount         uint32
+	MessageCount      uint32
+	LastMessageID     *int64
+	CreatedAt         *time.Time
+	UpdatedAt         *time.Time
+	CreatedBy         *int64
+	UpdatedBy         *int64
 
-	Group *ChatGroup
-
+	Group       *ChatGroup
 	UnreadCount uint32
-}
-
-// ConvertToRpc 转换为RPC返回格式
-func (a *ChatSession) ConvertToRpc() {
 }

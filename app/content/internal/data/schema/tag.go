@@ -30,7 +30,6 @@ func (Tag) Fields() []ent.Field {
 		field.String("description").Comment("标签描述").Optional().Nillable(),
 		field.Int64("domain_id").Comment("所属领域id").Optional().Nillable(),
 		field.Enum("status").Values(contentenum.TagStatusMap.EnumValues()...).Default(string(contentenum.TagStatusNormal)).Comment("标签状态"),
-		field.Int32("article_count").Comment("文章数").Default(0),
 	}
 	return fields
 }

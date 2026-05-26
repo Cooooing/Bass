@@ -1,151 +1,199 @@
 package repo
 
 import (
+	"context"
+
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
-	commonClient "common/pkg/client"
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/conf"
 	"content/internal/data/gen"
 	"content/internal/data/gen/domain"
 	"content/internal/enum"
-	"context"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.DomainRepo = (*DomainRepo)(nil)
 
 type DomainRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewDomainRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.DomainRepo {
-	return &DomainRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+func NewDomainRepo(db *gen.Client) repo.DomainRepo {
+	return &DomainRepo{db: db}
+}
+
+func (r *DomainRepo) getClient(ctx context.Context) *gen.Client {
+	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return tx
 	}
+	return r.db
 }
 
-func (r *DomainRepo) Save(ctx context.Context, tx *gen.Client, domain *model.Domain) (*model.Domain, error) {
-	save, err := tx.Domain.Create().
-		SetName(domain.Name).
-		SetNillableDescription(domain.Description).
-		SetStatus(domain.Status).
-		SetNillableURL(domain.URL).
-		SetNillableIcon(domain.Icon).
-		SetIsNav(domain.IsNav).
+func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*model.Domain, error) {
+	save, err := r.getClient(ctx).Domain.Create().
+		SetName(domainModel.Name).
+		SetNillableDescription(domainModel.Description).
+		SetStatus(domain.Status(domainModel.Status)).
+		SetNillableURL(domainModel.URL).
+		SetNillableIcon(domainModel.Icon).
+		SetIsNav(domainModel.IsNav).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &model.Domain{Domain: save}, nil
+	return &model.Domain{
+		ID:          save.ID,
+		Name:        save.Name,
+		Description: save.Description,
+		Status:      enum.DomainStatus(save.Status),
+		URL:         save.URL,
+		Icon:        save.Icon,
+		IsNav:       save.IsNav,
+		CreatedAt:   save.CreatedAt,
+		UpdatedAt:   save.UpdatedAt,
+		CreatedBy:   save.CreatedBy,
+		UpdatedBy:   save.UpdatedBy,
+	}, nil
 }
 
-func (r *DomainRepo) Saves(ctx context.Context, tx *gen.Client, domains []*model.Domain) ([]*model.Domain, error) {
-
+func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*model.Domain, error) {
+	client := r.getClient(ctx)
 	creates := make([]*gen.DomainCreate, 0, len(domains))
 	for i := range domains {
 		creates = append(creates,
-			tx.Domain.Create().
+			client.Domain.Create().
 				SetName(domains[i].Name).
 				SetNillableDescription(domains[i].Description).
-				SetStatus(domains[i].Status).
+				SetStatus(domain.Status(domains[i].Status)).
 				SetNillableURL(domains[i].URL).
 				SetNillableIcon(domains[i].Icon).
 				SetIsNav(domains[i].IsNav),
 		)
 	}
 
-	save, err := tx.Domain.CreateBulk(creates...).Save(ctx)
+	save, err := client.Domain.CreateBulk(creates...).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	res := make([]*model.Domain, len(save))
 	for i := range save {
-		res[i] = &model.Domain{Domain: save[i]}
+		res[i] = &model.Domain{
+			ID:          save[i].ID,
+			Name:        save[i].Name,
+			Description: save[i].Description,
+			Status:      enum.DomainStatus(save[i].Status),
+			URL:         save[i].URL,
+			Icon:        save[i].Icon,
+			IsNav:       save[i].IsNav,
+			CreatedAt:   save[i].CreatedAt,
+			UpdatedAt:   save[i].UpdatedAt,
+			CreatedBy:   save[i].CreatedBy,
+			UpdatedBy:   save[i].UpdatedBy,
+		}
 	}
 	return res, nil
 }
 
-func (r *DomainRepo) Update(ctx context.Context, tx *gen.Client, domain *model.Domain) (*model.Domain, error) {
-	update := tx.Domain.UpdateOneID(domain.ID).
-		SetName(domain.Name).
-		SetNillableDescription(domain.Description).
-		SetStatus(domain.Status).
-		SetNillableURL(domain.URL).
-		SetNillableIcon(domain.Icon).
-		SetIsNav(domain.IsNav)
-	save, err := update.Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &model.Domain{Domain: save}, nil
-}
-
-func (r *DomainRepo) AddTagCount(ctx context.Context, tx *gen.Client, id int64, num int32) (*model.Domain, error) {
-	save, err := tx.Domain.UpdateOneID(id).
-		AddTagCount(num).
+func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*model.Domain, error) {
+	save, err := r.getClient(ctx).Domain.UpdateOneID(domainModel.ID).
+		SetName(domainModel.Name).
+		SetNillableDescription(domainModel.Description).
+		SetStatus(domain.Status(domainModel.Status)).
+		SetNillableURL(domainModel.URL).
+		SetNillableIcon(domainModel.Icon).
+		SetIsNav(domainModel.IsNav).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &model.Domain{Domain: save}, nil
+	return &model.Domain{
+		ID:          save.ID,
+		Name:        save.Name,
+		Description: save.Description,
+		Status:      enum.DomainStatus(save.Status),
+		URL:         save.URL,
+		Icon:        save.Icon,
+		IsNav:       save.IsNav,
+		CreatedAt:   save.CreatedAt,
+		UpdatedAt:   save.UpdatedAt,
+		CreatedBy:   save.CreatedBy,
+		UpdatedBy:   save.UpdatedBy,
+	}, nil
 }
 
-func (r *DomainRepo) GetOne(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) (*model.Domain, error) {
-	query := tx.Domain.Query()
+func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Domain, error) {
+	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, cerrors.ErrorBadRequest("domain is not found")
 	}
-	return &model.Domain{Domain: d}, err
+	if err != nil {
+		return nil, err
+	}
+	return &model.Domain{
+		ID:          d.ID,
+		Name:        d.Name,
+		Description: d.Description,
+		Status:      enum.DomainStatus(d.Status),
+		URL:         d.URL,
+		Icon:        d.Icon,
+		IsNav:       d.IsNav,
+		CreatedAt:   d.CreatedAt,
+		UpdatedAt:   d.UpdatedAt,
+		CreatedBy:   d.CreatedBy,
+		UpdatedBy:   d.UpdatedBy,
+	}, nil
 }
 
-func (r *DomainRepo) GetList(ctx context.Context, tx *gen.Client, req *repo.DomainGetReq) ([]*model.Domain, error) {
-	var (
-		domains []*model.Domain
-		err     error
-	)
-	query := tx.Domain.Query().WithTags()
+func (r *DomainRepo) GetList(ctx context.Context, req *repo.DomainGetReq) ([]*model.Domain, error) {
+	query := r.getClient(ctx).Domain.Query().WithTags()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
+	domains := make([]*model.Domain, 0, len(list))
 	for i := range list {
-		domains = append(domains, &model.Domain{Domain: list[i]})
+		domainItem := &model.Domain{
+			ID:          list[i].ID,
+			Name:        list[i].Name,
+			Description: list[i].Description,
+			Status:      enum.DomainStatus(list[i].Status),
+			URL:         list[i].URL,
+			Icon:        list[i].Icon,
+			IsNav:       list[i].IsNav,
+			CreatedAt:   list[i].CreatedAt,
+			UpdatedAt:   list[i].UpdatedAt,
+			CreatedBy:   list[i].CreatedBy,
+			UpdatedBy:   list[i].UpdatedBy,
+		}
+		for _, item := range list[i].Edges.Tags {
+			domainItem.Tags = append(domainItem.Tags, &model.Tag{
+				ID:          item.ID,
+				Name:        item.Name,
+				Description: item.Description,
+				DomainID:    item.DomainID,
+				Status:      enum.TagStatus(item.Status),
+				CreatedAt:   item.CreatedAt,
+				UpdatedAt:   item.UpdatedAt,
+				CreatedBy:   item.CreatedBy,
+				UpdatedBy:   item.UpdatedBy,
+			})
+		}
+		domains = append(domains, domainItem)
 	}
 	return domains, nil
 }
 
-func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
-	var (
-		domains []*model.Domain
-		err     error
-		total   int
-	)
+func (r *DomainRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
 	page = constant.PageValid(page)
-	query := tx.Domain.Query().WithTags()
+	query := r.getClient(ctx).Domain.Query().WithTags()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
-	total, err = countQuery.Count(ctx)
+	total, err := countQuery.Count(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -153,8 +201,35 @@ func (r *DomainRepo) GetPage(ctx context.Context, tx *gen.Client, page *common.P
 	if err != nil {
 		return nil, nil, err
 	}
+	domains := make([]*model.Domain, 0, len(list))
 	for i := range list {
-		domains = append(domains, &model.Domain{Domain: list[i]})
+		domainItem := &model.Domain{
+			ID:          list[i].ID,
+			Name:        list[i].Name,
+			Description: list[i].Description,
+			Status:      enum.DomainStatus(list[i].Status),
+			URL:         list[i].URL,
+			Icon:        list[i].Icon,
+			IsNav:       list[i].IsNav,
+			CreatedAt:   list[i].CreatedAt,
+			UpdatedAt:   list[i].UpdatedAt,
+			CreatedBy:   list[i].CreatedBy,
+			UpdatedBy:   list[i].UpdatedBy,
+		}
+		for _, item := range list[i].Edges.Tags {
+			domainItem.Tags = append(domainItem.Tags, &model.Tag{
+				ID:          item.ID,
+				Name:        item.Name,
+				Description: item.Description,
+				DomainID:    item.DomainID,
+				Status:      enum.TagStatus(item.Status),
+				CreatedAt:   item.CreatedAt,
+				UpdatedAt:   item.UpdatedAt,
+				CreatedBy:   item.CreatedBy,
+				UpdatedBy:   item.UpdatedBy,
+			})
+		}
+		domains = append(domains, domainItem)
 	}
 	return domains, &common.PageReply{
 		Total: uint32(total),
@@ -185,14 +260,6 @@ func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *g
 	}
 	if req.Icon != nil {
 		query = query.Where(domain.IconContains(*req.Icon))
-	}
-	if req.TagCount != nil {
-		if req.TagCount.Start != nil {
-			query = query.Where(domain.TagCountGTE(*req.TagCount.Start))
-		}
-		if req.TagCount.End != nil {
-			query = query.Where(domain.TagCountLTE(*req.TagCount.End))
-		}
 	}
 	if req.IsNav != nil {
 		query = query.Where(domain.IsNavEQ(*req.IsNav))

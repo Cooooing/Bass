@@ -1,25 +1,15 @@
 package model
 
 import (
-	"common/api/gen/common/enums"
-	v1 "common/api/gen/notify/v1"
-	"notify/internal/data/gen"
-
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"notify/internal/enum"
+	"time"
 )
 
 type NotificationMeta struct {
-	*gen.NotificationMeta
-}
-
-func (n *NotificationMeta) ConvertToRpc() *v1.NotificationMeta {
-	return &v1.NotificationMeta{
-		CreatedAt:     timestamppb.New(*n.CreatedAt),
-		UpdatedAt:     timestamppb.New(*n.UpdatedAt),
-		Id:            n.ID,
-		Uuid:          n.UUID,
-		EventType:     enums.EventType(enums.EventType_value[string(n.EventType)]),
-		Status:        v1.NotificationStatus(v1.NotificationStatus_value[string(n.Status)]),
-		ContentRender: n.Content,
-	}
+	ID        int64
+	Title     string
+	Content   string
+	Status    enum.NotificationStatus
+	CreatedAt *time.Time
+	UpdatedAt *time.Time
 }

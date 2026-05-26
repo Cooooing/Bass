@@ -1,22 +1,18 @@
 package usecase
 
 import (
+	"context"
+
 	"common/api/gen/common"
+	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
-	userv1 "common/api/gen/user/v1"
-	"common/pkg/client/rpc"
+	commonenum "common/pkg/enum"
 	"common/pkg/util"
-	utilent "common/pkg/util/ent"
-
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/gen"
-	"content/internal/data/gen/commentactionrecord"
 	"content/internal/enum"
-	"context"
-	"errors"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/samber/lo"
@@ -25,60 +21,54 @@ import (
 type CommentUsecase struct {
 	log        *log.Helper
 	tx         base.Tx
-	userClient *rpc.UserClient
-	eventPool  *util.EventPool
+	userClient repo.UserClient
 
 	commentRepo             repo.CommentRepo
 	commentActionRecordRepo repo.CommentActionRecordRepo
 	articleRepo             repo.ArticleRepo
+	outboxRepo              repo.OutboxEventRepo
 }
 
 func NewCommentUsecase(
 	logger log.Logger,
 	tx base.Tx,
-	userClient *rpc.UserClient,
-	eventPool *util.EventPool,
+	userClient repo.UserClient,
 	commentRepo repo.CommentRepo,
 	commentActionRecordRepo repo.CommentActionRecordRepo,
 	articleRepo repo.ArticleRepo,
+	outboxRepo repo.OutboxEventRepo,
 ) *CommentUsecase {
 	return &CommentUsecase{
 		log:                     log.NewHelper(logger),
 		tx:                      tx,
 		userClient:              userClient,
-		eventPool:               eventPool,
 		commentRepo:             commentRepo,
 		commentActionRecordRepo: commentActionRecordRepo,
 		articleRepo:             articleRepo,
+		outboxRepo:              outboxRepo,
 	}
 }
 
-func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (c *model.Comment, err error) {
-	//user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	//if !ok {
-	//	return nil, cerrors.ErrorUnauthorized("user not login")
-	//}
+func (d *CommentUsecase) Add(ctx context.Context, userId int64, comment *model.Comment) (c *model.Comment, err error) {
+	senderName, err := accountName(ctx, d.userClient, userId)
+	if err != nil {
+		return nil, err
+	}
 	err = d.tx(ctx, func(ctx context.Context) error {
-		cl, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		// 回复文章
-		exist, err := d.articleRepo.GetOne(ctx, cl, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
 		}
-		if !exist.Commentable {
+		if !article.Commentable {
 			return cerrors.ErrorBadRequest("article not commentable")
 		}
 
-		// 回复评论
-		replyComment := &model.Comment{Comment: &gen.Comment{}}
+		replyComment := &model.Comment{}
 		if comment.ReplyID != nil {
-			replyComment, err = d.commentRepo.GetOne(ctx, cl, &repo.CommentGetReq{
+			replyComment, err = d.commentRepo.Get(ctx, &repo.CommentGetReq{
 				CommentId: comment.ReplyID,
 				ArticleId: new(comment.ArticleID),
 				Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
@@ -87,62 +77,55 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (c *mo
 				return err
 			}
 
-			err = d.commentRepo.UpdateStat(ctx, cl, replyComment.ID, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
+			err = d.commentRepo.UpdateStat(ctx, replyComment.ID, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
 			if err != nil {
 				return err
 			}
 		}
 
-		_, err = d.articleRepo.UpdateStat(ctx, cl, exist.ID, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
+		_, err = d.articleRepo.UpdateStat(ctx, article.ID, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
 		if err != nil {
 			return err
 		}
 
-		save := &model.Comment{Comment: &gen.Comment{ArticleID: comment.ArticleID,
-			Content:  comment.Content,
-			Level:    replyComment.Level + 1,
-			ParentID: util.If(comment.ReplyID == nil, nil, util.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
-			ReplyID:  comment.ReplyID,
-		}}
+		save := &model.Comment{
+			ArticleID: comment.ArticleID,
+			Content:   comment.Content,
+			Level:     replyComment.Level + 1,
+			ParentID:  util.If(comment.ReplyID == nil, nil, util.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
+			ReplyID:   comment.ReplyID,
+		}
 		save.FormatContent()
-		c, err = d.commentRepo.Save(ctx, cl, save)
+		c, err = d.commentRepo.Save(ctx, save)
 		if err != nil {
 			return err
 		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	err = d.eventPool.Submit(func() {
-		//atUserNames := c.ParseContent()
-		//err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleAt.String(), &commonModel.Notification{
-		//	UUID:       uuid.New().String(),
-		//	Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_AT),
-		//	SenderId:   user.ID,
-		//	SenderName: user.Name,
-		//	Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-		//	Meta: commonModel.Meta{
-		//		AtUsernames: lo.Keys(atUserNames),
-		//		Comment: &commonModel.CommentMeta{
-		//			CommentId:     c.ID,
-		//			ArticleId:     c.ArticleID,
-		//			Content:       c.Content,
-		//			ReplyId:       c.ReplyID,
-		//			CreatedBy:     *c.CreatedBy,
-		//			CreatedByName: *c.CreatedByName,
-		//		},
-		//	},
-		//})
-		if err != nil {
-			d.log.Errorf("publish a at event error: %v", err)
-			return
+		articleAuthorID := int64(0)
+		if article.CreatedBy != nil {
+			articleAuthorID = *article.CreatedBy
 		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			EventType: commonenum.EventTypeContentCommentPublish,
+			Subject:   commonenum.EventSubjectContentCommentPublish,
+			Event: &commonenums.Event{
+				Payload: &commonenums.Event_CommentPublished{
+					CommentPublished: &commonenums.CommentPublishedPayload{
+						SenderId:   userId,
+						SenderName: senderName,
+						CommentId:  c.ID,
+						ArticleId:  comment.ArticleID,
+						AuthorId:   articleAuthorID,
+						Content:    c.Content,
+						Title:      article.Title,
+					},
+				},
+			},
+		})
 	})
 	if err != nil {
 		return nil, err
 	}
-	return c, err
+	return c, nil
 }
 
 func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.CommentGetReq) (*common.PageReply, []*model.Comment, error) {
@@ -152,32 +135,31 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 		err       error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		reply, pageReply, err = d.commentRepo.GetPage(ctx, c, page, req)
+		reply, pageReply, err = d.commentRepo.GetPage(ctx, page, req)
 		if err != nil {
 			return err
 		}
-		userIds := make(map[int64]struct{})
+		userIDs := make(map[int64]struct{})
 		for _, item := range reply {
-			userIds[*item.CreatedBy] = struct{}{}
-			if item.Edges.Reply != nil {
-				userIds[*item.Edges.Reply.CreatedBy] = struct{}{}
+			if item.CreatedBy != nil {
+				userIDs[*item.CreatedBy] = struct{}{}
+			}
+			if item.Reply != nil && item.Reply.CreatedBy != nil {
+				userIDs[*item.Reply.CreatedBy] = struct{}{}
 			}
 		}
 
-		userMap, err := d.userClient.Account.BatchGetBasic(ctx, &userv1.BatchGetBasicAccount_Request{UserIds: lo.Keys(userIds)})
+		users, err := d.userClient.BatchGetBasicAccounts(ctx, lo.Keys(userIDs))
 		if err != nil {
 			return err
 		}
-		users := userMap.Accounts
 
 		for i := range reply {
-			reply[i].User = users[*reply[i].CreatedBy]
-			if reply[i].Edges.Reply != nil {
-				reply[i].ReplyUser = users[*reply[i].Edges.Reply.CreatedBy]
+			if reply[i].CreatedBy != nil {
+				reply[i].User = users[*reply[i].CreatedBy]
+			}
+			if reply[i].Reply != nil && reply[i].Reply.CreatedBy != nil {
+				reply[i].ReplyUser = users[*reply[i].Reply.CreatedBy]
 			}
 		}
 		return nil
@@ -186,51 +168,87 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 }
 
 func (d *CommentUsecase) UpdateStatus(ctx context.Context, commentId int64, status v1.CommentStatus) error {
-	err := d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		return d.commentRepo.UpdateStatus(ctx, c, commentId, status)
+	if _, ok := enum.CommentStatusMap.ToEnum(status); !ok {
+		return cerrors.ErrorBadRequest("invalid comment status")
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		return d.commentRepo.UpdateStatus(ctx, commentId, status)
 	})
-	return err
 }
 
 func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId int64, action v1.CommentAction, active bool) error {
-	var err error
-	err = d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
+	dbAction, ok := enum.CommentActionMap.ToEnum(action)
+	if !ok {
+		return cerrors.ErrorBadRequest("invalid comment action")
+	}
+	switch action {
+	case v1.CommentAction_COMMENT_ACTION_LIKE, v1.CommentAction_COMMENT_ACTION_THANK:
+	default:
+		return cerrors.ErrorBadRequest("unsupported comment action")
+	}
+	senderName, err := accountName(ctx, d.userClient, userId)
+	if err != nil {
+		return err
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		comment, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
+			CommentId: &commentId,
+			Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
+		})
+		if err != nil {
+			return err
+		}
+		commentAuthorID := int64(0)
+		if comment.CreatedBy != nil {
+			commentAuthorID = *comment.CreatedBy
 		}
 		if active {
-			err = d.commentRepo.UpdateStat(ctx, c, commentId, action, 1)
+			existRecord, err := d.commentActionRecordRepo.Exist(ctx, commentId, userId, action)
 			if err != nil {
 				return err
 			}
-			_, err = d.commentActionRecordRepo.Save(ctx, c, &model.CommentActionRecord{
+			if existRecord {
+				return nil
+			}
+			_, err = d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{
 				CommentID: commentId,
 				UserID:    userId,
-				Type: func() commentactionrecord.Type {
-					v, _ := enum.CommentActionMap.ToEnum(action)
-					return commentactionrecord.Type(v)
-				}(),
+				Type:      dbAction,
 			})
 			if err != nil {
 				return err
 			}
-			return nil
+			err = d.commentRepo.UpdateStat(ctx, commentId, action, 1)
+			if err != nil {
+				return err
+			}
+			if action != v1.CommentAction_COMMENT_ACTION_LIKE {
+				return nil
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				EventType: commonenum.EventTypeContentCommentLike,
+				Subject:   commonenum.EventSubjectContentCommentLike,
+				Event: &commonenums.Event{
+					Payload: &commonenums.Event_CommentLiked{
+						CommentLiked: &commonenums.CommentLikedPayload{
+							SenderId:        userId,
+							SenderName:      senderName,
+							CommentId:       commentId,
+							ArticleId:       comment.ArticleID,
+							CommentAuthorId: commentAuthorID,
+						},
+					},
+				},
+			})
 		}
 
-		err = d.commentRepo.UpdateStat(ctx, c, commentId, action, -1)
+		deleted, err := d.commentActionRecordRepo.Delete(ctx, commentId, userId, action)
 		if err != nil {
 			return err
 		}
-		err = d.commentActionRecordRepo.Delete(ctx, c, commentId, userId, action)
-		if err != nil {
-			return err
+		if deleted == 0 {
+			return nil
 		}
-		return nil
+		return d.commentRepo.UpdateStat(ctx, commentId, action, -1)
 	})
-	return err
 }

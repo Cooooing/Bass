@@ -11,12 +11,32 @@ enum AccountStatus {
   ACCOUNT_STATUS_DELETED = 3; // 注销
 }
 
+enum MBTI {
+  MBTI_UNSPECIFIED = 0;
+  MBTI_INTJ = 1;
+  MBTI_INTP = 2;
+  MBTI_ENTJ = 3;
+  MBTI_ENTP = 4;
+  MBTI_INFJ = 5;
+  MBTI_INFP = 6;
+  MBTI_ENFJ = 7;
+  MBTI_ENFP = 8;
+  MBTI_ISTJ = 9;
+  MBTI_ISFJ = 10;
+  MBTI_ESTJ = 11;
+  MBTI_ESFJ = 12;
+  MBTI_ISTP = 13;
+  MBTI_ISFP = 14;
+  MBTI_ESTP = 15;
+  MBTI_ESFP = 16;
+}
+
 enum AccountStatType {
   ACCOUNT_STAT_TYPE_UNSPECIFIED = 0;
   ACCOUNT_STAT_TYPE_FOLLOW = 1; // 关注数
   ACCOUNT_STAT_TYPE_FOLLOWER = 2; // 粉丝数
-  ACCOUNT_STAT_TYPE_BLOCK = 3; // 拉黑数
-  ACCOUNT_STAT_TYPE_BLOCKED = 4; // 被拉黑数
+  reserved 3, 4;
+  reserved "ACCOUNT_STAT_TYPE_BLOCK", "ACCOUNT_STAT_TYPE_BLOCKED";
 }
 
 enum RelationType {

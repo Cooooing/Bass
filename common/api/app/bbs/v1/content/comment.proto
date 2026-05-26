@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+import "bbs/v1/content/model.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/content;content";
+
+service CommentService {
+  rpc Create(CreateComment.Request) returns (CreateComment.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/create"
+      body: "*"
+    };
+  }
+  rpc List(ListComments.Request) returns (ListComments.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/list"
+      body: "*"
+    };
+  }
+  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/like"
+      body: "*"
+    };
+  }
+  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/thank"
+      body: "*"
+    };
+  }
+}
+
+message CreateComment {
+  message Request {
+    int64 article_id = 1;
+    string content = 2;
+    int64 reply_id = 3;
+  }
+  message Reply {
+    Comment comment = 1;
+  }
+}
+
+message ListComments {
+  message Request {
+    common.PageRequest page = 1;
+    CommentQuery query = 2;
+  }
+  message Reply {
+    common.PageReply page = 1;
+    repeated Comment rows = 2;
+  }
+}
+
+message LikeComment {
+  message Request {
+    int64 id = 1;
+    bool active = 2;
+  }
+  message Reply {}
+}
+
+message ThankComment {
+  message Request {
+    int64 id = 1;
+    bool active = 2;
+  }
+  message Reply {}
+}

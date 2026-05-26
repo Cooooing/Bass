@@ -27,7 +27,7 @@ func (CheckinRecord) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("账号 ID"),
-		field.Time("date").Comment("签到日期").Nillable(),
+		field.Time("date").Comment("签到日期"),
 		field.Int32("online_minutes").Comment("当天在线时长，单位为分钟").Default(0).Nillable(),
 		field.Int32("activity").Comment("当天活跃度").Default(0).Nillable(),
 		field.Bool("checked").Comment("是否完成签到").Default(false),
@@ -37,7 +37,6 @@ func (CheckinRecord) Fields() []ent.Field {
 func (CheckinRecord) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("user_id", "date").Unique(),
-		index.Fields("user_id"),
 	}
 }
 

@@ -29,15 +29,15 @@ service IMChatSessionService {
   // 标为已读
   rpc MarkRead(MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {
     option (google.api.http) = {
-      post: "/v1/chat-session/read"
+      post: "/v1/chat-session/mark-read"
       body: "*"
     };
   }
 
   // 查询会话数据
-  rpc Page(PageChatSession.Request) returns (PageChatSession.Reply) {
+  rpc List(ListChatSessions.Request) returns (ListChatSessions.Reply) {
     option (google.api.http) = {
-      post: "/v1/chat-session/page"
+      post: "/v1/chat-session/list"
       body: "*"
     };
   }
@@ -71,7 +71,7 @@ message MarkReadChatSession {
   message Reply {}
 }
 
-message PageChatSession {
+message ListChatSessions {
   message Request {
     // 分页参数
     common.PageRequest page = 1;

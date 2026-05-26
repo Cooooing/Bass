@@ -3,6 +3,7 @@ package schema
 import (
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
+	"im/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -28,7 +29,7 @@ func (ChatGroupMember) Fields() []ent.Field {
 		field.Int64("group_id").Comment("群id"),
 		field.Int64("user_id").Comment("成员id"),
 		field.String("nickname").Comment("群内昵称").Optional().Nillable(),
-		field.Int32("role").Comment("角色: 1-成员, 2-管理员, 3-群主").Default(1),
+		field.Enum("role").Values(enum.ChatGroupMemberRoleMap.EnumValues()...).Default(string(enum.ChatGroupMemberRoleMember)).Comment("群成员角色"),
 		field.Time("mute_end_at").Comment("禁言结束时间").Optional().Nillable(),
 	}
 	return fields
@@ -36,6 +37,7 @@ func (ChatGroupMember) Fields() []ent.Field {
 
 func (ChatGroupMember) Mixin() []ent.Mixin {
 	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
 		utilent.UserAuditMixin{},
 	}
 }

@@ -1,49 +1,65 @@
 package repo
 
 import (
-	v1 "common/api/gen/content/v1"
-	commonClient "common/pkg/client"
-	"content/internal/biz/model"
-	"content/internal/biz/repo"
-	"content/internal/conf"
-	"content/internal/data/gen"
 	"context"
 
-	"github.com/go-kratos/kratos/v2/log"
+	v1 "common/api/gen/content/v1"
+	utilent "common/pkg/util/ent"
+	"content/internal/biz/model"
+	"content/internal/biz/repo"
+	"content/internal/data/gen"
+	"content/internal/data/gen/commentactionrecord"
+	"content/internal/enum"
 )
 
 var _ repo.CommentActionRecordRepo = (*CommentActionRecordRepo)(nil)
 
 type CommentActionRecordRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewCommentActionRecordRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.CommentActionRecordRepo {
-	return &CommentActionRecordRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+func NewCommentActionRecordRepo(db *gen.Client) repo.CommentActionRecordRepo {
+	return &CommentActionRecordRepo{db: db}
+}
+
+func (r *CommentActionRecordRepo) getClient(ctx context.Context) *gen.Client {
+	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return tx
 	}
+	return r.db
 }
 
-func (a CommentActionRecordRepo) Save(ctx context.Context, client *gen.Client, record *model.CommentActionRecord) (*model.CommentActionRecord, error) {
-	// TODO: 待实现。
-	panic("implement me")
+func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.CommentActionRecord) (*model.CommentActionRecord, error) {
+	save, err := r.getClient(ctx).CommentActionRecord.Create().
+		SetCommentID(record.CommentID).
+		SetUserID(record.UserID).
+		SetType(commentactionrecord.Type(record.Type)).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &model.CommentActionRecord{
+		ID:        save.ID,
+		CommentID: save.CommentID,
+		UserID:    save.UserID,
+		Type:      enum.CommentAction(save.Type),
+	}, nil
 }
 
-func (a CommentActionRecordRepo) Delete(ctx context.Context, client *gen.Client, commentId int64, userId int64, action v1.CommentAction) error {
-	// TODO: 待实现。
-	panic("implement me")
+func (r *CommentActionRecordRepo) Delete(ctx context.Context, commentId int64, userId int64, action v1.CommentAction) (int, error) {
+	dbType, _ := enum.CommentActionMap.ToEnum(action)
+	return r.getClient(ctx).CommentActionRecord.Delete().
+		Where(commentactionrecord.CommentIDEQ(commentId)).
+		Where(commentactionrecord.UserIDEQ(userId)).
+		Where(commentactionrecord.TypeEQ(commentactionrecord.Type(dbType))).
+		Exec(ctx)
+}
+
+func (r *CommentActionRecordRepo) Exist(ctx context.Context, commentId int64, userId int64, action v1.CommentAction) (bool, error) {
+	dbType, _ := enum.CommentActionMap.ToEnum(action)
+	return r.getClient(ctx).CommentActionRecord.Query().
+		Where(commentactionrecord.CommentIDEQ(commentId)).
+		Where(commentactionrecord.UserIDEQ(userId)).
+		Where(commentactionrecord.TypeEQ(commentactionrecord.Type(dbType))).
+		Exist(ctx)
 }

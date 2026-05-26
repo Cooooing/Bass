@@ -7,13 +7,10 @@ import (
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/biz/usecase"
-	"user/internal/conf"
 	"user/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -21,21 +18,17 @@ import (
 
 type AccountService struct {
 	v1.UnimplementedAccountServiceServer
-	conf           *conf.Bootstrap
-	log            *log.Helper
-	accountUsecase *usecase.AccountUsecase
-	accountRepo    repo.AccountRepo
+	accountValidationUsecase *usecase.AccountValidationUsecase
+	accountRepo              repo.AccountRepo
 }
 
-func NewAccountService(conf *conf.Bootstrap, logger log.Logger,
-	accountUsecase *usecase.AccountUsecase,
+func NewAccountService(
+	accountValidationUsecase *usecase.AccountValidationUsecase,
 	accountRepo repo.AccountRepo,
 ) *AccountService {
 	return &AccountService{
-		conf:           conf,
-		log:            log.NewHelper(logger),
-		accountUsecase: accountUsecase,
-		accountRepo:    accountRepo,
+		accountValidationUsecase: accountValidationUsecase,
+		accountRepo:              accountRepo,
 	}
 }
 
@@ -61,12 +54,11 @@ func (s *AccountService) GetCurrent(ctx context.Context, req *v1.GetCurrentAccou
 		Url:           account.URL,
 		AvatarUrl:     account.AvatarURL,
 		Introduction:  account.Introduction,
-		Mbti:          account.Mbti,
-		GroupName:     account.GroupName,
 		FollowCount:   account.FollowCount,
 		FollowerCount: account.FollowerCount,
-		BlockCount:    account.BlockCount,
-		BlockedCount:  account.BlockedCount,
+	}
+	if account.Mbti != nil {
+		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
 	}
 	if account.Status != nil {
 		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
@@ -101,12 +93,11 @@ func (s *AccountService) GetBasic(ctx context.Context, req *v1.GetBasicAccount_R
 		Url:           account.URL,
 		AvatarUrl:     account.AvatarURL,
 		Introduction:  account.Introduction,
-		Mbti:          account.Mbti,
-		GroupName:     account.GroupName,
 		FollowCount:   account.FollowCount,
 		FollowerCount: account.FollowerCount,
-		BlockCount:    account.BlockCount,
-		BlockedCount:  account.BlockedCount,
+	}
+	if account.Mbti != nil {
+		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
 	}
 	if account.Status != nil {
 		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
@@ -135,12 +126,11 @@ func (s *AccountService) BatchGetBasic(ctx context.Context, req *v1.BatchGetBasi
 			Url:           account.URL,
 			AvatarUrl:     account.AvatarURL,
 			Introduction:  account.Introduction,
-			Mbti:          account.Mbti,
-			GroupName:     account.GroupName,
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
-			BlockCount:    account.BlockCount,
-			BlockedCount:  account.BlockedCount,
+		}
+		if account.Mbti != nil {
+			basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
 		}
 		if account.Status != nil {
 			basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
@@ -194,14 +184,28 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	account, err := s.accountRepo.Update(ctx, &model.Account{
-		ID:           current.ID,
-		AvatarURL:    req.AvatarUrl,
-		Nickname:     req.Nickname,
-		URL:          req.Url,
-		Introduction: req.Introduction,
-		Mbti:         req.Mbti,
-	})
+	patch := &repo.AccountProfilePatch{
+		UserID:       current.ID,
+		AvatarURL:    repo.NewStringPatch(req.AvatarUrl),
+		Nickname:     repo.NewStringPatch(req.Nickname),
+		URL:          repo.NewStringPatch(req.Url),
+		Introduction: repo.NewStringPatch(req.Introduction),
+	}
+	if req.Mbti != nil {
+		if *req.Mbti == v1.MBTI_MBTI_UNSPECIFIED {
+			patch.Mbti = repo.MBTIPatch{Set: true, Clear: true}
+		} else {
+			mbti, ok := enum.MBTIMap.ToEnum(*req.Mbti)
+			if !ok {
+				return nil, cerrors.ErrorBadRequest("mbti is invalid")
+			}
+			patch.Mbti = repo.MBTIPatch{Set: true, Value: mbti}
+		}
+	}
+	if err := s.accountValidationUsecase.ValidateProfileUpdate(patch); err != nil {
+		return nil, err
+	}
+	account, err := s.accountRepo.UpdateProfile(ctx, patch)
 	if err != nil {
 		return nil, err
 	}
@@ -212,12 +216,11 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		Url:           account.URL,
 		AvatarUrl:     account.AvatarURL,
 		Introduction:  account.Introduction,
-		Mbti:          account.Mbti,
-		GroupName:     account.GroupName,
 		FollowCount:   account.FollowCount,
 		FollowerCount: account.FollowerCount,
-		BlockCount:    account.BlockCount,
-		BlockedCount:  account.BlockedCount,
+	}
+	if account.Mbti != nil {
+		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
 	}
 	if account.Status != nil {
 		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)

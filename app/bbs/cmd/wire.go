@@ -7,6 +7,7 @@
 package main
 
 import (
+	"bbs/internal/biz"
 	"bbs/internal/conf"
 	"bbs/internal/data"
 	"bbs/internal/server"
@@ -22,6 +23,7 @@ func wireApp(*conf.Bootstrap, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		server.ServerProviderSet,
 		service.ServiceProviderSet,
+		biz.BizProviderSet,
 		data.DataProviderSet,
 		newApp,
 	))

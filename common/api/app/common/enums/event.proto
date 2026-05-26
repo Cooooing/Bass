@@ -12,8 +12,15 @@ enum EventType {
   EVENT_TYPE_UNSPECIFIED = 0;
 
   // 用户事件（1000-1999）
-  EVENT_TYPE_USER_FOLLOW_CREATED = 1001; // 关注
-  EVENT_TYPE_USER_FOLLOW_DELETED = 1002; // 取消关注
+  EVENT_TYPE_USER_FOLLOW = 1001; // 关注用户
+  EVENT_TYPE_USER_UNFOLLOW = 1002; // 取消关注用户
+  EVENT_TYPE_USER_REGISTER = 1003; // 用户注册
+  EVENT_TYPE_USER_LOGIN = 1004; // 用户登录
+  EVENT_TYPE_USER_LOGOUT = 1005; // 用户登出
+  EVENT_TYPE_USER_BLOCK = 1010; // 拉黑用户
+  EVENT_TYPE_USER_UNBLOCK = 1011; // 取消拉黑用户
+  EVENT_TYPE_USER_TFA_ENABLE = 1012; // 启用双因子认证
+  EVENT_TYPE_USER_TFA_DISABLE = 1013; // 停用双因子认证
 
   // 内容文章事件（2000-2099）
   EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
@@ -29,6 +36,43 @@ enum EventType {
   // 即时通讯事件（3000-3999）
 
   // 平台事件（4000-4999）
+}
+
+// 事件主题 — 数值与对应 EventType 保持一致，内部映射为实际 MQ subject。
+enum EventSubject {
+  EVENT_SUBJECT_UNSPECIFIED = 0;
+
+  // 用户事件（1000-1999）
+  EVENT_SUBJECT_USER_FOLLOW = 1001; // user.follow
+  EVENT_SUBJECT_USER_UNFOLLOW = 1002; // user.unfollow
+  EVENT_SUBJECT_USER_REGISTER = 1003; // user.register
+  EVENT_SUBJECT_USER_LOGIN = 1004; // user.login
+  EVENT_SUBJECT_USER_LOGOUT = 1005; // user.logout
+  EVENT_SUBJECT_USER_BLOCK = 1010; // user.block
+  EVENT_SUBJECT_USER_UNBLOCK = 1011; // user.unblock
+  EVENT_SUBJECT_USER_TFA_ENABLE = 1012; // user.tfa.enable
+  EVENT_SUBJECT_USER_TFA_DISABLE = 1013; // user.tfa.disable
+
+  // 内容文章事件（2000-2099）
+  EVENT_SUBJECT_ARTICLE_PUBLISHED = 2001; // content.article.published
+  EVENT_SUBJECT_ARTICLE_LIKED = 2002; // content.article.liked
+  EVENT_SUBJECT_ARTICLE_THANKED = 2003; // content.article.thanked
+  EVENT_SUBJECT_ARTICLE_COLLECTED = 2004; // content.article.collected
+  EVENT_SUBJECT_ARTICLE_WATCHED = 2005; // content.article.watched
+
+  // 内容评论事件（2100-2199）
+  EVENT_SUBJECT_COMMENT_PUBLISHED = 2101; // content.comment.published
+  EVENT_SUBJECT_COMMENT_LIKED = 2102; // content.comment.liked
+
+  // 即时通讯事件（3000-3999）
+
+  // 平台事件（4000-4999）
+}
+
+// 事件消费队列组 — 映射为 NATS queue group。
+enum EventQueueGroup {
+  EVENT_QUEUE_GROUP_UNSPECIFIED = 0;
+  EVENT_QUEUE_GROUP_NOTIFY = 1; // notify
 }
 
 // outbox 事件投递状态。
@@ -59,18 +103,23 @@ message Event {
   EventType type = 2;
   // 事件发生时间
   google.protobuf.Timestamp timestamp = 3;
-  // 接收者 ID 列表（由生产者填好）
-  repeated int64 receiver_ids = 4;
-  // 业务数据，类型与 type 对应
+  // 业务数据，类型与 type 对应；字段号必须和 EventType 数值一致。
   oneof payload {
-    UserFollowCreatedPayload user_follow_created = 10;
-    UserFollowDeletedPayload user_follow_deleted = 11;
-    ArticlePublishedPayload article_published = 12;
-    ArticleLikedPayload article_liked = 13;
-    ArticleThankedPayload article_thanked = 14;
-    ArticleCollectedPayload article_collected = 15;
-    ArticleWatchedPayload article_watched = 16;
-    CommentPublishedPayload comment_published = 17;
-    CommentLikedPayload comment_liked = 18;
+    UserFollowPayload user_follow = 1001;
+    UserUnfollowPayload user_unfollow = 1002;
+    UserRegisterPayload user_register = 1003;
+    UserLoginPayload user_login = 1004;
+    UserLogoutPayload user_logout = 1005;
+    UserBlockPayload user_block = 1010;
+    UserUnblockPayload user_unblock = 1011;
+    UserTfaEnablePayload user_tfa_enable = 1012;
+    UserTfaDisablePayload user_tfa_disable = 1013;
+    ArticlePublishedPayload article_published = 2001;
+    ArticleLikedPayload article_liked = 2002;
+    ArticleThankedPayload article_thanked = 2003;
+    ArticleCollectedPayload article_collected = 2004;
+    ArticleWatchedPayload article_watched = 2005;
+    CommentPublishedPayload comment_published = 2101;
+    CommentLikedPayload comment_liked = 2102;
   }
 }

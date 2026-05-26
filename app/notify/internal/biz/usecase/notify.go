@@ -2,227 +2,465 @@ package usecase
 
 import (
 	"bytes"
-	"common/api/gen/common/enums"
-	v1 "common/api/gen/notify/v1"
-	"common/pkg/client/rpc"
-	utilent "common/pkg/util/ent"
+	commonenum "common/pkg/enum"
 	"context"
 	"errors"
-	"html/template"
+	"fmt"
 	base "notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/biz/usecase/sender"
-	"notify/internal/data/gen"
-	"notify/internal/data/gen/notificationmeta"
 	notifyenum "notify/internal/enum"
+	"text/template"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"google.golang.org/protobuf/proto"
 )
 
-// UserResolver 用户信息解析接口（由外部实现，RPC 获取手机号/邮箱等）
-type UserResolver interface {
-	Resolve(ctx context.Context, userID int64) (*sender.UserInfo, error)
+// UserContact 是 notify 从 user 服务读取的触达信息。
+type UserContact struct {
+	Phone string
+	Email string
 }
 
-// DeliveryRequest 投递请求
-type DeliveryRequest struct {
-	EventId     string
-	EventType   enums.EventType
-	ReceiverIDs []int64
-	Vars        any
+// UserClient 定义 notify 依赖的用户服务能力。
+type UserClient interface {
+	GetContacts(ctx context.Context, userIDs []int64) (map[int64]*UserContact, error)
+	ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error)
 }
 
-// NotifyUsecase 纯投递服务
+// NotificationIntent 是事件 handler 输出的通知意图。
+// 事件 payload 只表达事件事实；各渠道目标由 handler 或 NotifyUsecase 按业务需要补齐。
+type NotificationIntent struct {
+	EventID   string
+	EventType commonenum.EventType
+	Vars      any
+
+	Station []*StationInput
+	Email   []*EmailInput
+	SMS     []*SMSInput
+	Webhook []*WebhookInput
+}
+
+type StationInput struct {
+	UserID int64
+}
+
+type EmailInput struct {
+	UserID int64
+	Email  string
+	Name   string
+}
+
+type SMSInput struct {
+	UserID      int64
+	Phone       string
+	CountryCode string
+}
+
+type WebhookInput struct {
+	UserID     int64
+	EndpointID int64
+	URL        string
+}
+
+type notificationPrepared struct {
+	station    *stationPrepared
+	deliveries []*model.NotificationDelivery
+}
+
+type stationPrepared struct {
+	title       string
+	content     string
+	receiverIDs []int64
+}
+
+// NotifyUsecase 负责把通知意图写入站内信和外部投递任务。
 type NotifyUsecase struct {
 	log                      *log.Helper
 	tx                       base.Tx
+	userClient               UserClient
 	notificationMetaRepo     repo.NotificationMetaRepo
 	notificationRecordRepo   repo.NotificationRecordRepo
 	notificationTemplateRepo repo.NotificationTemplateRepo
 	notificationSettingRepo  repo.NotificationSettingRepo
-	userClient               *rpc.UserClient
-	userResolver             UserResolver
-	senders                  *sender.Registry
+	notificationDeliveryRepo repo.NotificationDeliveryRepo
 }
 
 func NewNotifyUsecase(
 	logger log.Logger,
 	tx base.Tx,
+	userClient UserClient,
 	notificationMetaRepo repo.NotificationMetaRepo,
 	notificationRecordRepo repo.NotificationRecordRepo,
 	notificationTemplateRepo repo.NotificationTemplateRepo,
 	notificationSettingRepo repo.NotificationSettingRepo,
-	userClient *rpc.UserClient,
-	userResolver UserResolver,
-	senders *sender.Registry,
+	notificationDeliveryRepo repo.NotificationDeliveryRepo,
 ) *NotifyUsecase {
 	return &NotifyUsecase{
 		log:                      log.NewHelper(logger),
 		tx:                       tx,
+		userClient:               userClient,
 		notificationMetaRepo:     notificationMetaRepo,
 		notificationRecordRepo:   notificationRecordRepo,
 		notificationTemplateRepo: notificationTemplateRepo,
 		notificationSettingRepo:  notificationSettingRepo,
-		userClient:               userClient,
-		userResolver:             userResolver,
-		senders:                  senders,
+		notificationDeliveryRepo: notificationDeliveryRepo,
 	}
 }
 
-// Deliver 投递通知
-func (s *NotifyUsecase) Deliver(ctx context.Context, req *DeliveryRequest) error {
-	if len(req.ReceiverIDs) == 0 {
+func (s *NotifyUsecase) Create(ctx context.Context, intent *NotificationIntent) error {
+	prepared, err := s.prepare(ctx, intent)
+	if err != nil {
+		return err
+	}
+	if prepared == nil || (prepared.station == nil && len(prepared.deliveries) == 0) {
 		return nil
 	}
-
-	// 1. 序列化 payload
-	var payloadBytes []byte
-	if pm, ok := req.Vars.(proto.Message); ok {
-		payloadBytes, _ = proto.Marshal(pm)
-	}
-
-	// 2. 创建 notification_meta（uuid 唯一约束保证幂等）
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return errors.New("no client in context")
-	}
-	dbEventType, _ := notifyenum.EventTypeMap.ToEnum(req.EventType)
-	meta, err := s.notificationMetaRepo.Save(ctx, c, &model.NotificationMeta{
-		NotificationMeta: &gen.NotificationMeta{
-			UUID:      req.EventId,
-			EventType: notificationmeta.EventType(dbEventType),
-			Meta:      payloadBytes,
-			Status:    notificationmeta.StatusNormal,
-		},
+	return s.tx(ctx, func(ctx context.Context) error {
+		return s.savePrepared(ctx, prepared)
 	})
-	if err != nil {
-		s.log.Infof("duplicate event or save failed, skip: event_id=%s err=%v", req.EventId, err)
-		return nil
-	}
-
-	// 3. 逐接收者投递（每个用户可能有不同语言，模板在投递时按语言查询）
-	for _, receiverID := range req.ReceiverIDs {
-		s.deliverToReceiver(ctx, req, receiverID, meta.ID)
-	}
-
-	return nil
 }
 
-func (s *NotifyUsecase) deliverToReceiver(
-	ctx context.Context,
-	req *DeliveryRequest,
-	receiverID int64,
-	metaID int64,
-) {
-	// 1. 查用户语言
-	language := s.getLanguage(ctx, receiverID)
+func (s *NotifyUsecase) prepare(ctx context.Context, intent *NotificationIntent) (*notificationPrepared, error) {
+	prepared := &notificationPrepared{}
+	if intent == nil || (len(intent.Station) == 0 && len(intent.Email) == 0 && len(intent.SMS) == 0 && len(intent.Webhook) == 0) {
+		return prepared, nil
+	}
+	if intent.EventID == "" {
+		return nil, errors.New("event id is required")
+	}
+	protoEventType, ok := commonenum.EventTypeMap.ToProto(intent.EventType)
+	if !ok {
+		return nil, errors.New("event type is invalid")
+	}
 
-	// 2. 查该语言的模板
-	templates, err := s.notificationTemplateRepo.GetTemplates(ctx, req.EventType, language)
+	templates, err := s.notificationTemplateRepo.GetTemplates(ctx, protoEventType, string(notifyenum.LanguageZhCN))
 	if err != nil {
-		s.log.Errorf("get templates failed: type=%v lang=%s err=%v", req.EventType, language, err)
-		return
+		return nil, err
 	}
-	if len(templates) == 0 {
-		s.log.Warnf("no templates found: type=%v lang=%s", req.EventType, language)
-		return
-	}
-
-	// 3. 渲染模板
-	rendered := make(map[v1.NotificationChannel]struct{ Title, Content string })
+	templatesByChannel := make(map[notifyenum.NotificationChannel]*model.NotificationTemplate, len(templates))
 	for _, tpl := range templates {
-		ch := sender.ChannelToProto(string(tpl.Channel))
-		rendered[ch] = struct{ Title, Content string }{
-			Title:   s.render(tpl.Title, req.Vars),
-			Content: s.render(tpl.Content, req.Vars),
+		if tpl != nil {
+			templatesByChannel[tpl.Channel] = tpl
+		}
+	}
+	if len(templatesByChannel) == 0 {
+		return prepared, nil
+	}
+
+	settingUserIDs := make([]int64, 0)
+	contactUserIDs := make([]int64, 0)
+	seenSettingUserIDs := make(map[int64]struct{})
+	seenContactUserIDs := make(map[int64]struct{})
+	for _, input := range intent.Station {
+		if input == nil || input.UserID == 0 {
+			continue
+		}
+		if _, exists := seenSettingUserIDs[input.UserID]; exists {
+			continue
+		}
+		seenSettingUserIDs[input.UserID] = struct{}{}
+		settingUserIDs = append(settingUserIDs, input.UserID)
+	}
+	for _, input := range intent.Email {
+		if input == nil {
+			continue
+		}
+		if input.UserID != 0 {
+			if _, exists := seenSettingUserIDs[input.UserID]; !exists {
+				seenSettingUserIDs[input.UserID] = struct{}{}
+				settingUserIDs = append(settingUserIDs, input.UserID)
+			}
+		}
+		if input.Email == "" && input.UserID != 0 {
+			if _, exists := seenContactUserIDs[input.UserID]; exists {
+				continue
+			}
+			seenContactUserIDs[input.UserID] = struct{}{}
+			contactUserIDs = append(contactUserIDs, input.UserID)
+		}
+	}
+	for _, input := range intent.SMS {
+		if input == nil {
+			continue
+		}
+		if input.UserID != 0 {
+			if _, exists := seenSettingUserIDs[input.UserID]; !exists {
+				seenSettingUserIDs[input.UserID] = struct{}{}
+				settingUserIDs = append(settingUserIDs, input.UserID)
+			}
+		}
+		if input.Phone == "" && input.UserID != 0 {
+			if _, exists := seenContactUserIDs[input.UserID]; exists {
+				continue
+			}
+			seenContactUserIDs[input.UserID] = struct{}{}
+			contactUserIDs = append(contactUserIDs, input.UserID)
+		}
+	}
+	for _, input := range intent.Webhook {
+		if input == nil || input.UserID == 0 {
+			continue
+		}
+		if _, exists := seenSettingUserIDs[input.UserID]; exists {
+			continue
+		}
+		seenSettingUserIDs[input.UserID] = struct{}{}
+		settingUserIDs = append(settingUserIDs, input.UserID)
+	}
+
+	// 直接邮箱、手机号和 Webhook URL 可以没有系统用户；用户偏好只作用于带 UserID 的目标。
+	settingsByUserID := make(map[int64]map[notifyenum.NotificationChannel]bool)
+	if len(settingUserIDs) > 0 {
+		settings, err := s.notificationSettingRepo.List(ctx, &repo.NotificationSettingGetReq{
+			UserIDs:   settingUserIDs,
+			EventType: &protoEventType,
+		})
+		if err != nil {
+			return nil, err
+		}
+		for _, setting := range settings {
+			if setting == nil {
+				continue
+			}
+			if _, hasTemplate := templatesByChannel[setting.Channel]; !hasTemplate {
+				continue
+			}
+			if settingsByUserID[setting.UserID] == nil {
+				settingsByUserID[setting.UserID] = make(map[notifyenum.NotificationChannel]bool)
+			}
+			settingsByUserID[setting.UserID][setting.Channel] = setting.Enable
 		}
 	}
 
-	// 4. 查用户偏好
-	prefs, err := s.getUserPrefs(ctx, receiverID, req.EventType)
-	if err != nil {
-		s.log.Errorf("get user prefs failed: user=%d err=%v", receiverID, err)
+	contactsByUserID := map[int64]*UserContact{}
+	if len(contactUserIDs) > 0 && s.userClient != nil {
+		contactsByUserID, err = s.userClient.GetContacts(ctx, contactUserIDs)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	// 5. 确定可用渠道
-	enabledChannels := make(map[v1.NotificationChannel]bool)
-	for ch := range rendered {
-		enabledChannels[ch] = true
-	}
-	if len(prefs) > 0 {
-		for ch := range enabledChannels {
-			enabledChannels[ch] = false
+	// 模板 channel 决定本次实际生成哪些目标；没有模板的 channel 不产生通知数据。
+	if tpl := templatesByChannel[notifyenum.NotificationChannelStation]; tpl != nil {
+		receiverIDs := make([]int64, 0, len(intent.Station))
+		seenReceiverIDs := make(map[int64]struct{}, len(intent.Station))
+		for _, input := range intent.Station {
+			if input == nil || input.UserID == 0 {
+				continue
+			}
+			if settingsByChannel := settingsByUserID[input.UserID]; settingsByChannel != nil {
+				if enable, exists := settingsByChannel[notifyenum.NotificationChannelStation]; exists && !enable {
+					continue
+				}
+			}
+			if _, exists := seenReceiverIDs[input.UserID]; exists {
+				continue
+			}
+			seenReceiverIDs[input.UserID] = struct{}{}
+			receiverIDs = append(receiverIDs, input.UserID)
 		}
-		for _, p := range prefs {
-			if p.Enable {
-				enabledChannels[sender.ChannelToProto(string(p.Channel))] = true
+		if len(receiverIDs) > 0 {
+			title, err := renderTemplate(tpl.Title, intent.Vars)
+			if err != nil {
+				return nil, err
+			}
+			content, err := renderTemplate(tpl.Content, intent.Vars)
+			if err != nil {
+				return nil, err
+			}
+			prepared.station = &stationPrepared{
+				title:       title,
+				content:     content,
+				receiverIDs: receiverIDs,
 			}
 		}
 	}
 
-	// 6. 获取用户联系信息
-	var userInfo sender.UserInfo
-	if s.userResolver != nil {
-		info, err := s.userResolver.Resolve(ctx, receiverID)
+	if tpl := templatesByChannel[notifyenum.NotificationChannelEmail]; tpl != nil {
+		title, err := renderTemplate(tpl.Title, intent.Vars)
 		if err != nil {
-			s.log.Errorf("resolve user info failed: user=%d err=%v", receiverID, err)
-		} else if info != nil {
-			userInfo = *info
+			return nil, err
+		}
+		content, err := renderTemplate(tpl.Content, intent.Vars)
+		if err != nil {
+			return nil, err
+		}
+		seenTargets := make(map[string]struct{}, len(intent.Email))
+		for _, input := range intent.Email {
+			if input == nil {
+				continue
+			}
+			if input.UserID != 0 {
+				if settingsByChannel := settingsByUserID[input.UserID]; settingsByChannel != nil {
+					if enable, exists := settingsByChannel[notifyenum.NotificationChannelEmail]; exists && !enable {
+						continue
+					}
+				}
+			}
+			target := input.Email
+			if target == "" {
+				if contact := contactsByUserID[input.UserID]; contact != nil {
+					target = contact.Email
+				}
+			}
+			if target == "" {
+				continue
+			}
+			if _, exists := seenTargets[target]; exists {
+				continue
+			}
+			seenTargets[target] = struct{}{}
+			delivery := &model.NotificationDelivery{
+				EventID:   intent.EventID,
+				EventType: intent.EventType,
+				Channel:   notifyenum.NotificationChannelEmail,
+				Target:    target,
+				Title:     title,
+				Content:   content,
+				Status:    notifyenum.NotificationDeliveryStatusPending,
+			}
+			if input.UserID != 0 {
+				delivery.ReceiverID = new(input.UserID)
+			}
+			prepared.deliveries = append(prepared.deliveries, delivery)
 		}
 	}
 
-	// 7. 按渠道发送
-	for ch, enabled := range enabledChannels {
-		if !enabled {
-			continue
+	if tpl := templatesByChannel[notifyenum.NotificationChannelSMS]; tpl != nil {
+		title, err := renderTemplate(tpl.Title, intent.Vars)
+		if err != nil {
+			return nil, err
 		}
-		r := rendered[ch]
-		if err := s.senders.Send(ctx, ch, &sender.SendRequest{
-			ReceiverID: receiverID,
-			Title:      r.Title,
-			Content:    r.Content,
-			UserInfo:   userInfo,
-		}); err != nil {
-			s.log.Errorf("send failed: channel=%v receiver=%d err=%v", ch, receiverID, err)
+		content, err := renderTemplate(tpl.Content, intent.Vars)
+		if err != nil {
+			return nil, err
+		}
+		seenTargets := make(map[string]struct{}, len(intent.SMS))
+		for _, input := range intent.SMS {
+			if input == nil {
+				continue
+			}
+			if input.UserID != 0 {
+				if settingsByChannel := settingsByUserID[input.UserID]; settingsByChannel != nil {
+					if enable, exists := settingsByChannel[notifyenum.NotificationChannelSMS]; exists && !enable {
+						continue
+					}
+				}
+			}
+			target := input.Phone
+			if target == "" {
+				if contact := contactsByUserID[input.UserID]; contact != nil {
+					target = contact.Phone
+				}
+			}
+			if target == "" {
+				continue
+			}
+			if input.CountryCode != "" {
+				target = input.CountryCode + target
+			}
+			if _, exists := seenTargets[target]; exists {
+				continue
+			}
+			seenTargets[target] = struct{}{}
+			delivery := &model.NotificationDelivery{
+				EventID:   intent.EventID,
+				EventType: intent.EventType,
+				Channel:   notifyenum.NotificationChannelSMS,
+				Target:    target,
+				Title:     title,
+				Content:   content,
+				Status:    notifyenum.NotificationDeliveryStatusPending,
+			}
+			if input.UserID != 0 {
+				delivery.ReceiverID = new(input.UserID)
+			}
+			prepared.deliveries = append(prepared.deliveries, delivery)
 		}
 	}
 
-	// 8. 创建 notification_record
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		s.log.Errorf("no client in context for notification record")
-		return
+	if tpl := templatesByChannel[notifyenum.NotificationChannelWebhook]; tpl != nil {
+		title, err := renderTemplate(tpl.Title, intent.Vars)
+		if err != nil {
+			return nil, err
+		}
+		content, err := renderTemplate(tpl.Content, intent.Vars)
+		if err != nil {
+			return nil, err
+		}
+		seenTargets := make(map[string]struct{}, len(intent.Webhook))
+		for _, input := range intent.Webhook {
+			if input == nil || input.URL == "" {
+				continue
+			}
+			if input.UserID != 0 {
+				if settingsByChannel := settingsByUserID[input.UserID]; settingsByChannel != nil {
+					if enable, exists := settingsByChannel[notifyenum.NotificationChannelWebhook]; exists && !enable {
+						continue
+					}
+				}
+			}
+			if _, exists := seenTargets[input.URL]; exists {
+				continue
+			}
+			seenTargets[input.URL] = struct{}{}
+			delivery := &model.NotificationDelivery{
+				EventID:   intent.EventID,
+				EventType: intent.EventType,
+				Channel:   notifyenum.NotificationChannelWebhook,
+				Target:    input.URL,
+				Title:     title,
+				Content:   content,
+				Status:    notifyenum.NotificationDeliveryStatusPending,
+			}
+			if input.UserID != 0 {
+				delivery.ReceiverID = new(input.UserID)
+			}
+			prepared.deliveries = append(prepared.deliveries, delivery)
+		}
 	}
-	_, err = s.notificationRecordRepo.Save(ctx, c, &model.NotificationRecord{
-		NotificationRecord: &gen.NotificationRecord{
-			NotificationID: metaID,
-			ReceiverID:     receiverID,
-		},
-	})
-	if err != nil {
-		s.log.Errorf("create notification record failed: receiver=%d err=%v", receiverID, err)
-	}
+	return prepared, nil
 }
 
-func (s *NotifyUsecase) getUserPrefs(ctx context.Context, userID int64, eventType enums.EventType) ([]*model.NotificationSetting, error) {
-	return s.notificationSettingRepo.List(ctx, &repo.NotificationSettingGetReq{
-		UserID:    &userID,
-		EventType: &eventType,
-	})
+func (s *NotifyUsecase) savePrepared(ctx context.Context, prepared *notificationPrepared) error {
+	if prepared == nil {
+		return nil
+	}
+	if prepared.station != nil && len(prepared.station.receiverIDs) > 0 {
+		meta, err := s.notificationMetaRepo.Save(ctx, &model.NotificationMeta{
+			Title:   prepared.station.title,
+			Content: prepared.station.content,
+			Status:  notifyenum.NotificationStatusNormal,
+		})
+		if err != nil {
+			return err
+		}
+		records := make([]*model.NotificationRecord, 0, len(prepared.station.receiverIDs))
+		for _, receiverID := range prepared.station.receiverIDs {
+			records = append(records, &model.NotificationRecord{
+				NotificationID: meta.ID,
+				ReceiverID:     receiverID,
+			})
+		}
+		if _, err := s.notificationRecordRepo.Saves(ctx, records); err != nil {
+			return err
+		}
+	}
+	if len(prepared.deliveries) == 0 {
+		return nil
+	}
+	_, err := s.notificationDeliveryRepo.Saves(ctx, prepared.deliveries)
+	return err
 }
 
-func (s *NotifyUsecase) render(tplStr string, variables any) string {
-	tpl, err := template.New("").Parse(tplStr)
+func renderTemplate(tplStr string, variables any) (string, error) {
+	tpl, err := template.New("").Option("missingkey=error").Parse(tplStr)
 	if err != nil {
-		s.log.Errorf("parse template failed: %v", err)
-		return tplStr
+		return "", fmt.Errorf("parse notification template: %w", err)
 	}
 	var buf bytes.Buffer
 	if err := tpl.Execute(&buf, variables); err != nil {
-		s.log.Errorf("execute template failed: %v", err)
-		return tplStr
+		return "", fmt.Errorf("execute notification template: %w", err)
 	}
-	return buf.String()
+	return buf.String(), nil
 }

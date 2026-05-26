@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+import "common/enums/event.proto";
+import "google/api/annotations.proto";
+import "notify/v1/enum.proto";
+import "notify/v1/model.proto";
+
+option go_package = "common/api/gen/notify/v1;v1";
+
+service NotifyNotificationSettingService {
+  // 查询当前登录账号的通知设置。
+  rpc ListCurrent(ListCurrentNotificationSetting.Request) returns (ListCurrentNotificationSetting.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notification-setting/list-current"
+      body: "*"
+    };
+  }
+
+  // 更新当前登录账号的通知设置。
+  rpc UpdateCurrent(UpdateCurrentNotificationSetting.Request) returns (UpdateCurrentNotificationSetting.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notification-setting/update-current"
+      body: "*"
+    };
+  }
+}
+
+message ListCurrentNotificationSetting {
+  message Request {
+    NotificationSettingQueryParams query = 1;
+  }
+  message Reply {
+    repeated NotificationSetting rows = 1;
+  }
+}
+
+message UpdateCurrentNotificationSetting {
+  message Request {
+    common.enums.EventType event_type = 1;
+    NotificationChannel channel = 2;
+    bool enable = 3;
+  }
+  message Reply {
+    NotificationSetting notification_setting = 1;
+  }
+}

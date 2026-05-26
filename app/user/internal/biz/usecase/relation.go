@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"common/api/gen/common"
+	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/util"
+	commonenum "common/pkg/enum"
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -15,29 +16,30 @@ import (
 
 type RelationUsecase struct {
 	tx           base.Tx
-	eventPool    *util.EventPool
 	relationRepo repo.RelationRepo
 	accountRepo  repo.AccountRepo
+	outboxRepo   repo.OutboxEventRepo
 }
 
 func NewRelationUsecase(
 	tx base.Tx,
-	eventPool *util.EventPool,
 	relationRepo repo.RelationRepo,
 	accountRepo repo.AccountRepo,
+	outboxRepo repo.OutboxEventRepo,
 ) (*RelationUsecase, error) {
 	return &RelationUsecase{
 		tx:           tx,
-		eventPool:    eventPool,
 		relationRepo: relationRepo,
 		accountRepo:  accountRepo,
+		outboxRepo:   outboxRepo,
 	}, nil
 }
 
-// UpdateRelation 创建或移除一条有向关系，并在同一事务中维护两侧冗余计数。
+// UpdateRelation 创建或移除一条有向关系，并为关注关系维护两侧冗余计数。
 func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.RelationType, isAdd bool, actorID int64, targetID int64) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
 		var delta int32
+		var actor *model.Account
 
 		dbRelationType, ok := enum.RelationTypeMap.ToEnum(relationType)
 		if !ok {
@@ -51,6 +53,13 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 		})
 		if err != nil {
 			return err
+		}
+
+		if relationType == v1.RelationType_RELATION_TYPE_FOLLOW || relationType == v1.RelationType_RELATION_TYPE_BLOCK {
+			actor, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &actorID})
+			if err != nil {
+				return err
+			}
 		}
 
 		if isAdd {
@@ -89,14 +98,66 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 			if _, err = d.accountRepo.AddStat(ctx, actorID, enum.AccountStatTypeFollow, delta); err != nil {
 				return err
 			}
-			_, err = d.accountRepo.AddStat(ctx, targetID, enum.AccountStatTypeFollower, delta)
-			return err
-		case v1.RelationType_RELATION_TYPE_BLOCK:
-			if _, err = d.accountRepo.AddStat(ctx, actorID, enum.AccountStatTypeBlock, delta); err != nil {
+			if _, err = d.accountRepo.AddStat(ctx, targetID, enum.AccountStatTypeFollower, delta); err != nil {
 				return err
 			}
-			_, err = d.accountRepo.AddStat(ctx, targetID, enum.AccountStatTypeBlocked, delta)
-			return err
+			if isAdd {
+				return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+					EventType: commonenum.EventTypeUserFollow,
+					Subject:   commonenum.EventSubjectUserFollow,
+					Event: &commonenums.Event{
+						Payload: &commonenums.Event_UserFollow{
+							UserFollow: &commonenums.UserFollowPayload{
+								SenderId:   actor.ID,
+								SenderName: accountDisplayName(actor),
+								FollowedId: targetID,
+							},
+						},
+					},
+				})
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				EventType: commonenum.EventTypeUserUnfollow,
+				Subject:   commonenum.EventSubjectUserUnfollow,
+				Event: &commonenums.Event{
+					Payload: &commonenums.Event_UserUnfollow{
+						UserUnfollow: &commonenums.UserUnfollowPayload{
+							SenderId:   actor.ID,
+							SenderName: accountDisplayName(actor),
+							FollowedId: targetID,
+						},
+					},
+				},
+			})
+		case v1.RelationType_RELATION_TYPE_BLOCK:
+			if isAdd {
+				return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+					EventType: commonenum.EventTypeUserBlock,
+					Subject:   commonenum.EventSubjectUserBlock,
+					Event: &commonenums.Event{
+						Payload: &commonenums.Event_UserBlock{
+							UserBlock: &commonenums.UserBlockPayload{
+								SenderId:   actor.ID,
+								SenderName: accountDisplayName(actor),
+								BlockedId:  targetID,
+							},
+						},
+					},
+				})
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				EventType: commonenum.EventTypeUserUnblock,
+				Subject:   commonenum.EventSubjectUserUnblock,
+				Event: &commonenums.Event{
+					Payload: &commonenums.Event_UserUnblock{
+						UserUnblock: &commonenums.UserUnblockPayload{
+							SenderId:    actor.ID,
+							SenderName:  accountDisplayName(actor),
+							UnblockedId: targetID,
+						},
+					},
+				},
+			})
 		default:
 			return cerrors.ErrorBadRequest("unknown relation type")
 		}
@@ -104,14 +165,16 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 	if err != nil {
 		return err
 	}
-
-	// 关注通知属于 outbox 职责；第一版 schema 先保留空 hook，等待分发器和事件构建器接入。
-	if relationType == v1.RelationType_RELATION_TYPE_FOLLOW {
-		return d.eventPool.Submit(func() {})
-	}
 	return nil
 }
 
 func (d *RelationUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.RelationGetReq) ([]*model.Relation, *common.PageReply, error) {
 	return d.relationRepo.Page(ctx, page, req)
+}
+
+func accountDisplayName(account *model.Account) string {
+	if account.Nickname != nil && *account.Nickname != "" {
+		return *account.Nickname
+	}
+	return account.Name
 }

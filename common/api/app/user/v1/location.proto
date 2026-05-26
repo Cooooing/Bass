@@ -11,7 +11,7 @@ service LocationService {
   rpc GetCurrent(GetCurrentLocation.Request) returns (GetCurrentLocation.Reply) {}
 
   // 更新当前登录账号的地理资料；缺省扩展表使用 upsert 创建。
-  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Reply) {}
+  rpc UpsertCurrent(UpsertCurrentLocation.Request) returns (UpsertCurrentLocation.Reply) {}
 }
 
 message GetCurrentLocation {
@@ -21,7 +21,7 @@ message GetCurrentLocation {
   }
 }
 
-message UpsertLocation {
+message UpsertCurrentLocation {
   message Request {
     optional string country = 1;
     optional string province = 2;

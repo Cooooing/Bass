@@ -1,0 +1,31 @@
+package service
+
+import (
+	"bbs/internal/biz/usecase"
+	bbscontentv1 "common/api/gen/bbs/v1/content"
+	"context"
+
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
+)
+
+type ContentPostscriptService struct {
+	bbscontentv1.UnimplementedPostscriptServiceServer
+	contentUsecase *usecase.ContentUsecase
+}
+
+func NewContentPostscriptService(contentUsecase *usecase.ContentUsecase) *ContentPostscriptService {
+	return &ContentPostscriptService{contentUsecase: contentUsecase}
+}
+
+func (s *ContentPostscriptService) RegisterGrpc(gs *grpc.Server) {
+	bbscontentv1.RegisterPostscriptServiceServer(gs, s)
+}
+
+func (s *ContentPostscriptService) RegisterHttp(hs *http.Server) {
+	bbscontentv1.RegisterPostscriptServiceHTTPServer(hs, s)
+}
+
+func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Request) (*bbscontentv1.AddPostscript_Reply, error) {
+	return s.contentUsecase.AddPostscript(ctx, req)
+}

@@ -11,23 +11,31 @@ option go_package = "common/api/gen/notify/v1;v1";
 // NotificationRecord 服务
 service NotifyNotificationRecordService {
   // 查询通知详情数据
-  rpc Page(PageNotificationRecord.Request) returns (PageNotificationRecord.Reply) {
+  rpc List(ListNotificationRecords.Request) returns (ListNotificationRecords.Reply) {
     option (google.api.http) = {
-      post: "/v1/notification-record/page"
+      post: "/v1/notification-record/list"
       body: "*"
     };
   }
 
   // 已读
-  rpc Read(ReadNotificationRecord.Request) returns (ReadNotificationRecord.Reply) {
+  rpc MarkRead(MarkReadNotificationRecord.Request) returns (MarkReadNotificationRecord.Reply) {
     option (google.api.http) = {
-      post: "/v1/notification-record/read"
+      post: "/v1/notification-record/mark-read"
+      body: "*"
+    };
+  }
+
+  // 查询当前登录账号未读数量
+  rpc CountUnread(CountUnreadNotificationRecords.Request) returns (CountUnreadNotificationRecords.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notification-record/count-unread"
       body: "*"
     };
   }
 }
 
-message PageNotificationRecord {
+message ListNotificationRecords {
   message Request {
     // 分页参数
     common.PageRequest page = 1;
@@ -42,7 +50,7 @@ message PageNotificationRecord {
   }
 }
 
-message ReadNotificationRecord {
+message MarkReadNotificationRecord {
   message Request {
     // 通知 ID 列表
     repeated int64 ids = 1;
@@ -54,5 +62,12 @@ message ReadNotificationRecord {
   message Reply {
     // 已读数量
     int32 count = 1;
+  }
+}
+
+message CountUnreadNotificationRecords {
+  message Request {}
+  message Reply {
+    int64 count = 1;
   }
 }

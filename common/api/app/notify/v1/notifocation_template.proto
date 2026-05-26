@@ -13,17 +13,17 @@ option go_package = "common/api/gen/notify/v1;v1";
 // NotificationTemplate 服务
 service NotifyNotificationTemplateService {
   // 查询通知模板
-  rpc Page(PageNotificationTemplate.Request) returns (PageNotificationTemplate.Reply) {
+  rpc List(ListNotificationTemplates.Request) returns (ListNotificationTemplates.Reply) {
     option (google.api.http) = {
-      post: "/v1/notification-template/page"
+      post: "/v1/notification-template/list"
       body: "*"
     };
   }
 
   // 添加通知模板
-  rpc Add(AddNotificationTemplate.Request) returns (AddNotificationTemplate.Reply) {
+  rpc Create(CreateNotificationTemplate.Request) returns (CreateNotificationTemplate.Reply) {
     option (google.api.http) = {
-      post: "/v1/notification-template/add"
+      post: "/v1/notification-template/create"
       body: "*"
     };
   }
@@ -37,7 +37,7 @@ service NotifyNotificationTemplateService {
   }
 }
 
-message PageNotificationTemplate {
+message ListNotificationTemplates {
   message Request {
     // 分页参数
     common.PageRequest page = 1;
@@ -52,7 +52,7 @@ message PageNotificationTemplate {
   }
 }
 
-message AddNotificationTemplate {
+message CreateNotificationTemplate {
   message Request {
     // 通知模板
     NotificationTemplate notification_template = 2;

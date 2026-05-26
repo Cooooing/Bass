@@ -18,26 +18,26 @@ import (
 )
 
 type Qiniu struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
+	conf         *conf.Bootstrap
+	log          *log.Helper
+	db           *gen.Client
+	consulClient *commonClient.ConsulClient
+	redisClient  *commonClient.RedisClient
 }
 
 func NewQiniu(
 	conf *conf.Bootstrap,
 	logger log.Logger,
 	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
+	consulClient *commonClient.ConsulClient,
+	redisClient *commonClient.RedisClient,
 ) *Qiniu {
 	return &Qiniu{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
+		conf:         conf,
+		log:          log.NewHelper(logger),
+		db:           db,
+		consulClient: consulClient,
+		redisClient:  redisClient,
 	}
 }
 
@@ -57,7 +57,19 @@ func (q *Qiniu) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 	if err != nil {
 		return nil, err
 	}
-	return &model.ObjectStorage{ObjectStorage: save}, nil
+	return &model.ObjectStorage{
+		ID:           save.ID,
+		Provider:     save.Provider,
+		Bucket:       save.Bucket,
+		Key:          save.Key,
+		MimeType:     save.MimeType,
+		Size:         save.Size,
+		Hash:         save.Hash,
+		UploadBy:     save.UploadBy,
+		UploadByName: save.UploadByName,
+		CreatedAt:    save.CreatedAt,
+		UpdatedAt:    save.UpdatedAt,
+	}, nil
 }
 
 func (q *Qiniu) UploadToken(ctx context.Context, key string) (string, error) {

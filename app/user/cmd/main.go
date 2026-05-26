@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"user/internal/conf"
+	"user/internal/data"
 	"user/internal/server"
 
 	"github.com/go-kratos/kratos/v2"
@@ -33,7 +34,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *data.OutboxPublisher, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -44,7 +45,7 @@ func newApp(logger log.Logger, gs *grpc.Server, cc *commonClient.ConsulClient) *
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(gs),
+		kratos.Server(gs, outboxPublisher),
 		kratos.Registrar(cc.Registrar()),
 	)
 }

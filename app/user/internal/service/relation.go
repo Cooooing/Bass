@@ -78,12 +78,12 @@ func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_R
 	return &v1.UnblockRelation_Reply{}, err
 }
 
-func (s *RelationService) PageFollowing(ctx context.Context, req *v1.PageFollowingRelation_Request) (*v1.PageFollowingRelation_Reply, error) {
+func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Request) (*v1.ListFollowingRelations_Reply, error) {
 	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	req = util.OrDefault(req, &v1.PageFollowingRelation_Request{})
+	req = util.OrDefault(req, &v1.ListFollowingRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
 	relationType := v1.RelationType_RELATION_TYPE_FOLLOW
 	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{ActorId: &current.ID, Type: &relationType})
@@ -101,15 +101,15 @@ func (s *RelationService) PageFollowing(ctx context.Context, req *v1.PageFollowi
 		}
 		replyRows = append(replyRows, reply)
 	}
-	return &v1.PageFollowingRelation_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListFollowingRelations_Reply{Page: page, Rows: replyRows}, nil
 }
 
-func (s *RelationService) PageFollowers(ctx context.Context, req *v1.PageFollowersRelation_Request) (*v1.PageFollowersRelation_Reply, error) {
+func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowersRelations_Request) (*v1.ListFollowersRelations_Reply, error) {
 	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	req = util.OrDefault(req, &v1.PageFollowersRelation_Request{})
+	req = util.OrDefault(req, &v1.ListFollowersRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
 	relationType := v1.RelationType_RELATION_TYPE_FOLLOW
 	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{TargetId: &current.ID, Type: &relationType})
@@ -127,15 +127,33 @@ func (s *RelationService) PageFollowers(ctx context.Context, req *v1.PageFollowe
 		}
 		replyRows = append(replyRows, reply)
 	}
-	return &v1.PageFollowersRelation_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListFollowersRelations_Reply{Page: page, Rows: replyRows}, nil
 }
 
-func (s *RelationService) PageBlocked(ctx context.Context, req *v1.PageBlockedRelation_Request) (*v1.PageBlockedRelation_Reply, error) {
+func (s *RelationService) ListFollowerIds(ctx context.Context, req *v1.ListFollowerIdsRelation_Request) (*v1.ListFollowerIdsRelation_Reply, error) {
+	req = util.OrDefault(req, &v1.ListFollowerIdsRelation_Request{})
+	if req.UserId == 0 {
+		return nil, cerrors.ErrorBadRequest("user id is required")
+	}
+	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
+	relationType := v1.RelationType_RELATION_TYPE_FOLLOW
+	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{TargetId: &req.UserId, Type: &relationType})
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(rows))
+	for _, row := range rows {
+		userIDs = append(userIDs, row.ActorID)
+	}
+	return &v1.ListFollowerIdsRelation_Reply{Page: page, UserIds: userIDs}, nil
+}
+
+func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRelations_Request) (*v1.ListBlockedRelations_Reply, error) {
 	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	req = util.OrDefault(req, &v1.PageBlockedRelation_Request{})
+	req = util.OrDefault(req, &v1.ListBlockedRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
 	relationType := v1.RelationType_RELATION_TYPE_BLOCK
 	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{ActorId: &current.ID, Type: &relationType})
@@ -153,7 +171,7 @@ func (s *RelationService) PageBlocked(ctx context.Context, req *v1.PageBlockedRe
 		}
 		replyRows = append(replyRows, reply)
 	}
-	return &v1.PageBlockedRelation_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListBlockedRelations_Reply{Page: page, Rows: replyRows}, nil
 }
 
 func (s *RelationService) BatchGetStatus(ctx context.Context, req *v1.BatchGetStatusRelation_Request) (*v1.BatchGetStatusRelation_Reply, error) {

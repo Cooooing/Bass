@@ -23,9 +23,9 @@ service NotifyOssService {
     };
   }
 
-  rpc Page(PageOssOss.Request) returns (PageOssOss.Reply) {
+  rpc List(ListOss.Request) returns (ListOss.Reply) {
     option (google.api.http) = {
-      post: "/v1/oss/page"
+      post: "/v1/oss/list"
       body: "*"
     };
   }
@@ -63,7 +63,7 @@ message AuditOss {
   message Reply {}
 }
 
-message PageOssOss {
+message ListOss {
   message Request {
     common.PageRequest page = 1;
     OssQueryParams query = 2;

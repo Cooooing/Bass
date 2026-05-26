@@ -35,7 +35,10 @@ func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *v1.GetCurre
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	privacySetting, _ := s.privacySettingRepo.FindByUserID(ctx, current.ID)
+	privacySetting, err := s.privacySettingRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
 	reply := &v1.PrivacySetting{UserId: current.ID}
 	if privacySetting != nil {
 		reply.PublicPoints = privacySetting.PublicPoints
@@ -48,7 +51,7 @@ func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *v1.GetCurre
 	return &v1.GetCurrentPrivacySetting_Reply{PrivacySetting: reply}, nil
 }
 
-func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Request) (*v1.UpdatePrivacySetting_Reply, error) {
+func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *v1.UpdateCurrentPrivacySetting_Request) (*v1.UpdateCurrentPrivacySetting_Reply, error) {
 	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -65,7 +68,7 @@ func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivac
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdatePrivacySetting_Reply{PrivacySetting: &v1.PrivacySetting{
+	return &v1.UpdateCurrentPrivacySetting_Reply{PrivacySetting: &v1.PrivacySetting{
 		UserId:             current.ID,
 		PublicPoints:       privacySetting.PublicPoints,
 		PublicFollowers:    privacySetting.PublicFollowers,

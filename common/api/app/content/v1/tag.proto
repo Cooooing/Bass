@@ -9,17 +9,17 @@ option go_package = "common/api/gen/content/v1;v1";
 
 // 标签服务
 service ContentTagService {
-  // 批量添加标签
-  rpc Adds(AddsTag.Request) returns (AddsTag.Reply) {}
+  // 批量创建标签
+  rpc BatchCreate(BatchCreateTags.Request) returns (BatchCreateTags.Reply) {}
 
   // 更新标签
   rpc Update(UpdateTag.Request) returns (UpdateTag.Reply) {}
 
-  // 分页获取标签
-  rpc Page(PageTag.Request) returns (PageTag.Reply) {}
+  // 查询标签列表
+  rpc List(ListTags.Request) returns (ListTags.Reply) {}
 }
 
-message AddsTag {
+message BatchCreateTags {
   message Request {
     // 标签信息列表
     repeated TagSave tags = 1;
@@ -41,7 +41,7 @@ message UpdateTag {
   }
 }
 
-message PageTag {
+message ListTags {
   message Request {
     // 分页参数
     optional common.PageRequest page = 1;

@@ -8,25 +8,25 @@ option go_package = "common/api/gen/user/v1;v1";
 
 service AuthService {
   // 使用邮箱发起账号注册，成功后返回验证码令牌。
-  rpc RegisterEmail(RegisterEmail.Request) returns (RegisterEmail.Reply) {}
+  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Reply) {}
 
   // 校验邮箱注册验证码并创建账号。
-  rpc VerifyEmailRegister(VerifyEmailRegister.Request) returns (VerifyEmailRegister.Reply) {}
+  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Reply) {}
 
   // 使用手机号发起账号注册，成功后返回验证码令牌。
-  rpc RegisterPhone(RegisterPhone.Request) returns (RegisterPhone.Reply) {}
+  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Reply) {}
 
   // 校验手机号注册验证码并创建账号。
-  rpc VerifyPhoneRegister(VerifyPhoneRegister.Request) returns (VerifyPhoneRegister.Reply) {}
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Reply) {}
 
   // 使用账号名、邮箱或手机号加密码登录。
-  rpc LoginPassword(LoginPassword.Request) returns (LoginPassword.Reply) {}
+  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Reply) {}
 
   // 登出当前登录账号并清理当前令牌。
   rpc Logout(Logout.Request) returns (Logout.Reply) {}
 }
 
-message RegisterEmail {
+message StartEmailRegistration {
   message Request {
     string email = 1;
     string password = 2;
@@ -38,7 +38,7 @@ message RegisterEmail {
   }
 }
 
-message VerifyEmailRegister {
+message VerifyEmailRegistration {
   message Request {
     string code = 1;
     string code_token = 2;
@@ -46,7 +46,7 @@ message VerifyEmailRegister {
   message Reply {}
 }
 
-message RegisterPhone {
+message StartPhoneRegistration {
   message Request {
     string phone = 1;
     string password = 2;
@@ -58,7 +58,7 @@ message RegisterPhone {
   }
 }
 
-message VerifyPhoneRegister {
+message VerifyPhoneRegistration {
   message Request {
     string code = 1;
     string code_token = 2;
@@ -66,7 +66,7 @@ message VerifyPhoneRegister {
   message Reply {}
 }
 
-message LoginPassword {
+message LoginByPassword {
   message Request {
     string account = 1;
     string password = 2;

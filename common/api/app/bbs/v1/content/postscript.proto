@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+import "bbs/v1/content/model.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/content;content";
+
+service PostscriptService {
+  // 添加文章附言
+  rpc Add(AddPostscript.Request) returns (AddPostscript.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/postscript/add"
+      body: "*"
+    };
+  }
+}
+
+message AddPostscript {
+  message Request {
+    int64 article_id = 1;
+    string content = 2;
+  }
+  message Reply {
+    ArticlePostscript postscript = 1;
+  }
+}

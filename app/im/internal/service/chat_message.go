@@ -38,7 +38,7 @@ func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessa
 	panic("implement me")
 }
 
-func (s *ChatMessageService) Page(ctx context.Context, req *v1.PageChatMessage_Request) (rsp *v1.PageChatMessage_Reply, err error) {
+func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_Request) (rsp *v1.ListChatMessages_Reply, err error) {
 	// TODO: 待实现。
 	panic("implement me")
 }

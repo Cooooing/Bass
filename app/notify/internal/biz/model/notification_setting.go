@@ -1,7 +1,17 @@
 package model
 
-import "notify/internal/data/gen"
+import (
+	commonenum "common/pkg/enum"
+	"notify/internal/enum"
+	"time"
+)
 
 type NotificationSetting struct {
-	*gen.NotificationSetting
+	ID        int64
+	UserID    int64
+	EventType commonenum.EventType
+	Channel   enum.NotificationChannel
+	Enable    bool
+	CreatedAt *time.Time
+	UpdatedAt *time.Time
 }

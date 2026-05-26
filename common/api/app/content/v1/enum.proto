@@ -22,13 +22,6 @@ enum CommentStatus {
   COMMENT_STATUS_HIDDEN = 2; // 隐藏
 }
 
-enum ArticleLotteryStatus {
-  ARTICLE_LOTTERY_STATUS_UNSPECIFIED = 0;
-  ARTICLE_LOTTERY_STATUS_NOT_STARTED = 1; // 未开始
-  ARTICLE_LOTTERY_STATUS_IN_PROGRESS = 2; // 进行中
-  ARTICLE_LOTTERY_STATUS_FINISHED = 3; // 已结束
-}
-
 enum ArticleStatus {
   ARTICLE_STATUS_UNSPECIFIED = 0;
   ARTICLE_STATUS_NORMAL = 1; // 正常
@@ -39,11 +32,12 @@ enum ArticleStatus {
 }
 
 enum ArticleType {
+  reserved 3, 4;
+  reserved "ARTICLE_TYPE_VOTE", "ARTICLE_TYPE_LOTTERY";
+
   ARTICLE_TYPE_UNSPECIFIED = 0;
   ARTICLE_TYPE_NORMAL = 1; // 普通文章
   ARTICLE_TYPE_QA = 2; // 问答
-  ARTICLE_TYPE_VOTE = 3; // 投票
-  ARTICLE_TYPE_LOTTERY = 4; // 抽奖
 }
 
 enum ArticlePostscriptStatus {
@@ -53,6 +47,9 @@ enum ArticlePostscriptStatus {
 }
 
 enum ArticleAction {
+  reserved 7, 8, 9;
+  reserved "ARTICLE_ACTION_VOTE", "ARTICLE_ACTION_LOTTERY", "ARTICLE_ACTION_LOTTERY_WINNER";
+
   ARTICLE_ACTION_UNSPECIFIED = 0;
   ARTICLE_ACTION_LIKE = 1; // 点赞
   ARTICLE_ACTION_THANK = 2; // 感谢
@@ -60,9 +57,6 @@ enum ArticleAction {
   ARTICLE_ACTION_WATCH = 4; // 关注
   ARTICLE_ACTION_REWARD = 5; // 打赏
   ARTICLE_ACTION_REPLY = 6; // 回复
-  ARTICLE_ACTION_VOTE = 7; // 投票
-  ARTICLE_ACTION_LOTTERY = 8; // 抽奖参与
-  ARTICLE_ACTION_LOTTERY_WINNER = 9; // 抽奖中奖
 }
 
 enum ArticleOrder {
@@ -72,10 +66,13 @@ enum ArticleOrder {
 }
 
 enum CommentAction {
+  reserved 2;
+  reserved "COMMENT_ACTION_COLLECT";
+
   COMMENT_ACTION_UNSPECIFIED = 0;
   COMMENT_ACTION_LIKE = 1; // 点赞
-  COMMENT_ACTION_COLLECT = 2; // 收藏
   COMMENT_ACTION_REPLY = 3; // 回复
+  COMMENT_ACTION_THANK = 4; // 感谢
 }
 
 enum CommentOrder {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
@@ -9,6 +10,7 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
+	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -34,43 +36,55 @@ func (s *PreferencesService) GetCurrent(ctx context.Context, req *v1.GetCurrentP
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	preferences, _ := s.preferencesRepo.FindByUserID(ctx, current.ID)
+	preferences, err := s.preferencesRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
 	reply := &v1.Preferences{UserId: current.ID}
 	if preferences != nil {
-		reply.Language = preferences.Language
+		if preferences.Language != nil {
+			reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
+		}
 		reply.Timezone = preferences.Timezone
 		reply.Theme = preferences.Theme
 		reply.MobileTheme = preferences.MobileTheme
-		reply.EnableWebNotify = preferences.EnableWebNotify
-		reply.EnableEmailSubscribe = preferences.EnableEmailSubscribe
 	}
 	return &v1.GetCurrentPreferences_Reply{Preferences: reply}, nil
 }
 
-func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferences_Request) (*v1.UpdatePreferences_Reply, error) {
+func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *v1.UpdateCurrentPreferences_Request) (*v1.UpdateCurrentPreferences_Reply, error) {
 	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
+	var language *enum.Language
+	if req.Language != nil {
+		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
+			value, ok := enum.LanguageMap.ToEnum(*req.Language)
+			if !ok {
+				return nil, cerrors.ErrorBadRequest("language is invalid")
+			}
+			language = new(value)
+		}
+	}
 	preferences, err := s.preferencesRepo.UpsertByUserID(ctx, &model.Preferences{
-		UserID:               current.ID,
-		Language:             req.Language,
-		Timezone:             req.Timezone,
-		Theme:                req.Theme,
-		MobileTheme:          req.MobileTheme,
-		EnableWebNotify:      req.EnableWebNotify,
-		EnableEmailSubscribe: req.EnableEmailSubscribe,
+		UserID:      current.ID,
+		Language:    language,
+		Timezone:    req.Timezone,
+		Theme:       req.Theme,
+		MobileTheme: req.MobileTheme,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdatePreferences_Reply{Preferences: &v1.Preferences{
-		UserId:               current.ID,
-		Language:             preferences.Language,
-		Timezone:             preferences.Timezone,
-		Theme:                preferences.Theme,
-		MobileTheme:          preferences.MobileTheme,
-		EnableWebNotify:      preferences.EnableWebNotify,
-		EnableEmailSubscribe: preferences.EnableEmailSubscribe,
-	}}, nil
+	reply := &v1.Preferences{
+		UserId:      current.ID,
+		Timezone:    preferences.Timezone,
+		Theme:       preferences.Theme,
+		MobileTheme: preferences.MobileTheme,
+	}
+	if preferences.Language != nil {
+		reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
+	}
+	return &v1.UpdateCurrentPreferences_Reply{Preferences: reply}, nil
 }

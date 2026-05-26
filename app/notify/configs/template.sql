@@ -7,37 +7,41 @@
 -- ====================================================================
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('user_follow_created', 'station', 'zh_CN', '新增关注', '{{.ActorName}} 关注了你', true, NOW(), NOW())
+VALUES ('user_follow', 'station', 'zh_CN', '新增关注', '{{.SenderName}} 关注了你', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('user_follow_deleted', 'station', 'zh_CN', '取消关注', '{{.ActorName}} 取消了关注你', true, NOW(), NOW())
+VALUES ('user_register', 'email', 'zh_CN', '注册验证码', '你的注册验证码是 {{.Code}}，有效期 {{.ExpiresSeconds}} 秒。', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('article_published', 'station', 'zh_CN', '新文章发布', '{{.ActorName}} 发布了文章「{{.Title}}」', true, NOW(), NOW())
+VALUES ('user_register', 'sms', 'zh_CN', '注册验证码', '你的注册验证码是 {{.Code}}，有效期 {{.ExpiresSeconds}} 秒。', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('article_liked', 'station', 'zh_CN', '文章被点赞', '{{.ActorName}} 点赞了你的文章「{{.Title}}」', true, NOW(), NOW())
+VALUES ('content_article_publish', 'station', 'zh_CN', '新文章发布', '{{.SenderName}} 发布了文章「{{.Title}}」', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('article_thanked', 'station', 'zh_CN', '文章被感谢', '{{.ActorName}} 感谢了你的文章「{{.Title}}」', true, NOW(), NOW())
+VALUES ('content_article_like', 'station', 'zh_CN', '文章被点赞', '{{.SenderName}} 点赞了你的文章「{{.Title}}」', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('article_collected', 'station', 'zh_CN', '文章被收藏', '{{.ActorName}} 收藏了你的文章「{{.Title}}」', true, NOW(), NOW())
+VALUES ('content_article_thank', 'station', 'zh_CN', '文章被感谢', '{{.SenderName}} 感谢了你的文章「{{.Title}}」', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('article_watched', 'station', 'zh_CN', '文章被关注', '{{.ActorName}} 关注了你的文章「{{.Title}}」', true, NOW(), NOW())
+VALUES ('content_article_collect', 'station', 'zh_CN', '文章被收藏', '{{.SenderName}} 收藏了你的文章「{{.Title}}」', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('comment_published', 'station', 'zh_CN', '收到新评论', '{{.ActorName}} 评论了你的文章「{{.Title}}」', true, NOW(), NOW())
+VALUES ('content_article_watch', 'station', 'zh_CN', '文章被关注', '{{.SenderName}} 关注了你的文章「{{.Title}}」', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;
 
 INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
-VALUES ('comment_liked', 'station', 'zh_CN', '评论被点赞', '{{.ActorName}} 点赞了你的评论', true, NOW(), NOW())
+VALUES ('content_comment_publish', 'station', 'zh_CN', '收到新评论', '{{.SenderName}} 评论了你的文章「{{.Title}}」', true, NOW(), NOW())
+ON CONFLICT (event_type, channel, language) DO NOTHING;
+
+INSERT INTO notify_notification_template (event_type, channel, language, title, content, enable, created_at, updated_at)
+VALUES ('content_comment_like', 'station', 'zh_CN', '评论被点赞', '{{.SenderName}} 点赞了你的评论', true, NOW(), NOW())
 ON CONFLICT (event_type, channel, language) DO NOTHING;

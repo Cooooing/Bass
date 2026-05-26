@@ -1,7 +1,6 @@
 package biz
 
 import (
-	"common/pkg/util"
 	"common/pkg/util/jwt"
 	"user/internal/biz/usecase"
 
@@ -12,10 +11,9 @@ import (
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 	usecase.NewTokenUsecase,
-	util.NewEventPool,
+	usecase.NewAccountValidationUsecase,
 
 	usecase.NewAuthUsecase,
-	usecase.NewAccountUsecase,
 	usecase.NewRelationUsecase,
 	usecase.NewTfaUsecase,
 )

@@ -15,8 +15,7 @@ type LoginLogRepo interface {
 }
 
 type LoginLogGetReq struct {
-	UserID  *int64
-	Account *string
-	Status  *enum.LoginStatus
-	IP      *string
+	UserID *int64
+	Status *enum.LoginStatus
+	IP     *string
 }

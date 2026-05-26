@@ -20,14 +20,17 @@ service RelationService {
   // 当前账号取消拉黑目标账号，并同步维护双方拉黑统计。
   rpc Unblock(UnblockRelation.Request) returns (UnblockRelation.Reply) {}
 
-  // 分页查询当前账号关注的账号列表。
-  rpc PageFollowing(PageFollowingRelation.Request) returns (PageFollowingRelation.Reply) {}
+  // 查询当前账号关注的账号列表。
+  rpc ListFollowing(ListFollowingRelations.Request) returns (ListFollowingRelations.Reply) {}
 
-  // 分页查询当前账号的粉丝账号列表。
-  rpc PageFollowers(PageFollowersRelation.Request) returns (PageFollowersRelation.Reply) {}
+  // 查询当前账号的粉丝账号列表。
+  rpc ListFollowers(ListFollowersRelations.Request) returns (ListFollowersRelations.Reply) {}
 
-  // 分页查询当前账号拉黑的账号列表。
-  rpc PageBlocked(PageBlockedRelation.Request) returns (PageBlockedRelation.Reply) {}
+  // 查询指定账号的粉丝账号 ID 列表，供内部服务处理通知、统计等异步业务使用。
+  rpc ListFollowerIds(ListFollowerIdsRelation.Request) returns (ListFollowerIdsRelation.Reply) {}
+
+  // 查询当前账号拉黑的账号列表。
+  rpc ListBlocked(ListBlockedRelations.Request) returns (ListBlockedRelations.Reply) {}
 
   // 批量查询当前账号与多个目标账号之间的关系状态。
   rpc BatchGetStatus(BatchGetStatusRelation.Request) returns (BatchGetStatusRelation.Reply) {}
@@ -61,7 +64,7 @@ message UnblockRelation {
   message Reply {}
 }
 
-message PageFollowingRelation {
+message ListFollowingRelations {
   message Request {
     common.PageRequest page = 1;
   }
@@ -71,7 +74,7 @@ message PageFollowingRelation {
   }
 }
 
-message PageFollowersRelation {
+message ListFollowersRelations {
   message Request {
     common.PageRequest page = 1;
   }
@@ -81,7 +84,18 @@ message PageFollowersRelation {
   }
 }
 
-message PageBlockedRelation {
+message ListFollowerIdsRelation {
+  message Request {
+    int64 user_id = 1;
+    common.PageRequest page = 2;
+  }
+  message Reply {
+    common.PageReply page = 1;
+    repeated int64 user_ids = 2;
+  }
+}
+
+message ListBlockedRelations {
   message Request {
     common.PageRequest page = 1;
   }

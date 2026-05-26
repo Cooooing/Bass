@@ -4,42 +4,21 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/privacysetting"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.PrivacySettingRepo = (*PrivacySettingRepo)(nil)
 
 type PrivacySettingRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewPrivacySettingRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.PrivacySettingRepo {
+func NewPrivacySettingRepo(db *gen.Client) repo.PrivacySettingRepo {
 	return &PrivacySettingRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		db: db,
 	}
 }
 
@@ -48,19 +27,6 @@ func (r *PrivacySettingRepo) getClient(ctx context.Context) *gen.Client {
 		return c
 	}
 	return r.db
-}
-
-func privacySettingToDomain(p *gen.PrivacySetting) *model.PrivacySetting {
-	return &model.PrivacySetting{
-		ID:                 p.ID,
-		UserID:             p.UserID,
-		PublicPoints:       p.PublicPoints,
-		PublicFollowers:    p.PublicFollowers,
-		PublicArticles:     p.PublicArticles,
-		PublicComments:     p.PublicComments,
-		PublicOnlineStatus: p.PublicOnlineStatus,
-		PublicLocation:     p.PublicLocation,
-	}
 }
 
 func (r *PrivacySettingRepo) FindByUserID(ctx context.Context, userID int64) (*model.PrivacySetting, error) {
@@ -72,7 +38,16 @@ func (r *PrivacySettingRepo) FindByUserID(ctx context.Context, userID int64) (*m
 	if err != nil {
 		return nil, err
 	}
-	return privacySettingToDomain(p), nil
+	return &model.PrivacySetting{
+		ID:                 p.ID,
+		UserID:             p.UserID,
+		PublicPoints:       p.PublicPoints,
+		PublicFollowers:    p.PublicFollowers,
+		PublicArticles:     p.PublicArticles,
+		PublicComments:     p.PublicComments,
+		PublicOnlineStatus: p.PublicOnlineStatus,
+		PublicLocation:     p.PublicLocation,
+	}, nil
 }
 
 func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
@@ -94,7 +69,16 @@ func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.Privac
 		if err != nil {
 			return nil, err
 		}
-		return privacySettingToDomain(saved), nil
+		return &model.PrivacySetting{
+			ID:                 saved.ID,
+			UserID:             saved.UserID,
+			PublicPoints:       saved.PublicPoints,
+			PublicFollowers:    saved.PublicFollowers,
+			PublicArticles:     saved.PublicArticles,
+			PublicComments:     saved.PublicComments,
+			PublicOnlineStatus: saved.PublicOnlineStatus,
+			PublicLocation:     saved.PublicLocation,
+		}, nil
 	}
 	p.ID = existing.ID
 	return r.Update(ctx, p)
@@ -113,5 +97,14 @@ func (r *PrivacySettingRepo) Update(ctx context.Context, p *model.PrivacySetting
 	if err != nil {
 		return nil, err
 	}
-	return privacySettingToDomain(saved), nil
+	return &model.PrivacySetting{
+		ID:                 saved.ID,
+		UserID:             saved.UserID,
+		PublicPoints:       saved.PublicPoints,
+		PublicFollowers:    saved.PublicFollowers,
+		PublicArticles:     saved.PublicArticles,
+		PublicComments:     saved.PublicComments,
+		PublicOnlineStatus: saved.PublicOnlineStatus,
+		PublicLocation:     saved.PublicLocation,
+	}, nil
 }

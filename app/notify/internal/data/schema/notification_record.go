@@ -42,7 +42,8 @@ func (NotificationRecord) Mixin() []ent.Mixin {
 
 func (NotificationRecord) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("receiver_id", "notification_id"),
+		index.Fields("notification_id", "receiver_id").Unique(),
+		index.Fields("receiver_id", "read_time"),
 	}
 }
 

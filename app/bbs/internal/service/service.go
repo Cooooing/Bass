@@ -16,6 +16,13 @@ var ServiceProviderSet = wire.NewSet(
 	NewPrivacySettingService,
 	NewLocationService,
 	NewTfaService,
+	NewContentArticleService,
+	NewContentPostscriptService,
+	NewContentCommentService,
+	NewContentDomainService,
+	NewContentTagService,
+	NewNotificationService,
+	NewNotificationSettingService,
 	ProvideServices,
 )
 
@@ -28,6 +35,13 @@ func ProvideServices(
 	privacySettingService *PrivacySettingService,
 	locationService *LocationService,
 	tfaService *TfaService,
+	contentArticleService *ContentArticleService,
+	contentPostscriptService *ContentPostscriptService,
+	contentCommentService *ContentCommentService,
+	contentDomainService *ContentDomainService,
+	contentTagService *ContentTagService,
+	notificationService *NotificationService,
+	notificationSettingService *NotificationSettingService,
 ) []server.HttpService {
 	return []server.HttpService{
 		systemService,
@@ -38,5 +52,12 @@ func ProvideServices(
 		privacySettingService,
 		locationService,
 		tfaService,
+		contentArticleService,
+		contentPostscriptService,
+		contentCommentService,
+		contentDomainService,
+		contentTagService,
+		notificationService,
+		notificationSettingService,
 	}
 }

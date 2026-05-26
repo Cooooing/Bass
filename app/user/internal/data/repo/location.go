@@ -4,42 +4,21 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/location"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.LocationRepo = (*LocationRepo)(nil)
 
 type LocationRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewLocationRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.LocationRepo {
+func NewLocationRepo(db *gen.Client) repo.LocationRepo {
 	return &LocationRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		db: db,
 	}
 }
 
@@ -48,16 +27,6 @@ func (r *LocationRepo) getClient(ctx context.Context) *gen.Client {
 		return c
 	}
 	return r.db
-}
-
-func locationToDomain(l *gen.Location) *model.Location {
-	return &model.Location{
-		ID:       l.ID,
-		UserID:   l.UserID,
-		Country:  l.Country,
-		Province: l.Province,
-		City:     l.City,
-	}
 }
 
 func (r *LocationRepo) FindByUserID(ctx context.Context, userID int64) (*model.Location, error) {
@@ -69,7 +38,13 @@ func (r *LocationRepo) FindByUserID(ctx context.Context, userID int64) (*model.L
 	if err != nil {
 		return nil, err
 	}
-	return locationToDomain(l), nil
+	return &model.Location{
+		ID:       l.ID,
+		UserID:   l.UserID,
+		Country:  l.Country,
+		Province: l.Province,
+		City:     l.City,
+	}, nil
 }
 
 func (r *LocationRepo) UpsertByUserID(ctx context.Context, l *model.Location) (*model.Location, error) {
@@ -88,7 +63,13 @@ func (r *LocationRepo) UpsertByUserID(ctx context.Context, l *model.Location) (*
 		if err != nil {
 			return nil, err
 		}
-		return locationToDomain(saved), nil
+		return &model.Location{
+			ID:       saved.ID,
+			UserID:   saved.UserID,
+			Country:  saved.Country,
+			Province: saved.Province,
+			City:     saved.City,
+		}, nil
 	}
 	l.ID = existing.ID
 	return r.Update(ctx, l)
@@ -104,5 +85,11 @@ func (r *LocationRepo) Update(ctx context.Context, l *model.Location) (*model.Lo
 	if err != nil {
 		return nil, err
 	}
-	return locationToDomain(saved), nil
+	return &model.Location{
+		ID:       saved.ID,
+		UserID:   saved.UserID,
+		Country:  saved.Country,
+		Province: saved.Province,
+		City:     saved.City,
+	}, nil
 }

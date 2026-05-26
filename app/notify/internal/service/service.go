@@ -11,6 +11,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
 	NewNotificationMetaService,
 	NewNotificationRecordService,
+	NewNotificationSettingService,
 	NewNotificationTemplateService,
 	NewOssService,
 	ProvideServices,
@@ -20,6 +21,7 @@ func ProvideServices(
 	systemService *SystemService,
 	notificationMetaService *NotificationMetaService,
 	notificationRecordService *NotificationRecordService,
+	notificationSettingService *NotificationSettingService,
 	notificationTemplateService *NotificationTemplateService,
 	ossService *OssService,
 ) []server.GrpcService {
@@ -27,6 +29,7 @@ func ProvideServices(
 		systemService,
 		notificationMetaService,
 		notificationRecordService,
+		notificationSettingService,
 		notificationTemplateService,
 		ossService,
 	}

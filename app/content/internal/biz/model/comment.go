@@ -1,20 +1,36 @@
 package model
 
 import (
-	v1 "common/api/gen/content/v1"
+	"fmt"
+	"time"
+
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/util"
-	"content/internal/data/gen"
 	"content/internal/enum"
-	"fmt"
 
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Comment struct {
-	*gen.Comment
+	ID         int64
+	ArticleID  int64
+	Content    string
+	Level      int32
+	ParentID   *int64
+	ReplyID    *int64
+	Status     enum.CommentStatus
+	ThankCount int32
+	LikeCount  int32
+	ReplyCount int32
+	CreatedAt  *time.Time
+	UpdatedAt  *time.Time
+	CreatedBy  *int64
+	UpdatedBy  *int64
+
+	Article *Article
+	Reply   *Comment
+
 	ContentRender string `json:"content_render"`
 
 	User      *userv1.AccountBasic `json:"user"`
@@ -23,12 +39,10 @@ type Comment struct {
 	WithArticle bool `json:"-"`
 }
 
-// FormatContent 格式化评论内容
 func (c *Comment) FormatContent() {
 	c.Content = util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", c.ID), c.Content)
 }
 
-// ParseContent 解析评论内容
 func (c *Comment) ParseContent() (atUserNames map[string]struct{}) {
 	atUserNames = make(map[string]struct{})
 	tree := parse.Parse(fmt.Sprintf("article_postscript_%d", c.ID), []byte(c.Content), parse.NewOptions())
@@ -37,35 +51,4 @@ func (c *Comment) ParseContent() (atUserNames map[string]struct{}) {
 	})
 	c.ContentRender = util.LuteEngine.MarkdownStr(fmt.Sprintf("article_postscript_%d", c.ID), c.Content)
 	return atUserNames
-}
-
-func (c *Comment) ConvertToRpc() *v1.Comment {
-	c.ParseContent()
-	comment := &v1.Comment{
-		CreatedAt:     timestamppb.New(*c.CreatedAt),
-		UpdatedAt:     timestamppb.New(*c.UpdatedAt),
-		CreatedBy:     c.CreatedBy,
-		UpdatedBy:     c.UpdatedBy,
-		Id:            c.ID,
-		ArticleId:     c.ArticleID,
-		Content:       c.Content,
-		ContentRender: c.ContentRender,
-		Level:         c.Level,
-		ParentId:      c.ParentID,
-		ReplyId:       c.ReplyID,
-		Status:        enum.CommentStatusMap.MustToProto(enum.CommentStatus(c.Status)),
-		ThankCount:    c.ThankCount,
-		LikeCount:     c.LikeCount,
-		CollectCount:  c.CollectCount,
-		ReplyCount:    c.ReplyCount,
-		User:          c.User,
-		ReplyUser:     c.ReplyUser,
-	}
-	if c.WithArticle {
-		comment.Article = &v1.Article{
-			Title:     c.Edges.Article.Title,
-			CreatedBy: c.Edges.Article.CreatedBy,
-		}
-	}
-	return comment
 }

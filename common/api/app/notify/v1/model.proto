@@ -59,19 +59,30 @@ message NotificationMeta {
 
   // 主键
   int64 id = 3;
-  // UUID
-  string uuid = 4;
-  // 事件类型
-  common.enums.EventType event_type = 5;
-  // 发送者ID
-  int64 sender_id = 6;
-  // 通知元数据
-  string meta = 7;
+  // 标题
+  string title = 4;
+  // 内容
+  string content = 5;
   // 状态 1-正常 2-被取消
-  NotificationStatus status = 8;
+  NotificationStatus status = 6;
+}
 
-  // 渲染内容
-  string content_render = 20;
+message NotificationSetting {
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+
+  // 主键
+  int64 id = 1;
+  // 用户 ID
+  int64 user_id = 2;
+  // 事件类型
+  common.enums.EventType event_type = 3;
+  // 通知渠道
+  NotificationChannel channel = 4;
+  // 是否启用
+  bool enable = 5;
 }
 
 // =====================
@@ -101,12 +112,13 @@ message NotificationRecordQueryParams {
 message NotificationMetaQueryParams {
   // 主键
   repeated int64 ids = 2;
-  // UUID 列表
-  repeated string uuids = 3;
-  // 事件类型
-  optional common.enums.EventType event_type = 5;
-  // 发送者ID
-  repeated int64 sender_ids = 6;
   // 状态 1-正常 2-被取消
   optional NotificationStatus status = 8;
+}
+
+message NotificationSettingQueryParams {
+  // 事件类型
+  optional common.enums.EventType event_type = 1;
+  // 通知渠道
+  optional NotificationChannel channel = 2;
 }

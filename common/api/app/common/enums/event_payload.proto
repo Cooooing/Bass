@@ -6,16 +6,68 @@ option go_package = "common/api/gen/common/enums;enums";
 
 // ==================== user ====================
 
-message UserFollowCreatedPayload {
+enum UserRegisterContactType {
+  USER_REGISTER_CONTACT_TYPE_UNSPECIFIED = 0;
+  USER_REGISTER_CONTACT_TYPE_EMAIL = 1;
+  USER_REGISTER_CONTACT_TYPE_PHONE = 2;
+}
+
+message UserRegisterPayload {
+  UserRegisterContactType contact_type = 1;
+  string email = 2;
+  string phone = 3;
+  string code = 4;
+  int64 expires_seconds = 5;
+}
+
+message UserLoginPayload {
+  int64 user_id = 1;
+  string name = 2;
+  string account = 3;
+  string ip = 4;
+  string user_agent = 5;
+  string device_id = 6;
+  string platform = 7;
+  string request_id = 8;
+}
+
+message UserLogoutPayload {
+  int64 user_id = 1;
+  string name = 2;
+}
+
+message UserFollowPayload {
   int64 sender_id = 1;
   string sender_name = 2;
   int64 followed_id = 3;
 }
 
-message UserFollowDeletedPayload {
+message UserUnfollowPayload {
   int64 sender_id = 1;
   string sender_name = 2;
   int64 followed_id = 3;
+}
+
+message UserBlockPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 blocked_id = 3;
+}
+
+message UserUnblockPayload {
+  int64 sender_id = 1;
+  string sender_name = 2;
+  int64 unblocked_id = 3;
+}
+
+message UserTfaEnablePayload {
+  int64 user_id = 1;
+  string name = 2;
+}
+
+message UserTfaDisablePayload {
+  int64 user_id = 1;
+  string name = 2;
 }
 
 // ==================== article ====================
@@ -68,6 +120,7 @@ message CommentPublishedPayload {
   int64 article_id = 4;
   int64 author_id = 5;
   string content = 6;
+  string title = 7;
 }
 
 message CommentLikedPayload {

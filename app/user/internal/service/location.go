@@ -34,7 +34,10 @@ func (s *LocationService) GetCurrent(ctx context.Context, req *v1.GetCurrentLoca
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	location, _ := s.locationRepo.FindByUserID(ctx, current.ID)
+	location, err := s.locationRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
 	reply := &v1.Location{UserId: current.ID}
 	if location != nil {
 		reply.Country = location.Country
@@ -44,7 +47,7 @@ func (s *LocationService) GetCurrent(ctx context.Context, req *v1.GetCurrentLoca
 	return &v1.GetCurrentLocation_Reply{Location: reply}, nil
 }
 
-func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Request) (*v1.UpsertLocation_Reply, error) {
+func (s *LocationService) UpsertCurrent(ctx context.Context, req *v1.UpsertCurrentLocation_Request) (*v1.UpsertCurrentLocation_Reply, error) {
 	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
@@ -58,7 +61,7 @@ func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Req
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpsertLocation_Reply{Location: &v1.Location{
+	return &v1.UpsertCurrentLocation_Reply{Location: &v1.Location{
 		UserId:   current.ID,
 		Country:  location.Country,
 		Province: location.Province,

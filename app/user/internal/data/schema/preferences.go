@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	userenum "user/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -26,12 +27,10 @@ func (Preferences) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("账号 ID").Unique(),
-		field.String("language").Comment("语言").Default("zh-CN").Nillable(),
+		field.Enum("language").Values(userenum.LanguageMap.EnumValues()...).Default(string(userenum.LanguageZhCN)).Comment("语言").Nillable(),
 		field.String("timezone").Comment("时区").Default("Asia/Shanghai").Nillable(),
 		field.String("theme").Comment("桌面端主题").Default("default").Nillable(),
 		field.String("mobile_theme").Comment("移动端主题").Default("default").Nillable(),
-		field.Bool("enable_web_notify").Comment("是否启用 Web 通知").Default(true).Nillable(),
-		field.Bool("enable_email_subscribe").Comment("是否启用邮件订阅").Default(true).Nillable(),
 	}
 }
 

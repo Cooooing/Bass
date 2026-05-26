@@ -1,19 +1,16 @@
 package usecase
 
 import (
+	"context"
+
 	"common/api/gen/common"
-	utilent "common/pkg/util/ent"
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/gen"
-	"context"
-	"errors"
 )
 
 type TagUsecase struct {
-	tx base.Tx
-
+	tx      base.Tx
 	tagRepo repo.TagRepo
 }
 
@@ -33,11 +30,7 @@ func (t *TagUsecase) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag
 		err   error
 	)
 	err = t.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		reply, err = t.tagRepo.Saves(ctx, c, tags)
+		reply, err = t.tagRepo.Saves(ctx, tags)
 		return err
 	})
 	return reply, err
@@ -49,20 +42,12 @@ func (t *TagUsecase) Update(ctx context.Context, tag *model.Tag) (*model.Tag, er
 		err   error
 	)
 	err = t.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		reply, err = t.tagRepo.Update(ctx, c, tag)
+		reply, err = t.tagRepo.Update(ctx, tag)
 		return err
 	})
 	return reply, err
 }
 
 func (t *TagUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return nil, nil, errors.New("no client in context")
-	}
-	return t.tagRepo.GetPage(ctx, c, page, req)
+	return t.tagRepo.GetPage(ctx, page, req)
 }

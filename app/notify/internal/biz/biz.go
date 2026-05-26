@@ -1,12 +1,11 @@
 package biz
 
 import (
-	"common/pkg/client/rpc"
+	commonenum "common/pkg/enum"
 	"common/pkg/util/jwt"
 	"notify/internal/biz/usecase"
 	"notify/internal/biz/usecase/consumer"
 	"notify/internal/biz/usecase/handler"
-	"notify/internal/biz/usecase/sender"
 
 	"github.com/google/wire"
 )
@@ -15,28 +14,67 @@ import (
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 
+	handler.NewArticleCollectedHandler,
+	handler.NewArticleLikedHandler,
+	handler.NewArticlePublishedHandler,
+	handler.NewArticleThankedHandler,
+	handler.NewArticleWatchedHandler,
+	handler.NewCommentLikedHandler,
+	handler.NewCommentPublishedHandler,
+	handler.NewUserRegisterHandler,
+	handler.NewUserFollowHandler,
+	ProvideEventHandlers,
+	ProvideEventSubjects,
+
 	consumer.NewConsumer,
-	handler.NewDispatcher,
-	sender.ProvideRegistry,
+	usecase.NewEventUsecase,
 	usecase.NewNotifyUsecase,
-	usecase.NewRPCUserResolver,
-	wire.Bind(new(usecase.UserResolver), new(*usecase.RPCUserResolver)),
-
-	sender.NewSmtpSender,
-	sender.NewTencentSmsSender,
-
-	handler.NewFollowHandler,
-	handler.NewArticlePublishHandler,
-	handler.NewArticleActionHandler,
-	handler.NewCommentHandler,
-	handler.NewCommentActionHandler,
-	handler.NewDefaultHandler,
+	usecase.NewDeliveryUsecase,
+	usecase.NewDeliveryWorker,
 
 	usecase.NewNotificationMetaUsecase,
 	usecase.NewNotificationRecordUsecase,
+	usecase.NewNotificationSettingUsecase,
 	usecase.NewNotificationTemplateUsecase,
 	usecase.NewObjectStorageUsecase,
-
-	rpc.ProvideUserClient,
-	rpc.ProvideContentClient,
 )
+
+func ProvideEventHandlers(
+	articleCollectedHandler *handler.ArticleCollectedHandler,
+	articleLikedHandler *handler.ArticleLikedHandler,
+	articlePublishedHandler *handler.ArticlePublishedHandler,
+	articleThankedHandler *handler.ArticleThankedHandler,
+	articleWatchedHandler *handler.ArticleWatchedHandler,
+	commentLikedHandler *handler.CommentLikedHandler,
+	commentPublishedHandler *handler.CommentPublishedHandler,
+	userFollowHandler *handler.UserFollowHandler,
+	userRegisterHandler *handler.UserRegisterHandler,
+) usecase.EventHandlers {
+	eventHandlers := usecase.EventHandlers{
+		commonenum.EventTypeContentArticleCollect: articleCollectedHandler,
+		commonenum.EventTypeContentArticleLike:    articleLikedHandler,
+		commonenum.EventTypeContentArticlePublish: articlePublishedHandler,
+		commonenum.EventTypeContentArticleThank:   articleThankedHandler,
+		commonenum.EventTypeContentArticleWatch:   articleWatchedHandler,
+		commonenum.EventTypeContentCommentLike:    commentLikedHandler,
+		commonenum.EventTypeContentCommentPublish: commentPublishedHandler,
+		commonenum.EventTypeUserFollow:            userFollowHandler,
+		commonenum.EventTypeUserRegister:          userRegisterHandler,
+	}
+
+	return eventHandlers
+}
+
+func ProvideEventSubjects() usecase.EventSubjects {
+	return usecase.EventSubjects{
+		commonenum.EventSubjectContentArticleCollect,
+		commonenum.EventSubjectContentArticleLike,
+		commonenum.EventSubjectContentArticlePublish,
+		commonenum.EventSubjectContentArticleThank,
+		commonenum.EventSubjectContentArticleWatch,
+		commonenum.EventSubjectContentCommentLike,
+		commonenum.EventSubjectContentCommentPublish,
+		commonenum.EventSubjectUserFollow,
+		commonenum.EventSubjectUserRegister,
+	}
+}

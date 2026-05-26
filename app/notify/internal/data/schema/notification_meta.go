@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// NotificationMeta 通知元数据表
+// NotificationMeta 站内信内容表。
 type NotificationMeta struct {
 	ent.Schema
 }
@@ -28,12 +28,8 @@ func (NotificationMeta) Annotations() []schema.Annotation {
 func (NotificationMeta) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.String("uuid").Comment("唯一标识 幂等").Unique(),
-		field.Enum("event_type").Values(notifyenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
-		field.JSON("meta", []byte{}).Comment("事件载荷 JSON"),
-		field.String("title").Comment("渲染标题").Default(""),
-		field.String("content").Comment("渲染内容"),
-		field.Bool("is_global").Comment("是否全站广播").Default(false),
+		field.String("title").Comment("站内信标题").Default(""),
+		field.String("content").Comment("站内信内容"),
 		field.Enum("status").Values(notifyenum.NotificationStatusMap.EnumValues()...).Default(string(notifyenum.NotificationStatusNormal)).Comment("状态"),
 	}
 }
@@ -46,7 +42,7 @@ func (NotificationMeta) Mixin() []ent.Mixin {
 
 func (NotificationMeta) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("event_type", "status"),
+		index.Fields("status", "id"),
 	}
 }
 

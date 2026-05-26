@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
+import "common/enums/language.proto";
+
 option go_package = "common/api/gen/bbs/v1/user;user";
 
 // 账号状态
@@ -12,6 +14,27 @@ enum AccountStatus {
   ACCOUNT_STATUS_DELETED = 3; // 注销
 }
 
+// MBTI 类型
+enum MBTI {
+  MBTI_UNSPECIFIED = 0;
+  MBTI_INTJ = 1;
+  MBTI_INTP = 2;
+  MBTI_ENTJ = 3;
+  MBTI_ENTP = 4;
+  MBTI_INFJ = 5;
+  MBTI_INFP = 6;
+  MBTI_ENFJ = 7;
+  MBTI_ENFP = 8;
+  MBTI_ISTJ = 9;
+  MBTI_ISFJ = 10;
+  MBTI_ESTJ = 11;
+  MBTI_ESFJ = 12;
+  MBTI_ISTP = 13;
+  MBTI_ISFP = 14;
+  MBTI_ESTP = 15;
+  MBTI_ESFP = 16;
+}
+
 // 账号展示资料
 message AccountProfile {
   int64 id = 1;
@@ -20,13 +43,14 @@ message AccountProfile {
   optional string url = 4;
   optional string avatar_url = 5;
   optional string introduction = 6;
-  optional string mbti = 7;
+  MBTI mbti = 7;
   AccountStatus status = 8;
-  string group_name = 9;
+  reserved 9;
+  reserved "group_name";
   optional int32 follow_count = 10;
   optional int32 follower_count = 11;
-  optional int32 block_count = 12;
-  optional int32 blocked_count = 13;
+  reserved 12, 13;
+  reserved "block_count", "blocked_count";
   string created_at = 1000;
   string updated_at = 1001;
 }
@@ -47,12 +71,13 @@ message Account {
 // 账号偏好设置
 message Preference {
   int64 user_id = 1;
-  optional string language = 2;
+  reserved 2;
   optional string timezone = 3;
   optional string theme = 4;
   optional string mobile_theme = 5;
-  optional bool enable_web_notify = 6;
-  optional bool enable_email_subscribe = 7;
+  reserved 6, 7;
+  common.enums.Language language = 8;
+  reserved "enable_web_notify", "enable_email_subscribe";
 }
 
 // 账号隐私设置

@@ -17,7 +17,7 @@ service LocationService {
   }
 
   // 更新当前登录账号的地理资料
-  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Reply) {
+  rpc UpsertCurrent(UpsertCurrentLocation.Request) returns (UpsertCurrentLocation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/location/upsert-current"
       body: "*"
@@ -32,7 +32,7 @@ message GetCurrentLocation {
   }
 }
 
-message UpsertLocation {
+message UpsertCurrentLocation {
   message Request {
     optional string country = 1;
     optional string province = 2;

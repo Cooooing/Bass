@@ -9,41 +9,41 @@ option go_package = "common/api/gen/bbs/v1/user;user";
 
 service AuthService {
   // 使用邮箱发起账号注册
-  rpc RegisterEmail(RegisterEmail.Request) returns (RegisterEmail.Reply) {
+  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/auth/register-email"
+      post: "/v1/user/auth/start-email-registration"
       body: "*"
     };
   }
 
   // 校验邮箱注册验证码
-  rpc VerifyEmailRegister(VerifyEmailRegister.Request) returns (VerifyEmailRegister.Reply) {
+  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/auth/verify-email-register"
+      post: "/v1/user/auth/verify-email-registration"
       body: "*"
     };
   }
 
   // 使用手机号发起账号注册
-  rpc RegisterPhone(RegisterPhone.Request) returns (RegisterPhone.Reply) {
+  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/auth/register-phone"
+      post: "/v1/user/auth/start-phone-registration"
       body: "*"
     };
   }
 
   // 校验手机号注册验证码
-  rpc VerifyPhoneRegister(VerifyPhoneRegister.Request) returns (VerifyPhoneRegister.Reply) {
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/auth/verify-phone-register"
+      post: "/v1/user/auth/verify-phone-registration"
       body: "*"
     };
   }
 
   // 使用密码登录账号
-  rpc LoginPassword(LoginPassword.Request) returns (LoginPassword.Reply) {
+  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/auth/login-password"
+      post: "/v1/user/auth/login-by-password"
       body: "*"
     };
   }
@@ -57,7 +57,7 @@ service AuthService {
   }
 }
 
-message RegisterEmail {
+message StartEmailRegistration {
   message Request {
     string email = 1;
     string password = 2;
@@ -69,7 +69,7 @@ message RegisterEmail {
   }
 }
 
-message VerifyEmailRegister {
+message VerifyEmailRegistration {
   message Request {
     string code = 1;
     string code_token = 2;
@@ -77,7 +77,7 @@ message VerifyEmailRegister {
   message Reply {}
 }
 
-message RegisterPhone {
+message StartPhoneRegistration {
   message Request {
     string phone = 1;
     string password = 2;
@@ -89,7 +89,7 @@ message RegisterPhone {
   }
 }
 
-message VerifyPhoneRegister {
+message VerifyPhoneRegistration {
   message Request {
     string code = 1;
     string code_token = 2;
@@ -97,7 +97,7 @@ message VerifyPhoneRegister {
   message Reply {}
 }
 
-message LoginPassword {
+message LoginByPassword {
   message Request {
     string account = 1;
     string password = 2;

@@ -1,22 +1,47 @@
 package model
 
 import (
-	v1 "common/api/gen/content/v1"
-	userv1 "common/api/gen/user/v1"
-	"common/pkg/util"
-	"content/internal/data/gen"
-	"content/internal/data/gen/articleactionrecord"
-	"content/internal/enum"
 	"fmt"
 	"time"
 
+	userv1 "common/api/gen/user/v1"
+	"common/pkg/util"
+	"content/internal/enum"
+
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Article struct {
-	*gen.Article
+	ID               int64
+	Title            string
+	Content          string
+	HasPostscript    bool
+	RewardContent    *string
+	RewardPoints     *int32
+	Status           enum.ArticleStatus
+	Type             enum.ArticleType
+	Statement        *string
+	Commentable      bool
+	Anonymous        bool
+	Listable         bool
+	ViewCount        int32
+	ThankCount       int32
+	LikeCount        int32
+	CollectCount     int32
+	WatchCount       int32
+	ReplyCount       int32
+	BountyPoints     *int32
+	AcceptedAnswerID *int64
+	CreatedAt        *time.Time
+	UpdatedAt        *time.Time
+	CreatedBy        *int64
+	UpdatedBy        *int64
+
+	Postscripts   []*ArticlePostscript
+	Tags          []*Tag
+	ActionRecords []*ArticleActionRecord
+
 	ContentRender       string  `json:"content_render"`
 	RewardContentRender *string `json:"reward_content_render"`
 	CoverImageUrl       *string `json:"cover_image_url"`
@@ -25,11 +50,9 @@ type Article struct {
 	LastReplyCommentUser *userv1.AccountBasic `json:"last_reply_user"`
 	LastReplyCommentAt   *time.Time           `json:"last_replied_at"`
 
-	// 可选项
 	IsSummary bool `json:"-"`
 }
 
-// Summary 文章摘要
 func (a *Article) Summary() {
 	r := []rune(a.Content)
 	if len(r) > 200 {
@@ -37,12 +60,10 @@ func (a *Article) Summary() {
 	}
 }
 
-// FormatContent 格式化文章内容
 func (a *Article) FormatContent() {
 	a.Content = util.LuteEngine.FormatStr(fmt.Sprintf("%s_%d", "article_content", a.ID), a.Content)
 }
 
-// ParseContent 解析文章内容
 func (a *Article) ParseContent() (atUserNames map[string]struct{}) {
 	atUserNames = make(map[string]struct{})
 	tree := parse.Parse(fmt.Sprintf("%s_%d", "article_content", a.ID), []byte(a.Content), parse.NewOptions())
@@ -61,15 +82,13 @@ func (a *Article) ParseContent() (atUserNames map[string]struct{}) {
 	return atUserNames
 }
 
-// FormatRewardContent 格式化文章打赏区内容
 func (a *Article) FormatRewardContent() {
 	a.Content = util.LuteEngine.FormatStr(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), a.Content)
 }
 
-// ParseRewardContent 解析文章打赏区内容
 func (a *Article) ParseRewardContent() (atUserNames map[string]struct{}) {
 	atUserNames = make(map[string]struct{})
-	if a.RewardContent != nil && len(a.Edges.ActionRecords) > 0 && a.HasRewarded() {
+	if a.RewardContent != nil && len(a.ActionRecords) > 0 && a.HasRewarded() {
 		tree := parse.Parse(fmt.Sprintf("%s_%d", "article_reward_content", a.ID), []byte(*a.RewardContent), parse.NewOptions())
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			return util.ParseNodeLinkAtUsernames(n, entering, atUserNames)
@@ -79,69 +98,11 @@ func (a *Article) ParseRewardContent() (atUserNames map[string]struct{}) {
 	return atUserNames
 }
 
-// HasRewarded 判断文章是否打赏过，需要查询时使用 WithActionRecords 并按 UserId 过滤
 func (a *Article) HasRewarded() bool {
-	for _, record := range a.Edges.ActionRecords {
-		if record.Type == articleactionrecord.TypeReward {
+	for _, record := range a.ActionRecords {
+		if record.Type == enum.ArticleActionReward {
 			return true
 		}
 	}
 	return false
-}
-
-// ConvertToRpc 转换为RPC返回格式
-func (a *Article) ConvertToRpc() *v1.Article {
-	a.ParseContent()
-	a.ParseRewardContent()
-	if a.IsSummary {
-		a.Summary()
-	}
-	article := &v1.Article{
-		CreatedAt:               timestamppb.New(*a.CreatedAt),
-		UpdatedAt:               timestamppb.New(*a.UpdatedAt),
-		CreatedBy:               a.CreatedBy,
-		UpdatedBy:               a.UpdatedBy,
-		Id:                      a.ID,
-		Title:                   a.Title,
-		Content:                 a.Content,
-		ContentRender:           a.ContentRender,
-		RewardContent:           a.RewardContent,
-		RewardContentRender:     a.RewardContentRender,
-		HasPostscript:           a.HasPostscript,
-		HasReward:               util.IsNotNil(a.RewardPoints),
-		RewardPoints:            a.RewardPoints,
-		Status:                  enum.ArticleStatusMap.MustToProto(enum.ArticleStatus(a.Status)),
-		Type:                    enum.ArticleTypeMap.MustToProto(enum.ArticleType(a.Type)),
-		Statement:               a.Statement,
-		Commentable:             a.Commentable,
-		Anonymous:               a.Anonymous,
-		ViewCount:               a.ViewCount,
-		ThankCount:              a.ThankCount,
-		LikeCount:               a.LikeCount,
-		CollectCount:            a.CollectCount,
-		WatchCount:              a.WatchCount,
-		ReplyCount:              a.ReplyCount,
-		BountyPoints:            a.BountyPoints,
-		AcceptedAnswerId:        a.AcceptedAnswerID,
-		VoteTotal:               a.VoteTotal,
-		LotteryParticipantCount: a.LotteryParticipantCount,
-		LotteryWinnerCount:      a.LotteryWinnerCount,
-		AuthorUser:              a.AuthorUser,
-		LastReplyUser:           a.LastReplyCommentUser,
-		CoverImageUrl:           a.CoverImageUrl,
-	}
-	if a.LastReplyCommentAt != nil {
-		article.LastReplyAt = timestamppb.New(*a.LastReplyCommentAt)
-	}
-	if len(a.Edges.Postscripts) > 0 {
-		for _, postscript := range a.Edges.Postscripts {
-			article.Postscripts = append(article.Postscripts, (&ArticlePostscript{ArticlePostscript: postscript}).ConvertToRpc())
-		}
-	}
-	if len(a.Edges.Tags) > 0 {
-		for _, tag := range a.Edges.Tags {
-			article.Tags = append(article.Tags, (&Tag{Tag: tag}).ConvertToRpc())
-		}
-	}
-	return article
 }

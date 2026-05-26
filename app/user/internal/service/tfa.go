@@ -39,7 +39,14 @@ func (s *TfaService) Validate(ctx context.Context, req *v1.ValidateTfa_Request) 
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	verified := s.tfaUsecase.Validate(ctx, current.TwofaSecret, req.Code)
+	tfa, err := s.tfaRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
+	if tfa == nil || !tfa.Enable || tfa.Secret == "" {
+		return &v1.ValidateTfa_Reply{Verified: false}, nil
+	}
+	verified := s.tfaUsecase.Validate(ctx, tfa.Secret, req.Code)
 	return &v1.ValidateTfa_Reply{Verified: verified}, nil
 }
 
@@ -48,7 +55,11 @@ func (s *TfaService) BeginEnable(ctx context.Context, req *v1.BeginEnableTfa_Req
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	if current.TwofaEnable {
+	tfa, err := s.tfaRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
+	if tfa != nil && tfa.Enable {
 		return nil, cerrors.ErrorBadRequest("2FA already enabled")
 	}
 	buf, err := s.tfaUsecase.Enable(ctx, current.Name)
@@ -72,10 +83,14 @@ func (s *TfaService) Disable(ctx context.Context, req *v1.DisableTfa_Request) (*
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	if !current.TwofaEnable {
+	tfa, err := s.tfaRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
+	if tfa == nil || !tfa.Enable {
 		return nil, cerrors.ErrorBadRequest("2FA already disabled")
 	}
-	err := s.tfaUsecase.Disable(ctx, current.Name, current.TwofaSecret, req.Code)
+	err = s.tfaUsecase.Disable(ctx, current.Name, tfa.Secret, req.Code)
 	return &v1.DisableTfa_Reply{}, err
 }
 
@@ -84,7 +99,10 @@ func (s *TfaService) GetCurrent(ctx context.Context, req *v1.GetCurrentTfa_Reque
 	if !ok {
 		return nil, cerrors.ErrorUnauthorized("user not login")
 	}
-	tfa, _ := s.tfaRepo.FindByUserID(ctx, current.ID)
+	tfa, err := s.tfaRepo.FindByUserID(ctx, current.ID)
+	if err != nil {
+		return nil, err
+	}
 	reply := &v1.Tfa{UserId: current.ID}
 	if tfa != nil {
 		reply.Enable = tfa.Enable

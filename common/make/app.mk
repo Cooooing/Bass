@@ -31,6 +31,13 @@ tidy:
 	@echo "[tidy] go mod tidy..."
 	$(call run,cd $(APP_DIR) && go mod tidy,[tidy] go mod tidy)
 
+.PHONY: format
+format:
+	@echo "[format] gofmt module Go files..."
+	$(call run,find $(APP_DIR) -type f -name "*.go" -exec gofmt -w {} +,[format] gofmt)
+	@echo "[format] format module proto..."
+	$(call run,cd $(ROOT_DIR) && $(BUF) format -w app/$(SERVER),[format] buf format)
+
 .PHONY: config-clean
 config-clean:
 	@echo "[config-clean] cleaning proto generated Go files..."

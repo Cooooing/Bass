@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListNotificationsReply {
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
-    pub page: Option<Box<models::PageReply>>,
+    pub page: Option<models::PageReply>,
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::Notification>>,
 }

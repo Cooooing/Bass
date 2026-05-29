@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateCommentReply {
     #[serde(rename = "comment", skip_serializing_if = "Option::is_none")]
-    pub comment: Option<Box<models::Comment>>,
+    pub comment: Option<models::Comment>,
 }
 
 impl CreateCommentReply {

@@ -126,3 +126,101 @@ pub mod tag_service_api;
 pub mod tfa_service_api;
 
 pub mod configuration;
+
+use std::sync::Arc;
+
+pub trait Api {
+    fn account_service_api(&self) -> &dyn account_service_api::AccountServiceApi;
+    fn article_service_api(&self) -> &dyn article_service_api::ArticleServiceApi;
+    fn auth_service_api(&self) -> &dyn auth_service_api::AuthServiceApi;
+    fn comment_service_api(&self) -> &dyn comment_service_api::CommentServiceApi;
+    fn domain_service_api(&self) -> &dyn domain_service_api::DomainServiceApi;
+    fn location_service_api(&self) -> &dyn location_service_api::LocationServiceApi;
+    fn notification_service_api(&self) -> &dyn notification_service_api::NotificationServiceApi;
+    fn postscript_service_api(&self) -> &dyn postscript_service_api::PostscriptServiceApi;
+    fn preferences_service_api(&self) -> &dyn preferences_service_api::PreferencesServiceApi;
+    fn privacy_setting_service_api(&self) -> &dyn privacy_setting_service_api::PrivacySettingServiceApi;
+    fn relation_service_api(&self) -> &dyn relation_service_api::RelationServiceApi;
+    fn tag_service_api(&self) -> &dyn tag_service_api::TagServiceApi;
+    fn tfa_service_api(&self) -> &dyn tfa_service_api::TfaServiceApi;
+}
+
+pub struct ApiClient {
+    account_service_api: Box<dyn account_service_api::AccountServiceApi>,
+    article_service_api: Box<dyn article_service_api::ArticleServiceApi>,
+    auth_service_api: Box<dyn auth_service_api::AuthServiceApi>,
+    comment_service_api: Box<dyn comment_service_api::CommentServiceApi>,
+    domain_service_api: Box<dyn domain_service_api::DomainServiceApi>,
+    location_service_api: Box<dyn location_service_api::LocationServiceApi>,
+    notification_service_api: Box<dyn notification_service_api::NotificationServiceApi>,
+    postscript_service_api: Box<dyn postscript_service_api::PostscriptServiceApi>,
+    preferences_service_api: Box<dyn preferences_service_api::PreferencesServiceApi>,
+    privacy_setting_service_api: Box<dyn privacy_setting_service_api::PrivacySettingServiceApi>,
+    relation_service_api: Box<dyn relation_service_api::RelationServiceApi>,
+    tag_service_api: Box<dyn tag_service_api::TagServiceApi>,
+    tfa_service_api: Box<dyn tfa_service_api::TfaServiceApi>,
+}
+
+impl ApiClient {
+    pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
+        Self {
+            account_service_api: Box::new(account_service_api::AccountServiceApiClient::new(configuration.clone())),
+            article_service_api: Box::new(article_service_api::ArticleServiceApiClient::new(configuration.clone())),
+            auth_service_api: Box::new(auth_service_api::AuthServiceApiClient::new(configuration.clone())),
+            comment_service_api: Box::new(comment_service_api::CommentServiceApiClient::new(configuration.clone())),
+            domain_service_api: Box::new(domain_service_api::DomainServiceApiClient::new(configuration.clone())),
+            location_service_api: Box::new(location_service_api::LocationServiceApiClient::new(configuration.clone())),
+            notification_service_api: Box::new(notification_service_api::NotificationServiceApiClient::new(configuration.clone())),
+            postscript_service_api: Box::new(postscript_service_api::PostscriptServiceApiClient::new(configuration.clone())),
+            preferences_service_api: Box::new(preferences_service_api::PreferencesServiceApiClient::new(configuration.clone())),
+            privacy_setting_service_api: Box::new(privacy_setting_service_api::PrivacySettingServiceApiClient::new(configuration.clone())),
+            relation_service_api: Box::new(relation_service_api::RelationServiceApiClient::new(configuration.clone())),
+            tag_service_api: Box::new(tag_service_api::TagServiceApiClient::new(configuration.clone())),
+            tfa_service_api: Box::new(tfa_service_api::TfaServiceApiClient::new(configuration.clone())),
+        }
+    }
+}
+
+impl Api for ApiClient {
+    fn account_service_api(&self) -> &dyn account_service_api::AccountServiceApi {
+        self.account_service_api.as_ref()
+    }
+    fn article_service_api(&self) -> &dyn article_service_api::ArticleServiceApi {
+        self.article_service_api.as_ref()
+    }
+    fn auth_service_api(&self) -> &dyn auth_service_api::AuthServiceApi {
+        self.auth_service_api.as_ref()
+    }
+    fn comment_service_api(&self) -> &dyn comment_service_api::CommentServiceApi {
+        self.comment_service_api.as_ref()
+    }
+    fn domain_service_api(&self) -> &dyn domain_service_api::DomainServiceApi {
+        self.domain_service_api.as_ref()
+    }
+    fn location_service_api(&self) -> &dyn location_service_api::LocationServiceApi {
+        self.location_service_api.as_ref()
+    }
+    fn notification_service_api(&self) -> &dyn notification_service_api::NotificationServiceApi {
+        self.notification_service_api.as_ref()
+    }
+    fn postscript_service_api(&self) -> &dyn postscript_service_api::PostscriptServiceApi {
+        self.postscript_service_api.as_ref()
+    }
+    fn preferences_service_api(&self) -> &dyn preferences_service_api::PreferencesServiceApi {
+        self.preferences_service_api.as_ref()
+    }
+    fn privacy_setting_service_api(&self) -> &dyn privacy_setting_service_api::PrivacySettingServiceApi {
+        self.privacy_setting_service_api.as_ref()
+    }
+    fn relation_service_api(&self) -> &dyn relation_service_api::RelationServiceApi {
+        self.relation_service_api.as_ref()
+    }
+    fn tag_service_api(&self) -> &dyn tag_service_api::TagServiceApi {
+        self.tag_service_api.as_ref()
+    }
+    fn tfa_service_api(&self) -> &dyn tfa_service_api::TfaServiceApi {
+        self.tfa_service_api.as_ref()
+    }
+}
+
+

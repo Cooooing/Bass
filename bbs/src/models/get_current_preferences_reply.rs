@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentPreferencesReply {
     #[serde(rename = "preference", skip_serializing_if = "Option::is_none")]
-    pub preference: Option<Box<models::Preference>>,
+    pub preference: Option<models::Preference>,
 }
 
 impl GetCurrentPreferencesReply {

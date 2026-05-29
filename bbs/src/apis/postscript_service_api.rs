@@ -9,59 +9,82 @@
  */
 
 
+use async_trait::async_trait;
 use reqwest;
+use std::sync::Arc;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use super::{Error, configuration};
+use crate::apis::ContentType;
 
-/// struct for passing parameters to the method [`postscript_service_add`]
-#[derive(Clone, Debug)]
-pub struct PostscriptServiceAddParams {
-    pub add_postscript_request: models::AddPostscriptRequest
+#[async_trait]
+pub trait PostscriptServiceApi: Send + Sync {
+
+    /// POST /v1/content/postscript/add
+    ///
+    /// 添加文章附言
+    async fn postscript_service_add<'add_postscript_request>(&self, add_postscript_request: models::AddPostscriptRequest) -> Result<models::AddPostscriptReply, Error<PostscriptServiceAddError>>;
+}
+
+pub struct PostscriptServiceApiClient {
+    configuration: Arc<configuration::Configuration>
+}
+
+impl PostscriptServiceApiClient {
+    pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
+        Self { configuration }
+    }
 }
 
 
-/// struct for typed errors of method [`postscript_service_add`]
+
+#[async_trait]
+impl PostscriptServiceApi for PostscriptServiceApiClient {
+    /// 添加文章附言
+    async fn postscript_service_add<'add_postscript_request>(&self, add_postscript_request: models::AddPostscriptRequest) -> Result<models::AddPostscriptReply, Error<PostscriptServiceAddError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/postscript/add", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&add_postscript_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AddPostscriptReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AddPostscriptReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<PostscriptServiceAddError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+}
+
+/// struct for typed errors of method [`PostscriptServiceApi::postscript_service_add`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum PostscriptServiceAddError {
     UnknownValue(serde_json::Value),
-}
-
-
-/// 添加文章附言
-pub async fn postscript_service_add(configuration: &configuration::Configuration, params: PostscriptServiceAddParams) -> Result<models::AddPostscriptReply, Error<PostscriptServiceAddError>> {
-
-    let uri_str = format!("{}/v1/content/postscript/add", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.add_postscript_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AddPostscriptReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::AddPostscriptReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<PostscriptServiceAddError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
 }
 

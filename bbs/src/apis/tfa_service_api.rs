@@ -9,255 +9,286 @@
  */
 
 
+use async_trait::async_trait;
 use reqwest;
+use std::sync::Arc;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use super::{Error, configuration};
+use crate::apis::ContentType;
 
-/// struct for passing parameters to the method [`tfa_service_begin_enable`]
-#[derive(Clone, Debug)]
-pub struct TfaServiceBeginEnableParams {
-    pub body: serde_json::Value
+#[async_trait]
+pub trait TfaServiceApi: Send + Sync {
+
+    /// POST /v1/user/tfa/begin-enable
+    ///
+    /// 开始启用二步验证
+    async fn tfa_service_begin_enable<'body>(&self, body: serde_json::Value) -> Result<models::BeginEnableTfaReply, Error<TfaServiceBeginEnableError>>;
+
+    /// POST /v1/user/tfa/confirm-enable
+    ///
+    /// 确认二步验证码并正式启用二步验证
+    async fn tfa_service_confirm_enable<'confirm_enable_tfa_request>(&self, confirm_enable_tfa_request: models::ConfirmEnableTfaRequest) -> Result<serde_json::Value, Error<TfaServiceConfirmEnableError>>;
+
+    /// POST /v1/user/tfa/disable
+    ///
+    /// 校验二步验证码并关闭二步验证
+    async fn tfa_service_disable<'disable_tfa_request>(&self, disable_tfa_request: models::DisableTfaRequest) -> Result<serde_json::Value, Error<TfaServiceDisableError>>;
+
+    /// POST /v1/user/tfa/get-current
+    ///
+    /// 获取当前登录账号的二步验证状态
+    async fn tfa_service_get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentTfaReply, Error<TfaServiceGetCurrentError>>;
+
+    /// POST /v1/user/tfa/validate
+    ///
+    /// 校验当前登录账号的二步验证码
+    async fn tfa_service_validate<'validate_tfa_request>(&self, validate_tfa_request: models::ValidateTfaRequest) -> Result<models::ValidateTfaReply, Error<TfaServiceValidateError>>;
 }
 
-/// struct for passing parameters to the method [`tfa_service_confirm_enable`]
-#[derive(Clone, Debug)]
-pub struct TfaServiceConfirmEnableParams {
-    pub confirm_enable_tfa_request: models::ConfirmEnableTfaRequest
+pub struct TfaServiceApiClient {
+    configuration: Arc<configuration::Configuration>
 }
 
-/// struct for passing parameters to the method [`tfa_service_disable`]
-#[derive(Clone, Debug)]
-pub struct TfaServiceDisableParams {
-    pub disable_tfa_request: models::DisableTfaRequest
-}
-
-/// struct for passing parameters to the method [`tfa_service_get_current`]
-#[derive(Clone, Debug)]
-pub struct TfaServiceGetCurrentParams {
-    pub body: serde_json::Value
-}
-
-/// struct for passing parameters to the method [`tfa_service_validate`]
-#[derive(Clone, Debug)]
-pub struct TfaServiceValidateParams {
-    pub validate_tfa_request: models::ValidateTfaRequest
+impl TfaServiceApiClient {
+    pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
+        Self { configuration }
+    }
 }
 
 
-/// struct for typed errors of method [`tfa_service_begin_enable`]
+
+#[async_trait]
+impl TfaServiceApi for TfaServiceApiClient {
+    /// 开始启用二步验证
+    async fn tfa_service_begin_enable<'body>(&self, body: serde_json::Value) -> Result<models::BeginEnableTfaReply, Error<TfaServiceBeginEnableError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/tfa/begin-enable", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&body);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BeginEnableTfaReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::BeginEnableTfaReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<TfaServiceBeginEnableError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 确认二步验证码并正式启用二步验证
+    async fn tfa_service_confirm_enable<'confirm_enable_tfa_request>(&self, confirm_enable_tfa_request: models::ConfirmEnableTfaRequest) -> Result<serde_json::Value, Error<TfaServiceConfirmEnableError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/tfa/confirm-enable", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&confirm_enable_tfa_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<TfaServiceConfirmEnableError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 校验二步验证码并关闭二步验证
+    async fn tfa_service_disable<'disable_tfa_request>(&self, disable_tfa_request: models::DisableTfaRequest) -> Result<serde_json::Value, Error<TfaServiceDisableError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/tfa/disable", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&disable_tfa_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<TfaServiceDisableError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 获取当前登录账号的二步验证状态
+    async fn tfa_service_get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentTfaReply, Error<TfaServiceGetCurrentError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/tfa/get-current", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&body);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentTfaReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentTfaReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<TfaServiceGetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 校验当前登录账号的二步验证码
+    async fn tfa_service_validate<'validate_tfa_request>(&self, validate_tfa_request: models::ValidateTfaRequest) -> Result<models::ValidateTfaReply, Error<TfaServiceValidateError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/tfa/validate", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&validate_tfa_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ValidateTfaReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ValidateTfaReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<TfaServiceValidateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+}
+
+/// struct for typed errors of method [`TfaServiceApi::tfa_service_begin_enable`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum TfaServiceBeginEnableError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`tfa_service_confirm_enable`]
+/// struct for typed errors of method [`TfaServiceApi::tfa_service_confirm_enable`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum TfaServiceConfirmEnableError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`tfa_service_disable`]
+/// struct for typed errors of method [`TfaServiceApi::tfa_service_disable`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum TfaServiceDisableError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`tfa_service_get_current`]
+/// struct for typed errors of method [`TfaServiceApi::tfa_service_get_current`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum TfaServiceGetCurrentError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`tfa_service_validate`]
+/// struct for typed errors of method [`TfaServiceApi::tfa_service_validate`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum TfaServiceValidateError {
     UnknownValue(serde_json::Value),
-}
-
-
-/// 开始启用二步验证
-pub async fn tfa_service_begin_enable(configuration: &configuration::Configuration, params: TfaServiceBeginEnableParams) -> Result<models::BeginEnableTfaReply, Error<TfaServiceBeginEnableError>> {
-
-    let uri_str = format!("{}/v1/user/tfa/begin-enable", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.body);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BeginEnableTfaReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::BeginEnableTfaReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<TfaServiceBeginEnableError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 确认二步验证码并正式启用二步验证
-pub async fn tfa_service_confirm_enable(configuration: &configuration::Configuration, params: TfaServiceConfirmEnableParams) -> Result<serde_json::Value, Error<TfaServiceConfirmEnableError>> {
-
-    let uri_str = format!("{}/v1/user/tfa/confirm-enable", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.confirm_enable_tfa_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<TfaServiceConfirmEnableError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 校验二步验证码并关闭二步验证
-pub async fn tfa_service_disable(configuration: &configuration::Configuration, params: TfaServiceDisableParams) -> Result<serde_json::Value, Error<TfaServiceDisableError>> {
-
-    let uri_str = format!("{}/v1/user/tfa/disable", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.disable_tfa_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<TfaServiceDisableError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 获取当前登录账号的二步验证状态
-pub async fn tfa_service_get_current(configuration: &configuration::Configuration, params: TfaServiceGetCurrentParams) -> Result<models::GetCurrentTfaReply, Error<TfaServiceGetCurrentError>> {
-
-    let uri_str = format!("{}/v1/user/tfa/get-current", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.body);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentTfaReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetCurrentTfaReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<TfaServiceGetCurrentError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 校验当前登录账号的二步验证码
-pub async fn tfa_service_validate(configuration: &configuration::Configuration, params: TfaServiceValidateParams) -> Result<models::ValidateTfaReply, Error<TfaServiceValidateError>> {
-
-    let uri_str = format!("{}/v1/user/tfa/validate", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.validate_tfa_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ValidateTfaReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ValidateTfaReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<TfaServiceValidateError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
 }
 

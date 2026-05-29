@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentLocationReply {
     #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
-    pub location: Option<Box<models::Location>>,
+    pub location: Option<models::Location>,
 }
 
 impl GetCurrentLocationReply {

@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentPrivacySettingReply {
     #[serde(rename = "privacy_setting", skip_serializing_if = "Option::is_none")]
-    pub privacy_setting: Option<Box<models::PrivacySetting>>,
+    pub privacy_setting: Option<models::PrivacySetting>,
 }
 
 impl GetCurrentPrivacySettingReply {

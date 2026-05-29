@@ -36,11 +36,11 @@ pub struct Comment {
     #[serde(rename = "thank_count", skip_serializing_if = "Option::is_none")]
     pub thank_count: Option<i32>,
     #[serde(rename = "user", skip_serializing_if = "Option::is_none")]
-    pub user: Option<Box<models::AccountProfile>>,
+    pub user: Option<models::AccountProfile>,
     #[serde(rename = "reply_user", skip_serializing_if = "Option::is_none")]
-    pub reply_user: Option<Box<models::AccountProfile>>,
+    pub reply_user: Option<models::AccountProfile>,
     #[serde(rename = "article", skip_serializing_if = "Option::is_none")]
-    pub article: Option<Box<models::Article>>,
+    pub article: Option<models::Article>,
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]

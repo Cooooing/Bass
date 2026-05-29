@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AddPostscriptReply {
     #[serde(rename = "postscript", skip_serializing_if = "Option::is_none")]
-    pub postscript: Option<Box<models::ArticlePostscript>>,
+    pub postscript: Option<models::ArticlePostscript>,
 }
 
 impl AddPostscriptReply {

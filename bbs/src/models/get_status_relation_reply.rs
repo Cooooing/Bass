@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetStatusRelationReply {
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
-    pub status: Option<Box<models::RelationStatus>>,
+    pub status: Option<models::RelationStatus>,
 }
 
 impl GetStatusRelationReply {

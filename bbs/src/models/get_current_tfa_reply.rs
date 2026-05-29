@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentTfaReply {
     #[serde(rename = "tfa", skip_serializing_if = "Option::is_none")]
-    pub tfa: Option<Box<models::Tfa>>,
+    pub tfa: Option<models::Tfa>,
 }
 
 impl GetCurrentTfaReply {

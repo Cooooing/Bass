@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListTagsRequest {
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
-    pub page: Option<Box<models::PageRequest>>,
+    pub page: Option<models::PageRequest>,
     #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
-    pub query: Option<Box<models::TagQuery>>,
+    pub query: Option<models::TagQuery>,
 }
 
 impl ListTagsRequest {

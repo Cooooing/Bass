@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateArticleRequest {
     #[serde(rename = "article", skip_serializing_if = "Option::is_none")]
-    pub article: Option<Box<models::ArticleSave>>,
+    pub article: Option<models::ArticleSave>,
 }
 
 impl CreateArticleRequest {

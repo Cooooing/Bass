@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListFollowingRelationsRequest {
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
-    pub page: Option<Box<models::PageRequest>>,
+    pub page: Option<models::PageRequest>,
 }
 
 impl ListFollowingRelationsRequest {

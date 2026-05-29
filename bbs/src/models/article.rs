@@ -60,9 +60,9 @@ pub struct Article {
     #[serde(rename = "accepted_answer_id", skip_serializing_if = "Option::is_none")]
     pub accepted_answer_id: Option<String>,
     #[serde(rename = "author_user", skip_serializing_if = "Option::is_none")]
-    pub author_user: Option<Box<models::AccountProfile>>,
+    pub author_user: Option<models::AccountProfile>,
     #[serde(rename = "last_reply_user", skip_serializing_if = "Option::is_none")]
-    pub last_reply_user: Option<Box<models::AccountProfile>>,
+    pub last_reply_user: Option<models::AccountProfile>,
     #[serde(rename = "last_reply_at", skip_serializing_if = "Option::is_none")]
     pub last_reply_at: Option<String>,
     #[serde(rename = "cover_image_url", skip_serializing_if = "Option::is_none")]

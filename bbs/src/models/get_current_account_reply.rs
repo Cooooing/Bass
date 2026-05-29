@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentAccountReply {
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
-    pub account: Option<Box<models::Account>>,
+    pub account: Option<models::Account>,
 }
 
 impl GetCurrentAccountReply {

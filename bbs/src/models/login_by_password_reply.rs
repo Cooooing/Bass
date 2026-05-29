@@ -16,7 +16,7 @@ pub struct LoginByPasswordReply {
     #[serde(rename = "token", skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
-    pub account: Option<Box<models::Account>>,
+    pub account: Option<models::Account>,
 }
 
 impl LoginByPasswordReply {

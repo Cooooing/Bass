@@ -9,402 +9,439 @@
  */
 
 
+use async_trait::async_trait;
 use reqwest;
+use std::sync::Arc;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use super::{Error, configuration};
+use crate::apis::ContentType;
 
-/// struct for passing parameters to the method [`relation_service_block`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceBlockParams {
-    pub block_relation_request: models::BlockRelationRequest
+#[async_trait]
+pub trait RelationServiceApi: Send + Sync {
+
+    /// POST /v1/user/relation/block
+    ///
+    /// 当前账号拉黑目标账号
+    async fn relation_service_block<'block_relation_request>(&self, block_relation_request: models::BlockRelationRequest) -> Result<serde_json::Value, Error<RelationServiceBlockError>>;
+
+    /// POST /v1/user/relation/follow
+    ///
+    /// 当前账号关注目标账号
+    async fn relation_service_follow<'follow_relation_request>(&self, follow_relation_request: models::FollowRelationRequest) -> Result<serde_json::Value, Error<RelationServiceFollowError>>;
+
+    /// POST /v1/user/relation/get-status
+    ///
+    /// 查询当前账号与目标账号之间的关系
+    async fn relation_service_get_status<'get_status_relation_request>(&self, get_status_relation_request: models::GetStatusRelationRequest) -> Result<models::GetStatusRelationReply, Error<RelationServiceGetStatusError>>;
+
+    /// POST /v1/user/relation/list-blocked
+    ///
+    /// 分页查询当前账号拉黑的账号列表
+    async fn relation_service_list_blocked<'list_blocked_relations_request>(&self, list_blocked_relations_request: models::ListBlockedRelationsRequest) -> Result<models::ListBlockedRelationsReply, Error<RelationServiceListBlockedError>>;
+
+    /// POST /v1/user/relation/list-followers
+    ///
+    /// 分页查询当前账号的粉丝账号列表
+    async fn relation_service_list_followers<'list_followers_relations_request>(&self, list_followers_relations_request: models::ListFollowersRelationsRequest) -> Result<models::ListFollowersRelationsReply, Error<RelationServiceListFollowersError>>;
+
+    /// POST /v1/user/relation/list-following
+    ///
+    /// 分页查询当前账号关注的账号列表
+    async fn relation_service_list_following<'list_following_relations_request>(&self, list_following_relations_request: models::ListFollowingRelationsRequest) -> Result<models::ListFollowingRelationsReply, Error<RelationServiceListFollowingError>>;
+
+    /// POST /v1/user/relation/unblock
+    ///
+    /// 当前账号取消拉黑目标账号
+    async fn relation_service_unblock<'unblock_relation_request>(&self, unblock_relation_request: models::UnblockRelationRequest) -> Result<serde_json::Value, Error<RelationServiceUnblockError>>;
+
+    /// POST /v1/user/relation/unfollow
+    ///
+    /// 当前账号取消关注目标账号
+    async fn relation_service_unfollow<'unfollow_relation_request>(&self, unfollow_relation_request: models::UnfollowRelationRequest) -> Result<serde_json::Value, Error<RelationServiceUnfollowError>>;
 }
 
-/// struct for passing parameters to the method [`relation_service_follow`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceFollowParams {
-    pub follow_relation_request: models::FollowRelationRequest
+pub struct RelationServiceApiClient {
+    configuration: Arc<configuration::Configuration>
 }
 
-/// struct for passing parameters to the method [`relation_service_get_status`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceGetStatusParams {
-    pub get_status_relation_request: models::GetStatusRelationRequest
-}
-
-/// struct for passing parameters to the method [`relation_service_list_blocked`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceListBlockedParams {
-    pub list_blocked_relations_request: models::ListBlockedRelationsRequest
-}
-
-/// struct for passing parameters to the method [`relation_service_list_followers`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceListFollowersParams {
-    pub list_followers_relations_request: models::ListFollowersRelationsRequest
-}
-
-/// struct for passing parameters to the method [`relation_service_list_following`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceListFollowingParams {
-    pub list_following_relations_request: models::ListFollowingRelationsRequest
-}
-
-/// struct for passing parameters to the method [`relation_service_unblock`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceUnblockParams {
-    pub unblock_relation_request: models::UnblockRelationRequest
-}
-
-/// struct for passing parameters to the method [`relation_service_unfollow`]
-#[derive(Clone, Debug)]
-pub struct RelationServiceUnfollowParams {
-    pub unfollow_relation_request: models::UnfollowRelationRequest
+impl RelationServiceApiClient {
+    pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
+        Self { configuration }
+    }
 }
 
 
-/// struct for typed errors of method [`relation_service_block`]
+
+#[async_trait]
+impl RelationServiceApi for RelationServiceApiClient {
+    /// 当前账号拉黑目标账号
+    async fn relation_service_block<'block_relation_request>(&self, block_relation_request: models::BlockRelationRequest) -> Result<serde_json::Value, Error<RelationServiceBlockError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/block", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&block_relation_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceBlockError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 当前账号关注目标账号
+    async fn relation_service_follow<'follow_relation_request>(&self, follow_relation_request: models::FollowRelationRequest) -> Result<serde_json::Value, Error<RelationServiceFollowError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/follow", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&follow_relation_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceFollowError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 查询当前账号与目标账号之间的关系
+    async fn relation_service_get_status<'get_status_relation_request>(&self, get_status_relation_request: models::GetStatusRelationRequest) -> Result<models::GetStatusRelationReply, Error<RelationServiceGetStatusError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/get-status", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&get_status_relation_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetStatusRelationReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetStatusRelationReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceGetStatusError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 分页查询当前账号拉黑的账号列表
+    async fn relation_service_list_blocked<'list_blocked_relations_request>(&self, list_blocked_relations_request: models::ListBlockedRelationsRequest) -> Result<models::ListBlockedRelationsReply, Error<RelationServiceListBlockedError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/list-blocked", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_blocked_relations_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListBlockedRelationsReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListBlockedRelationsReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceListBlockedError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 分页查询当前账号的粉丝账号列表
+    async fn relation_service_list_followers<'list_followers_relations_request>(&self, list_followers_relations_request: models::ListFollowersRelationsRequest) -> Result<models::ListFollowersRelationsReply, Error<RelationServiceListFollowersError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/list-followers", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_followers_relations_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListFollowersRelationsReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListFollowersRelationsReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceListFollowersError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 分页查询当前账号关注的账号列表
+    async fn relation_service_list_following<'list_following_relations_request>(&self, list_following_relations_request: models::ListFollowingRelationsRequest) -> Result<models::ListFollowingRelationsReply, Error<RelationServiceListFollowingError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/list-following", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_following_relations_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListFollowingRelationsReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListFollowingRelationsReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceListFollowingError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 当前账号取消拉黑目标账号
+    async fn relation_service_unblock<'unblock_relation_request>(&self, unblock_relation_request: models::UnblockRelationRequest) -> Result<serde_json::Value, Error<RelationServiceUnblockError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/unblock", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&unblock_relation_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceUnblockError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 当前账号取消关注目标账号
+    async fn relation_service_unfollow<'unfollow_relation_request>(&self, unfollow_relation_request: models::UnfollowRelationRequest) -> Result<serde_json::Value, Error<RelationServiceUnfollowError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/relation/unfollow", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&unfollow_relation_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<RelationServiceUnfollowError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+}
+
+/// struct for typed errors of method [`RelationServiceApi::relation_service_block`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceBlockError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_follow`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_follow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceFollowError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_get_status`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_get_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceGetStatusError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_list_blocked`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_list_blocked`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceListBlockedError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_list_followers`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_list_followers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceListFollowersError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_list_following`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_list_following`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceListFollowingError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_unblock`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_unblock`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceUnblockError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`relation_service_unfollow`]
+/// struct for typed errors of method [`RelationServiceApi::relation_service_unfollow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RelationServiceUnfollowError {
     UnknownValue(serde_json::Value),
-}
-
-
-/// 当前账号拉黑目标账号
-pub async fn relation_service_block(configuration: &configuration::Configuration, params: RelationServiceBlockParams) -> Result<serde_json::Value, Error<RelationServiceBlockError>> {
-
-    let uri_str = format!("{}/v1/user/relation/block", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.block_relation_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceBlockError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 当前账号关注目标账号
-pub async fn relation_service_follow(configuration: &configuration::Configuration, params: RelationServiceFollowParams) -> Result<serde_json::Value, Error<RelationServiceFollowError>> {
-
-    let uri_str = format!("{}/v1/user/relation/follow", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.follow_relation_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceFollowError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 查询当前账号与目标账号之间的关系
-pub async fn relation_service_get_status(configuration: &configuration::Configuration, params: RelationServiceGetStatusParams) -> Result<models::GetStatusRelationReply, Error<RelationServiceGetStatusError>> {
-
-    let uri_str = format!("{}/v1/user/relation/get-status", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.get_status_relation_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetStatusRelationReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetStatusRelationReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceGetStatusError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 分页查询当前账号拉黑的账号列表
-pub async fn relation_service_list_blocked(configuration: &configuration::Configuration, params: RelationServiceListBlockedParams) -> Result<models::ListBlockedRelationsReply, Error<RelationServiceListBlockedError>> {
-
-    let uri_str = format!("{}/v1/user/relation/list-blocked", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.list_blocked_relations_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListBlockedRelationsReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ListBlockedRelationsReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceListBlockedError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 分页查询当前账号的粉丝账号列表
-pub async fn relation_service_list_followers(configuration: &configuration::Configuration, params: RelationServiceListFollowersParams) -> Result<models::ListFollowersRelationsReply, Error<RelationServiceListFollowersError>> {
-
-    let uri_str = format!("{}/v1/user/relation/list-followers", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.list_followers_relations_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListFollowersRelationsReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ListFollowersRelationsReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceListFollowersError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 分页查询当前账号关注的账号列表
-pub async fn relation_service_list_following(configuration: &configuration::Configuration, params: RelationServiceListFollowingParams) -> Result<models::ListFollowingRelationsReply, Error<RelationServiceListFollowingError>> {
-
-    let uri_str = format!("{}/v1/user/relation/list-following", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.list_following_relations_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListFollowingRelationsReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ListFollowingRelationsReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceListFollowingError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 当前账号取消拉黑目标账号
-pub async fn relation_service_unblock(configuration: &configuration::Configuration, params: RelationServiceUnblockParams) -> Result<serde_json::Value, Error<RelationServiceUnblockError>> {
-
-    let uri_str = format!("{}/v1/user/relation/unblock", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.unblock_relation_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceUnblockError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 当前账号取消关注目标账号
-pub async fn relation_service_unfollow(configuration: &configuration::Configuration, params: RelationServiceUnfollowParams) -> Result<serde_json::Value, Error<RelationServiceUnfollowError>> {
-
-    let uri_str = format!("{}/v1/user/relation/unfollow", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.unfollow_relation_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<RelationServiceUnfollowError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
 }
 

@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetProfileAccountReply {
     #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
-    pub profile: Option<Box<models::AccountProfile>>,
+    pub profile: Option<models::AccountProfile>,
 }
 
 impl GetProfileAccountReply {

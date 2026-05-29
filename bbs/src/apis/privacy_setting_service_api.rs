@@ -9,108 +9,133 @@
  */
 
 
+use async_trait::async_trait;
 use reqwest;
+use std::sync::Arc;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use super::{Error, configuration};
+use crate::apis::ContentType;
 
-/// struct for passing parameters to the method [`privacy_setting_service_get_current`]
-#[derive(Clone, Debug)]
-pub struct PrivacySettingServiceGetCurrentParams {
-    pub body: serde_json::Value
+#[async_trait]
+pub trait PrivacySettingServiceApi: Send + Sync {
+
+    /// POST /v1/user/privacy-setting/get-current
+    ///
+    /// 获取当前登录账号的隐私设置
+    async fn privacy_setting_service_get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingReply, Error<PrivacySettingServiceGetCurrentError>>;
+
+    /// POST /v1/user/privacy-setting/update-current
+    ///
+    /// 更新当前登录账号的隐私设置
+    async fn privacy_setting_service_update_current<'update_current_privacy_setting_request>(&self, update_current_privacy_setting_request: models::UpdateCurrentPrivacySettingRequest) -> Result<models::UpdateCurrentPrivacySettingReply, Error<PrivacySettingServiceUpdateCurrentError>>;
 }
 
-/// struct for passing parameters to the method [`privacy_setting_service_update_current`]
-#[derive(Clone, Debug)]
-pub struct PrivacySettingServiceUpdateCurrentParams {
-    pub update_current_privacy_setting_request: models::UpdateCurrentPrivacySettingRequest
+pub struct PrivacySettingServiceApiClient {
+    configuration: Arc<configuration::Configuration>
+}
+
+impl PrivacySettingServiceApiClient {
+    pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
+        Self { configuration }
+    }
 }
 
 
-/// struct for typed errors of method [`privacy_setting_service_get_current`]
+
+#[async_trait]
+impl PrivacySettingServiceApi for PrivacySettingServiceApiClient {
+    /// 获取当前登录账号的隐私设置
+    async fn privacy_setting_service_get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingReply, Error<PrivacySettingServiceGetCurrentError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/privacy-setting/get-current", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&body);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentPrivacySettingReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentPrivacySettingReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<PrivacySettingServiceGetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 更新当前登录账号的隐私设置
+    async fn privacy_setting_service_update_current<'update_current_privacy_setting_request>(&self, update_current_privacy_setting_request: models::UpdateCurrentPrivacySettingRequest) -> Result<models::UpdateCurrentPrivacySettingReply, Error<PrivacySettingServiceUpdateCurrentError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/privacy-setting/update-current", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&update_current_privacy_setting_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<PrivacySettingServiceUpdateCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+}
+
+/// struct for typed errors of method [`PrivacySettingServiceApi::privacy_setting_service_get_current`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum PrivacySettingServiceGetCurrentError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`privacy_setting_service_update_current`]
+/// struct for typed errors of method [`PrivacySettingServiceApi::privacy_setting_service_update_current`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum PrivacySettingServiceUpdateCurrentError {
     UnknownValue(serde_json::Value),
-}
-
-
-/// 获取当前登录账号的隐私设置
-pub async fn privacy_setting_service_get_current(configuration: &configuration::Configuration, params: PrivacySettingServiceGetCurrentParams) -> Result<models::GetCurrentPrivacySettingReply, Error<PrivacySettingServiceGetCurrentError>> {
-
-    let uri_str = format!("{}/v1/user/privacy-setting/get-current", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.body);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentPrivacySettingReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetCurrentPrivacySettingReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<PrivacySettingServiceGetCurrentError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
-}
-
-/// 更新当前登录账号的隐私设置
-pub async fn privacy_setting_service_update_current(configuration: &configuration::Configuration, params: PrivacySettingServiceUpdateCurrentParams) -> Result<models::UpdateCurrentPrivacySettingReply, Error<PrivacySettingServiceUpdateCurrentError>> {
-
-    let uri_str = format!("{}/v1/user/privacy-setting/update-current", configuration.base_path);
-    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
-
-    if let Some(ref user_agent) = configuration.user_agent {
-        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }
-    req_builder = req_builder.json(&params.update_current_privacy_setting_request);
-
-    let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
-
-    let status = resp.status();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingReply`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingReply`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<PrivacySettingServiceUpdateCurrentError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, content, entity }))
-    }
 }
 

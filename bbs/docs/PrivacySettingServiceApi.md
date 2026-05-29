@@ -5,13 +5,13 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**privacySettingServiceGetCurrent**](PrivacySettingServiceApi.md#privacysettingservicegetcurrent) | **POST** /v1/user/privacy-setting/get-current |  |
-| [**privacySettingServiceUpdate**](PrivacySettingServiceApi.md#privacysettingserviceupdate) | **POST** /v1/user/privacy-setting/update-current |  |
+| [**privacySettingServiceUpdateCurrent**](PrivacySettingServiceApi.md#privacysettingserviceupdatecurrent) | **POST** /v1/user/privacy-setting/update-current |  |
 
 
 
 ## privacySettingServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentPrivacySettingReply privacySettingServiceGetCurrent(body)
+> GetCurrentPrivacySettingReply privacySettingServiceGetCurrent(body)
 
 
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentPrivacySettingReply**](CommonApiAppBbsV1UserGetCurrentPrivacySettingReply.md)
+[**GetCurrentPrivacySettingReply**](GetCurrentPrivacySettingReply.md)
 
 ### Authorization
 
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## privacySettingServiceUpdate
+## privacySettingServiceUpdateCurrent
 
-> CommonApiAppBbsV1UserUpdatePrivacySettingReply privacySettingServiceUpdate(commonApiAppBbsV1UserUpdatePrivacySettingRequest)
+> UpdateCurrentPrivacySettingReply privacySettingServiceUpdateCurrent(updateCurrentPrivacySettingRequest)
 
 
 
@@ -91,19 +91,19 @@ import {
   Configuration,
   PrivacySettingServiceApi,
 } from '@bass/bbs-sdk';
-import type { PrivacySettingServiceUpdateRequest } from '@bass/bbs-sdk';
+import type { PrivacySettingServiceUpdateCurrentRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new PrivacySettingServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserUpdatePrivacySettingRequest
-    commonApiAppBbsV1UserUpdatePrivacySettingRequest: ...,
-  } satisfies PrivacySettingServiceUpdateRequest;
+    // UpdateCurrentPrivacySettingRequest
+    updateCurrentPrivacySettingRequest: ...,
+  } satisfies PrivacySettingServiceUpdateCurrentRequest;
 
   try {
-    const data = await api.privacySettingServiceUpdate(body);
+    const data = await api.privacySettingServiceUpdateCurrent(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -119,11 +119,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserUpdatePrivacySettingRequest** | [CommonApiAppBbsV1UserUpdatePrivacySettingRequest](CommonApiAppBbsV1UserUpdatePrivacySettingRequest.md) |  | |
+| **updateCurrentPrivacySettingRequest** | [UpdateCurrentPrivacySettingRequest](UpdateCurrentPrivacySettingRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpdatePrivacySettingReply**](CommonApiAppBbsV1UserUpdatePrivacySettingReply.md)
+[**UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySettingReply.md)
 
 ### Authorization
 

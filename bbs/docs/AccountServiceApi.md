@@ -4,83 +4,15 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**accountServiceBatchGetProfile**](AccountServiceApi.md#accountservicebatchgetprofile) | **POST** /v1/user/account/batch-get-profile |  |
 | [**accountServiceGetCurrent**](AccountServiceApi.md#accountservicegetcurrent) | **POST** /v1/user/account/get-current |  |
 | [**accountServiceGetProfile**](AccountServiceApi.md#accountservicegetprofile) | **POST** /v1/user/account/get-profile |  |
 | [**accountServiceUpdateProfile**](AccountServiceApi.md#accountserviceupdateprofile) | **POST** /v1/user/account/update-profile |  |
 
 
 
-## accountServiceBatchGetProfile
-
-> CommonApiAppBbsV1UserBatchGetProfileAccountReply accountServiceBatchGetProfile(commonApiAppBbsV1UserBatchGetProfileAccountRequest)
-
-
-
-批量获取账号展示资料
-
-### Example
-
-```ts
-import {
-  Configuration,
-  AccountServiceApi,
-} from '@bass/bbs-sdk';
-import type { AccountServiceBatchGetProfileRequest } from '@bass/bbs-sdk';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk SDK...");
-  const api = new AccountServiceApi();
-
-  const body = {
-    // CommonApiAppBbsV1UserBatchGetProfileAccountRequest
-    commonApiAppBbsV1UserBatchGetProfileAccountRequest: ...,
-  } satisfies AccountServiceBatchGetProfileRequest;
-
-  try {
-    const data = await api.accountServiceBatchGetProfile(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserBatchGetProfileAccountRequest** | [CommonApiAppBbsV1UserBatchGetProfileAccountRequest](CommonApiAppBbsV1UserBatchGetProfileAccountRequest.md) |  | |
-
-### Return type
-
-[**CommonApiAppBbsV1UserBatchGetProfileAccountReply**](CommonApiAppBbsV1UserBatchGetProfileAccountReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
 ## accountServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentAccountReply accountServiceGetCurrent(body)
+> GetCurrentAccountReply accountServiceGetCurrent(body)
 
 
 
@@ -125,7 +57,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentAccountReply**](CommonApiAppBbsV1UserGetCurrentAccountReply.md)
+[**GetCurrentAccountReply**](GetCurrentAccountReply.md)
 
 ### Authorization
 
@@ -147,7 +79,7 @@ No authorization required
 
 ## accountServiceGetProfile
 
-> CommonApiAppBbsV1UserGetProfileAccountReply accountServiceGetProfile(commonApiAppBbsV1UserGetProfileAccountRequest)
+> GetProfileAccountReply accountServiceGetProfile(getProfileAccountRequest)
 
 
 
@@ -167,8 +99,8 @@ async function example() {
   const api = new AccountServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserGetProfileAccountRequest
-    commonApiAppBbsV1UserGetProfileAccountRequest: ...,
+    // GetProfileAccountRequest
+    getProfileAccountRequest: ...,
   } satisfies AccountServiceGetProfileRequest;
 
   try {
@@ -188,11 +120,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserGetProfileAccountRequest** | [CommonApiAppBbsV1UserGetProfileAccountRequest](CommonApiAppBbsV1UserGetProfileAccountRequest.md) |  | |
+| **getProfileAccountRequest** | [GetProfileAccountRequest](GetProfileAccountRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetProfileAccountReply**](CommonApiAppBbsV1UserGetProfileAccountReply.md)
+[**GetProfileAccountReply**](GetProfileAccountReply.md)
 
 ### Authorization
 
@@ -214,7 +146,7 @@ No authorization required
 
 ## accountServiceUpdateProfile
 
-> CommonApiAppBbsV1UserUpdateProfileAccountReply accountServiceUpdateProfile(commonApiAppBbsV1UserUpdateProfileAccountRequest)
+> UpdateProfileAccountReply accountServiceUpdateProfile(updateProfileAccountRequest)
 
 
 
@@ -234,8 +166,8 @@ async function example() {
   const api = new AccountServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserUpdateProfileAccountRequest
-    commonApiAppBbsV1UserUpdateProfileAccountRequest: ...,
+    // UpdateProfileAccountRequest
+    updateProfileAccountRequest: ...,
   } satisfies AccountServiceUpdateProfileRequest;
 
   try {
@@ -255,11 +187,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserUpdateProfileAccountRequest** | [CommonApiAppBbsV1UserUpdateProfileAccountRequest](CommonApiAppBbsV1UserUpdateProfileAccountRequest.md) |  | |
+| **updateProfileAccountRequest** | [UpdateProfileAccountRequest](UpdateProfileAccountRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpdateProfileAccountReply**](CommonApiAppBbsV1UserUpdateProfileAccountReply.md)
+[**UpdateProfileAccountReply**](UpdateProfileAccountReply.md)
 
 ### Authorization
 

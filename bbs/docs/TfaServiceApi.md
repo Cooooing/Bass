@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 
 ## tfaServiceBeginEnable
 
-> CommonApiAppBbsV1UserBeginEnableTfaReply tfaServiceBeginEnable(body)
+> BeginEnableTfaReply tfaServiceBeginEnable(body)
 
 
 
@@ -59,7 +59,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CommonApiAppBbsV1UserBeginEnableTfaReply**](CommonApiAppBbsV1UserBeginEnableTfaReply.md)
+[**BeginEnableTfaReply**](BeginEnableTfaReply.md)
 
 ### Authorization
 
@@ -81,7 +81,7 @@ No authorization required
 
 ## tfaServiceConfirmEnable
 
-> object tfaServiceConfirmEnable(commonApiAppBbsV1UserConfirmEnableTfaRequest)
+> object tfaServiceConfirmEnable(confirmEnableTfaRequest)
 
 
 
@@ -101,8 +101,8 @@ async function example() {
   const api = new TfaServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserConfirmEnableTfaRequest
-    commonApiAppBbsV1UserConfirmEnableTfaRequest: ...,
+    // ConfirmEnableTfaRequest
+    confirmEnableTfaRequest: ...,
   } satisfies TfaServiceConfirmEnableRequest;
 
   try {
@@ -122,7 +122,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserConfirmEnableTfaRequest** | [CommonApiAppBbsV1UserConfirmEnableTfaRequest](CommonApiAppBbsV1UserConfirmEnableTfaRequest.md) |  | |
+| **confirmEnableTfaRequest** | [ConfirmEnableTfaRequest](ConfirmEnableTfaRequest.md) |  | |
 
 ### Return type
 
@@ -148,7 +148,7 @@ No authorization required
 
 ## tfaServiceDisable
 
-> object tfaServiceDisable(commonApiAppBbsV1UserDisableTfaRequest)
+> object tfaServiceDisable(disableTfaRequest)
 
 
 
@@ -168,8 +168,8 @@ async function example() {
   const api = new TfaServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserDisableTfaRequest
-    commonApiAppBbsV1UserDisableTfaRequest: ...,
+    // DisableTfaRequest
+    disableTfaRequest: ...,
   } satisfies TfaServiceDisableRequest;
 
   try {
@@ -189,7 +189,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserDisableTfaRequest** | [CommonApiAppBbsV1UserDisableTfaRequest](CommonApiAppBbsV1UserDisableTfaRequest.md) |  | |
+| **disableTfaRequest** | [DisableTfaRequest](DisableTfaRequest.md) |  | |
 
 ### Return type
 
@@ -215,7 +215,7 @@ No authorization required
 
 ## tfaServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentTfaReply tfaServiceGetCurrent(body)
+> GetCurrentTfaReply tfaServiceGetCurrent(body)
 
 
 
@@ -260,7 +260,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentTfaReply**](CommonApiAppBbsV1UserGetCurrentTfaReply.md)
+[**GetCurrentTfaReply**](GetCurrentTfaReply.md)
 
 ### Authorization
 
@@ -282,7 +282,7 @@ No authorization required
 
 ## tfaServiceValidate
 
-> CommonApiAppBbsV1UserValidateTfaReply tfaServiceValidate(commonApiAppBbsV1UserValidateTfaRequest)
+> ValidateTfaReply tfaServiceValidate(validateTfaRequest)
 
 
 
@@ -302,8 +302,8 @@ async function example() {
   const api = new TfaServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserValidateTfaRequest
-    commonApiAppBbsV1UserValidateTfaRequest: ...,
+    // ValidateTfaRequest
+    validateTfaRequest: ...,
   } satisfies TfaServiceValidateRequest;
 
   try {
@@ -323,11 +323,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserValidateTfaRequest** | [CommonApiAppBbsV1UserValidateTfaRequest](CommonApiAppBbsV1UserValidateTfaRequest.md) |  | |
+| **validateTfaRequest** | [ValidateTfaRequest](ValidateTfaRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserValidateTfaReply**](CommonApiAppBbsV1UserValidateTfaReply.md)
+[**ValidateTfaReply**](ValidateTfaReply.md)
 
 ### Authorization
 

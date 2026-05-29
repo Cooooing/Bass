@@ -5,13 +5,13 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**locationServiceGetCurrent**](LocationServiceApi.md#locationservicegetcurrent) | **POST** /v1/user/location/get-current |  |
-| [**locationServiceUpsert**](LocationServiceApi.md#locationserviceupsert) | **POST** /v1/user/location/upsert-current |  |
+| [**locationServiceUpsertCurrent**](LocationServiceApi.md#locationserviceupsertcurrent) | **POST** /v1/user/location/upsert-current |  |
 
 
 
 ## locationServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentLocationReply locationServiceGetCurrent(body)
+> GetCurrentLocationReply locationServiceGetCurrent(body)
 
 
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentLocationReply**](CommonApiAppBbsV1UserGetCurrentLocationReply.md)
+[**GetCurrentLocationReply**](GetCurrentLocationReply.md)
 
 ### Authorization
 
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## locationServiceUpsert
+## locationServiceUpsertCurrent
 
-> CommonApiAppBbsV1UserUpsertLocationReply locationServiceUpsert(commonApiAppBbsV1UserUpsertLocationRequest)
+> UpsertCurrentLocationReply locationServiceUpsertCurrent(upsertCurrentLocationRequest)
 
 
 
@@ -91,19 +91,19 @@ import {
   Configuration,
   LocationServiceApi,
 } from '@bass/bbs-sdk';
-import type { LocationServiceUpsertRequest } from '@bass/bbs-sdk';
+import type { LocationServiceUpsertCurrentRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new LocationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserUpsertLocationRequest
-    commonApiAppBbsV1UserUpsertLocationRequest: ...,
-  } satisfies LocationServiceUpsertRequest;
+    // UpsertCurrentLocationRequest
+    upsertCurrentLocationRequest: ...,
+  } satisfies LocationServiceUpsertCurrentRequest;
 
   try {
-    const data = await api.locationServiceUpsert(body);
+    const data = await api.locationServiceUpsertCurrent(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -119,11 +119,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserUpsertLocationRequest** | [CommonApiAppBbsV1UserUpsertLocationRequest](CommonApiAppBbsV1UserUpsertLocationRequest.md) |  | |
+| **upsertCurrentLocationRequest** | [UpsertCurrentLocationRequest](UpsertCurrentLocationRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpsertLocationReply**](CommonApiAppBbsV1UserUpsertLocationReply.md)
+[**UpsertCurrentLocationReply**](UpsertCurrentLocationReply.md)
 
 ### Authorization
 

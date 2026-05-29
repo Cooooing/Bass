@@ -4,87 +4,20 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**relationServiceBatchGetStatus**](RelationServiceApi.md#relationservicebatchgetstatus) | **POST** /v1/user/relation/batch-get-status |  |
 | [**relationServiceBlock**](RelationServiceApi.md#relationserviceblock) | **POST** /v1/user/relation/block |  |
 | [**relationServiceFollow**](RelationServiceApi.md#relationservicefollow) | **POST** /v1/user/relation/follow |  |
-| [**relationServicePageBlocked**](RelationServiceApi.md#relationservicepageblocked) | **POST** /v1/user/relation/page-blocked |  |
-| [**relationServicePageFollowers**](RelationServiceApi.md#relationservicepagefollowers) | **POST** /v1/user/relation/page-followers |  |
-| [**relationServicePageFollowing**](RelationServiceApi.md#relationservicepagefollowing) | **POST** /v1/user/relation/page-following |  |
+| [**relationServiceGetStatus**](RelationServiceApi.md#relationservicegetstatus) | **POST** /v1/user/relation/get-status |  |
+| [**relationServiceListBlocked**](RelationServiceApi.md#relationservicelistblocked) | **POST** /v1/user/relation/list-blocked |  |
+| [**relationServiceListFollowers**](RelationServiceApi.md#relationservicelistfollowers) | **POST** /v1/user/relation/list-followers |  |
+| [**relationServiceListFollowing**](RelationServiceApi.md#relationservicelistfollowing) | **POST** /v1/user/relation/list-following |  |
 | [**relationServiceUnblock**](RelationServiceApi.md#relationserviceunblock) | **POST** /v1/user/relation/unblock |  |
 | [**relationServiceUnfollow**](RelationServiceApi.md#relationserviceunfollow) | **POST** /v1/user/relation/unfollow |  |
 
 
 
-## relationServiceBatchGetStatus
-
-> CommonApiAppBbsV1UserBatchGetStatusRelationReply relationServiceBatchGetStatus(commonApiAppBbsV1UserBatchGetStatusRelationRequest)
-
-
-
-批量查询当前账号与多个目标账号之间的关系状态
-
-### Example
-
-```ts
-import {
-  Configuration,
-  RelationServiceApi,
-} from '@bass/bbs-sdk';
-import type { RelationServiceBatchGetStatusRequest } from '@bass/bbs-sdk';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk SDK...");
-  const api = new RelationServiceApi();
-
-  const body = {
-    // CommonApiAppBbsV1UserBatchGetStatusRelationRequest
-    commonApiAppBbsV1UserBatchGetStatusRelationRequest: ...,
-  } satisfies RelationServiceBatchGetStatusRequest;
-
-  try {
-    const data = await api.relationServiceBatchGetStatus(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserBatchGetStatusRelationRequest** | [CommonApiAppBbsV1UserBatchGetStatusRelationRequest](CommonApiAppBbsV1UserBatchGetStatusRelationRequest.md) |  | |
-
-### Return type
-
-[**CommonApiAppBbsV1UserBatchGetStatusRelationReply**](CommonApiAppBbsV1UserBatchGetStatusRelationReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
 ## relationServiceBlock
 
-> object relationServiceBlock(commonApiAppBbsV1UserBlockRelationRequest)
+> object relationServiceBlock(blockRelationRequest)
 
 
 
@@ -104,8 +37,8 @@ async function example() {
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserBlockRelationRequest
-    commonApiAppBbsV1UserBlockRelationRequest: ...,
+    // BlockRelationRequest
+    blockRelationRequest: ...,
   } satisfies RelationServiceBlockRequest;
 
   try {
@@ -125,7 +58,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserBlockRelationRequest** | [CommonApiAppBbsV1UserBlockRelationRequest](CommonApiAppBbsV1UserBlockRelationRequest.md) |  | |
+| **blockRelationRequest** | [BlockRelationRequest](BlockRelationRequest.md) |  | |
 
 ### Return type
 
@@ -151,7 +84,7 @@ No authorization required
 
 ## relationServiceFollow
 
-> object relationServiceFollow(commonApiAppBbsV1UserFollowRelationRequest)
+> object relationServiceFollow(followRelationRequest)
 
 
 
@@ -171,8 +104,8 @@ async function example() {
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserFollowRelationRequest
-    commonApiAppBbsV1UserFollowRelationRequest: ...,
+    // FollowRelationRequest
+    followRelationRequest: ...,
   } satisfies RelationServiceFollowRequest;
 
   try {
@@ -192,7 +125,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserFollowRelationRequest** | [CommonApiAppBbsV1UserFollowRelationRequest](CommonApiAppBbsV1UserFollowRelationRequest.md) |  | |
+| **followRelationRequest** | [FollowRelationRequest](FollowRelationRequest.md) |  | |
 
 ### Return type
 
@@ -216,9 +149,76 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## relationServicePageBlocked
+## relationServiceGetStatus
 
-> CommonApiAppBbsV1UserPageBlockedRelationReply relationServicePageBlocked(commonApiAppBbsV1UserPageBlockedRelationRequest)
+> GetStatusRelationReply relationServiceGetStatus(getStatusRelationRequest)
+
+
+
+查询当前账号与目标账号之间的关系
+
+### Example
+
+```ts
+import {
+  Configuration,
+  RelationServiceApi,
+} from '@bass/bbs-sdk';
+import type { RelationServiceGetStatusRequest } from '@bass/bbs-sdk';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk SDK...");
+  const api = new RelationServiceApi();
+
+  const body = {
+    // GetStatusRelationRequest
+    getStatusRelationRequest: ...,
+  } satisfies RelationServiceGetStatusRequest;
+
+  try {
+    const data = await api.relationServiceGetStatus(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **getStatusRelationRequest** | [GetStatusRelationRequest](GetStatusRelationRequest.md) |  | |
+
+### Return type
+
+[**GetStatusRelationReply**](GetStatusRelationReply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## relationServiceListBlocked
+
+> ListBlockedRelationsReply relationServiceListBlocked(listBlockedRelationsRequest)
 
 
 
@@ -231,19 +231,19 @@ import {
   Configuration,
   RelationServiceApi,
 } from '@bass/bbs-sdk';
-import type { RelationServicePageBlockedRequest } from '@bass/bbs-sdk';
+import type { RelationServiceListBlockedRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserPageBlockedRelationRequest
-    commonApiAppBbsV1UserPageBlockedRelationRequest: ...,
-  } satisfies RelationServicePageBlockedRequest;
+    // ListBlockedRelationsRequest
+    listBlockedRelationsRequest: ...,
+  } satisfies RelationServiceListBlockedRequest;
 
   try {
-    const data = await api.relationServicePageBlocked(body);
+    const data = await api.relationServiceListBlocked(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -259,11 +259,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserPageBlockedRelationRequest** | [CommonApiAppBbsV1UserPageBlockedRelationRequest](CommonApiAppBbsV1UserPageBlockedRelationRequest.md) |  | |
+| **listBlockedRelationsRequest** | [ListBlockedRelationsRequest](ListBlockedRelationsRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserPageBlockedRelationReply**](CommonApiAppBbsV1UserPageBlockedRelationReply.md)
+[**ListBlockedRelationsReply**](ListBlockedRelationsReply.md)
 
 ### Authorization
 
@@ -283,9 +283,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## relationServicePageFollowers
+## relationServiceListFollowers
 
-> CommonApiAppBbsV1UserPageFollowersRelationReply relationServicePageFollowers(commonApiAppBbsV1UserPageFollowersRelationRequest)
+> ListFollowersRelationsReply relationServiceListFollowers(listFollowersRelationsRequest)
 
 
 
@@ -298,19 +298,19 @@ import {
   Configuration,
   RelationServiceApi,
 } from '@bass/bbs-sdk';
-import type { RelationServicePageFollowersRequest } from '@bass/bbs-sdk';
+import type { RelationServiceListFollowersRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserPageFollowersRelationRequest
-    commonApiAppBbsV1UserPageFollowersRelationRequest: ...,
-  } satisfies RelationServicePageFollowersRequest;
+    // ListFollowersRelationsRequest
+    listFollowersRelationsRequest: ...,
+  } satisfies RelationServiceListFollowersRequest;
 
   try {
-    const data = await api.relationServicePageFollowers(body);
+    const data = await api.relationServiceListFollowers(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -326,11 +326,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserPageFollowersRelationRequest** | [CommonApiAppBbsV1UserPageFollowersRelationRequest](CommonApiAppBbsV1UserPageFollowersRelationRequest.md) |  | |
+| **listFollowersRelationsRequest** | [ListFollowersRelationsRequest](ListFollowersRelationsRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserPageFollowersRelationReply**](CommonApiAppBbsV1UserPageFollowersRelationReply.md)
+[**ListFollowersRelationsReply**](ListFollowersRelationsReply.md)
 
 ### Authorization
 
@@ -350,9 +350,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## relationServicePageFollowing
+## relationServiceListFollowing
 
-> CommonApiAppBbsV1UserPageFollowingRelationReply relationServicePageFollowing(commonApiAppBbsV1UserPageFollowingRelationRequest)
+> ListFollowingRelationsReply relationServiceListFollowing(listFollowingRelationsRequest)
 
 
 
@@ -365,19 +365,19 @@ import {
   Configuration,
   RelationServiceApi,
 } from '@bass/bbs-sdk';
-import type { RelationServicePageFollowingRequest } from '@bass/bbs-sdk';
+import type { RelationServiceListFollowingRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserPageFollowingRelationRequest
-    commonApiAppBbsV1UserPageFollowingRelationRequest: ...,
-  } satisfies RelationServicePageFollowingRequest;
+    // ListFollowingRelationsRequest
+    listFollowingRelationsRequest: ...,
+  } satisfies RelationServiceListFollowingRequest;
 
   try {
-    const data = await api.relationServicePageFollowing(body);
+    const data = await api.relationServiceListFollowing(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -393,11 +393,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserPageFollowingRelationRequest** | [CommonApiAppBbsV1UserPageFollowingRelationRequest](CommonApiAppBbsV1UserPageFollowingRelationRequest.md) |  | |
+| **listFollowingRelationsRequest** | [ListFollowingRelationsRequest](ListFollowingRelationsRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserPageFollowingRelationReply**](CommonApiAppBbsV1UserPageFollowingRelationReply.md)
+[**ListFollowingRelationsReply**](ListFollowingRelationsReply.md)
 
 ### Authorization
 
@@ -419,7 +419,7 @@ No authorization required
 
 ## relationServiceUnblock
 
-> object relationServiceUnblock(commonApiAppBbsV1UserUnblockRelationRequest)
+> object relationServiceUnblock(unblockRelationRequest)
 
 
 
@@ -439,8 +439,8 @@ async function example() {
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserUnblockRelationRequest
-    commonApiAppBbsV1UserUnblockRelationRequest: ...,
+    // UnblockRelationRequest
+    unblockRelationRequest: ...,
   } satisfies RelationServiceUnblockRequest;
 
   try {
@@ -460,7 +460,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserUnblockRelationRequest** | [CommonApiAppBbsV1UserUnblockRelationRequest](CommonApiAppBbsV1UserUnblockRelationRequest.md) |  | |
+| **unblockRelationRequest** | [UnblockRelationRequest](UnblockRelationRequest.md) |  | |
 
 ### Return type
 
@@ -486,7 +486,7 @@ No authorization required
 
 ## relationServiceUnfollow
 
-> object relationServiceUnfollow(commonApiAppBbsV1UserUnfollowRelationRequest)
+> object relationServiceUnfollow(unfollowRelationRequest)
 
 
 
@@ -506,8 +506,8 @@ async function example() {
   const api = new RelationServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserUnfollowRelationRequest
-    commonApiAppBbsV1UserUnfollowRelationRequest: ...,
+    // UnfollowRelationRequest
+    unfollowRelationRequest: ...,
   } satisfies RelationServiceUnfollowRequest;
 
   try {
@@ -527,7 +527,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserUnfollowRelationRequest** | [CommonApiAppBbsV1UserUnfollowRelationRequest](CommonApiAppBbsV1UserUnfollowRelationRequest.md) |  | |
+| **unfollowRelationRequest** | [UnfollowRelationRequest](UnfollowRelationRequest.md) |  | |
 
 ### Return type
 

@@ -14,46 +14,46 @@
 
 import * as runtime from '../runtime';
 import {
-    type CommonApiAppBbsV1UserBeginEnableTfaReply,
-    CommonApiAppBbsV1UserBeginEnableTfaReplyFromJSON,
-    CommonApiAppBbsV1UserBeginEnableTfaReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserBeginEnableTfaReply';
+    type BeginEnableTfaReply,
+    BeginEnableTfaReplyFromJSON,
+    BeginEnableTfaReplyToJSON,
+} from '../models/BeginEnableTfaReply';
 import {
-    type CommonApiAppBbsV1UserConfirmEnableTfaRequest,
-    CommonApiAppBbsV1UserConfirmEnableTfaRequestFromJSON,
-    CommonApiAppBbsV1UserConfirmEnableTfaRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserConfirmEnableTfaRequest';
+    type ConfirmEnableTfaRequest,
+    ConfirmEnableTfaRequestFromJSON,
+    ConfirmEnableTfaRequestToJSON,
+} from '../models/ConfirmEnableTfaRequest';
 import {
-    type CommonApiAppBbsV1UserDisableTfaRequest,
-    CommonApiAppBbsV1UserDisableTfaRequestFromJSON,
-    CommonApiAppBbsV1UserDisableTfaRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserDisableTfaRequest';
+    type DisableTfaRequest,
+    DisableTfaRequestFromJSON,
+    DisableTfaRequestToJSON,
+} from '../models/DisableTfaRequest';
 import {
-    type CommonApiAppBbsV1UserGetCurrentTfaReply,
-    CommonApiAppBbsV1UserGetCurrentTfaReplyFromJSON,
-    CommonApiAppBbsV1UserGetCurrentTfaReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserGetCurrentTfaReply';
+    type GetCurrentTfaReply,
+    GetCurrentTfaReplyFromJSON,
+    GetCurrentTfaReplyToJSON,
+} from '../models/GetCurrentTfaReply';
 import {
-    type CommonApiAppBbsV1UserValidateTfaReply,
-    CommonApiAppBbsV1UserValidateTfaReplyFromJSON,
-    CommonApiAppBbsV1UserValidateTfaReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserValidateTfaReply';
+    type ValidateTfaReply,
+    ValidateTfaReplyFromJSON,
+    ValidateTfaReplyToJSON,
+} from '../models/ValidateTfaReply';
 import {
-    type CommonApiAppBbsV1UserValidateTfaRequest,
-    CommonApiAppBbsV1UserValidateTfaRequestFromJSON,
-    CommonApiAppBbsV1UserValidateTfaRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserValidateTfaRequest';
+    type ValidateTfaRequest,
+    ValidateTfaRequestFromJSON,
+    ValidateTfaRequestToJSON,
+} from '../models/ValidateTfaRequest';
 
 export interface TfaServiceBeginEnableRequest {
     body: object;
 }
 
 export interface TfaServiceConfirmEnableRequest {
-    commonApiAppBbsV1UserConfirmEnableTfaRequest: CommonApiAppBbsV1UserConfirmEnableTfaRequest;
+    confirmEnableTfaRequest: ConfirmEnableTfaRequest;
 }
 
 export interface TfaServiceDisableRequest {
-    commonApiAppBbsV1UserDisableTfaRequest: CommonApiAppBbsV1UserDisableTfaRequest;
+    disableTfaRequest: DisableTfaRequest;
 }
 
 export interface TfaServiceGetCurrentRequest {
@@ -61,7 +61,7 @@ export interface TfaServiceGetCurrentRequest {
 }
 
 export interface TfaServiceValidateRequest {
-    commonApiAppBbsV1UserValidateTfaRequest: CommonApiAppBbsV1UserValidateTfaRequest;
+    validateTfaRequest: ValidateTfaRequest;
 }
 
 /**
@@ -86,16 +86,16 @@ export interface TfaServiceApiInterface {
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
      */
-    tfaServiceBeginEnableRaw(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserBeginEnableTfaReply>>;
+    tfaServiceBeginEnableRaw(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BeginEnableTfaReply>>;
 
     /**
      * 开始启用二步验证
      */
-    tfaServiceBeginEnable(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserBeginEnableTfaReply>;
+    tfaServiceBeginEnable(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BeginEnableTfaReply>;
 
     /**
      * Creates request options for tfaServiceConfirmEnable without sending the request
-     * @param {CommonApiAppBbsV1UserConfirmEnableTfaRequest} commonApiAppBbsV1UserConfirmEnableTfaRequest 
+     * @param {ConfirmEnableTfaRequest} confirmEnableTfaRequest 
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
      */
@@ -103,7 +103,7 @@ export interface TfaServiceApiInterface {
 
     /**
      * 确认二步验证码并正式启用二步验证
-     * @param {CommonApiAppBbsV1UserConfirmEnableTfaRequest} commonApiAppBbsV1UserConfirmEnableTfaRequest 
+     * @param {ConfirmEnableTfaRequest} confirmEnableTfaRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
@@ -117,7 +117,7 @@ export interface TfaServiceApiInterface {
 
     /**
      * Creates request options for tfaServiceDisable without sending the request
-     * @param {CommonApiAppBbsV1UserDisableTfaRequest} commonApiAppBbsV1UserDisableTfaRequest 
+     * @param {DisableTfaRequest} disableTfaRequest 
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
      */
@@ -125,7 +125,7 @@ export interface TfaServiceApiInterface {
 
     /**
      * 校验二步验证码并关闭二步验证
-     * @param {CommonApiAppBbsV1UserDisableTfaRequest} commonApiAppBbsV1UserDisableTfaRequest 
+     * @param {DisableTfaRequest} disableTfaRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
@@ -152,16 +152,16 @@ export interface TfaServiceApiInterface {
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
      */
-    tfaServiceGetCurrentRaw(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentTfaReply>>;
+    tfaServiceGetCurrentRaw(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentTfaReply>>;
 
     /**
      * 获取当前登录账号的二步验证状态
      */
-    tfaServiceGetCurrent(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentTfaReply>;
+    tfaServiceGetCurrent(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentTfaReply>;
 
     /**
      * Creates request options for tfaServiceValidate without sending the request
-     * @param {CommonApiAppBbsV1UserValidateTfaRequest} commonApiAppBbsV1UserValidateTfaRequest 
+     * @param {ValidateTfaRequest} validateTfaRequest 
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
      */
@@ -169,17 +169,17 @@ export interface TfaServiceApiInterface {
 
     /**
      * 校验当前登录账号的二步验证码
-     * @param {CommonApiAppBbsV1UserValidateTfaRequest} commonApiAppBbsV1UserValidateTfaRequest 
+     * @param {ValidateTfaRequest} validateTfaRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TfaServiceApiInterface
      */
-    tfaServiceValidateRaw(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserValidateTfaReply>>;
+    tfaServiceValidateRaw(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidateTfaReply>>;
 
     /**
      * 校验当前登录账号的二步验证码
      */
-    tfaServiceValidate(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserValidateTfaReply>;
+    tfaServiceValidate(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateTfaReply>;
 
 }
 
@@ -220,17 +220,17 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
     /**
      * 开始启用二步验证
      */
-    async tfaServiceBeginEnableRaw(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserBeginEnableTfaReply>> {
+    async tfaServiceBeginEnableRaw(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BeginEnableTfaReply>> {
         const requestOptions = await this.tfaServiceBeginEnableRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserBeginEnableTfaReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => BeginEnableTfaReplyFromJSON(jsonValue));
     }
 
     /**
      * 开始启用二步验证
      */
-    async tfaServiceBeginEnable(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserBeginEnableTfaReply> {
+    async tfaServiceBeginEnable(requestParameters: TfaServiceBeginEnableRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BeginEnableTfaReply> {
         const response = await this.tfaServiceBeginEnableRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -239,10 +239,10 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
      * Creates request options for tfaServiceConfirmEnable without sending the request
      */
     async tfaServiceConfirmEnableRequestOpts(requestParameters: TfaServiceConfirmEnableRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserConfirmEnableTfaRequest'] == null) {
+        if (requestParameters['confirmEnableTfaRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserConfirmEnableTfaRequest',
-                'Required parameter "commonApiAppBbsV1UserConfirmEnableTfaRequest" was null or undefined when calling tfaServiceConfirmEnable().'
+                'confirmEnableTfaRequest',
+                'Required parameter "confirmEnableTfaRequest" was null or undefined when calling tfaServiceConfirmEnable().'
             );
         }
 
@@ -260,7 +260,7 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserConfirmEnableTfaRequestToJSON(requestParameters['commonApiAppBbsV1UserConfirmEnableTfaRequest']),
+            body: ConfirmEnableTfaRequestToJSON(requestParameters['confirmEnableTfaRequest']),
         };
     }
 
@@ -286,10 +286,10 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
      * Creates request options for tfaServiceDisable without sending the request
      */
     async tfaServiceDisableRequestOpts(requestParameters: TfaServiceDisableRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserDisableTfaRequest'] == null) {
+        if (requestParameters['disableTfaRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserDisableTfaRequest',
-                'Required parameter "commonApiAppBbsV1UserDisableTfaRequest" was null or undefined when calling tfaServiceDisable().'
+                'disableTfaRequest',
+                'Required parameter "disableTfaRequest" was null or undefined when calling tfaServiceDisable().'
             );
         }
 
@@ -307,7 +307,7 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserDisableTfaRequestToJSON(requestParameters['commonApiAppBbsV1UserDisableTfaRequest']),
+            body: DisableTfaRequestToJSON(requestParameters['disableTfaRequest']),
         };
     }
 
@@ -361,17 +361,17 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
     /**
      * 获取当前登录账号的二步验证状态
      */
-    async tfaServiceGetCurrentRaw(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentTfaReply>> {
+    async tfaServiceGetCurrentRaw(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentTfaReply>> {
         const requestOptions = await this.tfaServiceGetCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserGetCurrentTfaReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentTfaReplyFromJSON(jsonValue));
     }
 
     /**
      * 获取当前登录账号的二步验证状态
      */
-    async tfaServiceGetCurrent(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentTfaReply> {
+    async tfaServiceGetCurrent(requestParameters: TfaServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentTfaReply> {
         const response = await this.tfaServiceGetCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -380,10 +380,10 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
      * Creates request options for tfaServiceValidate without sending the request
      */
     async tfaServiceValidateRequestOpts(requestParameters: TfaServiceValidateRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserValidateTfaRequest'] == null) {
+        if (requestParameters['validateTfaRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserValidateTfaRequest',
-                'Required parameter "commonApiAppBbsV1UserValidateTfaRequest" was null or undefined when calling tfaServiceValidate().'
+                'validateTfaRequest',
+                'Required parameter "validateTfaRequest" was null or undefined when calling tfaServiceValidate().'
             );
         }
 
@@ -401,24 +401,24 @@ export class TfaServiceApi extends runtime.BaseAPI implements TfaServiceApiInter
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserValidateTfaRequestToJSON(requestParameters['commonApiAppBbsV1UserValidateTfaRequest']),
+            body: ValidateTfaRequestToJSON(requestParameters['validateTfaRequest']),
         };
     }
 
     /**
      * 校验当前登录账号的二步验证码
      */
-    async tfaServiceValidateRaw(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserValidateTfaReply>> {
+    async tfaServiceValidateRaw(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidateTfaReply>> {
         const requestOptions = await this.tfaServiceValidateRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserValidateTfaReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ValidateTfaReplyFromJSON(jsonValue));
     }
 
     /**
      * 校验当前登录账号的二步验证码
      */
-    async tfaServiceValidate(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserValidateTfaReply> {
+    async tfaServiceValidate(requestParameters: TfaServiceValidateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidateTfaReply> {
         const response = await this.tfaServiceValidateRaw(requestParameters, initOverrides);
         return await response.value();
     }

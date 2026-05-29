@@ -14,68 +14,68 @@
 
 import * as runtime from '../runtime';
 import {
-    type CommonApiAppBbsV1UserLoginPasswordReply,
-    CommonApiAppBbsV1UserLoginPasswordReplyFromJSON,
-    CommonApiAppBbsV1UserLoginPasswordReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserLoginPasswordReply';
+    type LoginByPasswordReply,
+    LoginByPasswordReplyFromJSON,
+    LoginByPasswordReplyToJSON,
+} from '../models/LoginByPasswordReply';
 import {
-    type CommonApiAppBbsV1UserLoginPasswordRequest,
-    CommonApiAppBbsV1UserLoginPasswordRequestFromJSON,
-    CommonApiAppBbsV1UserLoginPasswordRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserLoginPasswordRequest';
+    type LoginByPasswordRequest,
+    LoginByPasswordRequestFromJSON,
+    LoginByPasswordRequestToJSON,
+} from '../models/LoginByPasswordRequest';
 import {
-    type CommonApiAppBbsV1UserRegisterEmailReply,
-    CommonApiAppBbsV1UserRegisterEmailReplyFromJSON,
-    CommonApiAppBbsV1UserRegisterEmailReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserRegisterEmailReply';
+    type StartEmailRegistrationReply,
+    StartEmailRegistrationReplyFromJSON,
+    StartEmailRegistrationReplyToJSON,
+} from '../models/StartEmailRegistrationReply';
 import {
-    type CommonApiAppBbsV1UserRegisterEmailRequest,
-    CommonApiAppBbsV1UserRegisterEmailRequestFromJSON,
-    CommonApiAppBbsV1UserRegisterEmailRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserRegisterEmailRequest';
+    type StartEmailRegistrationRequest,
+    StartEmailRegistrationRequestFromJSON,
+    StartEmailRegistrationRequestToJSON,
+} from '../models/StartEmailRegistrationRequest';
 import {
-    type CommonApiAppBbsV1UserRegisterPhoneReply,
-    CommonApiAppBbsV1UserRegisterPhoneReplyFromJSON,
-    CommonApiAppBbsV1UserRegisterPhoneReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserRegisterPhoneReply';
+    type StartPhoneRegistrationReply,
+    StartPhoneRegistrationReplyFromJSON,
+    StartPhoneRegistrationReplyToJSON,
+} from '../models/StartPhoneRegistrationReply';
 import {
-    type CommonApiAppBbsV1UserRegisterPhoneRequest,
-    CommonApiAppBbsV1UserRegisterPhoneRequestFromJSON,
-    CommonApiAppBbsV1UserRegisterPhoneRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserRegisterPhoneRequest';
+    type StartPhoneRegistrationRequest,
+    StartPhoneRegistrationRequestFromJSON,
+    StartPhoneRegistrationRequestToJSON,
+} from '../models/StartPhoneRegistrationRequest';
 import {
-    type CommonApiAppBbsV1UserVerifyEmailRegisterRequest,
-    CommonApiAppBbsV1UserVerifyEmailRegisterRequestFromJSON,
-    CommonApiAppBbsV1UserVerifyEmailRegisterRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserVerifyEmailRegisterRequest';
+    type VerifyEmailRegistrationRequest,
+    VerifyEmailRegistrationRequestFromJSON,
+    VerifyEmailRegistrationRequestToJSON,
+} from '../models/VerifyEmailRegistrationRequest';
 import {
-    type CommonApiAppBbsV1UserVerifyPhoneRegisterRequest,
-    CommonApiAppBbsV1UserVerifyPhoneRegisterRequestFromJSON,
-    CommonApiAppBbsV1UserVerifyPhoneRegisterRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserVerifyPhoneRegisterRequest';
+    type VerifyPhoneRegistrationRequest,
+    VerifyPhoneRegistrationRequestFromJSON,
+    VerifyPhoneRegistrationRequestToJSON,
+} from '../models/VerifyPhoneRegistrationRequest';
 
-export interface AuthServiceLoginPasswordRequest {
-    commonApiAppBbsV1UserLoginPasswordRequest: CommonApiAppBbsV1UserLoginPasswordRequest;
+export interface AuthServiceLoginByPasswordRequest {
+    loginByPasswordRequest: LoginByPasswordRequest;
 }
 
 export interface AuthServiceLogoutRequest {
     body: object;
 }
 
-export interface AuthServiceRegisterEmailRequest {
-    commonApiAppBbsV1UserRegisterEmailRequest: CommonApiAppBbsV1UserRegisterEmailRequest;
+export interface AuthServiceStartEmailRegistrationRequest {
+    startEmailRegistrationRequest: StartEmailRegistrationRequest;
 }
 
-export interface AuthServiceRegisterPhoneRequest {
-    commonApiAppBbsV1UserRegisterPhoneRequest: CommonApiAppBbsV1UserRegisterPhoneRequest;
+export interface AuthServiceStartPhoneRegistrationRequest {
+    startPhoneRegistrationRequest: StartPhoneRegistrationRequest;
 }
 
-export interface AuthServiceVerifyEmailRegisterRequest {
-    commonApiAppBbsV1UserVerifyEmailRegisterRequest: CommonApiAppBbsV1UserVerifyEmailRegisterRequest;
+export interface AuthServiceVerifyEmailRegistrationRequest {
+    verifyEmailRegistrationRequest: VerifyEmailRegistrationRequest;
 }
 
-export interface AuthServiceVerifyPhoneRegisterRequest {
-    commonApiAppBbsV1UserVerifyPhoneRegisterRequest: CommonApiAppBbsV1UserVerifyPhoneRegisterRequest;
+export interface AuthServiceVerifyPhoneRegistrationRequest {
+    verifyPhoneRegistrationRequest: VerifyPhoneRegistrationRequest;
 }
 
 /**
@@ -86,26 +86,26 @@ export interface AuthServiceVerifyPhoneRegisterRequest {
  */
 export interface AuthServiceApiInterface {
     /**
-     * Creates request options for authServiceLoginPassword without sending the request
-     * @param {CommonApiAppBbsV1UserLoginPasswordRequest} commonApiAppBbsV1UserLoginPasswordRequest 
+     * Creates request options for authServiceLoginByPassword without sending the request
+     * @param {LoginByPasswordRequest} loginByPasswordRequest 
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceLoginPasswordRequestOpts(requestParameters: AuthServiceLoginPasswordRequest): Promise<runtime.RequestOpts>;
+    authServiceLoginByPasswordRequestOpts(requestParameters: AuthServiceLoginByPasswordRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 使用密码登录账号
-     * @param {CommonApiAppBbsV1UserLoginPasswordRequest} commonApiAppBbsV1UserLoginPasswordRequest 
+     * @param {LoginByPasswordRequest} loginByPasswordRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceLoginPasswordRaw(requestParameters: AuthServiceLoginPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserLoginPasswordReply>>;
+    authServiceLoginByPasswordRaw(requestParameters: AuthServiceLoginByPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginByPasswordReply>>;
 
     /**
      * 使用密码登录账号
      */
-    authServiceLoginPassword(requestParameters: AuthServiceLoginPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserLoginPasswordReply>;
+    authServiceLoginByPassword(requestParameters: AuthServiceLoginByPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginByPasswordReply>;
 
     /**
      * Creates request options for authServiceLogout without sending the request
@@ -130,92 +130,92 @@ export interface AuthServiceApiInterface {
     authServiceLogout(requestParameters: AuthServiceLogoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for authServiceRegisterEmail without sending the request
-     * @param {CommonApiAppBbsV1UserRegisterEmailRequest} commonApiAppBbsV1UserRegisterEmailRequest 
+     * Creates request options for authServiceStartEmailRegistration without sending the request
+     * @param {StartEmailRegistrationRequest} startEmailRegistrationRequest 
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceRegisterEmailRequestOpts(requestParameters: AuthServiceRegisterEmailRequest): Promise<runtime.RequestOpts>;
+    authServiceStartEmailRegistrationRequestOpts(requestParameters: AuthServiceStartEmailRegistrationRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 使用邮箱发起账号注册
-     * @param {CommonApiAppBbsV1UserRegisterEmailRequest} commonApiAppBbsV1UserRegisterEmailRequest 
+     * @param {StartEmailRegistrationRequest} startEmailRegistrationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceRegisterEmailRaw(requestParameters: AuthServiceRegisterEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserRegisterEmailReply>>;
+    authServiceStartEmailRegistrationRaw(requestParameters: AuthServiceStartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartEmailRegistrationReply>>;
 
     /**
      * 使用邮箱发起账号注册
      */
-    authServiceRegisterEmail(requestParameters: AuthServiceRegisterEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserRegisterEmailReply>;
+    authServiceStartEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartEmailRegistrationReply>;
 
     /**
-     * Creates request options for authServiceRegisterPhone without sending the request
-     * @param {CommonApiAppBbsV1UserRegisterPhoneRequest} commonApiAppBbsV1UserRegisterPhoneRequest 
+     * Creates request options for authServiceStartPhoneRegistration without sending the request
+     * @param {StartPhoneRegistrationRequest} startPhoneRegistrationRequest 
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceRegisterPhoneRequestOpts(requestParameters: AuthServiceRegisterPhoneRequest): Promise<runtime.RequestOpts>;
+    authServiceStartPhoneRegistrationRequestOpts(requestParameters: AuthServiceStartPhoneRegistrationRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 使用手机号发起账号注册
-     * @param {CommonApiAppBbsV1UserRegisterPhoneRequest} commonApiAppBbsV1UserRegisterPhoneRequest 
+     * @param {StartPhoneRegistrationRequest} startPhoneRegistrationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceRegisterPhoneRaw(requestParameters: AuthServiceRegisterPhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserRegisterPhoneReply>>;
+    authServiceStartPhoneRegistrationRaw(requestParameters: AuthServiceStartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartPhoneRegistrationReply>>;
 
     /**
      * 使用手机号发起账号注册
      */
-    authServiceRegisterPhone(requestParameters: AuthServiceRegisterPhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserRegisterPhoneReply>;
+    authServiceStartPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartPhoneRegistrationReply>;
 
     /**
-     * Creates request options for authServiceVerifyEmailRegister without sending the request
-     * @param {CommonApiAppBbsV1UserVerifyEmailRegisterRequest} commonApiAppBbsV1UserVerifyEmailRegisterRequest 
+     * Creates request options for authServiceVerifyEmailRegistration without sending the request
+     * @param {VerifyEmailRegistrationRequest} verifyEmailRegistrationRequest 
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceVerifyEmailRegisterRequestOpts(requestParameters: AuthServiceVerifyEmailRegisterRequest): Promise<runtime.RequestOpts>;
+    authServiceVerifyEmailRegistrationRequestOpts(requestParameters: AuthServiceVerifyEmailRegistrationRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 校验邮箱注册验证码
-     * @param {CommonApiAppBbsV1UserVerifyEmailRegisterRequest} commonApiAppBbsV1UserVerifyEmailRegisterRequest 
+     * @param {VerifyEmailRegistrationRequest} verifyEmailRegistrationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceVerifyEmailRegisterRaw(requestParameters: AuthServiceVerifyEmailRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    authServiceVerifyEmailRegistrationRaw(requestParameters: AuthServiceVerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 校验邮箱注册验证码
      */
-    authServiceVerifyEmailRegister(requestParameters: AuthServiceVerifyEmailRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    authServiceVerifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for authServiceVerifyPhoneRegister without sending the request
-     * @param {CommonApiAppBbsV1UserVerifyPhoneRegisterRequest} commonApiAppBbsV1UserVerifyPhoneRegisterRequest 
+     * Creates request options for authServiceVerifyPhoneRegistration without sending the request
+     * @param {VerifyPhoneRegistrationRequest} verifyPhoneRegistrationRequest 
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceVerifyPhoneRegisterRequestOpts(requestParameters: AuthServiceVerifyPhoneRegisterRequest): Promise<runtime.RequestOpts>;
+    authServiceVerifyPhoneRegistrationRequestOpts(requestParameters: AuthServiceVerifyPhoneRegistrationRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 校验手机号注册验证码
-     * @param {CommonApiAppBbsV1UserVerifyPhoneRegisterRequest} commonApiAppBbsV1UserVerifyPhoneRegisterRequest 
+     * @param {VerifyPhoneRegistrationRequest} verifyPhoneRegistrationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceApiInterface
      */
-    authServiceVerifyPhoneRegisterRaw(requestParameters: AuthServiceVerifyPhoneRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    authServiceVerifyPhoneRegistrationRaw(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 校验手机号注册验证码
      */
-    authServiceVerifyPhoneRegister(requestParameters: AuthServiceVerifyPhoneRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    authServiceVerifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
 }
 
@@ -225,13 +225,13 @@ export interface AuthServiceApiInterface {
 export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInterface {
 
     /**
-     * Creates request options for authServiceLoginPassword without sending the request
+     * Creates request options for authServiceLoginByPassword without sending the request
      */
-    async authServiceLoginPasswordRequestOpts(requestParameters: AuthServiceLoginPasswordRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserLoginPasswordRequest'] == null) {
+    async authServiceLoginByPasswordRequestOpts(requestParameters: AuthServiceLoginByPasswordRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['loginByPasswordRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserLoginPasswordRequest',
-                'Required parameter "commonApiAppBbsV1UserLoginPasswordRequest" was null or undefined when calling authServiceLoginPassword().'
+                'loginByPasswordRequest',
+                'Required parameter "loginByPasswordRequest" was null or undefined when calling authServiceLoginByPassword().'
             );
         }
 
@@ -242,32 +242,32 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/auth/login-password`;
+        let urlPath = `/v1/user/auth/login-by-password`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserLoginPasswordRequestToJSON(requestParameters['commonApiAppBbsV1UserLoginPasswordRequest']),
+            body: LoginByPasswordRequestToJSON(requestParameters['loginByPasswordRequest']),
         };
     }
 
     /**
      * 使用密码登录账号
      */
-    async authServiceLoginPasswordRaw(requestParameters: AuthServiceLoginPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserLoginPasswordReply>> {
-        const requestOptions = await this.authServiceLoginPasswordRequestOpts(requestParameters);
+    async authServiceLoginByPasswordRaw(requestParameters: AuthServiceLoginByPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginByPasswordReply>> {
+        const requestOptions = await this.authServiceLoginByPasswordRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserLoginPasswordReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginByPasswordReplyFromJSON(jsonValue));
     }
 
     /**
      * 使用密码登录账号
      */
-    async authServiceLoginPassword(requestParameters: AuthServiceLoginPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserLoginPasswordReply> {
-        const response = await this.authServiceLoginPasswordRaw(requestParameters, initOverrides);
+    async authServiceLoginByPassword(requestParameters: AuthServiceLoginByPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginByPasswordReply> {
+        const response = await this.authServiceLoginByPasswordRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -319,13 +319,13 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
     }
 
     /**
-     * Creates request options for authServiceRegisterEmail without sending the request
+     * Creates request options for authServiceStartEmailRegistration without sending the request
      */
-    async authServiceRegisterEmailRequestOpts(requestParameters: AuthServiceRegisterEmailRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserRegisterEmailRequest'] == null) {
+    async authServiceStartEmailRegistrationRequestOpts(requestParameters: AuthServiceStartEmailRegistrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['startEmailRegistrationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserRegisterEmailRequest',
-                'Required parameter "commonApiAppBbsV1UserRegisterEmailRequest" was null or undefined when calling authServiceRegisterEmail().'
+                'startEmailRegistrationRequest',
+                'Required parameter "startEmailRegistrationRequest" was null or undefined when calling authServiceStartEmailRegistration().'
             );
         }
 
@@ -336,43 +336,43 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/auth/register-email`;
+        let urlPath = `/v1/user/auth/start-email-registration`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserRegisterEmailRequestToJSON(requestParameters['commonApiAppBbsV1UserRegisterEmailRequest']),
+            body: StartEmailRegistrationRequestToJSON(requestParameters['startEmailRegistrationRequest']),
         };
     }
 
     /**
      * 使用邮箱发起账号注册
      */
-    async authServiceRegisterEmailRaw(requestParameters: AuthServiceRegisterEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserRegisterEmailReply>> {
-        const requestOptions = await this.authServiceRegisterEmailRequestOpts(requestParameters);
+    async authServiceStartEmailRegistrationRaw(requestParameters: AuthServiceStartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartEmailRegistrationReply>> {
+        const requestOptions = await this.authServiceStartEmailRegistrationRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserRegisterEmailReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => StartEmailRegistrationReplyFromJSON(jsonValue));
     }
 
     /**
      * 使用邮箱发起账号注册
      */
-    async authServiceRegisterEmail(requestParameters: AuthServiceRegisterEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserRegisterEmailReply> {
-        const response = await this.authServiceRegisterEmailRaw(requestParameters, initOverrides);
+    async authServiceStartEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartEmailRegistrationReply> {
+        const response = await this.authServiceStartEmailRegistrationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for authServiceRegisterPhone without sending the request
+     * Creates request options for authServiceStartPhoneRegistration without sending the request
      */
-    async authServiceRegisterPhoneRequestOpts(requestParameters: AuthServiceRegisterPhoneRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserRegisterPhoneRequest'] == null) {
+    async authServiceStartPhoneRegistrationRequestOpts(requestParameters: AuthServiceStartPhoneRegistrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['startPhoneRegistrationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserRegisterPhoneRequest',
-                'Required parameter "commonApiAppBbsV1UserRegisterPhoneRequest" was null or undefined when calling authServiceRegisterPhone().'
+                'startPhoneRegistrationRequest',
+                'Required parameter "startPhoneRegistrationRequest" was null or undefined when calling authServiceStartPhoneRegistration().'
             );
         }
 
@@ -383,43 +383,43 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/auth/register-phone`;
+        let urlPath = `/v1/user/auth/start-phone-registration`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserRegisterPhoneRequestToJSON(requestParameters['commonApiAppBbsV1UserRegisterPhoneRequest']),
+            body: StartPhoneRegistrationRequestToJSON(requestParameters['startPhoneRegistrationRequest']),
         };
     }
 
     /**
      * 使用手机号发起账号注册
      */
-    async authServiceRegisterPhoneRaw(requestParameters: AuthServiceRegisterPhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserRegisterPhoneReply>> {
-        const requestOptions = await this.authServiceRegisterPhoneRequestOpts(requestParameters);
+    async authServiceStartPhoneRegistrationRaw(requestParameters: AuthServiceStartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartPhoneRegistrationReply>> {
+        const requestOptions = await this.authServiceStartPhoneRegistrationRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserRegisterPhoneReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => StartPhoneRegistrationReplyFromJSON(jsonValue));
     }
 
     /**
      * 使用手机号发起账号注册
      */
-    async authServiceRegisterPhone(requestParameters: AuthServiceRegisterPhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserRegisterPhoneReply> {
-        const response = await this.authServiceRegisterPhoneRaw(requestParameters, initOverrides);
+    async authServiceStartPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartPhoneRegistrationReply> {
+        const response = await this.authServiceStartPhoneRegistrationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for authServiceVerifyEmailRegister without sending the request
+     * Creates request options for authServiceVerifyEmailRegistration without sending the request
      */
-    async authServiceVerifyEmailRegisterRequestOpts(requestParameters: AuthServiceVerifyEmailRegisterRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserVerifyEmailRegisterRequest'] == null) {
+    async authServiceVerifyEmailRegistrationRequestOpts(requestParameters: AuthServiceVerifyEmailRegistrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['verifyEmailRegistrationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserVerifyEmailRegisterRequest',
-                'Required parameter "commonApiAppBbsV1UserVerifyEmailRegisterRequest" was null or undefined when calling authServiceVerifyEmailRegister().'
+                'verifyEmailRegistrationRequest',
+                'Required parameter "verifyEmailRegistrationRequest" was null or undefined when calling authServiceVerifyEmailRegistration().'
             );
         }
 
@@ -430,22 +430,22 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/auth/verify-email-register`;
+        let urlPath = `/v1/user/auth/verify-email-registration`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserVerifyEmailRegisterRequestToJSON(requestParameters['commonApiAppBbsV1UserVerifyEmailRegisterRequest']),
+            body: VerifyEmailRegistrationRequestToJSON(requestParameters['verifyEmailRegistrationRequest']),
         };
     }
 
     /**
      * 校验邮箱注册验证码
      */
-    async authServiceVerifyEmailRegisterRaw(requestParameters: AuthServiceVerifyEmailRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.authServiceVerifyEmailRegisterRequestOpts(requestParameters);
+    async authServiceVerifyEmailRegistrationRaw(requestParameters: AuthServiceVerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.authServiceVerifyEmailRegistrationRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -454,19 +454,19 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
     /**
      * 校验邮箱注册验证码
      */
-    async authServiceVerifyEmailRegister(requestParameters: AuthServiceVerifyEmailRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.authServiceVerifyEmailRegisterRaw(requestParameters, initOverrides);
+    async authServiceVerifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.authServiceVerifyEmailRegistrationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for authServiceVerifyPhoneRegister without sending the request
+     * Creates request options for authServiceVerifyPhoneRegistration without sending the request
      */
-    async authServiceVerifyPhoneRegisterRequestOpts(requestParameters: AuthServiceVerifyPhoneRegisterRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserVerifyPhoneRegisterRequest'] == null) {
+    async authServiceVerifyPhoneRegistrationRequestOpts(requestParameters: AuthServiceVerifyPhoneRegistrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['verifyPhoneRegistrationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserVerifyPhoneRegisterRequest',
-                'Required parameter "commonApiAppBbsV1UserVerifyPhoneRegisterRequest" was null or undefined when calling authServiceVerifyPhoneRegister().'
+                'verifyPhoneRegistrationRequest',
+                'Required parameter "verifyPhoneRegistrationRequest" was null or undefined when calling authServiceVerifyPhoneRegistration().'
             );
         }
 
@@ -477,22 +477,22 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/auth/verify-phone-register`;
+        let urlPath = `/v1/user/auth/verify-phone-registration`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserVerifyPhoneRegisterRequestToJSON(requestParameters['commonApiAppBbsV1UserVerifyPhoneRegisterRequest']),
+            body: VerifyPhoneRegistrationRequestToJSON(requestParameters['verifyPhoneRegistrationRequest']),
         };
     }
 
     /**
      * 校验手机号注册验证码
      */
-    async authServiceVerifyPhoneRegisterRaw(requestParameters: AuthServiceVerifyPhoneRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.authServiceVerifyPhoneRegisterRequestOpts(requestParameters);
+    async authServiceVerifyPhoneRegistrationRaw(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.authServiceVerifyPhoneRegistrationRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -501,8 +501,8 @@ export class AuthServiceApi extends runtime.BaseAPI implements AuthServiceApiInt
     /**
      * 校验手机号注册验证码
      */
-    async authServiceVerifyPhoneRegister(requestParameters: AuthServiceVerifyPhoneRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.authServiceVerifyPhoneRegisterRaw(requestParameters, initOverrides);
+    async authServiceVerifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.authServiceVerifyPhoneRegistrationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

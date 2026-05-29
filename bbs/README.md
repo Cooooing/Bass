@@ -18,19 +18,19 @@ import {
   Configuration,
   AccountServiceApi,
 } from '@bass/bbs-sdk';
-import type { AccountServiceBatchGetProfileRequest } from '@bass/bbs-sdk';
+import type { AccountServiceGetCurrentRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new AccountServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserBatchGetProfileAccountRequest
-    commonApiAppBbsV1UserBatchGetProfileAccountRequest: ...,
-  } satisfies AccountServiceBatchGetProfileRequest;
+    // object
+    body: Object,
+  } satisfies AccountServiceGetCurrentRequest;
 
   try {
-    const data = await api.accountServiceBatchGetProfile(body);
+    const data = await api.accountServiceGetCurrent(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -50,30 +50,51 @@ All URIs are relative to *http://localhost*
 
 | Class | Method | HTTP request | Description
 | ----- | ------ | ------------ | -------------
-*AccountServiceApi* | [**accountServiceBatchGetProfile**](docs/AccountServiceApi.md#accountservicebatchgetprofile) | **POST** /v1/user/account/batch-get-profile | 
 *AccountServiceApi* | [**accountServiceGetCurrent**](docs/AccountServiceApi.md#accountservicegetcurrent) | **POST** /v1/user/account/get-current | 
 *AccountServiceApi* | [**accountServiceGetProfile**](docs/AccountServiceApi.md#accountservicegetprofile) | **POST** /v1/user/account/get-profile | 
 *AccountServiceApi* | [**accountServiceUpdateProfile**](docs/AccountServiceApi.md#accountserviceupdateprofile) | **POST** /v1/user/account/update-profile | 
-*AuthServiceApi* | [**authServiceLoginPassword**](docs/AuthServiceApi.md#authserviceloginpassword) | **POST** /v1/user/auth/login-password | 
+*ArticleServiceApi* | [**articleServiceAcceptAnswer**](docs/ArticleServiceApi.md#articleserviceacceptanswer) | **POST** /v1/content/article/accept-answer | 
+*ArticleServiceApi* | [**articleServiceCollect**](docs/ArticleServiceApi.md#articleservicecollect) | **POST** /v1/content/article/collect | 
+*ArticleServiceApi* | [**articleServiceCreate**](docs/ArticleServiceApi.md#articleservicecreate) | **POST** /v1/content/article/create | 
+*ArticleServiceApi* | [**articleServiceDelete**](docs/ArticleServiceApi.md#articleservicedelete) | **POST** /v1/content/article/delete | 
+*ArticleServiceApi* | [**articleServiceGet**](docs/ArticleServiceApi.md#articleserviceget) | **POST** /v1/content/article/get | 
+*ArticleServiceApi* | [**articleServiceLike**](docs/ArticleServiceApi.md#articleservicelike) | **POST** /v1/content/article/like | 
+*ArticleServiceApi* | [**articleServiceList**](docs/ArticleServiceApi.md#articleservicelist) | **POST** /v1/content/article/list | 
+*ArticleServiceApi* | [**articleServicePublish**](docs/ArticleServiceApi.md#articleservicepublish) | **POST** /v1/content/article/publish | 
+*ArticleServiceApi* | [**articleServiceReward**](docs/ArticleServiceApi.md#articleservicereward) | **POST** /v1/content/article/reward | 
+*ArticleServiceApi* | [**articleServiceThank**](docs/ArticleServiceApi.md#articleservicethank) | **POST** /v1/content/article/thank | 
+*ArticleServiceApi* | [**articleServiceUpdateDraft**](docs/ArticleServiceApi.md#articleserviceupdatedraft) | **POST** /v1/content/article/update-draft | 
+*ArticleServiceApi* | [**articleServiceWatch**](docs/ArticleServiceApi.md#articleservicewatch) | **POST** /v1/content/article/watch | 
+*AuthServiceApi* | [**authServiceLoginByPassword**](docs/AuthServiceApi.md#authserviceloginbypassword) | **POST** /v1/user/auth/login-by-password | 
 *AuthServiceApi* | [**authServiceLogout**](docs/AuthServiceApi.md#authservicelogout) | **POST** /v1/user/auth/logout | 
-*AuthServiceApi* | [**authServiceRegisterEmail**](docs/AuthServiceApi.md#authserviceregisteremail) | **POST** /v1/user/auth/register-email | 
-*AuthServiceApi* | [**authServiceRegisterPhone**](docs/AuthServiceApi.md#authserviceregisterphone) | **POST** /v1/user/auth/register-phone | 
-*AuthServiceApi* | [**authServiceVerifyEmailRegister**](docs/AuthServiceApi.md#authserviceverifyemailregister) | **POST** /v1/user/auth/verify-email-register | 
-*AuthServiceApi* | [**authServiceVerifyPhoneRegister**](docs/AuthServiceApi.md#authserviceverifyphoneregister) | **POST** /v1/user/auth/verify-phone-register | 
+*AuthServiceApi* | [**authServiceStartEmailRegistration**](docs/AuthServiceApi.md#authservicestartemailregistration) | **POST** /v1/user/auth/start-email-registration | 
+*AuthServiceApi* | [**authServiceStartPhoneRegistration**](docs/AuthServiceApi.md#authservicestartphoneregistration) | **POST** /v1/user/auth/start-phone-registration | 
+*AuthServiceApi* | [**authServiceVerifyEmailRegistration**](docs/AuthServiceApi.md#authserviceverifyemailregistration) | **POST** /v1/user/auth/verify-email-registration | 
+*AuthServiceApi* | [**authServiceVerifyPhoneRegistration**](docs/AuthServiceApi.md#authserviceverifyphoneregistration) | **POST** /v1/user/auth/verify-phone-registration | 
+*CommentServiceApi* | [**commentServiceCreate**](docs/CommentServiceApi.md#commentservicecreate) | **POST** /v1/content/comment/create | 
+*CommentServiceApi* | [**commentServiceLike**](docs/CommentServiceApi.md#commentservicelike) | **POST** /v1/content/comment/like | 
+*CommentServiceApi* | [**commentServiceList**](docs/CommentServiceApi.md#commentservicelist) | **POST** /v1/content/comment/list | 
+*CommentServiceApi* | [**commentServiceThank**](docs/CommentServiceApi.md#commentservicethank) | **POST** /v1/content/comment/thank | 
+*DomainServiceApi* | [**domainServiceList**](docs/DomainServiceApi.md#domainservicelist) | **POST** /v1/content/domain/list | 
 *LocationServiceApi* | [**locationServiceGetCurrent**](docs/LocationServiceApi.md#locationservicegetcurrent) | **POST** /v1/user/location/get-current | 
-*LocationServiceApi* | [**locationServiceUpsert**](docs/LocationServiceApi.md#locationserviceupsert) | **POST** /v1/user/location/upsert-current | 
+*LocationServiceApi* | [**locationServiceUpsertCurrent**](docs/LocationServiceApi.md#locationserviceupsertcurrent) | **POST** /v1/user/location/upsert-current | 
+*NotificationServiceApi* | [**notificationServiceCountUnread**](docs/NotificationServiceApi.md#notificationservicecountunread) | **POST** /v1/notify/notification/count-unread | 
+*NotificationServiceApi* | [**notificationServiceList**](docs/NotificationServiceApi.md#notificationservicelist) | **POST** /v1/notify/notification/list | 
+*NotificationServiceApi* | [**notificationServiceMarkRead**](docs/NotificationServiceApi.md#notificationservicemarkread) | **POST** /v1/notify/notification/mark-read | 
+*PostscriptServiceApi* | [**postscriptServiceAdd**](docs/PostscriptServiceApi.md#postscriptserviceadd) | **POST** /v1/content/postscript/add | 
 *PreferencesServiceApi* | [**preferencesServiceGetCurrent**](docs/PreferencesServiceApi.md#preferencesservicegetcurrent) | **POST** /v1/user/preference/get-current | 
-*PreferencesServiceApi* | [**preferencesServiceUpdate**](docs/PreferencesServiceApi.md#preferencesserviceupdate) | **POST** /v1/user/preference/update-current | 
+*PreferencesServiceApi* | [**preferencesServiceUpdateCurrent**](docs/PreferencesServiceApi.md#preferencesserviceupdatecurrent) | **POST** /v1/user/preference/update-current | 
 *PrivacySettingServiceApi* | [**privacySettingServiceGetCurrent**](docs/PrivacySettingServiceApi.md#privacysettingservicegetcurrent) | **POST** /v1/user/privacy-setting/get-current | 
-*PrivacySettingServiceApi* | [**privacySettingServiceUpdate**](docs/PrivacySettingServiceApi.md#privacysettingserviceupdate) | **POST** /v1/user/privacy-setting/update-current | 
-*RelationServiceApi* | [**relationServiceBatchGetStatus**](docs/RelationServiceApi.md#relationservicebatchgetstatus) | **POST** /v1/user/relation/batch-get-status | 
+*PrivacySettingServiceApi* | [**privacySettingServiceUpdateCurrent**](docs/PrivacySettingServiceApi.md#privacysettingserviceupdatecurrent) | **POST** /v1/user/privacy-setting/update-current | 
 *RelationServiceApi* | [**relationServiceBlock**](docs/RelationServiceApi.md#relationserviceblock) | **POST** /v1/user/relation/block | 
 *RelationServiceApi* | [**relationServiceFollow**](docs/RelationServiceApi.md#relationservicefollow) | **POST** /v1/user/relation/follow | 
-*RelationServiceApi* | [**relationServicePageBlocked**](docs/RelationServiceApi.md#relationservicepageblocked) | **POST** /v1/user/relation/page-blocked | 
-*RelationServiceApi* | [**relationServicePageFollowers**](docs/RelationServiceApi.md#relationservicepagefollowers) | **POST** /v1/user/relation/page-followers | 
-*RelationServiceApi* | [**relationServicePageFollowing**](docs/RelationServiceApi.md#relationservicepagefollowing) | **POST** /v1/user/relation/page-following | 
+*RelationServiceApi* | [**relationServiceGetStatus**](docs/RelationServiceApi.md#relationservicegetstatus) | **POST** /v1/user/relation/get-status | 
+*RelationServiceApi* | [**relationServiceListBlocked**](docs/RelationServiceApi.md#relationservicelistblocked) | **POST** /v1/user/relation/list-blocked | 
+*RelationServiceApi* | [**relationServiceListFollowers**](docs/RelationServiceApi.md#relationservicelistfollowers) | **POST** /v1/user/relation/list-followers | 
+*RelationServiceApi* | [**relationServiceListFollowing**](docs/RelationServiceApi.md#relationservicelistfollowing) | **POST** /v1/user/relation/list-following | 
 *RelationServiceApi* | [**relationServiceUnblock**](docs/RelationServiceApi.md#relationserviceunblock) | **POST** /v1/user/relation/unblock | 
 *RelationServiceApi* | [**relationServiceUnfollow**](docs/RelationServiceApi.md#relationserviceunfollow) | **POST** /v1/user/relation/unfollow | 
+*TagServiceApi* | [**tagServiceList**](docs/TagServiceApi.md#tagservicelist) | **POST** /v1/content/tag/list | 
 *TfaServiceApi* | [**tfaServiceBeginEnable**](docs/TfaServiceApi.md#tfaservicebeginenable) | **POST** /v1/user/tfa/begin-enable | 
 *TfaServiceApi* | [**tfaServiceConfirmEnable**](docs/TfaServiceApi.md#tfaserviceconfirmenable) | **POST** /v1/user/tfa/confirm-enable | 
 *TfaServiceApi* | [**tfaServiceDisable**](docs/TfaServiceApi.md#tfaservicedisable) | **POST** /v1/user/tfa/disable | 
@@ -83,59 +104,102 @@ All URIs are relative to *http://localhost*
 
 ### Models
 
-- [CommonApiAppBbsV1UserAccount](docs/CommonApiAppBbsV1UserAccount.md)
-- [CommonApiAppBbsV1UserAccountContact](docs/CommonApiAppBbsV1UserAccountContact.md)
-- [CommonApiAppBbsV1UserAccountProfile](docs/CommonApiAppBbsV1UserAccountProfile.md)
-- [CommonApiAppBbsV1UserBatchGetProfileAccountReply](docs/CommonApiAppBbsV1UserBatchGetProfileAccountReply.md)
-- [CommonApiAppBbsV1UserBatchGetProfileAccountRequest](docs/CommonApiAppBbsV1UserBatchGetProfileAccountRequest.md)
-- [CommonApiAppBbsV1UserBatchGetStatusRelationReply](docs/CommonApiAppBbsV1UserBatchGetStatusRelationReply.md)
-- [CommonApiAppBbsV1UserBatchGetStatusRelationRequest](docs/CommonApiAppBbsV1UserBatchGetStatusRelationRequest.md)
-- [CommonApiAppBbsV1UserBeginEnableTfaReply](docs/CommonApiAppBbsV1UserBeginEnableTfaReply.md)
-- [CommonApiAppBbsV1UserBlockRelationRequest](docs/CommonApiAppBbsV1UserBlockRelationRequest.md)
-- [CommonApiAppBbsV1UserConfirmEnableTfaRequest](docs/CommonApiAppBbsV1UserConfirmEnableTfaRequest.md)
-- [CommonApiAppBbsV1UserDisableTfaRequest](docs/CommonApiAppBbsV1UserDisableTfaRequest.md)
-- [CommonApiAppBbsV1UserFollowRelationRequest](docs/CommonApiAppBbsV1UserFollowRelationRequest.md)
-- [CommonApiAppBbsV1UserGetCurrentAccountReply](docs/CommonApiAppBbsV1UserGetCurrentAccountReply.md)
-- [CommonApiAppBbsV1UserGetCurrentLocationReply](docs/CommonApiAppBbsV1UserGetCurrentLocationReply.md)
-- [CommonApiAppBbsV1UserGetCurrentPreferencesReply](docs/CommonApiAppBbsV1UserGetCurrentPreferencesReply.md)
-- [CommonApiAppBbsV1UserGetCurrentPrivacySettingReply](docs/CommonApiAppBbsV1UserGetCurrentPrivacySettingReply.md)
-- [CommonApiAppBbsV1UserGetCurrentTfaReply](docs/CommonApiAppBbsV1UserGetCurrentTfaReply.md)
-- [CommonApiAppBbsV1UserGetProfileAccountReply](docs/CommonApiAppBbsV1UserGetProfileAccountReply.md)
-- [CommonApiAppBbsV1UserGetProfileAccountRequest](docs/CommonApiAppBbsV1UserGetProfileAccountRequest.md)
-- [CommonApiAppBbsV1UserLocation](docs/CommonApiAppBbsV1UserLocation.md)
-- [CommonApiAppBbsV1UserLoginPasswordReply](docs/CommonApiAppBbsV1UserLoginPasswordReply.md)
-- [CommonApiAppBbsV1UserLoginPasswordRequest](docs/CommonApiAppBbsV1UserLoginPasswordRequest.md)
-- [CommonApiAppBbsV1UserPageBlockedRelationReply](docs/CommonApiAppBbsV1UserPageBlockedRelationReply.md)
-- [CommonApiAppBbsV1UserPageBlockedRelationRequest](docs/CommonApiAppBbsV1UserPageBlockedRelationRequest.md)
-- [CommonApiAppBbsV1UserPageFollowersRelationReply](docs/CommonApiAppBbsV1UserPageFollowersRelationReply.md)
-- [CommonApiAppBbsV1UserPageFollowersRelationRequest](docs/CommonApiAppBbsV1UserPageFollowersRelationRequest.md)
-- [CommonApiAppBbsV1UserPageFollowingRelationReply](docs/CommonApiAppBbsV1UserPageFollowingRelationReply.md)
-- [CommonApiAppBbsV1UserPageFollowingRelationRequest](docs/CommonApiAppBbsV1UserPageFollowingRelationRequest.md)
-- [CommonApiAppBbsV1UserPageReply](docs/CommonApiAppBbsV1UserPageReply.md)
-- [CommonApiAppBbsV1UserPageRequest](docs/CommonApiAppBbsV1UserPageRequest.md)
-- [CommonApiAppBbsV1UserPreference](docs/CommonApiAppBbsV1UserPreference.md)
-- [CommonApiAppBbsV1UserPrivacySetting](docs/CommonApiAppBbsV1UserPrivacySetting.md)
-- [CommonApiAppBbsV1UserRegisterEmailReply](docs/CommonApiAppBbsV1UserRegisterEmailReply.md)
-- [CommonApiAppBbsV1UserRegisterEmailRequest](docs/CommonApiAppBbsV1UserRegisterEmailRequest.md)
-- [CommonApiAppBbsV1UserRegisterPhoneReply](docs/CommonApiAppBbsV1UserRegisterPhoneReply.md)
-- [CommonApiAppBbsV1UserRegisterPhoneRequest](docs/CommonApiAppBbsV1UserRegisterPhoneRequest.md)
-- [CommonApiAppBbsV1UserRelation](docs/CommonApiAppBbsV1UserRelation.md)
-- [CommonApiAppBbsV1UserRelationStatus](docs/CommonApiAppBbsV1UserRelationStatus.md)
-- [CommonApiAppBbsV1UserTfa](docs/CommonApiAppBbsV1UserTfa.md)
-- [CommonApiAppBbsV1UserUnblockRelationRequest](docs/CommonApiAppBbsV1UserUnblockRelationRequest.md)
-- [CommonApiAppBbsV1UserUnfollowRelationRequest](docs/CommonApiAppBbsV1UserUnfollowRelationRequest.md)
-- [CommonApiAppBbsV1UserUpdatePreferencesReply](docs/CommonApiAppBbsV1UserUpdatePreferencesReply.md)
-- [CommonApiAppBbsV1UserUpdatePreferencesRequest](docs/CommonApiAppBbsV1UserUpdatePreferencesRequest.md)
-- [CommonApiAppBbsV1UserUpdatePrivacySettingReply](docs/CommonApiAppBbsV1UserUpdatePrivacySettingReply.md)
-- [CommonApiAppBbsV1UserUpdatePrivacySettingRequest](docs/CommonApiAppBbsV1UserUpdatePrivacySettingRequest.md)
-- [CommonApiAppBbsV1UserUpdateProfileAccountReply](docs/CommonApiAppBbsV1UserUpdateProfileAccountReply.md)
-- [CommonApiAppBbsV1UserUpdateProfileAccountRequest](docs/CommonApiAppBbsV1UserUpdateProfileAccountRequest.md)
-- [CommonApiAppBbsV1UserUpsertLocationReply](docs/CommonApiAppBbsV1UserUpsertLocationReply.md)
-- [CommonApiAppBbsV1UserUpsertLocationRequest](docs/CommonApiAppBbsV1UserUpsertLocationRequest.md)
-- [CommonApiAppBbsV1UserValidateTfaReply](docs/CommonApiAppBbsV1UserValidateTfaReply.md)
-- [CommonApiAppBbsV1UserValidateTfaRequest](docs/CommonApiAppBbsV1UserValidateTfaRequest.md)
-- [CommonApiAppBbsV1UserVerifyEmailRegisterRequest](docs/CommonApiAppBbsV1UserVerifyEmailRegisterRequest.md)
-- [CommonApiAppBbsV1UserVerifyPhoneRegisterRequest](docs/CommonApiAppBbsV1UserVerifyPhoneRegisterRequest.md)
+- [AcceptAnswerArticleRequest](docs/AcceptAnswerArticleRequest.md)
+- [Account](docs/Account.md)
+- [AccountContact](docs/AccountContact.md)
+- [AccountProfile](docs/AccountProfile.md)
+- [AddPostscriptReply](docs/AddPostscriptReply.md)
+- [AddPostscriptRequest](docs/AddPostscriptRequest.md)
+- [Article](docs/Article.md)
+- [ArticlePostscript](docs/ArticlePostscript.md)
+- [ArticleQuery](docs/ArticleQuery.md)
+- [ArticleSave](docs/ArticleSave.md)
+- [BeginEnableTfaReply](docs/BeginEnableTfaReply.md)
+- [BlockRelationRequest](docs/BlockRelationRequest.md)
+- [CollectArticleRequest](docs/CollectArticleRequest.md)
+- [Comment](docs/Comment.md)
+- [CommentQuery](docs/CommentQuery.md)
+- [ConfirmEnableTfaRequest](docs/ConfirmEnableTfaRequest.md)
+- [CountUnreadNotificationsReply](docs/CountUnreadNotificationsReply.md)
+- [CreateArticleReply](docs/CreateArticleReply.md)
+- [CreateArticleRequest](docs/CreateArticleRequest.md)
+- [CreateCommentReply](docs/CreateCommentReply.md)
+- [CreateCommentRequest](docs/CreateCommentRequest.md)
+- [DeleteArticleRequest](docs/DeleteArticleRequest.md)
+- [DisableTfaRequest](docs/DisableTfaRequest.md)
+- [Domain](docs/Domain.md)
+- [DomainQuery](docs/DomainQuery.md)
+- [FollowRelationRequest](docs/FollowRelationRequest.md)
+- [GetArticleReply](docs/GetArticleReply.md)
+- [GetArticleRequest](docs/GetArticleRequest.md)
+- [GetCurrentAccountReply](docs/GetCurrentAccountReply.md)
+- [GetCurrentLocationReply](docs/GetCurrentLocationReply.md)
+- [GetCurrentPreferencesReply](docs/GetCurrentPreferencesReply.md)
+- [GetCurrentPrivacySettingReply](docs/GetCurrentPrivacySettingReply.md)
+- [GetCurrentTfaReply](docs/GetCurrentTfaReply.md)
+- [GetProfileAccountReply](docs/GetProfileAccountReply.md)
+- [GetProfileAccountRequest](docs/GetProfileAccountRequest.md)
+- [GetStatusRelationReply](docs/GetStatusRelationReply.md)
+- [GetStatusRelationRequest](docs/GetStatusRelationRequest.md)
+- [LikeArticleRequest](docs/LikeArticleRequest.md)
+- [LikeCommentRequest](docs/LikeCommentRequest.md)
+- [ListArticlesReply](docs/ListArticlesReply.md)
+- [ListArticlesRequest](docs/ListArticlesRequest.md)
+- [ListBlockedRelationsReply](docs/ListBlockedRelationsReply.md)
+- [ListBlockedRelationsRequest](docs/ListBlockedRelationsRequest.md)
+- [ListCommentsReply](docs/ListCommentsReply.md)
+- [ListCommentsRequest](docs/ListCommentsRequest.md)
+- [ListDomainsReply](docs/ListDomainsReply.md)
+- [ListDomainsRequest](docs/ListDomainsRequest.md)
+- [ListFollowersRelationsReply](docs/ListFollowersRelationsReply.md)
+- [ListFollowersRelationsRequest](docs/ListFollowersRelationsRequest.md)
+- [ListFollowingRelationsReply](docs/ListFollowingRelationsReply.md)
+- [ListFollowingRelationsRequest](docs/ListFollowingRelationsRequest.md)
+- [ListNotificationsReply](docs/ListNotificationsReply.md)
+- [ListNotificationsRequest](docs/ListNotificationsRequest.md)
+- [ListTagsReply](docs/ListTagsReply.md)
+- [ListTagsRequest](docs/ListTagsRequest.md)
+- [Location](docs/Location.md)
+- [LoginByPasswordReply](docs/LoginByPasswordReply.md)
+- [LoginByPasswordRequest](docs/LoginByPasswordRequest.md)
+- [MarkReadNotificationReply](docs/MarkReadNotificationReply.md)
+- [MarkReadNotificationRequest](docs/MarkReadNotificationRequest.md)
+- [Notification](docs/Notification.md)
+- [PageReply](docs/PageReply.md)
+- [PageRequest](docs/PageRequest.md)
+- [Preference](docs/Preference.md)
+- [PrivacySetting](docs/PrivacySetting.md)
+- [PublishArticleRequest](docs/PublishArticleRequest.md)
+- [Relation](docs/Relation.md)
+- [RelationStatus](docs/RelationStatus.md)
+- [RewardArticleRequest](docs/RewardArticleRequest.md)
+- [StartEmailRegistrationReply](docs/StartEmailRegistrationReply.md)
+- [StartEmailRegistrationRequest](docs/StartEmailRegistrationRequest.md)
+- [StartPhoneRegistrationReply](docs/StartPhoneRegistrationReply.md)
+- [StartPhoneRegistrationRequest](docs/StartPhoneRegistrationRequest.md)
+- [Tag](docs/Tag.md)
+- [TagQuery](docs/TagQuery.md)
+- [TagSave](docs/TagSave.md)
+- [Tfa](docs/Tfa.md)
+- [ThankArticleRequest](docs/ThankArticleRequest.md)
+- [ThankCommentRequest](docs/ThankCommentRequest.md)
+- [UnblockRelationRequest](docs/UnblockRelationRequest.md)
+- [UnfollowRelationRequest](docs/UnfollowRelationRequest.md)
+- [UpdateCurrentPreferencesReply](docs/UpdateCurrentPreferencesReply.md)
+- [UpdateCurrentPreferencesRequest](docs/UpdateCurrentPreferencesRequest.md)
+- [UpdateCurrentPrivacySettingReply](docs/UpdateCurrentPrivacySettingReply.md)
+- [UpdateCurrentPrivacySettingRequest](docs/UpdateCurrentPrivacySettingRequest.md)
+- [UpdateDraftArticleReply](docs/UpdateDraftArticleReply.md)
+- [UpdateDraftArticleRequest](docs/UpdateDraftArticleRequest.md)
+- [UpdateProfileAccountReply](docs/UpdateProfileAccountReply.md)
+- [UpdateProfileAccountRequest](docs/UpdateProfileAccountRequest.md)
+- [UpsertCurrentLocationReply](docs/UpsertCurrentLocationReply.md)
+- [UpsertCurrentLocationRequest](docs/UpsertCurrentLocationRequest.md)
+- [ValidateTfaReply](docs/ValidateTfaReply.md)
+- [ValidateTfaRequest](docs/ValidateTfaRequest.md)
+- [VerifyEmailRegistrationRequest](docs/VerifyEmailRegistrationRequest.md)
+- [VerifyPhoneRegistrationRequest](docs/VerifyPhoneRegistrationRequest.md)
+- [WatchArticleRequest](docs/WatchArticleRequest.md)
 
 ### Authorization
 

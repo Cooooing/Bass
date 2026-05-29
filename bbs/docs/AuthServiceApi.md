@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**authServiceLoginPassword**](AuthServiceApi.md#authserviceloginpassword) | **POST** /v1/user/auth/login-password |  |
+| [**authServiceLoginByPassword**](AuthServiceApi.md#authserviceloginbypassword) | **POST** /v1/user/auth/login-by-password |  |
 | [**authServiceLogout**](AuthServiceApi.md#authservicelogout) | **POST** /v1/user/auth/logout |  |
-| [**authServiceRegisterEmail**](AuthServiceApi.md#authserviceregisteremail) | **POST** /v1/user/auth/register-email |  |
-| [**authServiceRegisterPhone**](AuthServiceApi.md#authserviceregisterphone) | **POST** /v1/user/auth/register-phone |  |
-| [**authServiceVerifyEmailRegister**](AuthServiceApi.md#authserviceverifyemailregister) | **POST** /v1/user/auth/verify-email-register |  |
-| [**authServiceVerifyPhoneRegister**](AuthServiceApi.md#authserviceverifyphoneregister) | **POST** /v1/user/auth/verify-phone-register |  |
+| [**authServiceStartEmailRegistration**](AuthServiceApi.md#authservicestartemailregistration) | **POST** /v1/user/auth/start-email-registration |  |
+| [**authServiceStartPhoneRegistration**](AuthServiceApi.md#authservicestartphoneregistration) | **POST** /v1/user/auth/start-phone-registration |  |
+| [**authServiceVerifyEmailRegistration**](AuthServiceApi.md#authserviceverifyemailregistration) | **POST** /v1/user/auth/verify-email-registration |  |
+| [**authServiceVerifyPhoneRegistration**](AuthServiceApi.md#authserviceverifyphoneregistration) | **POST** /v1/user/auth/verify-phone-registration |  |
 
 
 
-## authServiceLoginPassword
+## authServiceLoginByPassword
 
-> CommonApiAppBbsV1UserLoginPasswordReply authServiceLoginPassword(commonApiAppBbsV1UserLoginPasswordRequest)
+> LoginByPasswordReply authServiceLoginByPassword(loginByPasswordRequest)
 
 
 
@@ -28,19 +28,19 @@ import {
   Configuration,
   AuthServiceApi,
 } from '@bass/bbs-sdk';
-import type { AuthServiceLoginPasswordRequest } from '@bass/bbs-sdk';
+import type { AuthServiceLoginByPasswordRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new AuthServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserLoginPasswordRequest
-    commonApiAppBbsV1UserLoginPasswordRequest: ...,
-  } satisfies AuthServiceLoginPasswordRequest;
+    // LoginByPasswordRequest
+    loginByPasswordRequest: ...,
+  } satisfies AuthServiceLoginByPasswordRequest;
 
   try {
-    const data = await api.authServiceLoginPassword(body);
+    const data = await api.authServiceLoginByPassword(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -56,11 +56,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserLoginPasswordRequest** | [CommonApiAppBbsV1UserLoginPasswordRequest](CommonApiAppBbsV1UserLoginPasswordRequest.md) |  | |
+| **loginByPasswordRequest** | [LoginByPasswordRequest](LoginByPasswordRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserLoginPasswordReply**](CommonApiAppBbsV1UserLoginPasswordReply.md)
+[**LoginByPasswordReply**](LoginByPasswordReply.md)
 
 ### Authorization
 
@@ -147,9 +147,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## authServiceRegisterEmail
+## authServiceStartEmailRegistration
 
-> CommonApiAppBbsV1UserRegisterEmailReply authServiceRegisterEmail(commonApiAppBbsV1UserRegisterEmailRequest)
+> StartEmailRegistrationReply authServiceStartEmailRegistration(startEmailRegistrationRequest)
 
 
 
@@ -162,19 +162,19 @@ import {
   Configuration,
   AuthServiceApi,
 } from '@bass/bbs-sdk';
-import type { AuthServiceRegisterEmailRequest } from '@bass/bbs-sdk';
+import type { AuthServiceStartEmailRegistrationRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new AuthServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserRegisterEmailRequest
-    commonApiAppBbsV1UserRegisterEmailRequest: ...,
-  } satisfies AuthServiceRegisterEmailRequest;
+    // StartEmailRegistrationRequest
+    startEmailRegistrationRequest: ...,
+  } satisfies AuthServiceStartEmailRegistrationRequest;
 
   try {
-    const data = await api.authServiceRegisterEmail(body);
+    const data = await api.authServiceStartEmailRegistration(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -190,11 +190,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserRegisterEmailRequest** | [CommonApiAppBbsV1UserRegisterEmailRequest](CommonApiAppBbsV1UserRegisterEmailRequest.md) |  | |
+| **startEmailRegistrationRequest** | [StartEmailRegistrationRequest](StartEmailRegistrationRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserRegisterEmailReply**](CommonApiAppBbsV1UserRegisterEmailReply.md)
+[**StartEmailRegistrationReply**](StartEmailRegistrationReply.md)
 
 ### Authorization
 
@@ -214,9 +214,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## authServiceRegisterPhone
+## authServiceStartPhoneRegistration
 
-> CommonApiAppBbsV1UserRegisterPhoneReply authServiceRegisterPhone(commonApiAppBbsV1UserRegisterPhoneRequest)
+> StartPhoneRegistrationReply authServiceStartPhoneRegistration(startPhoneRegistrationRequest)
 
 
 
@@ -229,19 +229,19 @@ import {
   Configuration,
   AuthServiceApi,
 } from '@bass/bbs-sdk';
-import type { AuthServiceRegisterPhoneRequest } from '@bass/bbs-sdk';
+import type { AuthServiceStartPhoneRegistrationRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new AuthServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserRegisterPhoneRequest
-    commonApiAppBbsV1UserRegisterPhoneRequest: ...,
-  } satisfies AuthServiceRegisterPhoneRequest;
+    // StartPhoneRegistrationRequest
+    startPhoneRegistrationRequest: ...,
+  } satisfies AuthServiceStartPhoneRegistrationRequest;
 
   try {
-    const data = await api.authServiceRegisterPhone(body);
+    const data = await api.authServiceStartPhoneRegistration(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -257,11 +257,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserRegisterPhoneRequest** | [CommonApiAppBbsV1UserRegisterPhoneRequest](CommonApiAppBbsV1UserRegisterPhoneRequest.md) |  | |
+| **startPhoneRegistrationRequest** | [StartPhoneRegistrationRequest](StartPhoneRegistrationRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserRegisterPhoneReply**](CommonApiAppBbsV1UserRegisterPhoneReply.md)
+[**StartPhoneRegistrationReply**](StartPhoneRegistrationReply.md)
 
 ### Authorization
 
@@ -281,9 +281,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## authServiceVerifyEmailRegister
+## authServiceVerifyEmailRegistration
 
-> object authServiceVerifyEmailRegister(commonApiAppBbsV1UserVerifyEmailRegisterRequest)
+> object authServiceVerifyEmailRegistration(verifyEmailRegistrationRequest)
 
 
 
@@ -296,19 +296,19 @@ import {
   Configuration,
   AuthServiceApi,
 } from '@bass/bbs-sdk';
-import type { AuthServiceVerifyEmailRegisterRequest } from '@bass/bbs-sdk';
+import type { AuthServiceVerifyEmailRegistrationRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new AuthServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserVerifyEmailRegisterRequest
-    commonApiAppBbsV1UserVerifyEmailRegisterRequest: ...,
-  } satisfies AuthServiceVerifyEmailRegisterRequest;
+    // VerifyEmailRegistrationRequest
+    verifyEmailRegistrationRequest: ...,
+  } satisfies AuthServiceVerifyEmailRegistrationRequest;
 
   try {
-    const data = await api.authServiceVerifyEmailRegister(body);
+    const data = await api.authServiceVerifyEmailRegistration(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -324,7 +324,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserVerifyEmailRegisterRequest** | [CommonApiAppBbsV1UserVerifyEmailRegisterRequest](CommonApiAppBbsV1UserVerifyEmailRegisterRequest.md) |  | |
+| **verifyEmailRegistrationRequest** | [VerifyEmailRegistrationRequest](VerifyEmailRegistrationRequest.md) |  | |
 
 ### Return type
 
@@ -348,9 +348,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## authServiceVerifyPhoneRegister
+## authServiceVerifyPhoneRegistration
 
-> object authServiceVerifyPhoneRegister(commonApiAppBbsV1UserVerifyPhoneRegisterRequest)
+> object authServiceVerifyPhoneRegistration(verifyPhoneRegistrationRequest)
 
 
 
@@ -363,19 +363,19 @@ import {
   Configuration,
   AuthServiceApi,
 } from '@bass/bbs-sdk';
-import type { AuthServiceVerifyPhoneRegisterRequest } from '@bass/bbs-sdk';
+import type { AuthServiceVerifyPhoneRegistrationRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new AuthServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserVerifyPhoneRegisterRequest
-    commonApiAppBbsV1UserVerifyPhoneRegisterRequest: ...,
-  } satisfies AuthServiceVerifyPhoneRegisterRequest;
+    // VerifyPhoneRegistrationRequest
+    verifyPhoneRegistrationRequest: ...,
+  } satisfies AuthServiceVerifyPhoneRegistrationRequest;
 
   try {
-    const data = await api.authServiceVerifyPhoneRegister(body);
+    const data = await api.authServiceVerifyPhoneRegistration(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -391,7 +391,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserVerifyPhoneRegisterRequest** | [CommonApiAppBbsV1UserVerifyPhoneRegisterRequest](CommonApiAppBbsV1UserVerifyPhoneRegisterRequest.md) |  | |
+| **verifyPhoneRegistrationRequest** | [VerifyPhoneRegistrationRequest](VerifyPhoneRegistrationRequest.md) |  | |
 
 ### Return type
 

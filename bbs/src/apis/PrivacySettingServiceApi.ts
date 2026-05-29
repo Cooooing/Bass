@@ -14,27 +14,27 @@
 
 import * as runtime from '../runtime';
 import {
-    type CommonApiAppBbsV1UserGetCurrentPrivacySettingReply,
-    CommonApiAppBbsV1UserGetCurrentPrivacySettingReplyFromJSON,
-    CommonApiAppBbsV1UserGetCurrentPrivacySettingReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserGetCurrentPrivacySettingReply';
+    type GetCurrentPrivacySettingReply,
+    GetCurrentPrivacySettingReplyFromJSON,
+    GetCurrentPrivacySettingReplyToJSON,
+} from '../models/GetCurrentPrivacySettingReply';
 import {
-    type CommonApiAppBbsV1UserUpdatePrivacySettingReply,
-    CommonApiAppBbsV1UserUpdatePrivacySettingReplyFromJSON,
-    CommonApiAppBbsV1UserUpdatePrivacySettingReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserUpdatePrivacySettingReply';
+    type UpdateCurrentPrivacySettingReply,
+    UpdateCurrentPrivacySettingReplyFromJSON,
+    UpdateCurrentPrivacySettingReplyToJSON,
+} from '../models/UpdateCurrentPrivacySettingReply';
 import {
-    type CommonApiAppBbsV1UserUpdatePrivacySettingRequest,
-    CommonApiAppBbsV1UserUpdatePrivacySettingRequestFromJSON,
-    CommonApiAppBbsV1UserUpdatePrivacySettingRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserUpdatePrivacySettingRequest';
+    type UpdateCurrentPrivacySettingRequest,
+    UpdateCurrentPrivacySettingRequestFromJSON,
+    UpdateCurrentPrivacySettingRequestToJSON,
+} from '../models/UpdateCurrentPrivacySettingRequest';
 
 export interface PrivacySettingServiceGetCurrentRequest {
     body: object;
 }
 
-export interface PrivacySettingServiceUpdateRequest {
-    commonApiAppBbsV1UserUpdatePrivacySettingRequest: CommonApiAppBbsV1UserUpdatePrivacySettingRequest;
+export interface PrivacySettingServiceUpdateCurrentRequest {
+    updateCurrentPrivacySettingRequest: UpdateCurrentPrivacySettingRequest;
 }
 
 /**
@@ -59,34 +59,34 @@ export interface PrivacySettingServiceApiInterface {
      * @throws {RequiredError}
      * @memberof PrivacySettingServiceApiInterface
      */
-    privacySettingServiceGetCurrentRaw(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentPrivacySettingReply>>;
+    privacySettingServiceGetCurrentRaw(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentPrivacySettingReply>>;
 
     /**
      * 获取当前登录账号的隐私设置
      */
-    privacySettingServiceGetCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentPrivacySettingReply>;
+    privacySettingServiceGetCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentPrivacySettingReply>;
 
     /**
-     * Creates request options for privacySettingServiceUpdate without sending the request
-     * @param {CommonApiAppBbsV1UserUpdatePrivacySettingRequest} commonApiAppBbsV1UserUpdatePrivacySettingRequest 
+     * Creates request options for privacySettingServiceUpdateCurrent without sending the request
+     * @param {UpdateCurrentPrivacySettingRequest} updateCurrentPrivacySettingRequest 
      * @throws {RequiredError}
      * @memberof PrivacySettingServiceApiInterface
      */
-    privacySettingServiceUpdateRequestOpts(requestParameters: PrivacySettingServiceUpdateRequest): Promise<runtime.RequestOpts>;
+    privacySettingServiceUpdateCurrentRequestOpts(requestParameters: PrivacySettingServiceUpdateCurrentRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 更新当前登录账号的隐私设置
-     * @param {CommonApiAppBbsV1UserUpdatePrivacySettingRequest} commonApiAppBbsV1UserUpdatePrivacySettingRequest 
+     * @param {UpdateCurrentPrivacySettingRequest} updateCurrentPrivacySettingRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PrivacySettingServiceApiInterface
      */
-    privacySettingServiceUpdateRaw(requestParameters: PrivacySettingServiceUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserUpdatePrivacySettingReply>>;
+    privacySettingServiceUpdateCurrentRaw(requestParameters: PrivacySettingServiceUpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCurrentPrivacySettingReply>>;
 
     /**
      * 更新当前登录账号的隐私设置
      */
-    privacySettingServiceUpdate(requestParameters: PrivacySettingServiceUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserUpdatePrivacySettingReply>;
+    privacySettingServiceUpdateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCurrentPrivacySettingReply>;
 
 }
 
@@ -127,29 +127,29 @@ export class PrivacySettingServiceApi extends runtime.BaseAPI implements Privacy
     /**
      * 获取当前登录账号的隐私设置
      */
-    async privacySettingServiceGetCurrentRaw(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentPrivacySettingReply>> {
+    async privacySettingServiceGetCurrentRaw(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentPrivacySettingReply>> {
         const requestOptions = await this.privacySettingServiceGetCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserGetCurrentPrivacySettingReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentPrivacySettingReplyFromJSON(jsonValue));
     }
 
     /**
      * 获取当前登录账号的隐私设置
      */
-    async privacySettingServiceGetCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentPrivacySettingReply> {
+    async privacySettingServiceGetCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentPrivacySettingReply> {
         const response = await this.privacySettingServiceGetCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for privacySettingServiceUpdate without sending the request
+     * Creates request options for privacySettingServiceUpdateCurrent without sending the request
      */
-    async privacySettingServiceUpdateRequestOpts(requestParameters: PrivacySettingServiceUpdateRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserUpdatePrivacySettingRequest'] == null) {
+    async privacySettingServiceUpdateCurrentRequestOpts(requestParameters: PrivacySettingServiceUpdateCurrentRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['updateCurrentPrivacySettingRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserUpdatePrivacySettingRequest',
-                'Required parameter "commonApiAppBbsV1UserUpdatePrivacySettingRequest" was null or undefined when calling privacySettingServiceUpdate().'
+                'updateCurrentPrivacySettingRequest',
+                'Required parameter "updateCurrentPrivacySettingRequest" was null or undefined when calling privacySettingServiceUpdateCurrent().'
             );
         }
 
@@ -167,25 +167,25 @@ export class PrivacySettingServiceApi extends runtime.BaseAPI implements Privacy
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserUpdatePrivacySettingRequestToJSON(requestParameters['commonApiAppBbsV1UserUpdatePrivacySettingRequest']),
+            body: UpdateCurrentPrivacySettingRequestToJSON(requestParameters['updateCurrentPrivacySettingRequest']),
         };
     }
 
     /**
      * 更新当前登录账号的隐私设置
      */
-    async privacySettingServiceUpdateRaw(requestParameters: PrivacySettingServiceUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserUpdatePrivacySettingReply>> {
-        const requestOptions = await this.privacySettingServiceUpdateRequestOpts(requestParameters);
+    async privacySettingServiceUpdateCurrentRaw(requestParameters: PrivacySettingServiceUpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCurrentPrivacySettingReply>> {
+        const requestOptions = await this.privacySettingServiceUpdateCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserUpdatePrivacySettingReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateCurrentPrivacySettingReplyFromJSON(jsonValue));
     }
 
     /**
      * 更新当前登录账号的隐私设置
      */
-    async privacySettingServiceUpdate(requestParameters: PrivacySettingServiceUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserUpdatePrivacySettingReply> {
-        const response = await this.privacySettingServiceUpdateRaw(requestParameters, initOverrides);
+    async privacySettingServiceUpdateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCurrentPrivacySettingReply> {
+        const response = await this.privacySettingServiceUpdateCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

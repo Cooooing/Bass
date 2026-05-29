@@ -14,27 +14,27 @@
 
 import * as runtime from '../runtime';
 import {
-    type CommonApiAppBbsV1UserGetCurrentLocationReply,
-    CommonApiAppBbsV1UserGetCurrentLocationReplyFromJSON,
-    CommonApiAppBbsV1UserGetCurrentLocationReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserGetCurrentLocationReply';
+    type GetCurrentLocationReply,
+    GetCurrentLocationReplyFromJSON,
+    GetCurrentLocationReplyToJSON,
+} from '../models/GetCurrentLocationReply';
 import {
-    type CommonApiAppBbsV1UserUpsertLocationReply,
-    CommonApiAppBbsV1UserUpsertLocationReplyFromJSON,
-    CommonApiAppBbsV1UserUpsertLocationReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserUpsertLocationReply';
+    type UpsertCurrentLocationReply,
+    UpsertCurrentLocationReplyFromJSON,
+    UpsertCurrentLocationReplyToJSON,
+} from '../models/UpsertCurrentLocationReply';
 import {
-    type CommonApiAppBbsV1UserUpsertLocationRequest,
-    CommonApiAppBbsV1UserUpsertLocationRequestFromJSON,
-    CommonApiAppBbsV1UserUpsertLocationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserUpsertLocationRequest';
+    type UpsertCurrentLocationRequest,
+    UpsertCurrentLocationRequestFromJSON,
+    UpsertCurrentLocationRequestToJSON,
+} from '../models/UpsertCurrentLocationRequest';
 
 export interface LocationServiceGetCurrentRequest {
     body: object;
 }
 
-export interface LocationServiceUpsertRequest {
-    commonApiAppBbsV1UserUpsertLocationRequest: CommonApiAppBbsV1UserUpsertLocationRequest;
+export interface LocationServiceUpsertCurrentRequest {
+    upsertCurrentLocationRequest: UpsertCurrentLocationRequest;
 }
 
 /**
@@ -59,34 +59,34 @@ export interface LocationServiceApiInterface {
      * @throws {RequiredError}
      * @memberof LocationServiceApiInterface
      */
-    locationServiceGetCurrentRaw(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentLocationReply>>;
+    locationServiceGetCurrentRaw(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationReply>>;
 
     /**
      * 获取当前登录账号的地理资料
      */
-    locationServiceGetCurrent(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentLocationReply>;
+    locationServiceGetCurrent(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationReply>;
 
     /**
-     * Creates request options for locationServiceUpsert without sending the request
-     * @param {CommonApiAppBbsV1UserUpsertLocationRequest} commonApiAppBbsV1UserUpsertLocationRequest 
+     * Creates request options for locationServiceUpsertCurrent without sending the request
+     * @param {UpsertCurrentLocationRequest} upsertCurrentLocationRequest 
      * @throws {RequiredError}
      * @memberof LocationServiceApiInterface
      */
-    locationServiceUpsertRequestOpts(requestParameters: LocationServiceUpsertRequest): Promise<runtime.RequestOpts>;
+    locationServiceUpsertCurrentRequestOpts(requestParameters: LocationServiceUpsertCurrentRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 更新当前登录账号的地理资料
-     * @param {CommonApiAppBbsV1UserUpsertLocationRequest} commonApiAppBbsV1UserUpsertLocationRequest 
+     * @param {UpsertCurrentLocationRequest} upsertCurrentLocationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LocationServiceApiInterface
      */
-    locationServiceUpsertRaw(requestParameters: LocationServiceUpsertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserUpsertLocationReply>>;
+    locationServiceUpsertCurrentRaw(requestParameters: LocationServiceUpsertCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertCurrentLocationReply>>;
 
     /**
      * 更新当前登录账号的地理资料
      */
-    locationServiceUpsert(requestParameters: LocationServiceUpsertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserUpsertLocationReply>;
+    locationServiceUpsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertCurrentLocationReply>;
 
 }
 
@@ -127,29 +127,29 @@ export class LocationServiceApi extends runtime.BaseAPI implements LocationServi
     /**
      * 获取当前登录账号的地理资料
      */
-    async locationServiceGetCurrentRaw(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentLocationReply>> {
+    async locationServiceGetCurrentRaw(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationReply>> {
         const requestOptions = await this.locationServiceGetCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserGetCurrentLocationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentLocationReplyFromJSON(jsonValue));
     }
 
     /**
      * 获取当前登录账号的地理资料
      */
-    async locationServiceGetCurrent(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentLocationReply> {
+    async locationServiceGetCurrent(requestParameters: LocationServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationReply> {
         const response = await this.locationServiceGetCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for locationServiceUpsert without sending the request
+     * Creates request options for locationServiceUpsertCurrent without sending the request
      */
-    async locationServiceUpsertRequestOpts(requestParameters: LocationServiceUpsertRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserUpsertLocationRequest'] == null) {
+    async locationServiceUpsertCurrentRequestOpts(requestParameters: LocationServiceUpsertCurrentRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['upsertCurrentLocationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserUpsertLocationRequest',
-                'Required parameter "commonApiAppBbsV1UserUpsertLocationRequest" was null or undefined when calling locationServiceUpsert().'
+                'upsertCurrentLocationRequest',
+                'Required parameter "upsertCurrentLocationRequest" was null or undefined when calling locationServiceUpsertCurrent().'
             );
         }
 
@@ -167,25 +167,25 @@ export class LocationServiceApi extends runtime.BaseAPI implements LocationServi
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserUpsertLocationRequestToJSON(requestParameters['commonApiAppBbsV1UserUpsertLocationRequest']),
+            body: UpsertCurrentLocationRequestToJSON(requestParameters['upsertCurrentLocationRequest']),
         };
     }
 
     /**
      * 更新当前登录账号的地理资料
      */
-    async locationServiceUpsertRaw(requestParameters: LocationServiceUpsertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserUpsertLocationReply>> {
-        const requestOptions = await this.locationServiceUpsertRequestOpts(requestParameters);
+    async locationServiceUpsertCurrentRaw(requestParameters: LocationServiceUpsertCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertCurrentLocationReply>> {
+        const requestOptions = await this.locationServiceUpsertCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserUpsertLocationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpsertCurrentLocationReplyFromJSON(jsonValue));
     }
 
     /**
      * 更新当前登录账号的地理资料
      */
-    async locationServiceUpsert(requestParameters: LocationServiceUpsertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserUpsertLocationReply> {
-        const response = await this.locationServiceUpsertRaw(requestParameters, initOverrides);
+    async locationServiceUpsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertCurrentLocationReply> {
+        const response = await this.locationServiceUpsertCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

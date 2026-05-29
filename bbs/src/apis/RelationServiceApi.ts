@@ -14,96 +14,96 @@
 
 import * as runtime from '../runtime';
 import {
-    type CommonApiAppBbsV1UserBatchGetStatusRelationReply,
-    CommonApiAppBbsV1UserBatchGetStatusRelationReplyFromJSON,
-    CommonApiAppBbsV1UserBatchGetStatusRelationReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserBatchGetStatusRelationReply';
+    type BlockRelationRequest,
+    BlockRelationRequestFromJSON,
+    BlockRelationRequestToJSON,
+} from '../models/BlockRelationRequest';
 import {
-    type CommonApiAppBbsV1UserBatchGetStatusRelationRequest,
-    CommonApiAppBbsV1UserBatchGetStatusRelationRequestFromJSON,
-    CommonApiAppBbsV1UserBatchGetStatusRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserBatchGetStatusRelationRequest';
+    type FollowRelationRequest,
+    FollowRelationRequestFromJSON,
+    FollowRelationRequestToJSON,
+} from '../models/FollowRelationRequest';
 import {
-    type CommonApiAppBbsV1UserBlockRelationRequest,
-    CommonApiAppBbsV1UserBlockRelationRequestFromJSON,
-    CommonApiAppBbsV1UserBlockRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserBlockRelationRequest';
+    type GetStatusRelationReply,
+    GetStatusRelationReplyFromJSON,
+    GetStatusRelationReplyToJSON,
+} from '../models/GetStatusRelationReply';
 import {
-    type CommonApiAppBbsV1UserFollowRelationRequest,
-    CommonApiAppBbsV1UserFollowRelationRequestFromJSON,
-    CommonApiAppBbsV1UserFollowRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserFollowRelationRequest';
+    type GetStatusRelationRequest,
+    GetStatusRelationRequestFromJSON,
+    GetStatusRelationRequestToJSON,
+} from '../models/GetStatusRelationRequest';
 import {
-    type CommonApiAppBbsV1UserPageBlockedRelationReply,
-    CommonApiAppBbsV1UserPageBlockedRelationReplyFromJSON,
-    CommonApiAppBbsV1UserPageBlockedRelationReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserPageBlockedRelationReply';
+    type ListBlockedRelationsReply,
+    ListBlockedRelationsReplyFromJSON,
+    ListBlockedRelationsReplyToJSON,
+} from '../models/ListBlockedRelationsReply';
 import {
-    type CommonApiAppBbsV1UserPageBlockedRelationRequest,
-    CommonApiAppBbsV1UserPageBlockedRelationRequestFromJSON,
-    CommonApiAppBbsV1UserPageBlockedRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserPageBlockedRelationRequest';
+    type ListBlockedRelationsRequest,
+    ListBlockedRelationsRequestFromJSON,
+    ListBlockedRelationsRequestToJSON,
+} from '../models/ListBlockedRelationsRequest';
 import {
-    type CommonApiAppBbsV1UserPageFollowersRelationReply,
-    CommonApiAppBbsV1UserPageFollowersRelationReplyFromJSON,
-    CommonApiAppBbsV1UserPageFollowersRelationReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserPageFollowersRelationReply';
+    type ListFollowersRelationsReply,
+    ListFollowersRelationsReplyFromJSON,
+    ListFollowersRelationsReplyToJSON,
+} from '../models/ListFollowersRelationsReply';
 import {
-    type CommonApiAppBbsV1UserPageFollowersRelationRequest,
-    CommonApiAppBbsV1UserPageFollowersRelationRequestFromJSON,
-    CommonApiAppBbsV1UserPageFollowersRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserPageFollowersRelationRequest';
+    type ListFollowersRelationsRequest,
+    ListFollowersRelationsRequestFromJSON,
+    ListFollowersRelationsRequestToJSON,
+} from '../models/ListFollowersRelationsRequest';
 import {
-    type CommonApiAppBbsV1UserPageFollowingRelationReply,
-    CommonApiAppBbsV1UserPageFollowingRelationReplyFromJSON,
-    CommonApiAppBbsV1UserPageFollowingRelationReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserPageFollowingRelationReply';
+    type ListFollowingRelationsReply,
+    ListFollowingRelationsReplyFromJSON,
+    ListFollowingRelationsReplyToJSON,
+} from '../models/ListFollowingRelationsReply';
 import {
-    type CommonApiAppBbsV1UserPageFollowingRelationRequest,
-    CommonApiAppBbsV1UserPageFollowingRelationRequestFromJSON,
-    CommonApiAppBbsV1UserPageFollowingRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserPageFollowingRelationRequest';
+    type ListFollowingRelationsRequest,
+    ListFollowingRelationsRequestFromJSON,
+    ListFollowingRelationsRequestToJSON,
+} from '../models/ListFollowingRelationsRequest';
 import {
-    type CommonApiAppBbsV1UserUnblockRelationRequest,
-    CommonApiAppBbsV1UserUnblockRelationRequestFromJSON,
-    CommonApiAppBbsV1UserUnblockRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserUnblockRelationRequest';
+    type UnblockRelationRequest,
+    UnblockRelationRequestFromJSON,
+    UnblockRelationRequestToJSON,
+} from '../models/UnblockRelationRequest';
 import {
-    type CommonApiAppBbsV1UserUnfollowRelationRequest,
-    CommonApiAppBbsV1UserUnfollowRelationRequestFromJSON,
-    CommonApiAppBbsV1UserUnfollowRelationRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserUnfollowRelationRequest';
-
-export interface RelationServiceBatchGetStatusRequest {
-    commonApiAppBbsV1UserBatchGetStatusRelationRequest: CommonApiAppBbsV1UserBatchGetStatusRelationRequest;
-}
+    type UnfollowRelationRequest,
+    UnfollowRelationRequestFromJSON,
+    UnfollowRelationRequestToJSON,
+} from '../models/UnfollowRelationRequest';
 
 export interface RelationServiceBlockRequest {
-    commonApiAppBbsV1UserBlockRelationRequest: CommonApiAppBbsV1UserBlockRelationRequest;
+    blockRelationRequest: BlockRelationRequest;
 }
 
 export interface RelationServiceFollowRequest {
-    commonApiAppBbsV1UserFollowRelationRequest: CommonApiAppBbsV1UserFollowRelationRequest;
+    followRelationRequest: FollowRelationRequest;
 }
 
-export interface RelationServicePageBlockedRequest {
-    commonApiAppBbsV1UserPageBlockedRelationRequest: CommonApiAppBbsV1UserPageBlockedRelationRequest;
+export interface RelationServiceGetStatusRequest {
+    getStatusRelationRequest: GetStatusRelationRequest;
 }
 
-export interface RelationServicePageFollowersRequest {
-    commonApiAppBbsV1UserPageFollowersRelationRequest: CommonApiAppBbsV1UserPageFollowersRelationRequest;
+export interface RelationServiceListBlockedRequest {
+    listBlockedRelationsRequest: ListBlockedRelationsRequest;
 }
 
-export interface RelationServicePageFollowingRequest {
-    commonApiAppBbsV1UserPageFollowingRelationRequest: CommonApiAppBbsV1UserPageFollowingRelationRequest;
+export interface RelationServiceListFollowersRequest {
+    listFollowersRelationsRequest: ListFollowersRelationsRequest;
+}
+
+export interface RelationServiceListFollowingRequest {
+    listFollowingRelationsRequest: ListFollowingRelationsRequest;
 }
 
 export interface RelationServiceUnblockRequest {
-    commonApiAppBbsV1UserUnblockRelationRequest: CommonApiAppBbsV1UserUnblockRelationRequest;
+    unblockRelationRequest: UnblockRelationRequest;
 }
 
 export interface RelationServiceUnfollowRequest {
-    commonApiAppBbsV1UserUnfollowRelationRequest: CommonApiAppBbsV1UserUnfollowRelationRequest;
+    unfollowRelationRequest: UnfollowRelationRequest;
 }
 
 /**
@@ -114,30 +114,8 @@ export interface RelationServiceUnfollowRequest {
  */
 export interface RelationServiceApiInterface {
     /**
-     * Creates request options for relationServiceBatchGetStatus without sending the request
-     * @param {CommonApiAppBbsV1UserBatchGetStatusRelationRequest} commonApiAppBbsV1UserBatchGetStatusRelationRequest 
-     * @throws {RequiredError}
-     * @memberof RelationServiceApiInterface
-     */
-    relationServiceBatchGetStatusRequestOpts(requestParameters: RelationServiceBatchGetStatusRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 批量查询当前账号与多个目标账号之间的关系状态
-     * @param {CommonApiAppBbsV1UserBatchGetStatusRelationRequest} commonApiAppBbsV1UserBatchGetStatusRelationRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RelationServiceApiInterface
-     */
-    relationServiceBatchGetStatusRaw(requestParameters: RelationServiceBatchGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserBatchGetStatusRelationReply>>;
-
-    /**
-     * 批量查询当前账号与多个目标账号之间的关系状态
-     */
-    relationServiceBatchGetStatus(requestParameters: RelationServiceBatchGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserBatchGetStatusRelationReply>;
-
-    /**
      * Creates request options for relationServiceBlock without sending the request
-     * @param {CommonApiAppBbsV1UserBlockRelationRequest} commonApiAppBbsV1UserBlockRelationRequest 
+     * @param {BlockRelationRequest} blockRelationRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
@@ -145,7 +123,7 @@ export interface RelationServiceApiInterface {
 
     /**
      * 当前账号拉黑目标账号
-     * @param {CommonApiAppBbsV1UserBlockRelationRequest} commonApiAppBbsV1UserBlockRelationRequest 
+     * @param {BlockRelationRequest} blockRelationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
@@ -159,7 +137,7 @@ export interface RelationServiceApiInterface {
 
     /**
      * Creates request options for relationServiceFollow without sending the request
-     * @param {CommonApiAppBbsV1UserFollowRelationRequest} commonApiAppBbsV1UserFollowRelationRequest 
+     * @param {FollowRelationRequest} followRelationRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
@@ -167,7 +145,7 @@ export interface RelationServiceApiInterface {
 
     /**
      * 当前账号关注目标账号
-     * @param {CommonApiAppBbsV1UserFollowRelationRequest} commonApiAppBbsV1UserFollowRelationRequest 
+     * @param {FollowRelationRequest} followRelationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
@@ -180,74 +158,96 @@ export interface RelationServiceApiInterface {
     relationServiceFollow(requestParameters: RelationServiceFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for relationServicePageBlocked without sending the request
-     * @param {CommonApiAppBbsV1UserPageBlockedRelationRequest} commonApiAppBbsV1UserPageBlockedRelationRequest 
+     * Creates request options for relationServiceGetStatus without sending the request
+     * @param {GetStatusRelationRequest} getStatusRelationRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
-    relationServicePageBlockedRequestOpts(requestParameters: RelationServicePageBlockedRequest): Promise<runtime.RequestOpts>;
+    relationServiceGetStatusRequestOpts(requestParameters: RelationServiceGetStatusRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号与目标账号之间的关系
+     * @param {GetStatusRelationRequest} getStatusRelationRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RelationServiceApiInterface
+     */
+    relationServiceGetStatusRaw(requestParameters: RelationServiceGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetStatusRelationReply>>;
+
+    /**
+     * 查询当前账号与目标账号之间的关系
+     */
+    relationServiceGetStatus(requestParameters: RelationServiceGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetStatusRelationReply>;
+
+    /**
+     * Creates request options for relationServiceListBlocked without sending the request
+     * @param {ListBlockedRelationsRequest} listBlockedRelationsRequest 
+     * @throws {RequiredError}
+     * @memberof RelationServiceApiInterface
+     */
+    relationServiceListBlockedRequestOpts(requestParameters: RelationServiceListBlockedRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 分页查询当前账号拉黑的账号列表
-     * @param {CommonApiAppBbsV1UserPageBlockedRelationRequest} commonApiAppBbsV1UserPageBlockedRelationRequest 
+     * @param {ListBlockedRelationsRequest} listBlockedRelationsRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
-    relationServicePageBlockedRaw(requestParameters: RelationServicePageBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserPageBlockedRelationReply>>;
+    relationServiceListBlockedRaw(requestParameters: RelationServiceListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBlockedRelationsReply>>;
 
     /**
      * 分页查询当前账号拉黑的账号列表
      */
-    relationServicePageBlocked(requestParameters: RelationServicePageBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserPageBlockedRelationReply>;
+    relationServiceListBlocked(requestParameters: RelationServiceListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBlockedRelationsReply>;
 
     /**
-     * Creates request options for relationServicePageFollowers without sending the request
-     * @param {CommonApiAppBbsV1UserPageFollowersRelationRequest} commonApiAppBbsV1UserPageFollowersRelationRequest 
+     * Creates request options for relationServiceListFollowers without sending the request
+     * @param {ListFollowersRelationsRequest} listFollowersRelationsRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
-    relationServicePageFollowersRequestOpts(requestParameters: RelationServicePageFollowersRequest): Promise<runtime.RequestOpts>;
+    relationServiceListFollowersRequestOpts(requestParameters: RelationServiceListFollowersRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 分页查询当前账号的粉丝账号列表
-     * @param {CommonApiAppBbsV1UserPageFollowersRelationRequest} commonApiAppBbsV1UserPageFollowersRelationRequest 
+     * @param {ListFollowersRelationsRequest} listFollowersRelationsRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
-    relationServicePageFollowersRaw(requestParameters: RelationServicePageFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserPageFollowersRelationReply>>;
+    relationServiceListFollowersRaw(requestParameters: RelationServiceListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersRelationsReply>>;
 
     /**
      * 分页查询当前账号的粉丝账号列表
      */
-    relationServicePageFollowers(requestParameters: RelationServicePageFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserPageFollowersRelationReply>;
+    relationServiceListFollowers(requestParameters: RelationServiceListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersRelationsReply>;
 
     /**
-     * Creates request options for relationServicePageFollowing without sending the request
-     * @param {CommonApiAppBbsV1UserPageFollowingRelationRequest} commonApiAppBbsV1UserPageFollowingRelationRequest 
+     * Creates request options for relationServiceListFollowing without sending the request
+     * @param {ListFollowingRelationsRequest} listFollowingRelationsRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
-    relationServicePageFollowingRequestOpts(requestParameters: RelationServicePageFollowingRequest): Promise<runtime.RequestOpts>;
+    relationServiceListFollowingRequestOpts(requestParameters: RelationServiceListFollowingRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 分页查询当前账号关注的账号列表
-     * @param {CommonApiAppBbsV1UserPageFollowingRelationRequest} commonApiAppBbsV1UserPageFollowingRelationRequest 
+     * @param {ListFollowingRelationsRequest} listFollowingRelationsRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
-    relationServicePageFollowingRaw(requestParameters: RelationServicePageFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserPageFollowingRelationReply>>;
+    relationServiceListFollowingRaw(requestParameters: RelationServiceListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingRelationsReply>>;
 
     /**
      * 分页查询当前账号关注的账号列表
      */
-    relationServicePageFollowing(requestParameters: RelationServicePageFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserPageFollowingRelationReply>;
+    relationServiceListFollowing(requestParameters: RelationServiceListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingRelationsReply>;
 
     /**
      * Creates request options for relationServiceUnblock without sending the request
-     * @param {CommonApiAppBbsV1UserUnblockRelationRequest} commonApiAppBbsV1UserUnblockRelationRequest 
+     * @param {UnblockRelationRequest} unblockRelationRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
@@ -255,7 +255,7 @@ export interface RelationServiceApiInterface {
 
     /**
      * 当前账号取消拉黑目标账号
-     * @param {CommonApiAppBbsV1UserUnblockRelationRequest} commonApiAppBbsV1UserUnblockRelationRequest 
+     * @param {UnblockRelationRequest} unblockRelationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
@@ -269,7 +269,7 @@ export interface RelationServiceApiInterface {
 
     /**
      * Creates request options for relationServiceUnfollow without sending the request
-     * @param {CommonApiAppBbsV1UserUnfollowRelationRequest} commonApiAppBbsV1UserUnfollowRelationRequest 
+     * @param {UnfollowRelationRequest} unfollowRelationRequest 
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
      */
@@ -277,7 +277,7 @@ export interface RelationServiceApiInterface {
 
     /**
      * 当前账号取消关注目标账号
-     * @param {CommonApiAppBbsV1UserUnfollowRelationRequest} commonApiAppBbsV1UserUnfollowRelationRequest 
+     * @param {UnfollowRelationRequest} unfollowRelationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceApiInterface
@@ -297,60 +297,13 @@ export interface RelationServiceApiInterface {
 export class RelationServiceApi extends runtime.BaseAPI implements RelationServiceApiInterface {
 
     /**
-     * Creates request options for relationServiceBatchGetStatus without sending the request
-     */
-    async relationServiceBatchGetStatusRequestOpts(requestParameters: RelationServiceBatchGetStatusRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserBatchGetStatusRelationRequest'] == null) {
-            throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserBatchGetStatusRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserBatchGetStatusRelationRequest" was null or undefined when calling relationServiceBatchGetStatus().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/user/relation/batch-get-status`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CommonApiAppBbsV1UserBatchGetStatusRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserBatchGetStatusRelationRequest']),
-        };
-    }
-
-    /**
-     * 批量查询当前账号与多个目标账号之间的关系状态
-     */
-    async relationServiceBatchGetStatusRaw(requestParameters: RelationServiceBatchGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserBatchGetStatusRelationReply>> {
-        const requestOptions = await this.relationServiceBatchGetStatusRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserBatchGetStatusRelationReplyFromJSON(jsonValue));
-    }
-
-    /**
-     * 批量查询当前账号与多个目标账号之间的关系状态
-     */
-    async relationServiceBatchGetStatus(requestParameters: RelationServiceBatchGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserBatchGetStatusRelationReply> {
-        const response = await this.relationServiceBatchGetStatusRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Creates request options for relationServiceBlock without sending the request
      */
     async relationServiceBlockRequestOpts(requestParameters: RelationServiceBlockRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserBlockRelationRequest'] == null) {
+        if (requestParameters['blockRelationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserBlockRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserBlockRelationRequest" was null or undefined when calling relationServiceBlock().'
+                'blockRelationRequest',
+                'Required parameter "blockRelationRequest" was null or undefined when calling relationServiceBlock().'
             );
         }
 
@@ -368,7 +321,7 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserBlockRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserBlockRelationRequest']),
+            body: BlockRelationRequestToJSON(requestParameters['blockRelationRequest']),
         };
     }
 
@@ -394,10 +347,10 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
      * Creates request options for relationServiceFollow without sending the request
      */
     async relationServiceFollowRequestOpts(requestParameters: RelationServiceFollowRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserFollowRelationRequest'] == null) {
+        if (requestParameters['followRelationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserFollowRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserFollowRelationRequest" was null or undefined when calling relationServiceFollow().'
+                'followRelationRequest',
+                'Required parameter "followRelationRequest" was null or undefined when calling relationServiceFollow().'
             );
         }
 
@@ -415,7 +368,7 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserFollowRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserFollowRelationRequest']),
+            body: FollowRelationRequestToJSON(requestParameters['followRelationRequest']),
         };
     }
 
@@ -438,13 +391,13 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
     }
 
     /**
-     * Creates request options for relationServicePageBlocked without sending the request
+     * Creates request options for relationServiceGetStatus without sending the request
      */
-    async relationServicePageBlockedRequestOpts(requestParameters: RelationServicePageBlockedRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserPageBlockedRelationRequest'] == null) {
+    async relationServiceGetStatusRequestOpts(requestParameters: RelationServiceGetStatusRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['getStatusRelationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserPageBlockedRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserPageBlockedRelationRequest" was null or undefined when calling relationServicePageBlocked().'
+                'getStatusRelationRequest',
+                'Required parameter "getStatusRelationRequest" was null or undefined when calling relationServiceGetStatus().'
             );
         }
 
@@ -455,43 +408,90 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/relation/page-blocked`;
+        let urlPath = `/v1/user/relation/get-status`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserPageBlockedRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserPageBlockedRelationRequest']),
+            body: GetStatusRelationRequestToJSON(requestParameters['getStatusRelationRequest']),
+        };
+    }
+
+    /**
+     * 查询当前账号与目标账号之间的关系
+     */
+    async relationServiceGetStatusRaw(requestParameters: RelationServiceGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetStatusRelationReply>> {
+        const requestOptions = await this.relationServiceGetStatusRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetStatusRelationReplyFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号与目标账号之间的关系
+     */
+    async relationServiceGetStatus(requestParameters: RelationServiceGetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetStatusRelationReply> {
+        const response = await this.relationServiceGetStatusRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for relationServiceListBlocked without sending the request
+     */
+    async relationServiceListBlockedRequestOpts(requestParameters: RelationServiceListBlockedRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listBlockedRelationsRequest'] == null) {
+            throw new runtime.RequiredError(
+                'listBlockedRelationsRequest',
+                'Required parameter "listBlockedRelationsRequest" was null or undefined when calling relationServiceListBlocked().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/relation/list-blocked`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListBlockedRelationsRequestToJSON(requestParameters['listBlockedRelationsRequest']),
         };
     }
 
     /**
      * 分页查询当前账号拉黑的账号列表
      */
-    async relationServicePageBlockedRaw(requestParameters: RelationServicePageBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserPageBlockedRelationReply>> {
-        const requestOptions = await this.relationServicePageBlockedRequestOpts(requestParameters);
+    async relationServiceListBlockedRaw(requestParameters: RelationServiceListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBlockedRelationsReply>> {
+        const requestOptions = await this.relationServiceListBlockedRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserPageBlockedRelationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListBlockedRelationsReplyFromJSON(jsonValue));
     }
 
     /**
      * 分页查询当前账号拉黑的账号列表
      */
-    async relationServicePageBlocked(requestParameters: RelationServicePageBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserPageBlockedRelationReply> {
-        const response = await this.relationServicePageBlockedRaw(requestParameters, initOverrides);
+    async relationServiceListBlocked(requestParameters: RelationServiceListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBlockedRelationsReply> {
+        const response = await this.relationServiceListBlockedRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for relationServicePageFollowers without sending the request
+     * Creates request options for relationServiceListFollowers without sending the request
      */
-    async relationServicePageFollowersRequestOpts(requestParameters: RelationServicePageFollowersRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserPageFollowersRelationRequest'] == null) {
+    async relationServiceListFollowersRequestOpts(requestParameters: RelationServiceListFollowersRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listFollowersRelationsRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserPageFollowersRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserPageFollowersRelationRequest" was null or undefined when calling relationServicePageFollowers().'
+                'listFollowersRelationsRequest',
+                'Required parameter "listFollowersRelationsRequest" was null or undefined when calling relationServiceListFollowers().'
             );
         }
 
@@ -502,43 +502,43 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/relation/page-followers`;
+        let urlPath = `/v1/user/relation/list-followers`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserPageFollowersRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserPageFollowersRelationRequest']),
+            body: ListFollowersRelationsRequestToJSON(requestParameters['listFollowersRelationsRequest']),
         };
     }
 
     /**
      * 分页查询当前账号的粉丝账号列表
      */
-    async relationServicePageFollowersRaw(requestParameters: RelationServicePageFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserPageFollowersRelationReply>> {
-        const requestOptions = await this.relationServicePageFollowersRequestOpts(requestParameters);
+    async relationServiceListFollowersRaw(requestParameters: RelationServiceListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersRelationsReply>> {
+        const requestOptions = await this.relationServiceListFollowersRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserPageFollowersRelationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowersRelationsReplyFromJSON(jsonValue));
     }
 
     /**
      * 分页查询当前账号的粉丝账号列表
      */
-    async relationServicePageFollowers(requestParameters: RelationServicePageFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserPageFollowersRelationReply> {
-        const response = await this.relationServicePageFollowersRaw(requestParameters, initOverrides);
+    async relationServiceListFollowers(requestParameters: RelationServiceListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersRelationsReply> {
+        const response = await this.relationServiceListFollowersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for relationServicePageFollowing without sending the request
+     * Creates request options for relationServiceListFollowing without sending the request
      */
-    async relationServicePageFollowingRequestOpts(requestParameters: RelationServicePageFollowingRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserPageFollowingRelationRequest'] == null) {
+    async relationServiceListFollowingRequestOpts(requestParameters: RelationServiceListFollowingRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listFollowingRelationsRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserPageFollowingRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserPageFollowingRelationRequest" was null or undefined when calling relationServicePageFollowing().'
+                'listFollowingRelationsRequest',
+                'Required parameter "listFollowingRelationsRequest" was null or undefined when calling relationServiceListFollowing().'
             );
         }
 
@@ -549,32 +549,32 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/relation/page-following`;
+        let urlPath = `/v1/user/relation/list-following`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserPageFollowingRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserPageFollowingRelationRequest']),
+            body: ListFollowingRelationsRequestToJSON(requestParameters['listFollowingRelationsRequest']),
         };
     }
 
     /**
      * 分页查询当前账号关注的账号列表
      */
-    async relationServicePageFollowingRaw(requestParameters: RelationServicePageFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserPageFollowingRelationReply>> {
-        const requestOptions = await this.relationServicePageFollowingRequestOpts(requestParameters);
+    async relationServiceListFollowingRaw(requestParameters: RelationServiceListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingRelationsReply>> {
+        const requestOptions = await this.relationServiceListFollowingRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserPageFollowingRelationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowingRelationsReplyFromJSON(jsonValue));
     }
 
     /**
      * 分页查询当前账号关注的账号列表
      */
-    async relationServicePageFollowing(requestParameters: RelationServicePageFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserPageFollowingRelationReply> {
-        const response = await this.relationServicePageFollowingRaw(requestParameters, initOverrides);
+    async relationServiceListFollowing(requestParameters: RelationServiceListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingRelationsReply> {
+        const response = await this.relationServiceListFollowingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -582,10 +582,10 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
      * Creates request options for relationServiceUnblock without sending the request
      */
     async relationServiceUnblockRequestOpts(requestParameters: RelationServiceUnblockRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserUnblockRelationRequest'] == null) {
+        if (requestParameters['unblockRelationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserUnblockRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserUnblockRelationRequest" was null or undefined when calling relationServiceUnblock().'
+                'unblockRelationRequest',
+                'Required parameter "unblockRelationRequest" was null or undefined when calling relationServiceUnblock().'
             );
         }
 
@@ -603,7 +603,7 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserUnblockRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserUnblockRelationRequest']),
+            body: UnblockRelationRequestToJSON(requestParameters['unblockRelationRequest']),
         };
     }
 
@@ -629,10 +629,10 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
      * Creates request options for relationServiceUnfollow without sending the request
      */
     async relationServiceUnfollowRequestOpts(requestParameters: RelationServiceUnfollowRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserUnfollowRelationRequest'] == null) {
+        if (requestParameters['unfollowRelationRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserUnfollowRelationRequest',
-                'Required parameter "commonApiAppBbsV1UserUnfollowRelationRequest" was null or undefined when calling relationServiceUnfollow().'
+                'unfollowRelationRequest',
+                'Required parameter "unfollowRelationRequest" was null or undefined when calling relationServiceUnfollow().'
             );
         }
 
@@ -650,7 +650,7 @@ export class RelationServiceApi extends runtime.BaseAPI implements RelationServi
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserUnfollowRelationRequestToJSON(requestParameters['commonApiAppBbsV1UserUnfollowRelationRequest']),
+            body: UnfollowRelationRequestToJSON(requestParameters['unfollowRelationRequest']),
         };
     }
 

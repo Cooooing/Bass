@@ -5,13 +5,13 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**preferencesServiceGetCurrent**](PreferencesServiceApi.md#preferencesservicegetcurrent) | **POST** /v1/user/preference/get-current |  |
-| [**preferencesServiceUpdate**](PreferencesServiceApi.md#preferencesserviceupdate) | **POST** /v1/user/preference/update-current |  |
+| [**preferencesServiceUpdateCurrent**](PreferencesServiceApi.md#preferencesserviceupdatecurrent) | **POST** /v1/user/preference/update-current |  |
 
 
 
 ## preferencesServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentPreferencesReply preferencesServiceGetCurrent(body)
+> GetCurrentPreferencesReply preferencesServiceGetCurrent(body)
 
 
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentPreferencesReply**](CommonApiAppBbsV1UserGetCurrentPreferencesReply.md)
+[**GetCurrentPreferencesReply**](GetCurrentPreferencesReply.md)
 
 ### Authorization
 
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## preferencesServiceUpdate
+## preferencesServiceUpdateCurrent
 
-> CommonApiAppBbsV1UserUpdatePreferencesReply preferencesServiceUpdate(commonApiAppBbsV1UserUpdatePreferencesRequest)
+> UpdateCurrentPreferencesReply preferencesServiceUpdateCurrent(updateCurrentPreferencesRequest)
 
 
 
@@ -91,19 +91,19 @@ import {
   Configuration,
   PreferencesServiceApi,
 } from '@bass/bbs-sdk';
-import type { PreferencesServiceUpdateRequest } from '@bass/bbs-sdk';
+import type { PreferencesServiceUpdateCurrentRequest } from '@bass/bbs-sdk';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk SDK...");
   const api = new PreferencesServiceApi();
 
   const body = {
-    // CommonApiAppBbsV1UserUpdatePreferencesRequest
-    commonApiAppBbsV1UserUpdatePreferencesRequest: ...,
-  } satisfies PreferencesServiceUpdateRequest;
+    // UpdateCurrentPreferencesRequest
+    updateCurrentPreferencesRequest: ...,
+  } satisfies PreferencesServiceUpdateCurrentRequest;
 
   try {
-    const data = await api.preferencesServiceUpdate(body);
+    const data = await api.preferencesServiceUpdateCurrent(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -119,11 +119,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **commonApiAppBbsV1UserUpdatePreferencesRequest** | [CommonApiAppBbsV1UserUpdatePreferencesRequest](CommonApiAppBbsV1UserUpdatePreferencesRequest.md) |  | |
+| **updateCurrentPreferencesRequest** | [UpdateCurrentPreferencesRequest](UpdateCurrentPreferencesRequest.md) |  | |
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpdatePreferencesReply**](CommonApiAppBbsV1UserUpdatePreferencesReply.md)
+[**UpdateCurrentPreferencesReply**](UpdateCurrentPreferencesReply.md)
 
 ### Authorization
 

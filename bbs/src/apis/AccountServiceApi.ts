@@ -14,55 +14,41 @@
 
 import * as runtime from '../runtime';
 import {
-    type CommonApiAppBbsV1UserBatchGetProfileAccountReply,
-    CommonApiAppBbsV1UserBatchGetProfileAccountReplyFromJSON,
-    CommonApiAppBbsV1UserBatchGetProfileAccountReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserBatchGetProfileAccountReply';
+    type GetCurrentAccountReply,
+    GetCurrentAccountReplyFromJSON,
+    GetCurrentAccountReplyToJSON,
+} from '../models/GetCurrentAccountReply';
 import {
-    type CommonApiAppBbsV1UserBatchGetProfileAccountRequest,
-    CommonApiAppBbsV1UserBatchGetProfileAccountRequestFromJSON,
-    CommonApiAppBbsV1UserBatchGetProfileAccountRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserBatchGetProfileAccountRequest';
+    type GetProfileAccountReply,
+    GetProfileAccountReplyFromJSON,
+    GetProfileAccountReplyToJSON,
+} from '../models/GetProfileAccountReply';
 import {
-    type CommonApiAppBbsV1UserGetCurrentAccountReply,
-    CommonApiAppBbsV1UserGetCurrentAccountReplyFromJSON,
-    CommonApiAppBbsV1UserGetCurrentAccountReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserGetCurrentAccountReply';
+    type GetProfileAccountRequest,
+    GetProfileAccountRequestFromJSON,
+    GetProfileAccountRequestToJSON,
+} from '../models/GetProfileAccountRequest';
 import {
-    type CommonApiAppBbsV1UserGetProfileAccountReply,
-    CommonApiAppBbsV1UserGetProfileAccountReplyFromJSON,
-    CommonApiAppBbsV1UserGetProfileAccountReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserGetProfileAccountReply';
+    type UpdateProfileAccountReply,
+    UpdateProfileAccountReplyFromJSON,
+    UpdateProfileAccountReplyToJSON,
+} from '../models/UpdateProfileAccountReply';
 import {
-    type CommonApiAppBbsV1UserGetProfileAccountRequest,
-    CommonApiAppBbsV1UserGetProfileAccountRequestFromJSON,
-    CommonApiAppBbsV1UserGetProfileAccountRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserGetProfileAccountRequest';
-import {
-    type CommonApiAppBbsV1UserUpdateProfileAccountReply,
-    CommonApiAppBbsV1UserUpdateProfileAccountReplyFromJSON,
-    CommonApiAppBbsV1UserUpdateProfileAccountReplyToJSON,
-} from '../models/CommonApiAppBbsV1UserUpdateProfileAccountReply';
-import {
-    type CommonApiAppBbsV1UserUpdateProfileAccountRequest,
-    CommonApiAppBbsV1UserUpdateProfileAccountRequestFromJSON,
-    CommonApiAppBbsV1UserUpdateProfileAccountRequestToJSON,
-} from '../models/CommonApiAppBbsV1UserUpdateProfileAccountRequest';
-
-export interface AccountServiceBatchGetProfileRequest {
-    commonApiAppBbsV1UserBatchGetProfileAccountRequest: CommonApiAppBbsV1UserBatchGetProfileAccountRequest;
-}
+    type UpdateProfileAccountRequest,
+    UpdateProfileAccountRequestFromJSON,
+    UpdateProfileAccountRequestToJSON,
+} from '../models/UpdateProfileAccountRequest';
 
 export interface AccountServiceGetCurrentRequest {
     body: object;
 }
 
 export interface AccountServiceGetProfileRequest {
-    commonApiAppBbsV1UserGetProfileAccountRequest: CommonApiAppBbsV1UserGetProfileAccountRequest;
+    getProfileAccountRequest: GetProfileAccountRequest;
 }
 
 export interface AccountServiceUpdateProfileRequest {
-    commonApiAppBbsV1UserUpdateProfileAccountRequest: CommonApiAppBbsV1UserUpdateProfileAccountRequest;
+    updateProfileAccountRequest: UpdateProfileAccountRequest;
 }
 
 /**
@@ -72,28 +58,6 @@ export interface AccountServiceUpdateProfileRequest {
  * @interface AccountServiceApiInterface
  */
 export interface AccountServiceApiInterface {
-    /**
-     * Creates request options for accountServiceBatchGetProfile without sending the request
-     * @param {CommonApiAppBbsV1UserBatchGetProfileAccountRequest} commonApiAppBbsV1UserBatchGetProfileAccountRequest 
-     * @throws {RequiredError}
-     * @memberof AccountServiceApiInterface
-     */
-    accountServiceBatchGetProfileRequestOpts(requestParameters: AccountServiceBatchGetProfileRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 批量获取账号展示资料
-     * @param {CommonApiAppBbsV1UserBatchGetProfileAccountRequest} commonApiAppBbsV1UserBatchGetProfileAccountRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AccountServiceApiInterface
-     */
-    accountServiceBatchGetProfileRaw(requestParameters: AccountServiceBatchGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserBatchGetProfileAccountReply>>;
-
-    /**
-     * 批量获取账号展示资料
-     */
-    accountServiceBatchGetProfile(requestParameters: AccountServiceBatchGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserBatchGetProfileAccountReply>;
-
     /**
      * Creates request options for accountServiceGetCurrent without sending the request
      * @param {object} body 
@@ -109,16 +73,16 @@ export interface AccountServiceApiInterface {
      * @throws {RequiredError}
      * @memberof AccountServiceApiInterface
      */
-    accountServiceGetCurrentRaw(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentAccountReply>>;
+    accountServiceGetCurrentRaw(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountReply>>;
 
     /**
      * 获取当前登录账号的完整资料
      */
-    accountServiceGetCurrent(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentAccountReply>;
+    accountServiceGetCurrent(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountReply>;
 
     /**
      * Creates request options for accountServiceGetProfile without sending the request
-     * @param {CommonApiAppBbsV1UserGetProfileAccountRequest} commonApiAppBbsV1UserGetProfileAccountRequest 
+     * @param {GetProfileAccountRequest} getProfileAccountRequest 
      * @throws {RequiredError}
      * @memberof AccountServiceApiInterface
      */
@@ -126,21 +90,21 @@ export interface AccountServiceApiInterface {
 
     /**
      * 按账号 ID 获取账号展示资料
-     * @param {CommonApiAppBbsV1UserGetProfileAccountRequest} commonApiAppBbsV1UserGetProfileAccountRequest 
+     * @param {GetProfileAccountRequest} getProfileAccountRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountServiceApiInterface
      */
-    accountServiceGetProfileRaw(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetProfileAccountReply>>;
+    accountServiceGetProfileRaw(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountReply>>;
 
     /**
      * 按账号 ID 获取账号展示资料
      */
-    accountServiceGetProfile(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetProfileAccountReply>;
+    accountServiceGetProfile(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountReply>;
 
     /**
      * Creates request options for accountServiceUpdateProfile without sending the request
-     * @param {CommonApiAppBbsV1UserUpdateProfileAccountRequest} commonApiAppBbsV1UserUpdateProfileAccountRequest 
+     * @param {UpdateProfileAccountRequest} updateProfileAccountRequest 
      * @throws {RequiredError}
      * @memberof AccountServiceApiInterface
      */
@@ -148,17 +112,17 @@ export interface AccountServiceApiInterface {
 
     /**
      * 更新当前登录账号的展示资料
-     * @param {CommonApiAppBbsV1UserUpdateProfileAccountRequest} commonApiAppBbsV1UserUpdateProfileAccountRequest 
+     * @param {UpdateProfileAccountRequest} updateProfileAccountRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountServiceApiInterface
      */
-    accountServiceUpdateProfileRaw(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserUpdateProfileAccountReply>>;
+    accountServiceUpdateProfileRaw(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountReply>>;
 
     /**
      * 更新当前登录账号的展示资料
      */
-    accountServiceUpdateProfile(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserUpdateProfileAccountReply>;
+    accountServiceUpdateProfile(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountReply>;
 
 }
 
@@ -166,53 +130,6 @@ export interface AccountServiceApiInterface {
  * 
  */
 export class AccountServiceApi extends runtime.BaseAPI implements AccountServiceApiInterface {
-
-    /**
-     * Creates request options for accountServiceBatchGetProfile without sending the request
-     */
-    async accountServiceBatchGetProfileRequestOpts(requestParameters: AccountServiceBatchGetProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserBatchGetProfileAccountRequest'] == null) {
-            throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserBatchGetProfileAccountRequest',
-                'Required parameter "commonApiAppBbsV1UserBatchGetProfileAccountRequest" was null or undefined when calling accountServiceBatchGetProfile().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/user/account/batch-get-profile`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CommonApiAppBbsV1UserBatchGetProfileAccountRequestToJSON(requestParameters['commonApiAppBbsV1UserBatchGetProfileAccountRequest']),
-        };
-    }
-
-    /**
-     * 批量获取账号展示资料
-     */
-    async accountServiceBatchGetProfileRaw(requestParameters: AccountServiceBatchGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserBatchGetProfileAccountReply>> {
-        const requestOptions = await this.accountServiceBatchGetProfileRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserBatchGetProfileAccountReplyFromJSON(jsonValue));
-    }
-
-    /**
-     * 批量获取账号展示资料
-     */
-    async accountServiceBatchGetProfile(requestParameters: AccountServiceBatchGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserBatchGetProfileAccountReply> {
-        const response = await this.accountServiceBatchGetProfileRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
 
     /**
      * Creates request options for accountServiceGetCurrent without sending the request
@@ -246,17 +163,17 @@ export class AccountServiceApi extends runtime.BaseAPI implements AccountService
     /**
      * 获取当前登录账号的完整资料
      */
-    async accountServiceGetCurrentRaw(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetCurrentAccountReply>> {
+    async accountServiceGetCurrentRaw(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountReply>> {
         const requestOptions = await this.accountServiceGetCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserGetCurrentAccountReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentAccountReplyFromJSON(jsonValue));
     }
 
     /**
      * 获取当前登录账号的完整资料
      */
-    async accountServiceGetCurrent(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetCurrentAccountReply> {
+    async accountServiceGetCurrent(requestParameters: AccountServiceGetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountReply> {
         const response = await this.accountServiceGetCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -265,10 +182,10 @@ export class AccountServiceApi extends runtime.BaseAPI implements AccountService
      * Creates request options for accountServiceGetProfile without sending the request
      */
     async accountServiceGetProfileRequestOpts(requestParameters: AccountServiceGetProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserGetProfileAccountRequest'] == null) {
+        if (requestParameters['getProfileAccountRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserGetProfileAccountRequest',
-                'Required parameter "commonApiAppBbsV1UserGetProfileAccountRequest" was null or undefined when calling accountServiceGetProfile().'
+                'getProfileAccountRequest',
+                'Required parameter "getProfileAccountRequest" was null or undefined when calling accountServiceGetProfile().'
             );
         }
 
@@ -286,24 +203,24 @@ export class AccountServiceApi extends runtime.BaseAPI implements AccountService
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserGetProfileAccountRequestToJSON(requestParameters['commonApiAppBbsV1UserGetProfileAccountRequest']),
+            body: GetProfileAccountRequestToJSON(requestParameters['getProfileAccountRequest']),
         };
     }
 
     /**
      * 按账号 ID 获取账号展示资料
      */
-    async accountServiceGetProfileRaw(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserGetProfileAccountReply>> {
+    async accountServiceGetProfileRaw(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountReply>> {
         const requestOptions = await this.accountServiceGetProfileRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserGetProfileAccountReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetProfileAccountReplyFromJSON(jsonValue));
     }
 
     /**
      * 按账号 ID 获取账号展示资料
      */
-    async accountServiceGetProfile(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserGetProfileAccountReply> {
+    async accountServiceGetProfile(requestParameters: AccountServiceGetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountReply> {
         const response = await this.accountServiceGetProfileRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -312,10 +229,10 @@ export class AccountServiceApi extends runtime.BaseAPI implements AccountService
      * Creates request options for accountServiceUpdateProfile without sending the request
      */
     async accountServiceUpdateProfileRequestOpts(requestParameters: AccountServiceUpdateProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['commonApiAppBbsV1UserUpdateProfileAccountRequest'] == null) {
+        if (requestParameters['updateProfileAccountRequest'] == null) {
             throw new runtime.RequiredError(
-                'commonApiAppBbsV1UserUpdateProfileAccountRequest',
-                'Required parameter "commonApiAppBbsV1UserUpdateProfileAccountRequest" was null or undefined when calling accountServiceUpdateProfile().'
+                'updateProfileAccountRequest',
+                'Required parameter "updateProfileAccountRequest" was null or undefined when calling accountServiceUpdateProfile().'
             );
         }
 
@@ -333,24 +250,24 @@ export class AccountServiceApi extends runtime.BaseAPI implements AccountService
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CommonApiAppBbsV1UserUpdateProfileAccountRequestToJSON(requestParameters['commonApiAppBbsV1UserUpdateProfileAccountRequest']),
+            body: UpdateProfileAccountRequestToJSON(requestParameters['updateProfileAccountRequest']),
         };
     }
 
     /**
      * 更新当前登录账号的展示资料
      */
-    async accountServiceUpdateProfileRaw(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommonApiAppBbsV1UserUpdateProfileAccountReply>> {
+    async accountServiceUpdateProfileRaw(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountReply>> {
         const requestOptions = await this.accountServiceUpdateProfileRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CommonApiAppBbsV1UserUpdateProfileAccountReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateProfileAccountReplyFromJSON(jsonValue));
     }
 
     /**
      * 更新当前登录账号的展示资料
      */
-    async accountServiceUpdateProfile(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommonApiAppBbsV1UserUpdateProfileAccountReply> {
+    async accountServiceUpdateProfile(requestParameters: AccountServiceUpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountReply> {
         const response = await this.accountServiceUpdateProfileRaw(requestParameters, initOverrides);
         return await response.value();
     }

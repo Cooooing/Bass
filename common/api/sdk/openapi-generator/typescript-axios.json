@@ -1,9 +1,8 @@
 {
-  "npmName": "@bass/bbs-sdk-fetch",
+  "npmName": "@bass/bbs-sdk-axios",
   "npmVersion": "0.1.0",
   "supportsES6": true,
-  "typescriptThreePlus": true,
-  "useSingleRequestParameter": true,
   "withInterfaces": true,
+  "useSingleRequestParameter": true,
   "enumPropertyNaming": "UPPERCASE"
 }

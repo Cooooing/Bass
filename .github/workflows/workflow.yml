@@ -59,10 +59,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - language: typescript
-            make-target: sdk-ts
-            output-dir: common/api/gen-ts
-            branch: sdk/typescript
+          - language: typescript-axios
+            make-target: sdk-typescript-axios
+            output-dir: common/api/gen-typescript-axios/bbs
+            branch: sdk/typescript-axios
+          - language: typescript-fetch
+            make-target: sdk-typescript-fetch
+            output-dir: common/api/gen-typescript-fetch/bbs
+            branch: sdk/typescript-fetch
           - language: go
             make-target: sdk-go
             output-dir: common/api/gen-go

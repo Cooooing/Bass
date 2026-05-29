@@ -103,7 +103,7 @@ help:
 	@echo "  make -C app/<module> format    - format one module"
 	@echo "  make -C app/<module> ent       - generate Ent code"
 	@echo "  make -C app/<module> doc       - generate OpenAPI document"
-	@echo "  make -C app/<module> sdk       - generate BFF TypeScript, Go, Java and Rust SDKs"
+	@echo "  make -C app/<module> sdk       - generate BFF TypeScript Axios/Fetch, Go, Java and Rust SDKs"
 	@echo ""
 	@echo "Examples:"
 	@echo "    make -C app/bbs gen"

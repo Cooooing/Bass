@@ -7,11 +7,13 @@ BFF_SERVER := $(notdir $(CURDIR))
 BFF_PROTO_DIR := $(PROTO_DIR)/$(BFF_SERVER)
 BFF_OPENAPI_DIR := $(PROTO_GEN_DIR)/openapi/$(BFF_SERVER)
 BFF_OPENAPI_FILE := $(BFF_OPENAPI_DIR)/openapi.yaml
-BFF_GEN_TS_DIR := $(ROOT_DIR)/common/api/gen-ts/$(BFF_SERVER)
+BFF_GEN_TYPESCRIPT_AXIOS_DIR := $(ROOT_DIR)/common/api/gen-typescript-axios/$(BFF_SERVER)
+BFF_GEN_TYPESCRIPT_FETCH_DIR := $(ROOT_DIR)/common/api/gen-typescript-fetch/$(BFF_SERVER)
 BFF_GEN_GO_DIR := $(ROOT_DIR)/common/api/gen-go/$(BFF_SERVER)
 BFF_GEN_JAVA_DIR := $(ROOT_DIR)/common/api/gen-java/$(BFF_SERVER)
 BFF_GEN_RUST_DIR := $(ROOT_DIR)/common/api/gen-rust/$(BFF_SERVER)
 OPENAPI_GENERATOR ?= cd $(ROOT_DIR)/common/api/sdk && npx --yes @openapitools/openapi-generator-cli
+SDK_SHORT_NAME_OPTS := --remove-operation-id-prefix --additional-properties=apiNameSuffix=
 
 # Append to composite target sequence.
 MODULE_GEN_TARGETS += doc
@@ -47,18 +49,35 @@ sdk-validate: doc sdk-prereq
 .PHONY: sdk-clean
 sdk-clean:
 	@echo "[sdk-clean] cleaning generated SDKs..."
-	@rm -rf $(BFF_GEN_TS_DIR) $(BFF_GEN_GO_DIR) $(BFF_GEN_JAVA_DIR) $(BFF_GEN_RUST_DIR) 2>/dev/null; true
+	@rm -rf $(BFF_GEN_TYPESCRIPT_AXIOS_DIR) $(BFF_GEN_TYPESCRIPT_FETCH_DIR) $(BFF_GEN_GO_DIR) $(BFF_GEN_JAVA_DIR) $(BFF_GEN_RUST_DIR) 2>/dev/null; true
 
-# Generate TypeScript fetch SDK.
-.PHONY: sdk-ts
-sdk-ts: doc sdk-prereq
-	@echo "[sdk-ts] openapi-generator typescript-fetch..."
-	@mkdir -p $(BFF_GEN_TS_DIR)
+# 生成 TypeScript Axios SDK。
+.PHONY: sdk-typescript-axios
+sdk-typescript-axios: doc sdk-prereq
+	@echo "[sdk-typescript-axios] openapi-generator typescript-axios..."
+	@mkdir -p $(BFF_GEN_TYPESCRIPT_AXIOS_DIR)
+	@$(OPENAPI_GENERATOR) generate \
+		-i $(BFF_OPENAPI_FILE) \
+		-g typescript-axios \
+		-o $(BFF_GEN_TYPESCRIPT_AXIOS_DIR) \
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/typescript-axios.json \
+		$(SDK_SHORT_NAME_OPTS)
+
+# 生成 TypeScript Fetch SDK。
+.PHONY: sdk-typescript-fetch
+sdk-typescript-fetch: doc sdk-prereq
+	@echo "[sdk-typescript-fetch] openapi-generator typescript-fetch..."
+	@mkdir -p $(BFF_GEN_TYPESCRIPT_FETCH_DIR)
 	@$(OPENAPI_GENERATOR) generate \
 		-i $(BFF_OPENAPI_FILE) \
 		-g typescript-fetch \
-		-o $(BFF_GEN_TS_DIR) \
-		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/typescript-fetch.json
+		-o $(BFF_GEN_TYPESCRIPT_FETCH_DIR) \
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/typescript-fetch.json \
+		$(SDK_SHORT_NAME_OPTS)
+
+# 生成全部 TypeScript SDK。
+.PHONY: sdk-typescript
+sdk-typescript: sdk-typescript-axios sdk-typescript-fetch
 
 # Generate Go SDK.
 .PHONY: sdk-go
@@ -69,7 +88,8 @@ sdk-go: doc sdk-prereq
 		-i $(BFF_OPENAPI_FILE) \
 		-g go \
 		-o $(BFF_GEN_GO_DIR) \
-		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/go.json
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/go.json \
+		$(SDK_SHORT_NAME_OPTS)
 
 # Generate Java SDK.
 .PHONY: sdk-java
@@ -80,7 +100,8 @@ sdk-java: doc sdk-prereq
 		-i $(BFF_OPENAPI_FILE) \
 		-g java \
 		-o $(BFF_GEN_JAVA_DIR) \
-		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/java.json
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/java.json \
+		$(SDK_SHORT_NAME_OPTS)
 
 # Generate Rust SDK.
 .PHONY: sdk-rust
@@ -91,9 +112,10 @@ sdk-rust: doc sdk-prereq
 		-i $(BFF_OPENAPI_FILE) \
 		-g rust \
 		-o $(BFF_GEN_RUST_DIR) \
-		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/rust.json
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/rust.json \
+		$(SDK_SHORT_NAME_OPTS)
 
 .PHONY: sdk
-sdk: sdk-ts sdk-go sdk-java sdk-rust
+sdk: sdk-typescript sdk-go sdk-java sdk-rust
 
 endif

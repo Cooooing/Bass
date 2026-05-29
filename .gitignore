@@ -36,15 +36,10 @@ bin/
 *.swp
 
 /common/api/gen/**
-!/common/api/gen/.gitkeep
-/common/api/gen-ts/**
-/common/api/gen-go/**
-/common/api/gen-java/**
-/common/api/gen-rust/**
+/common/api/gen-*/**
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/gen/
-/app/**/gen-*/
 /app/**/server
 
 

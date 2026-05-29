@@ -34,11 +34,11 @@ func Test_bbs_LocationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test LocationServiceAPIService LocationServiceUpsert", func(t *testing.T) {
+	t.Run("Test LocationServiceAPIService LocationServiceUpsertCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.LocationServiceAPI.LocationServiceUpsert(context.Background()).Execute()
+		resp, httpRes, err := apiClient.LocationServiceAPI.LocationServiceUpsertCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

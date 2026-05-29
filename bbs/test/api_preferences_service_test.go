@@ -34,11 +34,11 @@ func Test_bbs_PreferencesServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test PreferencesServiceAPIService PreferencesServiceUpdate", func(t *testing.T) {
+	t.Run("Test PreferencesServiceAPIService PreferencesServiceUpdateCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PreferencesServiceAPI.PreferencesServiceUpdate(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PreferencesServiceAPI.PreferencesServiceUpdateCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

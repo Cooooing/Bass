@@ -51,15 +51,27 @@ type APIClient struct {
 
 	AccountServiceAPI AccountServiceAPI
 
+	ArticleServiceAPI ArticleServiceAPI
+
 	AuthServiceAPI AuthServiceAPI
 
+	CommentServiceAPI CommentServiceAPI
+
+	DomainServiceAPI DomainServiceAPI
+
 	LocationServiceAPI LocationServiceAPI
+
+	NotificationServiceAPI NotificationServiceAPI
+
+	PostscriptServiceAPI PostscriptServiceAPI
 
 	PreferencesServiceAPI PreferencesServiceAPI
 
 	PrivacySettingServiceAPI PrivacySettingServiceAPI
 
 	RelationServiceAPI RelationServiceAPI
+
+	TagServiceAPI TagServiceAPI
 
 	TfaServiceAPI TfaServiceAPI
 }
@@ -81,11 +93,17 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.AccountServiceAPI = (*AccountServiceAPIService)(&c.common)
+	c.ArticleServiceAPI = (*ArticleServiceAPIService)(&c.common)
 	c.AuthServiceAPI = (*AuthServiceAPIService)(&c.common)
+	c.CommentServiceAPI = (*CommentServiceAPIService)(&c.common)
+	c.DomainServiceAPI = (*DomainServiceAPIService)(&c.common)
 	c.LocationServiceAPI = (*LocationServiceAPIService)(&c.common)
+	c.NotificationServiceAPI = (*NotificationServiceAPIService)(&c.common)
+	c.PostscriptServiceAPI = (*PostscriptServiceAPIService)(&c.common)
 	c.PreferencesServiceAPI = (*PreferencesServiceAPIService)(&c.common)
 	c.PrivacySettingServiceAPI = (*PrivacySettingServiceAPIService)(&c.common)
 	c.RelationServiceAPI = (*RelationServiceAPIService)(&c.common)
+	c.TagServiceAPI = (*TagServiceAPIService)(&c.common)
 	c.TfaServiceAPI = (*TfaServiceAPIService)(&c.common)
 
 	return c

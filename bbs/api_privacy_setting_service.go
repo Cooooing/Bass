@@ -32,22 +32,22 @@ type PrivacySettingServiceAPI interface {
 	PrivacySettingServiceGetCurrent(ctx context.Context) ApiPrivacySettingServiceGetCurrentRequest
 
 	// PrivacySettingServiceGetCurrentExecute executes the request
-	//  @return CommonApiAppBbsV1UserGetCurrentPrivacySettingReply
-	PrivacySettingServiceGetCurrentExecute(r ApiPrivacySettingServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentPrivacySettingReply, *http.Response, error)
+	//  @return GetCurrentPrivacySettingReply
+	PrivacySettingServiceGetCurrentExecute(r ApiPrivacySettingServiceGetCurrentRequest) (*GetCurrentPrivacySettingReply, *http.Response, error)
 
 	/*
-	PrivacySettingServiceUpdate Method for PrivacySettingServiceUpdate
+	PrivacySettingServiceUpdateCurrent Method for PrivacySettingServiceUpdateCurrent
 
 	更新当前登录账号的隐私设置
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPrivacySettingServiceUpdateRequest
+	@return ApiPrivacySettingServiceUpdateCurrentRequest
 	*/
-	PrivacySettingServiceUpdate(ctx context.Context) ApiPrivacySettingServiceUpdateRequest
+	PrivacySettingServiceUpdateCurrent(ctx context.Context) ApiPrivacySettingServiceUpdateCurrentRequest
 
-	// PrivacySettingServiceUpdateExecute executes the request
-	//  @return CommonApiAppBbsV1UserUpdatePrivacySettingReply
-	PrivacySettingServiceUpdateExecute(r ApiPrivacySettingServiceUpdateRequest) (*CommonApiAppBbsV1UserUpdatePrivacySettingReply, *http.Response, error)
+	// PrivacySettingServiceUpdateCurrentExecute executes the request
+	//  @return UpdateCurrentPrivacySettingReply
+	PrivacySettingServiceUpdateCurrentExecute(r ApiPrivacySettingServiceUpdateCurrentRequest) (*UpdateCurrentPrivacySettingReply, *http.Response, error)
 }
 
 // PrivacySettingServiceAPIService PrivacySettingServiceAPI service
@@ -64,7 +64,7 @@ func (r ApiPrivacySettingServiceGetCurrentRequest) Body(body map[string]interfac
 	return r
 }
 
-func (r ApiPrivacySettingServiceGetCurrentRequest) Execute() (*CommonApiAppBbsV1UserGetCurrentPrivacySettingReply, *http.Response, error) {
+func (r ApiPrivacySettingServiceGetCurrentRequest) Execute() (*GetCurrentPrivacySettingReply, *http.Response, error) {
 	return r.ApiService.PrivacySettingServiceGetCurrentExecute(r)
 }
 
@@ -84,13 +84,13 @@ func (a *PrivacySettingServiceAPIService) PrivacySettingServiceGetCurrent(ctx co
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserGetCurrentPrivacySettingReply
-func (a *PrivacySettingServiceAPIService) PrivacySettingServiceGetCurrentExecute(r ApiPrivacySettingServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentPrivacySettingReply, *http.Response, error) {
+//  @return GetCurrentPrivacySettingReply
+func (a *PrivacySettingServiceAPIService) PrivacySettingServiceGetCurrentExecute(r ApiPrivacySettingServiceGetCurrentRequest) (*GetCurrentPrivacySettingReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserGetCurrentPrivacySettingReply
+		localVarReturnValue  *GetCurrentPrivacySettingReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PrivacySettingServiceAPIService.PrivacySettingServiceGetCurrent")
@@ -163,47 +163,47 @@ func (a *PrivacySettingServiceAPIService) PrivacySettingServiceGetCurrentExecute
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPrivacySettingServiceUpdateRequest struct {
+type ApiPrivacySettingServiceUpdateCurrentRequest struct {
 	ctx context.Context
 	ApiService PrivacySettingServiceAPI
-	commonApiAppBbsV1UserUpdatePrivacySettingRequest *CommonApiAppBbsV1UserUpdatePrivacySettingRequest
+	updateCurrentPrivacySettingRequest *UpdateCurrentPrivacySettingRequest
 }
 
-func (r ApiPrivacySettingServiceUpdateRequest) CommonApiAppBbsV1UserUpdatePrivacySettingRequest(commonApiAppBbsV1UserUpdatePrivacySettingRequest CommonApiAppBbsV1UserUpdatePrivacySettingRequest) ApiPrivacySettingServiceUpdateRequest {
-	r.commonApiAppBbsV1UserUpdatePrivacySettingRequest = &commonApiAppBbsV1UserUpdatePrivacySettingRequest
+func (r ApiPrivacySettingServiceUpdateCurrentRequest) UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest UpdateCurrentPrivacySettingRequest) ApiPrivacySettingServiceUpdateCurrentRequest {
+	r.updateCurrentPrivacySettingRequest = &updateCurrentPrivacySettingRequest
 	return r
 }
 
-func (r ApiPrivacySettingServiceUpdateRequest) Execute() (*CommonApiAppBbsV1UserUpdatePrivacySettingReply, *http.Response, error) {
-	return r.ApiService.PrivacySettingServiceUpdateExecute(r)
+func (r ApiPrivacySettingServiceUpdateCurrentRequest) Execute() (*UpdateCurrentPrivacySettingReply, *http.Response, error) {
+	return r.ApiService.PrivacySettingServiceUpdateCurrentExecute(r)
 }
 
 /*
-PrivacySettingServiceUpdate Method for PrivacySettingServiceUpdate
+PrivacySettingServiceUpdateCurrent Method for PrivacySettingServiceUpdateCurrent
 
 更新当前登录账号的隐私设置
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPrivacySettingServiceUpdateRequest
+ @return ApiPrivacySettingServiceUpdateCurrentRequest
 */
-func (a *PrivacySettingServiceAPIService) PrivacySettingServiceUpdate(ctx context.Context) ApiPrivacySettingServiceUpdateRequest {
-	return ApiPrivacySettingServiceUpdateRequest{
+func (a *PrivacySettingServiceAPIService) PrivacySettingServiceUpdateCurrent(ctx context.Context) ApiPrivacySettingServiceUpdateCurrentRequest {
+	return ApiPrivacySettingServiceUpdateCurrentRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserUpdatePrivacySettingReply
-func (a *PrivacySettingServiceAPIService) PrivacySettingServiceUpdateExecute(r ApiPrivacySettingServiceUpdateRequest) (*CommonApiAppBbsV1UserUpdatePrivacySettingReply, *http.Response, error) {
+//  @return UpdateCurrentPrivacySettingReply
+func (a *PrivacySettingServiceAPIService) PrivacySettingServiceUpdateCurrentExecute(r ApiPrivacySettingServiceUpdateCurrentRequest) (*UpdateCurrentPrivacySettingReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserUpdatePrivacySettingReply
+		localVarReturnValue  *UpdateCurrentPrivacySettingReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PrivacySettingServiceAPIService.PrivacySettingServiceUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PrivacySettingServiceAPIService.PrivacySettingServiceUpdateCurrent")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -213,8 +213,8 @@ func (a *PrivacySettingServiceAPIService) PrivacySettingServiceUpdateExecute(r A
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserUpdatePrivacySettingRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserUpdatePrivacySettingRequest is required and must be specified")
+	if r.updateCurrentPrivacySettingRequest == nil {
+		return localVarReturnValue, nil, reportError("updateCurrentPrivacySettingRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -235,7 +235,7 @@ func (a *PrivacySettingServiceAPIService) PrivacySettingServiceUpdateExecute(r A
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserUpdatePrivacySettingRequest
+	localVarPostBody = r.updateCurrentPrivacySettingRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

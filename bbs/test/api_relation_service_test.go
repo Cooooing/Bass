@@ -22,18 +22,6 @@ func Test_bbs_RelationServiceAPIService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test RelationServiceAPIService RelationServiceBatchGetStatus", func(t *testing.T) {
-
-		t.Skip("skip test")  // remove to run test
-
-		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServiceBatchGetStatus(context.Background()).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
 	t.Run("Test RelationServiceAPIService RelationServiceBlock", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
@@ -58,11 +46,11 @@ func Test_bbs_RelationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceAPIService RelationServicePageBlocked", func(t *testing.T) {
+	t.Run("Test RelationServiceAPIService RelationServiceGetStatus", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServicePageBlocked(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServiceGetStatus(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +58,11 @@ func Test_bbs_RelationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceAPIService RelationServicePageFollowers", func(t *testing.T) {
+	t.Run("Test RelationServiceAPIService RelationServiceListBlocked", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServicePageFollowers(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServiceListBlocked(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +70,23 @@ func Test_bbs_RelationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceAPIService RelationServicePageFollowing", func(t *testing.T) {
+	t.Run("Test RelationServiceAPIService RelationServiceListFollowers", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServicePageFollowing(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServiceListFollowers(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test RelationServiceAPIService RelationServiceListFollowing", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.RelationServiceAPI.RelationServiceListFollowing(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

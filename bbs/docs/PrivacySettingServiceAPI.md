@@ -5,13 +5,13 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**PrivacySettingServiceGetCurrent**](PrivacySettingServiceAPI.md#PrivacySettingServiceGetCurrent) | **Post** /v1/user/privacy-setting/get-current | 
-[**PrivacySettingServiceUpdate**](PrivacySettingServiceAPI.md#PrivacySettingServiceUpdate) | **Post** /v1/user/privacy-setting/update-current | 
+[**PrivacySettingServiceUpdateCurrent**](PrivacySettingServiceAPI.md#PrivacySettingServiceUpdateCurrent) | **Post** /v1/user/privacy-setting/update-current | 
 
 
 
 ## PrivacySettingServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentPrivacySettingReply PrivacySettingServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentPrivacySettingReply PrivacySettingServiceGetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingServiceAPI.PrivacySettingServiceGetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PrivacySettingServiceGetCurrent`: CommonApiAppBbsV1UserGetCurrentPrivacySettingReply
+	// response from `PrivacySettingServiceGetCurrent`: GetCurrentPrivacySettingReply
 	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingServiceAPI.PrivacySettingServiceGetCurrent`: %v\n", resp)
 }
 ```
@@ -59,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentPrivacySettingReply**](CommonApiAppBbsV1UserGetCurrentPrivacySettingReply.md)
+[**GetCurrentPrivacySettingReply**](GetCurrentPrivacySettingReply.md)
 
 ### Authorization
 
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PrivacySettingServiceUpdate
+## PrivacySettingServiceUpdateCurrent
 
-> CommonApiAppBbsV1UserUpdatePrivacySettingReply PrivacySettingServiceUpdate(ctx).CommonApiAppBbsV1UserUpdatePrivacySettingRequest(commonApiAppBbsV1UserUpdatePrivacySettingRequest).Execute()
+> UpdateCurrentPrivacySettingReply PrivacySettingServiceUpdateCurrent(ctx).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
 
 
 
@@ -96,17 +96,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserUpdatePrivacySettingRequest := *openapiclient.NewCommonApiAppBbsV1UserUpdatePrivacySettingRequest() // CommonApiAppBbsV1UserUpdatePrivacySettingRequest | 
+	updateCurrentPrivacySettingRequest := *openapiclient.NewUpdateCurrentPrivacySettingRequest() // UpdateCurrentPrivacySettingRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PrivacySettingServiceAPI.PrivacySettingServiceUpdate(context.Background()).CommonApiAppBbsV1UserUpdatePrivacySettingRequest(commonApiAppBbsV1UserUpdatePrivacySettingRequest).Execute()
+	resp, r, err := apiClient.PrivacySettingServiceAPI.PrivacySettingServiceUpdateCurrent(context.Background()).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingServiceAPI.PrivacySettingServiceUpdate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingServiceAPI.PrivacySettingServiceUpdateCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PrivacySettingServiceUpdate`: CommonApiAppBbsV1UserUpdatePrivacySettingReply
-	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingServiceAPI.PrivacySettingServiceUpdate`: %v\n", resp)
+	// response from `PrivacySettingServiceUpdateCurrent`: UpdateCurrentPrivacySettingReply
+	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingServiceAPI.PrivacySettingServiceUpdateCurrent`: %v\n", resp)
 }
 ```
 
@@ -116,16 +116,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPrivacySettingServiceUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPrivacySettingServiceUpdateCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserUpdatePrivacySettingRequest** | [**CommonApiAppBbsV1UserUpdatePrivacySettingRequest**](CommonApiAppBbsV1UserUpdatePrivacySettingRequest.md) |  | 
+ **updateCurrentPrivacySettingRequest** | [**UpdateCurrentPrivacySettingRequest**](UpdateCurrentPrivacySettingRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpdatePrivacySettingReply**](CommonApiAppBbsV1UserUpdatePrivacySettingReply.md)
+[**UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySettingReply.md)
 
 ### Authorization
 

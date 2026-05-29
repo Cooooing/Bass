@@ -5,13 +5,13 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**LocationServiceGetCurrent**](LocationServiceAPI.md#LocationServiceGetCurrent) | **Post** /v1/user/location/get-current | 
-[**LocationServiceUpsert**](LocationServiceAPI.md#LocationServiceUpsert) | **Post** /v1/user/location/upsert-current | 
+[**LocationServiceUpsertCurrent**](LocationServiceAPI.md#LocationServiceUpsertCurrent) | **Post** /v1/user/location/upsert-current | 
 
 
 
 ## LocationServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentLocationReply LocationServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentLocationReply LocationServiceGetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `LocationServiceAPI.LocationServiceGetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `LocationServiceGetCurrent`: CommonApiAppBbsV1UserGetCurrentLocationReply
+	// response from `LocationServiceGetCurrent`: GetCurrentLocationReply
 	fmt.Fprintf(os.Stdout, "Response from `LocationServiceAPI.LocationServiceGetCurrent`: %v\n", resp)
 }
 ```
@@ -59,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentLocationReply**](CommonApiAppBbsV1UserGetCurrentLocationReply.md)
+[**GetCurrentLocationReply**](GetCurrentLocationReply.md)
 
 ### Authorization
 
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## LocationServiceUpsert
+## LocationServiceUpsertCurrent
 
-> CommonApiAppBbsV1UserUpsertLocationReply LocationServiceUpsert(ctx).CommonApiAppBbsV1UserUpsertLocationRequest(commonApiAppBbsV1UserUpsertLocationRequest).Execute()
+> UpsertCurrentLocationReply LocationServiceUpsertCurrent(ctx).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
 
 
 
@@ -96,17 +96,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserUpsertLocationRequest := *openapiclient.NewCommonApiAppBbsV1UserUpsertLocationRequest() // CommonApiAppBbsV1UserUpsertLocationRequest | 
+	upsertCurrentLocationRequest := *openapiclient.NewUpsertCurrentLocationRequest() // UpsertCurrentLocationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LocationServiceAPI.LocationServiceUpsert(context.Background()).CommonApiAppBbsV1UserUpsertLocationRequest(commonApiAppBbsV1UserUpsertLocationRequest).Execute()
+	resp, r, err := apiClient.LocationServiceAPI.LocationServiceUpsertCurrent(context.Background()).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LocationServiceAPI.LocationServiceUpsert``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LocationServiceAPI.LocationServiceUpsertCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `LocationServiceUpsert`: CommonApiAppBbsV1UserUpsertLocationReply
-	fmt.Fprintf(os.Stdout, "Response from `LocationServiceAPI.LocationServiceUpsert`: %v\n", resp)
+	// response from `LocationServiceUpsertCurrent`: UpsertCurrentLocationReply
+	fmt.Fprintf(os.Stdout, "Response from `LocationServiceAPI.LocationServiceUpsertCurrent`: %v\n", resp)
 }
 ```
 
@@ -116,16 +116,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLocationServiceUpsertRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLocationServiceUpsertCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserUpsertLocationRequest** | [**CommonApiAppBbsV1UserUpsertLocationRequest**](CommonApiAppBbsV1UserUpsertLocationRequest.md) |  | 
+ **upsertCurrentLocationRequest** | [**UpsertCurrentLocationRequest**](UpsertCurrentLocationRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpsertLocationReply**](CommonApiAppBbsV1UserUpsertLocationReply.md)
+[**UpsertCurrentLocationReply**](UpsertCurrentLocationReply.md)
 
 ### Authorization
 

@@ -22,20 +22,6 @@ import (
 type AccountServiceAPI interface {
 
 	/*
-	AccountServiceBatchGetProfile Method for AccountServiceBatchGetProfile
-
-	批量获取账号展示资料
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAccountServiceBatchGetProfileRequest
-	*/
-	AccountServiceBatchGetProfile(ctx context.Context) ApiAccountServiceBatchGetProfileRequest
-
-	// AccountServiceBatchGetProfileExecute executes the request
-	//  @return CommonApiAppBbsV1UserBatchGetProfileAccountReply
-	AccountServiceBatchGetProfileExecute(r ApiAccountServiceBatchGetProfileRequest) (*CommonApiAppBbsV1UserBatchGetProfileAccountReply, *http.Response, error)
-
-	/*
 	AccountServiceGetCurrent Method for AccountServiceGetCurrent
 
 	获取当前登录账号的完整资料
@@ -46,8 +32,8 @@ type AccountServiceAPI interface {
 	AccountServiceGetCurrent(ctx context.Context) ApiAccountServiceGetCurrentRequest
 
 	// AccountServiceGetCurrentExecute executes the request
-	//  @return CommonApiAppBbsV1UserGetCurrentAccountReply
-	AccountServiceGetCurrentExecute(r ApiAccountServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentAccountReply, *http.Response, error)
+	//  @return GetCurrentAccountReply
+	AccountServiceGetCurrentExecute(r ApiAccountServiceGetCurrentRequest) (*GetCurrentAccountReply, *http.Response, error)
 
 	/*
 	AccountServiceGetProfile Method for AccountServiceGetProfile
@@ -60,8 +46,8 @@ type AccountServiceAPI interface {
 	AccountServiceGetProfile(ctx context.Context) ApiAccountServiceGetProfileRequest
 
 	// AccountServiceGetProfileExecute executes the request
-	//  @return CommonApiAppBbsV1UserGetProfileAccountReply
-	AccountServiceGetProfileExecute(r ApiAccountServiceGetProfileRequest) (*CommonApiAppBbsV1UserGetProfileAccountReply, *http.Response, error)
+	//  @return GetProfileAccountReply
+	AccountServiceGetProfileExecute(r ApiAccountServiceGetProfileRequest) (*GetProfileAccountReply, *http.Response, error)
 
 	/*
 	AccountServiceUpdateProfile Method for AccountServiceUpdateProfile
@@ -74,122 +60,12 @@ type AccountServiceAPI interface {
 	AccountServiceUpdateProfile(ctx context.Context) ApiAccountServiceUpdateProfileRequest
 
 	// AccountServiceUpdateProfileExecute executes the request
-	//  @return CommonApiAppBbsV1UserUpdateProfileAccountReply
-	AccountServiceUpdateProfileExecute(r ApiAccountServiceUpdateProfileRequest) (*CommonApiAppBbsV1UserUpdateProfileAccountReply, *http.Response, error)
+	//  @return UpdateProfileAccountReply
+	AccountServiceUpdateProfileExecute(r ApiAccountServiceUpdateProfileRequest) (*UpdateProfileAccountReply, *http.Response, error)
 }
 
 // AccountServiceAPIService AccountServiceAPI service
 type AccountServiceAPIService service
-
-type ApiAccountServiceBatchGetProfileRequest struct {
-	ctx context.Context
-	ApiService AccountServiceAPI
-	commonApiAppBbsV1UserBatchGetProfileAccountRequest *CommonApiAppBbsV1UserBatchGetProfileAccountRequest
-}
-
-func (r ApiAccountServiceBatchGetProfileRequest) CommonApiAppBbsV1UserBatchGetProfileAccountRequest(commonApiAppBbsV1UserBatchGetProfileAccountRequest CommonApiAppBbsV1UserBatchGetProfileAccountRequest) ApiAccountServiceBatchGetProfileRequest {
-	r.commonApiAppBbsV1UserBatchGetProfileAccountRequest = &commonApiAppBbsV1UserBatchGetProfileAccountRequest
-	return r
-}
-
-func (r ApiAccountServiceBatchGetProfileRequest) Execute() (*CommonApiAppBbsV1UserBatchGetProfileAccountReply, *http.Response, error) {
-	return r.ApiService.AccountServiceBatchGetProfileExecute(r)
-}
-
-/*
-AccountServiceBatchGetProfile Method for AccountServiceBatchGetProfile
-
-批量获取账号展示资料
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAccountServiceBatchGetProfileRequest
-*/
-func (a *AccountServiceAPIService) AccountServiceBatchGetProfile(ctx context.Context) ApiAccountServiceBatchGetProfileRequest {
-	return ApiAccountServiceBatchGetProfileRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return CommonApiAppBbsV1UserBatchGetProfileAccountReply
-func (a *AccountServiceAPIService) AccountServiceBatchGetProfileExecute(r ApiAccountServiceBatchGetProfileRequest) (*CommonApiAppBbsV1UserBatchGetProfileAccountReply, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserBatchGetProfileAccountReply
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceAPIService.AccountServiceBatchGetProfile")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/user/account/batch-get-profile"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserBatchGetProfileAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserBatchGetProfileAccountRequest is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserBatchGetProfileAccountRequest
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
 
 type ApiAccountServiceGetCurrentRequest struct {
 	ctx context.Context
@@ -202,7 +78,7 @@ func (r ApiAccountServiceGetCurrentRequest) Body(body map[string]interface{}) Ap
 	return r
 }
 
-func (r ApiAccountServiceGetCurrentRequest) Execute() (*CommonApiAppBbsV1UserGetCurrentAccountReply, *http.Response, error) {
+func (r ApiAccountServiceGetCurrentRequest) Execute() (*GetCurrentAccountReply, *http.Response, error) {
 	return r.ApiService.AccountServiceGetCurrentExecute(r)
 }
 
@@ -222,13 +98,13 @@ func (a *AccountServiceAPIService) AccountServiceGetCurrent(ctx context.Context)
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserGetCurrentAccountReply
-func (a *AccountServiceAPIService) AccountServiceGetCurrentExecute(r ApiAccountServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentAccountReply, *http.Response, error) {
+//  @return GetCurrentAccountReply
+func (a *AccountServiceAPIService) AccountServiceGetCurrentExecute(r ApiAccountServiceGetCurrentRequest) (*GetCurrentAccountReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserGetCurrentAccountReply
+		localVarReturnValue  *GetCurrentAccountReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceAPIService.AccountServiceGetCurrent")
@@ -304,15 +180,15 @@ func (a *AccountServiceAPIService) AccountServiceGetCurrentExecute(r ApiAccountS
 type ApiAccountServiceGetProfileRequest struct {
 	ctx context.Context
 	ApiService AccountServiceAPI
-	commonApiAppBbsV1UserGetProfileAccountRequest *CommonApiAppBbsV1UserGetProfileAccountRequest
+	getProfileAccountRequest *GetProfileAccountRequest
 }
 
-func (r ApiAccountServiceGetProfileRequest) CommonApiAppBbsV1UserGetProfileAccountRequest(commonApiAppBbsV1UserGetProfileAccountRequest CommonApiAppBbsV1UserGetProfileAccountRequest) ApiAccountServiceGetProfileRequest {
-	r.commonApiAppBbsV1UserGetProfileAccountRequest = &commonApiAppBbsV1UserGetProfileAccountRequest
+func (r ApiAccountServiceGetProfileRequest) GetProfileAccountRequest(getProfileAccountRequest GetProfileAccountRequest) ApiAccountServiceGetProfileRequest {
+	r.getProfileAccountRequest = &getProfileAccountRequest
 	return r
 }
 
-func (r ApiAccountServiceGetProfileRequest) Execute() (*CommonApiAppBbsV1UserGetProfileAccountReply, *http.Response, error) {
+func (r ApiAccountServiceGetProfileRequest) Execute() (*GetProfileAccountReply, *http.Response, error) {
 	return r.ApiService.AccountServiceGetProfileExecute(r)
 }
 
@@ -332,13 +208,13 @@ func (a *AccountServiceAPIService) AccountServiceGetProfile(ctx context.Context)
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserGetProfileAccountReply
-func (a *AccountServiceAPIService) AccountServiceGetProfileExecute(r ApiAccountServiceGetProfileRequest) (*CommonApiAppBbsV1UserGetProfileAccountReply, *http.Response, error) {
+//  @return GetProfileAccountReply
+func (a *AccountServiceAPIService) AccountServiceGetProfileExecute(r ApiAccountServiceGetProfileRequest) (*GetProfileAccountReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserGetProfileAccountReply
+		localVarReturnValue  *GetProfileAccountReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceAPIService.AccountServiceGetProfile")
@@ -351,8 +227,8 @@ func (a *AccountServiceAPIService) AccountServiceGetProfileExecute(r ApiAccountS
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserGetProfileAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserGetProfileAccountRequest is required and must be specified")
+	if r.getProfileAccountRequest == nil {
+		return localVarReturnValue, nil, reportError("getProfileAccountRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -373,7 +249,7 @@ func (a *AccountServiceAPIService) AccountServiceGetProfileExecute(r ApiAccountS
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserGetProfileAccountRequest
+	localVarPostBody = r.getProfileAccountRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -414,15 +290,15 @@ func (a *AccountServiceAPIService) AccountServiceGetProfileExecute(r ApiAccountS
 type ApiAccountServiceUpdateProfileRequest struct {
 	ctx context.Context
 	ApiService AccountServiceAPI
-	commonApiAppBbsV1UserUpdateProfileAccountRequest *CommonApiAppBbsV1UserUpdateProfileAccountRequest
+	updateProfileAccountRequest *UpdateProfileAccountRequest
 }
 
-func (r ApiAccountServiceUpdateProfileRequest) CommonApiAppBbsV1UserUpdateProfileAccountRequest(commonApiAppBbsV1UserUpdateProfileAccountRequest CommonApiAppBbsV1UserUpdateProfileAccountRequest) ApiAccountServiceUpdateProfileRequest {
-	r.commonApiAppBbsV1UserUpdateProfileAccountRequest = &commonApiAppBbsV1UserUpdateProfileAccountRequest
+func (r ApiAccountServiceUpdateProfileRequest) UpdateProfileAccountRequest(updateProfileAccountRequest UpdateProfileAccountRequest) ApiAccountServiceUpdateProfileRequest {
+	r.updateProfileAccountRequest = &updateProfileAccountRequest
 	return r
 }
 
-func (r ApiAccountServiceUpdateProfileRequest) Execute() (*CommonApiAppBbsV1UserUpdateProfileAccountReply, *http.Response, error) {
+func (r ApiAccountServiceUpdateProfileRequest) Execute() (*UpdateProfileAccountReply, *http.Response, error) {
 	return r.ApiService.AccountServiceUpdateProfileExecute(r)
 }
 
@@ -442,13 +318,13 @@ func (a *AccountServiceAPIService) AccountServiceUpdateProfile(ctx context.Conte
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserUpdateProfileAccountReply
-func (a *AccountServiceAPIService) AccountServiceUpdateProfileExecute(r ApiAccountServiceUpdateProfileRequest) (*CommonApiAppBbsV1UserUpdateProfileAccountReply, *http.Response, error) {
+//  @return UpdateProfileAccountReply
+func (a *AccountServiceAPIService) AccountServiceUpdateProfileExecute(r ApiAccountServiceUpdateProfileRequest) (*UpdateProfileAccountReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserUpdateProfileAccountReply
+		localVarReturnValue  *UpdateProfileAccountReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceAPIService.AccountServiceUpdateProfile")
@@ -461,8 +337,8 @@ func (a *AccountServiceAPIService) AccountServiceUpdateProfileExecute(r ApiAccou
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserUpdateProfileAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserUpdateProfileAccountRequest is required and must be specified")
+	if r.updateProfileAccountRequest == nil {
+		return localVarReturnValue, nil, reportError("updateProfileAccountRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -483,7 +359,7 @@ func (a *AccountServiceAPIService) AccountServiceUpdateProfileExecute(r ApiAccou
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserUpdateProfileAccountRequest
+	localVarPostBody = r.updateProfileAccountRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

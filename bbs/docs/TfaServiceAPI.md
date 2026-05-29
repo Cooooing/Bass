@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## TfaServiceBeginEnable
 
-> CommonApiAppBbsV1UserBeginEnableTfaReply TfaServiceBeginEnable(ctx).Body(body).Execute()
+> BeginEnableTfaReply TfaServiceBeginEnable(ctx).Body(body).Execute()
 
 
 
@@ -42,7 +42,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceBeginEnable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceBeginEnable`: CommonApiAppBbsV1UserBeginEnableTfaReply
+	// response from `TfaServiceBeginEnable`: BeginEnableTfaReply
 	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceBeginEnable`: %v\n", resp)
 }
 ```
@@ -62,7 +62,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CommonApiAppBbsV1UserBeginEnableTfaReply**](CommonApiAppBbsV1UserBeginEnableTfaReply.md)
+[**BeginEnableTfaReply**](BeginEnableTfaReply.md)
 
 ### Authorization
 
@@ -80,7 +80,7 @@ No authorization required
 
 ## TfaServiceConfirmEnable
 
-> map[string]interface{} TfaServiceConfirmEnable(ctx).CommonApiAppBbsV1UserConfirmEnableTfaRequest(commonApiAppBbsV1UserConfirmEnableTfaRequest).Execute()
+> map[string]interface{} TfaServiceConfirmEnable(ctx).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
 
 
 
@@ -99,11 +99,11 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserConfirmEnableTfaRequest := *openapiclient.NewCommonApiAppBbsV1UserConfirmEnableTfaRequest() // CommonApiAppBbsV1UserConfirmEnableTfaRequest | 
+	confirmEnableTfaRequest := *openapiclient.NewConfirmEnableTfaRequest() // ConfirmEnableTfaRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceConfirmEnable(context.Background()).CommonApiAppBbsV1UserConfirmEnableTfaRequest(commonApiAppBbsV1UserConfirmEnableTfaRequest).Execute()
+	resp, r, err := apiClient.TfaServiceAPI.TfaServiceConfirmEnable(context.Background()).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceConfirmEnable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -124,7 +124,7 @@ Other parameters are passed through a pointer to a apiTfaServiceConfirmEnableReq
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserConfirmEnableTfaRequest** | [**CommonApiAppBbsV1UserConfirmEnableTfaRequest**](CommonApiAppBbsV1UserConfirmEnableTfaRequest.md) |  | 
+ **confirmEnableTfaRequest** | [**ConfirmEnableTfaRequest**](ConfirmEnableTfaRequest.md) |  | 
 
 ### Return type
 
@@ -146,7 +146,7 @@ No authorization required
 
 ## TfaServiceDisable
 
-> map[string]interface{} TfaServiceDisable(ctx).CommonApiAppBbsV1UserDisableTfaRequest(commonApiAppBbsV1UserDisableTfaRequest).Execute()
+> map[string]interface{} TfaServiceDisable(ctx).DisableTfaRequest(disableTfaRequest).Execute()
 
 
 
@@ -165,11 +165,11 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserDisableTfaRequest := *openapiclient.NewCommonApiAppBbsV1UserDisableTfaRequest() // CommonApiAppBbsV1UserDisableTfaRequest | 
+	disableTfaRequest := *openapiclient.NewDisableTfaRequest() // DisableTfaRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceDisable(context.Background()).CommonApiAppBbsV1UserDisableTfaRequest(commonApiAppBbsV1UserDisableTfaRequest).Execute()
+	resp, r, err := apiClient.TfaServiceAPI.TfaServiceDisable(context.Background()).DisableTfaRequest(disableTfaRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceDisable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -190,7 +190,7 @@ Other parameters are passed through a pointer to a apiTfaServiceDisableRequest s
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserDisableTfaRequest** | [**CommonApiAppBbsV1UserDisableTfaRequest**](CommonApiAppBbsV1UserDisableTfaRequest.md) |  | 
+ **disableTfaRequest** | [**DisableTfaRequest**](DisableTfaRequest.md) |  | 
 
 ### Return type
 
@@ -212,7 +212,7 @@ No authorization required
 
 ## TfaServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentTfaReply TfaServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentTfaReply TfaServiceGetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -240,7 +240,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceGetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceGetCurrent`: CommonApiAppBbsV1UserGetCurrentTfaReply
+	// response from `TfaServiceGetCurrent`: GetCurrentTfaReply
 	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceGetCurrent`: %v\n", resp)
 }
 ```
@@ -260,7 +260,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentTfaReply**](CommonApiAppBbsV1UserGetCurrentTfaReply.md)
+[**GetCurrentTfaReply**](GetCurrentTfaReply.md)
 
 ### Authorization
 
@@ -278,7 +278,7 @@ No authorization required
 
 ## TfaServiceValidate
 
-> CommonApiAppBbsV1UserValidateTfaReply TfaServiceValidate(ctx).CommonApiAppBbsV1UserValidateTfaRequest(commonApiAppBbsV1UserValidateTfaRequest).Execute()
+> ValidateTfaReply TfaServiceValidate(ctx).ValidateTfaRequest(validateTfaRequest).Execute()
 
 
 
@@ -297,16 +297,16 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserValidateTfaRequest := *openapiclient.NewCommonApiAppBbsV1UserValidateTfaRequest() // CommonApiAppBbsV1UserValidateTfaRequest | 
+	validateTfaRequest := *openapiclient.NewValidateTfaRequest() // ValidateTfaRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceValidate(context.Background()).CommonApiAppBbsV1UserValidateTfaRequest(commonApiAppBbsV1UserValidateTfaRequest).Execute()
+	resp, r, err := apiClient.TfaServiceAPI.TfaServiceValidate(context.Background()).ValidateTfaRequest(validateTfaRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceValidate``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceValidate`: CommonApiAppBbsV1UserValidateTfaReply
+	// response from `TfaServiceValidate`: ValidateTfaReply
 	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceValidate`: %v\n", resp)
 }
 ```
@@ -322,11 +322,11 @@ Other parameters are passed through a pointer to a apiTfaServiceValidateRequest 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserValidateTfaRequest** | [**CommonApiAppBbsV1UserValidateTfaRequest**](CommonApiAppBbsV1UserValidateTfaRequest.md) |  | 
+ **validateTfaRequest** | [**ValidateTfaRequest**](ValidateTfaRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserValidateTfaReply**](CommonApiAppBbsV1UserValidateTfaReply.md)
+[**ValidateTfaReply**](ValidateTfaReply.md)
 
 ### Authorization
 

@@ -32,22 +32,22 @@ type PreferencesServiceAPI interface {
 	PreferencesServiceGetCurrent(ctx context.Context) ApiPreferencesServiceGetCurrentRequest
 
 	// PreferencesServiceGetCurrentExecute executes the request
-	//  @return CommonApiAppBbsV1UserGetCurrentPreferencesReply
-	PreferencesServiceGetCurrentExecute(r ApiPreferencesServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentPreferencesReply, *http.Response, error)
+	//  @return GetCurrentPreferencesReply
+	PreferencesServiceGetCurrentExecute(r ApiPreferencesServiceGetCurrentRequest) (*GetCurrentPreferencesReply, *http.Response, error)
 
 	/*
-	PreferencesServiceUpdate Method for PreferencesServiceUpdate
+	PreferencesServiceUpdateCurrent Method for PreferencesServiceUpdateCurrent
 
 	更新当前登录账号的偏好设置
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPreferencesServiceUpdateRequest
+	@return ApiPreferencesServiceUpdateCurrentRequest
 	*/
-	PreferencesServiceUpdate(ctx context.Context) ApiPreferencesServiceUpdateRequest
+	PreferencesServiceUpdateCurrent(ctx context.Context) ApiPreferencesServiceUpdateCurrentRequest
 
-	// PreferencesServiceUpdateExecute executes the request
-	//  @return CommonApiAppBbsV1UserUpdatePreferencesReply
-	PreferencesServiceUpdateExecute(r ApiPreferencesServiceUpdateRequest) (*CommonApiAppBbsV1UserUpdatePreferencesReply, *http.Response, error)
+	// PreferencesServiceUpdateCurrentExecute executes the request
+	//  @return UpdateCurrentPreferencesReply
+	PreferencesServiceUpdateCurrentExecute(r ApiPreferencesServiceUpdateCurrentRequest) (*UpdateCurrentPreferencesReply, *http.Response, error)
 }
 
 // PreferencesServiceAPIService PreferencesServiceAPI service
@@ -64,7 +64,7 @@ func (r ApiPreferencesServiceGetCurrentRequest) Body(body map[string]interface{}
 	return r
 }
 
-func (r ApiPreferencesServiceGetCurrentRequest) Execute() (*CommonApiAppBbsV1UserGetCurrentPreferencesReply, *http.Response, error) {
+func (r ApiPreferencesServiceGetCurrentRequest) Execute() (*GetCurrentPreferencesReply, *http.Response, error) {
 	return r.ApiService.PreferencesServiceGetCurrentExecute(r)
 }
 
@@ -84,13 +84,13 @@ func (a *PreferencesServiceAPIService) PreferencesServiceGetCurrent(ctx context.
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserGetCurrentPreferencesReply
-func (a *PreferencesServiceAPIService) PreferencesServiceGetCurrentExecute(r ApiPreferencesServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentPreferencesReply, *http.Response, error) {
+//  @return GetCurrentPreferencesReply
+func (a *PreferencesServiceAPIService) PreferencesServiceGetCurrentExecute(r ApiPreferencesServiceGetCurrentRequest) (*GetCurrentPreferencesReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserGetCurrentPreferencesReply
+		localVarReturnValue  *GetCurrentPreferencesReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceAPIService.PreferencesServiceGetCurrent")
@@ -163,47 +163,47 @@ func (a *PreferencesServiceAPIService) PreferencesServiceGetCurrentExecute(r Api
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPreferencesServiceUpdateRequest struct {
+type ApiPreferencesServiceUpdateCurrentRequest struct {
 	ctx context.Context
 	ApiService PreferencesServiceAPI
-	commonApiAppBbsV1UserUpdatePreferencesRequest *CommonApiAppBbsV1UserUpdatePreferencesRequest
+	updateCurrentPreferencesRequest *UpdateCurrentPreferencesRequest
 }
 
-func (r ApiPreferencesServiceUpdateRequest) CommonApiAppBbsV1UserUpdatePreferencesRequest(commonApiAppBbsV1UserUpdatePreferencesRequest CommonApiAppBbsV1UserUpdatePreferencesRequest) ApiPreferencesServiceUpdateRequest {
-	r.commonApiAppBbsV1UserUpdatePreferencesRequest = &commonApiAppBbsV1UserUpdatePreferencesRequest
+func (r ApiPreferencesServiceUpdateCurrentRequest) UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest UpdateCurrentPreferencesRequest) ApiPreferencesServiceUpdateCurrentRequest {
+	r.updateCurrentPreferencesRequest = &updateCurrentPreferencesRequest
 	return r
 }
 
-func (r ApiPreferencesServiceUpdateRequest) Execute() (*CommonApiAppBbsV1UserUpdatePreferencesReply, *http.Response, error) {
-	return r.ApiService.PreferencesServiceUpdateExecute(r)
+func (r ApiPreferencesServiceUpdateCurrentRequest) Execute() (*UpdateCurrentPreferencesReply, *http.Response, error) {
+	return r.ApiService.PreferencesServiceUpdateCurrentExecute(r)
 }
 
 /*
-PreferencesServiceUpdate Method for PreferencesServiceUpdate
+PreferencesServiceUpdateCurrent Method for PreferencesServiceUpdateCurrent
 
 更新当前登录账号的偏好设置
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPreferencesServiceUpdateRequest
+ @return ApiPreferencesServiceUpdateCurrentRequest
 */
-func (a *PreferencesServiceAPIService) PreferencesServiceUpdate(ctx context.Context) ApiPreferencesServiceUpdateRequest {
-	return ApiPreferencesServiceUpdateRequest{
+func (a *PreferencesServiceAPIService) PreferencesServiceUpdateCurrent(ctx context.Context) ApiPreferencesServiceUpdateCurrentRequest {
+	return ApiPreferencesServiceUpdateCurrentRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserUpdatePreferencesReply
-func (a *PreferencesServiceAPIService) PreferencesServiceUpdateExecute(r ApiPreferencesServiceUpdateRequest) (*CommonApiAppBbsV1UserUpdatePreferencesReply, *http.Response, error) {
+//  @return UpdateCurrentPreferencesReply
+func (a *PreferencesServiceAPIService) PreferencesServiceUpdateCurrentExecute(r ApiPreferencesServiceUpdateCurrentRequest) (*UpdateCurrentPreferencesReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserUpdatePreferencesReply
+		localVarReturnValue  *UpdateCurrentPreferencesReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceAPIService.PreferencesServiceUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceAPIService.PreferencesServiceUpdateCurrent")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -213,8 +213,8 @@ func (a *PreferencesServiceAPIService) PreferencesServiceUpdateExecute(r ApiPref
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserUpdatePreferencesRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserUpdatePreferencesRequest is required and must be specified")
+	if r.updateCurrentPreferencesRequest == nil {
+		return localVarReturnValue, nil, reportError("updateCurrentPreferencesRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -235,7 +235,7 @@ func (a *PreferencesServiceAPIService) PreferencesServiceUpdateExecute(r ApiPref
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserUpdatePreferencesRequest
+	localVarPostBody = r.updateCurrentPreferencesRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

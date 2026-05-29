@@ -22,18 +22,18 @@ import (
 type AuthServiceAPI interface {
 
 	/*
-	AuthServiceLoginPassword Method for AuthServiceLoginPassword
+	AuthServiceLoginByPassword Method for AuthServiceLoginByPassword
 
 	使用密码登录账号
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAuthServiceLoginPasswordRequest
+	@return ApiAuthServiceLoginByPasswordRequest
 	*/
-	AuthServiceLoginPassword(ctx context.Context) ApiAuthServiceLoginPasswordRequest
+	AuthServiceLoginByPassword(ctx context.Context) ApiAuthServiceLoginByPasswordRequest
 
-	// AuthServiceLoginPasswordExecute executes the request
-	//  @return CommonApiAppBbsV1UserLoginPasswordReply
-	AuthServiceLoginPasswordExecute(r ApiAuthServiceLoginPasswordRequest) (*CommonApiAppBbsV1UserLoginPasswordReply, *http.Response, error)
+	// AuthServiceLoginByPasswordExecute executes the request
+	//  @return LoginByPasswordReply
+	AuthServiceLoginByPasswordExecute(r ApiAuthServiceLoginByPasswordRequest) (*LoginByPasswordReply, *http.Response, error)
 
 	/*
 	AuthServiceLogout Method for AuthServiceLogout
@@ -50,117 +50,117 @@ type AuthServiceAPI interface {
 	AuthServiceLogoutExecute(r ApiAuthServiceLogoutRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	AuthServiceRegisterEmail Method for AuthServiceRegisterEmail
+	AuthServiceStartEmailRegistration Method for AuthServiceStartEmailRegistration
 
 	使用邮箱发起账号注册
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAuthServiceRegisterEmailRequest
+	@return ApiAuthServiceStartEmailRegistrationRequest
 	*/
-	AuthServiceRegisterEmail(ctx context.Context) ApiAuthServiceRegisterEmailRequest
+	AuthServiceStartEmailRegistration(ctx context.Context) ApiAuthServiceStartEmailRegistrationRequest
 
-	// AuthServiceRegisterEmailExecute executes the request
-	//  @return CommonApiAppBbsV1UserRegisterEmailReply
-	AuthServiceRegisterEmailExecute(r ApiAuthServiceRegisterEmailRequest) (*CommonApiAppBbsV1UserRegisterEmailReply, *http.Response, error)
+	// AuthServiceStartEmailRegistrationExecute executes the request
+	//  @return StartEmailRegistrationReply
+	AuthServiceStartEmailRegistrationExecute(r ApiAuthServiceStartEmailRegistrationRequest) (*StartEmailRegistrationReply, *http.Response, error)
 
 	/*
-	AuthServiceRegisterPhone Method for AuthServiceRegisterPhone
+	AuthServiceStartPhoneRegistration Method for AuthServiceStartPhoneRegistration
 
 	使用手机号发起账号注册
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAuthServiceRegisterPhoneRequest
+	@return ApiAuthServiceStartPhoneRegistrationRequest
 	*/
-	AuthServiceRegisterPhone(ctx context.Context) ApiAuthServiceRegisterPhoneRequest
+	AuthServiceStartPhoneRegistration(ctx context.Context) ApiAuthServiceStartPhoneRegistrationRequest
 
-	// AuthServiceRegisterPhoneExecute executes the request
-	//  @return CommonApiAppBbsV1UserRegisterPhoneReply
-	AuthServiceRegisterPhoneExecute(r ApiAuthServiceRegisterPhoneRequest) (*CommonApiAppBbsV1UserRegisterPhoneReply, *http.Response, error)
+	// AuthServiceStartPhoneRegistrationExecute executes the request
+	//  @return StartPhoneRegistrationReply
+	AuthServiceStartPhoneRegistrationExecute(r ApiAuthServiceStartPhoneRegistrationRequest) (*StartPhoneRegistrationReply, *http.Response, error)
 
 	/*
-	AuthServiceVerifyEmailRegister Method for AuthServiceVerifyEmailRegister
+	AuthServiceVerifyEmailRegistration Method for AuthServiceVerifyEmailRegistration
 
 	校验邮箱注册验证码
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAuthServiceVerifyEmailRegisterRequest
+	@return ApiAuthServiceVerifyEmailRegistrationRequest
 	*/
-	AuthServiceVerifyEmailRegister(ctx context.Context) ApiAuthServiceVerifyEmailRegisterRequest
+	AuthServiceVerifyEmailRegistration(ctx context.Context) ApiAuthServiceVerifyEmailRegistrationRequest
 
-	// AuthServiceVerifyEmailRegisterExecute executes the request
+	// AuthServiceVerifyEmailRegistrationExecute executes the request
 	//  @return map[string]interface{}
-	AuthServiceVerifyEmailRegisterExecute(r ApiAuthServiceVerifyEmailRegisterRequest) (map[string]interface{}, *http.Response, error)
+	AuthServiceVerifyEmailRegistrationExecute(r ApiAuthServiceVerifyEmailRegistrationRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	AuthServiceVerifyPhoneRegister Method for AuthServiceVerifyPhoneRegister
+	AuthServiceVerifyPhoneRegistration Method for AuthServiceVerifyPhoneRegistration
 
 	校验手机号注册验证码
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAuthServiceVerifyPhoneRegisterRequest
+	@return ApiAuthServiceVerifyPhoneRegistrationRequest
 	*/
-	AuthServiceVerifyPhoneRegister(ctx context.Context) ApiAuthServiceVerifyPhoneRegisterRequest
+	AuthServiceVerifyPhoneRegistration(ctx context.Context) ApiAuthServiceVerifyPhoneRegistrationRequest
 
-	// AuthServiceVerifyPhoneRegisterExecute executes the request
+	// AuthServiceVerifyPhoneRegistrationExecute executes the request
 	//  @return map[string]interface{}
-	AuthServiceVerifyPhoneRegisterExecute(r ApiAuthServiceVerifyPhoneRegisterRequest) (map[string]interface{}, *http.Response, error)
+	AuthServiceVerifyPhoneRegistrationExecute(r ApiAuthServiceVerifyPhoneRegistrationRequest) (map[string]interface{}, *http.Response, error)
 }
 
 // AuthServiceAPIService AuthServiceAPI service
 type AuthServiceAPIService service
 
-type ApiAuthServiceLoginPasswordRequest struct {
+type ApiAuthServiceLoginByPasswordRequest struct {
 	ctx context.Context
 	ApiService AuthServiceAPI
-	commonApiAppBbsV1UserLoginPasswordRequest *CommonApiAppBbsV1UserLoginPasswordRequest
+	loginByPasswordRequest *LoginByPasswordRequest
 }
 
-func (r ApiAuthServiceLoginPasswordRequest) CommonApiAppBbsV1UserLoginPasswordRequest(commonApiAppBbsV1UserLoginPasswordRequest CommonApiAppBbsV1UserLoginPasswordRequest) ApiAuthServiceLoginPasswordRequest {
-	r.commonApiAppBbsV1UserLoginPasswordRequest = &commonApiAppBbsV1UserLoginPasswordRequest
+func (r ApiAuthServiceLoginByPasswordRequest) LoginByPasswordRequest(loginByPasswordRequest LoginByPasswordRequest) ApiAuthServiceLoginByPasswordRequest {
+	r.loginByPasswordRequest = &loginByPasswordRequest
 	return r
 }
 
-func (r ApiAuthServiceLoginPasswordRequest) Execute() (*CommonApiAppBbsV1UserLoginPasswordReply, *http.Response, error) {
-	return r.ApiService.AuthServiceLoginPasswordExecute(r)
+func (r ApiAuthServiceLoginByPasswordRequest) Execute() (*LoginByPasswordReply, *http.Response, error) {
+	return r.ApiService.AuthServiceLoginByPasswordExecute(r)
 }
 
 /*
-AuthServiceLoginPassword Method for AuthServiceLoginPassword
+AuthServiceLoginByPassword Method for AuthServiceLoginByPassword
 
 使用密码登录账号
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuthServiceLoginPasswordRequest
+ @return ApiAuthServiceLoginByPasswordRequest
 */
-func (a *AuthServiceAPIService) AuthServiceLoginPassword(ctx context.Context) ApiAuthServiceLoginPasswordRequest {
-	return ApiAuthServiceLoginPasswordRequest{
+func (a *AuthServiceAPIService) AuthServiceLoginByPassword(ctx context.Context) ApiAuthServiceLoginByPasswordRequest {
+	return ApiAuthServiceLoginByPasswordRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserLoginPasswordReply
-func (a *AuthServiceAPIService) AuthServiceLoginPasswordExecute(r ApiAuthServiceLoginPasswordRequest) (*CommonApiAppBbsV1UserLoginPasswordReply, *http.Response, error) {
+//  @return LoginByPasswordReply
+func (a *AuthServiceAPIService) AuthServiceLoginByPasswordExecute(r ApiAuthServiceLoginByPasswordRequest) (*LoginByPasswordReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserLoginPasswordReply
+		localVarReturnValue  *LoginByPasswordReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceLoginPassword")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceLoginByPassword")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/login-password"
+	localVarPath := localBasePath + "/v1/user/auth/login-by-password"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserLoginPasswordRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserLoginPasswordRequest is required and must be specified")
+	if r.loginByPasswordRequest == nil {
+		return localVarReturnValue, nil, reportError("loginByPasswordRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -181,7 +181,7 @@ func (a *AuthServiceAPIService) AuthServiceLoginPasswordExecute(r ApiAuthService
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserLoginPasswordRequest
+	localVarPostBody = r.loginByPasswordRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -329,58 +329,58 @@ func (a *AuthServiceAPIService) AuthServiceLogoutExecute(r ApiAuthServiceLogoutR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiAuthServiceRegisterEmailRequest struct {
+type ApiAuthServiceStartEmailRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthServiceAPI
-	commonApiAppBbsV1UserRegisterEmailRequest *CommonApiAppBbsV1UserRegisterEmailRequest
+	startEmailRegistrationRequest *StartEmailRegistrationRequest
 }
 
-func (r ApiAuthServiceRegisterEmailRequest) CommonApiAppBbsV1UserRegisterEmailRequest(commonApiAppBbsV1UserRegisterEmailRequest CommonApiAppBbsV1UserRegisterEmailRequest) ApiAuthServiceRegisterEmailRequest {
-	r.commonApiAppBbsV1UserRegisterEmailRequest = &commonApiAppBbsV1UserRegisterEmailRequest
+func (r ApiAuthServiceStartEmailRegistrationRequest) StartEmailRegistrationRequest(startEmailRegistrationRequest StartEmailRegistrationRequest) ApiAuthServiceStartEmailRegistrationRequest {
+	r.startEmailRegistrationRequest = &startEmailRegistrationRequest
 	return r
 }
 
-func (r ApiAuthServiceRegisterEmailRequest) Execute() (*CommonApiAppBbsV1UserRegisterEmailReply, *http.Response, error) {
-	return r.ApiService.AuthServiceRegisterEmailExecute(r)
+func (r ApiAuthServiceStartEmailRegistrationRequest) Execute() (*StartEmailRegistrationReply, *http.Response, error) {
+	return r.ApiService.AuthServiceStartEmailRegistrationExecute(r)
 }
 
 /*
-AuthServiceRegisterEmail Method for AuthServiceRegisterEmail
+AuthServiceStartEmailRegistration Method for AuthServiceStartEmailRegistration
 
 使用邮箱发起账号注册
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuthServiceRegisterEmailRequest
+ @return ApiAuthServiceStartEmailRegistrationRequest
 */
-func (a *AuthServiceAPIService) AuthServiceRegisterEmail(ctx context.Context) ApiAuthServiceRegisterEmailRequest {
-	return ApiAuthServiceRegisterEmailRequest{
+func (a *AuthServiceAPIService) AuthServiceStartEmailRegistration(ctx context.Context) ApiAuthServiceStartEmailRegistrationRequest {
+	return ApiAuthServiceStartEmailRegistrationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserRegisterEmailReply
-func (a *AuthServiceAPIService) AuthServiceRegisterEmailExecute(r ApiAuthServiceRegisterEmailRequest) (*CommonApiAppBbsV1UserRegisterEmailReply, *http.Response, error) {
+//  @return StartEmailRegistrationReply
+func (a *AuthServiceAPIService) AuthServiceStartEmailRegistrationExecute(r ApiAuthServiceStartEmailRegistrationRequest) (*StartEmailRegistrationReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserRegisterEmailReply
+		localVarReturnValue  *StartEmailRegistrationReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceRegisterEmail")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceStartEmailRegistration")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/register-email"
+	localVarPath := localBasePath + "/v1/user/auth/start-email-registration"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserRegisterEmailRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserRegisterEmailRequest is required and must be specified")
+	if r.startEmailRegistrationRequest == nil {
+		return localVarReturnValue, nil, reportError("startEmailRegistrationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -401,7 +401,7 @@ func (a *AuthServiceAPIService) AuthServiceRegisterEmailExecute(r ApiAuthService
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserRegisterEmailRequest
+	localVarPostBody = r.startEmailRegistrationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -439,58 +439,58 @@ func (a *AuthServiceAPIService) AuthServiceRegisterEmailExecute(r ApiAuthService
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiAuthServiceRegisterPhoneRequest struct {
+type ApiAuthServiceStartPhoneRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthServiceAPI
-	commonApiAppBbsV1UserRegisterPhoneRequest *CommonApiAppBbsV1UserRegisterPhoneRequest
+	startPhoneRegistrationRequest *StartPhoneRegistrationRequest
 }
 
-func (r ApiAuthServiceRegisterPhoneRequest) CommonApiAppBbsV1UserRegisterPhoneRequest(commonApiAppBbsV1UserRegisterPhoneRequest CommonApiAppBbsV1UserRegisterPhoneRequest) ApiAuthServiceRegisterPhoneRequest {
-	r.commonApiAppBbsV1UserRegisterPhoneRequest = &commonApiAppBbsV1UserRegisterPhoneRequest
+func (r ApiAuthServiceStartPhoneRegistrationRequest) StartPhoneRegistrationRequest(startPhoneRegistrationRequest StartPhoneRegistrationRequest) ApiAuthServiceStartPhoneRegistrationRequest {
+	r.startPhoneRegistrationRequest = &startPhoneRegistrationRequest
 	return r
 }
 
-func (r ApiAuthServiceRegisterPhoneRequest) Execute() (*CommonApiAppBbsV1UserRegisterPhoneReply, *http.Response, error) {
-	return r.ApiService.AuthServiceRegisterPhoneExecute(r)
+func (r ApiAuthServiceStartPhoneRegistrationRequest) Execute() (*StartPhoneRegistrationReply, *http.Response, error) {
+	return r.ApiService.AuthServiceStartPhoneRegistrationExecute(r)
 }
 
 /*
-AuthServiceRegisterPhone Method for AuthServiceRegisterPhone
+AuthServiceStartPhoneRegistration Method for AuthServiceStartPhoneRegistration
 
 使用手机号发起账号注册
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuthServiceRegisterPhoneRequest
+ @return ApiAuthServiceStartPhoneRegistrationRequest
 */
-func (a *AuthServiceAPIService) AuthServiceRegisterPhone(ctx context.Context) ApiAuthServiceRegisterPhoneRequest {
-	return ApiAuthServiceRegisterPhoneRequest{
+func (a *AuthServiceAPIService) AuthServiceStartPhoneRegistration(ctx context.Context) ApiAuthServiceStartPhoneRegistrationRequest {
+	return ApiAuthServiceStartPhoneRegistrationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserRegisterPhoneReply
-func (a *AuthServiceAPIService) AuthServiceRegisterPhoneExecute(r ApiAuthServiceRegisterPhoneRequest) (*CommonApiAppBbsV1UserRegisterPhoneReply, *http.Response, error) {
+//  @return StartPhoneRegistrationReply
+func (a *AuthServiceAPIService) AuthServiceStartPhoneRegistrationExecute(r ApiAuthServiceStartPhoneRegistrationRequest) (*StartPhoneRegistrationReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserRegisterPhoneReply
+		localVarReturnValue  *StartPhoneRegistrationReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceRegisterPhone")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceStartPhoneRegistration")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/register-phone"
+	localVarPath := localBasePath + "/v1/user/auth/start-phone-registration"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserRegisterPhoneRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserRegisterPhoneRequest is required and must be specified")
+	if r.startPhoneRegistrationRequest == nil {
+		return localVarReturnValue, nil, reportError("startPhoneRegistrationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -511,7 +511,7 @@ func (a *AuthServiceAPIService) AuthServiceRegisterPhoneExecute(r ApiAuthService
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserRegisterPhoneRequest
+	localVarPostBody = r.startPhoneRegistrationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -549,31 +549,31 @@ func (a *AuthServiceAPIService) AuthServiceRegisterPhoneExecute(r ApiAuthService
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiAuthServiceVerifyEmailRegisterRequest struct {
+type ApiAuthServiceVerifyEmailRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthServiceAPI
-	commonApiAppBbsV1UserVerifyEmailRegisterRequest *CommonApiAppBbsV1UserVerifyEmailRegisterRequest
+	verifyEmailRegistrationRequest *VerifyEmailRegistrationRequest
 }
 
-func (r ApiAuthServiceVerifyEmailRegisterRequest) CommonApiAppBbsV1UserVerifyEmailRegisterRequest(commonApiAppBbsV1UserVerifyEmailRegisterRequest CommonApiAppBbsV1UserVerifyEmailRegisterRequest) ApiAuthServiceVerifyEmailRegisterRequest {
-	r.commonApiAppBbsV1UserVerifyEmailRegisterRequest = &commonApiAppBbsV1UserVerifyEmailRegisterRequest
+func (r ApiAuthServiceVerifyEmailRegistrationRequest) VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest VerifyEmailRegistrationRequest) ApiAuthServiceVerifyEmailRegistrationRequest {
+	r.verifyEmailRegistrationRequest = &verifyEmailRegistrationRequest
 	return r
 }
 
-func (r ApiAuthServiceVerifyEmailRegisterRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.AuthServiceVerifyEmailRegisterExecute(r)
+func (r ApiAuthServiceVerifyEmailRegistrationRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.AuthServiceVerifyEmailRegistrationExecute(r)
 }
 
 /*
-AuthServiceVerifyEmailRegister Method for AuthServiceVerifyEmailRegister
+AuthServiceVerifyEmailRegistration Method for AuthServiceVerifyEmailRegistration
 
 校验邮箱注册验证码
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuthServiceVerifyEmailRegisterRequest
+ @return ApiAuthServiceVerifyEmailRegistrationRequest
 */
-func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegister(ctx context.Context) ApiAuthServiceVerifyEmailRegisterRequest {
-	return ApiAuthServiceVerifyEmailRegisterRequest{
+func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegistration(ctx context.Context) ApiAuthServiceVerifyEmailRegistrationRequest {
+	return ApiAuthServiceVerifyEmailRegistrationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -581,7 +581,7 @@ func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegister(ctx context.Conte
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegisterExecute(r ApiAuthServiceVerifyEmailRegisterRequest) (map[string]interface{}, *http.Response, error) {
+func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegistrationExecute(r ApiAuthServiceVerifyEmailRegistrationRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -589,18 +589,18 @@ func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegisterExecute(r ApiAuthS
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceVerifyEmailRegister")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceVerifyEmailRegistration")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/verify-email-register"
+	localVarPath := localBasePath + "/v1/user/auth/verify-email-registration"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserVerifyEmailRegisterRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserVerifyEmailRegisterRequest is required and must be specified")
+	if r.verifyEmailRegistrationRequest == nil {
+		return localVarReturnValue, nil, reportError("verifyEmailRegistrationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -621,7 +621,7 @@ func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegisterExecute(r ApiAuthS
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserVerifyEmailRegisterRequest
+	localVarPostBody = r.verifyEmailRegistrationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -659,31 +659,31 @@ func (a *AuthServiceAPIService) AuthServiceVerifyEmailRegisterExecute(r ApiAuthS
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiAuthServiceVerifyPhoneRegisterRequest struct {
+type ApiAuthServiceVerifyPhoneRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthServiceAPI
-	commonApiAppBbsV1UserVerifyPhoneRegisterRequest *CommonApiAppBbsV1UserVerifyPhoneRegisterRequest
+	verifyPhoneRegistrationRequest *VerifyPhoneRegistrationRequest
 }
 
-func (r ApiAuthServiceVerifyPhoneRegisterRequest) CommonApiAppBbsV1UserVerifyPhoneRegisterRequest(commonApiAppBbsV1UserVerifyPhoneRegisterRequest CommonApiAppBbsV1UserVerifyPhoneRegisterRequest) ApiAuthServiceVerifyPhoneRegisterRequest {
-	r.commonApiAppBbsV1UserVerifyPhoneRegisterRequest = &commonApiAppBbsV1UserVerifyPhoneRegisterRequest
+func (r ApiAuthServiceVerifyPhoneRegistrationRequest) VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest VerifyPhoneRegistrationRequest) ApiAuthServiceVerifyPhoneRegistrationRequest {
+	r.verifyPhoneRegistrationRequest = &verifyPhoneRegistrationRequest
 	return r
 }
 
-func (r ApiAuthServiceVerifyPhoneRegisterRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.AuthServiceVerifyPhoneRegisterExecute(r)
+func (r ApiAuthServiceVerifyPhoneRegistrationRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.AuthServiceVerifyPhoneRegistrationExecute(r)
 }
 
 /*
-AuthServiceVerifyPhoneRegister Method for AuthServiceVerifyPhoneRegister
+AuthServiceVerifyPhoneRegistration Method for AuthServiceVerifyPhoneRegistration
 
 校验手机号注册验证码
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuthServiceVerifyPhoneRegisterRequest
+ @return ApiAuthServiceVerifyPhoneRegistrationRequest
 */
-func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegister(ctx context.Context) ApiAuthServiceVerifyPhoneRegisterRequest {
-	return ApiAuthServiceVerifyPhoneRegisterRequest{
+func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegistration(ctx context.Context) ApiAuthServiceVerifyPhoneRegistrationRequest {
+	return ApiAuthServiceVerifyPhoneRegistrationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -691,7 +691,7 @@ func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegister(ctx context.Conte
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegisterExecute(r ApiAuthServiceVerifyPhoneRegisterRequest) (map[string]interface{}, *http.Response, error) {
+func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegistrationExecute(r ApiAuthServiceVerifyPhoneRegistrationRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -699,18 +699,18 @@ func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegisterExecute(r ApiAuthS
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceVerifyPhoneRegister")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceAPIService.AuthServiceVerifyPhoneRegistration")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/verify-phone-register"
+	localVarPath := localBasePath + "/v1/user/auth/verify-phone-registration"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserVerifyPhoneRegisterRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserVerifyPhoneRegisterRequest is required and must be specified")
+	if r.verifyPhoneRegistrationRequest == nil {
+		return localVarReturnValue, nil, reportError("verifyPhoneRegistrationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -731,7 +731,7 @@ func (a *AuthServiceAPIService) AuthServiceVerifyPhoneRegisterExecute(r ApiAuthS
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserVerifyPhoneRegisterRequest
+	localVarPostBody = r.verifyPhoneRegistrationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

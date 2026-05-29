@@ -6,32 +6,416 @@ servers:
 - url: /
 tags:
 - name: AccountService
+- name: ArticleService
 - name: AuthService
+- name: CommentService
+- name: DomainService
 - name: LocationService
+- name: NotificationService
+- name: PostscriptService
 - name: PreferencesService
 - name: PrivacySettingService
 - name: RelationService
+- name: TagService
 - name: TfaService
 paths:
-  /v1/user/account/batch-get-profile:
+  /v1/content/article/accept-answer:
     post:
-      description: 批量获取账号展示资料
-      operationId: AccountService_BatchGetProfile
+      operationId: ArticleService_AcceptAnswer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetProfileAccount_Request"
+              $ref: "#/components/schemas/AcceptAnswerArticle_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetProfileAccount_Reply"
+                $ref: "#/components/schemas/AcceptAnswerArticle_Reply"
           description: OK
       tags:
-      - AccountService
+      - ArticleService
+  /v1/content/article/collect:
+    post:
+      operationId: ArticleService_Collect
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/create:
+    post:
+      operationId: ArticleService_Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/delete:
+    post:
+      operationId: ArticleService_Delete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/get:
+    post:
+      operationId: ArticleService_Get
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/like:
+    post:
+      operationId: ArticleService_Like
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LikeArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LikeArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/list:
+    post:
+      operationId: ArticleService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListArticles_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListArticles_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/publish:
+    post:
+      operationId: ArticleService_Publish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublishArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/reward:
+    post:
+      operationId: ArticleService_Reward
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RewardArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/thank:
+    post:
+      operationId: ArticleService_Thank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThankArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThankArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/update-draft:
+    post:
+      operationId: ArticleService_UpdateDraft
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDraftArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateDraftArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/watch:
+    post:
+      operationId: ArticleService_Watch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WatchArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WatchArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/comment/create:
+    post:
+      operationId: CommentService_Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateComment_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateComment_Reply"
+          description: OK
+      tags:
+      - CommentService
+  /v1/content/comment/like:
+    post:
+      operationId: CommentService_Like
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LikeComment_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LikeComment_Reply"
+          description: OK
+      tags:
+      - CommentService
+  /v1/content/comment/list:
+    post:
+      operationId: CommentService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListComments_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListComments_Reply"
+          description: OK
+      tags:
+      - CommentService
+  /v1/content/comment/thank:
+    post:
+      operationId: CommentService_Thank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThankComment_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThankComment_Reply"
+          description: OK
+      tags:
+      - CommentService
+  /v1/content/domain/list:
+    post:
+      operationId: DomainService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListDomains_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListDomains_Reply"
+          description: OK
+      tags:
+      - DomainService
+  /v1/content/postscript/add:
+    post:
+      description: 添加文章附言
+      operationId: PostscriptService_Add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddPostscript_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddPostscript_Reply"
+          description: OK
+      tags:
+      - PostscriptService
+  /v1/content/tag/list:
+    post:
+      operationId: TagService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListTags_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListTags_Reply"
+          description: OK
+      tags:
+      - TagService
+  /v1/notify/notification/count-unread:
+    post:
+      operationId: NotificationService_CountUnread
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CountUnreadNotifications_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountUnreadNotifications_Reply"
+          description: OK
+      tags:
+      - NotificationService
+  /v1/notify/notification/list:
+    post:
+      operationId: NotificationService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListNotifications_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListNotifications_Reply"
+          description: OK
+      tags:
+      - NotificationService
+  /v1/notify/notification/mark-read:
+    post:
+      operationId: NotificationService_MarkRead
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkReadNotification_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkReadNotification_Reply"
+          description: OK
+      tags:
+      - NotificationService
   /v1/user/account/get-current:
     post:
       description: 获取当前登录账号的完整资料
@@ -40,14 +424,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentAccount_Request"
+              $ref: "#/components/schemas/GetCurrentAccount_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentAccount_Reply"
+                $ref: "#/components/schemas/GetCurrentAccount_Reply"
           description: OK
       tags:
       - AccountService
@@ -59,14 +443,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetProfileAccount_Request"
+              $ref: "#/components/schemas/GetProfileAccount_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetProfileAccount_Reply"
+                $ref: "#/components/schemas/GetProfileAccount_Reply"
           description: OK
       tags:
       - AccountService
@@ -78,33 +462,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdateProfileAccount_Request"
+              $ref: "#/components/schemas/UpdateProfileAccount_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdateProfileAccount_Reply"
+                $ref: "#/components/schemas/UpdateProfileAccount_Reply"
           description: OK
       tags:
       - AccountService
-  /v1/user/auth/login-password:
+  /v1/user/auth/login-by-password:
     post:
       description: 使用密码登录账号
-      operationId: AuthService_LoginPassword
+      operationId: AuthService_LoginByPassword
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.LoginPassword_Request"
+              $ref: "#/components/schemas/LoginByPassword_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.LoginPassword_Reply"
+                $ref: "#/components/schemas/LoginByPassword_Reply"
           description: OK
       tags:
       - AuthService
@@ -116,90 +500,90 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.Logout_Request"
+              $ref: "#/components/schemas/Logout_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.Logout_Reply"
+                $ref: "#/components/schemas/Logout_Reply"
           description: OK
       tags:
       - AuthService
-  /v1/user/auth/register-email:
+  /v1/user/auth/start-email-registration:
     post:
       description: 使用邮箱发起账号注册
-      operationId: AuthService_RegisterEmail
+      operationId: AuthService_StartEmailRegistration
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterEmail_Request"
+              $ref: "#/components/schemas/StartEmailRegistration_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterEmail_Reply"
+                $ref: "#/components/schemas/StartEmailRegistration_Reply"
           description: OK
       tags:
       - AuthService
-  /v1/user/auth/register-phone:
+  /v1/user/auth/start-phone-registration:
     post:
       description: 使用手机号发起账号注册
-      operationId: AuthService_RegisterPhone
+      operationId: AuthService_StartPhoneRegistration
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterPhone_Request"
+              $ref: "#/components/schemas/StartPhoneRegistration_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.RegisterPhone_Reply"
+                $ref: "#/components/schemas/StartPhoneRegistration_Reply"
           description: OK
       tags:
       - AuthService
-  /v1/user/auth/verify-email-register:
+  /v1/user/auth/verify-email-registration:
     post:
       description: 校验邮箱注册验证码
-      operationId: AuthService_VerifyEmailRegister
+      operationId: AuthService_VerifyEmailRegistration
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyEmailRegister_Request"
+              $ref: "#/components/schemas/VerifyEmailRegistration_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyEmailRegister_Reply"
+                $ref: "#/components/schemas/VerifyEmailRegistration_Reply"
           description: OK
       tags:
       - AuthService
-  /v1/user/auth/verify-phone-register:
+  /v1/user/auth/verify-phone-registration:
     post:
       description: 校验手机号注册验证码
-      operationId: AuthService_VerifyPhoneRegister
+      operationId: AuthService_VerifyPhoneRegistration
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyPhoneRegister_Request"
+              $ref: "#/components/schemas/VerifyPhoneRegistration_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.VerifyPhoneRegister_Reply"
+                $ref: "#/components/schemas/VerifyPhoneRegistration_Reply"
           description: OK
       tags:
       - AuthService
@@ -211,33 +595,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentLocation_Request"
+              $ref: "#/components/schemas/GetCurrentLocation_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentLocation_Reply"
+                $ref: "#/components/schemas/GetCurrentLocation_Reply"
           description: OK
       tags:
       - LocationService
   /v1/user/location/upsert-current:
     post:
       description: 更新当前登录账号的地理资料
-      operationId: LocationService_Upsert
+      operationId: LocationService_UpsertCurrent
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpsertLocation_Request"
+              $ref: "#/components/schemas/UpsertCurrentLocation_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpsertLocation_Reply"
+                $ref: "#/components/schemas/UpsertCurrentLocation_Reply"
           description: OK
       tags:
       - LocationService
@@ -249,33 +633,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPreferences_Request"
+              $ref: "#/components/schemas/GetCurrentPreferences_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPreferences_Reply"
+                $ref: "#/components/schemas/GetCurrentPreferences_Reply"
           description: OK
       tags:
       - PreferencesService
   /v1/user/preference/update-current:
     post:
       description: 更新当前登录账号的偏好设置
-      operationId: PreferencesService_Update
+      operationId: PreferencesService_UpdateCurrent
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePreferences_Request"
+              $ref: "#/components/schemas/UpdateCurrentPreferences_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePreferences_Reply"
+                $ref: "#/components/schemas/UpdateCurrentPreferences_Reply"
           description: OK
       tags:
       - PreferencesService
@@ -287,55 +671,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Request"
+              $ref: "#/components/schemas/GetCurrentPrivacySetting_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Reply"
+                $ref: "#/components/schemas/GetCurrentPrivacySetting_Reply"
           description: OK
       tags:
       - PrivacySettingService
   /v1/user/privacy-setting/update-current:
     post:
       description: 更新当前登录账号的隐私设置
-      operationId: PrivacySettingService_Update
+      operationId: PrivacySettingService_UpdateCurrent
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePrivacySetting_Request"
+              $ref: "#/components/schemas/UpdateCurrentPrivacySetting_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UpdatePrivacySetting_Reply"
+                $ref: "#/components/schemas/UpdateCurrentPrivacySetting_Reply"
           description: OK
       tags:
       - PrivacySettingService
-  /v1/user/relation/batch-get-status:
-    post:
-      description: 批量查询当前账号与多个目标账号之间的关系状态
-      operationId: RelationService_BatchGetStatus
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetStatusRelation_Request"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BatchGetStatusRelation_Reply"
-          description: OK
-      tags:
-      - RelationService
   /v1/user/relation/block:
     post:
       description: 当前账号拉黑目标账号
@@ -344,14 +709,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BlockRelation_Request"
+              $ref: "#/components/schemas/BlockRelation_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BlockRelation_Reply"
+                $ref: "#/components/schemas/BlockRelation_Reply"
           description: OK
       tags:
       - RelationService
@@ -363,71 +728,90 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.FollowRelation_Request"
+              $ref: "#/components/schemas/FollowRelation_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.FollowRelation_Reply"
+                $ref: "#/components/schemas/FollowRelation_Reply"
           description: OK
       tags:
       - RelationService
-  /v1/user/relation/page-blocked:
+  /v1/user/relation/get-status:
+    post:
+      description: 查询当前账号与目标账号之间的关系
+      operationId: RelationService_GetStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetStatusRelation_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetStatusRelation_Reply"
+          description: OK
+      tags:
+      - RelationService
+  /v1/user/relation/list-blocked:
     post:
       description: 分页查询当前账号拉黑的账号列表
-      operationId: RelationService_PageBlocked
+      operationId: RelationService_ListBlocked
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageBlockedRelation_Request"
+              $ref: "#/components/schemas/ListBlockedRelations_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageBlockedRelation_Reply"
+                $ref: "#/components/schemas/ListBlockedRelations_Reply"
           description: OK
       tags:
       - RelationService
-  /v1/user/relation/page-followers:
+  /v1/user/relation/list-followers:
     post:
       description: 分页查询当前账号的粉丝账号列表
-      operationId: RelationService_PageFollowers
+      operationId: RelationService_ListFollowers
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowersRelation_Request"
+              $ref: "#/components/schemas/ListFollowersRelations_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowersRelation_Reply"
+                $ref: "#/components/schemas/ListFollowersRelations_Reply"
           description: OK
       tags:
       - RelationService
-  /v1/user/relation/page-following:
+  /v1/user/relation/list-following:
     post:
       description: 分页查询当前账号关注的账号列表
-      operationId: RelationService_PageFollowing
+      operationId: RelationService_ListFollowing
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowingRelation_Request"
+              $ref: "#/components/schemas/ListFollowingRelations_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageFollowingRelation_Reply"
+                $ref: "#/components/schemas/ListFollowingRelations_Reply"
           description: OK
       tags:
       - RelationService
@@ -439,14 +823,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnblockRelation_Request"
+              $ref: "#/components/schemas/UnblockRelation_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnblockRelation_Reply"
+                $ref: "#/components/schemas/UnblockRelation_Reply"
           description: OK
       tags:
       - RelationService
@@ -458,14 +842,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnfollowRelation_Request"
+              $ref: "#/components/schemas/UnfollowRelation_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.UnfollowRelation_Reply"
+                $ref: "#/components/schemas/UnfollowRelation_Reply"
           description: OK
       tags:
       - RelationService
@@ -477,14 +861,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.BeginEnableTfa_Request"
+              $ref: "#/components/schemas/BeginEnableTfa_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.BeginEnableTfa_Reply"
+                $ref: "#/components/schemas/BeginEnableTfa_Reply"
           description: OK
       tags:
       - TfaService
@@ -496,14 +880,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.ConfirmEnableTfa_Request"
+              $ref: "#/components/schemas/ConfirmEnableTfa_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.ConfirmEnableTfa_Reply"
+                $ref: "#/components/schemas/ConfirmEnableTfa_Reply"
           description: OK
       tags:
       - TfaService
@@ -515,14 +899,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.DisableTfa_Request"
+              $ref: "#/components/schemas/DisableTfa_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.DisableTfa_Reply"
+                $ref: "#/components/schemas/DisableTfa_Reply"
           description: OK
       tags:
       - TfaService
@@ -534,14 +918,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentTfa_Request"
+              $ref: "#/components/schemas/GetCurrentTfa_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.GetCurrentTfa_Reply"
+                $ref: "#/components/schemas/GetCurrentTfa_Reply"
           description: OK
       tags:
       - TfaService
@@ -553,49 +937,56 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/common.api.app.bbs.v1.user.ValidateTfa_Request"
+              $ref: "#/components/schemas/ValidateTfa_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/common.api.app.bbs.v1.user.ValidateTfa_Reply"
+                $ref: "#/components/schemas/ValidateTfa_Reply"
           description: OK
       tags:
       - TfaService
 components:
   schemas:
-    common.api.app.bbs.v1.user.Account:
+    AcceptAnswerArticle_Reply:
+      properties: {}
+      type: object
+    AcceptAnswerArticle_Request:
+      properties:
+        article_id:
+          type: string
+        comment_id:
+          type: string
+      type: object
+    Account:
       description: 当前账号完整资料
       example:
         profile:
-          group_name: group_name
-          created_at: created_at
-          follower_count: 1
-          url: url
-          blocked_count: 5
           avatar_url: avatar_url
           updated_at: updated_at
-          follow_count: 6
+          follow_count: 3
           name: name
           nickname: nickname
-          mbti: mbti
-          block_count: 5
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
           id: id
+          follower_count: 2
+          url: url
           introduction: introduction
-          status: 0
+          status: ACCOUNT_STATUS_UNSPECIFIED
         contact:
           user_id: user_id
           phone: phone
           email: email
       properties:
         profile:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+          $ref: "#/components/schemas/AccountProfile"
         contact:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountContact"
+          $ref: "#/components/schemas/AccountContact"
       type: object
-    common.api.app.bbs.v1.user.AccountContact:
+    AccountContact:
       description: 当前账号联系方式
       example:
         user_id: user_id
@@ -609,24 +1000,21 @@ components:
         phone:
           type: string
       type: object
-    common.api.app.bbs.v1.user.AccountProfile:
+    AccountProfile:
       description: 账号展示资料
       example:
-        group_name: group_name
-        created_at: created_at
-        follower_count: 1
-        url: url
-        blocked_count: 5
         avatar_url: avatar_url
         updated_at: updated_at
-        follow_count: 6
+        follow_count: 3
         name: name
         nickname: nickname
-        mbti: mbti
-        block_count: 5
+        mbti: MBTI_UNSPECIFIED
+        created_at: created_at
         id: id
+        follower_count: 2
+        url: url
         introduction: introduction
-        status: 0
+        status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         id:
           type: string
@@ -641,11 +1029,33 @@ components:
         introduction:
           type: string
         mbti:
+          enum:
+          - MBTI_UNSPECIFIED
+          - MBTI_INTJ
+          - MBTI_INTP
+          - MBTI_ENTJ
+          - MBTI_ENTP
+          - MBTI_INFJ
+          - MBTI_INFP
+          - MBTI_ENFJ
+          - MBTI_ENFP
+          - MBTI_ISTJ
+          - MBTI_ISFJ
+          - MBTI_ESTJ
+          - MBTI_ESFJ
+          - MBTI_ISTP
+          - MBTI_ISFP
+          - MBTI_ESTP
+          - MBTI_ESFP
+          format: enum
           type: string
         status:
+          enum:
+          - ACCOUNT_STATUS_UNSPECIFIED
+          - ACCOUNT_STATUS_NORMAL
+          - ACCOUNT_STATUS_BANNED
+          - ACCOUNT_STATUS_DELETED
           format: enum
-          type: integer
-        group_name:
           type: string
         follow_count:
           format: int32
@@ -653,72 +1063,287 @@ components:
         follower_count:
           format: int32
           type: integer
-        block_count:
-          format: int32
-          type: integer
-        blocked_count:
-          format: int32
-          type: integer
         created_at:
           type: string
         updated_at:
           type: string
       type: object
-    common.api.app.bbs.v1.user.BatchGetProfileAccount_Reply:
+    AddPostscript_Reply:
       example:
-        profiles:
-          key:
-            group_name: group_name
-            created_at: created_at
-            follower_count: 1
-            url: url
-            blocked_count: 5
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 6
-            name: name
-            nickname: nickname
-            mbti: mbti
-            block_count: 5
-            id: id
-            introduction: introduction
-            status: 0
+        postscript:
+          article_id: article_id
+          content_render: content_render
+          updated_at: updated_at
+          updated_by: updated_by
+          created_at: created_at
+          id: id
+          created_by: created_by
+          content: content
       properties:
-        profiles:
-          additionalProperties:
-            $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
-          type: object
+        postscript:
+          $ref: "#/components/schemas/ArticlePostscript"
       type: object
-    common.api.app.bbs.v1.user.BatchGetProfileAccount_Request:
+    AddPostscript_Request:
       properties:
-        user_ids:
+        article_id:
+          type: string
+        content:
+          type: string
+      type: object
+    Article:
+      example:
+        reward_content_render: reward_content_render
+        listable: true
+        cover_image_url: cover_image_url
+        created_at: created_at
+        title: title
+        type: ARTICLE_TYPE_UNSPECIFIED
+        content: content
+        reward_content: reward_content
+        last_reply_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        accepted_answer_id: accepted_answer_id
+        last_reply_at: last_reply_at
+        updated_at: updated_at
+        statement: statement
+        watch_count: 2
+        id: id
+        has_reward: true
+        commentable: true
+        thank_count: 1
+        like_count: 5
+        bounty_points: 9
+        has_postscript: true
+        reply_count: 7
+        created_by: created_by
+        reward_points: 0
+        collect_count: 5
+        content_render: content_render
+        updated_by: updated_by
+        anonymous: true
+        author_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        view_count: 6
+        status: ARTICLE_STATUS_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        content_render:
+          type: string
+        has_postscript:
+          type: boolean
+        has_reward:
+          type: boolean
+        reward_content:
+          type: string
+        reward_content_render:
+          type: string
+        reward_points:
+          format: int32
+          type: integer
+        status:
+          enum:
+          - ARTICLE_STATUS_UNSPECIFIED
+          - ARTICLE_STATUS_NORMAL
+          - ARTICLE_STATUS_HIDDEN
+          - ARTICLE_STATUS_LOCKED
+          - ARTICLE_STATUS_DRAFTS
+          - ARTICLE_STATUS_DELETED
+          format: enum
+          type: string
+        type:
+          enum:
+          - ARTICLE_TYPE_UNSPECIFIED
+          - ARTICLE_TYPE_NORMAL
+          - ARTICLE_TYPE_QA
+          format: enum
+          type: string
+        statement:
+          type: string
+        commentable:
+          type: boolean
+        anonymous:
+          type: boolean
+        listable:
+          type: boolean
+        view_count:
+          format: int32
+          type: integer
+        thank_count:
+          format: int32
+          type: integer
+        like_count:
+          format: int32
+          type: integer
+        collect_count:
+          format: int32
+          type: integer
+        watch_count:
+          format: int32
+          type: integer
+        reply_count:
+          format: int32
+          type: integer
+        bounty_points:
+          format: int32
+          type: integer
+        accepted_answer_id:
+          type: string
+        author_user:
+          $ref: "#/components/schemas/AccountProfile"
+        last_reply_user:
+          $ref: "#/components/schemas/AccountProfile"
+        last_reply_at:
+          type: string
+        cover_image_url:
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    ArticlePostscript:
+      example:
+        article_id: article_id
+        content_render: content_render
+        updated_at: updated_at
+        updated_by: updated_by
+        created_at: created_at
+        id: id
+        created_by: created_by
+        content: content
+      properties:
+        id:
+          type: string
+        article_id:
+          type: string
+        content:
+          type: string
+        content_render:
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    ArticleQuery:
+      properties:
+        tag_id:
+          type: string
+        domain_id:
+          type: string
+        status:
+          enum:
+          - ARTICLE_STATUS_UNSPECIFIED
+          - ARTICLE_STATUS_NORMAL
+          - ARTICLE_STATUS_HIDDEN
+          - ARTICLE_STATUS_LOCKED
+          - ARTICLE_STATUS_DRAFTS
+          - ARTICLE_STATUS_DELETED
+          format: enum
+          type: string
+        type:
+          enum:
+          - ARTICLE_TYPE_UNSPECIFIED
+          - ARTICLE_TYPE_NORMAL
+          - ARTICLE_TYPE_QA
+          format: enum
+          type: string
+        order:
+          enum:
+          - ARTICLE_ORDER_UNSPECIFIED
+          - ARTICLE_ORDER_NEWEST
+          - ARTICLE_ORDER_HOTTEST
+          format: enum
+          type: string
+        keyword:
+          type: string
+        author_id:
+          type: string
+        listable:
+          type: boolean
+      type: object
+    ArticleSave:
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        reward_content:
+          type: string
+        reward_points:
+          format: int32
+          type: integer
+        status:
+          enum:
+          - ARTICLE_STATUS_UNSPECIFIED
+          - ARTICLE_STATUS_NORMAL
+          - ARTICLE_STATUS_HIDDEN
+          - ARTICLE_STATUS_LOCKED
+          - ARTICLE_STATUS_DRAFTS
+          - ARTICLE_STATUS_DELETED
+          format: enum
+          type: string
+        type:
+          enum:
+          - ARTICLE_TYPE_UNSPECIFIED
+          - ARTICLE_TYPE_NORMAL
+          - ARTICLE_TYPE_QA
+          format: enum
+          type: string
+        bounty_points:
+          format: int32
+          type: integer
+        statement:
+          type: string
+        commentable:
+          type: boolean
+        anonymous:
+          type: boolean
+        listable:
+          type: boolean
+        tags:
           items:
-            type: string
+            $ref: "#/components/schemas/TagSave"
           type: array
       type: object
-    common.api.app.bbs.v1.user.BatchGetStatusRelation_Reply:
-      example:
-        statuses:
-          key:
-            followed_by: true
-            blocking: true
-            blocked_by: true
-            following: true
-            target_id: target_id
-      properties:
-        statuses:
-          additionalProperties:
-            $ref: "#/components/schemas/common.api.app.bbs.v1.user.RelationStatus"
-          type: object
-      type: object
-    common.api.app.bbs.v1.user.BatchGetStatusRelation_Request:
-      properties:
-        target_ids:
-          items:
-            type: string
-          type: array
-      type: object
-    common.api.app.bbs.v1.user.BeginEnableTfa_Reply:
+    BeginEnableTfa_Reply:
       example:
         data: data
         content_type: content_type
@@ -729,72 +1354,586 @@ components:
         content_type:
           type: string
       type: object
-    common.api.app.bbs.v1.user.BeginEnableTfa_Request:
+    BeginEnableTfa_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.BlockRelation_Reply:
+    BlockRelation_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.BlockRelation_Request:
+    BlockRelation_Request:
       properties:
         target_id:
           type: string
       type: object
-    common.api.app.bbs.v1.user.ConfirmEnableTfa_Reply:
+    CollectArticle_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.ConfirmEnableTfa_Request:
+    CollectArticle_Request:
+      properties:
+        article_id:
+          type: string
+        active:
+          type: boolean
+      type: object
+    Comment:
+      example:
+        like_count: 1
+        reply_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        level: 0
+        created_at: created_at
+        reply_count: 6
+        created_by: created_by
+        content: content
+        article:
+          reward_content_render: reward_content_render
+          listable: true
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          id: id
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          like_count: 5
+          bounty_points: 9
+          has_postscript: true
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+          status: ARTICLE_STATUS_UNSPECIFIED
+        article_id: article_id
+        content_render: content_render
+        reply_id: reply_id
+        updated_at: updated_at
+        parent_id: parent_id
+        updated_by: updated_by
+        id: id
+        user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        thank_count: 5
+        status: COMMENT_STATUS_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        article_id:
+          type: string
+        content:
+          type: string
+        content_render:
+          type: string
+        level:
+          format: int32
+          type: integer
+        parent_id:
+          type: string
+        reply_id:
+          type: string
+        status:
+          enum:
+          - COMMENT_STATUS_UNSPECIFIED
+          - COMMENT_STATUS_NORMAL
+          - COMMENT_STATUS_HIDDEN
+          format: enum
+          type: string
+        reply_count:
+          format: int32
+          type: integer
+        like_count:
+          format: int32
+          type: integer
+        thank_count:
+          format: int32
+          type: integer
+        user:
+          $ref: "#/components/schemas/AccountProfile"
+        reply_user:
+          $ref: "#/components/schemas/AccountProfile"
+        article:
+          $ref: "#/components/schemas/Article"
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    CommentQuery:
+      properties:
+        comment_id:
+          type: string
+        article_id:
+          type: string
+        parent_id:
+          type: string
+        reply_id:
+          type: string
+        order:
+          enum:
+          - COMMENT_ORDER_UNSPECIFIED
+          - COMMENT_ORDER_NEWEST
+          - COMMENT_ORDER_HOTTEST
+          format: enum
+          type: string
+        user_id:
+          type: string
+        level:
+          format: int32
+          type: integer
+        status:
+          enum:
+          - COMMENT_STATUS_UNSPECIFIED
+          - COMMENT_STATUS_NORMAL
+          - COMMENT_STATUS_HIDDEN
+          format: enum
+          type: string
+      type: object
+    ConfirmEnableTfa_Reply:
+      properties: {}
+      type: object
+    ConfirmEnableTfa_Request:
       properties:
         code:
           type: string
       type: object
-    common.api.app.bbs.v1.user.DisableTfa_Reply:
+    CountUnreadNotifications_Reply:
+      example:
+        count: count
+      properties:
+        count:
+          type: string
+      type: object
+    CountUnreadNotifications_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.DisableTfa_Request:
+    CreateArticle_Reply:
+      example:
+        article:
+          reward_content_render: reward_content_render
+          listable: true
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          id: id
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          like_count: 5
+          bounty_points: 9
+          has_postscript: true
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+          status: ARTICLE_STATUS_UNSPECIFIED
+      properties:
+        article:
+          $ref: "#/components/schemas/Article"
+      type: object
+    CreateArticle_Request:
+      properties:
+        article:
+          $ref: "#/components/schemas/ArticleSave"
+      type: object
+    CreateComment_Reply:
+      example:
+        comment:
+          like_count: 1
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          created_by: created_by
+          content: content
+          article:
+            reward_content_render: reward_content_render
+            listable: true
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            content: content
+            reward_content: reward_content
+            last_reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            accepted_answer_id: accepted_answer_id
+            last_reply_at: last_reply_at
+            updated_at: updated_at
+            statement: statement
+            watch_count: 2
+            id: id
+            has_reward: true
+            commentable: true
+            thank_count: 1
+            like_count: 5
+            bounty_points: 9
+            has_postscript: true
+            reply_count: 7
+            created_by: created_by
+            reward_points: 0
+            collect_count: 5
+            content_render: content_render
+            updated_by: updated_by
+            anonymous: true
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            view_count: 6
+            status: ARTICLE_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+          status: COMMENT_STATUS_UNSPECIFIED
+      properties:
+        comment:
+          $ref: "#/components/schemas/Comment"
+      type: object
+    CreateComment_Request:
+      properties:
+        article_id:
+          type: string
+        content:
+          type: string
+        reply_id:
+          type: string
+      type: object
+    DeleteArticle_Reply:
+      properties: {}
+      type: object
+    DeleteArticle_Request:
+      properties:
+        article_id:
+          type: string
+      type: object
+    DisableTfa_Reply:
+      properties: {}
+      type: object
+    DisableTfa_Request:
       properties:
         code:
           type: string
       type: object
-    common.api.app.bbs.v1.user.FollowRelation_Reply:
+    Domain:
+      example:
+        is_nav: true
+        updated_at: updated_at
+        name: name
+        icon: icon
+        updated_by: updated_by
+        description: description
+        created_at: created_at
+        id: id
+        created_by: created_by
+        url: url
+        status: DOMAIN_STATUS_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          enum:
+          - DOMAIN_STATUS_UNSPECIFIED
+          - DOMAIN_STATUS_NORMAL
+          - DOMAIN_STATUS_DISABLED
+          format: enum
+          type: string
+        url:
+          type: string
+        icon:
+          type: string
+        is_nav:
+          type: boolean
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    DomainQuery:
+      properties:
+        ids:
+          items:
+            type: string
+          type: array
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          enum:
+          - DOMAIN_STATUS_UNSPECIFIED
+          - DOMAIN_STATUS_NORMAL
+          - DOMAIN_STATUS_DISABLED
+          format: enum
+          type: string
+        url:
+          type: string
+        icon:
+          type: string
+        is_nav:
+          type: boolean
+      type: object
+    FollowRelation_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.FollowRelation_Request:
+    FollowRelation_Request:
       properties:
         target_id:
           type: string
       type: object
-    common.api.app.bbs.v1.user.GetCurrentAccount_Reply:
+    GetArticle_Reply:
+      example:
+        article:
+          reward_content_render: reward_content_render
+          listable: true
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          id: id
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          like_count: 5
+          bounty_points: 9
+          has_postscript: true
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+          status: ARTICLE_STATUS_UNSPECIFIED
+      properties:
+        article:
+          $ref: "#/components/schemas/Article"
+      type: object
+    GetArticle_Request:
+      properties:
+        article_id:
+          type: string
+      type: object
+    GetCurrentAccount_Reply:
       example:
         account:
           profile:
-            group_name: group_name
-            created_at: created_at
-            follower_count: 1
-            url: url
-            blocked_count: 5
             avatar_url: avatar_url
             updated_at: updated_at
-            follow_count: 6
+            follow_count: 3
             name: name
             nickname: nickname
-            mbti: mbti
-            block_count: 5
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
             id: id
+            follower_count: 2
+            url: url
             introduction: introduction
-            status: 0
+            status: ACCOUNT_STATUS_UNSPECIFIED
           contact:
             user_id: user_id
             phone: phone
             email: email
       properties:
         account:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Account"
+          $ref: "#/components/schemas/Account"
       type: object
-    common.api.app.bbs.v1.user.GetCurrentAccount_Request:
+    GetCurrentAccount_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.GetCurrentLocation_Reply:
+    GetCurrentLocation_Reply:
       example:
         location:
           country: country
@@ -803,29 +1942,27 @@ components:
           city: city
       properties:
         location:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Location"
+          $ref: "#/components/schemas/Location"
       type: object
-    common.api.app.bbs.v1.user.GetCurrentLocation_Request:
+    GetCurrentLocation_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.GetCurrentPreferences_Reply:
+    GetCurrentPreferences_Reply:
       example:
         preference:
           mobile_theme: mobile_theme
           user_id: user_id
-          enable_web_notify: true
           timezone: timezone
-          language: language
           theme: theme
-          enable_email_subscribe: true
+          language: LANGUAGE_UNSPECIFIED
       properties:
         preference:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Preference"
+          $ref: "#/components/schemas/Preference"
       type: object
-    common.api.app.bbs.v1.user.GetCurrentPreferences_Request:
+    GetCurrentPreferences_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Reply:
+    GetCurrentPrivacySetting_Reply:
       example:
         privacy_setting:
           public_followers: true
@@ -837,12 +1974,12 @@ components:
           public_online_status: true
       properties:
         privacy_setting:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PrivacySetting"
+          $ref: "#/components/schemas/PrivacySetting"
       type: object
-    common.api.app.bbs.v1.user.GetCurrentPrivacySetting_Request:
+    GetCurrentPrivacySetting_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.GetCurrentTfa_Reply:
+    GetCurrentTfa_Reply:
       example:
         tfa:
           user_id: user_id
@@ -850,39 +1987,639 @@ components:
           enable_time: enable_time
       properties:
         tfa:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Tfa"
+          $ref: "#/components/schemas/Tfa"
       type: object
-    common.api.app.bbs.v1.user.GetCurrentTfa_Request:
+    GetCurrentTfa_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.GetProfileAccount_Reply:
+    GetProfileAccount_Reply:
       example:
         profile:
-          group_name: group_name
-          created_at: created_at
-          follower_count: 1
-          url: url
-          blocked_count: 5
           avatar_url: avatar_url
           updated_at: updated_at
-          follow_count: 6
+          follow_count: 3
           name: name
           nickname: nickname
-          mbti: mbti
-          block_count: 5
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
           id: id
+          follower_count: 2
+          url: url
           introduction: introduction
-          status: 0
+          status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         profile:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+          $ref: "#/components/schemas/AccountProfile"
       type: object
-    common.api.app.bbs.v1.user.GetProfileAccount_Request:
+    GetProfileAccount_Request:
       properties:
         user_id:
           type: string
       type: object
-    common.api.app.bbs.v1.user.Location:
+    GetStatusRelation_Reply:
+      example:
+        status:
+          followed_by: true
+          blocking: true
+          blocked_by: true
+          following: true
+          target_id: target_id
+      properties:
+        status:
+          $ref: "#/components/schemas/RelationStatus"
+      type: object
+    GetStatusRelation_Request:
+      properties:
+        target_id:
+          type: string
+      type: object
+    LikeArticle_Reply:
+      properties: {}
+      type: object
+    LikeArticle_Request:
+      properties:
+        article_id:
+          type: string
+        active:
+          type: boolean
+      type: object
+    LikeComment_Reply:
+      properties: {}
+      type: object
+    LikeComment_Request:
+      properties:
+        id:
+          type: string
+        active:
+          type: boolean
+      type: object
+    ListArticles_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - reward_content_render: reward_content_render
+          listable: true
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          id: id
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          like_count: 5
+          bounty_points: 9
+          has_postscript: true
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+          status: ARTICLE_STATUS_UNSPECIFIED
+        - reward_content_render: reward_content_render
+          listable: true
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          id: id
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          like_count: 5
+          bounty_points: 9
+          has_postscript: true
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+          status: ARTICLE_STATUS_UNSPECIFIED
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Article"
+          type: array
+      type: object
+    ListArticles_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        query:
+          $ref: "#/components/schemas/ArticleQuery"
+      type: object
+    ListBlockedRelations_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Relation"
+          type: array
+      type: object
+    ListBlockedRelations_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+      type: object
+    ListComments_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - like_count: 1
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          created_by: created_by
+          content: content
+          article:
+            reward_content_render: reward_content_render
+            listable: true
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            content: content
+            reward_content: reward_content
+            last_reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            accepted_answer_id: accepted_answer_id
+            last_reply_at: last_reply_at
+            updated_at: updated_at
+            statement: statement
+            watch_count: 2
+            id: id
+            has_reward: true
+            commentable: true
+            thank_count: 1
+            like_count: 5
+            bounty_points: 9
+            has_postscript: true
+            reply_count: 7
+            created_by: created_by
+            reward_points: 0
+            collect_count: 5
+            content_render: content_render
+            updated_by: updated_by
+            anonymous: true
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            view_count: 6
+            status: ARTICLE_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+          status: COMMENT_STATUS_UNSPECIFIED
+        - like_count: 1
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          created_by: created_by
+          content: content
+          article:
+            reward_content_render: reward_content_render
+            listable: true
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            content: content
+            reward_content: reward_content
+            last_reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            accepted_answer_id: accepted_answer_id
+            last_reply_at: last_reply_at
+            updated_at: updated_at
+            statement: statement
+            watch_count: 2
+            id: id
+            has_reward: true
+            commentable: true
+            thank_count: 1
+            like_count: 5
+            bounty_points: 9
+            has_postscript: true
+            reply_count: 7
+            created_by: created_by
+            reward_points: 0
+            collect_count: 5
+            content_render: content_render
+            updated_by: updated_by
+            anonymous: true
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            view_count: 6
+            status: ARTICLE_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+          status: COMMENT_STATUS_UNSPECIFIED
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Comment"
+          type: array
+      type: object
+    ListComments_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        query:
+          $ref: "#/components/schemas/CommentQuery"
+      type: object
+    ListDomains_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - is_nav: true
+          updated_at: updated_at
+          name: name
+          icon: icon
+          updated_by: updated_by
+          description: description
+          created_at: created_at
+          id: id
+          created_by: created_by
+          url: url
+          status: DOMAIN_STATUS_UNSPECIFIED
+        - is_nav: true
+          updated_at: updated_at
+          name: name
+          icon: icon
+          updated_by: updated_by
+          description: description
+          created_at: created_at
+          id: id
+          created_by: created_by
+          url: url
+          status: DOMAIN_STATUS_UNSPECIFIED
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Domain"
+          type: array
+      type: object
+    ListDomains_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        query:
+          $ref: "#/components/schemas/DomainQuery"
+      type: object
+    ListFollowersRelations_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Relation"
+          type: array
+      type: object
+    ListFollowersRelations_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+      type: object
+    ListFollowingRelations_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+        - updated_at: updated_at
+          created_at: created_at
+          target_id: target_id
+          id: id
+          actor_id: actor_id
+          type: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Relation"
+          type: array
+      type: object
+    ListFollowingRelations_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+      type: object
+    ListNotifications_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - event_id: event_id
+          event_type: EVENT_TYPE_UNSPECIFIED
+          updated_at: updated_at
+          receiver_id: receiver_id
+          read_at: read_at
+          created_at: created_at
+          id: id
+          title: title
+          content: content
+        - event_id: event_id
+          event_type: EVENT_TYPE_UNSPECIFIED
+          updated_at: updated_at
+          receiver_id: receiver_id
+          read_at: read_at
+          created_at: created_at
+          id: id
+          title: title
+          content: content
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Notification"
+          type: array
+      type: object
+    ListNotifications_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+      type: object
+    ListTags_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - domain_id: domain_id
+          updated_at: updated_at
+          name: name
+          updated_by: updated_by
+          description: description
+          created_at: created_at
+          id: id
+          created_by: created_by
+          status: TAG_STATUS_UNSPECIFIED
+        - domain_id: domain_id
+          updated_at: updated_at
+          name: name
+          updated_by: updated_by
+          description: description
+          created_at: created_at
+          id: id
+          created_by: created_by
+          status: TAG_STATUS_UNSPECIFIED
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/Tag"
+          type: array
+      type: object
+    ListTags_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        query:
+          $ref: "#/components/schemas/TagQuery"
+      type: object
+    Location:
       description: 账号地理资料
       example:
         country: country
@@ -899,25 +2636,22 @@ components:
         city:
           type: string
       type: object
-    common.api.app.bbs.v1.user.LoginPassword_Reply:
+    LoginByPassword_Reply:
       example:
         account:
           profile:
-            group_name: group_name
-            created_at: created_at
-            follower_count: 1
-            url: url
-            blocked_count: 5
             avatar_url: avatar_url
             updated_at: updated_at
-            follow_count: 6
+            follow_count: 3
             name: name
             nickname: nickname
-            mbti: mbti
-            block_count: 5
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
             id: id
+            follower_count: 2
+            url: url
             introduction: introduction
-            status: 0
+            status: ACCOUNT_STATUS_UNSPECIFIED
           contact:
             user_id: user_id
             phone: phone
@@ -927,153 +2661,126 @@ components:
         token:
           type: string
         account:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Account"
+          $ref: "#/components/schemas/Account"
       type: object
-    common.api.app.bbs.v1.user.LoginPassword_Request:
+    LoginByPassword_Request:
       properties:
         account:
           type: string
         password:
           type: string
       type: object
-    common.api.app.bbs.v1.user.Logout_Reply:
+    Logout_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.Logout_Request:
+    Logout_Request:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.PageBlockedRelation_Reply:
+    MarkReadNotification_Reply:
       example:
-        page:
-          current: current
-          total: total
-          page_size: page_size
-        rows:
-        - updated_at: updated_at
-          created_at: created_at
-          target_id: target_id
-          id: id
-          actor_id: actor_id
-          type: 0
-        - updated_at: updated_at
-          created_at: created_at
-          target_id: target_id
-          id: id
-          actor_id: actor_id
-          type: 0
+        count: 0
       properties:
-        page:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageReply"
-        rows:
+        count:
+          format: int32
+          type: integer
+      type: object
+    MarkReadNotification_Request:
+      properties:
+        ids:
           items:
-            $ref: "#/components/schemas/common.api.app.bbs.v1.user.Relation"
+            type: string
           type: array
       type: object
-    common.api.app.bbs.v1.user.PageBlockedRelation_Request:
-      properties:
-        page:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageRequest"
-      type: object
-    common.api.app.bbs.v1.user.PageFollowersRelation_Reply:
+    Notification:
       example:
-        page:
-          current: current
-          total: total
-          page_size: page_size
-        rows:
-        - updated_at: updated_at
-          created_at: created_at
-          target_id: target_id
-          id: id
-          actor_id: actor_id
-          type: 0
-        - updated_at: updated_at
-          created_at: created_at
-          target_id: target_id
-          id: id
-          actor_id: actor_id
-          type: 0
+        event_id: event_id
+        event_type: EVENT_TYPE_UNSPECIFIED
+        updated_at: updated_at
+        receiver_id: receiver_id
+        read_at: read_at
+        created_at: created_at
+        id: id
+        title: title
+        content: content
       properties:
-        page:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageReply"
-        rows:
-          items:
-            $ref: "#/components/schemas/common.api.app.bbs.v1.user.Relation"
-          type: array
-      type: object
-    common.api.app.bbs.v1.user.PageFollowersRelation_Request:
-      properties:
-        page:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageRequest"
-      type: object
-    common.api.app.bbs.v1.user.PageFollowingRelation_Reply:
-      example:
-        page:
-          current: current
-          total: total
-          page_size: page_size
-        rows:
-        - updated_at: updated_at
-          created_at: created_at
-          target_id: target_id
-          id: id
-          actor_id: actor_id
-          type: 0
-        - updated_at: updated_at
-          created_at: created_at
-          target_id: target_id
-          id: id
-          actor_id: actor_id
-          type: 0
-      properties:
-        page:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageReply"
-        rows:
-          items:
-            $ref: "#/components/schemas/common.api.app.bbs.v1.user.Relation"
-          type: array
-      type: object
-    common.api.app.bbs.v1.user.PageFollowingRelation_Request:
-      properties:
-        page:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PageRequest"
-      type: object
-    common.api.app.bbs.v1.user.PageReply:
-      description: 分页响应
-      example:
-        current: current
-        total: total
-        page_size: page_size
-      properties:
-        current:
+        id:
           type: string
-        page_size:
+        event_id:
           type: string
+        receiver_id:
+          type: string
+        event_type:
+          enum:
+          - EVENT_TYPE_UNSPECIFIED
+          - EVENT_TYPE_USER_FOLLOW
+          - EVENT_TYPE_USER_UNFOLLOW
+          - EVENT_TYPE_USER_REGISTER
+          - EVENT_TYPE_USER_LOGIN
+          - EVENT_TYPE_USER_LOGOUT
+          - EVENT_TYPE_USER_BLOCK
+          - EVENT_TYPE_USER_UNBLOCK
+          - EVENT_TYPE_USER_TFA_ENABLE
+          - EVENT_TYPE_USER_TFA_DISABLE
+          - EVENT_TYPE_ARTICLE_PUBLISHED
+          - EVENT_TYPE_ARTICLE_LIKED
+          - EVENT_TYPE_ARTICLE_THANKED
+          - EVENT_TYPE_ARTICLE_COLLECTED
+          - EVENT_TYPE_ARTICLE_WATCHED
+          - EVENT_TYPE_COMMENT_PUBLISHED
+          - EVENT_TYPE_COMMENT_LIKED
+          format: enum
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        read_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    PageReply:
+      example:
+        total: 0
+        size: 1
+        page: 6
+      properties:
         total:
-          type: string
+          description: 总数
+          format: uint32
+          type: integer
+        page:
+          description: 页码
+          format: uint32
+          type: integer
+        size:
+          description: 页大小
+          format: uint32
+          type: integer
       type: object
-    common.api.app.bbs.v1.user.PageRequest:
-      description: 分页请求
+    PageRequest:
       properties:
-        current:
-          type: string
-        page_size:
-          type: string
+        page:
+          description: 页码
+          format: uint32
+          type: integer
+        size:
+          description: 页大小
+          format: uint32
+          type: integer
       type: object
-    common.api.app.bbs.v1.user.Preference:
+    Preference:
       description: 账号偏好设置
       example:
         mobile_theme: mobile_theme
         user_id: user_id
-        enable_web_notify: true
         timezone: timezone
-        language: language
         theme: theme
-        enable_email_subscribe: true
+        language: LANGUAGE_UNSPECIFIED
       properties:
         user_id:
-          type: string
-        language:
           type: string
         timezone:
           type: string
@@ -1081,12 +2788,16 @@ components:
           type: string
         mobile_theme:
           type: string
-        enable_web_notify:
-          type: boolean
-        enable_email_subscribe:
-          type: boolean
+        language:
+          enum:
+          - LANGUAGE_UNSPECIFIED
+          - LANGUAGE_ZH_CN
+          - LANGUAGE_ZH_TW
+          - LANGUAGE_EN
+          format: enum
+          type: string
       type: object
-    common.api.app.bbs.v1.user.PrivacySetting:
+    PrivacySetting:
       description: 账号隐私设置
       example:
         public_followers: true
@@ -1112,43 +2823,15 @@ components:
         public_location:
           type: boolean
       type: object
-    common.api.app.bbs.v1.user.RegisterEmail_Reply:
-      example:
-        code_token: code_token
+    PublishArticle_Reply:
+      properties: {}
+      type: object
+    PublishArticle_Request:
       properties:
-        code_token:
+        article_id:
           type: string
       type: object
-    common.api.app.bbs.v1.user.RegisterEmail_Request:
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-        name:
-          type: string
-        nickname:
-          type: string
-      type: object
-    common.api.app.bbs.v1.user.RegisterPhone_Reply:
-      example:
-        code_token: code_token
-      properties:
-        code_token:
-          type: string
-      type: object
-    common.api.app.bbs.v1.user.RegisterPhone_Request:
-      properties:
-        phone:
-          type: string
-        password:
-          type: string
-        name:
-          type: string
-        nickname:
-          type: string
-      type: object
-    common.api.app.bbs.v1.user.Relation:
+    Relation:
       description: 账号关系记录
       example:
         updated_at: updated_at
@@ -1172,7 +2855,7 @@ components:
         updated_at:
           type: string
       type: object
-    common.api.app.bbs.v1.user.RelationStatus:
+    RelationStatus:
       description: 当前账号与目标账号的关系状态
       example:
         followed_by: true
@@ -1192,7 +2875,129 @@ components:
         blocked_by:
           type: boolean
       type: object
-    common.api.app.bbs.v1.user.Tfa:
+    RewardArticle_Reply:
+      properties: {}
+      type: object
+    RewardArticle_Request:
+      properties:
+        article_id:
+          type: string
+      type: object
+    StartEmailRegistration_Reply:
+      example:
+        code_token: code_token
+      properties:
+        code_token:
+          type: string
+      type: object
+    StartEmailRegistration_Request:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+      type: object
+    StartPhoneRegistration_Reply:
+      example:
+        code_token: code_token
+      properties:
+        code_token:
+          type: string
+      type: object
+    StartPhoneRegistration_Request:
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+      type: object
+    Tag:
+      example:
+        domain_id: domain_id
+        updated_at: updated_at
+        name: name
+        updated_by: updated_by
+        description: description
+        created_at: created_at
+        id: id
+        created_by: created_by
+        status: TAG_STATUS_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        domain_id:
+          type: string
+        status:
+          enum:
+          - TAG_STATUS_UNSPECIFIED
+          - TAG_STATUS_NORMAL
+          - TAG_STATUS_DISABLED
+          format: enum
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      type: object
+    TagQuery:
+      properties:
+        ids:
+          items:
+            type: string
+          type: array
+        name:
+          type: string
+        names:
+          items:
+            type: string
+          type: array
+        description:
+          type: string
+        status:
+          enum:
+          - TAG_STATUS_UNSPECIFIED
+          - TAG_STATUS_NORMAL
+          - TAG_STATUS_DISABLED
+          format: enum
+          type: string
+        domain_id:
+          type: string
+      type: object
+    TagSave:
+      properties:
+        id:
+          type: string
+        domain_id:
+          type: string
+        status:
+          enum:
+          - TAG_STATUS_UNSPECIFIED
+          - TAG_STATUS_NORMAL
+          - TAG_STATUS_DISABLED
+          format: enum
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      type: object
+    Tfa:
       description: 二步验证状态
       example:
         user_id: user_id
@@ -1206,52 +3011,72 @@ components:
         enable_time:
           type: string
       type: object
-    common.api.app.bbs.v1.user.UnblockRelation_Reply:
+    ThankArticle_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.UnblockRelation_Request:
+    ThankArticle_Request:
+      properties:
+        article_id:
+          type: string
+        active:
+          type: boolean
+      type: object
+    ThankComment_Reply:
+      properties: {}
+      type: object
+    ThankComment_Request:
+      properties:
+        id:
+          type: string
+        active:
+          type: boolean
+      type: object
+    UnblockRelation_Reply:
+      properties: {}
+      type: object
+    UnblockRelation_Request:
       properties:
         target_id:
           type: string
       type: object
-    common.api.app.bbs.v1.user.UnfollowRelation_Reply:
+    UnfollowRelation_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.UnfollowRelation_Request:
+    UnfollowRelation_Request:
       properties:
         target_id:
           type: string
       type: object
-    common.api.app.bbs.v1.user.UpdatePreferences_Reply:
+    UpdateCurrentPreferences_Reply:
       example:
         preference:
           mobile_theme: mobile_theme
           user_id: user_id
-          enable_web_notify: true
           timezone: timezone
-          language: language
           theme: theme
-          enable_email_subscribe: true
+          language: LANGUAGE_UNSPECIFIED
       properties:
         preference:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Preference"
+          $ref: "#/components/schemas/Preference"
       type: object
-    common.api.app.bbs.v1.user.UpdatePreferences_Request:
+    UpdateCurrentPreferences_Request:
       properties:
-        language:
-          type: string
         timezone:
           type: string
         theme:
           type: string
         mobile_theme:
           type: string
-        enable_web_notify:
-          type: boolean
-        enable_email_subscribe:
-          type: boolean
+        language:
+          enum:
+          - LANGUAGE_UNSPECIFIED
+          - LANGUAGE_ZH_CN
+          - LANGUAGE_ZH_TW
+          - LANGUAGE_EN
+          format: enum
+          type: string
       type: object
-    common.api.app.bbs.v1.user.UpdatePrivacySetting_Reply:
+    UpdateCurrentPrivacySetting_Reply:
       example:
         privacy_setting:
           public_followers: true
@@ -1263,9 +3088,9 @@ components:
           public_online_status: true
       properties:
         privacy_setting:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.PrivacySetting"
+          $ref: "#/components/schemas/PrivacySetting"
       type: object
-    common.api.app.bbs.v1.user.UpdatePrivacySetting_Request:
+    UpdateCurrentPrivacySetting_Request:
       properties:
         public_points:
           type: boolean
@@ -1280,29 +3105,93 @@ components:
         public_location:
           type: boolean
       type: object
-    common.api.app.bbs.v1.user.UpdateProfileAccount_Reply:
+    UpdateDraftArticle_Reply:
+      example:
+        article:
+          reward_content_render: reward_content_render
+          listable: true
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          id: id
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          like_count: 5
+          bounty_points: 9
+          has_postscript: true
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+          status: ARTICLE_STATUS_UNSPECIFIED
+      properties:
+        article:
+          $ref: "#/components/schemas/Article"
+      type: object
+    UpdateDraftArticle_Request:
+      properties:
+        article:
+          $ref: "#/components/schemas/ArticleSave"
+      type: object
+    UpdateProfileAccount_Reply:
       example:
         profile:
-          group_name: group_name
-          created_at: created_at
-          follower_count: 1
-          url: url
-          blocked_count: 5
           avatar_url: avatar_url
           updated_at: updated_at
-          follow_count: 6
+          follow_count: 3
           name: name
           nickname: nickname
-          mbti: mbti
-          block_count: 5
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
           id: id
+          follower_count: 2
+          url: url
           introduction: introduction
-          status: 0
+          status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         profile:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.AccountProfile"
+          $ref: "#/components/schemas/AccountProfile"
       type: object
-    common.api.app.bbs.v1.user.UpdateProfileAccount_Request:
+    UpdateProfileAccount_Request:
       properties:
         avatar_url:
           type: string
@@ -1313,9 +3202,28 @@ components:
         introduction:
           type: string
         mbti:
+          enum:
+          - MBTI_UNSPECIFIED
+          - MBTI_INTJ
+          - MBTI_INTP
+          - MBTI_ENTJ
+          - MBTI_ENTP
+          - MBTI_INFJ
+          - MBTI_INFP
+          - MBTI_ENFJ
+          - MBTI_ENFP
+          - MBTI_ISTJ
+          - MBTI_ISFJ
+          - MBTI_ESTJ
+          - MBTI_ESFJ
+          - MBTI_ISTP
+          - MBTI_ISFP
+          - MBTI_ESTP
+          - MBTI_ESFP
+          format: enum
           type: string
       type: object
-    common.api.app.bbs.v1.user.UpsertLocation_Reply:
+    UpsertCurrentLocation_Reply:
       example:
         location:
           country: country
@@ -1324,9 +3232,9 @@ components:
           city: city
       properties:
         location:
-          $ref: "#/components/schemas/common.api.app.bbs.v1.user.Location"
+          $ref: "#/components/schemas/Location"
       type: object
-    common.api.app.bbs.v1.user.UpsertLocation_Request:
+    UpsertCurrentLocation_Request:
       properties:
         country:
           type: string
@@ -1335,35 +3243,45 @@ components:
         city:
           type: string
       type: object
-    common.api.app.bbs.v1.user.ValidateTfa_Reply:
+    ValidateTfa_Reply:
       example:
         verified: true
       properties:
         verified:
           type: boolean
       type: object
-    common.api.app.bbs.v1.user.ValidateTfa_Request:
+    ValidateTfa_Request:
       properties:
         code:
           type: string
       type: object
-    common.api.app.bbs.v1.user.VerifyEmailRegister_Reply:
+    VerifyEmailRegistration_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.VerifyEmailRegister_Request:
+    VerifyEmailRegistration_Request:
       properties:
         code:
           type: string
         code_token:
           type: string
       type: object
-    common.api.app.bbs.v1.user.VerifyPhoneRegister_Reply:
+    VerifyPhoneRegistration_Reply:
       properties: {}
       type: object
-    common.api.app.bbs.v1.user.VerifyPhoneRegister_Request:
+    VerifyPhoneRegistration_Request:
       properties:
         code:
           type: string
         code_token:
           type: string
+      type: object
+    WatchArticle_Reply:
+      properties: {}
+      type: object
+    WatchArticle_Request:
+      properties:
+        article_id:
+          type: string
+        active:
+          type: boolean
       type: object

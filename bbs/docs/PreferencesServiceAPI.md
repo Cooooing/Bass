@@ -5,13 +5,13 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**PreferencesServiceGetCurrent**](PreferencesServiceAPI.md#PreferencesServiceGetCurrent) | **Post** /v1/user/preference/get-current | 
-[**PreferencesServiceUpdate**](PreferencesServiceAPI.md#PreferencesServiceUpdate) | **Post** /v1/user/preference/update-current | 
+[**PreferencesServiceUpdateCurrent**](PreferencesServiceAPI.md#PreferencesServiceUpdateCurrent) | **Post** /v1/user/preference/update-current | 
 
 
 
 ## PreferencesServiceGetCurrent
 
-> CommonApiAppBbsV1UserGetCurrentPreferencesReply PreferencesServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentPreferencesReply PreferencesServiceGetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesServiceAPI.PreferencesServiceGetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PreferencesServiceGetCurrent`: CommonApiAppBbsV1UserGetCurrentPreferencesReply
+	// response from `PreferencesServiceGetCurrent`: GetCurrentPreferencesReply
 	fmt.Fprintf(os.Stdout, "Response from `PreferencesServiceAPI.PreferencesServiceGetCurrent`: %v\n", resp)
 }
 ```
@@ -59,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CommonApiAppBbsV1UserGetCurrentPreferencesReply**](CommonApiAppBbsV1UserGetCurrentPreferencesReply.md)
+[**GetCurrentPreferencesReply**](GetCurrentPreferencesReply.md)
 
 ### Authorization
 
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PreferencesServiceUpdate
+## PreferencesServiceUpdateCurrent
 
-> CommonApiAppBbsV1UserUpdatePreferencesReply PreferencesServiceUpdate(ctx).CommonApiAppBbsV1UserUpdatePreferencesRequest(commonApiAppBbsV1UserUpdatePreferencesRequest).Execute()
+> UpdateCurrentPreferencesReply PreferencesServiceUpdateCurrent(ctx).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
 
 
 
@@ -96,17 +96,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserUpdatePreferencesRequest := *openapiclient.NewCommonApiAppBbsV1UserUpdatePreferencesRequest() // CommonApiAppBbsV1UserUpdatePreferencesRequest | 
+	updateCurrentPreferencesRequest := *openapiclient.NewUpdateCurrentPreferencesRequest() // UpdateCurrentPreferencesRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PreferencesServiceAPI.PreferencesServiceUpdate(context.Background()).CommonApiAppBbsV1UserUpdatePreferencesRequest(commonApiAppBbsV1UserUpdatePreferencesRequest).Execute()
+	resp, r, err := apiClient.PreferencesServiceAPI.PreferencesServiceUpdateCurrent(context.Background()).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesServiceAPI.PreferencesServiceUpdate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesServiceAPI.PreferencesServiceUpdateCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PreferencesServiceUpdate`: CommonApiAppBbsV1UserUpdatePreferencesReply
-	fmt.Fprintf(os.Stdout, "Response from `PreferencesServiceAPI.PreferencesServiceUpdate`: %v\n", resp)
+	// response from `PreferencesServiceUpdateCurrent`: UpdateCurrentPreferencesReply
+	fmt.Fprintf(os.Stdout, "Response from `PreferencesServiceAPI.PreferencesServiceUpdateCurrent`: %v\n", resp)
 }
 ```
 
@@ -116,16 +116,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPreferencesServiceUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPreferencesServiceUpdateCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserUpdatePreferencesRequest** | [**CommonApiAppBbsV1UserUpdatePreferencesRequest**](CommonApiAppBbsV1UserUpdatePreferencesRequest.md) |  | 
+ **updateCurrentPreferencesRequest** | [**UpdateCurrentPreferencesRequest**](UpdateCurrentPreferencesRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserUpdatePreferencesReply**](CommonApiAppBbsV1UserUpdatePreferencesReply.md)
+[**UpdateCurrentPreferencesReply**](UpdateCurrentPreferencesReply.md)
 
 ### Authorization
 

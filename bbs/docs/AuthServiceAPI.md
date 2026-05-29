@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AuthServiceLoginPassword**](AuthServiceAPI.md#AuthServiceLoginPassword) | **Post** /v1/user/auth/login-password | 
+[**AuthServiceLoginByPassword**](AuthServiceAPI.md#AuthServiceLoginByPassword) | **Post** /v1/user/auth/login-by-password | 
 [**AuthServiceLogout**](AuthServiceAPI.md#AuthServiceLogout) | **Post** /v1/user/auth/logout | 
-[**AuthServiceRegisterEmail**](AuthServiceAPI.md#AuthServiceRegisterEmail) | **Post** /v1/user/auth/register-email | 
-[**AuthServiceRegisterPhone**](AuthServiceAPI.md#AuthServiceRegisterPhone) | **Post** /v1/user/auth/register-phone | 
-[**AuthServiceVerifyEmailRegister**](AuthServiceAPI.md#AuthServiceVerifyEmailRegister) | **Post** /v1/user/auth/verify-email-register | 
-[**AuthServiceVerifyPhoneRegister**](AuthServiceAPI.md#AuthServiceVerifyPhoneRegister) | **Post** /v1/user/auth/verify-phone-register | 
+[**AuthServiceStartEmailRegistration**](AuthServiceAPI.md#AuthServiceStartEmailRegistration) | **Post** /v1/user/auth/start-email-registration | 
+[**AuthServiceStartPhoneRegistration**](AuthServiceAPI.md#AuthServiceStartPhoneRegistration) | **Post** /v1/user/auth/start-phone-registration | 
+[**AuthServiceVerifyEmailRegistration**](AuthServiceAPI.md#AuthServiceVerifyEmailRegistration) | **Post** /v1/user/auth/verify-email-registration | 
+[**AuthServiceVerifyPhoneRegistration**](AuthServiceAPI.md#AuthServiceVerifyPhoneRegistration) | **Post** /v1/user/auth/verify-phone-registration | 
 
 
 
-## AuthServiceLoginPassword
+## AuthServiceLoginByPassword
 
-> CommonApiAppBbsV1UserLoginPasswordReply AuthServiceLoginPassword(ctx).CommonApiAppBbsV1UserLoginPasswordRequest(commonApiAppBbsV1UserLoginPasswordRequest).Execute()
+> LoginByPasswordReply AuthServiceLoginByPassword(ctx).LoginByPasswordRequest(loginByPasswordRequest).Execute()
 
 
 
@@ -34,17 +34,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserLoginPasswordRequest := *openapiclient.NewCommonApiAppBbsV1UserLoginPasswordRequest() // CommonApiAppBbsV1UserLoginPasswordRequest | 
+	loginByPasswordRequest := *openapiclient.NewLoginByPasswordRequest() // LoginByPasswordRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceLoginPassword(context.Background()).CommonApiAppBbsV1UserLoginPasswordRequest(commonApiAppBbsV1UserLoginPasswordRequest).Execute()
+	resp, r, err := apiClient.AuthServiceAPI.AuthServiceLoginByPassword(context.Background()).LoginByPasswordRequest(loginByPasswordRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceLoginPassword``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceLoginByPassword``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceLoginPassword`: CommonApiAppBbsV1UserLoginPasswordReply
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceLoginPassword`: %v\n", resp)
+	// response from `AuthServiceLoginByPassword`: LoginByPasswordReply
+	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceLoginByPassword`: %v\n", resp)
 }
 ```
 
@@ -54,16 +54,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceLoginPasswordRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAuthServiceLoginByPasswordRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserLoginPasswordRequest** | [**CommonApiAppBbsV1UserLoginPasswordRequest**](CommonApiAppBbsV1UserLoginPasswordRequest.md) |  | 
+ **loginByPasswordRequest** | [**LoginByPasswordRequest**](LoginByPasswordRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserLoginPasswordReply**](CommonApiAppBbsV1UserLoginPasswordReply.md)
+[**LoginByPasswordReply**](LoginByPasswordReply.md)
 
 ### Authorization
 
@@ -145,9 +145,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceRegisterEmail
+## AuthServiceStartEmailRegistration
 
-> CommonApiAppBbsV1UserRegisterEmailReply AuthServiceRegisterEmail(ctx).CommonApiAppBbsV1UserRegisterEmailRequest(commonApiAppBbsV1UserRegisterEmailRequest).Execute()
+> StartEmailRegistrationReply AuthServiceStartEmailRegistration(ctx).StartEmailRegistrationRequest(startEmailRegistrationRequest).Execute()
 
 
 
@@ -166,17 +166,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserRegisterEmailRequest := *openapiclient.NewCommonApiAppBbsV1UserRegisterEmailRequest() // CommonApiAppBbsV1UserRegisterEmailRequest | 
+	startEmailRegistrationRequest := *openapiclient.NewStartEmailRegistrationRequest() // StartEmailRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceRegisterEmail(context.Background()).CommonApiAppBbsV1UserRegisterEmailRequest(commonApiAppBbsV1UserRegisterEmailRequest).Execute()
+	resp, r, err := apiClient.AuthServiceAPI.AuthServiceStartEmailRegistration(context.Background()).StartEmailRegistrationRequest(startEmailRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceRegisterEmail``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceStartEmailRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceRegisterEmail`: CommonApiAppBbsV1UserRegisterEmailReply
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceRegisterEmail`: %v\n", resp)
+	// response from `AuthServiceStartEmailRegistration`: StartEmailRegistrationReply
+	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceStartEmailRegistration`: %v\n", resp)
 }
 ```
 
@@ -186,16 +186,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceRegisterEmailRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAuthServiceStartEmailRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserRegisterEmailRequest** | [**CommonApiAppBbsV1UserRegisterEmailRequest**](CommonApiAppBbsV1UserRegisterEmailRequest.md) |  | 
+ **startEmailRegistrationRequest** | [**StartEmailRegistrationRequest**](StartEmailRegistrationRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserRegisterEmailReply**](CommonApiAppBbsV1UserRegisterEmailReply.md)
+[**StartEmailRegistrationReply**](StartEmailRegistrationReply.md)
 
 ### Authorization
 
@@ -211,9 +211,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceRegisterPhone
+## AuthServiceStartPhoneRegistration
 
-> CommonApiAppBbsV1UserRegisterPhoneReply AuthServiceRegisterPhone(ctx).CommonApiAppBbsV1UserRegisterPhoneRequest(commonApiAppBbsV1UserRegisterPhoneRequest).Execute()
+> StartPhoneRegistrationReply AuthServiceStartPhoneRegistration(ctx).StartPhoneRegistrationRequest(startPhoneRegistrationRequest).Execute()
 
 
 
@@ -232,17 +232,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserRegisterPhoneRequest := *openapiclient.NewCommonApiAppBbsV1UserRegisterPhoneRequest() // CommonApiAppBbsV1UserRegisterPhoneRequest | 
+	startPhoneRegistrationRequest := *openapiclient.NewStartPhoneRegistrationRequest() // StartPhoneRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceRegisterPhone(context.Background()).CommonApiAppBbsV1UserRegisterPhoneRequest(commonApiAppBbsV1UserRegisterPhoneRequest).Execute()
+	resp, r, err := apiClient.AuthServiceAPI.AuthServiceStartPhoneRegistration(context.Background()).StartPhoneRegistrationRequest(startPhoneRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceRegisterPhone``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceStartPhoneRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceRegisterPhone`: CommonApiAppBbsV1UserRegisterPhoneReply
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceRegisterPhone`: %v\n", resp)
+	// response from `AuthServiceStartPhoneRegistration`: StartPhoneRegistrationReply
+	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceStartPhoneRegistration`: %v\n", resp)
 }
 ```
 
@@ -252,16 +252,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceRegisterPhoneRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAuthServiceStartPhoneRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserRegisterPhoneRequest** | [**CommonApiAppBbsV1UserRegisterPhoneRequest**](CommonApiAppBbsV1UserRegisterPhoneRequest.md) |  | 
+ **startPhoneRegistrationRequest** | [**StartPhoneRegistrationRequest**](StartPhoneRegistrationRequest.md) |  | 
 
 ### Return type
 
-[**CommonApiAppBbsV1UserRegisterPhoneReply**](CommonApiAppBbsV1UserRegisterPhoneReply.md)
+[**StartPhoneRegistrationReply**](StartPhoneRegistrationReply.md)
 
 ### Authorization
 
@@ -277,9 +277,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceVerifyEmailRegister
+## AuthServiceVerifyEmailRegistration
 
-> map[string]interface{} AuthServiceVerifyEmailRegister(ctx).CommonApiAppBbsV1UserVerifyEmailRegisterRequest(commonApiAppBbsV1UserVerifyEmailRegisterRequest).Execute()
+> map[string]interface{} AuthServiceVerifyEmailRegistration(ctx).VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest).Execute()
 
 
 
@@ -298,17 +298,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserVerifyEmailRegisterRequest := *openapiclient.NewCommonApiAppBbsV1UserVerifyEmailRegisterRequest() // CommonApiAppBbsV1UserVerifyEmailRegisterRequest | 
+	verifyEmailRegistrationRequest := *openapiclient.NewVerifyEmailRegistrationRequest() // VerifyEmailRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceVerifyEmailRegister(context.Background()).CommonApiAppBbsV1UserVerifyEmailRegisterRequest(commonApiAppBbsV1UserVerifyEmailRegisterRequest).Execute()
+	resp, r, err := apiClient.AuthServiceAPI.AuthServiceVerifyEmailRegistration(context.Background()).VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceVerifyEmailRegister``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceVerifyEmailRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceVerifyEmailRegister`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceVerifyEmailRegister`: %v\n", resp)
+	// response from `AuthServiceVerifyEmailRegistration`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceVerifyEmailRegistration`: %v\n", resp)
 }
 ```
 
@@ -318,12 +318,12 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceVerifyEmailRegisterRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAuthServiceVerifyEmailRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserVerifyEmailRegisterRequest** | [**CommonApiAppBbsV1UserVerifyEmailRegisterRequest**](CommonApiAppBbsV1UserVerifyEmailRegisterRequest.md) |  | 
+ **verifyEmailRegistrationRequest** | [**VerifyEmailRegistrationRequest**](VerifyEmailRegistrationRequest.md) |  | 
 
 ### Return type
 
@@ -343,9 +343,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceVerifyPhoneRegister
+## AuthServiceVerifyPhoneRegistration
 
-> map[string]interface{} AuthServiceVerifyPhoneRegister(ctx).CommonApiAppBbsV1UserVerifyPhoneRegisterRequest(commonApiAppBbsV1UserVerifyPhoneRegisterRequest).Execute()
+> map[string]interface{} AuthServiceVerifyPhoneRegistration(ctx).VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest).Execute()
 
 
 
@@ -364,17 +364,17 @@ import (
 )
 
 func main() {
-	commonApiAppBbsV1UserVerifyPhoneRegisterRequest := *openapiclient.NewCommonApiAppBbsV1UserVerifyPhoneRegisterRequest() // CommonApiAppBbsV1UserVerifyPhoneRegisterRequest | 
+	verifyPhoneRegistrationRequest := *openapiclient.NewVerifyPhoneRegistrationRequest() // VerifyPhoneRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceVerifyPhoneRegister(context.Background()).CommonApiAppBbsV1UserVerifyPhoneRegisterRequest(commonApiAppBbsV1UserVerifyPhoneRegisterRequest).Execute()
+	resp, r, err := apiClient.AuthServiceAPI.AuthServiceVerifyPhoneRegistration(context.Background()).VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceVerifyPhoneRegister``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceVerifyPhoneRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceVerifyPhoneRegister`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceVerifyPhoneRegister`: %v\n", resp)
+	// response from `AuthServiceVerifyPhoneRegistration`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceVerifyPhoneRegistration`: %v\n", resp)
 }
 ```
 
@@ -384,12 +384,12 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceVerifyPhoneRegisterRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAuthServiceVerifyPhoneRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **commonApiAppBbsV1UserVerifyPhoneRegisterRequest** | [**CommonApiAppBbsV1UserVerifyPhoneRegisterRequest**](CommonApiAppBbsV1UserVerifyPhoneRegisterRequest.md) |  | 
+ **verifyPhoneRegistrationRequest** | [**VerifyPhoneRegistrationRequest**](VerifyPhoneRegistrationRequest.md) |  | 
 
 ### Return type
 

@@ -32,8 +32,8 @@ type TfaServiceAPI interface {
 	TfaServiceBeginEnable(ctx context.Context) ApiTfaServiceBeginEnableRequest
 
 	// TfaServiceBeginEnableExecute executes the request
-	//  @return CommonApiAppBbsV1UserBeginEnableTfaReply
-	TfaServiceBeginEnableExecute(r ApiTfaServiceBeginEnableRequest) (*CommonApiAppBbsV1UserBeginEnableTfaReply, *http.Response, error)
+	//  @return BeginEnableTfaReply
+	TfaServiceBeginEnableExecute(r ApiTfaServiceBeginEnableRequest) (*BeginEnableTfaReply, *http.Response, error)
 
 	/*
 	TfaServiceConfirmEnable Method for TfaServiceConfirmEnable
@@ -74,8 +74,8 @@ type TfaServiceAPI interface {
 	TfaServiceGetCurrent(ctx context.Context) ApiTfaServiceGetCurrentRequest
 
 	// TfaServiceGetCurrentExecute executes the request
-	//  @return CommonApiAppBbsV1UserGetCurrentTfaReply
-	TfaServiceGetCurrentExecute(r ApiTfaServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentTfaReply, *http.Response, error)
+	//  @return GetCurrentTfaReply
+	TfaServiceGetCurrentExecute(r ApiTfaServiceGetCurrentRequest) (*GetCurrentTfaReply, *http.Response, error)
 
 	/*
 	TfaServiceValidate Method for TfaServiceValidate
@@ -88,8 +88,8 @@ type TfaServiceAPI interface {
 	TfaServiceValidate(ctx context.Context) ApiTfaServiceValidateRequest
 
 	// TfaServiceValidateExecute executes the request
-	//  @return CommonApiAppBbsV1UserValidateTfaReply
-	TfaServiceValidateExecute(r ApiTfaServiceValidateRequest) (*CommonApiAppBbsV1UserValidateTfaReply, *http.Response, error)
+	//  @return ValidateTfaReply
+	TfaServiceValidateExecute(r ApiTfaServiceValidateRequest) (*ValidateTfaReply, *http.Response, error)
 }
 
 // TfaServiceAPIService TfaServiceAPI service
@@ -106,7 +106,7 @@ func (r ApiTfaServiceBeginEnableRequest) Body(body map[string]interface{}) ApiTf
 	return r
 }
 
-func (r ApiTfaServiceBeginEnableRequest) Execute() (*CommonApiAppBbsV1UserBeginEnableTfaReply, *http.Response, error) {
+func (r ApiTfaServiceBeginEnableRequest) Execute() (*BeginEnableTfaReply, *http.Response, error) {
 	return r.ApiService.TfaServiceBeginEnableExecute(r)
 }
 
@@ -126,13 +126,13 @@ func (a *TfaServiceAPIService) TfaServiceBeginEnable(ctx context.Context) ApiTfa
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserBeginEnableTfaReply
-func (a *TfaServiceAPIService) TfaServiceBeginEnableExecute(r ApiTfaServiceBeginEnableRequest) (*CommonApiAppBbsV1UserBeginEnableTfaReply, *http.Response, error) {
+//  @return BeginEnableTfaReply
+func (a *TfaServiceAPIService) TfaServiceBeginEnableExecute(r ApiTfaServiceBeginEnableRequest) (*BeginEnableTfaReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserBeginEnableTfaReply
+		localVarReturnValue  *BeginEnableTfaReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceBeginEnable")
@@ -208,11 +208,11 @@ func (a *TfaServiceAPIService) TfaServiceBeginEnableExecute(r ApiTfaServiceBegin
 type ApiTfaServiceConfirmEnableRequest struct {
 	ctx context.Context
 	ApiService TfaServiceAPI
-	commonApiAppBbsV1UserConfirmEnableTfaRequest *CommonApiAppBbsV1UserConfirmEnableTfaRequest
+	confirmEnableTfaRequest *ConfirmEnableTfaRequest
 }
 
-func (r ApiTfaServiceConfirmEnableRequest) CommonApiAppBbsV1UserConfirmEnableTfaRequest(commonApiAppBbsV1UserConfirmEnableTfaRequest CommonApiAppBbsV1UserConfirmEnableTfaRequest) ApiTfaServiceConfirmEnableRequest {
-	r.commonApiAppBbsV1UserConfirmEnableTfaRequest = &commonApiAppBbsV1UserConfirmEnableTfaRequest
+func (r ApiTfaServiceConfirmEnableRequest) ConfirmEnableTfaRequest(confirmEnableTfaRequest ConfirmEnableTfaRequest) ApiTfaServiceConfirmEnableRequest {
+	r.confirmEnableTfaRequest = &confirmEnableTfaRequest
 	return r
 }
 
@@ -255,8 +255,8 @@ func (a *TfaServiceAPIService) TfaServiceConfirmEnableExecute(r ApiTfaServiceCon
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserConfirmEnableTfaRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserConfirmEnableTfaRequest is required and must be specified")
+	if r.confirmEnableTfaRequest == nil {
+		return localVarReturnValue, nil, reportError("confirmEnableTfaRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -277,7 +277,7 @@ func (a *TfaServiceAPIService) TfaServiceConfirmEnableExecute(r ApiTfaServiceCon
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserConfirmEnableTfaRequest
+	localVarPostBody = r.confirmEnableTfaRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -318,11 +318,11 @@ func (a *TfaServiceAPIService) TfaServiceConfirmEnableExecute(r ApiTfaServiceCon
 type ApiTfaServiceDisableRequest struct {
 	ctx context.Context
 	ApiService TfaServiceAPI
-	commonApiAppBbsV1UserDisableTfaRequest *CommonApiAppBbsV1UserDisableTfaRequest
+	disableTfaRequest *DisableTfaRequest
 }
 
-func (r ApiTfaServiceDisableRequest) CommonApiAppBbsV1UserDisableTfaRequest(commonApiAppBbsV1UserDisableTfaRequest CommonApiAppBbsV1UserDisableTfaRequest) ApiTfaServiceDisableRequest {
-	r.commonApiAppBbsV1UserDisableTfaRequest = &commonApiAppBbsV1UserDisableTfaRequest
+func (r ApiTfaServiceDisableRequest) DisableTfaRequest(disableTfaRequest DisableTfaRequest) ApiTfaServiceDisableRequest {
+	r.disableTfaRequest = &disableTfaRequest
 	return r
 }
 
@@ -365,8 +365,8 @@ func (a *TfaServiceAPIService) TfaServiceDisableExecute(r ApiTfaServiceDisableRe
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserDisableTfaRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserDisableTfaRequest is required and must be specified")
+	if r.disableTfaRequest == nil {
+		return localVarReturnValue, nil, reportError("disableTfaRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -387,7 +387,7 @@ func (a *TfaServiceAPIService) TfaServiceDisableExecute(r ApiTfaServiceDisableRe
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserDisableTfaRequest
+	localVarPostBody = r.disableTfaRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -436,7 +436,7 @@ func (r ApiTfaServiceGetCurrentRequest) Body(body map[string]interface{}) ApiTfa
 	return r
 }
 
-func (r ApiTfaServiceGetCurrentRequest) Execute() (*CommonApiAppBbsV1UserGetCurrentTfaReply, *http.Response, error) {
+func (r ApiTfaServiceGetCurrentRequest) Execute() (*GetCurrentTfaReply, *http.Response, error) {
 	return r.ApiService.TfaServiceGetCurrentExecute(r)
 }
 
@@ -456,13 +456,13 @@ func (a *TfaServiceAPIService) TfaServiceGetCurrent(ctx context.Context) ApiTfaS
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserGetCurrentTfaReply
-func (a *TfaServiceAPIService) TfaServiceGetCurrentExecute(r ApiTfaServiceGetCurrentRequest) (*CommonApiAppBbsV1UserGetCurrentTfaReply, *http.Response, error) {
+//  @return GetCurrentTfaReply
+func (a *TfaServiceAPIService) TfaServiceGetCurrentExecute(r ApiTfaServiceGetCurrentRequest) (*GetCurrentTfaReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserGetCurrentTfaReply
+		localVarReturnValue  *GetCurrentTfaReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceGetCurrent")
@@ -538,15 +538,15 @@ func (a *TfaServiceAPIService) TfaServiceGetCurrentExecute(r ApiTfaServiceGetCur
 type ApiTfaServiceValidateRequest struct {
 	ctx context.Context
 	ApiService TfaServiceAPI
-	commonApiAppBbsV1UserValidateTfaRequest *CommonApiAppBbsV1UserValidateTfaRequest
+	validateTfaRequest *ValidateTfaRequest
 }
 
-func (r ApiTfaServiceValidateRequest) CommonApiAppBbsV1UserValidateTfaRequest(commonApiAppBbsV1UserValidateTfaRequest CommonApiAppBbsV1UserValidateTfaRequest) ApiTfaServiceValidateRequest {
-	r.commonApiAppBbsV1UserValidateTfaRequest = &commonApiAppBbsV1UserValidateTfaRequest
+func (r ApiTfaServiceValidateRequest) ValidateTfaRequest(validateTfaRequest ValidateTfaRequest) ApiTfaServiceValidateRequest {
+	r.validateTfaRequest = &validateTfaRequest
 	return r
 }
 
-func (r ApiTfaServiceValidateRequest) Execute() (*CommonApiAppBbsV1UserValidateTfaReply, *http.Response, error) {
+func (r ApiTfaServiceValidateRequest) Execute() (*ValidateTfaReply, *http.Response, error) {
 	return r.ApiService.TfaServiceValidateExecute(r)
 }
 
@@ -566,13 +566,13 @@ func (a *TfaServiceAPIService) TfaServiceValidate(ctx context.Context) ApiTfaSer
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserValidateTfaReply
-func (a *TfaServiceAPIService) TfaServiceValidateExecute(r ApiTfaServiceValidateRequest) (*CommonApiAppBbsV1UserValidateTfaReply, *http.Response, error) {
+//  @return ValidateTfaReply
+func (a *TfaServiceAPIService) TfaServiceValidateExecute(r ApiTfaServiceValidateRequest) (*ValidateTfaReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserValidateTfaReply
+		localVarReturnValue  *ValidateTfaReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceValidate")
@@ -585,8 +585,8 @@ func (a *TfaServiceAPIService) TfaServiceValidateExecute(r ApiTfaServiceValidate
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserValidateTfaRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserValidateTfaRequest is required and must be specified")
+	if r.validateTfaRequest == nil {
+		return localVarReturnValue, nil, reportError("validateTfaRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -607,7 +607,7 @@ func (a *TfaServiceAPIService) TfaServiceValidateExecute(r ApiTfaServiceValidate
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserValidateTfaRequest
+	localVarPostBody = r.validateTfaRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

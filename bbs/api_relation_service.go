@@ -22,20 +22,6 @@ import (
 type RelationServiceAPI interface {
 
 	/*
-	RelationServiceBatchGetStatus Method for RelationServiceBatchGetStatus
-
-	批量查询当前账号与多个目标账号之间的关系状态
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRelationServiceBatchGetStatusRequest
-	*/
-	RelationServiceBatchGetStatus(ctx context.Context) ApiRelationServiceBatchGetStatusRequest
-
-	// RelationServiceBatchGetStatusExecute executes the request
-	//  @return CommonApiAppBbsV1UserBatchGetStatusRelationReply
-	RelationServiceBatchGetStatusExecute(r ApiRelationServiceBatchGetStatusRequest) (*CommonApiAppBbsV1UserBatchGetStatusRelationReply, *http.Response, error)
-
-	/*
 	RelationServiceBlock Method for RelationServiceBlock
 
 	当前账号拉黑目标账号
@@ -64,46 +50,60 @@ type RelationServiceAPI interface {
 	RelationServiceFollowExecute(r ApiRelationServiceFollowRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	RelationServicePageBlocked Method for RelationServicePageBlocked
+	RelationServiceGetStatus Method for RelationServiceGetStatus
+
+	查询当前账号与目标账号之间的关系
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiRelationServiceGetStatusRequest
+	*/
+	RelationServiceGetStatus(ctx context.Context) ApiRelationServiceGetStatusRequest
+
+	// RelationServiceGetStatusExecute executes the request
+	//  @return GetStatusRelationReply
+	RelationServiceGetStatusExecute(r ApiRelationServiceGetStatusRequest) (*GetStatusRelationReply, *http.Response, error)
+
+	/*
+	RelationServiceListBlocked Method for RelationServiceListBlocked
 
 	分页查询当前账号拉黑的账号列表
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRelationServicePageBlockedRequest
+	@return ApiRelationServiceListBlockedRequest
 	*/
-	RelationServicePageBlocked(ctx context.Context) ApiRelationServicePageBlockedRequest
+	RelationServiceListBlocked(ctx context.Context) ApiRelationServiceListBlockedRequest
 
-	// RelationServicePageBlockedExecute executes the request
-	//  @return CommonApiAppBbsV1UserPageBlockedRelationReply
-	RelationServicePageBlockedExecute(r ApiRelationServicePageBlockedRequest) (*CommonApiAppBbsV1UserPageBlockedRelationReply, *http.Response, error)
+	// RelationServiceListBlockedExecute executes the request
+	//  @return ListBlockedRelationsReply
+	RelationServiceListBlockedExecute(r ApiRelationServiceListBlockedRequest) (*ListBlockedRelationsReply, *http.Response, error)
 
 	/*
-	RelationServicePageFollowers Method for RelationServicePageFollowers
+	RelationServiceListFollowers Method for RelationServiceListFollowers
 
 	分页查询当前账号的粉丝账号列表
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRelationServicePageFollowersRequest
+	@return ApiRelationServiceListFollowersRequest
 	*/
-	RelationServicePageFollowers(ctx context.Context) ApiRelationServicePageFollowersRequest
+	RelationServiceListFollowers(ctx context.Context) ApiRelationServiceListFollowersRequest
 
-	// RelationServicePageFollowersExecute executes the request
-	//  @return CommonApiAppBbsV1UserPageFollowersRelationReply
-	RelationServicePageFollowersExecute(r ApiRelationServicePageFollowersRequest) (*CommonApiAppBbsV1UserPageFollowersRelationReply, *http.Response, error)
+	// RelationServiceListFollowersExecute executes the request
+	//  @return ListFollowersRelationsReply
+	RelationServiceListFollowersExecute(r ApiRelationServiceListFollowersRequest) (*ListFollowersRelationsReply, *http.Response, error)
 
 	/*
-	RelationServicePageFollowing Method for RelationServicePageFollowing
+	RelationServiceListFollowing Method for RelationServiceListFollowing
 
 	分页查询当前账号关注的账号列表
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRelationServicePageFollowingRequest
+	@return ApiRelationServiceListFollowingRequest
 	*/
-	RelationServicePageFollowing(ctx context.Context) ApiRelationServicePageFollowingRequest
+	RelationServiceListFollowing(ctx context.Context) ApiRelationServiceListFollowingRequest
 
-	// RelationServicePageFollowingExecute executes the request
-	//  @return CommonApiAppBbsV1UserPageFollowingRelationReply
-	RelationServicePageFollowingExecute(r ApiRelationServicePageFollowingRequest) (*CommonApiAppBbsV1UserPageFollowingRelationReply, *http.Response, error)
+	// RelationServiceListFollowingExecute executes the request
+	//  @return ListFollowingRelationsReply
+	RelationServiceListFollowingExecute(r ApiRelationServiceListFollowingRequest) (*ListFollowingRelationsReply, *http.Response, error)
 
 	/*
 	RelationServiceUnblock Method for RelationServiceUnblock
@@ -137,124 +137,14 @@ type RelationServiceAPI interface {
 // RelationServiceAPIService RelationServiceAPI service
 type RelationServiceAPIService service
 
-type ApiRelationServiceBatchGetStatusRequest struct {
-	ctx context.Context
-	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserBatchGetStatusRelationRequest *CommonApiAppBbsV1UserBatchGetStatusRelationRequest
-}
-
-func (r ApiRelationServiceBatchGetStatusRequest) CommonApiAppBbsV1UserBatchGetStatusRelationRequest(commonApiAppBbsV1UserBatchGetStatusRelationRequest CommonApiAppBbsV1UserBatchGetStatusRelationRequest) ApiRelationServiceBatchGetStatusRequest {
-	r.commonApiAppBbsV1UserBatchGetStatusRelationRequest = &commonApiAppBbsV1UserBatchGetStatusRelationRequest
-	return r
-}
-
-func (r ApiRelationServiceBatchGetStatusRequest) Execute() (*CommonApiAppBbsV1UserBatchGetStatusRelationReply, *http.Response, error) {
-	return r.ApiService.RelationServiceBatchGetStatusExecute(r)
-}
-
-/*
-RelationServiceBatchGetStatus Method for RelationServiceBatchGetStatus
-
-批量查询当前账号与多个目标账号之间的关系状态
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRelationServiceBatchGetStatusRequest
-*/
-func (a *RelationServiceAPIService) RelationServiceBatchGetStatus(ctx context.Context) ApiRelationServiceBatchGetStatusRequest {
-	return ApiRelationServiceBatchGetStatusRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return CommonApiAppBbsV1UserBatchGetStatusRelationReply
-func (a *RelationServiceAPIService) RelationServiceBatchGetStatusExecute(r ApiRelationServiceBatchGetStatusRequest) (*CommonApiAppBbsV1UserBatchGetStatusRelationReply, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserBatchGetStatusRelationReply
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServiceBatchGetStatus")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/user/relation/batch-get-status"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserBatchGetStatusRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserBatchGetStatusRelationRequest is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserBatchGetStatusRelationRequest
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
 type ApiRelationServiceBlockRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserBlockRelationRequest *CommonApiAppBbsV1UserBlockRelationRequest
+	blockRelationRequest *BlockRelationRequest
 }
 
-func (r ApiRelationServiceBlockRequest) CommonApiAppBbsV1UserBlockRelationRequest(commonApiAppBbsV1UserBlockRelationRequest CommonApiAppBbsV1UserBlockRelationRequest) ApiRelationServiceBlockRequest {
-	r.commonApiAppBbsV1UserBlockRelationRequest = &commonApiAppBbsV1UserBlockRelationRequest
+func (r ApiRelationServiceBlockRequest) BlockRelationRequest(blockRelationRequest BlockRelationRequest) ApiRelationServiceBlockRequest {
+	r.blockRelationRequest = &blockRelationRequest
 	return r
 }
 
@@ -297,8 +187,8 @@ func (a *RelationServiceAPIService) RelationServiceBlockExecute(r ApiRelationSer
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserBlockRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserBlockRelationRequest is required and must be specified")
+	if r.blockRelationRequest == nil {
+		return localVarReturnValue, nil, reportError("blockRelationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -319,7 +209,7 @@ func (a *RelationServiceAPIService) RelationServiceBlockExecute(r ApiRelationSer
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserBlockRelationRequest
+	localVarPostBody = r.blockRelationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -360,11 +250,11 @@ func (a *RelationServiceAPIService) RelationServiceBlockExecute(r ApiRelationSer
 type ApiRelationServiceFollowRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserFollowRelationRequest *CommonApiAppBbsV1UserFollowRelationRequest
+	followRelationRequest *FollowRelationRequest
 }
 
-func (r ApiRelationServiceFollowRequest) CommonApiAppBbsV1UserFollowRelationRequest(commonApiAppBbsV1UserFollowRelationRequest CommonApiAppBbsV1UserFollowRelationRequest) ApiRelationServiceFollowRequest {
-	r.commonApiAppBbsV1UserFollowRelationRequest = &commonApiAppBbsV1UserFollowRelationRequest
+func (r ApiRelationServiceFollowRequest) FollowRelationRequest(followRelationRequest FollowRelationRequest) ApiRelationServiceFollowRequest {
+	r.followRelationRequest = &followRelationRequest
 	return r
 }
 
@@ -407,8 +297,8 @@ func (a *RelationServiceAPIService) RelationServiceFollowExecute(r ApiRelationSe
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserFollowRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserFollowRelationRequest is required and must be specified")
+	if r.followRelationRequest == nil {
+		return localVarReturnValue, nil, reportError("followRelationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -429,7 +319,7 @@ func (a *RelationServiceAPIService) RelationServiceFollowExecute(r ApiRelationSe
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserFollowRelationRequest
+	localVarPostBody = r.followRelationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -467,58 +357,168 @@ func (a *RelationServiceAPIService) RelationServiceFollowExecute(r ApiRelationSe
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRelationServicePageBlockedRequest struct {
+type ApiRelationServiceGetStatusRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserPageBlockedRelationRequest *CommonApiAppBbsV1UserPageBlockedRelationRequest
+	getStatusRelationRequest *GetStatusRelationRequest
 }
 
-func (r ApiRelationServicePageBlockedRequest) CommonApiAppBbsV1UserPageBlockedRelationRequest(commonApiAppBbsV1UserPageBlockedRelationRequest CommonApiAppBbsV1UserPageBlockedRelationRequest) ApiRelationServicePageBlockedRequest {
-	r.commonApiAppBbsV1UserPageBlockedRelationRequest = &commonApiAppBbsV1UserPageBlockedRelationRequest
+func (r ApiRelationServiceGetStatusRequest) GetStatusRelationRequest(getStatusRelationRequest GetStatusRelationRequest) ApiRelationServiceGetStatusRequest {
+	r.getStatusRelationRequest = &getStatusRelationRequest
 	return r
 }
 
-func (r ApiRelationServicePageBlockedRequest) Execute() (*CommonApiAppBbsV1UserPageBlockedRelationReply, *http.Response, error) {
-	return r.ApiService.RelationServicePageBlockedExecute(r)
+func (r ApiRelationServiceGetStatusRequest) Execute() (*GetStatusRelationReply, *http.Response, error) {
+	return r.ApiService.RelationServiceGetStatusExecute(r)
 }
 
 /*
-RelationServicePageBlocked Method for RelationServicePageBlocked
+RelationServiceGetStatus Method for RelationServiceGetStatus
+
+查询当前账号与目标账号之间的关系
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiRelationServiceGetStatusRequest
+*/
+func (a *RelationServiceAPIService) RelationServiceGetStatus(ctx context.Context) ApiRelationServiceGetStatusRequest {
+	return ApiRelationServiceGetStatusRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return GetStatusRelationReply
+func (a *RelationServiceAPIService) RelationServiceGetStatusExecute(r ApiRelationServiceGetStatusRequest) (*GetStatusRelationReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GetStatusRelationReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServiceGetStatus")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/relation/get-status"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.getStatusRelationRequest == nil {
+		return localVarReturnValue, nil, reportError("getStatusRelationRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.getStatusRelationRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiRelationServiceListBlockedRequest struct {
+	ctx context.Context
+	ApiService RelationServiceAPI
+	listBlockedRelationsRequest *ListBlockedRelationsRequest
+}
+
+func (r ApiRelationServiceListBlockedRequest) ListBlockedRelationsRequest(listBlockedRelationsRequest ListBlockedRelationsRequest) ApiRelationServiceListBlockedRequest {
+	r.listBlockedRelationsRequest = &listBlockedRelationsRequest
+	return r
+}
+
+func (r ApiRelationServiceListBlockedRequest) Execute() (*ListBlockedRelationsReply, *http.Response, error) {
+	return r.ApiService.RelationServiceListBlockedExecute(r)
+}
+
+/*
+RelationServiceListBlocked Method for RelationServiceListBlocked
 
 分页查询当前账号拉黑的账号列表
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRelationServicePageBlockedRequest
+ @return ApiRelationServiceListBlockedRequest
 */
-func (a *RelationServiceAPIService) RelationServicePageBlocked(ctx context.Context) ApiRelationServicePageBlockedRequest {
-	return ApiRelationServicePageBlockedRequest{
+func (a *RelationServiceAPIService) RelationServiceListBlocked(ctx context.Context) ApiRelationServiceListBlockedRequest {
+	return ApiRelationServiceListBlockedRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserPageBlockedRelationReply
-func (a *RelationServiceAPIService) RelationServicePageBlockedExecute(r ApiRelationServicePageBlockedRequest) (*CommonApiAppBbsV1UserPageBlockedRelationReply, *http.Response, error) {
+//  @return ListBlockedRelationsReply
+func (a *RelationServiceAPIService) RelationServiceListBlockedExecute(r ApiRelationServiceListBlockedRequest) (*ListBlockedRelationsReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserPageBlockedRelationReply
+		localVarReturnValue  *ListBlockedRelationsReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServicePageBlocked")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServiceListBlocked")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/relation/page-blocked"
+	localVarPath := localBasePath + "/v1/user/relation/list-blocked"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserPageBlockedRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserPageBlockedRelationRequest is required and must be specified")
+	if r.listBlockedRelationsRequest == nil {
+		return localVarReturnValue, nil, reportError("listBlockedRelationsRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -539,7 +539,7 @@ func (a *RelationServiceAPIService) RelationServicePageBlockedExecute(r ApiRelat
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserPageBlockedRelationRequest
+	localVarPostBody = r.listBlockedRelationsRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -577,58 +577,58 @@ func (a *RelationServiceAPIService) RelationServicePageBlockedExecute(r ApiRelat
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRelationServicePageFollowersRequest struct {
+type ApiRelationServiceListFollowersRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserPageFollowersRelationRequest *CommonApiAppBbsV1UserPageFollowersRelationRequest
+	listFollowersRelationsRequest *ListFollowersRelationsRequest
 }
 
-func (r ApiRelationServicePageFollowersRequest) CommonApiAppBbsV1UserPageFollowersRelationRequest(commonApiAppBbsV1UserPageFollowersRelationRequest CommonApiAppBbsV1UserPageFollowersRelationRequest) ApiRelationServicePageFollowersRequest {
-	r.commonApiAppBbsV1UserPageFollowersRelationRequest = &commonApiAppBbsV1UserPageFollowersRelationRequest
+func (r ApiRelationServiceListFollowersRequest) ListFollowersRelationsRequest(listFollowersRelationsRequest ListFollowersRelationsRequest) ApiRelationServiceListFollowersRequest {
+	r.listFollowersRelationsRequest = &listFollowersRelationsRequest
 	return r
 }
 
-func (r ApiRelationServicePageFollowersRequest) Execute() (*CommonApiAppBbsV1UserPageFollowersRelationReply, *http.Response, error) {
-	return r.ApiService.RelationServicePageFollowersExecute(r)
+func (r ApiRelationServiceListFollowersRequest) Execute() (*ListFollowersRelationsReply, *http.Response, error) {
+	return r.ApiService.RelationServiceListFollowersExecute(r)
 }
 
 /*
-RelationServicePageFollowers Method for RelationServicePageFollowers
+RelationServiceListFollowers Method for RelationServiceListFollowers
 
 分页查询当前账号的粉丝账号列表
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRelationServicePageFollowersRequest
+ @return ApiRelationServiceListFollowersRequest
 */
-func (a *RelationServiceAPIService) RelationServicePageFollowers(ctx context.Context) ApiRelationServicePageFollowersRequest {
-	return ApiRelationServicePageFollowersRequest{
+func (a *RelationServiceAPIService) RelationServiceListFollowers(ctx context.Context) ApiRelationServiceListFollowersRequest {
+	return ApiRelationServiceListFollowersRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserPageFollowersRelationReply
-func (a *RelationServiceAPIService) RelationServicePageFollowersExecute(r ApiRelationServicePageFollowersRequest) (*CommonApiAppBbsV1UserPageFollowersRelationReply, *http.Response, error) {
+//  @return ListFollowersRelationsReply
+func (a *RelationServiceAPIService) RelationServiceListFollowersExecute(r ApiRelationServiceListFollowersRequest) (*ListFollowersRelationsReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserPageFollowersRelationReply
+		localVarReturnValue  *ListFollowersRelationsReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServicePageFollowers")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServiceListFollowers")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/relation/page-followers"
+	localVarPath := localBasePath + "/v1/user/relation/list-followers"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserPageFollowersRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserPageFollowersRelationRequest is required and must be specified")
+	if r.listFollowersRelationsRequest == nil {
+		return localVarReturnValue, nil, reportError("listFollowersRelationsRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -649,7 +649,7 @@ func (a *RelationServiceAPIService) RelationServicePageFollowersExecute(r ApiRel
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserPageFollowersRelationRequest
+	localVarPostBody = r.listFollowersRelationsRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -687,58 +687,58 @@ func (a *RelationServiceAPIService) RelationServicePageFollowersExecute(r ApiRel
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRelationServicePageFollowingRequest struct {
+type ApiRelationServiceListFollowingRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserPageFollowingRelationRequest *CommonApiAppBbsV1UserPageFollowingRelationRequest
+	listFollowingRelationsRequest *ListFollowingRelationsRequest
 }
 
-func (r ApiRelationServicePageFollowingRequest) CommonApiAppBbsV1UserPageFollowingRelationRequest(commonApiAppBbsV1UserPageFollowingRelationRequest CommonApiAppBbsV1UserPageFollowingRelationRequest) ApiRelationServicePageFollowingRequest {
-	r.commonApiAppBbsV1UserPageFollowingRelationRequest = &commonApiAppBbsV1UserPageFollowingRelationRequest
+func (r ApiRelationServiceListFollowingRequest) ListFollowingRelationsRequest(listFollowingRelationsRequest ListFollowingRelationsRequest) ApiRelationServiceListFollowingRequest {
+	r.listFollowingRelationsRequest = &listFollowingRelationsRequest
 	return r
 }
 
-func (r ApiRelationServicePageFollowingRequest) Execute() (*CommonApiAppBbsV1UserPageFollowingRelationReply, *http.Response, error) {
-	return r.ApiService.RelationServicePageFollowingExecute(r)
+func (r ApiRelationServiceListFollowingRequest) Execute() (*ListFollowingRelationsReply, *http.Response, error) {
+	return r.ApiService.RelationServiceListFollowingExecute(r)
 }
 
 /*
-RelationServicePageFollowing Method for RelationServicePageFollowing
+RelationServiceListFollowing Method for RelationServiceListFollowing
 
 分页查询当前账号关注的账号列表
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRelationServicePageFollowingRequest
+ @return ApiRelationServiceListFollowingRequest
 */
-func (a *RelationServiceAPIService) RelationServicePageFollowing(ctx context.Context) ApiRelationServicePageFollowingRequest {
-	return ApiRelationServicePageFollowingRequest{
+func (a *RelationServiceAPIService) RelationServiceListFollowing(ctx context.Context) ApiRelationServiceListFollowingRequest {
+	return ApiRelationServiceListFollowingRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CommonApiAppBbsV1UserPageFollowingRelationReply
-func (a *RelationServiceAPIService) RelationServicePageFollowingExecute(r ApiRelationServicePageFollowingRequest) (*CommonApiAppBbsV1UserPageFollowingRelationReply, *http.Response, error) {
+//  @return ListFollowingRelationsReply
+func (a *RelationServiceAPIService) RelationServiceListFollowingExecute(r ApiRelationServiceListFollowingRequest) (*ListFollowingRelationsReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CommonApiAppBbsV1UserPageFollowingRelationReply
+		localVarReturnValue  *ListFollowingRelationsReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServicePageFollowing")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceAPIService.RelationServiceListFollowing")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/relation/page-following"
+	localVarPath := localBasePath + "/v1/user/relation/list-following"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserPageFollowingRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserPageFollowingRelationRequest is required and must be specified")
+	if r.listFollowingRelationsRequest == nil {
+		return localVarReturnValue, nil, reportError("listFollowingRelationsRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -759,7 +759,7 @@ func (a *RelationServiceAPIService) RelationServicePageFollowingExecute(r ApiRel
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserPageFollowingRelationRequest
+	localVarPostBody = r.listFollowingRelationsRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -800,11 +800,11 @@ func (a *RelationServiceAPIService) RelationServicePageFollowingExecute(r ApiRel
 type ApiRelationServiceUnblockRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserUnblockRelationRequest *CommonApiAppBbsV1UserUnblockRelationRequest
+	unblockRelationRequest *UnblockRelationRequest
 }
 
-func (r ApiRelationServiceUnblockRequest) CommonApiAppBbsV1UserUnblockRelationRequest(commonApiAppBbsV1UserUnblockRelationRequest CommonApiAppBbsV1UserUnblockRelationRequest) ApiRelationServiceUnblockRequest {
-	r.commonApiAppBbsV1UserUnblockRelationRequest = &commonApiAppBbsV1UserUnblockRelationRequest
+func (r ApiRelationServiceUnblockRequest) UnblockRelationRequest(unblockRelationRequest UnblockRelationRequest) ApiRelationServiceUnblockRequest {
+	r.unblockRelationRequest = &unblockRelationRequest
 	return r
 }
 
@@ -847,8 +847,8 @@ func (a *RelationServiceAPIService) RelationServiceUnblockExecute(r ApiRelationS
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserUnblockRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserUnblockRelationRequest is required and must be specified")
+	if r.unblockRelationRequest == nil {
+		return localVarReturnValue, nil, reportError("unblockRelationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -869,7 +869,7 @@ func (a *RelationServiceAPIService) RelationServiceUnblockExecute(r ApiRelationS
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserUnblockRelationRequest
+	localVarPostBody = r.unblockRelationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -910,11 +910,11 @@ func (a *RelationServiceAPIService) RelationServiceUnblockExecute(r ApiRelationS
 type ApiRelationServiceUnfollowRequest struct {
 	ctx context.Context
 	ApiService RelationServiceAPI
-	commonApiAppBbsV1UserUnfollowRelationRequest *CommonApiAppBbsV1UserUnfollowRelationRequest
+	unfollowRelationRequest *UnfollowRelationRequest
 }
 
-func (r ApiRelationServiceUnfollowRequest) CommonApiAppBbsV1UserUnfollowRelationRequest(commonApiAppBbsV1UserUnfollowRelationRequest CommonApiAppBbsV1UserUnfollowRelationRequest) ApiRelationServiceUnfollowRequest {
-	r.commonApiAppBbsV1UserUnfollowRelationRequest = &commonApiAppBbsV1UserUnfollowRelationRequest
+func (r ApiRelationServiceUnfollowRequest) UnfollowRelationRequest(unfollowRelationRequest UnfollowRelationRequest) ApiRelationServiceUnfollowRequest {
+	r.unfollowRelationRequest = &unfollowRelationRequest
 	return r
 }
 
@@ -957,8 +957,8 @@ func (a *RelationServiceAPIService) RelationServiceUnfollowExecute(r ApiRelation
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.commonApiAppBbsV1UserUnfollowRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("commonApiAppBbsV1UserUnfollowRelationRequest is required and must be specified")
+	if r.unfollowRelationRequest == nil {
+		return localVarReturnValue, nil, reportError("unfollowRelationRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -979,7 +979,7 @@ func (a *RelationServiceAPIService) RelationServiceUnfollowExecute(r ApiRelation
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.commonApiAppBbsV1UserUnfollowRelationRequest
+	localVarPostBody = r.unfollowRelationRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

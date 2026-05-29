@@ -1,9 +1,10 @@
 {
   "packageName": "bbs-sdk",
   "packageVersion": "0.1.0",
-  "library": "reqwest",
-  "supportAsync": true,
-  "useSingleRequestParameter": true,
+  "library": "reqwest-trait",
+  "topLevelApiClient": true,
   "useChrono": true,
+  "useSerdePathToError": true,
+  "avoidBoxedModels": true,
   "hideGenerationTimestamp": true
 }

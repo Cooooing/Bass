@@ -76,25 +76,25 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 import com.bass.bbs.*;
 import com.bass.bbs.model.*;
-import com.bass.bbs.api.AccountServiceApi;
-import com.bass.bbs.api.AccountServiceApi.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
 
-public class AccountServiceApiExample {
+public class AccountServiceExample {
 
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         // Configure clients using the `defaultClient` object, such as
         // overriding the host and port, timeout, etc.
-        AccountServiceApi apiInstance = new AccountServiceApi(defaultClient);
+        AccountService apiInstance = new AccountService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIaccountServiceGetCurrentRequest request = APIaccountServiceGetCurrentRequest.newBuilder()
+            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentAccountReply result = apiInstance.accountServiceGetCurrent(request);
+            GetCurrentAccountReply result = apiInstance.getCurrent(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountServiceApi#accountServiceGetCurrent");
+            System.err.println("Exception when calling AccountService#getCurrent");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -111,106 +111,106 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AccountServiceApi* | [**accountServiceGetCurrent**](docs/AccountServiceApi.md#accountServiceGetCurrent) | **POST** /v1/user/account/get-current | 
-*AccountServiceApi* | [**accountServiceGetCurrentWithHttpInfo**](docs/AccountServiceApi.md#accountServiceGetCurrentWithHttpInfo) | **POST** /v1/user/account/get-current | 
-*AccountServiceApi* | [**accountServiceGetProfile**](docs/AccountServiceApi.md#accountServiceGetProfile) | **POST** /v1/user/account/get-profile | 
-*AccountServiceApi* | [**accountServiceGetProfileWithHttpInfo**](docs/AccountServiceApi.md#accountServiceGetProfileWithHttpInfo) | **POST** /v1/user/account/get-profile | 
-*AccountServiceApi* | [**accountServiceUpdateProfile**](docs/AccountServiceApi.md#accountServiceUpdateProfile) | **POST** /v1/user/account/update-profile | 
-*AccountServiceApi* | [**accountServiceUpdateProfileWithHttpInfo**](docs/AccountServiceApi.md#accountServiceUpdateProfileWithHttpInfo) | **POST** /v1/user/account/update-profile | 
-*ArticleServiceApi* | [**articleServiceAcceptAnswer**](docs/ArticleServiceApi.md#articleServiceAcceptAnswer) | **POST** /v1/content/article/accept-answer | 
-*ArticleServiceApi* | [**articleServiceAcceptAnswerWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceAcceptAnswerWithHttpInfo) | **POST** /v1/content/article/accept-answer | 
-*ArticleServiceApi* | [**articleServiceCollect**](docs/ArticleServiceApi.md#articleServiceCollect) | **POST** /v1/content/article/collect | 
-*ArticleServiceApi* | [**articleServiceCollectWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceCollectWithHttpInfo) | **POST** /v1/content/article/collect | 
-*ArticleServiceApi* | [**articleServiceCreate**](docs/ArticleServiceApi.md#articleServiceCreate) | **POST** /v1/content/article/create | 
-*ArticleServiceApi* | [**articleServiceCreateWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceCreateWithHttpInfo) | **POST** /v1/content/article/create | 
-*ArticleServiceApi* | [**articleServiceDelete**](docs/ArticleServiceApi.md#articleServiceDelete) | **POST** /v1/content/article/delete | 
-*ArticleServiceApi* | [**articleServiceDeleteWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceDeleteWithHttpInfo) | **POST** /v1/content/article/delete | 
-*ArticleServiceApi* | [**articleServiceGet**](docs/ArticleServiceApi.md#articleServiceGet) | **POST** /v1/content/article/get | 
-*ArticleServiceApi* | [**articleServiceGetWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceGetWithHttpInfo) | **POST** /v1/content/article/get | 
-*ArticleServiceApi* | [**articleServiceLike**](docs/ArticleServiceApi.md#articleServiceLike) | **POST** /v1/content/article/like | 
-*ArticleServiceApi* | [**articleServiceLikeWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceLikeWithHttpInfo) | **POST** /v1/content/article/like | 
-*ArticleServiceApi* | [**articleServiceList**](docs/ArticleServiceApi.md#articleServiceList) | **POST** /v1/content/article/list | 
-*ArticleServiceApi* | [**articleServiceListWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceListWithHttpInfo) | **POST** /v1/content/article/list | 
-*ArticleServiceApi* | [**articleServicePublish**](docs/ArticleServiceApi.md#articleServicePublish) | **POST** /v1/content/article/publish | 
-*ArticleServiceApi* | [**articleServicePublishWithHttpInfo**](docs/ArticleServiceApi.md#articleServicePublishWithHttpInfo) | **POST** /v1/content/article/publish | 
-*ArticleServiceApi* | [**articleServiceReward**](docs/ArticleServiceApi.md#articleServiceReward) | **POST** /v1/content/article/reward | 
-*ArticleServiceApi* | [**articleServiceRewardWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceRewardWithHttpInfo) | **POST** /v1/content/article/reward | 
-*ArticleServiceApi* | [**articleServiceThank**](docs/ArticleServiceApi.md#articleServiceThank) | **POST** /v1/content/article/thank | 
-*ArticleServiceApi* | [**articleServiceThankWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceThankWithHttpInfo) | **POST** /v1/content/article/thank | 
-*ArticleServiceApi* | [**articleServiceUpdateDraft**](docs/ArticleServiceApi.md#articleServiceUpdateDraft) | **POST** /v1/content/article/update-draft | 
-*ArticleServiceApi* | [**articleServiceUpdateDraftWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceUpdateDraftWithHttpInfo) | **POST** /v1/content/article/update-draft | 
-*ArticleServiceApi* | [**articleServiceWatch**](docs/ArticleServiceApi.md#articleServiceWatch) | **POST** /v1/content/article/watch | 
-*ArticleServiceApi* | [**articleServiceWatchWithHttpInfo**](docs/ArticleServiceApi.md#articleServiceWatchWithHttpInfo) | **POST** /v1/content/article/watch | 
-*AuthServiceApi* | [**authServiceLoginByPassword**](docs/AuthServiceApi.md#authServiceLoginByPassword) | **POST** /v1/user/auth/login-by-password | 
-*AuthServiceApi* | [**authServiceLoginByPasswordWithHttpInfo**](docs/AuthServiceApi.md#authServiceLoginByPasswordWithHttpInfo) | **POST** /v1/user/auth/login-by-password | 
-*AuthServiceApi* | [**authServiceLogout**](docs/AuthServiceApi.md#authServiceLogout) | **POST** /v1/user/auth/logout | 
-*AuthServiceApi* | [**authServiceLogoutWithHttpInfo**](docs/AuthServiceApi.md#authServiceLogoutWithHttpInfo) | **POST** /v1/user/auth/logout | 
-*AuthServiceApi* | [**authServiceStartEmailRegistration**](docs/AuthServiceApi.md#authServiceStartEmailRegistration) | **POST** /v1/user/auth/start-email-registration | 
-*AuthServiceApi* | [**authServiceStartEmailRegistrationWithHttpInfo**](docs/AuthServiceApi.md#authServiceStartEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-email-registration | 
-*AuthServiceApi* | [**authServiceStartPhoneRegistration**](docs/AuthServiceApi.md#authServiceStartPhoneRegistration) | **POST** /v1/user/auth/start-phone-registration | 
-*AuthServiceApi* | [**authServiceStartPhoneRegistrationWithHttpInfo**](docs/AuthServiceApi.md#authServiceStartPhoneRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-phone-registration | 
-*AuthServiceApi* | [**authServiceVerifyEmailRegistration**](docs/AuthServiceApi.md#authServiceVerifyEmailRegistration) | **POST** /v1/user/auth/verify-email-registration | 
-*AuthServiceApi* | [**authServiceVerifyEmailRegistrationWithHttpInfo**](docs/AuthServiceApi.md#authServiceVerifyEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/verify-email-registration | 
-*AuthServiceApi* | [**authServiceVerifyPhoneRegistration**](docs/AuthServiceApi.md#authServiceVerifyPhoneRegistration) | **POST** /v1/user/auth/verify-phone-registration | 
-*AuthServiceApi* | [**authServiceVerifyPhoneRegistrationWithHttpInfo**](docs/AuthServiceApi.md#authServiceVerifyPhoneRegistrationWithHttpInfo) | **POST** /v1/user/auth/verify-phone-registration | 
-*CommentServiceApi* | [**commentServiceCreate**](docs/CommentServiceApi.md#commentServiceCreate) | **POST** /v1/content/comment/create | 
-*CommentServiceApi* | [**commentServiceCreateWithHttpInfo**](docs/CommentServiceApi.md#commentServiceCreateWithHttpInfo) | **POST** /v1/content/comment/create | 
-*CommentServiceApi* | [**commentServiceLike**](docs/CommentServiceApi.md#commentServiceLike) | **POST** /v1/content/comment/like | 
-*CommentServiceApi* | [**commentServiceLikeWithHttpInfo**](docs/CommentServiceApi.md#commentServiceLikeWithHttpInfo) | **POST** /v1/content/comment/like | 
-*CommentServiceApi* | [**commentServiceList**](docs/CommentServiceApi.md#commentServiceList) | **POST** /v1/content/comment/list | 
-*CommentServiceApi* | [**commentServiceListWithHttpInfo**](docs/CommentServiceApi.md#commentServiceListWithHttpInfo) | **POST** /v1/content/comment/list | 
-*CommentServiceApi* | [**commentServiceThank**](docs/CommentServiceApi.md#commentServiceThank) | **POST** /v1/content/comment/thank | 
-*CommentServiceApi* | [**commentServiceThankWithHttpInfo**](docs/CommentServiceApi.md#commentServiceThankWithHttpInfo) | **POST** /v1/content/comment/thank | 
-*DomainServiceApi* | [**domainServiceList**](docs/DomainServiceApi.md#domainServiceList) | **POST** /v1/content/domain/list | 
-*DomainServiceApi* | [**domainServiceListWithHttpInfo**](docs/DomainServiceApi.md#domainServiceListWithHttpInfo) | **POST** /v1/content/domain/list | 
-*LocationServiceApi* | [**locationServiceGetCurrent**](docs/LocationServiceApi.md#locationServiceGetCurrent) | **POST** /v1/user/location/get-current | 
-*LocationServiceApi* | [**locationServiceGetCurrentWithHttpInfo**](docs/LocationServiceApi.md#locationServiceGetCurrentWithHttpInfo) | **POST** /v1/user/location/get-current | 
-*LocationServiceApi* | [**locationServiceUpsertCurrent**](docs/LocationServiceApi.md#locationServiceUpsertCurrent) | **POST** /v1/user/location/upsert-current | 
-*LocationServiceApi* | [**locationServiceUpsertCurrentWithHttpInfo**](docs/LocationServiceApi.md#locationServiceUpsertCurrentWithHttpInfo) | **POST** /v1/user/location/upsert-current | 
-*NotificationServiceApi* | [**notificationServiceCountUnread**](docs/NotificationServiceApi.md#notificationServiceCountUnread) | **POST** /v1/notify/notification/count-unread | 
-*NotificationServiceApi* | [**notificationServiceCountUnreadWithHttpInfo**](docs/NotificationServiceApi.md#notificationServiceCountUnreadWithHttpInfo) | **POST** /v1/notify/notification/count-unread | 
-*NotificationServiceApi* | [**notificationServiceList**](docs/NotificationServiceApi.md#notificationServiceList) | **POST** /v1/notify/notification/list | 
-*NotificationServiceApi* | [**notificationServiceListWithHttpInfo**](docs/NotificationServiceApi.md#notificationServiceListWithHttpInfo) | **POST** /v1/notify/notification/list | 
-*NotificationServiceApi* | [**notificationServiceMarkRead**](docs/NotificationServiceApi.md#notificationServiceMarkRead) | **POST** /v1/notify/notification/mark-read | 
-*NotificationServiceApi* | [**notificationServiceMarkReadWithHttpInfo**](docs/NotificationServiceApi.md#notificationServiceMarkReadWithHttpInfo) | **POST** /v1/notify/notification/mark-read | 
-*PostscriptServiceApi* | [**postscriptServiceAdd**](docs/PostscriptServiceApi.md#postscriptServiceAdd) | **POST** /v1/content/postscript/add | 
-*PostscriptServiceApi* | [**postscriptServiceAddWithHttpInfo**](docs/PostscriptServiceApi.md#postscriptServiceAddWithHttpInfo) | **POST** /v1/content/postscript/add | 
-*PreferencesServiceApi* | [**preferencesServiceGetCurrent**](docs/PreferencesServiceApi.md#preferencesServiceGetCurrent) | **POST** /v1/user/preference/get-current | 
-*PreferencesServiceApi* | [**preferencesServiceGetCurrentWithHttpInfo**](docs/PreferencesServiceApi.md#preferencesServiceGetCurrentWithHttpInfo) | **POST** /v1/user/preference/get-current | 
-*PreferencesServiceApi* | [**preferencesServiceUpdateCurrent**](docs/PreferencesServiceApi.md#preferencesServiceUpdateCurrent) | **POST** /v1/user/preference/update-current | 
-*PreferencesServiceApi* | [**preferencesServiceUpdateCurrentWithHttpInfo**](docs/PreferencesServiceApi.md#preferencesServiceUpdateCurrentWithHttpInfo) | **POST** /v1/user/preference/update-current | 
-*PrivacySettingServiceApi* | [**privacySettingServiceGetCurrent**](docs/PrivacySettingServiceApi.md#privacySettingServiceGetCurrent) | **POST** /v1/user/privacy-setting/get-current | 
-*PrivacySettingServiceApi* | [**privacySettingServiceGetCurrentWithHttpInfo**](docs/PrivacySettingServiceApi.md#privacySettingServiceGetCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current | 
-*PrivacySettingServiceApi* | [**privacySettingServiceUpdateCurrent**](docs/PrivacySettingServiceApi.md#privacySettingServiceUpdateCurrent) | **POST** /v1/user/privacy-setting/update-current | 
-*PrivacySettingServiceApi* | [**privacySettingServiceUpdateCurrentWithHttpInfo**](docs/PrivacySettingServiceApi.md#privacySettingServiceUpdateCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current | 
-*RelationServiceApi* | [**relationServiceBlock**](docs/RelationServiceApi.md#relationServiceBlock) | **POST** /v1/user/relation/block | 
-*RelationServiceApi* | [**relationServiceBlockWithHttpInfo**](docs/RelationServiceApi.md#relationServiceBlockWithHttpInfo) | **POST** /v1/user/relation/block | 
-*RelationServiceApi* | [**relationServiceFollow**](docs/RelationServiceApi.md#relationServiceFollow) | **POST** /v1/user/relation/follow | 
-*RelationServiceApi* | [**relationServiceFollowWithHttpInfo**](docs/RelationServiceApi.md#relationServiceFollowWithHttpInfo) | **POST** /v1/user/relation/follow | 
-*RelationServiceApi* | [**relationServiceGetStatus**](docs/RelationServiceApi.md#relationServiceGetStatus) | **POST** /v1/user/relation/get-status | 
-*RelationServiceApi* | [**relationServiceGetStatusWithHttpInfo**](docs/RelationServiceApi.md#relationServiceGetStatusWithHttpInfo) | **POST** /v1/user/relation/get-status | 
-*RelationServiceApi* | [**relationServiceListBlocked**](docs/RelationServiceApi.md#relationServiceListBlocked) | **POST** /v1/user/relation/list-blocked | 
-*RelationServiceApi* | [**relationServiceListBlockedWithHttpInfo**](docs/RelationServiceApi.md#relationServiceListBlockedWithHttpInfo) | **POST** /v1/user/relation/list-blocked | 
-*RelationServiceApi* | [**relationServiceListFollowers**](docs/RelationServiceApi.md#relationServiceListFollowers) | **POST** /v1/user/relation/list-followers | 
-*RelationServiceApi* | [**relationServiceListFollowersWithHttpInfo**](docs/RelationServiceApi.md#relationServiceListFollowersWithHttpInfo) | **POST** /v1/user/relation/list-followers | 
-*RelationServiceApi* | [**relationServiceListFollowing**](docs/RelationServiceApi.md#relationServiceListFollowing) | **POST** /v1/user/relation/list-following | 
-*RelationServiceApi* | [**relationServiceListFollowingWithHttpInfo**](docs/RelationServiceApi.md#relationServiceListFollowingWithHttpInfo) | **POST** /v1/user/relation/list-following | 
-*RelationServiceApi* | [**relationServiceUnblock**](docs/RelationServiceApi.md#relationServiceUnblock) | **POST** /v1/user/relation/unblock | 
-*RelationServiceApi* | [**relationServiceUnblockWithHttpInfo**](docs/RelationServiceApi.md#relationServiceUnblockWithHttpInfo) | **POST** /v1/user/relation/unblock | 
-*RelationServiceApi* | [**relationServiceUnfollow**](docs/RelationServiceApi.md#relationServiceUnfollow) | **POST** /v1/user/relation/unfollow | 
-*RelationServiceApi* | [**relationServiceUnfollowWithHttpInfo**](docs/RelationServiceApi.md#relationServiceUnfollowWithHttpInfo) | **POST** /v1/user/relation/unfollow | 
-*TagServiceApi* | [**tagServiceList**](docs/TagServiceApi.md#tagServiceList) | **POST** /v1/content/tag/list | 
-*TagServiceApi* | [**tagServiceListWithHttpInfo**](docs/TagServiceApi.md#tagServiceListWithHttpInfo) | **POST** /v1/content/tag/list | 
-*TfaServiceApi* | [**tfaServiceBeginEnable**](docs/TfaServiceApi.md#tfaServiceBeginEnable) | **POST** /v1/user/tfa/begin-enable | 
-*TfaServiceApi* | [**tfaServiceBeginEnableWithHttpInfo**](docs/TfaServiceApi.md#tfaServiceBeginEnableWithHttpInfo) | **POST** /v1/user/tfa/begin-enable | 
-*TfaServiceApi* | [**tfaServiceConfirmEnable**](docs/TfaServiceApi.md#tfaServiceConfirmEnable) | **POST** /v1/user/tfa/confirm-enable | 
-*TfaServiceApi* | [**tfaServiceConfirmEnableWithHttpInfo**](docs/TfaServiceApi.md#tfaServiceConfirmEnableWithHttpInfo) | **POST** /v1/user/tfa/confirm-enable | 
-*TfaServiceApi* | [**tfaServiceDisable**](docs/TfaServiceApi.md#tfaServiceDisable) | **POST** /v1/user/tfa/disable | 
-*TfaServiceApi* | [**tfaServiceDisableWithHttpInfo**](docs/TfaServiceApi.md#tfaServiceDisableWithHttpInfo) | **POST** /v1/user/tfa/disable | 
-*TfaServiceApi* | [**tfaServiceGetCurrent**](docs/TfaServiceApi.md#tfaServiceGetCurrent) | **POST** /v1/user/tfa/get-current | 
-*TfaServiceApi* | [**tfaServiceGetCurrentWithHttpInfo**](docs/TfaServiceApi.md#tfaServiceGetCurrentWithHttpInfo) | **POST** /v1/user/tfa/get-current | 
-*TfaServiceApi* | [**tfaServiceValidate**](docs/TfaServiceApi.md#tfaServiceValidate) | **POST** /v1/user/tfa/validate | 
-*TfaServiceApi* | [**tfaServiceValidateWithHttpInfo**](docs/TfaServiceApi.md#tfaServiceValidateWithHttpInfo) | **POST** /v1/user/tfa/validate | 
+*AccountService* | [**getCurrent**](docs/AccountService.md#getCurrent) | **POST** /v1/user/account/get-current | 
+*AccountService* | [**getCurrentWithHttpInfo**](docs/AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current | 
+*AccountService* | [**getProfile**](docs/AccountService.md#getProfile) | **POST** /v1/user/account/get-profile | 
+*AccountService* | [**getProfileWithHttpInfo**](docs/AccountService.md#getProfileWithHttpInfo) | **POST** /v1/user/account/get-profile | 
+*AccountService* | [**updateProfile**](docs/AccountService.md#updateProfile) | **POST** /v1/user/account/update-profile | 
+*AccountService* | [**updateProfileWithHttpInfo**](docs/AccountService.md#updateProfileWithHttpInfo) | **POST** /v1/user/account/update-profile | 
+*ArticleService* | [**acceptAnswer**](docs/ArticleService.md#acceptAnswer) | **POST** /v1/content/article/accept-answer | 
+*ArticleService* | [**acceptAnswerWithHttpInfo**](docs/ArticleService.md#acceptAnswerWithHttpInfo) | **POST** /v1/content/article/accept-answer | 
+*ArticleService* | [**callList**](docs/ArticleService.md#callList) | **POST** /v1/content/article/list | 
+*ArticleService* | [**callListWithHttpInfo**](docs/ArticleService.md#callListWithHttpInfo) | **POST** /v1/content/article/list | 
+*ArticleService* | [**collect**](docs/ArticleService.md#collect) | **POST** /v1/content/article/collect | 
+*ArticleService* | [**collectWithHttpInfo**](docs/ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect | 
+*ArticleService* | [**create**](docs/ArticleService.md#create) | **POST** /v1/content/article/create | 
+*ArticleService* | [**createWithHttpInfo**](docs/ArticleService.md#createWithHttpInfo) | **POST** /v1/content/article/create | 
+*ArticleService* | [**delete**](docs/ArticleService.md#delete) | **POST** /v1/content/article/delete | 
+*ArticleService* | [**deleteWithHttpInfo**](docs/ArticleService.md#deleteWithHttpInfo) | **POST** /v1/content/article/delete | 
+*ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
+*ArticleService* | [**getWithHttpInfo**](docs/ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get | 
+*ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
+*ArticleService* | [**likeWithHttpInfo**](docs/ArticleService.md#likeWithHttpInfo) | **POST** /v1/content/article/like | 
+*ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
+*ArticleService* | [**publishWithHttpInfo**](docs/ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish | 
+*ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
+*ArticleService* | [**rewardWithHttpInfo**](docs/ArticleService.md#rewardWithHttpInfo) | **POST** /v1/content/article/reward | 
+*ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
+*ArticleService* | [**thankWithHttpInfo**](docs/ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank | 
+*ArticleService* | [**updateDraft**](docs/ArticleService.md#updateDraft) | **POST** /v1/content/article/update-draft | 
+*ArticleService* | [**updateDraftWithHttpInfo**](docs/ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/update-draft | 
+*ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
+*ArticleService* | [**watchWithHttpInfo**](docs/ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch | 
+*AuthService* | [**loginByPassword**](docs/AuthService.md#loginByPassword) | **POST** /v1/user/auth/login-by-password | 
+*AuthService* | [**loginByPasswordWithHttpInfo**](docs/AuthService.md#loginByPasswordWithHttpInfo) | **POST** /v1/user/auth/login-by-password | 
+*AuthService* | [**logout**](docs/AuthService.md#logout) | **POST** /v1/user/auth/logout | 
+*AuthService* | [**logoutWithHttpInfo**](docs/AuthService.md#logoutWithHttpInfo) | **POST** /v1/user/auth/logout | 
+*AuthService* | [**startEmailRegistration**](docs/AuthService.md#startEmailRegistration) | **POST** /v1/user/auth/start-email-registration | 
+*AuthService* | [**startEmailRegistrationWithHttpInfo**](docs/AuthService.md#startEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-email-registration | 
+*AuthService* | [**startPhoneRegistration**](docs/AuthService.md#startPhoneRegistration) | **POST** /v1/user/auth/start-phone-registration | 
+*AuthService* | [**startPhoneRegistrationWithHttpInfo**](docs/AuthService.md#startPhoneRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-phone-registration | 
+*AuthService* | [**verifyEmailRegistration**](docs/AuthService.md#verifyEmailRegistration) | **POST** /v1/user/auth/verify-email-registration | 
+*AuthService* | [**verifyEmailRegistrationWithHttpInfo**](docs/AuthService.md#verifyEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/verify-email-registration | 
+*AuthService* | [**verifyPhoneRegistration**](docs/AuthService.md#verifyPhoneRegistration) | **POST** /v1/user/auth/verify-phone-registration | 
+*AuthService* | [**verifyPhoneRegistrationWithHttpInfo**](docs/AuthService.md#verifyPhoneRegistrationWithHttpInfo) | **POST** /v1/user/auth/verify-phone-registration | 
+*CommentService* | [**callList**](docs/CommentService.md#callList) | **POST** /v1/content/comment/list | 
+*CommentService* | [**callListWithHttpInfo**](docs/CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list | 
+*CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
+*CommentService* | [**createWithHttpInfo**](docs/CommentService.md#createWithHttpInfo) | **POST** /v1/content/comment/create | 
+*CommentService* | [**like**](docs/CommentService.md#like) | **POST** /v1/content/comment/like | 
+*CommentService* | [**likeWithHttpInfo**](docs/CommentService.md#likeWithHttpInfo) | **POST** /v1/content/comment/like | 
+*CommentService* | [**thank**](docs/CommentService.md#thank) | **POST** /v1/content/comment/thank | 
+*CommentService* | [**thankWithHttpInfo**](docs/CommentService.md#thankWithHttpInfo) | **POST** /v1/content/comment/thank | 
+*DomainService* | [**callList**](docs/DomainService.md#callList) | **POST** /v1/content/domain/list | 
+*DomainService* | [**callListWithHttpInfo**](docs/DomainService.md#callListWithHttpInfo) | **POST** /v1/content/domain/list | 
+*LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/user/location/get-current | 
+*LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/user/location/get-current | 
+*LocationService* | [**upsertCurrent**](docs/LocationService.md#upsertCurrent) | **POST** /v1/user/location/upsert-current | 
+*LocationService* | [**upsertCurrentWithHttpInfo**](docs/LocationService.md#upsertCurrentWithHttpInfo) | **POST** /v1/user/location/upsert-current | 
+*NotificationService* | [**callList**](docs/NotificationService.md#callList) | **POST** /v1/notify/notification/list | 
+*NotificationService* | [**callListWithHttpInfo**](docs/NotificationService.md#callListWithHttpInfo) | **POST** /v1/notify/notification/list | 
+*NotificationService* | [**countUnread**](docs/NotificationService.md#countUnread) | **POST** /v1/notify/notification/count-unread | 
+*NotificationService* | [**countUnreadWithHttpInfo**](docs/NotificationService.md#countUnreadWithHttpInfo) | **POST** /v1/notify/notification/count-unread | 
+*NotificationService* | [**markRead**](docs/NotificationService.md#markRead) | **POST** /v1/notify/notification/mark-read | 
+*NotificationService* | [**markReadWithHttpInfo**](docs/NotificationService.md#markReadWithHttpInfo) | **POST** /v1/notify/notification/mark-read | 
+*PostscriptService* | [**add**](docs/PostscriptService.md#add) | **POST** /v1/content/postscript/add | 
+*PostscriptService* | [**addWithHttpInfo**](docs/PostscriptService.md#addWithHttpInfo) | **POST** /v1/content/postscript/add | 
+*PreferencesService* | [**getCurrent**](docs/PreferencesService.md#getCurrent) | **POST** /v1/user/preference/get-current | 
+*PreferencesService* | [**getCurrentWithHttpInfo**](docs/PreferencesService.md#getCurrentWithHttpInfo) | **POST** /v1/user/preference/get-current | 
+*PreferencesService* | [**updateCurrent**](docs/PreferencesService.md#updateCurrent) | **POST** /v1/user/preference/update-current | 
+*PreferencesService* | [**updateCurrentWithHttpInfo**](docs/PreferencesService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/preference/update-current | 
+*PrivacySettingService* | [**getCurrent**](docs/PrivacySettingService.md#getCurrent) | **POST** /v1/user/privacy-setting/get-current | 
+*PrivacySettingService* | [**getCurrentWithHttpInfo**](docs/PrivacySettingService.md#getCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current | 
+*PrivacySettingService* | [**updateCurrent**](docs/PrivacySettingService.md#updateCurrent) | **POST** /v1/user/privacy-setting/update-current | 
+*PrivacySettingService* | [**updateCurrentWithHttpInfo**](docs/PrivacySettingService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current | 
+*RelationService* | [**block**](docs/RelationService.md#block) | **POST** /v1/user/relation/block | 
+*RelationService* | [**blockWithHttpInfo**](docs/RelationService.md#blockWithHttpInfo) | **POST** /v1/user/relation/block | 
+*RelationService* | [**follow**](docs/RelationService.md#follow) | **POST** /v1/user/relation/follow | 
+*RelationService* | [**followWithHttpInfo**](docs/RelationService.md#followWithHttpInfo) | **POST** /v1/user/relation/follow | 
+*RelationService* | [**getStatus**](docs/RelationService.md#getStatus) | **POST** /v1/user/relation/get-status | 
+*RelationService* | [**getStatusWithHttpInfo**](docs/RelationService.md#getStatusWithHttpInfo) | **POST** /v1/user/relation/get-status | 
+*RelationService* | [**listBlocked**](docs/RelationService.md#listBlocked) | **POST** /v1/user/relation/list-blocked | 
+*RelationService* | [**listBlockedWithHttpInfo**](docs/RelationService.md#listBlockedWithHttpInfo) | **POST** /v1/user/relation/list-blocked | 
+*RelationService* | [**listFollowers**](docs/RelationService.md#listFollowers) | **POST** /v1/user/relation/list-followers | 
+*RelationService* | [**listFollowersWithHttpInfo**](docs/RelationService.md#listFollowersWithHttpInfo) | **POST** /v1/user/relation/list-followers | 
+*RelationService* | [**listFollowing**](docs/RelationService.md#listFollowing) | **POST** /v1/user/relation/list-following | 
+*RelationService* | [**listFollowingWithHttpInfo**](docs/RelationService.md#listFollowingWithHttpInfo) | **POST** /v1/user/relation/list-following | 
+*RelationService* | [**unblock**](docs/RelationService.md#unblock) | **POST** /v1/user/relation/unblock | 
+*RelationService* | [**unblockWithHttpInfo**](docs/RelationService.md#unblockWithHttpInfo) | **POST** /v1/user/relation/unblock | 
+*RelationService* | [**unfollow**](docs/RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow | 
+*RelationService* | [**unfollowWithHttpInfo**](docs/RelationService.md#unfollowWithHttpInfo) | **POST** /v1/user/relation/unfollow | 
+*TagService* | [**callList**](docs/TagService.md#callList) | **POST** /v1/content/tag/list | 
+*TagService* | [**callListWithHttpInfo**](docs/TagService.md#callListWithHttpInfo) | **POST** /v1/content/tag/list | 
+*TfaService* | [**beginEnable**](docs/TfaService.md#beginEnable) | **POST** /v1/user/tfa/begin-enable | 
+*TfaService* | [**beginEnableWithHttpInfo**](docs/TfaService.md#beginEnableWithHttpInfo) | **POST** /v1/user/tfa/begin-enable | 
+*TfaService* | [**confirmEnable**](docs/TfaService.md#confirmEnable) | **POST** /v1/user/tfa/confirm-enable | 
+*TfaService* | [**confirmEnableWithHttpInfo**](docs/TfaService.md#confirmEnableWithHttpInfo) | **POST** /v1/user/tfa/confirm-enable | 
+*TfaService* | [**disable**](docs/TfaService.md#disable) | **POST** /v1/user/tfa/disable | 
+*TfaService* | [**disableWithHttpInfo**](docs/TfaService.md#disableWithHttpInfo) | **POST** /v1/user/tfa/disable | 
+*TfaService* | [**getCurrent**](docs/TfaService.md#getCurrent) | **POST** /v1/user/tfa/get-current | 
+*TfaService* | [**getCurrentWithHttpInfo**](docs/TfaService.md#getCurrentWithHttpInfo) | **POST** /v1/user/tfa/get-current | 
+*TfaService* | [**validate**](docs/TfaService.md#validate) | **POST** /v1/user/tfa/validate | 
+*TfaService* | [**validateWithHttpInfo**](docs/TfaService.md#validateWithHttpInfo) | **POST** /v1/user/tfa/validate | 
 
 
 ## Documentation for Models

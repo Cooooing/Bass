@@ -1,0 +1,70 @@
+# \LocationServiceApi
+
+All URIs are relative to *http://localhost*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**location_service_get_current**](LocationServiceApi.md#location_service_get_current) | **POST** /v1/user/location/get-current | 
+[**location_service_upsert_current**](LocationServiceApi.md#location_service_upsert_current) | **POST** /v1/user/location/upsert-current | 
+
+
+
+## location_service_get_current
+
+> models::GetCurrentLocationReply location_service_get_current(body)
+
+
+获取当前登录账号的地理资料
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**body** | **serde_json::Value** |  | [required] |
+
+### Return type
+
+[**models::GetCurrentLocationReply**](GetCurrentLocation_Reply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## location_service_upsert_current
+
+> models::UpsertCurrentLocationReply location_service_upsert_current(upsert_current_location_request)
+
+
+更新当前登录账号的地理资料
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**upsert_current_location_request** | [**UpsertCurrentLocationRequest**](UpsertCurrentLocationRequest.md) |  | [required] |
+
+### Return type
+
+[**models::UpsertCurrentLocationReply**](UpsertCurrentLocation_Reply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

@@ -1,20 +1,20 @@
-# \PrivacySettingServiceApi
+# \LocationService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**privacy_setting_service_get_current**](PrivacySettingServiceApi.md#privacy_setting_service_get_current) | **POST** /v1/user/privacy-setting/get-current | 
-[**privacy_setting_service_update_current**](PrivacySettingServiceApi.md#privacy_setting_service_update_current) | **POST** /v1/user/privacy-setting/update-current | 
+[**get_current**](LocationService.md#get_current) | **POST** /v1/user/location/get-current | 
+[**upsert_current**](LocationService.md#upsert_current) | **POST** /v1/user/location/upsert-current | 
 
 
 
-## privacy_setting_service_get_current
+## get_current
 
-> models::GetCurrentPrivacySettingReply privacy_setting_service_get_current(body)
+> models::GetCurrentLocationReply get_current(body)
 
 
-获取当前登录账号的隐私设置
+获取当前登录账号的地理资料
 
 ### Parameters
 
@@ -25,7 +25,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetCurrentPrivacySettingReply**](GetCurrentPrivacySetting_Reply.md)
+[**models::GetCurrentLocationReply**](GetCurrentLocation_Reply.md)
 
 ### Authorization
 
@@ -39,23 +39,23 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## privacy_setting_service_update_current
+## upsert_current
 
-> models::UpdateCurrentPrivacySettingReply privacy_setting_service_update_current(update_current_privacy_setting_request)
+> models::UpsertCurrentLocationReply upsert_current(upsert_current_location_request)
 
 
-更新当前登录账号的隐私设置
+更新当前登录账号的地理资料
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**update_current_privacy_setting_request** | [**UpdateCurrentPrivacySettingRequest**](UpdateCurrentPrivacySettingRequest.md) |  | [required] |
+**upsert_current_location_request** | [**UpsertCurrentLocationRequest**](UpsertCurrentLocationRequest.md) |  | [required] |
 
 ### Return type
 
-[**models::UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySetting_Reply.md)
+[**models::UpsertCurrentLocationReply**](UpsertCurrentLocation_Reply.md)
 
 ### Authorization
 

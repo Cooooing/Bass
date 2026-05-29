@@ -1,28 +1,30 @@
-# \TagServiceApi
+# \PostscriptService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tag_service_list**](TagServiceApi.md#tag_service_list) | **POST** /v1/content/tag/list | 
+[**add**](PostscriptService.md#add) | **POST** /v1/content/postscript/add | 
 
 
 
-## tag_service_list
+## add
 
-> models::ListTagsReply tag_service_list(list_tags_request)
+> models::AddPostscriptReply add(add_postscript_request)
 
+
+添加文章附言
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_tags_request** | [**ListTagsRequest**](ListTagsRequest.md) |  | [required] |
+**add_postscript_request** | [**AddPostscriptRequest**](AddPostscriptRequest.md) |  | [required] |
 
 ### Return type
 
-[**models::ListTagsReply**](ListTags_Reply.md)
+[**models::AddPostscriptReply**](AddPostscript_Reply.md)
 
 ### Authorization
 

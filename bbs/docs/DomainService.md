@@ -1,30 +1,28 @@
-# \PostscriptServiceApi
+# \DomainService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**postscript_service_add**](PostscriptServiceApi.md#postscript_service_add) | **POST** /v1/content/postscript/add | 
+[**list**](DomainService.md#list) | **POST** /v1/content/domain/list | 
 
 
 
-## postscript_service_add
+## list
 
-> models::AddPostscriptReply postscript_service_add(add_postscript_request)
+> models::ListDomainsReply list(list_domains_request)
 
-
-添加文章附言
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**add_postscript_request** | [**AddPostscriptRequest**](AddPostscriptRequest.md) |  | [required] |
+**list_domains_request** | [**ListDomainsRequest**](ListDomainsRequest.md) |  | [required] |
 
 ### Return type
 
-[**models::AddPostscriptReply**](AddPostscript_Reply.md)
+[**models::ListDomainsReply**](ListDomains_Reply.md)
 
 ### Authorization
 

@@ -1,16 +1,16 @@
-# \DomainServiceApi
+# \TagService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**domain_service_list**](DomainServiceApi.md#domain_service_list) | **POST** /v1/content/domain/list | 
+[**list**](TagService.md#list) | **POST** /v1/content/tag/list | 
 
 
 
-## domain_service_list
+## list
 
-> models::ListDomainsReply domain_service_list(list_domains_request)
+> models::ListTagsReply list(list_tags_request)
 
 
 ### Parameters
@@ -18,11 +18,11 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_domains_request** | [**ListDomainsRequest**](ListDomainsRequest.md) |  | [required] |
+**list_tags_request** | [**ListTagsRequest**](ListTagsRequest.md) |  | [required] |
 
 ### Return type
 
-[**models::ListDomainsReply**](ListDomains_Reply.md)
+[**models::ListTagsReply**](ListTags_Reply.md)
 
 ### Authorization
 

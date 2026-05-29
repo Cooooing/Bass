@@ -1,18 +1,18 @@
-# \NotificationServiceApi
+# \NotificationService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**notification_service_count_unread**](NotificationServiceApi.md#notification_service_count_unread) | **POST** /v1/notify/notification/count-unread | 
-[**notification_service_list**](NotificationServiceApi.md#notification_service_list) | **POST** /v1/notify/notification/list | 
-[**notification_service_mark_read**](NotificationServiceApi.md#notification_service_mark_read) | **POST** /v1/notify/notification/mark-read | 
+[**count_unread**](NotificationService.md#count_unread) | **POST** /v1/notify/notification/count-unread | 
+[**list**](NotificationService.md#list) | **POST** /v1/notify/notification/list | 
+[**mark_read**](NotificationService.md#mark_read) | **POST** /v1/notify/notification/mark-read | 
 
 
 
-## notification_service_count_unread
+## count_unread
 
-> models::CountUnreadNotificationsReply notification_service_count_unread(body)
+> models::CountUnreadNotificationsReply count_unread(body)
 
 
 ### Parameters
@@ -38,9 +38,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## notification_service_list
+## list
 
-> models::ListNotificationsReply notification_service_list(list_notifications_request)
+> models::ListNotificationsReply list(list_notifications_request)
 
 
 ### Parameters
@@ -66,9 +66,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## notification_service_mark_read
+## mark_read
 
-> models::MarkReadNotificationReply notification_service_mark_read(mark_read_notification_request)
+> models::MarkReadNotificationReply mark_read(mark_read_notification_request)
 
 
 ### Parameters

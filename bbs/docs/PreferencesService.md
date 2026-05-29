@@ -1,17 +1,17 @@
-# \PreferencesServiceApi
+# \PreferencesService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**preferences_service_get_current**](PreferencesServiceApi.md#preferences_service_get_current) | **POST** /v1/user/preference/get-current | 
-[**preferences_service_update_current**](PreferencesServiceApi.md#preferences_service_update_current) | **POST** /v1/user/preference/update-current | 
+[**get_current**](PreferencesService.md#get_current) | **POST** /v1/user/preference/get-current | 
+[**update_current**](PreferencesService.md#update_current) | **POST** /v1/user/preference/update-current | 
 
 
 
-## preferences_service_get_current
+## get_current
 
-> models::GetCurrentPreferencesReply preferences_service_get_current(body)
+> models::GetCurrentPreferencesReply get_current(body)
 
 
 获取当前登录账号的偏好设置
@@ -39,9 +39,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## preferences_service_update_current
+## update_current
 
-> models::UpdateCurrentPreferencesReply preferences_service_update_current(update_current_preferences_request)
+> models::UpdateCurrentPreferencesReply update_current(update_current_preferences_request)
 
 
 更新当前登录账号的偏好设置

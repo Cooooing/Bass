@@ -18,19 +18,19 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait TagServiceApi: Send + Sync {
+pub trait TagService: Send + Sync {
 
     /// POST /v1/content/tag/list
     ///
     /// 
-    async fn tag_service_list<'list_tags_request>(&self, list_tags_request: models::ListTagsRequest) -> Result<models::ListTagsReply, Error<TagServiceListError>>;
+    async fn list<'list_tags_request>(&self, list_tags_request: models::ListTagsRequest) -> Result<models::ListTagsReply, Error<ListError>>;
 }
 
-pub struct TagServiceApiClient {
+pub struct TagServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl TagServiceApiClient {
+impl TagServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -39,8 +39,8 @@ impl TagServiceApiClient {
 
 
 #[async_trait]
-impl TagServiceApi for TagServiceApiClient {
-    async fn tag_service_list<'list_tags_request>(&self, list_tags_request: models::ListTagsRequest) -> Result<models::ListTagsReply, Error<TagServiceListError>> {
+impl TagService for TagServiceClient {
+    async fn list<'list_tags_request>(&self, list_tags_request: models::ListTagsRequest) -> Result<models::ListTagsReply, Error<ListError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -67,12 +67,12 @@ impl TagServiceApi for TagServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListTagsReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListTagsReply`")))),
             }
         } else {
-            let local_var_entity: Option<TagServiceListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -80,10 +80,10 @@ impl TagServiceApi for TagServiceApiClient {
 
 }
 
-/// struct for typed errors of method [`TagServiceApi::tag_service_list`]
+/// struct for typed errors of method [`TagService::list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TagServiceListError {
+pub enum ListError {
     UnknownValue(serde_json::Value),
 }
 

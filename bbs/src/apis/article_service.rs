@@ -18,74 +18,74 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait ArticleServiceApi: Send + Sync {
+pub trait ArticleService: Send + Sync {
 
     /// POST /v1/content/article/accept-answer
     ///
     /// 
-    async fn article_service_accept_answer<'accept_answer_article_request>(&self, accept_answer_article_request: models::AcceptAnswerArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceAcceptAnswerError>>;
+    async fn accept_answer<'accept_answer_article_request>(&self, accept_answer_article_request: models::AcceptAnswerArticleRequest) -> Result<serde_json::Value, Error<AcceptAnswerError>>;
 
     /// POST /v1/content/article/collect
     ///
     /// 
-    async fn article_service_collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceCollectError>>;
+    async fn collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<serde_json::Value, Error<CollectError>>;
 
     /// POST /v1/content/article/create
     ///
     /// 
-    async fn article_service_create<'create_article_request>(&self, create_article_request: models::CreateArticleRequest) -> Result<models::CreateArticleReply, Error<ArticleServiceCreateError>>;
+    async fn create<'create_article_request>(&self, create_article_request: models::CreateArticleRequest) -> Result<models::CreateArticleReply, Error<CreateError>>;
 
     /// POST /v1/content/article/delete
     ///
     /// 
-    async fn article_service_delete<'delete_article_request>(&self, delete_article_request: models::DeleteArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceDeleteError>>;
+    async fn delete<'delete_article_request>(&self, delete_article_request: models::DeleteArticleRequest) -> Result<serde_json::Value, Error<DeleteError>>;
 
     /// POST /v1/content/article/get
     ///
     /// 
-    async fn article_service_get<'get_article_request>(&self, get_article_request: models::GetArticleRequest) -> Result<models::GetArticleReply, Error<ArticleServiceGetError>>;
+    async fn get<'get_article_request>(&self, get_article_request: models::GetArticleRequest) -> Result<models::GetArticleReply, Error<GetError>>;
 
     /// POST /v1/content/article/like
     ///
     /// 
-    async fn article_service_like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceLikeError>>;
+    async fn like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<serde_json::Value, Error<LikeError>>;
 
     /// POST /v1/content/article/list
     ///
     /// 
-    async fn article_service_list<'list_articles_request>(&self, list_articles_request: models::ListArticlesRequest) -> Result<models::ListArticlesReply, Error<ArticleServiceListError>>;
+    async fn list<'list_articles_request>(&self, list_articles_request: models::ListArticlesRequest) -> Result<models::ListArticlesReply, Error<ListError>>;
 
     /// POST /v1/content/article/publish
     ///
     /// 
-    async fn article_service_publish<'publish_article_request>(&self, publish_article_request: models::PublishArticleRequest) -> Result<serde_json::Value, Error<ArticleServicePublishError>>;
+    async fn publish<'publish_article_request>(&self, publish_article_request: models::PublishArticleRequest) -> Result<serde_json::Value, Error<PublishError>>;
 
     /// POST /v1/content/article/reward
     ///
     /// 
-    async fn article_service_reward<'reward_article_request>(&self, reward_article_request: models::RewardArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceRewardError>>;
+    async fn reward<'reward_article_request>(&self, reward_article_request: models::RewardArticleRequest) -> Result<serde_json::Value, Error<RewardError>>;
 
     /// POST /v1/content/article/thank
     ///
     /// 
-    async fn article_service_thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceThankError>>;
+    async fn thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<serde_json::Value, Error<ThankError>>;
 
     /// POST /v1/content/article/update-draft
     ///
     /// 
-    async fn article_service_update_draft<'update_draft_article_request>(&self, update_draft_article_request: models::UpdateDraftArticleRequest) -> Result<models::UpdateDraftArticleReply, Error<ArticleServiceUpdateDraftError>>;
+    async fn update_draft<'update_draft_article_request>(&self, update_draft_article_request: models::UpdateDraftArticleRequest) -> Result<models::UpdateDraftArticleReply, Error<UpdateDraftError>>;
 
     /// POST /v1/content/article/watch
     ///
     /// 
-    async fn article_service_watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceWatchError>>;
+    async fn watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<serde_json::Value, Error<WatchError>>;
 }
 
-pub struct ArticleServiceApiClient {
+pub struct ArticleServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl ArticleServiceApiClient {
+impl ArticleServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -94,8 +94,8 @@ impl ArticleServiceApiClient {
 
 
 #[async_trait]
-impl ArticleServiceApi for ArticleServiceApiClient {
-    async fn article_service_accept_answer<'accept_answer_article_request>(&self, accept_answer_article_request: models::AcceptAnswerArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceAcceptAnswerError>> {
+impl ArticleService for ArticleServiceClient {
+    async fn accept_answer<'accept_answer_article_request>(&self, accept_answer_article_request: models::AcceptAnswerArticleRequest) -> Result<serde_json::Value, Error<AcceptAnswerError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -122,18 +122,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceAcceptAnswerError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<AcceptAnswerError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceCollectError>> {
+    async fn collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<serde_json::Value, Error<CollectError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -160,18 +160,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceCollectError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CollectError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_create<'create_article_request>(&self, create_article_request: models::CreateArticleRequest) -> Result<models::CreateArticleReply, Error<ArticleServiceCreateError>> {
+    async fn create<'create_article_request>(&self, create_article_request: models::CreateArticleRequest) -> Result<models::CreateArticleReply, Error<CreateError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -198,18 +198,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CreateArticleReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateArticleReply`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceCreateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_delete<'delete_article_request>(&self, delete_article_request: models::DeleteArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceDeleteError>> {
+    async fn delete<'delete_article_request>(&self, delete_article_request: models::DeleteArticleRequest) -> Result<serde_json::Value, Error<DeleteError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -236,18 +236,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceDeleteError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<DeleteError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_get<'get_article_request>(&self, get_article_request: models::GetArticleRequest) -> Result<models::GetArticleReply, Error<ArticleServiceGetError>> {
+    async fn get<'get_article_request>(&self, get_article_request: models::GetArticleRequest) -> Result<models::GetArticleReply, Error<GetError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -274,18 +274,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetArticleReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetArticleReply`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceGetError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceLikeError>> {
+    async fn like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<serde_json::Value, Error<LikeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -312,18 +312,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceLikeError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<LikeError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_list<'list_articles_request>(&self, list_articles_request: models::ListArticlesRequest) -> Result<models::ListArticlesReply, Error<ArticleServiceListError>> {
+    async fn list<'list_articles_request>(&self, list_articles_request: models::ListArticlesRequest) -> Result<models::ListArticlesReply, Error<ListError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -350,18 +350,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListArticlesReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListArticlesReply`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_publish<'publish_article_request>(&self, publish_article_request: models::PublishArticleRequest) -> Result<serde_json::Value, Error<ArticleServicePublishError>> {
+    async fn publish<'publish_article_request>(&self, publish_article_request: models::PublishArticleRequest) -> Result<serde_json::Value, Error<PublishError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -388,18 +388,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServicePublishError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<PublishError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_reward<'reward_article_request>(&self, reward_article_request: models::RewardArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceRewardError>> {
+    async fn reward<'reward_article_request>(&self, reward_article_request: models::RewardArticleRequest) -> Result<serde_json::Value, Error<RewardError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -426,18 +426,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceRewardError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RewardError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceThankError>> {
+    async fn thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<serde_json::Value, Error<ThankError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -464,18 +464,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceThankError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ThankError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_update_draft<'update_draft_article_request>(&self, update_draft_article_request: models::UpdateDraftArticleRequest) -> Result<models::UpdateDraftArticleReply, Error<ArticleServiceUpdateDraftError>> {
+    async fn update_draft<'update_draft_article_request>(&self, update_draft_article_request: models::UpdateDraftArticleRequest) -> Result<models::UpdateDraftArticleReply, Error<UpdateDraftError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -502,18 +502,18 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateDraftArticleReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateDraftArticleReply`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceUpdateDraftError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdateDraftError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn article_service_watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<serde_json::Value, Error<ArticleServiceWatchError>> {
+    async fn watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<serde_json::Value, Error<WatchError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -540,12 +540,12 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ArticleServiceWatchError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<WatchError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -553,87 +553,87 @@ impl ArticleServiceApi for ArticleServiceApiClient {
 
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_accept_answer`]
+/// struct for typed errors of method [`ArticleService::accept_answer`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceAcceptAnswerError {
+pub enum AcceptAnswerError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_collect`]
+/// struct for typed errors of method [`ArticleService::collect`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceCollectError {
+pub enum CollectError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_create`]
+/// struct for typed errors of method [`ArticleService::create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceCreateError {
+pub enum CreateError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_delete`]
+/// struct for typed errors of method [`ArticleService::delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceDeleteError {
+pub enum DeleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_get`]
+/// struct for typed errors of method [`ArticleService::get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceGetError {
+pub enum GetError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_like`]
+/// struct for typed errors of method [`ArticleService::like`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceLikeError {
+pub enum LikeError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_list`]
+/// struct for typed errors of method [`ArticleService::list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceListError {
+pub enum ListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_publish`]
+/// struct for typed errors of method [`ArticleService::publish`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServicePublishError {
+pub enum PublishError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_reward`]
+/// struct for typed errors of method [`ArticleService::reward`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceRewardError {
+pub enum RewardError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_thank`]
+/// struct for typed errors of method [`ArticleService::thank`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceThankError {
+pub enum ThankError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_update_draft`]
+/// struct for typed errors of method [`ArticleService::update_draft`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceUpdateDraftError {
+pub enum UpdateDraftError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleServiceApi::article_service_watch`]
+/// struct for typed errors of method [`ArticleService::watch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArticleServiceWatchError {
+pub enum WatchError {
     UnknownValue(serde_json::Value),
 }
 

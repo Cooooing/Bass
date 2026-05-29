@@ -18,34 +18,34 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait CommentServiceApi: Send + Sync {
+pub trait CommentService: Send + Sync {
 
     /// POST /v1/content/comment/create
     ///
     /// 
-    async fn comment_service_create<'create_comment_request>(&self, create_comment_request: models::CreateCommentRequest) -> Result<models::CreateCommentReply, Error<CommentServiceCreateError>>;
+    async fn create<'create_comment_request>(&self, create_comment_request: models::CreateCommentRequest) -> Result<models::CreateCommentReply, Error<CreateError>>;
 
     /// POST /v1/content/comment/like
     ///
     /// 
-    async fn comment_service_like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<serde_json::Value, Error<CommentServiceLikeError>>;
+    async fn like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<serde_json::Value, Error<LikeError>>;
 
     /// POST /v1/content/comment/list
     ///
     /// 
-    async fn comment_service_list<'list_comments_request>(&self, list_comments_request: models::ListCommentsRequest) -> Result<models::ListCommentsReply, Error<CommentServiceListError>>;
+    async fn list<'list_comments_request>(&self, list_comments_request: models::ListCommentsRequest) -> Result<models::ListCommentsReply, Error<ListError>>;
 
     /// POST /v1/content/comment/thank
     ///
     /// 
-    async fn comment_service_thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<serde_json::Value, Error<CommentServiceThankError>>;
+    async fn thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<serde_json::Value, Error<ThankError>>;
 }
 
-pub struct CommentServiceApiClient {
+pub struct CommentServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl CommentServiceApiClient {
+impl CommentServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -54,8 +54,8 @@ impl CommentServiceApiClient {
 
 
 #[async_trait]
-impl CommentServiceApi for CommentServiceApiClient {
-    async fn comment_service_create<'create_comment_request>(&self, create_comment_request: models::CreateCommentRequest) -> Result<models::CreateCommentReply, Error<CommentServiceCreateError>> {
+impl CommentService for CommentServiceClient {
+    async fn create<'create_comment_request>(&self, create_comment_request: models::CreateCommentRequest) -> Result<models::CreateCommentReply, Error<CreateError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -82,18 +82,18 @@ impl CommentServiceApi for CommentServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CreateCommentReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateCommentReply`")))),
             }
         } else {
-            let local_var_entity: Option<CommentServiceCreateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn comment_service_like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<serde_json::Value, Error<CommentServiceLikeError>> {
+    async fn like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<serde_json::Value, Error<LikeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -120,18 +120,18 @@ impl CommentServiceApi for CommentServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<CommentServiceLikeError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<LikeError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn comment_service_list<'list_comments_request>(&self, list_comments_request: models::ListCommentsRequest) -> Result<models::ListCommentsReply, Error<CommentServiceListError>> {
+    async fn list<'list_comments_request>(&self, list_comments_request: models::ListCommentsRequest) -> Result<models::ListCommentsReply, Error<ListError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -158,18 +158,18 @@ impl CommentServiceApi for CommentServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListCommentsReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListCommentsReply`")))),
             }
         } else {
-            let local_var_entity: Option<CommentServiceListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn comment_service_thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<serde_json::Value, Error<CommentServiceThankError>> {
+    async fn thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<serde_json::Value, Error<ThankError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -196,12 +196,12 @@ impl CommentServiceApi for CommentServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<CommentServiceThankError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ThankError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -209,31 +209,31 @@ impl CommentServiceApi for CommentServiceApiClient {
 
 }
 
-/// struct for typed errors of method [`CommentServiceApi::comment_service_create`]
+/// struct for typed errors of method [`CommentService::create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CommentServiceCreateError {
+pub enum CreateError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`CommentServiceApi::comment_service_like`]
+/// struct for typed errors of method [`CommentService::like`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CommentServiceLikeError {
+pub enum LikeError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`CommentServiceApi::comment_service_list`]
+/// struct for typed errors of method [`CommentService::list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CommentServiceListError {
+pub enum ListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`CommentServiceApi::comment_service_thank`]
+/// struct for typed errors of method [`CommentService::thank`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CommentServiceThankError {
+pub enum ThankError {
     UnknownValue(serde_json::Value),
 }
 

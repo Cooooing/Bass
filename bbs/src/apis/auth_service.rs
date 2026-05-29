@@ -18,44 +18,44 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait AuthServiceApi: Send + Sync {
+pub trait AuthService: Send + Sync {
 
     /// POST /v1/user/auth/login-by-password
     ///
     /// 使用密码登录账号
-    async fn auth_service_login_by_password<'login_by_password_request>(&self, login_by_password_request: models::LoginByPasswordRequest) -> Result<models::LoginByPasswordReply, Error<AuthServiceLoginByPasswordError>>;
+    async fn login_by_password<'login_by_password_request>(&self, login_by_password_request: models::LoginByPasswordRequest) -> Result<models::LoginByPasswordReply, Error<LoginByPasswordError>>;
 
     /// POST /v1/user/auth/logout
     ///
     /// 登出当前登录账号
-    async fn auth_service_logout<'body>(&self, body: serde_json::Value) -> Result<serde_json::Value, Error<AuthServiceLogoutError>>;
+    async fn logout<'body>(&self, body: serde_json::Value) -> Result<serde_json::Value, Error<LogoutError>>;
 
     /// POST /v1/user/auth/start-email-registration
     ///
     /// 使用邮箱发起账号注册
-    async fn auth_service_start_email_registration<'start_email_registration_request>(&self, start_email_registration_request: models::StartEmailRegistrationRequest) -> Result<models::StartEmailRegistrationReply, Error<AuthServiceStartEmailRegistrationError>>;
+    async fn start_email_registration<'start_email_registration_request>(&self, start_email_registration_request: models::StartEmailRegistrationRequest) -> Result<models::StartEmailRegistrationReply, Error<StartEmailRegistrationError>>;
 
     /// POST /v1/user/auth/start-phone-registration
     ///
     /// 使用手机号发起账号注册
-    async fn auth_service_start_phone_registration<'start_phone_registration_request>(&self, start_phone_registration_request: models::StartPhoneRegistrationRequest) -> Result<models::StartPhoneRegistrationReply, Error<AuthServiceStartPhoneRegistrationError>>;
+    async fn start_phone_registration<'start_phone_registration_request>(&self, start_phone_registration_request: models::StartPhoneRegistrationRequest) -> Result<models::StartPhoneRegistrationReply, Error<StartPhoneRegistrationError>>;
 
     /// POST /v1/user/auth/verify-email-registration
     ///
     /// 校验邮箱注册验证码
-    async fn auth_service_verify_email_registration<'verify_email_registration_request>(&self, verify_email_registration_request: models::VerifyEmailRegistrationRequest) -> Result<serde_json::Value, Error<AuthServiceVerifyEmailRegistrationError>>;
+    async fn verify_email_registration<'verify_email_registration_request>(&self, verify_email_registration_request: models::VerifyEmailRegistrationRequest) -> Result<serde_json::Value, Error<VerifyEmailRegistrationError>>;
 
     /// POST /v1/user/auth/verify-phone-registration
     ///
     /// 校验手机号注册验证码
-    async fn auth_service_verify_phone_registration<'verify_phone_registration_request>(&self, verify_phone_registration_request: models::VerifyPhoneRegistrationRequest) -> Result<serde_json::Value, Error<AuthServiceVerifyPhoneRegistrationError>>;
+    async fn verify_phone_registration<'verify_phone_registration_request>(&self, verify_phone_registration_request: models::VerifyPhoneRegistrationRequest) -> Result<serde_json::Value, Error<VerifyPhoneRegistrationError>>;
 }
 
-pub struct AuthServiceApiClient {
+pub struct AuthServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl AuthServiceApiClient {
+impl AuthServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -64,9 +64,9 @@ impl AuthServiceApiClient {
 
 
 #[async_trait]
-impl AuthServiceApi for AuthServiceApiClient {
+impl AuthService for AuthServiceClient {
     /// 使用密码登录账号
-    async fn auth_service_login_by_password<'login_by_password_request>(&self, login_by_password_request: models::LoginByPasswordRequest) -> Result<models::LoginByPasswordReply, Error<AuthServiceLoginByPasswordError>> {
+    async fn login_by_password<'login_by_password_request>(&self, login_by_password_request: models::LoginByPasswordRequest) -> Result<models::LoginByPasswordReply, Error<LoginByPasswordError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -93,19 +93,19 @@ impl AuthServiceApi for AuthServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::LoginByPasswordReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::LoginByPasswordReply`")))),
             }
         } else {
-            let local_var_entity: Option<AuthServiceLoginByPasswordError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<LoginByPasswordError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 登出当前登录账号
-    async fn auth_service_logout<'body>(&self, body: serde_json::Value) -> Result<serde_json::Value, Error<AuthServiceLogoutError>> {
+    async fn logout<'body>(&self, body: serde_json::Value) -> Result<serde_json::Value, Error<LogoutError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -132,19 +132,19 @@ impl AuthServiceApi for AuthServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<AuthServiceLogoutError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<LogoutError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 使用邮箱发起账号注册
-    async fn auth_service_start_email_registration<'start_email_registration_request>(&self, start_email_registration_request: models::StartEmailRegistrationRequest) -> Result<models::StartEmailRegistrationReply, Error<AuthServiceStartEmailRegistrationError>> {
+    async fn start_email_registration<'start_email_registration_request>(&self, start_email_registration_request: models::StartEmailRegistrationRequest) -> Result<models::StartEmailRegistrationReply, Error<StartEmailRegistrationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -171,19 +171,19 @@ impl AuthServiceApi for AuthServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::StartEmailRegistrationReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::StartEmailRegistrationReply`")))),
             }
         } else {
-            let local_var_entity: Option<AuthServiceStartEmailRegistrationError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<StartEmailRegistrationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 使用手机号发起账号注册
-    async fn auth_service_start_phone_registration<'start_phone_registration_request>(&self, start_phone_registration_request: models::StartPhoneRegistrationRequest) -> Result<models::StartPhoneRegistrationReply, Error<AuthServiceStartPhoneRegistrationError>> {
+    async fn start_phone_registration<'start_phone_registration_request>(&self, start_phone_registration_request: models::StartPhoneRegistrationRequest) -> Result<models::StartPhoneRegistrationReply, Error<StartPhoneRegistrationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -210,19 +210,19 @@ impl AuthServiceApi for AuthServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::StartPhoneRegistrationReply`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::StartPhoneRegistrationReply`")))),
             }
         } else {
-            let local_var_entity: Option<AuthServiceStartPhoneRegistrationError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<StartPhoneRegistrationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 校验邮箱注册验证码
-    async fn auth_service_verify_email_registration<'verify_email_registration_request>(&self, verify_email_registration_request: models::VerifyEmailRegistrationRequest) -> Result<serde_json::Value, Error<AuthServiceVerifyEmailRegistrationError>> {
+    async fn verify_email_registration<'verify_email_registration_request>(&self, verify_email_registration_request: models::VerifyEmailRegistrationRequest) -> Result<serde_json::Value, Error<VerifyEmailRegistrationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -249,19 +249,19 @@ impl AuthServiceApi for AuthServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<AuthServiceVerifyEmailRegistrationError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<VerifyEmailRegistrationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 校验手机号注册验证码
-    async fn auth_service_verify_phone_registration<'verify_phone_registration_request>(&self, verify_phone_registration_request: models::VerifyPhoneRegistrationRequest) -> Result<serde_json::Value, Error<AuthServiceVerifyPhoneRegistrationError>> {
+    async fn verify_phone_registration<'verify_phone_registration_request>(&self, verify_phone_registration_request: models::VerifyPhoneRegistrationRequest) -> Result<serde_json::Value, Error<VerifyPhoneRegistrationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -288,12 +288,12 @@ impl AuthServiceApi for AuthServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
                 ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<AuthServiceVerifyPhoneRegistrationError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<VerifyPhoneRegistrationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -301,45 +301,45 @@ impl AuthServiceApi for AuthServiceApiClient {
 
 }
 
-/// struct for typed errors of method [`AuthServiceApi::auth_service_login_by_password`]
+/// struct for typed errors of method [`AuthService::login_by_password`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServiceLoginByPasswordError {
+pub enum LoginByPasswordError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthServiceApi::auth_service_logout`]
+/// struct for typed errors of method [`AuthService::logout`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServiceLogoutError {
+pub enum LogoutError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthServiceApi::auth_service_start_email_registration`]
+/// struct for typed errors of method [`AuthService::start_email_registration`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServiceStartEmailRegistrationError {
+pub enum StartEmailRegistrationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthServiceApi::auth_service_start_phone_registration`]
+/// struct for typed errors of method [`AuthService::start_phone_registration`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServiceStartPhoneRegistrationError {
+pub enum StartPhoneRegistrationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthServiceApi::auth_service_verify_email_registration`]
+/// struct for typed errors of method [`AuthService::verify_email_registration`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServiceVerifyEmailRegistrationError {
+pub enum VerifyEmailRegistrationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthServiceApi::auth_service_verify_phone_registration`]
+/// struct for typed errors of method [`AuthService::verify_phone_registration`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServiceVerifyPhoneRegistrationError {
+pub enum VerifyPhoneRegistrationError {
     UnknownValue(serde_json::Value),
 }
 

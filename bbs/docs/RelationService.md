@@ -1,23 +1,23 @@
-# \RelationServiceApi
+# \RelationService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**relation_service_block**](RelationServiceApi.md#relation_service_block) | **POST** /v1/user/relation/block | 
-[**relation_service_follow**](RelationServiceApi.md#relation_service_follow) | **POST** /v1/user/relation/follow | 
-[**relation_service_get_status**](RelationServiceApi.md#relation_service_get_status) | **POST** /v1/user/relation/get-status | 
-[**relation_service_list_blocked**](RelationServiceApi.md#relation_service_list_blocked) | **POST** /v1/user/relation/list-blocked | 
-[**relation_service_list_followers**](RelationServiceApi.md#relation_service_list_followers) | **POST** /v1/user/relation/list-followers | 
-[**relation_service_list_following**](RelationServiceApi.md#relation_service_list_following) | **POST** /v1/user/relation/list-following | 
-[**relation_service_unblock**](RelationServiceApi.md#relation_service_unblock) | **POST** /v1/user/relation/unblock | 
-[**relation_service_unfollow**](RelationServiceApi.md#relation_service_unfollow) | **POST** /v1/user/relation/unfollow | 
+[**block**](RelationService.md#block) | **POST** /v1/user/relation/block | 
+[**follow**](RelationService.md#follow) | **POST** /v1/user/relation/follow | 
+[**get_status**](RelationService.md#get_status) | **POST** /v1/user/relation/get-status | 
+[**list_blocked**](RelationService.md#list_blocked) | **POST** /v1/user/relation/list-blocked | 
+[**list_followers**](RelationService.md#list_followers) | **POST** /v1/user/relation/list-followers | 
+[**list_following**](RelationService.md#list_following) | **POST** /v1/user/relation/list-following | 
+[**unblock**](RelationService.md#unblock) | **POST** /v1/user/relation/unblock | 
+[**unfollow**](RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow | 
 
 
 
-## relation_service_block
+## block
 
-> serde_json::Value relation_service_block(block_relation_request)
+> serde_json::Value block(block_relation_request)
 
 
 当前账号拉黑目标账号
@@ -45,9 +45,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_follow
+## follow
 
-> serde_json::Value relation_service_follow(follow_relation_request)
+> serde_json::Value follow(follow_relation_request)
 
 
 当前账号关注目标账号
@@ -75,9 +75,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_get_status
+## get_status
 
-> models::GetStatusRelationReply relation_service_get_status(get_status_relation_request)
+> models::GetStatusRelationReply get_status(get_status_relation_request)
 
 
 查询当前账号与目标账号之间的关系
@@ -105,9 +105,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_list_blocked
+## list_blocked
 
-> models::ListBlockedRelationsReply relation_service_list_blocked(list_blocked_relations_request)
+> models::ListBlockedRelationsReply list_blocked(list_blocked_relations_request)
 
 
 分页查询当前账号拉黑的账号列表
@@ -135,9 +135,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_list_followers
+## list_followers
 
-> models::ListFollowersRelationsReply relation_service_list_followers(list_followers_relations_request)
+> models::ListFollowersRelationsReply list_followers(list_followers_relations_request)
 
 
 分页查询当前账号的粉丝账号列表
@@ -165,9 +165,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_list_following
+## list_following
 
-> models::ListFollowingRelationsReply relation_service_list_following(list_following_relations_request)
+> models::ListFollowingRelationsReply list_following(list_following_relations_request)
 
 
 分页查询当前账号关注的账号列表
@@ -195,9 +195,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_unblock
+## unblock
 
-> serde_json::Value relation_service_unblock(unblock_relation_request)
+> serde_json::Value unblock(unblock_relation_request)
 
 
 当前账号取消拉黑目标账号
@@ -225,9 +225,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## relation_service_unfollow
+## unfollow
 
-> serde_json::Value relation_service_unfollow(unfollow_relation_request)
+> serde_json::Value unfollow(unfollow_relation_request)
 
 
 当前账号取消关注目标账号

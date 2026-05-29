@@ -18,24 +18,24 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait PrivacySettingServiceApi: Send + Sync {
+pub trait LocationService: Send + Sync {
 
-    /// POST /v1/user/privacy-setting/get-current
+    /// POST /v1/user/location/get-current
     ///
-    /// 获取当前登录账号的隐私设置
-    async fn privacy_setting_service_get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingReply, Error<PrivacySettingServiceGetCurrentError>>;
+    /// 获取当前登录账号的地理资料
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationReply, Error<GetCurrentError>>;
 
-    /// POST /v1/user/privacy-setting/update-current
+    /// POST /v1/user/location/upsert-current
     ///
-    /// 更新当前登录账号的隐私设置
-    async fn privacy_setting_service_update_current<'update_current_privacy_setting_request>(&self, update_current_privacy_setting_request: models::UpdateCurrentPrivacySettingRequest) -> Result<models::UpdateCurrentPrivacySettingReply, Error<PrivacySettingServiceUpdateCurrentError>>;
+    /// 更新当前登录账号的地理资料
+    async fn upsert_current<'upsert_current_location_request>(&self, upsert_current_location_request: models::UpsertCurrentLocationRequest) -> Result<models::UpsertCurrentLocationReply, Error<UpsertCurrentError>>;
 }
 
-pub struct PrivacySettingServiceApiClient {
+pub struct LocationServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl PrivacySettingServiceApiClient {
+impl LocationServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -44,14 +44,14 @@ impl PrivacySettingServiceApiClient {
 
 
 #[async_trait]
-impl PrivacySettingServiceApi for PrivacySettingServiceApiClient {
-    /// 获取当前登录账号的隐私设置
-    async fn privacy_setting_service_get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingReply, Error<PrivacySettingServiceGetCurrentError>> {
+impl LocationService for LocationServiceClient {
+    /// 获取当前登录账号的地理资料
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationReply, Error<GetCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/user/privacy-setting/get-current", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/user/location/get-current", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
@@ -73,30 +73,30 @@ impl PrivacySettingServiceApi for PrivacySettingServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentPrivacySettingReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentPrivacySettingReply`")))),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentLocationReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentLocationReply`")))),
             }
         } else {
-            let local_var_entity: Option<PrivacySettingServiceGetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    /// 更新当前登录账号的隐私设置
-    async fn privacy_setting_service_update_current<'update_current_privacy_setting_request>(&self, update_current_privacy_setting_request: models::UpdateCurrentPrivacySettingRequest) -> Result<models::UpdateCurrentPrivacySettingReply, Error<PrivacySettingServiceUpdateCurrentError>> {
+    /// 更新当前登录账号的地理资料
+    async fn upsert_current<'upsert_current_location_request>(&self, upsert_current_location_request: models::UpsertCurrentLocationRequest) -> Result<models::UpsertCurrentLocationReply, Error<UpsertCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/user/privacy-setting/update-current", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/user/location/upsert-current", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&update_current_privacy_setting_request);
+        local_var_req_builder = local_var_req_builder.json(&upsert_current_location_request);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -112,12 +112,12 @@ impl PrivacySettingServiceApi for PrivacySettingServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingReply`")))),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpsertCurrentLocationReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpsertCurrentLocationReply`")))),
             }
         } else {
-            let local_var_entity: Option<PrivacySettingServiceUpdateCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpsertCurrentError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,17 +125,17 @@ impl PrivacySettingServiceApi for PrivacySettingServiceApiClient {
 
 }
 
-/// struct for typed errors of method [`PrivacySettingServiceApi::privacy_setting_service_get_current`]
+/// struct for typed errors of method [`LocationService::get_current`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PrivacySettingServiceGetCurrentError {
+pub enum GetCurrentError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`PrivacySettingServiceApi::privacy_setting_service_update_current`]
+/// struct for typed errors of method [`LocationService::upsert_current`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PrivacySettingServiceUpdateCurrentError {
+pub enum UpsertCurrentError {
     UnknownValue(serde_json::Value),
 }
 

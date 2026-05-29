@@ -1,20 +1,20 @@
-# \TfaServiceApi
+# \TfaService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tfa_service_begin_enable**](TfaServiceApi.md#tfa_service_begin_enable) | **POST** /v1/user/tfa/begin-enable | 
-[**tfa_service_confirm_enable**](TfaServiceApi.md#tfa_service_confirm_enable) | **POST** /v1/user/tfa/confirm-enable | 
-[**tfa_service_disable**](TfaServiceApi.md#tfa_service_disable) | **POST** /v1/user/tfa/disable | 
-[**tfa_service_get_current**](TfaServiceApi.md#tfa_service_get_current) | **POST** /v1/user/tfa/get-current | 
-[**tfa_service_validate**](TfaServiceApi.md#tfa_service_validate) | **POST** /v1/user/tfa/validate | 
+[**begin_enable**](TfaService.md#begin_enable) | **POST** /v1/user/tfa/begin-enable | 
+[**confirm_enable**](TfaService.md#confirm_enable) | **POST** /v1/user/tfa/confirm-enable | 
+[**disable**](TfaService.md#disable) | **POST** /v1/user/tfa/disable | 
+[**get_current**](TfaService.md#get_current) | **POST** /v1/user/tfa/get-current | 
+[**validate**](TfaService.md#validate) | **POST** /v1/user/tfa/validate | 
 
 
 
-## tfa_service_begin_enable
+## begin_enable
 
-> models::BeginEnableTfaReply tfa_service_begin_enable(body)
+> models::BeginEnableTfaReply begin_enable(body)
 
 
 开始启用二步验证
@@ -42,9 +42,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## tfa_service_confirm_enable
+## confirm_enable
 
-> serde_json::Value tfa_service_confirm_enable(confirm_enable_tfa_request)
+> serde_json::Value confirm_enable(confirm_enable_tfa_request)
 
 
 确认二步验证码并正式启用二步验证
@@ -72,9 +72,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## tfa_service_disable
+## disable
 
-> serde_json::Value tfa_service_disable(disable_tfa_request)
+> serde_json::Value disable(disable_tfa_request)
 
 
 校验二步验证码并关闭二步验证
@@ -102,9 +102,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## tfa_service_get_current
+## get_current
 
-> models::GetCurrentTfaReply tfa_service_get_current(body)
+> models::GetCurrentTfaReply get_current(body)
 
 
 获取当前登录账号的二步验证状态
@@ -132,9 +132,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## tfa_service_validate
+## validate
 
-> models::ValidateTfaReply tfa_service_validate(validate_tfa_request)
+> models::ValidateTfaReply validate(validate_tfa_request)
 
 
 校验当前登录账号的二步验证码

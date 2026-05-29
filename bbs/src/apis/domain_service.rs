@@ -18,19 +18,19 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait PostscriptServiceApi: Send + Sync {
+pub trait DomainService: Send + Sync {
 
-    /// POST /v1/content/postscript/add
+    /// POST /v1/content/domain/list
     ///
-    /// 添加文章附言
-    async fn postscript_service_add<'add_postscript_request>(&self, add_postscript_request: models::AddPostscriptRequest) -> Result<models::AddPostscriptReply, Error<PostscriptServiceAddError>>;
+    /// 
+    async fn list<'list_domains_request>(&self, list_domains_request: models::ListDomainsRequest) -> Result<models::ListDomainsReply, Error<ListError>>;
 }
 
-pub struct PostscriptServiceApiClient {
+pub struct DomainServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl PostscriptServiceApiClient {
+impl DomainServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -39,20 +39,19 @@ impl PostscriptServiceApiClient {
 
 
 #[async_trait]
-impl PostscriptServiceApi for PostscriptServiceApiClient {
-    /// 添加文章附言
-    async fn postscript_service_add<'add_postscript_request>(&self, add_postscript_request: models::AddPostscriptRequest) -> Result<models::AddPostscriptReply, Error<PostscriptServiceAddError>> {
+impl DomainService for DomainServiceClient {
+    async fn list<'list_domains_request>(&self, list_domains_request: models::ListDomainsRequest) -> Result<models::ListDomainsReply, Error<ListError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/content/postscript/add", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/content/domain/list", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&add_postscript_request);
+        local_var_req_builder = local_var_req_builder.json(&list_domains_request);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -68,12 +67,12 @@ impl PostscriptServiceApi for PostscriptServiceApiClient {
 
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
-                ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&local_var_content)).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AddPostscriptReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AddPostscriptReply`")))),
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListDomainsReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListDomainsReply`")))),
             }
         } else {
-            let local_var_entity: Option<PostscriptServiceAddError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -81,10 +80,10 @@ impl PostscriptServiceApi for PostscriptServiceApiClient {
 
 }
 
-/// struct for typed errors of method [`PostscriptServiceApi::postscript_service_add`]
+/// struct for typed errors of method [`DomainService::list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PostscriptServiceAddError {
+pub enum ListError {
     UnknownValue(serde_json::Value),
 }
 

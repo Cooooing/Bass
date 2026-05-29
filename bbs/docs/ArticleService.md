@@ -1,27 +1,27 @@
-# \ArticleServiceApi
+# \ArticleService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**article_service_accept_answer**](ArticleServiceApi.md#article_service_accept_answer) | **POST** /v1/content/article/accept-answer | 
-[**article_service_collect**](ArticleServiceApi.md#article_service_collect) | **POST** /v1/content/article/collect | 
-[**article_service_create**](ArticleServiceApi.md#article_service_create) | **POST** /v1/content/article/create | 
-[**article_service_delete**](ArticleServiceApi.md#article_service_delete) | **POST** /v1/content/article/delete | 
-[**article_service_get**](ArticleServiceApi.md#article_service_get) | **POST** /v1/content/article/get | 
-[**article_service_like**](ArticleServiceApi.md#article_service_like) | **POST** /v1/content/article/like | 
-[**article_service_list**](ArticleServiceApi.md#article_service_list) | **POST** /v1/content/article/list | 
-[**article_service_publish**](ArticleServiceApi.md#article_service_publish) | **POST** /v1/content/article/publish | 
-[**article_service_reward**](ArticleServiceApi.md#article_service_reward) | **POST** /v1/content/article/reward | 
-[**article_service_thank**](ArticleServiceApi.md#article_service_thank) | **POST** /v1/content/article/thank | 
-[**article_service_update_draft**](ArticleServiceApi.md#article_service_update_draft) | **POST** /v1/content/article/update-draft | 
-[**article_service_watch**](ArticleServiceApi.md#article_service_watch) | **POST** /v1/content/article/watch | 
+[**accept_answer**](ArticleService.md#accept_answer) | **POST** /v1/content/article/accept-answer | 
+[**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect | 
+[**create**](ArticleService.md#create) | **POST** /v1/content/article/create | 
+[**delete**](ArticleService.md#delete) | **POST** /v1/content/article/delete | 
+[**get**](ArticleService.md#get) | **POST** /v1/content/article/get | 
+[**like**](ArticleService.md#like) | **POST** /v1/content/article/like | 
+[**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
+[**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
+[**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
+[**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
+[**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/update-draft | 
+[**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 
 
 
-## article_service_accept_answer
+## accept_answer
 
-> serde_json::Value article_service_accept_answer(accept_answer_article_request)
+> serde_json::Value accept_answer(accept_answer_article_request)
 
 
 ### Parameters
@@ -47,9 +47,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_collect
+## collect
 
-> serde_json::Value article_service_collect(collect_article_request)
+> serde_json::Value collect(collect_article_request)
 
 
 ### Parameters
@@ -75,9 +75,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_create
+## create
 
-> models::CreateArticleReply article_service_create(create_article_request)
+> models::CreateArticleReply create(create_article_request)
 
 
 ### Parameters
@@ -103,9 +103,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_delete
+## delete
 
-> serde_json::Value article_service_delete(delete_article_request)
+> serde_json::Value delete(delete_article_request)
 
 
 ### Parameters
@@ -131,9 +131,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_get
+## get
 
-> models::GetArticleReply article_service_get(get_article_request)
+> models::GetArticleReply get(get_article_request)
 
 
 ### Parameters
@@ -159,9 +159,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_like
+## like
 
-> serde_json::Value article_service_like(like_article_request)
+> serde_json::Value like(like_article_request)
 
 
 ### Parameters
@@ -187,9 +187,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_list
+## list
 
-> models::ListArticlesReply article_service_list(list_articles_request)
+> models::ListArticlesReply list(list_articles_request)
 
 
 ### Parameters
@@ -215,9 +215,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_publish
+## publish
 
-> serde_json::Value article_service_publish(publish_article_request)
+> serde_json::Value publish(publish_article_request)
 
 
 ### Parameters
@@ -243,9 +243,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_reward
+## reward
 
-> serde_json::Value article_service_reward(reward_article_request)
+> serde_json::Value reward(reward_article_request)
 
 
 ### Parameters
@@ -271,9 +271,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_thank
+## thank
 
-> serde_json::Value article_service_thank(thank_article_request)
+> serde_json::Value thank(thank_article_request)
 
 
 ### Parameters
@@ -299,9 +299,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_update_draft
+## update_draft
 
-> models::UpdateDraftArticleReply article_service_update_draft(update_draft_article_request)
+> models::UpdateDraftArticleReply update_draft(update_draft_article_request)
 
 
 ### Parameters
@@ -327,9 +327,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## article_service_watch
+## watch
 
-> serde_json::Value article_service_watch(watch_article_request)
+> serde_json::Value watch(watch_article_request)
 
 
 ### Parameters

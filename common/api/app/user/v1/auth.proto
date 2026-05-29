@@ -22,7 +22,7 @@ service AuthService {
   // 使用账号名、邮箱或手机号加密码登录。
   rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Reply) {}
 
-  // 登出当前登录账号并清理当前令牌。
+  // 登出账号并清理令牌。
   rpc Logout(Logout.Request) returns (Logout.Reply) {}
 }
 
@@ -78,6 +78,8 @@ message LoginByPassword {
 }
 
 message Logout {
-  message Request {}
+  message Request {
+    string token = 1;
+  }
   message Reply {}
 }

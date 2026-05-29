@@ -44,6 +44,11 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentCommentLike:    {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED},
 })
 
+// Values 返回 Ent enum 允许写入的持久化值。
+func (EventSubject) Values() []string {
+	return EventSubjectMap.EnumValues()
+}
+
 // EventSubjectByEventType 根据事件类型返回对应的 MQ 主题。
 func EventSubjectByEventType(eventType enums.EventType) (EventSubject, bool) {
 	return EventSubjectMap.ToEnum(enums.EventSubject(eventType))

@@ -13,9 +13,6 @@ option go_package = "common/api/gen/content/v1;v1";
 // =====================
 
 message Article {
-  reserved 19, 20, 21;
-  reserved "vote_total", "lottery_participant_count", "lottery_winner_count";
-
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
   // 更新时间
@@ -89,11 +86,6 @@ message Article {
 
   // 文章封面图
   optional string cover_image_url = 27;
-
-  // 附言
-  repeated ArticlePostscript postscripts = 99;
-  // 标签
-  repeated Tag tags = 100;
 }
 
 message ArticlePostscript {
@@ -129,9 +121,6 @@ message ArticleEventPublish {
 }
 
 message Tag {
-  reserved 7;
-  reserved "article_count";
-
   // 创建时间
   optional google.protobuf.Timestamp created_at = 1000;
   // 更新时间
@@ -153,9 +142,6 @@ message Tag {
 }
 
 message Domain {
-  reserved 9;
-  reserved "tag_count";
-
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
   // 更新时间
@@ -179,14 +165,9 @@ message Domain {
   optional string icon = 8;
   // 是否导航
   bool is_nav = 10;
-  // 标签列表
-  repeated Tag tags = 100;
 }
 
 message Comment {
-  reserved 11;
-  reserved "collect_count";
-
   // 创建时间
   google.protobuf.Timestamp created_at = 1000;
   // 更新时间
@@ -272,15 +253,9 @@ message CommentQueryParams {
   optional int32 level = 8;
   // 状态
   optional CommentStatus status = 9;
-
-  // 是否返回文章信息
-  bool with_article = 100;
 }
 
 message TagQueryParams {
-  reserved 8;
-  reserved "article_count";
-
   // 标签Id列表
   repeated int64 ids = 1;
   // 用户Id
@@ -298,9 +273,6 @@ message TagQueryParams {
 }
 
 message DomainQueryParams {
-  reserved 9;
-  reserved "tag_count";
-
   // 主键
   repeated int64 ids = 2;
   // 领域名称

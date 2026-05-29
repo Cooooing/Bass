@@ -29,13 +29,7 @@ var BizProviderSet = wire.NewSet(
 	consumer.NewConsumer,
 	usecase.NewEventUsecase,
 	usecase.NewNotifyUsecase,
-	usecase.NewDeliveryUsecase,
-	usecase.NewDeliveryWorker,
-
-	usecase.NewNotificationMetaUsecase,
-	usecase.NewNotificationRecordUsecase,
-	usecase.NewNotificationSettingUsecase,
-	usecase.NewNotificationTemplateUsecase,
+	usecase.NewStationMessageUsecase,
 	usecase.NewObjectStorageUsecase,
 )
 

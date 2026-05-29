@@ -83,8 +83,6 @@ message Article {
   optional int64 updated_by = 1003;
   string created_at = 1000;
   string updated_at = 1001;
-  repeated ArticlePostscript postscripts = 100;
-  repeated Tag tags = 101;
 }
 
 message ArticlePostscript {
@@ -143,7 +141,6 @@ message Domain {
   optional int64 updated_by = 1003;
   string created_at = 1000;
   string updated_at = 1001;
-  repeated Tag tags = 100;
 }
 
 message ArticleSave {
@@ -190,7 +187,6 @@ message CommentQuery {
   optional int64 user_id = 6;
   optional int32 level = 7;
   optional CommentStatus status = 8;
-  bool with_article = 100;
 }
 
 message TagQuery {

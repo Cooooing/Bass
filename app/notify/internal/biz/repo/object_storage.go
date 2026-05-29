@@ -15,7 +15,7 @@ type ObjectStorageRepo interface {
 
 	Exist(ctx context.Context, req *ObjectStorageGetReq) (bool, error)
 	GetList(ctx context.Context, req *ObjectStorageGetReq) ([]*model.ObjectStorage, error)
-	GetPage(ctx context.Context, page *common.PageRequest, req *ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error)
+	Page(ctx context.Context, page *common.PageRequest, req *ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error)
 }
 
 type ObjectStorageGetReq struct {
@@ -28,8 +28,8 @@ type ObjectStorageGetReq struct {
 	BlockedByName *string
 }
 
-type ObjectStorageProvider interface {
+type ObjectStorageClient interface {
 	Name() string
-	UploadToken(ctx context.Context, key string) (string, error)
+	UploadToken(ctx context.Context, key string, uploaderID int64, uploaderName string) (string, error)
 	Status(ctx context.Context, key string, enable bool) error
 }

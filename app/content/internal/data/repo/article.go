@@ -15,7 +15,6 @@ import (
 	"content/internal/data/gen"
 	articleent "content/internal/data/gen/article"
 	"content/internal/data/gen/articleactionrecord"
-	"content/internal/data/gen/articlepostscript"
 	tagent "content/internal/data/gen/tag"
 	"content/internal/enum"
 
@@ -122,6 +121,8 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article, tags []*
 	create := r.getClient(ctx).Article.Create().
 		SetTitle(article.Title).
 		SetContent(article.Content).
+		SetNillableCreatedBy(article.CreatedBy).
+		SetNillableUpdatedBy(article.UpdatedBy).
 		SetNillableRewardContent(article.RewardContent).
 		SetNillableRewardPoints(article.RewardPoints).
 		SetStatus(articleent.Status(article.Status)).
@@ -180,6 +181,7 @@ func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article, 
 	update := r.getClient(ctx).Article.UpdateOneID(updateArticle.ID).
 		SetTitle(updateArticle.Title).
 		SetContent(updateArticle.Content).
+		SetNillableUpdatedBy(updateArticle.UpdatedBy).
 		SetNillableRewardContent(updateArticle.RewardContent).
 		SetNillableRewardPoints(updateArticle.RewardPoints).
 		SetStatus(articleent.Status(updateArticle.Status)).
@@ -230,16 +232,18 @@ func (r *ArticleRepo) UpdateContent(ctx context.Context, articleId int64, conten
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateStatus(ctx context.Context, articleId int64, status v1.ArticleStatus) error {
+func (r *ArticleRepo) UpdateStatus(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus) error {
 	dbStatus, _ := enum.ArticleStatusMap.ToEnum(status)
 	return r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetUpdatedBy(userId).
 		SetStatus(articleent.Status(dbStatus)).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateControlFields(ctx context.Context, articleId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
+func (r *ArticleRepo) UpdateControlFields(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
 	dbStatus, _ := enum.ArticleStatusMap.ToEnum(status)
 	update := r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetUpdatedBy(userId).
 		SetStatus(articleent.Status(dbStatus)).
 		SetCommentable(commentable).
 		SetAnonymous(anonymous)
@@ -249,14 +253,15 @@ func (r *ArticleRepo) UpdateControlFields(ctx context.Context, articleId int64, 
 	return update.Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, articleId int64, hasPostscript bool) error {
+func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, articleId int64, userId int64, hasPostscript bool) error {
 	return r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetUpdatedBy(userId).
 		SetHasPostscript(hasPostscript).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateStat(ctx context.Context, articleId int64, action v1.ArticleAction, num int32) (*model.Article, error) {
-	updateOne := r.getClient(ctx).Article.UpdateOneID(articleId)
+func (r *ArticleRepo) UpdateStat(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, num int32) (*model.Article, error) {
+	updateOne := r.getClient(ctx).Article.UpdateOneID(articleId).SetUpdatedBy(userId)
 	switch action {
 	case v1.ArticleAction_ARTICLE_ACTION_LIKE:
 		updateOne.AddLikeCount(num)
@@ -303,7 +308,7 @@ func (r *ArticleRepo) UpdateStat(ctx context.Context, articleId int64, action v1
 	}, nil
 }
 
-func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, commentId int64) (*model.Article, error) {
+func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, userId int64, commentId int64) (*model.Article, error) {
 	exist, err := r.commentRepo.Exist(ctx, &repo.CommentGetReq{CommentId: new(commentId), ArticleId: new(articleId)})
 	if err != nil {
 		return nil, err
@@ -312,6 +317,7 @@ func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, c
 		return nil, fmt.Errorf("comment not exist")
 	}
 	a, err := r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetUpdatedBy(userId).
 		SetAcceptedAnswerID(commentId).
 		Save(ctx)
 	if err != nil {
@@ -345,7 +351,7 @@ func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, c
 	}, nil
 }
 
-func (r *ArticleRepo) Publish(ctx context.Context, articleId int64) (*model.Article, error) {
+func (r *ArticleRepo) Publish(ctx context.Context, articleId int64, userId int64) (*model.Article, error) {
 	first, err := r.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 	if err != nil {
 		return nil, err
@@ -355,15 +361,18 @@ func (r *ArticleRepo) Publish(ctx context.Context, articleId int64) (*model.Arti
 		return nil, cerrors.ErrorBadRequest("only update draft")
 	}
 
-	err = r.UpdateStatus(ctx, articleId, v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
+	err = r.UpdateStatus(ctx, articleId, userId, v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
 	if err != nil {
 		return nil, err
 	}
 	return first, nil
 }
 
-func (r *ArticleRepo) Delete(ctx context.Context, articleId int64) error {
-	return r.getClient(ctx).Article.UpdateOneID(articleId).SetStatus(articleent.StatusDeleted).Exec(ctx)
+func (r *ArticleRepo) Delete(ctx context.Context, articleId int64, userId int64) error {
+	return r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetUpdatedBy(userId).
+		SetStatus(articleent.StatusDeleted).
+		Exec(ctx)
 }
 
 func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool, error) {
@@ -373,12 +382,7 @@ func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool,
 }
 
 func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.Article, error) {
-	query := r.getClient(ctx).Article.Query().
-		WithPostscripts(func(q *gen.ArticlePostscriptQuery) {
-			q.Where(articlepostscript.StatusEQ(articlepostscript.StatusNormal)).
-				Order(gen.Asc(articlepostscript.FieldCreatedAt))
-		}).
-		WithTags()
+	query := r.getClient(ctx).Article.Query()
 	if req.QueryUserId != nil {
 		query = query.WithActionRecords(func(query *gen.ArticleActionRecordQuery) {
 			query.Where(articleactionrecord.UserIDEQ(*req.QueryUserId))
@@ -419,31 +423,6 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		UpdatedBy:        a.UpdatedBy,
 		IsSummary:        req.IsSummary,
 	}
-	for _, item := range a.Edges.Postscripts {
-		result.Postscripts = append(result.Postscripts, &model.ArticlePostscript{
-			ID:        item.ID,
-			ArticleID: item.ArticleID,
-			Content:   item.Content,
-			Status:    enum.ArticlePostscriptStatus(item.Status),
-			CreatedAt: item.CreatedAt,
-			UpdatedAt: item.UpdatedAt,
-			CreatedBy: item.CreatedBy,
-			UpdatedBy: item.UpdatedBy,
-		})
-	}
-	for _, item := range a.Edges.Tags {
-		result.Tags = append(result.Tags, &model.Tag{
-			ID:          item.ID,
-			Name:        item.Name,
-			Description: item.Description,
-			DomainID:    item.DomainID,
-			Status:      enum.TagStatus(item.Status),
-			CreatedAt:   item.CreatedAt,
-			UpdatedAt:   item.UpdatedAt,
-			CreatedBy:   item.CreatedBy,
-			UpdatedBy:   item.UpdatedBy,
-		})
-	}
 	for _, item := range a.Edges.ActionRecords {
 		result.ActionRecords = append(result.ActionRecords, &model.ArticleActionRecord{
 			ID:        item.ID,
@@ -456,7 +435,7 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 }
 
 func (r *ArticleRepo) GetList(ctx context.Context, req *repo.ArticleGetReq) ([]*model.Article, error) {
-	query := r.getClient(ctx).Article.Query().WithTags()
+	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
@@ -491,27 +470,14 @@ func (r *ArticleRepo) GetList(ctx context.Context, req *repo.ArticleGetReq) ([]*
 			UpdatedBy:        list[i].UpdatedBy,
 			IsSummary:        req.IsSummary,
 		}
-		for _, tag := range list[i].Edges.Tags {
-			item.Tags = append(item.Tags, &model.Tag{
-				ID:          tag.ID,
-				Name:        tag.Name,
-				Description: tag.Description,
-				DomainID:    tag.DomainID,
-				Status:      enum.TagStatus(tag.Status),
-				CreatedAt:   tag.CreatedAt,
-				UpdatedAt:   tag.UpdatedAt,
-				CreatedBy:   tag.CreatedBy,
-				UpdatedBy:   tag.UpdatedBy,
-			})
-		}
 		articles = append(articles, item)
 	}
 	return articles, nil
 }
 
-func (r *ArticleRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
+func (r *ArticleRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
 	page = constant.PageValid(page)
-	query := r.getClient(ctx).Article.Query().WithTags()
+	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	total, err := countQuery.Count(ctx)
@@ -550,19 +516,6 @@ func (r *ArticleRepo) GetPage(ctx context.Context, page *common.PageRequest, req
 			CreatedBy:        list[i].CreatedBy,
 			UpdatedBy:        list[i].UpdatedBy,
 			IsSummary:        req.IsSummary,
-		}
-		for _, tag := range list[i].Edges.Tags {
-			item.Tags = append(item.Tags, &model.Tag{
-				ID:          tag.ID,
-				Name:        tag.Name,
-				Description: tag.Description,
-				DomainID:    tag.DomainID,
-				Status:      enum.TagStatus(tag.Status),
-				CreatedAt:   tag.CreatedAt,
-				UpdatedAt:   tag.UpdatedAt,
-				CreatedBy:   tag.CreatedBy,
-				UpdatedBy:   tag.UpdatedBy,
-			})
 		}
 		articles = append(articles, item)
 	}

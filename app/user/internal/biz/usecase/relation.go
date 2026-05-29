@@ -7,7 +7,6 @@ import (
 	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	commonenum "common/pkg/enum"
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -39,7 +38,6 @@ func NewRelationUsecase(
 func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.RelationType, isAdd bool, actorID int64, targetID int64) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
 		var delta int32
-		var actor *model.Account
 
 		dbRelationType, ok := enum.RelationTypeMap.ToEnum(relationType)
 		if !ok {
@@ -56,8 +54,7 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 		}
 
 		if relationType == v1.RelationType_RELATION_TYPE_FOLLOW || relationType == v1.RelationType_RELATION_TYPE_BLOCK {
-			actor, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &actorID})
-			if err != nil {
+			if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &actorID}); err != nil {
 				return err
 			}
 		}
@@ -103,13 +100,12 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 			}
 			if isAdd {
 				return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-					EventType: commonenum.EventTypeUserFollow,
-					Subject:   commonenum.EventSubjectUserFollow,
 					Event: &commonenums.Event{
+						Type:    commonenums.EventType_EVENT_TYPE_USER_FOLLOW,
+						Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_FOLLOW,
 						Payload: &commonenums.Event_UserFollow{
 							UserFollow: &commonenums.UserFollowPayload{
-								SenderId:   actor.ID,
-								SenderName: accountDisplayName(actor),
+								SenderId:   actorID,
 								FollowedId: targetID,
 							},
 						},
@@ -117,13 +113,12 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 				})
 			}
 			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				EventType: commonenum.EventTypeUserUnfollow,
-				Subject:   commonenum.EventSubjectUserUnfollow,
 				Event: &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_USER_UNFOLLOW,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNFOLLOW,
 					Payload: &commonenums.Event_UserUnfollow{
 						UserUnfollow: &commonenums.UserUnfollowPayload{
-							SenderId:   actor.ID,
-							SenderName: accountDisplayName(actor),
+							SenderId:   actorID,
 							FollowedId: targetID,
 						},
 					},
@@ -132,27 +127,25 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 		case v1.RelationType_RELATION_TYPE_BLOCK:
 			if isAdd {
 				return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-					EventType: commonenum.EventTypeUserBlock,
-					Subject:   commonenum.EventSubjectUserBlock,
 					Event: &commonenums.Event{
+						Type:    commonenums.EventType_EVENT_TYPE_USER_BLOCK,
+						Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_BLOCK,
 						Payload: &commonenums.Event_UserBlock{
 							UserBlock: &commonenums.UserBlockPayload{
-								SenderId:   actor.ID,
-								SenderName: accountDisplayName(actor),
-								BlockedId:  targetID,
+								SenderId:  actorID,
+								BlockedId: targetID,
 							},
 						},
 					},
 				})
 			}
 			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				EventType: commonenum.EventTypeUserUnblock,
-				Subject:   commonenum.EventSubjectUserUnblock,
 				Event: &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_USER_UNBLOCK,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNBLOCK,
 					Payload: &commonenums.Event_UserUnblock{
 						UserUnblock: &commonenums.UserUnblockPayload{
-							SenderId:    actor.ID,
-							SenderName:  accountDisplayName(actor),
+							SenderId:    actorID,
 							UnblockedId: targetID,
 						},
 					},
@@ -168,13 +161,50 @@ func (d *RelationUsecase) UpdateRelation(ctx context.Context, relationType v1.Re
 	return nil
 }
 
-func (d *RelationUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.RelationGetReq) ([]*model.Relation, *common.PageReply, error) {
-	return d.relationRepo.Page(ctx, page, req)
+func (d *RelationUsecase) ListFollowing(ctx context.Context, page *common.PageRequest, actorID int64) ([]*model.Relation, *common.PageReply, error) {
+	return d.relationRepo.Page(ctx, page, &repo.RelationGetReq{ActorId: &actorID, Type: new(v1.RelationType_RELATION_TYPE_FOLLOW)})
 }
 
-func accountDisplayName(account *model.Account) string {
-	if account.Nickname != nil && *account.Nickname != "" {
-		return *account.Nickname
+func (d *RelationUsecase) ListFollowers(ctx context.Context, page *common.PageRequest, targetID int64) ([]*model.Relation, *common.PageReply, error) {
+	return d.relationRepo.Page(ctx, page, &repo.RelationGetReq{TargetId: &targetID, Type: new(v1.RelationType_RELATION_TYPE_FOLLOW)})
+}
+
+func (d *RelationUsecase) ListBlocked(ctx context.Context, page *common.PageRequest, actorID int64) ([]*model.Relation, *common.PageReply, error) {
+	return d.relationRepo.Page(ctx, page, &repo.RelationGetReq{ActorId: &actorID, Type: new(v1.RelationType_RELATION_TYPE_BLOCK)})
+}
+
+func (d *RelationUsecase) MapStatus(ctx context.Context, actorID int64, targetIDs []int64) (map[int64]*model.RelationStatus, error) {
+	statuses := make(map[int64]*model.RelationStatus, len(targetIDs))
+	for _, targetID := range targetIDs {
+		statuses[targetID] = &model.RelationStatus{TargetID: targetID}
 	}
-	return account.Name
+	rows, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorId: &actorID})
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range rows {
+		if status, ok := statuses[row.TargetID]; ok {
+			switch row.Type {
+			case enum.RelationTypeFollow:
+				status.Following = true
+			case enum.RelationTypeBlock:
+				status.Blocking = true
+			}
+		}
+	}
+	rows, err = d.relationRepo.List(ctx, &repo.RelationGetReq{TargetId: &actorID})
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range rows {
+		if status, ok := statuses[row.ActorID]; ok {
+			switch row.Type {
+			case enum.RelationTypeFollow:
+				status.FollowedBy = true
+			case enum.RelationTypeBlock:
+				status.BlockedBy = true
+			}
+		}
+	}
+	return statuses, nil
 }

@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "im/v1/enum.proto";
 import "im/v1/model.proto";
 
@@ -12,28 +11,13 @@ option go_package = "common/api/gen/im/v1;v1";
 // ChatMessage 服务
 service IMChatMessageService {
   // 发送消息
-  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-message/send"
-      body: "*"
-    };
-  }
+  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Reply) {}
 
   // 撤回消息
-  rpc Revoke(RevokeChatMessage.Request) returns (RevokeChatMessage.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-message/revoke"
-      body: "*"
-    };
-  }
+  rpc Revoke(RevokeChatMessage.Request) returns (RevokeChatMessage.Reply) {}
 
   // 查询消息数据
-  rpc List(ListChatMessages.Request) returns (ListChatMessages.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-message/list"
-      body: "*"
-    };
-  }
+  rpc List(ListChatMessages.Request) returns (ListChatMessages.Reply) {}
 }
 
 message SendChatMessage {

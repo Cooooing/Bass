@@ -7,7 +7,6 @@ import (
 	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
-	commonenum "common/pkg/enum"
 	"common/pkg/util"
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
@@ -50,10 +49,6 @@ func NewCommentUsecase(
 }
 
 func (d *CommentUsecase) Add(ctx context.Context, userId int64, comment *model.Comment) (c *model.Comment, err error) {
-	senderName, err := accountName(ctx, d.userClient, userId)
-	if err != nil {
-		return nil, err
-	}
 	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
@@ -77,13 +72,13 @@ func (d *CommentUsecase) Add(ctx context.Context, userId int64, comment *model.C
 				return err
 			}
 
-			err = d.commentRepo.UpdateStat(ctx, replyComment.ID, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
+			err = d.commentRepo.UpdateStat(ctx, replyComment.ID, userId, v1.CommentAction_COMMENT_ACTION_REPLY, 1)
 			if err != nil {
 				return err
 			}
 		}
 
-		_, err = d.articleRepo.UpdateStat(ctx, article.ID, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
+		_, err = d.articleRepo.UpdateStat(ctx, article.ID, userId, v1.ArticleAction_ARTICLE_ACTION_REPLY, 1)
 		if err != nil {
 			return err
 		}
@@ -94,29 +89,21 @@ func (d *CommentUsecase) Add(ctx context.Context, userId int64, comment *model.C
 			Level:     replyComment.Level + 1,
 			ParentID:  util.If(comment.ReplyID == nil, nil, util.If(replyComment.ParentID == nil, &replyComment.ID, replyComment.ParentID)),
 			ReplyID:   comment.ReplyID,
+			CreatedBy: comment.CreatedBy,
+			UpdatedBy: comment.UpdatedBy,
 		}
 		save.FormatContent()
 		c, err = d.commentRepo.Save(ctx, save)
 		if err != nil {
 			return err
 		}
-		articleAuthorID := int64(0)
-		if article.CreatedBy != nil {
-			articleAuthorID = *article.CreatedBy
-		}
 		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			EventType: commonenum.EventTypeContentCommentPublish,
-			Subject:   commonenum.EventSubjectContentCommentPublish,
 			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_COMMENT_PUBLISHED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED,
 				Payload: &commonenums.Event_CommentPublished{
 					CommentPublished: &commonenums.CommentPublishedPayload{
-						SenderId:   userId,
-						SenderName: senderName,
-						CommentId:  c.ID,
-						ArticleId:  comment.ArticleID,
-						AuthorId:   articleAuthorID,
-						Content:    c.Content,
-						Title:      article.Title,
+						CommentId: c.ID,
 					},
 				},
 			},
@@ -135,7 +122,7 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 		err       error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		reply, pageReply, err = d.commentRepo.GetPage(ctx, page, req)
+		reply, pageReply, err = d.commentRepo.Page(ctx, page, req)
 		if err != nil {
 			return err
 		}
@@ -149,7 +136,7 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 			}
 		}
 
-		users, err := d.userClient.BatchGetBasicAccounts(ctx, lo.Keys(userIDs))
+		users, err := d.userClient.MapAccounts(ctx, lo.Keys(userIDs))
 		if err != nil {
 			return err
 		}
@@ -167,12 +154,12 @@ func (d *CommentUsecase) Page(ctx context.Context, page *common.PageRequest, req
 	return pageReply, reply, err
 }
 
-func (d *CommentUsecase) UpdateStatus(ctx context.Context, commentId int64, status v1.CommentStatus) error {
+func (d *CommentUsecase) UpdateStatus(ctx context.Context, commentId int64, userId int64, status v1.CommentStatus) error {
 	if _, ok := enum.CommentStatusMap.ToEnum(status); !ok {
 		return cerrors.ErrorBadRequest("invalid comment status")
 	}
 	return d.tx(ctx, func(ctx context.Context) error {
-		return d.commentRepo.UpdateStatus(ctx, commentId, status)
+		return d.commentRepo.UpdateStatus(ctx, commentId, userId, status)
 	})
 }
 
@@ -186,21 +173,13 @@ func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId
 	default:
 		return cerrors.ErrorBadRequest("unsupported comment action")
 	}
-	senderName, err := accountName(ctx, d.userClient, userId)
-	if err != nil {
-		return err
-	}
 	return d.tx(ctx, func(ctx context.Context) error {
-		comment, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
+		_, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
 			CommentId: &commentId,
 			Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
-		}
-		commentAuthorID := int64(0)
-		if comment.CreatedBy != nil {
-			commentAuthorID = *comment.CreatedBy
 		}
 		if active {
 			existRecord, err := d.commentActionRecordRepo.Exist(ctx, commentId, userId, action)
@@ -218,7 +197,7 @@ func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId
 			if err != nil {
 				return err
 			}
-			err = d.commentRepo.UpdateStat(ctx, commentId, action, 1)
+			err = d.commentRepo.UpdateStat(ctx, commentId, userId, action, 1)
 			if err != nil {
 				return err
 			}
@@ -226,16 +205,13 @@ func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId
 				return nil
 			}
 			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				EventType: commonenum.EventTypeContentCommentLike,
-				Subject:   commonenum.EventSubjectContentCommentLike,
 				Event: &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_COMMENT_LIKED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED,
 					Payload: &commonenums.Event_CommentLiked{
 						CommentLiked: &commonenums.CommentLikedPayload{
-							SenderId:        userId,
-							SenderName:      senderName,
-							CommentId:       commentId,
-							ArticleId:       comment.ArticleID,
-							CommentAuthorId: commentAuthorID,
+							SenderId:  userId,
+							CommentId: commentId,
 						},
 					},
 				},
@@ -249,6 +225,6 @@ func (d *CommentUsecase) UpdateStat(ctx context.Context, commentId int64, userId
 		if deleted == 0 {
 			return nil
 		}
-		return d.commentRepo.UpdateStat(ctx, commentId, action, -1)
+		return d.commentRepo.UpdateStat(ctx, commentId, userId, action, -1)
 	})
 }

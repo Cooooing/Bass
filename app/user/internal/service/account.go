@@ -3,11 +3,8 @@ package service
 import (
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"user/internal/biz/repo"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
 
@@ -18,18 +15,11 @@ import (
 
 type AccountService struct {
 	v1.UnimplementedAccountServiceServer
-	accountValidationUsecase *usecase.AccountValidationUsecase
-	accountRepo              repo.AccountRepo
+	accountUsecase *usecase.AccountUsecase
 }
 
-func NewAccountService(
-	accountValidationUsecase *usecase.AccountValidationUsecase,
-	accountRepo repo.AccountRepo,
-) *AccountService {
-	return &AccountService{
-		accountValidationUsecase: accountValidationUsecase,
-		accountRepo:              accountRepo,
-	}
+func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
+	return &AccountService{accountUsecase: accountUsecase}
 }
 
 func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
@@ -38,12 +28,9 @@ func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *AccountService) RegisterHttp(hs *http.Server) {}
 
-func (s *AccountService) GetCurrent(ctx context.Context, req *v1.GetCurrentAccount_Request) (*v1.GetCurrentAccount_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &current.ID})
+func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Request) (*v1.GetAccount_Reply, error) {
+	req = util.OrDefault(req, &v1.GetAccount_Request{})
+	account, err := s.accountUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -69,55 +56,28 @@ func (s *AccountService) GetCurrent(ctx context.Context, req *v1.GetCurrentAccou
 	if account.UpdatedAt != nil {
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
-	return &v1.GetCurrentAccount_Reply{
-		Account: &v1.Account{
-			Basic: basic,
-			Contact: &v1.AccountContact{
-				UserId: account.ID,
-				Email:  account.Email,
-				Phone:  account.Phone,
-			},
+	replyAccount := &v1.Account{
+		Basic: basic,
+		Contact: &v1.AccountContact{
+			UserId: account.ID,
+			Email:  account.Email,
+			Phone:  account.Phone,
 		},
-	}, nil
+	}
+	return &v1.GetAccount_Reply{Account: replyAccount}, nil
 }
 
-func (s *AccountService) GetBasic(ctx context.Context, req *v1.GetBasicAccount_Request) (*v1.GetBasicAccount_Reply, error) {
-	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.UserId})
+func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Request) (*v1.ListAccounts_Reply, error) {
+	req = util.OrDefault(req, &v1.ListAccounts_Request{})
+	query := util.OrDefault(req.Query, &v1.AccountQuery{})
+	if len(query.UserIds) == 0 {
+		return &v1.ListAccounts_Reply{Rows: []*v1.Account{}}, nil
+	}
+	accounts, err := s.accountUsecase.ListByUserIDs(ctx, query.UserIds)
 	if err != nil {
 		return nil, err
 	}
-	basic := &v1.AccountBasic{
-		Id:            account.ID,
-		Name:          account.Name,
-		Nickname:      account.Nickname,
-		Url:           account.URL,
-		AvatarUrl:     account.AvatarURL,
-		Introduction:  account.Introduction,
-		FollowCount:   account.FollowCount,
-		FollowerCount: account.FollowerCount,
-	}
-	if account.Mbti != nil {
-		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
-	}
-	if account.Status != nil {
-		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
-	}
-	if account.CreatedAt != nil {
-		basic.CreatedAt = timestamppb.New(*account.CreatedAt)
-	}
-	if account.UpdatedAt != nil {
-		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
-	}
-	return &v1.GetBasicAccount_Reply{Account: basic}, nil
-}
-
-func (s *AccountService) BatchGetBasic(ctx context.Context, req *v1.BatchGetBasicAccount_Request) (*v1.BatchGetBasicAccount_Reply, error) {
-	req = util.OrDefault(req, &v1.BatchGetBasicAccount_Request{})
-	accounts, err := s.accountRepo.List(ctx, &repo.AccountGetReq{UserIds: req.UserIds})
-	if err != nil {
-		return nil, err
-	}
-	result := make(map[int64]*v1.AccountBasic, len(accounts))
+	rows := make([]*v1.Account, 0, len(accounts))
 	for _, account := range accounts {
 		basic := &v1.AccountBasic{
 			Id:            account.ID,
@@ -141,71 +101,100 @@ func (s *AccountService) BatchGetBasic(ctx context.Context, req *v1.BatchGetBasi
 		if account.UpdatedAt != nil {
 			basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 		}
-		result[account.ID] = basic
+		replyAccount := &v1.Account{
+			Basic: basic,
+			Contact: &v1.AccountContact{
+				UserId: account.ID,
+				Email:  account.Email,
+				Phone:  account.Phone,
+			},
+		}
+		rows = append(rows, replyAccount)
 	}
-	return &v1.BatchGetBasicAccount_Reply{Accounts: result}, nil
+	return &v1.ListAccounts_Reply{Rows: rows}, nil
 }
 
-func (s *AccountService) BatchGetContact(ctx context.Context, req *v1.BatchGetContactAccount_Request) (*v1.BatchGetContactAccount_Reply, error) {
-	req = util.OrDefault(req, &v1.BatchGetContactAccount_Request{})
-	accounts, err := s.accountRepo.List(ctx, &repo.AccountGetReq{UserIds: req.UserIds})
+func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Request) (*v1.MapAccounts_Reply, error) {
+	req = util.OrDefault(req, &v1.MapAccounts_Request{})
+	query := util.OrDefault(req.Query, &v1.AccountQuery{})
+	if len(query.UserIds) == 0 {
+		return &v1.MapAccounts_Reply{Accounts: map[int64]*v1.Account{}}, nil
+	}
+	accounts, err := s.accountUsecase.MapByUserIDs(ctx, query.UserIds)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*v1.AccountContact, len(accounts))
-	for _, account := range accounts {
-		result[account.ID] = &v1.AccountContact{
-			UserId: account.ID,
-			Email:  account.Email,
-			Phone:  account.Phone,
+	rows := make(map[int64]*v1.Account, len(accounts))
+	for userID, account := range accounts {
+		basic := &v1.AccountBasic{
+			Id:            account.ID,
+			Name:          account.Name,
+			Nickname:      account.Nickname,
+			Url:           account.URL,
+			AvatarUrl:     account.AvatarURL,
+			Introduction:  account.Introduction,
+			FollowCount:   account.FollowCount,
+			FollowerCount: account.FollowerCount,
 		}
+		if account.Mbti != nil {
+			basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
+		}
+		if account.Status != nil {
+			basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
+		}
+		if account.CreatedAt != nil {
+			basic.CreatedAt = timestamppb.New(*account.CreatedAt)
+		}
+		if account.UpdatedAt != nil {
+			basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
+		}
+		replyAccount := &v1.Account{
+			Basic: basic,
+			Contact: &v1.AccountContact{
+				UserId: account.ID,
+				Email:  account.Email,
+				Phone:  account.Phone,
+			},
+		}
+		rows[userID] = replyAccount
 	}
-	return &v1.BatchGetContactAccount_Reply{Contacts: result}, nil
+	return &v1.MapAccounts_Reply{Accounts: rows}, nil
 }
 
 func (s *AccountService) ExistsEmail(ctx context.Context, req *v1.ExistsEmail_Request) (*v1.ExistsEmail_Reply, error) {
-	exists, err := s.accountRepo.ExistsByAccount(ctx, req.Email)
+	exists, err := s.accountUsecase.ExistsByAccount(ctx, req.Email)
 	return &v1.ExistsEmail_Reply{Exists: exists}, err
 }
 
 func (s *AccountService) ExistsPhone(ctx context.Context, req *v1.ExistsPhone_Request) (*v1.ExistsPhone_Reply, error) {
-	exists, err := s.accountRepo.ExistsByAccount(ctx, req.Phone)
+	exists, err := s.accountUsecase.ExistsByAccount(ctx, req.Phone)
 	return &v1.ExistsPhone_Reply{Exists: exists}, err
 }
 
 func (s *AccountService) ExistsName(ctx context.Context, req *v1.ExistsName_Request) (*v1.ExistsName_Reply, error) {
-	exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name)
+	exists, err := s.accountUsecase.ExistsByAccount(ctx, req.Name)
 	return &v1.ExistsName_Reply{Exists: exists}, err
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Request) (*v1.UpdateProfileAccount_Reply, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Request{})
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
+	if err := s.validateProfileUpdate(req.AvatarUrl, req.Nickname, req.Url, req.Introduction); err != nil {
+		return nil, err
 	}
-	patch := &repo.AccountProfilePatch{
-		UserID:       current.ID,
-		AvatarURL:    repo.NewStringPatch(req.AvatarUrl),
-		Nickname:     repo.NewStringPatch(req.Nickname),
-		URL:          repo.NewStringPatch(req.Url),
-		Introduction: repo.NewStringPatch(req.Introduction),
-	}
+	var mbti *enum.MBTI
+	clearMBTI := false
 	if req.Mbti != nil {
 		if *req.Mbti == v1.MBTI_MBTI_UNSPECIFIED {
-			patch.Mbti = repo.MBTIPatch{Set: true, Clear: true}
+			clearMBTI = true
 		} else {
-			mbti, ok := enum.MBTIMap.ToEnum(*req.Mbti)
+			value, ok := enum.MBTIMap.ToEnum(*req.Mbti)
 			if !ok {
 				return nil, cerrors.ErrorBadRequest("mbti is invalid")
 			}
-			patch.Mbti = repo.MBTIPatch{Set: true, Value: mbti}
+			mbti = new(value)
 		}
 	}
-	if err := s.accountValidationUsecase.ValidateProfileUpdate(patch); err != nil {
-		return nil, err
-	}
-	account, err := s.accountRepo.UpdateProfile(ctx, patch)
+	account, err := s.accountUsecase.UpdateProfile(ctx, req.GetUserId(), req.AvatarUrl, req.Nickname, req.Url, req.Introduction, mbti, clearMBTI)
 	if err != nil {
 		return nil, err
 	}

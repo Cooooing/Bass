@@ -100,47 +100,45 @@ func (r *AccountRepo) Update(ctx context.Context, u *model.Account) (*model.Acco
 	}, nil
 }
 
-func (r *AccountRepo) UpdateProfile(ctx context.Context, patch *repo.AccountProfilePatch) (*model.Account, error) {
-	if !patch.HasChanges() {
-		return r.Get(ctx, &repo.AccountGetReq{UserID: &patch.UserID})
+func (r *AccountRepo) UpdateProfile(ctx context.Context, userID int64, avatarURL *string, nickname *string, url *string, introduction *string, mbti *enum.MBTI, clearMBTI bool) (*model.Account, error) {
+	if avatarURL == nil && nickname == nil && url == nil && introduction == nil && mbti == nil && !clearMBTI {
+		return r.Get(ctx, &repo.AccountGetReq{UserID: &userID})
 	}
 
 	tx := r.getClient(ctx)
-	update := tx.Account.UpdateOneID(patch.UserID)
-	if patch.AvatarURL.Set {
-		if patch.AvatarURL.Value == "" {
+	update := tx.Account.UpdateOneID(userID)
+	if avatarURL != nil {
+		if *avatarURL == "" {
 			update.ClearAvatarURL()
 		} else {
-			update.SetAvatarURL(patch.AvatarURL.Value)
+			update.SetAvatarURL(*avatarURL)
 		}
 	}
-	if patch.Nickname.Set {
-		if patch.Nickname.Value == "" {
+	if nickname != nil {
+		if *nickname == "" {
 			update.ClearNickname()
 		} else {
-			update.SetNickname(patch.Nickname.Value)
+			update.SetNickname(*nickname)
 		}
 	}
-	if patch.URL.Set {
-		if patch.URL.Value == "" {
+	if url != nil {
+		if *url == "" {
 			update.ClearURL()
 		} else {
-			update.SetURL(patch.URL.Value)
+			update.SetURL(*url)
 		}
 	}
-	if patch.Introduction.Set {
-		if patch.Introduction.Value == "" {
+	if introduction != nil {
+		if *introduction == "" {
 			update.ClearIntroduction()
 		} else {
-			update.SetIntroduction(patch.Introduction.Value)
+			update.SetIntroduction(*introduction)
 		}
 	}
-	if patch.Mbti.Set {
-		if patch.Mbti.Clear {
-			update.ClearMbti()
-		} else {
-			update.SetMbti(account.Mbti(patch.Mbti.Value))
-		}
+	if clearMBTI {
+		update.ClearMbti()
+	} else if mbti != nil {
+		update.SetMbti(account.Mbti(*mbti))
 	}
 
 	updated, err := update.Save(ctx)
@@ -301,6 +299,18 @@ func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) ([]*mod
 			CreatedAt:     u.CreatedAt,
 			UpdatedAt:     u.UpdatedAt,
 		})
+	}
+	return result, nil
+}
+
+func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (map[int64]*model.Account, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.Account, len(list))
+	for _, item := range list {
+		result[item.ID] = item
 	}
 	return result, nil
 }

@@ -3,9 +3,8 @@ package service
 import (
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	"common/pkg/util"
 	"context"
+	"regexp"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
@@ -17,14 +16,20 @@ import (
 
 type AuthService struct {
 	v1.UnimplementedAuthServiceServer
-	accountValidationUsecase *usecase.AccountValidationUsecase
-	authUsecase              *usecase.AuthUsecase
+	authUsecase *usecase.AuthUsecase
+	passRe      *regexp.Regexp
+	letterRe    *regexp.Regexp
+	numRe       *regexp.Regexp
+	nameRe      *regexp.Regexp
 }
 
-func NewAuthService(accountValidationUsecase *usecase.AccountValidationUsecase, authUsecase *usecase.AuthUsecase) *AuthService {
+func NewAuthService(authUsecase *usecase.AuthUsecase) *AuthService {
 	return &AuthService{
-		accountValidationUsecase: accountValidationUsecase,
-		authUsecase:              authUsecase,
+		authUsecase: authUsecase,
+		passRe:      regexp.MustCompile(`^[!-~]+$`),
+		letterRe:    regexp.MustCompile(`[A-Za-z]`),
+		numRe:       regexp.MustCompile(`[0-9]`),
+		nameRe:      regexp.MustCompile(`^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$`),
 	}
 }
 
@@ -35,7 +40,7 @@ func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 func (s *AuthService) RegisterHttp(hs *http.Server) {}
 
 func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartEmailRegistration_Request) (*v1.StartEmailRegistration_Reply, error) {
-	if err := s.accountValidationUsecase.ValidateRegister(req.Name, req.Nickname, req.Password); err != nil {
+	if err := s.validateRegister(req.Name, req.Nickname, req.Password); err != nil {
 		return nil, err
 	}
 	_, token, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{
@@ -53,7 +58,7 @@ func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *v1.Verif
 }
 
 func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartPhoneRegistration_Request) (*v1.StartPhoneRegistration_Reply, error) {
-	if err := s.accountValidationUsecase.ValidateRegister(req.Name, req.Nickname, req.Password); err != nil {
+	if err := s.validateRegister(req.Name, req.Nickname, req.Password); err != nil {
 		return nil, err
 	}
 	_, token, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{
@@ -73,6 +78,9 @@ func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.Verif
 func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPassword_Request) (*v1.LoginByPassword_Reply, error) {
 	token, account, err := s.authUsecase.LoginByPassword(ctx, req.Account, req.Password)
 	if err != nil {
+		if cerrors.IsInternalServerError(err) {
+			return nil, err
+		}
 		return nil, cerrors.ErrorBadRequest("account not exist or password is incorrect").WithCause(err)
 	}
 	basic := &v1.AccountBasic{
@@ -111,10 +119,6 @@ func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPasswo
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Request) (*v1.Logout_Reply, error) {
-	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	err := s.authUsecase.Logout(ctx, token)
+	err := s.authUsecase.Logout(ctx, req.GetToken())
 	return &v1.Logout_Reply{}, err
 }

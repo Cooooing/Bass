@@ -66,19 +66,6 @@ func (s *DomainService) BatchCreate(ctx context.Context, req *v1.BatchCreateDoma
 			Icon:        save.Icon,
 			IsNav:       save.IsNav,
 		}
-		for _, tag := range save.Tags {
-			row.Tags = append(row.Tags, &v1.Tag{
-				CreatedAt:   timestamppb.New(*tag.CreatedAt),
-				UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-				CreatedBy:   tag.CreatedBy,
-				UpdatedBy:   tag.UpdatedBy,
-				Id:          tag.ID,
-				Name:        tag.Name,
-				Description: tag.Description,
-				DomainId:    tag.DomainID,
-				Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-			})
-		}
 		rows = append(rows, row)
 	}
 	return &v1.BatchCreateDomains_Reply{
@@ -119,19 +106,6 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Request
 		Icon:        data.Icon,
 		IsNav:       data.IsNav,
 	}
-	for _, tag := range data.Tags {
-		reply.Tags = append(reply.Tags, &v1.Tag{
-			CreatedAt:   timestamppb.New(*tag.CreatedAt),
-			UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-			CreatedBy:   tag.CreatedBy,
-			UpdatedBy:   tag.UpdatedBy,
-			Id:          tag.ID,
-			Name:        tag.Name,
-			Description: tag.Description,
-			DomainId:    tag.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-		})
-	}
 	return &v1.UpdateDomain_Reply{
 		Data: reply,
 	}, err
@@ -169,19 +143,6 @@ func (s *DomainService) List(ctx context.Context, req *v1.ListDomains_Request) (
 			Url:         datum.URL,
 			Icon:        datum.Icon,
 			IsNav:       datum.IsNav,
-		}
-		for _, tag := range datum.Tags {
-			row.Tags = append(row.Tags, &v1.Tag{
-				CreatedAt:   timestamppb.New(*tag.CreatedAt),
-				UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-				CreatedBy:   tag.CreatedBy,
-				UpdatedBy:   tag.UpdatedBy,
-				Id:          tag.ID,
-				Name:        tag.Name,
-				Description: tag.Description,
-				DomainId:    tag.DomainID,
-				Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-			})
 		}
 		reply = append(reply, row)
 	}

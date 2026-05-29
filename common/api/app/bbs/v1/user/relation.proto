@@ -3,6 +3,7 @@ syntax = "proto3";
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/model.proto";
+import "common/common.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/user;user";
@@ -103,30 +104,30 @@ message UnblockRelation {
 
 message ListFollowingRelations {
   message Request {
-    PageRequest page = 1;
+    common.PageRequest page = 1;
   }
   message Reply {
-    PageReply page = 1;
+    common.PageReply page = 1;
     repeated Relation rows = 2;
   }
 }
 
 message ListFollowersRelations {
   message Request {
-    PageRequest page = 1;
+    common.PageRequest page = 1;
   }
   message Reply {
-    PageReply page = 1;
+    common.PageReply page = 1;
     repeated Relation rows = 2;
   }
 }
 
 message ListBlockedRelations {
   message Request {
-    PageRequest page = 1;
+    common.PageRequest page = 1;
   }
   message Reply {
-    PageReply page = 1;
+    common.PageReply page = 1;
     repeated Relation rows = 2;
   }
 }

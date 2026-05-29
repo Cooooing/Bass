@@ -2,44 +2,59 @@ package handler
 
 import (
 	"common/api/gen/common/enums"
-	commonenum "common/pkg/enum"
 	"context"
+	"notify/internal/biz/model"
+	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 )
 
 type ArticlePublishedHandler struct {
-	userClient usecase.UserClient
+	userClientHandler
+	contentClientHandler
 }
 
-func NewArticlePublishedHandler(userClient usecase.UserClient) *ArticlePublishedHandler {
-	return &ArticlePublishedHandler{userClient: userClient}
+func NewArticlePublishedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *ArticlePublishedHandler {
+	return &ArticlePublishedHandler{
+		userClientHandler:    userClientHandler{userClient: userClient},
+		contentClientHandler: contentClientHandler{contentClient: contentClient},
+	}
 }
 
-func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationIntent, error) {
+func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}
 	payload := event.GetArticlePublished()
-	if payload == nil {
+	if payload == nil || payload.GetArticleId() == 0 || h.contentClient == nil {
 		return nil, nil
 	}
-	receiverIDs := []int64(nil)
-	if h.userClient != nil {
-		var err error
-		receiverIDs, err = h.userClient.ListFollowerIDs(ctx, payload.SenderId)
-		if err != nil {
-			return nil, err
+	article, err := h.contentClient.GetArticle(ctx, payload.GetArticleId())
+	if err != nil {
+		return nil, err
+	}
+	templateData := model.ArticlePublishedTemplateData{
+		Article: h.articleTemplateData(article),
+	}
+	if article == nil || article.AuthorID == 0 || h.userClient == nil {
+		return &usecase.NotificationContext{
+			EventID:      event.EventId,
+			TemplateData: templateData,
+		}, nil
+	}
+	followerIDs, err := h.userClient.ListFollowerIDs(ctx, article.AuthorID)
+	if err != nil {
+		return nil, err
+	}
+	recipients := make([]*usecase.NotificationRecipient, 0, len(followerIDs))
+	for _, followerID := range followerIDs {
+		if followerID == 0 || followerID == article.AuthorID {
+			continue
 		}
+		recipients = append(recipients, &usecase.NotificationRecipient{UserID: followerID})
 	}
-	intent := &usecase.NotificationIntent{
-		EventID:   event.EventId,
-		EventType: commonenum.EventTypeContentArticlePublish,
-		Vars:      payload,
-	}
-	for _, receiverID := range receiverIDs {
-		if receiverID != 0 {
-			intent.Station = append(intent.Station, &usecase.StationInput{UserID: receiverID})
-		}
-	}
-	return intent, nil
+	return &usecase.NotificationContext{
+		EventID:      event.EventId,
+		TemplateData: templateData,
+		Recipients:   recipients,
+	}, nil
 }

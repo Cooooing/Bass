@@ -4,11 +4,8 @@ import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"context"
-	"user/internal/biz/repo"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
 
@@ -20,13 +17,11 @@ import (
 type RelationService struct {
 	v1.UnimplementedRelationServiceServer
 	relationUsecase *usecase.RelationUsecase
-	relationRepo    repo.RelationRepo
 }
 
-func NewRelationService(relationUsecase *usecase.RelationUsecase, relationRepo repo.RelationRepo) *RelationService {
+func NewRelationService(relationUsecase *usecase.RelationUsecase) *RelationService {
 	return &RelationService{
 		relationUsecase: relationUsecase,
-		relationRepo:    relationRepo,
 	}
 }
 
@@ -37,56 +32,35 @@ func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 func (s *RelationService) RegisterHttp(hs *http.Server) {}
 
 func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Request) (*v1.FollowRelation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	if current.ID == req.TargetId {
+	if req.GetActorId() == req.GetTargetId() {
 		return nil, cerrors.ErrorBadRequest("can not follow yourself")
 	}
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_FOLLOW, true, current.ID, req.TargetId)
+	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_FOLLOW, true, req.GetActorId(), req.GetTargetId())
 	return &v1.FollowRelation_Reply{}, err
 }
 
 func (s *RelationService) Unfollow(ctx context.Context, req *v1.UnfollowRelation_Request) (*v1.UnfollowRelation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_FOLLOW, false, current.ID, req.TargetId)
+	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_FOLLOW, false, req.GetActorId(), req.GetTargetId())
 	return &v1.UnfollowRelation_Reply{}, err
 }
 
 func (s *RelationService) Block(ctx context.Context, req *v1.BlockRelation_Request) (*v1.BlockRelation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	if current.ID == req.TargetId {
+	if req.GetActorId() == req.GetTargetId() {
 		return nil, cerrors.ErrorBadRequest("can not block yourself")
 	}
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_BLOCK, true, current.ID, req.TargetId)
+	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_BLOCK, true, req.GetActorId(), req.GetTargetId())
 	return &v1.BlockRelation_Reply{}, err
 }
 
 func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_Request) (*v1.UnblockRelation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_BLOCK, false, current.ID, req.TargetId)
+	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_BLOCK, false, req.GetActorId(), req.GetTargetId())
 	return &v1.UnblockRelation_Reply{}, err
 }
 
 func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Request) (*v1.ListFollowingRelations_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
 	req = util.OrDefault(req, &v1.ListFollowingRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	relationType := v1.RelationType_RELATION_TYPE_FOLLOW
-	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{ActorId: &current.ID, Type: &relationType})
+	rows, page, err := s.relationUsecase.ListFollowing(ctx, req.Page, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -105,14 +79,10 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowi
 }
 
 func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowersRelations_Request) (*v1.ListFollowersRelations_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
 	req = util.OrDefault(req, &v1.ListFollowersRelations_Request{})
+	targetID := req.GetUserId()
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	relationType := v1.RelationType_RELATION_TYPE_FOLLOW
-	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{TargetId: &current.ID, Type: &relationType})
+	rows, page, err := s.relationUsecase.ListFollowers(ctx, req.Page, targetID)
 	if err != nil {
 		return nil, err
 	}
@@ -130,33 +100,10 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowe
 	return &v1.ListFollowersRelations_Reply{Page: page, Rows: replyRows}, nil
 }
 
-func (s *RelationService) ListFollowerIds(ctx context.Context, req *v1.ListFollowerIdsRelation_Request) (*v1.ListFollowerIdsRelation_Reply, error) {
-	req = util.OrDefault(req, &v1.ListFollowerIdsRelation_Request{})
-	if req.UserId == 0 {
-		return nil, cerrors.ErrorBadRequest("user id is required")
-	}
-	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	relationType := v1.RelationType_RELATION_TYPE_FOLLOW
-	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{TargetId: &req.UserId, Type: &relationType})
-	if err != nil {
-		return nil, err
-	}
-	userIDs := make([]int64, 0, len(rows))
-	for _, row := range rows {
-		userIDs = append(userIDs, row.ActorID)
-	}
-	return &v1.ListFollowerIdsRelation_Reply{Page: page, UserIds: userIDs}, nil
-}
-
 func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRelations_Request) (*v1.ListBlockedRelations_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
 	req = util.OrDefault(req, &v1.ListBlockedRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	relationType := v1.RelationType_RELATION_TYPE_BLOCK
-	rows, page, err := s.relationUsecase.Page(ctx, req.Page, &repo.RelationGetReq{ActorId: &current.ID, Type: &relationType})
+	rows, page, err := s.relationUsecase.ListBlocked(ctx, req.Page, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -174,42 +121,24 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRe
 	return &v1.ListBlockedRelations_Reply{Page: page, Rows: replyRows}, nil
 }
 
-func (s *RelationService) BatchGetStatus(ctx context.Context, req *v1.BatchGetStatusRelation_Request) (*v1.BatchGetStatusRelation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	statuses := make(map[int64]*v1.RelationStatus, len(req.TargetIds))
-	for _, targetID := range req.TargetIds {
-		statuses[targetID] = &v1.RelationStatus{TargetId: targetID}
-	}
-	rows, err := s.relationRepo.List(ctx, &repo.RelationGetReq{ActorId: &current.ID})
+func (s *RelationService) MapStatus(ctx context.Context, req *v1.MapRelationStatuses_Request) (*v1.MapRelationStatuses_Reply, error) {
+	req = util.OrDefault(req, &v1.MapRelationStatuses_Request{})
+	rows, err := s.relationUsecase.MapStatus(ctx, req.GetActorId(), req.TargetIds)
 	if err != nil {
 		return nil, err
 	}
-	for _, row := range rows {
-		if status, ok := statuses[row.TargetID]; ok {
-			switch row.Type {
-			case enum.RelationTypeFollow:
-				status.Following = true
-			case enum.RelationTypeBlock:
-				status.Blocking = true
-			}
+	statuses := make(map[int64]*v1.RelationStatus, len(rows))
+	for targetID, row := range rows {
+		if row == nil {
+			continue
+		}
+		statuses[targetID] = &v1.RelationStatus{
+			TargetId:   row.TargetID,
+			Following:  row.Following,
+			FollowedBy: row.FollowedBy,
+			Blocking:   row.Blocking,
+			BlockedBy:  row.BlockedBy,
 		}
 	}
-	rows, err = s.relationRepo.List(ctx, &repo.RelationGetReq{TargetId: &current.ID})
-	if err != nil {
-		return nil, err
-	}
-	for _, row := range rows {
-		if status, ok := statuses[row.ActorID]; ok {
-			switch row.Type {
-			case enum.RelationTypeFollow:
-				status.FollowedBy = true
-			case enum.RelationTypeBlock:
-				status.BlockedBy = true
-			}
-		}
-	}
-	return &v1.BatchGetStatusRelation_Reply{Statuses: statuses}, nil
+	return &v1.MapRelationStatuses_Reply{Statuses: statuses}, nil
 }

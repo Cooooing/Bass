@@ -5,6 +5,7 @@ plugins:
     out: .
     strategy: all
     opt:
-      - fq_schema_naming=true
+      - fq_schema_naming=false
       - naming=proto
+      - enum_type=string
       - default_response=false

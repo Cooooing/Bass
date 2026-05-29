@@ -4,8 +4,8 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/util"
 	commonServer "common/pkg/util/server"
+	"content/internal/biz/usecase"
 	"content/internal/conf"
-	"content/internal/data"
 	"content/internal/server"
 	"context"
 	"flag"
@@ -34,7 +34,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *data.OutboxPublisher, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)

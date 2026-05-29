@@ -2,33 +2,51 @@ package handler
 
 import (
 	"common/api/gen/common/enums"
-	commonenum "common/pkg/enum"
 	"context"
+	"notify/internal/biz/model"
+	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 )
 
 type CommentLikedHandler struct {
+	userClientHandler
+	contentClientHandler
 }
 
-func NewCommentLikedHandler() *CommentLikedHandler {
-	return &CommentLikedHandler{}
+func NewCommentLikedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *CommentLikedHandler {
+	return &CommentLikedHandler{
+		userClientHandler:    userClientHandler{userClient: userClient},
+		contentClientHandler: contentClientHandler{contentClient: contentClient},
+	}
 }
 
-func (h *CommentLikedHandler) Build(_ context.Context, event *enums.Event) (*usecase.NotificationIntent, error) {
+func (h *CommentLikedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}
 	payload := event.GetCommentLiked()
-	if payload == nil {
+	if payload == nil || payload.GetCommentId() == 0 || h.contentClient == nil {
 		return nil, nil
 	}
-	intent := &usecase.NotificationIntent{
-		EventID:   event.EventId,
-		EventType: commonenum.EventTypeContentCommentLike,
-		Vars:      payload,
+	comment, err := h.contentClient.GetComment(ctx, payload.GetCommentId())
+	if err != nil {
+		return nil, err
 	}
-	if payload.CommentAuthorId != 0 && payload.CommentAuthorId != payload.SenderId {
-		intent.Station = append(intent.Station, &usecase.StationInput{UserID: payload.CommentAuthorId})
+	users, err := h.loadAccounts(ctx, payload.GetSenderId())
+	if err != nil {
+		return nil, err
 	}
-	return intent, nil
+	templateData := model.CommentLikedTemplateData{
+		Comment: h.commentTemplateData(comment),
+		Actor:   h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()]),
+	}
+	recipients := make([]*usecase.NotificationRecipient, 0, 1)
+	if comment != nil && comment.UserID != 0 && comment.UserID != payload.GetSenderId() {
+		recipients = append(recipients, &usecase.NotificationRecipient{UserID: comment.UserID})
+	}
+	return &usecase.NotificationContext{
+		EventID:      event.EventId,
+		TemplateData: templateData,
+		Recipients:   recipients,
+	}, nil
 }

@@ -2,33 +2,41 @@ package handler
 
 import (
 	"common/api/gen/common/enums"
-	commonenum "common/pkg/enum"
 	"context"
+	"notify/internal/biz/model"
+	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 )
 
 type UserFollowHandler struct {
+	userClientHandler
 }
 
-func NewUserFollowHandler() *UserFollowHandler {
-	return &UserFollowHandler{}
+func NewUserFollowHandler(userClient repo.UserClient) *UserFollowHandler {
+	return &UserFollowHandler{userClientHandler: userClientHandler{userClient: userClient}}
 }
 
-func (h *UserFollowHandler) Build(_ context.Context, event *enums.Event) (*usecase.NotificationIntent, error) {
+func (h *UserFollowHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}
 	payload := event.GetUserFollow()
-	if payload == nil {
+	if payload == nil || payload.GetFollowedId() == 0 {
 		return nil, nil
 	}
-	intent := &usecase.NotificationIntent{
-		EventID:   event.EventId,
-		EventType: commonenum.EventTypeUserFollow,
-		Vars:      payload,
+	users, err := h.loadAccounts(ctx, payload.GetSenderId(), payload.GetFollowedId())
+	if err != nil {
+		return nil, err
 	}
-	if payload.FollowedId != 0 {
-		intent.Station = append(intent.Station, &usecase.StationInput{UserID: payload.FollowedId})
+	templateData := model.UserFollowTemplateData{
+		Follower: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()]),
+		Followed: h.templateUser(payload.GetFollowedId(), users[payload.GetFollowedId()]),
 	}
-	return intent, nil
+	return &usecase.NotificationContext{
+		EventID:      event.EventId,
+		TemplateData: templateData,
+		Recipients: []*usecase.NotificationRecipient{
+			{UserID: payload.GetFollowedId()},
+		},
+	}, nil
 }

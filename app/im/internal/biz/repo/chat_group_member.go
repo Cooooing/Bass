@@ -14,7 +14,7 @@ type ChatGroupMemberRepo interface {
 
 	Get(ctx context.Context, req *ChatGroupMemberGetReq) (*model.ChatGroupMember, error)
 	GetList(ctx context.Context, req *ChatGroupMemberGetReq) ([]*model.ChatGroupMember, error)
-	GetPage(ctx context.Context, page *common.PageRequest, req *ChatGroupMemberGetReq) ([]*model.ChatGroupMember, *common.PageReply, error)
+	Page(ctx context.Context, page *common.PageRequest, req *ChatGroupMemberGetReq) ([]*model.ChatGroupMember, *common.PageReply, error)
 }
 
 type ChatGroupMemberGetReq struct {

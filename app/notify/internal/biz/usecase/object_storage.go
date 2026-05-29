@@ -2,10 +2,6 @@ package usecase
 
 import (
 	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"context"
 
 	base "notify/internal/biz/base"
@@ -18,31 +14,31 @@ import (
 )
 
 type ObjectStorageUsecase struct {
-	conf                  *conf.Bootstrap
-	tx                    base.Tx
-	objectStorageRepo     repo.ObjectStorageRepo
-	objectStorageProvider repo.ObjectStorageProvider
+	conf                *conf.Bootstrap
+	tx                  base.Tx
+	objectStorageRepo   repo.ObjectStorageRepo
+	objectStorageClient repo.ObjectStorageClient
 }
 
 func NewObjectStorageUsecase(
 	conf *conf.Bootstrap,
 	tx base.Tx,
 	objectStorageRepo repo.ObjectStorageRepo,
-	objectStorageProvider repo.ObjectStorageProvider,
+	objectStorageClient repo.ObjectStorageClient,
 ) *ObjectStorageUsecase {
 	return &ObjectStorageUsecase{
-		conf:                  conf,
-		tx:                    tx,
-		objectStorageRepo:     objectStorageRepo,
-		objectStorageProvider: objectStorageProvider,
+		conf:                conf,
+		tx:                  tx,
+		objectStorageRepo:   objectStorageRepo,
+		objectStorageClient: objectStorageClient,
 	}
 }
 
-func (d *ObjectStorageUsecase) UploadToken(ctx context.Context, num int) ([]*model.UploadToken, error) {
+func (d *ObjectStorageUsecase) UploadToken(ctx context.Context, num int, userID int64, userName string) ([]*model.UploadToken, error) {
 	tokens := make([]*model.UploadToken, 0, num)
 	for range num {
 		key := uuid.New().String()
-		token, err := d.objectStorageProvider.UploadToken(ctx, key)
+		token, err := d.objectStorageClient.UploadToken(ctx, key, userID, userName)
 		if err != nil {
 			return nil, err
 		}
@@ -54,13 +50,8 @@ func (d *ObjectStorageUsecase) UploadToken(ctx context.Context, num int) ([]*mod
 	return tokens, nil
 }
 
-func (d *ObjectStorageUsecase) UpdateAudit(ctx context.Context, key string, enable bool, reason *string) error {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return cerrors.ErrorUnauthorized("user not login")
-	}
-
-	err := d.objectStorageProvider.Status(ctx, key, enable)
+func (d *ObjectStorageUsecase) UpdateAudit(ctx context.Context, key string, enable bool, reason *string, userID int64, userName string) error {
+	err := d.objectStorageClient.Status(ctx, key, enable)
 	if err != nil {
 		return err
 	}
@@ -70,8 +61,8 @@ func (d *ObjectStorageUsecase) UpdateAudit(ctx context.Context, key string, enab
 			Blocked:       enable,
 			BlockedReason: reason,
 			BlockedAt:     new(time.Now()),
-			BlockedBy:     new(user.ID),
-			BlockedByName: new(user.Name),
+			BlockedBy:     new(userID),
+			BlockedByName: new(userName),
 		})
 	})
 }
@@ -83,7 +74,7 @@ func (d *ObjectStorageUsecase) Page(ctx context.Context, page *common.PageReques
 	)
 	err := d.tx(ctx, func(ctx context.Context) error {
 		var err error
-		rows, pageReply, err = d.objectStorageRepo.GetPage(ctx, page, req)
+		rows, pageReply, err = d.objectStorageRepo.Page(ctx, page, req)
 		return err
 	})
 	return rows, pageReply, err

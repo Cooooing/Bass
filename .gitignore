@@ -39,9 +39,12 @@ bin/
 !/common/api/gen/.gitkeep
 /common/api/gen-ts/**
 /common/api/gen-go/**
+/common/api/gen-java/**
+/common/api/gen-rust/**
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/gen/
+/app/**/gen-*/
 /app/**/server
 
 

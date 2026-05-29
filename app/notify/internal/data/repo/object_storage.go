@@ -149,7 +149,7 @@ func (r *ObjectStorageRepo) GetList(ctx context.Context, req *repo.ObjectStorage
 	return records, nil
 }
 
-func (r *ObjectStorageRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
+func (r *ObjectStorageRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
 	var (
 		items []*model.ObjectStorage
 		err   error

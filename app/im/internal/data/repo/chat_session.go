@@ -224,7 +224,7 @@ func (r *ChatSessionRepo) GetList(ctx context.Context, req *repo.ChatSessionGetR
 	return chatSessions, nil
 }
 
-func (r *ChatSessionRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.ChatSessionGetReq) ([]*model.ChatSession, *common.PageReply, error) {
+func (r *ChatSessionRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ChatSessionGetReq) ([]*model.ChatSession, *common.PageReply, error) {
 	page = constant.PageValid(page)
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)

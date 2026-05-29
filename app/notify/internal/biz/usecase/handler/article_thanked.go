@@ -2,19 +2,23 @@ package handler
 
 import (
 	"common/api/gen/common/enums"
-	commonenum "common/pkg/enum"
 	"context"
+	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 )
 
 type ArticleThankedHandler struct {
+	articleActorHandler
 }
 
-func NewArticleThankedHandler() *ArticleThankedHandler {
-	return &ArticleThankedHandler{}
+func NewArticleThankedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *ArticleThankedHandler {
+	return &ArticleThankedHandler{articleActorHandler: articleActorHandler{
+		userClientHandler:    userClientHandler{userClient: userClient},
+		contentClientHandler: contentClientHandler{contentClient: contentClient},
+	}}
 }
 
-func (h *ArticleThankedHandler) Build(_ context.Context, event *enums.Event) (*usecase.NotificationIntent, error) {
+func (h *ArticleThankedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}
@@ -22,13 +26,5 @@ func (h *ArticleThankedHandler) Build(_ context.Context, event *enums.Event) (*u
 	if payload == nil {
 		return nil, nil
 	}
-	intent := &usecase.NotificationIntent{
-		EventID:   event.EventId,
-		EventType: commonenum.EventTypeContentArticleThank,
-		Vars:      payload,
-	}
-	if payload.AuthorId != 0 && payload.AuthorId != payload.SenderId {
-		intent.Station = append(intent.Station, &usecase.StationInput{UserID: payload.AuthorId})
-	}
-	return intent, nil
+	return h.build(ctx, event.EventId, payload.GetArticleId(), payload.GetSenderId())
 }

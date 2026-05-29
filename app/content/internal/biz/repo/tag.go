@@ -14,7 +14,7 @@ type TagRepo interface {
 
 	Get(ctx context.Context, req *TagGetReq) (*model.Tag, error)
 	GetList(ctx context.Context, req *TagGetReq) ([]*model.Tag, error)
-	GetPage(ctx context.Context, page *common.PageRequest, req *TagGetReq) ([]*model.Tag, *common.PageReply, error)
+	Page(ctx context.Context, page *common.PageRequest, req *TagGetReq) ([]*model.Tag, *common.PageReply, error)
 }
 
 type TagGetReq struct {

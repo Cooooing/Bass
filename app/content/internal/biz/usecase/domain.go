@@ -49,5 +49,5 @@ func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*mod
 }
 
 func (d *ContentUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
-	return d.domainRepo.GetPage(ctx, page, req)
+	return d.domainRepo.Page(ctx, page, req)
 }

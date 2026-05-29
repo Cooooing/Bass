@@ -8,7 +8,6 @@ import (
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	userv1 "common/api/gen/user/v1"
-	commonenum "common/pkg/enum"
 	"common/pkg/util"
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
@@ -96,7 +95,7 @@ func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tags [
 	return save, err
 }
 
-func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, content string) (*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, userId int64, content string) (*model.ArticlePostscript, error) {
 	var save *model.ArticlePostscript
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
@@ -113,11 +112,13 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, con
 			ArticleID: articleId,
 			Content:   content,
 			Status:    enum.ArticlePostscriptStatusNormal,
+			CreatedBy: new(userId),
+			UpdatedBy: new(userId),
 		})
 		if err != nil {
 			return err
 		}
-		return d.articleRepo.UpdateHasPostscript(ctx, articleId, true)
+		return d.articleRepo.UpdateHasPostscript(ctx, articleId, userId, true)
 	})
 	return save, err
 }
@@ -175,21 +176,13 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 	default:
 		return cerrors.ErrorBadRequest("unsupported article action")
 	}
-	senderName, err := accountName(ctx, d.userClient, userId)
-	if err != nil {
-		return err
-	}
 	return d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		_, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
-		}
-		authorID := int64(0)
-		if article.CreatedBy != nil {
-			authorID = *article.CreatedBy
 		}
 		if active {
 			existRecord, err := d.actionRecordRepo.Exist(ctx, &repo.ArticleActionRecordReq{
@@ -211,67 +204,53 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 			if err != nil {
 				return err
 			}
-			_, err = d.articleRepo.UpdateStat(ctx, articleId, action, 1)
+			_, err = d.articleRepo.UpdateStat(ctx, articleId, userId, action, 1)
 			if err != nil {
 				return err
 			}
-			var eventType commonenum.EventType
-			var subject commonenum.EventSubject
 			var event *commonenums.Event
 			switch action {
 			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
-				eventType = commonenum.EventTypeContentArticleLike
-				subject = commonenum.EventSubjectContentArticleLike
 				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED,
 					Payload: &commonenums.Event_ArticleLiked{
 						ArticleLiked: &commonenums.ArticleLikedPayload{
-							SenderId:   userId,
-							SenderName: senderName,
-							ArticleId:  articleId,
-							AuthorId:   authorID,
-							Title:      article.Title,
+							SenderId:  userId,
+							ArticleId: articleId,
 						},
 					},
 				}
 			case v1.ArticleAction_ARTICLE_ACTION_THANK:
-				eventType = commonenum.EventTypeContentArticleThank
-				subject = commonenum.EventSubjectContentArticleThank
 				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED,
 					Payload: &commonenums.Event_ArticleThanked{
 						ArticleThanked: &commonenums.ArticleThankedPayload{
-							SenderId:   userId,
-							SenderName: senderName,
-							ArticleId:  articleId,
-							AuthorId:   authorID,
-							Title:      article.Title,
+							SenderId:  userId,
+							ArticleId: articleId,
 						},
 					},
 				}
 			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
-				eventType = commonenum.EventTypeContentArticleCollect
-				subject = commonenum.EventSubjectContentArticleCollect
 				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED,
 					Payload: &commonenums.Event_ArticleCollected{
 						ArticleCollected: &commonenums.ArticleCollectedPayload{
-							SenderId:   userId,
-							SenderName: senderName,
-							ArticleId:  articleId,
-							AuthorId:   authorID,
-							Title:      article.Title,
+							SenderId:  userId,
+							ArticleId: articleId,
 						},
 					},
 				}
 			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
-				eventType = commonenum.EventTypeContentArticleWatch
-				subject = commonenum.EventSubjectContentArticleWatch
 				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_WATCHED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED,
 					Payload: &commonenums.Event_ArticleWatched{
 						ArticleWatched: &commonenums.ArticleWatchedPayload{
-							SenderId:   userId,
-							SenderName: senderName,
-							ArticleId:  articleId,
-							AuthorId:   authorID,
-							Title:      article.Title,
+							SenderId:  userId,
+							ArticleId: articleId,
 						},
 					},
 				}
@@ -280,9 +259,7 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 				return nil
 			}
 			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				EventType: eventType,
-				Subject:   subject,
-				Event:     event,
+				Event: event,
 			})
 		}
 		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, action)
@@ -292,16 +269,12 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 		if deleted == 0 {
 			return nil
 		}
-		_, err = d.articleRepo.UpdateStat(ctx, articleId, action, -1)
+		_, err = d.articleRepo.UpdateStat(ctx, articleId, userId, action, -1)
 		return err
 	})
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId int64) error {
-	senderName, err := accountName(ctx, d.userClient, userId)
-	if err != nil {
-		return err
-	}
 	return d.tx(ctx, func(ctx context.Context) error {
 		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
@@ -313,20 +286,17 @@ func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId in
 		if !exist {
 			return cerrors.ErrorBadRequest("article not exist")
 		}
-		article, err := d.articleRepo.Publish(ctx, articleId)
+		_, err = d.articleRepo.Publish(ctx, articleId, userId)
 		if err != nil {
 			return err
 		}
 		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			EventType: commonenum.EventTypeContentArticlePublish,
-			Subject:   commonenum.EventSubjectContentArticlePublish,
 			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED,
 				Payload: &commonenums.Event_ArticlePublished{
 					ArticlePublished: &commonenums.ArticlePublishedPayload{
-						SenderId:   userId,
-						SenderName: senderName,
-						ArticleId:  articleId,
-						Title:      article.Title,
+						ArticleId: articleId,
 					},
 				},
 			},
@@ -334,7 +304,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId in
 	})
 }
 
-func (d *ArticleUsecase) UpdateArticle(ctx context.Context, articleId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
+func (d *ArticleUsecase) UpdateArticle(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
 	dbStatus, ok := enum.ArticleStatusMap.ToEnum(status)
 	if !ok {
 		return cerrors.ErrorBadRequest("invalid article status")
@@ -354,11 +324,11 @@ func (d *ArticleUsecase) UpdateArticle(ctx context.Context, articleId int64, sta
 		default:
 			return cerrors.ErrorBadRequest("invalid article status flow")
 		}
-		return d.articleRepo.UpdateControlFields(ctx, articleId, status, commentable, anonymous, listable)
+		return d.articleRepo.UpdateControlFields(ctx, articleId, userId, status, commentable, anonymous, listable)
 	})
 }
 
-func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, commentId int64) error {
+func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, userId int64, commentId int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
 		a, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
@@ -384,7 +354,7 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, comm
 		if !exist {
 			return cerrors.ErrorBadRequest("comment not exist")
 		}
-		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, articleId, commentId)
+		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, articleId, userId, commentId)
 		return err
 	})
 }
@@ -411,7 +381,7 @@ func (d *ArticleUsecase) Get(ctx context.Context, articleId int64) (*model.Artic
 	}
 	userAuthorsMap := map[int64]*userv1.AccountBasic{}
 	if len(userIDs) > 0 {
-		userAuthorsMap, err = d.userClient.BatchGetBasicAccounts(ctx, userIDs)
+		userAuthorsMap, err = d.userClient.MapAccounts(ctx, userIDs)
 		if err != nil {
 			return nil, err
 		}
@@ -431,7 +401,7 @@ func (d *ArticleUsecase) Get(ctx context.Context, articleId int64) (*model.Artic
 
 func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
 	req.IsSummary = true
-	list, pageReply, err := d.articleRepo.GetPage(ctx, page, req)
+	list, pageReply, err := d.articleRepo.Page(ctx, page, req)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -459,7 +429,7 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 
 	userAuthorsMap := map[int64]*userv1.AccountBasic{}
 	if len(userIDs) > 0 {
-		userAuthorsMap, err = d.userClient.BatchGetBasicAccounts(ctx, lo.Keys(userIDs))
+		userAuthorsMap, err = d.userClient.MapAccounts(ctx, lo.Keys(userIDs))
 		if err != nil {
 			return nil, nil, err
 		}
@@ -479,7 +449,7 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 	return list, pageReply, nil
 }
 
-func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64) error {
+func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64, userId int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
 		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
@@ -491,6 +461,6 @@ func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64) error {
 		if !exist {
 			return cerrors.ErrorBadRequest("article not exist")
 		}
-		return d.articleRepo.Delete(ctx, articleId)
+		return d.articleRepo.Delete(ctx, articleId, userId)
 	})
 }

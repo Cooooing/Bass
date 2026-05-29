@@ -17,12 +17,8 @@ message AccountBasic {
   optional string introduction = 6;
   MBTI mbti = 7;
   AccountStatus status = 8;
-  reserved 9;
-  reserved "group_name";
   optional int32 follow_count = 10;
   optional int32 follower_count = 11;
-  reserved 12, 13;
-  reserved "block_count", "blocked_count";
   google.protobuf.Timestamp created_at = 1000;
   google.protobuf.Timestamp updated_at = 1001;
 }
@@ -40,13 +36,10 @@ message Account {
 
 message Preferences {
   int64 user_id = 1;
-  reserved 2;
   optional string timezone = 3;
   optional string theme = 4;
   optional string mobile_theme = 5;
-  reserved 6, 7;
   common.enums.Language language = 8;
-  reserved "enable_web_notify", "enable_email_subscribe";
 }
 
 message PrivacySetting {
@@ -91,8 +84,6 @@ message CheckinStat {
 message LoginLog {
   int64 id = 1;
   optional int64 user_id = 2;
-  reserved 3, 6, 19;
-  reserved "account", "failure_reason", "request_id";
   LoginMethod login_method = 4;
   LoginStatus status = 5;
   optional string ip = 7;
@@ -103,8 +94,6 @@ message LoginLog {
   optional string isp = 12;
   optional string user_agent = 13;
   optional string device_id = 14;
-  reserved 15, 16, 17, 18;
-  reserved "device_name", "platform", "os", "browser";
   google.protobuf.Timestamp created_at = 1000;
 }
 

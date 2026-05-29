@@ -34,7 +34,7 @@ var DataProviderSet = wire.NewSet(
 	repo.NewDomainRepo,
 	repo.NewTagRepo,
 	repo.NewUserClient,
-	NewOutboxPublisher,
+	repo.NewNatsEventClient,
 
 	jwt.NewTokenCache,
 )

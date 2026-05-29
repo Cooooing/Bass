@@ -4,13 +4,11 @@ import (
 	"bytes"
 	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
-	"common/pkg/client"
-	"common/pkg/constant"
-	commonenum "common/pkg/enum"
 	"context"
 	"image/png"
 	"time"
 	base "user/internal/biz/base"
+	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/conf"
 
@@ -18,29 +16,26 @@ import (
 )
 
 type TfaUsecase struct {
-	conf        *conf.Bootstrap
-	redisClient *client.RedisClient
-	tx          base.Tx
-	accountRepo repo.AccountRepo
-	tfaRepo     repo.TfaRepo
-	outboxRepo  repo.OutboxEventRepo
+	conf           *conf.Bootstrap
+	tfaSecretCache repo.TfaSecretCache
+	tx             base.Tx
+	tfaRepo        repo.TfaRepo
+	outboxRepo     repo.OutboxEventRepo
 }
 
 func NewTfaUsecase(
 	conf *conf.Bootstrap,
-	redisClient *client.RedisClient,
+	tfaSecretCache repo.TfaSecretCache,
 	tx base.Tx,
-	accountRepo repo.AccountRepo,
 	tfaRepo repo.TfaRepo,
 	outboxRepo repo.OutboxEventRepo,
 ) (*TfaUsecase, error) {
 	return &TfaUsecase{
-		conf:        conf,
-		redisClient: redisClient,
-		tx:          tx,
-		accountRepo: accountRepo,
-		tfaRepo:     tfaRepo,
-		outboxRepo:  outboxRepo,
+		conf:           conf,
+		tfaSecretCache: tfaSecretCache,
+		tx:             tx,
+		tfaRepo:        tfaRepo,
+		outboxRepo:     outboxRepo,
 	}, nil
 }
 
@@ -48,17 +43,43 @@ func (d *TfaUsecase) Validate(ctx context.Context, secret string, code string) b
 	return totp.Validate(code, secret)
 }
 
-func (d *TfaUsecase) Enable(ctx context.Context, name string) ([]byte, error) {
+func (d *TfaUsecase) GetByUserID(ctx context.Context, userID int64) (*model.TFA, error) {
+	return d.tfaRepo.FindByUserID(ctx, userID)
+}
+
+func (d *TfaUsecase) ValidateByUserID(ctx context.Context, userID int64, code string) (bool, error) {
+	tfa, err := d.tfaRepo.FindByUserID(ctx, userID)
+	if err != nil {
+		return false, err
+	}
+	if tfa == nil || !tfa.Enable || tfa.Secret == "" {
+		return false, nil
+	}
+	return d.Validate(ctx, tfa.Secret, code), nil
+}
+
+func (d *TfaUsecase) BeginEnable(ctx context.Context, userID int64, accountName string) ([]byte, error) {
+	tfa, err := d.tfaRepo.FindByUserID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	if tfa != nil && tfa.Enable {
+		return nil, cerrors.ErrorBadRequest("2FA already enabled")
+	}
+	return d.Enable(ctx, userID, accountName)
+}
+
+func (d *TfaUsecase) Enable(ctx context.Context, userID int64, accountName string) ([]byte, error) {
 	buf := &bytes.Buffer{}
 	generate, err := totp.Generate(totp.GenerateOpts{
 		Issuer:      d.conf.Server.App,
-		AccountName: name,
+		AccountName: accountName,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	err = d.redisClient.Client.SetEx(ctx, constant.GetKeyTwoFactorAuth(name), generate.Secret(), 5*time.Minute).Err()
+	err = d.tfaSecretCache.Save(ctx, userID, generate.Secret(), 5*time.Minute)
 	if err != nil {
 		return nil, err
 	}
@@ -74,27 +95,22 @@ func (d *TfaUsecase) Enable(ctx context.Context, name string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func (d *TfaUsecase) Disable(ctx context.Context, name string, secret string, code string) error {
+func (d *TfaUsecase) Disable(ctx context.Context, userID int64, secret string, code string) error {
 	if !totp.Validate(code, secret) {
 		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
 	err := d.tx(ctx, func(ctx context.Context) error {
-		u, err := d.accountRepo.GetByAccount(ctx, name)
-		if err != nil {
-			return err
-		}
-		_, err = d.tfaRepo.DisableByUserID(ctx, u.ID)
+		_, err := d.tfaRepo.DisableByUserID(ctx, userID)
 		if err != nil {
 			return err
 		}
 		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			EventType: commonenum.EventTypeUserTfaDisable,
-			Subject:   commonenum.EventSubjectUserTfaDisable,
 			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_USER_TFA_DISABLE,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TFA_DISABLE,
 				Payload: &commonenums.Event_UserTfaDisable{
 					UserTfaDisable: &commonenums.UserTfaDisablePayload{
-						UserId: u.ID,
-						Name:   u.Name,
+						UserId: userID,
 					},
 				},
 			},
@@ -103,8 +119,19 @@ func (d *TfaUsecase) Disable(ctx context.Context, name string, secret string, co
 	return err
 }
 
-func (d *TfaUsecase) Confirm(ctx context.Context, name string, code string) error {
-	secret, err := d.redisClient.Client.Get(ctx, constant.GetKeyTwoFactorAuth(name)).Result()
+func (d *TfaUsecase) DisableByUserID(ctx context.Context, userID int64, code string) error {
+	tfa, err := d.tfaRepo.FindByUserID(ctx, userID)
+	if err != nil {
+		return err
+	}
+	if tfa == nil || !tfa.Enable {
+		return cerrors.ErrorBadRequest("2FA already disabled")
+	}
+	return d.Disable(ctx, userID, tfa.Secret, code)
+}
+
+func (d *TfaUsecase) Confirm(ctx context.Context, userID int64, code string) error {
+	secret, err := d.tfaSecretCache.Get(ctx, userID)
 	if err != nil {
 		return err
 	}
@@ -112,22 +139,17 @@ func (d *TfaUsecase) Confirm(ctx context.Context, name string, code string) erro
 		return cerrors.ErrorBadRequest("2FA code invalid")
 	}
 	err = d.tx(ctx, func(ctx context.Context) error {
-		u, err := d.accountRepo.GetByAccount(ctx, name)
-		if err != nil {
-			return err
-		}
-		_, err = d.tfaRepo.UpsertEnabledByUserID(ctx, u.ID, secret)
+		_, err = d.tfaRepo.UpsertEnabledByUserID(ctx, userID, secret)
 		if err != nil {
 			return err
 		}
 		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			EventType: commonenum.EventTypeUserTfaEnable,
-			Subject:   commonenum.EventSubjectUserTfaEnable,
 			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_USER_TFA_ENABLE,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TFA_ENABLE,
 				Payload: &commonenums.Event_UserTfaEnable{
 					UserTfaEnable: &commonenums.UserTfaEnablePayload{
-						UserId: u.ID,
-						Name:   u.Name,
+						UserId: userID,
 					},
 				},
 			},

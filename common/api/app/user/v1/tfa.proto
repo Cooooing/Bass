@@ -7,7 +7,7 @@ import "user/v1/model.proto";
 option go_package = "common/api/gen/user/v1;v1";
 
 service TfaService {
-  // 校验当前登录账号的二步验证码。
+  // 校验账号的二步验证码。
   rpc Validate(ValidateTfa.Request) returns (ValidateTfa.Reply) {}
 
   // 开始启用二步验证，生成临时密钥和二维码图片。
@@ -19,13 +19,14 @@ service TfaService {
   // 校验二步验证码并关闭二步验证。
   rpc Disable(DisableTfa.Request) returns (DisableTfa.Reply) {}
 
-  // 获取当前登录账号的二步验证状态。
-  rpc GetCurrent(GetCurrentTfa.Request) returns (GetCurrentTfa.Reply) {}
+  // 获取账号二步验证状态。
+  rpc Get(GetTfa.Request) returns (GetTfa.Reply) {}
 }
 
 message ValidateTfa {
   message Request {
-    string code = 1;
+    int64 user_id = 1;
+    string code = 2;
   }
   message Reply {
     bool verified = 1;
@@ -33,7 +34,10 @@ message ValidateTfa {
 }
 
 message BeginEnableTfa {
-  message Request {}
+  message Request {
+    int64 user_id = 1;
+    string account_name = 2;
+  }
   message Reply {
     bytes data = 1;
     string content_type = 2;
@@ -42,20 +46,24 @@ message BeginEnableTfa {
 
 message ConfirmEnableTfa {
   message Request {
-    string code = 1;
+    int64 user_id = 1;
+    string code = 2;
   }
   message Reply {}
 }
 
 message DisableTfa {
   message Request {
-    string code = 1;
+    int64 user_id = 1;
+    string code = 2;
   }
   message Reply {}
 }
 
-message GetCurrentTfa {
-  message Request {}
+message GetTfa {
+  message Request {
+    int64 user_id = 1;
+  }
   message Reply {
     Tfa tfa = 1;
   }

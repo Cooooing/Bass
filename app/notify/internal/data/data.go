@@ -4,13 +4,13 @@ import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
-	"fmt"
+	"net/http"
+	bizchannel "notify/internal/biz/channel"
 	"notify/internal/conf"
 	datachannel "notify/internal/data/channel"
 	"notify/internal/data/client"
 	"notify/internal/data/oss"
 	"notify/internal/data/repo"
-	"notify/internal/enum"
 
 	"github.com/google/wire"
 )
@@ -24,29 +24,31 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
+	NewHTTPClient,
 
 	client.ProvideTx,
 
-	repo.NewNotificationMetaRepo,
-	repo.NewNotificationRecordRepo,
-	repo.NewNotificationTemplateRepo,
-	repo.NewNotificationSettingRepo,
 	repo.NewObjectStorageRepo,
 	repo.NewInboxEventRepo,
-	repo.NewNotificationDeliveryRepo,
+	repo.NewNotificationRuleRepo,
+	repo.NewNotificationStationMessageRepo,
+	repo.NewNotificationEmailDeliveryRepo,
+	repo.NewNotificationTencentSMSDeliveryRepo,
+	repo.NewNotificationLarkWebhookDeliveryRepo,
 	repo.NewUserClient,
+	repo.NewContentClient,
 
-	datachannel.NewClient,
-	datachannel.NewEmailChannel,
-	NewSMSClient,
-	datachannel.NewSMSChannel,
-	datachannel.NewWebhookChannel,
-
+	datachannel.NewEmailClient,
+	wire.Bind(new(bizchannel.EmailClient), new(*datachannel.EmailClient)),
 	datachannel.NewTencentSMSClient,
+	wire.Bind(new(bizchannel.TencentSMSClient), new(*datachannel.TencentSMSClient)),
+	datachannel.NewLarkWebhookClient,
+	wire.Bind(new(bizchannel.LarkWebhookClient), new(*datachannel.LarkWebhookClient)),
 
 	oss.ProviderSet,
 
 	rpc.ProvideUserClient,
+	rpc.ProvideContentClient,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {
@@ -61,20 +63,6 @@ func ProvideNats(c *conf.Bootstrap) *common.Nats {
 	return c.Data.Nats
 }
 
-func NewSMSClient(
-	conf *conf.Bootstrap,
-	tencentSMS *datachannel.TencentSMSClient,
-) (datachannel.SMSClient, error) {
-	if conf == nil || conf.Server == nil || conf.Server.Sms == nil {
-		return nil, fmt.Errorf("sms config is required")
-	}
-	switch enum.SMSType(conf.Server.Sms.Provider) {
-	case enum.SMSTypeTencent:
-		if tencentSMS == nil {
-			return nil, fmt.Errorf("tencent sms client is required")
-		}
-		return tencentSMS, nil
-	default:
-		return nil, fmt.Errorf("unsupported sms provider: %s", conf.Server.Sms.Provider)
-	}
+func NewHTTPClient() *http.Client {
+	return http.DefaultClient
 }

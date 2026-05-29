@@ -101,6 +101,8 @@ message Event {
   string event_id = 1;
   // 事件类型
   EventType type = 2;
+  // 事件主题
+  EventSubject subject = 4;
   // 事件发生时间
   google.protobuf.Timestamp timestamp = 3;
   // 业务数据，类型与 type 对应；字段号必须和 EventType 数值一致。

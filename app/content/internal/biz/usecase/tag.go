@@ -49,5 +49,5 @@ func (t *TagUsecase) Update(ctx context.Context, tag *model.Tag) (*model.Tag, er
 }
 
 func (t *TagUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
-	return t.tagRepo.GetPage(ctx, page, req)
+	return t.tagRepo.Page(ctx, page, req)
 }

@@ -4,7 +4,6 @@ import (
 	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	"common/pkg/constant"
-	commonenum "common/pkg/enum"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
 	"common/pkg/util/jwt"
@@ -12,7 +11,6 @@ import (
 	"common/pkg/util/str"
 	"context"
 	"strings"
-	"time"
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -114,17 +112,6 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 	if err != nil {
 		return
 	}
-	err = s.saveRegisterOutbox(ctx, &commonenums.UserRegisterPayload{
-		ContactType:    commonenums.UserRegisterContactType_USER_REGISTER_CONTACT_TYPE_EMAIL,
-		Email:          *u.Email,
-		Code:           code,
-		ExpiresSeconds: int64(s.conf.Server.Jwt.EmailExpire.AsDuration() / time.Second),
-	})
-	if err != nil {
-		_ = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email)
-		return
-	}
-
 	return code, token, nil
 }
 
@@ -154,7 +141,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, codeToken str
 		if err != nil {
 			return err
 		}
-		_, err = s.accountRepo.Create(ctx, user)
+		created, err := s.accountRepo.Create(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -162,7 +149,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, codeToken str
 		if err != nil {
 			return err
 		}
-		return nil
+		return s.saveRegisterOutbox(ctx, created.ID)
 	})
 	if err != nil {
 		return
@@ -213,17 +200,6 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 	if err != nil {
 		return
 	}
-	err = s.saveRegisterOutbox(ctx, &commonenums.UserRegisterPayload{
-		ContactType:    commonenums.UserRegisterContactType_USER_REGISTER_CONTACT_TYPE_PHONE,
-		Phone:          *u.Phone,
-		Code:           code,
-		ExpiresSeconds: int64(s.conf.Server.Jwt.PhoneExpire.AsDuration() / time.Second),
-	})
-	if err != nil {
-		_ = s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone)
-		return
-	}
-
 	return code, token, nil
 }
 
@@ -253,7 +229,7 @@ func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, codeToken str
 		if err != nil {
 			return err
 		}
-		_, err = s.accountRepo.Create(ctx, user)
+		created, err := s.accountRepo.Create(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -261,7 +237,7 @@ func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, codeToken str
 		if err != nil {
 			return err
 		}
-		return nil
+		return s.saveRegisterOutbox(ctx, created.ID)
 	})
 	if err != nil {
 		return
@@ -321,15 +297,16 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, passw
 		)
 	}
 	if outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		EventType: commonenum.EventTypeUserLogin,
-		Subject:   commonenum.EventSubjectUserLogin,
 		Event: &commonenums.Event{
+			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGIN,
+			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGIN,
 			Payload: &commonenums.Event_UserLogin{
 				UserLogin: loginPayload,
 			},
 		},
 	}); outboxErr != nil {
-		s.log.Warnf("create login outbox failed: %v", outboxErr)
+		s.log.Errorf("create login outbox failed: %v", outboxErr)
+		return "", nil, cerrors.ErrorInternalServerError("create login outbox failed").WithCause(outboxErr)
 	}
 
 	return token, user, nil
@@ -347,9 +324,9 @@ func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
 	}
 	if tokenUser != nil {
 		if outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			EventType: commonenum.EventTypeUserLogout,
-			Subject:   commonenum.EventSubjectUserLogout,
 			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_USER_LOGOUT,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGOUT,
 				Payload: &commonenums.Event_UserLogout{
 					UserLogout: &commonenums.UserLogoutPayload{
 						UserId: tokenUser.ID,
@@ -358,7 +335,8 @@ func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
 				},
 			},
 		}); outboxErr != nil {
-			s.log.Warnf("create logout outbox failed: %v", outboxErr)
+			s.log.Errorf("create logout outbox failed: %v", outboxErr)
+			return cerrors.ErrorInternalServerError("create logout outbox failed").WithCause(outboxErr)
 		}
 	}
 	return nil
@@ -413,13 +391,15 @@ func optionalString(value string) *string {
 	return new(value)
 }
 
-func (s *AuthUsecase) saveRegisterOutbox(ctx context.Context, payload *commonenums.UserRegisterPayload) error {
+func (s *AuthUsecase) saveRegisterOutbox(ctx context.Context, userID int64) error {
 	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		EventType: commonenum.EventTypeUserRegister,
-		Subject:   commonenum.EventSubjectUserRegister,
 		Event: &commonenums.Event{
+			Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
+			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
 			Payload: &commonenums.Event_UserRegister{
-				UserRegister: payload,
+				UserRegister: &commonenums.UserRegisterPayload{
+					UserId: userID,
+				},
 			},
 		},
 	})

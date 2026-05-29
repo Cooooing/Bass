@@ -5,35 +5,49 @@ import (
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
 	"context"
-	"notify/internal/biz/usecase"
+	"notify/internal/biz/model"
+	bizrepo "notify/internal/biz/repo"
 )
 
-var _ usecase.UserClient = (*UserClient)(nil)
+var _ bizrepo.UserClient = (*UserClient)(nil)
 
 type UserClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewUserClient(userClient *rpc.UserClient) usecase.UserClient {
+func NewUserClient(userClient *rpc.UserClient) bizrepo.UserClient {
 	return &UserClient{
 		userClient: userClient,
 	}
 }
 
-func (c *UserClient) GetContacts(ctx context.Context, userIDs []int64) (map[int64]*usecase.UserContact, error) {
-	reply, err := c.userClient.Account.BatchGetContact(ctx, &userv1.BatchGetContactAccount_Request{UserIds: userIDs})
+func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccount, error) {
+	if len(userIDs) == 0 {
+		return map[int64]*model.UserAccount{}, nil
+	}
+	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Request{
+		Query: &userv1.AccountQuery{UserIds: userIDs},
+	})
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*usecase.UserContact, len(reply.GetContacts()))
-	for userID, contact := range reply.GetContacts() {
-		if contact == nil {
+	accounts := reply.GetAccounts()
+	result := make(map[int64]*model.UserAccount, len(accounts))
+	for userID, account := range accounts {
+		basic := account.GetBasic()
+		if basic == nil {
 			continue
 		}
-		result[userID] = &usecase.UserContact{
-			Email: contact.GetEmail(),
-			Phone: contact.GetPhone(),
+		item := &model.UserAccount{
+			ID:       userID,
+			Name:     basic.GetName(),
+			Nickname: basic.GetNickname(),
 		}
+		if contact := account.GetContact(); contact != nil {
+			item.Email = contact.GetEmail()
+			item.Phone = contact.GetPhone()
+		}
+		result[item.ID] = item
 	}
 	return result, nil
 }
@@ -43,16 +57,19 @@ func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64
 	size := uint32(500)
 	userIDs := make([]int64, 0)
 	for {
-		reply, err := c.userClient.Relation.ListFollowerIds(ctx, &userv1.ListFollowerIdsRelation_Request{
+		reply, err := c.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Request{
 			UserId: userID,
 			Page:   &common.PageRequest{Page: page, Size: size},
 		})
 		if err != nil {
 			return nil, err
 		}
-		userIDs = append(userIDs, reply.GetUserIds()...)
+		rows := reply.GetRows()
+		for _, row := range rows {
+			userIDs = append(userIDs, row.GetActorId())
+		}
 		pageReply := reply.GetPage()
-		if pageReply == nil || len(reply.GetUserIds()) == 0 || pageReply.GetPage()*pageReply.GetSize() >= pageReply.GetTotal() {
+		if pageReply == nil || len(rows) == 0 || pageReply.GetPage()*pageReply.GetSize() >= pageReply.GetTotal() {
 			break
 		}
 		page++

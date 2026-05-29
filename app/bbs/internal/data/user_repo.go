@@ -3,7 +3,6 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	bbsuserv1 "common/api/gen/bbs/v1/user"
-	commonv1 "common/api/gen/common"
 	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
 	"context"
@@ -107,7 +106,11 @@ func (r *UserRepo) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPa
 }
 
 func (r *UserRepo) Logout(ctx context.Context, req *bbsuserv1.Logout_Request) (*bbsuserv1.Logout_Reply, error) {
-	_, err := r.userClient.Auth.Logout(forwardAuth(ctx), &userv1.Logout_Request{})
+	token, err := currentToken(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Auth.Logout(ctx, &userv1.Logout_Request{Token: token})
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +118,11 @@ func (r *UserRepo) Logout(ctx context.Context, req *bbsuserv1.Logout_Request) (*
 }
 
 func (r *UserRepo) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Reply, error) {
-	reply, err := r.userClient.Account.GetCurrent(forwardAuth(ctx), &userv1.GetCurrentAccount_Request{})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -151,11 +158,11 @@ func (r *UserRepo) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetCurr
 }
 
 func (r *UserRepo) GetProfileAccount(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Reply, error) {
-	reply, err := r.userClient.Account.GetBasic(ctx, &userv1.GetBasicAccount_Request{UserId: req.GetUserId()})
+	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.GetUserId()})
 	if err != nil {
 		return nil, err
 	}
-	account := reply.GetAccount()
+	account := reply.GetAccount().GetBasic()
 	var profile *bbsuserv1.AccountProfile
 	if account != nil {
 		profile = &bbsuserv1.AccountProfile{
@@ -177,7 +184,12 @@ func (r *UserRepo) GetProfileAccount(ctx context.Context, req *bbsuserv1.GetProf
 }
 
 func (r *UserRepo) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Reply, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
 	updateReq := &userv1.UpdateProfileAccount_Request{
+		UserId:       userID,
 		AvatarUrl:    req.AvatarUrl,
 		Nickname:     req.Nickname,
 		Url:          req.Url,
@@ -186,7 +198,7 @@ func (r *UserRepo) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.Upda
 	if req.Mbti != nil {
 		updateReq.Mbti = new(userv1.MBTI(*req.Mbti))
 	}
-	reply, err := r.userClient.Account.UpdateProfile(forwardAuth(ctx), updateReq)
+	reply, err := r.userClient.Account.UpdateProfile(ctx, updateReq)
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +224,11 @@ func (r *UserRepo) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.Upda
 }
 
 func (r *UserRepo) GetCurrentPreferences(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Request) (*bbsuserv1.GetCurrentPreferences_Reply, error) {
-	reply, err := r.userClient.Preferences.GetCurrent(forwardAuth(ctx), &userv1.GetCurrentPreferences_Request{})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Request{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -231,7 +247,12 @@ func (r *UserRepo) GetCurrentPreferences(ctx context.Context, req *bbsuserv1.Get
 }
 
 func (r *UserRepo) UpdateCurrentPreferences(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Request) (*bbsuserv1.UpdateCurrentPreferences_Reply, error) {
-	reply, err := r.userClient.Preferences.UpdateCurrent(forwardAuth(ctx), &userv1.UpdateCurrentPreferences_Request{
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Preferences.Update(ctx, &userv1.UpdatePreferences_Request{
+		UserId:      userID,
 		Language:    req.Language,
 		Timezone:    req.Timezone,
 		Theme:       req.Theme,
@@ -255,7 +276,11 @@ func (r *UserRepo) UpdateCurrentPreferences(ctx context.Context, req *bbsuserv1.
 }
 
 func (r *UserRepo) GetCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Request) (*bbsuserv1.GetCurrentPrivacySetting_Reply, error) {
-	reply, err := r.userClient.PrivacySetting.GetCurrent(forwardAuth(ctx), &userv1.GetCurrentPrivacySetting_Request{})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.PrivacySetting.Get(ctx, &userv1.GetPrivacySetting_Request{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -276,7 +301,12 @@ func (r *UserRepo) GetCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.
 }
 
 func (r *UserRepo) UpdateCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Request) (*bbsuserv1.UpdateCurrentPrivacySetting_Reply, error) {
-	reply, err := r.userClient.PrivacySetting.UpdateCurrent(forwardAuth(ctx), &userv1.UpdateCurrentPrivacySetting_Request{
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.PrivacySetting.Update(ctx, &userv1.UpdatePrivacySetting_Request{
+		UserId:             userID,
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
 		PublicArticles:     req.PublicArticles,
@@ -304,7 +334,11 @@ func (r *UserRepo) UpdateCurrentPrivacySetting(ctx context.Context, req *bbsuser
 }
 
 func (r *UserRepo) GetCurrentLocation(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error) {
-	reply, err := r.userClient.Location.GetCurrent(forwardAuth(ctx), &userv1.GetCurrentLocation_Request{})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Location.Get(ctx, &userv1.GetLocation_Request{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -322,7 +356,12 @@ func (r *UserRepo) GetCurrentLocation(ctx context.Context, req *bbsuserv1.GetCur
 }
 
 func (r *UserRepo) UpsertCurrentLocation(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error) {
-	reply, err := r.userClient.Location.UpsertCurrent(forwardAuth(ctx), &userv1.UpsertCurrentLocation_Request{
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Location.Upsert(ctx, &userv1.UpsertLocation_Request{
+		UserId:   userID,
 		Country:  req.Country,
 		Province: req.Province,
 		City:     req.City,
@@ -344,7 +383,11 @@ func (r *UserRepo) UpsertCurrentLocation(ctx context.Context, req *bbsuserv1.Ups
 }
 
 func (r *UserRepo) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Request) (*bbsuserv1.FollowRelation_Reply, error) {
-	_, err := r.userClient.Relation.Follow(forwardAuth(ctx), &userv1.FollowRelation_Request{TargetId: req.GetTargetId()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Relation.Follow(ctx, &userv1.FollowRelation_Request{ActorId: userID, TargetId: req.GetTargetId()})
 	if err != nil {
 		return nil, err
 	}
@@ -352,7 +395,11 @@ func (r *UserRepo) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Req
 }
 
 func (r *UserRepo) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Request) (*bbsuserv1.UnfollowRelation_Reply, error) {
-	_, err := r.userClient.Relation.Unfollow(forwardAuth(ctx), &userv1.UnfollowRelation_Request{TargetId: req.GetTargetId()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Relation.Unfollow(ctx, &userv1.UnfollowRelation_Request{ActorId: userID, TargetId: req.GetTargetId()})
 	if err != nil {
 		return nil, err
 	}
@@ -360,7 +407,11 @@ func (r *UserRepo) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation
 }
 
 func (r *UserRepo) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Request) (*bbsuserv1.BlockRelation_Reply, error) {
-	_, err := r.userClient.Relation.Block(forwardAuth(ctx), &userv1.BlockRelation_Request{TargetId: req.GetTargetId()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Relation.Block(ctx, &userv1.BlockRelation_Request{ActorId: userID, TargetId: req.GetTargetId()})
 	if err != nil {
 		return nil, err
 	}
@@ -368,7 +419,11 @@ func (r *UserRepo) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Reque
 }
 
 func (r *UserRepo) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_Request) (*bbsuserv1.UnblockRelation_Reply, error) {
-	_, err := r.userClient.Relation.Unblock(forwardAuth(ctx), &userv1.UnblockRelation_Request{TargetId: req.GetTargetId()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Relation.Unblock(ctx, &userv1.UnblockRelation_Request{ActorId: userID, TargetId: req.GetTargetId()})
 	if err != nil {
 		return nil, err
 	}
@@ -376,24 +431,13 @@ func (r *UserRepo) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_R
 }
 
 func (r *UserRepo) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowingRelations_Request) (*bbsuserv1.ListFollowingRelations_Reply, error) {
-	var pageReq *commonv1.PageRequest
-	if req.GetPage() != nil {
-		pageReq = &commonv1.PageRequest{
-			Page: uint32(req.GetPage().GetCurrent()),
-			Size: uint32(req.GetPage().GetPageSize()),
-		}
-	}
-	reply, err := r.userClient.Relation.ListFollowing(forwardAuth(ctx), &userv1.ListFollowingRelations_Request{Page: pageReq})
+	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	var pageReply *bbsuserv1.PageReply
-	if reply.GetPage() != nil {
-		pageReply = &bbsuserv1.PageReply{
-			Current:  int64(reply.GetPage().GetPage()),
-			PageSize: int64(reply.GetPage().GetSize()),
-			Total:    int64(reply.GetPage().GetTotal()),
-		}
+	reply, err := r.userClient.Relation.ListFollowing(ctx, &userv1.ListFollowingRelations_Request{Page: req.GetPage(), UserId: userID})
+	if err != nil {
+		return nil, err
 	}
 	rows := make([]*bbsuserv1.Relation, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
@@ -410,28 +454,17 @@ func (r *UserRepo) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowi
 			UpdatedAt: formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	return &bbsuserv1.ListFollowingRelations_Reply{Page: pageReply, Rows: rows}, nil
+	return &bbsuserv1.ListFollowingRelations_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
 func (r *UserRepo) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowersRelations_Request) (*bbsuserv1.ListFollowersRelations_Reply, error) {
-	var pageReq *commonv1.PageRequest
-	if req.GetPage() != nil {
-		pageReq = &commonv1.PageRequest{
-			Page: uint32(req.GetPage().GetCurrent()),
-			Size: uint32(req.GetPage().GetPageSize()),
-		}
-	}
-	reply, err := r.userClient.Relation.ListFollowers(forwardAuth(ctx), &userv1.ListFollowersRelations_Request{Page: pageReq})
+	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	var pageReply *bbsuserv1.PageReply
-	if reply.GetPage() != nil {
-		pageReply = &bbsuserv1.PageReply{
-			Current:  int64(reply.GetPage().GetPage()),
-			PageSize: int64(reply.GetPage().GetSize()),
-			Total:    int64(reply.GetPage().GetTotal()),
-		}
+	reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Request{Page: req.GetPage(), UserId: userID})
+	if err != nil {
+		return nil, err
 	}
 	rows := make([]*bbsuserv1.Relation, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
@@ -448,28 +481,17 @@ func (r *UserRepo) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowe
 			UpdatedAt: formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	return &bbsuserv1.ListFollowersRelations_Reply{Page: pageReply, Rows: rows}, nil
+	return &bbsuserv1.ListFollowersRelations_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
 func (r *UserRepo) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRelations_Request) (*bbsuserv1.ListBlockedRelations_Reply, error) {
-	var pageReq *commonv1.PageRequest
-	if req.GetPage() != nil {
-		pageReq = &commonv1.PageRequest{
-			Page: uint32(req.GetPage().GetCurrent()),
-			Size: uint32(req.GetPage().GetPageSize()),
-		}
-	}
-	reply, err := r.userClient.Relation.ListBlocked(forwardAuth(ctx), &userv1.ListBlockedRelations_Request{Page: pageReq})
+	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	var pageReply *bbsuserv1.PageReply
-	if reply.GetPage() != nil {
-		pageReply = &bbsuserv1.PageReply{
-			Current:  int64(reply.GetPage().GetPage()),
-			PageSize: int64(reply.GetPage().GetSize()),
-			Total:    int64(reply.GetPage().GetTotal()),
-		}
+	reply, err := r.userClient.Relation.ListBlocked(ctx, &userv1.ListBlockedRelations_Request{Page: req.GetPage(), UserId: userID})
+	if err != nil {
+		return nil, err
 	}
 	rows := make([]*bbsuserv1.Relation, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
@@ -486,11 +508,15 @@ func (r *UserRepo) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRe
 			UpdatedAt: formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	return &bbsuserv1.ListBlockedRelations_Reply{Page: pageReply, Rows: rows}, nil
+	return &bbsuserv1.ListBlockedRelations_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
 func (r *UserRepo) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Request) (*bbsuserv1.GetStatusRelation_Reply, error) {
-	reply, err := r.userClient.Relation.BatchGetStatus(forwardAuth(ctx), &userv1.BatchGetStatusRelation_Request{TargetIds: []int64{req.GetTargetId()}})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Request{ActorId: userID, TargetIds: []int64{req.GetTargetId()}})
 	if err != nil {
 		return nil, err
 	}
@@ -508,7 +534,11 @@ func (r *UserRepo) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelati
 }
 
 func (r *UserRepo) ValidateTfa(ctx context.Context, req *bbsuserv1.ValidateTfa_Request) (*bbsuserv1.ValidateTfa_Reply, error) {
-	reply, err := r.userClient.Tfa.Validate(forwardAuth(ctx), &userv1.ValidateTfa_Request{Code: req.GetCode()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Tfa.Validate(ctx, &userv1.ValidateTfa_Request{UserId: userID, Code: req.GetCode()})
 	if err != nil {
 		return nil, err
 	}
@@ -516,7 +546,11 @@ func (r *UserRepo) ValidateTfa(ctx context.Context, req *bbsuserv1.ValidateTfa_R
 }
 
 func (r *UserRepo) BeginEnableTfa(ctx context.Context, req *bbsuserv1.BeginEnableTfa_Request) (*bbsuserv1.BeginEnableTfa_Reply, error) {
-	reply, err := r.userClient.Tfa.BeginEnable(forwardAuth(ctx), &userv1.BeginEnableTfa_Request{})
+	user, err := currentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Tfa.BeginEnable(ctx, &userv1.BeginEnableTfa_Request{UserId: user.ID, AccountName: user.Name})
 	if err != nil {
 		return nil, err
 	}
@@ -527,7 +561,11 @@ func (r *UserRepo) BeginEnableTfa(ctx context.Context, req *bbsuserv1.BeginEnabl
 }
 
 func (r *UserRepo) ConfirmEnableTfa(ctx context.Context, req *bbsuserv1.ConfirmEnableTfa_Request) (*bbsuserv1.ConfirmEnableTfa_Reply, error) {
-	_, err := r.userClient.Tfa.ConfirmEnable(forwardAuth(ctx), &userv1.ConfirmEnableTfa_Request{Code: req.GetCode()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Tfa.ConfirmEnable(ctx, &userv1.ConfirmEnableTfa_Request{UserId: userID, Code: req.GetCode()})
 	if err != nil {
 		return nil, err
 	}
@@ -535,7 +573,11 @@ func (r *UserRepo) ConfirmEnableTfa(ctx context.Context, req *bbsuserv1.ConfirmE
 }
 
 func (r *UserRepo) DisableTfa(ctx context.Context, req *bbsuserv1.DisableTfa_Request) (*bbsuserv1.DisableTfa_Reply, error) {
-	_, err := r.userClient.Tfa.Disable(forwardAuth(ctx), &userv1.DisableTfa_Request{Code: req.GetCode()})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.userClient.Tfa.Disable(ctx, &userv1.DisableTfa_Request{UserId: userID, Code: req.GetCode()})
 	if err != nil {
 		return nil, err
 	}
@@ -543,7 +585,11 @@ func (r *UserRepo) DisableTfa(ctx context.Context, req *bbsuserv1.DisableTfa_Req
 }
 
 func (r *UserRepo) GetCurrentTfa(ctx context.Context, req *bbsuserv1.GetCurrentTfa_Request) (*bbsuserv1.GetCurrentTfa_Reply, error) {
-	reply, err := r.userClient.Tfa.GetCurrent(forwardAuth(ctx), &userv1.GetCurrentTfa_Request{})
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	reply, err := r.userClient.Tfa.Get(ctx, &userv1.GetTfa_Request{UserId: userID})
 	if err != nil {
 		return nil, err
 	}

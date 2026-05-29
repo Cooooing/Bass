@@ -1,0 +1,14 @@
+{
+  "groupId": "com.bass",
+  "artifactId": "bbs-sdk",
+  "artifactVersion": "0.1.0",
+  "invokerPackage": "com.bass.bbs",
+  "apiPackage": "com.bass.bbs.api",
+  "modelPackage": "com.bass.bbs.model",
+  "library": "native",
+  "serializationLibrary": "jackson",
+  "dateLibrary": "java8",
+  "hideGenerationTimestamp": true,
+  "enumPropertyNaming": "MACRO_CASE",
+  "useSingleRequestParameter": true
+}

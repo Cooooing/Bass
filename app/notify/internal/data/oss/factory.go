@@ -11,13 +11,13 @@ import (
 
 var ProviderSet = wire.NewSet(
 	NewFactory,
-	ProvideObjectStorageProvider,
+	ProvideObjectStorageClient,
 	minio.NewMinio,
 	qiniu.NewQiniu,
 )
 
 type Factory struct {
-	providers map[string]repo.ObjectStorageProvider
+	clients map[string]repo.ObjectStorageClient
 }
 
 func NewFactory(
@@ -25,17 +25,17 @@ func NewFactory(
 	qiniu *qiniu.Qiniu,
 ) *Factory {
 	return &Factory{
-		providers: map[string]repo.ObjectStorageProvider{
+		clients: map[string]repo.ObjectStorageClient{
 			minio.Name(): minio,
 			qiniu.Name(): qiniu,
 		},
 	}
 }
 
-func (f *Factory) Get(name string) repo.ObjectStorageProvider {
-	return f.providers[name]
+func (f *Factory) Get(name string) repo.ObjectStorageClient {
+	return f.clients[name]
 }
 
-func ProvideObjectStorageProvider(conf *conf.Bootstrap, minio *minio.Minio, qiniu *qiniu.Qiniu) repo.ObjectStorageProvider {
+func ProvideObjectStorageClient(conf *conf.Bootstrap, minio *minio.Minio, qiniu *qiniu.Qiniu) repo.ObjectStorageClient {
 	return NewFactory(minio, qiniu).Get(conf.Server.Oss.Provider)
 }

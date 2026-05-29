@@ -242,7 +242,7 @@ func (r *ChatGroupRepo) GetList(ctx context.Context, req *repo.ChatGroupGetReq) 
 	return chatGroups, nil
 }
 
-func (r *ChatGroupRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, *common.PageReply, error) {
+func (r *ChatGroupRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, *common.PageReply, error) {
 	page = constant.PageValid(page)
 	query := r.getClient(ctx).ChatGroup.Query()
 	query = r.getQuery(query, req)

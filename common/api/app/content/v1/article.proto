@@ -23,7 +23,7 @@ service ContentArticleService {
   rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {}
 
   // 修改文章（管理员使用）
-  rpc UpdateArticle(UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {}
+  rpc Update(UpdateArticle.Request) returns (UpdateArticle.Reply) {}
 
   // 删除文章（仅草稿）
   rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {}
@@ -104,7 +104,7 @@ message AddPostscriptArticle {
   }
 }
 
-message UpdateArticleArticle {
+message UpdateArticle {
   message Request {
     // 文章ID
     int64 article_id = 1;

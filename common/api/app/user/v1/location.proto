@@ -7,25 +7,28 @@ import "user/v1/model.proto";
 option go_package = "common/api/gen/user/v1;v1";
 
 service LocationService {
-  // 获取当前登录账号的地理资料。
-  rpc GetCurrent(GetCurrentLocation.Request) returns (GetCurrentLocation.Reply) {}
+  // 获取账号地理资料。
+  rpc Get(GetLocation.Request) returns (GetLocation.Reply) {}
 
-  // 更新当前登录账号的地理资料；缺省扩展表使用 upsert 创建。
-  rpc UpsertCurrent(UpsertCurrentLocation.Request) returns (UpsertCurrentLocation.Reply) {}
+  // 更新账号地理资料；缺省扩展表使用 upsert 创建。
+  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Reply) {}
 }
 
-message GetCurrentLocation {
-  message Request {}
+message GetLocation {
+  message Request {
+    int64 user_id = 1;
+  }
   message Reply {
     Location location = 1;
   }
 }
 
-message UpsertCurrentLocation {
+message UpsertLocation {
   message Request {
-    optional string country = 1;
-    optional string province = 2;
-    optional string city = 3;
+    int64 user_id = 1;
+    optional string country = 2;
+    optional string province = 3;
+    optional string city = 4;
   }
   message Reply {
     Location location = 1;

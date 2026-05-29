@@ -11,9 +11,13 @@ import (
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 	usecase.NewTokenUsecase,
-	usecase.NewAccountValidationUsecase,
 
+	usecase.NewAccountUsecase,
 	usecase.NewAuthUsecase,
+	usecase.NewPreferencesUsecase,
+	usecase.NewPrivacySettingUsecase,
+	usecase.NewLocationUsecase,
 	usecase.NewRelationUsecase,
 	usecase.NewTfaUsecase,
+	usecase.NewOutboxPublisher,
 )

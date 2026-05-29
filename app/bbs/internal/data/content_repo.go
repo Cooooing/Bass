@@ -104,19 +104,6 @@ func (r *ContentRepo) CreateArticle(ctx context.Context, req *bbscontentv1.Creat
 			UpdatedAt:     formatProtoTime(author.GetUpdatedAt()),
 		}
 	}
-	for _, tag := range item.GetTags() {
-		out.Tags = append(out.Tags, &bbscontentv1.Tag{
-			Id:          tag.GetId(),
-			Name:        tag.GetName(),
-			Description: tag.Description,
-			DomainId:    tag.DomainId,
-			Status:      new(bbscontentv1.TagStatus(tag.GetStatus())),
-			CreatedBy:   tag.CreatedBy,
-			UpdatedBy:   tag.UpdatedBy,
-			CreatedAt:   formatProtoTime(tag.GetCreatedAt()),
-			UpdatedAt:   formatProtoTime(tag.GetUpdatedAt()),
-		})
-	}
 	return &bbscontentv1.CreateArticle_Reply{Article: out}, nil
 }
 
@@ -328,29 +315,6 @@ func (r *ContentRepo) GetArticle(ctx context.Context, req *bbscontentv1.GetArtic
 	if author := item.GetAuthorUser(); author != nil {
 		out.AuthorUser = &bbsuserv1.AccountProfile{Id: author.GetId(), Name: author.GetName(), Nickname: author.Nickname, AvatarUrl: author.AvatarUrl}
 	}
-	for _, tag := range item.GetTags() {
-		out.Tags = append(out.Tags, &bbscontentv1.Tag{
-			Id:          tag.GetId(),
-			Name:        tag.GetName(),
-			Description: tag.Description,
-			DomainId:    tag.DomainId,
-			Status:      new(bbscontentv1.TagStatus(tag.GetStatus())),
-			CreatedAt:   formatProtoTime(tag.GetCreatedAt()),
-			UpdatedAt:   formatProtoTime(tag.GetUpdatedAt()),
-		})
-	}
-	for _, postscript := range item.GetPostscripts() {
-		out.Postscripts = append(out.Postscripts, &bbscontentv1.ArticlePostscript{
-			Id:            postscript.GetId(),
-			ArticleId:     postscript.GetArticleId(),
-			Content:       postscript.GetContent(),
-			ContentRender: postscript.GetContentRender(),
-			CreatedBy:     postscript.CreatedBy,
-			UpdatedBy:     postscript.UpdatedBy,
-			CreatedAt:     formatProtoTime(postscript.GetCreatedAt()),
-			UpdatedAt:     formatProtoTime(postscript.GetUpdatedAt()),
-		})
-	}
 	return &bbscontentv1.GetArticle_Reply{Article: out}, nil
 }
 
@@ -483,13 +447,12 @@ func (r *ContentRepo) ListComments(ctx context.Context, req *bbscontentv1.ListCo
 		query = &bbscontentv1.CommentQuery{}
 	}
 	contentQuery := &contentv1.CommentQueryParams{
-		CommentId:   query.CommentId,
-		ArticleId:   query.ArticleId,
-		ParentId:    query.ParentId,
-		ReplyId:     query.ReplyId,
-		UserId:      query.UserId,
-		Level:       query.Level,
-		WithArticle: query.GetWithArticle(),
+		CommentId: query.CommentId,
+		ArticleId: query.ArticleId,
+		ParentId:  query.ParentId,
+		ReplyId:   query.ReplyId,
+		UserId:    query.UserId,
+		Level:     query.Level,
 	}
 	if query.Order != nil {
 		contentQuery.Order = new(contentv1.CommentOrder(*query.Order))
@@ -595,17 +558,6 @@ func (r *ContentRepo) ListDomains(ctx context.Context, req *bbscontentv1.ListDom
 			UpdatedBy:   item.UpdatedBy,
 			CreatedAt:   formatProtoTime(item.GetCreatedAt()),
 			UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
-		}
-		for _, tag := range item.GetTags() {
-			row.Tags = append(row.Tags, &bbscontentv1.Tag{
-				Id:          tag.GetId(),
-				Name:        tag.GetName(),
-				Description: tag.Description,
-				DomainId:    tag.DomainId,
-				Status:      new(bbscontentv1.TagStatus(tag.GetStatus())),
-				CreatedAt:   formatProtoTime(tag.GetCreatedAt()),
-				UpdatedAt:   formatProtoTime(tag.GetUpdatedAt()),
-			})
 		}
 		rows = append(rows, row)
 	}

@@ -35,6 +35,8 @@ func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*mode
 	save, err := r.getClient(ctx).Domain.Create().
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
+		SetNillableCreatedBy(domainModel.CreatedBy).
+		SetNillableUpdatedBy(domainModel.UpdatedBy).
 		SetStatus(domain.Status(domainModel.Status)).
 		SetNillableURL(domainModel.URL).
 		SetNillableIcon(domainModel.Icon).
@@ -66,6 +68,8 @@ func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*mod
 			client.Domain.Create().
 				SetName(domains[i].Name).
 				SetNillableDescription(domains[i].Description).
+				SetNillableCreatedBy(domains[i].CreatedBy).
+				SetNillableUpdatedBy(domains[i].UpdatedBy).
 				SetStatus(domain.Status(domains[i].Status)).
 				SetNillableURL(domains[i].URL).
 				SetNillableIcon(domains[i].Icon).
@@ -100,6 +104,7 @@ func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*mo
 	save, err := r.getClient(ctx).Domain.UpdateOneID(domainModel.ID).
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
+		SetNillableUpdatedBy(domainModel.UpdatedBy).
 		SetStatus(domain.Status(domainModel.Status)).
 		SetNillableURL(domainModel.URL).
 		SetNillableIcon(domainModel.Icon).
@@ -149,7 +154,7 @@ func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Do
 }
 
 func (r *DomainRepo) GetList(ctx context.Context, req *repo.DomainGetReq) ([]*model.Domain, error) {
-	query := r.getClient(ctx).Domain.Query().WithTags()
+	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
@@ -170,27 +175,14 @@ func (r *DomainRepo) GetList(ctx context.Context, req *repo.DomainGetReq) ([]*mo
 			CreatedBy:   list[i].CreatedBy,
 			UpdatedBy:   list[i].UpdatedBy,
 		}
-		for _, item := range list[i].Edges.Tags {
-			domainItem.Tags = append(domainItem.Tags, &model.Tag{
-				ID:          item.ID,
-				Name:        item.Name,
-				Description: item.Description,
-				DomainID:    item.DomainID,
-				Status:      enum.TagStatus(item.Status),
-				CreatedAt:   item.CreatedAt,
-				UpdatedAt:   item.UpdatedAt,
-				CreatedBy:   item.CreatedBy,
-				UpdatedBy:   item.UpdatedBy,
-			})
-		}
 		domains = append(domains, domainItem)
 	}
 	return domains, nil
 }
 
-func (r *DomainRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
+func (r *DomainRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
 	page = constant.PageValid(page)
-	query := r.getClient(ctx).Domain.Query().WithTags()
+	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	total, err := countQuery.Count(ctx)
@@ -215,19 +207,6 @@ func (r *DomainRepo) GetPage(ctx context.Context, page *common.PageRequest, req 
 			UpdatedAt:   list[i].UpdatedAt,
 			CreatedBy:   list[i].CreatedBy,
 			UpdatedBy:   list[i].UpdatedBy,
-		}
-		for _, item := range list[i].Edges.Tags {
-			domainItem.Tags = append(domainItem.Tags, &model.Tag{
-				ID:          item.ID,
-				Name:        item.Name,
-				Description: item.Description,
-				DomainID:    item.DomainID,
-				Status:      enum.TagStatus(item.Status),
-				CreatedAt:   item.CreatedAt,
-				UpdatedAt:   item.UpdatedAt,
-				CreatedBy:   item.CreatedBy,
-				UpdatedBy:   item.UpdatedBy,
-			})
 		}
 		domains = append(domains, domainItem)
 	}

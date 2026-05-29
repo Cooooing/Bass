@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "im/v1/model.proto";
 
 option go_package = "common/api/gen/im/v1;v1";
@@ -11,36 +10,16 @@ option go_package = "common/api/gen/im/v1;v1";
 // ChatSession 服务
 service IMChatSessionService {
   // 免打扰
-  rpc MarkMuted(MarkMutedChatSession.Request) returns (MarkMutedChatSession.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-session/mute"
-      body: "*"
-    };
-  }
+  rpc MarkMuted(MarkMutedChatSession.Request) returns (MarkMutedChatSession.Reply) {}
 
   // 置顶
-  rpc MarkPinned(MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-session/pin"
-      body: "*"
-    };
-  }
+  rpc MarkPinned(MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Reply) {}
 
   // 标为已读
-  rpc MarkRead(MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-session/mark-read"
-      body: "*"
-    };
-  }
+  rpc MarkRead(MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {}
 
   // 查询会话数据
-  rpc List(ListChatSessions.Request) returns (ListChatSessions.Reply) {
-    option (google.api.http) = {
-      post: "/v1/chat-session/list"
-      body: "*"
-    };
-  }
+  rpc List(ListChatSessions.Request) returns (ListChatSessions.Reply) {}
 }
 
 message MarkMutedChatSession {

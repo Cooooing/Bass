@@ -7,22 +7,22 @@ import (
 	"fmt"
 	bizchannel "notify/internal/biz/channel"
 	"notify/internal/conf"
+	notifyenum "notify/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	tencenterrors "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111"
 )
 
-// TencentSMSClient 调用腾讯云短信接口。
+var _ bizchannel.TencentSMSClient = (*TencentSMSClient)(nil)
+
 type TencentSMSClient struct {
 	conf   *conf.Bootstrap
-	log    *log.Helper
 	client *sms.Client
 }
 
-func NewTencentSMSClient(conf *conf.Bootstrap, logger log.Logger) (*TencentSMSClient, error) {
+func NewTencentSMSClient(conf *conf.Bootstrap) (*TencentSMSClient, error) {
 	if conf == nil || conf.Server == nil || conf.Server.Sms == nil || conf.Server.Sms.Tencent == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
@@ -42,43 +42,46 @@ func NewTencentSMSClient(conf *conf.Bootstrap, logger log.Logger) (*TencentSMSCl
 	if err != nil {
 		return nil, err
 	}
-	return &TencentSMSClient{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		client: client,
-	}, nil
+	return &TencentSMSClient{conf: conf, client: client}, nil
 }
 
-func (c *TencentSMSClient) Send(_ context.Context, req *bizchannel.SendReq) error {
-	if req == nil || req.Target == "" {
-		return nil
+func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.TencentSMSRequest) (*bizchannel.SendResult, error) {
+	if req == nil || req.Phone == "" {
+		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusFailed}, nil
 	}
-	tencentConf := c.conf.Server.Sms.Tencent
-	templateID := req.TemplateID
-	if templateID == "" {
-		templateID = tencentConf.TemplateId
+	if c.conf == nil || c.conf.Server == nil || c.conf.Server.Sms == nil || c.conf.Server.Sms.Tencent == nil {
+		return nil, errors.New("tencent sms config is required")
 	}
-	if templateID == "" {
-		return errors.New("tencent sms template id is required")
-	}
-	if len(req.TemplateParams) == 0 {
-		return errors.New("tencent sms template params are required")
+	if req.ProviderTemplateID == "" {
+		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusFailed}, nil
 	}
 	request := sms.NewSendSmsRequest()
-	request.SmsSdkAppId = new(tencentConf.SmsSdkAppId)
-	request.SignName = new(tencentConf.SignName)
-	request.TemplateId = new(templateID)
+	request.SmsSdkAppId = &req.SMSSDKAppID
+	request.SignName = &req.SignName
+	request.TemplateId = &req.ProviderTemplateID
 	request.TemplateParamSet = common.StringPtrs(req.TemplateParams)
-	request.PhoneNumberSet = common.StringPtrs([]string{req.Target})
+	request.PhoneNumberSet = common.StringPtrs([]string{req.Phone})
 
 	response, err := c.client.SendSms(request)
 	if err != nil {
 		if sdkErr, ok := errors.AsType[*tencenterrors.TencentCloudSDKError](err); ok {
-			return fmt.Errorf("send tencent sms: code=%s message=%s request_id=%s", sdkErr.GetCode(), sdkErr.GetMessage(), sdkErr.GetRequestId())
+			return &bizchannel.SendResult{
+				Status:            notifyenum.NotificationChannelStatusFailed,
+				ProviderRequestID: new(sdkErr.GetRequestId()),
+				ProviderCode:      new(sdkErr.GetCode()),
+				ProviderMessage:   new(sdkErr.GetMessage()),
+			}, nil
 		}
-		return fmt.Errorf("send tencent sms: %w", err)
+		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderMessage: new(fmt.Sprintf("send tencent sms: %v", err))}, nil
 	}
 	reply, _ := json.Marshal(response.Response)
-	c.log.Infof("tencent sms sent: target=%s reply=%s", req.Target, string(reply))
-	return nil
+	requestID := ""
+	if response.Response != nil && response.Response.RequestId != nil {
+		requestID = *response.Response.RequestId
+	}
+	return &bizchannel.SendResult{
+		Status:            notifyenum.NotificationChannelStatusSucceeded,
+		ProviderRequestID: &requestID,
+		ProviderResponse:  new(string(reply)),
+	}, nil
 }

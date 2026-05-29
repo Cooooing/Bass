@@ -1,0 +1,9 @@
+{
+  "packageName": "bbs-sdk",
+  "packageVersion": "0.1.0",
+  "library": "reqwest",
+  "supportAsync": true,
+  "useSingleRequestParameter": true,
+  "useChrono": true,
+  "hideGenerationTimestamp": true
+}

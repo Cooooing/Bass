@@ -40,6 +40,8 @@ func (r *CommentRepo) Save(ctx context.Context, comment *model.Comment) (*model.
 		SetArticleID(comment.ArticleID).
 		SetContent(comment.Content).
 		SetLevel(comment.Level).
+		SetNillableCreatedBy(comment.CreatedBy).
+		SetNillableUpdatedBy(comment.UpdatedBy).
 		SetNillableParentID(comment.ParentID).
 		SetNillableReplyID(comment.ReplyID).
 		SetStatus(commentent.StatusNormal).
@@ -65,16 +67,17 @@ func (r *CommentRepo) Save(ctx context.Context, comment *model.Comment) (*model.
 	}, nil
 }
 
-func (r *CommentRepo) UpdateStatus(ctx context.Context, commentId int64, status v1.CommentStatus) error {
+func (r *CommentRepo) UpdateStatus(ctx context.Context, commentId int64, userId int64, status v1.CommentStatus) error {
 	dbStatus, _ := enum.CommentStatusMap.ToEnum(status)
 	_, err := r.getClient(ctx).Comment.UpdateOneID(commentId).
+		SetUpdatedBy(userId).
 		SetStatus(commentent.Status(dbStatus)).
 		Save(ctx)
 	return err
 }
 
-func (r *CommentRepo) UpdateStat(ctx context.Context, commentId int64, action v1.CommentAction, num int32) error {
-	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentId)
+func (r *CommentRepo) UpdateStat(ctx context.Context, commentId int64, userId int64, action v1.CommentAction, num int32) error {
+	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentId).SetUpdatedBy(userId)
 	switch action {
 	case v1.CommentAction_COMMENT_ACTION_LIKE:
 		updateOne.AddLikeCount(num)
@@ -106,21 +109,20 @@ func (r *CommentRepo) Get(ctx context.Context, req *repo.CommentGetReq) (*model.
 		return nil, err
 	}
 	reply := &model.Comment{
-		ID:          c.ID,
-		ArticleID:   c.ArticleID,
-		Content:     c.Content,
-		Level:       c.Level,
-		ParentID:    c.ParentID,
-		ReplyID:     c.ReplyID,
-		Status:      enum.CommentStatus(c.Status),
-		ThankCount:  c.ThankCount,
-		LikeCount:   c.LikeCount,
-		ReplyCount:  c.ReplyCount,
-		CreatedAt:   c.CreatedAt,
-		UpdatedAt:   c.UpdatedAt,
-		CreatedBy:   c.CreatedBy,
-		UpdatedBy:   c.UpdatedBy,
-		WithArticle: req.WithArticle,
+		ID:         c.ID,
+		ArticleID:  c.ArticleID,
+		Content:    c.Content,
+		Level:      c.Level,
+		ParentID:   c.ParentID,
+		ReplyID:    c.ReplyID,
+		Status:     enum.CommentStatus(c.Status),
+		ThankCount: c.ThankCount,
+		LikeCount:  c.LikeCount,
+		ReplyCount: c.ReplyCount,
+		CreatedAt:  c.CreatedAt,
+		UpdatedAt:  c.UpdatedAt,
+		CreatedBy:  c.CreatedBy,
+		UpdatedBy:  c.UpdatedBy,
 	}
 	if c.Edges.Article != nil {
 		reply.Article = &model.Article{
@@ -142,21 +144,20 @@ func (r *CommentRepo) GetList(ctx context.Context, req *repo.CommentGetReq) ([]*
 	comments := make([]*model.Comment, 0, len(list))
 	for i := range list {
 		item := &model.Comment{
-			ID:          list[i].ID,
-			ArticleID:   list[i].ArticleID,
-			Content:     list[i].Content,
-			Level:       list[i].Level,
-			ParentID:    list[i].ParentID,
-			ReplyID:     list[i].ReplyID,
-			Status:      enum.CommentStatus(list[i].Status),
-			ThankCount:  list[i].ThankCount,
-			LikeCount:   list[i].LikeCount,
-			ReplyCount:  list[i].ReplyCount,
-			CreatedAt:   list[i].CreatedAt,
-			UpdatedAt:   list[i].UpdatedAt,
-			CreatedBy:   list[i].CreatedBy,
-			UpdatedBy:   list[i].UpdatedBy,
-			WithArticle: req.WithArticle,
+			ID:         list[i].ID,
+			ArticleID:  list[i].ArticleID,
+			Content:    list[i].Content,
+			Level:      list[i].Level,
+			ParentID:   list[i].ParentID,
+			ReplyID:    list[i].ReplyID,
+			Status:     enum.CommentStatus(list[i].Status),
+			ThankCount: list[i].ThankCount,
+			LikeCount:  list[i].LikeCount,
+			ReplyCount: list[i].ReplyCount,
+			CreatedAt:  list[i].CreatedAt,
+			UpdatedAt:  list[i].UpdatedAt,
+			CreatedBy:  list[i].CreatedBy,
+			UpdatedBy:  list[i].UpdatedBy,
 		}
 		if list[i].Edges.Article != nil {
 			item.Article = &model.Article{
@@ -170,7 +171,7 @@ func (r *CommentRepo) GetList(ctx context.Context, req *repo.CommentGetReq) ([]*
 	return comments, nil
 }
 
-func (r *CommentRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *common.PageReply, error) {
+func (r *CommentRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *common.PageReply, error) {
 	page = constant.PageValid(page)
 	query := r.getClient(ctx).Comment.Query().WithReply()
 	query = r.getQuery(query, req)
@@ -186,21 +187,20 @@ func (r *CommentRepo) GetPage(ctx context.Context, page *common.PageRequest, req
 	comments := make([]*model.Comment, 0, len(list))
 	for i := range list {
 		item := &model.Comment{
-			ID:          list[i].ID,
-			ArticleID:   list[i].ArticleID,
-			Content:     list[i].Content,
-			Level:       list[i].Level,
-			ParentID:    list[i].ParentID,
-			ReplyID:     list[i].ReplyID,
-			Status:      enum.CommentStatus(list[i].Status),
-			ThankCount:  list[i].ThankCount,
-			LikeCount:   list[i].LikeCount,
-			ReplyCount:  list[i].ReplyCount,
-			CreatedAt:   list[i].CreatedAt,
-			UpdatedAt:   list[i].UpdatedAt,
-			CreatedBy:   list[i].CreatedBy,
-			UpdatedBy:   list[i].UpdatedBy,
-			WithArticle: req.WithArticle,
+			ID:         list[i].ID,
+			ArticleID:  list[i].ArticleID,
+			Content:    list[i].Content,
+			Level:      list[i].Level,
+			ParentID:   list[i].ParentID,
+			ReplyID:    list[i].ReplyID,
+			Status:     enum.CommentStatus(list[i].Status),
+			ThankCount: list[i].ThankCount,
+			LikeCount:  list[i].LikeCount,
+			ReplyCount: list[i].ReplyCount,
+			CreatedAt:  list[i].CreatedAt,
+			UpdatedAt:  list[i].UpdatedAt,
+			CreatedBy:  list[i].CreatedBy,
+			UpdatedBy:  list[i].UpdatedBy,
 		}
 		if list[i].Edges.Reply != nil {
 			item.Reply = &model.Comment{
@@ -225,10 +225,6 @@ func (r *CommentRepo) GetPage(ctx context.Context, page *common.PageRequest, req
 }
 
 func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
-	if req.WithArticle {
-		query = query.WithArticle()
-	}
-
 	if req.ParentId != nil {
 		query = query.Where(commentent.ParentIDEQ(*req.ParentId))
 	}
@@ -293,21 +289,20 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, req *repo.Comme
 		return nil, err
 	}
 	return &model.Comment{
-		ID:          c.ID,
-		ArticleID:   c.ArticleID,
-		Content:     c.Content,
-		Level:       c.Level,
-		ParentID:    c.ParentID,
-		ReplyID:     c.ReplyID,
-		Status:      enum.CommentStatus(c.Status),
-		ThankCount:  c.ThankCount,
-		LikeCount:   c.LikeCount,
-		ReplyCount:  c.ReplyCount,
-		CreatedAt:   c.CreatedAt,
-		UpdatedAt:   c.UpdatedAt,
-		CreatedBy:   c.CreatedBy,
-		UpdatedBy:   c.UpdatedBy,
-		WithArticle: req.WithArticle,
+		ID:         c.ID,
+		ArticleID:  c.ArticleID,
+		Content:    c.Content,
+		Level:      c.Level,
+		ParentID:   c.ParentID,
+		ReplyID:    c.ReplyID,
+		Status:     enum.CommentStatus(c.Status),
+		ThankCount: c.ThankCount,
+		LikeCount:  c.LikeCount,
+		ReplyCount: c.ReplyCount,
+		CreatedAt:  c.CreatedAt,
+		UpdatedAt:  c.UpdatedAt,
+		CreatedBy:  c.CreatedBy,
+		UpdatedBy:  c.UpdatedBy,
 	}, nil
 }
 
@@ -345,21 +340,20 @@ func (r *CommentRepo) GetArticleLastComments(ctx context.Context, req *repo.Comm
 	commentMap := make(map[int64]*model.Comment)
 	for _, item := range comments {
 		commentMap[item.ArticleID] = &model.Comment{
-			ID:          item.ID,
-			ArticleID:   item.ArticleID,
-			Content:     item.Content,
-			Level:       item.Level,
-			ParentID:    item.ParentID,
-			ReplyID:     item.ReplyID,
-			Status:      enum.CommentStatus(item.Status),
-			ThankCount:  item.ThankCount,
-			LikeCount:   item.LikeCount,
-			ReplyCount:  item.ReplyCount,
-			CreatedAt:   item.CreatedAt,
-			UpdatedAt:   item.UpdatedAt,
-			CreatedBy:   item.CreatedBy,
-			UpdatedBy:   item.UpdatedBy,
-			WithArticle: req.WithArticle,
+			ID:         item.ID,
+			ArticleID:  item.ArticleID,
+			Content:    item.Content,
+			Level:      item.Level,
+			ParentID:   item.ParentID,
+			ReplyID:    item.ReplyID,
+			Status:     enum.CommentStatus(item.Status),
+			ThankCount: item.ThankCount,
+			LikeCount:  item.LikeCount,
+			ReplyCount: item.ReplyCount,
+			CreatedAt:  item.CreatedAt,
+			UpdatedAt:  item.UpdatedAt,
+			CreatedBy:  item.CreatedBy,
+			UpdatedBy:  item.UpdatedBy,
 		}
 	}
 	return commentMap, nil

@@ -25,7 +25,6 @@ func (s *ChatMessageService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
-	v1.RegisterIMChatMessageServiceHTTPServer(hs, s)
 }
 
 func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (rsp *v1.SendChatMessage_Reply, err error) {

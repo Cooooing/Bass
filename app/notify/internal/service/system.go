@@ -28,7 +28,6 @@ func (s *SystemService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *SystemService) RegisterHttp(hs *http.Server) {
-	v1.RegisterCommonSystemServiceHTTPServer(hs, s)
 }
 
 func (s *SystemService) Health(ctx context.Context, req *v1.HealthSystem_Request) (*v1.HealthSystem_Reply, error) {

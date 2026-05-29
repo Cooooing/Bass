@@ -4,16 +4,20 @@ import (
 	"common/api/gen/common/enums"
 	commonenum "common/pkg/enum"
 	"context"
+	"errors"
+	"fmt"
 	base "notify/internal/biz/base"
 	"notify/internal/biz/repo"
+	notifyenum "notify/internal/enum"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/protobuf/proto"
 )
 
-// EventHandler 将一种跨服务事件转换为通知意图。
+// EventHandler 将一种跨服务事件补齐为通知上下文。
 type EventHandler interface {
-	Build(ctx context.Context, event *enums.Event) (*NotificationIntent, error)
+	Build(ctx context.Context, event *enums.Event) (*NotificationContext, error)
 }
 
 type EventHandlers map[commonenum.EventType]EventHandler
@@ -49,77 +53,84 @@ func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, pa
 	var event enums.Event
 	if err := proto.Unmarshal(payload, &event); err != nil {
 		u.log.Errorf("unmarshal event failed: subject=%s err=%v", subjectName, err)
-		return nil
+		return err
 	}
 	if event.EventId == "" {
-		u.log.Errorf("event id is empty: subject=%s type=%v", subjectName, event.Type)
-		return nil
-	}
-	eventType, ok := commonenum.EventTypeMap.ToEnum(event.Type)
-	if !ok {
-		u.log.Errorf("unknown event type: subject=%s type=%v", subjectName, event.Type)
-		return nil
-	}
-	subject := commonenum.EventSubject(subjectName)
-	if _, ok := commonenum.EventSubjectMap.ToProto(subject); !ok {
-		u.log.Errorf("unknown event subject: subject=%s type=%v", subjectName, event.Type)
-		return nil
-	}
-	if expectedSubject, ok := commonenum.EventSubjectByEventType(event.Type); !ok || expectedSubject != subject {
-		u.log.Errorf("event subject mismatch: subject=%s type=%v", subjectName, event.Type)
-		return nil
+		u.log.Errorf("event id is empty, inbox status cannot be saved: subject=%s type=%v", subjectName, event.Type)
+		return errors.New("event id is required")
 	}
 
-	inboxEvent, err := u.inboxEventRepo.SaveReceived(ctx, &repo.InboxEventSave{
+	eventType, ok := commonenum.EventTypeMap.ToEnum(event.Type)
+	if !ok {
+		err := fmt.Errorf("unknown event type: %s", event.Type.String())
+		u.log.Errorf("event type invalid: event_id=%s subject=%s type=%v err=%v", event.EventId, subjectName, event.Type, err)
+		return err
+	}
+	eventSubject := commonenum.EventSubject(subjectName)
+	if _, ok := commonenum.EventSubjectMap.ToProto(eventSubject); !ok {
+		err := fmt.Errorf("unknown event subject: %s", subjectName)
+		u.log.Errorf("event subject invalid: event_id=%s subject=%s type=%v err=%v", event.EventId, subjectName, event.Type, err)
+		return err
+	}
+	if expectedSubject, ok := commonenum.EventSubjectByEventType(event.Type); !ok || expectedSubject != eventSubject {
+		err := fmt.Errorf("event subject mismatch: subject=%s type=%s", subjectName, event.Type.String())
+		u.log.Errorf("event subject mismatch: event_id=%s subject=%s type=%v err=%v", event.EventId, subjectName, event.Type, err)
+		return err
+	}
+	now := time.Now()
+	inboxEvent, claimed, err := u.inboxEventRepo.SaveProcessing(ctx, &repo.InboxEventSave{
 		EventID:   event.EventId,
 		EventType: event.Type,
-		Subject:   subject,
+		Subject:   eventSubject,
 		Payload:   payload,
-	})
+	}, now)
 	if err != nil {
 		return err
 	}
 	if inboxEvent.Status == commonenum.InboxEventStatusProcessed {
 		return nil
 	}
-
-	claimed, err := u.inboxEventRepo.MarkProcessing(ctx, event.EventId)
-	if err != nil {
-		return err
-	}
 	if !claimed {
-		return nil
+		claimed, err = u.inboxEventRepo.ClaimRetry(ctx, event.EventId, now, 10*time.Minute)
+		if err != nil {
+			return err
+		}
+		if !claimed {
+			return fmt.Errorf("event is processing: event_id=%s", event.EventId)
+		}
 	}
 
+	rules, err := u.notifyUsecase.ListEnabledRules(ctx, eventType, notifyenum.LanguageZhCN)
+	if err != nil {
+		return u.markFailed(ctx, event.EventId, err)
+	}
+	if len(rules) == 0 {
+		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
+	}
 	eventHandler, ok := u.eventHandlers[eventType]
 	if !ok {
-		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId)
+		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
 	}
-	intent, err := eventHandler.Build(ctx, &event)
+	notificationContext, err := eventHandler.Build(ctx, &event)
 	if err != nil {
 		return u.markFailed(ctx, event.EventId, err)
 	}
-	prepared, err := u.notifyUsecase.prepare(ctx, intent)
-	if err != nil {
-		return u.markFailed(ctx, event.EventId, err)
+	if notificationContext == nil {
+		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
 	}
+	notificationContext.EventID = event.EventId
+	notificationContext.EventType = eventType
+	notificationContext.Language = notifyenum.LanguageZhCN
 
-	err = u.tx(ctx, func(ctx context.Context) error {
-		if prepared != nil && (prepared.station != nil || len(prepared.deliveries) > 0) {
-			if err := u.notifyUsecase.savePrepared(ctx, prepared); err != nil {
-				return err
-			}
-		}
-		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId)
-	})
+	err = u.notifyUsecase.Process(ctx, notificationContext, rules)
 	if err != nil {
 		return u.markFailed(ctx, event.EventId, err)
 	}
-	return nil
+	return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
 }
 
 func (u *EventUsecase) markFailed(ctx context.Context, eventID string, err error) error {
-	if markErr := u.inboxEventRepo.MarkFailed(ctx, eventID); markErr != nil {
+	if markErr := u.inboxEventRepo.MarkFailed(ctx, eventID, err.Error()); markErr != nil {
 		u.log.Errorf("mark inbox failed status failed: event_id=%s err=%v", eventID, markErr)
 	}
 	return err

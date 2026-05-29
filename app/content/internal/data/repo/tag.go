@@ -36,6 +36,8 @@ func (r *TagRepo) Save(ctx context.Context, tag *model.Tag) (*model.Tag, error) 
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
+		SetNillableCreatedBy(tag.CreatedBy).
+		SetNillableUpdatedBy(tag.UpdatedBy).
 		SetStatus(tagent.Status(tag.Status)).
 		Save(ctx)
 	if err != nil {
@@ -63,6 +65,8 @@ func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, e
 				SetName(tags[i].Name).
 				SetNillableDescription(tags[i].Description).
 				SetNillableDomainID(tags[i].DomainID).
+				SetNillableCreatedBy(tags[i].CreatedBy).
+				SetNillableUpdatedBy(tags[i].UpdatedBy).
 				SetStatus(tagent.Status(tags[i].Status)),
 		)
 	}
@@ -92,6 +96,7 @@ func (r *TagRepo) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
+		SetNillableUpdatedBy(tag.UpdatedBy).
 		SetStatus(tagent.Status(tag.Status)).
 		Save(ctx)
 	if err != nil {
@@ -158,7 +163,7 @@ func (r *TagRepo) GetList(ctx context.Context, req *repo.TagGetReq) ([]*model.Ta
 	return tags, nil
 }
 
-func (r *TagRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
+func (r *TagRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
 	page = constant.PageValid(page)
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)

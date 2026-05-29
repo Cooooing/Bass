@@ -35,8 +35,6 @@ type Comment struct {
 
 	User      *userv1.AccountBasic `json:"user"`
 	ReplyUser *userv1.AccountBasic `json:"reply_user"`
-
-	WithArticle bool `json:"-"`
 }
 
 func (c *Comment) FormatContent() {

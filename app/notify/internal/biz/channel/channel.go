@@ -1,30 +1,52 @@
 package channel
 
 import (
-	commonenum "common/pkg/enum"
 	"context"
-
 	notifyenum "notify/internal/enum"
 )
 
-type Client interface {
-	GetChannel(channel notifyenum.NotificationChannel) (Channel, error)
+type SendResult struct {
+	Status            notifyenum.NotificationChannelStatus
+	ProviderMessageID *string
+	ProviderRequestID *string
+	ProviderCode      *string
+	ProviderMessage   *string
+	ProviderResponse  *string
+	HTTPStatus        *int
+	ResponseBody      *string
 }
 
-// Channel 是 biz 层面对具体投递渠道的统一发送能力。
-type Channel interface {
-	Send(ctx context.Context, req *SendReq) error
+type EmailClient interface {
+	SendEmail(ctx context.Context, req *EmailRequest) (*SendResult, error)
 }
 
-// SendReq 是外部投递任务在发送阶段使用的扁平请求。
-type SendReq struct {
-	EventID        string
-	EventType      commonenum.EventType
-	ReceiverID     *int64
-	Channel        notifyenum.NotificationChannel
-	Target         string
-	Title          string
-	Content        string
-	TemplateID     string
-	TemplateParams []string
+type EmailRequest struct {
+	IdempotencyKey string
+	ToEmail        string
+	Subject        string
+	Body           string
+	ContentType    string
+}
+
+type TencentSMSClient interface {
+	SendTencentSMS(ctx context.Context, req *TencentSMSRequest) (*SendResult, error)
+}
+
+type TencentSMSRequest struct {
+	IdempotencyKey     string
+	Phone              string
+	SMSSDKAppID        string
+	SignName           string
+	ProviderTemplateID string
+	TemplateParams     []string
+}
+
+type LarkWebhookClient interface {
+	SendLarkWebhook(ctx context.Context, req *LarkWebhookRequest) (*SendResult, error)
+}
+
+type LarkWebhookRequest struct {
+	IdempotencyKey string
+	Token          string
+	RequestBody    string
 }

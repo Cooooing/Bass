@@ -14,7 +14,7 @@ type DomainRepo interface {
 
 	Get(ctx context.Context, req *DomainGetReq) (*model.Domain, error)
 	GetList(ctx context.Context, req *DomainGetReq) ([]*model.Domain, error)
-	GetPage(ctx context.Context, page *common.PageRequest, req *DomainGetReq) ([]*model.Domain, *common.PageReply, error)
+	Page(ctx context.Context, page *common.PageRequest, req *DomainGetReq) ([]*model.Domain, *common.PageReply, error)
 }
 
 type DomainGetReq struct {

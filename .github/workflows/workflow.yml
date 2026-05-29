@@ -67,6 +67,14 @@ jobs:
             make-target: sdk-go
             output-dir: common/api/gen-go
             branch: sdk/go
+          - language: java
+            make-target: sdk-java
+            output-dir: common/api/gen-java
+            branch: sdk/java
+          - language: rust
+            make-target: sdk-rust
+            output-dir: common/api/gen-rust
+            branch: sdk/rust
       fail-fast: false
 
     steps:

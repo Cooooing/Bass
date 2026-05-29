@@ -34,11 +34,12 @@ func NewCommentService(
 }
 
 func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Request) (rsp *v1.CreateComment_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	comment, err := s.commentUsecase.Add(ctx, req.UserId, &model.Comment{
 		ArticleID: req.ArticleId,
 		Content:   req.Content,
 		ReplyID:   util.If(req.ReplyId != 0, &req.ReplyId, nil),
+		CreatedBy: new(req.UserId),
+		UpdatedBy: new(req.UserId),
 	})
 	if err != nil {
 		return nil, err
@@ -63,12 +64,6 @@ func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Reque
 		User:          comment.User,
 		ReplyUser:     comment.ReplyUser,
 	}
-	if comment.WithArticle {
-		reply.Article = &v1.Article{
-			Title:     comment.Article.Title,
-			CreatedBy: comment.Article.CreatedBy,
-		}
-	}
 	return &v1.CreateComment_Reply{
 		Comment: reply,
 	}, err
@@ -82,17 +77,16 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request)
 		}
 	}
 	page, comments, err := s.commentUsecase.Page(ctx, req.Page, &repo.CommentGetReq{
-		CommentId:   req.Query.CommentId,
-		CommentIds:  nil,
-		ParentId:    req.Query.ParentId,
-		ReplyId:     req.Query.ReplyId,
-		ArticleId:   req.Query.ArticleId,
-		ArticleIds:  nil,
-		CreatedBy:   req.Query.UserId,
-		Status:      req.Query.Status,
-		Level:       req.Query.Level,
-		Order:       req.Query.Order,
-		WithArticle: req.Query.WithArticle,
+		CommentId:  req.Query.CommentId,
+		CommentIds: nil,
+		ParentId:   req.Query.ParentId,
+		ReplyId:    req.Query.ReplyId,
+		ArticleId:  req.Query.ArticleId,
+		ArticleIds: nil,
+		CreatedBy:  req.Query.UserId,
+		Status:     req.Query.Status,
+		Level:      req.Query.Level,
+		Order:      req.Query.Order,
 	})
 	rows := make([]*v1.Comment, 0, len(comments))
 	for _, comment := range comments {
@@ -116,12 +110,6 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request)
 			User:          comment.User,
 			ReplyUser:     comment.ReplyUser,
 		}
-		if comment.WithArticle {
-			row.Article = &v1.Article{
-				Title:     comment.Article.Title,
-				CreatedBy: comment.Article.CreatedBy,
-			}
-		}
 		rows = append(rows, row)
 	}
 	return &v1.ListComments_Reply{
@@ -131,19 +119,16 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request)
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) (rsp *v1.LikeComment_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.commentUsecase.UpdateStat(ctx, req.Id, req.UserId, v1.CommentAction_COMMENT_ACTION_LIKE, req.Active)
 	return &v1.LikeComment_Reply{}, err
 }
 
 func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Request) (rsp *v1.ThankComment_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.commentUsecase.UpdateStat(ctx, req.Id, req.UserId, v1.CommentAction_COMMENT_ACTION_THANK, req.Active)
 	return &v1.ThankComment_Reply{}, err
 }
 
 func (s *CommentService) UpdateStatus(ctx context.Context, req *v1.UpdateStatusComment_Request) (rsp *v1.UpdateStatusComment_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
-	err = s.commentUsecase.UpdateStatus(ctx, req.Id, req.Status)
+	err = s.commentUsecase.UpdateStatus(ctx, req.Id, req.UserId, req.Status)
 	return &v1.UpdateStatusComment_Reply{}, err
 }

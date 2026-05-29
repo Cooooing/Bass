@@ -101,7 +101,7 @@ func (r *ArticleActionRecordRepo) GetList(ctx context.Context, req *repo.Article
 	return articleActionRecords, nil
 }
 
-func (r *ArticleActionRecordRepo) GetPage(ctx context.Context, page *common.PageRequest, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error) {
+func (r *ArticleActionRecordRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error) {
 	page = constant.PageValid(page)
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)

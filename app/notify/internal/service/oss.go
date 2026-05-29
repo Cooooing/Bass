@@ -38,11 +38,10 @@ func (s *OssService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *OssService) RegisterHttp(hs *http.Server) {
-	v1.RegisterNotifyOssServiceHTTPServer(hs, s)
 }
 
 func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenOss_Request) (*v1.GetUploadTokenOss_Reply, error) {
-	tokens, err := s.objectStorageUsecase.UploadToken(ctx, int(req.Num))
+	tokens, err := s.objectStorageUsecase.UploadToken(ctx, int(req.Num), req.GetUserId(), req.GetUserName())
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +58,7 @@ func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenO
 }
 
 func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Request) (*v1.AuditOss_Reply, error) {
-	err := s.objectStorageUsecase.UpdateAudit(ctx, req.Key, req.Status, req.Reason)
+	err := s.objectStorageUsecase.UpdateAudit(ctx, req.Key, req.Status, req.Reason, req.GetUserId(), req.GetUserName())
 	if err != nil {
 		return nil, err
 	}

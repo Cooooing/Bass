@@ -25,7 +25,6 @@ func (s *ChatSessionService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *ChatSessionService) RegisterHttp(hs *http.Server) {
-	v1.RegisterIMChatSessionServiceHTTPServer(hs, s)
 }
 
 func (s *ChatSessionService) MarkMuted(ctx context.Context, req *v1.MarkMutedChatSession_Request) (rsp *v1.MarkMutedChatSession_Reply, err error) {

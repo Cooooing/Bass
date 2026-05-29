@@ -51,7 +51,7 @@ func NewIpUsecase(
 	}, cleanup, nil
 }
 
-func (d *IpUsecase) GetInfo(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
+func (d *IpUsecase) Get(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
 	def := "未知"
 	if d.ip2region == nil || ip == "" {
 		return &commonModel.IpInfo{

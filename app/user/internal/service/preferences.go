@@ -4,12 +4,9 @@ import (
 	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"context"
 	"user/internal/biz/model"
-	"user/internal/biz/repo"
+	"user/internal/biz/usecase"
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -18,11 +15,11 @@ import (
 
 type PreferencesService struct {
 	v1.UnimplementedPreferencesServiceServer
-	preferencesRepo repo.PreferencesRepo
+	preferencesUsecase *usecase.PreferencesUsecase
 }
 
-func NewPreferencesService(preferencesRepo repo.PreferencesRepo) *PreferencesService {
-	return &PreferencesService{preferencesRepo: preferencesRepo}
+func NewPreferencesService(preferencesUsecase *usecase.PreferencesUsecase) *PreferencesService {
+	return &PreferencesService{preferencesUsecase: preferencesUsecase}
 }
 
 func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
@@ -31,16 +28,12 @@ func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *PreferencesService) RegisterHttp(hs *http.Server) {}
 
-func (s *PreferencesService) GetCurrent(ctx context.Context, req *v1.GetCurrentPreferences_Request) (*v1.GetCurrentPreferences_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	preferences, err := s.preferencesRepo.FindByUserID(ctx, current.ID)
+func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Request) (*v1.GetPreferences_Reply, error) {
+	preferences, err := s.preferencesUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.Preferences{UserId: current.ID}
+	reply := &v1.Preferences{UserId: req.GetUserId()}
 	if preferences != nil {
 		if preferences.Language != nil {
 			reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
@@ -49,14 +42,10 @@ func (s *PreferencesService) GetCurrent(ctx context.Context, req *v1.GetCurrentP
 		reply.Theme = preferences.Theme
 		reply.MobileTheme = preferences.MobileTheme
 	}
-	return &v1.GetCurrentPreferences_Reply{Preferences: reply}, nil
+	return &v1.GetPreferences_Reply{Preferences: reply}, nil
 }
 
-func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *v1.UpdateCurrentPreferences_Request) (*v1.UpdateCurrentPreferences_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
+func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferences_Request) (*v1.UpdatePreferences_Reply, error) {
 	var language *enum.Language
 	if req.Language != nil {
 		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
@@ -67,8 +56,8 @@ func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *v1.UpdateCu
 			language = new(value)
 		}
 	}
-	preferences, err := s.preferencesRepo.UpsertByUserID(ctx, &model.Preferences{
-		UserID:      current.ID,
+	preferences, err := s.preferencesUsecase.UpsertByUserID(ctx, &model.Preferences{
+		UserID:      req.GetUserId(),
 		Language:    language,
 		Timezone:    req.Timezone,
 		Theme:       req.Theme,
@@ -78,7 +67,7 @@ func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *v1.UpdateCu
 		return nil, err
 	}
 	reply := &v1.Preferences{
-		UserId:      current.ID,
+		UserId:      req.GetUserId(),
 		Timezone:    preferences.Timezone,
 		Theme:       preferences.Theme,
 		MobileTheme: preferences.MobileTheme,
@@ -86,5 +75,5 @@ func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *v1.UpdateCu
 	if preferences.Language != nil {
 		reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
 	}
-	return &v1.UpdateCurrentPreferences_Reply{Preferences: reply}, nil
+	return &v1.UpdatePreferences_Reply{Preferences: reply}, nil
 }

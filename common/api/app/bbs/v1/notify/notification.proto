@@ -41,7 +41,7 @@ message ListNotifications {
 
 message MarkReadNotification {
   message Request {
-    repeated int64 notification_record_ids = 1;
+    repeated int64 ids = 1;
   }
   message Reply {
     int32 count = 1;

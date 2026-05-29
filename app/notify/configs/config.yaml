@@ -26,6 +26,9 @@ server:
       sms_sdk_app_id: ${TENCENT_SMS_APP_ID:}
       sign_name: ${TENCENT_SMS_SIGN_NAME:}
       template_id: ${TENCENT_SMS_TEMPLATE_ID:}
+  lark_webhook:
+    base_url: ${LARK_WEBHOOK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
+    timeout: 10s
   oss:
     provider: qiniu
     minio:

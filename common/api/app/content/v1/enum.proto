@@ -32,9 +32,6 @@ enum ArticleStatus {
 }
 
 enum ArticleType {
-  reserved 3, 4;
-  reserved "ARTICLE_TYPE_VOTE", "ARTICLE_TYPE_LOTTERY";
-
   ARTICLE_TYPE_UNSPECIFIED = 0;
   ARTICLE_TYPE_NORMAL = 1; // 普通文章
   ARTICLE_TYPE_QA = 2; // 问答
@@ -47,9 +44,6 @@ enum ArticlePostscriptStatus {
 }
 
 enum ArticleAction {
-  reserved 7, 8, 9;
-  reserved "ARTICLE_ACTION_VOTE", "ARTICLE_ACTION_LOTTERY", "ARTICLE_ACTION_LOTTERY_WINNER";
-
   ARTICLE_ACTION_UNSPECIFIED = 0;
   ARTICLE_ACTION_LIKE = 1; // 点赞
   ARTICLE_ACTION_THANK = 2; // 感谢
@@ -66,9 +60,6 @@ enum ArticleOrder {
 }
 
 enum CommentAction {
-  reserved 2;
-  reserved "COMMENT_ACTION_COLLECT";
-
   COMMENT_ACTION_UNSPECIFIED = 0;
   COMMENT_ACTION_LIKE = 1; // 点赞
   COMMENT_ACTION_REPLY = 3; // 回复

@@ -6,41 +6,14 @@ import "common/enums/event.proto";
 
 option go_package = "common/api/gen/bbs/v1/notify;notify";
 
-enum NotificationStatus {
-  NOTIFICATION_STATUS_UNSPECIFIED = 0;
-  NOTIFICATION_STATUS_NORMAL = 1;
-  NOTIFICATION_STATUS_CANCEL = 2;
-}
-
-enum NotificationChannel {
-  NOTIFICATION_CHANNEL_UNSPECIFIED = 0;
-  NOTIFICATION_CHANNEL_EMAIL = 1;
-  NOTIFICATION_CHANNEL_SMS = 2;
-  NOTIFICATION_CHANNEL_STATION = 3;
-}
-
 message Notification {
   int64 id = 1;
-  int64 notification_id = 2;
+  string event_id = 2;
   int64 receiver_id = 3;
-  string title = 4;
-  string content = 5;
-  string read_time = 6;
+  common.enums.EventType event_type = 4;
+  string title = 5;
+  string content = 6;
+  string read_at = 7;
   string created_at = 1000;
   string updated_at = 1001;
-}
-
-message NotificationSetting {
-  int64 id = 1;
-  int64 user_id = 2;
-  common.enums.EventType event_type = 3;
-  NotificationChannel channel = 4;
-  bool enable = 5;
-  string created_at = 1000;
-  string updated_at = 1001;
-}
-
-message NotificationSettingQuery {
-  optional common.enums.EventType event_type = 1;
-  optional NotificationChannel channel = 2;
 }

@@ -7,28 +7,31 @@ import "user/v1/model.proto";
 option go_package = "common/api/gen/user/v1;v1";
 
 service PrivacySettingService {
-  // 获取当前登录账号的隐私设置，缺省时返回默认设置。
-  rpc GetCurrent(GetCurrentPrivacySetting.Request) returns (GetCurrentPrivacySetting.Reply) {}
+  // 获取账号隐私设置，缺省时返回默认设置。
+  rpc Get(GetPrivacySetting.Request) returns (GetPrivacySetting.Reply) {}
 
-  // 更新当前登录账号的隐私设置；缺省扩展表使用 upsert 创建。
-  rpc UpdateCurrent(UpdateCurrentPrivacySetting.Request) returns (UpdateCurrentPrivacySetting.Reply) {}
+  // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
+  rpc Update(UpdatePrivacySetting.Request) returns (UpdatePrivacySetting.Reply) {}
 }
 
-message GetCurrentPrivacySetting {
-  message Request {}
+message GetPrivacySetting {
+  message Request {
+    int64 user_id = 1;
+  }
   message Reply {
     PrivacySetting privacy_setting = 1;
   }
 }
 
-message UpdateCurrentPrivacySetting {
+message UpdatePrivacySetting {
   message Request {
-    optional bool public_points = 1;
-    optional bool public_followers = 2;
-    optional bool public_articles = 3;
-    optional bool public_comments = 4;
-    optional bool public_online_status = 5;
-    optional bool public_location = 6;
+    int64 user_id = 1;
+    optional bool public_points = 2;
+    optional bool public_followers = 3;
+    optional bool public_articles = 4;
+    optional bool public_comments = 5;
+    optional bool public_online_status = 6;
+    optional bool public_location = 7;
   }
   message Reply {
     PrivacySetting privacy_setting = 1;

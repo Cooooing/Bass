@@ -54,11 +54,17 @@ npx gitnexus analyze --embeddings
 - 契约分为 BFF HTTP、内部 gRPC、内部事件、外部回调四类；外部回调必须独立说明验签、幂等键、来源字段和失败处理。
 - `google.api.http` option 必须使用多行块格式，路径和 `body` 各占一行；不要写成 `{ post: "..." body: "*" }` 这种单行格式。
 - 共享 API 和 BFF 对外 RPC 命名使用业务动作；禁止 `GetOne`、`Page`、`Info`、`Data` 这类实现视角或含义不明确的名字。单资源查询用 `Get`，集合查询用 `List`，创建实体用 `Create`，追加子内容可用明确业务动词如 `Add`，状态变更使用 `Publish`、`MarkRead` 等业务动作。
+- 查询 RPC 按资源收敛为单资源 `Get`、列表 `List` 和映射 `Map`；禁止因返回字段组合拆分 `GetBasic`、`BatchGetBasic`、`BatchGetContact` 这类接口。
+- 调用方需要按 ID 获取映射时，归属服务必须定义独立 `Map` RPC；`List` 只表示列表查询并返回列表，调用方不能通过 `List` 的 `repeated` 结果自行组装映射。
+- 基础资源模型只表达资源本体，不挂载可独立查询的关联集合；关联集合通过独立 RPC 暴露，不能由 `Get` 或 `List` 隐式聚合返回。
+- 项目初期不维护 proto 向后兼容保留位，删除字段或枚举值时直接删除，不写 `reserved` 字段号或字段名。
+- 请求参数不能用 `with_xxx`、`include_xxx` 等布尔开关控制响应结构；同一接口的响应结构必须由接口语义固定。
+- RPC 注释只描述接口功能，不写消费方、调用场景、登录态、幂等策略和字段缺省规则。
 - service 名已经表达资源时，RPC 只写业务动作；request/reply 外层 message 使用 `动作 + 资源名`，禁止 `UpdateArticleArticle` 这类重复资源名。
 - BFF HTTP 路径统一使用 `/v1/{模块}/{资源}/{动作}`；同一资源名称保持单数且前后一致，动作使用 lower-kebab。
 - BFF 不暴露邮箱、手机号、账号名是否存在等可用于枚举用户信息的接口。
 - BFF OpenAPI 从 `google.api.http` 和 proto 注释生成；不手写 tags、servers、external_docs、BearerAuth，也不在接口描述中写登录态、幂等策略、字段缺省规则等运行时说明。
-- SDK 从 BFF OpenAPI 生成，输出到 `common/api/gen-ts/<bff>`、`common/api/gen-go/<bff>`，生成产物不入 Git 和 Docker。
+- SDK 从 BFF OpenAPI 生成，输出到 `common/api/gen-ts/<bff>`、`common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker。
 - gRPC client 统一通过 `common/pkg/client/rpc` 和 `ConsulClient.GetGrpcConn` 创建；业务代码不要直接 `grpc.Dial` 或手写服务发现逻辑。
 - gRPC 超时、发现、tracing、metadata 和连接复用由统一 client 管理；普通 RPC 调用不要重复包 `context.WithTimeout`。
 - BFF 读接口可以按业务场景降级或返回部分结果；写接口下游失败时默认返回失败，不吞错伪造成功。
@@ -66,7 +72,8 @@ npx gitnexus analyze --embeddings
 - 分层依赖只能从外层指向内层；biz 层禁止依赖本模块 `internal/data`、`internal/data/gen`、Ent 生成模型、Ent client、schema predicate 或 data 层实现类型。
 - BFF 负责入口认证和权限判断；内部服务默认信任内部调用链传入的身份上下文，不重复实现入口层权限判断。
 - 内部服务仍需校验资源存在、状态流转、归属服务本地业务不变量和写入前置条件。
-- service 层不能直接调用 data 层或 data 层实现的底层接口；现有历史偏离不作为新代码依据。
+- service 层只能调用 biz/usecase，不能直接注入或调用 repo、data 层实现；现有历史偏离不作为新代码依据。
+- service 入参校验属于协议入口适配，写在对应 service 的接收者方法中；不要为入口校验新增游离函数、独立校验结构体或独立校验 usecase。
 - biz 层底层能力接口只能暴露业务模型、基础类型、枚举和查询参数对象；不能在接口签名中出现 Ent client、Ent entity、Ent mutation、Ent query 等 data 层细节。
 - Ent 生成模型只允许在 data 层内部使用；biz model 必须是独立业务结构，不能嵌入或别名引用 Ent entity。
 - schema 字段必须来自明确业务需求或实际读写路径；意义不明、未使用、可推导或重复的信息不落库；任何数据库表结构变更都必须先给出设计、影响范围和理由，经用户确认后再修改。
@@ -87,6 +94,11 @@ npx gitnexus analyze --embeddings
 - MQ subject 属于跨服务事件协议，必须定义在 common proto enum 中，并通过内部 string enum 映射实际主题字符串。
 - MQ queue group 属于事件消费协议，必须定义为 common 枚举；业务消费者订阅时使用枚举值，不直接书写字符串。
 - 复合查询条件使用 `Query`、`Filter`、`Spec` 等参数对象，不拼接超长方法名。
+- biz/repo 的参数对象只表达持久化查询或写入条件，不定义 `StringPatch`、`XXXPatch` 等承载 service 入参校验状态的类型。
+- 底层能力接口方法名使用业务动作和资源语义；单资源查询使用 `Get`，列表查询使用 `List`，按 ID 返回映射使用 `Map`，批量查询不使用 `BatchGetBasic`、`BatchGetContact` 这类按字段组合命名的方法。
+- 返回 map 的 biz client/repo 方法使用 `Map` 语义命名，不能命名为 `ListAccounts`、`ListBasicAccounts` 等列表查询名称。
+- 基础资源模型只写资源本体字段，不挂载标签、附言等可独立查询的关联集合；调用方需要关联集合时定义独立 RPC。
+- 项目初期删除 proto 字段或枚举值时直接删除，不写 `reserved` 字段号或字段名。
 - 文本文件使用 UTF-8、无 BOM、LF；所有注释使用中文。
 - 业务规则、跨服务边界、事务边界、事件语义和数据库约束需要必要注释；注释描述意图、约束和边界，不复述代码表面行为。
 - 跨服务调用、事件投递和消费、关键写事务必须记录 trace ID、业务 ID、耗时和结果状态等可追踪信息。
@@ -104,7 +116,7 @@ npx gitnexus analyze --embeddings
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Bass** (3290 symbols, 7644 relationships, 233 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Bass** (3284 symbols, 7249 relationships, 135 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

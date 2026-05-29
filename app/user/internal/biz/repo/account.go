@@ -11,13 +11,14 @@ type AccountRepo interface {
 	Create(ctx context.Context, u *model.Account) (*model.Account, error)
 
 	Update(ctx context.Context, u *model.Account) (*model.Account, error)
-	UpdateProfile(ctx context.Context, patch *AccountProfilePatch) (*model.Account, error)
+	UpdateProfile(ctx context.Context, userID int64, avatarURL *string, nickname *string, url *string, introduction *string, mbti *enum.MBTI, clearMBTI bool) (*model.Account, error)
 	AddStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error)
 
 	ExistsByAccount(ctx context.Context, account string) (bool, error)
 	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)
 	GetByAccount(ctx context.Context, account string) (*model.Account, error)
 	List(ctx context.Context, req *AccountGetReq) ([]*model.Account, error)
+	Map(ctx context.Context, req *AccountGetReq) (map[int64]*model.Account, error)
 	Page(ctx context.Context, page *common.PageRequest, req *AccountGetReq) ([]*model.Account, *common.PageReply, error)
 }
 
@@ -32,39 +33,4 @@ type AccountGetReq struct {
 	Emails    []string
 	Phone     *string
 	Phones    []string
-}
-
-type StringPatch struct {
-	Set   bool
-	Value string
-}
-
-func NewStringPatch(value *string) StringPatch {
-	if value == nil {
-		return StringPatch{}
-	}
-	return StringPatch{Set: true, Value: *value}
-}
-
-type MBTIPatch struct {
-	Set   bool
-	Clear bool
-	Value enum.MBTI
-}
-
-type AccountProfilePatch struct {
-	UserID       int64
-	AvatarURL    StringPatch
-	Nickname     StringPatch
-	URL          StringPatch
-	Introduction StringPatch
-	Mbti         MBTIPatch
-}
-
-func (p *AccountProfilePatch) HasChanges() bool {
-	return p.AvatarURL.Set ||
-		p.Nickname.Set ||
-		p.URL.Set ||
-		p.Introduction.Set ||
-		p.Mbti.Set
 }

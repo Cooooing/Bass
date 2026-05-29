@@ -1,11 +1,8 @@
 package qiniu
 
 import (
-	cerrors "common/api/gen/common/errors"
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"context"
 	"fmt"
 	"notify/internal/biz/model"
@@ -72,18 +69,14 @@ func (q *Qiniu) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 	}, nil
 }
 
-func (q *Qiniu) UploadToken(ctx context.Context, key string) (string, error) {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return "", cerrors.ErrorUnauthorized("user not login")
-	}
+func (q *Qiniu) UploadToken(ctx context.Context, key string, uploaderID int64, uploaderName string) (string, error) {
 	mac := auth.New(q.conf.Server.Oss.Qiniu.AccessKey, q.conf.Server.Oss.Qiniu.SecretKey)
 	putPolicy := storage.PutPolicy{
 		Scope:            fmt.Sprintf("%s:%s", q.conf.Server.Oss.Qiniu.Bucket, key),
 		CallbackURL:      q.conf.Server.Oss.Qiniu.CallbackUrl,
-		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, user.ID, user.Name),
+		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, uploaderID, uploaderName),
 		CallbackBodyType: "application/json",
-		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, user.ID, user.Name),
+		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, uploaderID, uploaderName),
 		Expires:          uint64(q.conf.Server.Oss.Qiniu.Timeout.Seconds),
 		InsertOnly:       1,
 		FsizeMin:         1024 * 1024 * q.conf.Server.Oss.Qiniu.SizeMin,

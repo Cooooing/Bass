@@ -32,6 +32,8 @@ func (r *ArticlePostscriptRepo) Save(ctx context.Context, postscript *model.Arti
 	save, err := r.getClient(ctx).ArticlePostscript.Create().
 		SetArticleID(postscript.ArticleID).
 		SetContent(postscript.Content).
+		SetNillableCreatedBy(postscript.CreatedBy).
+		SetNillableUpdatedBy(postscript.UpdatedBy).
 		SetStatus(articlepostscript.Status(postscript.Status)).
 		Save(ctx)
 	if err != nil {

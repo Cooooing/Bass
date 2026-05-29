@@ -10,13 +10,13 @@ import (
 type CommentRepo interface {
 	Save(ctx context.Context, comment *model.Comment) (*model.Comment, error)
 
-	UpdateStatus(ctx context.Context, commentId int64, status v1.CommentStatus) error
-	UpdateStat(ctx context.Context, commentId int64, action v1.CommentAction, num int32) error
+	UpdateStatus(ctx context.Context, commentId int64, userId int64, status v1.CommentStatus) error
+	UpdateStat(ctx context.Context, commentId int64, userId int64, action v1.CommentAction, num int32) error
 
 	Exist(ctx context.Context, req *CommentGetReq) (bool, error)
 	Get(ctx context.Context, req *CommentGetReq) (*model.Comment, error)
 	GetList(ctx context.Context, req *CommentGetReq) ([]*model.Comment, error)
-	GetPage(ctx context.Context, page *common.PageRequest, req *CommentGetReq) ([]*model.Comment, *common.PageReply, error)
+	Page(ctx context.Context, page *common.PageRequest, req *CommentGetReq) ([]*model.Comment, *common.PageReply, error)
 	GetArticleLastComment(ctx context.Context, req *CommentGetReq) (*model.Comment, error)
 	GetArticleLastComments(ctx context.Context, req *CommentGetReq) (map[int64]*model.Comment, error)
 }
@@ -32,8 +32,6 @@ type CommentGetReq struct {
 	Status     *v1.CommentStatus
 	Level      *int32
 	Order      *v1.CommentOrder
-
-	WithArticle bool
 }
 
 type CommentActionRecordRepo interface {

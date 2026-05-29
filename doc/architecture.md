@@ -12,7 +12,7 @@
 - 依赖只能从外层指向内层：service 调用 usecase；data 实现 biz 层定义的底层能力接口；biz 不能依赖 data。
 - biz 层不能 import 本模块 `internal/data`、`internal/data/gen`、Ent 生成模型、Ent client、schema predicate 或 data 层实现类型。
 - biz 层底层能力接口只能暴露业务模型、基础类型、枚举和查询参数对象；接口签名不能出现 Ent 或 data 层细节。
-- service 层负责协议适配和入参组装，不能直接调用 data 层实现；现有历史偏离不作为新代码依据。
+- service 层负责协议适配和入参组装，只能调用 biz/usecase；不能直接注入或调用 repo、data 层实现，现有历史偏离不作为新代码依据。
 - 事务能力通过 biz 层 `Tx` 等抽象传入 usecase，不能通过 repo 参数暴露具体数据库 client。
 - 常规表业务尽量保持 proto、service、biz、data、schema 一一对应；复杂流程新增明确业务 usecase，禁止泛化 helper 承载流程。
 - usecase 可以按业务层级组合调用，但必须明确上下游，禁止循环调用；一个写流程只能有一个清晰事务入口。
@@ -34,7 +34,12 @@
 - Proto 管理、lint 和生成统一使用 Buf；模板放在 `common/buf`，共享 API 配置放在 `common/api/app`，第三方 proto 依赖通过 Buf deps 管理。
 - 无法从 Buf deps 获取且必须长期稳定的扩展，可以定义为项目自有 proto，并放在 `common/api/app` 下。
 - 一个 proto 文件最多定义一个 `service`，每个 proto service 对应一个 Go service 文件。
-- 每个 RPC 必须写简短注释；请求和响应必须围绕接口语义定义，不复用过大的通用模型。
+- 每个 RPC 必须写简短注释；注释只描述接口功能，不写消费方、调用场景、登录态、幂等策略和字段缺省规则。
+- 请求和响应必须围绕接口语义定义，不复用过大的通用模型；查询 RPC 按资源收敛为单资源 `Get`、列表 `List` 和映射 `Map`，禁止因返回字段组合拆分 `GetBasic`、`BatchGetBasic`、`BatchGetContact` 这类接口。
+- 调用方需要按 ID 获取映射时，归属服务必须定义独立 `Map` RPC；`List` 只表示列表查询并返回列表，调用方不能通过 `List` 的 `repeated` 结果自行组装映射。
+- 基础资源模型只表达资源本体，不挂载可独立查询的关联集合；关联集合通过独立 RPC 暴露，不能由 `Get` 或 `List` 隐式聚合返回。
+- 项目初期不维护 proto 向后兼容保留位，删除字段或枚举值时直接删除，不写 `reserved` 字段号或字段名。
+- 请求参数不能用 `with_xxx`、`include_xxx` 等布尔开关控制响应结构；同一接口的响应结构必须由接口语义固定。
 - 内部服务 proto 只暴露 gRPC 契约，不写 `google.api.http` 注解；OpenAPI 只面向 BFF。
 - BFF proto 必须定义自己的 request、reply 和对外模型，不引用内部服务 proto message。
 - 项目初期不要求 proto 版本兼容；按当前需求可以删除、重命名或重排字段。
@@ -48,7 +53,7 @@
 - BFF 不暴露邮箱、手机号、账号名是否存在等可用于枚举用户信息的接口。
 - BFF OpenAPI 从 `google.api.http` 和 proto 注释生成；文档入口放在 BFF proto 包的 `doc.proto`。
 - BFF OpenAPI 不手写 tags、servers、external_docs、BearerAuth，也不写登录态、幂等策略和字段缺省规则。
-- SDK 只从 BFF OpenAPI 生成，输出到 `common/api/gen-ts/<bff>`、`common/api/gen-go/<bff>`，生成产物不入 Git 和 Docker。
+- SDK 只从 BFF OpenAPI 生成，输出到 `common/api/gen-ts/<bff>`、`common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker。
 - gRPC client 统一通过 `common/pkg/client/rpc` 和 `ConsulClient.GetGrpcConn` 创建；业务代码不要直接 `grpc.Dial`、手写服务发现或为普通 RPC 重复包 `context.WithTimeout`。
 
 ## 数据设计

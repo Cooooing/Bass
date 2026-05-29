@@ -22,7 +22,6 @@ var ServiceProviderSet = wire.NewSet(
 	NewContentDomainService,
 	NewContentTagService,
 	NewNotificationService,
-	NewNotificationSettingService,
 	ProvideServices,
 )
 
@@ -41,7 +40,6 @@ func ProvideServices(
 	contentDomainService *ContentDomainService,
 	contentTagService *ContentTagService,
 	notificationService *NotificationService,
-	notificationSettingService *NotificationSettingService,
 ) []server.HttpService {
 	return []server.HttpService{
 		systemService,
@@ -58,6 +56,5 @@ func ProvideServices(
 		contentDomainService,
 		contentTagService,
 		notificationService,
-		notificationSettingService,
 	}
 }

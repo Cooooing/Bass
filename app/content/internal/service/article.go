@@ -54,6 +54,8 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 				Description: tag.Description,
 				DomainID:    tag.DomainId,
 				Status:      tagStatus,
+				CreatedBy:   new(req.UserId),
+				UpdatedBy:   new(req.UserId),
 			}
 			if tag.Id != nil {
 				saveTag.ID = *tag.Id
@@ -70,7 +72,6 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 	if !ok {
 		return nil, cerrors.ErrorBadRequest("invalid article type")
 	}
-	ctx = withUserID(ctx, req.UserId)
 	save, err := s.articleUsecase.Add(ctx, &model.Article{
 		Title:         article.Title,
 		Content:       article.Content,
@@ -83,6 +84,8 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 		Listable:      util.DerefOrDefault(article.Listable, true),
+		CreatedBy:     new(req.UserId),
+		UpdatedBy:     new(req.UserId),
 	}, tags)
 	if err != nil {
 		return nil, err
@@ -123,32 +126,6 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 	if save.LastReplyCommentAt != nil {
 		articleReply.LastReplyAt = timestamppb.New(*save.LastReplyCommentAt)
 	}
-	for _, item := range save.Postscripts {
-		item.ParseContent()
-		articleReply.Postscripts = append(articleReply.Postscripts, &v1.ArticlePostscript{
-			CreatedAt:     timestamppb.New(*item.CreatedAt),
-			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
-			CreatedBy:     item.CreatedBy,
-			UpdatedBy:     item.UpdatedBy,
-			Id:            item.ID,
-			ArticleId:     item.ArticleID,
-			Content:       item.Content,
-			ContentRender: item.ContentRender,
-		})
-	}
-	for _, tag := range save.Tags {
-		articleReply.Tags = append(articleReply.Tags, &v1.Tag{
-			CreatedAt:   timestamppb.New(*tag.CreatedAt),
-			UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-			CreatedBy:   tag.CreatedBy,
-			UpdatedBy:   tag.UpdatedBy,
-			Id:          tag.ID,
-			Name:        tag.Name,
-			Description: tag.Description,
-			DomainId:    tag.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-		})
-	}
 	return &v1.CreateArticle_Reply{
 		Article: articleReply,
 	}, nil
@@ -175,6 +152,8 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 				Description: tag.Description,
 				DomainID:    tag.DomainId,
 				Status:      tagStatus,
+				CreatedBy:   new(req.UserId),
+				UpdatedBy:   new(req.UserId),
 			}
 			if tag.Id != nil {
 				saveTag.ID = *tag.Id
@@ -191,7 +170,6 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 	if !ok {
 		return nil, cerrors.ErrorBadRequest("invalid article type")
 	}
-	ctx = withUserID(ctx, req.UserId)
 	update, err := s.articleUsecase.UpdateDraft(ctx, &model.Article{
 		ID:            *req.Article.Id,
 		Title:         article.Title,
@@ -205,6 +183,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 		Listable:      util.DerefOrDefault(article.Listable, true),
+		UpdatedBy:     new(req.UserId),
 	}, tags)
 	if err != nil {
 		return nil, err
@@ -245,46 +224,18 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 	if update.LastReplyCommentAt != nil {
 		articleReply.LastReplyAt = timestamppb.New(*update.LastReplyCommentAt)
 	}
-	for _, item := range update.Postscripts {
-		item.ParseContent()
-		articleReply.Postscripts = append(articleReply.Postscripts, &v1.ArticlePostscript{
-			CreatedAt:     timestamppb.New(*item.CreatedAt),
-			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
-			CreatedBy:     item.CreatedBy,
-			UpdatedBy:     item.UpdatedBy,
-			Id:            item.ID,
-			ArticleId:     item.ArticleID,
-			Content:       item.Content,
-			ContentRender: item.ContentRender,
-		})
-	}
-	for _, tag := range update.Tags {
-		articleReply.Tags = append(articleReply.Tags, &v1.Tag{
-			CreatedAt:   timestamppb.New(*tag.CreatedAt),
-			UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-			CreatedBy:   tag.CreatedBy,
-			UpdatedBy:   tag.UpdatedBy,
-			Id:          tag.ID,
-			Name:        tag.Name,
-			Description: tag.Description,
-			DomainId:    tag.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-		})
-	}
 	return &v1.UpdateDraftArticle_Reply{
 		Article: articleReply,
 	}, nil
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (rsp *v1.PublishArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.articleUsecase.Publish(ctx, req.ArticleId, req.UserId)
 	return &v1.PublishArticle_Reply{}, err
 }
 
 func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticle_Request) (rsp *v1.AddPostscriptArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
-	save, err := s.articleUsecase.AddPostscript(ctx, req.ArticleId, req.Content)
+	save, err := s.articleUsecase.AddPostscript(ctx, req.ArticleId, req.UserId, req.Content)
 	if err != nil {
 		return nil, err
 	}
@@ -303,15 +254,13 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	}, err
 }
 
-func (s *ArticleService) UpdateArticle(ctx context.Context, req *v1.UpdateArticleArticle_Request) (rsp *v1.UpdateArticleArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
-	err = s.articleUsecase.UpdateArticle(ctx, req.ArticleId, req.Status, req.Commentable, req.Anonymous, req.Listable)
-	return &v1.UpdateArticleArticle_Reply{}, err
+func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Request) (rsp *v1.UpdateArticle_Reply, err error) {
+	err = s.articleUsecase.UpdateArticle(ctx, req.ArticleId, req.UserId, req.Status, req.Commentable, req.Anonymous, req.Listable)
+	return &v1.UpdateArticle_Reply{}, err
 }
 
 func (s *ArticleService) Delete(ctx context.Context, req *v1.DeleteArticle_Request) (rsp *v1.DeleteArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
-	err = s.articleUsecase.Delete(ctx, req.ArticleId)
+	err = s.articleUsecase.Delete(ctx, req.ArticleId, req.UserId)
 	return &v1.DeleteArticle_Reply{}, err
 }
 
@@ -375,32 +324,6 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Request)
 		if item.LastReplyCommentAt != nil {
 			row.LastReplyAt = timestamppb.New(*item.LastReplyCommentAt)
 		}
-		for _, itemPostscript := range item.Postscripts {
-			itemPostscript.ParseContent()
-			row.Postscripts = append(row.Postscripts, &v1.ArticlePostscript{
-				CreatedAt:     timestamppb.New(*itemPostscript.CreatedAt),
-				UpdatedAt:     timestamppb.New(*itemPostscript.UpdatedAt),
-				CreatedBy:     itemPostscript.CreatedBy,
-				UpdatedBy:     itemPostscript.UpdatedBy,
-				Id:            itemPostscript.ID,
-				ArticleId:     itemPostscript.ArticleID,
-				Content:       itemPostscript.Content,
-				ContentRender: itemPostscript.ContentRender,
-			})
-		}
-		for _, tag := range item.Tags {
-			row.Tags = append(row.Tags, &v1.Tag{
-				CreatedAt:   timestamppb.New(*tag.CreatedAt),
-				UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-				CreatedBy:   tag.CreatedBy,
-				UpdatedBy:   tag.UpdatedBy,
-				Id:          tag.ID,
-				Name:        tag.Name,
-				Description: tag.Description,
-				DomainId:    tag.DomainID,
-				Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-			})
-		}
 		rows = append(rows, row)
 	}
 	return &v1.ListArticles_Reply{
@@ -453,67 +376,35 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Request) (r
 	if one.LastReplyCommentAt != nil {
 		article.LastReplyAt = timestamppb.New(*one.LastReplyCommentAt)
 	}
-	for _, item := range one.Postscripts {
-		item.ParseContent()
-		article.Postscripts = append(article.Postscripts, &v1.ArticlePostscript{
-			CreatedAt:     timestamppb.New(*item.CreatedAt),
-			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
-			CreatedBy:     item.CreatedBy,
-			UpdatedBy:     item.UpdatedBy,
-			Id:            item.ID,
-			ArticleId:     item.ArticleID,
-			Content:       item.Content,
-			ContentRender: item.ContentRender,
-		})
-	}
-	for _, tag := range one.Tags {
-		article.Tags = append(article.Tags, &v1.Tag{
-			CreatedAt:   timestamppb.New(*tag.CreatedAt),
-			UpdatedAt:   timestamppb.New(*tag.UpdatedAt),
-			CreatedBy:   tag.CreatedBy,
-			UpdatedBy:   tag.UpdatedBy,
-			Id:          tag.ID,
-			Name:        tag.Name,
-			Description: tag.Description,
-			DomainId:    tag.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(tag.Status)),
-		})
-	}
 	return &v1.GetArticle_Reply{Article: article}, err
 }
 
 func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Request) (rsp *v1.RewardArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.articleUsecase.Action(ctx, req.ArticleId, req.UserId, v1.ArticleAction_ARTICLE_ACTION_REWARD, true)
 	return &v1.RewardArticle_Reply{}, err
 }
 
 func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Request) (rsp *v1.LikeArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.articleUsecase.Action(ctx, req.ArticleId, req.UserId, v1.ArticleAction_ARTICLE_ACTION_LIKE, req.Active)
 	return &v1.LikeArticle_Reply{}, err
 }
 
 func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Request) (rsp *v1.ThankArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.articleUsecase.Action(ctx, req.ArticleId, req.UserId, v1.ArticleAction_ARTICLE_ACTION_THANK, req.Active)
 	return &v1.ThankArticle_Reply{}, err
 }
 
 func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Request) (rsp *v1.CollectArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.articleUsecase.Action(ctx, req.ArticleId, req.UserId, v1.ArticleAction_ARTICLE_ACTION_COLLECT, req.Active)
 	return &v1.CollectArticle_Reply{}, err
 }
 
 func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Request) (rsp *v1.WatchArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
 	err = s.articleUsecase.Action(ctx, req.ArticleId, req.UserId, v1.ArticleAction_ARTICLE_ACTION_WATCH, req.Active)
 	return &v1.WatchArticle_Reply{}, err
 }
 
 func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticle_Request) (rsp *v1.AcceptAnswerArticle_Reply, err error) {
-	ctx = withUserID(ctx, req.UserId)
-	err = s.articleUsecase.AcceptAnswer(ctx, req.ArticleId, req.CommentId)
+	err = s.articleUsecase.AcceptAnswer(ctx, req.ArticleId, req.UserId, req.CommentId)
 	return &v1.AcceptAnswerArticle_Reply{}, err
 }

@@ -35,8 +35,6 @@ enum AccountStatType {
   ACCOUNT_STAT_TYPE_UNSPECIFIED = 0;
   ACCOUNT_STAT_TYPE_FOLLOW = 1; // 关注数
   ACCOUNT_STAT_TYPE_FOLLOWER = 2; // 粉丝数
-  reserved 3, 4;
-  reserved "ACCOUNT_STAT_TYPE_BLOCK", "ACCOUNT_STAT_TYPE_BLOCKED";
 }
 
 enum RelationType {

@@ -9,7 +9,7 @@ func accountName(ctx context.Context, userClient repo.UserClient, userID int64) 
 	if userID == 0 {
 		return "", nil
 	}
-	accounts, err := userClient.BatchGetBasicAccounts(ctx, []int64{userID})
+	accounts, err := userClient.MapAccounts(ctx, []int64{userID})
 	if err != nil {
 		return "", err
 	}

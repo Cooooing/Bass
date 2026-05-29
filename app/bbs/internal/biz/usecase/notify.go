@@ -25,11 +25,3 @@ func (u *NotifyUsecase) MarkReadNotification(ctx context.Context, req *bbsnotify
 func (u *NotifyUsecase) CountUnreadNotifications(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Request) (*bbsnotifyv1.CountUnreadNotifications_Reply, error) {
 	return u.notifyRepo.CountUnreadNotifications(ctx, req)
 }
-
-func (u *NotifyUsecase) ListCurrentNotificationSetting(ctx context.Context, req *bbsnotifyv1.ListCurrentNotificationSetting_Request) (*bbsnotifyv1.ListCurrentNotificationSetting_Reply, error) {
-	return u.notifyRepo.ListCurrentNotificationSetting(ctx, req)
-}
-
-func (u *NotifyUsecase) UpdateCurrentNotificationSetting(ctx context.Context, req *bbsnotifyv1.UpdateCurrentNotificationSetting_Request) (*bbsnotifyv1.UpdateCurrentNotificationSetting_Reply, error) {
-	return u.notifyRepo.UpdateCurrentNotificationSetting(ctx, req)
-}

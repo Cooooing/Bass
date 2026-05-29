@@ -1,9 +1,6 @@
 package ent
 
 import (
-	"common/pkg/constant"
-	"common/pkg/model"
-	"common/pkg/util"
 	"context"
 	"time"
 
@@ -87,29 +84,5 @@ func (UserAuditMixin) Policy() ent.Policy               { return nil }
 func (UserAuditMixin) Annotations() []schema.Annotation { return nil }
 
 func (UserAuditMixin) Hooks() []ent.Hook {
-	return []ent.Hook{userAuditHook()}
-}
-
-func userAuditHook() ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			us, ok := m.(UserAuditSetter)
-			if !ok {
-				return next.Mutate(ctx, m)
-			}
-			user, userOk := util.GetContextValue[*model.User](ctx, constant.CtxUserInfo)
-			if !userOk {
-				return next.Mutate(ctx, m)
-			}
-			userID := user.ID
-			switch {
-			case m.Op().Is(ent.OpCreate):
-				us.SetCreatedBy(userID)
-				us.SetUpdatedBy(userID)
-			case m.Op().Is(ent.OpUpdate | ent.OpUpdateOne):
-				us.SetUpdatedBy(userID)
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
+	return nil
 }

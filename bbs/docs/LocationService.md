@@ -1,17 +1,17 @@
-# \LocationServiceAPI
+# \LocationService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**LocationServiceGetCurrent**](LocationServiceAPI.md#LocationServiceGetCurrent) | **Post** /v1/user/location/get-current | 
-[**LocationServiceUpsertCurrent**](LocationServiceAPI.md#LocationServiceUpsertCurrent) | **Post** /v1/user/location/upsert-current | 
+[**GetCurrent**](LocationService.md#GetCurrent) | **Post** /v1/user/location/get-current | 
+[**UpsertCurrent**](LocationService.md#UpsertCurrent) | **Post** /v1/user/location/upsert-current | 
 
 
 
-## LocationServiceGetCurrent
+## GetCurrent
 
-> GetCurrentLocationReply LocationServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentLocationReply GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LocationServiceAPI.LocationServiceGetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.LocationService.GetCurrent(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LocationServiceAPI.LocationServiceGetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LocationService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `LocationServiceGetCurrent`: GetCurrentLocationReply
-	fmt.Fprintf(os.Stdout, "Response from `LocationServiceAPI.LocationServiceGetCurrent`: %v\n", resp)
+	// response from `GetCurrent`: GetCurrentLocationReply
+	fmt.Fprintf(os.Stdout, "Response from `LocationService.GetCurrent`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLocationServiceGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## LocationServiceUpsertCurrent
+## UpsertCurrent
 
-> UpsertCurrentLocationReply LocationServiceUpsertCurrent(ctx).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
+> UpsertCurrentLocationReply UpsertCurrent(ctx).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LocationServiceAPI.LocationServiceUpsertCurrent(context.Background()).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
+	resp, r, err := apiClient.LocationService.UpsertCurrent(context.Background()).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LocationServiceAPI.LocationServiceUpsertCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LocationService.UpsertCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `LocationServiceUpsertCurrent`: UpsertCurrentLocationReply
-	fmt.Fprintf(os.Stdout, "Response from `LocationServiceAPI.LocationServiceUpsertCurrent`: %v\n", resp)
+	// response from `UpsertCurrent`: UpsertCurrentLocationReply
+	fmt.Fprintf(os.Stdout, "Response from `LocationService.UpsertCurrent`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLocationServiceUpsertCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpsertCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

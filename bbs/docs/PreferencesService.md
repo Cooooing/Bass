@@ -1,17 +1,17 @@
-# \PreferencesServiceAPI
+# \PreferencesService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**PreferencesServiceGetCurrent**](PreferencesServiceAPI.md#PreferencesServiceGetCurrent) | **Post** /v1/user/preference/get-current | 
-[**PreferencesServiceUpdateCurrent**](PreferencesServiceAPI.md#PreferencesServiceUpdateCurrent) | **Post** /v1/user/preference/update-current | 
+[**GetCurrent**](PreferencesService.md#GetCurrent) | **Post** /v1/user/preference/get-current | 
+[**UpdateCurrent**](PreferencesService.md#UpdateCurrent) | **Post** /v1/user/preference/update-current | 
 
 
 
-## PreferencesServiceGetCurrent
+## GetCurrent
 
-> GetCurrentPreferencesReply PreferencesServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentPreferencesReply GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PreferencesServiceAPI.PreferencesServiceGetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.PreferencesService.GetCurrent(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesServiceAPI.PreferencesServiceGetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PreferencesServiceGetCurrent`: GetCurrentPreferencesReply
-	fmt.Fprintf(os.Stdout, "Response from `PreferencesServiceAPI.PreferencesServiceGetCurrent`: %v\n", resp)
+	// response from `GetCurrent`: GetCurrentPreferencesReply
+	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.GetCurrent`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPreferencesServiceGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PreferencesServiceUpdateCurrent
+## UpdateCurrent
 
-> UpdateCurrentPreferencesReply PreferencesServiceUpdateCurrent(ctx).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
+> UpdateCurrentPreferencesReply UpdateCurrent(ctx).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PreferencesServiceAPI.PreferencesServiceUpdateCurrent(context.Background()).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
+	resp, r, err := apiClient.PreferencesService.UpdateCurrent(context.Background()).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesServiceAPI.PreferencesServiceUpdateCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.UpdateCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PreferencesServiceUpdateCurrent`: UpdateCurrentPreferencesReply
-	fmt.Fprintf(os.Stdout, "Response from `PreferencesServiceAPI.PreferencesServiceUpdateCurrent`: %v\n", resp)
+	// response from `UpdateCurrent`: UpdateCurrentPreferencesReply
+	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.UpdateCurrent`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPreferencesServiceUpdateCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

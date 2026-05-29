@@ -19,47 +19,47 @@ import (
 )
 
 
-type DomainServiceAPI interface {
+type DomainService interface {
 
 	/*
-	DomainServiceList Method for DomainServiceList
+	List Method for List
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiDomainServiceListRequest
+	@return ApiListRequest
 	*/
-	DomainServiceList(ctx context.Context) ApiDomainServiceListRequest
+	List(ctx context.Context) ApiListRequest
 
-	// DomainServiceListExecute executes the request
+	// ListExecute executes the request
 	//  @return ListDomainsReply
-	DomainServiceListExecute(r ApiDomainServiceListRequest) (*ListDomainsReply, *http.Response, error)
+	ListExecute(r ApiListRequest) (*ListDomainsReply, *http.Response, error)
 }
 
-// DomainServiceAPIService DomainServiceAPI service
-type DomainServiceAPIService service
+// DomainServiceService DomainService service
+type DomainServiceService service
 
-type ApiDomainServiceListRequest struct {
+type ApiListRequest struct {
 	ctx context.Context
-	ApiService DomainServiceAPI
+	ApiService DomainService
 	listDomainsRequest *ListDomainsRequest
 }
 
-func (r ApiDomainServiceListRequest) ListDomainsRequest(listDomainsRequest ListDomainsRequest) ApiDomainServiceListRequest {
+func (r ApiListRequest) ListDomainsRequest(listDomainsRequest ListDomainsRequest) ApiListRequest {
 	r.listDomainsRequest = &listDomainsRequest
 	return r
 }
 
-func (r ApiDomainServiceListRequest) Execute() (*ListDomainsReply, *http.Response, error) {
-	return r.ApiService.DomainServiceListExecute(r)
+func (r ApiListRequest) Execute() (*ListDomainsReply, *http.Response, error) {
+	return r.ApiService.ListExecute(r)
 }
 
 /*
-DomainServiceList Method for DomainServiceList
+List Method for List
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiDomainServiceListRequest
+ @return ApiListRequest
 */
-func (a *DomainServiceAPIService) DomainServiceList(ctx context.Context) ApiDomainServiceListRequest {
-	return ApiDomainServiceListRequest{
+func (a *DomainServiceService) List(ctx context.Context) ApiListRequest {
+	return ApiListRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -67,7 +67,7 @@ func (a *DomainServiceAPIService) DomainServiceList(ctx context.Context) ApiDoma
 
 // Execute executes the request
 //  @return ListDomainsReply
-func (a *DomainServiceAPIService) DomainServiceListExecute(r ApiDomainServiceListRequest) (*ListDomainsReply, *http.Response, error) {
+func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -75,7 +75,7 @@ func (a *DomainServiceAPIService) DomainServiceListExecute(r ApiDomainServiceLis
 		localVarReturnValue  *ListDomainsReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceAPIService.DomainServiceList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.List")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

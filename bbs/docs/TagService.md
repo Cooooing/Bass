@@ -1,16 +1,16 @@
-# \DomainServiceAPI
+# \TagService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**DomainServiceList**](DomainServiceAPI.md#DomainServiceList) | **Post** /v1/content/domain/list | 
+[**List**](TagService.md#List) | **Post** /v1/content/tag/list | 
 
 
 
-## DomainServiceList
+## List
 
-> ListDomainsReply DomainServiceList(ctx).ListDomainsRequest(listDomainsRequest).Execute()
+> ListTagsReply List(ctx).ListTagsRequest(listTagsRequest).Execute()
 
 
 
@@ -27,17 +27,17 @@ import (
 )
 
 func main() {
-	listDomainsRequest := *openapiclient.NewListDomainsRequest() // ListDomainsRequest | 
+	listTagsRequest := *openapiclient.NewListTagsRequest() // ListTagsRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DomainServiceAPI.DomainServiceList(context.Background()).ListDomainsRequest(listDomainsRequest).Execute()
+	resp, r, err := apiClient.TagService.List(context.Background()).ListTagsRequest(listTagsRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DomainServiceAPI.DomainServiceList``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TagService.List``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DomainServiceList`: ListDomainsReply
-	fmt.Fprintf(os.Stdout, "Response from `DomainServiceAPI.DomainServiceList`: %v\n", resp)
+	// response from `List`: ListTagsReply
+	fmt.Fprintf(os.Stdout, "Response from `TagService.List`: %v\n", resp)
 }
 ```
 
@@ -47,16 +47,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDomainServiceListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listDomainsRequest** | [**ListDomainsRequest**](ListDomainsRequest.md) |  | 
+ **listTagsRequest** | [**ListTagsRequest**](ListTagsRequest.md) |  | 
 
 ### Return type
 
-[**ListDomainsReply**](ListDomainsReply.md)
+[**ListTagsReply**](ListTagsReply.md)
 
 ### Authorization
 

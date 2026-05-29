@@ -1,7 +1,7 @@
 /*
 
 
-Testing PostscriptServiceAPIService
+Testing PostscriptServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_PostscriptServiceAPIService(t *testing.T) {
+func Test_bbs_PostscriptServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test PostscriptServiceAPIService PostscriptServiceAdd", func(t *testing.T) {
+	t.Run("Test PostscriptServiceService Add", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PostscriptServiceAPI.PostscriptServiceAdd(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PostscriptService.Add(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

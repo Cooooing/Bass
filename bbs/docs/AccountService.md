@@ -1,18 +1,18 @@
-# \AccountServiceAPI
+# \AccountService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AccountServiceGetCurrent**](AccountServiceAPI.md#AccountServiceGetCurrent) | **Post** /v1/user/account/get-current | 
-[**AccountServiceGetProfile**](AccountServiceAPI.md#AccountServiceGetProfile) | **Post** /v1/user/account/get-profile | 
-[**AccountServiceUpdateProfile**](AccountServiceAPI.md#AccountServiceUpdateProfile) | **Post** /v1/user/account/update-profile | 
+[**GetCurrent**](AccountService.md#GetCurrent) | **Post** /v1/user/account/get-current | 
+[**GetProfile**](AccountService.md#GetProfile) | **Post** /v1/user/account/get-profile | 
+[**UpdateProfile**](AccountService.md#UpdateProfile) | **Post** /v1/user/account/update-profile | 
 
 
 
-## AccountServiceGetCurrent
+## GetCurrent
 
-> GetCurrentAccountReply AccountServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentAccountReply GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -35,13 +35,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountServiceAPI.AccountServiceGetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.AccountService.GetCurrent(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AccountServiceAPI.AccountServiceGetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AccountServiceGetCurrent`: GetCurrentAccountReply
-	fmt.Fprintf(os.Stdout, "Response from `AccountServiceAPI.AccountServiceGetCurrent`: %v\n", resp)
+	// response from `GetCurrent`: GetCurrentAccountReply
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.GetCurrent`: %v\n", resp)
 }
 ```
 
@@ -51,7 +51,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAccountServiceGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -76,9 +76,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AccountServiceGetProfile
+## GetProfile
 
-> GetProfileAccountReply AccountServiceGetProfile(ctx).GetProfileAccountRequest(getProfileAccountRequest).Execute()
+> GetProfileAccountReply GetProfile(ctx).GetProfileAccountRequest(getProfileAccountRequest).Execute()
 
 
 
@@ -101,13 +101,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountServiceAPI.AccountServiceGetProfile(context.Background()).GetProfileAccountRequest(getProfileAccountRequest).Execute()
+	resp, r, err := apiClient.AccountService.GetProfile(context.Background()).GetProfileAccountRequest(getProfileAccountRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AccountServiceAPI.AccountServiceGetProfile``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.GetProfile``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AccountServiceGetProfile`: GetProfileAccountReply
-	fmt.Fprintf(os.Stdout, "Response from `AccountServiceAPI.AccountServiceGetProfile`: %v\n", resp)
+	// response from `GetProfile`: GetProfileAccountReply
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.GetProfile`: %v\n", resp)
 }
 ```
 
@@ -117,7 +117,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAccountServiceGetProfileRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetProfileRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -142,9 +142,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AccountServiceUpdateProfile
+## UpdateProfile
 
-> UpdateProfileAccountReply AccountServiceUpdateProfile(ctx).UpdateProfileAccountRequest(updateProfileAccountRequest).Execute()
+> UpdateProfileAccountReply UpdateProfile(ctx).UpdateProfileAccountRequest(updateProfileAccountRequest).Execute()
 
 
 
@@ -167,13 +167,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountServiceAPI.AccountServiceUpdateProfile(context.Background()).UpdateProfileAccountRequest(updateProfileAccountRequest).Execute()
+	resp, r, err := apiClient.AccountService.UpdateProfile(context.Background()).UpdateProfileAccountRequest(updateProfileAccountRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AccountServiceAPI.AccountServiceUpdateProfile``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.UpdateProfile``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AccountServiceUpdateProfile`: UpdateProfileAccountReply
-	fmt.Fprintf(os.Stdout, "Response from `AccountServiceAPI.AccountServiceUpdateProfile`: %v\n", resp)
+	// response from `UpdateProfile`: UpdateProfileAccountReply
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.UpdateProfile`: %v\n", resp)
 }
 ```
 
@@ -183,7 +183,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAccountServiceUpdateProfileRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateProfileRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

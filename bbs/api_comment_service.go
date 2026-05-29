@@ -19,83 +19,83 @@ import (
 )
 
 
-type CommentServiceAPI interface {
+type CommentService interface {
 
 	/*
-	CommentServiceCreate Method for CommentServiceCreate
+	Create Method for Create
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCommentServiceCreateRequest
+	@return ApiCreateRequest
 	*/
-	CommentServiceCreate(ctx context.Context) ApiCommentServiceCreateRequest
+	Create(ctx context.Context) ApiCreateRequest
 
-	// CommentServiceCreateExecute executes the request
+	// CreateExecute executes the request
 	//  @return CreateCommentReply
-	CommentServiceCreateExecute(r ApiCommentServiceCreateRequest) (*CreateCommentReply, *http.Response, error)
+	CreateExecute(r ApiCreateRequest) (*CreateCommentReply, *http.Response, error)
 
 	/*
-	CommentServiceLike Method for CommentServiceLike
+	Like Method for Like
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCommentServiceLikeRequest
+	@return ApiLikeRequest
 	*/
-	CommentServiceLike(ctx context.Context) ApiCommentServiceLikeRequest
+	Like(ctx context.Context) ApiLikeRequest
 
-	// CommentServiceLikeExecute executes the request
+	// LikeExecute executes the request
 	//  @return map[string]interface{}
-	CommentServiceLikeExecute(r ApiCommentServiceLikeRequest) (map[string]interface{}, *http.Response, error)
+	LikeExecute(r ApiLikeRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	CommentServiceList Method for CommentServiceList
+	List Method for List
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCommentServiceListRequest
+	@return ApiListRequest
 	*/
-	CommentServiceList(ctx context.Context) ApiCommentServiceListRequest
+	List(ctx context.Context) ApiListRequest
 
-	// CommentServiceListExecute executes the request
+	// ListExecute executes the request
 	//  @return ListCommentsReply
-	CommentServiceListExecute(r ApiCommentServiceListRequest) (*ListCommentsReply, *http.Response, error)
+	ListExecute(r ApiListRequest) (*ListCommentsReply, *http.Response, error)
 
 	/*
-	CommentServiceThank Method for CommentServiceThank
+	Thank Method for Thank
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCommentServiceThankRequest
+	@return ApiThankRequest
 	*/
-	CommentServiceThank(ctx context.Context) ApiCommentServiceThankRequest
+	Thank(ctx context.Context) ApiThankRequest
 
-	// CommentServiceThankExecute executes the request
+	// ThankExecute executes the request
 	//  @return map[string]interface{}
-	CommentServiceThankExecute(r ApiCommentServiceThankRequest) (map[string]interface{}, *http.Response, error)
+	ThankExecute(r ApiThankRequest) (map[string]interface{}, *http.Response, error)
 }
 
-// CommentServiceAPIService CommentServiceAPI service
-type CommentServiceAPIService service
+// CommentServiceService CommentService service
+type CommentServiceService service
 
-type ApiCommentServiceCreateRequest struct {
+type ApiCreateRequest struct {
 	ctx context.Context
-	ApiService CommentServiceAPI
+	ApiService CommentService
 	createCommentRequest *CreateCommentRequest
 }
 
-func (r ApiCommentServiceCreateRequest) CreateCommentRequest(createCommentRequest CreateCommentRequest) ApiCommentServiceCreateRequest {
+func (r ApiCreateRequest) CreateCommentRequest(createCommentRequest CreateCommentRequest) ApiCreateRequest {
 	r.createCommentRequest = &createCommentRequest
 	return r
 }
 
-func (r ApiCommentServiceCreateRequest) Execute() (*CreateCommentReply, *http.Response, error) {
-	return r.ApiService.CommentServiceCreateExecute(r)
+func (r ApiCreateRequest) Execute() (*CreateCommentReply, *http.Response, error) {
+	return r.ApiService.CreateExecute(r)
 }
 
 /*
-CommentServiceCreate Method for CommentServiceCreate
+Create Method for Create
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCommentServiceCreateRequest
+ @return ApiCreateRequest
 */
-func (a *CommentServiceAPIService) CommentServiceCreate(ctx context.Context) ApiCommentServiceCreateRequest {
-	return ApiCommentServiceCreateRequest{
+func (a *CommentServiceService) Create(ctx context.Context) ApiCreateRequest {
+	return ApiCreateRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -103,7 +103,7 @@ func (a *CommentServiceAPIService) CommentServiceCreate(ctx context.Context) Api
 
 // Execute executes the request
 //  @return CreateCommentReply
-func (a *CommentServiceAPIService) CommentServiceCreateExecute(r ApiCommentServiceCreateRequest) (*CreateCommentReply, *http.Response, error) {
+func (a *CommentServiceService) CreateExecute(r ApiCreateRequest) (*CreateCommentReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -111,7 +111,7 @@ func (a *CommentServiceAPIService) CommentServiceCreateExecute(r ApiCommentServi
 		localVarReturnValue  *CreateCommentReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceAPIService.CommentServiceCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Create")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -181,29 +181,29 @@ func (a *CommentServiceAPIService) CommentServiceCreateExecute(r ApiCommentServi
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCommentServiceLikeRequest struct {
+type ApiLikeRequest struct {
 	ctx context.Context
-	ApiService CommentServiceAPI
+	ApiService CommentService
 	likeCommentRequest *LikeCommentRequest
 }
 
-func (r ApiCommentServiceLikeRequest) LikeCommentRequest(likeCommentRequest LikeCommentRequest) ApiCommentServiceLikeRequest {
+func (r ApiLikeRequest) LikeCommentRequest(likeCommentRequest LikeCommentRequest) ApiLikeRequest {
 	r.likeCommentRequest = &likeCommentRequest
 	return r
 }
 
-func (r ApiCommentServiceLikeRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.CommentServiceLikeExecute(r)
+func (r ApiLikeRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.LikeExecute(r)
 }
 
 /*
-CommentServiceLike Method for CommentServiceLike
+Like Method for Like
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCommentServiceLikeRequest
+ @return ApiLikeRequest
 */
-func (a *CommentServiceAPIService) CommentServiceLike(ctx context.Context) ApiCommentServiceLikeRequest {
-	return ApiCommentServiceLikeRequest{
+func (a *CommentServiceService) Like(ctx context.Context) ApiLikeRequest {
+	return ApiLikeRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -211,7 +211,7 @@ func (a *CommentServiceAPIService) CommentServiceLike(ctx context.Context) ApiCo
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *CommentServiceAPIService) CommentServiceLikeExecute(r ApiCommentServiceLikeRequest) (map[string]interface{}, *http.Response, error) {
+func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -219,7 +219,7 @@ func (a *CommentServiceAPIService) CommentServiceLikeExecute(r ApiCommentService
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceAPIService.CommentServiceLike")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Like")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -289,29 +289,29 @@ func (a *CommentServiceAPIService) CommentServiceLikeExecute(r ApiCommentService
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCommentServiceListRequest struct {
+type ApiListRequest struct {
 	ctx context.Context
-	ApiService CommentServiceAPI
+	ApiService CommentService
 	listCommentsRequest *ListCommentsRequest
 }
 
-func (r ApiCommentServiceListRequest) ListCommentsRequest(listCommentsRequest ListCommentsRequest) ApiCommentServiceListRequest {
+func (r ApiListRequest) ListCommentsRequest(listCommentsRequest ListCommentsRequest) ApiListRequest {
 	r.listCommentsRequest = &listCommentsRequest
 	return r
 }
 
-func (r ApiCommentServiceListRequest) Execute() (*ListCommentsReply, *http.Response, error) {
-	return r.ApiService.CommentServiceListExecute(r)
+func (r ApiListRequest) Execute() (*ListCommentsReply, *http.Response, error) {
+	return r.ApiService.ListExecute(r)
 }
 
 /*
-CommentServiceList Method for CommentServiceList
+List Method for List
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCommentServiceListRequest
+ @return ApiListRequest
 */
-func (a *CommentServiceAPIService) CommentServiceList(ctx context.Context) ApiCommentServiceListRequest {
-	return ApiCommentServiceListRequest{
+func (a *CommentServiceService) List(ctx context.Context) ApiListRequest {
+	return ApiListRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -319,7 +319,7 @@ func (a *CommentServiceAPIService) CommentServiceList(ctx context.Context) ApiCo
 
 // Execute executes the request
 //  @return ListCommentsReply
-func (a *CommentServiceAPIService) CommentServiceListExecute(r ApiCommentServiceListRequest) (*ListCommentsReply, *http.Response, error) {
+func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -327,7 +327,7 @@ func (a *CommentServiceAPIService) CommentServiceListExecute(r ApiCommentService
 		localVarReturnValue  *ListCommentsReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceAPIService.CommentServiceList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.List")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -397,29 +397,29 @@ func (a *CommentServiceAPIService) CommentServiceListExecute(r ApiCommentService
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCommentServiceThankRequest struct {
+type ApiThankRequest struct {
 	ctx context.Context
-	ApiService CommentServiceAPI
+	ApiService CommentService
 	thankCommentRequest *ThankCommentRequest
 }
 
-func (r ApiCommentServiceThankRequest) ThankCommentRequest(thankCommentRequest ThankCommentRequest) ApiCommentServiceThankRequest {
+func (r ApiThankRequest) ThankCommentRequest(thankCommentRequest ThankCommentRequest) ApiThankRequest {
 	r.thankCommentRequest = &thankCommentRequest
 	return r
 }
 
-func (r ApiCommentServiceThankRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.CommentServiceThankExecute(r)
+func (r ApiThankRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ThankExecute(r)
 }
 
 /*
-CommentServiceThank Method for CommentServiceThank
+Thank Method for Thank
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCommentServiceThankRequest
+ @return ApiThankRequest
 */
-func (a *CommentServiceAPIService) CommentServiceThank(ctx context.Context) ApiCommentServiceThankRequest {
-	return ApiCommentServiceThankRequest{
+func (a *CommentServiceService) Thank(ctx context.Context) ApiThankRequest {
+	return ApiThankRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -427,7 +427,7 @@ func (a *CommentServiceAPIService) CommentServiceThank(ctx context.Context) ApiC
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *CommentServiceAPIService) CommentServiceThankExecute(r ApiCommentServiceThankRequest) (map[string]interface{}, *http.Response, error) {
+func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -435,7 +435,7 @@ func (a *CommentServiceAPIService) CommentServiceThankExecute(r ApiCommentServic
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceAPIService.CommentServiceThank")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Thank")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

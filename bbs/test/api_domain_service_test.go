@@ -1,7 +1,7 @@
 /*
 
 
-Testing DomainServiceAPIService
+Testing DomainServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_DomainServiceAPIService(t *testing.T) {
+func Test_bbs_DomainServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test DomainServiceAPIService DomainServiceList", func(t *testing.T) {
+	t.Run("Test DomainServiceService List", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.DomainServiceAPI.DomainServiceList(context.Background()).Execute()
+		resp, httpRes, err := apiClient.DomainService.List(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

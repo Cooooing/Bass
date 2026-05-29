@@ -1,16 +1,18 @@
-# \TagServiceAPI
+# \PostscriptService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**TagServiceList**](TagServiceAPI.md#TagServiceList) | **Post** /v1/content/tag/list | 
+[**Add**](PostscriptService.md#Add) | **Post** /v1/content/postscript/add | 
 
 
 
-## TagServiceList
+## Add
 
-> ListTagsReply TagServiceList(ctx).ListTagsRequest(listTagsRequest).Execute()
+> AddPostscriptReply Add(ctx).AddPostscriptRequest(addPostscriptRequest).Execute()
+
+
 
 
 
@@ -27,17 +29,17 @@ import (
 )
 
 func main() {
-	listTagsRequest := *openapiclient.NewListTagsRequest() // ListTagsRequest | 
+	addPostscriptRequest := *openapiclient.NewAddPostscriptRequest() // AddPostscriptRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TagServiceAPI.TagServiceList(context.Background()).ListTagsRequest(listTagsRequest).Execute()
+	resp, r, err := apiClient.PostscriptService.Add(context.Background()).AddPostscriptRequest(addPostscriptRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TagServiceAPI.TagServiceList``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PostscriptService.Add``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TagServiceList`: ListTagsReply
-	fmt.Fprintf(os.Stdout, "Response from `TagServiceAPI.TagServiceList`: %v\n", resp)
+	// response from `Add`: AddPostscriptReply
+	fmt.Fprintf(os.Stdout, "Response from `PostscriptService.Add`: %v\n", resp)
 }
 ```
 
@@ -47,16 +49,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTagServiceListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAddRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listTagsRequest** | [**ListTagsRequest**](ListTagsRequest.md) |  | 
+ **addPostscriptRequest** | [**AddPostscriptRequest**](AddPostscriptRequest.md) |  | 
 
 ### Return type
 
-[**ListTagsReply**](ListTagsReply.md)
+[**AddPostscriptReply**](AddPostscriptReply.md)
 
 ### Authorization
 

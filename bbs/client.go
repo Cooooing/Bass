@@ -49,31 +49,31 @@ type APIClient struct {
 
 	// API Services
 
-	AccountServiceAPI AccountServiceAPI
+	AccountService AccountService
 
-	ArticleServiceAPI ArticleServiceAPI
+	ArticleService ArticleService
 
-	AuthServiceAPI AuthServiceAPI
+	AuthService AuthService
 
-	CommentServiceAPI CommentServiceAPI
+	CommentService CommentService
 
-	DomainServiceAPI DomainServiceAPI
+	DomainService DomainService
 
-	LocationServiceAPI LocationServiceAPI
+	LocationService LocationService
 
-	NotificationServiceAPI NotificationServiceAPI
+	NotificationService NotificationService
 
-	PostscriptServiceAPI PostscriptServiceAPI
+	PostscriptService PostscriptService
 
-	PreferencesServiceAPI PreferencesServiceAPI
+	PreferencesService PreferencesService
 
-	PrivacySettingServiceAPI PrivacySettingServiceAPI
+	PrivacySettingService PrivacySettingService
 
-	RelationServiceAPI RelationServiceAPI
+	RelationService RelationService
 
-	TagServiceAPI TagServiceAPI
+	TagService TagService
 
-	TfaServiceAPI TfaServiceAPI
+	TfaService TfaService
 }
 
 type service struct {
@@ -92,19 +92,19 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
-	c.AccountServiceAPI = (*AccountServiceAPIService)(&c.common)
-	c.ArticleServiceAPI = (*ArticleServiceAPIService)(&c.common)
-	c.AuthServiceAPI = (*AuthServiceAPIService)(&c.common)
-	c.CommentServiceAPI = (*CommentServiceAPIService)(&c.common)
-	c.DomainServiceAPI = (*DomainServiceAPIService)(&c.common)
-	c.LocationServiceAPI = (*LocationServiceAPIService)(&c.common)
-	c.NotificationServiceAPI = (*NotificationServiceAPIService)(&c.common)
-	c.PostscriptServiceAPI = (*PostscriptServiceAPIService)(&c.common)
-	c.PreferencesServiceAPI = (*PreferencesServiceAPIService)(&c.common)
-	c.PrivacySettingServiceAPI = (*PrivacySettingServiceAPIService)(&c.common)
-	c.RelationServiceAPI = (*RelationServiceAPIService)(&c.common)
-	c.TagServiceAPI = (*TagServiceAPIService)(&c.common)
-	c.TfaServiceAPI = (*TfaServiceAPIService)(&c.common)
+	c.AccountService = (*AccountServiceService)(&c.common)
+	c.ArticleService = (*ArticleServiceService)(&c.common)
+	c.AuthService = (*AuthServiceService)(&c.common)
+	c.CommentService = (*CommentServiceService)(&c.common)
+	c.DomainService = (*DomainServiceService)(&c.common)
+	c.LocationService = (*LocationServiceService)(&c.common)
+	c.NotificationService = (*NotificationServiceService)(&c.common)
+	c.PostscriptService = (*PostscriptServiceService)(&c.common)
+	c.PreferencesService = (*PreferencesServiceService)(&c.common)
+	c.PrivacySettingService = (*PrivacySettingServiceService)(&c.common)
+	c.RelationService = (*RelationServiceService)(&c.common)
+	c.TagService = (*TagServiceService)(&c.common)
+	c.TfaService = (*TfaServiceService)(&c.common)
 
 	return c
 }

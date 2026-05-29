@@ -1,7 +1,7 @@
 /*
 
 
-Testing CommentServiceAPIService
+Testing CommentServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_CommentServiceAPIService(t *testing.T) {
+func Test_bbs_CommentServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test CommentServiceAPIService CommentServiceCreate", func(t *testing.T) {
+	t.Run("Test CommentServiceService Create", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentServiceAPI.CommentServiceCreate(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.Create(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_CommentServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceAPIService CommentServiceLike", func(t *testing.T) {
+	t.Run("Test CommentServiceService Like", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentServiceAPI.CommentServiceLike(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.Like(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_CommentServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceAPIService CommentServiceList", func(t *testing.T) {
+	t.Run("Test CommentServiceService List", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentServiceAPI.CommentServiceList(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.List(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_CommentServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceAPIService CommentServiceThank", func(t *testing.T) {
+	t.Run("Test CommentServiceService Thank", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentServiceAPI.CommentServiceThank(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.Thank(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

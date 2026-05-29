@@ -1,20 +1,20 @@
-# \TfaServiceAPI
+# \TfaService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**TfaServiceBeginEnable**](TfaServiceAPI.md#TfaServiceBeginEnable) | **Post** /v1/user/tfa/begin-enable | 
-[**TfaServiceConfirmEnable**](TfaServiceAPI.md#TfaServiceConfirmEnable) | **Post** /v1/user/tfa/confirm-enable | 
-[**TfaServiceDisable**](TfaServiceAPI.md#TfaServiceDisable) | **Post** /v1/user/tfa/disable | 
-[**TfaServiceGetCurrent**](TfaServiceAPI.md#TfaServiceGetCurrent) | **Post** /v1/user/tfa/get-current | 
-[**TfaServiceValidate**](TfaServiceAPI.md#TfaServiceValidate) | **Post** /v1/user/tfa/validate | 
+[**BeginEnable**](TfaService.md#BeginEnable) | **Post** /v1/user/tfa/begin-enable | 
+[**ConfirmEnable**](TfaService.md#ConfirmEnable) | **Post** /v1/user/tfa/confirm-enable | 
+[**Disable**](TfaService.md#Disable) | **Post** /v1/user/tfa/disable | 
+[**GetCurrent**](TfaService.md#GetCurrent) | **Post** /v1/user/tfa/get-current | 
+[**Validate**](TfaService.md#Validate) | **Post** /v1/user/tfa/validate | 
 
 
 
-## TfaServiceBeginEnable
+## BeginEnable
 
-> BeginEnableTfaReply TfaServiceBeginEnable(ctx).Body(body).Execute()
+> BeginEnableTfaReply BeginEnable(ctx).Body(body).Execute()
 
 
 
@@ -37,13 +37,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceBeginEnable(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.TfaService.BeginEnable(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceBeginEnable``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.BeginEnable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceBeginEnable`: BeginEnableTfaReply
-	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceBeginEnable`: %v\n", resp)
+	// response from `BeginEnable`: BeginEnableTfaReply
+	fmt.Fprintf(os.Stdout, "Response from `TfaService.BeginEnable`: %v\n", resp)
 }
 ```
 
@@ -53,7 +53,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTfaServiceBeginEnableRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiBeginEnableRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -78,9 +78,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## TfaServiceConfirmEnable
+## ConfirmEnable
 
-> map[string]interface{} TfaServiceConfirmEnable(ctx).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
+> map[string]interface{} ConfirmEnable(ctx).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
 
 
 
@@ -103,13 +103,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceConfirmEnable(context.Background()).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
+	resp, r, err := apiClient.TfaService.ConfirmEnable(context.Background()).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceConfirmEnable``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.ConfirmEnable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceConfirmEnable`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceConfirmEnable`: %v\n", resp)
+	// response from `ConfirmEnable`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `TfaService.ConfirmEnable`: %v\n", resp)
 }
 ```
 
@@ -119,7 +119,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTfaServiceConfirmEnableRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiConfirmEnableRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -144,9 +144,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## TfaServiceDisable
+## Disable
 
-> map[string]interface{} TfaServiceDisable(ctx).DisableTfaRequest(disableTfaRequest).Execute()
+> map[string]interface{} Disable(ctx).DisableTfaRequest(disableTfaRequest).Execute()
 
 
 
@@ -169,13 +169,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceDisable(context.Background()).DisableTfaRequest(disableTfaRequest).Execute()
+	resp, r, err := apiClient.TfaService.Disable(context.Background()).DisableTfaRequest(disableTfaRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceDisable``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.Disable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceDisable`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceDisable`: %v\n", resp)
+	// response from `Disable`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `TfaService.Disable`: %v\n", resp)
 }
 ```
 
@@ -185,7 +185,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTfaServiceDisableRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDisableRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -210,9 +210,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## TfaServiceGetCurrent
+## GetCurrent
 
-> GetCurrentTfaReply TfaServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentTfaReply GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -235,13 +235,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceGetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.TfaService.GetCurrent(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceGetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceGetCurrent`: GetCurrentTfaReply
-	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceGetCurrent`: %v\n", resp)
+	// response from `GetCurrent`: GetCurrentTfaReply
+	fmt.Fprintf(os.Stdout, "Response from `TfaService.GetCurrent`: %v\n", resp)
 }
 ```
 
@@ -251,7 +251,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTfaServiceGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -276,9 +276,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## TfaServiceValidate
+## Validate
 
-> ValidateTfaReply TfaServiceValidate(ctx).ValidateTfaRequest(validateTfaRequest).Execute()
+> ValidateTfaReply Validate(ctx).ValidateTfaRequest(validateTfaRequest).Execute()
 
 
 
@@ -301,13 +301,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaServiceAPI.TfaServiceValidate(context.Background()).ValidateTfaRequest(validateTfaRequest).Execute()
+	resp, r, err := apiClient.TfaService.Validate(context.Background()).ValidateTfaRequest(validateTfaRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaServiceAPI.TfaServiceValidate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.Validate``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `TfaServiceValidate`: ValidateTfaReply
-	fmt.Fprintf(os.Stdout, "Response from `TfaServiceAPI.TfaServiceValidate`: %v\n", resp)
+	// response from `Validate`: ValidateTfaReply
+	fmt.Fprintf(os.Stdout, "Response from `TfaService.Validate`: %v\n", resp)
 }
 ```
 
@@ -317,7 +317,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiTfaServiceValidateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiValidateRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

@@ -1,21 +1,21 @@
-# \AuthServiceAPI
+# \AuthService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AuthServiceLoginByPassword**](AuthServiceAPI.md#AuthServiceLoginByPassword) | **Post** /v1/user/auth/login-by-password | 
-[**AuthServiceLogout**](AuthServiceAPI.md#AuthServiceLogout) | **Post** /v1/user/auth/logout | 
-[**AuthServiceStartEmailRegistration**](AuthServiceAPI.md#AuthServiceStartEmailRegistration) | **Post** /v1/user/auth/start-email-registration | 
-[**AuthServiceStartPhoneRegistration**](AuthServiceAPI.md#AuthServiceStartPhoneRegistration) | **Post** /v1/user/auth/start-phone-registration | 
-[**AuthServiceVerifyEmailRegistration**](AuthServiceAPI.md#AuthServiceVerifyEmailRegistration) | **Post** /v1/user/auth/verify-email-registration | 
-[**AuthServiceVerifyPhoneRegistration**](AuthServiceAPI.md#AuthServiceVerifyPhoneRegistration) | **Post** /v1/user/auth/verify-phone-registration | 
+[**LoginByPassword**](AuthService.md#LoginByPassword) | **Post** /v1/user/auth/login-by-password | 
+[**Logout**](AuthService.md#Logout) | **Post** /v1/user/auth/logout | 
+[**StartEmailRegistration**](AuthService.md#StartEmailRegistration) | **Post** /v1/user/auth/start-email-registration | 
+[**StartPhoneRegistration**](AuthService.md#StartPhoneRegistration) | **Post** /v1/user/auth/start-phone-registration | 
+[**VerifyEmailRegistration**](AuthService.md#VerifyEmailRegistration) | **Post** /v1/user/auth/verify-email-registration | 
+[**VerifyPhoneRegistration**](AuthService.md#VerifyPhoneRegistration) | **Post** /v1/user/auth/verify-phone-registration | 
 
 
 
-## AuthServiceLoginByPassword
+## LoginByPassword
 
-> LoginByPasswordReply AuthServiceLoginByPassword(ctx).LoginByPasswordRequest(loginByPasswordRequest).Execute()
+> LoginByPasswordReply LoginByPassword(ctx).LoginByPasswordRequest(loginByPasswordRequest).Execute()
 
 
 
@@ -38,13 +38,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceLoginByPassword(context.Background()).LoginByPasswordRequest(loginByPasswordRequest).Execute()
+	resp, r, err := apiClient.AuthService.LoginByPassword(context.Background()).LoginByPasswordRequest(loginByPasswordRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceLoginByPassword``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.LoginByPassword``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceLoginByPassword`: LoginByPasswordReply
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceLoginByPassword`: %v\n", resp)
+	// response from `LoginByPassword`: LoginByPasswordReply
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.LoginByPassword`: %v\n", resp)
 }
 ```
 
@@ -54,7 +54,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceLoginByPasswordRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLoginByPasswordRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -79,9 +79,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceLogout
+## Logout
 
-> map[string]interface{} AuthServiceLogout(ctx).Body(body).Execute()
+> map[string]interface{} Logout(ctx).Body(body).Execute()
 
 
 
@@ -104,13 +104,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceLogout(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.AuthService.Logout(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceLogout``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.Logout``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceLogout`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceLogout`: %v\n", resp)
+	// response from `Logout`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.Logout`: %v\n", resp)
 }
 ```
 
@@ -120,7 +120,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceLogoutRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLogoutRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -145,9 +145,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceStartEmailRegistration
+## StartEmailRegistration
 
-> StartEmailRegistrationReply AuthServiceStartEmailRegistration(ctx).StartEmailRegistrationRequest(startEmailRegistrationRequest).Execute()
+> StartEmailRegistrationReply StartEmailRegistration(ctx).StartEmailRegistrationRequest(startEmailRegistrationRequest).Execute()
 
 
 
@@ -170,13 +170,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceStartEmailRegistration(context.Background()).StartEmailRegistrationRequest(startEmailRegistrationRequest).Execute()
+	resp, r, err := apiClient.AuthService.StartEmailRegistration(context.Background()).StartEmailRegistrationRequest(startEmailRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceStartEmailRegistration``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.StartEmailRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceStartEmailRegistration`: StartEmailRegistrationReply
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceStartEmailRegistration`: %v\n", resp)
+	// response from `StartEmailRegistration`: StartEmailRegistrationReply
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.StartEmailRegistration`: %v\n", resp)
 }
 ```
 
@@ -186,7 +186,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceStartEmailRegistrationRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiStartEmailRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -211,9 +211,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceStartPhoneRegistration
+## StartPhoneRegistration
 
-> StartPhoneRegistrationReply AuthServiceStartPhoneRegistration(ctx).StartPhoneRegistrationRequest(startPhoneRegistrationRequest).Execute()
+> StartPhoneRegistrationReply StartPhoneRegistration(ctx).StartPhoneRegistrationRequest(startPhoneRegistrationRequest).Execute()
 
 
 
@@ -236,13 +236,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceStartPhoneRegistration(context.Background()).StartPhoneRegistrationRequest(startPhoneRegistrationRequest).Execute()
+	resp, r, err := apiClient.AuthService.StartPhoneRegistration(context.Background()).StartPhoneRegistrationRequest(startPhoneRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceStartPhoneRegistration``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.StartPhoneRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceStartPhoneRegistration`: StartPhoneRegistrationReply
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceStartPhoneRegistration`: %v\n", resp)
+	// response from `StartPhoneRegistration`: StartPhoneRegistrationReply
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.StartPhoneRegistration`: %v\n", resp)
 }
 ```
 
@@ -252,7 +252,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceStartPhoneRegistrationRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiStartPhoneRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -277,9 +277,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceVerifyEmailRegistration
+## VerifyEmailRegistration
 
-> map[string]interface{} AuthServiceVerifyEmailRegistration(ctx).VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest).Execute()
+> map[string]interface{} VerifyEmailRegistration(ctx).VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest).Execute()
 
 
 
@@ -302,13 +302,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceVerifyEmailRegistration(context.Background()).VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest).Execute()
+	resp, r, err := apiClient.AuthService.VerifyEmailRegistration(context.Background()).VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceVerifyEmailRegistration``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.VerifyEmailRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceVerifyEmailRegistration`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceVerifyEmailRegistration`: %v\n", resp)
+	// response from `VerifyEmailRegistration`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.VerifyEmailRegistration`: %v\n", resp)
 }
 ```
 
@@ -318,7 +318,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceVerifyEmailRegistrationRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiVerifyEmailRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -343,9 +343,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## AuthServiceVerifyPhoneRegistration
+## VerifyPhoneRegistration
 
-> map[string]interface{} AuthServiceVerifyPhoneRegistration(ctx).VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest).Execute()
+> map[string]interface{} VerifyPhoneRegistration(ctx).VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest).Execute()
 
 
 
@@ -368,13 +368,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthServiceAPI.AuthServiceVerifyPhoneRegistration(context.Background()).VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest).Execute()
+	resp, r, err := apiClient.AuthService.VerifyPhoneRegistration(context.Background()).VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthServiceAPI.AuthServiceVerifyPhoneRegistration``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.VerifyPhoneRegistration``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AuthServiceVerifyPhoneRegistration`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthServiceAPI.AuthServiceVerifyPhoneRegistration`: %v\n", resp)
+	// response from `VerifyPhoneRegistration`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.VerifyPhoneRegistration`: %v\n", resp)
 }
 ```
 
@@ -384,7 +384,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAuthServiceVerifyPhoneRegistrationRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiVerifyPhoneRegistrationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

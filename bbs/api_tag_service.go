@@ -19,47 +19,47 @@ import (
 )
 
 
-type TagServiceAPI interface {
+type TagService interface {
 
 	/*
-	TagServiceList Method for TagServiceList
+	List Method for List
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTagServiceListRequest
+	@return ApiListRequest
 	*/
-	TagServiceList(ctx context.Context) ApiTagServiceListRequest
+	List(ctx context.Context) ApiListRequest
 
-	// TagServiceListExecute executes the request
+	// ListExecute executes the request
 	//  @return ListTagsReply
-	TagServiceListExecute(r ApiTagServiceListRequest) (*ListTagsReply, *http.Response, error)
+	ListExecute(r ApiListRequest) (*ListTagsReply, *http.Response, error)
 }
 
-// TagServiceAPIService TagServiceAPI service
-type TagServiceAPIService service
+// TagServiceService TagService service
+type TagServiceService service
 
-type ApiTagServiceListRequest struct {
+type ApiListRequest struct {
 	ctx context.Context
-	ApiService TagServiceAPI
+	ApiService TagService
 	listTagsRequest *ListTagsRequest
 }
 
-func (r ApiTagServiceListRequest) ListTagsRequest(listTagsRequest ListTagsRequest) ApiTagServiceListRequest {
+func (r ApiListRequest) ListTagsRequest(listTagsRequest ListTagsRequest) ApiListRequest {
 	r.listTagsRequest = &listTagsRequest
 	return r
 }
 
-func (r ApiTagServiceListRequest) Execute() (*ListTagsReply, *http.Response, error) {
-	return r.ApiService.TagServiceListExecute(r)
+func (r ApiListRequest) Execute() (*ListTagsReply, *http.Response, error) {
+	return r.ApiService.ListExecute(r)
 }
 
 /*
-TagServiceList Method for TagServiceList
+List Method for List
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTagServiceListRequest
+ @return ApiListRequest
 */
-func (a *TagServiceAPIService) TagServiceList(ctx context.Context) ApiTagServiceListRequest {
-	return ApiTagServiceListRequest{
+func (a *TagServiceService) List(ctx context.Context) ApiListRequest {
+	return ApiListRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -67,7 +67,7 @@ func (a *TagServiceAPIService) TagServiceList(ctx context.Context) ApiTagService
 
 // Execute executes the request
 //  @return ListTagsReply
-func (a *TagServiceAPIService) TagServiceListExecute(r ApiTagServiceListRequest) (*ListTagsReply, *http.Response, error) {
+func (a *TagServiceService) ListExecute(r ApiListRequest) (*ListTagsReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -75,7 +75,7 @@ func (a *TagServiceAPIService) TagServiceListExecute(r ApiTagServiceListRequest)
 		localVarReturnValue  *ListTagsReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceAPIService.TagServiceList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.List")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

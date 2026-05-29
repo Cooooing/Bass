@@ -1,7 +1,7 @@
 /*
 
 
-Testing TfaServiceAPIService
+Testing TfaServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_TfaServiceAPIService(t *testing.T) {
+func Test_bbs_TfaServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test TfaServiceAPIService TfaServiceBeginEnable", func(t *testing.T) {
+	t.Run("Test TfaServiceService BeginEnable", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TfaServiceAPI.TfaServiceBeginEnable(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TfaService.BeginEnable(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_TfaServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test TfaServiceAPIService TfaServiceConfirmEnable", func(t *testing.T) {
+	t.Run("Test TfaServiceService ConfirmEnable", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TfaServiceAPI.TfaServiceConfirmEnable(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TfaService.ConfirmEnable(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_TfaServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test TfaServiceAPIService TfaServiceDisable", func(t *testing.T) {
+	t.Run("Test TfaServiceService Disable", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TfaServiceAPI.TfaServiceDisable(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TfaService.Disable(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_TfaServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test TfaServiceAPIService TfaServiceGetCurrent", func(t *testing.T) {
+	t.Run("Test TfaServiceService GetCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TfaServiceAPI.TfaServiceGetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TfaService.GetCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_TfaServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test TfaServiceAPIService TfaServiceValidate", func(t *testing.T) {
+	t.Run("Test TfaServiceService Validate", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TfaServiceAPI.TfaServiceValidate(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TfaService.Validate(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

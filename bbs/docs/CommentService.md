@@ -1,19 +1,19 @@
-# \CommentServiceAPI
+# \CommentService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CommentServiceCreate**](CommentServiceAPI.md#CommentServiceCreate) | **Post** /v1/content/comment/create | 
-[**CommentServiceLike**](CommentServiceAPI.md#CommentServiceLike) | **Post** /v1/content/comment/like | 
-[**CommentServiceList**](CommentServiceAPI.md#CommentServiceList) | **Post** /v1/content/comment/list | 
-[**CommentServiceThank**](CommentServiceAPI.md#CommentServiceThank) | **Post** /v1/content/comment/thank | 
+[**Create**](CommentService.md#Create) | **Post** /v1/content/comment/create | 
+[**Like**](CommentService.md#Like) | **Post** /v1/content/comment/like | 
+[**List**](CommentService.md#List) | **Post** /v1/content/comment/list | 
+[**Thank**](CommentService.md#Thank) | **Post** /v1/content/comment/thank | 
 
 
 
-## CommentServiceCreate
+## Create
 
-> CreateCommentReply CommentServiceCreate(ctx).CreateCommentRequest(createCommentRequest).Execute()
+> CreateCommentReply Create(ctx).CreateCommentRequest(createCommentRequest).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentServiceAPI.CommentServiceCreate(context.Background()).CreateCommentRequest(createCommentRequest).Execute()
+	resp, r, err := apiClient.CommentService.Create(context.Background()).CreateCommentRequest(createCommentRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CommentServiceAPI.CommentServiceCreate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.Create``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CommentServiceCreate`: CreateCommentReply
-	fmt.Fprintf(os.Stdout, "Response from `CommentServiceAPI.CommentServiceCreate`: %v\n", resp)
+	// response from `Create`: CreateCommentReply
+	fmt.Fprintf(os.Stdout, "Response from `CommentService.Create`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCommentServiceCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## CommentServiceLike
+## Like
 
-> map[string]interface{} CommentServiceLike(ctx).LikeCommentRequest(likeCommentRequest).Execute()
+> map[string]interface{} Like(ctx).LikeCommentRequest(likeCommentRequest).Execute()
 
 
 
@@ -98,13 +98,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentServiceAPI.CommentServiceLike(context.Background()).LikeCommentRequest(likeCommentRequest).Execute()
+	resp, r, err := apiClient.CommentService.Like(context.Background()).LikeCommentRequest(likeCommentRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CommentServiceAPI.CommentServiceLike``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.Like``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CommentServiceLike`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `CommentServiceAPI.CommentServiceLike`: %v\n", resp)
+	// response from `Like`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `CommentService.Like`: %v\n", resp)
 }
 ```
 
@@ -114,7 +114,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCommentServiceLikeRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLikeRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -139,9 +139,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## CommentServiceList
+## List
 
-> ListCommentsReply CommentServiceList(ctx).ListCommentsRequest(listCommentsRequest).Execute()
+> ListCommentsReply List(ctx).ListCommentsRequest(listCommentsRequest).Execute()
 
 
 
@@ -162,13 +162,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentServiceAPI.CommentServiceList(context.Background()).ListCommentsRequest(listCommentsRequest).Execute()
+	resp, r, err := apiClient.CommentService.List(context.Background()).ListCommentsRequest(listCommentsRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CommentServiceAPI.CommentServiceList``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.List``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CommentServiceList`: ListCommentsReply
-	fmt.Fprintf(os.Stdout, "Response from `CommentServiceAPI.CommentServiceList`: %v\n", resp)
+	// response from `List`: ListCommentsReply
+	fmt.Fprintf(os.Stdout, "Response from `CommentService.List`: %v\n", resp)
 }
 ```
 
@@ -178,7 +178,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCommentServiceListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -203,9 +203,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## CommentServiceThank
+## Thank
 
-> map[string]interface{} CommentServiceThank(ctx).ThankCommentRequest(thankCommentRequest).Execute()
+> map[string]interface{} Thank(ctx).ThankCommentRequest(thankCommentRequest).Execute()
 
 
 
@@ -226,13 +226,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentServiceAPI.CommentServiceThank(context.Background()).ThankCommentRequest(thankCommentRequest).Execute()
+	resp, r, err := apiClient.CommentService.Thank(context.Background()).ThankCommentRequest(thankCommentRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CommentServiceAPI.CommentServiceThank``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.Thank``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CommentServiceThank`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `CommentServiceAPI.CommentServiceThank`: %v\n", resp)
+	// response from `Thank`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `CommentService.Thank`: %v\n", resp)
 }
 ```
 
@@ -242,7 +242,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCommentServiceThankRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiThankRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

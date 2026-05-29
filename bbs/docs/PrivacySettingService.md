@@ -1,17 +1,17 @@
-# \PrivacySettingServiceAPI
+# \PrivacySettingService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**PrivacySettingServiceGetCurrent**](PrivacySettingServiceAPI.md#PrivacySettingServiceGetCurrent) | **Post** /v1/user/privacy-setting/get-current | 
-[**PrivacySettingServiceUpdateCurrent**](PrivacySettingServiceAPI.md#PrivacySettingServiceUpdateCurrent) | **Post** /v1/user/privacy-setting/update-current | 
+[**GetCurrent**](PrivacySettingService.md#GetCurrent) | **Post** /v1/user/privacy-setting/get-current | 
+[**UpdateCurrent**](PrivacySettingService.md#UpdateCurrent) | **Post** /v1/user/privacy-setting/update-current | 
 
 
 
-## PrivacySettingServiceGetCurrent
+## GetCurrent
 
-> GetCurrentPrivacySettingReply PrivacySettingServiceGetCurrent(ctx).Body(body).Execute()
+> GetCurrentPrivacySettingReply GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PrivacySettingServiceAPI.PrivacySettingServiceGetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.PrivacySettingService.GetCurrent(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingServiceAPI.PrivacySettingServiceGetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PrivacySettingServiceGetCurrent`: GetCurrentPrivacySettingReply
-	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingServiceAPI.PrivacySettingServiceGetCurrent`: %v\n", resp)
+	// response from `GetCurrent`: GetCurrentPrivacySettingReply
+	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.GetCurrent`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPrivacySettingServiceGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PrivacySettingServiceUpdateCurrent
+## UpdateCurrent
 
-> UpdateCurrentPrivacySettingReply PrivacySettingServiceUpdateCurrent(ctx).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
+> UpdateCurrentPrivacySettingReply UpdateCurrent(ctx).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PrivacySettingServiceAPI.PrivacySettingServiceUpdateCurrent(context.Background()).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
+	resp, r, err := apiClient.PrivacySettingService.UpdateCurrent(context.Background()).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingServiceAPI.PrivacySettingServiceUpdateCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.UpdateCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PrivacySettingServiceUpdateCurrent`: UpdateCurrentPrivacySettingReply
-	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingServiceAPI.PrivacySettingServiceUpdateCurrent`: %v\n", resp)
+	// response from `UpdateCurrent`: UpdateCurrentPrivacySettingReply
+	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.UpdateCurrent`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPrivacySettingServiceUpdateCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateCurrentRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

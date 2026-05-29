@@ -19,107 +19,107 @@ import (
 )
 
 
-type TfaServiceAPI interface {
+type TfaService interface {
 
 	/*
-	TfaServiceBeginEnable Method for TfaServiceBeginEnable
+	BeginEnable Method for BeginEnable
 
 	开始启用二步验证
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTfaServiceBeginEnableRequest
+	@return ApiBeginEnableRequest
 	*/
-	TfaServiceBeginEnable(ctx context.Context) ApiTfaServiceBeginEnableRequest
+	BeginEnable(ctx context.Context) ApiBeginEnableRequest
 
-	// TfaServiceBeginEnableExecute executes the request
+	// BeginEnableExecute executes the request
 	//  @return BeginEnableTfaReply
-	TfaServiceBeginEnableExecute(r ApiTfaServiceBeginEnableRequest) (*BeginEnableTfaReply, *http.Response, error)
+	BeginEnableExecute(r ApiBeginEnableRequest) (*BeginEnableTfaReply, *http.Response, error)
 
 	/*
-	TfaServiceConfirmEnable Method for TfaServiceConfirmEnable
+	ConfirmEnable Method for ConfirmEnable
 
 	确认二步验证码并正式启用二步验证
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTfaServiceConfirmEnableRequest
+	@return ApiConfirmEnableRequest
 	*/
-	TfaServiceConfirmEnable(ctx context.Context) ApiTfaServiceConfirmEnableRequest
+	ConfirmEnable(ctx context.Context) ApiConfirmEnableRequest
 
-	// TfaServiceConfirmEnableExecute executes the request
+	// ConfirmEnableExecute executes the request
 	//  @return map[string]interface{}
-	TfaServiceConfirmEnableExecute(r ApiTfaServiceConfirmEnableRequest) (map[string]interface{}, *http.Response, error)
+	ConfirmEnableExecute(r ApiConfirmEnableRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	TfaServiceDisable Method for TfaServiceDisable
+	Disable Method for Disable
 
 	校验二步验证码并关闭二步验证
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTfaServiceDisableRequest
+	@return ApiDisableRequest
 	*/
-	TfaServiceDisable(ctx context.Context) ApiTfaServiceDisableRequest
+	Disable(ctx context.Context) ApiDisableRequest
 
-	// TfaServiceDisableExecute executes the request
+	// DisableExecute executes the request
 	//  @return map[string]interface{}
-	TfaServiceDisableExecute(r ApiTfaServiceDisableRequest) (map[string]interface{}, *http.Response, error)
+	DisableExecute(r ApiDisableRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	TfaServiceGetCurrent Method for TfaServiceGetCurrent
+	GetCurrent Method for GetCurrent
 
 	获取当前登录账号的二步验证状态
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTfaServiceGetCurrentRequest
+	@return ApiGetCurrentRequest
 	*/
-	TfaServiceGetCurrent(ctx context.Context) ApiTfaServiceGetCurrentRequest
+	GetCurrent(ctx context.Context) ApiGetCurrentRequest
 
-	// TfaServiceGetCurrentExecute executes the request
+	// GetCurrentExecute executes the request
 	//  @return GetCurrentTfaReply
-	TfaServiceGetCurrentExecute(r ApiTfaServiceGetCurrentRequest) (*GetCurrentTfaReply, *http.Response, error)
+	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentTfaReply, *http.Response, error)
 
 	/*
-	TfaServiceValidate Method for TfaServiceValidate
+	Validate Method for Validate
 
 	校验当前登录账号的二步验证码
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTfaServiceValidateRequest
+	@return ApiValidateRequest
 	*/
-	TfaServiceValidate(ctx context.Context) ApiTfaServiceValidateRequest
+	Validate(ctx context.Context) ApiValidateRequest
 
-	// TfaServiceValidateExecute executes the request
+	// ValidateExecute executes the request
 	//  @return ValidateTfaReply
-	TfaServiceValidateExecute(r ApiTfaServiceValidateRequest) (*ValidateTfaReply, *http.Response, error)
+	ValidateExecute(r ApiValidateRequest) (*ValidateTfaReply, *http.Response, error)
 }
 
-// TfaServiceAPIService TfaServiceAPI service
-type TfaServiceAPIService service
+// TfaServiceService TfaService service
+type TfaServiceService service
 
-type ApiTfaServiceBeginEnableRequest struct {
+type ApiBeginEnableRequest struct {
 	ctx context.Context
-	ApiService TfaServiceAPI
+	ApiService TfaService
 	body *map[string]interface{}
 }
 
-func (r ApiTfaServiceBeginEnableRequest) Body(body map[string]interface{}) ApiTfaServiceBeginEnableRequest {
+func (r ApiBeginEnableRequest) Body(body map[string]interface{}) ApiBeginEnableRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiTfaServiceBeginEnableRequest) Execute() (*BeginEnableTfaReply, *http.Response, error) {
-	return r.ApiService.TfaServiceBeginEnableExecute(r)
+func (r ApiBeginEnableRequest) Execute() (*BeginEnableTfaReply, *http.Response, error) {
+	return r.ApiService.BeginEnableExecute(r)
 }
 
 /*
-TfaServiceBeginEnable Method for TfaServiceBeginEnable
+BeginEnable Method for BeginEnable
 
 开始启用二步验证
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTfaServiceBeginEnableRequest
+ @return ApiBeginEnableRequest
 */
-func (a *TfaServiceAPIService) TfaServiceBeginEnable(ctx context.Context) ApiTfaServiceBeginEnableRequest {
-	return ApiTfaServiceBeginEnableRequest{
+func (a *TfaServiceService) BeginEnable(ctx context.Context) ApiBeginEnableRequest {
+	return ApiBeginEnableRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -127,7 +127,7 @@ func (a *TfaServiceAPIService) TfaServiceBeginEnable(ctx context.Context) ApiTfa
 
 // Execute executes the request
 //  @return BeginEnableTfaReply
-func (a *TfaServiceAPIService) TfaServiceBeginEnableExecute(r ApiTfaServiceBeginEnableRequest) (*BeginEnableTfaReply, *http.Response, error) {
+func (a *TfaServiceService) BeginEnableExecute(r ApiBeginEnableRequest) (*BeginEnableTfaReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -135,7 +135,7 @@ func (a *TfaServiceAPIService) TfaServiceBeginEnableExecute(r ApiTfaServiceBegin
 		localVarReturnValue  *BeginEnableTfaReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceBeginEnable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceService.BeginEnable")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -205,31 +205,31 @@ func (a *TfaServiceAPIService) TfaServiceBeginEnableExecute(r ApiTfaServiceBegin
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiTfaServiceConfirmEnableRequest struct {
+type ApiConfirmEnableRequest struct {
 	ctx context.Context
-	ApiService TfaServiceAPI
+	ApiService TfaService
 	confirmEnableTfaRequest *ConfirmEnableTfaRequest
 }
 
-func (r ApiTfaServiceConfirmEnableRequest) ConfirmEnableTfaRequest(confirmEnableTfaRequest ConfirmEnableTfaRequest) ApiTfaServiceConfirmEnableRequest {
+func (r ApiConfirmEnableRequest) ConfirmEnableTfaRequest(confirmEnableTfaRequest ConfirmEnableTfaRequest) ApiConfirmEnableRequest {
 	r.confirmEnableTfaRequest = &confirmEnableTfaRequest
 	return r
 }
 
-func (r ApiTfaServiceConfirmEnableRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.TfaServiceConfirmEnableExecute(r)
+func (r ApiConfirmEnableRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ConfirmEnableExecute(r)
 }
 
 /*
-TfaServiceConfirmEnable Method for TfaServiceConfirmEnable
+ConfirmEnable Method for ConfirmEnable
 
 确认二步验证码并正式启用二步验证
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTfaServiceConfirmEnableRequest
+ @return ApiConfirmEnableRequest
 */
-func (a *TfaServiceAPIService) TfaServiceConfirmEnable(ctx context.Context) ApiTfaServiceConfirmEnableRequest {
-	return ApiTfaServiceConfirmEnableRequest{
+func (a *TfaServiceService) ConfirmEnable(ctx context.Context) ApiConfirmEnableRequest {
+	return ApiConfirmEnableRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -237,7 +237,7 @@ func (a *TfaServiceAPIService) TfaServiceConfirmEnable(ctx context.Context) ApiT
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *TfaServiceAPIService) TfaServiceConfirmEnableExecute(r ApiTfaServiceConfirmEnableRequest) (map[string]interface{}, *http.Response, error) {
+func (a *TfaServiceService) ConfirmEnableExecute(r ApiConfirmEnableRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -245,7 +245,7 @@ func (a *TfaServiceAPIService) TfaServiceConfirmEnableExecute(r ApiTfaServiceCon
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceConfirmEnable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceService.ConfirmEnable")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -315,31 +315,31 @@ func (a *TfaServiceAPIService) TfaServiceConfirmEnableExecute(r ApiTfaServiceCon
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiTfaServiceDisableRequest struct {
+type ApiDisableRequest struct {
 	ctx context.Context
-	ApiService TfaServiceAPI
+	ApiService TfaService
 	disableTfaRequest *DisableTfaRequest
 }
 
-func (r ApiTfaServiceDisableRequest) DisableTfaRequest(disableTfaRequest DisableTfaRequest) ApiTfaServiceDisableRequest {
+func (r ApiDisableRequest) DisableTfaRequest(disableTfaRequest DisableTfaRequest) ApiDisableRequest {
 	r.disableTfaRequest = &disableTfaRequest
 	return r
 }
 
-func (r ApiTfaServiceDisableRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.TfaServiceDisableExecute(r)
+func (r ApiDisableRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DisableExecute(r)
 }
 
 /*
-TfaServiceDisable Method for TfaServiceDisable
+Disable Method for Disable
 
 校验二步验证码并关闭二步验证
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTfaServiceDisableRequest
+ @return ApiDisableRequest
 */
-func (a *TfaServiceAPIService) TfaServiceDisable(ctx context.Context) ApiTfaServiceDisableRequest {
-	return ApiTfaServiceDisableRequest{
+func (a *TfaServiceService) Disable(ctx context.Context) ApiDisableRequest {
+	return ApiDisableRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -347,7 +347,7 @@ func (a *TfaServiceAPIService) TfaServiceDisable(ctx context.Context) ApiTfaServ
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *TfaServiceAPIService) TfaServiceDisableExecute(r ApiTfaServiceDisableRequest) (map[string]interface{}, *http.Response, error) {
+func (a *TfaServiceService) DisableExecute(r ApiDisableRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -355,7 +355,7 @@ func (a *TfaServiceAPIService) TfaServiceDisableExecute(r ApiTfaServiceDisableRe
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceDisable")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceService.Disable")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -425,31 +425,31 @@ func (a *TfaServiceAPIService) TfaServiceDisableExecute(r ApiTfaServiceDisableRe
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiTfaServiceGetCurrentRequest struct {
+type ApiGetCurrentRequest struct {
 	ctx context.Context
-	ApiService TfaServiceAPI
+	ApiService TfaService
 	body *map[string]interface{}
 }
 
-func (r ApiTfaServiceGetCurrentRequest) Body(body map[string]interface{}) ApiTfaServiceGetCurrentRequest {
+func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiTfaServiceGetCurrentRequest) Execute() (*GetCurrentTfaReply, *http.Response, error) {
-	return r.ApiService.TfaServiceGetCurrentExecute(r)
+func (r ApiGetCurrentRequest) Execute() (*GetCurrentTfaReply, *http.Response, error) {
+	return r.ApiService.GetCurrentExecute(r)
 }
 
 /*
-TfaServiceGetCurrent Method for TfaServiceGetCurrent
+GetCurrent Method for GetCurrent
 
 获取当前登录账号的二步验证状态
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTfaServiceGetCurrentRequest
+ @return ApiGetCurrentRequest
 */
-func (a *TfaServiceAPIService) TfaServiceGetCurrent(ctx context.Context) ApiTfaServiceGetCurrentRequest {
-	return ApiTfaServiceGetCurrentRequest{
+func (a *TfaServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRequest {
+	return ApiGetCurrentRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -457,7 +457,7 @@ func (a *TfaServiceAPIService) TfaServiceGetCurrent(ctx context.Context) ApiTfaS
 
 // Execute executes the request
 //  @return GetCurrentTfaReply
-func (a *TfaServiceAPIService) TfaServiceGetCurrentExecute(r ApiTfaServiceGetCurrentRequest) (*GetCurrentTfaReply, *http.Response, error) {
+func (a *TfaServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentTfaReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -465,7 +465,7 @@ func (a *TfaServiceAPIService) TfaServiceGetCurrentExecute(r ApiTfaServiceGetCur
 		localVarReturnValue  *GetCurrentTfaReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceGetCurrent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceService.GetCurrent")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -535,31 +535,31 @@ func (a *TfaServiceAPIService) TfaServiceGetCurrentExecute(r ApiTfaServiceGetCur
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiTfaServiceValidateRequest struct {
+type ApiValidateRequest struct {
 	ctx context.Context
-	ApiService TfaServiceAPI
+	ApiService TfaService
 	validateTfaRequest *ValidateTfaRequest
 }
 
-func (r ApiTfaServiceValidateRequest) ValidateTfaRequest(validateTfaRequest ValidateTfaRequest) ApiTfaServiceValidateRequest {
+func (r ApiValidateRequest) ValidateTfaRequest(validateTfaRequest ValidateTfaRequest) ApiValidateRequest {
 	r.validateTfaRequest = &validateTfaRequest
 	return r
 }
 
-func (r ApiTfaServiceValidateRequest) Execute() (*ValidateTfaReply, *http.Response, error) {
-	return r.ApiService.TfaServiceValidateExecute(r)
+func (r ApiValidateRequest) Execute() (*ValidateTfaReply, *http.Response, error) {
+	return r.ApiService.ValidateExecute(r)
 }
 
 /*
-TfaServiceValidate Method for TfaServiceValidate
+Validate Method for Validate
 
 校验当前登录账号的二步验证码
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTfaServiceValidateRequest
+ @return ApiValidateRequest
 */
-func (a *TfaServiceAPIService) TfaServiceValidate(ctx context.Context) ApiTfaServiceValidateRequest {
-	return ApiTfaServiceValidateRequest{
+func (a *TfaServiceService) Validate(ctx context.Context) ApiValidateRequest {
+	return ApiValidateRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -567,7 +567,7 @@ func (a *TfaServiceAPIService) TfaServiceValidate(ctx context.Context) ApiTfaSer
 
 // Execute executes the request
 //  @return ValidateTfaReply
-func (a *TfaServiceAPIService) TfaServiceValidateExecute(r ApiTfaServiceValidateRequest) (*ValidateTfaReply, *http.Response, error) {
+func (a *TfaServiceService) ValidateExecute(r ApiValidateRequest) (*ValidateTfaReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -575,7 +575,7 @@ func (a *TfaServiceAPIService) TfaServiceValidateExecute(r ApiTfaServiceValidate
 		localVarReturnValue  *ValidateTfaReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceAPIService.TfaServiceValidate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TfaServiceService.Validate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

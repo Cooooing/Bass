@@ -1,7 +1,7 @@
 /*
 
 
-Testing NotificationServiceAPIService
+Testing NotificationServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_NotificationServiceAPIService(t *testing.T) {
+func Test_bbs_NotificationServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test NotificationServiceAPIService NotificationServiceCountUnread", func(t *testing.T) {
+	t.Run("Test NotificationServiceService CountUnread", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.NotificationServiceAPI.NotificationServiceCountUnread(context.Background()).Execute()
+		resp, httpRes, err := apiClient.NotificationService.CountUnread(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_NotificationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test NotificationServiceAPIService NotificationServiceList", func(t *testing.T) {
+	t.Run("Test NotificationServiceService List", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.NotificationServiceAPI.NotificationServiceList(context.Background()).Execute()
+		resp, httpRes, err := apiClient.NotificationService.List(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_NotificationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test NotificationServiceAPIService NotificationServiceMarkRead", func(t *testing.T) {
+	t.Run("Test NotificationServiceService MarkRead", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.NotificationServiceAPI.NotificationServiceMarkRead(context.Background()).Execute()
+		resp, httpRes, err := apiClient.NotificationService.MarkRead(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

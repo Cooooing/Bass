@@ -1,7 +1,7 @@
 /*
 
 
-Testing AuthServiceAPIService
+Testing AuthServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_AuthServiceAPIService(t *testing.T) {
+func Test_bbs_AuthServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test AuthServiceAPIService AuthServiceLoginByPassword", func(t *testing.T) {
+	t.Run("Test AuthServiceService LoginByPassword", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthServiceAPI.AuthServiceLoginByPassword(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.LoginByPassword(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_AuthServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceAPIService AuthServiceLogout", func(t *testing.T) {
+	t.Run("Test AuthServiceService Logout", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthServiceAPI.AuthServiceLogout(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.Logout(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_AuthServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceAPIService AuthServiceStartEmailRegistration", func(t *testing.T) {
+	t.Run("Test AuthServiceService StartEmailRegistration", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthServiceAPI.AuthServiceStartEmailRegistration(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.StartEmailRegistration(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_AuthServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceAPIService AuthServiceStartPhoneRegistration", func(t *testing.T) {
+	t.Run("Test AuthServiceService StartPhoneRegistration", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthServiceAPI.AuthServiceStartPhoneRegistration(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.StartPhoneRegistration(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_AuthServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceAPIService AuthServiceVerifyEmailRegistration", func(t *testing.T) {
+	t.Run("Test AuthServiceService VerifyEmailRegistration", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthServiceAPI.AuthServiceVerifyEmailRegistration(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.VerifyEmailRegistration(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +82,11 @@ func Test_bbs_AuthServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceAPIService AuthServiceVerifyPhoneRegistration", func(t *testing.T) {
+	t.Run("Test AuthServiceService VerifyPhoneRegistration", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthServiceAPI.AuthServiceVerifyPhoneRegistration(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.VerifyPhoneRegistration(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

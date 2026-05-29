@@ -1,7 +1,7 @@
 /*
 
 
-Testing PreferencesServiceAPIService
+Testing PreferencesServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_PreferencesServiceAPIService(t *testing.T) {
+func Test_bbs_PreferencesServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test PreferencesServiceAPIService PreferencesServiceGetCurrent", func(t *testing.T) {
+	t.Run("Test PreferencesServiceService GetCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PreferencesServiceAPI.PreferencesServiceGetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PreferencesService.GetCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_PreferencesServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test PreferencesServiceAPIService PreferencesServiceUpdateCurrent", func(t *testing.T) {
+	t.Run("Test PreferencesServiceService UpdateCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PreferencesServiceAPI.PreferencesServiceUpdateCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PreferencesService.UpdateCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

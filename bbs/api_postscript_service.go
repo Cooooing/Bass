@@ -19,51 +19,51 @@ import (
 )
 
 
-type PostscriptServiceAPI interface {
+type PostscriptService interface {
 
 	/*
-	PostscriptServiceAdd Method for PostscriptServiceAdd
+	Add Method for Add
 
 	添加文章附言
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPostscriptServiceAddRequest
+	@return ApiAddRequest
 	*/
-	PostscriptServiceAdd(ctx context.Context) ApiPostscriptServiceAddRequest
+	Add(ctx context.Context) ApiAddRequest
 
-	// PostscriptServiceAddExecute executes the request
+	// AddExecute executes the request
 	//  @return AddPostscriptReply
-	PostscriptServiceAddExecute(r ApiPostscriptServiceAddRequest) (*AddPostscriptReply, *http.Response, error)
+	AddExecute(r ApiAddRequest) (*AddPostscriptReply, *http.Response, error)
 }
 
-// PostscriptServiceAPIService PostscriptServiceAPI service
-type PostscriptServiceAPIService service
+// PostscriptServiceService PostscriptService service
+type PostscriptServiceService service
 
-type ApiPostscriptServiceAddRequest struct {
+type ApiAddRequest struct {
 	ctx context.Context
-	ApiService PostscriptServiceAPI
+	ApiService PostscriptService
 	addPostscriptRequest *AddPostscriptRequest
 }
 
-func (r ApiPostscriptServiceAddRequest) AddPostscriptRequest(addPostscriptRequest AddPostscriptRequest) ApiPostscriptServiceAddRequest {
+func (r ApiAddRequest) AddPostscriptRequest(addPostscriptRequest AddPostscriptRequest) ApiAddRequest {
 	r.addPostscriptRequest = &addPostscriptRequest
 	return r
 }
 
-func (r ApiPostscriptServiceAddRequest) Execute() (*AddPostscriptReply, *http.Response, error) {
-	return r.ApiService.PostscriptServiceAddExecute(r)
+func (r ApiAddRequest) Execute() (*AddPostscriptReply, *http.Response, error) {
+	return r.ApiService.AddExecute(r)
 }
 
 /*
-PostscriptServiceAdd Method for PostscriptServiceAdd
+Add Method for Add
 
 添加文章附言
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPostscriptServiceAddRequest
+ @return ApiAddRequest
 */
-func (a *PostscriptServiceAPIService) PostscriptServiceAdd(ctx context.Context) ApiPostscriptServiceAddRequest {
-	return ApiPostscriptServiceAddRequest{
+func (a *PostscriptServiceService) Add(ctx context.Context) ApiAddRequest {
+	return ApiAddRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -71,7 +71,7 @@ func (a *PostscriptServiceAPIService) PostscriptServiceAdd(ctx context.Context) 
 
 // Execute executes the request
 //  @return AddPostscriptReply
-func (a *PostscriptServiceAPIService) PostscriptServiceAddExecute(r ApiPostscriptServiceAddRequest) (*AddPostscriptReply, *http.Response, error) {
+func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -79,7 +79,7 @@ func (a *PostscriptServiceAPIService) PostscriptServiceAddExecute(r ApiPostscrip
 		localVarReturnValue  *AddPostscriptReply
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceAPIService.PostscriptServiceAdd")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.Add")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

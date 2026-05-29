@@ -1,7 +1,7 @@
 /*
 
 
-Testing AccountServiceAPIService
+Testing AccountServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_AccountServiceAPIService(t *testing.T) {
+func Test_bbs_AccountServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test AccountServiceAPIService AccountServiceGetCurrent", func(t *testing.T) {
+	t.Run("Test AccountServiceService GetCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountServiceAPI.AccountServiceGetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.GetCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_AccountServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceAPIService AccountServiceGetProfile", func(t *testing.T) {
+	t.Run("Test AccountServiceService GetProfile", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountServiceAPI.AccountServiceGetProfile(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.GetProfile(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_AccountServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceAPIService AccountServiceUpdateProfile", func(t *testing.T) {
+	t.Run("Test AccountServiceService UpdateProfile", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountServiceAPI.AccountServiceUpdateProfile(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.UpdateProfile(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

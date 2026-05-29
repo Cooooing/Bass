@@ -1,7 +1,7 @@
 /*
 
 
-Testing LocationServiceAPIService
+Testing LocationServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_LocationServiceAPIService(t *testing.T) {
+func Test_bbs_LocationServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test LocationServiceAPIService LocationServiceGetCurrent", func(t *testing.T) {
+	t.Run("Test LocationServiceService GetCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.LocationServiceAPI.LocationServiceGetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.LocationService.GetCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_LocationServiceAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test LocationServiceAPIService LocationServiceUpsertCurrent", func(t *testing.T) {
+	t.Run("Test LocationServiceService UpsertCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.LocationServiceAPI.LocationServiceUpsertCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.LocationService.UpsertCurrent(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

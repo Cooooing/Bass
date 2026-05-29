@@ -1,23 +1,23 @@
-# \RelationServiceAPI
+# \RelationService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**RelationServiceBlock**](RelationServiceAPI.md#RelationServiceBlock) | **Post** /v1/user/relation/block | 
-[**RelationServiceFollow**](RelationServiceAPI.md#RelationServiceFollow) | **Post** /v1/user/relation/follow | 
-[**RelationServiceGetStatus**](RelationServiceAPI.md#RelationServiceGetStatus) | **Post** /v1/user/relation/get-status | 
-[**RelationServiceListBlocked**](RelationServiceAPI.md#RelationServiceListBlocked) | **Post** /v1/user/relation/list-blocked | 
-[**RelationServiceListFollowers**](RelationServiceAPI.md#RelationServiceListFollowers) | **Post** /v1/user/relation/list-followers | 
-[**RelationServiceListFollowing**](RelationServiceAPI.md#RelationServiceListFollowing) | **Post** /v1/user/relation/list-following | 
-[**RelationServiceUnblock**](RelationServiceAPI.md#RelationServiceUnblock) | **Post** /v1/user/relation/unblock | 
-[**RelationServiceUnfollow**](RelationServiceAPI.md#RelationServiceUnfollow) | **Post** /v1/user/relation/unfollow | 
+[**Block**](RelationService.md#Block) | **Post** /v1/user/relation/block | 
+[**Follow**](RelationService.md#Follow) | **Post** /v1/user/relation/follow | 
+[**GetStatus**](RelationService.md#GetStatus) | **Post** /v1/user/relation/get-status | 
+[**ListBlocked**](RelationService.md#ListBlocked) | **Post** /v1/user/relation/list-blocked | 
+[**ListFollowers**](RelationService.md#ListFollowers) | **Post** /v1/user/relation/list-followers | 
+[**ListFollowing**](RelationService.md#ListFollowing) | **Post** /v1/user/relation/list-following | 
+[**Unblock**](RelationService.md#Unblock) | **Post** /v1/user/relation/unblock | 
+[**Unfollow**](RelationService.md#Unfollow) | **Post** /v1/user/relation/unfollow | 
 
 
 
-## RelationServiceBlock
+## Block
 
-> map[string]interface{} RelationServiceBlock(ctx).BlockRelationRequest(blockRelationRequest).Execute()
+> map[string]interface{} Block(ctx).BlockRelationRequest(blockRelationRequest).Execute()
 
 
 
@@ -40,13 +40,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceBlock(context.Background()).BlockRelationRequest(blockRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Block(context.Background()).BlockRelationRequest(blockRelationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceBlock``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Block``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceBlock`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceBlock`: %v\n", resp)
+	// response from `Block`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.Block`: %v\n", resp)
 }
 ```
 
@@ -56,7 +56,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceBlockRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiBlockRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -81,9 +81,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceFollow
+## Follow
 
-> map[string]interface{} RelationServiceFollow(ctx).FollowRelationRequest(followRelationRequest).Execute()
+> map[string]interface{} Follow(ctx).FollowRelationRequest(followRelationRequest).Execute()
 
 
 
@@ -106,13 +106,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceFollow(context.Background()).FollowRelationRequest(followRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Follow(context.Background()).FollowRelationRequest(followRelationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceFollow``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Follow``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceFollow`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceFollow`: %v\n", resp)
+	// response from `Follow`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.Follow`: %v\n", resp)
 }
 ```
 
@@ -122,7 +122,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceFollowRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiFollowRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -147,9 +147,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceGetStatus
+## GetStatus
 
-> GetStatusRelationReply RelationServiceGetStatus(ctx).GetStatusRelationRequest(getStatusRelationRequest).Execute()
+> GetStatusRelationReply GetStatus(ctx).GetStatusRelationRequest(getStatusRelationRequest).Execute()
 
 
 
@@ -172,13 +172,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceGetStatus(context.Background()).GetStatusRelationRequest(getStatusRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.GetStatus(context.Background()).GetStatusRelationRequest(getStatusRelationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceGetStatus``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.GetStatus``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceGetStatus`: GetStatusRelationReply
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceGetStatus`: %v\n", resp)
+	// response from `GetStatus`: GetStatusRelationReply
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.GetStatus`: %v\n", resp)
 }
 ```
 
@@ -188,7 +188,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceGetStatusRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetStatusRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -213,9 +213,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceListBlocked
+## ListBlocked
 
-> ListBlockedRelationsReply RelationServiceListBlocked(ctx).ListBlockedRelationsRequest(listBlockedRelationsRequest).Execute()
+> ListBlockedRelationsReply ListBlocked(ctx).ListBlockedRelationsRequest(listBlockedRelationsRequest).Execute()
 
 
 
@@ -238,13 +238,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceListBlocked(context.Background()).ListBlockedRelationsRequest(listBlockedRelationsRequest).Execute()
+	resp, r, err := apiClient.RelationService.ListBlocked(context.Background()).ListBlockedRelationsRequest(listBlockedRelationsRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceListBlocked``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.ListBlocked``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceListBlocked`: ListBlockedRelationsReply
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceListBlocked`: %v\n", resp)
+	// response from `ListBlocked`: ListBlockedRelationsReply
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.ListBlocked`: %v\n", resp)
 }
 ```
 
@@ -254,7 +254,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceListBlockedRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListBlockedRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -279,9 +279,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceListFollowers
+## ListFollowers
 
-> ListFollowersRelationsReply RelationServiceListFollowers(ctx).ListFollowersRelationsRequest(listFollowersRelationsRequest).Execute()
+> ListFollowersRelationsReply ListFollowers(ctx).ListFollowersRelationsRequest(listFollowersRelationsRequest).Execute()
 
 
 
@@ -304,13 +304,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceListFollowers(context.Background()).ListFollowersRelationsRequest(listFollowersRelationsRequest).Execute()
+	resp, r, err := apiClient.RelationService.ListFollowers(context.Background()).ListFollowersRelationsRequest(listFollowersRelationsRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceListFollowers``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.ListFollowers``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceListFollowers`: ListFollowersRelationsReply
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceListFollowers`: %v\n", resp)
+	// response from `ListFollowers`: ListFollowersRelationsReply
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.ListFollowers`: %v\n", resp)
 }
 ```
 
@@ -320,7 +320,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceListFollowersRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListFollowersRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -345,9 +345,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceListFollowing
+## ListFollowing
 
-> ListFollowingRelationsReply RelationServiceListFollowing(ctx).ListFollowingRelationsRequest(listFollowingRelationsRequest).Execute()
+> ListFollowingRelationsReply ListFollowing(ctx).ListFollowingRelationsRequest(listFollowingRelationsRequest).Execute()
 
 
 
@@ -370,13 +370,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceListFollowing(context.Background()).ListFollowingRelationsRequest(listFollowingRelationsRequest).Execute()
+	resp, r, err := apiClient.RelationService.ListFollowing(context.Background()).ListFollowingRelationsRequest(listFollowingRelationsRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceListFollowing``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.ListFollowing``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceListFollowing`: ListFollowingRelationsReply
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceListFollowing`: %v\n", resp)
+	// response from `ListFollowing`: ListFollowingRelationsReply
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.ListFollowing`: %v\n", resp)
 }
 ```
 
@@ -386,7 +386,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceListFollowingRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListFollowingRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -411,9 +411,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceUnblock
+## Unblock
 
-> map[string]interface{} RelationServiceUnblock(ctx).UnblockRelationRequest(unblockRelationRequest).Execute()
+> map[string]interface{} Unblock(ctx).UnblockRelationRequest(unblockRelationRequest).Execute()
 
 
 
@@ -436,13 +436,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceUnblock(context.Background()).UnblockRelationRequest(unblockRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Unblock(context.Background()).UnblockRelationRequest(unblockRelationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceUnblock``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Unblock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceUnblock`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceUnblock`: %v\n", resp)
+	// response from `Unblock`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.Unblock`: %v\n", resp)
 }
 ```
 
@@ -452,7 +452,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceUnblockRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUnblockRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -477,9 +477,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RelationServiceUnfollow
+## Unfollow
 
-> map[string]interface{} RelationServiceUnfollow(ctx).UnfollowRelationRequest(unfollowRelationRequest).Execute()
+> map[string]interface{} Unfollow(ctx).UnfollowRelationRequest(unfollowRelationRequest).Execute()
 
 
 
@@ -502,13 +502,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationServiceAPI.RelationServiceUnfollow(context.Background()).UnfollowRelationRequest(unfollowRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Unfollow(context.Background()).UnfollowRelationRequest(unfollowRelationRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RelationServiceAPI.RelationServiceUnfollow``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Unfollow``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RelationServiceUnfollow`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `RelationServiceAPI.RelationServiceUnfollow`: %v\n", resp)
+	// response from `Unfollow`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `RelationService.Unfollow`: %v\n", resp)
 }
 ```
 
@@ -518,7 +518,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRelationServiceUnfollowRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUnfollowRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

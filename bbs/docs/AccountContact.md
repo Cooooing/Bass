@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** |  | [optional] 
-**Email** | Pointer to **string** |  | [optional] 
-**Phone** | Pointer to **string** |  | [optional] 
+**UserId** | Pointer to **string** | 账号 ID。 | [optional] 
+**Email** | Pointer to **string** | 邮箱地址。 | [optional] 
+**Phone** | Pointer to **string** | 手机号。 | [optional] 
 
 ## Methods
 

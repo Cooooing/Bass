@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Status** | Pointer to [**RelationStatus**](RelationStatus.md) |  | [optional] 
+**Status** | Pointer to [**RelationStatus**](RelationStatus.md) | 关系状态。 | [optional] 
 
 ## Methods
 

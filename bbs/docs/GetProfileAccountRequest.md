@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** |  | [optional] 
+**UserId** | **string** | 账号 ID。 | 
 
 ## Methods
 
 ### NewGetProfileAccountRequest
 
-`func NewGetProfileAccountRequest() *GetProfileAccountRequest`
+`func NewGetProfileAccountRequest(userId string, ) *GetProfileAccountRequest`
 
 NewGetProfileAccountRequest instantiates a new GetProfileAccountRequest object
 This constructor will assign default values to properties that have it defined,
@@ -44,11 +44,6 @@ and a boolean to check if the value has been set.
 
 SetUserId sets UserId field to given value.
 
-### HasUserId
-
-`func (o *GetProfileAccountRequest) HasUserId() bool`
-
-HasUserId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

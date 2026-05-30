@@ -25,6 +25,8 @@ Method | HTTP request | Description
 
 
 
+
+
 ### Example
 
 ```go
@@ -38,7 +40,7 @@ import (
 )
 
 func main() {
-	acceptAnswerArticleRequest := *openapiclient.NewAcceptAnswerArticleRequest() // AcceptAnswerArticleRequest | 
+	acceptAnswerArticleRequest := *openapiclient.NewAcceptAnswerArticleRequest("ArticleId_example", "CommentId_example") // AcceptAnswerArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -89,6 +91,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -102,7 +106,7 @@ import (
 )
 
 func main() {
-	collectArticleRequest := *openapiclient.NewCollectArticleRequest() // CollectArticleRequest | 
+	collectArticleRequest := *openapiclient.NewCollectArticleRequest("ArticleId_example", false) // CollectArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -153,6 +157,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -166,7 +172,7 @@ import (
 )
 
 func main() {
-	createArticleRequest := *openapiclient.NewCreateArticleRequest() // CreateArticleRequest | 
+	createArticleRequest := *openapiclient.NewCreateArticleRequest(*openapiclient.NewArticleSave("Title_example", "Content_example", "Status_example", "Type_example")) // CreateArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -217,6 +223,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -230,7 +238,7 @@ import (
 )
 
 func main() {
-	deleteArticleRequest := *openapiclient.NewDeleteArticleRequest() // DeleteArticleRequest | 
+	deleteArticleRequest := *openapiclient.NewDeleteArticleRequest("ArticleId_example") // DeleteArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -281,6 +289,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -294,7 +304,7 @@ import (
 )
 
 func main() {
-	getArticleRequest := *openapiclient.NewGetArticleRequest() // GetArticleRequest | 
+	getArticleRequest := *openapiclient.NewGetArticleRequest("ArticleId_example") // GetArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -345,6 +355,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -358,7 +370,7 @@ import (
 )
 
 func main() {
-	likeArticleRequest := *openapiclient.NewLikeArticleRequest() // LikeArticleRequest | 
+	likeArticleRequest := *openapiclient.NewLikeArticleRequest("ArticleId_example", false) // LikeArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -406,6 +418,8 @@ No authorization required
 ## List
 
 > ListArticlesReply List(ctx).ListArticlesRequest(listArticlesRequest).Execute()
+
+
 
 
 
@@ -473,6 +487,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -486,7 +502,7 @@ import (
 )
 
 func main() {
-	publishArticleRequest := *openapiclient.NewPublishArticleRequest() // PublishArticleRequest | 
+	publishArticleRequest := *openapiclient.NewPublishArticleRequest("ArticleId_example") // PublishArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -537,6 +553,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -550,7 +568,7 @@ import (
 )
 
 func main() {
-	rewardArticleRequest := *openapiclient.NewRewardArticleRequest() // RewardArticleRequest | 
+	rewardArticleRequest := *openapiclient.NewRewardArticleRequest("ArticleId_example") // RewardArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -601,6 +619,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -614,7 +634,7 @@ import (
 )
 
 func main() {
-	thankArticleRequest := *openapiclient.NewThankArticleRequest() // ThankArticleRequest | 
+	thankArticleRequest := *openapiclient.NewThankArticleRequest("ArticleId_example", false) // ThankArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -665,6 +685,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -678,7 +700,7 @@ import (
 )
 
 func main() {
-	updateDraftArticleRequest := *openapiclient.NewUpdateDraftArticleRequest() // UpdateDraftArticleRequest | 
+	updateDraftArticleRequest := *openapiclient.NewUpdateDraftArticleRequest(*openapiclient.NewArticleSave("Title_example", "Content_example", "Status_example", "Type_example")) // UpdateDraftArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -729,6 +751,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -742,7 +766,7 @@ import (
 )
 
 func main() {
-	watchArticleRequest := *openapiclient.NewWatchArticleRequest() // WatchArticleRequest | 
+	watchArticleRequest := *openapiclient.NewWatchArticleRequest("ArticleId_example", false) // WatchArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

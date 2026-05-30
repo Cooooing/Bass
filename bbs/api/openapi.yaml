@@ -1,26 +1,41 @@
 openapi: 3.0.3
 info:
-  title: ""
-  version: 0.0.1
+  description: Bass 社区 HTTP/JSON API
+  title: Bass BBS API
+  version: 1.0.0
 servers:
 - url: /
 tags:
-- name: AccountService
-- name: ArticleService
-- name: AuthService
-- name: CommentService
-- name: DomainService
-- name: LocationService
-- name: NotificationService
-- name: PostscriptService
-- name: PreferencesService
-- name: PrivacySettingService
-- name: RelationService
-- name: TagService
-- name: TfaService
+- description: 账号接口。
+  name: AccountService
+- description: 文章接口。
+  name: ArticleService
+- description: 认证接口。
+  name: AuthService
+- description: 评论接口。
+  name: CommentService
+- description: 内容板块接口。
+  name: DomainService
+- description: 账号地理资料接口。
+  name: LocationService
+- description: 通知接口。
+  name: NotificationService
+- description: 文章附言接口。
+  name: PostscriptService
+- description: 账号偏好设置接口。
+  name: PreferencesService
+- description: 账号隐私设置接口。
+  name: PrivacySettingService
+- description: 账号关系接口。
+  name: RelationService
+- description: 标签接口。
+  name: TagService
+- description: TOTP 认证接口。
+  name: TotpService
 paths:
   /v1/content/article/accept-answer:
     post:
+      description: 采纳文章评论为答案。
       operationId: ArticleService_AcceptAnswer
       requestBody:
         content:
@@ -39,6 +54,7 @@ paths:
       - ArticleService
   /v1/content/article/collect:
     post:
+      description: 收藏或取消收藏文章。
       operationId: ArticleService_Collect
       requestBody:
         content:
@@ -57,6 +73,7 @@ paths:
       - ArticleService
   /v1/content/article/create:
     post:
+      description: 创建文章。
       operationId: ArticleService_Create
       requestBody:
         content:
@@ -75,6 +92,7 @@ paths:
       - ArticleService
   /v1/content/article/delete:
     post:
+      description: 删除文章。
       operationId: ArticleService_Delete
       requestBody:
         content:
@@ -93,6 +111,7 @@ paths:
       - ArticleService
   /v1/content/article/get:
     post:
+      description: 获取文章详情。
       operationId: ArticleService_Get
       requestBody:
         content:
@@ -111,6 +130,7 @@ paths:
       - ArticleService
   /v1/content/article/like:
     post:
+      description: 点赞或取消点赞文章。
       operationId: ArticleService_Like
       requestBody:
         content:
@@ -129,6 +149,7 @@ paths:
       - ArticleService
   /v1/content/article/list:
     post:
+      description: 分页查询文章列表。
       operationId: ArticleService_List
       requestBody:
         content:
@@ -147,6 +168,7 @@ paths:
       - ArticleService
   /v1/content/article/publish:
     post:
+      description: 发布文章。
       operationId: ArticleService_Publish
       requestBody:
         content:
@@ -165,6 +187,7 @@ paths:
       - ArticleService
   /v1/content/article/reward:
     post:
+      description: 打赏文章。
       operationId: ArticleService_Reward
       requestBody:
         content:
@@ -183,6 +206,7 @@ paths:
       - ArticleService
   /v1/content/article/thank:
     post:
+      description: 感谢或取消感谢文章。
       operationId: ArticleService_Thank
       requestBody:
         content:
@@ -201,6 +225,7 @@ paths:
       - ArticleService
   /v1/content/article/update-draft:
     post:
+      description: 更新文章草稿。
       operationId: ArticleService_UpdateDraft
       requestBody:
         content:
@@ -219,6 +244,7 @@ paths:
       - ArticleService
   /v1/content/article/watch:
     post:
+      description: 关注或取消关注文章。
       operationId: ArticleService_Watch
       requestBody:
         content:
@@ -237,6 +263,7 @@ paths:
       - ArticleService
   /v1/content/comment/create:
     post:
+      description: 创建评论。
       operationId: CommentService_Create
       requestBody:
         content:
@@ -255,6 +282,7 @@ paths:
       - CommentService
   /v1/content/comment/like:
     post:
+      description: 点赞或取消点赞评论。
       operationId: CommentService_Like
       requestBody:
         content:
@@ -273,6 +301,7 @@ paths:
       - CommentService
   /v1/content/comment/list:
     post:
+      description: 分页查询评论列表。
       operationId: CommentService_List
       requestBody:
         content:
@@ -291,6 +320,7 @@ paths:
       - CommentService
   /v1/content/comment/thank:
     post:
+      description: 感谢或取消感谢评论。
       operationId: CommentService_Thank
       requestBody:
         content:
@@ -309,6 +339,7 @@ paths:
       - CommentService
   /v1/content/domain/list:
     post:
+      description: 分页查询内容板块列表。
       operationId: DomainService_List
       requestBody:
         content:
@@ -327,7 +358,7 @@ paths:
       - DomainService
   /v1/content/postscript/add:
     post:
-      description: 添加文章附言
+      description: 添加文章附言。
       operationId: PostscriptService_Add
       requestBody:
         content:
@@ -346,6 +377,7 @@ paths:
       - PostscriptService
   /v1/content/tag/list:
     post:
+      description: 分页查询标签列表。
       operationId: TagService_List
       requestBody:
         content:
@@ -364,6 +396,7 @@ paths:
       - TagService
   /v1/notify/notification/count-unread:
     post:
+      description: 统计未读通知数量。
       operationId: NotificationService_CountUnread
       requestBody:
         content:
@@ -382,6 +415,7 @@ paths:
       - NotificationService
   /v1/notify/notification/list:
     post:
+      description: 分页查询通知列表。
       operationId: NotificationService_List
       requestBody:
         content:
@@ -400,6 +434,7 @@ paths:
       - NotificationService
   /v1/notify/notification/mark-read:
     post:
+      description: 标记通知为已读。
       operationId: NotificationService_MarkRead
       requestBody:
         content:
@@ -416,9 +451,31 @@ paths:
           description: OK
       tags:
       - NotificationService
+  /v1/user/account/avatar:
+    get:
+      description: 生成默认账号头像。
+      operationId: AccountService_Avatar
+      parameters:
+      - description: 用于生成头像的账号名。
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageReply"
+          description: OK
+      tags:
+      - AccountService
   /v1/user/account/get-current:
     post:
-      description: 获取当前登录账号的完整资料
+      description: 获取当前账号的完整资料。
       operationId: AccountService_GetCurrent
       requestBody:
         content:
@@ -437,7 +494,7 @@ paths:
       - AccountService
   /v1/user/account/get-profile:
     post:
-      description: 按账号 ID 获取账号展示资料
+      description: 按账号 ID 获取账号展示资料。
       operationId: AccountService_GetProfile
       requestBody:
         content:
@@ -456,7 +513,7 @@ paths:
       - AccountService
   /v1/user/account/update-profile:
     post:
-      description: 更新当前登录账号的展示资料
+      description: 更新当前账号的展示资料。
       operationId: AccountService_UpdateProfile
       requestBody:
         content:
@@ -475,7 +532,7 @@ paths:
       - AccountService
   /v1/user/auth/login-by-password:
     post:
-      description: 使用密码登录账号
+      description: 使用密码登录账号。
       operationId: AuthService_LoginByPassword
       requestBody:
         content:
@@ -494,7 +551,7 @@ paths:
       - AuthService
   /v1/user/auth/logout:
     post:
-      description: 登出当前登录账号
+      description: 登出当前账号。
       operationId: AuthService_Logout
       requestBody:
         content:
@@ -513,7 +570,7 @@ paths:
       - AuthService
   /v1/user/auth/start-email-registration:
     post:
-      description: 使用邮箱发起账号注册
+      description: 使用邮箱发起账号注册。
       operationId: AuthService_StartEmailRegistration
       requestBody:
         content:
@@ -532,7 +589,7 @@ paths:
       - AuthService
   /v1/user/auth/start-phone-registration:
     post:
-      description: 使用手机号发起账号注册
+      description: 使用手机号发起账号注册。
       operationId: AuthService_StartPhoneRegistration
       requestBody:
         content:
@@ -551,7 +608,7 @@ paths:
       - AuthService
   /v1/user/auth/verify-email-registration:
     post:
-      description: 校验邮箱注册验证码
+      description: 校验邮箱注册验证码。
       operationId: AuthService_VerifyEmailRegistration
       requestBody:
         content:
@@ -570,7 +627,7 @@ paths:
       - AuthService
   /v1/user/auth/verify-phone-registration:
     post:
-      description: 校验手机号注册验证码
+      description: 校验手机号注册验证码。
       operationId: AuthService_VerifyPhoneRegistration
       requestBody:
         content:
@@ -589,7 +646,7 @@ paths:
       - AuthService
   /v1/user/location/get-current:
     post:
-      description: 获取当前登录账号的地理资料
+      description: 获取当前账号的地理资料。
       operationId: LocationService_GetCurrent
       requestBody:
         content:
@@ -608,7 +665,7 @@ paths:
       - LocationService
   /v1/user/location/upsert-current:
     post:
-      description: 更新当前登录账号的地理资料
+      description: 更新当前账号的地理资料。
       operationId: LocationService_UpsertCurrent
       requestBody:
         content:
@@ -627,7 +684,7 @@ paths:
       - LocationService
   /v1/user/preference/get-current:
     post:
-      description: 获取当前登录账号的偏好设置
+      description: 获取当前账号的偏好设置。
       operationId: PreferencesService_GetCurrent
       requestBody:
         content:
@@ -646,7 +703,7 @@ paths:
       - PreferencesService
   /v1/user/preference/update-current:
     post:
-      description: 更新当前登录账号的偏好设置
+      description: 更新当前账号的偏好设置。
       operationId: PreferencesService_UpdateCurrent
       requestBody:
         content:
@@ -665,7 +722,7 @@ paths:
       - PreferencesService
   /v1/user/privacy-setting/get-current:
     post:
-      description: 获取当前登录账号的隐私设置
+      description: 获取当前账号的隐私设置。
       operationId: PrivacySettingService_GetCurrent
       requestBody:
         content:
@@ -684,7 +741,7 @@ paths:
       - PrivacySettingService
   /v1/user/privacy-setting/update-current:
     post:
-      description: 更新当前登录账号的隐私设置
+      description: 更新当前账号的隐私设置。
       operationId: PrivacySettingService_UpdateCurrent
       requestBody:
         content:
@@ -703,7 +760,7 @@ paths:
       - PrivacySettingService
   /v1/user/relation/block:
     post:
-      description: 当前账号拉黑目标账号
+      description: 当前账号拉黑目标账号。
       operationId: RelationService_Block
       requestBody:
         content:
@@ -722,7 +779,7 @@ paths:
       - RelationService
   /v1/user/relation/follow:
     post:
-      description: 当前账号关注目标账号
+      description: 当前账号关注目标账号。
       operationId: RelationService_Follow
       requestBody:
         content:
@@ -741,7 +798,7 @@ paths:
       - RelationService
   /v1/user/relation/get-status:
     post:
-      description: 查询当前账号与目标账号之间的关系
+      description: 查询当前账号与目标账号之间的关系。
       operationId: RelationService_GetStatus
       requestBody:
         content:
@@ -760,7 +817,7 @@ paths:
       - RelationService
   /v1/user/relation/list-blocked:
     post:
-      description: 分页查询当前账号拉黑的账号列表
+      description: 分页查询当前账号拉黑的账号列表。
       operationId: RelationService_ListBlocked
       requestBody:
         content:
@@ -779,7 +836,7 @@ paths:
       - RelationService
   /v1/user/relation/list-followers:
     post:
-      description: 分页查询当前账号的粉丝账号列表
+      description: 分页查询当前账号的粉丝账号列表。
       operationId: RelationService_ListFollowers
       requestBody:
         content:
@@ -798,7 +855,7 @@ paths:
       - RelationService
   /v1/user/relation/list-following:
     post:
-      description: 分页查询当前账号关注的账号列表
+      description: 分页查询当前账号关注的账号列表。
       operationId: RelationService_ListFollowing
       requestBody:
         content:
@@ -817,7 +874,7 @@ paths:
       - RelationService
   /v1/user/relation/unblock:
     post:
-      description: 当前账号取消拉黑目标账号
+      description: 当前账号取消拉黑目标账号。
       operationId: RelationService_Unblock
       requestBody:
         content:
@@ -836,7 +893,7 @@ paths:
       - RelationService
   /v1/user/relation/unfollow:
     post:
-      description: 当前账号取消关注目标账号
+      description: 当前账号取消关注目标账号。
       operationId: RelationService_Unfollow
       requestBody:
         content:
@@ -853,101 +910,82 @@ paths:
           description: OK
       tags:
       - RelationService
-  /v1/user/tfa/begin-enable:
+  /v1/user/totp/begin-enable:
     post:
-      description: 开始启用二步验证
-      operationId: TfaService_BeginEnable
+      description: 开始启用 TOTP。
+      operationId: TotpService_BeginEnable
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BeginEnableTfa_Request"
+              $ref: "#/components/schemas/BeginEnableTotp_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BeginEnableTfa_Reply"
+                $ref: "#/components/schemas/BeginEnableTotp_Reply"
           description: OK
       tags:
-      - TfaService
-  /v1/user/tfa/confirm-enable:
+      - TotpService
+  /v1/user/totp/confirm-enable:
     post:
-      description: 确认二步验证码并正式启用二步验证
-      operationId: TfaService_ConfirmEnable
+      description: 确认 TOTP 验证码并正式启用 TOTP。
+      operationId: TotpService_ConfirmEnable
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ConfirmEnableTfa_Request"
+              $ref: "#/components/schemas/ConfirmEnableTotp_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConfirmEnableTfa_Reply"
+                $ref: "#/components/schemas/ConfirmEnableTotp_Reply"
           description: OK
       tags:
-      - TfaService
-  /v1/user/tfa/disable:
+      - TotpService
+  /v1/user/totp/disable:
     post:
-      description: 校验二步验证码并关闭二步验证
-      operationId: TfaService_Disable
+      description: 校验 TOTP 验证码并关闭 TOTP。
+      operationId: TotpService_Disable
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DisableTfa_Request"
+              $ref: "#/components/schemas/DisableTotp_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DisableTfa_Reply"
+                $ref: "#/components/schemas/DisableTotp_Reply"
           description: OK
       tags:
-      - TfaService
-  /v1/user/tfa/get-current:
+      - TotpService
+  /v1/user/totp/get-current:
     post:
-      description: 获取当前登录账号的二步验证状态
-      operationId: TfaService_GetCurrent
+      description: 获取当前账号的 TOTP 状态。
+      operationId: TotpService_GetCurrent
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetCurrentTfa_Request"
+              $ref: "#/components/schemas/GetCurrentTotp_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetCurrentTfa_Reply"
+                $ref: "#/components/schemas/GetCurrentTotp_Reply"
           description: OK
       tags:
-      - TfaService
-  /v1/user/tfa/validate:
-    post:
-      description: 校验当前登录账号的二步验证码
-      operationId: TfaService_Validate
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ValidateTfa_Request"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidateTfa_Reply"
-          description: OK
-      tags:
-      - TfaService
+      - TotpService
 components:
   schemas:
     AcceptAnswerArticle_Reply:
@@ -956,79 +994,63 @@ components:
     AcceptAnswerArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         comment_id:
+          description: 评论 ID。
           type: string
+      required:
+      - article_id
+      - comment_id
       type: object
     Account:
-      description: 当前账号完整资料
-      example:
-        profile:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
-        contact:
-          user_id: user_id
-          phone: phone
-          email: email
+      description: 当前账号完整资料。
       properties:
         profile:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 账号展示资料。
         contact:
-          $ref: "#/components/schemas/AccountContact"
+          allOf:
+          - $ref: "#/components/schemas/AccountContact"
+          description: 账号联系方式。
       type: object
     AccountContact:
-      description: 当前账号联系方式
-      example:
-        user_id: user_id
-        phone: phone
-        email: email
+      description: 当前账号联系方式。
       properties:
         user_id:
+          description: 账号 ID。
           type: string
         email:
+          description: 邮箱地址。
           type: string
         phone:
+          description: 手机号。
           type: string
       type: object
     AccountProfile:
-      description: 账号展示资料
-      example:
-        avatar_url: avatar_url
-        updated_at: updated_at
-        follow_count: 3
-        name: name
-        nickname: nickname
-        mbti: MBTI_UNSPECIFIED
-        created_at: created_at
-        id: id
-        follower_count: 2
-        url: url
-        introduction: introduction
-        status: ACCOUNT_STATUS_UNSPECIFIED
+      description: 账号展示资料。
       properties:
         id:
+          description: 账号 ID。
           type: string
         name:
+          description: 账号名。
           type: string
         nickname:
+          description: 昵称。
           type: string
         url:
+          description: 个人主页 URL。
           type: string
         avatar_url:
+          description: 头像 URL。
           type: string
         introduction:
+          description: 个人简介。
           type: string
         mbti:
+          description: MBTI 类型。
           enum:
           - MBTI_UNSPECIFIED
           - MBTI_INTJ
@@ -1050,6 +1072,7 @@ components:
           format: enum
           type: string
         status:
+          description: 账号状态。
           enum:
           - ACCOUNT_STATUS_UNSPECIFIED
           - ACCOUNT_STATUS_NORMAL
@@ -1058,39 +1081,50 @@ components:
           format: enum
           type: string
         follow_count:
+          description: 关注数量。
           format: int32
           type: integer
         follower_count:
+          description: 粉丝数量。
           format: int32
           type: integer
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     AddPostscript_Reply:
       example:
-        postscript:
-          article_id: article_id
-          content_render: content_render
-          updated_at: updated_at
-          updated_by: updated_by
-          created_at: created_at
-          id: id
-          created_by: created_by
-          content: content
+        postscript: ""
       properties:
         postscript:
-          $ref: "#/components/schemas/ArticlePostscript"
+          allOf:
+          - $ref: "#/components/schemas/ArticlePostscript"
+          description: 创建后的文章附言。
       type: object
     AddPostscript_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         content:
+          description: 附言内容。
+          type: string
+      required:
+      - article_id
+      - content
+      type: object
+    Any:
+      properties:
+        value:
+          $ref: "#/components/schemas/GoogleProtobufAny"
+        yaml:
           type: string
       type: object
     Article:
+      description: 文章。
       example:
         reward_content_render: reward_content_render
         listable: true
@@ -1100,19 +1134,7 @@ components:
         type: ARTICLE_TYPE_UNSPECIFIED
         content: content
         reward_content: reward_content
-        last_reply_user:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+        last_reply_user: ""
         accepted_answer_id: accepted_answer_id
         last_reply_at: last_reply_at
         updated_at: updated_at
@@ -1132,42 +1154,40 @@ components:
         content_render: content_render
         updated_by: updated_by
         anonymous: true
-        author_user:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+        author_user: ""
         view_count: 6
         status: ARTICLE_STATUS_UNSPECIFIED
       properties:
         id:
+          description: 文章 ID。
           type: string
         title:
+          description: 标题。
           type: string
         content:
+          description: 原始内容。
           type: string
         content_render:
+          description: 渲染后的内容。
           type: string
         has_postscript:
+          description: 是否有附言。
           type: boolean
         has_reward:
+          description: 是否有打赏内容。
           type: boolean
         reward_content:
+          description: 打赏后可见内容。
           type: string
         reward_content_render:
+          description: 渲染后的打赏内容。
           type: string
         reward_points:
+          description: 打赏所需积分。
           format: int32
           type: integer
         status:
+          description: 文章状态。
           enum:
           - ARTICLE_STATUS_UNSPECIFIED
           - ARTICLE_STATUS_NORMAL
@@ -1178,6 +1198,7 @@ components:
           format: enum
           type: string
         type:
+          description: 文章类型。
           enum:
           - ARTICLE_TYPE_UNSPECIFIED
           - ARTICLE_TYPE_NORMAL
@@ -1185,88 +1206,114 @@ components:
           format: enum
           type: string
         statement:
+          description: 文章声明。
           type: string
         commentable:
+          description: 是否允许评论。
           type: boolean
         anonymous:
+          description: 是否匿名展示。
           type: boolean
         listable:
+          description: 是否在列表中展示。
           type: boolean
         view_count:
+          description: 浏览数量。
           format: int32
           type: integer
         thank_count:
+          description: 感谢数量。
           format: int32
           type: integer
         like_count:
+          description: 点赞数量。
           format: int32
           type: integer
         collect_count:
+          description: 收藏数量。
           format: int32
           type: integer
         watch_count:
+          description: 关注数量。
           format: int32
           type: integer
         reply_count:
+          description: 回复数量。
           format: int32
           type: integer
         bounty_points:
+          description: 悬赏积分。
           format: int32
           type: integer
         accepted_answer_id:
+          description: 已采纳答案评论 ID。
           type: string
         author_user:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 作者账号展示资料。
         last_reply_user:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 最后回复账号展示资料。
         last_reply_at:
+          description: 最后回复时间。
           type: string
         cover_image_url:
+          description: 封面图片 URL。
           type: string
         created_by:
+          description: 创建账号 ID。
           type: string
         updated_by:
+          description: 更新账号 ID。
           type: string
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     ArticlePostscript:
-      example:
-        article_id: article_id
-        content_render: content_render
-        updated_at: updated_at
-        updated_by: updated_by
-        created_at: created_at
-        id: id
-        created_by: created_by
-        content: content
+      description: 文章附言。
       properties:
         id:
+          description: 附言 ID。
           type: string
         article_id:
+          description: 文章 ID。
           type: string
         content:
+          description: 原始内容。
           type: string
         content_render:
+          description: 渲染后的内容。
           type: string
         created_by:
+          description: 创建账号 ID。
           type: string
         updated_by:
+          description: 更新账号 ID。
           type: string
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     ArticleQuery:
+      description: 文章查询条件。
       properties:
         tag_id:
+          description: 标签 ID。
           type: string
         domain_id:
+          description: 板块 ID。
           type: string
         status:
+          description: 文章状态。
           enum:
           - ARTICLE_STATUS_UNSPECIFIED
           - ARTICLE_STATUS_NORMAL
@@ -1277,6 +1324,7 @@ components:
           format: enum
           type: string
         type:
+          description: 文章类型。
           enum:
           - ARTICLE_TYPE_UNSPECIFIED
           - ARTICLE_TYPE_NORMAL
@@ -1284,6 +1332,7 @@ components:
           format: enum
           type: string
         order:
+          description: 排序方式。
           enum:
           - ARTICLE_ORDER_UNSPECIFIED
           - ARTICLE_ORDER_NEWEST
@@ -1291,26 +1340,36 @@ components:
           format: enum
           type: string
         keyword:
+          description: 搜索关键词。
           type: string
         author_id:
+          description: 作者账号 ID。
           type: string
         listable:
+          description: 是否在列表中展示。
           type: boolean
       type: object
     ArticleSave:
+      description: 文章保存内容。
       properties:
         id:
+          description: 文章 ID。
           type: string
         title:
+          description: 标题。
           type: string
         content:
+          description: 原始内容。
           type: string
         reward_content:
+          description: 打赏后可见内容。
           type: string
         reward_points:
+          description: 打赏所需积分。
           format: int32
           type: integer
         status:
+          description: 文章状态。
           enum:
           - ARTICLE_STATUS_UNSPECIFIED
           - ARTICLE_STATUS_NORMAL
@@ -1321,6 +1380,7 @@ components:
           format: enum
           type: string
         type:
+          description: 文章类型。
           enum:
           - ARTICLE_TYPE_UNSPECIFIED
           - ARTICLE_TYPE_NORMAL
@@ -1328,33 +1388,46 @@ components:
           format: enum
           type: string
         bounty_points:
+          description: 悬赏积分。
           format: int32
           type: integer
         statement:
+          description: 文章声明。
           type: string
         commentable:
+          description: 是否允许评论。
           type: boolean
         anonymous:
+          description: 是否匿名展示。
           type: boolean
         listable:
+          description: 是否在列表中展示。
           type: boolean
         tags:
+          description: 绑定标签。
           items:
             $ref: "#/components/schemas/TagSave"
           type: array
+      required:
+      - content
+      - status
+      - title
+      - type
       type: object
-    BeginEnableTfa_Reply:
+    BeginEnableTotp_Reply:
       example:
-        data: data
-        content_type: content_type
+        qr_code: qr_code
+        url: url
       properties:
-        data:
+        url:
+          description: TOTP 绑定 URL。
+          type: string
+        qr_code:
+          description: TOTP 二维码图片数据。
           format: bytes
           type: string
-        content_type:
-          type: string
       type: object
-    BeginEnableTfa_Request:
+    BeginEnableTotp_Request:
       properties: {}
       type: object
     BlockRelation_Reply:
@@ -1363,7 +1436,10 @@ components:
     BlockRelation_Request:
       properties:
         target_id:
+          description: 目标账号 ID。
           type: string
+      required:
+      - target_id
       type: object
     CollectArticle_Reply:
       properties: {}
@@ -1371,87 +1447,26 @@ components:
     CollectArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         active:
+          description: 是否收藏。
           type: boolean
+      required:
+      - active
+      - article_id
       type: object
     Comment:
+      description: 评论。
       example:
         like_count: 1
-        reply_user:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+        reply_user: ""
         level: 0
         created_at: created_at
         reply_count: 6
         created_by: created_by
         content: content
-        article:
-          reward_content_render: reward_content_render
-          listable: true
-          cover_image_url: cover_image_url
-          created_at: created_at
-          title: title
-          type: ARTICLE_TYPE_UNSPECIFIED
-          content: content
-          reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          accepted_answer_id: accepted_answer_id
-          last_reply_at: last_reply_at
-          updated_at: updated_at
-          statement: statement
-          watch_count: 2
-          id: id
-          has_reward: true
-          commentable: true
-          thank_count: 1
-          like_count: 5
-          bounty_points: 9
-          has_postscript: true
-          reply_count: 7
-          created_by: created_by
-          reward_points: 0
-          collect_count: 5
-          content_render: content_render
-          updated_by: updated_by
-          anonymous: true
-          author_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 6
-          status: ARTICLE_STATUS_UNSPECIFIED
+        article: ""
         article_id: article_id
         content_render: content_render
         reply_id: reply_id
@@ -1459,38 +1474,34 @@ components:
         parent_id: parent_id
         updated_by: updated_by
         id: id
-        user:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+        user: ""
         thank_count: 5
         status: COMMENT_STATUS_UNSPECIFIED
       properties:
         id:
+          description: 评论 ID。
           type: string
         article_id:
+          description: 文章 ID。
           type: string
         content:
+          description: 原始内容。
           type: string
         content_render:
+          description: 渲染后的内容。
           type: string
         level:
+          description: 评论层级。
           format: int32
           type: integer
         parent_id:
+          description: 父评论 ID。
           type: string
         reply_id:
+          description: 回复的评论 ID。
           type: string
         status:
+          description: 评论状态。
           enum:
           - COMMENT_STATUS_UNSPECIFIED
           - COMMENT_STATUS_NORMAL
@@ -1498,40 +1509,59 @@ components:
           format: enum
           type: string
         reply_count:
+          description: 回复数量。
           format: int32
           type: integer
         like_count:
+          description: 点赞数量。
           format: int32
           type: integer
         thank_count:
+          description: 感谢数量。
           format: int32
           type: integer
         user:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 评论账号展示资料。
         reply_user:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 被回复账号展示资料。
         article:
-          $ref: "#/components/schemas/Article"
+          allOf:
+          - $ref: "#/components/schemas/Article"
+          description: 所属文章。
         created_by:
+          description: 创建账号 ID。
           type: string
         updated_by:
+          description: 更新账号 ID。
           type: string
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     CommentQuery:
+      description: 评论查询条件。
       properties:
         comment_id:
+          description: 评论 ID。
           type: string
         article_id:
+          description: 文章 ID。
           type: string
         parent_id:
+          description: 父评论 ID。
           type: string
         reply_id:
+          description: 回复的评论 ID。
           type: string
         order:
+          description: 排序方式。
           enum:
           - COMMENT_ORDER_UNSPECIFIED
           - COMMENT_ORDER_NEWEST
@@ -1539,11 +1569,14 @@ components:
           format: enum
           type: string
         user_id:
+          description: 评论账号 ID。
           type: string
         level:
+          description: 评论层级。
           format: int32
           type: integer
         status:
+          description: 评论状态。
           enum:
           - COMMENT_STATUS_UNSPECIFIED
           - COMMENT_STATUS_NORMAL
@@ -1551,19 +1584,23 @@ components:
           format: enum
           type: string
       type: object
-    ConfirmEnableTfa_Reply:
+    ConfirmEnableTotp_Reply:
       properties: {}
       type: object
-    ConfirmEnableTfa_Request:
+    ConfirmEnableTotp_Request:
       properties:
         code:
+          description: TOTP 验证码。
           type: string
+      required:
+      - code
       type: object
     CountUnreadNotifications_Reply:
       example:
         count: count
       properties:
         count:
+          description: 未读通知数量。
           type: string
       type: object
     CountUnreadNotifications_Request:
@@ -1571,183 +1608,45 @@ components:
       type: object
     CreateArticle_Reply:
       example:
-        article:
-          reward_content_render: reward_content_render
-          listable: true
-          cover_image_url: cover_image_url
-          created_at: created_at
-          title: title
-          type: ARTICLE_TYPE_UNSPECIFIED
-          content: content
-          reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          accepted_answer_id: accepted_answer_id
-          last_reply_at: last_reply_at
-          updated_at: updated_at
-          statement: statement
-          watch_count: 2
-          id: id
-          has_reward: true
-          commentable: true
-          thank_count: 1
-          like_count: 5
-          bounty_points: 9
-          has_postscript: true
-          reply_count: 7
-          created_by: created_by
-          reward_points: 0
-          collect_count: 5
-          content_render: content_render
-          updated_by: updated_by
-          anonymous: true
-          author_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 6
-          status: ARTICLE_STATUS_UNSPECIFIED
+        article: ""
       properties:
         article:
-          $ref: "#/components/schemas/Article"
+          allOf:
+          - $ref: "#/components/schemas/Article"
+          description: 创建后的文章。
       type: object
     CreateArticle_Request:
       properties:
         article:
-          $ref: "#/components/schemas/ArticleSave"
+          allOf:
+          - $ref: "#/components/schemas/ArticleSave"
+          description: 文章保存内容。
+      required:
+      - article
       type: object
     CreateComment_Reply:
       example:
-        comment:
-          like_count: 1
-          reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          level: 0
-          created_at: created_at
-          reply_count: 6
-          created_by: created_by
-          content: content
-          article:
-            reward_content_render: reward_content_render
-            listable: true
-            cover_image_url: cover_image_url
-            created_at: created_at
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            content: content
-            reward_content: reward_content
-            last_reply_user:
-              avatar_url: avatar_url
-              updated_at: updated_at
-              follow_count: 3
-              name: name
-              nickname: nickname
-              mbti: MBTI_UNSPECIFIED
-              created_at: created_at
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            accepted_answer_id: accepted_answer_id
-            last_reply_at: last_reply_at
-            updated_at: updated_at
-            statement: statement
-            watch_count: 2
-            id: id
-            has_reward: true
-            commentable: true
-            thank_count: 1
-            like_count: 5
-            bounty_points: 9
-            has_postscript: true
-            reply_count: 7
-            created_by: created_by
-            reward_points: 0
-            collect_count: 5
-            content_render: content_render
-            updated_by: updated_by
-            anonymous: true
-            author_user:
-              avatar_url: avatar_url
-              updated_at: updated_at
-              follow_count: 3
-              name: name
-              nickname: nickname
-              mbti: MBTI_UNSPECIFIED
-              created_at: created_at
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            view_count: 6
-            status: ARTICLE_STATUS_UNSPECIFIED
-          article_id: article_id
-          content_render: content_render
-          reply_id: reply_id
-          updated_at: updated_at
-          parent_id: parent_id
-          updated_by: updated_by
-          id: id
-          user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          thank_count: 5
-          status: COMMENT_STATUS_UNSPECIFIED
+        comment: ""
       properties:
         comment:
-          $ref: "#/components/schemas/Comment"
+          allOf:
+          - $ref: "#/components/schemas/Comment"
+          description: 创建后的评论。
       type: object
     CreateComment_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         content:
+          description: 评论内容。
           type: string
         reply_id:
+          description: 回复的评论 ID。
           type: string
+      required:
+      - article_id
+      - content
       type: object
     DeleteArticle_Reply:
       properties: {}
@@ -1755,17 +1654,24 @@ components:
     DeleteArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
+      required:
+      - article_id
       type: object
-    DisableTfa_Reply:
+    DisableTotp_Reply:
       properties: {}
       type: object
-    DisableTfa_Request:
+    DisableTotp_Request:
       properties:
         code:
+          description: TOTP 验证码。
           type: string
+      required:
+      - code
       type: object
     Domain:
+      description: 内容板块。
       example:
         is_nav: true
         updated_at: updated_at
@@ -1780,12 +1686,16 @@ components:
         status: DOMAIN_STATUS_UNSPECIFIED
       properties:
         id:
+          description: 板块 ID。
           type: string
         name:
+          description: 板块名称。
           type: string
         description:
+          description: 板块描述。
           type: string
         status:
+          description: 板块状态。
           enum:
           - DOMAIN_STATUS_UNSPECIFIED
           - DOMAIN_STATUS_NORMAL
@@ -1793,31 +1703,43 @@ components:
           format: enum
           type: string
         url:
+          description: 板块 URL。
           type: string
         icon:
+          description: 板块图标。
           type: string
         is_nav:
+          description: 是否在导航中展示。
           type: boolean
         created_by:
+          description: 创建账号 ID。
           type: string
         updated_by:
+          description: 更新账号 ID。
           type: string
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     DomainQuery:
+      description: 内容板块查询条件。
       properties:
         ids:
+          description: 板块 ID 列表。
           items:
             type: string
           type: array
         name:
+          description: 板块名称。
           type: string
         description:
+          description: 板块描述。
           type: string
         status:
+          description: 板块状态。
           enum:
           - DOMAIN_STATUS_UNSPECIFIED
           - DOMAIN_STATUS_NORMAL
@@ -1825,11 +1747,34 @@ components:
           format: enum
           type: string
         url:
+          description: 板块 URL。
           type: string
         icon:
+          description: 板块图标。
           type: string
         is_nav:
+          description: 是否在导航中展示。
           type: boolean
+      type: object
+    ExternalDocs:
+      description: Allows referencing an external resource for extended documentation.
+      example:
+        description: description
+        specification_extension:
+        - name: name
+          value: ""
+        - name: name
+          value: ""
+        url: url
+      properties:
+        description:
+          type: string
+        url:
+          type: string
+        specification_extension:
+          items:
+            $ref: "#/components/schemas/NamedAny"
+          type: array
       type: object
     FollowRelation_Reply:
       properties: {}
@@ -1837,200 +1782,142 @@ components:
     FollowRelation_Request:
       properties:
         target_id:
+          description: 目标账号 ID。
           type: string
+      required:
+      - target_id
       type: object
     GetArticle_Reply:
       example:
-        article:
-          reward_content_render: reward_content_render
-          listable: true
-          cover_image_url: cover_image_url
-          created_at: created_at
-          title: title
-          type: ARTICLE_TYPE_UNSPECIFIED
-          content: content
-          reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          accepted_answer_id: accepted_answer_id
-          last_reply_at: last_reply_at
-          updated_at: updated_at
-          statement: statement
-          watch_count: 2
-          id: id
-          has_reward: true
-          commentable: true
-          thank_count: 1
-          like_count: 5
-          bounty_points: 9
-          has_postscript: true
-          reply_count: 7
-          created_by: created_by
-          reward_points: 0
-          collect_count: 5
-          content_render: content_render
-          updated_by: updated_by
-          anonymous: true
-          author_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 6
-          status: ARTICLE_STATUS_UNSPECIFIED
+        article: ""
       properties:
         article:
-          $ref: "#/components/schemas/Article"
+          allOf:
+          - $ref: "#/components/schemas/Article"
+          description: 文章详情。
       type: object
     GetArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
+      required:
+      - article_id
       type: object
     GetCurrentAccount_Reply:
       example:
-        account:
-          profile:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          contact:
-            user_id: user_id
-            phone: phone
-            email: email
+        account: ""
       properties:
         account:
-          $ref: "#/components/schemas/Account"
+          allOf:
+          - $ref: "#/components/schemas/Account"
+          description: 当前账号完整资料。
       type: object
     GetCurrentAccount_Request:
       properties: {}
       type: object
     GetCurrentLocation_Reply:
       example:
-        location:
-          country: country
-          province: province
-          user_id: user_id
-          city: city
+        location: ""
       properties:
         location:
-          $ref: "#/components/schemas/Location"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          description: 当前账号地理资料。
       type: object
     GetCurrentLocation_Request:
       properties: {}
       type: object
     GetCurrentPreferences_Reply:
       example:
-        preference:
-          mobile_theme: mobile_theme
-          user_id: user_id
-          timezone: timezone
-          theme: theme
-          language: LANGUAGE_UNSPECIFIED
+        preference: ""
       properties:
         preference:
-          $ref: "#/components/schemas/Preference"
+          allOf:
+          - $ref: "#/components/schemas/Preference"
+          description: 当前账号偏好设置。
       type: object
     GetCurrentPreferences_Request:
       properties: {}
       type: object
     GetCurrentPrivacySetting_Reply:
       example:
-        privacy_setting:
-          public_followers: true
-          public_points: true
-          user_id: user_id
-          public_location: true
-          public_articles: true
-          public_comments: true
-          public_online_status: true
+        privacy_setting: ""
       properties:
         privacy_setting:
-          $ref: "#/components/schemas/PrivacySetting"
+          allOf:
+          - $ref: "#/components/schemas/PrivacySetting"
+          description: 当前账号隐私设置。
       type: object
     GetCurrentPrivacySetting_Request:
       properties: {}
       type: object
-    GetCurrentTfa_Reply:
+    GetCurrentTotp_Reply:
       example:
-        tfa:
-          user_id: user_id
-          enable: true
-          enable_time: enable_time
+        totp: ""
       properties:
-        tfa:
-          $ref: "#/components/schemas/Tfa"
+        totp:
+          allOf:
+          - $ref: "#/components/schemas/Totp"
+          description: TOTP 认证状态。
       type: object
-    GetCurrentTfa_Request:
+    GetCurrentTotp_Request:
       properties: {}
       type: object
     GetProfileAccount_Reply:
       example:
-        profile:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+        profile: ""
       properties:
         profile:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 账号展示资料。
       type: object
     GetProfileAccount_Request:
       properties:
         user_id:
+          description: 账号 ID。
           type: string
+      required:
+      - user_id
       type: object
     GetStatusRelation_Reply:
       example:
-        status:
-          followed_by: true
-          blocking: true
-          blocked_by: true
-          following: true
-          target_id: target_id
+        status: ""
       properties:
         status:
-          $ref: "#/components/schemas/RelationStatus"
+          allOf:
+          - $ref: "#/components/schemas/RelationStatus"
+          description: 关系状态。
       type: object
     GetStatusRelation_Request:
       properties:
         target_id:
+          description: 目标账号 ID。
+          type: string
+      required:
+      - target_id
+      type: object
+    GoogleProtobufAny:
+      additionalProperties: true
+      description: Contains an arbitrary serialized message along with a @type that
+        describes the type of the serialized message.
+      properties:
+        '@type':
+          description: The type of the serialized message.
+          type: string
+      type: object
+    ImageReply:
+      example:
+        data: data
+        content_type: content_type
+      properties:
+        data:
+          description: 图片数据
+          format: bytes
+          type: string
+        content_type:
+          description: 图片类型
           type: string
       type: object
     LikeArticle_Reply:
@@ -2039,9 +1926,14 @@ components:
     LikeArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         active:
+          description: 是否点赞。
           type: boolean
+      required:
+      - active
+      - article_id
       type: object
     LikeComment_Reply:
       properties: {}
@@ -2049,16 +1941,18 @@ components:
     LikeComment_Request:
       properties:
         id:
+          description: 评论 ID。
           type: string
         active:
+          description: 是否点赞。
           type: boolean
+      required:
+      - active
+      - id
       type: object
     ListArticles_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - reward_content_render: reward_content_render
           listable: true
@@ -2068,19 +1962,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_user: ""
           accepted_answer_id: accepted_answer_id
           last_reply_at: last_reply_at
           updated_at: updated_at
@@ -2100,19 +1982,7 @@ components:
           content_render: content_render
           updated_by: updated_by
           anonymous: true
-          author_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          author_user: ""
           view_count: 6
           status: ARTICLE_STATUS_UNSPECIFIED
         - reward_content_render: reward_content_render
@@ -2123,19 +1993,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_user: ""
           accepted_answer_id: accepted_answer_id
           last_reply_at: last_reply_at
           updated_at: updated_at
@@ -2155,25 +2013,16 @@ components:
           content_render: content_render
           updated_by: updated_by
           anonymous: true
-          author_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          author_user: ""
           view_count: 6
           status: ARTICLE_STATUS_UNSPECIFIED
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 文章列表。
           items:
             $ref: "#/components/schemas/Article"
           type: array
@@ -2181,16 +2030,17 @@ components:
     ListArticles_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
         query:
-          $ref: "#/components/schemas/ArticleQuery"
+          allOf:
+          - $ref: "#/components/schemas/ArticleQuery"
+          description: 查询条件。
       type: object
     ListBlockedRelations_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - updated_at: updated_at
           created_at: created_at
@@ -2206,8 +2056,11 @@ components:
           type: 0
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 账号关系列表。
           items:
             $ref: "#/components/schemas/Relation"
           type: array
@@ -2215,90 +2068,22 @@ components:
     ListBlockedRelations_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
       type: object
     ListComments_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - like_count: 1
-          reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          reply_user: ""
           level: 0
           created_at: created_at
           reply_count: 6
           created_by: created_by
           content: content
-          article:
-            reward_content_render: reward_content_render
-            listable: true
-            cover_image_url: cover_image_url
-            created_at: created_at
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            content: content
-            reward_content: reward_content
-            last_reply_user:
-              avatar_url: avatar_url
-              updated_at: updated_at
-              follow_count: 3
-              name: name
-              nickname: nickname
-              mbti: MBTI_UNSPECIFIED
-              created_at: created_at
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            accepted_answer_id: accepted_answer_id
-            last_reply_at: last_reply_at
-            updated_at: updated_at
-            statement: statement
-            watch_count: 2
-            id: id
-            has_reward: true
-            commentable: true
-            thank_count: 1
-            like_count: 5
-            bounty_points: 9
-            has_postscript: true
-            reply_count: 7
-            created_by: created_by
-            reward_points: 0
-            collect_count: 5
-            content_render: content_render
-            updated_by: updated_by
-            anonymous: true
-            author_user:
-              avatar_url: avatar_url
-              updated_at: updated_at
-              follow_count: 3
-              name: name
-              nickname: nickname
-              mbti: MBTI_UNSPECIFIED
-              created_at: created_at
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            view_count: 6
-            status: ARTICLE_STATUS_UNSPECIFIED
+          article: ""
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
@@ -2306,96 +2091,17 @@ components:
           parent_id: parent_id
           updated_by: updated_by
           id: id
-          user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          user: ""
           thank_count: 5
           status: COMMENT_STATUS_UNSPECIFIED
         - like_count: 1
-          reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          reply_user: ""
           level: 0
           created_at: created_at
           reply_count: 6
           created_by: created_by
           content: content
-          article:
-            reward_content_render: reward_content_render
-            listable: true
-            cover_image_url: cover_image_url
-            created_at: created_at
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            content: content
-            reward_content: reward_content
-            last_reply_user:
-              avatar_url: avatar_url
-              updated_at: updated_at
-              follow_count: 3
-              name: name
-              nickname: nickname
-              mbti: MBTI_UNSPECIFIED
-              created_at: created_at
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            accepted_answer_id: accepted_answer_id
-            last_reply_at: last_reply_at
-            updated_at: updated_at
-            statement: statement
-            watch_count: 2
-            id: id
-            has_reward: true
-            commentable: true
-            thank_count: 1
-            like_count: 5
-            bounty_points: 9
-            has_postscript: true
-            reply_count: 7
-            created_by: created_by
-            reward_points: 0
-            collect_count: 5
-            content_render: content_render
-            updated_by: updated_by
-            anonymous: true
-            author_user:
-              avatar_url: avatar_url
-              updated_at: updated_at
-              follow_count: 3
-              name: name
-              nickname: nickname
-              mbti: MBTI_UNSPECIFIED
-              created_at: created_at
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            view_count: 6
-            status: ARTICLE_STATUS_UNSPECIFIED
+          article: ""
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
@@ -2403,25 +2109,16 @@ components:
           parent_id: parent_id
           updated_by: updated_by
           id: id
-          user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
+          user: ""
           thank_count: 5
           status: COMMENT_STATUS_UNSPECIFIED
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 评论列表。
           items:
             $ref: "#/components/schemas/Comment"
           type: array
@@ -2429,16 +2126,17 @@ components:
     ListComments_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
         query:
-          $ref: "#/components/schemas/CommentQuery"
+          allOf:
+          - $ref: "#/components/schemas/CommentQuery"
+          description: 查询条件。
       type: object
     ListDomains_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - is_nav: true
           updated_at: updated_at
@@ -2464,8 +2162,11 @@ components:
           status: DOMAIN_STATUS_UNSPECIFIED
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 内容板块列表。
           items:
             $ref: "#/components/schemas/Domain"
           type: array
@@ -2473,16 +2174,17 @@ components:
     ListDomains_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
         query:
-          $ref: "#/components/schemas/DomainQuery"
+          allOf:
+          - $ref: "#/components/schemas/DomainQuery"
+          description: 查询条件。
       type: object
     ListFollowersRelations_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - updated_at: updated_at
           created_at: created_at
@@ -2498,8 +2200,11 @@ components:
           type: 0
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 账号关系列表。
           items:
             $ref: "#/components/schemas/Relation"
           type: array
@@ -2507,14 +2212,13 @@ components:
     ListFollowersRelations_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
       type: object
     ListFollowingRelations_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - updated_at: updated_at
           created_at: created_at
@@ -2530,8 +2234,11 @@ components:
           type: 0
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 账号关系列表。
           items:
             $ref: "#/components/schemas/Relation"
           type: array
@@ -2539,14 +2246,13 @@ components:
     ListFollowingRelations_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
       type: object
     ListNotifications_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
         - event_id: event_id
           event_type: EVENT_TYPE_UNSPECIFIED
@@ -2568,8 +2274,11 @@ components:
           content: content
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 通知列表。
           items:
             $ref: "#/components/schemas/Notification"
           type: array
@@ -2577,37 +2286,51 @@ components:
     ListNotifications_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
       type: object
     ListTags_Reply:
       example:
-        page:
-          total: 0
-          size: 1
-          page: 6
+        page: ""
         rows:
-        - domain_id: domain_id
-          updated_at: updated_at
+        - external_docs:
+            description: description
+            specification_extension:
+            - name: name
+              value: ""
+            - name: name
+              value: ""
+            url: url
           name: name
-          updated_by: updated_by
           description: description
-          created_at: created_at
-          id: id
-          created_by: created_by
-          status: TAG_STATUS_UNSPECIFIED
-        - domain_id: domain_id
-          updated_at: updated_at
+          specification_extension:
+          - name: name
+            value: ""
+          - name: name
+            value: ""
+        - external_docs:
+            description: description
+            specification_extension:
+            - name: name
+              value: ""
+            - name: name
+              value: ""
+            url: url
           name: name
-          updated_by: updated_by
           description: description
-          created_at: created_at
-          id: id
-          created_by: created_by
-          status: TAG_STATUS_UNSPECIFIED
+          specification_extension:
+          - name: name
+            value: ""
+          - name: name
+            value: ""
       properties:
         page:
-          $ref: "#/components/schemas/PageReply"
+          allOf:
+          - $ref: "#/components/schemas/PageReply"
+          description: 分页结果。
         rows:
+          description: 标签列表。
           items:
             $ref: "#/components/schemas/Tag"
           type: array
@@ -2615,60 +2338,54 @@ components:
     ListTags_Request:
       properties:
         page:
-          $ref: "#/components/schemas/PageRequest"
+          allOf:
+          - $ref: "#/components/schemas/PageRequest"
+          description: 分页参数。
         query:
-          $ref: "#/components/schemas/TagQuery"
+          allOf:
+          - $ref: "#/components/schemas/TagQuery"
+          description: 查询条件。
       type: object
     Location:
-      description: 账号地理资料
-      example:
-        country: country
-        province: province
-        user_id: user_id
-        city: city
+      description: 账号地理资料。
       properties:
         user_id:
+          description: 账号 ID。
           type: string
         country:
+          description: 国家或地区。
           type: string
         province:
+          description: 省份或州。
           type: string
         city:
+          description: 城市。
           type: string
       type: object
     LoginByPassword_Reply:
       example:
-        account:
-          profile:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          contact:
-            user_id: user_id
-            phone: phone
-            email: email
+        account: ""
         token: token
       properties:
         token:
+          description: 登录令牌。
           type: string
         account:
-          $ref: "#/components/schemas/Account"
+          allOf:
+          - $ref: "#/components/schemas/Account"
+          description: 当前账号完整资料。
       type: object
     LoginByPassword_Request:
       properties:
         account:
+          description: 账号、邮箱或手机号。
           type: string
         password:
+          description: 账号密码。
           type: string
+      required:
+      - account
+      - password
       type: object
     Logout_Reply:
       properties: {}
@@ -2681,17 +2398,35 @@ components:
         count: 0
       properties:
         count:
+          description: 成功标记的通知数量。
           format: int32
           type: integer
       type: object
     MarkReadNotification_Request:
       properties:
         ids:
+          description: 通知 ID 列表。
           items:
             type: string
           type: array
       type: object
+    NamedAny:
+      description: "Automatically-generated message used to represent maps of Any\
+        \ as ordered (name,value) pairs."
+      example:
+        name: name
+        value: ""
+      properties:
+        name:
+          description: Map key
+          type: string
+        value:
+          allOf:
+          - $ref: "#/components/schemas/Any"
+          description: Mapped value
+      type: object
     Notification:
+      description: 通知记录。
       example:
         event_id: event_id
         event_type: EVENT_TYPE_UNSPECIFIED
@@ -2704,12 +2439,16 @@ components:
         content: content
       properties:
         id:
+          description: 通知 ID。
           type: string
         event_id:
+          description: 来源事件 ID。
           type: string
         receiver_id:
+          description: 接收账号 ID。
           type: string
         event_type:
+          description: 来源事件类型。
           enum:
           - EVENT_TYPE_UNSPECIFIED
           - EVENT_TYPE_USER_FOLLOW
@@ -2717,10 +2456,12 @@ components:
           - EVENT_TYPE_USER_REGISTER
           - EVENT_TYPE_USER_LOGIN
           - EVENT_TYPE_USER_LOGOUT
+          - EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE
+          - EVENT_TYPE_USER_PHONE_VERIFICATION_CODE
           - EVENT_TYPE_USER_BLOCK
           - EVENT_TYPE_USER_UNBLOCK
-          - EVENT_TYPE_USER_TFA_ENABLE
-          - EVENT_TYPE_USER_TFA_DISABLE
+          - EVENT_TYPE_USER_TOTP_ENABLE
+          - EVENT_TYPE_USER_TOTP_DISABLE
           - EVENT_TYPE_ARTICLE_PUBLISHED
           - EVENT_TYPE_ARTICLE_LIKED
           - EVENT_TYPE_ARTICLE_THANKED
@@ -2731,21 +2472,22 @@ components:
           format: enum
           type: string
         title:
+          description: 通知标题。
           type: string
         content:
+          description: 通知内容。
           type: string
         read_at:
+          description: 已读时间。
           type: string
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     PageReply:
-      example:
-        total: 0
-        size: 1
-        page: 6
       properties:
         total:
           description: 总数
@@ -2772,23 +2514,22 @@ components:
           type: integer
       type: object
     Preference:
-      description: 账号偏好设置
-      example:
-        mobile_theme: mobile_theme
-        user_id: user_id
-        timezone: timezone
-        theme: theme
-        language: LANGUAGE_UNSPECIFIED
+      description: 账号偏好设置。
       properties:
         user_id:
+          description: 账号 ID。
           type: string
         timezone:
+          description: 时区。
           type: string
         theme:
+          description: 桌面端主题。
           type: string
         mobile_theme:
+          description: 移动端主题。
           type: string
         language:
+          description: 界面语言。
           enum:
           - LANGUAGE_UNSPECIFIED
           - LANGUAGE_ZH_CN
@@ -2798,29 +2539,28 @@ components:
           type: string
       type: object
     PrivacySetting:
-      description: 账号隐私设置
-      example:
-        public_followers: true
-        public_points: true
-        user_id: user_id
-        public_location: true
-        public_articles: true
-        public_comments: true
-        public_online_status: true
+      description: 账号隐私设置。
       properties:
         user_id:
+          description: 账号 ID。
           type: string
         public_points:
+          description: 是否公开积分。
           type: boolean
         public_followers:
+          description: 是否公开粉丝列表。
           type: boolean
         public_articles:
+          description: 是否公开文章列表。
           type: boolean
         public_comments:
+          description: 是否公开评论列表。
           type: boolean
         public_online_status:
+          description: 是否公开在线状态。
           type: boolean
         public_location:
+          description: 是否公开地理资料。
           type: boolean
       type: object
     PublishArticle_Reply:
@@ -2829,10 +2569,13 @@ components:
     PublishArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
+      required:
+      - article_id
       type: object
     Relation:
-      description: 账号关系记录
+      description: 账号关系记录。
       example:
         updated_at: updated_at
         created_at: created_at
@@ -2842,37 +2585,42 @@ components:
         type: 0
       properties:
         id:
+          description: 关系记录 ID。
           type: string
         type:
+          description: 关系类型。
           format: int32
           type: integer
         actor_id:
+          description: 发起账号 ID。
           type: string
         target_id:
+          description: 目标账号 ID。
           type: string
         created_at:
+          description: 创建时间。
           type: string
         updated_at:
+          description: 更新时间。
           type: string
       type: object
     RelationStatus:
-      description: 当前账号与目标账号的关系状态
-      example:
-        followed_by: true
-        blocking: true
-        blocked_by: true
-        following: true
-        target_id: target_id
+      description: 当前账号与目标账号的关系状态。
       properties:
         target_id:
+          description: 目标账号 ID。
           type: string
         following:
+          description: 当前账号是否关注目标账号。
           type: boolean
         followed_by:
+          description: 目标账号是否关注当前账号。
           type: boolean
         blocking:
+          description: 当前账号是否拉黑目标账号。
           type: boolean
         blocked_by:
+          description: 目标账号是否拉黑当前账号。
           type: boolean
       type: object
     RewardArticle_Reply:
@@ -2881,95 +2629,126 @@ components:
     RewardArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
+      required:
+      - article_id
       type: object
     StartEmailRegistration_Reply:
       example:
+        code: code
         code_token: code_token
       properties:
         code_token:
+          description: 验证码令牌。
+          type: string
+        code:
+          description: 验证码。
           type: string
       type: object
     StartEmailRegistration_Request:
       properties:
         email:
+          description: 邮箱地址。
           type: string
         password:
+          description: 账号密码。
           type: string
         name:
+          description: 账号名。
           type: string
         nickname:
+          description: 昵称。
           type: string
+      required:
+      - email
+      - name
+      - password
       type: object
     StartPhoneRegistration_Reply:
       example:
+        code: code
         code_token: code_token
       properties:
         code_token:
+          description: 验证码令牌。
+          type: string
+        code:
+          description: 验证码。
           type: string
       type: object
     StartPhoneRegistration_Request:
       properties:
         phone:
+          description: 手机号。
           type: string
         password:
+          description: 账号密码。
           type: string
         name:
+          description: 账号名。
           type: string
         nickname:
+          description: 昵称。
           type: string
+      required:
+      - name
+      - password
+      - phone
       type: object
     Tag:
+      description: Adds metadata to a single tag that is used by the Operation Object.
+        It is not mandatory to have a Tag Object per tag defined in the Operation
+        Object instances.
       example:
-        domain_id: domain_id
-        updated_at: updated_at
+        external_docs:
+          description: description
+          specification_extension:
+          - name: name
+            value: ""
+          - name: name
+            value: ""
+          url: url
         name: name
-        updated_by: updated_by
         description: description
-        created_at: created_at
-        id: id
-        created_by: created_by
-        status: TAG_STATUS_UNSPECIFIED
+        specification_extension:
+        - name: name
+          value: ""
+        - name: name
+          value: ""
       properties:
-        id:
-          type: string
         name:
           type: string
         description:
           type: string
-        domain_id:
-          type: string
-        status:
-          enum:
-          - TAG_STATUS_UNSPECIFIED
-          - TAG_STATUS_NORMAL
-          - TAG_STATUS_DISABLED
-          format: enum
-          type: string
-        created_by:
-          type: string
-        updated_by:
-          type: string
-        created_at:
-          type: string
-        updated_at:
-          type: string
+        external_docs:
+          $ref: "#/components/schemas/ExternalDocs"
+        specification_extension:
+          items:
+            $ref: "#/components/schemas/NamedAny"
+          type: array
       type: object
     TagQuery:
+      description: 标签查询条件。
       properties:
         ids:
+          description: 标签 ID 列表。
           items:
             type: string
           type: array
         name:
+          description: 标签名称。
           type: string
         names:
+          description: 标签名称列表。
           items:
             type: string
           type: array
         description:
+          description: 标签描述。
           type: string
         status:
+          description: 标签状态。
           enum:
           - TAG_STATUS_UNSPECIFIED
           - TAG_STATUS_NORMAL
@@ -2977,15 +2756,20 @@ components:
           format: enum
           type: string
         domain_id:
+          description: 所属板块 ID。
           type: string
       type: object
     TagSave:
+      description: 标签保存内容。
       properties:
         id:
+          description: 标签 ID。
           type: string
         domain_id:
+          description: 所属板块 ID。
           type: string
         status:
+          description: 标签状态。
           enum:
           - TAG_STATUS_UNSPECIFIED
           - TAG_STATUS_NORMAL
@@ -2993,22 +2777,10 @@ components:
           format: enum
           type: string
         name:
+          description: 标签名称。
           type: string
         description:
-          type: string
-      type: object
-    Tfa:
-      description: 二步验证状态
-      example:
-        user_id: user_id
-        enable: true
-        enable_time: enable_time
-      properties:
-        user_id:
-          type: string
-        enable:
-          type: boolean
-        enable_time:
+          description: 标签描述。
           type: string
       type: object
     ThankArticle_Reply:
@@ -3017,9 +2789,14 @@ components:
     ThankArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         active:
+          description: 是否感谢。
           type: boolean
+      required:
+      - active
+      - article_id
       type: object
     ThankComment_Reply:
       properties: {}
@@ -3027,9 +2804,27 @@ components:
     ThankComment_Request:
       properties:
         id:
+          description: 评论 ID。
           type: string
         active:
+          description: 是否感谢。
           type: boolean
+      required:
+      - active
+      - id
+      type: object
+    Totp:
+      description: TOTP 认证状态。
+      properties:
+        user_id:
+          description: 账号 ID。
+          type: string
+        enable:
+          description: 是否启用 TOTP。
+          type: boolean
+        enable_time:
+          description: 启用时间。
+          type: string
       type: object
     UnblockRelation_Reply:
       properties: {}
@@ -3037,7 +2832,10 @@ components:
     UnblockRelation_Request:
       properties:
         target_id:
+          description: 目标账号 ID。
           type: string
+      required:
+      - target_id
       type: object
     UnfollowRelation_Reply:
       properties: {}
@@ -3045,29 +2843,33 @@ components:
     UnfollowRelation_Request:
       properties:
         target_id:
+          description: 目标账号 ID。
           type: string
+      required:
+      - target_id
       type: object
     UpdateCurrentPreferences_Reply:
       example:
-        preference:
-          mobile_theme: mobile_theme
-          user_id: user_id
-          timezone: timezone
-          theme: theme
-          language: LANGUAGE_UNSPECIFIED
+        preference: ""
       properties:
         preference:
-          $ref: "#/components/schemas/Preference"
+          allOf:
+          - $ref: "#/components/schemas/Preference"
+          description: 更新后的账号偏好设置。
       type: object
     UpdateCurrentPreferences_Request:
       properties:
         timezone:
+          description: 时区。
           type: string
         theme:
+          description: 桌面端主题。
           type: string
         mobile_theme:
+          description: 移动端主题。
           type: string
         language:
+          description: 界面语言。
           enum:
           - LANGUAGE_UNSPECIFIED
           - LANGUAGE_ZH_CN
@@ -3078,130 +2880,77 @@ components:
       type: object
     UpdateCurrentPrivacySetting_Reply:
       example:
-        privacy_setting:
-          public_followers: true
-          public_points: true
-          user_id: user_id
-          public_location: true
-          public_articles: true
-          public_comments: true
-          public_online_status: true
+        privacy_setting: ""
       properties:
         privacy_setting:
-          $ref: "#/components/schemas/PrivacySetting"
+          allOf:
+          - $ref: "#/components/schemas/PrivacySetting"
+          description: 更新后的账号隐私设置。
       type: object
     UpdateCurrentPrivacySetting_Request:
       properties:
         public_points:
+          description: 是否公开积分。
           type: boolean
         public_followers:
+          description: 是否公开粉丝列表。
           type: boolean
         public_articles:
+          description: 是否公开文章列表。
           type: boolean
         public_comments:
+          description: 是否公开评论列表。
           type: boolean
         public_online_status:
+          description: 是否公开在线状态。
           type: boolean
         public_location:
+          description: 是否公开地理资料。
           type: boolean
       type: object
     UpdateDraftArticle_Reply:
       example:
-        article:
-          reward_content_render: reward_content_render
-          listable: true
-          cover_image_url: cover_image_url
-          created_at: created_at
-          title: title
-          type: ARTICLE_TYPE_UNSPECIFIED
-          content: content
-          reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          accepted_answer_id: accepted_answer_id
-          last_reply_at: last_reply_at
-          updated_at: updated_at
-          statement: statement
-          watch_count: 2
-          id: id
-          has_reward: true
-          commentable: true
-          thank_count: 1
-          like_count: 5
-          bounty_points: 9
-          has_postscript: true
-          reply_count: 7
-          created_by: created_by
-          reward_points: 0
-          collect_count: 5
-          content_render: content_render
-          updated_by: updated_by
-          anonymous: true
-          author_user:
-            avatar_url: avatar_url
-            updated_at: updated_at
-            follow_count: 3
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: created_at
-            id: id
-            follower_count: 2
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 6
-          status: ARTICLE_STATUS_UNSPECIFIED
+        article: ""
       properties:
         article:
-          $ref: "#/components/schemas/Article"
+          allOf:
+          - $ref: "#/components/schemas/Article"
+          description: 更新后的文章。
       type: object
     UpdateDraftArticle_Request:
       properties:
         article:
-          $ref: "#/components/schemas/ArticleSave"
+          allOf:
+          - $ref: "#/components/schemas/ArticleSave"
+          description: 文章保存内容。
+      required:
+      - article
       type: object
     UpdateProfileAccount_Reply:
       example:
-        profile:
-          avatar_url: avatar_url
-          updated_at: updated_at
-          follow_count: 3
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: created_at
-          id: id
-          follower_count: 2
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+        profile: ""
       properties:
         profile:
-          $ref: "#/components/schemas/AccountProfile"
+          allOf:
+          - $ref: "#/components/schemas/AccountProfile"
+          description: 更新后的账号展示资料。
       type: object
     UpdateProfileAccount_Request:
       properties:
         avatar_url:
+          description: 头像 URL。
           type: string
         nickname:
+          description: 昵称。
           type: string
         url:
+          description: 个人主页 URL。
           type: string
         introduction:
+          description: 个人简介。
           type: string
         mbti:
+          description: MBTI 类型。
           enum:
           - MBTI_UNSPECIFIED
           - MBTI_INTJ
@@ -3225,34 +2974,23 @@ components:
       type: object
     UpsertCurrentLocation_Reply:
       example:
-        location:
-          country: country
-          province: province
-          user_id: user_id
-          city: city
+        location: ""
       properties:
         location:
-          $ref: "#/components/schemas/Location"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          description: 更新后的账号地理资料。
       type: object
     UpsertCurrentLocation_Request:
       properties:
         country:
+          description: 国家或地区。
           type: string
         province:
+          description: 省份或州。
           type: string
         city:
-          type: string
-      type: object
-    ValidateTfa_Reply:
-      example:
-        verified: true
-      properties:
-        verified:
-          type: boolean
-      type: object
-    ValidateTfa_Request:
-      properties:
-        code:
+          description: 城市。
           type: string
       type: object
     VerifyEmailRegistration_Reply:
@@ -3261,9 +2999,14 @@ components:
     VerifyEmailRegistration_Request:
       properties:
         code:
+          description: 验证码。
           type: string
         code_token:
+          description: 验证码令牌。
           type: string
+      required:
+      - code
+      - code_token
       type: object
     VerifyPhoneRegistration_Reply:
       properties: {}
@@ -3271,9 +3014,14 @@ components:
     VerifyPhoneRegistration_Request:
       properties:
         code:
+          description: 验证码。
           type: string
         code_token:
+          description: 验证码令牌。
           type: string
+      required:
+      - code
+      - code_token
       type: object
     WatchArticle_Reply:
       properties: {}
@@ -3281,7 +3029,12 @@ components:
     WatchArticle_Request:
       properties:
         article_id:
+          description: 文章 ID。
           type: string
         active:
+          description: 是否关注。
           type: boolean
+      required:
+      - active
+      - article_id
       type: object

@@ -36,7 +36,7 @@ import (
 )
 
 func main() {
-	blockRelationRequest := *openapiclient.NewBlockRelationRequest() // BlockRelationRequest | 
+	blockRelationRequest := *openapiclient.NewBlockRelationRequest("TargetId_example") // BlockRelationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -102,7 +102,7 @@ import (
 )
 
 func main() {
-	followRelationRequest := *openapiclient.NewFollowRelationRequest() // FollowRelationRequest | 
+	followRelationRequest := *openapiclient.NewFollowRelationRequest("TargetId_example") // FollowRelationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -168,7 +168,7 @@ import (
 )
 
 func main() {
-	getStatusRelationRequest := *openapiclient.NewGetStatusRelationRequest() // GetStatusRelationRequest | 
+	getStatusRelationRequest := *openapiclient.NewGetStatusRelationRequest("TargetId_example") // GetStatusRelationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -432,7 +432,7 @@ import (
 )
 
 func main() {
-	unblockRelationRequest := *openapiclient.NewUnblockRelationRequest() // UnblockRelationRequest | 
+	unblockRelationRequest := *openapiclient.NewUnblockRelationRequest("TargetId_example") // UnblockRelationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -498,7 +498,7 @@ import (
 )
 
 func main() {
-	unfollowRelationRequest := *openapiclient.NewUnfollowRelationRequest() // UnfollowRelationRequest | 
+	unfollowRelationRequest := *openapiclient.NewUnfollowRelationRequest("TargetId_example") // UnfollowRelationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

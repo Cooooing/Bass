@@ -1,5 +1,5 @@
 /*
-
+Bass BBS API
 
 Testing AccountServiceService
 
@@ -21,6 +21,18 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
+
+	t.Run("Test AccountServiceService Avatar", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.Avatar(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
 
 	t.Run("Test AccountServiceService GetCurrent", func(t *testing.T) {
 

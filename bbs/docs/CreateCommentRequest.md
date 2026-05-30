@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**ReplyId** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 文章 ID。 | 
+**Content** | **string** | 评论内容。 | 
+**ReplyId** | Pointer to **string** | 回复的评论 ID。 | [optional] 
 
 ## Methods
 
 ### NewCreateCommentRequest
 
-`func NewCreateCommentRequest() *CreateCommentRequest`
+`func NewCreateCommentRequest(articleId string, content string, ) *CreateCommentRequest`
 
 NewCreateCommentRequest instantiates a new CreateCommentRequest object
 This constructor will assign default values to properties that have it defined,
@@ -46,11 +46,6 @@ and a boolean to check if the value has been set.
 
 SetArticleId sets ArticleId field to given value.
 
-### HasArticleId
-
-`func (o *CreateCommentRequest) HasArticleId() bool`
-
-HasArticleId returns a boolean if a field has been set.
 
 ### GetContent
 
@@ -71,11 +66,6 @@ and a boolean to check if the value has been set.
 
 SetContent sets Content field to given value.
 
-### HasContent
-
-`func (o *CreateCommentRequest) HasContent() bool`
-
-HasContent returns a boolean if a field has been set.
 
 ### GetReplyId
 

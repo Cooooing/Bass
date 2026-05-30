@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 文章 ID。 | 
 
 ## Methods
 
 ### NewGetArticleRequest
 
-`func NewGetArticleRequest() *GetArticleRequest`
+`func NewGetArticleRequest(articleId string, ) *GetArticleRequest`
 
 NewGetArticleRequest instantiates a new GetArticleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -44,11 +44,6 @@ and a boolean to check if the value has been set.
 
 SetArticleId sets ArticleId field to given value.
 
-### HasArticleId
-
-`func (o *GetArticleRequest) HasArticleId() bool`
-
-HasArticleId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

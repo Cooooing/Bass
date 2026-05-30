@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Active** | Pointer to **bool** |  | [optional] 
+**Id** | **string** | 评论 ID。 | 
+**Active** | **bool** | 是否点赞。 | 
 
 ## Methods
 
 ### NewLikeCommentRequest
 
-`func NewLikeCommentRequest() *LikeCommentRequest`
+`func NewLikeCommentRequest(id string, active bool, ) *LikeCommentRequest`
 
 NewLikeCommentRequest instantiates a new LikeCommentRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetId sets Id field to given value.
 
-### HasId
-
-`func (o *LikeCommentRequest) HasId() bool`
-
-HasId returns a boolean if a field has been set.
 
 ### GetActive
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetActive sets Active field to given value.
 
-### HasActive
-
-`func (o *LikeCommentRequest) HasActive() bool`
-
-HasActive returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

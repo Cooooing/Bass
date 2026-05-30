@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TagId** | Pointer to **string** |  | [optional] 
-**DomainId** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**Order** | Pointer to **string** |  | [optional] 
-**Keyword** | Pointer to **string** |  | [optional] 
-**AuthorId** | Pointer to **string** |  | [optional] 
-**Listable** | Pointer to **bool** |  | [optional] 
+**TagId** | Pointer to **string** | 标签 ID。 | [optional] 
+**DomainId** | Pointer to **string** | 板块 ID。 | [optional] 
+**Status** | Pointer to **string** | 文章状态。 | [optional] 
+**Type** | Pointer to **string** | 文章类型。 | [optional] 
+**Order** | Pointer to **string** | 排序方式。 | [optional] 
+**Keyword** | Pointer to **string** | 搜索关键词。 | [optional] 
+**AuthorId** | Pointer to **string** | 作者账号 ID。 | [optional] 
+**Listable** | Pointer to **bool** | 是否在列表中展示。 | [optional] 
 
 ## Methods
 

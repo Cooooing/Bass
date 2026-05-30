@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | Pointer to [**ArticleSave**](ArticleSave.md) |  | [optional] 
+**Article** | [**ArticleSave**](ArticleSave.md) | 文章保存内容。 | 
 
 ## Methods
 
 ### NewCreateArticleRequest
 
-`func NewCreateArticleRequest() *CreateArticleRequest`
+`func NewCreateArticleRequest(article ArticleSave, ) *CreateArticleRequest`
 
 NewCreateArticleRequest instantiates a new CreateArticleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -44,11 +44,6 @@ and a boolean to check if the value has been set.
 
 SetArticle sets Article field to given value.
 
-### HasArticle
-
-`func (o *CreateArticleRequest) HasArticle() bool`
-
-HasArticle returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

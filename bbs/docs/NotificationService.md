@@ -16,6 +16,8 @@ Method | HTTP request | Description
 
 
 
+
+
 ### Example
 
 ```go
@@ -80,6 +82,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -141,6 +145,8 @@ No authorization required
 ## MarkRead
 
 > MarkReadNotificationReply MarkRead(ctx).MarkReadNotificationRequest(markReadNotificationRequest).Execute()
+
+
 
 
 

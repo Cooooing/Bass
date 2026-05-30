@@ -4,25 +4,25 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**RewardContent** | Pointer to **string** |  | [optional] 
-**RewardPoints** | Pointer to **int32** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**BountyPoints** | Pointer to **int32** |  | [optional] 
-**Statement** | Pointer to **string** |  | [optional] 
-**Commentable** | Pointer to **bool** |  | [optional] 
-**Anonymous** | Pointer to **bool** |  | [optional] 
-**Listable** | Pointer to **bool** |  | [optional] 
-**Tags** | Pointer to [**[]TagSave**](TagSave.md) |  | [optional] 
+**Id** | Pointer to **string** | 文章 ID。 | [optional] 
+**Title** | **string** | 标题。 | 
+**Content** | **string** | 原始内容。 | 
+**RewardContent** | Pointer to **string** | 打赏后可见内容。 | [optional] 
+**RewardPoints** | Pointer to **int32** | 打赏所需积分。 | [optional] 
+**Status** | **string** | 文章状态。 | 
+**Type** | **string** | 文章类型。 | 
+**BountyPoints** | Pointer to **int32** | 悬赏积分。 | [optional] 
+**Statement** | Pointer to **string** | 文章声明。 | [optional] 
+**Commentable** | Pointer to **bool** | 是否允许评论。 | [optional] 
+**Anonymous** | Pointer to **bool** | 是否匿名展示。 | [optional] 
+**Listable** | Pointer to **bool** | 是否在列表中展示。 | [optional] 
+**Tags** | Pointer to [**[]TagSave**](TagSave.md) | 绑定标签。 | [optional] 
 
 ## Methods
 
 ### NewArticleSave
 
-`func NewArticleSave() *ArticleSave`
+`func NewArticleSave(title string, content string, status string, type_ string, ) *ArticleSave`
 
 NewArticleSave instantiates a new ArticleSave object
 This constructor will assign default values to properties that have it defined,
@@ -81,11 +81,6 @@ and a boolean to check if the value has been set.
 
 SetTitle sets Title field to given value.
 
-### HasTitle
-
-`func (o *ArticleSave) HasTitle() bool`
-
-HasTitle returns a boolean if a field has been set.
 
 ### GetContent
 
@@ -106,11 +101,6 @@ and a boolean to check if the value has been set.
 
 SetContent sets Content field to given value.
 
-### HasContent
-
-`func (o *ArticleSave) HasContent() bool`
-
-HasContent returns a boolean if a field has been set.
 
 ### GetRewardContent
 
@@ -181,11 +171,6 @@ and a boolean to check if the value has been set.
 
 SetStatus sets Status field to given value.
 
-### HasStatus
-
-`func (o *ArticleSave) HasStatus() bool`
-
-HasStatus returns a boolean if a field has been set.
 
 ### GetType
 
@@ -206,11 +191,6 @@ and a boolean to check if the value has been set.
 
 SetType sets Type field to given value.
 
-### HasType
-
-`func (o *ArticleSave) HasType() bool`
-
-HasType returns a boolean if a field has been set.
 
 ### GetBountyPoints
 

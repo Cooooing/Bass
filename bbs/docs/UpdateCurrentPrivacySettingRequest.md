@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PublicPoints** | Pointer to **bool** |  | [optional] 
-**PublicFollowers** | Pointer to **bool** |  | [optional] 
-**PublicArticles** | Pointer to **bool** |  | [optional] 
-**PublicComments** | Pointer to **bool** |  | [optional] 
-**PublicOnlineStatus** | Pointer to **bool** |  | [optional] 
-**PublicLocation** | Pointer to **bool** |  | [optional] 
+**PublicPoints** | Pointer to **bool** | 是否公开积分。 | [optional] 
+**PublicFollowers** | Pointer to **bool** | 是否公开粉丝列表。 | [optional] 
+**PublicArticles** | Pointer to **bool** | 是否公开文章列表。 | [optional] 
+**PublicComments** | Pointer to **bool** | 是否公开评论列表。 | [optional] 
+**PublicOnlineStatus** | Pointer to **bool** | 是否公开在线状态。 | [optional] 
+**PublicLocation** | Pointer to **bool** | 是否公开地理资料。 | [optional] 
 
 ## Methods
 

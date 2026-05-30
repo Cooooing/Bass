@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PrivacySetting** | Pointer to [**PrivacySetting**](PrivacySetting.md) |  | [optional] 
+**PrivacySetting** | Pointer to [**PrivacySetting**](PrivacySetting.md) | 更新后的账号隐私设置。 | [optional] 
 
 ## Methods
 

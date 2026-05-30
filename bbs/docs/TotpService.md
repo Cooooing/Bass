@@ -1,20 +1,19 @@
-# \TfaService
+# \TotpService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**BeginEnable**](TfaService.md#BeginEnable) | **Post** /v1/user/tfa/begin-enable | 
-[**ConfirmEnable**](TfaService.md#ConfirmEnable) | **Post** /v1/user/tfa/confirm-enable | 
-[**Disable**](TfaService.md#Disable) | **Post** /v1/user/tfa/disable | 
-[**GetCurrent**](TfaService.md#GetCurrent) | **Post** /v1/user/tfa/get-current | 
-[**Validate**](TfaService.md#Validate) | **Post** /v1/user/tfa/validate | 
+[**BeginEnable**](TotpService.md#BeginEnable) | **Post** /v1/user/totp/begin-enable | 
+[**ConfirmEnable**](TotpService.md#ConfirmEnable) | **Post** /v1/user/totp/confirm-enable | 
+[**Disable**](TotpService.md#Disable) | **Post** /v1/user/totp/disable | 
+[**GetCurrent**](TotpService.md#GetCurrent) | **Post** /v1/user/totp/get-current | 
 
 
 
 ## BeginEnable
 
-> BeginEnableTfaReply BeginEnable(ctx).Body(body).Execute()
+> BeginEnableTotpReply BeginEnable(ctx).Body(body).Execute()
 
 
 
@@ -37,13 +36,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaService.BeginEnable(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.TotpService.BeginEnable(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.BeginEnable``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TotpService.BeginEnable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `BeginEnable`: BeginEnableTfaReply
-	fmt.Fprintf(os.Stdout, "Response from `TfaService.BeginEnable`: %v\n", resp)
+	// response from `BeginEnable`: BeginEnableTotpReply
+	fmt.Fprintf(os.Stdout, "Response from `TotpService.BeginEnable`: %v\n", resp)
 }
 ```
 
@@ -62,7 +61,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**BeginEnableTfaReply**](BeginEnableTfaReply.md)
+[**BeginEnableTotpReply**](BeginEnableTotpReply.md)
 
 ### Authorization
 
@@ -80,7 +79,7 @@ No authorization required
 
 ## ConfirmEnable
 
-> map[string]interface{} ConfirmEnable(ctx).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
+> map[string]interface{} ConfirmEnable(ctx).ConfirmEnableTotpRequest(confirmEnableTotpRequest).Execute()
 
 
 
@@ -99,17 +98,17 @@ import (
 )
 
 func main() {
-	confirmEnableTfaRequest := *openapiclient.NewConfirmEnableTfaRequest() // ConfirmEnableTfaRequest | 
+	confirmEnableTotpRequest := *openapiclient.NewConfirmEnableTotpRequest("Code_example") // ConfirmEnableTotpRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaService.ConfirmEnable(context.Background()).ConfirmEnableTfaRequest(confirmEnableTfaRequest).Execute()
+	resp, r, err := apiClient.TotpService.ConfirmEnable(context.Background()).ConfirmEnableTotpRequest(confirmEnableTotpRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.ConfirmEnable``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TotpService.ConfirmEnable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
 	// response from `ConfirmEnable`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `TfaService.ConfirmEnable`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `TotpService.ConfirmEnable`: %v\n", resp)
 }
 ```
 
@@ -124,7 +123,7 @@ Other parameters are passed through a pointer to a apiConfirmEnableRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **confirmEnableTfaRequest** | [**ConfirmEnableTfaRequest**](ConfirmEnableTfaRequest.md) |  | 
+ **confirmEnableTotpRequest** | [**ConfirmEnableTotpRequest**](ConfirmEnableTotpRequest.md) |  | 
 
 ### Return type
 
@@ -146,7 +145,7 @@ No authorization required
 
 ## Disable
 
-> map[string]interface{} Disable(ctx).DisableTfaRequest(disableTfaRequest).Execute()
+> map[string]interface{} Disable(ctx).DisableTotpRequest(disableTotpRequest).Execute()
 
 
 
@@ -165,17 +164,17 @@ import (
 )
 
 func main() {
-	disableTfaRequest := *openapiclient.NewDisableTfaRequest() // DisableTfaRequest | 
+	disableTotpRequest := *openapiclient.NewDisableTotpRequest("Code_example") // DisableTotpRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaService.Disable(context.Background()).DisableTfaRequest(disableTfaRequest).Execute()
+	resp, r, err := apiClient.TotpService.Disable(context.Background()).DisableTotpRequest(disableTotpRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.Disable``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TotpService.Disable``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
 	// response from `Disable`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `TfaService.Disable`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `TotpService.Disable`: %v\n", resp)
 }
 ```
 
@@ -190,7 +189,7 @@ Other parameters are passed through a pointer to a apiDisableRequest struct via 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **disableTfaRequest** | [**DisableTfaRequest**](DisableTfaRequest.md) |  | 
+ **disableTotpRequest** | [**DisableTotpRequest**](DisableTotpRequest.md) |  | 
 
 ### Return type
 
@@ -212,7 +211,7 @@ No authorization required
 
 ## GetCurrent
 
-> GetCurrentTfaReply GetCurrent(ctx).Body(body).Execute()
+> GetCurrentTotpReply GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -235,13 +234,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaService.GetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.TotpService.GetCurrent(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.GetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TotpService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentTfaReply
-	fmt.Fprintf(os.Stdout, "Response from `TfaService.GetCurrent`: %v\n", resp)
+	// response from `GetCurrent`: GetCurrentTotpReply
+	fmt.Fprintf(os.Stdout, "Response from `TotpService.GetCurrent`: %v\n", resp)
 }
 ```
 
@@ -260,73 +259,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCurrentTfaReply**](GetCurrentTfaReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## Validate
-
-> ValidateTfaReply Validate(ctx).ValidateTfaRequest(validateTfaRequest).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	validateTfaRequest := *openapiclient.NewValidateTfaRequest() // ValidateTfaRequest | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TfaService.Validate(context.Background()).ValidateTfaRequest(validateTfaRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TfaService.Validate``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `Validate`: ValidateTfaReply
-	fmt.Fprintf(os.Stdout, "Response from `TfaService.Validate`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiValidateRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **validateTfaRequest** | [**ValidateTfaRequest**](ValidateTfaRequest.md) |  | 
-
-### Return type
-
-[**ValidateTfaReply**](ValidateTfaReply.md)
+[**GetCurrentTotpReply**](GetCurrentTotpReply.md)
 
 ### Authorization
 

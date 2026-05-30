@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Account** | Pointer to **string** |  | [optional] 
-**Password** | Pointer to **string** |  | [optional] 
+**Account** | **string** | 账号、邮箱或手机号。 | 
+**Password** | **string** | 账号密码。 | 
 
 ## Methods
 
 ### NewLoginByPasswordRequest
 
-`func NewLoginByPasswordRequest() *LoginByPasswordRequest`
+`func NewLoginByPasswordRequest(account string, password string, ) *LoginByPasswordRequest`
 
 NewLoginByPasswordRequest instantiates a new LoginByPasswordRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetAccount sets Account field to given value.
 
-### HasAccount
-
-`func (o *LoginByPasswordRequest) HasAccount() bool`
-
-HasAccount returns a boolean if a field has been set.
 
 ### GetPassword
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetPassword sets Password field to given value.
 
-### HasPassword
-
-`func (o *LoginByPasswordRequest) HasPassword() bool`
-
-HasPassword returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

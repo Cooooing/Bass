@@ -4,10 +4,77 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**Avatar**](AccountService.md#Avatar) | **Get** /v1/user/account/avatar | 
 [**GetCurrent**](AccountService.md#GetCurrent) | **Post** /v1/user/account/get-current | 
 [**GetProfile**](AccountService.md#GetProfile) | **Post** /v1/user/account/get-profile | 
 [**UpdateProfile**](AccountService.md#UpdateProfile) | **Post** /v1/user/account/update-profile | 
 
+
+
+## Avatar
+
+> ImageReply Avatar(ctx).Name(name).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	name := "name_example" // string | 用于生成头像的账号名。 (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.Avatar(context.Background()).Name(name).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.Avatar``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `Avatar`: ImageReply
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.Avatar`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiAvatarRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **name** | **string** | 用于生成头像的账号名。 | 
+
+### Return type
+
+[**ImageReply**](ImageReply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## GetCurrent
@@ -97,7 +164,7 @@ import (
 )
 
 func main() {
-	getProfileAccountRequest := *openapiclient.NewGetProfileAccountRequest() // GetProfileAccountRequest | 
+	getProfileAccountRequest := *openapiclient.NewGetProfileAccountRequest("UserId_example") // GetProfileAccountRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

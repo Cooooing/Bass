@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | Pointer to **string** |  | [optional] 
-**CodeToken** | Pointer to **string** |  | [optional] 
+**Code** | **string** | 验证码。 | 
+**CodeToken** | **string** | 验证码令牌。 | 
 
 ## Methods
 
 ### NewVerifyEmailRegistrationRequest
 
-`func NewVerifyEmailRegistrationRequest() *VerifyEmailRegistrationRequest`
+`func NewVerifyEmailRegistrationRequest(code string, codeToken string, ) *VerifyEmailRegistrationRequest`
 
 NewVerifyEmailRegistrationRequest instantiates a new VerifyEmailRegistrationRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetCode sets Code field to given value.
 
-### HasCode
-
-`func (o *VerifyEmailRegistrationRequest) HasCode() bool`
-
-HasCode returns a boolean if a field has been set.
 
 ### GetCodeToken
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetCodeToken sets CodeToken field to given value.
 
-### HasCodeToken
-
-`func (o *VerifyEmailRegistrationRequest) HasCodeToken() bool`
-
-HasCodeToken returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

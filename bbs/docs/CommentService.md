@@ -17,6 +17,8 @@ Method | HTTP request | Description
 
 
 
+
+
 ### Example
 
 ```go
@@ -30,7 +32,7 @@ import (
 )
 
 func main() {
-	createCommentRequest := *openapiclient.NewCreateCommentRequest() // CreateCommentRequest | 
+	createCommentRequest := *openapiclient.NewCreateCommentRequest("ArticleId_example", "Content_example") // CreateCommentRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -81,6 +83,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -94,7 +98,7 @@ import (
 )
 
 func main() {
-	likeCommentRequest := *openapiclient.NewLikeCommentRequest() // LikeCommentRequest | 
+	likeCommentRequest := *openapiclient.NewLikeCommentRequest("Id_example", false) // LikeCommentRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -142,6 +146,8 @@ No authorization required
 ## List
 
 > ListCommentsReply List(ctx).ListCommentsRequest(listCommentsRequest).Execute()
+
+
 
 
 
@@ -209,6 +215,8 @@ No authorization required
 
 
 
+
+
 ### Example
 
 ```go
@@ -222,7 +230,7 @@ import (
 )
 
 func main() {
-	thankCommentRequest := *openapiclient.NewThankCommentRequest() // ThankCommentRequest | 
+	thankCommentRequest := *openapiclient.NewThankCommentRequest("Id_example", false) // ThankCommentRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

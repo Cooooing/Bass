@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | Pointer to **string** |  | [optional] 
-**CommentId** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 文章 ID。 | 
+**CommentId** | **string** | 评论 ID。 | 
 
 ## Methods
 
 ### NewAcceptAnswerArticleRequest
 
-`func NewAcceptAnswerArticleRequest() *AcceptAnswerArticleRequest`
+`func NewAcceptAnswerArticleRequest(articleId string, commentId string, ) *AcceptAnswerArticleRequest`
 
 NewAcceptAnswerArticleRequest instantiates a new AcceptAnswerArticleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetArticleId sets ArticleId field to given value.
 
-### HasArticleId
-
-`func (o *AcceptAnswerArticleRequest) HasArticleId() bool`
-
-HasArticleId returns a boolean if a field has been set.
 
 ### GetCommentId
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetCommentId sets CommentId field to given value.
 
-### HasCommentId
-
-`func (o *AcceptAnswerArticleRequest) HasCommentId() bool`
-
-HasCommentId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

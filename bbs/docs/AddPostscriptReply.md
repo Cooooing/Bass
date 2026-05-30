@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Postscript** | Pointer to [**ArticlePostscript**](ArticlePostscript.md) |  | [optional] 
+**Postscript** | Pointer to [**ArticlePostscript**](ArticlePostscript.md) | 创建后的文章附言。 | [optional] 
 
 ## Methods
 

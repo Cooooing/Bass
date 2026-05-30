@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Country** | Pointer to **string** |  | [optional] 
-**Province** | Pointer to **string** |  | [optional] 
-**City** | Pointer to **string** |  | [optional] 
+**Country** | Pointer to **string** | 国家或地区。 | [optional] 
+**Province** | Pointer to **string** | 省份或州。 | [optional] 
+**City** | Pointer to **string** | 城市。 | [optional] 
 
 ## Methods
 

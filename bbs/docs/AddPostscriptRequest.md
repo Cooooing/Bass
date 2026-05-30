@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 文章 ID。 | 
+**Content** | **string** | 附言内容。 | 
 
 ## Methods
 
 ### NewAddPostscriptRequest
 
-`func NewAddPostscriptRequest() *AddPostscriptRequest`
+`func NewAddPostscriptRequest(articleId string, content string, ) *AddPostscriptRequest`
 
 NewAddPostscriptRequest instantiates a new AddPostscriptRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetArticleId sets ArticleId field to given value.
 
-### HasArticleId
-
-`func (o *AddPostscriptRequest) HasArticleId() bool`
-
-HasArticleId returns a boolean if a field has been set.
 
 ### GetContent
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetContent sets Content field to given value.
 
-### HasContent
-
-`func (o *AddPostscriptRequest) HasContent() bool`
-
-HasContent returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

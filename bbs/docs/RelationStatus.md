@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TargetId** | Pointer to **string** |  | [optional] 
-**Following** | Pointer to **bool** |  | [optional] 
-**FollowedBy** | Pointer to **bool** |  | [optional] 
-**Blocking** | Pointer to **bool** |  | [optional] 
-**BlockedBy** | Pointer to **bool** |  | [optional] 
+**TargetId** | Pointer to **string** | 目标账号 ID。 | [optional] 
+**Following** | Pointer to **bool** | 当前账号是否关注目标账号。 | [optional] 
+**FollowedBy** | Pointer to **bool** | 目标账号是否关注当前账号。 | [optional] 
+**Blocking** | Pointer to **bool** | 当前账号是否拉黑目标账号。 | [optional] 
+**BlockedBy** | Pointer to **bool** | 目标账号是否拉黑当前账号。 | [optional] 
 
 ## Methods
 

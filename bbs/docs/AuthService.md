@@ -34,7 +34,7 @@ import (
 )
 
 func main() {
-	loginByPasswordRequest := *openapiclient.NewLoginByPasswordRequest() // LoginByPasswordRequest | 
+	loginByPasswordRequest := *openapiclient.NewLoginByPasswordRequest("Account_example", "Password_example") // LoginByPasswordRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -166,7 +166,7 @@ import (
 )
 
 func main() {
-	startEmailRegistrationRequest := *openapiclient.NewStartEmailRegistrationRequest() // StartEmailRegistrationRequest | 
+	startEmailRegistrationRequest := *openapiclient.NewStartEmailRegistrationRequest("Email_example", "Password_example", "Name_example") // StartEmailRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -232,7 +232,7 @@ import (
 )
 
 func main() {
-	startPhoneRegistrationRequest := *openapiclient.NewStartPhoneRegistrationRequest() // StartPhoneRegistrationRequest | 
+	startPhoneRegistrationRequest := *openapiclient.NewStartPhoneRegistrationRequest("Phone_example", "Password_example", "Name_example") // StartPhoneRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -298,7 +298,7 @@ import (
 )
 
 func main() {
-	verifyEmailRegistrationRequest := *openapiclient.NewVerifyEmailRegistrationRequest() // VerifyEmailRegistrationRequest | 
+	verifyEmailRegistrationRequest := *openapiclient.NewVerifyEmailRegistrationRequest("Code_example", "CodeToken_example") // VerifyEmailRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -364,7 +364,7 @@ import (
 )
 
 func main() {
-	verifyPhoneRegistrationRequest := *openapiclient.NewVerifyPhoneRegistrationRequest() // VerifyPhoneRegistrationRequest | 
+	verifyPhoneRegistrationRequest := *openapiclient.NewVerifyPhoneRegistrationRequest("Code_example", "CodeToken_example") // VerifyPhoneRegistrationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Timezone** | Pointer to **string** |  | [optional] 
-**Theme** | Pointer to **string** |  | [optional] 
-**MobileTheme** | Pointer to **string** |  | [optional] 
-**Language** | Pointer to **string** |  | [optional] 
+**Timezone** | Pointer to **string** | 时区。 | [optional] 
+**Theme** | Pointer to **string** | 桌面端主题。 | [optional] 
+**MobileTheme** | Pointer to **string** | 移动端主题。 | [optional] 
+**Language** | Pointer to **string** | 界面语言。 | [optional] 
 
 ## Methods
 

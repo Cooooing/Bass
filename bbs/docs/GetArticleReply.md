@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | Pointer to [**Article**](Article.md) |  | [optional] 
+**Article** | Pointer to [**Article**](Article.md) | 文章详情。 | [optional] 
 
 ## Methods
 

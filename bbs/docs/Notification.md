@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**EventId** | Pointer to **string** |  | [optional] 
-**ReceiverId** | Pointer to **string** |  | [optional] 
-**EventType** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**ReadAt** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 通知 ID。 | [optional] 
+**EventId** | Pointer to **string** | 来源事件 ID。 | [optional] 
+**ReceiverId** | Pointer to **string** | 接收账号 ID。 | [optional] 
+**EventType** | Pointer to **string** | 来源事件类型。 | [optional] 
+**Title** | Pointer to **string** | 通知标题。 | [optional] 
+**Content** | Pointer to **string** | 通知内容。 | [optional] 
+**ReadAt** | Pointer to **string** | 已读时间。 | [optional] 
+**CreatedAt** | Pointer to **string** | 创建时间。 | [optional] 
+**UpdatedAt** | Pointer to **string** | 更新时间。 | [optional] 
 
 ## Methods
 

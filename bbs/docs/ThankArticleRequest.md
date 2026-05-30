@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | Pointer to **string** |  | [optional] 
-**Active** | Pointer to **bool** |  | [optional] 
+**ArticleId** | **string** | 文章 ID。 | 
+**Active** | **bool** | 是否感谢。 | 
 
 ## Methods
 
 ### NewThankArticleRequest
 
-`func NewThankArticleRequest() *ThankArticleRequest`
+`func NewThankArticleRequest(articleId string, active bool, ) *ThankArticleRequest`
 
 NewThankArticleRequest instantiates a new ThankArticleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetArticleId sets ArticleId field to given value.
 
-### HasArticleId
-
-`func (o *ThankArticleRequest) HasArticleId() bool`
-
-HasArticleId returns a boolean if a field has been set.
 
 ### GetActive
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetActive sets Active field to given value.
 
-### HasActive
-
-`func (o *ThankArticleRequest) HasActive() bool`
-
-HasActive returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

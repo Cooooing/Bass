@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-	addPostscriptRequest := *openapiclient.NewAddPostscriptRequest() // AddPostscriptRequest | 
+	addPostscriptRequest := *openapiclient.NewAddPostscriptRequest("ArticleId_example", "Content_example") // AddPostscriptRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

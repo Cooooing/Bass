@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageRequest**](PageRequest.md) |  | [optional] 
+**Page** | Pointer to [**PageRequest**](PageRequest.md) | 分页参数。 | [optional] 
 
 ## Methods
 

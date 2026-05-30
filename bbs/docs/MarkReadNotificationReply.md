@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Count** | Pointer to **int32** |  | [optional] 
+**Count** | Pointer to **int32** | 成功标记的通知数量。 | [optional] 
 
 ## Methods
 

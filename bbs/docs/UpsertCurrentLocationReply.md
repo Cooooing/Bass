@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Location** | Pointer to [**Location**](Location.md) |  | [optional] 
+**Location** | Pointer to [**Location**](Location.md) | 更新后的账号地理资料。 | [optional] 
 
 ## Methods
 

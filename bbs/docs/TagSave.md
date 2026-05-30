@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**DomainId** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 标签 ID。 | [optional] 
+**DomainId** | Pointer to **string** | 所属板块 ID。 | [optional] 
+**Status** | Pointer to **string** | 标签状态。 | [optional] 
+**Name** | Pointer to **string** | 标签名称。 | [optional] 
+**Description** | Pointer to **string** | 标签描述。 | [optional] 
 
 ## Methods
 

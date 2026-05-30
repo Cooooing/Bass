@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CommentId** | Pointer to **string** |  | [optional] 
-**ArticleId** | Pointer to **string** |  | [optional] 
-**ParentId** | Pointer to **string** |  | [optional] 
-**ReplyId** | Pointer to **string** |  | [optional] 
-**Order** | Pointer to **string** |  | [optional] 
-**UserId** | Pointer to **string** |  | [optional] 
-**Level** | Pointer to **int32** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
+**CommentId** | Pointer to **string** | 评论 ID。 | [optional] 
+**ArticleId** | Pointer to **string** | 文章 ID。 | [optional] 
+**ParentId** | Pointer to **string** | 父评论 ID。 | [optional] 
+**ReplyId** | Pointer to **string** | 回复的评论 ID。 | [optional] 
+**Order** | Pointer to **string** | 排序方式。 | [optional] 
+**UserId** | Pointer to **string** | 评论账号 ID。 | [optional] 
+**Level** | Pointer to **int32** | 评论层级。 | [optional] 
+**Status** | Pointer to **string** | 评论状态。 | [optional] 
 
 ## Methods
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageReply**](PageReply.md) |  | [optional] 
-**Rows** | Pointer to [**[]Comment**](Comment.md) |  | [optional] 
+**Page** | Pointer to [**PageReply**](PageReply.md) | 分页结果。 | [optional] 
+**Rows** | Pointer to [**[]Comment**](Comment.md) | 评论列表。 | [optional] 
 
 ## Methods
 

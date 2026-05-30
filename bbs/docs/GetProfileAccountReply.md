@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
+**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) | 账号展示资料。 | [optional] 
 
 ## Methods
 

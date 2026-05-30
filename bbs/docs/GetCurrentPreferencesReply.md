@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Preference** | Pointer to [**Preference**](Preference.md) |  | [optional] 
+**Preference** | Pointer to [**Preference**](Preference.md) | 当前账号偏好设置。 | [optional] 
 
 ## Methods
 

@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**ArticleId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**ContentRender** | Pointer to **string** |  | [optional] 
-**CreatedBy** | Pointer to **string** |  | [optional] 
-**UpdatedBy** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 附言 ID。 | [optional] 
+**ArticleId** | Pointer to **string** | 文章 ID。 | [optional] 
+**Content** | Pointer to **string** | 原始内容。 | [optional] 
+**ContentRender** | Pointer to **string** | 渲染后的内容。 | [optional] 
+**CreatedBy** | Pointer to **string** | 创建账号 ID。 | [optional] 
+**UpdatedBy** | Pointer to **string** | 更新账号 ID。 | [optional] 
+**CreatedAt** | Pointer to **string** | 创建时间。 | [optional] 
+**UpdatedAt** | Pointer to **string** | 更新时间。 | [optional] 
 
 ## Methods
 

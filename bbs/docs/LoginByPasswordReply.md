@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Token** | Pointer to **string** |  | [optional] 
-**Account** | Pointer to [**Account**](Account.md) |  | [optional] 
+**Token** | Pointer to **string** | 登录令牌。 | [optional] 
+**Account** | Pointer to [**Account**](Account.md) | 当前账号完整资料。 | [optional] 
 
 ## Methods
 

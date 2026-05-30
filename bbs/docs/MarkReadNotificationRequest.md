@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ids** | Pointer to **[]string** |  | [optional] 
+**Ids** | Pointer to **[]string** | 通知 ID 列表。 | [optional] 
 
 ## Methods
 

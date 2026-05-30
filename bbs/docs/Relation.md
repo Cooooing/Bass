@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **int32** |  | [optional] 
-**ActorId** | Pointer to **string** |  | [optional] 
-**TargetId** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 关系记录 ID。 | [optional] 
+**Type** | Pointer to **int32** | 关系类型。 | [optional] 
+**ActorId** | Pointer to **string** | 发起账号 ID。 | [optional] 
+**TargetId** | Pointer to **string** | 目标账号 ID。 | [optional] 
+**CreatedAt** | Pointer to **string** | 创建时间。 | [optional] 
+**UpdatedAt** | Pointer to **string** | 更新时间。 | [optional] 
 
 ## Methods
 

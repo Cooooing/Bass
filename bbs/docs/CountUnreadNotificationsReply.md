@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Count** | Pointer to **string** |  | [optional] 
+**Count** | Pointer to **string** | 未读通知数量。 | [optional] 
 
 ## Methods
 

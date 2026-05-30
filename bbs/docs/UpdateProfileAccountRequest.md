@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AvatarUrl** | Pointer to **string** |  | [optional] 
-**Nickname** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
-**Introduction** | Pointer to **string** |  | [optional] 
-**Mbti** | Pointer to **string** |  | [optional] 
+**AvatarUrl** | Pointer to **string** | 头像 URL。 | [optional] 
+**Nickname** | Pointer to **string** | 昵称。 | [optional] 
+**Url** | Pointer to **string** | 个人主页 URL。 | [optional] 
+**Introduction** | Pointer to **string** | 个人简介。 | [optional] 
+**Mbti** | Pointer to **string** | MBTI 类型。 | [optional] 
 
 ## Methods
 

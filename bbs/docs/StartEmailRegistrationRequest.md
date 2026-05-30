@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | Pointer to **string** |  | [optional] 
-**Password** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Nickname** | Pointer to **string** |  | [optional] 
+**Email** | **string** | 邮箱地址。 | 
+**Password** | **string** | 账号密码。 | 
+**Name** | **string** | 账号名。 | 
+**Nickname** | Pointer to **string** | 昵称。 | [optional] 
 
 ## Methods
 
 ### NewStartEmailRegistrationRequest
 
-`func NewStartEmailRegistrationRequest() *StartEmailRegistrationRequest`
+`func NewStartEmailRegistrationRequest(email string, password string, name string, ) *StartEmailRegistrationRequest`
 
 NewStartEmailRegistrationRequest instantiates a new StartEmailRegistrationRequest object
 This constructor will assign default values to properties that have it defined,
@@ -47,11 +47,6 @@ and a boolean to check if the value has been set.
 
 SetEmail sets Email field to given value.
 
-### HasEmail
-
-`func (o *StartEmailRegistrationRequest) HasEmail() bool`
-
-HasEmail returns a boolean if a field has been set.
 
 ### GetPassword
 
@@ -72,11 +67,6 @@ and a boolean to check if the value has been set.
 
 SetPassword sets Password field to given value.
 
-### HasPassword
-
-`func (o *StartEmailRegistrationRequest) HasPassword() bool`
-
-HasPassword returns a boolean if a field has been set.
 
 ### GetName
 
@@ -97,11 +87,6 @@ and a boolean to check if the value has been set.
 
 SetName sets Name field to given value.
 
-### HasName
-
-`func (o *StartEmailRegistrationRequest) HasName() bool`
-
-HasName returns a boolean if a field has been set.
 
 ### GetNickname
 

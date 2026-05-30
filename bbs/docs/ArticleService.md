@@ -24,6 +24,8 @@ Method | HTTP request | Description
 > serde_json::Value accept_answer(accept_answer_article_request)
 
 
+采纳文章评论为答案。
+
 ### Parameters
 
 
@@ -51,6 +53,8 @@ No authorization required
 
 > serde_json::Value collect(collect_article_request)
 
+
+收藏或取消收藏文章。
 
 ### Parameters
 
@@ -80,6 +84,8 @@ No authorization required
 > models::CreateArticleReply create(create_article_request)
 
 
+创建文章。
+
 ### Parameters
 
 
@@ -107,6 +113,8 @@ No authorization required
 
 > serde_json::Value delete(delete_article_request)
 
+
+删除文章。
 
 ### Parameters
 
@@ -136,6 +144,8 @@ No authorization required
 > models::GetArticleReply get(get_article_request)
 
 
+获取文章详情。
+
 ### Parameters
 
 
@@ -163,6 +173,8 @@ No authorization required
 
 > serde_json::Value like(like_article_request)
 
+
+点赞或取消点赞文章。
 
 ### Parameters
 
@@ -192,6 +204,8 @@ No authorization required
 > models::ListArticlesReply list(list_articles_request)
 
 
+分页查询文章列表。
+
 ### Parameters
 
 
@@ -219,6 +233,8 @@ No authorization required
 
 > serde_json::Value publish(publish_article_request)
 
+
+发布文章。
 
 ### Parameters
 
@@ -248,6 +264,8 @@ No authorization required
 > serde_json::Value reward(reward_article_request)
 
 
+打赏文章。
+
 ### Parameters
 
 
@@ -275,6 +293,8 @@ No authorization required
 
 > serde_json::Value thank(thank_article_request)
 
+
+感谢或取消感谢文章。
 
 ### Parameters
 
@@ -304,6 +324,8 @@ No authorization required
 > models::UpdateDraftArticleReply update_draft(update_draft_article_request)
 
 
+更新文章草稿。
+
 ### Parameters
 
 
@@ -331,6 +353,8 @@ No authorization required
 
 > serde_json::Value watch(watch_article_request)
 
+
+关注或取消关注文章。
 
 ### Parameters
 

@@ -13,6 +13,8 @@ Method | HTTP request | Description
 > models::ListDomainsReply list(list_domains_request)
 
 
+分页查询内容板块列表。
+
 ### Parameters
 
 

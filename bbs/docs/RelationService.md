@@ -20,7 +20,7 @@ Method | HTTP request | Description
 > serde_json::Value block(block_relation_request)
 
 
-当前账号拉黑目标账号
+当前账号拉黑目标账号。
 
 ### Parameters
 
@@ -50,7 +50,7 @@ No authorization required
 > serde_json::Value follow(follow_relation_request)
 
 
-当前账号关注目标账号
+当前账号关注目标账号。
 
 ### Parameters
 
@@ -80,7 +80,7 @@ No authorization required
 > models::GetStatusRelationReply get_status(get_status_relation_request)
 
 
-查询当前账号与目标账号之间的关系
+查询当前账号与目标账号之间的关系。
 
 ### Parameters
 
@@ -110,7 +110,7 @@ No authorization required
 > models::ListBlockedRelationsReply list_blocked(list_blocked_relations_request)
 
 
-分页查询当前账号拉黑的账号列表
+分页查询当前账号拉黑的账号列表。
 
 ### Parameters
 
@@ -140,7 +140,7 @@ No authorization required
 > models::ListFollowersRelationsReply list_followers(list_followers_relations_request)
 
 
-分页查询当前账号的粉丝账号列表
+分页查询当前账号的粉丝账号列表。
 
 ### Parameters
 
@@ -170,7 +170,7 @@ No authorization required
 > models::ListFollowingRelationsReply list_following(list_following_relations_request)
 
 
-分页查询当前账号关注的账号列表
+分页查询当前账号关注的账号列表。
 
 ### Parameters
 
@@ -200,7 +200,7 @@ No authorization required
 > serde_json::Value unblock(unblock_relation_request)
 
 
-当前账号取消拉黑目标账号
+当前账号取消拉黑目标账号。
 
 ### Parameters
 
@@ -230,7 +230,7 @@ No authorization required
 > serde_json::Value unfollow(unfollow_relation_request)
 
 
-当前账号取消关注目标账号
+当前账号取消关注目标账号。
 
 ### Parameters
 

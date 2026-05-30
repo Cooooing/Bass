@@ -14,7 +14,7 @@ Method | HTTP request | Description
 > models::GetCurrentLocationReply get_current(body)
 
 
-获取当前登录账号的地理资料
+获取当前账号的地理资料。
 
 ### Parameters
 
@@ -44,7 +44,7 @@ No authorization required
 > models::UpsertCurrentLocationReply upsert_current(upsert_current_location_request)
 
 
-更新当前登录账号的地理资料
+更新当前账号的地理资料。
 
 ### Parameters
 

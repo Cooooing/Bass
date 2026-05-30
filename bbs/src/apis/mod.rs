@@ -123,7 +123,7 @@ pub mod preferences_service;
 pub mod privacy_setting_service;
 pub mod relation_service;
 pub mod tag_service;
-pub mod tfa_service;
+pub mod totp_service;
 
 pub mod configuration;
 
@@ -142,7 +142,7 @@ pub trait Api {
     fn privacy_setting_service(&self) -> &dyn privacy_setting_service::PrivacySettingService;
     fn relation_service(&self) -> &dyn relation_service::RelationService;
     fn tag_service(&self) -> &dyn tag_service::TagService;
-    fn tfa_service(&self) -> &dyn tfa_service::TfaService;
+    fn totp_service(&self) -> &dyn totp_service::TotpService;
 }
 
 pub struct ApiClient {
@@ -158,7 +158,7 @@ pub struct ApiClient {
     privacy_setting_service: Box<dyn privacy_setting_service::PrivacySettingService>,
     relation_service: Box<dyn relation_service::RelationService>,
     tag_service: Box<dyn tag_service::TagService>,
-    tfa_service: Box<dyn tfa_service::TfaService>,
+    totp_service: Box<dyn totp_service::TotpService>,
 }
 
 impl ApiClient {
@@ -176,7 +176,7 @@ impl ApiClient {
             privacy_setting_service: Box::new(privacy_setting_service::PrivacySettingServiceClient::new(configuration.clone())),
             relation_service: Box::new(relation_service::RelationServiceClient::new(configuration.clone())),
             tag_service: Box::new(tag_service::TagServiceClient::new(configuration.clone())),
-            tfa_service: Box::new(tfa_service::TfaServiceClient::new(configuration.clone())),
+            totp_service: Box::new(totp_service::TotpServiceClient::new(configuration.clone())),
         }
     }
 }
@@ -218,8 +218,8 @@ impl Api for ApiClient {
     fn tag_service(&self) -> &dyn tag_service::TagService {
         self.tag_service.as_ref()
     }
-    fn tfa_service(&self) -> &dyn tfa_service::TfaService {
-        self.tfa_service.as_ref()
+    fn totp_service(&self) -> &dyn totp_service::TotpService {
+        self.totp_service.as_ref()
     }
 }
 

@@ -13,6 +13,8 @@ Method | HTTP request | Description
 > models::ListTagsReply list(list_tags_request)
 
 
+分页查询标签列表。
+
 ### Parameters
 
 

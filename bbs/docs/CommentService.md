@@ -16,6 +16,8 @@ Method | HTTP request | Description
 > models::CreateCommentReply create(create_comment_request)
 
 
+创建评论。
+
 ### Parameters
 
 
@@ -43,6 +45,8 @@ No authorization required
 
 > serde_json::Value like(like_comment_request)
 
+
+点赞或取消点赞评论。
 
 ### Parameters
 
@@ -72,6 +76,8 @@ No authorization required
 > models::ListCommentsReply list(list_comments_request)
 
 
+分页查询评论列表。
+
 ### Parameters
 
 
@@ -99,6 +105,8 @@ No authorization required
 
 > serde_json::Value thank(thank_comment_request)
 
+
+感谢或取消感谢评论。
 
 ### Parameters
 

@@ -13,7 +13,7 @@ Method | HTTP request | Description
 > models::AddPostscriptReply add(add_postscript_request)
 
 
-添加文章附言
+添加文章附言。
 
 ### Parameters
 

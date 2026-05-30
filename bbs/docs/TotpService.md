@@ -1,23 +1,22 @@
-# \TfaService
+# \TotpService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**begin_enable**](TfaService.md#begin_enable) | **POST** /v1/user/tfa/begin-enable | 
-[**confirm_enable**](TfaService.md#confirm_enable) | **POST** /v1/user/tfa/confirm-enable | 
-[**disable**](TfaService.md#disable) | **POST** /v1/user/tfa/disable | 
-[**get_current**](TfaService.md#get_current) | **POST** /v1/user/tfa/get-current | 
-[**validate**](TfaService.md#validate) | **POST** /v1/user/tfa/validate | 
+[**begin_enable**](TotpService.md#begin_enable) | **POST** /v1/user/totp/begin-enable | 
+[**confirm_enable**](TotpService.md#confirm_enable) | **POST** /v1/user/totp/confirm-enable | 
+[**disable**](TotpService.md#disable) | **POST** /v1/user/totp/disable | 
+[**get_current**](TotpService.md#get_current) | **POST** /v1/user/totp/get-current | 
 
 
 
 ## begin_enable
 
-> models::BeginEnableTfaReply begin_enable(body)
+> models::BeginEnableTotpReply begin_enable(body)
 
 
-开始启用二步验证
+开始启用 TOTP。
 
 ### Parameters
 
@@ -28,7 +27,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::BeginEnableTfaReply**](BeginEnableTfa_Reply.md)
+[**models::BeginEnableTotpReply**](BeginEnableTotp_Reply.md)
 
 ### Authorization
 
@@ -44,17 +43,17 @@ No authorization required
 
 ## confirm_enable
 
-> serde_json::Value confirm_enable(confirm_enable_tfa_request)
+> serde_json::Value confirm_enable(confirm_enable_totp_request)
 
 
-确认二步验证码并正式启用二步验证
+确认 TOTP 验证码并正式启用 TOTP。
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**confirm_enable_tfa_request** | [**ConfirmEnableTfaRequest**](ConfirmEnableTfaRequest.md) |  | [required] |
+**confirm_enable_totp_request** | [**ConfirmEnableTotpRequest**](ConfirmEnableTotpRequest.md) |  | [required] |
 
 ### Return type
 
@@ -74,17 +73,17 @@ No authorization required
 
 ## disable
 
-> serde_json::Value disable(disable_tfa_request)
+> serde_json::Value disable(disable_totp_request)
 
 
-校验二步验证码并关闭二步验证
+校验 TOTP 验证码并关闭 TOTP。
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**disable_tfa_request** | [**DisableTfaRequest**](DisableTfaRequest.md) |  | [required] |
+**disable_totp_request** | [**DisableTotpRequest**](DisableTotpRequest.md) |  | [required] |
 
 ### Return type
 
@@ -104,10 +103,10 @@ No authorization required
 
 ## get_current
 
-> models::GetCurrentTfaReply get_current(body)
+> models::GetCurrentTotpReply get_current(body)
 
 
-获取当前登录账号的二步验证状态
+获取当前账号的 TOTP 状态。
 
 ### Parameters
 
@@ -118,37 +117,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetCurrentTfaReply**](GetCurrentTfa_Reply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## validate
-
-> models::ValidateTfaReply validate(validate_tfa_request)
-
-
-校验当前登录账号的二步验证码
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**validate_tfa_request** | [**ValidateTfaRequest**](ValidateTfaRequest.md) |  | [required] |
-
-### Return type
-
-[**models::ValidateTfaReply**](ValidateTfa_Reply.md)
+[**models::GetCurrentTotpReply**](GetCurrentTotp_Reply.md)
 
 ### Authorization
 

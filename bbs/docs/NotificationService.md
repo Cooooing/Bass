@@ -15,6 +15,8 @@ Method | HTTP request | Description
 > models::CountUnreadNotificationsReply count_unread(body)
 
 
+统计未读通知数量。
+
 ### Parameters
 
 
@@ -43,6 +45,8 @@ No authorization required
 > models::ListNotificationsReply list(list_notifications_request)
 
 
+分页查询通知列表。
+
 ### Parameters
 
 
@@ -70,6 +74,8 @@ No authorization required
 
 > models::MarkReadNotificationReply mark_read(mark_read_notification_request)
 
+
+标记通知为已读。
 
 ### Parameters
 

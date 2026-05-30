@@ -14,7 +14,7 @@ Method | HTTP request | Description
 > models::GetCurrentPrivacySettingReply get_current(body)
 
 
-获取当前登录账号的隐私设置
+获取当前账号的隐私设置。
 
 ### Parameters
 
@@ -44,7 +44,7 @@ No authorization required
 > models::UpdateCurrentPrivacySettingReply update_current(update_current_privacy_setting_request)
 
 
-更新当前登录账号的隐私设置
+更新当前账号的隐私设置。
 
 ### Parameters
 

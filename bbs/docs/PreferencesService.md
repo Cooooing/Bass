@@ -14,7 +14,7 @@ Method | HTTP request | Description
 > models::GetCurrentPreferencesReply get_current(body)
 
 
-获取当前登录账号的偏好设置
+获取当前账号的偏好设置。
 
 ### Parameters
 
@@ -44,7 +44,7 @@ No authorization required
 > models::UpdateCurrentPreferencesReply update_current(update_current_preferences_request)
 
 
-更新当前登录账号的偏好设置
+更新当前账号的偏好设置。
 
 ### Parameters
 

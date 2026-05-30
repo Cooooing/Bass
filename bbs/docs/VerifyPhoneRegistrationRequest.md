@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | Option<**String**> |  | [optional]
-**code_token** | Option<**String**> |  | [optional]
+**code** | **String** | 验证码。 | 
+**code_token** | **String** | 验证码令牌。 | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

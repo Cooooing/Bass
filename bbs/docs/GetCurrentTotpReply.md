@@ -1,13 +1,13 @@
 
 
-# ConfirmEnableTfaRequest
+# GetCurrentTotpReply
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**code** | **String** |  |  [optional] |
+|**totp** | [**Totp**](Totp.md) | TOTP 认证状态。 |  [optional] |
 
 
 

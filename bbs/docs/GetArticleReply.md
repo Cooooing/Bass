@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**article** | [**Article**](Article.md) |  |  [optional] |
+|**article** | [**Article**](Article.md) | 文章详情。 |  [optional] |
 
 
 

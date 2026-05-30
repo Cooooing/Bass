@@ -7,8 +7,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**code** | **String** |  |  [optional] |
-|**codeToken** | **String** |  |  [optional] |
+|**code** | **String** | 验证码。 |  |
+|**codeToken** | **String** | 验证码令牌。 |  |
 
 
 

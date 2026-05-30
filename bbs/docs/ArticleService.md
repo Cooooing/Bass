@@ -37,6 +37,8 @@ All URIs are relative to *http://localhost*
 
 
 
+采纳文章评论为答案。
+
 ### Example
 
 ```java
@@ -102,6 +104,8 @@ No authorization required
 > ApiResponse<Object> acceptAnswerWithHttpInfo(acceptAnswerRequest)
 
 
+
+采纳文章评论为答案。
 
 ### Example
 
@@ -183,6 +187,8 @@ No authorization required
 
 
 
+分页查询文章列表。
+
 ### Example
 
 ```java
@@ -248,6 +254,8 @@ No authorization required
 > ApiResponse<ListArticlesReply> callListWithHttpInfo(callListRequest)
 
 
+
+分页查询文章列表。
 
 ### Example
 
@@ -329,6 +337,8 @@ No authorization required
 
 
 
+收藏或取消收藏文章。
+
 ### Example
 
 ```java
@@ -394,6 +404,8 @@ No authorization required
 > ApiResponse<Object> collectWithHttpInfo(collectRequest)
 
 
+
+收藏或取消收藏文章。
 
 ### Example
 
@@ -475,6 +487,8 @@ No authorization required
 
 
 
+创建文章。
+
 ### Example
 
 ```java
@@ -540,6 +554,8 @@ No authorization required
 > ApiResponse<CreateArticleReply> createWithHttpInfo(createRequest)
 
 
+
+创建文章。
 
 ### Example
 
@@ -621,6 +637,8 @@ No authorization required
 
 
 
+删除文章。
+
 ### Example
 
 ```java
@@ -686,6 +704,8 @@ No authorization required
 > ApiResponse<Object> deleteWithHttpInfo(deleteRequest)
 
 
+
+删除文章。
 
 ### Example
 
@@ -767,6 +787,8 @@ No authorization required
 
 
 
+获取文章详情。
+
 ### Example
 
 ```java
@@ -832,6 +854,8 @@ No authorization required
 > ApiResponse<GetArticleReply> getWithHttpInfo(getRequest)
 
 
+
+获取文章详情。
 
 ### Example
 
@@ -913,6 +937,8 @@ No authorization required
 
 
 
+点赞或取消点赞文章。
+
 ### Example
 
 ```java
@@ -978,6 +1004,8 @@ No authorization required
 > ApiResponse<Object> likeWithHttpInfo(likeRequest)
 
 
+
+点赞或取消点赞文章。
 
 ### Example
 
@@ -1059,6 +1087,8 @@ No authorization required
 
 
 
+发布文章。
+
 ### Example
 
 ```java
@@ -1124,6 +1154,8 @@ No authorization required
 > ApiResponse<Object> publishWithHttpInfo(publishRequest)
 
 
+
+发布文章。
 
 ### Example
 
@@ -1205,6 +1237,8 @@ No authorization required
 
 
 
+打赏文章。
+
 ### Example
 
 ```java
@@ -1270,6 +1304,8 @@ No authorization required
 > ApiResponse<Object> rewardWithHttpInfo(rewardRequest)
 
 
+
+打赏文章。
 
 ### Example
 
@@ -1351,6 +1387,8 @@ No authorization required
 
 
 
+感谢或取消感谢文章。
+
 ### Example
 
 ```java
@@ -1416,6 +1454,8 @@ No authorization required
 > ApiResponse<Object> thankWithHttpInfo(thankRequest)
 
 
+
+感谢或取消感谢文章。
 
 ### Example
 
@@ -1497,6 +1537,8 @@ No authorization required
 
 
 
+更新文章草稿。
+
 ### Example
 
 ```java
@@ -1562,6 +1604,8 @@ No authorization required
 > ApiResponse<UpdateDraftArticleReply> updateDraftWithHttpInfo(updateDraftRequest)
 
 
+
+更新文章草稿。
 
 ### Example
 
@@ -1643,6 +1687,8 @@ No authorization required
 
 
 
+关注或取消关注文章。
+
 ### Example
 
 ```java
@@ -1708,6 +1754,8 @@ No authorization required
 > ApiResponse<Object> watchWithHttpInfo(watchRequest)
 
 
+
+关注或取消关注文章。
 
 ### Example
 

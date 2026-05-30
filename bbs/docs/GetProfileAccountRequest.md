@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**userId** | **String** |  |  [optional] |
+|**userId** | **String** | 账号 ID。 |  |
 
 
 

@@ -7,8 +7,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**articleId** | **String** |  |  [optional] |
-|**active** | **Boolean** |  |  [optional] |
+|**articleId** | **String** | 文章 ID。 |  |
+|**active** | **Boolean** | 是否关注。 |  |
 
 
 

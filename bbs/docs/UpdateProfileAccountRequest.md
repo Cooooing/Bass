@@ -7,11 +7,11 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**avatarUrl** | **String** |  |  [optional] |
-|**nickname** | **String** |  |  [optional] |
-|**url** | **String** |  |  [optional] |
-|**introduction** | **String** |  |  [optional] |
-|**mbti** | [**MbtiEnum**](#MbtiEnum) |  |  [optional] |
+|**avatarUrl** | **String** | 头像 URL。 |  [optional] |
+|**nickname** | **String** | 昵称。 |  [optional] |
+|**url** | **String** | 个人主页 URL。 |  [optional] |
+|**introduction** | **String** | 个人简介。 |  [optional] |
+|**mbti** | [**MbtiEnum**](#MbtiEnum) | MBTI 类型。 |  [optional] |
 
 
 

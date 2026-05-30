@@ -2,19 +2,20 @@
 
 # ArticleQuery
 
+文章查询条件。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**tagId** | **String** |  |  [optional] |
-|**domainId** | **String** |  |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
-|**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
-|**order** | [**OrderEnum**](#OrderEnum) |  |  [optional] |
-|**keyword** | **String** |  |  [optional] |
-|**authorId** | **String** |  |  [optional] |
-|**listable** | **Boolean** |  |  [optional] |
+|**tagId** | **String** | 标签 ID。 |  [optional] |
+|**domainId** | **String** | 板块 ID。 |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 文章状态。 |  [optional] |
+|**type** | [**TypeEnum**](#TypeEnum) | 文章类型。 |  [optional] |
+|**order** | [**OrderEnum**](#OrderEnum) | 排序方式。 |  [optional] |
+|**keyword** | **String** | 搜索关键词。 |  [optional] |
+|**authorId** | **String** | 作者账号 ID。 |  [optional] |
+|**listable** | **Boolean** | 是否在列表中展示。 |  [optional] |
 
 
 

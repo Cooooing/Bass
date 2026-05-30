@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**status** | [**RelationStatus**](RelationStatus.md) |  |  [optional] |
+|**status** | [**RelationStatus**](RelationStatus.md) | 关系状态。 |  [optional] |
 
 
 

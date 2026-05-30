@@ -7,8 +7,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**token** | **String** |  |  [optional] |
-|**account** | [**Account**](Account.md) |  |  [optional] |
+|**token** | **String** | 登录令牌。 |  [optional] |
+|**account** | [**Account**](Account.md) | 当前账号完整资料。 |  [optional] |
 
 
 

@@ -2,16 +2,17 @@
 
 # TagSave
 
+标签保存内容。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**id** | **String** |  |  [optional] |
-|**domainId** | **String** |  |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
-|**name** | **String** |  |  [optional] |
-|**description** | **String** |  |  [optional] |
+|**id** | **String** | 标签 ID。 |  [optional] |
+|**domainId** | **String** | 所属板块 ID。 |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 标签状态。 |  [optional] |
+|**name** | **String** | 标签名称。 |  [optional] |
+|**description** | **String** | 标签描述。 |  [optional] |
 
 
 

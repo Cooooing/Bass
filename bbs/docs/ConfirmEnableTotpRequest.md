@@ -1,14 +1,13 @@
 
 
-# BeginEnableTfaReply
+# ConfirmEnableTotpRequest
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**data** | **String** |  |  [optional] |
-|**contentType** | **String** |  |  [optional] |
+|**code** | **String** | TOTP 验证码。 |  |
 
 
 

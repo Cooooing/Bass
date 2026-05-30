@@ -21,6 +21,8 @@ All URIs are relative to *http://localhost*
 
 
 
+分页查询评论列表。
+
 ### Example
 
 ```java
@@ -86,6 +88,8 @@ No authorization required
 > ApiResponse<ListCommentsReply> callListWithHttpInfo(callListRequest)
 
 
+
+分页查询评论列表。
 
 ### Example
 
@@ -167,6 +171,8 @@ No authorization required
 
 
 
+创建评论。
+
 ### Example
 
 ```java
@@ -232,6 +238,8 @@ No authorization required
 > ApiResponse<CreateCommentReply> createWithHttpInfo(createRequest)
 
 
+
+创建评论。
 
 ### Example
 
@@ -313,6 +321,8 @@ No authorization required
 
 
 
+点赞或取消点赞评论。
+
 ### Example
 
 ```java
@@ -378,6 +388,8 @@ No authorization required
 > ApiResponse<Object> likeWithHttpInfo(likeRequest)
 
 
+
+点赞或取消点赞评论。
 
 ### Example
 
@@ -459,6 +471,8 @@ No authorization required
 
 
 
+感谢或取消感谢评论。
+
 ### Example
 
 ```java
@@ -524,6 +538,8 @@ No authorization required
 > ApiResponse<Object> thankWithHttpInfo(thankRequest)
 
 
+
+感谢或取消感谢评论。
 
 ### Example
 

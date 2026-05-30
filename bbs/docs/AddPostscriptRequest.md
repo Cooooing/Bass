@@ -7,8 +7,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**articleId** | **String** |  |  [optional] |
-|**content** | **String** |  |  [optional] |
+|**articleId** | **String** | 文章 ID。 |  |
+|**content** | **String** | 附言内容。 |  |
 
 
 

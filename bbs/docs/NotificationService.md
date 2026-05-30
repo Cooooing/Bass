@@ -19,6 +19,8 @@ All URIs are relative to *http://localhost*
 
 
 
+分页查询通知列表。
+
 ### Example
 
 ```java
@@ -84,6 +86,8 @@ No authorization required
 > ApiResponse<ListNotificationsReply> callListWithHttpInfo(callListRequest)
 
 
+
+分页查询通知列表。
 
 ### Example
 
@@ -165,6 +169,8 @@ No authorization required
 
 
 
+统计未读通知数量。
+
 ### Example
 
 ```java
@@ -230,6 +236,8 @@ No authorization required
 > ApiResponse<CountUnreadNotificationsReply> countUnreadWithHttpInfo(countUnreadRequest)
 
 
+
+统计未读通知数量。
 
 ### Example
 
@@ -311,6 +319,8 @@ No authorization required
 
 
 
+标记通知为已读。
+
 ### Example
 
 ```java
@@ -376,6 +386,8 @@ No authorization required
 > ApiResponse<MarkReadNotificationReply> markReadWithHttpInfo(markReadRequest)
 
 
+
+标记通知为已读。
 
 ### Example
 

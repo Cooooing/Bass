@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**targetId** | **String** |  |  [optional] |
+|**targetId** | **String** | 目标账号 ID。 |  |
 
 
 

@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**count** | **Integer** |  |  [optional] |
+|**count** | **Integer** | 成功标记的通知数量。 |  [optional] |
 
 
 

@@ -2,17 +2,18 @@
 
 # TagQuery
 
+标签查询条件。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**ids** | **List&lt;String&gt;** |  |  [optional] |
-|**name** | **String** |  |  [optional] |
-|**names** | **List&lt;String&gt;** |  |  [optional] |
-|**description** | **String** |  |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
-|**domainId** | **String** |  |  [optional] |
+|**ids** | **List&lt;String&gt;** | 标签 ID 列表。 |  [optional] |
+|**name** | **String** | 标签名称。 |  [optional] |
+|**names** | **List&lt;String&gt;** | 标签名称列表。 |  [optional] |
+|**description** | **String** | 标签描述。 |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 标签状态。 |  [optional] |
+|**domainId** | **String** | 所属板块 ID。 |  [optional] |
 
 
 

@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**page** | [**PageRequest**](PageRequest.md) |  |  [optional] |
+|**page** | [**PageRequest**](PageRequest.md) | 分页参数。 |  [optional] |
 
 
 

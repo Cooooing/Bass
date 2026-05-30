@@ -2,17 +2,17 @@
 
 # Preference
 
-账号偏好设置
+账号偏好设置。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**userId** | **String** |  |  [optional] |
-|**timezone** | **String** |  |  [optional] |
-|**theme** | **String** |  |  [optional] |
-|**mobileTheme** | **String** |  |  [optional] |
-|**language** | [**LanguageEnum**](#LanguageEnum) |  |  [optional] |
+|**userId** | **String** | 账号 ID。 |  [optional] |
+|**timezone** | **String** | 时区。 |  [optional] |
+|**theme** | **String** | 桌面端主题。 |  [optional] |
+|**mobileTheme** | **String** | 移动端主题。 |  [optional] |
+|**language** | [**LanguageEnum**](#LanguageEnum) | 界面语言。 |  [optional] |
 
 
 

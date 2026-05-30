@@ -17,7 +17,7 @@ All URIs are relative to *http://localhost*
 
 
 
-获取当前登录账号的偏好设置
+获取当前账号的偏好设置。
 
 ### Example
 
@@ -85,7 +85,7 @@ No authorization required
 
 
 
-获取当前登录账号的偏好设置
+获取当前账号的偏好设置。
 
 ### Example
 
@@ -167,7 +167,7 @@ No authorization required
 
 
 
-更新当前登录账号的偏好设置
+更新当前账号的偏好设置。
 
 ### Example
 
@@ -235,7 +235,7 @@ No authorization required
 
 
 
-更新当前登录账号的偏好设置
+更新当前账号的偏好设置。
 
 ### Example
 

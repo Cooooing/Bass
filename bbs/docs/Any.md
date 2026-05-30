@@ -1,13 +1,14 @@
 
 
-# GetCurrentTfaReply
+# Any
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**tfa** | [**Tfa**](Tfa.md) |  |  [optional] |
+|**value** | **GoogleProtobufAny** |  |  [optional] |
+|**yaml** | **String** |  |  [optional] |
 
 
 

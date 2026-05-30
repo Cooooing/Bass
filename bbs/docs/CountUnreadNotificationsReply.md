@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**count** | **String** |  |  [optional] |
+|**count** | **String** | 未读通知数量。 |  [optional] |
 
 
 

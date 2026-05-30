@@ -7,8 +7,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**page** | [**PageReply**](PageReply.md) |  |  [optional] |
-|**rows** | [**List&lt;Domain&gt;**](Domain.md) |  |  [optional] |
+|**page** | [**PageReply**](PageReply.md) | 分页结果。 |  [optional] |
+|**rows** | [**List&lt;Domain&gt;**](Domain.md) | 内容板块列表。 |  [optional] |
 
 
 

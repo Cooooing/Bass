@@ -29,7 +29,7 @@ All URIs are relative to *http://localhost*
 
 
 
-当前账号拉黑目标账号
+当前账号拉黑目标账号。
 
 ### Example
 
@@ -97,7 +97,7 @@ No authorization required
 
 
 
-当前账号拉黑目标账号
+当前账号拉黑目标账号。
 
 ### Example
 
@@ -179,7 +179,7 @@ No authorization required
 
 
 
-当前账号关注目标账号
+当前账号关注目标账号。
 
 ### Example
 
@@ -247,7 +247,7 @@ No authorization required
 
 
 
-当前账号关注目标账号
+当前账号关注目标账号。
 
 ### Example
 
@@ -329,7 +329,7 @@ No authorization required
 
 
 
-查询当前账号与目标账号之间的关系
+查询当前账号与目标账号之间的关系。
 
 ### Example
 
@@ -397,7 +397,7 @@ No authorization required
 
 
 
-查询当前账号与目标账号之间的关系
+查询当前账号与目标账号之间的关系。
 
 ### Example
 
@@ -479,7 +479,7 @@ No authorization required
 
 
 
-分页查询当前账号拉黑的账号列表
+分页查询当前账号拉黑的账号列表。
 
 ### Example
 
@@ -547,7 +547,7 @@ No authorization required
 
 
 
-分页查询当前账号拉黑的账号列表
+分页查询当前账号拉黑的账号列表。
 
 ### Example
 
@@ -629,7 +629,7 @@ No authorization required
 
 
 
-分页查询当前账号的粉丝账号列表
+分页查询当前账号的粉丝账号列表。
 
 ### Example
 
@@ -697,7 +697,7 @@ No authorization required
 
 
 
-分页查询当前账号的粉丝账号列表
+分页查询当前账号的粉丝账号列表。
 
 ### Example
 
@@ -779,7 +779,7 @@ No authorization required
 
 
 
-分页查询当前账号关注的账号列表
+分页查询当前账号关注的账号列表。
 
 ### Example
 
@@ -847,7 +847,7 @@ No authorization required
 
 
 
-分页查询当前账号关注的账号列表
+分页查询当前账号关注的账号列表。
 
 ### Example
 
@@ -929,7 +929,7 @@ No authorization required
 
 
 
-当前账号取消拉黑目标账号
+当前账号取消拉黑目标账号。
 
 ### Example
 
@@ -997,7 +997,7 @@ No authorization required
 
 
 
-当前账号取消拉黑目标账号
+当前账号取消拉黑目标账号。
 
 ### Example
 
@@ -1079,7 +1079,7 @@ No authorization required
 
 
 
-当前账号取消关注目标账号
+当前账号取消关注目标账号。
 
 ### Example
 
@@ -1147,7 +1147,7 @@ No authorization required
 
 
 
-当前账号取消关注目标账号
+当前账号取消关注目标账号。
 
 ### Example
 

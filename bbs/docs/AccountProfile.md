@@ -2,24 +2,24 @@
 
 # AccountProfile
 
-账号展示资料
+账号展示资料。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**id** | **String** |  |  [optional] |
-|**name** | **String** |  |  [optional] |
-|**nickname** | **String** |  |  [optional] |
-|**url** | **String** |  |  [optional] |
-|**avatarUrl** | **String** |  |  [optional] |
-|**introduction** | **String** |  |  [optional] |
-|**mbti** | [**MbtiEnum**](#MbtiEnum) |  |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
-|**followCount** | **Integer** |  |  [optional] |
-|**followerCount** | **Integer** |  |  [optional] |
-|**createdAt** | **String** |  |  [optional] |
-|**updatedAt** | **String** |  |  [optional] |
+|**id** | **String** | 账号 ID。 |  [optional] |
+|**name** | **String** | 账号名。 |  [optional] |
+|**nickname** | **String** | 昵称。 |  [optional] |
+|**url** | **String** | 个人主页 URL。 |  [optional] |
+|**avatarUrl** | **String** | 头像 URL。 |  [optional] |
+|**introduction** | **String** | 个人简介。 |  [optional] |
+|**mbti** | [**MbtiEnum**](#MbtiEnum) | MBTI 类型。 |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 账号状态。 |  [optional] |
+|**followCount** | **Integer** | 关注数量。 |  [optional] |
+|**followerCount** | **Integer** | 粉丝数量。 |  [optional] |
+|**createdAt** | **String** | 创建时间。 |  [optional] |
+|**updatedAt** | **String** | 更新时间。 |  [optional] |
 
 
 

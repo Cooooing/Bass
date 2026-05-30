@@ -15,6 +15,8 @@ All URIs are relative to *http://localhost*
 
 
 
+分页查询内容板块列表。
+
 ### Example
 
 ```java
@@ -80,6 +82,8 @@ No authorization required
 > ApiResponse<ListDomainsReply> callListWithHttpInfo(callListRequest)
 
 
+
+分页查询内容板块列表。
 
 ### Example
 

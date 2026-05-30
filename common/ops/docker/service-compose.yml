@@ -17,9 +17,9 @@ services:
     networks:
       - bass
 
-  gateway:
-    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/gateway:latest
-    container_name: gateway
+  bbs:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/bbs:latest
+    container_name: bbs
     restart: on-failure:3
     env_file:
       - .env
@@ -77,26 +77,3 @@ services:
     networks:
       - bass
 
-  signal:
-    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/signal:latest
-    container_name: signal
-    restart: on-failure:3
-    env_file:
-      - .env
-    ports:
-      - "8006:8000"
-      - "9006:9000"
-    networks:
-      - bass
-
-  connector:
-    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/connector:latest
-    container_name: connector
-    restart: on-failure:3
-    env_file:
-      - .env
-    ports:
-      - "8007:8000"
-      - "9007:9000"
-    networks:
-      - bass

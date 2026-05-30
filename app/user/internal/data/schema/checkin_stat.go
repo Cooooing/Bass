@@ -26,9 +26,9 @@ func (CheckinStat) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("账号 ID").Unique(),
-		field.Int32("total_online_minutes").Comment("累计在线时长，单位为分钟").Default(0).Nillable(),
-		field.Int32("current_streak").Comment("当前连续签到天数").Default(0).Nillable(),
-		field.Int32("longest_streak").Comment("最长连续签到天数").Default(0).Nillable(),
+		field.Int32("total_online_minutes").Comment("累计在线时长，单位为分钟").Default(0),
+		field.Int32("current_streak").Comment("当前连续签到天数").Default(0),
+		field.Int32("longest_streak").Comment("最长连续签到天数").Default(0),
 	}
 }
 

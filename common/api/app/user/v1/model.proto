@@ -59,7 +59,7 @@ message Location {
   optional string city = 4;
 }
 
-message Tfa {
+message Totp {
   int64 user_id = 1;
   bool enable = 2;
   google.protobuf.Timestamp enable_time = 3;

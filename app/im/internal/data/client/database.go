@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"im/internal/conf"
 	"im/internal/data/gen"
+	"im/internal/data/gen/migrate"
+
+	_ "im/internal/data/gen/runtime"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
@@ -24,7 +27,7 @@ func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, fu
 	// 可选：自动迁移
 	if conf.Data.Database.Merge {
 		ctx := context.Background()
-		if err := client.Schema.Create(ctx); err != nil {
+		if err := client.Schema.Create(ctx, migrate.WithDropColumn(true), migrate.WithDropIndex(true)); err != nil {
 			return nil, nil, fmt.Errorf("failed creating schema resources: %w", err)
 		}
 	}

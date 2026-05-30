@@ -2,5 +2,13 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1;
 
+import "gnostic/openapi/v3/annotations.proto";
+
 option go_package = "common/api/gen/bbs/v1;v1";
-// BBS BFF 对外 API 文档元信息
+option (gnostic.openapi.v3.document) = {
+  info: {
+    title: "Bass BBS API"
+    description: "Bass 社区 HTTP/JSON API"
+    version: "1.0.0"
+  }
+};

@@ -48,7 +48,6 @@ func (c *Consumer) Start(ctx context.Context) error {
 			c.log.Errorf("queue subscribe %s[%s] failed: %v", subjectName, queueGroup, err)
 			continue
 		}
-		c.log.Infof("queue subscribed to %s[%s]", subjectName, queueGroup)
 	}
 	return nil
 }

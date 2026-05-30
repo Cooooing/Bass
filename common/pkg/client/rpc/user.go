@@ -13,7 +13,7 @@ type UserClient struct {
 	Preferences    userv1.PreferencesServiceClient
 	PrivacySetting userv1.PrivacySettingServiceClient
 	Location       userv1.LocationServiceClient
-	Tfa            userv1.TfaServiceClient
+	Totp           userv1.TotpServiceClient
 }
 
 func NewUserClient(conn *grpc.ClientConn) *UserClient {
@@ -24,6 +24,6 @@ func NewUserClient(conn *grpc.ClientConn) *UserClient {
 		Preferences:    userv1.NewPreferencesServiceClient(conn),
 		PrivacySetting: userv1.NewPrivacySettingServiceClient(conn),
 		Location:       userv1.NewLocationServiceClient(conn),
-		Tfa:            userv1.NewTfaServiceClient(conn),
+		Totp:           userv1.NewTotpServiceClient(conn),
 	}
 }

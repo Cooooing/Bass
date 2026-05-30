@@ -25,6 +25,19 @@ type UserRegisterTemplateData struct {
 	User TemplateUser
 }
 
+type VerificationCodeTemplateData struct {
+	Code           string
+	ExpiresSeconds int64
+}
+
+func (d VerificationCodeTemplateData) ExpiresMinutes() int64 {
+	expiresMinutes := d.ExpiresSeconds / 60
+	if expiresMinutes <= 0 {
+		return 1
+	}
+	return expiresMinutes
+}
+
 type UserFollowTemplateData struct {
 	Follower TemplateUser
 	Followed TemplateUser

@@ -3,7 +3,7 @@ package service
 import "testing"
 
 func TestAuthServiceValidateRegister(t *testing.T) {
-	service := NewAuthService(nil)
+	service := NewAuthService(nil, nil)
 	nickname := "Tester"
 	if err := service.validateRegister("user-1", &nickname, "abc123"); err != nil {
 		t.Fatalf("valid register should pass: %v", err)

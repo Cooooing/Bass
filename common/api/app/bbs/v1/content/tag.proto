@@ -8,7 +8,9 @@ import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/content;content";
 
+// 标签接口。
 service TagService {
+  // 分页查询标签列表。
   rpc List(ListTags.Request) returns (ListTags.Reply) {
     option (google.api.http) = {
       post: "/v1/content/tag/list"
@@ -17,13 +19,18 @@ service TagService {
   }
 }
 
+// 分页查询标签列表。
 message ListTags {
   message Request {
+    // 分页参数。
     common.PageRequest page = 1;
+    // 查询条件。
     TagQuery query = 2;
   }
   message Reply {
+    // 分页结果。
     common.PageReply page = 1;
+    // 标签列表。
     repeated Tag rows = 2;
   }
 }

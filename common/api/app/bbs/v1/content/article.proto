@@ -4,77 +4,102 @@ package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/model.proto";
 import "common/common.proto";
+import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/content;content";
 
+// 文章接口。
 service ArticleService {
+  // 创建文章。
   rpc Create(CreateArticle.Request) returns (CreateArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/create"
       body: "*"
     };
   }
+
+  // 更新文章草稿。
   rpc UpdateDraft(UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/update-draft"
       body: "*"
     };
   }
+
+  // 发布文章。
   rpc Publish(PublishArticle.Request) returns (PublishArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/publish"
       body: "*"
     };
   }
+
+  // 删除文章。
   rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/delete"
       body: "*"
     };
   }
+
+  // 分页查询文章列表。
   rpc List(ListArticles.Request) returns (ListArticles.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/list"
       body: "*"
     };
   }
+
+  // 获取文章详情。
   rpc Get(GetArticle.Request) returns (GetArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/get"
       body: "*"
     };
   }
+
+  // 点赞或取消点赞文章。
   rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/like"
       body: "*"
     };
   }
+
+  // 感谢或取消感谢文章。
   rpc Thank(ThankArticle.Request) returns (ThankArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/thank"
       body: "*"
     };
   }
+
+  // 收藏或取消收藏文章。
   rpc Collect(CollectArticle.Request) returns (CollectArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/collect"
       body: "*"
     };
   }
+
+  // 关注或取消关注文章。
   rpc Watch(WatchArticle.Request) returns (WatchArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/watch"
       body: "*"
     };
   }
+
+  // 打赏文章。
   rpc Reward(RewardArticle.Request) returns (RewardArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/reward"
       body: "*"
     };
   }
+
+  // 采纳文章评论为答案。
   rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {
     option (google.api.http) = {
       post: "/v1/content/article/accept-answer"
@@ -83,101 +108,173 @@ service ArticleService {
   }
 }
 
+// 创建文章。
 message CreateArticle {
   message Request {
+    // 文章保存内容。
     ArticleSave article = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "article"};
   }
   message Reply {
+    // 创建后的文章。
     Article article = 1;
   }
 }
 
+// 更新文章草稿。
 message UpdateDraftArticle {
   message Request {
+    // 文章保存内容。
     ArticleSave article = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "article"};
   }
   message Reply {
+    // 更新后的文章。
     Article article = 1;
   }
 }
 
+// 发布文章。
 message PublishArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Reply {}
 }
 
+// 删除文章。
 message DeleteArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Reply {}
 }
 
+// 分页查询文章列表。
 message ListArticles {
   message Request {
+    // 分页参数。
     common.PageRequest page = 1;
+    // 查询条件。
     ArticleQuery query = 2;
   }
   message Reply {
+    // 分页结果。
     common.PageReply page = 1;
+    // 文章列表。
     repeated Article rows = 2;
   }
 }
 
+// 获取文章详情。
 message GetArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Reply {
+    // 文章详情。
     Article article = 1;
   }
 }
 
+// 点赞或取消点赞文章。
 message LikeArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 是否点赞。
     bool active = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Reply {}
 }
 
+// 感谢或取消感谢文章。
 message ThankArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 是否感谢。
     bool active = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Reply {}
 }
 
+// 收藏或取消收藏文章。
 message CollectArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 是否收藏。
     bool active = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Reply {}
 }
 
+// 关注或取消关注文章。
 message WatchArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 是否关注。
     bool active = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Reply {}
 }
 
+// 打赏文章。
 message RewardArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Reply {}
 }
 
+// 采纳文章评论为答案。
 message AcceptAnswerArticle {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 评论 ID。
     int64 comment_id = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "comment_id"
+    };
   }
   message Reply {}
 }

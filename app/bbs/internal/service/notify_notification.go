@@ -11,11 +11,11 @@ import (
 
 type NotificationService struct {
 	bbsnotifyv1.UnimplementedNotificationServiceServer
-	notifyUsecase *usecase.NotifyUsecase
+	notificationUsecase *usecase.NotificationUsecase
 }
 
-func NewNotificationService(notifyUsecase *usecase.NotifyUsecase) *NotificationService {
-	return &NotificationService{notifyUsecase: notifyUsecase}
+func NewNotificationService(notificationUsecase *usecase.NotificationUsecase) *NotificationService {
+	return &NotificationService{notificationUsecase: notificationUsecase}
 }
 
 func (s *NotificationService) RegisterGrpc(gs *grpc.Server) {
@@ -27,13 +27,13 @@ func (s *NotificationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Request) (*bbsnotifyv1.ListNotifications_Reply, error) {
-	return s.notifyUsecase.ListNotifications(ctx, req)
+	return s.notificationUsecase.ListNotifications(ctx, req)
 }
 
 func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Request) (*bbsnotifyv1.MarkReadNotification_Reply, error) {
-	return s.notifyUsecase.MarkReadNotification(ctx, req)
+	return s.notificationUsecase.MarkReadNotification(ctx, req)
 }
 
 func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Request) (*bbsnotifyv1.CountUnreadNotifications_Reply, error) {
-	return s.notifyUsecase.CountUnreadNotifications(ctx, req)
+	return s.notificationUsecase.CountUnreadNotifications(ctx, req)
 }

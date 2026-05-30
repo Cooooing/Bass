@@ -11,11 +11,11 @@ import (
 
 type ContentTagService struct {
 	bbscontentv1.UnimplementedTagServiceServer
-	contentUsecase *usecase.ContentUsecase
+	contentTagUsecase *usecase.ContentTagUsecase
 }
 
-func NewContentTagService(contentUsecase *usecase.ContentUsecase) *ContentTagService {
-	return &ContentTagService{contentUsecase: contentUsecase}
+func NewContentTagService(contentTagUsecase *usecase.ContentTagUsecase) *ContentTagService {
+	return &ContentTagService{contentTagUsecase: contentTagUsecase}
 }
 
 func (s *ContentTagService) RegisterGrpc(gs *grpc.Server) {
@@ -27,5 +27,5 @@ func (s *ContentTagService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags_Request) (*bbscontentv1.ListTags_Reply, error) {
-	return s.contentUsecase.ListTags(ctx, req)
+	return s.contentTagUsecase.ListTags(ctx, req)
 }

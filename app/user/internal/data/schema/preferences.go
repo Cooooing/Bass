@@ -27,10 +27,10 @@ func (Preferences) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("账号 ID").Unique(),
-		field.Enum("language").Values(userenum.LanguageMap.EnumValues()...).Default(string(userenum.LanguageZhCN)).Comment("语言").Nillable(),
-		field.String("timezone").Comment("时区").Default("Asia/Shanghai").Nillable(),
-		field.String("theme").Comment("桌面端主题").Default("default").Nillable(),
-		field.String("mobile_theme").Comment("移动端主题").Default("default").Nillable(),
+		field.Enum("language").Values(userenum.LanguageMap.EnumValues()...).Default(string(userenum.LanguageZhCN)).Comment("语言"),
+		field.String("timezone").Comment("时区").Default("Asia/Shanghai"),
+		field.String("theme").Comment("桌面端主题").Default("default"),
+		field.String("mobile_theme").Comment("移动端主题").Default("default"),
 	}
 }
 

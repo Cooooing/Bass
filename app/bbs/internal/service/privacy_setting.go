@@ -11,11 +11,11 @@ import (
 
 type PrivacySettingService struct {
 	bbsuserv1.UnimplementedPrivacySettingServiceServer
-	userUsecase *usecase.UserUsecase
+	privacySettingUsecase *usecase.PrivacySettingUsecase
 }
 
-func NewPrivacySettingService(userUsecase *usecase.UserUsecase) *PrivacySettingService {
-	return &PrivacySettingService{userUsecase: userUsecase}
+func NewPrivacySettingService(privacySettingUsecase *usecase.PrivacySettingUsecase) *PrivacySettingService {
+	return &PrivacySettingService{privacySettingUsecase: privacySettingUsecase}
 }
 
 func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
@@ -27,9 +27,9 @@ func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Request) (*bbsuserv1.GetCurrentPrivacySetting_Reply, error) {
-	return s.userUsecase.GetCurrentPrivacySetting(ctx, req)
+	return s.privacySettingUsecase.GetCurrentPrivacySetting(ctx, req)
 }
 
 func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Request) (*bbsuserv1.UpdateCurrentPrivacySetting_Reply, error) {
-	return s.userUsecase.UpdateCurrentPrivacySetting(ctx, req)
+	return s.privacySettingUsecase.UpdateCurrentPrivacySetting(ctx, req)
 }

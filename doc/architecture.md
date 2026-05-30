@@ -15,6 +15,7 @@
 - service 层负责协议适配和入参组装，只能调用 biz/usecase；不能直接注入或调用 repo、data 层实现，现有历史偏离不作为新代码依据。
 - 事务能力通过 biz 层 `Tx` 等抽象传入 usecase，不能通过 repo 参数暴露具体数据库 client。
 - 常规表业务尽量保持 proto、service、biz、data、schema 一一对应；复杂流程新增明确业务 usecase，禁止泛化 helper 承载流程。
+- BFF 适配内部服务调用时，biz/repo、biz/usecase 和 data 实现按具体业务面或内部 proto service 拆分；禁止按下游大服务聚合成 `user.go`、`content.go`、`notify.go` 这类总入口文件或大接口。
 - usecase 可以按业务层级组合调用，但必须明确上下游，禁止循环调用；一个写流程只能有一个清晰事务入口。
 
 ## 读写边界
@@ -48,12 +49,12 @@
 - request/reply 外层 message 使用 `动作 + 资源名`；集合查询使用资源复数，避免 `UpdateArticleArticle` 这类重复资源名。
 - BFF 面向客户端默认不提供批量接口；确有批量需求时必须来自明确客户端流程，并在 RPC 名中使用 `Batch`。
 - 高频查询接口可以拆细，不做万能查询接口；分页、排序、过滤字段必须有默认值和边界说明。
-- 普通 BFF HTTP 对外业务接口默认使用 `POST` 和 `body: "*"`；回调、健康检查、图片、文件下载等不适合 POST 的接口按场景设计。
-- `google.api.http` option 使用多行块格式；BFF HTTP 路径统一使用 `/v1/{模块}/{资源}/{动作}`，资源名称使用单数，动作使用 lower-kebab，不暴露内部投影名、表名或 RPC 实现名。
+- 普通 BFF HTTP 对外业务接口默认使用 `POST` 和 `body: "*"`；回调、健康检查、直接返回图片或文件等需要被浏览器资源标签引用的接口可以按场景使用 `GET`。
+- Proto 文件格式以 `buf format` 输出为准，不为 `google.api.http` option 手工调整出与 `buf format` 不一致的格式。BFF HTTP 路径统一使用 `/v1/{模块}/{资源}/{动作}`，资源名称使用单数，动作使用 lower-kebab，不暴露内部投影名、表名或 RPC 实现名。
 - BFF 不暴露邮箱、手机号、账号名是否存在等可用于枚举用户信息的接口。
 - BFF OpenAPI 从 `google.api.http` 和 proto 注释生成；文档入口放在 BFF proto 包的 `doc.proto`。
 - BFF OpenAPI 不手写 tags、servers、external_docs、BearerAuth，也不写登录态、幂等策略和字段缺省规则。
-- SDK 只从 BFF OpenAPI 生成，输出到 `common/api/gen-ts/<bff>`、`common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker。
+- SDK 只从 BFF OpenAPI 生成，TypeScript Axios 输出到 `common/api/gen-typescript-axios/<bff>`，TypeScript Fetch 输出到 `common/api/gen-typescript-fetch/<bff>`，Go、Java、Rust 分别输出到 `common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker。SDK 生成时去掉 OpenAPI operationId 的 service 前缀和 API 后缀，客户端对象使用 proto service 名，方法使用 RPC 动作名。
 - gRPC client 统一通过 `common/pkg/client/rpc` 和 `ConsulClient.GetGrpcConn` 创建；业务代码不要直接 `grpc.Dial`、手写服务发现或为普通 RPC 重复包 `context.WithTimeout`。
 
 ## 数据设计
@@ -75,7 +76,7 @@
 ## 数据可见范围
 
 - 生成代码时必须根据业务语义判断字段是否属于隐私信息，不能只依赖字段名白名单。
-- 密码、token、验证码、密钥任何时候都不能返回给用户，也不能写入日志、错误信息或事件 payload。
+- 密码、token、密钥任何时候都不能返回给用户，也不能写入日志、错误信息或事件 payload；验证码只允许写入验证码投递事件，不能写入日志、错误信息或其他事件 payload。
 - 邮箱、手机号、账号绑定信息、设备信息、IP 等字段按业务可见范围返回；默认只允许用户本人或明确授权的管理场景可见。
 - BFF 对外模型只包含当前接口需要展示的字段；不因为内部服务返回了字段就继续透出。
 
@@ -95,6 +96,7 @@
 
 - server、service、wire、middleware 按模块统一组织；新增组件必须进入对应 ProviderSet。
 - BFF 负责入口认证和权限判断；内部服务默认信任内部调用链身份上下文，不重复实现入口层权限判断。
+- BFF 解析登录令牌必须调用 user 服务认证接口获取通用用户上下文；BFF 不直接读取 user 登录令牌的 Redis 缓存。
 - 内部服务仍需校验资源存在、状态流转、本地业务不变量和写入前置条件。
 - 身份信息通过统一 context key 传递，禁止字符串 key 散落。
 - 需要改变内部 RPC 信任边界或增加服务间鉴权时，必须先明确边界并统一在 middleware 实现。

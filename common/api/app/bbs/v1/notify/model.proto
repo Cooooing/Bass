@@ -6,14 +6,24 @@ import "common/enums/event.proto";
 
 option go_package = "common/api/gen/bbs/v1/notify;notify";
 
+// 通知记录。
 message Notification {
+  // 通知 ID。
   int64 id = 1;
+  // 来源事件 ID。
   string event_id = 2;
+  // 接收账号 ID。
   int64 receiver_id = 3;
+  // 来源事件类型。
   common.enums.EventType event_type = 4;
+  // 通知标题。
   string title = 5;
+  // 通知内容。
   string content = 6;
+  // 已读时间。
   string read_at = 7;
+  // 创建时间。
   string created_at = 1000;
+  // 更新时间。
   string updated_at = 1001;
 }

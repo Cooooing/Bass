@@ -49,10 +49,10 @@ npx gitnexus analyze --embeddings
 - 第三方 proto 依赖统一通过 Buf deps 管理；不能继续维护 `common/api/third_party`。
 - 项目初期不要求 proto 版本兼容；按当前需求可以删除、重命名或重排字段。
 - BFF proto 按模块功能分目录存放，必须定义自己的 request、reply 和对外模型，不引用内部服务 proto message。
-- 普通 BFF HTTP 对外业务接口默认使用 `POST` 和 `body: "*"`；回调、健康检查、图片、文件下载等不适合 POST 的接口按具体场景设计。
+- 普通 BFF HTTP 对外业务接口默认使用 `POST` 和 `body: "*"`；回调、健康检查、直接返回图片或文件等需要被浏览器资源标签引用的接口可以按场景使用 `GET`。
 - 内部服务 proto 只暴露 gRPC 契约，不写 `google.api.http` 注解；OpenAPI 只面向 BFF。
 - 契约分为 BFF HTTP、内部 gRPC、内部事件、外部回调四类；外部回调必须独立说明验签、幂等键、来源字段和失败处理。
-- `google.api.http` option 必须使用多行块格式，路径和 `body` 各占一行；不要写成 `{ post: "..." body: "*" }` 这种单行格式。
+- Proto 文件格式以 `buf format` 输出为准，不为 `google.api.http` option 手工调整出与 `buf format` 不一致的格式。
 - 共享 API 和 BFF 对外 RPC 命名使用业务动作；禁止 `GetOne`、`Page`、`Info`、`Data` 这类实现视角或含义不明确的名字。单资源查询用 `Get`，集合查询用 `List`，创建实体用 `Create`，追加子内容可用明确业务动词如 `Add`，状态变更使用 `Publish`、`MarkRead` 等业务动作。
 - 查询 RPC 按资源收敛为单资源 `Get`、列表 `List` 和映射 `Map`；禁止因返回字段组合拆分 `GetBasic`、`BatchGetBasic`、`BatchGetContact` 这类接口。
 - 调用方需要按 ID 获取映射时，归属服务必须定义独立 `Map` RPC；`List` 只表示列表查询并返回列表，调用方不能通过 `List` 的 `repeated` 结果自行组装映射。
@@ -64,21 +64,24 @@ npx gitnexus analyze --embeddings
 - BFF HTTP 路径统一使用 `/v1/{模块}/{资源}/{动作}`；同一资源名称保持单数且前后一致，动作使用 lower-kebab。
 - BFF 不暴露邮箱、手机号、账号名是否存在等可用于枚举用户信息的接口。
 - BFF OpenAPI 从 `google.api.http` 和 proto 注释生成；不手写 tags、servers、external_docs、BearerAuth，也不在接口描述中写登录态、幂等策略、字段缺省规则等运行时说明。
-- SDK 从 BFF OpenAPI 生成，输出到 `common/api/gen-ts/<bff>`、`common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker。
+- BFF 对外请求参数的必填字段使用 `gnostic.openapi.v3.schema.required` 标注；只标注请求 `Request` 和请求专用输入模型，不标注响应字段。`option (gnostic.openapi.v3.schema)` 放在字段定义之后，字段注释只描述业务含义，不同步写“必填”或“选填”。
+- SDK 从 BFF OpenAPI 生成，TypeScript Axios 输出到 `common/api/gen-typescript-axios/<bff>`，TypeScript Fetch 输出到 `common/api/gen-typescript-fetch/<bff>`，Go、Java、Rust 分别输出到 `common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker；SDK 客户端对象名使用 proto service 名，方法名使用 RPC 动作名。
 - gRPC client 统一通过 `common/pkg/client/rpc` 和 `ConsulClient.GetGrpcConn` 创建；业务代码不要直接 `grpc.Dial` 或手写服务发现逻辑。
 - gRPC 超时、发现、tracing、metadata 和连接复用由统一 client 管理；普通 RPC 调用不要重复包 `context.WithTimeout`。
 - BFF 读接口可以按业务场景降级或返回部分结果；写接口下游失败时默认返回失败，不吞错伪造成功。
 - 常规表业务尽量保持 proto、service、biz、data、schema 一一对应。
 - 分层依赖只能从外层指向内层；biz 层禁止依赖本模块 `internal/data`、`internal/data/gen`、Ent 生成模型、Ent client、schema predicate 或 data 层实现类型。
 - BFF 负责入口认证和权限判断；内部服务默认信任内部调用链传入的身份上下文，不重复实现入口层权限判断。
+- BFF 解析登录令牌必须调用 user 服务认证接口获取通用用户上下文；BFF 不直接读取 user 登录令牌的 Redis 缓存。
 - 内部服务仍需校验资源存在、状态流转、归属服务本地业务不变量和写入前置条件。
 - service 层只能调用 biz/usecase，不能直接注入或调用 repo、data 层实现；现有历史偏离不作为新代码依据。
 - service 入参校验属于协议入口适配，写在对应 service 的接收者方法中；不要为入口校验新增游离函数、独立校验结构体或独立校验 usecase。
+- BFF 的 biz/repo 接口、usecase 和 data 实现文件按具体调用语义命名和拆分，例如 user 相关能力按 auth、account、relation 等拆分；不要把一个下游服务的所有调用收敛到 `UserRepo`、`ContentRepo`、`NotifyRepo` 这类大接口。
 - biz 层底层能力接口只能暴露业务模型、基础类型、枚举和查询参数对象；不能在接口签名中出现 Ent client、Ent entity、Ent mutation、Ent query 等 data 层细节。
 - Ent 生成模型只允许在 data 层内部使用；biz model 必须是独立业务结构，不能嵌入或别名引用 Ent entity。
 - schema 字段必须来自明确业务需求或实际读写路径；意义不明、未使用、可推导或重复的信息不落库；任何数据库表结构变更都必须先给出设计、影响范围和理由，经用户确认后再修改。
 - 日志表只记录后续排查和安全审计真正需要的事实；没有明确消费方的提交原文、失败文案、链路标识和客户端解析字段不落库。
-- 密码、token、验证码、密钥任何时候都不能返回给用户，也不能写入日志、错误信息或事件 payload；邮箱、手机号、设备信息、IP 等字段按业务可见范围返回。
+- 密码、token、密钥任何时候都不能返回给用户，也不能写入日志、错误信息或事件 payload；验证码只允许写入验证码投递事件，不能写入日志、错误信息或其他事件 payload；邮箱、手机号、设备信息、IP 等字段按业务可见范围返回。
 - 参与唯一约束的字段应避免可空；复合索引能覆盖左前缀查询时，不额外增加重复单列索引。
 - 复杂业务新增明确业务 usecase；usecase 可按层级组合调用，但禁止循环调用。
 - 偏好设置按业务归属拆分；端侧展示、本地化等账号体验设置与通知投递、订阅、渠道开关分表维护。
@@ -106,17 +109,18 @@ npx gitnexus analyze --embeddings
 - 涉及表结构、跨服务依赖、事件契约、BFF 对外接口、缓存策略或信任边界的变更，必须先说明变更目的、影响范围和处理方式。
 - 新增服务、跨服务事件、BFF 接口、数据库 schema、生成链路、公共包约定或配置项时，必须同步更新 `doc/`、`AGENTS.md` 和 `CLAUDE.md`。
 - 代码格式化统一使用 Make：根目录执行 `make format`，共享 API 和 common Go 代码执行 `make api-format`，单模块执行 `make -C app/<module> format`。
-- 格式化目标只编排 `gofmt`、`buf format` 等现有工具，不在项目内实现自定义格式化器。
+- 格式化目标只编排 `gofmt`、`buf format` 等现有工具，不在项目内实现自定义格式化器；Proto 文件格式以 `buf format` 输出为准。
 - 需要基础类型指针时使用 Go 1.26 的 `new(expr)`；禁止使用 `common/pkg/util.Ptr` 或临时变量取地址来构造值指针。
 - 内部方法的拆分边界是是否存在复用或独立复杂规则；只调用一次的简单代码块不要单独拆成私有方法。
 - 不编写通用模型转换接口，也不编写 `ConvertToRpc`、`toXXX`、`xxxToDomain`、`buildXXXReply` 等内部转换或组装函数；数据库模型、业务模型和 proto DTO 之间的字段组装必须在具体业务函数内按当前接口需求显式完成。
+- 简单结构体组装和派生展示字段不要新增游离私有函数；需要复用时优先用结构体方法表达派生值，或在具体业务函数内显式组装。
 - BFF 返回字段必须由当前接口的业务边界决定，不能通过复用转换函数隐式扩大返回字段。
 - 默认不新增测试代码；只有用户明确要求、修复已有测试或维护现有测试文件时，才新增或修改测试代码。仍需按变更类型运行生成、编译或已有测试命令。
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Bass** (3284 symbols, 7249 relationships, 135 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Bass** (3338 symbols, 7395 relationships, 135 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

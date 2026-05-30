@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 type ObjectStorage struct {
@@ -51,9 +52,7 @@ func (ObjectStorage) Mixin() []ent.Mixin {
 }
 
 func (ObjectStorage) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
-func (ObjectStorage) Edges() []ent.Edge {
-	return []ent.Edge{}
+	return []ent.Index{
+		index.Fields("provider", "bucket", "key").Unique(),
+	}
 }

@@ -51,7 +51,7 @@ func (ChatGroupMember) Edges() []ent.Edge {
 
 func (ChatGroupMember) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("user_id").Unique(),
-		index.Fields("group_id").Unique(),
+		index.Fields("group_id", "user_id").Unique(),
+		index.Fields("user_id"),
 	}
 }

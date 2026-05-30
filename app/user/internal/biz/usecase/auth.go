@@ -26,6 +26,7 @@ type AuthUsecase struct {
 	log          *log.Helper
 	tx           base.Tx
 	accountRepo  repo.AccountRepo
+	prefsRepo    repo.PreferencesRepo
 	loginLogRepo repo.LoginLogRepo
 	outboxRepo   repo.OutboxEventRepo
 	tokenCache   *jwt.TokenCache
@@ -35,18 +36,21 @@ type AuthUsecase struct {
 }
 
 type registerAccountCache struct {
-	Name     string  `json:"name"`
-	Nickname *string `json:"nickname,omitempty"`
-	Password string  `json:"password"`
-	Email    *string `json:"email,omitempty"`
-	Phone    *string `json:"phone,omitempty"`
+	Name         string  `json:"name"`
+	Nickname     *string `json:"nickname,omitempty"`
+	PasswordHash string  `json:"password_hash"`
+	Email        *string `json:"email,omitempty"`
+	Phone        *string `json:"phone,omitempty"`
 }
+
+const registrationRequestInvalid = "registration request is invalid"
 
 func NewAuthUsecase(
 	conf *conf.Bootstrap,
 	logger log.Logger,
 	tx base.Tx,
 	accountRepo repo.AccountRepo,
+	prefsRepo repo.PreferencesRepo,
 	loginLogRepo repo.LoginLogRepo,
 	outboxRepo repo.OutboxEventRepo,
 	tokenCache *jwt.TokenCache,
@@ -61,6 +65,7 @@ func NewAuthUsecase(
 		log:          log.NewHelper(logger),
 		tx:           tx,
 		accountRepo:  accountRepo,
+		prefsRepo:    prefsRepo,
 		loginLogRepo: loginLogRepo,
 		outboxRepo:   outboxRepo,
 		tokenCache:   tokenCache,
@@ -75,14 +80,14 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 	}
 	exist, err := s.accountRepo.ExistsByAccount(ctx, *u.Email)
 	if exist {
-		err = cerrors.ErrorBadRequest("email already exists")
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
 	}
 	if err != nil {
 		return
 	}
 	exist, err = s.accountRepo.ExistsByAccount(ctx, u.Name)
 	if exist {
-		err = cerrors.ErrorBadRequest("name already exists")
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
 	}
 	if err != nil {
 		return
@@ -93,7 +98,7 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 		return
 	}
 	if existEmailCode {
-		err = cerrors.ErrorBadRequest("email verification code has been sent")
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
 		return
 	}
 
@@ -102,14 +107,37 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 	if err != nil {
 		return
 	}
+	passwordHash, err := str.HashPassword(u.Password)
+	if err != nil {
+		return
+	}
 
 	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email, code, &registerAccountCache{
-		Name:     u.Name,
-		Nickname: u.Nickname,
-		Password: u.Password,
-		Email:    u.Email,
+		Name:         u.Name,
+		Nickname:     u.Nickname,
+		PasswordHash: passwordHash,
+		Email:        u.Email,
 	}, s.conf.Server.Jwt.EmailExpire.AsDuration())
 	if err != nil {
+		return
+	}
+	err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		Event: &commonenums.Event{
+			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
+			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
+			Payload: &commonenums.Event_UserEmailVerificationCode{
+				UserEmailVerificationCode: &commonenums.UserEmailVerificationCodePayload{
+					Email:          *u.Email,
+					Code:           code,
+					ExpiresSeconds: int64(s.conf.Server.Jwt.EmailExpire.AsDuration().Seconds()),
+				},
+			},
+		},
+	})
+	if err != nil {
+		if delErr := s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email); delErr != nil {
+			s.log.Warnf("delete email registration verification code failed: %v", delErr)
+		}
 		return
 	}
 	return code, token, nil
@@ -129,17 +157,17 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, codeToken str
 		err = cerrors.ErrorBadRequest("email code invalid")
 		return
 	}
+	if saveUser.PasswordHash == "" {
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
+		return
+	}
 
 	err = s.tx(ctx, func(ctx context.Context) error {
 		user := &model.Account{
 			Name:     saveUser.Name,
 			Nickname: saveUser.Nickname,
-			Password: saveUser.Password,
+			Password: saveUser.PasswordHash,
 			Email:    saveUser.Email,
-		}
-		user.Password, err = str.HashPassword(user.Password)
-		if err != nil {
-			return err
 		}
 		created, err := s.accountRepo.Create(ctx, user)
 		if err != nil {
@@ -163,14 +191,14 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 	}
 	exist, err := s.accountRepo.ExistsByAccount(ctx, *u.Phone)
 	if exist {
-		err = cerrors.ErrorBadRequest("phone already exists")
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
 	}
 	if err != nil {
 		return
 	}
 	exist, err = s.accountRepo.ExistsByAccount(ctx, u.Name)
 	if exist {
-		err = cerrors.ErrorBadRequest("name already exists")
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
 	}
 	if err != nil {
 		return
@@ -181,7 +209,7 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 		return
 	}
 	if existPhoneCode {
-		err = cerrors.ErrorBadRequest("phone verification code has been sent")
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
 		return
 	}
 
@@ -190,14 +218,37 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 	if err != nil {
 		return
 	}
+	passwordHash, err := str.HashPassword(u.Password)
+	if err != nil {
+		return
+	}
 
 	err = s.tokenCache.SaveVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone, code, &registerAccountCache{
-		Name:     u.Name,
-		Nickname: u.Nickname,
-		Password: u.Password,
-		Phone:    u.Phone,
+		Name:         u.Name,
+		Nickname:     u.Nickname,
+		PasswordHash: passwordHash,
+		Phone:        u.Phone,
 	}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
+		return
+	}
+	err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		Event: &commonenums.Event{
+			Type:    commonenums.EventType_EVENT_TYPE_USER_PHONE_VERIFICATION_CODE,
+			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE,
+			Payload: &commonenums.Event_UserPhoneVerificationCode{
+				UserPhoneVerificationCode: &commonenums.UserPhoneVerificationCodePayload{
+					Phone:          *u.Phone,
+					Code:           code,
+					ExpiresSeconds: int64(s.conf.Server.Jwt.PhoneExpire.AsDuration().Seconds()),
+				},
+			},
+		},
+	})
+	if err != nil {
+		if delErr := s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone); delErr != nil {
+			s.log.Warnf("delete phone registration verification code failed: %v", delErr)
+		}
 		return
 	}
 	return code, token, nil
@@ -217,17 +268,17 @@ func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, codeToken str
 		err = cerrors.ErrorBadRequest("phone code invalid")
 		return
 	}
+	if saveUser.PasswordHash == "" {
+		err = cerrors.ErrorBadRequest(registrationRequestInvalid)
+		return
+	}
 
 	err = s.tx(ctx, func(ctx context.Context) error {
 		user := &model.Account{
 			Name:     saveUser.Name,
 			Nickname: saveUser.Nickname,
-			Password: saveUser.Password,
+			Password: saveUser.PasswordHash,
 			Phone:    saveUser.Phone,
-		}
-		user.Password, err = str.HashPassword(user.Password)
-		if err != nil {
-			return err
 		}
 		created, err := s.accountRepo.Create(ctx, user)
 		if err != nil {
@@ -267,6 +318,19 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, passw
 	}
 	if user.Nickname != nil {
 		saveUser.Nickname = *user.Nickname
+	}
+	prefs, err := s.prefsRepo.FindByUserID(ctx, user.ID)
+	if err != nil {
+		s.recordLoginLog(ctx, &user.ID, enum.LoginStatusFailed)
+		return
+	}
+	if prefs != nil {
+		if prefs.Language != nil {
+			saveUser.Language = string(*prefs.Language)
+		}
+		if prefs.Timezone != nil {
+			saveUser.Timezone = *prefs.Timezone
+		}
 	}
 	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Server.Jwt.Expires.AsDuration())
 	if err != nil {
@@ -340,6 +404,24 @@ func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
 		}
 	}
 	return nil
+}
+
+func (s *AuthUsecase) ParseToken(ctx context.Context, token string) (*commonModel.User, error) {
+	if token == "" {
+		return nil, cerrors.ErrorUnauthorized("token is invalid")
+	}
+	tokenData, err := s.tokenUsecase.TokenGen.Parse(token)
+	if err != nil {
+		return nil, cerrors.ErrorUnauthorized("token is invalid").WithCause(err)
+	}
+	user, err := s.tokenCache.GetToken(ctx, token)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil || user.ID != tokenData.Id {
+		return nil, cerrors.ErrorUnauthorized("token is invalid")
+	}
+	return user, nil
 }
 
 func (s *AuthUsecase) recordLoginLog(ctx context.Context, userID *int64, status enum.LoginStatus) {

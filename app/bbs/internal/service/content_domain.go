@@ -11,11 +11,11 @@ import (
 
 type ContentDomainService struct {
 	bbscontentv1.UnimplementedDomainServiceServer
-	contentUsecase *usecase.ContentUsecase
+	contentDomainUsecase *usecase.ContentDomainUsecase
 }
 
-func NewContentDomainService(contentUsecase *usecase.ContentUsecase) *ContentDomainService {
-	return &ContentDomainService{contentUsecase: contentUsecase}
+func NewContentDomainService(contentDomainUsecase *usecase.ContentDomainUsecase) *ContentDomainService {
+	return &ContentDomainService{contentDomainUsecase: contentDomainUsecase}
 }
 
 func (s *ContentDomainService) RegisterGrpc(gs *grpc.Server) {
@@ -27,5 +27,5 @@ func (s *ContentDomainService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Request) (*bbscontentv1.ListDomains_Reply, error) {
-	return s.contentUsecase.ListDomains(ctx, req)
+	return s.contentDomainUsecase.ListDomains(ctx, req)
 }

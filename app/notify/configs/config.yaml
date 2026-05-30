@@ -12,12 +12,14 @@ server:
     timeout: 5s
   email:
     enable: true
-    smtp_host: smtp.qq.com
-    smtp_port: 465
-    username: example
-    password: example
-    from: example@example.com
+    smtp_host: ${EMAIL_SMTP_HOST:smtp.qq.com}
+    smtp_port: ${EMAIL_SMTP_PORT:465}
+    username: ${EMAIL_USERNAME:example}
+    password: ${EMAIL_PASSWORD:example}
+    from_email: ${EMAIL_FROM_EMAIL:example@example.com}
+    from_name: ${EMAIL_FROM_NAME:example}
   sms:
+    enable: false
     provider: tencent
     tencent:
       secret_id: ${TENCENT_SMS_SECRET_ID:}

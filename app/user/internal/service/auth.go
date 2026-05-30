@@ -3,10 +3,12 @@ package service
 import (
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
+	"common/pkg/constant"
 	"context"
 	"regexp"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
+	"user/internal/conf"
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -16,6 +18,7 @@ import (
 
 type AuthService struct {
 	v1.UnimplementedAuthServiceServer
+	conf        *conf.Bootstrap
 	authUsecase *usecase.AuthUsecase
 	passRe      *regexp.Regexp
 	letterRe    *regexp.Regexp
@@ -23,8 +26,9 @@ type AuthService struct {
 	nameRe      *regexp.Regexp
 }
 
-func NewAuthService(authUsecase *usecase.AuthUsecase) *AuthService {
+func NewAuthService(conf *conf.Bootstrap, authUsecase *usecase.AuthUsecase) *AuthService {
 	return &AuthService{
+		conf:        conf,
 		authUsecase: authUsecase,
 		passRe:      regexp.MustCompile(`^[!-~]+$`),
 		letterRe:    regexp.MustCompile(`[A-Za-z]`),
@@ -43,13 +47,17 @@ func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartE
 	if err := s.validateRegister(req.Name, req.Nickname, req.Password); err != nil {
 		return nil, err
 	}
-	_, token, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{
+	code, token, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{
 		Email:    &req.Email,
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
 	})
-	return &v1.StartEmailRegistration_Reply{CodeToken: token}, err
+	reply := &v1.StartEmailRegistration_Reply{CodeToken: token}
+	if err == nil && s.conf.GetServer().GetMode() != constant.Prod {
+		reply.Code = code
+	}
+	return reply, err
 }
 
 func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *v1.VerifyEmailRegistration_Request) (*v1.VerifyEmailRegistration_Reply, error) {
@@ -61,13 +69,17 @@ func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartP
 	if err := s.validateRegister(req.Name, req.Nickname, req.Password); err != nil {
 		return nil, err
 	}
-	_, token, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{
+	code, token, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{
 		Phone:    &req.Phone,
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
 	})
-	return &v1.StartPhoneRegistration_Reply{CodeToken: token}, err
+	reply := &v1.StartPhoneRegistration_Reply{CodeToken: token}
+	if err == nil && s.conf.GetServer().GetMode() != constant.Prod {
+		reply.Code = code
+	}
+	return reply, err
 }
 
 func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.VerifyPhoneRegistration_Request) (*v1.VerifyPhoneRegistration_Reply, error) {
@@ -121,4 +133,20 @@ func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPasswo
 func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Request) (*v1.Logout_Reply, error) {
 	err := s.authUsecase.Logout(ctx, req.GetToken())
 	return &v1.Logout_Reply{}, err
+}
+
+func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Request) (*v1.ParseToken_Reply, error) {
+	user, err := s.authUsecase.ParseToken(ctx, req.GetToken())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.ParseToken_Reply{
+		User: &v1.TokenUser{
+			Id:       user.ID,
+			Name:     user.Name,
+			Nickname: user.Nickname,
+			Language: user.Language,
+			Timezone: user.Timezone,
+		},
+	}, nil
 }

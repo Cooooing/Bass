@@ -15,7 +15,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -68,17 +68,18 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) e
 		return fmt.Errorf("unknown event subject: %s", req.Event.Subject)
 	}
 	normalizeEvent(req.Event)
-	payloadBytes, err := proto.Marshal(req.Event)
+	payloadBytes, err := protojson.MarshalOptions{UseProtoNames: true}.Marshal(req.Event)
 	if err != nil {
 		return err
 	}
+	payload := string(payloadBytes)
 
 	return r.withTxClient(ctx, func(c *gen.Client) error {
 		return c.OutboxEvent.Create().
 			SetEventID(req.Event.EventId).
 			SetEventType(outboxevent.EventType(eventType)).
 			SetSubject(subject).
-			SetPayload(payloadBytes).
+			SetPayload(payload).
 			Exec(ctx)
 	})
 }
@@ -174,7 +175,7 @@ func (p *NatsEventClient) Publish(ctx context.Context, msg *repo.EventClientMess
 	}
 	return p.natsClient.Publish(ctx, msg.Subject, &client.Message{
 		Subject: msg.Subject,
-		Data:    msg.Payload,
+		Data:    []byte(msg.Payload),
 		Header:  msg.Headers,
 	})
 }

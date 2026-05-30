@@ -1,6 +1,7 @@
 package service
 
 import (
+	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
 	"common/pkg/util"
@@ -221,4 +222,12 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
 	return &v1.UpdateProfileAccount_Reply{Account: basic}, nil
+}
+
+func (s *AccountService) Avatar(ctx context.Context, req *v1.AvatarAccount_Request) (*common.ImageReply, error) {
+	data, err := s.accountUsecase.Avatar(ctx, req.GetName())
+	if err != nil {
+		return nil, err
+	}
+	return &common.ImageReply{Data: data, ContentType: "image/png"}, nil
 }

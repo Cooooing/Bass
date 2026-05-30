@@ -41,12 +41,12 @@ func (r *PrivacySettingRepo) FindByUserID(ctx context.Context, userID int64) (*m
 	return &model.PrivacySetting{
 		ID:                 p.ID,
 		UserID:             p.UserID,
-		PublicPoints:       p.PublicPoints,
-		PublicFollowers:    p.PublicFollowers,
-		PublicArticles:     p.PublicArticles,
-		PublicComments:     p.PublicComments,
-		PublicOnlineStatus: p.PublicOnlineStatus,
-		PublicLocation:     p.PublicLocation,
+		PublicPoints:       new(p.PublicPoints),
+		PublicFollowers:    new(p.PublicFollowers),
+		PublicArticles:     new(p.PublicArticles),
+		PublicComments:     new(p.PublicComments),
+		PublicOnlineStatus: new(p.PublicOnlineStatus),
+		PublicLocation:     new(p.PublicLocation),
 	}, nil
 }
 
@@ -57,27 +57,39 @@ func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.Privac
 	}
 	if existing == nil {
 		tx := r.getClient(ctx)
-		saved, err := tx.PrivacySetting.Create().
-			SetUserID(p.UserID).
-			SetNillablePublicPoints(p.PublicPoints).
-			SetNillablePublicFollowers(p.PublicFollowers).
-			SetNillablePublicArticles(p.PublicArticles).
-			SetNillablePublicComments(p.PublicComments).
-			SetNillablePublicOnlineStatus(p.PublicOnlineStatus).
-			SetNillablePublicLocation(p.PublicLocation).
-			Save(ctx)
+		create := tx.PrivacySetting.Create().
+			SetUserID(p.UserID)
+		if p.PublicPoints != nil {
+			create.SetPublicPoints(*p.PublicPoints)
+		}
+		if p.PublicFollowers != nil {
+			create.SetPublicFollowers(*p.PublicFollowers)
+		}
+		if p.PublicArticles != nil {
+			create.SetPublicArticles(*p.PublicArticles)
+		}
+		if p.PublicComments != nil {
+			create.SetPublicComments(*p.PublicComments)
+		}
+		if p.PublicOnlineStatus != nil {
+			create.SetPublicOnlineStatus(*p.PublicOnlineStatus)
+		}
+		if p.PublicLocation != nil {
+			create.SetPublicLocation(*p.PublicLocation)
+		}
+		saved, err := create.Save(ctx)
 		if err != nil {
 			return nil, err
 		}
 		return &model.PrivacySetting{
 			ID:                 saved.ID,
 			UserID:             saved.UserID,
-			PublicPoints:       saved.PublicPoints,
-			PublicFollowers:    saved.PublicFollowers,
-			PublicArticles:     saved.PublicArticles,
-			PublicComments:     saved.PublicComments,
-			PublicOnlineStatus: saved.PublicOnlineStatus,
-			PublicLocation:     saved.PublicLocation,
+			PublicPoints:       new(saved.PublicPoints),
+			PublicFollowers:    new(saved.PublicFollowers),
+			PublicArticles:     new(saved.PublicArticles),
+			PublicComments:     new(saved.PublicComments),
+			PublicOnlineStatus: new(saved.PublicOnlineStatus),
+			PublicLocation:     new(saved.PublicLocation),
 		}, nil
 	}
 	p.ID = existing.ID
@@ -86,25 +98,58 @@ func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.Privac
 
 func (r *PrivacySettingRepo) Update(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
 	tx := r.getClient(ctx)
-	saved, err := tx.PrivacySetting.UpdateOneID(p.ID).
-		SetNillablePublicPoints(p.PublicPoints).
-		SetNillablePublicFollowers(p.PublicFollowers).
-		SetNillablePublicArticles(p.PublicArticles).
-		SetNillablePublicComments(p.PublicComments).
-		SetNillablePublicOnlineStatus(p.PublicOnlineStatus).
-		SetNillablePublicLocation(p.PublicLocation).
-		Save(ctx)
+	if p.PublicPoints == nil &&
+		p.PublicFollowers == nil &&
+		p.PublicArticles == nil &&
+		p.PublicComments == nil &&
+		p.PublicOnlineStatus == nil &&
+		p.PublicLocation == nil {
+		saved, err := tx.PrivacySetting.Get(ctx, p.ID)
+		if err != nil {
+			return nil, err
+		}
+		return &model.PrivacySetting{
+			ID:                 saved.ID,
+			UserID:             saved.UserID,
+			PublicPoints:       new(saved.PublicPoints),
+			PublicFollowers:    new(saved.PublicFollowers),
+			PublicArticles:     new(saved.PublicArticles),
+			PublicComments:     new(saved.PublicComments),
+			PublicOnlineStatus: new(saved.PublicOnlineStatus),
+			PublicLocation:     new(saved.PublicLocation),
+		}, nil
+	}
+	update := tx.PrivacySetting.UpdateOneID(p.ID)
+	if p.PublicPoints != nil {
+		update.SetPublicPoints(*p.PublicPoints)
+	}
+	if p.PublicFollowers != nil {
+		update.SetPublicFollowers(*p.PublicFollowers)
+	}
+	if p.PublicArticles != nil {
+		update.SetPublicArticles(*p.PublicArticles)
+	}
+	if p.PublicComments != nil {
+		update.SetPublicComments(*p.PublicComments)
+	}
+	if p.PublicOnlineStatus != nil {
+		update.SetPublicOnlineStatus(*p.PublicOnlineStatus)
+	}
+	if p.PublicLocation != nil {
+		update.SetPublicLocation(*p.PublicLocation)
+	}
+	saved, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &model.PrivacySetting{
 		ID:                 saved.ID,
 		UserID:             saved.UserID,
-		PublicPoints:       saved.PublicPoints,
-		PublicFollowers:    saved.PublicFollowers,
-		PublicArticles:     saved.PublicArticles,
-		PublicComments:     saved.PublicComments,
-		PublicOnlineStatus: saved.PublicOnlineStatus,
-		PublicLocation:     saved.PublicLocation,
+		PublicPoints:       new(saved.PublicPoints),
+		PublicFollowers:    new(saved.PublicFollowers),
+		PublicArticles:     new(saved.PublicArticles),
+		PublicComments:     new(saved.PublicComments),
+		PublicOnlineStatus: new(saved.PublicOnlineStatus),
+		PublicLocation:     new(saved.PublicLocation),
 	}, nil
 }

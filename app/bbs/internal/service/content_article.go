@@ -11,11 +11,11 @@ import (
 
 type ContentArticleService struct {
 	bbscontentv1.UnimplementedArticleServiceServer
-	contentUsecase *usecase.ContentUsecase
+	contentArticleUsecase *usecase.ContentArticleUsecase
 }
 
-func NewContentArticleService(contentUsecase *usecase.ContentUsecase) *ContentArticleService {
-	return &ContentArticleService{contentUsecase: contentUsecase}
+func NewContentArticleService(contentArticleUsecase *usecase.ContentArticleUsecase) *ContentArticleService {
+	return &ContentArticleService{contentArticleUsecase: contentArticleUsecase}
 }
 
 func (s *ContentArticleService) RegisterGrpc(gs *grpc.Server) {
@@ -27,49 +27,49 @@ func (s *ContentArticleService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.CreateArticle_Request) (*bbscontentv1.CreateArticle_Reply, error) {
-	return s.contentUsecase.CreateArticle(ctx, req)
+	return s.contentArticleUsecase.CreateArticle(ctx, req)
 }
 
 func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Request) (*bbscontentv1.UpdateDraftArticle_Reply, error) {
-	return s.contentUsecase.UpdateDraftArticle(ctx, req)
+	return s.contentArticleUsecase.UpdateDraftArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.PublishArticle_Request) (*bbscontentv1.PublishArticle_Reply, error) {
-	return s.contentUsecase.PublishArticle(ctx, req)
+	return s.contentArticleUsecase.PublishArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Delete(ctx context.Context, req *bbscontentv1.DeleteArticle_Request) (*bbscontentv1.DeleteArticle_Reply, error) {
-	return s.contentUsecase.DeleteArticle(ctx, req)
+	return s.contentArticleUsecase.DeleteArticle(ctx, req)
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Request) (*bbscontentv1.ListArticles_Reply, error) {
-	return s.contentUsecase.ListArticles(ctx, req)
+	return s.contentArticleUsecase.ListArticles(ctx, req)
 }
 
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Request) (*bbscontentv1.GetArticle_Reply, error) {
-	return s.contentUsecase.GetArticle(ctx, req)
+	return s.contentArticleUsecase.GetArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Request) (*bbscontentv1.LikeArticle_Reply, error) {
-	return s.contentUsecase.LikeArticle(ctx, req)
+	return s.contentArticleUsecase.LikeArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.ThankArticle_Request) (*bbscontentv1.ThankArticle_Reply, error) {
-	return s.contentUsecase.ThankArticle(ctx, req)
+	return s.contentArticleUsecase.ThankArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.CollectArticle_Request) (*bbscontentv1.CollectArticle_Reply, error) {
-	return s.contentUsecase.CollectArticle(ctx, req)
+	return s.contentArticleUsecase.CollectArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.WatchArticle_Request) (*bbscontentv1.WatchArticle_Reply, error) {
-	return s.contentUsecase.WatchArticle(ctx, req)
+	return s.contentArticleUsecase.WatchArticle(ctx, req)
 }
 
 func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.RewardArticle_Request) (*bbscontentv1.RewardArticle_Reply, error) {
-	return s.contentUsecase.RewardArticle(ctx, req)
+	return s.contentArticleUsecase.RewardArticle(ctx, req)
 }
 
 func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbscontentv1.AcceptAnswerArticle_Request) (*bbscontentv1.AcceptAnswerArticle_Reply, error) {
-	return s.contentUsecase.AcceptAnswerArticle(ctx, req)
+	return s.contentArticleUsecase.AcceptAnswerArticle(ctx, req)
 }

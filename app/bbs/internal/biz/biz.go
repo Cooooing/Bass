@@ -8,7 +8,17 @@ import (
 
 // BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
-	usecase.NewUserUsecase,
-	usecase.NewContentUsecase,
-	usecase.NewNotifyUsecase,
+	usecase.NewAuthUsecase,
+	usecase.NewAccountUsecase,
+	usecase.NewPreferencesUsecase,
+	usecase.NewPrivacySettingUsecase,
+	usecase.NewLocationUsecase,
+	usecase.NewRelationUsecase,
+	usecase.NewTotpUsecase,
+	usecase.NewContentArticleUsecase,
+	usecase.NewContentPostscriptUsecase,
+	usecase.NewContentCommentUsecase,
+	usecase.NewContentDomainUsecase,
+	usecase.NewContentTagUsecase,
+	usecase.NewNotificationUsecase,
 )

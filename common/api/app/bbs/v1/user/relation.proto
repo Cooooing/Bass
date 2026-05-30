@@ -4,12 +4,14 @@ package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/model.proto";
 import "common/common.proto";
+import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/user;user";
 
+// 账号关系接口。
 service RelationService {
-  // 当前账号关注目标账号
+  // 当前账号关注目标账号。
   rpc Follow(FollowRelation.Request) returns (FollowRelation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/follow"
@@ -17,7 +19,7 @@ service RelationService {
     };
   }
 
-  // 当前账号取消关注目标账号
+  // 当前账号取消关注目标账号。
   rpc Unfollow(UnfollowRelation.Request) returns (UnfollowRelation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/unfollow"
@@ -25,7 +27,7 @@ service RelationService {
     };
   }
 
-  // 当前账号拉黑目标账号
+  // 当前账号拉黑目标账号。
   rpc Block(BlockRelation.Request) returns (BlockRelation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/block"
@@ -33,7 +35,7 @@ service RelationService {
     };
   }
 
-  // 当前账号取消拉黑目标账号
+  // 当前账号取消拉黑目标账号。
   rpc Unblock(UnblockRelation.Request) returns (UnblockRelation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/unblock"
@@ -41,7 +43,7 @@ service RelationService {
     };
   }
 
-  // 分页查询当前账号关注的账号列表
+  // 分页查询当前账号关注的账号列表。
   rpc ListFollowing(ListFollowingRelations.Request) returns (ListFollowingRelations.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-following"
@@ -49,7 +51,7 @@ service RelationService {
     };
   }
 
-  // 分页查询当前账号的粉丝账号列表
+  // 分页查询当前账号的粉丝账号列表。
   rpc ListFollowers(ListFollowersRelations.Request) returns (ListFollowersRelations.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-followers"
@@ -57,7 +59,7 @@ service RelationService {
     };
   }
 
-  // 分页查询当前账号拉黑的账号列表
+  // 分页查询当前账号拉黑的账号列表。
   rpc ListBlocked(ListBlockedRelations.Request) returns (ListBlockedRelations.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-blocked"
@@ -65,7 +67,7 @@ service RelationService {
     };
   }
 
-  // 查询当前账号与目标账号之间的关系
+  // 查询当前账号与目标账号之间的关系。
   rpc GetStatus(GetStatusRelation.Request) returns (GetStatusRelation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/relation/get-status"
@@ -74,69 +76,102 @@ service RelationService {
   }
 }
 
+// 当前账号关注目标账号。
 message FollowRelation {
   message Request {
+    // 目标账号 ID。
     int64 target_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Reply {}
 }
 
+// 当前账号取消关注目标账号。
 message UnfollowRelation {
   message Request {
+    // 目标账号 ID。
     int64 target_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Reply {}
 }
 
+// 当前账号拉黑目标账号。
 message BlockRelation {
   message Request {
+    // 目标账号 ID。
     int64 target_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Reply {}
 }
 
+// 当前账号取消拉黑目标账号。
 message UnblockRelation {
   message Request {
+    // 目标账号 ID。
     int64 target_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Reply {}
 }
 
+// 分页查询当前账号关注的账号列表。
 message ListFollowingRelations {
   message Request {
+    // 分页参数。
     common.PageRequest page = 1;
   }
   message Reply {
+    // 分页结果。
     common.PageReply page = 1;
+    // 账号关系列表。
     repeated Relation rows = 2;
   }
 }
 
+// 分页查询当前账号的粉丝账号列表。
 message ListFollowersRelations {
   message Request {
+    // 分页参数。
     common.PageRequest page = 1;
   }
   message Reply {
+    // 分页结果。
     common.PageReply page = 1;
+    // 账号关系列表。
     repeated Relation rows = 2;
   }
 }
 
+// 分页查询当前账号拉黑的账号列表。
 message ListBlockedRelations {
   message Request {
+    // 分页参数。
     common.PageRequest page = 1;
   }
   message Reply {
+    // 分页结果。
     common.PageReply page = 1;
+    // 账号关系列表。
     repeated Relation rows = 2;
   }
 }
 
+// 查询当前账号与目标账号之间的关系。
 message GetStatusRelation {
   message Request {
+    // 目标账号 ID。
     int64 target_id = 1;
+
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Reply {
+    // 关系状态。
     RelationStatus status = 1;
   }
 }

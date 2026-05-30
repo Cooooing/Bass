@@ -25,7 +25,7 @@ func (p *NatsEventClient) Publish(ctx context.Context, msg *repo.EventClientMess
 	}
 	return p.natsClient.Publish(ctx, msg.Subject, &client.Message{
 		Subject: msg.Subject,
-		Data:    msg.Payload,
+		Data:    []byte(msg.Payload),
 		Header:  msg.Headers,
 	})
 }

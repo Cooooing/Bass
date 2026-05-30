@@ -52,11 +52,13 @@ type NotificationTencentSMSTemplate struct {
 }
 
 type NotificationLarkWebhookTemplate struct {
-	ID           int64
-	RuleID       int64
-	WebhookID    string
-	Token        string
-	BodyTemplate string
-	CreatedAt    *time.Time
-	UpdatedAt    *time.Time
+	ID              int64
+	RuleID          int64
+	WebhookID       string
+	Token           string
+	Secret          string
+	MsgType         string
+	ContentTemplate string
+	CreatedAt       *time.Time
+	UpdatedAt       *time.Time
 }

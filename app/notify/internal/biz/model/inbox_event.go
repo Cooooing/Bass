@@ -10,7 +10,7 @@ type InboxEvent struct {
 	EventID             string
 	EventType           commonenum.EventType
 	Subject             commonenum.EventSubject
-	Payload             []byte
+	Payload             string
 	Status              commonenum.InboxEventStatus
 	AttemptCount        int32
 	LastError           *string

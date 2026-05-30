@@ -42,9 +42,9 @@ func (r *CheckinRepo) FindStatByUserID(ctx context.Context, userID int64) (*mode
 	return &model.CheckinStat{
 		ID:                 s.ID,
 		UserID:             s.UserID,
-		TotalOnlineMinutes: s.TotalOnlineMinutes,
-		CurrentStreak:      s.CurrentStreak,
-		LongestStreak:      s.LongestStreak,
+		TotalOnlineMinutes: new(s.TotalOnlineMinutes),
+		CurrentStreak:      new(s.CurrentStreak),
+		LongestStreak:      new(s.LongestStreak),
 	}, nil
 }
 
@@ -58,11 +58,15 @@ func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRec
 		return nil, err
 	}
 	if existing != nil {
-		saved, err := tx.CheckinRecord.UpdateOneID(existing.ID).
-			SetNillableOnlineMinutes(record.OnlineMinutes).
-			SetNillableActivity(record.Activity).
-			SetChecked(record.Checked).
-			Save(ctx)
+		update := tx.CheckinRecord.UpdateOneID(existing.ID).
+			SetChecked(record.Checked)
+		if record.OnlineMinutes != nil {
+			update.SetOnlineMinutes(*record.OnlineMinutes)
+		}
+		if record.Activity != nil {
+			update.SetActivity(*record.Activity)
+		}
+		saved, err := update.Save(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -70,18 +74,22 @@ func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRec
 			ID:            saved.ID,
 			UserID:        saved.UserID,
 			Date:          new(saved.Date),
-			OnlineMinutes: saved.OnlineMinutes,
-			Activity:      saved.Activity,
+			OnlineMinutes: new(saved.OnlineMinutes),
+			Activity:      new(saved.Activity),
 			Checked:       saved.Checked,
 		}, nil
 	}
-	saved, err := tx.CheckinRecord.Create().
+	create := tx.CheckinRecord.Create().
 		SetUserID(record.UserID).
 		SetDate(*record.Date).
-		SetNillableOnlineMinutes(record.OnlineMinutes).
-		SetNillableActivity(record.Activity).
-		SetChecked(record.Checked).
-		Save(ctx)
+		SetChecked(record.Checked)
+	if record.OnlineMinutes != nil {
+		create.SetOnlineMinutes(*record.OnlineMinutes)
+	}
+	if record.Activity != nil {
+		create.SetActivity(*record.Activity)
+	}
+	saved, err := create.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -89,8 +97,8 @@ func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRec
 		ID:            saved.ID,
 		UserID:        saved.UserID,
 		Date:          new(saved.Date),
-		OnlineMinutes: saved.OnlineMinutes,
-		Activity:      saved.Activity,
+		OnlineMinutes: new(saved.OnlineMinutes),
+		Activity:      new(saved.Activity),
 		Checked:       saved.Checked,
 	}, nil
 }
@@ -102,38 +110,53 @@ func (r *CheckinRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (
 	}
 	if existing == nil {
 		tx := r.getClient(ctx)
-		saved, err := tx.CheckinStat.Create().
-			SetUserID(stat.UserID).
-			SetNillableTotalOnlineMinutes(stat.TotalOnlineMinutes).
-			SetNillableCurrentStreak(stat.CurrentStreak).
-			SetNillableLongestStreak(stat.LongestStreak).
-			Save(ctx)
+		create := tx.CheckinStat.Create().
+			SetUserID(stat.UserID)
+		if stat.TotalOnlineMinutes != nil {
+			create.SetTotalOnlineMinutes(*stat.TotalOnlineMinutes)
+		}
+		if stat.CurrentStreak != nil {
+			create.SetCurrentStreak(*stat.CurrentStreak)
+		}
+		if stat.LongestStreak != nil {
+			create.SetLongestStreak(*stat.LongestStreak)
+		}
+		saved, err := create.Save(ctx)
 		if err != nil {
 			return nil, err
 		}
 		return &model.CheckinStat{
 			ID:                 saved.ID,
 			UserID:             saved.UserID,
-			TotalOnlineMinutes: saved.TotalOnlineMinutes,
-			CurrentStreak:      saved.CurrentStreak,
-			LongestStreak:      saved.LongestStreak,
+			TotalOnlineMinutes: new(saved.TotalOnlineMinutes),
+			CurrentStreak:      new(saved.CurrentStreak),
+			LongestStreak:      new(saved.LongestStreak),
 		}, nil
+	}
+	if stat.TotalOnlineMinutes == nil && stat.CurrentStreak == nil && stat.LongestStreak == nil {
+		return existing, nil
 	}
 	stat.ID = existing.ID
 	tx := r.getClient(ctx)
-	saved, err := tx.CheckinStat.UpdateOneID(stat.ID).
-		SetNillableTotalOnlineMinutes(stat.TotalOnlineMinutes).
-		SetNillableCurrentStreak(stat.CurrentStreak).
-		SetNillableLongestStreak(stat.LongestStreak).
-		Save(ctx)
+	update := tx.CheckinStat.UpdateOneID(stat.ID)
+	if stat.TotalOnlineMinutes != nil {
+		update.SetTotalOnlineMinutes(*stat.TotalOnlineMinutes)
+	}
+	if stat.CurrentStreak != nil {
+		update.SetCurrentStreak(*stat.CurrentStreak)
+	}
+	if stat.LongestStreak != nil {
+		update.SetLongestStreak(*stat.LongestStreak)
+	}
+	saved, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &model.CheckinStat{
 		ID:                 saved.ID,
 		UserID:             saved.UserID,
-		TotalOnlineMinutes: saved.TotalOnlineMinutes,
-		CurrentStreak:      saved.CurrentStreak,
-		LongestStreak:      saved.LongestStreak,
+		TotalOnlineMinutes: new(saved.TotalOnlineMinutes),
+		CurrentStreak:      new(saved.CurrentStreak),
+		LongestStreak:      new(saved.LongestStreak),
 	}, nil
 }

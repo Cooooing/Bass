@@ -11,11 +11,11 @@ import (
 
 type LocationService struct {
 	bbsuserv1.UnimplementedLocationServiceServer
-	userUsecase *usecase.UserUsecase
+	locationUsecase *usecase.LocationUsecase
 }
 
-func NewLocationService(userUsecase *usecase.UserUsecase) *LocationService {
-	return &LocationService{userUsecase: userUsecase}
+func NewLocationService(locationUsecase *usecase.LocationUsecase) *LocationService {
+	return &LocationService{locationUsecase: locationUsecase}
 }
 
 func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
@@ -27,9 +27,9 @@ func (s *LocationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error) {
-	return s.userUsecase.GetCurrentLocation(ctx, req)
+	return s.locationUsecase.GetCurrentLocation(ctx, req)
 }
 
 func (s *LocationService) UpsertCurrent(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error) {
-	return s.userUsecase.UpsertCurrentLocation(ctx, req)
+	return s.locationUsecase.UpsertCurrentLocation(ctx, req)
 }

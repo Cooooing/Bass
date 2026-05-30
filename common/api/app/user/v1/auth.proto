@@ -24,6 +24,9 @@ service AuthService {
 
   // 登出账号并清理令牌。
   rpc Logout(Logout.Request) returns (Logout.Reply) {}
+
+  // 解析登录令牌。
+  rpc ParseToken(ParseToken.Request) returns (ParseToken.Reply) {}
 }
 
 message StartEmailRegistration {
@@ -35,6 +38,7 @@ message StartEmailRegistration {
   }
   message Reply {
     string code_token = 1;
+    string code = 2;
   }
 }
 
@@ -55,6 +59,7 @@ message StartPhoneRegistration {
   }
   message Reply {
     string code_token = 1;
+    string code = 2;
   }
 }
 
@@ -82,4 +87,21 @@ message Logout {
     string token = 1;
   }
   message Reply {}
+}
+
+message TokenUser {
+  int64 id = 1;
+  string name = 2;
+  string nickname = 3;
+  string language = 4;
+  string timezone = 5;
+}
+
+message ParseToken {
+  message Request {
+    string token = 1;
+  }
+  message Reply {
+    TokenUser user = 1;
+  }
 }

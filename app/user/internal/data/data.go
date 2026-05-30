@@ -27,11 +27,11 @@ var DataProviderSet = wire.NewSet(
 	repo.NewPreferencesRepo,
 	repo.NewPrivacySettingRepo,
 	repo.NewLocationRepo,
-	repo.NewTfaRepo,
+	repo.NewTotpRepo,
 	repo.NewCheckinRepo,
 	repo.NewLoginLogRepo,
 	repo.NewOutboxEventRepo,
-	repo.NewTfaSecretCache,
+	repo.NewTotpSecretCache,
 	repo.NewNatsEventClient,
 )
 

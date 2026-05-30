@@ -90,14 +90,20 @@ func (r *NotificationRuleRepo) ListEnabled(ctx context.Context, eventType common
 			}
 		}
 		if item.Edges.LarkWebhookTemplate != nil {
+			secret := ""
+			if item.Edges.LarkWebhookTemplate.Secret != nil {
+				secret = *item.Edges.LarkWebhookTemplate.Secret
+			}
 			rule.LarkWebhookTemplate = &model.NotificationLarkWebhookTemplate{
-				ID:           item.Edges.LarkWebhookTemplate.ID,
-				RuleID:       item.Edges.LarkWebhookTemplate.RuleID,
-				WebhookID:    item.Edges.LarkWebhookTemplate.WebhookID,
-				Token:        item.Edges.LarkWebhookTemplate.Token,
-				BodyTemplate: item.Edges.LarkWebhookTemplate.BodyTemplate,
-				CreatedAt:    item.Edges.LarkWebhookTemplate.CreatedAt,
-				UpdatedAt:    item.Edges.LarkWebhookTemplate.UpdatedAt,
+				ID:              item.Edges.LarkWebhookTemplate.ID,
+				RuleID:          item.Edges.LarkWebhookTemplate.RuleID,
+				WebhookID:       item.Edges.LarkWebhookTemplate.WebhookID,
+				Token:           item.Edges.LarkWebhookTemplate.Token,
+				Secret:          secret,
+				MsgType:         item.Edges.LarkWebhookTemplate.MsgType,
+				ContentTemplate: item.Edges.LarkWebhookTemplate.ContentTemplate,
+				CreatedAt:       item.Edges.LarkWebhookTemplate.CreatedAt,
+				UpdatedAt:       item.Edges.LarkWebhookTemplate.UpdatedAt,
 			}
 		}
 		rules = append(rules, rule)

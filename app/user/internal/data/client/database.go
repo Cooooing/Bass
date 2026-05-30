@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"user/internal/conf"
 	"user/internal/data/gen"
+	"user/internal/data/gen/migrate"
+
+	_ "user/internal/data/gen/runtime"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
@@ -21,10 +24,10 @@ func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, fu
 	debugDrv := driver.NewDriver(logger, conf.Server.Mode, drv, conf.Data.Database)
 	client := gen.NewClient(gen.Driver(debugDrv))
 	l.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
-	// 鍙€夛細鑷姩杩佺Щ
+	// 可选：自动迁移
 	if conf.Data.Database.Merge {
 		ctx := context.Background()
-		if err := client.Schema.Create(ctx); err != nil {
+		if err := client.Schema.Create(ctx, migrate.WithDropColumn(true), migrate.WithDropIndex(true)); err != nil {
 			return nil, nil, fmt.Errorf("failed creating schema resources: %w", err)
 		}
 	}

@@ -18,6 +18,6 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewPrivacySettingUsecase,
 	usecase.NewLocationUsecase,
 	usecase.NewRelationUsecase,
-	usecase.NewTfaUsecase,
+	usecase.NewTotpUsecase,
 	usecase.NewOutboxPublisher,
 )

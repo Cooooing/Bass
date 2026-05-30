@@ -48,5 +48,6 @@ type LarkWebhookClient interface {
 type LarkWebhookRequest struct {
 	IdempotencyKey string
 	Token          string
+	Secret         string
 	RequestBody    string
 }

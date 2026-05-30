@@ -23,7 +23,10 @@ type TencentSMSClient struct {
 }
 
 func NewTencentSMSClient(conf *conf.Bootstrap) (*TencentSMSClient, error) {
-	if conf == nil || conf.Server == nil || conf.Server.Sms == nil || conf.Server.Sms.Tencent == nil {
+	if conf == nil || conf.Server == nil || conf.Server.Sms == nil || !conf.Server.Sms.Enable {
+		return &TencentSMSClient{conf: conf}, nil
+	}
+	if conf.Server.Sms.Tencent == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
 	tencentConf := conf.Server.Sms.Tencent
@@ -49,7 +52,10 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 	if req == nil || req.Phone == "" {
 		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusFailed}, nil
 	}
-	if c.conf == nil || c.conf.Server == nil || c.conf.Server.Sms == nil || c.conf.Server.Sms.Tencent == nil {
+	if c.conf == nil || c.conf.Server == nil || c.conf.Server.Sms == nil || !c.conf.Server.Sms.Enable {
+		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+	}
+	if c.conf.Server.Sms.Tencent == nil || c.client == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
 	if req.ProviderTemplateID == "" {

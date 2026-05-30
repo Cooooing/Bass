@@ -3,12 +3,14 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/model.proto";
+import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/content;content";
 
+// 文章附言接口。
 service PostscriptService {
-  // 添加文章附言
+  // 添加文章附言。
   rpc Add(AddPostscript.Request) returns (AddPostscript.Reply) {
     option (google.api.http) = {
       post: "/v1/content/postscript/add"
@@ -17,12 +19,21 @@ service PostscriptService {
   }
 }
 
+// 添加文章附言。
 message AddPostscript {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 附言内容。
     string content = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "content"
+    };
   }
   message Reply {
+    // 创建后的文章附言。
     ArticlePostscript postscript = 1;
   }
 }

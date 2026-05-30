@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 // EventHandler 将一种跨服务事件补齐为通知上下文。
@@ -51,7 +51,7 @@ func NewEventUsecase(
 
 func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, payload []byte) error {
 	var event enums.Event
-	if err := proto.Unmarshal(payload, &event); err != nil {
+	if err := protojson.Unmarshal(payload, &event); err != nil {
 		u.log.Errorf("unmarshal event failed: subject=%s err=%v", subjectName, err)
 		return err
 	}
@@ -82,7 +82,7 @@ func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, pa
 		EventID:   event.EventId,
 		EventType: event.Type,
 		Subject:   eventSubject,
-		Payload:   payload,
+		Payload:   string(payload),
 	}, now)
 	if err != nil {
 		return err
@@ -99,7 +99,6 @@ func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, pa
 			return fmt.Errorf("event is processing: event_id=%s", event.EventId)
 		}
 	}
-
 	rules, err := u.notifyUsecase.ListEnabledRules(ctx, eventType, notifyenum.LanguageZhCN)
 	if err != nil {
 		return u.markFailed(ctx, event.EventId, err)

@@ -17,10 +17,12 @@ enum EventType {
   EVENT_TYPE_USER_REGISTER = 1003; // 用户注册
   EVENT_TYPE_USER_LOGIN = 1004; // 用户登录
   EVENT_TYPE_USER_LOGOUT = 1005; // 用户登出
+  EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE = 1006; // 用户邮箱验证码
+  EVENT_TYPE_USER_PHONE_VERIFICATION_CODE = 1007; // 用户手机号验证码
   EVENT_TYPE_USER_BLOCK = 1010; // 拉黑用户
   EVENT_TYPE_USER_UNBLOCK = 1011; // 取消拉黑用户
-  EVENT_TYPE_USER_TFA_ENABLE = 1012; // 启用双因子认证
-  EVENT_TYPE_USER_TFA_DISABLE = 1013; // 停用双因子认证
+  EVENT_TYPE_USER_TOTP_ENABLE = 1012; // 启用 TOTP 认证
+  EVENT_TYPE_USER_TOTP_DISABLE = 1013; // 停用 TOTP 认证
 
   // 内容文章事件（2000-2099）
   EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
@@ -48,10 +50,12 @@ enum EventSubject {
   EVENT_SUBJECT_USER_REGISTER = 1003; // user.register
   EVENT_SUBJECT_USER_LOGIN = 1004; // user.login
   EVENT_SUBJECT_USER_LOGOUT = 1005; // user.logout
+  EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE = 1006; // user.email.verification_code
+  EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE = 1007; // user.phone.verification_code
   EVENT_SUBJECT_USER_BLOCK = 1010; // user.block
   EVENT_SUBJECT_USER_UNBLOCK = 1011; // user.unblock
-  EVENT_SUBJECT_USER_TFA_ENABLE = 1012; // user.tfa.enable
-  EVENT_SUBJECT_USER_TFA_DISABLE = 1013; // user.tfa.disable
+  EVENT_SUBJECT_USER_TOTP_ENABLE = 1012; // user.totp.enable
+  EVENT_SUBJECT_USER_TOTP_DISABLE = 1013; // user.totp.disable
 
   // 内容文章事件（2000-2099）
   EVENT_SUBJECT_ARTICLE_PUBLISHED = 2001; // content.article.published
@@ -112,10 +116,12 @@ message Event {
     UserRegisterPayload user_register = 1003;
     UserLoginPayload user_login = 1004;
     UserLogoutPayload user_logout = 1005;
+    UserEmailVerificationCodePayload user_email_verification_code = 1006;
+    UserPhoneVerificationCodePayload user_phone_verification_code = 1007;
     UserBlockPayload user_block = 1010;
     UserUnblockPayload user_unblock = 1011;
-    UserTfaEnablePayload user_tfa_enable = 1012;
-    UserTfaDisablePayload user_tfa_disable = 1013;
+    UserTotpEnablePayload user_totp_enable = 1012;
+    UserTotpDisablePayload user_totp_disable = 1013;
     ArticlePublishedPayload article_published = 2001;
     ArticleLikedPayload article_liked = 2002;
     ArticleThankedPayload article_thanked = 2003;

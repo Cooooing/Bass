@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
+import "common/common.proto";
 import "user/v1/enum.proto";
 import "user/v1/model.proto";
 
@@ -28,6 +29,9 @@ service AccountService {
 
   // 更新账号展示资料。
   rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Reply) {}
+
+  // 生成默认账号头像。
+  rpc Avatar(AvatarAccount.Request) returns (.common.api.app.common.ImageReply) {}
 }
 
 message AccountQuery {
@@ -99,5 +103,11 @@ message UpdateProfileAccount {
   }
   message Reply {
     AccountBasic account = 1;
+  }
+}
+
+message AvatarAccount {
+  message Request {
+    string name = 1;
   }
 }

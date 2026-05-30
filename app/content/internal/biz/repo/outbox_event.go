@@ -16,7 +16,7 @@ type OutboxEvent struct {
 	ID      int64
 	EventID string
 	Subject commonenum.EventSubject
-	Payload []byte
+	Payload string
 	Headers map[string]string
 }
 
@@ -29,7 +29,7 @@ type OutboxEventRepo interface {
 
 type EventClientMessage struct {
 	Subject string
-	Payload []byte
+	Payload string
 	Headers map[string]string
 }
 

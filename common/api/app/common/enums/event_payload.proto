@@ -6,6 +6,18 @@ option go_package = "common/api/gen/common/enums;enums";
 
 // ==================== user ====================
 
+message UserEmailVerificationCodePayload {
+  string email = 1;
+  string code = 2;
+  int64 expires_seconds = 3;
+}
+
+message UserPhoneVerificationCodePayload {
+  string phone = 1;
+  string code = 2;
+  int64 expires_seconds = 3;
+}
+
 message UserRegisterPayload {
   int64 user_id = 1;
 }
@@ -46,11 +58,11 @@ message UserUnblockPayload {
   int64 unblocked_id = 3;
 }
 
-message UserTfaEnablePayload {
+message UserTotpEnablePayload {
   int64 user_id = 1;
 }
 
-message UserTfaDisablePayload {
+message UserTotpDisablePayload {
   int64 user_id = 1;
 }
 

@@ -15,7 +15,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewPrivacySettingService,
 	NewLocationService,
 	NewRelationService,
-	NewTfaService,
+	NewTotpService,
 	ProvideServices,
 )
 
@@ -27,7 +27,7 @@ func ProvideServices(
 	privacySettingService *PrivacySettingService,
 	locationService *LocationService,
 	relationService *RelationService,
-	tfaService *TfaService,
+	totpService *TotpService,
 ) []server.GrpcService {
 	return []server.GrpcService{
 		systemService,
@@ -37,6 +37,6 @@ func ProvideServices(
 		privacySettingService,
 		locationService,
 		relationService,
-		tfaService,
+		totpService,
 	}
 }

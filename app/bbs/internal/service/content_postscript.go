@@ -11,11 +11,11 @@ import (
 
 type ContentPostscriptService struct {
 	bbscontentv1.UnimplementedPostscriptServiceServer
-	contentUsecase *usecase.ContentUsecase
+	contentPostscriptUsecase *usecase.ContentPostscriptUsecase
 }
 
-func NewContentPostscriptService(contentUsecase *usecase.ContentUsecase) *ContentPostscriptService {
-	return &ContentPostscriptService{contentUsecase: contentUsecase}
+func NewContentPostscriptService(contentPostscriptUsecase *usecase.ContentPostscriptUsecase) *ContentPostscriptService {
+	return &ContentPostscriptService{contentPostscriptUsecase: contentPostscriptUsecase}
 }
 
 func (s *ContentPostscriptService) RegisterGrpc(gs *grpc.Server) {
@@ -27,5 +27,5 @@ func (s *ContentPostscriptService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Request) (*bbscontentv1.AddPostscript_Reply, error) {
-	return s.contentUsecase.AddPostscript(ctx, req)
+	return s.contentPostscriptUsecase.AddPostscript(ctx, req)
 }

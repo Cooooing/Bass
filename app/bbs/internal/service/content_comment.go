@@ -11,11 +11,11 @@ import (
 
 type ContentCommentService struct {
 	bbscontentv1.UnimplementedCommentServiceServer
-	contentUsecase *usecase.ContentUsecase
+	contentCommentUsecase *usecase.ContentCommentUsecase
 }
 
-func NewContentCommentService(contentUsecase *usecase.ContentUsecase) *ContentCommentService {
-	return &ContentCommentService{contentUsecase: contentUsecase}
+func NewContentCommentService(contentCommentUsecase *usecase.ContentCommentUsecase) *ContentCommentService {
+	return &ContentCommentService{contentCommentUsecase: contentCommentUsecase}
 }
 
 func (s *ContentCommentService) RegisterGrpc(gs *grpc.Server) {
@@ -27,17 +27,17 @@ func (s *ContentCommentService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.CreateComment_Request) (*bbscontentv1.CreateComment_Reply, error) {
-	return s.contentUsecase.CreateComment(ctx, req)
+	return s.contentCommentUsecase.CreateComment(ctx, req)
 }
 
 func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.ListComments_Request) (*bbscontentv1.ListComments_Reply, error) {
-	return s.contentUsecase.ListComments(ctx, req)
+	return s.contentCommentUsecase.ListComments(ctx, req)
 }
 
 func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.LikeComment_Request) (*bbscontentv1.LikeComment_Reply, error) {
-	return s.contentUsecase.LikeComment(ctx, req)
+	return s.contentCommentUsecase.LikeComment(ctx, req)
 }
 
 func (s *ContentCommentService) Thank(ctx context.Context, req *bbscontentv1.ThankComment_Request) (*bbscontentv1.ThankComment_Reply, error) {
-	return s.contentUsecase.ThankComment(ctx, req)
+	return s.contentCommentUsecase.ThankComment(ctx, req)
 }

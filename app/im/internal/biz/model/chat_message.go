@@ -12,6 +12,7 @@ type ChatMessage struct {
 	SenderID   int64
 	ReceiverID *int64
 	GroupID    *int64
+	SessionID  *int64
 	Type       enum.MessageType
 	Content    string
 	Status     enum.MessageStatus

@@ -49,7 +49,3 @@ func (Domain) Edges() []ent.Edge {
 		edge.To("tags", Tag.Type),
 	}
 }
-
-func (Domain) Indexes() []ent.Index {
-	return []ent.Index{}
-}

@@ -21,7 +21,7 @@ type OutboxEventRepo interface {
 
 type EventClientMessage struct {
 	Subject string
-	Payload []byte
+	Payload string
 	Headers map[string]string
 }
 

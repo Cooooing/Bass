@@ -42,10 +42,10 @@ func (r *PreferencesRepo) FindByUserID(ctx context.Context, userID int64) (*mode
 	return &model.Preferences{
 		ID:          p.ID,
 		UserID:      p.UserID,
-		Language:    (*enum.Language)(p.Language),
-		Timezone:    p.Timezone,
-		Theme:       p.Theme,
-		MobileTheme: p.MobileTheme,
+		Language:    new(enum.Language(p.Language)),
+		Timezone:    new(p.Timezone),
+		Theme:       new(p.Theme),
+		MobileTheme: new(p.MobileTheme),
 	}, nil
 }
 
@@ -56,23 +56,31 @@ func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, p *model.Preferenc
 	}
 	if existing == nil {
 		tx := r.getClient(ctx)
-		saved, err := tx.Preferences.Create().
-			SetUserID(p.UserID).
-			SetNillableLanguage((*preferences.Language)(p.Language)).
-			SetNillableTimezone(p.Timezone).
-			SetNillableTheme(p.Theme).
-			SetNillableMobileTheme(p.MobileTheme).
-			Save(ctx)
+		create := tx.Preferences.Create().
+			SetUserID(p.UserID)
+		if p.Language != nil {
+			create.SetLanguage(preferences.Language(*p.Language))
+		}
+		if p.Timezone != nil {
+			create.SetTimezone(*p.Timezone)
+		}
+		if p.Theme != nil {
+			create.SetTheme(*p.Theme)
+		}
+		if p.MobileTheme != nil {
+			create.SetMobileTheme(*p.MobileTheme)
+		}
+		saved, err := create.Save(ctx)
 		if err != nil {
 			return nil, err
 		}
 		return &model.Preferences{
 			ID:          saved.ID,
 			UserID:      saved.UserID,
-			Language:    (*enum.Language)(saved.Language),
-			Timezone:    saved.Timezone,
-			Theme:       saved.Theme,
-			MobileTheme: saved.MobileTheme,
+			Language:    new(enum.Language(saved.Language)),
+			Timezone:    new(saved.Timezone),
+			Theme:       new(saved.Theme),
+			MobileTheme: new(saved.MobileTheme),
 		}, nil
 	}
 	p.ID = existing.ID
@@ -81,21 +89,43 @@ func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, p *model.Preferenc
 
 func (r *PreferencesRepo) Update(ctx context.Context, p *model.Preferences) (*model.Preferences, error) {
 	tx := r.getClient(ctx)
-	saved, err := tx.Preferences.UpdateOneID(p.ID).
-		SetNillableLanguage((*preferences.Language)(p.Language)).
-		SetNillableTimezone(p.Timezone).
-		SetNillableTheme(p.Theme).
-		SetNillableMobileTheme(p.MobileTheme).
-		Save(ctx)
+	if p.Language == nil && p.Timezone == nil && p.Theme == nil && p.MobileTheme == nil {
+		saved, err := tx.Preferences.Get(ctx, p.ID)
+		if err != nil {
+			return nil, err
+		}
+		return &model.Preferences{
+			ID:          saved.ID,
+			UserID:      saved.UserID,
+			Language:    new(enum.Language(saved.Language)),
+			Timezone:    new(saved.Timezone),
+			Theme:       new(saved.Theme),
+			MobileTheme: new(saved.MobileTheme),
+		}, nil
+	}
+	update := tx.Preferences.UpdateOneID(p.ID)
+	if p.Language != nil {
+		update.SetLanguage(preferences.Language(*p.Language))
+	}
+	if p.Timezone != nil {
+		update.SetTimezone(*p.Timezone)
+	}
+	if p.Theme != nil {
+		update.SetTheme(*p.Theme)
+	}
+	if p.MobileTheme != nil {
+		update.SetMobileTheme(*p.MobileTheme)
+	}
+	saved, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &model.Preferences{
 		ID:          saved.ID,
 		UserID:      saved.UserID,
-		Language:    (*enum.Language)(saved.Language),
-		Timezone:    saved.Timezone,
-		Theme:       saved.Theme,
-		MobileTheme: saved.MobileTheme,
+		Language:    new(enum.Language(saved.Language)),
+		Timezone:    new(saved.Timezone),
+		Theme:       new(saved.Theme),
+		MobileTheme: new(saved.MobileTheme),
 	}, nil
 }

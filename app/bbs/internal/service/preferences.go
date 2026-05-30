@@ -11,11 +11,11 @@ import (
 
 type PreferencesService struct {
 	bbsuserv1.UnimplementedPreferencesServiceServer
-	userUsecase *usecase.UserUsecase
+	preferencesUsecase *usecase.PreferencesUsecase
 }
 
-func NewPreferencesService(userUsecase *usecase.UserUsecase) *PreferencesService {
-	return &PreferencesService{userUsecase: userUsecase}
+func NewPreferencesService(preferencesUsecase *usecase.PreferencesUsecase) *PreferencesService {
+	return &PreferencesService{preferencesUsecase: preferencesUsecase}
 }
 
 func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
@@ -27,9 +27,9 @@ func (s *PreferencesService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Request) (*bbsuserv1.GetCurrentPreferences_Reply, error) {
-	return s.userUsecase.GetCurrentPreferences(ctx, req)
+	return s.preferencesUsecase.GetCurrentPreferences(ctx, req)
 }
 
 func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Request) (*bbsuserv1.UpdateCurrentPreferences_Reply, error) {
-	return s.userUsecase.UpdateCurrentPreferences(ctx, req)
+	return s.preferencesUsecase.UpdateCurrentPreferences(ctx, req)
 }

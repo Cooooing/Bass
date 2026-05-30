@@ -4,6 +4,7 @@ modules:
   - path: .
 
 deps:
+  - buf.build/gnostic/gnostic
   - buf.build/googleapis/googleapis
 
 lint:

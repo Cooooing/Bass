@@ -4,29 +4,38 @@ package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/model.proto";
 import "common/common.proto";
+import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/content;content";
 
+// 评论接口。
 service CommentService {
+  // 创建评论。
   rpc Create(CreateComment.Request) returns (CreateComment.Reply) {
     option (google.api.http) = {
       post: "/v1/content/comment/create"
       body: "*"
     };
   }
+
+  // 分页查询评论列表。
   rpc List(ListComments.Request) returns (ListComments.Reply) {
     option (google.api.http) = {
       post: "/v1/content/comment/list"
       body: "*"
     };
   }
+
+  // 点赞或取消点赞评论。
   rpc Like(LikeComment.Request) returns (LikeComment.Reply) {
     option (google.api.http) = {
       post: "/v1/content/comment/like"
       body: "*"
     };
   }
+
+  // 感谢或取消感谢评论。
   rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {
     option (google.api.http) = {
       post: "/v1/content/comment/thank"
@@ -35,40 +44,71 @@ service CommentService {
   }
 }
 
+// 创建评论。
 message CreateComment {
   message Request {
+    // 文章 ID。
     int64 article_id = 1;
+    // 评论内容。
     string content = 2;
+    // 回复的评论 ID。
     int64 reply_id = 3;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "content"
+    };
   }
   message Reply {
+    // 创建后的评论。
     Comment comment = 1;
   }
 }
 
+// 分页查询评论列表。
 message ListComments {
   message Request {
+    // 分页参数。
     common.PageRequest page = 1;
+    // 查询条件。
     CommentQuery query = 2;
   }
   message Reply {
+    // 分页结果。
     common.PageReply page = 1;
+    // 评论列表。
     repeated Comment rows = 2;
   }
 }
 
+// 点赞或取消点赞评论。
 message LikeComment {
   message Request {
+    // 评论 ID。
     int64 id = 1;
+    // 是否点赞。
     bool active = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "id"
+      required: "active"
+    };
   }
   message Reply {}
 }
 
+// 感谢或取消感谢评论。
 message ThankComment {
   message Request {
+    // 评论 ID。
     int64 id = 1;
+    // 是否感谢。
     bool active = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "id"
+      required: "active"
+    };
   }
   message Reply {}
 }

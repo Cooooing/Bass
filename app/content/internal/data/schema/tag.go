@@ -49,7 +49,3 @@ func (Tag) Edges() []ent.Edge {
 		edge.From("domain", Domain.Type).Ref("tags").Field("domain_id").Unique(),
 	}
 }
-
-func (Tag) Indexes() []ent.Index {
-	return []ent.Index{}
-}

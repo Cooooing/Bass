@@ -3,12 +3,13 @@ package server
 import (
 	"common/api/gen/common"
 	cerrors "common/api/gen/common/errors"
+	userv1 "common/api/gen/user/v1"
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
 	"common/pkg/util"
-
 	"common/pkg/util/jwt"
+
 	"context"
 	"encoding/json"
 	"net/http"
@@ -151,7 +152,7 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 	}
 }
 
-// AuthMiddleware 返回一个 Kratos 中间件，用于认证
+// AuthMiddleware 返回一个 Kratos 中间件，用于通过 Redis token cache 认证。
 func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
@@ -170,6 +171,46 @@ func AuthMiddleware(tokenCache *jwt.TokenCache) middleware.Middleware {
 			}
 			if token != "" && userInfo == nil {
 				return nil, cerrors.ErrorUnauthorized("token is invalid")
+			}
+
+			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
+			ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
+
+			return handler(ctx, req)
+		}
+	}
+}
+
+// UserAuthMiddleware 返回一个 Kratos 中间件，用于通过 user 服务强制解析登录令牌。
+func UserAuthMiddleware(authClient userv1.AuthServiceClient) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+
+			const bearerPrefix = "Bearer "
+			token := GetHeader(ctx, constant.HeaderAuthentication)
+
+			if !strings.HasPrefix(token, bearerPrefix) {
+				return nil, cerrors.ErrorUnauthorized("token is required")
+			}
+			token = strings.TrimSpace(strings.TrimPrefix(token, bearerPrefix))
+			if token == "" {
+				return nil, cerrors.ErrorUnauthorized("token is required")
+			}
+
+			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Request{Token: token})
+			if err != nil {
+				return nil, cerrors.ErrorUnauthorized("token is invalid").WithCause(err)
+			}
+			tokenUser := reply.GetUser()
+			if tokenUser == nil {
+				return nil, cerrors.ErrorUnauthorized("token is invalid")
+			}
+			userInfo := &model.User{
+				ID:       tokenUser.GetId(),
+				Name:     tokenUser.GetName(),
+				Nickname: tokenUser.GetNickname(),
+				Language: tokenUser.GetLanguage(),
+				Timezone: tokenUser.GetTimezone(),
 			}
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)

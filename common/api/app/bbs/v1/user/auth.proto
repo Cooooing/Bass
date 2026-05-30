@@ -3,12 +3,14 @@ syntax = "proto3";
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/model.proto";
+import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/user;user";
 
+// 认证接口。
 service AuthService {
-  // 使用邮箱发起账号注册
+  // 使用邮箱发起账号注册。
   rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Reply) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-email-registration"
@@ -16,7 +18,7 @@ service AuthService {
     };
   }
 
-  // 校验邮箱注册验证码
+  // 校验邮箱注册验证码。
   rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Reply) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-email-registration"
@@ -24,7 +26,7 @@ service AuthService {
     };
   }
 
-  // 使用手机号发起账号注册
+  // 使用手机号发起账号注册。
   rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Reply) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-phone-registration"
@@ -32,7 +34,7 @@ service AuthService {
     };
   }
 
-  // 校验手机号注册验证码
+  // 校验手机号注册验证码。
   rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Reply) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-phone-registration"
@@ -40,7 +42,7 @@ service AuthService {
     };
   }
 
-  // 使用密码登录账号
+  // 使用密码登录账号。
   rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Reply) {
     option (google.api.http) = {
       post: "/v1/user/auth/login-by-password"
@@ -48,7 +50,7 @@ service AuthService {
     };
   }
 
-  // 登出当前登录账号
+  // 登出当前账号。
   rpc Logout(Logout.Request) returns (Logout.Reply) {
     option (google.api.http) = {
       post: "/v1/user/auth/logout"
@@ -57,57 +59,112 @@ service AuthService {
   }
 }
 
+// 使用邮箱发起账号注册。
 message StartEmailRegistration {
   message Request {
+    // 邮箱地址。
     string email = 1;
+    // 账号密码。
     string password = 2;
+    // 账号名。
     string name = 3;
+    // 昵称。
     optional string nickname = 4;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "email"
+      required: "password"
+      required: "name"
+    };
   }
   message Reply {
+    // 验证码令牌。
     string code_token = 1;
+    // 验证码。
+    string code = 2;
   }
 }
 
+// 校验邮箱注册验证码。
 message VerifyEmailRegistration {
   message Request {
+    // 验证码。
     string code = 1;
+    // 验证码令牌。
     string code_token = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "code"
+      required: "code_token"
+    };
   }
   message Reply {}
 }
 
+// 使用手机号发起账号注册。
 message StartPhoneRegistration {
   message Request {
+    // 手机号。
     string phone = 1;
+    // 账号密码。
     string password = 2;
+    // 账号名。
     string name = 3;
+    // 昵称。
     optional string nickname = 4;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "phone"
+      required: "password"
+      required: "name"
+    };
   }
   message Reply {
+    // 验证码令牌。
     string code_token = 1;
+    // 验证码。
+    string code = 2;
   }
 }
 
+// 校验手机号注册验证码。
 message VerifyPhoneRegistration {
   message Request {
+    // 验证码。
     string code = 1;
+    // 验证码令牌。
     string code_token = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "code"
+      required: "code_token"
+    };
   }
   message Reply {}
 }
 
+// 使用密码登录账号。
 message LoginByPassword {
   message Request {
+    // 账号、邮箱或手机号。
     string account = 1;
+    // 账号密码。
     string password = 2;
+
+    option (gnostic.openapi.v3.schema) = {
+      required: "account"
+      required: "password"
+    };
   }
   message Reply {
+    // 登录令牌。
     string token = 1;
+    // 当前账号完整资料。
     Account account = 2;
   }
 }
 
+// 登出当前账号。
 message Logout {
   message Request {}
   message Reply {}

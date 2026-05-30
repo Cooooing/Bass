@@ -7,8 +7,9 @@ import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/user;user";
 
+// 账号地理资料接口。
 service LocationService {
-  // 获取当前登录账号的地理资料
+  // 获取当前账号的地理资料。
   rpc GetCurrent(GetCurrentLocation.Request) returns (GetCurrentLocation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/location/get-current"
@@ -16,7 +17,7 @@ service LocationService {
     };
   }
 
-  // 更新当前登录账号的地理资料
+  // 更新当前账号的地理资料。
   rpc UpsertCurrent(UpsertCurrentLocation.Request) returns (UpsertCurrentLocation.Reply) {
     option (google.api.http) = {
       post: "/v1/user/location/upsert-current"
@@ -25,20 +26,27 @@ service LocationService {
   }
 }
 
+// 获取当前账号的地理资料。
 message GetCurrentLocation {
   message Request {}
   message Reply {
+    // 当前账号地理资料。
     Location location = 1;
   }
 }
 
+// 更新当前账号的地理资料。
 message UpsertCurrentLocation {
   message Request {
+    // 国家或地区。
     optional string country = 1;
+    // 省份或州。
     optional string province = 2;
+    // 城市。
     optional string city = 3;
   }
   message Reply {
+    // 更新后的账号地理资料。
     Location location = 1;
   }
 }

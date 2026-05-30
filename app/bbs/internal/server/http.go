@@ -2,8 +2,10 @@ package server
 
 import (
 	"bbs/internal/conf"
-	"common/pkg/util/jwt"
+	bbsuserv1 "common/api/gen/bbs/v1/user"
+	userv1 "common/api/gen/user/v1"
 	"common/pkg/util/server"
+	"context"
 	"fmt"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -11,13 +13,28 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
+	bbsuserv1.OperationAuthServiceStartEmailRegistration:  {},
+	bbsuserv1.OperationAuthServiceVerifyEmailRegistration: {},
+	bbsuserv1.OperationAuthServiceStartPhoneRegistration:  {},
+	bbsuserv1.OperationAuthServiceVerifyPhoneRegistration: {},
+	bbsuserv1.OperationAuthServiceLoginByPassword:         {},
+	bbsuserv1.OperationAccountServiceAvatar:               {},
+}
+
 // NewHTTPServer 创建 HTTP 服务。
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService, tokenCache *jwt.TokenCache) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService, authClient userv1.AuthServiceClient) *http.Server {
+	authRequiredMatch := func(_ context.Context, operation string) bool {
+		_, ok := bbsHTTPAuthOperationWhitelist[operation]
+		return !ok
+	}
+
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,7 +44,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpS
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			server.AuthMiddleware(tokenCache),
+			selector.Server(server.UserAuthMiddleware(authClient)).Match(authRequiredMatch).Build(),
 			validate.ProtoValidate(),
 		),
 		http.ResponseEncoder(server.HttpResponseEncoder),

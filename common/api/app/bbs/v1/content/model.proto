@@ -3,207 +3,381 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/user/model.proto";
+import "gnostic/openapi/v3/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/content;content";
 
+// 内容板块状态。
 enum DomainStatus {
+  // 未指定。
   DOMAIN_STATUS_UNSPECIFIED = 0;
+  // 正常。
   DOMAIN_STATUS_NORMAL = 1;
+  // 停用。
   DOMAIN_STATUS_DISABLED = 2;
 }
 
+// 标签状态。
 enum TagStatus {
+  // 未指定。
   TAG_STATUS_UNSPECIFIED = 0;
+  // 正常。
   TAG_STATUS_NORMAL = 1;
+  // 停用。
   TAG_STATUS_DISABLED = 2;
 }
 
+// 评论状态。
 enum CommentStatus {
+  // 未指定。
   COMMENT_STATUS_UNSPECIFIED = 0;
+  // 正常。
   COMMENT_STATUS_NORMAL = 1;
+  // 隐藏。
   COMMENT_STATUS_HIDDEN = 2;
 }
 
+// 文章状态。
 enum ArticleStatus {
+  // 未指定。
   ARTICLE_STATUS_UNSPECIFIED = 0;
+  // 正常。
   ARTICLE_STATUS_NORMAL = 1;
+  // 隐藏。
   ARTICLE_STATUS_HIDDEN = 2;
+  // 锁定。
   ARTICLE_STATUS_LOCKED = 3;
+  // 草稿。
   ARTICLE_STATUS_DRAFTS = 4;
+  // 已删除。
   ARTICLE_STATUS_DELETED = 5;
 }
 
+// 文章类型。
 enum ArticleType {
+  // 未指定。
   ARTICLE_TYPE_UNSPECIFIED = 0;
+  // 普通文章。
   ARTICLE_TYPE_NORMAL = 1;
+  // 问答文章。
   ARTICLE_TYPE_QA = 2;
 }
 
+// 文章排序方式。
 enum ArticleOrder {
+  // 未指定。
   ARTICLE_ORDER_UNSPECIFIED = 0;
+  // 最新优先。
   ARTICLE_ORDER_NEWEST = 1;
+  // 热度优先。
   ARTICLE_ORDER_HOTTEST = 2;
 }
 
+// 评论排序方式。
 enum CommentOrder {
+  // 未指定。
   COMMENT_ORDER_UNSPECIFIED = 0;
+  // 最新优先。
   COMMENT_ORDER_NEWEST = 1;
+  // 热度优先。
   COMMENT_ORDER_HOTTEST = 2;
 }
 
+// 文章。
 message Article {
+  // 文章 ID。
   int64 id = 1;
+  // 标题。
   string title = 2;
+  // 原始内容。
   string content = 3;
+  // 渲染后的内容。
   string content_render = 4;
+  // 是否有附言。
   bool has_postscript = 5;
+  // 是否有打赏内容。
   bool has_reward = 6;
+  // 打赏后可见内容。
   optional string reward_content = 7;
+  // 渲染后的打赏内容。
   optional string reward_content_render = 8;
+  // 打赏所需积分。
   optional int32 reward_points = 9;
+  // 文章状态。
   ArticleStatus status = 10;
+  // 文章类型。
   ArticleType type = 11;
+  // 文章声明。
   optional string statement = 12;
+  // 是否允许评论。
   bool commentable = 13;
+  // 是否匿名展示。
   bool anonymous = 14;
+  // 是否在列表中展示。
   bool listable = 15;
+  // 浏览数量。
   int32 view_count = 16;
+  // 感谢数量。
   int32 thank_count = 17;
+  // 点赞数量。
   int32 like_count = 18;
+  // 收藏数量。
   int32 collect_count = 19;
+  // 关注数量。
   int32 watch_count = 20;
+  // 回复数量。
   int32 reply_count = 21;
+  // 悬赏积分。
   optional int32 bounty_points = 22;
+  // 已采纳答案评论 ID。
   optional int64 accepted_answer_id = 23;
+  // 作者账号展示资料。
   common.api.app.bbs.v1.user.AccountProfile author_user = 24;
+  // 最后回复账号展示资料。
   common.api.app.bbs.v1.user.AccountProfile last_reply_user = 25;
+  // 最后回复时间。
   string last_reply_at = 26;
+  // 封面图片 URL。
   optional string cover_image_url = 27;
+  // 创建账号 ID。
   optional int64 created_by = 1002;
+  // 更新账号 ID。
   optional int64 updated_by = 1003;
+  // 创建时间。
   string created_at = 1000;
+  // 更新时间。
   string updated_at = 1001;
 }
 
+// 文章附言。
 message ArticlePostscript {
+  // 附言 ID。
   int64 id = 1;
+  // 文章 ID。
   int64 article_id = 2;
+  // 原始内容。
   string content = 3;
+  // 渲染后的内容。
   string content_render = 4;
+  // 创建账号 ID。
   optional int64 created_by = 1002;
+  // 更新账号 ID。
   optional int64 updated_by = 1003;
+  // 创建时间。
   string created_at = 1000;
+  // 更新时间。
   string updated_at = 1001;
 }
 
+// 评论。
 message Comment {
+  // 评论 ID。
   int64 id = 1;
+  // 文章 ID。
   int64 article_id = 2;
+  // 原始内容。
   string content = 3;
+  // 渲染后的内容。
   string content_render = 4;
+  // 评论层级。
   int32 level = 5;
+  // 父评论 ID。
   optional int64 parent_id = 6;
+  // 回复的评论 ID。
   optional int64 reply_id = 7;
+  // 评论状态。
   CommentStatus status = 8;
+  // 回复数量。
   int32 reply_count = 9;
+  // 点赞数量。
   int32 like_count = 10;
+  // 感谢数量。
   int32 thank_count = 11;
+  // 评论账号展示资料。
   common.api.app.bbs.v1.user.AccountProfile user = 12;
+  // 被回复账号展示资料。
   common.api.app.bbs.v1.user.AccountProfile reply_user = 13;
+  // 所属文章。
   Article article = 14;
+  // 创建账号 ID。
   optional int64 created_by = 1002;
+  // 更新账号 ID。
   optional int64 updated_by = 1003;
+  // 创建时间。
   string created_at = 1000;
+  // 更新时间。
   string updated_at = 1001;
 }
 
+// 标签。
 message Tag {
+  // 标签 ID。
   int64 id = 1;
+  // 标签名称。
   string name = 2;
+  // 标签描述。
   optional string description = 3;
+  // 所属板块 ID。
   optional int64 domain_id = 4;
+  // 标签状态。
   optional TagStatus status = 5;
+  // 创建账号 ID。
   optional int64 created_by = 1002;
+  // 更新账号 ID。
   optional int64 updated_by = 1003;
+  // 创建时间。
   string created_at = 1000;
+  // 更新时间。
   string updated_at = 1001;
 }
 
+// 内容板块。
 message Domain {
+  // 板块 ID。
   int64 id = 1;
+  // 板块名称。
   string name = 2;
+  // 板块描述。
   optional string description = 3;
+  // 板块状态。
   DomainStatus status = 4;
+  // 板块 URL。
   optional string url = 5;
+  // 板块图标。
   optional string icon = 6;
+  // 是否在导航中展示。
   bool is_nav = 7;
+  // 创建账号 ID。
   optional int64 created_by = 1002;
+  // 更新账号 ID。
   optional int64 updated_by = 1003;
+  // 创建时间。
   string created_at = 1000;
+  // 更新时间。
   string updated_at = 1001;
 }
 
+// 文章保存内容。
 message ArticleSave {
+  // 文章 ID。
   optional int64 id = 1;
+  // 标题。
   string title = 2;
+  // 原始内容。
   string content = 3;
+  // 打赏后可见内容。
   optional string reward_content = 4;
+  // 打赏所需积分。
   optional int32 reward_points = 5;
+  // 文章状态。
   ArticleStatus status = 6;
+  // 文章类型。
   ArticleType type = 7;
+  // 悬赏积分。
   optional int32 bounty_points = 8;
+  // 文章声明。
   optional string statement = 9;
+  // 是否允许评论。
   optional bool commentable = 10;
+  // 是否匿名展示。
   optional bool anonymous = 11;
+  // 是否在列表中展示。
   optional bool listable = 12;
+  // 绑定标签。
   repeated TagSave tags = 100;
+
+  option (gnostic.openapi.v3.schema) = {
+    required: "title"
+    required: "content"
+    required: "status"
+    required: "type"
+  };
 }
 
+// 标签保存内容。
 message TagSave {
+  // 标签 ID。
   optional int64 id = 1;
+  // 所属板块 ID。
   optional int64 domain_id = 2;
+  // 标签状态。
   optional TagStatus status = 3;
+  // 标签名称。
   string name = 4;
+  // 标签描述。
   optional string description = 5;
 }
 
+// 文章查询条件。
 message ArticleQuery {
+  // 标签 ID。
   optional int64 tag_id = 1;
+  // 板块 ID。
   optional int64 domain_id = 2;
+  // 文章状态。
   optional ArticleStatus status = 3;
+  // 文章类型。
   optional ArticleType type = 4;
+  // 排序方式。
   optional ArticleOrder order = 5;
+  // 搜索关键词。
   optional string keyword = 6;
+  // 作者账号 ID。
   optional int64 author_id = 7;
+  // 是否在列表中展示。
   optional bool listable = 8;
 }
 
+// 评论查询条件。
 message CommentQuery {
+  // 评论 ID。
   optional int64 comment_id = 1;
+  // 文章 ID。
   optional int64 article_id = 2;
+  // 父评论 ID。
   optional int64 parent_id = 3;
+  // 回复的评论 ID。
   optional int64 reply_id = 4;
+  // 排序方式。
   optional CommentOrder order = 5;
+  // 评论账号 ID。
   optional int64 user_id = 6;
+  // 评论层级。
   optional int32 level = 7;
+  // 评论状态。
   optional CommentStatus status = 8;
 }
 
+// 标签查询条件。
 message TagQuery {
+  // 标签 ID 列表。
   repeated int64 ids = 1;
+  // 标签名称。
   optional string name = 2;
+  // 标签名称列表。
   repeated string names = 3;
+  // 标签描述。
   optional string description = 4;
+  // 标签状态。
   optional TagStatus status = 5;
+  // 所属板块 ID。
   optional int64 domain_id = 6;
 }
 
+// 内容板块查询条件。
 message DomainQuery {
+  // 板块 ID 列表。
   repeated int64 ids = 1;
+  // 板块名称。
   optional string name = 2;
+  // 板块描述。
   optional string description = 3;
+  // 板块状态。
   optional DomainStatus status = 4;
+  // 板块 URL。
   optional string url = 5;
+  // 板块图标。
   optional string icon = 6;
+  // 是否在导航中展示。
   optional bool is_nav = 7;
 }

@@ -30,7 +30,9 @@ func (NotificationLarkWebhookTemplate) Fields() []ent.Field {
 		field.Int64("rule_id").Comment("通知规则 ID"),
 		field.String("webhook_id").Comment("Lark webhook 配置标识"),
 		field.String("token").Sensitive().Comment("Lark webhook token"),
-		field.String("body_template").Comment("完整请求体模板"),
+		field.String("secret").Optional().Nillable().Sensitive().Comment("Lark webhook 签名密钥"),
+		field.String("msg_type").Default("text").Comment("Lark 消息类型"),
+		field.String("content_template").Comment("Lark content 对象模板"),
 	}
 }
 

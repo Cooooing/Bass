@@ -19,5 +19,5 @@ type InboxEventSave struct {
 	EventID   string
 	EventType enums.EventType
 	Subject   commonenum.EventSubject
-	Payload   []byte
+	Payload   string
 }

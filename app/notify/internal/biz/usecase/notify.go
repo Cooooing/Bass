@@ -4,10 +4,12 @@ import (
 	"bytes"
 	commonenum "common/pkg/enum"
 	"context"
+	"encoding/json"
 	"fmt"
 	bizchannel "notify/internal/biz/channel"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
+	"notify/internal/conf"
 	notifyenum "notify/internal/enum"
 	"strings"
 	"text/template"
@@ -18,10 +20,9 @@ import (
 
 // NotificationRecipient 表示站内信、邮件和短信的接收者。
 type NotificationRecipient struct {
-	UserID       int64
-	Email        string
-	Phone        string
-	TemplateData any
+	UserID int64
+	Email  string
+	Phone  string
 }
 
 // NotificationContext 是事件语义补齐后的通知输入。
@@ -45,11 +46,13 @@ type NotifyUsecase struct {
 	emailClient               bizchannel.EmailClient
 	tencentSMSClient          bizchannel.TencentSMSClient
 	larkWebhookClient         bizchannel.LarkWebhookClient
+	smsEnabled                bool
 	externalProcessingTimeout time.Duration
 }
 
 func NewNotifyUsecase(
 	logger log.Logger,
+	conf *conf.Bootstrap,
 	userClient repo.UserClient,
 	notificationRuleRepo repo.NotificationRuleRepo,
 	stationMessageRepo repo.NotificationStationMessageRepo,
@@ -71,6 +74,7 @@ func NewNotifyUsecase(
 		emailClient:               emailClient,
 		tencentSMSClient:          tencentSMSClient,
 		larkWebhookClient:         larkWebhookClient,
+		smsEnabled:                conf != nil && conf.Server != nil && conf.Server.Sms != nil && conf.Server.Sms.Enable,
 		externalProcessingTimeout: 10 * time.Minute,
 	}
 }
@@ -132,12 +136,11 @@ func (u *NotifyUsecase) processStation(ctx context.Context, notificationContext 
 			continue
 		}
 		seen[recipient.UserID] = struct{}{}
-		templateData := u.recipientTemplateData(notificationContext.TemplateData, recipient.TemplateData)
-		title, ok := u.renderTemplate(rule.StationTemplate.TitleTemplate, templateData)
+		title, ok := u.renderTemplate(rule.StationTemplate.TitleTemplate, notificationContext.TemplateData)
 		if !ok {
 			continue
 		}
-		content, ok := u.renderTemplate(rule.StationTemplate.ContentTemplate, templateData)
+		content, ok := u.renderTemplate(rule.StationTemplate.ContentTemplate, notificationContext.TemplateData)
 		if !ok {
 			continue
 		}
@@ -186,12 +189,11 @@ func (u *NotifyUsecase) processEmail(ctx context.Context, notificationContext *N
 			continue
 		}
 		seen[toEmail] = struct{}{}
-		templateData := u.recipientTemplateData(notificationContext.TemplateData, recipient.TemplateData)
-		subject, ok := u.renderTemplate(rule.EmailTemplate.SubjectTemplate, templateData)
+		subject, ok := u.renderTemplate(rule.EmailTemplate.SubjectTemplate, notificationContext.TemplateData)
 		if !ok {
 			continue
 		}
-		body, ok := u.renderTemplate(rule.EmailTemplate.BodyTemplate, templateData)
+		body, ok := u.renderTemplate(rule.EmailTemplate.BodyTemplate, notificationContext.TemplateData)
 		if !ok {
 			continue
 		}
@@ -268,6 +270,9 @@ func (u *NotifyUsecase) finishEmail(ctx context.Context, deliveryID int64, resul
 }
 
 func (u *NotifyUsecase) processTencentSMS(ctx context.Context, notificationContext *NotificationContext, rule *model.NotificationRule, accountsByUserID map[int64]*model.UserAccount) (notifyenum.NotificationChannelStatus, error) {
+	if !u.smsEnabled {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
 	if rule.TencentSMSTemplate == nil {
 		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
@@ -293,11 +298,10 @@ func (u *NotifyUsecase) processTencentSMS(ctx context.Context, notificationConte
 			continue
 		}
 		seen[phone] = struct{}{}
-		templateData := u.recipientTemplateData(notificationContext.TemplateData, recipient.TemplateData)
 		params := make([]string, 0, len(rule.TencentSMSTemplate.ParamTemplates))
 		renderFailed := false
 		for _, paramTemplate := range rule.TencentSMSTemplate.ParamTemplates {
-			param, ok := u.renderTemplate(paramTemplate, templateData)
+			param, ok := u.renderTemplate(paramTemplate, notificationContext.TemplateData)
 			if !ok {
 				renderFailed = true
 				break
@@ -388,18 +392,39 @@ func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, notificationCont
 	if u.larkWebhookClient == nil {
 		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook client is nil")
 	}
-	requestBody, ok := u.renderTemplate(rule.LarkWebhookTemplate.BodyTemplate, notificationContext.TemplateData)
+	renderedContent, ok := u.renderTemplate(rule.LarkWebhookTemplate.ContentTemplate, notificationContext.TemplateData)
 	if !ok {
 		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	var content map[string]any
+	if err := json.Unmarshal([]byte(renderedContent), &content); err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if content == nil {
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook content must be json object")
+	}
+	msgType := strings.TrimSpace(rule.LarkWebhookTemplate.MsgType)
+	if msgType == "" {
+		msgType = "text"
+	}
+	requestBodyBytes, err := json.Marshal(struct {
+		MsgType string         `json:"msg_type"`
+		Content map[string]any `json:"content"`
+	}{
+		MsgType: msgType,
+		Content: content,
+	})
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	delivery := &model.NotificationLarkWebhookDelivery{
 		EventID:     notificationContext.EventID,
 		EventType:   notificationContext.EventType,
 		WebhookID:   rule.LarkWebhookTemplate.WebhookID,
-		RequestBody: requestBody,
+		RequestBody: string(requestBodyBytes),
 		Status:      notifyenum.NotificationChannelStatusProcessing,
 	}
-	delivery, err := u.larkWebhookDeliveryRepo.SaveOrGet(ctx, delivery)
+	delivery, err = u.larkWebhookDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err != nil {
 		return notifyenum.NotificationChannelStatusInternalError, err
 	}
@@ -419,6 +444,7 @@ func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, notificationCont
 	result, err := u.larkWebhookClient.SendLarkWebhook(ctx, &bizchannel.LarkWebhookRequest{
 		IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
 		Token:          rule.LarkWebhookTemplate.Token,
+		Secret:         rule.LarkWebhookTemplate.Secret,
 		RequestBody:    delivery.RequestBody,
 	})
 	if err != nil {
@@ -446,7 +472,7 @@ func (u *NotifyUsecase) loadAccounts(ctx context.Context, notificationContext *N
 		if rule == nil || !rule.Enabled {
 			continue
 		}
-		if rule.Channel == notifyenum.NotificationChannelEmail || rule.Channel == notifyenum.NotificationChannelTencentSMS {
+		if rule.Channel == notifyenum.NotificationChannelEmail || (rule.Channel == notifyenum.NotificationChannelTencentSMS && u.smsEnabled) {
 			needsContact = true
 			break
 		}
@@ -473,13 +499,6 @@ func (u *NotifyUsecase) loadAccounts(ctx context.Context, notificationContext *N
 		return map[int64]*model.UserAccount{}, nil
 	}
 	return u.userClient.MapAccounts(ctx, userIDs)
-}
-
-func (u *NotifyUsecase) recipientTemplateData(contextData any, recipientData any) any {
-	if recipientData != nil {
-		return recipientData
-	}
-	return contextData
 }
 
 func (u *NotifyUsecase) renderTemplate(tplStr string, data any) (string, bool) {

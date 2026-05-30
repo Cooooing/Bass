@@ -17,6 +17,8 @@ All URIs are relative to *http://localhost*
 
 
 
+创建评论。
+
 ### Example
 
 ```ts
@@ -81,6 +83,8 @@ No authorization required
 > object like(likeCommentRequest)
 
 
+
+点赞或取消点赞评论。
 
 ### Example
 
@@ -147,6 +151,8 @@ No authorization required
 
 
 
+分页查询评论列表。
+
 ### Example
 
 ```ts
@@ -211,6 +217,8 @@ No authorization required
 > object thank(thankCommentRequest)
 
 
+
+感谢或取消感谢评论。
 
 ### Example
 

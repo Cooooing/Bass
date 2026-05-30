@@ -1,7 +1,7 @@
 
 # RelationStatus
 
-当前账号与目标账号的关系状态
+当前账号与目标账号的关系状态。
 
 ## Properties
 

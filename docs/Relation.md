@@ -1,7 +1,7 @@
 
 # Relation
 
-账号关系记录
+账号关系记录。
 
 ## Properties
 

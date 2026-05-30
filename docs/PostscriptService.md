@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 
 
 
-添加文章附言
+添加文章附言。
 
 ### Example
 

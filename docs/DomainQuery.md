@@ -1,6 +1,7 @@
 
 # DomainQuery
 
+内容板块查询条件。
 
 ## Properties
 

@@ -1,7 +1,7 @@
 
 # Location
 
-账号地理资料
+账号地理资料。
 
 ## Properties
 

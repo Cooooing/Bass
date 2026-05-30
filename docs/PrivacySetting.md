@@ -1,7 +1,7 @@
 
 # PrivacySetting
 
-账号隐私设置
+账号隐私设置。
 
 ## Properties
 

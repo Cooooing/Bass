@@ -1,22 +1,25 @@
 
-# ValidateTfaReply
+# NamedAny
 
+Automatically-generated message used to represent maps of Any as ordered (name,value) pairs.
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`verified` | boolean
+`name` | string
+`value` | [Any](Any.md)
 
 ## Example
 
 ```typescript
-import type { ValidateTfaReply } from '@bass/bbs-sdk-fetch'
+import type { NamedAny } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "verified": null,
-} satisfies ValidateTfaReply
+  "name": null,
+  "value": null,
+} satisfies NamedAny
 
 console.log(example)
 
@@ -25,7 +28,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ValidateTfaReply
+const exampleParsed = JSON.parse(exampleJSON) as NamedAny
 console.log(exampleParsed)
 ```
 

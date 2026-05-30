@@ -1,37 +1,36 @@
-# TfaService
+# TotpService
 
 All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**beginEnable**](TfaService.md#beginenable) | **POST** /v1/user/tfa/begin-enable |  |
-| [**confirmEnable**](TfaService.md#confirmenable) | **POST** /v1/user/tfa/confirm-enable |  |
-| [**disable**](TfaService.md#disable) | **POST** /v1/user/tfa/disable |  |
-| [**getCurrent**](TfaService.md#getcurrent) | **POST** /v1/user/tfa/get-current |  |
-| [**validate**](TfaService.md#validate) | **POST** /v1/user/tfa/validate |  |
+| [**beginEnable**](TotpService.md#beginenable) | **POST** /v1/user/totp/begin-enable |  |
+| [**confirmEnable**](TotpService.md#confirmenable) | **POST** /v1/user/totp/confirm-enable |  |
+| [**disable**](TotpService.md#disable) | **POST** /v1/user/totp/disable |  |
+| [**getCurrent**](TotpService.md#getcurrent) | **POST** /v1/user/totp/get-current |  |
 
 
 
 ## beginEnable
 
-> BeginEnableTfaReply beginEnable(body)
+> BeginEnableTotpReply beginEnable(body)
 
 
 
-开始启用二步验证
+开始启用 TOTP。
 
 ### Example
 
 ```ts
 import {
   Configuration,
-  TfaService,
+  TotpService,
 } from '@bass/bbs-sdk-fetch';
 import type { BeginEnableRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new TfaService();
+  const api = new TotpService();
 
   const body = {
     // object
@@ -59,7 +58,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**BeginEnableTfaReply**](BeginEnableTfaReply.md)
+[**BeginEnableTotpReply**](BeginEnableTotpReply.md)
 
 ### Authorization
 
@@ -81,28 +80,28 @@ No authorization required
 
 ## confirmEnable
 
-> object confirmEnable(confirmEnableTfaRequest)
+> object confirmEnable(confirmEnableTotpRequest)
 
 
 
-确认二步验证码并正式启用二步验证
+确认 TOTP 验证码并正式启用 TOTP。
 
 ### Example
 
 ```ts
 import {
   Configuration,
-  TfaService,
+  TotpService,
 } from '@bass/bbs-sdk-fetch';
 import type { ConfirmEnableRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new TfaService();
+  const api = new TotpService();
 
   const body = {
-    // ConfirmEnableTfaRequest
-    confirmEnableTfaRequest: ...,
+    // ConfirmEnableTotpRequest
+    confirmEnableTotpRequest: ...,
   } satisfies ConfirmEnableRequest;
 
   try {
@@ -122,7 +121,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **confirmEnableTfaRequest** | [ConfirmEnableTfaRequest](ConfirmEnableTfaRequest.md) |  | |
+| **confirmEnableTotpRequest** | [ConfirmEnableTotpRequest](ConfirmEnableTotpRequest.md) |  | |
 
 ### Return type
 
@@ -148,28 +147,28 @@ No authorization required
 
 ## disable
 
-> object disable(disableTfaRequest)
+> object disable(disableTotpRequest)
 
 
 
-校验二步验证码并关闭二步验证
+校验 TOTP 验证码并关闭 TOTP。
 
 ### Example
 
 ```ts
 import {
   Configuration,
-  TfaService,
+  TotpService,
 } from '@bass/bbs-sdk-fetch';
 import type { DisableRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new TfaService();
+  const api = new TotpService();
 
   const body = {
-    // DisableTfaRequest
-    disableTfaRequest: ...,
+    // DisableTotpRequest
+    disableTotpRequest: ...,
   } satisfies DisableRequest;
 
   try {
@@ -189,7 +188,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **disableTfaRequest** | [DisableTfaRequest](DisableTfaRequest.md) |  | |
+| **disableTotpRequest** | [DisableTotpRequest](DisableTotpRequest.md) |  | |
 
 ### Return type
 
@@ -215,24 +214,24 @@ No authorization required
 
 ## getCurrent
 
-> GetCurrentTfaReply getCurrent(body)
+> GetCurrentTotpReply getCurrent(body)
 
 
 
-获取当前登录账号的二步验证状态
+获取当前账号的 TOTP 状态。
 
 ### Example
 
 ```ts
 import {
   Configuration,
-  TfaService,
+  TotpService,
 } from '@bass/bbs-sdk-fetch';
 import type { GetCurrentRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new TfaService();
+  const api = new TotpService();
 
   const body = {
     // object
@@ -260,74 +259,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**GetCurrentTfaReply**](GetCurrentTfaReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## validate
-
-> ValidateTfaReply validate(validateTfaRequest)
-
-
-
-校验当前登录账号的二步验证码
-
-### Example
-
-```ts
-import {
-  Configuration,
-  TfaService,
-} from '@bass/bbs-sdk-fetch';
-import type { ValidateRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new TfaService();
-
-  const body = {
-    // ValidateTfaRequest
-    validateTfaRequest: ...,
-  } satisfies ValidateRequest;
-
-  try {
-    const data = await api.validate(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **validateTfaRequest** | [ValidateTfaRequest](ValidateTfaRequest.md) |  | |
-
-### Return type
-
-[**ValidateTfaReply**](ValidateTfaReply.md)
+[**GetCurrentTotpReply**](GetCurrentTotpReply.md)
 
 ### Authorization
 

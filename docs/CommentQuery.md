@@ -1,6 +1,7 @@
 
 # CommentQuery
 
+评论查询条件。
 
 ## Properties
 

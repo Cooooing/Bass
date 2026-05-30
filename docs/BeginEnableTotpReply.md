@@ -1,22 +1,24 @@
 
-# GetCurrentTfaReply
+# BeginEnableTotpReply
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`tfa` | [Tfa](Tfa.md)
+`url` | string
+`qrCode` | string
 
 ## Example
 
 ```typescript
-import type { GetCurrentTfaReply } from '@bass/bbs-sdk-fetch'
+import type { BeginEnableTotpReply } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "tfa": null,
-} satisfies GetCurrentTfaReply
+  "url": null,
+  "qrCode": null,
+} satisfies BeginEnableTotpReply
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as GetCurrentTfaReply
+const exampleParsed = JSON.parse(exampleJSON) as BeginEnableTotpReply
 console.log(exampleParsed)
 ```
 

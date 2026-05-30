@@ -7,6 +7,7 @@
 Name | Type
 ------------ | -------------
 `codeToken` | string
+`code` | string
 
 ## Example
 
@@ -16,6 +17,7 @@ import type { StartEmailRegistrationReply } from '@bass/bbs-sdk-fetch'
 // TODO: Update the object below with actual values
 const example = {
   "codeToken": null,
+  "code": null,
 } satisfies StartEmailRegistrationReply
 
 console.log(example)

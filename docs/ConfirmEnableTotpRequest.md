@@ -1,5 +1,5 @@
 
-# ValidateTfaRequest
+# ConfirmEnableTotpRequest
 
 
 ## Properties
@@ -11,12 +11,12 @@ Name | Type
 ## Example
 
 ```typescript
-import type { ValidateTfaRequest } from '@bass/bbs-sdk-fetch'
+import type { ConfirmEnableTotpRequest } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
   "code": null,
-} satisfies ValidateTfaRequest
+} satisfies ConfirmEnableTotpRequest
 
 console.log(example)
 
@@ -25,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ValidateTfaRequest
+const exampleParsed = JSON.parse(exampleJSON) as ConfirmEnableTotpRequest
 console.log(exampleParsed)
 ```
 

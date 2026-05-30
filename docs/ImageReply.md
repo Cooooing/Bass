@@ -1,22 +1,24 @@
 
-# DisableTfaRequest
+# ImageReply
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`code` | string
+`data` | string
+`contentType` | string
 
 ## Example
 
 ```typescript
-import type { DisableTfaRequest } from '@bass/bbs-sdk-fetch'
+import type { ImageReply } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "code": null,
-} satisfies DisableTfaRequest
+  "data": null,
+  "contentType": null,
+} satisfies ImageReply
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as DisableTfaRequest
+const exampleParsed = JSON.parse(exampleJSON) as ImageReply
 console.log(exampleParsed)
 ```
 

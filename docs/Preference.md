@@ -1,7 +1,7 @@
 
 # Preference
 
-账号偏好设置
+账号偏好设置。
 
 ## Properties
 

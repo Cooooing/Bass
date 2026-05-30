@@ -1,6 +1,7 @@
 
 # TagQuery
 
+标签查询条件。
 
 ## Properties
 

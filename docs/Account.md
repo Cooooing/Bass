@@ -1,7 +1,7 @@
 
 # Account
 
-当前账号完整资料
+当前账号完整资料。
 
 ## Properties
 

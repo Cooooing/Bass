@@ -1,6 +1,7 @@
 
 # ArticleQuery
 
+文章查询条件。
 
 ## Properties
 

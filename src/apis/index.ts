@@ -12,4 +12,4 @@ export * from './PreferencesService';
 export * from './PrivacySettingService';
 export * from './RelationService';
 export * from './TagService';
-export * from './TfaService';
+export * from './TotpService';

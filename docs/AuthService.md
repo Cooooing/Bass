@@ -19,7 +19,7 @@ All URIs are relative to *http://localhost*
 
 
 
-使用密码登录账号
+使用密码登录账号。
 
 ### Example
 
@@ -86,7 +86,7 @@ No authorization required
 
 
 
-登出当前登录账号
+登出当前账号。
 
 ### Example
 
@@ -153,7 +153,7 @@ No authorization required
 
 
 
-使用邮箱发起账号注册
+使用邮箱发起账号注册。
 
 ### Example
 
@@ -220,7 +220,7 @@ No authorization required
 
 
 
-使用手机号发起账号注册
+使用手机号发起账号注册。
 
 ### Example
 
@@ -287,7 +287,7 @@ No authorization required
 
 
 
-校验邮箱注册验证码
+校验邮箱注册验证码。
 
 ### Example
 
@@ -354,7 +354,7 @@ No authorization required
 
 
 
-校验手机号注册验证码
+校验手机号注册验证码。
 
 ### Example
 

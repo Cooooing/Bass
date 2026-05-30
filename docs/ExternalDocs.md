@@ -1,24 +1,27 @@
 
-# BeginEnableTfaReply
+# ExternalDocs
 
+Allows referencing an external resource for extended documentation.
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`data` | string
-`contentType` | string
+`description` | string
+`url` | string
+`specificationExtension` | [Array&lt;NamedAny&gt;](NamedAny.md)
 
 ## Example
 
 ```typescript
-import type { BeginEnableTfaReply } from '@bass/bbs-sdk-fetch'
+import type { ExternalDocs } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "data": null,
-  "contentType": null,
-} satisfies BeginEnableTfaReply
+  "description": null,
+  "url": null,
+  "specificationExtension": null,
+} satisfies ExternalDocs
 
 console.log(example)
 
@@ -27,7 +30,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as BeginEnableTfaReply
+const exampleParsed = JSON.parse(exampleJSON) as ExternalDocs
 console.log(exampleParsed)
 ```
 

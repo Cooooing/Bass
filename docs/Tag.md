@@ -1,20 +1,16 @@
 
 # Tag
 
+Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`id` | string
 `name` | string
 `description` | string
-`domainId` | string
-`status` | string
-`createdBy` | string
-`updatedBy` | string
-`createdAt` | string
-`updatedAt` | string
+`externalDocs` | [ExternalDocs](ExternalDocs.md)
+`specificationExtension` | [Array&lt;NamedAny&gt;](NamedAny.md)
 
 ## Example
 
@@ -23,15 +19,10 @@ import type { Tag } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "id": null,
   "name": null,
   "description": null,
-  "domainId": null,
-  "status": null,
-  "createdBy": null,
-  "updatedBy": null,
-  "createdAt": null,
-  "updatedAt": null,
+  "externalDocs": null,
+  "specificationExtension": null,
 } satisfies Tag
 
 console.log(example)

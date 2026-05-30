@@ -1,7 +1,7 @@
 
 # AccountContact
 
-当前账号联系方式
+当前账号联系方式。
 
 ## Properties
 

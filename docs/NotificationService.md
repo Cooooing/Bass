@@ -16,6 +16,8 @@ All URIs are relative to *http://localhost*
 
 
 
+统计未读通知数量。
+
 ### Example
 
 ```ts
@@ -81,6 +83,8 @@ No authorization required
 
 
 
+分页查询通知列表。
+
 ### Example
 
 ```ts
@@ -145,6 +149,8 @@ No authorization required
 > MarkReadNotificationReply markRead(markReadNotificationRequest)
 
 
+
+标记通知为已读。
 
 ### Example
 

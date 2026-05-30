@@ -25,6 +25,8 @@ All URIs are relative to *http://localhost*
 
 
 
+删除文章。
+
 ### Example
 
 ```ts
@@ -89,6 +91,8 @@ No authorization required
 > object acceptAnswer(acceptAnswerArticleRequest)
 
 
+
+采纳文章评论为答案。
 
 ### Example
 
@@ -155,6 +159,8 @@ No authorization required
 
 
 
+收藏或取消收藏文章。
+
 ### Example
 
 ```ts
@@ -219,6 +225,8 @@ No authorization required
 > CreateArticleReply create(createArticleRequest)
 
 
+
+创建文章。
 
 ### Example
 
@@ -285,6 +293,8 @@ No authorization required
 
 
 
+获取文章详情。
+
 ### Example
 
 ```ts
@@ -349,6 +359,8 @@ No authorization required
 > object like(likeArticleRequest)
 
 
+
+点赞或取消点赞文章。
 
 ### Example
 
@@ -415,6 +427,8 @@ No authorization required
 
 
 
+分页查询文章列表。
+
 ### Example
 
 ```ts
@@ -479,6 +493,8 @@ No authorization required
 > object publish(publishArticleRequest)
 
 
+
+发布文章。
 
 ### Example
 
@@ -545,6 +561,8 @@ No authorization required
 
 
 
+打赏文章。
+
 ### Example
 
 ```ts
@@ -609,6 +627,8 @@ No authorization required
 > object thank(thankArticleRequest)
 
 
+
+感谢或取消感谢文章。
 
 ### Example
 
@@ -675,6 +695,8 @@ No authorization required
 
 
 
+更新文章草稿。
+
 ### Example
 
 ```ts
@@ -739,6 +761,8 @@ No authorization required
 > object watch(watchArticleRequest)
 
 
+
+关注或取消关注文章。
 
 ### Example
 

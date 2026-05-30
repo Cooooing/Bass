@@ -1,6 +1,7 @@
 
 # Notification
 
+通知记录。
 
 ## Properties
 

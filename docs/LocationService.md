@@ -15,7 +15,7 @@ All URIs are relative to *http://localhost*
 
 
 
-获取当前登录账号的地理资料
+获取当前账号的地理资料。
 
 ### Example
 
@@ -82,7 +82,7 @@ No authorization required
 
 
 
-更新当前登录账号的地理资料
+更新当前账号的地理资料。
 
 ### Example
 

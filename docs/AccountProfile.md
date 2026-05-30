@@ -1,7 +1,7 @@
 
 # AccountProfile
 
-账号展示资料
+账号展示资料。
 
 ## Properties
 

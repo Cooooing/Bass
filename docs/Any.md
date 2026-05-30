@@ -1,27 +1,24 @@
 
-# Tfa
+# Any
 
-二步验证状态
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`userId` | string
-`enable` | boolean
-`enableTime` | string
+`value` | [GoogleProtobufAny](GoogleProtobufAny.md)
+`yaml` | string
 
 ## Example
 
 ```typescript
-import type { Tfa } from '@bass/bbs-sdk-fetch'
+import type { Any } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "userId": null,
-  "enable": null,
-  "enableTime": null,
-} satisfies Tfa
+  "value": null,
+  "yaml": null,
+} satisfies Any
 
 console.log(example)
 
@@ -30,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as Tfa
+const exampleParsed = JSON.parse(exampleJSON) as Any
 console.log(exampleParsed)
 ```
 

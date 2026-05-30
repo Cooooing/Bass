@@ -4,10 +4,78 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
 | [**getCurrent**](AccountService.md#getcurrent) | **POST** /v1/user/account/get-current |  |
 | [**getProfile**](AccountService.md#getprofile) | **POST** /v1/user/account/get-profile |  |
 | [**updateProfile**](AccountService.md#updateprofile) | **POST** /v1/user/account/update-profile |  |
 
+
+
+## avatar
+
+> ImageReply avatar(name)
+
+
+
+生成默认账号头像。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { AvatarRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // string | 用于生成头像的账号名。 (optional)
+    name: name_example,
+  } satisfies AvatarRequest;
+
+  try {
+    const data = await api.avatar(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **name** | `string` | 用于生成头像的账号名。 | [Optional] [Defaults to `undefined`] |
+
+### Return type
+
+[**ImageReply**](ImageReply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## getCurrent
@@ -16,7 +84,7 @@ All URIs are relative to *http://localhost*
 
 
 
-获取当前登录账号的完整资料
+获取当前账号的完整资料。
 
 ### Example
 
@@ -83,7 +151,7 @@ No authorization required
 
 
 
-按账号 ID 获取账号展示资料
+按账号 ID 获取账号展示资料。
 
 ### Example
 
@@ -150,7 +218,7 @@ No authorization required
 
 
 
-更新当前登录账号的展示资料
+更新当前账号的展示资料。
 
 ### Example
 

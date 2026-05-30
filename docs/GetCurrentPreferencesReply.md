@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**preference** | [**Preference**](Preference.md) |  | [optional] [default to undefined]
+**preference** | [**Preference**](Preference.md) | 当前账号偏好设置。 | [optional] [default to undefined]
 
 ## Example
 

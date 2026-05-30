@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PageReply**](PageReply.md) |  | [optional] [default to undefined]
-**rows** | [**Array&lt;Article&gt;**](Article.md) |  | [optional] [default to undefined]
+**page** | [**PageReply**](PageReply.md) | 分页结果。 | [optional] [default to undefined]
+**rows** | [**Array&lt;Article&gt;**](Article.md) | 文章列表。 | [optional] [default to undefined]
 
 ## Example
 

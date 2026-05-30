@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**account** | **string** |  | [optional] [default to undefined]
-**password** | **string** |  | [optional] [default to undefined]
+**account** | **string** | 账号、邮箱或手机号。 | [default to undefined]
+**password** | **string** | 账号密码。 | [default to undefined]
 
 ## Example
 

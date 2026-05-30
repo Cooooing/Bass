@@ -1,15 +1,15 @@
 # Location
 
-账号地理资料
+账号地理资料。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
-**country** | **string** |  | [optional] [default to undefined]
-**province** | **string** |  | [optional] [default to undefined]
-**city** | **string** |  | [optional] [default to undefined]
+**user_id** | **string** | 账号 ID。 | [optional] [default to undefined]
+**country** | **string** | 国家或地区。 | [optional] [default to undefined]
+**province** | **string** | 省份或州。 | [optional] [default to undefined]
+**city** | **string** | 城市。 | [optional] [default to undefined]
 
 ## Example
 

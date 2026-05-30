@@ -1,19 +1,21 @@
-# ValidateTfaReply
+# ImageReply
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**verified** | **boolean** |  | [optional] [default to undefined]
+**data** | **string** | 图片数据 | [optional] [default to undefined]
+**content_type** | **string** | 图片类型 | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { ValidateTfaReply } from '@bass/bbs-sdk-axios';
+import { ImageReply } from '@bass/bbs-sdk-axios';
 
-const instance: ValidateTfaReply = {
-    verified,
+const instance: ImageReply = {
+    data,
+    content_type,
 };
 ```
 

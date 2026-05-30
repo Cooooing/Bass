@@ -9,6 +9,7 @@ All URIs are relative to *http://localhost*
 # **list**
 > ListTagsReply list(listTagsRequest)
 
+分页查询标签列表。
 
 ### Example
 

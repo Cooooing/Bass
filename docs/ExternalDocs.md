@@ -1,25 +1,23 @@
-# Tag
+# ExternalDocs
 
-Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
+Allows referencing an external resource for extended documentation.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [optional] [default to undefined]
 **description** | **string** |  | [optional] [default to undefined]
-**external_docs** | [**ExternalDocs**](ExternalDocs.md) |  | [optional] [default to undefined]
+**url** | **string** |  | [optional] [default to undefined]
 **specification_extension** | [**Array&lt;NamedAny&gt;**](NamedAny.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { Tag } from '@bass/bbs-sdk-axios';
+import { ExternalDocs } from '@bass/bbs-sdk-axios';
 
-const instance: Tag = {
-    name,
+const instance: ExternalDocs = {
     description,
-    external_docs,
+    url,
     specification_extension,
 };
 ```

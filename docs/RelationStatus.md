@@ -1,16 +1,16 @@
 # RelationStatus
 
-当前账号与目标账号的关系状态
+当前账号与目标账号的关系状态。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**target_id** | **string** |  | [optional] [default to undefined]
-**following** | **boolean** |  | [optional] [default to undefined]
-**followed_by** | **boolean** |  | [optional] [default to undefined]
-**blocking** | **boolean** |  | [optional] [default to undefined]
-**blocked_by** | **boolean** |  | [optional] [default to undefined]
+**target_id** | **string** | 目标账号 ID。 | [optional] [default to undefined]
+**following** | **boolean** | 当前账号是否关注目标账号。 | [optional] [default to undefined]
+**followed_by** | **boolean** | 目标账号是否关注当前账号。 | [optional] [default to undefined]
+**blocking** | **boolean** | 当前账号是否拉黑目标账号。 | [optional] [default to undefined]
+**blocked_by** | **boolean** | 目标账号是否拉黑当前账号。 | [optional] [default to undefined]
 
 ## Example
 

@@ -11,6 +11,7 @@ All URIs are relative to *http://localhost*
 # **countUnread**
 > CountUnreadNotificationsReply countUnread(body)
 
+统计未读通知数量。
 
 ### Example
 
@@ -61,6 +62,7 @@ No authorization required
 # **list**
 > ListNotificationsReply list(listNotificationsRequest)
 
+分页查询通知列表。
 
 ### Example
 
@@ -112,6 +114,7 @@ No authorization required
 # **markRead**
 > MarkReadNotificationReply markRead(markReadNotificationRequest)
 
+标记通知为已读。
 
 ### Example
 

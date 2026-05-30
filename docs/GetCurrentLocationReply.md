@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**location** | [**Location**](Location.md) |  | [optional] [default to undefined]
+**location** | [**Location**](Location.md) | 当前账号地理资料。 | [optional] [default to undefined]
 
 ## Example
 

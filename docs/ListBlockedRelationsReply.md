@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PageReply**](PageReply.md) |  | [optional] [default to undefined]
-**rows** | [**Array&lt;Relation&gt;**](Relation.md) |  | [optional] [default to undefined]
+**page** | [**PageReply**](PageReply.md) | 分页结果。 | [optional] [default to undefined]
+**rows** | [**Array&lt;Relation&gt;**](Relation.md) | 账号关系列表。 | [optional] [default to undefined]
 
 ## Example
 

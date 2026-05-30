@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**privacy_setting** | [**PrivacySetting**](PrivacySetting.md) |  | [optional] [default to undefined]
+**privacy_setting** | [**PrivacySetting**](PrivacySetting.md) | 更新后的账号隐私设置。 | [optional] [default to undefined]
 
 ## Example
 

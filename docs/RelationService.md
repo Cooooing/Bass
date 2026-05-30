@@ -16,7 +16,7 @@ All URIs are relative to *http://localhost*
 # **block**
 > object block(blockRelationRequest)
 
-当前账号拉黑目标账号
+当前账号拉黑目标账号。
 
 ### Example
 
@@ -68,7 +68,7 @@ No authorization required
 # **follow**
 > object follow(followRelationRequest)
 
-当前账号关注目标账号
+当前账号关注目标账号。
 
 ### Example
 
@@ -120,7 +120,7 @@ No authorization required
 # **getStatus**
 > GetStatusRelationReply getStatus(getStatusRelationRequest)
 
-查询当前账号与目标账号之间的关系
+查询当前账号与目标账号之间的关系。
 
 ### Example
 
@@ -172,7 +172,7 @@ No authorization required
 # **listBlocked**
 > ListBlockedRelationsReply listBlocked(listBlockedRelationsRequest)
 
-分页查询当前账号拉黑的账号列表
+分页查询当前账号拉黑的账号列表。
 
 ### Example
 
@@ -224,7 +224,7 @@ No authorization required
 # **listFollowers**
 > ListFollowersRelationsReply listFollowers(listFollowersRelationsRequest)
 
-分页查询当前账号的粉丝账号列表
+分页查询当前账号的粉丝账号列表。
 
 ### Example
 
@@ -276,7 +276,7 @@ No authorization required
 # **listFollowing**
 > ListFollowingRelationsReply listFollowing(listFollowingRelationsRequest)
 
-分页查询当前账号关注的账号列表
+分页查询当前账号关注的账号列表。
 
 ### Example
 
@@ -328,7 +328,7 @@ No authorization required
 # **unblock**
 > object unblock(unblockRelationRequest)
 
-当前账号取消拉黑目标账号
+当前账号取消拉黑目标账号。
 
 ### Example
 
@@ -380,7 +380,7 @@ No authorization required
 # **unfollow**
 > object unfollow(unfollowRelationRequest)
 
-当前账号取消关注目标账号
+当前账号取消关注目标账号。
 
 ### Example
 

@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
-**code_token** | **string** |  | [optional] [default to undefined]
+**code** | **string** | 验证码。 | [default to undefined]
+**code_token** | **string** | 验证码令牌。 | [default to undefined]
 
 ## Example
 

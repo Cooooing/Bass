@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PageRequest**](PageRequest.md) |  | [optional] [default to undefined]
+**page** | [**PageRequest**](PageRequest.md) | 分页参数。 | [optional] [default to undefined]
 
 ## Example
 

@@ -51,6 +51,7 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AccountService* | [**avatar**](docs/AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
 *AccountService* | [**getCurrent**](docs/AccountService.md#getcurrent) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getProfile**](docs/AccountService.md#getprofile) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**updateProfile**](docs/AccountService.md#updateprofile) | **POST** /v1/user/account/update-profile | 
@@ -96,11 +97,10 @@ Class | Method | HTTP request | Description
 *RelationService* | [**unblock**](docs/RelationService.md#unblock) | **POST** /v1/user/relation/unblock | 
 *RelationService* | [**unfollow**](docs/RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow | 
 *TagService* | [**list**](docs/TagService.md#list) | **POST** /v1/content/tag/list | 
-*TfaService* | [**beginEnable**](docs/TfaService.md#beginenable) | **POST** /v1/user/tfa/begin-enable | 
-*TfaService* | [**confirmEnable**](docs/TfaService.md#confirmenable) | **POST** /v1/user/tfa/confirm-enable | 
-*TfaService* | [**disable**](docs/TfaService.md#disable) | **POST** /v1/user/tfa/disable | 
-*TfaService* | [**getCurrent**](docs/TfaService.md#getcurrent) | **POST** /v1/user/tfa/get-current | 
-*TfaService* | [**validate**](docs/TfaService.md#validate) | **POST** /v1/user/tfa/validate | 
+*TotpService* | [**beginEnable**](docs/TotpService.md#beginenable) | **POST** /v1/user/totp/begin-enable | 
+*TotpService* | [**confirmEnable**](docs/TotpService.md#confirmenable) | **POST** /v1/user/totp/confirm-enable | 
+*TotpService* | [**disable**](docs/TotpService.md#disable) | **POST** /v1/user/totp/disable | 
+*TotpService* | [**getCurrent**](docs/TotpService.md#getcurrent) | **POST** /v1/user/totp/get-current | 
 
 
 ### Documentation For Models
@@ -111,25 +111,27 @@ Class | Method | HTTP request | Description
  - [AccountProfile](docs/AccountProfile.md)
  - [AddPostscriptReply](docs/AddPostscriptReply.md)
  - [AddPostscriptRequest](docs/AddPostscriptRequest.md)
+ - [Any](docs/Any.md)
  - [Article](docs/Article.md)
  - [ArticlePostscript](docs/ArticlePostscript.md)
  - [ArticleQuery](docs/ArticleQuery.md)
  - [ArticleSave](docs/ArticleSave.md)
- - [BeginEnableTfaReply](docs/BeginEnableTfaReply.md)
+ - [BeginEnableTotpReply](docs/BeginEnableTotpReply.md)
  - [BlockRelationRequest](docs/BlockRelationRequest.md)
  - [CollectArticleRequest](docs/CollectArticleRequest.md)
  - [Comment](docs/Comment.md)
  - [CommentQuery](docs/CommentQuery.md)
- - [ConfirmEnableTfaRequest](docs/ConfirmEnableTfaRequest.md)
+ - [ConfirmEnableTotpRequest](docs/ConfirmEnableTotpRequest.md)
  - [CountUnreadNotificationsReply](docs/CountUnreadNotificationsReply.md)
  - [CreateArticleReply](docs/CreateArticleReply.md)
  - [CreateArticleRequest](docs/CreateArticleRequest.md)
  - [CreateCommentReply](docs/CreateCommentReply.md)
  - [CreateCommentRequest](docs/CreateCommentRequest.md)
  - [DeleteArticleRequest](docs/DeleteArticleRequest.md)
- - [DisableTfaRequest](docs/DisableTfaRequest.md)
+ - [DisableTotpRequest](docs/DisableTotpRequest.md)
  - [Domain](docs/Domain.md)
  - [DomainQuery](docs/DomainQuery.md)
+ - [ExternalDocs](docs/ExternalDocs.md)
  - [FollowRelationRequest](docs/FollowRelationRequest.md)
  - [GetArticleReply](docs/GetArticleReply.md)
  - [GetArticleRequest](docs/GetArticleRequest.md)
@@ -137,11 +139,13 @@ Class | Method | HTTP request | Description
  - [GetCurrentLocationReply](docs/GetCurrentLocationReply.md)
  - [GetCurrentPreferencesReply](docs/GetCurrentPreferencesReply.md)
  - [GetCurrentPrivacySettingReply](docs/GetCurrentPrivacySettingReply.md)
- - [GetCurrentTfaReply](docs/GetCurrentTfaReply.md)
+ - [GetCurrentTotpReply](docs/GetCurrentTotpReply.md)
  - [GetProfileAccountReply](docs/GetProfileAccountReply.md)
  - [GetProfileAccountRequest](docs/GetProfileAccountRequest.md)
  - [GetStatusRelationReply](docs/GetStatusRelationReply.md)
  - [GetStatusRelationRequest](docs/GetStatusRelationRequest.md)
+ - [GoogleProtobufAny](docs/GoogleProtobufAny.md)
+ - [ImageReply](docs/ImageReply.md)
  - [LikeArticleRequest](docs/LikeArticleRequest.md)
  - [LikeCommentRequest](docs/LikeCommentRequest.md)
  - [ListArticlesReply](docs/ListArticlesReply.md)
@@ -165,6 +169,7 @@ Class | Method | HTTP request | Description
  - [LoginByPasswordRequest](docs/LoginByPasswordRequest.md)
  - [MarkReadNotificationReply](docs/MarkReadNotificationReply.md)
  - [MarkReadNotificationRequest](docs/MarkReadNotificationRequest.md)
+ - [NamedAny](docs/NamedAny.md)
  - [Notification](docs/Notification.md)
  - [PageReply](docs/PageReply.md)
  - [PageRequest](docs/PageRequest.md)
@@ -181,9 +186,9 @@ Class | Method | HTTP request | Description
  - [Tag](docs/Tag.md)
  - [TagQuery](docs/TagQuery.md)
  - [TagSave](docs/TagSave.md)
- - [Tfa](docs/Tfa.md)
  - [ThankArticleRequest](docs/ThankArticleRequest.md)
  - [ThankCommentRequest](docs/ThankCommentRequest.md)
+ - [Totp](docs/Totp.md)
  - [UnblockRelationRequest](docs/UnblockRelationRequest.md)
  - [UnfollowRelationRequest](docs/UnfollowRelationRequest.md)
  - [UpdateCurrentPreferencesReply](docs/UpdateCurrentPreferencesReply.md)
@@ -196,8 +201,6 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountRequest](docs/UpdateProfileAccountRequest.md)
  - [UpsertCurrentLocationReply](docs/UpsertCurrentLocationReply.md)
  - [UpsertCurrentLocationRequest](docs/UpsertCurrentLocationRequest.md)
- - [ValidateTfaReply](docs/ValidateTfaReply.md)
- - [ValidateTfaRequest](docs/ValidateTfaRequest.md)
  - [VerifyEmailRegistrationRequest](docs/VerifyEmailRegistrationRequest.md)
  - [VerifyPhoneRegistrationRequest](docs/VerifyPhoneRegistrationRequest.md)
  - [WatchArticleRequest](docs/WatchArticleRequest.md)

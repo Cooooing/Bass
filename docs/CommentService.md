@@ -12,6 +12,7 @@ All URIs are relative to *http://localhost*
 # **create**
 > CreateCommentReply create(createCommentRequest)
 
+创建评论。
 
 ### Example
 
@@ -63,6 +64,7 @@ No authorization required
 # **like**
 > object like(likeCommentRequest)
 
+点赞或取消点赞评论。
 
 ### Example
 
@@ -114,6 +116,7 @@ No authorization required
 # **list**
 > ListCommentsReply list(listCommentsRequest)
 
+分页查询评论列表。
 
 ### Example
 
@@ -165,6 +168,7 @@ No authorization required
 # **thank**
 > object thank(thankCommentRequest)
 
+感谢或取消感谢评论。
 
 ### Example
 

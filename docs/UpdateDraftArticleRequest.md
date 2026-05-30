@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article** | [**ArticleSave**](ArticleSave.md) |  | [optional] [default to undefined]
+**article** | [**ArticleSave**](ArticleSave.md) | 文章保存内容。 | [default to undefined]
 
 ## Example
 

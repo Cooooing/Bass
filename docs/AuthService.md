@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 # **loginByPassword**
 > LoginByPasswordReply loginByPassword(loginByPasswordRequest)
 
-使用密码登录账号
+使用密码登录账号。
 
 ### Example
 
@@ -66,7 +66,7 @@ No authorization required
 # **logout**
 > object logout(body)
 
-登出当前登录账号
+登出当前账号。
 
 ### Example
 
@@ -117,7 +117,7 @@ No authorization required
 # **startEmailRegistration**
 > StartEmailRegistrationReply startEmailRegistration(startEmailRegistrationRequest)
 
-使用邮箱发起账号注册
+使用邮箱发起账号注册。
 
 ### Example
 
@@ -169,7 +169,7 @@ No authorization required
 # **startPhoneRegistration**
 > StartPhoneRegistrationReply startPhoneRegistration(startPhoneRegistrationRequest)
 
-使用手机号发起账号注册
+使用手机号发起账号注册。
 
 ### Example
 
@@ -221,7 +221,7 @@ No authorization required
 # **verifyEmailRegistration**
 > object verifyEmailRegistration(verifyEmailRegistrationRequest)
 
-校验邮箱注册验证码
+校验邮箱注册验证码。
 
 ### Example
 
@@ -273,7 +273,7 @@ No authorization required
 # **verifyPhoneRegistration**
 > object verifyPhoneRegistration(verifyPhoneRegistrationRequest)
 
-校验手机号注册验证码
+校验手机号注册验证码。
 
 ### Example
 

@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [optional] [default to undefined]
-**comment_id** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 文章 ID。 | [default to undefined]
+**comment_id** | **string** | 评论 ID。 | [default to undefined]
 
 ## Example
 

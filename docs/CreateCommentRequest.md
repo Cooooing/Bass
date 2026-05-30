@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [optional] [default to undefined]
-**content** | **string** |  | [optional] [default to undefined]
-**reply_id** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 文章 ID。 | [default to undefined]
+**content** | **string** | 评论内容。 | [default to undefined]
+**reply_id** | **string** | 回复的评论 ID。 | [optional] [default to undefined]
 
 ## Example
 

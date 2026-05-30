@@ -1,30 +1,29 @@
-# TfaService
+# TotpService
 
 All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**beginEnable**](#beginenable) | **POST** /v1/user/tfa/begin-enable | |
-|[**confirmEnable**](#confirmenable) | **POST** /v1/user/tfa/confirm-enable | |
-|[**disable**](#disable) | **POST** /v1/user/tfa/disable | |
-|[**getCurrent**](#getcurrent) | **POST** /v1/user/tfa/get-current | |
-|[**validate**](#validate) | **POST** /v1/user/tfa/validate | |
+|[**beginEnable**](#beginenable) | **POST** /v1/user/totp/begin-enable | |
+|[**confirmEnable**](#confirmenable) | **POST** /v1/user/totp/confirm-enable | |
+|[**disable**](#disable) | **POST** /v1/user/totp/disable | |
+|[**getCurrent**](#getcurrent) | **POST** /v1/user/totp/get-current | |
 
 # **beginEnable**
-> BeginEnableTfaReply beginEnable(body)
+> BeginEnableTotpReply beginEnable(body)
 
-开始启用二步验证
+开始启用 TOTP。
 
 ### Example
 
 ```typescript
 import {
-    TfaService,
+    TotpService,
     Configuration
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new TfaService(configuration);
+const apiInstance = new TotpService(configuration);
 
 let body: object; //
 
@@ -42,7 +41,7 @@ const { status, data } = await apiInstance.beginEnable(
 
 ### Return type
 
-**BeginEnableTfaReply**
+**BeginEnableTotpReply**
 
 ### Authorization
 
@@ -62,26 +61,26 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **confirmEnable**
-> object confirmEnable(confirmEnableTfaRequest)
+> object confirmEnable(confirmEnableTotpRequest)
 
-确认二步验证码并正式启用二步验证
+确认 TOTP 验证码并正式启用 TOTP。
 
 ### Example
 
 ```typescript
 import {
-    TfaService,
+    TotpService,
     Configuration,
-    ConfirmEnableTfaRequest
+    ConfirmEnableTotpRequest
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new TfaService(configuration);
+const apiInstance = new TotpService(configuration);
 
-let confirmEnableTfaRequest: ConfirmEnableTfaRequest; //
+let confirmEnableTotpRequest: ConfirmEnableTotpRequest; //
 
 const { status, data } = await apiInstance.confirmEnable(
-    confirmEnableTfaRequest
+    confirmEnableTotpRequest
 );
 ```
 
@@ -89,7 +88,7 @@ const { status, data } = await apiInstance.confirmEnable(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **confirmEnableTfaRequest** | **ConfirmEnableTfaRequest**|  | |
+| **confirmEnableTotpRequest** | **ConfirmEnableTotpRequest**|  | |
 
 
 ### Return type
@@ -114,26 +113,26 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **disable**
-> object disable(disableTfaRequest)
+> object disable(disableTotpRequest)
 
-校验二步验证码并关闭二步验证
+校验 TOTP 验证码并关闭 TOTP。
 
 ### Example
 
 ```typescript
 import {
-    TfaService,
+    TotpService,
     Configuration,
-    DisableTfaRequest
+    DisableTotpRequest
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new TfaService(configuration);
+const apiInstance = new TotpService(configuration);
 
-let disableTfaRequest: DisableTfaRequest; //
+let disableTotpRequest: DisableTotpRequest; //
 
 const { status, data } = await apiInstance.disable(
-    disableTfaRequest
+    disableTotpRequest
 );
 ```
 
@@ -141,7 +140,7 @@ const { status, data } = await apiInstance.disable(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **disableTfaRequest** | **DisableTfaRequest**|  | |
+| **disableTotpRequest** | **DisableTotpRequest**|  | |
 
 
 ### Return type
@@ -166,20 +165,20 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getCurrent**
-> GetCurrentTfaReply getCurrent(body)
+> GetCurrentTotpReply getCurrent(body)
 
-获取当前登录账号的二步验证状态
+获取当前账号的 TOTP 状态。
 
 ### Example
 
 ```typescript
 import {
-    TfaService,
+    TotpService,
     Configuration
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new TfaService(configuration);
+const apiInstance = new TotpService(configuration);
 
 let body: object; //
 
@@ -197,59 +196,7 @@ const { status, data } = await apiInstance.getCurrent(
 
 ### Return type
 
-**GetCurrentTfaReply**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **validate**
-> ValidateTfaReply validate(validateTfaRequest)
-
-校验当前登录账号的二步验证码
-
-### Example
-
-```typescript
-import {
-    TfaService,
-    Configuration,
-    ValidateTfaRequest
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new TfaService(configuration);
-
-let validateTfaRequest: ValidateTfaRequest; //
-
-const { status, data } = await apiInstance.validate(
-    validateTfaRequest
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **validateTfaRequest** | **ValidateTfaRequest**|  | |
-
-
-### Return type
-
-**ValidateTfaReply**
+**GetCurrentTotpReply**
 
 ### Authorization
 

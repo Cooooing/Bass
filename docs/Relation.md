@@ -1,17 +1,17 @@
 # Relation
 
-账号关系记录
+账号关系记录。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**type** | **number** |  | [optional] [default to undefined]
-**actor_id** | **string** |  | [optional] [default to undefined]
-**target_id** | **string** |  | [optional] [default to undefined]
-**created_at** | **string** |  | [optional] [default to undefined]
-**updated_at** | **string** |  | [optional] [default to undefined]
+**id** | **string** | 关系记录 ID。 | [optional] [default to undefined]
+**type** | **number** | 关系类型。 | [optional] [default to undefined]
+**actor_id** | **string** | 发起账号 ID。 | [optional] [default to undefined]
+**target_id** | **string** | 目标账号 ID。 | [optional] [default to undefined]
+**created_at** | **string** | 创建时间。 | [optional] [default to undefined]
+**updated_at** | **string** | 更新时间。 | [optional] [default to undefined]
 
 ## Example
 

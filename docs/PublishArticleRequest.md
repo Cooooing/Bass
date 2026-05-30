@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 文章 ID。 | [default to undefined]
 
 ## Example
 

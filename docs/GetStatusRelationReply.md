@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**status** | [**RelationStatus**](RelationStatus.md) |  | [optional] [default to undefined]
+**status** | [**RelationStatus**](RelationStatus.md) | 关系状态。 | [optional] [default to undefined]
 
 ## Example
 

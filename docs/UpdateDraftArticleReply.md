@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article** | [**Article**](Article.md) |  | [optional] [default to undefined]
+**article** | [**Article**](Article.md) | 更新后的文章。 | [optional] [default to undefined]
 
 ## Example
 

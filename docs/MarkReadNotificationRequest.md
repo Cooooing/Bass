@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**ids** | **Array&lt;string&gt;** | 通知 ID 列表。 | [optional] [default to undefined]
 
 ## Example
 

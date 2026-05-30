@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**count** | **string** |  | [optional] [default to undefined]
+**count** | **string** | 未读通知数量。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,18 +1,18 @@
-# ConfirmEnableTfaRequest
+# ConfirmEnableTotpRequest
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
+**code** | **string** | TOTP 验证码。 | [default to undefined]
 
 ## Example
 
 ```typescript
-import { ConfirmEnableTfaRequest } from '@bass/bbs-sdk-axios';
+import { ConfirmEnableTotpRequest } from '@bass/bbs-sdk-axios';
 
-const instance: ConfirmEnableTfaRequest = {
+const instance: ConfirmEnableTotpRequest = {
     code,
 };
 ```

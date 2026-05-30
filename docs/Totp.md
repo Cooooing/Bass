@@ -1,21 +1,21 @@
-# Tfa
+# Totp
 
-二步验证状态
+TOTP 认证状态。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
-**enable** | **boolean** |  | [optional] [default to undefined]
-**enable_time** | **string** |  | [optional] [default to undefined]
+**user_id** | **string** | 账号 ID。 | [optional] [default to undefined]
+**enable** | **boolean** | 是否启用 TOTP。 | [optional] [default to undefined]
+**enable_time** | **string** | 启用时间。 | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { Tfa } from '@bass/bbs-sdk-axios';
+import { Totp } from '@bass/bbs-sdk-axios';
 
-const instance: Tfa = {
+const instance: Totp = {
     user_id,
     enable,
     enable_time,

@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**phone** | **string** |  | [optional] [default to undefined]
-**password** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
-**nickname** | **string** |  | [optional] [default to undefined]
+**phone** | **string** | 手机号。 | [default to undefined]
+**password** | **string** | 账号密码。 | [default to undefined]
+**name** | **string** | 账号名。 | [default to undefined]
+**nickname** | **string** | 昵称。 | [optional] [default to undefined]
 
 ## Example
 

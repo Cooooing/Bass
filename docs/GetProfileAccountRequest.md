@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
+**user_id** | **string** | 账号 ID。 | [default to undefined]
 
 ## Example
 

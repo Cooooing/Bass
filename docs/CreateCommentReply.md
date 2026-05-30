@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**comment** | [**Comment**](Comment.md) |  | [optional] [default to undefined]
+**comment** | [**Comment**](Comment.md) | 创建后的评论。 | [optional] [default to undefined]
 
 ## Example
 

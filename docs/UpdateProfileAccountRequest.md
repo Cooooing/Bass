@@ -5,11 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**avatar_url** | **string** |  | [optional] [default to undefined]
-**nickname** | **string** |  | [optional] [default to undefined]
-**url** | **string** |  | [optional] [default to undefined]
-**introduction** | **string** |  | [optional] [default to undefined]
-**mbti** | **string** |  | [optional] [default to undefined]
+**avatar_url** | **string** | 头像 URL。 | [optional] [default to undefined]
+**nickname** | **string** | 昵称。 | [optional] [default to undefined]
+**url** | **string** | 个人主页 URL。 | [optional] [default to undefined]
+**introduction** | **string** | 个人简介。 | [optional] [default to undefined]
+**mbti** | **string** | MBTI 类型。 | [optional] [default to undefined]
 
 ## Example
 

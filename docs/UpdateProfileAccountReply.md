@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
+**profile** | [**AccountProfile**](AccountProfile.md) | 更新后的账号展示资料。 | [optional] [default to undefined]
 
 ## Example
 

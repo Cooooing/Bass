@@ -5,7 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code_token** | **string** |  | [optional] [default to undefined]
+**code_token** | **string** | 验证码令牌。 | [optional] [default to undefined]
+**code** | **string** | 验证码。 | [optional] [default to undefined]
 
 ## Example
 
@@ -14,6 +15,7 @@ import { StartPhoneRegistrationReply } from '@bass/bbs-sdk-axios';
 
 const instance: StartPhoneRegistrationReply = {
     code_token,
+    code,
 };
 ```
 

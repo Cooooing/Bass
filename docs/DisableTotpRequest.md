@@ -1,18 +1,18 @@
-# ValidateTfaRequest
+# DisableTotpRequest
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
+**code** | **string** | TOTP 验证码。 | [default to undefined]
 
 ## Example
 
 ```typescript
-import { ValidateTfaRequest } from '@bass/bbs-sdk-axios';
+import { DisableTotpRequest } from '@bass/bbs-sdk-axios';
 
-const instance: ValidateTfaRequest = {
+const instance: DisableTotpRequest = {
     code,
 };
 ```

@@ -9,6 +9,7 @@ All URIs are relative to *http://localhost*
 # **list**
 > ListDomainsReply list(listDomainsRequest)
 
+分页查询内容板块列表。
 
 ### Example
 

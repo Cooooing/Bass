@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [optional] [default to undefined]
-**active** | **boolean** |  | [optional] [default to undefined]
+**article_id** | **string** | 文章 ID。 | [default to undefined]
+**active** | **boolean** | 是否关注。 | [default to undefined]
 
 ## Example
 

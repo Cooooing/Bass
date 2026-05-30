@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**target_id** | **string** |  | [optional] [default to undefined]
+**target_id** | **string** | 目标账号 ID。 | [default to undefined]
 
 ## Example
 

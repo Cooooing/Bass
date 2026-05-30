@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**count** | **number** |  | [optional] [default to undefined]
+**count** | **number** | 成功标记的通知数量。 | [optional] [default to undefined]
 
 ## Example
 

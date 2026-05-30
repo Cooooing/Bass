@@ -1,19 +1,21 @@
-# GetCurrentTfaReply
+# Any
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**tfa** | [**Tfa**](Tfa.md) |  | [optional] [default to undefined]
+**value** | [**GoogleProtobufAny**](GoogleProtobufAny.md) |  | [optional] [default to undefined]
+**yaml** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { GetCurrentTfaReply } from '@bass/bbs-sdk-axios';
+import { Any } from '@bass/bbs-sdk-axios';
 
-const instance: GetCurrentTfaReply = {
-    tfa,
+const instance: Any = {
+    value,
+    yaml,
 };
 ```
 

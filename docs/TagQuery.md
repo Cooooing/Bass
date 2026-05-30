@@ -1,16 +1,17 @@
 # TagQuery
 
+标签查询条件。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
-**names** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
-**description** | **string** |  | [optional] [default to undefined]
-**status** | **string** |  | [optional] [default to undefined]
-**domain_id** | **string** |  | [optional] [default to undefined]
+**ids** | **Array&lt;string&gt;** | 标签 ID 列表。 | [optional] [default to undefined]
+**name** | **string** | 标签名称。 | [optional] [default to undefined]
+**names** | **Array&lt;string&gt;** | 标签名称列表。 | [optional] [default to undefined]
+**description** | **string** | 标签描述。 | [optional] [default to undefined]
+**status** | **string** | 标签状态。 | [optional] [default to undefined]
+**domain_id** | **string** | 所属板块 ID。 | [optional] [default to undefined]
 
 ## Example
 

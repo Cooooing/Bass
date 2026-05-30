@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**active** | **boolean** |  | [optional] [default to undefined]
+**id** | **string** | 评论 ID。 | [default to undefined]
+**active** | **boolean** | 是否点赞。 | [default to undefined]
 
 ## Example
 

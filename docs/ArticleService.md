@@ -20,6 +20,7 @@ All URIs are relative to *http://localhost*
 # **_delete**
 > object _delete(deleteArticleRequest)
 
+删除文章。
 
 ### Example
 
@@ -71,6 +72,7 @@ No authorization required
 # **acceptAnswer**
 > object acceptAnswer(acceptAnswerArticleRequest)
 
+采纳文章评论为答案。
 
 ### Example
 
@@ -122,6 +124,7 @@ No authorization required
 # **collect**
 > object collect(collectArticleRequest)
 
+收藏或取消收藏文章。
 
 ### Example
 
@@ -173,6 +176,7 @@ No authorization required
 # **create**
 > CreateArticleReply create(createArticleRequest)
 
+创建文章。
 
 ### Example
 
@@ -224,6 +228,7 @@ No authorization required
 # **get**
 > GetArticleReply get(getArticleRequest)
 
+获取文章详情。
 
 ### Example
 
@@ -275,6 +280,7 @@ No authorization required
 # **like**
 > object like(likeArticleRequest)
 
+点赞或取消点赞文章。
 
 ### Example
 
@@ -326,6 +332,7 @@ No authorization required
 # **list**
 > ListArticlesReply list(listArticlesRequest)
 
+分页查询文章列表。
 
 ### Example
 
@@ -377,6 +384,7 @@ No authorization required
 # **publish**
 > object publish(publishArticleRequest)
 
+发布文章。
 
 ### Example
 
@@ -428,6 +436,7 @@ No authorization required
 # **reward**
 > object reward(rewardArticleRequest)
 
+打赏文章。
 
 ### Example
 
@@ -479,6 +488,7 @@ No authorization required
 # **thank**
 > object thank(thankArticleRequest)
 
+感谢或取消感谢文章。
 
 ### Example
 
@@ -530,6 +540,7 @@ No authorization required
 # **updateDraft**
 > UpdateDraftArticleReply updateDraft(updateDraftArticleRequest)
 
+更新文章草稿。
 
 ### Example
 
@@ -581,6 +592,7 @@ No authorization required
 # **watch**
 > object watch(watchArticleRequest)
 
+关注或取消关注文章。
 
 ### Example
 

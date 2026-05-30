@@ -1,19 +1,19 @@
-# DisableTfaRequest
+# GetCurrentTotpReply
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
+**totp** | [**Totp**](Totp.md) | TOTP 认证状态。 | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { DisableTfaRequest } from '@bass/bbs-sdk-axios';
+import { GetCurrentTotpReply } from '@bass/bbs-sdk-axios';
 
-const instance: DisableTfaRequest = {
-    code,
+const instance: GetCurrentTotpReply = {
+    totp,
 };
 ```
 

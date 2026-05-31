@@ -78,7 +78,9 @@ func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, fun
 
 	reg := consulregistry.New(apiClient,
 		consulregistry.WithHealthCheck(false),
-		consulregistry.WithHeartbeat(false),
+		consulregistry.WithHeartbeat(true),
+		consulregistry.WithHealthCheckInterval(10),
+		consulregistry.WithDeregisterCriticalServiceAfter(30),
 	)
 
 	// 连接预检查。

@@ -35,6 +35,7 @@ var DataProviderSet = wire.NewSet(
 	repo.NewNotificationEmailDeliveryRepo,
 	repo.NewNotificationTencentSMSDeliveryRepo,
 	repo.NewNotificationLarkWebhookDeliveryRepo,
+	repo.NewNotificationRateLimitCache,
 	repo.NewUserClient,
 	repo.NewContentClient,
 

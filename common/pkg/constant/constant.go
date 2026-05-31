@@ -11,13 +11,6 @@ const (
 	Prod = "prod"
 )
 
-// 请求头 key 定义
-const (
-	HeaderTimestamp      = "X-Timestamp"   // 时间戳，防止过期请求
-	HeaderNonce          = "X-Nonce"       // 随机数，防止重放攻击
-	HeaderAuthentication = "Authorization" // 令牌请求头名称
-)
-
 const (
 	defaultPage uint32 = 1
 	defaultSize uint32 = 10

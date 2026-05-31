@@ -1,4 +1,10 @@
 config:
+  merge:
+    authorization:
+      users:
+        - user: admin
+          password: "123456"
+
   jetstream:
     enabled: true
     fileStore:

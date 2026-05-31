@@ -8,10 +8,12 @@ import (
 
 type NotifyClient struct {
 	StationMessage notifyv1.NotifyStationMessageServiceClient
+	RateLimit      notifyv1.NotifyRateLimitServiceClient
 }
 
 func NewNotifyClient(conn *grpc.ClientConn) *NotifyClient {
 	return &NotifyClient{
 		StationMessage: notifyv1.NewNotifyStationMessageServiceClient(conn),
+		RateLimit:      notifyv1.NewNotifyRateLimitServiceClient(conn),
 	}
 }

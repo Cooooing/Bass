@@ -12,6 +12,7 @@ type NotificationEmailDeliveryRepo interface {
 	MarkSucceeded(ctx context.Context, id int64, providerMessageID *string, providerResponse *string, sentAt time.Time) error
 	MarkFailed(ctx context.Context, id int64, providerResponse *string) error
 	MarkUnknown(ctx context.Context, id int64, providerResponse *string) error
+	MarkRateLimited(ctx context.Context, id int64) error
 }
 
 type NotificationTencentSMSDeliveryRepo interface {
@@ -20,6 +21,7 @@ type NotificationTencentSMSDeliveryRepo interface {
 	MarkSucceeded(ctx context.Context, id int64, providerRequestID *string, providerCode *string, providerMessage *string, sentAt time.Time) error
 	MarkFailed(ctx context.Context, id int64, providerRequestID *string, providerCode *string, providerMessage *string) error
 	MarkUnknown(ctx context.Context, id int64, providerRequestID *string, providerCode *string, providerMessage *string) error
+	MarkRateLimited(ctx context.Context, id int64) error
 }
 
 type NotificationLarkWebhookDeliveryRepo interface {

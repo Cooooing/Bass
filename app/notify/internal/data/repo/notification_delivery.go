@@ -163,6 +163,16 @@ func (r *NotificationEmailDeliveryRepo) MarkUnknown(ctx context.Context, id int6
 		Exec(ctx)
 }
 
+func (r *NotificationEmailDeliveryRepo) MarkRateLimited(ctx context.Context, id int64) error {
+	return r.getClient(ctx).NotificationEmailDelivery.Update().
+		Where(
+			notificationemaildelivery.IDEQ(id),
+			notificationemaildelivery.StatusNEQ(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusSucceeded)),
+		).
+		SetStatus(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusRateLimited)).
+		Exec(ctx)
+}
+
 type NotificationTencentSMSDeliveryRepo struct {
 	db *gen.Client
 }
@@ -314,6 +324,16 @@ func (r *NotificationTencentSMSDeliveryRepo) MarkUnknown(ctx context.Context, id
 		SetNillableProviderRequestID(providerRequestID).
 		SetNillableProviderCode(providerCode).
 		SetNillableProviderMessage(providerMessage).
+		Exec(ctx)
+}
+
+func (r *NotificationTencentSMSDeliveryRepo) MarkRateLimited(ctx context.Context, id int64) error {
+	return r.getClient(ctx).NotificationTencentSMSDelivery.Update().
+		Where(
+			notificationtencentsmsdelivery.IDEQ(id),
+			notificationtencentsmsdelivery.StatusNEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusSucceeded)),
+		).
+		SetStatus(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusRateLimited)).
 		Exec(ctx)
 }
 

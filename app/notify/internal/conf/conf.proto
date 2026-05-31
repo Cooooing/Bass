@@ -76,6 +76,12 @@ message Server {
   message LarkWebhook {
     string base_url = 1;
   }
+  NotificationRateLimit notification_rate_limit = 11;
+  message NotificationRateLimit {
+    bool enable = 1; // 是否启用邮件和短信发送限流
+    google.protobuf.Duration window = 2; // 限流统计窗口
+    int64 max_count = 3; // 单个收件目标在窗口内允许的最大发送次数
+  }
 }
 
 message Data {

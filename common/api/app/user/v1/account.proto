@@ -18,15 +18,6 @@ service AccountService {
   // 查询账号映射。
   rpc Map(MapAccounts.Request) returns (MapAccounts.Reply) {}
 
-  // 检查邮箱是否已被账号占用。
-  rpc ExistsEmail(ExistsEmail.Request) returns (ExistsEmail.Reply) {}
-
-  // 检查手机号是否已被账号占用。
-  rpc ExistsPhone(ExistsPhone.Request) returns (ExistsPhone.Reply) {}
-
-  // 检查账号名是否已被占用。
-  rpc ExistsName(ExistsName.Request) returns (ExistsName.Reply) {}
-
   // 更新账号展示资料。
   rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Reply) {}
 
@@ -62,33 +53,6 @@ message MapAccounts {
   }
   message Reply {
     map<int64, Account> accounts = 1;
-  }
-}
-
-message ExistsEmail {
-  message Request {
-    string email = 1;
-  }
-  message Reply {
-    bool exists = 1;
-  }
-}
-
-message ExistsPhone {
-  message Request {
-    string phone = 1;
-  }
-  message Reply {
-    bool exists = 1;
-  }
-}
-
-message ExistsName {
-  message Request {
-    string name = 1;
-  }
-  message Reply {
-    bool exists = 1;
   }
 }
 

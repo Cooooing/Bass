@@ -31,6 +31,10 @@ server:
   lark_webhook:
     base_url: ${LARK_WEBHOOK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
     timeout: 10s
+  notification_rate_limit:
+    enable: true
+    window: 300s
+    max_count: 2
   oss:
     provider: qiniu
     minio:
@@ -60,7 +64,10 @@ data:
     conn_max_idle_time: 600s
     conn_max_life_time: 1800s
   nats:
-    url: nats://${NATS_HOST:127.0.0.1}:${NATS_PORT:4222}
+    host: ${NATS_HOST:127.0.0.1}
+    port: ${NATS_PORT:4222}
+    user: ${NATS_USER:admin}
+    password: ${NATS_PASSWORD:123456}
     name: nats-client
     timeout: 5s
     max_reconnects: 10

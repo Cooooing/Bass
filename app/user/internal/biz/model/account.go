@@ -37,3 +37,13 @@ type Account struct {
 	// UpdatedAt 是记录更新时间。
 	UpdatedAt *time.Time
 }
+
+type AccountProfileUpdate struct {
+	UserID       int64
+	AvatarURL    *string
+	Nickname     *string
+	URL          *string
+	Introduction *string
+	Mbti         *enum.MBTI
+	ClearMBTI    bool
+}

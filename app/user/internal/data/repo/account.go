@@ -100,45 +100,45 @@ func (r *AccountRepo) Update(ctx context.Context, u *model.Account) (*model.Acco
 	}, nil
 }
 
-func (r *AccountRepo) UpdateProfile(ctx context.Context, userID int64, avatarURL *string, nickname *string, url *string, introduction *string, mbti *enum.MBTI, clearMBTI bool) (*model.Account, error) {
-	if avatarURL == nil && nickname == nil && url == nil && introduction == nil && mbti == nil && !clearMBTI {
-		return r.Get(ctx, &repo.AccountGetReq{UserID: &userID})
+func (r *AccountRepo) UpdateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error) {
+	if req.AvatarURL == nil && req.Nickname == nil && req.URL == nil && req.Introduction == nil && req.Mbti == nil && !req.ClearMBTI {
+		return r.Get(ctx, &repo.AccountGetReq{UserID: &req.UserID})
 	}
 
 	tx := r.getClient(ctx)
-	update := tx.Account.UpdateOneID(userID)
-	if avatarURL != nil {
-		if *avatarURL == "" {
+	update := tx.Account.UpdateOneID(req.UserID)
+	if req.AvatarURL != nil {
+		if *req.AvatarURL == "" {
 			update.ClearAvatarURL()
 		} else {
-			update.SetAvatarURL(*avatarURL)
+			update.SetAvatarURL(*req.AvatarURL)
 		}
 	}
-	if nickname != nil {
-		if *nickname == "" {
+	if req.Nickname != nil {
+		if *req.Nickname == "" {
 			update.ClearNickname()
 		} else {
-			update.SetNickname(*nickname)
+			update.SetNickname(*req.Nickname)
 		}
 	}
-	if url != nil {
-		if *url == "" {
+	if req.URL != nil {
+		if *req.URL == "" {
 			update.ClearURL()
 		} else {
-			update.SetURL(*url)
+			update.SetURL(*req.URL)
 		}
 	}
-	if introduction != nil {
-		if *introduction == "" {
+	if req.Introduction != nil {
+		if *req.Introduction == "" {
 			update.ClearIntroduction()
 		} else {
-			update.SetIntroduction(*introduction)
+			update.SetIntroduction(*req.Introduction)
 		}
 	}
-	if clearMBTI {
+	if req.ClearMBTI {
 		update.ClearMbti()
-	} else if mbti != nil {
-		update.SetMbti(account.Mbti(*mbti))
+	} else if req.Mbti != nil {
+		update.SetMbti(account.Mbti(*req.Mbti))
 	}
 
 	updated, err := update.Save(ctx)

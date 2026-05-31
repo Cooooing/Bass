@@ -11,6 +11,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	jwt.NewTokenCache,
 	usecase.NewTokenUsecase,
+	wire.Struct(new(usecase.AuthUsecaseDeps), "*"),
 
 	usecase.NewAccountUsecase,
 	usecase.NewAuthUsecase,

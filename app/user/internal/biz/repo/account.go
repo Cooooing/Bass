@@ -11,7 +11,7 @@ type AccountRepo interface {
 	Create(ctx context.Context, u *model.Account) (*model.Account, error)
 
 	Update(ctx context.Context, u *model.Account) (*model.Account, error)
-	UpdateProfile(ctx context.Context, userID int64, avatarURL *string, nickname *string, url *string, introduction *string, mbti *enum.MBTI, clearMBTI bool) (*model.Account, error)
+	UpdateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error)
 	AddStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error)
 
 	ExistsByAccount(ctx context.Context, account string) (bool, error)

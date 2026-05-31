@@ -3,6 +3,7 @@ package data
 import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
+	"common/pkg/client/rpc"
 	"user/internal/conf"
 	"user/internal/data/client"
 	"user/internal/data/repo"
@@ -19,6 +20,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
+	rpc.ProvideNotifyClient,
 
 	client.ProvideTx,
 
@@ -33,6 +35,7 @@ var DataProviderSet = wire.NewSet(
 	repo.NewOutboxEventRepo,
 	repo.NewTotpSecretCache,
 	repo.NewNatsEventClient,
+	repo.NewNotificationRateLimitClient,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {

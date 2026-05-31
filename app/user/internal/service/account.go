@@ -6,6 +6,7 @@ import (
 	v1 "common/api/gen/user/v1"
 	"common/pkg/util"
 	"context"
+	"user/internal/biz/model"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
 
@@ -162,26 +163,8 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Request) (
 	return &v1.MapAccounts_Reply{Accounts: rows}, nil
 }
 
-func (s *AccountService) ExistsEmail(ctx context.Context, req *v1.ExistsEmail_Request) (*v1.ExistsEmail_Reply, error) {
-	exists, err := s.accountUsecase.ExistsByAccount(ctx, req.Email)
-	return &v1.ExistsEmail_Reply{Exists: exists}, err
-}
-
-func (s *AccountService) ExistsPhone(ctx context.Context, req *v1.ExistsPhone_Request) (*v1.ExistsPhone_Reply, error) {
-	exists, err := s.accountUsecase.ExistsByAccount(ctx, req.Phone)
-	return &v1.ExistsPhone_Reply{Exists: exists}, err
-}
-
-func (s *AccountService) ExistsName(ctx context.Context, req *v1.ExistsName_Request) (*v1.ExistsName_Reply, error) {
-	exists, err := s.accountUsecase.ExistsByAccount(ctx, req.Name)
-	return &v1.ExistsName_Reply{Exists: exists}, err
-}
-
 func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Request) (*v1.UpdateProfileAccount_Reply, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Request{})
-	if err := s.validateProfileUpdate(req.AvatarUrl, req.Nickname, req.Url, req.Introduction); err != nil {
-		return nil, err
-	}
 	var mbti *enum.MBTI
 	clearMBTI := false
 	if req.Mbti != nil {
@@ -195,7 +178,15 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 			mbti = new(value)
 		}
 	}
-	account, err := s.accountUsecase.UpdateProfile(ctx, req.GetUserId(), req.AvatarUrl, req.Nickname, req.Url, req.Introduction, mbti, clearMBTI)
+	account, err := s.accountUsecase.UpdateProfile(ctx, &model.AccountProfileUpdate{
+		UserID:       req.GetUserId(),
+		AvatarURL:    req.AvatarUrl,
+		Nickname:     req.Nickname,
+		URL:          req.Url,
+		Introduction: req.Introduction,
+		Mbti:         mbti,
+		ClearMBTI:    clearMBTI,
+	})
 	if err != nil {
 		return nil, err
 	}

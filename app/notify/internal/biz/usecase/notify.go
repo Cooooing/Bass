@@ -36,18 +36,22 @@ type NotificationContext struct {
 
 // NotifyUsecase 按规则和通道模板生成通知结果。
 type NotifyUsecase struct {
-	log                       *log.Helper
-	userClient                repo.UserClient
-	notificationRuleRepo      repo.NotificationRuleRepo
-	stationMessageRepo        repo.NotificationStationMessageRepo
-	emailDeliveryRepo         repo.NotificationEmailDeliveryRepo
-	tencentSMSDeliveryRepo    repo.NotificationTencentSMSDeliveryRepo
-	larkWebhookDeliveryRepo   repo.NotificationLarkWebhookDeliveryRepo
-	emailClient               bizchannel.EmailClient
-	tencentSMSClient          bizchannel.TencentSMSClient
-	larkWebhookClient         bizchannel.LarkWebhookClient
-	smsEnabled                bool
-	externalProcessingTimeout time.Duration
+	log                        *log.Helper
+	userClient                 repo.UserClient
+	notificationRuleRepo       repo.NotificationRuleRepo
+	stationMessageRepo         repo.NotificationStationMessageRepo
+	emailDeliveryRepo          repo.NotificationEmailDeliveryRepo
+	tencentSMSDeliveryRepo     repo.NotificationTencentSMSDeliveryRepo
+	larkWebhookDeliveryRepo    repo.NotificationLarkWebhookDeliveryRepo
+	notificationRateLimitCache repo.NotificationRateLimitCache
+	emailClient                bizchannel.EmailClient
+	tencentSMSClient           bizchannel.TencentSMSClient
+	larkWebhookClient          bizchannel.LarkWebhookClient
+	smsEnabled                 bool
+	rateLimitEnabled           bool
+	rateLimitWindow            time.Duration
+	rateLimitMaxCount          int64
+	externalProcessingTimeout  time.Duration
 }
 
 func NewNotifyUsecase(
@@ -59,23 +63,40 @@ func NewNotifyUsecase(
 	emailDeliveryRepo repo.NotificationEmailDeliveryRepo,
 	tencentSMSDeliveryRepo repo.NotificationTencentSMSDeliveryRepo,
 	larkWebhookDeliveryRepo repo.NotificationLarkWebhookDeliveryRepo,
+	notificationRateLimitCache repo.NotificationRateLimitCache,
 	emailClient bizchannel.EmailClient,
 	tencentSMSClient bizchannel.TencentSMSClient,
 	larkWebhookClient bizchannel.LarkWebhookClient,
 ) *NotifyUsecase {
+	rateLimitEnabled := true
+	rateLimitWindow := 5 * time.Minute
+	rateLimitMaxCount := int64(5)
+	if conf != nil && conf.Server != nil && conf.Server.NotificationRateLimit != nil {
+		rateLimitEnabled = conf.Server.NotificationRateLimit.Enable
+		if conf.Server.NotificationRateLimit.Window != nil && conf.Server.NotificationRateLimit.Window.AsDuration() > 0 {
+			rateLimitWindow = conf.Server.NotificationRateLimit.Window.AsDuration()
+		}
+		if conf.Server.NotificationRateLimit.MaxCount > 0 {
+			rateLimitMaxCount = conf.Server.NotificationRateLimit.MaxCount
+		}
+	}
 	return &NotifyUsecase{
-		log:                       log.NewHelper(logger),
-		userClient:                userClient,
-		notificationRuleRepo:      notificationRuleRepo,
-		stationMessageRepo:        stationMessageRepo,
-		emailDeliveryRepo:         emailDeliveryRepo,
-		tencentSMSDeliveryRepo:    tencentSMSDeliveryRepo,
-		larkWebhookDeliveryRepo:   larkWebhookDeliveryRepo,
-		emailClient:               emailClient,
-		tencentSMSClient:          tencentSMSClient,
-		larkWebhookClient:         larkWebhookClient,
-		smsEnabled:                conf != nil && conf.Server != nil && conf.Server.Sms != nil && conf.Server.Sms.Enable,
-		externalProcessingTimeout: 10 * time.Minute,
+		log:                        log.NewHelper(logger),
+		userClient:                 userClient,
+		notificationRuleRepo:       notificationRuleRepo,
+		stationMessageRepo:         stationMessageRepo,
+		emailDeliveryRepo:          emailDeliveryRepo,
+		tencentSMSDeliveryRepo:     tencentSMSDeliveryRepo,
+		larkWebhookDeliveryRepo:    larkWebhookDeliveryRepo,
+		notificationRateLimitCache: notificationRateLimitCache,
+		emailClient:                emailClient,
+		tencentSMSClient:           tencentSMSClient,
+		larkWebhookClient:          larkWebhookClient,
+		smsEnabled:                 conf != nil && conf.Server != nil && conf.Server.Sms != nil && conf.Server.Sms.Enable,
+		rateLimitEnabled:           rateLimitEnabled,
+		rateLimitWindow:            rateLimitWindow,
+		rateLimitMaxCount:          rateLimitMaxCount,
+		externalProcessingTimeout:  10 * time.Minute,
 	}
 }
 
@@ -232,12 +253,32 @@ func (u *NotifyUsecase) sendEmail(ctx context.Context, delivery *model.Notificat
 	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
 		return notifyenum.NotificationChannelStatusUnknown, nil
 	}
+	if delivery.Status == notifyenum.NotificationChannelStatusRateLimited {
+		return notifyenum.NotificationChannelStatusRateLimited, nil
+	}
 	claimed, err := u.emailDeliveryRepo.Claim(ctx, delivery.ID, time.Now(), u.externalProcessingTimeout, false)
 	if err != nil {
 		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if !claimed {
 		return delivery.Status, nil
+	}
+	if u.rateLimitEnabled {
+		allowed, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitSpec{
+			Channel:   notifyenum.NotificationChannelEmail,
+			Recipient: delivery.ToEmail,
+			Window:    u.rateLimitWindow,
+			MaxCount:  u.rateLimitMaxCount,
+		})
+		if err != nil {
+			return notifyenum.NotificationChannelStatusInternalError, err
+		}
+		if !allowed {
+			if err := u.emailDeliveryRepo.MarkRateLimited(ctx, delivery.ID); err != nil {
+				return notifyenum.NotificationChannelStatusInternalError, err
+			}
+			return notifyenum.NotificationChannelStatusRateLimited, nil
+		}
 	}
 	result, err := u.emailClient.SendEmail(ctx, &bizchannel.EmailRequest{
 		IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
@@ -347,12 +388,32 @@ func (u *NotifyUsecase) sendTencentSMS(ctx context.Context, delivery *model.Noti
 	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
 		return notifyenum.NotificationChannelStatusUnknown, nil
 	}
+	if delivery.Status == notifyenum.NotificationChannelStatusRateLimited {
+		return notifyenum.NotificationChannelStatusRateLimited, nil
+	}
 	claimed, err := u.tencentSMSDeliveryRepo.Claim(ctx, delivery.ID, time.Now(), u.externalProcessingTimeout, false)
 	if err != nil {
 		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if !claimed {
 		return delivery.Status, nil
+	}
+	if u.rateLimitEnabled {
+		allowed, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitSpec{
+			Channel:   notifyenum.NotificationChannelTencentSMS,
+			Recipient: delivery.Phone,
+			Window:    u.rateLimitWindow,
+			MaxCount:  u.rateLimitMaxCount,
+		})
+		if err != nil {
+			return notifyenum.NotificationChannelStatusInternalError, err
+		}
+		if !allowed {
+			if err := u.tencentSMSDeliveryRepo.MarkRateLimited(ctx, delivery.ID); err != nil {
+				return notifyenum.NotificationChannelStatusInternalError, err
+			}
+			return notifyenum.NotificationChannelStatusRateLimited, nil
+		}
 	}
 	result, err := u.tencentSMSClient.SendTencentSMS(ctx, &bizchannel.TencentSMSRequest{
 		IdempotencyKey:     fmt.Sprintf("%d", delivery.ID),

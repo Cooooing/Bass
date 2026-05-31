@@ -61,8 +61,11 @@ func NewNatsClient(logger log.Logger, conf *common.Nats) (*NatsClient, func(), e
 	if conf == nil {
 		conf = &common.Nats{}
 	}
-	if conf.Url == "" {
-		conf.Url = nats.DefaultURL
+	if conf.Host == "" {
+		conf.Host = "127.0.0.1"
+	}
+	if conf.Port == 0 {
+		conf.Port = 4222
 	}
 	if conf.Name == "" {
 		conf.Name = "nats-client"
@@ -102,10 +105,14 @@ func NewNatsClient(logger log.Logger, conf *common.Nats) (*NatsClient, func(), e
 			helper.Errorf("nats error: subject=%s err=%v", sub.Subject, err)
 		}),
 	}
+	if conf.User != "" || conf.Password != "" {
+		opts = append(opts, nats.UserInfo(conf.User, conf.Password))
+	}
 
-	nc, err := nats.Connect(conf.Url, opts...)
+	address := fmt.Sprintf("nats://%s:%d", conf.Host, conf.Port)
+	nc, err := nats.Connect(address, opts...)
 	if err != nil {
-		return nil, nil, fmt.Errorf("nats connect [%s]: %w", conf.Url, err)
+		return nil, nil, fmt.Errorf("nats connect [%s]: %w", address, err)
 	}
 
 	c := &NatsClient{

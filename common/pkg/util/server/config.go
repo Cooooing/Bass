@@ -19,7 +19,7 @@ func LoadConfig[T any](bootstrapPath string, path string) (*T, *common.Bootstrap
 		return nil, nil, cleanup, err
 	}
 
-	if bc.Server.Mode == constant.Prod {
+	if bc.Server.Mode != constant.Dev {
 		c, err := loadConsulConfig[T](bc)
 		return c, bc, cleanup, err
 	}

@@ -5,7 +5,6 @@ import (
 	v1 "common/api/gen/user/v1"
 	"common/pkg/constant"
 	"context"
-	"regexp"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
 	"user/internal/conf"
@@ -20,20 +19,12 @@ type AuthService struct {
 	v1.UnimplementedAuthServiceServer
 	conf        *conf.Bootstrap
 	authUsecase *usecase.AuthUsecase
-	passRe      *regexp.Regexp
-	letterRe    *regexp.Regexp
-	numRe       *regexp.Regexp
-	nameRe      *regexp.Regexp
 }
 
 func NewAuthService(conf *conf.Bootstrap, authUsecase *usecase.AuthUsecase) *AuthService {
 	return &AuthService{
 		conf:        conf,
 		authUsecase: authUsecase,
-		passRe:      regexp.MustCompile(`^[!-~]+$`),
-		letterRe:    regexp.MustCompile(`[A-Za-z]`),
-		numRe:       regexp.MustCompile(`[0-9]`),
-		nameRe:      regexp.MustCompile(`^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$`),
 	}
 }
 
@@ -44,9 +35,6 @@ func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 func (s *AuthService) RegisterHttp(hs *http.Server) {}
 
 func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartEmailRegistration_Request) (*v1.StartEmailRegistration_Reply, error) {
-	if err := s.validateRegister(req.Name, req.Nickname, req.Password); err != nil {
-		return nil, err
-	}
 	code, token, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{
 		Email:    &req.Email,
 		Password: req.Password,
@@ -66,9 +54,6 @@ func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *v1.Verif
 }
 
 func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartPhoneRegistration_Request) (*v1.StartPhoneRegistration_Reply, error) {
-	if err := s.validateRegister(req.Name, req.Nickname, req.Password); err != nil {
-		return nil, err
-	}
 	code, token, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{
 		Phone:    &req.Phone,
 		Password: req.Password,

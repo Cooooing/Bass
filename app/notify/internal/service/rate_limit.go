@@ -1,0 +1,53 @@
+package service
+
+import (
+	cerrors "common/api/gen/common/errors"
+	v1 "common/api/gen/notify/v1"
+	"context"
+	"notify/internal/biz/usecase"
+	notifyenum "notify/internal/enum"
+	"strings"
+	"time"
+
+	"github.com/go-kratos/kratos/v2/transport/grpc"
+)
+
+type RateLimitService struct {
+	v1.UnimplementedNotifyRateLimitServiceServer
+	rateLimitUsecase *usecase.RateLimitUsecase
+}
+
+func NewRateLimitService(rateLimitUsecase *usecase.RateLimitUsecase) *RateLimitService {
+	return &RateLimitService{rateLimitUsecase: rateLimitUsecase}
+}
+
+func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
+	v1.RegisterNotifyRateLimitServiceServer(gs, s)
+}
+
+func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Request) (*v1.CheckNotificationRateLimit_Reply, error) {
+	if req == nil {
+		return nil, cerrors.ErrorBadRequest("rate limit request is invalid")
+	}
+	channel, ok := notifyenum.NotificationChannelMap.ToEnum(req.GetChannel())
+	if !ok || (channel != notifyenum.NotificationChannelEmail && channel != notifyenum.NotificationChannelTencentSMS) {
+		return nil, cerrors.ErrorBadRequest("notification channel is invalid")
+	}
+	recipient := strings.TrimSpace(req.GetRecipient())
+	if recipient == "" {
+		return nil, cerrors.ErrorBadRequest("notification recipient is invalid")
+	}
+	state, err := s.rateLimitUsecase.Check(ctx, channel, recipient)
+	if err != nil {
+		return nil, err
+	}
+	retryAfterSeconds := int64(0)
+	if state.RetryAfter > 0 {
+		retryAfterSeconds = int64((state.RetryAfter + time.Second - 1) / time.Second)
+	}
+	return &v1.CheckNotificationRateLimit_Reply{
+		Limited:           state.Limited,
+		RetryAfterSeconds: retryAfterSeconds,
+		RemainingCount:    state.RemainingCount,
+	}, nil
+}

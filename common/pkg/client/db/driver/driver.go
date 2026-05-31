@@ -126,7 +126,8 @@ func (t *tx) Commit() error {
 	err := t.Tx.Commit()
 	cost := time.Since(start)
 	if err != nil || cost > slowThreshold(t.config) {
-		t.log.Warnw("tx commit",
+		t.log.Warnw(
+			"msg", "tx commit",
 			"tx_id", t.txID,
 			"cost_ms", cost.Milliseconds(),
 			"error", err,
@@ -140,7 +141,8 @@ func (t *tx) Rollback() error {
 	err := t.Tx.Rollback()
 	cost := time.Since(start)
 	if err != nil {
-		t.log.Warnw("tx rollback",
+		t.log.Warnw(
+			"msg", "tx rollback",
 			"tx_id", t.txID,
 			"cost_ms", cost.Milliseconds(),
 			"error", err,
@@ -210,7 +212,8 @@ func logSQL(ctx context.Context, helper *log.Helper, mode string, cost time.Dura
 
 	// 生产环境：结构化 JSON。
 	if err != nil {
-		helper.WithContext(ctx).Warnw("sql executed",
+		helper.WithContext(ctx).Warnw(
+			"msg", "sql executed",
 			"cost_ms", cost.Milliseconds(),
 			"sql", sql,
 			"file", file,
@@ -219,7 +222,8 @@ func logSQL(ctx context.Context, helper *log.Helper, mode string, cost time.Dura
 			"error", err,
 		)
 	} else {
-		helper.WithContext(ctx).Debugw("sql executed",
+		helper.WithContext(ctx).Debugw(
+			"msg", "sql executed",
 			"cost_ms", cost.Milliseconds(),
 			"sql", sql,
 			"file", file,

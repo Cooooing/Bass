@@ -10,7 +10,15 @@ ENV CGO_ENABLED=0 \
     GOARCH=amd64 \
     PATH="/go/bin/linux_amd64:/go/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y --no-install-recommends protobuf-compiler git curl unzip upx-ucl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    protobuf-compiler \
+    git \
+    curl \
+    unzip \
+    upx-ucl \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 
@@ -33,8 +41,10 @@ WORKDIR /app
 
 COPY --from=builder /build/server /app/server
 COPY --from=builder /build/app/${APP_NAME}/configs/ /app/configs/
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-ENV TZ=Asia/Shanghai
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    TZ=Asia/Shanghai
 
 EXPOSE 8000 9000
 

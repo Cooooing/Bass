@@ -2,227 +2,494 @@ package usecase
 
 import (
 	"bytes"
-	"common/api/gen/common/enums"
-	v1 "common/api/gen/notify/v1"
-	"common/pkg/client/rpc"
-	utilent "common/pkg/util/ent"
+	commonenum "common/pkg/enum"
 	"context"
-	"errors"
-	"html/template"
-	base "notify/internal/biz/base"
+	"fmt"
+	bizchannel "notify/internal/biz/channel"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/biz/usecase/sender"
-	"notify/internal/data/gen"
-	"notify/internal/data/gen/notificationmeta"
 	notifyenum "notify/internal/enum"
+	"strings"
+	"text/template"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"google.golang.org/protobuf/proto"
 )
 
-// UserResolver 用户信息解析接口（由外部实现，RPC 获取手机号/邮箱等）
-type UserResolver interface {
-	Resolve(ctx context.Context, userID int64) (*sender.UserInfo, error)
+// NotificationRecipient 表示站内信、邮件和短信的接收者。
+type NotificationRecipient struct {
+	UserID       int64
+	Email        string
+	Phone        string
+	TemplateData any
 }
 
-// DeliveryRequest 投递请求
-type DeliveryRequest struct {
-	EventId     string
-	EventType   enums.EventType
-	ReceiverIDs []int64
-	Vars        any
+// NotificationContext 是事件语义补齐后的通知输入。
+type NotificationContext struct {
+	EventID      string
+	EventType    commonenum.EventType
+	Language     notifyenum.Language
+	TemplateData any
+	Recipients   []*NotificationRecipient
 }
 
-// NotifyUsecase 纯投递服务
+// NotifyUsecase 按规则和通道模板生成通知结果。
 type NotifyUsecase struct {
-	log                      *log.Helper
-	tx                       base.Tx
-	notificationMetaRepo     repo.NotificationMetaRepo
-	notificationRecordRepo   repo.NotificationRecordRepo
-	notificationTemplateRepo repo.NotificationTemplateRepo
-	notificationSettingRepo  repo.NotificationSettingRepo
-	userClient               *rpc.UserClient
-	userResolver             UserResolver
-	senders                  *sender.Registry
+	log                       *log.Helper
+	userClient                repo.UserClient
+	notificationRuleRepo      repo.NotificationRuleRepo
+	stationMessageRepo        repo.NotificationStationMessageRepo
+	emailDeliveryRepo         repo.NotificationEmailDeliveryRepo
+	tencentSMSDeliveryRepo    repo.NotificationTencentSMSDeliveryRepo
+	larkWebhookDeliveryRepo   repo.NotificationLarkWebhookDeliveryRepo
+	emailClient               bizchannel.EmailClient
+	tencentSMSClient          bizchannel.TencentSMSClient
+	larkWebhookClient         bizchannel.LarkWebhookClient
+	externalProcessingTimeout time.Duration
 }
 
 func NewNotifyUsecase(
 	logger log.Logger,
-	tx base.Tx,
-	notificationMetaRepo repo.NotificationMetaRepo,
-	notificationRecordRepo repo.NotificationRecordRepo,
-	notificationTemplateRepo repo.NotificationTemplateRepo,
-	notificationSettingRepo repo.NotificationSettingRepo,
-	userClient *rpc.UserClient,
-	userResolver UserResolver,
-	senders *sender.Registry,
+	userClient repo.UserClient,
+	notificationRuleRepo repo.NotificationRuleRepo,
+	stationMessageRepo repo.NotificationStationMessageRepo,
+	emailDeliveryRepo repo.NotificationEmailDeliveryRepo,
+	tencentSMSDeliveryRepo repo.NotificationTencentSMSDeliveryRepo,
+	larkWebhookDeliveryRepo repo.NotificationLarkWebhookDeliveryRepo,
+	emailClient bizchannel.EmailClient,
+	tencentSMSClient bizchannel.TencentSMSClient,
+	larkWebhookClient bizchannel.LarkWebhookClient,
 ) *NotifyUsecase {
 	return &NotifyUsecase{
-		log:                      log.NewHelper(logger),
-		tx:                       tx,
-		notificationMetaRepo:     notificationMetaRepo,
-		notificationRecordRepo:   notificationRecordRepo,
-		notificationTemplateRepo: notificationTemplateRepo,
-		notificationSettingRepo:  notificationSettingRepo,
-		userClient:               userClient,
-		userResolver:             userResolver,
-		senders:                  senders,
+		log:                       log.NewHelper(logger),
+		userClient:                userClient,
+		notificationRuleRepo:      notificationRuleRepo,
+		stationMessageRepo:        stationMessageRepo,
+		emailDeliveryRepo:         emailDeliveryRepo,
+		tencentSMSDeliveryRepo:    tencentSMSDeliveryRepo,
+		larkWebhookDeliveryRepo:   larkWebhookDeliveryRepo,
+		emailClient:               emailClient,
+		tencentSMSClient:          tencentSMSClient,
+		larkWebhookClient:         larkWebhookClient,
+		externalProcessingTimeout: 10 * time.Minute,
 	}
 }
 
-// Deliver 投递通知
-func (s *NotifyUsecase) Deliver(ctx context.Context, req *DeliveryRequest) error {
-	if len(req.ReceiverIDs) == 0 {
+func (u *NotifyUsecase) ListEnabledRules(ctx context.Context, eventType commonenum.EventType, language notifyenum.Language) ([]*model.NotificationRule, error) {
+	return u.notificationRuleRepo.ListEnabled(ctx, eventType, language)
+}
+
+func (u *NotifyUsecase) Process(ctx context.Context, notificationContext *NotificationContext, rules []*model.NotificationRule) error {
+	if notificationContext == nil || notificationContext.EventID == "" {
 		return nil
 	}
-
-	// 1. 序列化 payload
-	var payloadBytes []byte
-	if pm, ok := req.Vars.(proto.Message); ok {
-		payloadBytes, _ = proto.Marshal(pm)
-	}
-
-	// 2. 创建 notification_meta（uuid 唯一约束保证幂等）
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return errors.New("no client in context")
-	}
-	dbEventType, _ := notifyenum.EventTypeMap.ToEnum(req.EventType)
-	meta, err := s.notificationMetaRepo.Save(ctx, c, &model.NotificationMeta{
-		NotificationMeta: &gen.NotificationMeta{
-			UUID:      req.EventId,
-			EventType: notificationmeta.EventType(dbEventType),
-			Meta:      payloadBytes,
-			Status:    notificationmeta.StatusNormal,
-		},
-	})
+	accountsByUserID, err := u.loadAccounts(ctx, notificationContext, rules)
 	if err != nil {
-		s.log.Infof("duplicate event or save failed, skip: event_id=%s err=%v", req.EventId, err)
-		return nil
+		return err
 	}
-
-	// 3. 逐接收者投递（每个用户可能有不同语言，模板在投递时按语言查询）
-	for _, receiverID := range req.ReceiverIDs {
-		s.deliverToReceiver(ctx, req, receiverID, meta.ID)
+	for _, rule := range rules {
+		status, err := u.processRule(ctx, notificationContext, rule, accountsByUserID)
+		if err != nil {
+			return err
+		}
+		switch status {
+		case notifyenum.NotificationChannelStatusProcessing, notifyenum.NotificationChannelStatusFailed, notifyenum.NotificationChannelStatusInternalError:
+			return fmt.Errorf("notification channel not completed: event_id=%s channel=%s status=%s", notificationContext.EventID, rule.Channel, status)
+		}
 	}
-
 	return nil
 }
 
-func (s *NotifyUsecase) deliverToReceiver(
-	ctx context.Context,
-	req *DeliveryRequest,
-	receiverID int64,
-	metaID int64,
-) {
-	// 1. 查用户语言
-	language := s.getLanguage(ctx, receiverID)
+func (u *NotifyUsecase) processRule(ctx context.Context, notificationContext *NotificationContext, rule *model.NotificationRule, accountsByUserID map[int64]*model.UserAccount) (notifyenum.NotificationChannelStatus, error) {
+	if rule == nil || !rule.Enabled {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	switch rule.Channel {
+	case notifyenum.NotificationChannelStation:
+		return u.processStation(ctx, notificationContext, rule)
+	case notifyenum.NotificationChannelEmail:
+		return u.processEmail(ctx, notificationContext, rule, accountsByUserID)
+	case notifyenum.NotificationChannelTencentSMS:
+		return u.processTencentSMS(ctx, notificationContext, rule, accountsByUserID)
+	case notifyenum.NotificationChannelLarkWebhook:
+		return u.processLarkWebhook(ctx, notificationContext, rule)
+	default:
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+}
 
-	// 2. 查该语言的模板
-	templates, err := s.notificationTemplateRepo.GetTemplates(ctx, req.EventType, language)
-	if err != nil {
-		s.log.Errorf("get templates failed: type=%v lang=%s err=%v", req.EventType, language, err)
-		return
+func (u *NotifyUsecase) processStation(ctx context.Context, notificationContext *NotificationContext, rule *model.NotificationRule) (notifyenum.NotificationChannelStatus, error) {
+	if rule.StationTemplate == nil {
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
-	if len(templates) == 0 {
-		s.log.Warnf("no templates found: type=%v lang=%s", req.EventType, language)
-		return
-	}
-
-	// 3. 渲染模板
-	rendered := make(map[v1.NotificationChannel]struct{ Title, Content string })
-	for _, tpl := range templates {
-		ch := sender.ChannelToProto(string(tpl.Channel))
-		rendered[ch] = struct{ Title, Content string }{
-			Title:   s.render(tpl.Title, req.Vars),
-			Content: s.render(tpl.Content, req.Vars),
-		}
-	}
-
-	// 4. 查用户偏好
-	prefs, err := s.getUserPrefs(ctx, receiverID, req.EventType)
-	if err != nil {
-		s.log.Errorf("get user prefs failed: user=%d err=%v", receiverID, err)
-	}
-
-	// 5. 确定可用渠道
-	enabledChannels := make(map[v1.NotificationChannel]bool)
-	for ch := range rendered {
-		enabledChannels[ch] = true
-	}
-	if len(prefs) > 0 {
-		for ch := range enabledChannels {
-			enabledChannels[ch] = false
-		}
-		for _, p := range prefs {
-			if p.Enable {
-				enabledChannels[sender.ChannelToProto(string(p.Channel))] = true
-			}
-		}
-	}
-
-	// 6. 获取用户联系信息
-	var userInfo sender.UserInfo
-	if s.userResolver != nil {
-		info, err := s.userResolver.Resolve(ctx, receiverID)
-		if err != nil {
-			s.log.Errorf("resolve user info failed: user=%d err=%v", receiverID, err)
-		} else if info != nil {
-			userInfo = *info
-		}
-	}
-
-	// 7. 按渠道发送
-	for ch, enabled := range enabledChannels {
-		if !enabled {
+	seen := make(map[int64]struct{}, len(notificationContext.Recipients))
+	written := false
+	for _, recipient := range notificationContext.Recipients {
+		if recipient == nil || recipient.UserID == 0 {
 			continue
 		}
-		r := rendered[ch]
-		if err := s.senders.Send(ctx, ch, &sender.SendRequest{
-			ReceiverID: receiverID,
-			Title:      r.Title,
-			Content:    r.Content,
-			UserInfo:   userInfo,
-		}); err != nil {
-			s.log.Errorf("send failed: channel=%v receiver=%d err=%v", ch, receiverID, err)
+		if _, ok := seen[recipient.UserID]; ok {
+			continue
+		}
+		seen[recipient.UserID] = struct{}{}
+		templateData := u.recipientTemplateData(notificationContext.TemplateData, recipient.TemplateData)
+		title, ok := u.renderTemplate(rule.StationTemplate.TitleTemplate, templateData)
+		if !ok {
+			continue
+		}
+		content, ok := u.renderTemplate(rule.StationTemplate.ContentTemplate, templateData)
+		if !ok {
+			continue
+		}
+		_, err := u.stationMessageRepo.Save(ctx, &model.NotificationStationMessage{
+			EventID:    notificationContext.EventID,
+			EventType:  notificationContext.EventType,
+			ReceiverID: recipient.UserID,
+			Title:      title,
+			Content:    content,
+			Status:     notifyenum.NotificationChannelStatusSucceeded,
+		})
+		if err != nil {
+			return notifyenum.NotificationChannelStatusInternalError, err
+		}
+		written = true
+	}
+	if !written {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	return notifyenum.NotificationChannelStatusSucceeded, nil
+}
+
+func (u *NotifyUsecase) processEmail(ctx context.Context, notificationContext *NotificationContext, rule *model.NotificationRule, accountsByUserID map[int64]*model.UserAccount) (notifyenum.NotificationChannelStatus, error) {
+	if rule.EmailTemplate == nil {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	if u.emailClient == nil {
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("email client is nil")
+	}
+	status := notifyenum.NotificationChannelStatusSkipped
+	seen := map[string]struct{}{}
+	for _, recipient := range notificationContext.Recipients {
+		if recipient == nil {
+			continue
+		}
+		toEmail := strings.TrimSpace(recipient.Email)
+		if toEmail == "" && recipient.UserID != 0 {
+			if account := accountsByUserID[recipient.UserID]; account != nil {
+				toEmail = strings.TrimSpace(account.Email)
+			}
+		}
+		if toEmail == "" {
+			continue
+		}
+		if _, ok := seen[toEmail]; ok {
+			continue
+		}
+		seen[toEmail] = struct{}{}
+		templateData := u.recipientTemplateData(notificationContext.TemplateData, recipient.TemplateData)
+		subject, ok := u.renderTemplate(rule.EmailTemplate.SubjectTemplate, templateData)
+		if !ok {
+			continue
+		}
+		body, ok := u.renderTemplate(rule.EmailTemplate.BodyTemplate, templateData)
+		if !ok {
+			continue
+		}
+		delivery := &model.NotificationEmailDelivery{
+			EventID:     notificationContext.EventID,
+			EventType:   notificationContext.EventType,
+			ToEmail:     toEmail,
+			Subject:     subject,
+			Body:        body,
+			ContentType: rule.EmailTemplate.ContentType,
+			Status:      notifyenum.NotificationChannelStatusProcessing,
+		}
+		if recipient.UserID != 0 {
+			delivery.ReceiverID = new(recipient.UserID)
+		}
+		itemStatus, err := u.sendEmail(ctx, delivery)
+		if err != nil {
+			return itemStatus, err
+		}
+		status = status.Merge(itemStatus)
+		if status.Blocking() {
+			return status, nil
 		}
 	}
+	return status, nil
+}
 
-	// 8. 创建 notification_record
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
+func (u *NotifyUsecase) sendEmail(ctx context.Context, delivery *model.NotificationEmailDelivery) (notifyenum.NotificationChannelStatus, error) {
+	delivery, err := u.emailDeliveryRepo.SaveOrGet(ctx, delivery)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if delivery.Status == notifyenum.NotificationChannelStatusSucceeded {
+		return notifyenum.NotificationChannelStatusSucceeded, nil
+	}
+	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
+		return notifyenum.NotificationChannelStatusUnknown, nil
+	}
+	claimed, err := u.emailDeliveryRepo.Claim(ctx, delivery.ID, time.Now(), u.externalProcessingTimeout, false)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if !claimed {
+		return delivery.Status, nil
+	}
+	result, err := u.emailClient.SendEmail(ctx, &bizchannel.EmailRequest{
+		IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
+		ToEmail:        delivery.ToEmail,
+		Subject:        delivery.Subject,
+		Body:           delivery.Body,
+		ContentType:    delivery.ContentType,
+	})
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	return u.finishEmail(ctx, delivery.ID, result)
+}
+
+func (u *NotifyUsecase) finishEmail(ctx context.Context, deliveryID int64, result *bizchannel.SendResult) (notifyenum.NotificationChannelStatus, error) {
+	if result == nil {
+		return notifyenum.NotificationChannelStatusUnknown, u.emailDeliveryRepo.MarkUnknown(ctx, deliveryID, nil)
+	}
+	switch result.Status {
+	case notifyenum.NotificationChannelStatusSucceeded:
+		err := u.emailDeliveryRepo.MarkSucceeded(ctx, deliveryID, result.ProviderMessageID, result.ProviderResponse, time.Now())
+		return notifyenum.NotificationChannelStatusSucceeded, err
+	case notifyenum.NotificationChannelStatusFailed:
+		err := u.emailDeliveryRepo.MarkFailed(ctx, deliveryID, result.ProviderResponse)
+		return notifyenum.NotificationChannelStatusFailed, err
+	default:
+		err := u.emailDeliveryRepo.MarkUnknown(ctx, deliveryID, result.ProviderResponse)
+		return notifyenum.NotificationChannelStatusUnknown, err
+	}
+}
+
+func (u *NotifyUsecase) processTencentSMS(ctx context.Context, notificationContext *NotificationContext, rule *model.NotificationRule, accountsByUserID map[int64]*model.UserAccount) (notifyenum.NotificationChannelStatus, error) {
+	if rule.TencentSMSTemplate == nil {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	if u.tencentSMSClient == nil {
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("tencent sms client is nil")
+	}
+	status := notifyenum.NotificationChannelStatusSkipped
+	seen := map[string]struct{}{}
+	for _, recipient := range notificationContext.Recipients {
+		if recipient == nil {
+			continue
+		}
+		phone := strings.TrimSpace(recipient.Phone)
+		if phone == "" && recipient.UserID != 0 {
+			if account := accountsByUserID[recipient.UserID]; account != nil {
+				phone = strings.TrimSpace(account.Phone)
+			}
+		}
+		if phone == "" {
+			continue
+		}
+		if _, ok := seen[phone]; ok {
+			continue
+		}
+		seen[phone] = struct{}{}
+		templateData := u.recipientTemplateData(notificationContext.TemplateData, recipient.TemplateData)
+		params := make([]string, 0, len(rule.TencentSMSTemplate.ParamTemplates))
+		renderFailed := false
+		for _, paramTemplate := range rule.TencentSMSTemplate.ParamTemplates {
+			param, ok := u.renderTemplate(paramTemplate, templateData)
+			if !ok {
+				renderFailed = true
+				break
+			}
+			params = append(params, param)
+		}
+		if renderFailed {
+			continue
+		}
+		delivery := &model.NotificationTencentSMSDelivery{
+			EventID:            notificationContext.EventID,
+			EventType:          notificationContext.EventType,
+			Phone:              phone,
+			SMSSDKAppID:        rule.TencentSMSTemplate.SMSSDKAppID,
+			SignName:           rule.TencentSMSTemplate.SignName,
+			ProviderTemplateID: rule.TencentSMSTemplate.ProviderTemplateID,
+			TemplateParams:     params,
+			Status:             notifyenum.NotificationChannelStatusProcessing,
+		}
+		if recipient.UserID != 0 {
+			delivery.ReceiverID = new(recipient.UserID)
+		}
+		itemStatus, err := u.sendTencentSMS(ctx, delivery)
+		if err != nil {
+			return itemStatus, err
+		}
+		status = status.Merge(itemStatus)
+		if status.Blocking() {
+			return status, nil
+		}
+	}
+	return status, nil
+}
+
+func (u *NotifyUsecase) sendTencentSMS(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (notifyenum.NotificationChannelStatus, error) {
+	delivery, err := u.tencentSMSDeliveryRepo.SaveOrGet(ctx, delivery)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if delivery.Status == notifyenum.NotificationChannelStatusSucceeded {
+		return notifyenum.NotificationChannelStatusSucceeded, nil
+	}
+	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
+		return notifyenum.NotificationChannelStatusUnknown, nil
+	}
+	claimed, err := u.tencentSMSDeliveryRepo.Claim(ctx, delivery.ID, time.Now(), u.externalProcessingTimeout, false)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if !claimed {
+		return delivery.Status, nil
+	}
+	result, err := u.tencentSMSClient.SendTencentSMS(ctx, &bizchannel.TencentSMSRequest{
+		IdempotencyKey:     fmt.Sprintf("%d", delivery.ID),
+		Phone:              delivery.Phone,
+		SMSSDKAppID:        delivery.SMSSDKAppID,
+		SignName:           delivery.SignName,
+		ProviderTemplateID: delivery.ProviderTemplateID,
+		TemplateParams:     delivery.TemplateParams,
+	})
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	return u.finishTencentSMS(ctx, delivery.ID, result)
+}
+
+func (u *NotifyUsecase) finishTencentSMS(ctx context.Context, deliveryID int64, result *bizchannel.SendResult) (notifyenum.NotificationChannelStatus, error) {
+	if result == nil {
+		return notifyenum.NotificationChannelStatusUnknown, u.tencentSMSDeliveryRepo.MarkUnknown(ctx, deliveryID, nil, nil, nil)
+	}
+	switch result.Status {
+	case notifyenum.NotificationChannelStatusSucceeded:
+		err := u.tencentSMSDeliveryRepo.MarkSucceeded(ctx, deliveryID, result.ProviderRequestID, result.ProviderCode, result.ProviderMessage, time.Now())
+		return notifyenum.NotificationChannelStatusSucceeded, err
+	case notifyenum.NotificationChannelStatusFailed:
+		err := u.tencentSMSDeliveryRepo.MarkFailed(ctx, deliveryID, result.ProviderRequestID, result.ProviderCode, result.ProviderMessage)
+		return notifyenum.NotificationChannelStatusFailed, err
+	default:
+		err := u.tencentSMSDeliveryRepo.MarkUnknown(ctx, deliveryID, result.ProviderRequestID, result.ProviderCode, result.ProviderMessage)
+		return notifyenum.NotificationChannelStatusUnknown, err
+	}
+}
+
+func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, notificationContext *NotificationContext, rule *model.NotificationRule) (notifyenum.NotificationChannelStatus, error) {
+	if rule.LarkWebhookTemplate == nil || rule.LarkWebhookTemplate.WebhookID == "" || rule.LarkWebhookTemplate.Token == "" {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	if u.larkWebhookClient == nil {
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook client is nil")
+	}
+	requestBody, ok := u.renderTemplate(rule.LarkWebhookTemplate.BodyTemplate, notificationContext.TemplateData)
 	if !ok {
-		s.log.Errorf("no client in context for notification record")
-		return
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
-	_, err = s.notificationRecordRepo.Save(ctx, c, &model.NotificationRecord{
-		NotificationRecord: &gen.NotificationRecord{
-			NotificationID: metaID,
-			ReceiverID:     receiverID,
-		},
+	delivery := &model.NotificationLarkWebhookDelivery{
+		EventID:     notificationContext.EventID,
+		EventType:   notificationContext.EventType,
+		WebhookID:   rule.LarkWebhookTemplate.WebhookID,
+		RequestBody: requestBody,
+		Status:      notifyenum.NotificationChannelStatusProcessing,
+	}
+	delivery, err := u.larkWebhookDeliveryRepo.SaveOrGet(ctx, delivery)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if delivery.Status == notifyenum.NotificationChannelStatusSucceeded {
+		return notifyenum.NotificationChannelStatusSucceeded, nil
+	}
+	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
+		return notifyenum.NotificationChannelStatusUnknown, nil
+	}
+	claimed, err := u.larkWebhookDeliveryRepo.Claim(ctx, delivery.ID, time.Now(), u.externalProcessingTimeout, false)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if !claimed {
+		return delivery.Status, nil
+	}
+	result, err := u.larkWebhookClient.SendLarkWebhook(ctx, &bizchannel.LarkWebhookRequest{
+		IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
+		Token:          rule.LarkWebhookTemplate.Token,
+		RequestBody:    delivery.RequestBody,
 	})
 	if err != nil {
-		s.log.Errorf("create notification record failed: receiver=%d err=%v", receiverID, err)
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if result == nil {
+		return notifyenum.NotificationChannelStatusUnknown, u.larkWebhookDeliveryRepo.MarkUnknown(ctx, delivery.ID, nil, nil)
+	}
+	switch result.Status {
+	case notifyenum.NotificationChannelStatusSucceeded:
+		err = u.larkWebhookDeliveryRepo.MarkSucceeded(ctx, delivery.ID, result.HTTPStatus, result.ResponseBody, time.Now())
+		return notifyenum.NotificationChannelStatusSucceeded, err
+	case notifyenum.NotificationChannelStatusFailed:
+		err = u.larkWebhookDeliveryRepo.MarkFailed(ctx, delivery.ID, result.HTTPStatus, result.ResponseBody)
+		return notifyenum.NotificationChannelStatusFailed, err
+	default:
+		err = u.larkWebhookDeliveryRepo.MarkUnknown(ctx, delivery.ID, result.HTTPStatus, result.ResponseBody)
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 }
 
-func (s *NotifyUsecase) getUserPrefs(ctx context.Context, userID int64, eventType enums.EventType) ([]*model.NotificationSetting, error) {
-	return s.notificationSettingRepo.List(ctx, &repo.NotificationSettingGetReq{
-		UserID:    &userID,
-		EventType: &eventType,
-	})
+func (u *NotifyUsecase) loadAccounts(ctx context.Context, notificationContext *NotificationContext, rules []*model.NotificationRule) (map[int64]*model.UserAccount, error) {
+	needsContact := false
+	for _, rule := range rules {
+		if rule == nil || !rule.Enabled {
+			continue
+		}
+		if rule.Channel == notifyenum.NotificationChannelEmail || rule.Channel == notifyenum.NotificationChannelTencentSMS {
+			needsContact = true
+			break
+		}
+	}
+	if !needsContact || u.userClient == nil {
+		return map[int64]*model.UserAccount{}, nil
+	}
+	userIDs := make([]int64, 0)
+	seen := map[int64]struct{}{}
+	for _, recipient := range notificationContext.Recipients {
+		if recipient == nil || recipient.UserID == 0 {
+			continue
+		}
+		if recipient.Email != "" && recipient.Phone != "" {
+			continue
+		}
+		if _, ok := seen[recipient.UserID]; ok {
+			continue
+		}
+		seen[recipient.UserID] = struct{}{}
+		userIDs = append(userIDs, recipient.UserID)
+	}
+	if len(userIDs) == 0 {
+		return map[int64]*model.UserAccount{}, nil
+	}
+	return u.userClient.MapAccounts(ctx, userIDs)
 }
 
-func (s *NotifyUsecase) render(tplStr string, variables any) string {
-	tpl, err := template.New("").Parse(tplStr)
+func (u *NotifyUsecase) recipientTemplateData(contextData any, recipientData any) any {
+	if recipientData != nil {
+		return recipientData
+	}
+	return contextData
+}
+
+func (u *NotifyUsecase) renderTemplate(tplStr string, data any) (string, bool) {
+	tpl, err := template.New("").Option("missingkey=error").Parse(tplStr)
 	if err != nil {
-		s.log.Errorf("parse template failed: %v", err)
-		return tplStr
+		return "", false
 	}
 	var buf bytes.Buffer
-	if err := tpl.Execute(&buf, variables); err != nil {
-		s.log.Errorf("execute template failed: %v", err)
-		return tplStr
+	if err := tpl.Execute(&buf, data); err != nil {
+		return "", false
 	}
-	return buf.String()
+	return buf.String(), true
 }

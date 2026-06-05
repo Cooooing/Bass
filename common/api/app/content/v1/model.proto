@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
-import "common/common.proto";
 import "content/v1/enum.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/model.proto";
@@ -78,13 +77,6 @@ message Article {
   // 采纳评论Id（可为空）
   optional int64 accepted_answer_id = 18;
 
-  // 总投票数
-  int32 vote_total = 19;
-  // 抽奖参与人数
-  int32 lottery_participant_count = 20;
-  // 抽奖获奖人数
-  int32 lottery_winner_count = 21;
-
   // 作者信息
   user.v1.AccountBasic author_user = 24;
   // 最后回复用户
@@ -94,11 +86,6 @@ message Article {
 
   // 文章封面图
   optional string cover_image_url = 27;
-
-  // 附言
-  repeated ArticlePostscript postscripts = 99;
-  // 标签
-  repeated Tag tags = 100;
 }
 
 message ArticlePostscript {
@@ -152,8 +139,6 @@ message Tag {
   optional int64 domain_id = 5;
   // 标签状态：1-正常，2-禁用
   optional TagStatus status = 6;
-  // 文章数
-  int32 article_count = 7;
 }
 
 message Domain {
@@ -178,12 +163,8 @@ message Domain {
   optional string url = 7;
   // 图标
   optional string icon = 8;
-  // 标签数量
-  int32 tagCount = 9;
   // 是否导航
-  bool isNav = 10;
-  // 标签列表
-  repeated Tag tags = 100;
+  bool is_nav = 10;
 }
 
 message Comment {
@@ -220,8 +201,6 @@ message Comment {
   int32 thank_count = 13;
   // 点赞数量
   int32 like_count = 10;
-  // 收藏数量
-  int32 collect_count = 11;
   // 子评论数量
   int32 reply_count = 9;
 
@@ -240,9 +219,9 @@ message Comment {
 
 message ArticleQueryParams {
   // 标签
-  optional int64 tagId = 2;
+  optional int64 tag_id = 2;
   // 领域
-  optional int64 domainId = 3;
+  optional int64 domain_id = 3;
   // 状态
   optional ArticleStatus status = 4;
   // 类型
@@ -252,7 +231,9 @@ message ArticleQueryParams {
   // 查询关键词
   optional string keyword = 9;
   // 作者Id
-  optional int64 authorId = 10;
+  optional int64 author_id = 10;
+  // 是否在列表展示
+  optional bool listable = 11;
 }
 
 message CommentQueryParams {
@@ -265,14 +246,13 @@ message CommentQueryParams {
   // 回复评论Id
   optional int64 reply_id = 5;
   // 排序 1-最新 2-最热
-  optional CommentStatus order = 6;
+  optional CommentOrder order = 6;
   // 用户Id
   optional int64 user_id = 7;
   // 层级
   optional int32 level = 8;
-
-  // 是否返回文章信息
-  bool with_article = 100;
+  // 状态
+  optional CommentStatus status = 9;
 }
 
 message TagQueryParams {
@@ -290,8 +270,6 @@ message TagQueryParams {
   optional TagStatus status = 6;
   // 领域Id
   optional int64 domain_id = 7;
-  // 文章数量范围
-  common.Int32Range article_count = 8;
 }
 
 message DomainQueryParams {
@@ -308,9 +286,7 @@ message DomainQueryParams {
   // 图标
   optional string icon = 7;
   // 是否导航
-  optional bool isNav = 8;
-  // 标签数量范围
-  common.Int32Range tagCount = 9;
+  optional bool is_nav = 8;
 }
 
 // =====================
@@ -375,5 +351,5 @@ message DomainSave {
   // 图标
   optional string icon = 6;
   // 是否导航
-  bool isNav = 7;
+  bool is_nav = 7;
 }

@@ -4,43 +4,22 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/checkinrecord"
 	"user/internal/data/gen/checkinstat"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.CheckinRepo = (*CheckinRepo)(nil)
 
 type CheckinRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewCheckinRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.CheckinRepo {
+func NewCheckinRepo(db *gen.Client) repo.CheckinRepo {
 	return &CheckinRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		db: db,
 	}
 }
 
@@ -49,27 +28,6 @@ func (r *CheckinRepo) getClient(ctx context.Context) *gen.Client {
 		return c
 	}
 	return r.db
-}
-
-func checkinStatToDomain(s *gen.CheckinStat) *model.CheckinStat {
-	return &model.CheckinStat{
-		ID:                 s.ID,
-		UserID:             s.UserID,
-		TotalOnlineMinutes: s.TotalOnlineMinutes,
-		CurrentStreak:      s.CurrentStreak,
-		LongestStreak:      s.LongestStreak,
-	}
-}
-
-func checkinRecordToDomain(r *gen.CheckinRecord) *model.CheckinRecord {
-	return &model.CheckinRecord{
-		ID:            r.ID,
-		UserID:        r.UserID,
-		Date:          r.Date,
-		OnlineMinutes: r.OnlineMinutes,
-		Activity:      r.Activity,
-		Checked:       r.Checked,
-	}
 }
 
 func (r *CheckinRepo) FindStatByUserID(ctx context.Context, userID int64) (*model.CheckinStat, error) {
@@ -81,7 +39,13 @@ func (r *CheckinRepo) FindStatByUserID(ctx context.Context, userID int64) (*mode
 	if err != nil {
 		return nil, err
 	}
-	return checkinStatToDomain(s), nil
+	return &model.CheckinStat{
+		ID:                 s.ID,
+		UserID:             s.UserID,
+		TotalOnlineMinutes: s.TotalOnlineMinutes,
+		CurrentStreak:      s.CurrentStreak,
+		LongestStreak:      s.LongestStreak,
+	}, nil
 }
 
 func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRecord) (*model.CheckinRecord, error) {
@@ -102,7 +66,14 @@ func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRec
 		if err != nil {
 			return nil, err
 		}
-		return checkinRecordToDomain(saved), nil
+		return &model.CheckinRecord{
+			ID:            saved.ID,
+			UserID:        saved.UserID,
+			Date:          new(saved.Date),
+			OnlineMinutes: saved.OnlineMinutes,
+			Activity:      saved.Activity,
+			Checked:       saved.Checked,
+		}, nil
 	}
 	saved, err := tx.CheckinRecord.Create().
 		SetUserID(record.UserID).
@@ -114,7 +85,14 @@ func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRec
 	if err != nil {
 		return nil, err
 	}
-	return checkinRecordToDomain(saved), nil
+	return &model.CheckinRecord{
+		ID:            saved.ID,
+		UserID:        saved.UserID,
+		Date:          new(saved.Date),
+		OnlineMinutes: saved.OnlineMinutes,
+		Activity:      saved.Activity,
+		Checked:       saved.Checked,
+	}, nil
 }
 
 func (r *CheckinRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (*model.CheckinStat, error) {
@@ -133,7 +111,13 @@ func (r *CheckinRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (
 		if err != nil {
 			return nil, err
 		}
-		return checkinStatToDomain(saved), nil
+		return &model.CheckinStat{
+			ID:                 saved.ID,
+			UserID:             saved.UserID,
+			TotalOnlineMinutes: saved.TotalOnlineMinutes,
+			CurrentStreak:      saved.CurrentStreak,
+			LongestStreak:      saved.LongestStreak,
+		}, nil
 	}
 	stat.ID = existing.ID
 	tx := r.getClient(ctx)
@@ -145,5 +129,11 @@ func (r *CheckinRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (
 	if err != nil {
 		return nil, err
 	}
-	return checkinStatToDomain(saved), nil
+	return &model.CheckinStat{
+		ID:                 saved.ID,
+		UserID:             saved.UserID,
+		TotalOnlineMinutes: saved.TotalOnlineMinutes,
+		CurrentStreak:      saved.CurrentStreak,
+		LongestStreak:      saved.LongestStreak,
+	}, nil
 }

@@ -15,50 +15,57 @@ import (
 )
 
 type TokenCache struct {
-	log   *log.Helper
-	redis *client.RedisClient
+	log         *log.Helper
+	redisClient *client.RedisClient
 }
 
-func NewTokenCache(logger log.Logger, redis *client.RedisClient) *TokenCache {
+func NewTokenCache(logger log.Logger, redisClient *client.RedisClient) *TokenCache {
 	return &TokenCache{
-		log:   log.NewHelper(logger),
-		redis: redis,
+		log:         log.NewHelper(logger),
+		redisClient: redisClient,
 	}
 }
 
 type verityCodeTokenData struct {
-	Code string      `json:"code"`
-	User *model.User `json:"user"`
+	Code    string          `json:"code"`
+	Payload json.RawMessage `json:"payload"`
 }
 
-func (r *TokenCache) SaveVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string, code string, user *model.User, expires time.Duration) error {
+func (r *TokenCache) SaveVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string, code string, payload any, expires time.Duration) error {
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
 	value, err := json.Marshal(&verityCodeTokenData{
-		Code: code,
-		User: user,
+		Code:    code,
+		Payload: payloadBytes,
 	})
 	if err != nil {
 		return err
 	}
-	return r.redis.Client.Set(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account), value, expires).Err()
+	return r.redisClient.Client.Set(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account), value, expires).Err()
 }
 
-func (r *TokenCache) GetVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (string, *model.User, error) {
-	value, err := r.redis.Client.Get(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
+func (r *TokenCache) GetVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string, payload any) (string, error) {
+	value, err := r.redisClient.Client.Get(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
 	if errors.Is(err, redis.Nil) {
-		return "", nil, errors.New("email code invalid")
+		return "", errors.New("verification code invalid")
 	}
 	if err != nil {
-		return "", nil, err
+		return "", err
 	}
 	var data verityCodeTokenData
 	if err := json.Unmarshal([]byte(value), &data); err != nil {
-		return "", nil, err
+		return "", err
 	}
-	return data.Code, data.User, nil
+	if err := json.Unmarshal(data.Payload, payload); err != nil {
+		return "", err
+	}
+	return data.Code, nil
 }
 
 func (r *TokenCache) ExistVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) (bool, error) {
-	result, err := r.redis.Client.Exists(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
+	result, err := r.redisClient.Client.Exists(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Result()
 	if err != nil {
 		return false, err
 	}
@@ -66,7 +73,7 @@ func (r *TokenCache) ExistVerityCode(ctx context.Context, verityCodeType constan
 }
 
 func (r *TokenCache) DelVerityCode(ctx context.Context, verityCodeType constant.VerifyCodeType, account string) error {
-	return r.redis.Client.Del(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Err()
+	return r.redisClient.Client.Del(ctx, constant.GetKeyTokenVerityCode(verityCodeType, account)).Err()
 }
 
 func (r *TokenCache) SaveToken(ctx context.Context, token string, user *model.User, expires time.Duration) error {
@@ -74,11 +81,11 @@ func (r *TokenCache) SaveToken(ctx context.Context, token string, user *model.Us
 	if err != nil {
 		return err
 	}
-	return r.redis.Client.Set(ctx, constant.GetKeyToken(token), value, expires).Err()
+	return r.redisClient.Client.Set(ctx, constant.GetKeyToken(token), value, expires).Err()
 }
 
 func (r *TokenCache) GetToken(ctx context.Context, token string) (*model.User, error) {
-	value, err := r.redis.Client.Get(ctx, constant.GetKeyToken(token)).Result()
+	value, err := r.redisClient.Client.Get(ctx, constant.GetKeyToken(token)).Result()
 	if errors.Is(err, redis.Nil) {
 		return nil, nil
 	}
@@ -90,5 +97,5 @@ func (r *TokenCache) GetToken(ctx context.Context, token string) (*model.User, e
 }
 
 func (r *TokenCache) DelToken(ctx context.Context, token string) error {
-	return r.redis.Client.Del(ctx, constant.GetKeyToken(token)).Err()
+	return r.redisClient.Client.Del(ctx, constant.GetKeyToken(token)).Err()
 }

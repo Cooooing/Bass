@@ -9,6 +9,8 @@ BFF_OPENAPI_DIR := $(PROTO_GEN_DIR)/openapi/$(BFF_SERVER)
 BFF_OPENAPI_FILE := $(BFF_OPENAPI_DIR)/openapi.yaml
 BFF_GEN_TS_DIR := $(ROOT_DIR)/common/api/gen-ts/$(BFF_SERVER)
 BFF_GEN_GO_DIR := $(ROOT_DIR)/common/api/gen-go/$(BFF_SERVER)
+BFF_GEN_JAVA_DIR := $(ROOT_DIR)/common/api/gen-java/$(BFF_SERVER)
+BFF_GEN_RUST_DIR := $(ROOT_DIR)/common/api/gen-rust/$(BFF_SERVER)
 OPENAPI_GENERATOR ?= cd $(ROOT_DIR)/common/api/sdk && npx --yes @openapitools/openapi-generator-cli
 
 # Append to composite target sequence.
@@ -45,7 +47,7 @@ sdk-validate: doc sdk-prereq
 .PHONY: sdk-clean
 sdk-clean:
 	@echo "[sdk-clean] cleaning generated SDKs..."
-	@rm -rf $(BFF_GEN_TS_DIR) $(BFF_GEN_GO_DIR) 2>/dev/null; true
+	@rm -rf $(BFF_GEN_TS_DIR) $(BFF_GEN_GO_DIR) $(BFF_GEN_JAVA_DIR) $(BFF_GEN_RUST_DIR) 2>/dev/null; true
 
 # Generate TypeScript fetch SDK.
 .PHONY: sdk-ts
@@ -69,7 +71,29 @@ sdk-go: doc sdk-prereq
 		-o $(BFF_GEN_GO_DIR) \
 		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/go.json
 
+# Generate Java SDK.
+.PHONY: sdk-java
+sdk-java: doc sdk-prereq
+	@echo "[sdk-java] openapi-generator java..."
+	@mkdir -p $(BFF_GEN_JAVA_DIR)
+	@$(OPENAPI_GENERATOR) generate \
+		-i $(BFF_OPENAPI_FILE) \
+		-g java \
+		-o $(BFF_GEN_JAVA_DIR) \
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/java.json
+
+# Generate Rust SDK.
+.PHONY: sdk-rust
+sdk-rust: doc sdk-prereq
+	@echo "[sdk-rust] openapi-generator rust..."
+	@mkdir -p $(BFF_GEN_RUST_DIR)
+	@$(OPENAPI_GENERATOR) generate \
+		-i $(BFF_OPENAPI_FILE) \
+		-g rust \
+		-o $(BFF_GEN_RUST_DIR) \
+		-c $(ROOT_DIR)/common/api/sdk/openapi-generator/rust.json
+
 .PHONY: sdk
-sdk: sdk-ts sdk-go
+sdk: sdk-ts sdk-go sdk-java sdk-rust
 
 endif

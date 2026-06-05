@@ -1,9 +1,8 @@
 package service
 
 import (
+	"bbs/internal/biz/usecase"
 	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
-	"common/pkg/client/rpc"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -12,11 +11,11 @@ import (
 
 type PreferencesService struct {
 	bbsuserv1.UnimplementedPreferencesServiceServer
-	userClient *rpc.UserClient
+	userUsecase *usecase.UserUsecase
 }
 
-func NewPreferencesService(userClient *rpc.UserClient) *PreferencesService {
-	return &PreferencesService{userClient: userClient}
+func NewPreferencesService(userUsecase *usecase.UserUsecase) *PreferencesService {
+	return &PreferencesService{userUsecase: userUsecase}
 }
 
 func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
@@ -28,39 +27,9 @@ func (s *PreferencesService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Request) (*bbsuserv1.GetCurrentPreferences_Reply, error) {
-	reply, err := s.userClient.Preferences.GetCurrent(forwardAuth(ctx), &userv1.GetCurrentPreferences_Request{})
-	if err != nil {
-		return nil, err
-	}
-	return &bbsuserv1.GetCurrentPreferences_Reply{Preference: toBFFPreference(reply.GetPreferences())}, nil
+	return s.userUsecase.GetCurrentPreferences(ctx, req)
 }
 
-func (s *PreferencesService) Update(ctx context.Context, req *bbsuserv1.UpdatePreferences_Request) (*bbsuserv1.UpdatePreferences_Reply, error) {
-	reply, err := s.userClient.Preferences.Update(forwardAuth(ctx), &userv1.UpdatePreferences_Request{
-		Language:             req.Language,
-		Timezone:             req.Timezone,
-		Theme:                req.Theme,
-		MobileTheme:          req.MobileTheme,
-		EnableWebNotify:      req.EnableWebNotify,
-		EnableEmailSubscribe: req.EnableEmailSubscribe,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &bbsuserv1.UpdatePreferences_Reply{Preference: toBFFPreference(reply.GetPreferences())}, nil
-}
-
-func toBFFPreference(in *userv1.Preferences) *bbsuserv1.Preference {
-	if in == nil {
-		return nil
-	}
-	return &bbsuserv1.Preference{
-		UserId:               in.GetUserId(),
-		Language:             in.Language,
-		Timezone:             in.Timezone,
-		Theme:                in.Theme,
-		MobileTheme:          in.MobileTheme,
-		EnableWebNotify:      in.EnableWebNotify,
-		EnableEmailSubscribe: in.EnableEmailSubscribe,
-	}
+func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Request) (*bbsuserv1.UpdateCurrentPreferences_Reply, error) {
+	return s.userUsecase.UpdateCurrentPreferences(ctx, req)
 }

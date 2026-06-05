@@ -21,7 +21,7 @@ RUN cd /build/common && go mod download && cd /build/app/${APP_NAME} && go mod d
 
 COPY common/ /build/common/
 COPY app/${APP_NAME}/ /build/app/${APP_NAME}/
-RUN cd /build/app/${APP_NAME} && make gen && make build
+RUN cd /build/app/${APP_NAME} && make all
 RUN upx -9 --lzma /build/app/${APP_NAME}/server -o /build/server
 
 # ===================== 第二阶段：制作轻量运行环境 =====================

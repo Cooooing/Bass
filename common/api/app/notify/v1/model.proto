@@ -8,105 +8,22 @@ import "notify/v1/enum.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
 
-// =====================
-// 实体定义
-// =====================
-
-message NotificationTemplate {
-  // 创建时间
+message NotificationStationMessage {
   google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
   google.protobuf.Timestamp updated_at = 1001;
 
-  // 主键
-  int64 id = 3;
-  // 事件类型
-  common.enums.EventType event_type = 5;
-  // 通知渠道
-  NotificationChannel channel = 6;
-  // 模板标题
-  string title = 4;
-  // 模板内容
-  string content = 7;
-  // 是否启用
-  bool enable = 9;
+  int64 id = 1;
+  string event_id = 2;
+  common.enums.EventType event_type = 3;
+  int64 receiver_id = 4;
+  string title = 5;
+  string content = 6;
+  NotificationChannelStatus status = 7;
+  optional google.protobuf.Timestamp read_at = 8;
 }
 
-message NotificationRecord {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
-
-  // 主键
-  int64 id = 3;
-  // 通知元数据id
-  int64 notification_id = 4;
-  // 接收者ID
-  int64 receiver_id = 5;
-  // 已读时间
-  google.protobuf.Timestamp read_time = 6;
-
-  // 通知元数据
-  NotificationMeta notification_meta = 20;
-}
-
-message NotificationMeta {
-  // 创建时间
-  google.protobuf.Timestamp created_at = 1000;
-  // 更新时间
-  google.protobuf.Timestamp updated_at = 1001;
-
-  // 主键
-  int64 id = 3;
-  // UUID
-  string uuid = 4;
-  // 事件类型
-  common.enums.EventType event_type = 5;
-  // 发送者ID
-  int64 sender_id = 6;
-  // 通知元数据
-  string meta = 7;
-  // 状态 1-正常 2-被取消
-  NotificationStatus status = 8;
-
-  // 渲染内容
-  string content_render = 20;
-}
-
-// =====================
-// 查询参数定义
-// =====================
-
-message NotificationTemplateQueryParams {
-  // 主键
-  repeated int64 ids = 2;
-  // 事件类型
-  optional common.enums.EventType event_type = 5;
-  // 通知渠道
-  optional NotificationChannel channel = 6;
-  // 是否启用
-  optional bool enable = 9;
-}
-
-message NotificationRecordQueryParams {
-  // 主键
-  repeated int64 ids = 2;
-  // 通知元数据id
-  repeated int64 notification_ids = 4;
-  // 接收者ID
-  repeated int64 receiver_ids = 5;
-}
-
-message NotificationMetaQueryParams {
-  // 主键
-  repeated int64 ids = 2;
-  // UUID 列表
-  repeated string uuids = 3;
-  // 事件类型
-  optional common.enums.EventType event_type = 5;
-  // 发送者ID
-  repeated int64 sender_ids = 6;
-  // 状态 1-正常 2-被取消
-  optional NotificationStatus status = 8;
+message NotificationStationMessageQueryParams {
+  repeated int64 ids = 1;
+  optional common.enums.EventType event_type = 2;
+  optional bool unread = 3;
 }

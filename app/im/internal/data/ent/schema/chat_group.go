@@ -3,6 +3,7 @@ package schema
 import (
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
+	"im/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -29,7 +30,7 @@ func (ChatGroup) Fields() []ent.Field {
 		field.String("avatar").Comment("群头像").Optional().Nillable(),
 		field.String("introduction").Comment("群简介").Optional().Nillable(),
 		field.Int64("owner_id").Comment("群主id"),
-		field.Int32("status").Comment("群状态: 1-正常, 2-解散").Default(1),
+		field.Enum("status").Values(enum.ChatGroupStatusMap.EnumValues()...).Default(string(enum.ChatGroupStatusNormal)).Comment("群状态"),
 		field.Uint32("member_count").Comment("群成员数").Default(0),
 
 		field.Uint32("message_count").Comment("群消息数").Default(0),

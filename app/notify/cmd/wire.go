@@ -3,7 +3,6 @@
 // +build wireinject
 
 // 构建标签确保该注入桩不会进入最终构建。
-
 package main
 
 import (

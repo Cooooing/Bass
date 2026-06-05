@@ -3,13 +3,9 @@ package service
 import (
 	"context"
 
-	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"user/internal/biz/model"
-	"user/internal/biz/repo"
+	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -17,11 +13,11 @@ import (
 
 type PrivacySettingService struct {
 	v1.UnimplementedPrivacySettingServiceServer
-	privacySettingRepo repo.PrivacySettingRepo
+	privacySettingUsecase *usecase.PrivacySettingUsecase
 }
 
-func NewPrivacySettingService(privacySettingRepo repo.PrivacySettingRepo) *PrivacySettingService {
-	return &PrivacySettingService{privacySettingRepo: privacySettingRepo}
+func NewPrivacySettingService(privacySettingUsecase *usecase.PrivacySettingUsecase) *PrivacySettingService {
+	return &PrivacySettingService{privacySettingUsecase: privacySettingUsecase}
 }
 
 func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
@@ -30,13 +26,12 @@ func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {}
 
-func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *v1.GetCurrentPrivacySetting_Request) (*v1.GetCurrentPrivacySetting_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
+func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetting_Request) (*v1.GetPrivacySetting_Reply, error) {
+	privacySetting, err := s.privacySettingUsecase.GetByUserID(ctx, req.GetUserId())
+	if err != nil {
+		return nil, err
 	}
-	privacySetting, _ := s.privacySettingRepo.FindByUserID(ctx, current.ID)
-	reply := &v1.PrivacySetting{UserId: current.ID}
+	reply := &v1.PrivacySetting{UserId: req.GetUserId()}
 	if privacySetting != nil {
 		reply.PublicPoints = privacySetting.PublicPoints
 		reply.PublicFollowers = privacySetting.PublicFollowers
@@ -45,16 +40,12 @@ func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *v1.GetCurre
 		reply.PublicOnlineStatus = privacySetting.PublicOnlineStatus
 		reply.PublicLocation = privacySetting.PublicLocation
 	}
-	return &v1.GetCurrentPrivacySetting_Reply{PrivacySetting: reply}, nil
+	return &v1.GetPrivacySetting_Reply{PrivacySetting: reply}, nil
 }
 
 func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Request) (*v1.UpdatePrivacySetting_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	privacySetting, err := s.privacySettingRepo.UpsertByUserID(ctx, &model.PrivacySetting{
-		UserID:             current.ID,
+	privacySetting, err := s.privacySettingUsecase.UpsertByUserID(ctx, &model.PrivacySetting{
+		UserID:             req.GetUserId(),
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
 		PublicArticles:     req.PublicArticles,
@@ -66,7 +57,7 @@ func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivac
 		return nil, err
 	}
 	return &v1.UpdatePrivacySetting_Reply{PrivacySetting: &v1.PrivacySetting{
-		UserId:             current.ID,
+		UserId:             req.GetUserId(),
 		PublicPoints:       privacySetting.PublicPoints,
 		PublicFollowers:    privacySetting.PublicFollowers,
 		PublicArticles:     privacySetting.PublicArticles,

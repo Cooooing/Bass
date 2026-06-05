@@ -8,62 +8,67 @@ import "user/v1/model.proto";
 option go_package = "common/api/gen/user/v1;v1";
 
 service RelationService {
-  // 当前账号关注目标账号，并同步维护双方关注统计。
+  // 账号关注目标账号，并同步维护双方关注统计。
   rpc Follow(FollowRelation.Request) returns (FollowRelation.Reply) {}
 
-  // 当前账号取消关注目标账号，并同步维护双方关注统计。
+  // 账号取消关注目标账号，并同步维护双方关注统计。
   rpc Unfollow(UnfollowRelation.Request) returns (UnfollowRelation.Reply) {}
 
-  // 当前账号拉黑目标账号，并同步维护双方拉黑统计。
+  // 账号拉黑目标账号，并同步维护双方拉黑统计。
   rpc Block(BlockRelation.Request) returns (BlockRelation.Reply) {}
 
-  // 当前账号取消拉黑目标账号，并同步维护双方拉黑统计。
+  // 账号取消拉黑目标账号，并同步维护双方拉黑统计。
   rpc Unblock(UnblockRelation.Request) returns (UnblockRelation.Reply) {}
 
-  // 分页查询当前账号关注的账号列表。
-  rpc PageFollowing(PageFollowingRelation.Request) returns (PageFollowingRelation.Reply) {}
+  // 查询账号关注的账号列表。
+  rpc ListFollowing(ListFollowingRelations.Request) returns (ListFollowingRelations.Reply) {}
 
-  // 分页查询当前账号的粉丝账号列表。
-  rpc PageFollowers(PageFollowersRelation.Request) returns (PageFollowersRelation.Reply) {}
+  // 查询账号的粉丝关系列表。
+  rpc ListFollowers(ListFollowersRelations.Request) returns (ListFollowersRelations.Reply) {}
 
-  // 分页查询当前账号拉黑的账号列表。
-  rpc PageBlocked(PageBlockedRelation.Request) returns (PageBlockedRelation.Reply) {}
+  // 查询账号拉黑的账号列表。
+  rpc ListBlocked(ListBlockedRelations.Request) returns (ListBlockedRelations.Reply) {}
 
-  // 批量查询当前账号与多个目标账号之间的关系状态。
-  rpc BatchGetStatus(BatchGetStatusRelation.Request) returns (BatchGetStatusRelation.Reply) {}
+  // 查询账号与多个目标账号之间的关系状态映射。
+  rpc MapStatus(MapRelationStatuses.Request) returns (MapRelationStatuses.Reply) {}
 }
 
 message FollowRelation {
   message Request {
-    int64 target_id = 1;
+    int64 actor_id = 1;
+    int64 target_id = 2;
   }
   message Reply {}
 }
 
 message UnfollowRelation {
   message Request {
-    int64 target_id = 1;
+    int64 actor_id = 1;
+    int64 target_id = 2;
   }
   message Reply {}
 }
 
 message BlockRelation {
   message Request {
-    int64 target_id = 1;
+    int64 actor_id = 1;
+    int64 target_id = 2;
   }
   message Reply {}
 }
 
 message UnblockRelation {
   message Request {
-    int64 target_id = 1;
+    int64 actor_id = 1;
+    int64 target_id = 2;
   }
   message Reply {}
 }
 
-message PageFollowingRelation {
+message ListFollowingRelations {
   message Request {
     common.PageRequest page = 1;
+    int64 user_id = 2;
   }
   message Reply {
     common.PageReply page = 1;
@@ -71,9 +76,10 @@ message PageFollowingRelation {
   }
 }
 
-message PageFollowersRelation {
+message ListFollowersRelations {
   message Request {
     common.PageRequest page = 1;
+    int64 user_id = 2;
   }
   message Reply {
     common.PageReply page = 1;
@@ -81,9 +87,10 @@ message PageFollowersRelation {
   }
 }
 
-message PageBlockedRelation {
+message ListBlockedRelations {
   message Request {
     common.PageRequest page = 1;
+    int64 user_id = 2;
   }
   message Reply {
     common.PageReply page = 1;
@@ -91,9 +98,10 @@ message PageBlockedRelation {
   }
 }
 
-message BatchGetStatusRelation {
+message MapRelationStatuses {
   message Request {
-    repeated int64 target_ids = 1;
+    int64 actor_id = 1;
+    repeated int64 target_ids = 2;
   }
   message Reply {
     map<int64, RelationStatus> statuses = 1;

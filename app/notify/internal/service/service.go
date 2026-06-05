@@ -9,25 +9,19 @@ import (
 // ServiceProviderSet 是 service 层依赖集合。
 var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
-	NewNotificationMetaService,
-	NewNotificationRecordService,
-	NewNotificationTemplateService,
+	NewStationMessageService,
 	NewOssService,
 	ProvideServices,
 )
 
 func ProvideServices(
 	systemService *SystemService,
-	notificationMetaService *NotificationMetaService,
-	notificationRecordService *NotificationRecordService,
-	notificationTemplateService *NotificationTemplateService,
+	stationMessageService *StationMessageService,
 	ossService *OssService,
 ) []server.GrpcService {
 	return []server.GrpcService{
 		systemService,
-		notificationMetaService,
-		notificationRecordService,
-		notificationTemplateService,
+		stationMessageService,
 		ossService,
 	}
 }

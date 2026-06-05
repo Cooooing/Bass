@@ -26,8 +26,8 @@ import (
 
 // ConsulClient 管理基于 Consul 的服务注册与发现。
 type ConsulClient struct {
-	conf   *common.Consul
-	logger *log.Helper
+	conf *common.Consul
+	log  *log.Helper
 
 	// Client 是原始 Consul API 客户端，供高级场景使用。
 	Client *consulapi.Client
@@ -88,12 +88,12 @@ func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, fun
 
 	c := &ConsulClient{
 		conf:   conf,
-		logger: log.NewHelper(logger),
+		log:    log.NewHelper(logger),
 		Client: apiClient,
 		reg:    reg,
 	}
 
-	c.logger.Infof("consul connected: %s (dc=%s)", conf.Address, cfg.Datacenter)
+	c.log.Infof("consul connected: %s (dc=%s)", conf.Address, cfg.Datacenter)
 	return c, c.Close, nil
 }
 
@@ -112,7 +112,7 @@ func (c *ConsulClient) RegisterService(svc *consulapi.AgentServiceRegistration) 
 	c.mu.Lock()
 	c.services = append(c.services, svc.ID)
 	c.mu.Unlock()
-	c.logger.Infof("registered: %s", svc.ID)
+	c.log.Infof("registered: %s", svc.ID)
 	return nil
 }
 
@@ -154,7 +154,7 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 		return actual.(*grpc.ClientConn), nil
 	}
 
-	c.logger.Infof("grpc conn: %s", service)
+	c.log.Infof("grpc conn: %s", service)
 	return conn, nil
 }
 
@@ -182,7 +182,7 @@ func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
 		return actual.(*khttp.Client), nil
 	}
 
-	c.logger.Infof("http client: %s", service)
+	c.log.Infof("http client: %s", service)
 	return cl, nil
 }
 
@@ -196,9 +196,9 @@ func (c *ConsulClient) Close() {
 
 	for _, id := range ids {
 		if err := c.Client.Agent().ServiceDeregister(id); err != nil {
-			c.logger.Warnf("deregister %s: %v", id, err)
+			c.log.Warnf("deregister %s: %v", id, err)
 		} else {
-			c.logger.Infof("deregistered: %s", id)
+			c.log.Infof("deregistered: %s", id)
 		}
 	}
 
@@ -214,5 +214,5 @@ func (c *ConsulClient) Close() {
 		return true
 	})
 
-	c.logger.Info("consul client closed")
+	c.log.Info("consul client closed")
 }

@@ -1,58 +1,42 @@
 package usecase
 
 import (
+	"context"
+
 	"common/api/gen/common"
+	commonenums "common/api/gen/common/enums"
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
 	userv1 "common/api/gen/user/v1"
-	"common/pkg/client/rpc"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
-	utilent "common/pkg/util/ent"
-
-	"common/pkg/util/str"
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/data/gen"
-	articleent "content/internal/data/gen/article"
-	"content/internal/data/gen/articlepostscript"
 	"content/internal/enum"
-	"context"
-	"errors"
 
 	"github.com/samber/lo"
-	"github.com/sony/sonyflake/v2"
 )
 
 type ArticleUsecase struct {
 	tx         base.Tx
-	userClient *rpc.UserClient
+	userClient repo.UserClient
 
 	articleRepo      repo.ArticleRepo
 	postscriptRepo   repo.ArticlePostscriptRepo
 	actionRecordRepo repo.ArticleActionRecordRepo
 	commentRepo      repo.CommentRepo
-	tagRepo          repo.TagRepo
-	domainRepo       repo.DomainRepo
-	sf               *sonyflake.Sonyflake
+	outboxRepo       repo.OutboxEventRepo
 }
 
 func NewArticleUsecase(
 	tx base.Tx,
-	userClient *rpc.UserClient,
+	userClient repo.UserClient,
 	articleRepo repo.ArticleRepo,
 	postscriptRepo repo.ArticlePostscriptRepo,
 	actionRecordRepo repo.ArticleActionRecordRepo,
 	commentRepo repo.CommentRepo,
-	tagRepo repo.TagRepo,
-	domainRepo repo.DomainRepo,
-) (*ArticleUsecase, error) {
-	sf, err := str.NewSonyflake()
-	if err != nil {
-		return nil, err
-	}
+	outboxRepo repo.OutboxEventRepo,
+) *ArticleUsecase {
 	return &ArticleUsecase{
 		tx:               tx,
 		userClient:       userClient,
@@ -60,38 +44,53 @@ func NewArticleUsecase(
 		postscriptRepo:   postscriptRepo,
 		actionRecordRepo: actionRecordRepo,
 		commentRepo:      commentRepo,
-		tagRepo:          tagRepo,
-		domainRepo:       domainRepo,
-		sf:               sf,
-	}, nil
+		outboxRepo:       outboxRepo,
+	}
 }
 
-// --- 新增 ---
+func validateArticleSave(article *model.Article) error {
+	if article == nil {
+		return cerrors.ErrorBadRequest("article is required")
+	}
+	switch article.Status {
+	case enum.ArticleStatusNormal, enum.ArticleStatusDrafts:
+	default:
+		return cerrors.ErrorBadRequest("status only be normal or drafts")
+	}
+	switch article.Type {
+	case enum.ArticleTypeNormal, enum.ArticleTypeQA:
+	default:
+		return cerrors.ErrorBadRequest("invalid article type")
+	}
+	if article.Type != enum.ArticleTypeQA && article.BountyPoints != nil {
+		return cerrors.ErrorBadRequest("bounty points only be set when type is qa")
+	}
+	return nil
+}
 
 func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
 	)
+	if err := validateArticleSave(article); err != nil {
+		return nil, err
+	}
 	status := article.Status
-	article.Status = articleent.StatusDrafts // 默认均为草稿
+	article.Status = enum.ArticleStatusDrafts
 	err = d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		save, err = d.articleRepo.Save(ctx, c, article, tags)
+		save, err = d.articleRepo.Save(ctx, article, tags)
 		if err != nil {
 			return err
 		}
-		// 正常文章，进行发布
-		if enum.ArticleStatus(status) == enum.ArticleStatusNormal {
-			err = d.Publish(ctx, save.ID, *save.CreatedBy)
-			if err != nil {
-				return err
+		if status == enum.ArticleStatusNormal {
+			senderID := int64(0)
+			if save.CreatedBy != nil {
+				senderID = *save.CreatedBy
 			}
+			return d.Publish(ctx, save.ID, senderID)
 		}
-		return err
+		return nil
 	})
 	return save, err
 }
@@ -99,14 +98,9 @@ func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tags [
 func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, userId int64, content string) (*model.ArticlePostscript, error) {
 	var save *model.ArticlePostscript
 	err := d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
-			CreatedBy: &userId,
 		})
 		if err != nil {
 			return err
@@ -114,41 +108,35 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, use
 		if !exist {
 			return cerrors.ErrorBadRequest("article not exist")
 		}
-		save, err = d.postscriptRepo.Save(ctx, c, &model.ArticlePostscript{ArticlePostscript: &gen.ArticlePostscript{
+		save, err = d.postscriptRepo.Save(ctx, &model.ArticlePostscript{
 			ArticleID: articleId,
 			Content:   content,
-			Status:    articlepostscript.StatusNormal,
-		}})
+			Status:    enum.ArticlePostscriptStatusNormal,
+			CreatedBy: new(userId),
+			UpdatedBy: new(userId),
+		})
 		if err != nil {
 			return err
 		}
-		err = d.articleRepo.UpdateHasPostscript(ctx, c, articleId, true)
-		if err != nil {
-			return err
-		}
-		return err
+		return d.articleRepo.UpdateHasPostscript(ctx, articleId, userId, true)
 	})
 	return save, err
 }
-
-// --- 更新 ---
 
 func (d *ArticleUsecase) UpdateDraft(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
 	)
+	if err := validateArticleSave(article); err != nil {
+		return nil, err
+	}
 	status := article.Status
-	article.Status = articleent.StatusDrafts // 默认均为草稿
+	article.Status = enum.ArticleStatusDrafts
 	err = d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
 			ArticleId: new(article.ID),
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-			CreatedBy: article.CreatedBy,
 		})
 		if err != nil {
 			return err
@@ -157,158 +145,140 @@ func (d *ArticleUsecase) UpdateDraft(ctx context.Context, article *model.Article
 			return cerrors.ErrorBadRequest("article not exist")
 		}
 
-		save, err = d.articleRepo.Update(ctx, c, article, tags)
+		save, err = d.articleRepo.Update(ctx, article, tags)
 		if err != nil {
 			return err
 		}
-		// 正常文章，进行发布
-		if enum.ArticleStatus(status) == enum.ArticleStatusNormal {
-			err = d.Publish(ctx, save.ID, *save.CreatedBy)
-			if err != nil {
-				return err
+		if status == enum.ArticleStatusNormal {
+			senderID := int64(0)
+			if save.CreatedBy != nil {
+				senderID = *save.CreatedBy
 			}
+			return d.Publish(ctx, save.ID, senderID)
 		}
-		return err
+		return nil
 	})
 	return save, err
 }
 
 func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
-	var err error
-	//user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	//if !ok {
-	//	return cerrors.ErrorUnauthorized("user not login")
-	//}
-
-	//var a *model.Article
-	//err := ent.WithTx(ctx, d.db, func(tx *gen.Client) error {
-	//	var err error
-	//	if active {
-	//		a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, 1)
-	//		if err != nil {
-	//			return err
-	//		}
-	//		_, err = d.actionRecordRepo.Save(ctx, tx, &model.ArticleActionRecord{ArticleActionRecord: &gen.ArticleActionRecord{
-	//			ArticleID: articleId,
-	//			UserID:    userId,
-	//			Type:      int32(action),
-	//		}})
-	//		if err != nil {
-	//			return err
-	//		}
-	//	} else {
-	//		a, err = d.articleRepo.UpdateStat(ctx, tx, articleId, action, -1)
-	//		if err != nil {
-	//			return err
-	//		}
-	//		err = d.actionRecordRepo.Delete(ctx, tx, articleId, userId, action)
-	//		if err != nil {
-	//			return err
-	//		}
-	//	}
-	//	return err
-	//})
-	//if active {
-	//err = d.eventPool.Submit(func() {
-	//	switch action {
-	//	case v1.ArticleAction_ARTICLE_ACTION_LIKE:
-	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleLike.String(), &commonModel.Notification{
-	//			UUID:       uuid.New().String(),
-	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_LIKE),
-	//			SenderId:   user.ID,
-	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//			Meta: commonModel.Meta{
-	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//			},
-	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-	//		})
-	//		if err != nil {
-	//			d.log.Errorf("publish article like event error: %v", err)
-	//			return
-	//		}
-	//	case v1.ArticleAction_ARTICLE_ACTION_THANK:
-	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleThank.String(), &commonModel.Notification{
-	//			UUID:       uuid.New().String(),
-	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_THANK),
-	//			SenderId:   user.ID,
-	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//			Meta: commonModel.Meta{
-	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//			},
-	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-	//		})
-	//		if err != nil {
-	//			d.log.Errorf("publish article thank event error: %v", err)
-	//			return
-	//		}
-	//	case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
-	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleCollect.String(), &commonModel.Notification{
-	//			UUID:       uuid.New().String(),
-	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_COLLECT),
-	//			SenderId:   user.ID,
-	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//			Meta: commonModel.Meta{
-	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//			},
-	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-	//		})
-	//		if err != nil {
-	//			d.log.Errorf("publish article collect event error: %v", err)
-	//			return
-	//		}
-	//	case v1.ArticleAction_ARTICLE_ACTION_WATCH:
-	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
-	//			UUID:       uuid.New().String(),
-	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_WATCH),
-	//			SenderId:   user.ID,
-	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//			Meta: commonModel.Meta{
-	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//			},
-	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-	//		})
-	//		if err != nil {
-	//			d.log.Errorf("publish article watch event error: %v", err)
-	//			return
-	//		}
-	//	case v1.ArticleAction_ARTICLE_ACTION_REWARD:
-	//		err = d.Rabbitmq.Publish(constant.ExchangeContent.String(), constant.RoutingKeyContentArticleWatch.String(), &commonModel.Notification{
-	//			UUID:       uuid.New().String(),
-	//			Type:       new(notifyv1.NotificationType_NOTIFICATION_TYPE_ARTICLE_REWARD),
-	//			SenderId:   user.ID,
-	//			SenderName: user.Name,
-	//			Channels:   []*notifyv1.NotificationChannel{new(notifyv1.NotificationChannel_NOTIFICATION_CHANNEL_STATION)},
-	//			Meta: commonModel.Meta{
-	//				Article: &commonModel.ArticleMeta{ArticleId: a.ID, Title: a.Title, CreatedBy: *a.CreatedBy, CreatedByName: *a.CreatedByName},
-	//			},
-	//			Status: notifyv1.NotificationStatus_NOTIFICATION_STATUS_NORMAL,
-	//		})
-	//		if err != nil {
-	//			d.log.Errorf("publish article watch event error: %v", err)
-	//			return
-	//		}
-	//	default:
-	//		return
-	//	}
-	//})
-	//}
-	return err
+	dbAction, ok := enum.ArticleActionMap.ToEnum(action)
+	if !ok {
+		return cerrors.ErrorBadRequest("invalid article action")
+	}
+	switch action {
+	case v1.ArticleAction_ARTICLE_ACTION_LIKE,
+		v1.ArticleAction_ARTICLE_ACTION_THANK,
+		v1.ArticleAction_ARTICLE_ACTION_COLLECT,
+		v1.ArticleAction_ARTICLE_ACTION_WATCH:
+	case v1.ArticleAction_ARTICLE_ACTION_REWARD:
+		return cerrors.ErrorNotImplemented("article reward not implemented")
+	default:
+		return cerrors.ErrorBadRequest("unsupported article action")
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		_, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: &articleId,
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+		})
+		if err != nil {
+			return err
+		}
+		if active {
+			existRecord, err := d.actionRecordRepo.Exist(ctx, &repo.ArticleActionRecordReq{
+				ArticleId: &articleId,
+				UserId:    &userId,
+				Type:      &action,
+			})
+			if err != nil {
+				return err
+			}
+			if existRecord {
+				return nil
+			}
+			_, err = d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
+				ArticleID: articleId,
+				UserID:    userId,
+				Type:      dbAction,
+			})
+			if err != nil {
+				return err
+			}
+			_, err = d.articleRepo.UpdateStat(ctx, articleId, userId, action, 1)
+			if err != nil {
+				return err
+			}
+			var event *commonenums.Event
+			switch action {
+			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
+				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED,
+					Payload: &commonenums.Event_ArticleLiked{
+						ArticleLiked: &commonenums.ArticleLikedPayload{
+							SenderId:  userId,
+							ArticleId: articleId,
+						},
+					},
+				}
+			case v1.ArticleAction_ARTICLE_ACTION_THANK:
+				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED,
+					Payload: &commonenums.Event_ArticleThanked{
+						ArticleThanked: &commonenums.ArticleThankedPayload{
+							SenderId:  userId,
+							ArticleId: articleId,
+						},
+					},
+				}
+			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
+				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED,
+					Payload: &commonenums.Event_ArticleCollected{
+						ArticleCollected: &commonenums.ArticleCollectedPayload{
+							SenderId:  userId,
+							ArticleId: articleId,
+						},
+					},
+				}
+			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
+				event = &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_WATCHED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED,
+					Payload: &commonenums.Event_ArticleWatched{
+						ArticleWatched: &commonenums.ArticleWatchedPayload{
+							SenderId:  userId,
+							ArticleId: articleId,
+						},
+					},
+				}
+			}
+			if event == nil {
+				return nil
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: event,
+			})
+		}
+		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, action)
+		if err != nil {
+			return err
+		}
+		if deleted == 0 {
+			return nil
+		}
+		_, err = d.articleRepo.UpdateStat(ctx, articleId, userId, action, -1)
+		return err
+	})
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-			CreatedBy: &userId,
 		})
 		if err != nil {
 			return err
@@ -316,131 +286,150 @@ func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId in
 		if !exist {
 			return cerrors.ErrorBadRequest("article not exist")
 		}
-		// TODO: 实现发布逻辑
-		return nil
-	})
-}
-
-func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, commentId int64) error {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return cerrors.ErrorUnauthorized("user not login")
-	}
-	err := d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		a, err := d.articleRepo.GetOne(ctx, c, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		_, err = d.articleRepo.Publish(ctx, articleId, userId)
 		if err != nil {
 			return err
 		}
-		if *a.CreatedBy != user.ID {
-			return cerrors.ErrorForbidden("you are not the author of this article")
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED,
+				Payload: &commonenums.Event_ArticlePublished{
+					ArticlePublished: &commonenums.ArticlePublishedPayload{
+						ArticleId: articleId,
+					},
+				},
+			},
+		})
+	})
+}
+
+func (d *ArticleUsecase) UpdateArticle(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
+	dbStatus, ok := enum.ArticleStatusMap.ToEnum(status)
+	if !ok {
+		return cerrors.ErrorBadRequest("invalid article status")
+	}
+	switch dbStatus {
+	case enum.ArticleStatusNormal, enum.ArticleStatusHidden, enum.ArticleStatusLocked:
+	default:
+		return cerrors.ErrorBadRequest("invalid article status flow")
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		a, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: &articleId})
+		if err != nil {
+			return err
+		}
+		switch a.Status {
+		case enum.ArticleStatusNormal, enum.ArticleStatusHidden, enum.ArticleStatusLocked:
+		default:
+			return cerrors.ErrorBadRequest("invalid article status flow")
+		}
+		return d.articleRepo.UpdateControlFields(ctx, articleId, userId, status, commentable, anonymous, listable)
+	})
+}
+
+func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, userId int64, commentId int64) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		a, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
+		})
+		if err != nil {
+			return err
+		}
+		if a.Type != enum.ArticleTypeQA {
+			return cerrors.ErrorBadRequest("only qa article can accept answer")
 		}
 		if a.AcceptedAnswerID != nil {
 			return cerrors.ErrorBadRequest("article already accepted answer")
 		}
-		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, c, articleId, commentId)
+		exist, err := d.commentRepo.Exist(ctx, &repo.CommentGetReq{
+			CommentId: &commentId,
+			ArticleId: &articleId,
+			Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
+		})
 		if err != nil {
 			return err
 		}
-		return nil
-	})
-	if err != nil {
+		if !exist {
+			return cerrors.ErrorBadRequest("comment not exist")
+		}
+		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, articleId, userId, commentId)
 		return err
-	}
-	// TODO: 发送通知。
-	return nil
+	})
 }
 
-// --- 查询 ---
-
-func (d *ArticleUsecase) GetOne(ctx context.Context, articleId int64) (*model.Article, error) {
-	var (
-		reply *model.Article
-		err   error
-	)
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return nil, errors.New("no client in context")
-	}
-	reply, err = d.articleRepo.GetOne(ctx, c, &repo.ArticleGetReq{
+func (d *ArticleUsecase) Get(ctx context.Context, articleId int64) (*model.Article, error) {
+	reply, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 		ArticleId: new(articleId),
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-
-	/*
-	 * 正常状态的只能查看公开
-	 * 草稿状态的只能查看自己
-	 */
-
-	if enum.ArticleStatus(reply.Status) == enum.ArticleStatusDrafts && !ok && *reply.CreatedBy != user.ID {
-		return nil, cerrors.ErrorUnauthorized("login required to view drafts")
-	}
-
-	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, c, &repo.CommentGetReq{ArticleId: new(reply.ID)})
+	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, &repo.CommentGetReq{ArticleId: new(reply.ID)})
 	if err != nil {
 		return nil, err
 	}
 
-	userIds := []int64{*reply.CreatedBy}
-	if lastReplyComment != nil {
-		userIds = append(userIds, *lastReplyComment.CreatedBy)
+	userIDs := make([]int64, 0, 2)
+	if reply.CreatedBy != nil {
+		userIDs = append(userIDs, *reply.CreatedBy)
 	}
-	userAuthorsMap, err := d.userClient.Account.BatchGetBasic(ctx, &userv1.BatchGetBasicAccount_Request{UserIds: userIds})
-	if err != nil {
-		return nil, err
+	if lastReplyComment != nil && lastReplyComment.CreatedBy != nil {
+		userIDs = append(userIDs, *lastReplyComment.CreatedBy)
+	}
+	userAuthorsMap := map[int64]*userv1.AccountBasic{}
+	if len(userIDs) > 0 {
+		userAuthorsMap, err = d.userClient.MapAccounts(ctx, userIDs)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if lastReplyComment != nil {
 		reply.LastReplyCommentAt = lastReplyComment.CreatedAt
-		reply.LastReplyCommentUser = userAuthorsMap.Accounts[*lastReplyComment.CreatedBy]
+		if lastReplyComment.CreatedBy != nil {
+			reply.LastReplyCommentUser = userAuthorsMap[*lastReplyComment.CreatedBy]
+		}
 	}
-	reply.AuthorUser = util.If(reply.Anonymous, nil, userAuthorsMap.Accounts[*reply.CreatedBy])
-	return reply, err
+	if reply.CreatedBy != nil {
+		reply.AuthorUser = util.If(reply.Anonymous, nil, userAuthorsMap[*reply.CreatedBy])
+	}
+	return reply, nil
 }
 
 func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
-	var (
-		list      []*model.Article
-		pageReply *common.PageReply
-		err       error
-	)
-	c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-	if !ok {
-		return nil, nil, errors.New("no client in context")
-	}
 	req.IsSummary = true
-	list, pageReply, err = d.articleRepo.GetPage(ctx, c, page, req)
+	list, pageReply, err := d.articleRepo.Page(ctx, page, req)
 	if err != nil {
 		return nil, nil, err
 	}
-	articleIds := make(map[int64]struct{})
-	userIds := make(map[int64]struct{})
+	articleIDs := make(map[int64]struct{})
+	userIDs := make(map[int64]struct{})
 	for _, item := range list {
-		articleIds[item.ID] = struct{}{}
-		userIds[*item.CreatedBy] = struct{}{}
+		articleIDs[item.ID] = struct{}{}
+		if item.CreatedBy != nil {
+			userIDs[*item.CreatedBy] = struct{}{}
+		}
 	}
 
 	lastCommentMap := make(map[int64]*model.Comment)
-	if len(articleIds) > 0 {
-		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, c, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIds)})
+	if len(articleIDs) > 0 {
+		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIDs)})
 		if err != nil {
 			return nil, nil, err
 		}
 		for _, v := range lastCommentMap {
-			userIds[*v.CreatedBy] = struct{}{}
+			if v.CreatedBy != nil {
+				userIDs[*v.CreatedBy] = struct{}{}
+			}
 		}
 	}
 
-	userAuthorsMap := &userv1.BatchGetBasicAccount_Reply{Accounts: map[int64]*userv1.AccountBasic{}}
-	if len(userIds) > 0 {
-		userAuthorsMap, err = d.userClient.Account.BatchGetBasic(ctx, &userv1.BatchGetBasicAccount_Request{UserIds: lo.Keys(userIds)})
+	userAuthorsMap := map[int64]*userv1.AccountBasic{}
+	if len(userIDs) > 0 {
+		userAuthorsMap, err = d.userClient.MapAccounts(ctx, lo.Keys(userIDs))
 		if err != nil {
 			return nil, nil, err
 		}
@@ -449,23 +438,22 @@ func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req
 	for i := range list {
 		if lastReplyComment, ok := lastCommentMap[list[i].ID]; ok {
 			list[i].LastReplyCommentAt = lastReplyComment.CreatedAt
-			list[i].LastReplyCommentUser = userAuthorsMap.Accounts[*lastReplyComment.CreatedBy]
+			if lastReplyComment.CreatedBy != nil {
+				list[i].LastReplyCommentUser = userAuthorsMap[*lastReplyComment.CreatedBy]
+			}
 		}
-		list[i].AuthorUser = util.If(list[i].Anonymous, nil, userAuthorsMap.Accounts[*list[i].CreatedBy])
+		if list[i].CreatedBy != nil {
+			list[i].AuthorUser = util.If(list[i].Anonymous, nil, userAuthorsMap[*list[i].CreatedBy])
+		}
 	}
-	return list, pageReply, err
+	return list, pageReply, nil
 }
 
 func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64, userId int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
-		c, ok := utilent.ClientFromCtx[*gen.Client](ctx)
-		if !ok {
-			return errors.New("no transaction in context")
-		}
-		exist, err := d.articleRepo.Exist(ctx, c, &repo.ArticleGetReq{
+		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
 			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-			CreatedBy: &userId,
 		})
 		if err != nil {
 			return err
@@ -473,6 +461,6 @@ func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64, userId int
 		if !exist {
 			return cerrors.ErrorBadRequest("article not exist")
 		}
-		return d.articleRepo.Delete(ctx, c, articleId)
+		return d.articleRepo.Delete(ctx, articleId, userId)
 	})
 }

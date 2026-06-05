@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+import "bbs/v1/content/model.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/content;content";
+
+service ArticleService {
+  rpc Create(CreateArticle.Request) returns (CreateArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/create"
+      body: "*"
+    };
+  }
+  rpc UpdateDraft(UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/update-draft"
+      body: "*"
+    };
+  }
+  rpc Publish(PublishArticle.Request) returns (PublishArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/publish"
+      body: "*"
+    };
+  }
+  rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/delete"
+      body: "*"
+    };
+  }
+  rpc List(ListArticles.Request) returns (ListArticles.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/list"
+      body: "*"
+    };
+  }
+  rpc Get(GetArticle.Request) returns (GetArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/get"
+      body: "*"
+    };
+  }
+  rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/like"
+      body: "*"
+    };
+  }
+  rpc Thank(ThankArticle.Request) returns (ThankArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/thank"
+      body: "*"
+    };
+  }
+  rpc Collect(CollectArticle.Request) returns (CollectArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/collect"
+      body: "*"
+    };
+  }
+  rpc Watch(WatchArticle.Request) returns (WatchArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/watch"
+      body: "*"
+    };
+  }
+  rpc Reward(RewardArticle.Request) returns (RewardArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/reward"
+      body: "*"
+    };
+  }
+  rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/article/accept-answer"
+      body: "*"
+    };
+  }
+}
+
+message CreateArticle {
+  message Request {
+    ArticleSave article = 1;
+  }
+  message Reply {
+    Article article = 1;
+  }
+}
+
+message UpdateDraftArticle {
+  message Request {
+    ArticleSave article = 1;
+  }
+  message Reply {
+    Article article = 1;
+  }
+}
+
+message PublishArticle {
+  message Request {
+    int64 article_id = 1;
+  }
+  message Reply {}
+}
+
+message DeleteArticle {
+  message Request {
+    int64 article_id = 1;
+  }
+  message Reply {}
+}
+
+message ListArticles {
+  message Request {
+    common.PageRequest page = 1;
+    ArticleQuery query = 2;
+  }
+  message Reply {
+    common.PageReply page = 1;
+    repeated Article rows = 2;
+  }
+}
+
+message GetArticle {
+  message Request {
+    int64 article_id = 1;
+  }
+  message Reply {
+    Article article = 1;
+  }
+}
+
+message LikeArticle {
+  message Request {
+    int64 article_id = 1;
+    bool active = 2;
+  }
+  message Reply {}
+}
+
+message ThankArticle {
+  message Request {
+    int64 article_id = 1;
+    bool active = 2;
+  }
+  message Reply {}
+}
+
+message CollectArticle {
+  message Request {
+    int64 article_id = 1;
+    bool active = 2;
+  }
+  message Reply {}
+}
+
+message WatchArticle {
+  message Request {
+    int64 article_id = 1;
+    bool active = 2;
+  }
+  message Reply {}
+}
+
+message RewardArticle {
+  message Request {
+    int64 article_id = 1;
+  }
+  message Reply {}
+}
+
+message AcceptAnswerArticle {
+  message Request {
+    int64 article_id = 1;
+    int64 comment_id = 2;
+  }
+  message Reply {}
+}

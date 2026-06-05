@@ -5,42 +5,21 @@ import (
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/tfa"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.TfaRepo = (*TfaRepo)(nil)
 
 type TfaRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewTfaRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.TfaRepo {
+func NewTfaRepo(db *gen.Client) repo.TfaRepo {
 	return &TfaRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		db: db,
 	}
 }
 
@@ -49,16 +28,6 @@ func (r *TfaRepo) getClient(ctx context.Context) *gen.Client {
 		return c
 	}
 	return r.db
-}
-
-func tfaToDomain(t *gen.TFA) *model.TFA {
-	return &model.TFA{
-		ID:         t.ID,
-		UserID:     t.UserID,
-		Enable:     t.Enable,
-		EnableTime: t.EnableTime,
-		Secret:     t.Secret,
-	}
 }
 
 func (r *TfaRepo) FindByUserID(ctx context.Context, userID int64) (*model.TFA, error) {
@@ -70,7 +39,13 @@ func (r *TfaRepo) FindByUserID(ctx context.Context, userID int64) (*model.TFA, e
 	if err != nil {
 		return nil, err
 	}
-	return tfaToDomain(t), nil
+	return &model.TFA{
+		ID:         t.ID,
+		UserID:     t.UserID,
+		Enable:     t.Enable,
+		EnableTime: t.EnableTime,
+		Secret:     t.Secret,
+	}, nil
 }
 
 func (r *TfaRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secret string) (*model.TFA, error) {
@@ -92,7 +67,13 @@ func (r *TfaRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secre
 		if err != nil {
 			return nil, err
 		}
-		return tfaToDomain(saved), nil
+		return &model.TFA{
+			ID:         saved.ID,
+			UserID:     saved.UserID,
+			Enable:     saved.Enable,
+			EnableTime: saved.EnableTime,
+			Secret:     saved.Secret,
+		}, nil
 	}
 	saved, err := tx.TFA.Create().
 		SetUserID(userID).
@@ -103,7 +84,13 @@ func (r *TfaRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secre
 	if err != nil {
 		return nil, err
 	}
-	return tfaToDomain(saved), nil
+	return &model.TFA{
+		ID:         saved.ID,
+		UserID:     saved.UserID,
+		Enable:     saved.Enable,
+		EnableTime: saved.EnableTime,
+		Secret:     saved.Secret,
+	}, nil
 }
 
 func (r *TfaRepo) DisableByUserID(ctx context.Context, userID int64) (*model.TFA, error) {
@@ -119,5 +106,11 @@ func (r *TfaRepo) DisableByUserID(ctx context.Context, userID int64) (*model.TFA
 	if err != nil {
 		return nil, err
 	}
-	return tfaToDomain(saved), nil
+	return &model.TFA{
+		ID:         saved.ID,
+		UserID:     saved.UserID,
+		Enable:     saved.Enable,
+		EnableTime: saved.EnableTime,
+		Secret:     saved.Secret,
+	}, nil
 }

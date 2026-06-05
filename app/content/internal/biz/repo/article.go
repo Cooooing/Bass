@@ -4,27 +4,27 @@ import (
 	"common/api/gen/common"
 	v1 "common/api/gen/content/v1"
 	"content/internal/biz/model"
-	"content/internal/data/gen"
 	"context"
 )
 
 type ArticleRepo interface {
-	Save(ctx context.Context, tx *gen.Client, article *model.Article, tags []*model.Tag) (*model.Article, error)
+	Save(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error)
 
-	Update(ctx context.Context, tx *gen.Client, article *model.Article, tags []*model.Tag) (*model.Article, error)
-	UpdateContent(ctx context.Context, tx *gen.Client, articleId int64, content string) error
-	UpdateStatus(ctx context.Context, tx *gen.Client, articleId int64, status v1.ArticleStatus) error
-	UpdateHasPostscript(ctx context.Context, tx *gen.Client, articleId int64, hasPostscript bool) error
-	UpdateStat(ctx context.Context, tx *gen.Client, articleId int64, action v1.ArticleAction, num int32) (*model.Article, error)
-	UpdateAcceptAnswer(ctx context.Context, tx *gen.Client, articleId int64, commentId int64) (*model.Article, error)
-	Publish(ctx context.Context, tx *gen.Client, articleId int64) (*model.Article, error)
+	Update(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error)
+	UpdateContent(ctx context.Context, articleId int64, content string) error
+	UpdateStatus(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus) error
+	UpdateControlFields(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error
+	UpdateHasPostscript(ctx context.Context, articleId int64, userId int64, hasPostscript bool) error
+	UpdateStat(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, num int32) (*model.Article, error)
+	UpdateAcceptAnswer(ctx context.Context, articleId int64, userId int64, commentId int64) (*model.Article, error)
+	Publish(ctx context.Context, articleId int64, userId int64) (*model.Article, error)
 
-	Delete(ctx context.Context, tx *gen.Client, articleId int64) error
+	Delete(ctx context.Context, articleId int64, userId int64) error
 
-	Exist(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (bool, error)
-	GetOne(ctx context.Context, tx *gen.Client, req *ArticleGetReq) (*model.Article, error)
-	GetList(ctx context.Context, tx *gen.Client, req *ArticleGetReq) ([]*model.Article, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ArticleGetReq) ([]*model.Article, *common.PageReply, error)
+	Exist(ctx context.Context, req *ArticleGetReq) (bool, error)
+	Get(ctx context.Context, req *ArticleGetReq) (*model.Article, error)
+	GetList(ctx context.Context, req *ArticleGetReq) ([]*model.Article, error)
+	Page(ctx context.Context, page *common.PageRequest, req *ArticleGetReq) ([]*model.Article, *common.PageReply, error)
 }
 
 type ArticleGetReq struct {
@@ -45,16 +45,17 @@ type ArticleGetReq struct {
 }
 
 type ArticlePostscriptRepo interface {
-	Save(ctx context.Context, tx *gen.Client, articlePostscript *model.ArticlePostscript) (*model.ArticlePostscript, error)
+	Save(ctx context.Context, articlePostscript *model.ArticlePostscript) (*model.ArticlePostscript, error)
 }
 
 type ArticleActionRecordRepo interface {
-	Save(ctx context.Context, tx *gen.Client, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error)
-	Delete(ctx context.Context, tx *gen.Client, articleId int64, userId int64, action v1.ArticleAction) error
+	Save(ctx context.Context, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error)
+	Delete(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction) (int, error)
 
-	GetOne(ctx context.Context, tx *gen.Client, req *ArticleActionRecordReq) (*model.ArticleActionRecord, error)
-	GetList(ctx context.Context, tx *gen.Client, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error)
+	Exist(ctx context.Context, req *ArticleActionRecordReq) (bool, error)
+	Get(ctx context.Context, req *ArticleActionRecordReq) (*model.ArticleActionRecord, error)
+	GetList(ctx context.Context, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, error)
+	Page(ctx context.Context, page *common.PageRequest, req *ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error)
 }
 
 type ArticleActionRecordReq struct {

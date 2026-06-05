@@ -9,17 +9,17 @@ option go_package = "common/api/gen/content/v1;v1";
 
 // 领域服务
 service ContentDomainService {
-  // 新增领域
-  rpc Adds(AddsDomain.Request) returns (AddsDomain.Reply) {}
+  // 批量创建领域
+  rpc BatchCreate(BatchCreateDomains.Request) returns (BatchCreateDomains.Reply) {}
 
   // 修改领域信息
   rpc Update(UpdateDomain.Request) returns (UpdateDomain.Reply) {}
 
-  // 分页查询领域
-  rpc Page(PageDomain.Request) returns (PageDomain.Reply) {}
+  // 查询领域列表
+  rpc List(ListDomains.Request) returns (ListDomains.Reply) {}
 }
 
-message AddsDomain {
+message BatchCreateDomains {
   message Request {
     // 领域信息列表
     repeated DomainSave domains = 1;
@@ -41,7 +41,7 @@ message UpdateDomain {
   }
 }
 
-message PageDomain {
+message ListDomains {
   message Request {
     // 分页参数
     optional common.PageRequest page = 1;

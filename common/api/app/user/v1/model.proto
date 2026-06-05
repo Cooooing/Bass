@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
+import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/enum.proto";
 
@@ -14,13 +15,10 @@ message AccountBasic {
   optional string url = 4;
   optional string avatar_url = 5;
   optional string introduction = 6;
-  optional string mbti = 7;
+  MBTI mbti = 7;
   AccountStatus status = 8;
-  string group_name = 9;
   optional int32 follow_count = 10;
   optional int32 follower_count = 11;
-  optional int32 block_count = 12;
-  optional int32 blocked_count = 13;
   google.protobuf.Timestamp created_at = 1000;
   google.protobuf.Timestamp updated_at = 1001;
 }
@@ -38,12 +36,10 @@ message Account {
 
 message Preferences {
   int64 user_id = 1;
-  optional string language = 2;
   optional string timezone = 3;
   optional string theme = 4;
   optional string mobile_theme = 5;
-  optional bool enable_web_notify = 6;
-  optional bool enable_email_subscribe = 7;
+  common.enums.Language language = 8;
 }
 
 message PrivacySetting {
@@ -88,10 +84,8 @@ message CheckinStat {
 message LoginLog {
   int64 id = 1;
   optional int64 user_id = 2;
-  string account = 3;
   LoginMethod login_method = 4;
   LoginStatus status = 5;
-  optional string failure_reason = 6;
   optional string ip = 7;
   optional string country = 8;
   optional string country_code = 9;
@@ -100,11 +94,6 @@ message LoginLog {
   optional string isp = 12;
   optional string user_agent = 13;
   optional string device_id = 14;
-  optional string device_name = 15;
-  optional string platform = 16;
-  optional string os = 17;
-  optional string browser = 18;
-  optional string request_id = 19;
   google.protobuf.Timestamp created_at = 1000;
 }
 

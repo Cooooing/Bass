@@ -1,46 +1,52 @@
 package repo
 
 import (
-	commonClient "common/pkg/client"
-	"content/internal/biz/model"
-	"content/internal/biz/repo"
-	"content/internal/conf"
-	"content/internal/data/gen"
 	"context"
 
-	"github.com/go-kratos/kratos/v2/log"
+	utilent "common/pkg/util/ent"
+	"content/internal/biz/model"
+	"content/internal/biz/repo"
+	"content/internal/data/gen"
+	"content/internal/data/gen/articlepostscript"
+	"content/internal/enum"
 )
 
 var _ repo.ArticlePostscriptRepo = (*ArticlePostscriptRepo)(nil)
 
 type ArticlePostscriptRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewArticlePostscriptRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.ArticlePostscriptRepo {
-	return &ArticlePostscriptRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+func NewArticlePostscriptRepo(db *gen.Client) repo.ArticlePostscriptRepo {
+	return &ArticlePostscriptRepo{db: db}
+}
+
+func (r *ArticlePostscriptRepo) getClient(ctx context.Context) *gen.Client {
+	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return tx
 	}
+	return r.db
 }
 
-func (a ArticlePostscriptRepo) Save(ctx context.Context, client *gen.Client, articlePostscript *model.ArticlePostscript) (*model.ArticlePostscript, error) {
-	save, err := client.ArticlePostscript.Create().
-		SetArticleID(articlePostscript.ArticleID).
-		SetContent(articlePostscript.Content).
+func (r *ArticlePostscriptRepo) Save(ctx context.Context, postscript *model.ArticlePostscript) (*model.ArticlePostscript, error) {
+	save, err := r.getClient(ctx).ArticlePostscript.Create().
+		SetArticleID(postscript.ArticleID).
+		SetContent(postscript.Content).
+		SetNillableCreatedBy(postscript.CreatedBy).
+		SetNillableUpdatedBy(postscript.UpdatedBy).
+		SetStatus(articlepostscript.Status(postscript.Status)).
 		Save(ctx)
-	return &model.ArticlePostscript{ArticlePostscript: save}, err
+	if err != nil {
+		return nil, err
+	}
+	return &model.ArticlePostscript{
+		ID:        save.ID,
+		ArticleID: save.ArticleID,
+		Content:   save.Content,
+		Status:    enum.ArticlePostscriptStatus(save.Status),
+		CreatedAt: save.CreatedAt,
+		UpdatedAt: save.UpdatedAt,
+		CreatedBy: save.CreatedBy,
+		UpdatedBy: save.UpdatedBy,
+	}, nil
 }

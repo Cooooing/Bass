@@ -11,12 +11,14 @@ type AccountRepo interface {
 	Create(ctx context.Context, u *model.Account) (*model.Account, error)
 
 	Update(ctx context.Context, u *model.Account) (*model.Account, error)
+	UpdateProfile(ctx context.Context, userID int64, avatarURL *string, nickname *string, url *string, introduction *string, mbti *enum.MBTI, clearMBTI bool) (*model.Account, error)
 	AddStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error)
 
 	ExistsByAccount(ctx context.Context, account string) (bool, error)
 	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)
 	GetByAccount(ctx context.Context, account string) (*model.Account, error)
 	List(ctx context.Context, req *AccountGetReq) ([]*model.Account, error)
+	Map(ctx context.Context, req *AccountGetReq) (map[int64]*model.Account, error)
 	Page(ctx context.Context, page *common.PageRequest, req *AccountGetReq) ([]*model.Account, *common.PageReply, error)
 }
 

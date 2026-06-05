@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.notify;
+
+import "bbs/v1/notify/model.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/api/gen/bbs/v1/notify;notify";
+
+service NotificationService {
+  rpc List(ListNotifications.Request) returns (ListNotifications.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notify/notification/list"
+      body: "*"
+    };
+  }
+  rpc MarkRead(MarkReadNotification.Request) returns (MarkReadNotification.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notify/notification/mark-read"
+      body: "*"
+    };
+  }
+  rpc CountUnread(CountUnreadNotifications.Request) returns (CountUnreadNotifications.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notify/notification/count-unread"
+      body: "*"
+    };
+  }
+}
+
+message ListNotifications {
+  message Request {
+    common.PageRequest page = 1;
+  }
+  message Reply {
+    common.PageReply page = 1;
+    repeated Notification rows = 2;
+  }
+}
+
+message MarkReadNotification {
+  message Request {
+    repeated int64 ids = 1;
+  }
+  message Reply {
+    int32 count = 1;
+  }
+}
+
+message CountUnreadNotifications {
+  message Request {}
+  message Reply {
+    int64 count = 1;
+  }
+}

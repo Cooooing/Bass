@@ -155,7 +155,7 @@ func IpMiddleware(ipUsecase *usecase.IpUsecase) middleware.Middleware {
 					ip, _, _ = net.SplitHostPort(tr.(*transporthttp.Transport).Request().RemoteAddr)
 				}
 
-				ipInfo, err := ipUsecase.GetInfo(ctx, ip)
+				ipInfo, err := ipUsecase.Get(ctx, ip)
 				if err != nil {
 					return nil, err
 				}

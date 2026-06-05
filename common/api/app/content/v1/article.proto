@@ -10,8 +10,8 @@ option go_package = "common/api/gen/content/v1;v1";
 
 // Article 服务
 service ContentArticleService {
-  // 新增文章
-  rpc AddArticle(AddArticle.Request) returns (AddArticle.Reply) {}
+  // 创建文章
+  rpc Create(CreateArticle.Request) returns (CreateArticle.Reply) {}
 
   // 更新草稿
   rpc UpdateDraft(UpdateDraftArticle.Request) returns (UpdateDraftArticle.Reply) {}
@@ -23,16 +23,16 @@ service ContentArticleService {
   rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {}
 
   // 修改文章（管理员使用）
-  rpc UpdateArticle(UpdateArticleArticle.Request) returns (UpdateArticleArticle.Reply) {}
+  rpc Update(UpdateArticle.Request) returns (UpdateArticle.Reply) {}
 
   // 删除文章（仅草稿）
   rpc Delete(DeleteArticle.Request) returns (DeleteArticle.Reply) {}
 
-  // 查询文章
-  rpc Page(PageArticle.Request) returns (PageArticle.Reply) {}
+  // 查询文章列表
+  rpc List(ListArticles.Request) returns (ListArticles.Reply) {}
 
   // 查询单篇文章
-  rpc GetOne(GetOneArticle.Request) returns (GetOneArticle.Reply) {}
+  rpc Get(GetArticle.Request) returns (GetArticle.Reply) {}
 
   // 点赞文章
   rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {}
@@ -53,10 +53,12 @@ service ContentArticleService {
   rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {}
 }
 
-message AddArticle {
+message CreateArticle {
   message Request {
     // 文章信息
     ArticleSave article = 1;
+    // 用户ID
+    int64 user_id = 2;
   }
   message Reply {
     // 文章信息
@@ -68,6 +70,8 @@ message UpdateDraftArticle {
   message Request {
     // 文章信息
     ArticleSave article = 1;
+    // 用户ID
+    int64 user_id = 2;
   }
   message Reply {
     // 文章信息
@@ -79,6 +83,8 @@ message PublishArticle {
   message Request {
     // 文章ID
     int64 article_id = 1;
+    // 用户ID
+    int64 user_id = 2;
   }
   message Reply {}
 }
@@ -89,6 +95,8 @@ message AddPostscriptArticle {
     int64 article_id = 1;
     // 附言内容
     string content = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {
     // 附言信息
@@ -96,7 +104,7 @@ message AddPostscriptArticle {
   }
 }
 
-message UpdateArticleArticle {
+message UpdateArticle {
   message Request {
     // 文章ID
     int64 article_id = 1;
@@ -106,6 +114,10 @@ message UpdateArticleArticle {
     bool commentable = 3;
     // 是否匿名
     bool anonymous = 4;
+    // 用户ID
+    int64 user_id = 5;
+    // 是否在列表展示
+    optional bool listable = 6;
   }
   message Reply {}
 }
@@ -114,11 +126,13 @@ message DeleteArticle {
   message Request {
     // 文章ID
     int64 article_id = 1;
+    // 用户ID
+    int64 user_id = 2;
   }
   message Reply {}
 }
 
-message PageArticle {
+message ListArticles {
   message Request {
     // 分页参数
     common.PageRequest page = 1;
@@ -133,7 +147,7 @@ message PageArticle {
   }
 }
 
-message GetOneArticle {
+message GetArticle {
   message Request {
     // 文章ID
     int64 article_id = 1;
@@ -148,6 +162,8 @@ message RewardArticle {
   message Request {
     // 文章ID
     int64 article_id = 1;
+    // 用户ID
+    int64 user_id = 2;
   }
   message Reply {}
 }
@@ -158,6 +174,8 @@ message ThankArticle {
     int64 article_id = 1;
     // 是否感谢
     bool active = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }
@@ -168,6 +186,8 @@ message LikeArticle {
     int64 article_id = 1;
     // 是否点赞
     bool active = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }
@@ -178,6 +198,8 @@ message CollectArticle {
     int64 article_id = 1;
     // 是否收藏
     bool active = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }
@@ -188,6 +210,8 @@ message WatchArticle {
     int64 article_id = 1;
     // 是否关注
     bool active = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }
@@ -198,6 +222,8 @@ message AcceptAnswerArticle {
     int64 article_id = 1;
     // 评论ID
     int64 comment_id = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }

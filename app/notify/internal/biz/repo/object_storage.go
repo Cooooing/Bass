@@ -4,19 +4,18 @@ import (
 	"common/api/gen/common"
 	"context"
 	"notify/internal/biz/model"
-	"notify/internal/data/gen"
 )
 
 type ObjectStorageRepo interface {
-	Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage) (*model.ObjectStorage, error)
+	Save(ctx context.Context, o *model.ObjectStorage) (*model.ObjectStorage, error)
 
-	UpdateAudit(ctx context.Context, tx *gen.Client, u *model.ObjectStorage) error
+	UpdateAudit(ctx context.Context, u *model.ObjectStorage) error
 
-	Delete(ctx context.Context, tx *gen.Client, o *model.ObjectStorage) (int, error)
+	Delete(ctx context.Context, o *model.ObjectStorage) (int, error)
 
-	Exist(ctx context.Context, tx *gen.Client, req *ObjectStorageGetReq) (bool, error)
-	GetList(ctx context.Context, tx *gen.Client, req *ObjectStorageGetReq) ([]*model.ObjectStorage, error)
-	GetPage(ctx context.Context, tx *gen.Client, page *common.PageRequest, req *ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error)
+	Exist(ctx context.Context, req *ObjectStorageGetReq) (bool, error)
+	GetList(ctx context.Context, req *ObjectStorageGetReq) ([]*model.ObjectStorage, error)
+	Page(ctx context.Context, page *common.PageRequest, req *ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error)
 }
 
 type ObjectStorageGetReq struct {
@@ -29,8 +28,8 @@ type ObjectStorageGetReq struct {
 	BlockedByName *string
 }
 
-type ObjectStorageProvider interface {
+type ObjectStorageClient interface {
 	Name() string
-	UploadToken(ctx context.Context, key string) (string, error)
+	UploadToken(ctx context.Context, key string, uploaderID int64, uploaderName string) (string, error)
 	Status(ctx context.Context, key string, enable bool) error
 }

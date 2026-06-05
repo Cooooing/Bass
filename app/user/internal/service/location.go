@@ -1,14 +1,10 @@
 package service
 
 import (
-	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/user/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"context"
 	"user/internal/biz/model"
-	"user/internal/biz/repo"
+	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -16,11 +12,11 @@ import (
 
 type LocationService struct {
 	v1.UnimplementedLocationServiceServer
-	locationRepo repo.LocationRepo
+	locationUsecase *usecase.LocationUsecase
 }
 
-func NewLocationService(locationRepo repo.LocationRepo) *LocationService {
-	return &LocationService{locationRepo: locationRepo}
+func NewLocationService(locationUsecase *usecase.LocationUsecase) *LocationService {
+	return &LocationService{locationUsecase: locationUsecase}
 }
 
 func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
@@ -29,28 +25,23 @@ func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *LocationService) RegisterHttp(hs *http.Server) {}
 
-func (s *LocationService) GetCurrent(ctx context.Context, req *v1.GetCurrentLocation_Request) (*v1.GetCurrentLocation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
+func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Request) (*v1.GetLocation_Reply, error) {
+	location, err := s.locationUsecase.GetByUserID(ctx, req.GetUserId())
+	if err != nil {
+		return nil, err
 	}
-	location, _ := s.locationRepo.FindByUserID(ctx, current.ID)
-	reply := &v1.Location{UserId: current.ID}
+	reply := &v1.Location{UserId: req.GetUserId()}
 	if location != nil {
 		reply.Country = location.Country
 		reply.Province = location.Province
 		reply.City = location.City
 	}
-	return &v1.GetCurrentLocation_Reply{Location: reply}, nil
+	return &v1.GetLocation_Reply{Location: reply}, nil
 }
 
 func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Request) (*v1.UpsertLocation_Reply, error) {
-	current, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	location, err := s.locationRepo.UpsertByUserID(ctx, &model.Location{
-		UserID:   current.ID,
+	location, err := s.locationUsecase.UpsertByUserID(ctx, &model.Location{
+		UserID:   req.GetUserId(),
 		Country:  req.Country,
 		Province: req.Province,
 		City:     req.City,
@@ -59,7 +50,7 @@ func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Req
 		return nil, err
 	}
 	return &v1.UpsertLocation_Reply{Location: &v1.Location{
-		UserId:   current.ID,
+		UserId:   req.GetUserId(),
 		Country:  location.Country,
 		Province: location.Province,
 		City:     location.City,

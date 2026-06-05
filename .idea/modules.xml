@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Bass.iml" filepath="$PROJECT_DIR$/Bass.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/bbs/bbs.iml" filepath="$PROJECT_DIR$/app/bbs/bbs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/content/content.iml" filepath="$PROJECT_DIR$/app/content/content.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml" />

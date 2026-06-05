@@ -36,13 +36,10 @@ func (Account) Fields() []ent.Field {
 		field.String("url").Comment("个人主页 URL").Optional().Nillable(),
 		field.String("avatar_url").Comment("头像 URL").Optional().Nillable(),
 		field.String("introduction").Comment("个人简介").Optional().Nillable(),
-		field.String("mbti").Comment("MBTI 类型").Optional().Nillable(),
+		field.Enum("mbti").Values(userenum.MBTIMap.EnumValues()...).Comment("MBTI 类型").Optional().Nillable(),
 		field.Enum("status").Values(userenum.AccountStatusMap.EnumValues()...).Default(string(userenum.AccountStatusNormal)).Nillable().Comment("账号状态"),
-		field.String("group_name").Comment("账号组名").Optional(),
 		field.Int32("follow_count").Comment("关注数").Default(0).Nillable(),
 		field.Int32("follower_count").Comment("粉丝数").Default(0).Nillable(),
-		field.Int32("block_count").Comment("拉黑账号数").Default(0).Nillable(),
-		field.Int32("blocked_count").Comment("被拉黑账号数").Default(0).Nillable(),
 	}
 }
 

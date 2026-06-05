@@ -3,6 +3,7 @@ syntax = "proto3";
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/model.proto";
+import "common/enums/language.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/user;user";
@@ -17,7 +18,7 @@ service PreferencesService {
   }
 
   // 更新当前登录账号的偏好设置
-  rpc Update(UpdatePreferences.Request) returns (UpdatePreferences.Reply) {
+  rpc UpdateCurrent(UpdateCurrentPreferences.Request) returns (UpdateCurrentPreferences.Reply) {
     option (google.api.http) = {
       post: "/v1/user/preference/update-current"
       body: "*"
@@ -32,14 +33,12 @@ message GetCurrentPreferences {
   }
 }
 
-message UpdatePreferences {
+message UpdateCurrentPreferences {
   message Request {
-    optional string language = 1;
     optional string timezone = 2;
     optional string theme = 3;
     optional string mobile_theme = 4;
-    optional bool enable_web_notify = 5;
-    optional bool enable_email_subscribe = 6;
+    optional common.enums.Language language = 7;
   }
   message Reply {
     Preference preference = 1;

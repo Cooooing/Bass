@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+import "common/common.proto";
+import "notify/v1/model.proto";
+
+option go_package = "common/api/gen/notify/v1;v1";
+
+service NotifyStationMessageService {
+  // 查询账号站内信列表。
+  rpc List(ListStationMessages.Request) returns (ListStationMessages.Reply) {}
+
+  // 标记账号站内信为已读。
+  rpc MarkRead(MarkReadStationMessage.Request) returns (MarkReadStationMessage.Reply) {}
+
+  // 查询账号未读站内信数量。
+  rpc CountUnread(CountUnreadStationMessages.Request) returns (CountUnreadStationMessages.Reply) {}
+}
+
+message ListStationMessages {
+  message Request {
+    int64 user_id = 1;
+    common.PageRequest page = 2;
+    NotificationStationMessageQueryParams query = 3;
+  }
+  message Reply {
+    common.PageReply page = 1;
+    repeated NotificationStationMessage rows = 2;
+  }
+}
+
+message MarkReadStationMessage {
+  message Request {
+    int64 user_id = 1;
+    repeated int64 ids = 2;
+    common.TimeRange created_time_range = 3;
+  }
+  message Reply {
+    int32 count = 1;
+  }
+}
+
+message CountUnreadStationMessages {
+  message Request {
+    int64 user_id = 1;
+  }
+  message Reply {
+    int64 count = 1;
+  }
+}

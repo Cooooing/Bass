@@ -3,6 +3,7 @@ package data
 import (
 	"common/api/gen/common"
 	commonClient "common/pkg/client"
+	"common/pkg/client/rpc"
 	"common/pkg/util/jwt"
 	"content/internal/conf"
 	"content/internal/data/client"
@@ -20,6 +21,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
+	rpc.ProvideUserClient,
 
 	client.ProvideTx,
 
@@ -28,8 +30,11 @@ var DataProviderSet = wire.NewSet(
 	repo.NewCommentActionRecordRepo,
 	repo.NewArticlePostscriptRepo,
 	repo.NewArticleActionRecordRepo,
+	repo.NewOutboxEventRepo,
 	repo.NewDomainRepo,
 	repo.NewTagRepo,
+	repo.NewUserClient,
+	repo.NewNatsEventClient,
 
 	jwt.NewTokenCache,
 )

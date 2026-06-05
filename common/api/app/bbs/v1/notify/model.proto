@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.notify;
+
+import "common/enums/event.proto";
+
+option go_package = "common/api/gen/bbs/v1/notify;notify";
+
+message Notification {
+  int64 id = 1;
+  string event_id = 2;
+  int64 receiver_id = 3;
+  common.enums.EventType event_type = 4;
+  string title = 5;
+  string content = 6;
+  string read_at = 7;
+  string created_at = 1000;
+  string updated_at = 1001;
+}

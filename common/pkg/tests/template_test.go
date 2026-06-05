@@ -34,12 +34,12 @@ func TestNotificationTemplate(t *testing.T) {
 
 /*
     <p>Hello map[Article:map[author_user:&lt;nil&gt; bounty_points:0 commentable:true content:esse
- content_render: cover_image_url:&lt;nil&gt; created_at:2025-12-09T14:22:41.577765Z created_by:1 created_by_name:admin edges:map[] id:14 last_replied_at:&lt;nil&gt; last_reply_user:&lt;nil&gt; listable:true reward_content_render:&lt;nil&gt; reward_points:0 status:3 title:test updated_at:2025-12-09T14:22:41.577765Z updated_by:1 updated_by_name:admin] User:map[avatar_url:https://treble.sxisa.com/v1/user/avatar/admin created_at:2025-12-09T13:42:30.412511Z email:uclgm3.gc3@sohu.com enable_email_subscribe:true enable_web_notify:true id:1 language:zh-CN mobile_theme:default name:admin nickname:admin password:$2a$10$JUfPISgMcWKHnXH2r8OnPuIlugREdpUbO2./QqhZiHSQIJpiWRDHS public_articles:true public_comments:true public_followers:true public_location:true public_online_status:true public_points:true theme:default timezone:Asia/Shanghai updated_at:2025-12-09T13:42:30.412511Z]]</p>  发布文章
+ content_render: cover_image_url:&lt;nil&gt; created_at:2025-12-09T14:22:41.577765Z created_by:1 created_by_name:admin edges:map[] id:14 last_replied_at:&lt;nil&gt; last_reply_user:&lt;nil&gt; listable:true reward_content_render:&lt;nil&gt; reward_points:0 status:3 title:test updated_at:2025-12-09T14:22:41.577765Z updated_by:1 updated_by_name:admin] User:map[avatar_url:https://treble.sxisa.com/v1/user/avatar/admin created_at:2025-12-09T13:42:30.412511Z email:uclgm3.gc3@sohu.com id:1 language:zh-CN mobile_theme:default name:admin nickname:admin password:$2a$10$JUfPISgMcWKHnXH2r8OnPuIlugREdpUbO2./QqhZiHSQIJpiWRDHS public_articles:true public_comments:true public_followers:true public_location:true public_online_status:true public_points:true theme:default timezone:Asia/Shanghai updated_at:2025-12-09T13:42:30.412511Z]]</p>  发布文章
 
 */
 
 func TestName(t *testing.T) {
 	password := "Qq111111"
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
-	fmt.Printf("%s", string(bytes))
+	fmt.Printf("%s\n", string(bytes))
 }

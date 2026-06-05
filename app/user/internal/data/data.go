@@ -30,6 +30,9 @@ var DataProviderSet = wire.NewSet(
 	repo.NewTfaRepo,
 	repo.NewCheckinRepo,
 	repo.NewLoginLogRepo,
+	repo.NewOutboxEventRepo,
+	repo.NewTfaSecretCache,
+	repo.NewNatsEventClient,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {

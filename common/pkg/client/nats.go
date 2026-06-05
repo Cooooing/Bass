@@ -186,7 +186,7 @@ func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) 
 	natsMsg := &nats.Msg{
 		Subject: subject,
 		Data:    msg.Data,
-		Header:  toNatsHeader(msg.Header),
+		Header:  buildNatsHeader(msg.Header),
 	}
 
 	if err := c.conn.PublishMsg(natsMsg); err != nil {
@@ -200,7 +200,7 @@ func (c *NatsClient) publishJetStream(subject string, msg *Message) error {
 	natsMsg := &nats.Msg{
 		Subject: subject,
 		Data:    msg.Data,
-		Header:  toNatsHeader(msg.Header),
+		Header:  buildNatsHeader(msg.Header),
 	}
 
 	ack, err := c.js.PublishMsg(natsMsg)
@@ -329,7 +329,7 @@ func (s *subscription) Unsubscribe() error {
 	return nil
 }
 
-func toNatsHeader(h map[string]string) nats.Header {
+func buildNatsHeader(h map[string]string) nats.Header {
 	if len(h) == 0 {
 		return nil
 	}

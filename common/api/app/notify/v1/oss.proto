@@ -3,51 +3,27 @@ syntax = "proto3";
 package common.api.app.notify.v1;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "notify/v1/oss_model.proto";
 
 option go_package = "common/api/gen/notify/v1;v1";
 
 service NotifyOssService {
-  rpc GetUploadToken(GetUploadTokenOss.Request) returns (GetUploadTokenOss.Reply) {
-    option (google.api.http) = {
-      post: "/v1/oss/get-upload-token"
-      body: "*"
-    };
-  }
+  rpc GetUploadToken(GetUploadTokenOss.Request) returns (GetUploadTokenOss.Reply) {}
 
-  rpc Audit(AuditOss.Request) returns (AuditOss.Reply) {
-    option (google.api.http) = {
-      post: "/v1/oss/audit"
-      body: "*"
-    };
-  }
+  rpc Audit(AuditOss.Request) returns (AuditOss.Reply) {}
 
-  rpc Page(PageOssOss.Request) returns (PageOssOss.Reply) {
-    option (google.api.http) = {
-      post: "/v1/oss/page"
-      body: "*"
-    };
-  }
+  rpc List(ListOss.Request) returns (ListOss.Reply) {}
 
-  rpc QiniuUploadCallback(QiniuUploadCallbackOss.Request) returns (QiniuUploadCallbackOss.Reply) {
-    option (google.api.http) = {
-      post: "/v1/oss/qiniu/upload-callback"
-      body: "*"
-    };
-  }
+  rpc QiniuUploadCallback(QiniuUploadCallbackOss.Request) returns (QiniuUploadCallbackOss.Reply) {}
 
-  rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Request) returns (QiniuIncrementAuditCallbackOss.Reply) {
-    option (google.api.http) = {
-      post: "/v1/oss/qiniu/increment-audit-callback"
-      body: "*"
-    };
-  }
+  rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Request) returns (QiniuIncrementAuditCallbackOss.Reply) {}
 }
 
 message GetUploadTokenOss {
   message Request {
-    int32 num = 1;
+    int64 user_id = 1;
+    string user_name = 2;
+    int32 num = 3;
   }
   message Reply {
     repeated UploadToken upload_token = 1;
@@ -56,14 +32,16 @@ message GetUploadTokenOss {
 
 message AuditOss {
   message Request {
-    string key = 1;
-    bool status = 2;
-    optional string reason = 3;
+    int64 user_id = 1;
+    string user_name = 2;
+    string key = 3;
+    bool status = 4;
+    optional string reason = 5;
   }
   message Reply {}
 }
 
-message PageOssOss {
+message ListOss {
   message Request {
     common.PageRequest page = 1;
     OssQueryParams query = 2;

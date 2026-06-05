@@ -3,6 +3,7 @@ syntax = "proto3";
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/model.proto";
+import "common/common.proto";
 import "google/api/annotations.proto";
 
 option go_package = "common/api/gen/bbs/v1/user;user";
@@ -41,33 +42,33 @@ service RelationService {
   }
 
   // 分页查询当前账号关注的账号列表
-  rpc PageFollowing(PageFollowingRelation.Request) returns (PageFollowingRelation.Reply) {
+  rpc ListFollowing(ListFollowingRelations.Request) returns (ListFollowingRelations.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/relation/page-following"
+      post: "/v1/user/relation/list-following"
       body: "*"
     };
   }
 
   // 分页查询当前账号的粉丝账号列表
-  rpc PageFollowers(PageFollowersRelation.Request) returns (PageFollowersRelation.Reply) {
+  rpc ListFollowers(ListFollowersRelations.Request) returns (ListFollowersRelations.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/relation/page-followers"
+      post: "/v1/user/relation/list-followers"
       body: "*"
     };
   }
 
   // 分页查询当前账号拉黑的账号列表
-  rpc PageBlocked(PageBlockedRelation.Request) returns (PageBlockedRelation.Reply) {
+  rpc ListBlocked(ListBlockedRelations.Request) returns (ListBlockedRelations.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/relation/page-blocked"
+      post: "/v1/user/relation/list-blocked"
       body: "*"
     };
   }
 
-  // 批量查询当前账号与多个目标账号之间的关系状态
-  rpc BatchGetStatus(BatchGetStatusRelation.Request) returns (BatchGetStatusRelation.Reply) {
+  // 查询当前账号与目标账号之间的关系
+  rpc GetStatus(GetStatusRelation.Request) returns (GetStatusRelation.Reply) {
     option (google.api.http) = {
-      post: "/v1/user/relation/batch-get-status"
+      post: "/v1/user/relation/get-status"
       body: "*"
     };
   }
@@ -101,41 +102,41 @@ message UnblockRelation {
   message Reply {}
 }
 
-message PageFollowingRelation {
+message ListFollowingRelations {
   message Request {
-    PageRequest page = 1;
+    common.PageRequest page = 1;
   }
   message Reply {
-    PageReply page = 1;
+    common.PageReply page = 1;
     repeated Relation rows = 2;
   }
 }
 
-message PageFollowersRelation {
+message ListFollowersRelations {
   message Request {
-    PageRequest page = 1;
+    common.PageRequest page = 1;
   }
   message Reply {
-    PageReply page = 1;
+    common.PageReply page = 1;
     repeated Relation rows = 2;
   }
 }
 
-message PageBlockedRelation {
+message ListBlockedRelations {
   message Request {
-    PageRequest page = 1;
+    common.PageRequest page = 1;
   }
   message Reply {
-    PageReply page = 1;
+    common.PageReply page = 1;
     repeated Relation rows = 2;
   }
 }
 
-message BatchGetStatusRelation {
+message GetStatusRelation {
   message Request {
-    repeated int64 target_ids = 1;
+    int64 target_id = 1;
   }
   message Reply {
-    map<int64, RelationStatus> statuses = 1;
+    RelationStatus status = 1;
   }
 }

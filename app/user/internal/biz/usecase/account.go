@@ -8,6 +8,7 @@ import (
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/conf"
+	"user/internal/enum"
 
 	"github.com/MuhammadSaim/goavatar"
 	"github.com/go-kratos/kratos/v2/log"
@@ -35,6 +36,26 @@ func NewAccountUsecase(
 		accountRepo:     accountRepo,
 		preferencesRepo: preferencesRepo,
 	}, nil
+}
+
+func (s *AccountUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Account, error) {
+	return s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &userID})
+}
+
+func (s *AccountUsecase) ListByUserIDs(ctx context.Context, userIDs []int64) ([]*model.Account, error) {
+	return s.accountRepo.List(ctx, &repo.AccountGetReq{UserIds: userIDs})
+}
+
+func (s *AccountUsecase) MapByUserIDs(ctx context.Context, userIDs []int64) (map[int64]*model.Account, error) {
+	return s.accountRepo.Map(ctx, &repo.AccountGetReq{UserIds: userIDs})
+}
+
+func (s *AccountUsecase) ExistsByAccount(ctx context.Context, account string) (bool, error) {
+	return s.accountRepo.ExistsByAccount(ctx, account)
+}
+
+func (s *AccountUsecase) UpdateProfile(ctx context.Context, userID int64, avatarURL *string, nickname *string, url *string, introduction *string, mbti *enum.MBTI, clearMBTI bool) (*model.Account, error) {
+	return s.accountRepo.UpdateProfile(ctx, userID, avatarURL, nickname, url, introduction, mbti, clearMBTI)
 }
 
 // UpdateSetting 在同一事务中更新账号资料和偏好设置。

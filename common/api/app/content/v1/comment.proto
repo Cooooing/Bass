@@ -10,11 +10,11 @@ option go_package = "common/api/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
-  // 新增评论
-  rpc AddComment(AddComment.Request) returns (AddComment.Reply) {}
+  // 创建评论
+  rpc Create(CreateComment.Request) returns (CreateComment.Reply) {}
 
   // 查询评论列表
-  rpc Page(PageComment.Request) returns (PageComment.Reply) {}
+  rpc List(ListComments.Request) returns (ListComments.Reply) {}
 
   // 点赞评论
   rpc Like(LikeComment.Request) returns (LikeComment.Reply) {}
@@ -26,7 +26,7 @@ service ContentCommentService {
   rpc UpdateStatus(UpdateStatusComment.Request) returns (UpdateStatusComment.Reply) {}
 }
 
-message AddComment {
+message CreateComment {
   message Request {
     // 文章ID
     int64 article_id = 2;
@@ -34,6 +34,8 @@ message AddComment {
     string content = 4;
     // 回复评论ID
     int64 reply_id = 6;
+    // 用户ID
+    int64 user_id = 7;
   }
   message Reply {
     // 评论信息
@@ -41,7 +43,7 @@ message AddComment {
   }
 }
 
-message PageComment {
+message ListComments {
   message Request {
     // 分页参数
     optional common.PageRequest page = 1;
@@ -62,6 +64,8 @@ message LikeComment {
     int64 id = 1;
     // 是否点赞
     bool active = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }
@@ -72,6 +76,8 @@ message ThankComment {
     int64 id = 1;
     // 是否感谢
     bool active = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }
@@ -82,6 +88,8 @@ message UpdateStatusComment {
     int64 id = 1;
     // 状态
     CommentStatus status = 2;
+    // 用户ID
+    int64 user_id = 3;
   }
   message Reply {}
 }

@@ -1,28 +1,19 @@
 package model
 
 import (
-	v1 "common/api/gen/content/v1"
-	"content/internal/data/gen"
-	"content/internal/enum"
+	"time"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"content/internal/enum"
 )
 
 type Tag struct {
-	*gen.Tag
-}
-
-func (t *Tag) ConvertToRpc() *v1.Tag {
-	return &v1.Tag{
-		CreatedAt:    timestamppb.New(*t.CreatedAt),
-		UpdatedAt:    timestamppb.New(*t.UpdatedAt),
-		CreatedBy:    t.CreatedBy,
-		UpdatedBy:    t.UpdatedBy,
-		Id:           t.ID,
-		Name:         t.Name,
-		Description:  t.Description,
-		DomainId:     t.DomainID,
-		Status:       new(enum.TagStatusMap.MustToProto(enum.TagStatus(t.Status))),
-		ArticleCount: t.ArticleCount,
-	}
+	ID          int64
+	Name        string
+	Description *string
+	DomainID    *int64
+	Status      enum.TagStatus
+	CreatedAt   *time.Time
+	UpdatedAt   *time.Time
+	CreatedBy   *int64
+	UpdatedBy   *int64
 }

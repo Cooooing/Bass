@@ -13,9 +13,8 @@ require (
 	github.com/google/wire v0.7.0
 	github.com/lib/pq v1.10.9
 	github.com/qiniu/go-sdk/v7 v7.26.10
-	github.com/samber/lo v1.53.0
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.90
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.3.86
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.102
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.3.93
 	go.opentelemetry.io/otel v1.39.0
 	go.opentelemetry.io/otel/metric v1.39.0
 	google.golang.org/grpc v1.79.3
@@ -42,7 +41,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
-	github.com/envoyproxy/protoc-gen-validate v1.3.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gammazero/toposort v0.1.1 // indirect
@@ -72,23 +70,19 @@ require (
 	github.com/hashicorp/hcl/v2 v2.18.1 // indirect
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/hibiken/asynq v0.25.1 // indirect
-	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/klauspost/compress v1.18.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/nats-io/nats.go v1.51.0 // indirect
 	github.com/nats-io/nkeys v0.4.15 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/panjf2000/ants/v2 v2.11.3 // indirect
 	github.com/redis/go-redis/v9 v9.17.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/samber/lo v1.53.0 // indirect
 	github.com/spf13/cast v1.7.0 // indirect
-	github.com/spf13/cobra v1.7.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stoewer/go-strcase v1.3.1 // indirect
 	github.com/zclconf/go-cty v1.14.4 // indirect
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
@@ -109,7 +103,6 @@ require (
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.35.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
-	golang.org/x/tools v0.42.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251213004720-97cd9d5aeac2 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251213004720-97cd9d5aeac2 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

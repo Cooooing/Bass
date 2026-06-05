@@ -3,26 +3,22 @@ package service
 import (
 	cerrors "common/api/gen/common/errors"
 	v1 "common/api/gen/content/v1"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
 
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/biz/usecase"
-	"content/internal/data/gen"
+	"content/internal/enum"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type CommentService struct {
 	v1.UnimplementedContentCommentServiceServer
 
-	commentDomain *usecase.CommentUsecase
-	commentRepo   repo.CommentRepo
-	articleRepo   repo.ArticleRepo
-	db            *gen.Client
+	commentUsecase *usecase.CommentUsecase
 }
 
 func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
@@ -30,81 +26,109 @@ func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func NewCommentService(
-	commentDomain *usecase.CommentUsecase,
-	commentRepo repo.CommentRepo,
-	articleRepo repo.ArticleRepo,
-	db *gen.Client,
+	commentUsecase *usecase.CommentUsecase,
 ) *CommentService {
 	return &CommentService{
-		commentDomain: commentDomain,
-		commentRepo:   commentRepo,
-		articleRepo:   articleRepo,
-		db:            db,
+		commentUsecase: commentUsecase,
 	}
 }
 
-func (s *CommentService) AddComment(ctx context.Context, req *v1.AddComment_Request) (rsp *v1.AddComment_Reply, err error) {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
-	}
-	comment, err := s.commentDomain.Add(ctx, &model.Comment{
-		Comment: &gen.Comment{
-			ArticleID: req.ArticleId,
-			CreatedBy: &user.ID,
-			Content:   req.Content,
-			ReplyID:   util.If(req.ReplyId != 0, &req.ReplyId, nil),
-		},
+func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Request) (rsp *v1.CreateComment_Reply, err error) {
+	comment, err := s.commentUsecase.Add(ctx, req.UserId, &model.Comment{
+		ArticleID: req.ArticleId,
+		Content:   req.Content,
+		ReplyID:   util.If(req.ReplyId != 0, &req.ReplyId, nil),
+		CreatedBy: new(req.UserId),
+		UpdatedBy: new(req.UserId),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddComment_Reply{
-		Comment: comment.ConvertToRpc(),
+	comment.ParseContent()
+	reply := &v1.Comment{
+		CreatedAt:     timestamppb.New(*comment.CreatedAt),
+		UpdatedAt:     timestamppb.New(*comment.UpdatedAt),
+		CreatedBy:     comment.CreatedBy,
+		UpdatedBy:     comment.UpdatedBy,
+		Id:            comment.ID,
+		ArticleId:     comment.ArticleID,
+		Content:       comment.Content,
+		ContentRender: comment.ContentRender,
+		Level:         comment.Level,
+		ParentId:      comment.ParentID,
+		ReplyId:       comment.ReplyID,
+		Status:        enum.CommentStatusMap.MustToProto(enum.CommentStatus(comment.Status)),
+		ThankCount:    comment.ThankCount,
+		LikeCount:     comment.LikeCount,
+		ReplyCount:    comment.ReplyCount,
+		User:          comment.User,
+		ReplyUser:     comment.ReplyUser,
+	}
+	return &v1.CreateComment_Reply{
+		Comment: reply,
 	}, err
 }
 
-func (s *CommentService) Page(ctx context.Context, req *v1.PageComment_Request) (*v1.PageComment_Reply, error) {
+func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request) (*v1.ListComments_Reply, error) {
 	req.Query = util.OrDefault(req.Query, &v1.CommentQueryParams{})
-	page, comments, err := s.commentDomain.Page(ctx, req.Page, &repo.CommentGetReq{
-		CommentId:   req.Query.CommentId,
-		CommentIds:  nil,
-		ParentId:    req.Query.ParentId,
-		ReplyId:     req.Query.ReplyId,
-		ArticleId:   req.Query.ArticleId,
-		ArticleIds:  nil,
-		CreatedBy:   req.Query.UserId,
-		Status:      new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
-		Level:       req.Query.Level,
-		Order:       (*int32)(req.Query.Order),
-		WithArticle: req.Query.WithArticle,
+	if req.Query.Status != nil {
+		if _, ok := enum.CommentStatusMap.ToEnum(*req.Query.Status); !ok {
+			return nil, cerrors.ErrorBadRequest("invalid comment status")
+		}
+	}
+	page, comments, err := s.commentUsecase.Page(ctx, req.Page, &repo.CommentGetReq{
+		CommentId:  req.Query.CommentId,
+		CommentIds: nil,
+		ParentId:   req.Query.ParentId,
+		ReplyId:    req.Query.ReplyId,
+		ArticleId:  req.Query.ArticleId,
+		ArticleIds: nil,
+		CreatedBy:  req.Query.UserId,
+		Status:     req.Query.Status,
+		Level:      req.Query.Level,
+		Order:      req.Query.Order,
 	})
-	return &v1.PageComment_Reply{
+	rows := make([]*v1.Comment, 0, len(comments))
+	for _, comment := range comments {
+		comment.ParseContent()
+		row := &v1.Comment{
+			CreatedAt:     timestamppb.New(*comment.CreatedAt),
+			UpdatedAt:     timestamppb.New(*comment.UpdatedAt),
+			CreatedBy:     comment.CreatedBy,
+			UpdatedBy:     comment.UpdatedBy,
+			Id:            comment.ID,
+			ArticleId:     comment.ArticleID,
+			Content:       comment.Content,
+			ContentRender: comment.ContentRender,
+			Level:         comment.Level,
+			ParentId:      comment.ParentID,
+			ReplyId:       comment.ReplyID,
+			Status:        enum.CommentStatusMap.MustToProto(enum.CommentStatus(comment.Status)),
+			ThankCount:    comment.ThankCount,
+			LikeCount:     comment.LikeCount,
+			ReplyCount:    comment.ReplyCount,
+			User:          comment.User,
+			ReplyUser:     comment.ReplyUser,
+		}
+		rows = append(rows, row)
+	}
+	return &v1.ListComments_Reply{
 		Page: page,
-		Rows: commonModel.ConvertToRpcList(comments),
+		Rows: rows,
 	}, err
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) (rsp *v1.LikeComment_Reply, err error) {
-	// user := s.tokenCache.GetUserInfo(ctx)
-	exist, err := s.commentRepo.Exist(ctx, s.db, &repo.CommentGetReq{CommentId: new(req.Id)})
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, cerrors.ErrorBadRequest("comment not exist")
-	}
-
-	err = s.commentRepo.UpdateStat(ctx, s.db, req.Id, v1.CommentAction_COMMENT_ACTION_LIKE, util.If[int32](req.Active, 1, -1))
+	err = s.commentUsecase.UpdateStat(ctx, req.Id, req.UserId, v1.CommentAction_COMMENT_ACTION_LIKE, req.Active)
 	return &v1.LikeComment_Reply{}, err
 }
 
 func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Request) (rsp *v1.ThankComment_Reply, err error) {
-	// TODO: 待实现。
-	panic("implement me")
+	err = s.commentUsecase.UpdateStat(ctx, req.Id, req.UserId, v1.CommentAction_COMMENT_ACTION_THANK, req.Active)
+	return &v1.ThankComment_Reply{}, err
 }
 
 func (s *CommentService) UpdateStatus(ctx context.Context, req *v1.UpdateStatusComment_Request) (rsp *v1.UpdateStatusComment_Reply, err error) {
-	// TODO: 待实现。
-	panic("implement me")
+	err = s.commentUsecase.UpdateStatus(ctx, req.Id, req.UserId, req.Status)
+	return &v1.UpdateStatusComment_Reply{}, err
 }

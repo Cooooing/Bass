@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// CommentActionRecord 存储用户对文章的各种行为（点赞、收藏、感谢等）
+// CommentActionRecord 存储用户对评论的各种行为（点赞、收藏、感谢等）
 type CommentActionRecord struct {
 	ent.Schema
 }
@@ -28,7 +28,7 @@ func (CommentActionRecord) Annotations() []schema.Annotation {
 func (CommentActionRecord) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Int64("comment_id").Comment("关联的文章ID"),
+		field.Int64("comment_id").Comment("关联的评论ID"),
 		field.Int64("user_id").Comment("执行行为的用户ID"),
 		field.Enum("type").Values(contentenum.CommentActionMap.EnumValues()...).Comment("行为类型"),
 	}
@@ -47,8 +47,6 @@ func (CommentActionRecord) Indexes() []ent.Index {
 	return []ent.Index{
 		// 一个用户对一条评论的某种行为只能有一条记录
 		index.Fields("comment_id", "user_id", "type").Unique(),
-		// 常用查询索引
-		index.Fields("comment_id"),
 		index.Fields("user_id"),
 	}
 }

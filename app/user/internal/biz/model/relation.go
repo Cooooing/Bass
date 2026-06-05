@@ -19,3 +19,11 @@ type Relation struct {
 	// UpdatedAt 是记录更新时间。
 	UpdatedAt *time.Time
 }
+
+type RelationStatus struct {
+	TargetID   int64
+	Following  bool
+	FollowedBy bool
+	Blocking   bool
+	BlockedBy  bool
+}

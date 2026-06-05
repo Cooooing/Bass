@@ -2,6 +2,7 @@ package server
 
 import (
 	"bbs/internal/conf"
+	"common/pkg/util/jwt"
 	"common/pkg/util/server"
 	"fmt"
 
@@ -16,7 +17,7 @@ import (
 )
 
 // NewHTTPServer 创建 HTTP 服务。
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService, tokenCache *jwt.TokenCache) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -26,7 +27,7 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpS
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			//server.AuthMiddleware(tokenCache),
+			server.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
 		http.ResponseEncoder(server.HttpResponseEncoder),

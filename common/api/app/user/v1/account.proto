@@ -2,67 +2,62 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
+import "user/v1/enum.proto";
 import "user/v1/model.proto";
 
 option go_package = "common/api/gen/user/v1;v1";
 
 service AccountService {
-  // 获取当前登录账号的完整资料，包含基础资料和联系方式。
-  rpc GetCurrent(GetCurrentAccount.Request) returns (GetCurrentAccount.Reply) {}
+  // 查询单个账号。
+  rpc Get(GetAccount.Request) returns (GetAccount.Reply) {}
 
-  // 按账号 ID 获取单个账号基础资料，供内部服务聚合展示信息使用。
-  rpc GetBasic(GetBasicAccount.Request) returns (GetBasicAccount.Reply) {}
+  // 查询账号列表。
+  rpc List(ListAccounts.Request) returns (ListAccounts.Reply) {}
 
-  // 批量获取账号基础资料，供 content、notify 等内部服务高频聚合使用。
-  rpc BatchGetBasic(BatchGetBasicAccount.Request) returns (BatchGetBasicAccount.Reply) {}
+  // 查询账号映射。
+  rpc Map(MapAccounts.Request) returns (MapAccounts.Reply) {}
 
-  // 批量获取账号联系方式，仅供需要触达用户的受控内部服务使用。
-  rpc BatchGetContact(BatchGetContactAccount.Request) returns (BatchGetContactAccount.Reply) {}
-
-  // 检查邮箱是否已被账号占用，仅供注册流程或受控内部调用使用。
+  // 检查邮箱是否已被账号占用。
   rpc ExistsEmail(ExistsEmail.Request) returns (ExistsEmail.Reply) {}
 
-  // 检查手机号是否已被账号占用，仅供注册流程或受控内部调用使用。
+  // 检查手机号是否已被账号占用。
   rpc ExistsPhone(ExistsPhone.Request) returns (ExistsPhone.Reply) {}
 
-  // 检查账号名是否已被占用，仅供注册流程或受控内部调用使用。
+  // 检查账号名是否已被占用。
   rpc ExistsName(ExistsName.Request) returns (ExistsName.Reply) {}
 
-  // 更新当前登录账号的展示资料。
+  // 更新账号展示资料。
   rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Reply) {}
 }
 
-message GetCurrentAccount {
-  message Request {}
+message AccountQuery {
+  repeated int64 user_ids = 1;
+}
+
+message GetAccount {
+  message Request {
+    int64 user_id = 1;
+  }
   message Reply {
     Account account = 1;
   }
 }
 
-message GetBasicAccount {
+message ListAccounts {
   message Request {
-    int64 user_id = 1;
+    AccountQuery query = 1;
   }
   message Reply {
-    AccountBasic account = 1;
+    repeated Account rows = 1;
   }
 }
 
-message BatchGetBasicAccount {
+message MapAccounts {
   message Request {
-    repeated int64 user_ids = 1;
+    AccountQuery query = 1;
   }
   message Reply {
-    map<int64, AccountBasic> accounts = 1;
-  }
-}
-
-message BatchGetContactAccount {
-  message Request {
-    repeated int64 user_ids = 1;
-  }
-  message Reply {
-    map<int64, AccountContact> contacts = 1;
+    map<int64, Account> accounts = 1;
   }
 }
 
@@ -95,11 +90,12 @@ message ExistsName {
 
 message UpdateProfileAccount {
   message Request {
-    optional string avatar_url = 1;
-    optional string nickname = 2;
-    optional string url = 3;
-    optional string introduction = 4;
-    optional string mbti = 5;
+    int64 user_id = 1;
+    optional string avatar_url = 2;
+    optional string nickname = 3;
+    optional string url = 4;
+    optional string introduction = 5;
+    optional MBTI mbti = 6;
   }
   message Reply {
     AccountBasic account = 1;

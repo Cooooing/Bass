@@ -52,6 +52,13 @@ api-dep:
 	@echo "[api-dep] buf dep update..."
 	@cd $(ROOT_DIR) && $(BUF) dep update $(BUF_CONFIG_DIR)
 
+.PHONY: api-format
+api-format:
+	@echo "[api-format] format shared API proto..."
+	@cd $(ROOT_DIR) && $(BUF) format -w $(BUF_CONFIG_DIR)
+	@echo "[api-format] gofmt common Go files..."
+	@find $(COMMON_DIR) -type f -name "*.go" -not -path "$(PROTO_GEN_DIR)/*" -exec gofmt -w {} +
+
 .PHONY: api
 api: api-clean
 	@echo "[api] buf generate..."

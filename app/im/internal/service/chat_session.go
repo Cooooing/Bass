@@ -25,7 +25,6 @@ func (s *ChatSessionService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *ChatSessionService) RegisterHttp(hs *http.Server) {
-	v1.RegisterIMChatSessionServiceHTTPServer(hs, s)
 }
 
 func (s *ChatSessionService) MarkMuted(ctx context.Context, req *v1.MarkMutedChatSession_Request) (rsp *v1.MarkMutedChatSession_Reply, err error) {
@@ -43,7 +42,7 @@ func (s *ChatSessionService) MarkPinned(ctx context.Context, req *v1.MarkPinnedC
 	return &v1.MarkPinnedChatSession_Reply{}, nil
 }
 
-func (s *ChatSessionService) Page(ctx context.Context, req *v1.PageChatSession_Request) (rsp *v1.PageChatSession_Reply, err error) {
+func (s *ChatSessionService) List(ctx context.Context, req *v1.ListChatSessions_Request) (rsp *v1.ListChatSessions_Reply, err error) {
 	// 占位实现：返回空的分页结果，Page 字段暂不暴露具体值
-	return &v1.PageChatSession_Reply{Page: nil, Rows: []*v1.ChatSession{}}, nil
+	return &v1.ListChatSessions_Reply{Page: nil, Rows: []*v1.ChatSession{}}, nil
 }

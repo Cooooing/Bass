@@ -8,8 +8,8 @@ require (
 	github.com/MuhammadSaim/goavatar v1.1.1
 	github.com/go-kratos/kratos/contrib/middleware/validate/v2 v2.0.0-20251217105121-fb8e43efb207
 	github.com/go-kratos/kratos/v2 v2.9.2
+	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.7.0
-	github.com/jinzhu/copier v0.4.0
 	github.com/lib/pq v1.10.9
 	github.com/pquerna/otp v1.5.0
 	github.com/sony/sonyflake/v2 v2.2.0
@@ -53,7 +53,6 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
 	github.com/google/cel-go v0.26.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3 // indirect

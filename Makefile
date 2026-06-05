@@ -41,6 +41,15 @@ tidy-all build-all:
 		$(MAKE) -C $(APP_DIR)/$$module $(patsubst %-all,%,$@) IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
+.PHONY: format fmt
+format: api-format
+	@for module in $(MODULES); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module format IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
+fmt: format
+
 .PHONY: doc-all
 doc-all:
 	@for module in $(BFF_SERVERS); do \
@@ -73,6 +82,8 @@ help:
 	@echo "  make api-dep      - update Buf dependencies"
 	@echo "  make api-lint     - lint shared API proto with Buf"
 	@echo "  make api-clean    - clean shared API generated code"
+	@echo "  make api-format   - format shared API proto and common Go files"
+	@echo "  make format       - format shared API and all app modules"
 	@echo "  make all          - run init, api, gen, and build"
 	@echo ""
 	@echo "Batch targets:"
@@ -89,9 +100,10 @@ help:
 	@echo "  make -C app/<module> clean     - clean one module"
 	@echo "  make -C app/<module> build     - build one module"
 	@echo "  make -C app/<module> tidy      - run go mod tidy for one module"
+	@echo "  make -C app/<module> format    - format one module"
 	@echo "  make -C app/<module> ent       - generate Ent code"
 	@echo "  make -C app/<module> doc       - generate OpenAPI document"
-	@echo "  make -C app/<module> sdk       - generate BFF TypeScript and Go SDKs"
+	@echo "  make -C app/<module> sdk       - generate BFF TypeScript, Go, Java and Rust SDKs"
 	@echo ""
 	@echo "Examples:"
 	@echo "    make -C app/bbs gen"

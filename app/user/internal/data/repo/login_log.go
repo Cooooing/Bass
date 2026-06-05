@@ -6,43 +6,22 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/loginlog"
 	"user/internal/enum"
 
-	commonClient "common/pkg/client"
 	utilent "common/pkg/util/ent"
-
-	"github.com/go-kratos/kratos/v2/log"
 )
 
 var _ repo.LoginLogRepo = (*LoginLogRepo)(nil)
 
 type LoginLogRepo struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
-	nats   *commonClient.NatsClient
+	db *gen.Client
 }
 
-func NewLoginLogRepo(
-	conf *conf.Bootstrap,
-	logger log.Logger,
-	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
-	nats *commonClient.NatsClient,
-) repo.LoginLogRepo {
+func NewLoginLogRepo(db *gen.Client) repo.LoginLogRepo {
 	return &LoginLogRepo{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
-		nats:   nats,
+		db: db,
 	}
 }
 
@@ -53,40 +32,12 @@ func (r *LoginLogRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func loginLogToDomain(l *gen.LoginLog) *model.LoginLog {
-	return &model.LoginLog{
-		ID:            l.ID,
-		UserID:        l.UserID,
-		Account:       l.Account,
-		LoginMethod:   enum.LoginMethod(l.LoginMethod),
-		Status:        enum.LoginStatus(l.Status),
-		FailureReason: l.FailureReason,
-		IP:            l.IP,
-		Country:       l.Country,
-		CountryCode:   l.CountryCode,
-		Province:      l.Province,
-		City:          l.City,
-		ISP:           l.Isp,
-		UserAgent:     l.UserAgent,
-		DeviceID:      l.DeviceID,
-		DeviceName:    l.DeviceName,
-		Platform:      l.Platform,
-		OS:            l.Os,
-		Browser:       l.Browser,
-		RequestID:     l.RequestID,
-		CreatedAt:     l.CreatedAt,
-		UpdatedAt:     l.UpdatedAt,
-	}
-}
-
 func (r *LoginLogRepo) Create(ctx context.Context, l *model.LoginLog) (*model.LoginLog, error) {
 	tx := r.getClient(ctx)
 	created, err := tx.LoginLog.Create().
 		SetNillableUserID(l.UserID).
-		SetAccount(l.Account).
 		SetLoginMethod(loginlog.LoginMethod(l.LoginMethod)).
 		SetStatus(loginlog.Status(l.Status)).
-		SetNillableFailureReason(l.FailureReason).
 		SetNillableIP(l.IP).
 		SetNillableCountry(l.Country).
 		SetNillableCountryCode(l.CountryCode).
@@ -95,16 +46,26 @@ func (r *LoginLogRepo) Create(ctx context.Context, l *model.LoginLog) (*model.Lo
 		SetNillableIsp(l.ISP).
 		SetNillableUserAgent(l.UserAgent).
 		SetNillableDeviceID(l.DeviceID).
-		SetNillableDeviceName(l.DeviceName).
-		SetNillablePlatform(l.Platform).
-		SetNillableOs(l.OS).
-		SetNillableBrowser(l.Browser).
-		SetNillableRequestID(l.RequestID).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return loginLogToDomain(created), nil
+	return &model.LoginLog{
+		ID:          created.ID,
+		UserID:      created.UserID,
+		LoginMethod: enum.LoginMethod(created.LoginMethod),
+		Status:      enum.LoginStatus(created.Status),
+		IP:          created.IP,
+		Country:     created.Country,
+		CountryCode: created.CountryCode,
+		Province:    created.Province,
+		City:        created.City,
+		ISP:         created.Isp,
+		UserAgent:   created.UserAgent,
+		DeviceID:    created.DeviceID,
+		CreatedAt:   created.CreatedAt,
+		UpdatedAt:   created.UpdatedAt,
+	}, nil
 }
 
 func (r *LoginLogRepo) FindLastSuccessByUserID(ctx context.Context, userID int64) (*model.LoginLog, error) {
@@ -120,7 +81,22 @@ func (r *LoginLogRepo) FindLastSuccessByUserID(ctx context.Context, userID int64
 	if err != nil {
 		return nil, err
 	}
-	return loginLogToDomain(l), nil
+	return &model.LoginLog{
+		ID:          l.ID,
+		UserID:      l.UserID,
+		LoginMethod: enum.LoginMethod(l.LoginMethod),
+		Status:      enum.LoginStatus(l.Status),
+		IP:          l.IP,
+		Country:     l.Country,
+		CountryCode: l.CountryCode,
+		Province:    l.Province,
+		City:        l.City,
+		ISP:         l.Isp,
+		UserAgent:   l.UserAgent,
+		DeviceID:    l.DeviceID,
+		CreatedAt:   l.CreatedAt,
+		UpdatedAt:   l.UpdatedAt,
+	}, nil
 }
 
 func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
@@ -133,7 +109,22 @@ func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) ([]*m
 	}
 	result := make([]*model.LoginLog, 0, len(list))
 	for _, l := range list {
-		result = append(result, loginLogToDomain(l))
+		result = append(result, &model.LoginLog{
+			ID:          l.ID,
+			UserID:      l.UserID,
+			LoginMethod: enum.LoginMethod(l.LoginMethod),
+			Status:      enum.LoginStatus(l.Status),
+			IP:          l.IP,
+			Country:     l.Country,
+			CountryCode: l.CountryCode,
+			Province:    l.Province,
+			City:        l.City,
+			ISP:         l.Isp,
+			UserAgent:   l.UserAgent,
+			DeviceID:    l.DeviceID,
+			CreatedAt:   l.CreatedAt,
+			UpdatedAt:   l.UpdatedAt,
+		})
 	}
 	return result, nil
 }
@@ -159,7 +150,22 @@ func (r *LoginLogRepo) Page(ctx context.Context, page *common.PageRequest, req *
 
 	result := make([]*model.LoginLog, 0, len(list))
 	for _, l := range list {
-		result = append(result, loginLogToDomain(l))
+		result = append(result, &model.LoginLog{
+			ID:          l.ID,
+			UserID:      l.UserID,
+			LoginMethod: enum.LoginMethod(l.LoginMethod),
+			Status:      enum.LoginStatus(l.Status),
+			IP:          l.IP,
+			Country:     l.Country,
+			CountryCode: l.CountryCode,
+			Province:    l.Province,
+			City:        l.City,
+			ISP:         l.Isp,
+			UserAgent:   l.UserAgent,
+			DeviceID:    l.DeviceID,
+			CreatedAt:   l.CreatedAt,
+			UpdatedAt:   l.UpdatedAt,
+		})
 	}
 	return result, &common.PageReply{
 		Total: uint32(total),
@@ -174,9 +180,6 @@ func (r *LoginLogRepo) getQuery(query *gen.LoginLogQuery, req *repo.LoginLogGetR
 	}
 	if req.UserID != nil {
 		query = query.Where(loginlog.UserID(*req.UserID))
-	}
-	if req.Account != nil {
-		query = query.Where(loginlog.Account(*req.Account))
 	}
 	if req.Status != nil {
 		query = query.Where(loginlog.StatusEQ(loginlog.Status(*req.Status)))

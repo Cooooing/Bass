@@ -1,5 +1,10 @@
 package model
 
-import "content/internal/data/gen"
+import "content/internal/enum"
 
-type CommentActionRecord gen.CommentActionRecord
+type CommentActionRecord struct {
+	ID        int64
+	CommentID int64
+	UserID    int64
+	Type      enum.CommentAction
+}

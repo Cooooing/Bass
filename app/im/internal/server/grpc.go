@@ -1,7 +1,6 @@
 package server
 
 import (
-	"common/pkg/util/jwt"
 	"common/pkg/util/server"
 	"fmt"
 	"im/internal/conf"
@@ -19,7 +18,7 @@ import (
 )
 
 // NewGRPCServer 创建 gRPC 服务。
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcService, tokenCache *jwt.TokenCache) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcService) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,
@@ -42,7 +41,6 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcS
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			server.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
 		grpc.Options(ka...),

@@ -11,19 +11,19 @@ import (
 )
 
 type AsynqCache struct {
-	log   *log.Helper
-	redis *client.RedisClient
+	log         *log.Helper
+	redisClient *client.RedisClient
 }
 
-func NewAsynqCache(logger log.Logger, redis *client.RedisClient) *AsynqCache {
+func NewAsynqCache(logger log.Logger, redisClient *client.RedisClient) *AsynqCache {
 	return &AsynqCache{
-		log:   log.NewHelper(logger),
-		redis: redis,
+		log:         log.NewHelper(logger),
+		redisClient: redisClient,
 	}
 }
 
 func (c *AsynqCache) SetAsynqTaskVersion(ctx context.Context, taskName string, version int64, expire time.Duration) error {
-	_, err := c.redis.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
+	_, err := c.redisClient.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
 		err := pipe.HSet(ctx, constant.AsynqTaskVersion, taskName, version).Err()
 		if err != nil {
 			return err
@@ -38,9 +38,9 @@ func (c *AsynqCache) SetAsynqTaskVersion(ctx context.Context, taskName string, v
 }
 
 func (c *AsynqCache) GetAsynqTaskVersion(ctx context.Context, taskName string) (int64, error) {
-	return c.redis.Client.HGet(ctx, constant.AsynqTaskVersion, taskName).Int64()
+	return c.redisClient.Client.HGet(ctx, constant.AsynqTaskVersion, taskName).Int64()
 }
 
 func (c *AsynqCache) SetAsynqTaskExpire(ctx context.Context, taskName string, expire time.Duration) error {
-	return c.redis.Client.HExpire(ctx, constant.AsynqTaskVersion, expire, taskName).Err()
+	return c.redisClient.Client.HExpire(ctx, constant.AsynqTaskVersion, expire, taskName).Err()
 }

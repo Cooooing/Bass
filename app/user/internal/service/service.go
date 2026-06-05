@@ -8,7 +8,6 @@ import (
 
 // ServiceProviderSet 是 service 层依赖集合。
 var ServiceProviderSet = wire.NewSet(
-	NewVerifyService,
 	NewSystemService,
 	NewAuthService,
 	NewAccountService,

@@ -1,11 +1,8 @@
 package qiniu
 
 import (
-	cerrors "common/api/gen/common/errors"
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"context"
 	"fmt"
 	"notify/internal/biz/model"
@@ -18,26 +15,26 @@ import (
 )
 
 type Qiniu struct {
-	conf   *conf.Bootstrap
-	log    *log.Helper
-	db     *gen.Client
-	consul *commonClient.ConsulClient
-	redis  *commonClient.RedisClient
+	conf         *conf.Bootstrap
+	log          *log.Helper
+	db           *gen.Client
+	consulClient *commonClient.ConsulClient
+	redisClient  *commonClient.RedisClient
 }
 
 func NewQiniu(
 	conf *conf.Bootstrap,
 	logger log.Logger,
 	db *gen.Client,
-	consul *commonClient.ConsulClient,
-	redis *commonClient.RedisClient,
+	consulClient *commonClient.ConsulClient,
+	redisClient *commonClient.RedisClient,
 ) *Qiniu {
 	return &Qiniu{
-		conf:   conf,
-		log:    log.NewHelper(logger),
-		db:     db,
-		consul: consul,
-		redis:  redis,
+		conf:         conf,
+		log:          log.NewHelper(logger),
+		db:           db,
+		consulClient: consulClient,
+		redisClient:  redisClient,
 	}
 }
 
@@ -57,21 +54,29 @@ func (q *Qiniu) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 	if err != nil {
 		return nil, err
 	}
-	return &model.ObjectStorage{ObjectStorage: save}, nil
+	return &model.ObjectStorage{
+		ID:           save.ID,
+		Provider:     save.Provider,
+		Bucket:       save.Bucket,
+		Key:          save.Key,
+		MimeType:     save.MimeType,
+		Size:         save.Size,
+		Hash:         save.Hash,
+		UploadBy:     save.UploadBy,
+		UploadByName: save.UploadByName,
+		CreatedAt:    save.CreatedAt,
+		UpdatedAt:    save.UpdatedAt,
+	}, nil
 }
 
-func (q *Qiniu) UploadToken(ctx context.Context, key string) (string, error) {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok {
-		return "", cerrors.ErrorUnauthorized("user not login")
-	}
+func (q *Qiniu) UploadToken(ctx context.Context, key string, uploaderID int64, uploaderName string) (string, error) {
 	mac := auth.New(q.conf.Server.Oss.Qiniu.AccessKey, q.conf.Server.Oss.Qiniu.SecretKey)
 	putPolicy := storage.PutPolicy{
 		Scope:            fmt.Sprintf("%s:%s", q.conf.Server.Oss.Qiniu.Bucket, key),
 		CallbackURL:      q.conf.Server.Oss.Qiniu.CallbackUrl,
-		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, user.ID, user.Name),
+		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, uploaderID, uploaderName),
 		CallbackBodyType: "application/json",
-		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, user.ID, user.Name),
+		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, uploaderID, uploaderName),
 		Expires:          uint64(q.conf.Server.Oss.Qiniu.Timeout.Seconds),
 		InsertOnly:       1,
 		FsizeMin:         1024 * 1024 * q.conf.Server.Oss.Qiniu.SizeMin,

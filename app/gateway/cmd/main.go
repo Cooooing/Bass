@@ -3,7 +3,6 @@ package main
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/util"
-	commonServer "common/pkg/util/server"
 	"context"
 	"flag"
 	"fmt"
@@ -54,7 +53,7 @@ func newApp(logger log.Logger, hs *http.Server, cc *commonClient.ConsulClient) *
 func main() {
 	flag.Parse()
 
-	c, bc, confCleanup, err := commonServer.LoadConfig[conf.Bootstrap](flagBootstrap, flagConf)
+	c, bc, confCleanup, err := conf.LoadConfig(flagBootstrap, flagConf)
 	if err != nil {
 		panic(err)
 	}

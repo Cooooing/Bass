@@ -3,7 +3,7 @@ package main
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/util"
-	commonServer "common/pkg/util/server"
+	"content/internal/biz/usecase"
 	"content/internal/conf"
 	"content/internal/server"
 	"context"
@@ -33,7 +33,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -44,7 +44,7 @@ func newApp(logger log.Logger, gs *grpc.Server, cc *commonClient.ConsulClient) *
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(gs),
+		kratos.Server(gs, outboxPublisher),
 		kratos.Registrar(cc.Registrar()),
 	)
 }
@@ -52,7 +52,7 @@ func newApp(logger log.Logger, gs *grpc.Server, cc *commonClient.ConsulClient) *
 func main() {
 	flag.Parse()
 
-	c, bc, confCleanup, err := commonServer.LoadConfig[conf.Bootstrap](flagBootstrap, flagConf)
+	c, bc, confCleanup, err := conf.LoadConfig(flagBootstrap, flagConf)
 	if err != nil {
 		panic(err)
 	}

@@ -2,9 +2,13 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/server"
+	"common/pkg/util"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
@@ -16,6 +20,10 @@ type AuthRepo struct {
 
 func NewAuthRepo(userClient *rpc.UserClient) repo.AuthRepo {
 	return &AuthRepo{userClient: userClient}
+}
+
+func NewAuthClient(userClient *rpc.UserClient) repo.AuthRepo {
+	return NewAuthRepo(userClient)
 }
 
 func (r *AuthRepo) StartEmailRegistration(ctx context.Context, req *bbsuserv1.StartEmailRegistration_Request) (*bbsuserv1.StartEmailRegistration_Reply, error) {
@@ -67,10 +75,29 @@ func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.V
 }
 
 func (r *AuthRepo) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPassword_Request) (*bbsuserv1.LoginByPassword_Reply, error) {
-	reply, err := r.userClient.Auth.LoginByPassword(ctx, &userv1.LoginByPassword_Request{
-		Account:  req.GetAccount(),
-		Password: req.GetPassword(),
-	})
+	loginReq := &userv1.LoginByPassword_Request{
+		Account:   req.GetAccount(),
+		Password:  req.GetPassword(),
+		UserAgent: server.GetHeader(ctx, constant.HeaderUserAgent),
+		DeviceId:  server.GetHeader(ctx, constant.HeaderDeviceID),
+		Platform:  server.GetHeader(ctx, constant.HeaderPlatform),
+		RequestId: server.GetHeader(ctx, constant.HeaderRequestID),
+	}
+	if loginReq.RequestId == "" {
+		loginReq.RequestId = server.GetHeader(ctx, constant.HeaderTraceID)
+	}
+	if ipInfo, ok := util.GetContextValue[*commonmodel.IpInfo](ctx, constant.CtxIpInfo); ok && ipInfo != nil {
+		loginReq.Ip = ipInfo.Ip
+		loginReq.Country = ipInfo.Country
+		loginReq.CountryCode = ipInfo.CountryCode
+		loginReq.Province = ipInfo.Province
+		loginReq.City = ipInfo.City
+		loginReq.Isp = ipInfo.ISP
+	}
+	if loginReq.Ip == "" {
+		loginReq.Ip = server.ClientIP(ctx)
+	}
+	reply, err := r.userClient.Auth.LoginByPassword(ctx, loginReq)
 	if err != nil {
 		return nil, err
 	}

@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+import "bbs/v1/user/enum.proto";
+import "common/enums/language.proto";
+
+option go_package = "common/proto/gen/bbs/v1/user;user";
+
+// 账号展示资料。
+message AccountProfile {
+  // 账号 ID。
+  int64 id = 1;
+  // 账号名。
+  string name = 2;
+  // 昵称。
+  optional string nickname = 3;
+  // 个人主页 URL。
+  optional string url = 4;
+  // 头像 URL。
+  optional string avatar_url = 5;
+  // 个人简介。
+  optional string introduction = 6;
+  // MBTI 类型。
+  MBTI mbti = 7;
+  // 账号状态。
+  AccountStatus status = 8;
+  // 关注数量。
+  optional int32 follow_count = 10;
+  // 粉丝数量。
+  optional int32 follower_count = 11;
+  // 创建时间。
+  string created_at = 1000;
+  // 更新时间。
+  string updated_at = 1001;
+}
+
+// 当前账号联系方式。
+message AccountContact {
+  // 账号 ID。
+  int64 user_id = 1;
+  // 邮箱地址。
+  optional string email = 2;
+  // 手机号。
+  optional string phone = 3;
+}
+
+// 当前账号完整资料。
+message Account {
+  // 账号展示资料。
+  AccountProfile profile = 1;
+  // 账号联系方式。
+  AccountContact contact = 2;
+}
+
+// 账号偏好设置。
+message Preference {
+  // 账号 ID。
+  int64 user_id = 1;
+  // 时区。
+  optional string timezone = 3;
+  // 桌面端主题。
+  optional string theme = 4;
+  // 移动端主题。
+  optional string mobile_theme = 5;
+  // 界面语言。
+  common.enums.Language language = 8;
+}
+
+// 账号隐私设置。
+message PrivacySetting {
+  // 账号 ID。
+  int64 user_id = 1;
+  // 是否公开积分。
+  optional bool public_points = 2;
+  // 是否公开粉丝列表。
+  optional bool public_followers = 3;
+  // 是否公开文章列表。
+  optional bool public_articles = 4;
+  // 是否公开评论列表。
+  optional bool public_comments = 5;
+  // 是否公开在线状态。
+  optional bool public_online_status = 6;
+  // 是否公开地理资料。
+  optional bool public_location = 7;
+}
+
+// 账号地理资料。
+message Location {
+  // 账号 ID。
+  int64 user_id = 1;
+  // 国家或地区。
+  optional string country = 2;
+  // 省份或州。
+  optional string province = 3;
+  // 城市。
+  optional string city = 4;
+}
+
+// TOTP 认证状态。
+message Totp {
+  // 账号 ID。
+  int64 user_id = 1;
+  // 是否启用 TOTP。
+  bool enable = 2;
+  // 启用时间。
+  string enable_time = 3;
+}
+
+// 账号关系记录。
+message Relation {
+  // 关系记录 ID。
+  int64 id = 1;
+  // 关系类型。
+  int32 type = 2;
+  // 发起账号 ID。
+  int64 actor_id = 3;
+  // 目标账号 ID。
+  int64 target_id = 4;
+  // 创建时间。
+  string created_at = 1000;
+  // 更新时间。
+  string updated_at = 1001;
+}
+
+// 当前账号与目标账号的关系状态。
+message RelationStatus {
+  // 目标账号 ID。
+  int64 target_id = 1;
+  // 当前账号是否关注目标账号。
+  bool following = 2;
+  // 目标账号是否关注当前账号。
+  bool followed_by = 3;
+  // 当前账号是否拉黑目标账号。
+  bool blocking = 4;
+  // 目标账号是否拉黑当前账号。
+  bool blocked_by = 5;
+}

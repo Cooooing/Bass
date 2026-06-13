@@ -1,0 +1,42 @@
+syntax = "proto3";
+package kratos.api.conf;
+
+import "common/config.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "push_node/internal/conf/conf;conf";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Trace trace = 3;
+}
+
+message Server {
+  string name = 1;
+  string version = 2;
+  string mode = 3;
+  HTTP http = 5;
+  message HTTP {
+    string network = 1;
+    string host = 2;
+    int32 port = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+  // JWT 签名密钥，用于验证客户端 SSE 连接 token
+  string jwt_secret = 10;
+  // push_hub gRPC 服务地址（支持 discovery:/// 格式的服务发现）
+  string push_hub_address = 11;
+}
+
+message Data {
+  common.api.app.common.Consul consul = 3;
+  common.api.app.common.Nats nats = 4;
+}
+
+message Trace {
+  bool enable_otel = 1;
+  string endpoint = 2;
+  bool insecure = 3;
+  double sampler = 4;
+}

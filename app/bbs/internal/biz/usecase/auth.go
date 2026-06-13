@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 )
 

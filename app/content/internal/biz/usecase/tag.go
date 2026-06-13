@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"common/api/gen/common"
+	"common/proto/gen/common"
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"

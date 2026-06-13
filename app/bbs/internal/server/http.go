@@ -2,11 +2,14 @@ package server
 
 import (
 	"bbs/internal/conf"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
-	"common/pkg/util/server"
+	"common/pkg/server"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	cerrors "common/proto/gen/common/errors"
+	userv1 "common/proto/gen/user/v1"
 	"context"
+	"encoding/json"
 	"fmt"
+	stdhttp "net/http"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -15,7 +18,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	kratoshttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -29,14 +32,14 @@ var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
 }
 
 // NewHTTPServer 创建 HTTP 服务。
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService, authClient userv1.AuthServiceClient) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService, authClient userv1.AuthServiceClient) *kratoshttp.Server {
 	authRequiredMatch := func(_ context.Context, operation string) bool {
 		_, ok := bbsHTTPAuthOperationWhitelist[operation]
 		return !ok
 	}
 
-	var opts = []http.ServerOption{
-		http.Middleware(
+	var opts = []kratoshttp.ServerOption{
+		kratoshttp.Middleware(
 			recovery.Recovery(),
 			tracing.Server(),
 			metrics.Server(
@@ -47,19 +50,21 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpS
 			selector.Server(server.UserAuthMiddleware(authClient)).Match(authRequiredMatch).Build(),
 			validate.ProtoValidate(),
 		),
-		http.ResponseEncoder(server.HttpResponseEncoder),
-		// http.ErrorEncoder(pkg.HttpErrorEncoder),
+		kratoshttp.ResponseEncoder(server.HttpResponseEncoder),
+		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(func(r *stdhttp.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
+			return bbsErrorMessages.Resolve(r, code, data)
+		})),
 	}
 	if c.Server.Http.Network != "" {
-		opts = append(opts, http.Network(c.Server.Http.Network))
+		opts = append(opts, kratoshttp.Network(c.Server.Http.Network))
 	}
 	if c.Server.Http.Host != "" && c.Server.Http.Port != 0 {
-		opts = append(opts, http.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
+		opts = append(opts, kratoshttp.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
 	}
 	if c.Server.Http.Timeout != nil {
-		opts = append(opts, http.Timeout(c.Server.Http.Timeout.AsDuration()))
+		opts = append(opts, kratoshttp.Timeout(c.Server.Http.Timeout.AsDuration()))
 	}
-	srv := http.NewServer(opts...)
+	srv := kratoshttp.NewServer(opts...)
 	srv.Handle("/metrics", promhttp.Handler())
 	for _, s := range services {
 		s.RegisterHttp(srv)

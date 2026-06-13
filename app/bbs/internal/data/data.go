@@ -2,10 +2,10 @@ package data
 
 import (
 	"bbs/internal/conf"
-	"common/api/gen/common"
-	userv1 "common/api/gen/user/v1"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
+	"common/proto/gen/common"
+	userv1 "common/proto/gen/user/v1"
 
 	"github.com/google/wire"
 )
@@ -20,19 +20,19 @@ var DataProviderSet = wire.NewSet(
 	ProvideUserAuthClient,
 	rpc.ProvideContentClient,
 	rpc.ProvideNotifyClient,
-	NewAuthRepo,
-	NewAccountRepo,
-	NewPreferencesRepo,
-	NewPrivacySettingRepo,
-	NewLocationRepo,
-	NewRelationRepo,
-	NewTotpRepo,
-	NewContentArticleRepo,
-	NewContentPostscriptRepo,
-	NewContentCommentRepo,
-	NewContentDomainRepo,
-	NewContentTagRepo,
-	NewNotificationRepo,
+	NewAuthClient,
+	NewAccountClient,
+	NewPreferencesClient,
+	NewPrivacySettingClient,
+	NewLocationClient,
+	NewRelationClient,
+	NewTotpClient,
+	NewContentArticleClient,
+	NewContentPostscriptClient,
+	NewContentCommentClient,
+	NewContentDomainClient,
+	NewContentTagClient,
+	NewNotificationClient,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {

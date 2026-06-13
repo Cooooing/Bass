@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Comment 评论实体定义
+// Comment 定义评论实体。
 type Comment struct {
 	ent.Schema
 }
@@ -26,48 +26,48 @@ func (Comment) Annotations() []schema.Annotation {
 }
 
 func (Comment) Fields() []ent.Field {
-	fields := []ent.Field{
+	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Int64("article_id").Comment("所属文章ID"),
+		field.Int64("article_id").Comment("所属文章 ID"),
 		field.Text("content").Comment("评论内容").NotEmpty(),
 		field.Int32("level").Comment("评论层级"),
-		field.Int64("parent_id").Comment("父级评论ID").Optional().Nillable(),
-		field.Int64("reply_id").Comment("回复评论ID").Optional().Nillable(),
-		field.Enum("status").Values(contentenum.CommentStatusMap.EnumValues()...).Default(string(contentenum.CommentStatusNormal)).Comment("状态"),
+		field.Int64("parent_id").Comment("父级评论 ID").Optional().Nillable(),
+		field.Int64("reply_id").Comment("回复评论 ID").Optional().Nillable(),
+		field.Enum("restriction").Values(contentenum.ContentRestrictionMap.EnumValues()...).Default(string(contentenum.ContentRestrictionNone)).Comment("管理限制"),
 
 		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),
 		field.Int32("reply_count").Comment("回复数").Default(0),
+		field.Int64("created_by").Comment("创建人 ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人 ID").Nillable().Optional(),
 	}
-	return fields
 }
 
 func (Comment) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 
 func (Comment) Edges() []ent.Edge {
 	return []ent.Edge{
-		// 关联文章 多对一
 		edge.From("article", Article.Type).Ref("comments").Field("article_id").Required().Unique(),
-		// 关联父评论 多对一
 		edge.From("parent", Comment.Type).Ref("parent_replies").Field("parent_id").Unique(),
-		// 关联子评论 一对多
 		edge.To("parent_replies", Comment.Type),
-		// 关联回复评论 多对一
 		edge.From("reply", Comment.Type).Ref("reply_replies").Field("reply_id").Unique(),
-		// 关联子评论 一对多
 		edge.To("reply_replies", Comment.Type),
-		// 关联操作 一对多
 		edge.To("action_records", CommentActionRecord.Type),
 	}
 }
 
 func (Comment) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("article_id", "parent_id", "status"),
+		index.Fields("article_id", "level", "restriction", "created_at", "id").
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("article_id", "parent_id", "restriction", "created_at", "id").
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("article_id", "restriction", "created_at", "id").
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }

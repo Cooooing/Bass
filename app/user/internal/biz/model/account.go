@@ -47,3 +47,12 @@ type AccountProfileUpdate struct {
 	Mbti         *enum.MBTI
 	ClearMBTI    bool
 }
+
+type AccountAvailability struct {
+	Name           *string
+	Email          *string
+	Phone          *string
+	NameAvailable  bool
+	EmailAvailable bool
+	PhoneAvailable bool
+}

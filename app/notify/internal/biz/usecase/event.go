@@ -1,13 +1,14 @@
 package usecase
 
 import (
-	"common/api/gen/common/enums"
 	commonenum "common/pkg/enum"
+	"common/proto/gen/common/enums"
 	"context"
 	"errors"
 	"fmt"
 	base "notify/internal/biz/base"
 	"notify/internal/biz/repo"
+	"notify/internal/conf"
 	notifyenum "notify/internal/enum"
 	"time"
 
@@ -27,6 +28,7 @@ type EventSubjects []commonenum.EventSubject
 
 type EventUsecase struct {
 	log            *log.Helper
+	conf           *conf.Bootstrap
 	tx             base.Tx
 	inboxEventRepo repo.InboxEventRepo
 	notifyUsecase  *NotifyUsecase
@@ -35,6 +37,7 @@ type EventUsecase struct {
 
 func NewEventUsecase(
 	logger log.Logger,
+	conf *conf.Bootstrap,
 	tx base.Tx,
 	inboxEventRepo repo.InboxEventRepo,
 	notifyUsecase *NotifyUsecase,
@@ -42,6 +45,7 @@ func NewEventUsecase(
 ) *EventUsecase {
 	return &EventUsecase{
 		log:            log.NewHelper(logger),
+		conf:           conf,
 		tx:             tx,
 		inboxEventRepo: inboxEventRepo,
 		notifyUsecase:  notifyUsecase,
@@ -87,11 +91,11 @@ func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, pa
 	if err != nil {
 		return err
 	}
-	if inboxEvent.Status == commonenum.InboxEventStatusProcessed {
+	if inboxEvent.Status == commonenum.InboxEventStatusProcessed || inboxEvent.Status == commonenum.InboxEventStatusDead {
 		return nil
 	}
 	if !claimed {
-		claimed, err = u.inboxEventRepo.ClaimRetry(ctx, event.EventId, now, 10*time.Minute)
+		claimed, err = u.inboxEventRepo.ClaimRetry(ctx, event.EventId, now, u.inboxProcessingTimeout(), u.inboxMaxRetry())
 		if err != nil {
 			return err
 		}
@@ -129,8 +133,22 @@ func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, pa
 }
 
 func (u *EventUsecase) markFailed(ctx context.Context, eventID string, err error) error {
-	if markErr := u.inboxEventRepo.MarkFailed(ctx, eventID, err.Error()); markErr != nil {
+	if markErr := u.inboxEventRepo.MarkFailed(ctx, eventID, err.Error(), u.inboxMaxRetry()); markErr != nil {
 		u.log.Errorf("mark inbox failed status failed: event_id=%s err=%v", eventID, markErr)
 	}
 	return err
+}
+
+func (u *EventUsecase) inboxMaxRetry() int32 {
+	if u.conf != nil && u.conf.GetEvent() != nil && u.conf.GetEvent().GetInbox() != nil && u.conf.GetEvent().GetInbox().GetMaxRetry() > 0 {
+		return u.conf.GetEvent().GetInbox().GetMaxRetry()
+	}
+	return 10
+}
+
+func (u *EventUsecase) inboxProcessingTimeout() time.Duration {
+	if u.conf != nil && u.conf.GetEvent() != nil && u.conf.GetEvent().GetInbox() != nil && u.conf.GetEvent().GetInbox().GetProcessingTimeout() != nil && u.conf.GetEvent().GetInbox().GetProcessingTimeout().AsDuration() > 0 {
+		return u.conf.GetEvent().GetInbox().GetProcessingTimeout().AsDuration()
+	}
+	return 10 * time.Minute
 }

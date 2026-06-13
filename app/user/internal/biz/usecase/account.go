@@ -41,6 +41,39 @@ func (s *AccountUsecase) GetByUserID(ctx context.Context, userID int64) (*model.
 	return s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &userID})
 }
 
+func (s *AccountUsecase) CheckAvailability(ctx context.Context, req *model.AccountAvailability) (*model.AccountAvailability, error) {
+	if req == nil {
+		return &model.AccountAvailability{}, nil
+	}
+	result := &model.AccountAvailability{
+		Name:  req.Name,
+		Email: req.Email,
+		Phone: req.Phone,
+	}
+	if req.Name != nil {
+		exist, err := s.accountRepo.ExistsByAccount(ctx, *req.Name)
+		if err != nil {
+			return nil, err
+		}
+		result.NameAvailable = !exist
+	}
+	if req.Email != nil {
+		exist, err := s.accountRepo.ExistsByAccount(ctx, *req.Email)
+		if err != nil {
+			return nil, err
+		}
+		result.EmailAvailable = !exist
+	}
+	if req.Phone != nil {
+		exist, err := s.accountRepo.ExistsByAccount(ctx, *req.Phone)
+		if err != nil {
+			return nil, err
+		}
+		result.PhoneAvailable = !exist
+	}
+	return result, nil
+}
+
 func (s *AccountUsecase) ListByUserIDs(ctx context.Context, userIDs []int64) ([]*model.Account, error) {
 	return s.accountRepo.List(ctx, &repo.AccountGetReq{UserIds: userIDs})
 }

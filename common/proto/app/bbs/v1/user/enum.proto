@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+option go_package = "common/proto/gen/bbs/v1/user;user";
+
+// 账号状态。
+enum AccountStatus {
+  // 未指定。
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  // 正常。
+  ACCOUNT_STATUS_NORMAL = 1;
+  // 封禁。
+  ACCOUNT_STATUS_BANNED = 2;
+  // 注销。
+  ACCOUNT_STATUS_DELETED = 3;
+}
+
+// MBTI 类型。
+enum MBTI {
+  // 未指定。
+  MBTI_UNSPECIFIED = 0;
+  // INTJ。
+  MBTI_INTJ = 1;
+  // INTP。
+  MBTI_INTP = 2;
+  // ENTJ。
+  MBTI_ENTJ = 3;
+  // ENTP。
+  MBTI_ENTP = 4;
+  // INFJ。
+  MBTI_INFJ = 5;
+  // INFP。
+  MBTI_INFP = 6;
+  // ENFJ。
+  MBTI_ENFJ = 7;
+  // ENFP。
+  MBTI_ENFP = 8;
+  // ISTJ。
+  MBTI_ISTJ = 9;
+  // ISFJ。
+  MBTI_ISFJ = 10;
+  // ESTJ。
+  MBTI_ESTJ = 11;
+  // ESFJ。
+  MBTI_ESFJ = 12;
+  // ISTP。
+  MBTI_ISTP = 13;
+  // ISFP。
+  MBTI_ISFP = 14;
+  // ESTP。
+  MBTI_ESTP = 15;
+  // ESFP。
+  MBTI_ESFP = 16;
+}

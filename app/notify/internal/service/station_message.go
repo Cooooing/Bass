@@ -1,9 +1,9 @@
 package service
 
 import (
-	"common/api/gen/common"
-	v1 "common/api/gen/notify/v1"
 	commonenum "common/pkg/enum"
+	"common/proto/gen/common"
+	v1 "common/proto/gen/notify/v1"
 	"context"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"

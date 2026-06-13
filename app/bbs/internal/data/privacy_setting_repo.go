@@ -2,23 +2,23 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
-var _ repo.PrivacySettingRepo = (*PrivacySettingRepo)(nil)
+var _ repo.PrivacySettingClient = (*PrivacySettingClient)(nil)
 
-type PrivacySettingRepo struct {
+type PrivacySettingClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewPrivacySettingRepo(userClient *rpc.UserClient) repo.PrivacySettingRepo {
-	return &PrivacySettingRepo{userClient: userClient}
+func NewPrivacySettingClient(userClient *rpc.UserClient) repo.PrivacySettingClient {
+	return &PrivacySettingClient{userClient: userClient}
 }
 
-func (r *PrivacySettingRepo) GetCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Request) (*bbsuserv1.GetCurrentPrivacySetting_Reply, error) {
+func (r *PrivacySettingClient) GetCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Request) (*bbsuserv1.GetCurrentPrivacySetting_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (r *PrivacySettingRepo) GetCurrentPrivacySetting(ctx context.Context, req *
 	return &bbsuserv1.GetCurrentPrivacySetting_Reply{PrivacySetting: out}, nil
 }
 
-func (r *PrivacySettingRepo) UpdateCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Request) (*bbsuserv1.UpdateCurrentPrivacySetting_Reply, error) {
+func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Request) (*bbsuserv1.UpdateCurrentPrivacySetting_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

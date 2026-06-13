@@ -1,10 +1,10 @@
 package data
 
 import (
-	"common/api/gen/common"
+	"common/pkg/auth"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
-	"common/pkg/util/jwt"
+	"common/proto/gen/common"
 	"content/internal/conf"
 	"content/internal/data/client"
 	"content/internal/data/repo"
@@ -20,7 +20,10 @@ var DataProviderSet = wire.NewSet(
 	ProvideNats,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
+	commonClient.NewRedisLock,
 	commonClient.NewNatsClient,
+	commonClient.NewLarkWebhookClient,
+	commonClient.NewDeadLetterAlertClient,
 	rpc.ProvideUserClient,
 
 	client.ProvideTx,
@@ -31,12 +34,13 @@ var DataProviderSet = wire.NewSet(
 	repo.NewArticlePostscriptRepo,
 	repo.NewArticleActionRecordRepo,
 	repo.NewOutboxEventRepo,
+	repo.NewContentModerationRecordRepo,
 	repo.NewDomainRepo,
 	repo.NewTagRepo,
 	repo.NewUserClient,
 	repo.NewNatsEventClient,
 
-	jwt.NewTokenCache,
+	auth.NewTokenCache,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {

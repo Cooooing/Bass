@@ -31,6 +31,8 @@ func (ChatGroupMember) Fields() []ent.Field {
 		field.String("nickname").Comment("群内昵称").Optional().Nillable(),
 		field.Enum("role").Values(enum.ChatGroupMemberRoleMap.EnumValues()...).Default(string(enum.ChatGroupMemberRoleMember)).Comment("群成员角色"),
 		field.Time("mute_end_at").Comment("禁言结束时间").Optional().Nillable(),
+		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}
 	return fields
 }
@@ -38,7 +40,6 @@ func (ChatGroupMember) Fields() []ent.Field {
 func (ChatGroupMember) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
 	}
 }
 

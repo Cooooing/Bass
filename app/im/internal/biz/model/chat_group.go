@@ -1,9 +1,9 @@
-package model
+﻿package model
 
 import (
 	"time"
 
-	userv1 "common/api/gen/user/v1"
+	userv1 "common/proto/gen/user/v1"
 	"im/internal/enum"
 )
 

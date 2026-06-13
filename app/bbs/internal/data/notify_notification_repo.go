@@ -2,23 +2,23 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsnotifyv1 "common/api/gen/bbs/v1/notify"
-	notifyv1 "common/api/gen/notify/v1"
 	"common/pkg/client/rpc"
+	bbsnotifyv1 "common/proto/gen/bbs/v1/notify"
+	notifyv1 "common/proto/gen/notify/v1"
 	"context"
 )
 
-var _ repo.NotificationRepo = (*NotificationRepo)(nil)
+var _ repo.NotificationClient = (*NotificationClient)(nil)
 
-type NotificationRepo struct {
+type NotificationClient struct {
 	notifyClient *rpc.NotifyClient
 }
 
-func NewNotificationRepo(notifyClient *rpc.NotifyClient) repo.NotificationRepo {
-	return &NotificationRepo{notifyClient: notifyClient}
+func NewNotificationClient(notifyClient *rpc.NotifyClient) repo.NotificationClient {
+	return &NotificationClient{notifyClient: notifyClient}
 }
 
-func (r *NotificationRepo) ListNotifications(ctx context.Context, req *bbsnotifyv1.ListNotifications_Request) (*bbsnotifyv1.ListNotifications_Reply, error) {
+func (r *NotificationClient) ListNotifications(ctx context.Context, req *bbsnotifyv1.ListNotifications_Request) (*bbsnotifyv1.ListNotifications_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (r *NotificationRepo) ListNotifications(ctx context.Context, req *bbsnotify
 	return &bbsnotifyv1.ListNotifications_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
-func (r *NotificationRepo) MarkReadNotification(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Request) (*bbsnotifyv1.MarkReadNotification_Reply, error) {
+func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Request) (*bbsnotifyv1.MarkReadNotification_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (r *NotificationRepo) MarkReadNotification(ctx context.Context, req *bbsnot
 	return &bbsnotifyv1.MarkReadNotification_Reply{Count: reply.GetCount()}, nil
 }
 
-func (r *NotificationRepo) CountUnreadNotifications(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Request) (*bbsnotifyv1.CountUnreadNotifications_Reply, error) {
+func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Request) (*bbsnotifyv1.CountUnreadNotifications_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

@@ -2,9 +2,10 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
+	"common/pkg/apperror"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
 	"unicode"
@@ -46,12 +47,12 @@ func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfi
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Reply, error) {
 	if req == nil {
-		return nil, cerrors.ErrorBadRequest("profile update request is invalid")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
 	if req.AvatarUrl != nil {
 		value := strings.TrimSpace(*req.AvatarUrl)
 		if utf8.RuneCountInString(value) > maxProfileURLLength {
-			return nil, cerrors.ErrorBadRequest("avatar_url is too long")
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 		req.AvatarUrl = new(value)
 	}
@@ -60,7 +61,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		if value != "" {
 			length := utf8.RuneCountInString(value)
 			if length < 2 || length > 32 {
-				return nil, cerrors.ErrorBadRequest("nickname is invalid")
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 			}
 			hasNonDigit := false
 			for _, r := range value {
@@ -70,7 +71,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 				}
 			}
 			if !hasNonDigit {
-				return nil, cerrors.ErrorBadRequest("nickname is invalid")
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 			}
 		}
 		req.Nickname = new(value)
@@ -78,16 +79,16 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	if req.Url != nil {
 		value := strings.TrimSpace(*req.Url)
 		if utf8.RuneCountInString(value) > maxProfileURLLength {
-			return nil, cerrors.ErrorBadRequest("url is too long")
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 		req.Url = new(value)
 	}
 	if req.Introduction != nil && utf8.RuneCountInString(*req.Introduction) > maxProfileIntroductionLength {
-		return nil, cerrors.ErrorBadRequest("introduction is too long")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
 	if req.Mbti != nil {
 		if _, ok := bbsuserv1.MBTI_name[int32(*req.Mbti)]; !ok {
-			return nil, cerrors.ErrorBadRequest("mbti is invalid")
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 	}
 	return s.accountUsecase.UpdateProfileAccount(ctx, req)

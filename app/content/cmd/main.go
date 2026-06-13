@@ -33,7 +33,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -44,7 +44,7 @@ func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxP
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(gs, outboxPublisher),
+		kratos.Server(gs, outboxPublisher, outboxDeadLetterScanner),
 		kratos.Registrar(cc.Registrar()),
 	)
 }

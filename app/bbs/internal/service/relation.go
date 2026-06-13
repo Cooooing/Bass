@@ -2,7 +2,12 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -27,18 +32,30 @@ func (s *RelationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *RelationService) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Request) (*bbsuserv1.FollowRelation_Reply, error) {
+	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil && user.ID == req.GetTargetId() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	return s.relationUsecase.Follow(ctx, req)
 }
 
 func (s *RelationService) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Request) (*bbsuserv1.UnfollowRelation_Reply, error) {
+	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil && user.ID == req.GetTargetId() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	return s.relationUsecase.Unfollow(ctx, req)
 }
 
 func (s *RelationService) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Request) (*bbsuserv1.BlockRelation_Reply, error) {
+	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil && user.ID == req.GetTargetId() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	return s.relationUsecase.Block(ctx, req)
 }
 
 func (s *RelationService) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_Request) (*bbsuserv1.UnblockRelation_Reply, error) {
+	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil && user.ID == req.GetTargetId() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	return s.relationUsecase.Unblock(ctx, req)
 }
 

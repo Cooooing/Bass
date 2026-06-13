@@ -2,7 +2,7 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
-	bbscontentv1 "common/api/gen/bbs/v1/content"
+	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -32,6 +32,18 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 
 func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.ListComments_Request) (*bbscontentv1.ListComments_Reply, error) {
 	return s.contentCommentUsecase.ListComments(ctx, req)
+}
+
+func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Request) (*bbscontentv1.ListCommentThreads_Reply, error) {
+	return s.contentCommentUsecase.ListCommentThreads(ctx, req)
+}
+
+func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Request) (*bbscontentv1.ListCommentReplies_Reply, error) {
+	return s.contentCommentUsecase.ListCommentReplies(ctx, req)
+}
+
+func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Request) (*bbscontentv1.ListCommentTimeline_Reply, error) {
+	return s.contentCommentUsecase.ListCommentTimeline(ctx, req)
 }
 
 func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.LikeComment_Request) (*bbscontentv1.LikeComment_Reply, error) {

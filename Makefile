@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := help
+﻿.DEFAULT_GOAL := help
 
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 APP_DIR := $(ROOT_DIR)/app
@@ -9,7 +9,7 @@ BFF_SERVERS ?= bbs
 
 IGNORE_ERROR ?= 1
 
-include $(ROOT_DIR)/common/make/common.mk
+include $(ROOT_DIR)/common/build/make/common.mk
 
 # --- Root-only targets, avoiding module target collisions. ---
 

@@ -35,6 +35,8 @@ func (ChatMessage) Fields() []ent.Field {
 		field.Enum("type").Values(enum.MessageTypeMap.EnumValues()...).Default(string(enum.MessageTypeNormal)).Comment("消息内容类型"),
 		field.Text("content").Comment("消息内容"),
 		field.Enum("status").Values(enum.MessageStatusMap.EnumValues()...).Default(string(enum.MessageStatusNormal)).Comment("消息状态"),
+		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}
 	return fields
 }
@@ -42,7 +44,6 @@ func (ChatMessage) Fields() []ent.Field {
 func (ChatMessage) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
 	}
 }
 

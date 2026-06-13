@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"common/api/gen/common"
-	commonserver "common/pkg/util/server"
+	commonserver "common/pkg/server"
+	"common/proto/gen/common"
 )
 
 // LoadConfig 加载本模块配置，并注册可热更新配置。
@@ -15,7 +15,9 @@ func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstra
 	if err := hot.BindProtoHotFields(
 		&c.Server.App,
 		&c.Server.Avatar,
-		&c.Server.Jwt,
+		&c.Alert.LarkWebhook,
+		&c.Event.Outbox,
+		&c.Event.DeadLetter,
 	); err != nil {
 		cleanup()
 		return nil, nil, cleanup, err

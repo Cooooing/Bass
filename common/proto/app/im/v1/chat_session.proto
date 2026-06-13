@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/common.proto";
+import "im/v1/model.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+// ChatSession 服务
+service IMChatSessionService {
+  rpc MarkMuted(MarkMutedChatSession.Request) returns (MarkMutedChatSession.Reply) {} // 免打扰
+  rpc MarkPinned(MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Reply) {} // 置顶
+  rpc MarkRead(MarkReadChatSession.Request) returns (MarkReadChatSession.Reply) {} // 标为已读
+  rpc List(ListChatSessions.Request) returns (ListChatSessions.Reply) {} // 查询会话数据
+}
+
+message MarkMutedChatSession {
+  message Request {
+    repeated int64 ids = 1; // 会话ID
+    bool disturb = 2; // 是否免打扰
+    int64 user_id = 3; // 用户 ID
+  }
+  message Reply {}
+}
+
+message MarkPinnedChatSession {
+  message Request {
+    repeated int64 ids = 1; // 会话ID
+    bool top = 2; // 是否置顶
+    int64 user_id = 3; // 用户 ID
+  }
+  message Reply {}
+}
+
+message MarkReadChatSession {
+  message Request {
+    repeated int64 ids = 1; // 会话ID
+    int64 user_id = 2; // 用户 ID
+  }
+  message Reply {}
+}
+
+message ListChatSessions {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    ChatSessionQueryParams query = 2; // 查询参数
+    int64 user_id = 3; // 用户 ID
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页信息
+    repeated ChatSession rows = 2; // 消息信息
+  }
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package common.api.app.push_hub.v1;
+
+option go_package = "common/proto/gen/push_hub/v1;v1";
+
+// 推送事件类型
+enum PushEventType {
+  PUSH_EVENT_TYPE_UNKNOWN = 0;
+  PUSH_EVENT_TYPE_IM_MESSAGE = 1; // IM 消息
+  PUSH_EVENT_TYPE_NOTIFICATION = 2; // 通知
+  PUSH_EVENT_TYPE_SYSTEM = 3; // 系统消息
+}
+
+// 节点状态
+enum NodeStatus {
+  NODE_STATUS_UNKNOWN = 0;
+  NODE_STATUS_ONLINE = 1; // 在线
+  NODE_STATUS_OFFLINE = 2; // 离线
+}

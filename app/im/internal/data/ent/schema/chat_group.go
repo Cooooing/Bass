@@ -35,6 +35,8 @@ func (ChatGroup) Fields() []ent.Field {
 
 		field.Uint32("message_count").Comment("群消息数").Default(0),
 		field.Int64("last_message_id").Comment("最后一条消息id").Unique().Optional().Nillable(),
+		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}
 	return fields
 }
@@ -42,7 +44,6 @@ func (ChatGroup) Fields() []ent.Field {
 func (ChatGroup) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
 	}
 }
 

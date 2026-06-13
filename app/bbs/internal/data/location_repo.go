@@ -2,23 +2,23 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
-var _ repo.LocationRepo = (*LocationRepo)(nil)
+var _ repo.LocationClient = (*LocationClient)(nil)
 
-type LocationRepo struct {
+type LocationClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewLocationRepo(userClient *rpc.UserClient) repo.LocationRepo {
-	return &LocationRepo{userClient: userClient}
+func NewLocationClient(userClient *rpc.UserClient) repo.LocationClient {
+	return &LocationClient{userClient: userClient}
 }
 
-func (r *LocationRepo) GetCurrentLocation(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error) {
+func (r *LocationClient) GetCurrentLocation(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (r *LocationRepo) GetCurrentLocation(ctx context.Context, req *bbsuserv1.Ge
 	return &bbsuserv1.GetCurrentLocation_Reply{Location: out}, nil
 }
 
-func (r *LocationRepo) UpsertCurrentLocation(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error) {
+func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

@@ -1,7 +1,7 @@
-package enum
+﻿package enum
 
 import (
-	v1 "common/api/gen/im/v1"
+	v1 "common/proto/gen/im/v1"
 	"common/pkg/enum"
 )
 
@@ -51,4 +51,16 @@ const (
 var MessageStatusMap = enum.NewMapping[MessageStatus, v1.MessageStatus](map[MessageStatus]enum.Entry[MessageStatus, v1.MessageStatus]{
 	MessageStatusNormal: {Proto: v1.MessageStatus_MESSAGE_STATUS_NORMAL},
 	MessageStatusRevoke: {Proto: v1.MessageStatus_MESSAGE_STATUS_REVOKE},
+})
+
+type ReceiverType string
+
+const (
+	ReceiverTypeUser  ReceiverType = "user"
+	ReceiverTypeGroup ReceiverType = "group"
+)
+
+var ReceiverTypeMap = enum.NewMapping[ReceiverType, v1.ReceiverType](map[ReceiverType]enum.Entry[ReceiverType, v1.ReceiverType]{
+	ReceiverTypeUser:  {Proto: v1.ReceiverType_RECEIVER_TYPE_USER},
+	ReceiverTypeGroup: {Proto: v1.ReceiverType_RECEIVER_TYPE_GROUP},
 })

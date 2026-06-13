@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "user/v1/model.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+service PrivacySettingService {
+  rpc Get(GetPrivacySetting.Request) returns (GetPrivacySetting.Reply) {} // 获取账号隐私设置，缺省时返回默认设置。
+  rpc Update(UpdatePrivacySetting.Request) returns (UpdatePrivacySetting.Reply) {} // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
+}
+
+message GetPrivacySetting {
+  message Request {
+    int64 user_id = 1;
+  }
+  message Reply {
+    PrivacySetting privacy_setting = 1;
+  }
+}
+
+message UpdatePrivacySetting {
+  message Request {
+    int64 user_id = 1;
+    optional bool public_points = 2;
+    optional bool public_followers = 3;
+    optional bool public_articles = 4;
+    optional bool public_comments = 5;
+    optional bool public_online_status = 6;
+    optional bool public_location = 7;
+  }
+  message Reply {
+    PrivacySetting privacy_setting = 1;
+  }
+}

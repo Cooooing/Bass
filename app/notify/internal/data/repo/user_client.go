@@ -1,9 +1,9 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	"common/proto/gen/common"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"

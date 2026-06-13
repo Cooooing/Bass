@@ -1,8 +1,9 @@
 package service
 
 import (
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/notify/v1"
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/notify/v1"
 	"context"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
@@ -27,15 +28,15 @@ func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Request) (*v1.CheckNotificationRateLimit_Reply, error) {
 	if req == nil {
-		return nil, cerrors.ErrorBadRequest("rate limit request is invalid")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQUEST_INVALID)
 	}
 	channel, ok := notifyenum.NotificationChannelMap.ToEnum(req.GetChannel())
 	if !ok || (channel != notifyenum.NotificationChannelEmail && channel != notifyenum.NotificationChannelTencentSMS) {
-		return nil, cerrors.ErrorBadRequest("notification channel is invalid")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_CHANNEL_INVALID)
 	}
 	recipient := strings.TrimSpace(req.GetRecipient())
 	if recipient == "" {
-		return nil, cerrors.ErrorBadRequest("notification recipient is invalid")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RECIPIENT_INVALID)
 	}
 	state, err := s.rateLimitUsecase.Check(ctx, channel, recipient)
 	if err != nil {

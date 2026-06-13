@@ -1,7 +1,7 @@
-package data
+﻿package data
 
 import (
-	"common/api/gen/common"
+	"common/proto/gen/common"
 	commonClient "common/pkg/client"
 	"im/internal/conf"
 	"im/internal/data/client"
@@ -22,6 +22,8 @@ var DataProviderSet = wire.NewSet(
 
 	repo.NewChatGroupRepo,
 	repo.NewChatSessionRepo,
+	repo.NewChatMessageRepo,
+	repo.NewChatGroupMemberRepo,
 )
 
 func ProvideRedis(c *conf.Bootstrap) *common.Redis {

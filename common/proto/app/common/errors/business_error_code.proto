@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package common.api.app.common;
+
+import "errors/errors.proto";
+
+option go_package = "common/proto/gen/common/errors;errors";
+
+// BusinessErrorCode 表示业务错误码，对外响应体 code 字段使用该枚举的数字值。
+enum BusinessErrorCode {
+  option (errors.default_code) = 500;
+  BUSINESS_ERROR_CODE_SUCCESS = 0 [(errors.code) = 200]; // 成功
+  BUSINESS_ERROR_CODE_COMMON_UNKNOWN = 10000 [(errors.code) = 500]; // 未知错误
+  BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT = 10001 [(errors.code) = 400]; // 请求参数无效
+  BUSINESS_ERROR_CODE_COMMON_UNAUTHORIZED = 10002 [(errors.code) = 401]; // 未认证
+  BUSINESS_ERROR_CODE_COMMON_FORBIDDEN = 10003 [(errors.code) = 403]; // 无权限
+  BUSINESS_ERROR_CODE_COMMON_NOT_FOUND = 10004 [(errors.code) = 404]; // 资源不存在
+  BUSINESS_ERROR_CODE_COMMON_CONFLICT = 10005 [(errors.code) = 409]; // 状态冲突
+  BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQUESTS = 10006 [(errors.code) = 429]; // 请求过于频繁
+  BUSINESS_ERROR_CODE_COMMON_INTERNAL = 10007 [(errors.code) = 500]; // 服务内部错误
+  BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED = 10008 [(errors.code) = 501]; // 功能未实现
+  BUSINESS_ERROR_CODE_COMMON_UPSTREAM_UNAVAILABLE = 10009 [(errors.code) = 503]; // 上游服务不可用
+  BUSINESS_ERROR_CODE_COMMON_OPERATION_FAILED = 10010 [(errors.code) = 500]; // 操作失败
+  BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS = 11001 [(errors.code) = 400]; // 用户登录凭证无效
+  BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED = 11002 [(errors.code) = 401]; // 用户登录令牌缺失
+  BUSINESS_ERROR_CODE_USER_TOKEN_INVALID = 11003 [(errors.code) = 401]; // 用户登录令牌无效
+  BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND = 11004 [(errors.code) = 404]; // 用户账号不存在
+  BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN = 11005 [(errors.code) = 409]; // 用户账号名已被占用
+  BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS = 11006 [(errors.code) = 409]; // 用户账号已存在
+  BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED = 11007 [(errors.code) = 400]; // 用户验证码无效或已过期
+  BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_SEND_TOO_FREQUENT = 11008 [(errors.code) = 429]; // 用户验证码发送过于频繁
+  BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_ENABLED = 11009 [(errors.code) = 409]; // 用户 TOTP 已启用
+  BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_DISABLED = 11010 [(errors.code) = 409]; // 用户 TOTP 已关闭
+  BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID = 11011 [(errors.code) = 400]; // 用户 TOTP 验证码无效
+  BUSINESS_ERROR_CODE_USER_RELATION_INVALID = 11012 [(errors.code) = 400]; // 用户关系操作无效
+  BUSINESS_ERROR_CODE_USER_RELATION_ALREADY_EXISTS = 11013 [(errors.code) = 409]; // 用户关系已存在
+  BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND = 11014 [(errors.code) = 404]; // 用户关系不存在
+  BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED = 11015 [(errors.code) = 400]; // 用户不允许对自己操作
+  BUSINESS_ERROR_CODE_USER_PREFERENCE_INVALID = 11016 [(errors.code) = 400]; // 用户偏好设置无效
+  BUSINESS_ERROR_CODE_USER_PROFILE_INVALID = 11017 [(errors.code) = 400]; // 用户资料信息无效
+  BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND = 12001 [(errors.code) = 404]; // 内容文章不存在
+  BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND = 12002 [(errors.code) = 404]; // 内容标签不存在
+  BUSINESS_ERROR_CODE_CONTENT_DOMAIN_NOT_FOUND = 12003 [(errors.code) = 404]; // 内容领域不存在
+  BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND = 12004 [(errors.code) = 404]; // 内容评论不存在
+  BUSINESS_ERROR_CODE_CONTENT_ARTICLE_ACTION_RECORD_NOT_FOUND = 12005 [(errors.code) = 404]; // 内容文章操作记录不存在
+  BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS = 12006 [(errors.code) = 400]; // 内容文章状态无效
+  BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE = 12007 [(errors.code) = 400]; // 内容文章类型无效
+  BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_ACTION = 12008 [(errors.code) = 400]; // 内容文章操作无效
+  BUSINESS_ERROR_CODE_CONTENT_INVALID_COMMENT_STATUS = 12009 [(errors.code) = 400]; // 内容评论状态无效
+  BUSINESS_ERROR_CODE_CONTENT_INVALID_COMMENT_ACTION = 12010 [(errors.code) = 400]; // 内容评论操作无效
+  BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_COMMENTABLE = 12011 [(errors.code) = 409]; // 内容文章不允许评论
+  BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT = 12012 [(errors.code) = 409]; // 内容文章状态冲突
+  BUSINESS_ERROR_CODE_CONTENT_ARTICLE_REWARD_NOT_IMPLEMENTED = 12013 [(errors.code) = 501]; // 内容文章打赏未实现
+  BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID = 12014 [(errors.code) = 400]; // 内容标签信息无效
+  BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID = 12015 [(errors.code) = 400]; // 内容领域信息无效
+  BUSINESS_ERROR_CODE_CONTENT_COMMENT_INVALID = 12016 [(errors.code) = 400]; // 内容评论信息无效
+  BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQUEST_INVALID = 13001 [(errors.code) = 400]; // 通知限流请求无效
+  BUSINESS_ERROR_CODE_NOTIFY_CHANNEL_INVALID = 13002 [(errors.code) = 400]; // 通知渠道无效
+  BUSINESS_ERROR_CODE_NOTIFY_RECIPIENT_INVALID = 13003 [(errors.code) = 400]; // 通知接收人无效
+  BUSINESS_ERROR_CODE_IM_CHAT_SESSION_NOT_FOUND = 14001 [(errors.code) = 404]; // 即时通信会话不存在
+  BUSINESS_ERROR_CODE_IM_CHAT_GROUP_NOT_FOUND = 14002 [(errors.code) = 404]; // 即时通信群组不存在
+  BUSINESS_ERROR_CODE_IM_CHAT_GROUP_STATUS_INVALID = 14003 [(errors.code) = 400]; // 即时通信群组状态无效
+  BUSINESS_ERROR_CODE_IM_CHAT_SESSION_INVALID = 14004 [(errors.code) = 400]; // 即时通信会话信息无效
+  BUSINESS_ERROR_CODE_BBS_CALLBACK_SIGNATURE_INVALID = 15001 [(errors.code) = 403]; // BBS 回调签名无效
+}

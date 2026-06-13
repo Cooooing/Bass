@@ -1,15 +1,14 @@
 package data
 
 import (
-	"common/api/gen/common"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
+	"common/proto/gen/common"
 	"net/http"
 	bizchannel "notify/internal/biz/channel"
 	"notify/internal/conf"
 	datachannel "notify/internal/data/channel"
 	"notify/internal/data/client"
-	"notify/internal/data/oss"
 	"notify/internal/data/repo"
 
 	"github.com/google/wire"
@@ -24,11 +23,12 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
+	commonClient.NewLarkWebhookClient,
+	commonClient.NewDeadLetterAlertClient,
 	NewHTTPClient,
 
 	client.ProvideTx,
 
-	repo.NewObjectStorageRepo,
 	repo.NewInboxEventRepo,
 	repo.NewNotificationRuleRepo,
 	repo.NewNotificationStationMessageRepo,
@@ -45,8 +45,6 @@ var DataProviderSet = wire.NewSet(
 	wire.Bind(new(bizchannel.TencentSMSClient), new(*datachannel.TencentSMSClient)),
 	datachannel.NewLarkWebhookClient,
 	wire.Bind(new(bizchannel.LarkWebhookClient), new(*datachannel.LarkWebhookClient)),
-
-	oss.ProviderSet,
 
 	rpc.ProvideUserClient,
 	rpc.ProvideContentClient,

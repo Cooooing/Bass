@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/pkg/client/db/driver"
+	"common/pkg/client/driver"
 	"content/internal/conf"
 	"content/internal/data/gen"
 	"content/internal/data/gen/migrate"

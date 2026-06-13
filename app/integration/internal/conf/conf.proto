@@ -1,0 +1,37 @@
+syntax = "proto3";
+package kratos.api.conf;
+
+import "common/config.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "integration/internal/conf/conf;conf";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Trace trace = 3;
+}
+
+message Server {
+  string name = 1;
+  string version = 2;
+  string mode = 3;
+  GRPC grpc = 6;
+  message GRPC {
+    string network = 1;
+    string host = 2;
+    int32 port = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+}
+
+message Data {
+  common.api.app.common.Consul consul = 1;
+}
+
+message Trace {
+  bool enable_otel = 1;
+  string endpoint = 2;
+  bool insecure = 3;
+  double sampler = 4;
+}

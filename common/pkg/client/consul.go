@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/api/gen/common"
+	"common/proto/gen/common"
 	"context"
 	"fmt"
 	"net"

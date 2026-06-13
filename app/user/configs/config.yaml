@@ -3,10 +3,12 @@ server:
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
   http:
+    network: tcp
     host: ${HTTP_HOST:0.0.0.0}
     port: ${HTTP_PORT:8002}
     timeout: 5s
   grpc:
+    network: tcp
     host: ${GRPC_HOST:0.0.0.0}
     port: ${GRPC_PORT:9002}
     timeout: 5s
@@ -16,15 +18,18 @@ server:
     secret: qbceKQYgXXffTxVBgGrX
     expires: 864000s
     email_expire: 300s
+    phone_expire: 300s
 data:
   database:
     driver: postgres
     source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable # 数据库连接串模板
     merge: true # 是否同步表到数据库
     debug: true
+    slow_sql_threshold: 1s
+    sample_rate: 1
   redis:
     addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
-    password: ${REDIS_PASSWORD:123456}
+    password: ${REDIS_PASSWORD:'123456'}
     dial_timeout: 5s
     db: 0
     read_timeout: 5s
@@ -38,7 +43,7 @@ data:
     host: ${NATS_HOST:127.0.0.1}
     port: ${NATS_PORT:4222}
     user: ${NATS_USER:admin}
-    password: ${NATS_PASSWORD:123456}
+    password: ${NATS_PASSWORD:'123456'}
     name: nats-client
     timeout: 5s
     max_reconnects: 10
@@ -58,3 +63,21 @@ trace:
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}  # OTel Collector 地址
   insecure: true
   sampler: 1  # 100% 采样率
+alert:
+  lark_webhook:
+    base_url: ${ALERT_LARK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
+    token: ${ALERT_LARK_TOKEN:}
+    secret: ${ALERT_LARK_SECRET:}
+    timeout: 10s
+event:
+  outbox:
+    max_retry: 10
+    publish_timeout: 300s
+    poll_lock_ttl: 60s
+    publish_limit: 1000
+    min_poll_interval: 1s
+    max_poll_interval: 8s
+  dead_letter:
+    enable_alert: false
+    scan_interval: 60s
+    alert_dedup_window: 3600s

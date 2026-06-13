@@ -1,7 +1,7 @@
-package service
+﻿package service
 
 import (
-	"common/api/gen/common/v1"
+	"common/proto/gen/common/v1"
 	"context"
 	"fmt"
 	"im/internal/conf"

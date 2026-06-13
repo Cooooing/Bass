@@ -2,23 +2,23 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbscontentv1 "common/api/gen/bbs/v1/content"
-	contentv1 "common/api/gen/content/v1"
 	"common/pkg/client/rpc"
+	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	contentv1 "common/proto/gen/content/v1"
 	"context"
 )
 
-var _ repo.ContentDomainRepo = (*ContentDomainRepo)(nil)
+var _ repo.ContentDomainClient = (*ContentDomainClient)(nil)
 
-type ContentDomainRepo struct {
+type ContentDomainClient struct {
 	contentClient *rpc.ContentClient
 }
 
-func NewContentDomainRepo(contentClient *rpc.ContentClient) repo.ContentDomainRepo {
-	return &ContentDomainRepo{contentClient: contentClient}
+func NewContentDomainClient(contentClient *rpc.ContentClient) repo.ContentDomainClient {
+	return &ContentDomainClient{contentClient: contentClient}
 }
 
-func (r *ContentDomainRepo) ListDomains(ctx context.Context, req *bbscontentv1.ListDomains_Request) (*bbscontentv1.ListDomains_Reply, error) {
+func (r *ContentDomainClient) ListDomains(ctx context.Context, req *bbscontentv1.ListDomains_Request) (*bbscontentv1.ListDomains_Reply, error) {
 	query := req.GetQuery()
 	if query == nil {
 		query = &bbscontentv1.DomainQuery{}
@@ -34,7 +34,7 @@ func (r *ContentDomainRepo) ListDomains(ctx context.Context, req *bbscontentv1.L
 	if query.Status != nil {
 		contentQuery.Status = new(contentv1.DomainStatus(*query.Status))
 	}
-	reply, err := r.contentClient.Domain.List(ctx, &contentv1.ListDomains_Request{
+	reply, err := r.contentClient.Domain.Page(ctx, &contentv1.PageDomains_Request{
 		Page:  req.Page,
 		Query: contentQuery,
 	})

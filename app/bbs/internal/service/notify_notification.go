@@ -2,7 +2,7 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
-	bbsnotifyv1 "common/api/gen/bbs/v1/notify"
+	bbsnotifyv1 "common/proto/gen/bbs/v1/notify"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package common.api.app.common.v1;
+
+option go_package = "common/proto/gen/common/v1;v1";
+
+// System 服务
+service CommonSystemService {
+  // 健康检查
+  rpc Health(HealthSystem.Request) returns (HealthSystem.Reply) {}
+}
+
+message HealthSystem {
+  message Request {}
+  message Reply {
+    // 响应消息
+    string message = 1;
+  }
+}

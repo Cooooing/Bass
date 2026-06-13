@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package common.api.app.integration.v1;
+
+import "integration/v1/model.proto";
+
+option go_package = "common/proto/gen/integration/v1;v1";
+
+// IP 解析服务（内部 gRPC）
+service IntegrationIpResolutionService {
+  // 解析 IP 地理信息
+  rpc ResolveIp(ResolveIp.Request) returns (ResolveIp.Reply) {}
+}
+
+message ResolveIp {
+  message Request {
+    // IP 地址
+    string ip = 1;
+  }
+  message Reply {
+    // 国家
+    string country = 1;
+    // 省份
+    string province = 2;
+    // 城市
+    string city = 3;
+    // 运营商
+    string isp = 4;
+    // 国家代码
+    string country_code = 5;
+  }
+}

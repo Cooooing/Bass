@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -8,47 +9,127 @@ import (
 	"user/internal/data/gen/checkinrecord"
 	"user/internal/data/gen/checkinstat"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
-var _ repo.CheckinRepo = (*CheckinRepo)(nil)
+var _ repo.CheckinRecordRepo = (*CheckinRecordRepo)(nil)
+var _ repo.CheckinStatRepo = (*CheckinStatRepo)(nil)
 
-type CheckinRepo struct {
+type CheckinRecordRepo struct {
 	db *gen.Client
 }
 
-func NewCheckinRepo(db *gen.Client) repo.CheckinRepo {
-	return &CheckinRepo{
+func NewCheckinRecordRepo(db *gen.Client) repo.CheckinRecordRepo {
+	return &CheckinRecordRepo{
 		db: db,
 	}
 }
 
-func (r *CheckinRepo) getClient(ctx context.Context) *gen.Client {
+func (r *CheckinRecordRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *CheckinRepo) FindStatByUserID(ctx context.Context, userID int64) (*model.CheckinStat, error) {
+func (r *CheckinRecordRepo) Get(ctx context.Context, req *repo.CheckinRecordGetReq) (*model.CheckinRecord, error) {
 	tx := r.getClient(ctx)
-	s, err := tx.CheckinStat.Query().Where(checkinstat.UserID(userID)).Only(ctx)
+	query := tx.CheckinRecord.Query()
+	query = r.getQuery(query, req)
+	row, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &model.CheckinStat{
-		ID:                 s.ID,
-		UserID:             s.UserID,
-		TotalOnlineMinutes: new(s.TotalOnlineMinutes),
-		CurrentStreak:      new(s.CurrentStreak),
-		LongestStreak:      new(s.LongestStreak),
+	return &model.CheckinRecord{
+		ID:            row.ID,
+		UserID:        row.UserID,
+		Date:          new(row.Date),
+		OnlineMinutes: new(row.OnlineMinutes),
+		Activity:      new(row.Activity),
+		Checked:       row.Checked,
 	}, nil
 }
 
-func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRecord) (*model.CheckinRecord, error) {
+func (r *CheckinRecordRepo) List(ctx context.Context, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, error) {
+	tx := r.getClient(ctx)
+	query := tx.CheckinRecord.Query()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.CheckinRecord, 0, len(list))
+	for _, row := range list {
+		result = append(result, &model.CheckinRecord{
+			ID:            row.ID,
+			UserID:        row.UserID,
+			Date:          new(row.Date),
+			OnlineMinutes: new(row.OnlineMinutes),
+			Activity:      new(row.Activity),
+			Checked:       row.Checked,
+		})
+	}
+	return result, nil
+}
+
+func (r *CheckinRecordRepo) Map(ctx context.Context, req *repo.CheckinRecordGetReq) (map[int64]*model.CheckinRecord, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.CheckinRecord, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *CheckinRecordRepo) Count(ctx context.Context, req *repo.CheckinRecordGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.CheckinRecord.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *CheckinRecordRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, *common.PageReply, error) {
+	tx := r.getClient(ctx)
+	page = server.PageValid(page)
+	query := tx.CheckinRecord.Query()
+	query = r.getQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.CheckinRecord, 0, len(list))
+	for _, row := range list {
+		result = append(result, &model.CheckinRecord{
+			ID:            row.ID,
+			UserID:        row.UserID,
+			Date:          new(row.Date),
+			OnlineMinutes: new(row.OnlineMinutes),
+			Activity:      new(row.Activity),
+			Checked:       row.Checked,
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
+func (r *CheckinRecordRepo) UpsertRecord(ctx context.Context, record *model.CheckinRecord) (*model.CheckinRecord, error) {
 	tx := r.getClient(ctx)
 	existing, err := tx.CheckinRecord.Query().
 		Where(checkinrecord.UserID(record.UserID)).
@@ -103,8 +184,140 @@ func (r *CheckinRepo) UpsertRecord(ctx context.Context, record *model.CheckinRec
 	}, nil
 }
 
-func (r *CheckinRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (*model.CheckinStat, error) {
-	existing, err := r.FindStatByUserID(ctx, stat.UserID)
+func (r *CheckinRecordRepo) getQuery(query *gen.CheckinRecordQuery, req *repo.CheckinRecordGetReq) *gen.CheckinRecordQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(checkinrecord.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(checkinrecord.IDIn(req.IDs...))
+	}
+	if req.UserID != nil {
+		query = query.Where(checkinrecord.UserID(*req.UserID))
+	}
+	if len(req.UserIDs) > 0 {
+		query = query.Where(checkinrecord.UserIDIn(req.UserIDs...))
+	}
+	if req.Date != nil {
+		query = query.Where(checkinrecord.DateEQ(*req.Date))
+	}
+	return query
+}
+
+type CheckinStatRepo struct {
+	db *gen.Client
+}
+
+func NewCheckinStatRepo(db *gen.Client) repo.CheckinStatRepo {
+	return &CheckinStatRepo{
+		db: db,
+	}
+}
+
+func (r *CheckinStatRepo) getClient(ctx context.Context) *gen.Client {
+	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return c
+	}
+	return r.db
+}
+
+func (r *CheckinStatRepo) Get(ctx context.Context, req *repo.CheckinStatGetReq) (*model.CheckinStat, error) {
+	tx := r.getClient(ctx)
+	query := tx.CheckinStat.Query()
+	query = r.getQuery(query, req)
+	s, err := query.First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &model.CheckinStat{
+		ID:                 s.ID,
+		UserID:             s.UserID,
+		TotalOnlineMinutes: new(s.TotalOnlineMinutes),
+		CurrentStreak:      new(s.CurrentStreak),
+		LongestStreak:      new(s.LongestStreak),
+	}, nil
+}
+
+func (r *CheckinStatRepo) List(ctx context.Context, req *repo.CheckinStatGetReq) ([]*model.CheckinStat, error) {
+	tx := r.getClient(ctx)
+	query := tx.CheckinStat.Query()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.CheckinStat, 0, len(list))
+	for _, s := range list {
+		result = append(result, &model.CheckinStat{
+			ID:                 s.ID,
+			UserID:             s.UserID,
+			TotalOnlineMinutes: new(s.TotalOnlineMinutes),
+			CurrentStreak:      new(s.CurrentStreak),
+			LongestStreak:      new(s.LongestStreak),
+		})
+	}
+	return result, nil
+}
+
+func (r *CheckinStatRepo) Map(ctx context.Context, req *repo.CheckinStatGetReq) (map[int64]*model.CheckinStat, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.CheckinStat, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *CheckinStatRepo) Count(ctx context.Context, req *repo.CheckinStatGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.CheckinStat.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *CheckinStatRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.CheckinStatGetReq) ([]*model.CheckinStat, *common.PageReply, error) {
+	tx := r.getClient(ctx)
+	page = server.PageValid(page)
+	query := tx.CheckinStat.Query()
+	query = r.getQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.CheckinStat, 0, len(list))
+	for _, s := range list {
+		result = append(result, &model.CheckinStat{
+			ID:                 s.ID,
+			UserID:             s.UserID,
+			TotalOnlineMinutes: new(s.TotalOnlineMinutes),
+			CurrentStreak:      new(s.CurrentStreak),
+			LongestStreak:      new(s.LongestStreak),
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
+func (r *CheckinStatRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (*model.CheckinStat, error) {
+	existing, err := r.Get(ctx, &repo.CheckinStatGetReq{UserID: &stat.UserID})
 	if err != nil {
 		return nil, err
 	}
@@ -159,4 +372,23 @@ func (r *CheckinRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (
 		CurrentStreak:      new(saved.CurrentStreak),
 		LongestStreak:      new(saved.LongestStreak),
 	}, nil
+}
+
+func (r *CheckinStatRepo) getQuery(query *gen.CheckinStatQuery, req *repo.CheckinStatGetReq) *gen.CheckinStatQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(checkinstat.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(checkinstat.IDIn(req.IDs...))
+	}
+	if req.UserID != nil {
+		query = query.Where(checkinstat.UserID(*req.UserID))
+	}
+	if len(req.UserIDs) > 0 {
+		query = query.Where(checkinstat.UserIDIn(req.UserIDs...))
+	}
+	return query
 }

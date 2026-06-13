@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package common.api.app.push_hub.v1;
+
+import "common/common.proto";
+import "push_hub/v1/model.proto";
+
+option go_package = "common/proto/gen/push_hub/v1;v1";
+
+// 节点管理服务（内部 gRPC）
+service PushHubNodeService {
+  // 注册推送节点
+  rpc RegisterNode(RegisterNode.Request) returns (RegisterNode.Reply) {}
+
+  // 节点心跳
+  rpc Heartbeat(Heartbeat.Request) returns (Heartbeat.Reply) {}
+
+  // 列出所有节点
+  rpc ListNodes(ListNodes.Request) returns (ListNodes.Reply) {}
+}
+
+message RegisterNode {
+  message Request {
+    // 节点地址
+    string address = 1;
+  }
+  message Reply {
+    // 分配的节点 ID
+    string node_id = 1;
+  }
+}
+
+message Heartbeat {
+  message Request {
+    // 节点 ID
+    string node_id = 1;
+    // 当前连接数
+    int64 connection_count = 2;
+  }
+  message Reply {}
+}
+
+message ListNodes {
+  message Request {}
+  message Reply {
+    repeated NodeInfo nodes = 1;
+  }
+}

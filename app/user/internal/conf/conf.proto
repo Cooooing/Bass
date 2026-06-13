@@ -10,6 +10,8 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Trace trace = 3;
+  common.api.app.common.Event event = 4;
+  common.api.app.common.Alert alert = 5;
 }
 
 message Server {

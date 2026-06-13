@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	contentv1 "common/api/gen/content/v1"
+	contentv1 "common/proto/gen/content/v1"
 
 	"google.golang.org/grpc"
 )

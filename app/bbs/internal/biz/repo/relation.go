@@ -1,11 +1,11 @@
 package repo
 
 import (
-	bbsuserv1 "common/api/gen/bbs/v1/user"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 )
 
-type RelationRepo interface {
+type RelationClient interface {
 	Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Request) (*bbsuserv1.FollowRelation_Reply, error)
 	Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Request) (*bbsuserv1.UnfollowRelation_Reply, error)
 	Block(ctx context.Context, req *bbsuserv1.BlockRelation_Request) (*bbsuserv1.BlockRelation_Reply, error)

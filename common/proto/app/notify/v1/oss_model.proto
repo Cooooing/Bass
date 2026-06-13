@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+import "common/common.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/notify/v1;v1";
+
+message Oss {
+  google.protobuf.Timestamp created_at = 1000;
+  google.protobuf.Timestamp updated_at = 1001;
+  int64 id = 1;
+  string provider = 2;
+  string bucket = 3;
+  string key = 4;
+  string mime_type = 5;
+  int64 size = 6;
+  string hash = 7;
+  optional string audit_callback_reply = 8;
+  bool blocked = 9;
+  optional string blocked_reason = 10;
+  google.protobuf.Timestamp blocked_at = 11;
+  optional int64 blocked_by = 12;
+  optional string blocked_by_name = 13;
+}
+
+message UploadToken {
+  string key = 1;
+  string token = 2;
+}
+
+message Item {
+  string cmd = 1;
+  int32 code = 2;
+  string desc = 3;
+  ItemResultWrapper result = 4;
+  int32 returnOld = 5;
+}
+
+message ItemResultWrapper {
+  bool disable = 1;
+  ItemResult result = 2;
+}
+
+message ItemResult {
+  int32 code = 1;
+  string message = 2;
+  google.protobuf.Struct scenes = 3;
+  string suggestion = 4;
+}
+
+message OssQueryParams {
+  optional string provider = 1;
+  optional string bucket = 2;
+  optional string key = 3;
+  optional string mime_type = 4;
+  common.Int64Range size = 7;
+  optional bool blocked = 5;
+  optional string blocked_by_name = 6;
+}

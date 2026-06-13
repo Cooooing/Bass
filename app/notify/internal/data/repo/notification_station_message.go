@@ -1,9 +1,8 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	"common/pkg/constant"
 	commonenum "common/pkg/enum"
+	"common/proto/gen/common"
 	"context"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
@@ -12,6 +11,7 @@ import (
 	notifyenum "notify/internal/enum"
 	"time"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -82,30 +82,79 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 	}, nil
 }
 
-func (r *NotificationStationMessageRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.NotificationStationMessageQuery) ([]*model.NotificationStationMessage, *common.PageReply, error) {
-	page = constant.PageValid(page)
+func (r *NotificationStationMessageRepo) Get(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (*model.NotificationStationMessage, error) {
 	query := r.getClient(ctx).NotificationStationMessage.Query()
-	if req != nil {
-		if len(req.IDs) > 0 {
-			query = query.Where(notificationstationmessage.IDIn(req.IDs...))
-		}
-		if req.ReceiverID != nil {
-			query = query.Where(notificationstationmessage.ReceiverIDEQ(*req.ReceiverID))
-		}
-		if req.EventType != nil {
-			eventType, ok := commonenum.EventTypeMap.ToEnum(*req.EventType)
-			if ok {
-				query = query.Where(notificationstationmessage.EventTypeEQ(notificationstationmessage.EventType(eventType)))
-			}
-		}
-		if req.Unread != nil {
-			if *req.Unread {
-				query = query.Where(notificationstationmessage.ReadAtIsNil())
-			} else {
-				query = query.Where(notificationstationmessage.ReadAtNotNil())
-			}
-		}
+	query = r.getQuery(query, req)
+	item, err := query.First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, nil
 	}
+	if err != nil {
+		return nil, err
+	}
+	return &model.NotificationStationMessage{
+		ID:         item.ID,
+		EventID:    item.EventID,
+		EventType:  commonenum.EventType(item.EventType),
+		ReceiverID: item.ReceiverID,
+		Title:      item.Title,
+		Content:    item.Content,
+		Status:     notifyenum.NotificationChannelStatus(item.Status),
+		ReadAt:     item.ReadAt,
+		CreatedAt:  item.CreatedAt,
+		UpdatedAt:  item.UpdatedAt,
+	}, nil
+}
+
+func (r *NotificationStationMessageRepo) List(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) ([]*model.NotificationStationMessage, error) {
+	query := r.getClient(ctx).NotificationStationMessage.Query()
+	query = r.getQuery(query, req)
+	list, err := query.
+		Order(gen.Desc(notificationstationmessage.FieldCreatedAt), gen.Desc(notificationstationmessage.FieldID)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	items := make([]*model.NotificationStationMessage, 0, len(list))
+	for _, item := range list {
+		items = append(items, &model.NotificationStationMessage{
+			ID:         item.ID,
+			EventID:    item.EventID,
+			EventType:  commonenum.EventType(item.EventType),
+			ReceiverID: item.ReceiverID,
+			Title:      item.Title,
+			Content:    item.Content,
+			Status:     notifyenum.NotificationChannelStatus(item.Status),
+			ReadAt:     item.ReadAt,
+			CreatedAt:  item.CreatedAt,
+			UpdatedAt:  item.UpdatedAt,
+		})
+	}
+	return items, nil
+}
+
+func (r *NotificationStationMessageRepo) Map(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (map[int64]*model.NotificationStationMessage, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.NotificationStationMessage, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *NotificationStationMessageRepo) Count(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (int, error) {
+	query := r.getClient(ctx).NotificationStationMessage.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *NotificationStationMessageRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.NotificationStationMessageQuery) ([]*model.NotificationStationMessage, *common.PageReply, error) {
+	page = server.PageValid(page)
+	query := r.getClient(ctx).NotificationStationMessage.Query()
+	query = r.getQuery(query, req)
 
 	count, err := query.Clone().Count(ctx)
 	if err != nil {
@@ -167,4 +216,36 @@ func (r *NotificationStationMessageRepo) CountUnread(ctx context.Context, receiv
 			notificationstationmessage.ReadAtIsNil(),
 		).
 		Count(ctx)
+}
+
+func (r *NotificationStationMessageRepo) getQuery(query *gen.NotificationStationMessageQuery, req *bizrepo.NotificationStationMessageQuery) *gen.NotificationStationMessageQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(notificationstationmessage.IDEQ(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(notificationstationmessage.IDIn(req.IDs...))
+	}
+	if len(req.EventIDs) > 0 {
+		query = query.Where(notificationstationmessage.EventIDIn(req.EventIDs...))
+	}
+	if req.ReceiverID != nil {
+		query = query.Where(notificationstationmessage.ReceiverIDEQ(*req.ReceiverID))
+	}
+	if req.EventType != nil {
+		eventType, ok := commonenum.EventTypeMap.ToEnum(*req.EventType)
+		if ok {
+			query = query.Where(notificationstationmessage.EventTypeEQ(notificationstationmessage.EventType(eventType)))
+		}
+	}
+	if req.Unread != nil {
+		if *req.Unread {
+			query = query.Where(notificationstationmessage.ReadAtIsNil())
+		} else {
+			query = query.Where(notificationstationmessage.ReadAtNotNil())
+		}
+	}
+	return query
 }

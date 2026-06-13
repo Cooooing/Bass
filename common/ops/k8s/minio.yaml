@@ -1,0 +1,28 @@
+rootUser: admin
+rootPassword: "12345678"
+
+mode: standalone
+
+replicas: 1
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m
+  limits:
+    memory: 512Mi
+    cpu: 500m
+
+service:
+  type: NodePort
+  nodePort: 30086
+
+consoleService:
+  type: NodePort
+  nodePort: 30087
+
+# helm upgrade --install minio minio/minio -n bass-test --create-namespace -f ./minio.yaml

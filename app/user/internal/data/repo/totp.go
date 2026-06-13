@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"common/proto/gen/common"
 	"context"
 	"time"
 	"user/internal/biz/model"
@@ -8,6 +9,7 @@ import (
 	"user/internal/data/gen"
 	"user/internal/data/gen/totp"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -30,9 +32,11 @@ func (r *TotpRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TotpRepo) FindByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
+func (r *TotpRepo) Get(ctx context.Context, req *repo.TotpGetReq) (*model.Totp, error) {
 	tx := r.getClient(ctx)
-	row, err := tx.Totp.Query().Where(totp.UserID(userID)).Only(ctx)
+	query := tx.Totp.Query()
+	query = r.getQuery(query, req)
+	row, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -48,17 +52,86 @@ func (r *TotpRepo) FindByUserID(ctx context.Context, userID int64) (*model.Totp,
 	}, nil
 }
 
-func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secret string) (*model.Totp, error) {
+func (r *TotpRepo) List(ctx context.Context, req *repo.TotpGetReq) ([]*model.Totp, error) {
 	tx := r.getClient(ctx)
-	exist, err := tx.Totp.Query().Where(totp.UserID(userID)).Exist(ctx)
+	query := tx.Totp.Query()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	if exist {
-		existing, err := tx.Totp.Query().Where(totp.UserID(userID)).Only(ctx)
-		if err != nil {
-			return nil, err
-		}
+	result := make([]*model.Totp, 0, len(list))
+	for _, row := range list {
+		result = append(result, &model.Totp{
+			ID:         row.ID,
+			UserID:     row.UserID,
+			Enable:     row.Enable,
+			EnableTime: row.EnableTime,
+			Secret:     row.Secret,
+		})
+	}
+	return result, nil
+}
+
+func (r *TotpRepo) Map(ctx context.Context, req *repo.TotpGetReq) (map[int64]*model.Totp, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.Totp, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *TotpRepo) Count(ctx context.Context, req *repo.TotpGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.Totp.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *TotpRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.TotpGetReq) ([]*model.Totp, *common.PageReply, error) {
+	tx := r.getClient(ctx)
+	page = server.PageValid(page)
+	query := tx.Totp.Query()
+	query = r.getQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.Totp, 0, len(list))
+	for _, row := range list {
+		result = append(result, &model.Totp{
+			ID:         row.ID,
+			UserID:     row.UserID,
+			Enable:     row.Enable,
+			EnableTime: row.EnableTime,
+			Secret:     row.Secret,
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
+func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secret string) (*model.Totp, error) {
+	tx := r.getClient(ctx)
+	existing, err := r.Get(ctx, &repo.TotpGetReq{UserID: &userID})
+	if err != nil {
+		return nil, err
+	}
+	if existing != nil {
 		saved, err := tx.Totp.UpdateOneID(existing.ID).
 			SetEnable(true).
 			SetEnableTime(time.Now()).
@@ -95,7 +168,7 @@ func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secr
 
 func (r *TotpRepo) DisableByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
 	tx := r.getClient(ctx)
-	existing, err := tx.Totp.Query().Where(totp.UserID(userID)).Only(ctx)
+	existing, err := r.Get(ctx, &repo.TotpGetReq{UserID: &userID})
 	if err != nil {
 		return nil, err
 	}
@@ -113,4 +186,26 @@ func (r *TotpRepo) DisableByUserID(ctx context.Context, userID int64) (*model.To
 		EnableTime: saved.EnableTime,
 		Secret:     saved.Secret,
 	}, nil
+}
+
+func (r *TotpRepo) getQuery(query *gen.TotpQuery, req *repo.TotpGetReq) *gen.TotpQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(totp.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(totp.IDIn(req.IDs...))
+	}
+	if req.UserID != nil {
+		query = query.Where(totp.UserID(*req.UserID))
+	}
+	if len(req.UserIDs) > 0 {
+		query = query.Where(totp.UserIDIn(req.UserIDs...))
+	}
+	if req.Enable != nil {
+		query = query.Where(totp.Enable(*req.Enable))
+	}
+	return query
 }

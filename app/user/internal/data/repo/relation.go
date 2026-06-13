@@ -1,8 +1,7 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	"common/pkg/constant"
+	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -10,6 +9,7 @@ import (
 	"user/internal/data/gen/relation"
 	"user/internal/enum"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -68,6 +68,27 @@ func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (bo
 	return query.Exist(ctx)
 }
 
+func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*model.Relation, error) {
+	tx := r.getClient(ctx)
+	query := tx.Relation.Query()
+	query = r.getQuery(query, req)
+	rel, err := query.First(ctx)
+	if gen.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &model.Relation{
+		ID:        rel.ID,
+		Type:      enum.RelationType(rel.Type),
+		ActorID:   rel.ActorID,
+		TargetID:  rel.TargetID,
+		CreatedAt: rel.CreatedAt,
+		UpdatedAt: rel.UpdatedAt,
+	}, nil
+}
+
 func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*model.Relation, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
@@ -90,9 +111,28 @@ func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*m
 	return result, nil
 }
 
+func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (map[int64]*model.Relation, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.Relation, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.Relation.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *RelationRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.RelationGetReq) ([]*model.Relation, *common.PageReply, error) {
 	tx := r.getClient(ctx)
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
 
@@ -128,6 +168,15 @@ func (r *RelationRepo) Page(ctx context.Context, page *common.PageRequest, req *
 }
 
 func (r *RelationRepo) getQuery(query *gen.RelationQuery, req *repo.RelationGetReq) *gen.RelationQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(relation.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(relation.IDIn(req.IDs...))
+	}
 	if req.ActorId != nil {
 		query = query.Where(relation.ActorIDEQ(*req.ActorId))
 	}

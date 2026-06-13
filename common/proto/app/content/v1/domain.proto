@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "common/common.proto";
+import "content/v1/enum.proto";
+import "content/v1/model.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// 领域服务
+service ContentDomainService {
+  rpc BatchCreate(BatchCreateDomains.Request) returns (BatchCreateDomains.Reply) {} // 批量创建领域
+
+  rpc Update(UpdateDomain.Request) returns (UpdateDomain.Reply) {} // 修改领域信息
+
+  rpc List(ListDomains.Request) returns (ListDomains.Reply) {} // 查询领域列表
+  rpc Page(PageDomains.Request) returns (PageDomains.Reply) {} // 分页查询领域
+}
+
+message BatchCreateDomains {
+  message Request {
+    repeated Domain domains = 1; // 领域信息列表
+    int64 user_id = 2; // 用户 ID
+
+    message Domain {
+      string name = 2; // 领域名称
+      optional string description = 3; // 描述
+      optional DomainStatus status = 4; // 启停状态
+      optional string url = 5; // 链接
+      optional string icon = 6; // 图标
+      bool is_nav = 7; // 是否导航
+    }
+  }
+
+  message Reply {
+    repeated Domain rows = 1; // 领域信息列表
+  }
+}
+
+message UpdateDomain {
+  message Request {
+    Domain domain = 1; // 领域信息
+    int64 user_id = 2; // 用户 ID
+
+    message Domain {
+      int64 id = 1; // 主键
+      string name = 2; // 领域名称
+      optional string description = 3; // 描述
+      optional DomainStatus status = 4; // 启停状态
+      optional string url = 5; // 链接
+      optional string icon = 6; // 图标
+      bool is_nav = 7; // 是否导航
+    }
+  }
+
+  message Reply {
+    Domain domain = 1; // 领域信息
+  }
+}
+
+message ListDomains {
+  message Request {
+    DomainQueryParams query = 1; // 查询参数
+  }
+
+  message Reply {
+    repeated Domain rows = 1; // 领域列表
+  }
+}
+
+message PageDomains {
+  message Request {
+    DomainQueryParams query = 1; // 查询参数
+    optional common.PageRequest page = 2; // 分页参数
+  }
+
+  message Reply {
+    repeated Domain rows = 1; // 领域列表
+    optional common.PageReply page = 2; // 分页信息
+  }
+}
+
+message DomainQueryParams {
+  repeated int64 ids = 1; // 主键列表
+  optional string name = 2; // 领域名称
+  optional string description = 3; // 描述
+  optional DomainStatus status = 4; // 状态
+  optional string url = 5; // 链接
+  optional string icon = 6; // 图标
+  optional bool is_nav = 7; // 是否导航
+}

@@ -1,7 +1,6 @@
 package util
 
 import (
-	"common/pkg/constant"
 	"context"
 	"fmt"
 	"os"
@@ -95,7 +94,7 @@ func Logger(mode string, level string, file string) log.Logger {
 		zap.AddStacktrace(zapcore.ErrorLevel),
 	}
 
-	if mode == constant.Dev {
+	if mode == "dev" {
 		opts = append(opts, zap.AddCaller())
 		opts = append(opts, zap.AddCallerSkip(3))
 		opts = append(opts, zap.Development()) // dev 模式添加开发友好字段
@@ -121,7 +120,7 @@ func NewZapLogger(mode string, file string, encoder zapcore.EncoderConfig, level
 		writers = append(writers, zapcore.AddSync(lumberJackLogger))
 	}
 
-	if mode == constant.Dev {
+	if mode == "dev" {
 		core = zapcore.NewCore(
 			zapcore.NewConsoleEncoder(encoder),
 			zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件

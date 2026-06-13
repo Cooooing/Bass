@@ -1,20 +1,18 @@
 package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
-	"fmt"
 	"time"
 
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/content/v1"
-	"common/pkg/constant"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
+	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	articleent "content/internal/data/gen/article"
-	"content/internal/data/gen/articleactionrecord"
 	tagent "content/internal/data/gen/tag"
 	"content/internal/enum"
 
@@ -25,21 +23,11 @@ import (
 var _ repo.ArticleRepo = (*ArticleRepo)(nil)
 
 type ArticleRepo struct {
-	db          *gen.Client
-	commentRepo repo.CommentRepo
-	tagRepo     repo.TagRepo
+	db *gen.Client
 }
 
-func NewArticleRepo(
-	db *gen.Client,
-	commentRepo repo.CommentRepo,
-	tagRepo repo.TagRepo,
-) repo.ArticleRepo {
-	return &ArticleRepo{
-		db:          db,
-		commentRepo: commentRepo,
-		tagRepo:     tagRepo,
-	}
+func NewArticleRepo(db *gen.Client) repo.ArticleRepo {
+	return &ArticleRepo{db: db}
 }
 
 func (r *ArticleRepo) getClient(ctx context.Context) *gen.Client {
@@ -49,93 +37,25 @@ func (r *ArticleRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ArticleRepo) resolveArticleTagIDs(ctx context.Context, tags []*model.Tag) ([]int64, error) {
-	tagIDSet := make(map[int64]struct{})
-	tagByName := make(map[string]*model.Tag)
-	for _, item := range tags {
-		if item == nil {
-			continue
-		}
-		if item.ID > 0 {
-			tagIDSet[item.ID] = struct{}{}
-			continue
-		}
-		if item.Name != "" {
-			tagByName[item.Name] = item
-		}
-	}
-
-	bindTagIDSet := make(map[int64]struct{})
-	if len(tagIDSet) > 0 {
-		existingTags, err := r.tagRepo.GetList(ctx, &repo.TagGetReq{TagIds: lo.Keys(tagIDSet)})
-		if err != nil {
-			return nil, err
-		}
-		if len(existingTags) != len(tagIDSet) {
-			return nil, cerrors.ErrorBadRequest("tag not exist")
-		}
-		for _, item := range existingTags {
-			bindTagIDSet[item.ID] = struct{}{}
-		}
-	}
-
-	if len(tagByName) > 0 {
-		existingTags, err := r.tagRepo.GetList(ctx, &repo.TagGetReq{Names: lo.Keys(tagByName)})
-		if err != nil {
-			return nil, err
-		}
-		for _, item := range existingTags {
-			bindTagIDSet[item.ID] = struct{}{}
-			delete(tagByName, item.Name)
-		}
-
-		saveTags := make([]*model.Tag, 0, len(tagByName))
-		for _, item := range tagByName {
-			saveTags = append(saveTags, item)
-		}
-		if len(saveTags) > 0 {
-			savedTags, err := r.tagRepo.Saves(ctx, saveTags)
-			if err != nil {
-				return nil, err
-			}
-			for _, item := range savedTags {
-				bindTagIDSet[item.ID] = struct{}{}
-			}
-		}
-	}
-
-	return lo.Keys(bindTagIDSet), nil
-}
-
-func (r *ArticleRepo) Save(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
-	var bindTagIds []int64
-	if len(tags) > 0 {
-		var err error
-		bindTagIds, err = r.resolveArticleTagIDs(ctx, tags)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	article.FormatContent()
-	create := r.getClient(ctx).Article.Create().
+func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.Article, error) {
+	save, err := r.getClient(ctx).Article.Create().
 		SetTitle(article.Title).
 		SetContent(article.Content).
-		SetNillableCreatedBy(article.CreatedBy).
-		SetNillableUpdatedBy(article.UpdatedBy).
 		SetNillableRewardContent(article.RewardContent).
 		SetNillableRewardPoints(article.RewardPoints).
-		SetStatus(articleent.Status(article.Status)).
+		SetPublishStatus(articleent.PublishStatus(article.PublishStatus)).
+		SetVisibility(articleent.Visibility(article.Visibility)).
+		SetRestriction(articleent.Restriction(article.Restriction)).
 		SetType(articleent.Type(article.Type)).
 		SetNillableBountyPoints(article.BountyPoints).
 		SetNillableStatement(article.Statement).
 		SetCommentable(article.Commentable).
 		SetAnonymous(article.Anonymous).
-		SetListable(article.Listable)
-	if len(bindTagIds) > 0 {
-		create.AddTagIDs(bindTagIds...)
-	}
-	save, err := create.Save(ctx)
+		SetNillablePublishedAt(article.PublishedAt).
+		SetNillableEditedAt(article.EditedAt).
+		SetNillableCreatedBy(article.CreatedBy).
+		SetNillableUpdatedBy(article.UpdatedBy).
+		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -146,12 +66,15 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article, tags []*
 		HasPostscript:    save.HasPostscript,
 		RewardContent:    save.RewardContent,
 		RewardPoints:     save.RewardPoints,
-		Status:           enum.ArticleStatus(save.Status),
+		PublishStatus:    enum.ArticlePublishStatus(save.PublishStatus),
+		Visibility:       enum.ArticleVisibility(save.Visibility),
+		Restriction:      enum.ContentRestriction(save.Restriction),
 		Type:             enum.ArticleType(save.Type),
 		Statement:        save.Statement,
 		Commentable:      save.Commentable,
 		Anonymous:        save.Anonymous,
-		Listable:         save.Listable,
+		PublishedAt:      save.PublishedAt,
+		EditedAt:         save.EditedAt,
 		ViewCount:        save.ViewCount,
 		ThankCount:       save.ThankCount,
 		LikeCount:        save.LikeCount,
@@ -164,37 +87,28 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article, tags []*
 		UpdatedAt:        save.UpdatedAt,
 		CreatedBy:        save.CreatedBy,
 		UpdatedBy:        save.UpdatedBy,
+		DeletedAt:        save.DeletedAt,
 	}, nil
 }
 
-func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article, tags []*model.Tag) (*model.Article, error) {
-	var bindTagIds []int64
-	if len(tags) > 0 {
-		var err error
-		bindTagIds, err = r.resolveArticleTagIDs(ctx, tags)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	updateArticle.FormatContent()
-	update := r.getClient(ctx).Article.UpdateOneID(updateArticle.ID).
+func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article) (*model.Article, error) {
+	save, err := r.getClient(ctx).Article.UpdateOneID(updateArticle.ID).
 		SetTitle(updateArticle.Title).
 		SetContent(updateArticle.Content).
-		SetNillableUpdatedBy(updateArticle.UpdatedBy).
 		SetNillableRewardContent(updateArticle.RewardContent).
 		SetNillableRewardPoints(updateArticle.RewardPoints).
-		SetStatus(articleent.Status(updateArticle.Status)).
+		SetPublishStatus(articleent.PublishStatus(updateArticle.PublishStatus)).
+		SetVisibility(articleent.Visibility(updateArticle.Visibility)).
+		SetRestriction(articleent.Restriction(updateArticle.Restriction)).
 		SetType(articleent.Type(updateArticle.Type)).
 		SetNillableBountyPoints(updateArticle.BountyPoints).
 		SetNillableStatement(updateArticle.Statement).
 		SetCommentable(updateArticle.Commentable).
 		SetAnonymous(updateArticle.Anonymous).
-		SetListable(updateArticle.Listable)
-	if len(bindTagIds) > 0 {
-		update.ClearTags().AddTagIDs(bindTagIds...)
-	}
-	save, err := update.Save(ctx)
+		SetNillablePublishedAt(updateArticle.PublishedAt).
+		SetNillableEditedAt(updateArticle.EditedAt).
+		SetNillableUpdatedBy(updateArticle.UpdatedBy).
+		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -205,12 +119,15 @@ func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article, 
 		HasPostscript:    save.HasPostscript,
 		RewardContent:    save.RewardContent,
 		RewardPoints:     save.RewardPoints,
-		Status:           enum.ArticleStatus(save.Status),
+		PublishStatus:    enum.ArticlePublishStatus(save.PublishStatus),
+		Visibility:       enum.ArticleVisibility(save.Visibility),
+		Restriction:      enum.ContentRestriction(save.Restriction),
 		Type:             enum.ArticleType(save.Type),
 		Statement:        save.Statement,
 		Commentable:      save.Commentable,
 		Anonymous:        save.Anonymous,
-		Listable:         save.Listable,
+		PublishedAt:      save.PublishedAt,
+		EditedAt:         save.EditedAt,
 		ViewCount:        save.ViewCount,
 		ThankCount:       save.ThankCount,
 		LikeCount:        save.LikeCount,
@@ -223,102 +140,87 @@ func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article, 
 		UpdatedAt:        save.UpdatedAt,
 		CreatedBy:        save.CreatedBy,
 		UpdatedBy:        save.UpdatedBy,
+		DeletedAt:        save.DeletedAt,
 	}, nil
 }
 
-func (r *ArticleRepo) UpdateContent(ctx context.Context, articleId int64, content string) error {
-	return r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetContent(content).
-		Exec(ctx)
-}
-
-func (r *ArticleRepo) UpdateStatus(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus) error {
-	dbStatus, _ := enum.ArticleStatusMap.ToEnum(status)
-	return r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetUpdatedBy(userId).
-		SetStatus(articleent.Status(dbStatus)).
-		Exec(ctx)
-}
-
-func (r *ArticleRepo) UpdateControlFields(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
-	dbStatus, _ := enum.ArticleStatusMap.ToEnum(status)
+func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, articleId int64, publishStatus enum.ArticlePublishStatus, visibility enum.ArticleVisibility, publishedAt *time.Time, updatedBy int64) error {
+	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
+	if gen.IsNotFound(err) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if err != nil {
+		return err
+	}
 	update := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetUpdatedBy(userId).
-		SetStatus(articleent.Status(dbStatus)).
-		SetCommentable(commentable).
-		SetAnonymous(anonymous)
-	if listable != nil {
-		update.SetListable(*listable)
+		SetPublishStatus(articleent.PublishStatus(publishStatus)).
+		SetVisibility(articleent.Visibility(visibility)).
+		SetUpdatedBy(updatedBy)
+	if publishedAt != nil {
+		update.SetPublishedAt(*publishedAt)
 	}
 	return update.Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, articleId int64, userId int64, hasPostscript bool) error {
+func (r *ArticleRepo) UpdateVisibility(ctx context.Context, articleId int64, visibility enum.ArticleVisibility, updatedBy int64) error {
 	return r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetUpdatedBy(userId).
-		SetHasPostscript(hasPostscript).
+		SetVisibility(articleent.Visibility(visibility)).
+		SetUpdatedBy(updatedBy).
 		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateStat(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, num int32) (*model.Article, error) {
-	updateOne := r.getClient(ctx).Article.UpdateOneID(articleId).SetUpdatedBy(userId)
-	switch action {
-	case v1.ArticleAction_ARTICLE_ACTION_LIKE:
-		updateOne.AddLikeCount(num)
-	case v1.ArticleAction_ARTICLE_ACTION_THANK:
-		updateOne.AddThankCount(num)
-	case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
-		updateOne.AddCollectCount(num)
-	case v1.ArticleAction_ARTICLE_ACTION_WATCH:
-		updateOne.AddWatchCount(num)
-	case v1.ArticleAction_ARTICLE_ACTION_REPLY:
-		updateOne.AddReplyCount(num)
-	default:
-		return nil, fmt.Errorf("unknown action")
+func (r *ArticleRepo) UpdateRestriction(ctx context.Context, articleId int64, restriction enum.ContentRestriction, updatedBy int64) error {
+	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
+	if gen.IsNotFound(err) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
-	save, err := updateOne.Save(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &model.Article{
-		ID:               save.ID,
-		Title:            save.Title,
-		Content:          save.Content,
-		HasPostscript:    save.HasPostscript,
-		RewardContent:    save.RewardContent,
-		RewardPoints:     save.RewardPoints,
-		Status:           enum.ArticleStatus(save.Status),
-		Type:             enum.ArticleType(save.Type),
-		Statement:        save.Statement,
-		Commentable:      save.Commentable,
-		Anonymous:        save.Anonymous,
-		Listable:         save.Listable,
-		ViewCount:        save.ViewCount,
-		ThankCount:       save.ThankCount,
-		LikeCount:        save.LikeCount,
-		CollectCount:     save.CollectCount,
-		WatchCount:       save.WatchCount,
-		ReplyCount:       save.ReplyCount,
-		BountyPoints:     save.BountyPoints,
-		AcceptedAnswerID: save.AcceptedAnswerID,
-		CreatedAt:        save.CreatedAt,
-		UpdatedAt:        save.UpdatedAt,
-		CreatedBy:        save.CreatedBy,
-		UpdatedBy:        save.UpdatedBy,
-	}, nil
+	return r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetRestriction(articleent.Restriction(restriction)).
+		SetUpdatedBy(updatedBy).
+		Exec(ctx)
 }
 
-func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, userId int64, commentId int64) (*model.Article, error) {
-	exist, err := r.commentRepo.Exist(ctx, &repo.CommentGetReq{CommentId: new(commentId), ArticleId: new(articleId)})
-	if err != nil {
-		return nil, err
+func (r *ArticleRepo) DiscardDraft(ctx context.Context, articleId int64) error {
+	return r.getClient(ctx).Article.DeleteOneID(articleId).Exec(ctx)
+}
+
+func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, articleId int64, hasPostscript bool, updatedBy int64) error {
+	return r.getClient(ctx).Article.UpdateOneID(articleId).
+		SetHasPostscript(hasPostscript).
+		SetUpdatedBy(updatedBy).
+		Exec(ctx)
+}
+
+func (r *ArticleRepo) AddStats(ctx context.Context, articleId int64, stats repo.ArticleStatUpdate, updatedBy *int64) error {
+	updateOne := r.getClient(ctx).Article.UpdateOneID(articleId)
+	if stats.ViewCount != 0 {
+		updateOne.AddViewCount(stats.ViewCount)
 	}
-	if !exist {
-		return nil, fmt.Errorf("comment not exist")
+	if stats.ThankCount != 0 {
+		updateOne.AddThankCount(stats.ThankCount)
 	}
+	if stats.LikeCount != 0 {
+		updateOne.AddLikeCount(stats.LikeCount)
+	}
+	if stats.CollectCount != 0 {
+		updateOne.AddCollectCount(stats.CollectCount)
+	}
+	if stats.WatchCount != 0 {
+		updateOne.AddWatchCount(stats.WatchCount)
+	}
+	if stats.ReplyCount != 0 {
+		updateOne.AddReplyCount(stats.ReplyCount)
+	}
+	return updateOne.Exec(ctx)
+}
+
+func (r *ArticleRepo) UpdateAcceptedAnswerID(ctx context.Context, articleId int64, commentId int64, updatedBy int64) (*model.Article, error) {
 	a, err := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetUpdatedBy(userId).
 		SetAcceptedAnswerID(commentId).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -330,12 +232,15 @@ func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, u
 		HasPostscript:    a.HasPostscript,
 		RewardContent:    a.RewardContent,
 		RewardPoints:     a.RewardPoints,
-		Status:           enum.ArticleStatus(a.Status),
+		PublishStatus:    enum.ArticlePublishStatus(a.PublishStatus),
+		Visibility:       enum.ArticleVisibility(a.Visibility),
+		Restriction:      enum.ContentRestriction(a.Restriction),
 		Type:             enum.ArticleType(a.Type),
 		Statement:        a.Statement,
 		Commentable:      a.Commentable,
 		Anonymous:        a.Anonymous,
-		Listable:         a.Listable,
+		PublishedAt:      a.PublishedAt,
+		EditedAt:         a.EditedAt,
 		ViewCount:        a.ViewCount,
 		ThankCount:       a.ThankCount,
 		LikeCount:        a.LikeCount,
@@ -348,31 +253,16 @@ func (r *ArticleRepo) UpdateAcceptAnswer(ctx context.Context, articleId int64, u
 		UpdatedAt:        a.UpdatedAt,
 		CreatedBy:        a.CreatedBy,
 		UpdatedBy:        a.UpdatedBy,
+		DeletedAt:        a.DeletedAt,
 	}, nil
 }
 
-func (r *ArticleRepo) Publish(ctx context.Context, articleId int64, userId int64) (*model.Article, error) {
-	first, err := r.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
-	if err != nil {
-		return nil, err
+func (r *ArticleRepo) ReplaceTags(ctx context.Context, articleId int64, tagIds []int64) error {
+	update := r.getClient(ctx).Article.UpdateOneID(articleId).ClearTags()
+	if len(tagIds) > 0 {
+		update.AddTagIDs(tagIds...)
 	}
-
-	if first.Status != enum.ArticleStatusDrafts {
-		return nil, cerrors.ErrorBadRequest("only update draft")
-	}
-
-	err = r.UpdateStatus(ctx, articleId, userId, v1.ArticleStatus_ARTICLE_STATUS_NORMAL)
-	if err != nil {
-		return nil, err
-	}
-	return first, nil
-}
-
-func (r *ArticleRepo) Delete(ctx context.Context, articleId int64, userId int64) error {
-	return r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetUpdatedBy(userId).
-		SetStatus(articleent.StatusDeleted).
-		Exec(ctx)
+	return update.Exec(ctx)
 }
 
 func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool, error) {
@@ -383,32 +273,30 @@ func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool,
 
 func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.Article, error) {
 	query := r.getClient(ctx).Article.Query()
-	if req.QueryUserId != nil {
-		query = query.WithActionRecords(func(query *gen.ArticleActionRecordQuery) {
-			query.Where(articleactionrecord.UserIDEQ(*req.QueryUserId))
-		})
-	}
 	query = r.getQuery(query, req)
 	a, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("article is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	result := &model.Article{
+	return &model.Article{
 		ID:               a.ID,
 		Title:            a.Title,
 		Content:          a.Content,
 		HasPostscript:    a.HasPostscript,
 		RewardContent:    a.RewardContent,
 		RewardPoints:     a.RewardPoints,
-		Status:           enum.ArticleStatus(a.Status),
+		PublishStatus:    enum.ArticlePublishStatus(a.PublishStatus),
+		Visibility:       enum.ArticleVisibility(a.Visibility),
+		Restriction:      enum.ContentRestriction(a.Restriction),
 		Type:             enum.ArticleType(a.Type),
 		Statement:        a.Statement,
 		Commentable:      a.Commentable,
 		Anonymous:        a.Anonymous,
-		Listable:         a.Listable,
+		PublishedAt:      a.PublishedAt,
+		EditedAt:         a.EditedAt,
 		ViewCount:        a.ViewCount,
 		ThankCount:       a.ThankCount,
 		LikeCount:        a.LikeCount,
@@ -421,66 +309,72 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		UpdatedAt:        a.UpdatedAt,
 		CreatedBy:        a.CreatedBy,
 		UpdatedBy:        a.UpdatedBy,
-		IsSummary:        req.IsSummary,
-	}
-	for _, item := range a.Edges.ActionRecords {
-		result.ActionRecords = append(result.ActionRecords, &model.ArticleActionRecord{
-			ID:        item.ID,
-			ArticleID: item.ArticleID,
-			UserID:    item.UserID,
-			Type:      enum.ArticleAction(item.Type),
-		})
-	}
-	return result, nil
+		DeletedAt:        a.DeletedAt,
+	}, nil
 }
 
-func (r *ArticleRepo) GetList(ctx context.Context, req *repo.ArticleGetReq) ([]*model.Article, error) {
+func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*model.Article, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	articles := make([]*model.Article, 0, len(list))
-	for i := range list {
-		item := &model.Article{
-			ID:               list[i].ID,
-			Title:            list[i].Title,
-			Content:          list[i].Content,
-			HasPostscript:    list[i].HasPostscript,
-			RewardContent:    list[i].RewardContent,
-			RewardPoints:     list[i].RewardPoints,
-			Status:           enum.ArticleStatus(list[i].Status),
-			Type:             enum.ArticleType(list[i].Type),
-			Statement:        list[i].Statement,
-			Commentable:      list[i].Commentable,
-			Anonymous:        list[i].Anonymous,
-			Listable:         list[i].Listable,
-			ViewCount:        list[i].ViewCount,
-			ThankCount:       list[i].ThankCount,
-			LikeCount:        list[i].LikeCount,
-			CollectCount:     list[i].CollectCount,
-			WatchCount:       list[i].WatchCount,
-			ReplyCount:       list[i].ReplyCount,
-			BountyPoints:     list[i].BountyPoints,
-			AcceptedAnswerID: list[i].AcceptedAnswerID,
-			CreatedAt:        list[i].CreatedAt,
-			UpdatedAt:        list[i].UpdatedAt,
-			CreatedBy:        list[i].CreatedBy,
-			UpdatedBy:        list[i].UpdatedBy,
-			IsSummary:        req.IsSummary,
+	return lo.Map(list, func(item *gen.Article, _ int) *model.Article {
+		return &model.Article{
+			ID:               item.ID,
+			Title:            item.Title,
+			Content:          item.Content,
+			HasPostscript:    item.HasPostscript,
+			RewardContent:    item.RewardContent,
+			RewardPoints:     item.RewardPoints,
+			PublishStatus:    enum.ArticlePublishStatus(item.PublishStatus),
+			Visibility:       enum.ArticleVisibility(item.Visibility),
+			Restriction:      enum.ContentRestriction(item.Restriction),
+			Type:             enum.ArticleType(item.Type),
+			Statement:        item.Statement,
+			Commentable:      item.Commentable,
+			Anonymous:        item.Anonymous,
+			PublishedAt:      item.PublishedAt,
+			EditedAt:         item.EditedAt,
+			ViewCount:        item.ViewCount,
+			ThankCount:       item.ThankCount,
+			LikeCount:        item.LikeCount,
+			CollectCount:     item.CollectCount,
+			WatchCount:       item.WatchCount,
+			ReplyCount:       item.ReplyCount,
+			BountyPoints:     item.BountyPoints,
+			AcceptedAnswerID: item.AcceptedAnswerID,
+			CreatedAt:        item.CreatedAt,
+			UpdatedAt:        item.UpdatedAt,
+			CreatedBy:        item.CreatedBy,
+			UpdatedBy:        item.UpdatedBy,
+			DeletedAt:        item.DeletedAt,
 		}
-		articles = append(articles, item)
+	}), nil
+}
+
+func (r *ArticleRepo) Map(ctx context.Context, req *repo.ArticleGetReq) (map[int64]*model.Article, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
 	}
-	return articles, nil
+	return lo.SliceToMap(list, func(item *model.Article) (int64, *model.Article) {
+		return item.ID, item
+	}), nil
+}
+
+func (r *ArticleRepo) Count(ctx context.Context, req *repo.ArticleGetReq) (int, error) {
+	query := r.getClient(ctx).Article.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
 }
 
 func (r *ArticleRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
-	countQuery := query.Clone()
-	total, err := countQuery.Count(ctx)
+	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -488,37 +382,38 @@ func (r *ArticleRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 	if err != nil {
 		return nil, nil, err
 	}
-	articles := make([]*model.Article, 0, len(list))
-	for i := range list {
-		item := &model.Article{
-			ID:               list[i].ID,
-			Title:            list[i].Title,
-			Content:          list[i].Content,
-			HasPostscript:    list[i].HasPostscript,
-			RewardContent:    list[i].RewardContent,
-			RewardPoints:     list[i].RewardPoints,
-			Status:           enum.ArticleStatus(list[i].Status),
-			Type:             enum.ArticleType(list[i].Type),
-			Statement:        list[i].Statement,
-			Commentable:      list[i].Commentable,
-			Anonymous:        list[i].Anonymous,
-			Listable:         list[i].Listable,
-			ViewCount:        list[i].ViewCount,
-			ThankCount:       list[i].ThankCount,
-			LikeCount:        list[i].LikeCount,
-			CollectCount:     list[i].CollectCount,
-			WatchCount:       list[i].WatchCount,
-			ReplyCount:       list[i].ReplyCount,
-			BountyPoints:     list[i].BountyPoints,
-			AcceptedAnswerID: list[i].AcceptedAnswerID,
-			CreatedAt:        list[i].CreatedAt,
-			UpdatedAt:        list[i].UpdatedAt,
-			CreatedBy:        list[i].CreatedBy,
-			UpdatedBy:        list[i].UpdatedBy,
-			IsSummary:        req.IsSummary,
+	articles := lo.Map(list, func(item *gen.Article, _ int) *model.Article {
+		return &model.Article{
+			ID:               item.ID,
+			Title:            item.Title,
+			Content:          item.Content,
+			HasPostscript:    item.HasPostscript,
+			RewardContent:    item.RewardContent,
+			RewardPoints:     item.RewardPoints,
+			PublishStatus:    enum.ArticlePublishStatus(item.PublishStatus),
+			Visibility:       enum.ArticleVisibility(item.Visibility),
+			Restriction:      enum.ContentRestriction(item.Restriction),
+			Type:             enum.ArticleType(item.Type),
+			Statement:        item.Statement,
+			Commentable:      item.Commentable,
+			Anonymous:        item.Anonymous,
+			PublishedAt:      item.PublishedAt,
+			EditedAt:         item.EditedAt,
+			ViewCount:        item.ViewCount,
+			ThankCount:       item.ThankCount,
+			LikeCount:        item.LikeCount,
+			CollectCount:     item.CollectCount,
+			WatchCount:       item.WatchCount,
+			ReplyCount:       item.ReplyCount,
+			BountyPoints:     item.BountyPoints,
+			AcceptedAnswerID: item.AcceptedAnswerID,
+			CreatedAt:        item.CreatedAt,
+			UpdatedAt:        item.UpdatedAt,
+			CreatedBy:        item.CreatedBy,
+			UpdatedBy:        item.UpdatedBy,
+			DeletedAt:        item.DeletedAt,
 		}
-		articles = append(articles, item)
-	}
+	})
 	return articles, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
@@ -527,8 +422,15 @@ func (r *ArticleRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 }
 
 func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq) *gen.ArticleQuery {
+	query = query.Where(articleent.DeletedAtIsNil())
+	if req == nil {
+		req = &repo.ArticleGetReq{}
+	}
 	if req.ArticleId != nil {
 		query = query.Where(articleent.IDEQ(*req.ArticleId))
+	}
+	if len(req.ArticleIds) > 0 {
+		query = query.Where(articleent.IDIn(req.ArticleIds...))
 	}
 	if req.CreatedBy != nil {
 		query = query.Where(articleent.CreatedByEQ(*req.CreatedBy))
@@ -539,16 +441,35 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 	if req.DomainId != nil {
 		query = query.Where(articleent.HasTagsWith(tagent.DomainIDEQ(*req.DomainId)))
 	}
-	if req.Status != nil {
-		dbStatus, _ := enum.ArticleStatusMap.ToEnum(*req.Status)
-		query = query.Where(articleent.StatusEQ(articleent.Status(dbStatus)))
+	if req.PublishStatus != nil {
+		query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(*req.PublishStatus)))
+	}
+	if len(req.PublishStatuses) > 0 {
+		query = query.Where(articleent.PublishStatusIn(lo.Map(req.PublishStatuses, func(item enum.ArticlePublishStatus, _ int) articleent.PublishStatus {
+			return articleent.PublishStatus(item)
+		})...))
+	}
+	if req.Visibility != nil {
+		query = query.Where(articleent.VisibilityEQ(articleent.Visibility(*req.Visibility)))
+	}
+	if len(req.Visibilities) > 0 {
+		query = query.Where(articleent.VisibilityIn(lo.Map(req.Visibilities, func(item enum.ArticleVisibility, _ int) articleent.Visibility {
+			return articleent.Visibility(item)
+		})...))
+	}
+	if req.Restriction != nil {
+		query = query.Where(articleent.RestrictionEQ(articleent.Restriction(*req.Restriction)))
+	}
+	if len(req.Restrictions) > 0 {
+		query = query.Where(articleent.RestrictionIn(lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) articleent.Restriction {
+			return articleent.Restriction(item)
+		})...))
 	}
 	if req.AuthorId != nil {
 		query = query.Where(articleent.CreatedByEQ(*req.AuthorId))
 	}
 	if req.Type != nil {
-		dbType, _ := enum.ArticleTypeMap.ToEnum(*req.Type)
-		query = query.Where(articleent.TypeEQ(articleent.Type(dbType)))
+		query = query.Where(articleent.TypeEQ(articleent.Type(*req.Type)))
 	}
 	if req.Keyword != nil {
 		query = query.Where(
@@ -558,14 +479,11 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 			),
 		)
 	}
-	if req.Listable != nil {
-		query = query.Where(articleent.ListableEQ(*req.Listable))
-	}
 	if req.Order != nil {
 		switch *req.Order {
-		case v1.ArticleOrder_ARTICLE_ORDER_NEWEST:
+		case enum.ArticleOrderNewest:
 			query = query.Order(gen.Desc(articleent.FieldCreatedAt))
-		case v1.ArticleOrder_ARTICLE_ORDER_HOTTEST:
+		case enum.ArticleOrderHottest:
 			query = query.Where(articleent.CreatedAtGTE(time.Now().Add(-30 * 24 * time.Hour))).
 				Order(func(s *sql.Selector) {
 					s.OrderExpr(sql.Expr(`

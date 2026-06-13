@@ -1,10 +1,11 @@
 package service
 
 import (
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/user/v1"
+	"common/pkg/apperror"
 	"common/pkg/util"
+	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -173,7 +174,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		} else {
 			value, ok := enum.MBTIMap.ToEnum(*req.Mbti)
 			if !ok {
-				return nil, cerrors.ErrorBadRequest("mbti is invalid")
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 			}
 			mbti = new(value)
 		}

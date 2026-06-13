@@ -1,17 +1,20 @@
 package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	"common/pkg/constant"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
+	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	"content/internal/data/gen/domain"
 	"content/internal/enum"
+
+	"github.com/samber/lo"
 )
 
 var _ repo.DomainRepo = (*DomainRepo)(nil)
@@ -35,12 +38,12 @@ func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*mode
 	save, err := r.getClient(ctx).Domain.Create().
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
-		SetNillableCreatedBy(domainModel.CreatedBy).
-		SetNillableUpdatedBy(domainModel.UpdatedBy).
 		SetStatus(domain.Status(domainModel.Status)).
 		SetNillableURL(domainModel.URL).
 		SetNillableIcon(domainModel.Icon).
 		SetIsNav(domainModel.IsNav).
+		SetNillableCreatedBy(domainModel.CreatedBy).
+		SetNillableUpdatedBy(domainModel.UpdatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -68,12 +71,12 @@ func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*mod
 			client.Domain.Create().
 				SetName(domains[i].Name).
 				SetNillableDescription(domains[i].Description).
-				SetNillableCreatedBy(domains[i].CreatedBy).
-				SetNillableUpdatedBy(domains[i].UpdatedBy).
 				SetStatus(domain.Status(domains[i].Status)).
 				SetNillableURL(domains[i].URL).
 				SetNillableIcon(domains[i].Icon).
-				SetIsNav(domains[i].IsNav),
+				SetIsNav(domains[i].IsNav).
+				SetNillableCreatedBy(domains[i].CreatedBy).
+				SetNillableUpdatedBy(domains[i].UpdatedBy),
 		)
 	}
 
@@ -104,11 +107,11 @@ func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*mo
 	save, err := r.getClient(ctx).Domain.UpdateOneID(domainModel.ID).
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
-		SetNillableUpdatedBy(domainModel.UpdatedBy).
 		SetStatus(domain.Status(domainModel.Status)).
 		SetNillableURL(domainModel.URL).
 		SetNillableIcon(domainModel.Icon).
 		SetIsNav(domainModel.IsNav).
+		SetNillableUpdatedBy(domainModel.UpdatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -133,7 +136,7 @@ func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Do
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("domain is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
@@ -153,7 +156,7 @@ func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Do
 	}, nil
 }
 
-func (r *DomainRepo) GetList(ctx context.Context, req *repo.DomainGetReq) ([]*model.Domain, error) {
+func (r *DomainRepo) List(ctx context.Context, req *repo.DomainGetReq) ([]*model.Domain, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -180,8 +183,24 @@ func (r *DomainRepo) GetList(ctx context.Context, req *repo.DomainGetReq) ([]*mo
 	return domains, nil
 }
 
+func (r *DomainRepo) Map(ctx context.Context, req *repo.DomainGetReq) (map[int64]*model.Domain, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return lo.SliceToMap(list, func(item *model.Domain) (int64, *model.Domain) {
+		return item.ID, item
+	}), nil
+}
+
+func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (int, error) {
+	query := r.getClient(ctx).Domain.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *DomainRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -231,8 +250,7 @@ func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *g
 		query = query.Where(domain.DescriptionContains(*req.Description))
 	}
 	if req.Status != nil {
-		dbStatus, _ := enum.DomainStatusMap.ToEnum(*req.Status)
-		query = query.Where(domain.StatusEQ(domain.Status(dbStatus)))
+		query = query.Where(domain.StatusEQ(domain.Status(*req.Status)))
 	}
 	if req.Url != nil {
 		query = query.Where(domain.URLContains(*req.Url))

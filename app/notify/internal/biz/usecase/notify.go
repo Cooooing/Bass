@@ -101,7 +101,12 @@ func NewNotifyUsecase(
 }
 
 func (u *NotifyUsecase) ListEnabledRules(ctx context.Context, eventType commonenum.EventType, language notifyenum.Language) ([]*model.NotificationRule, error) {
-	return u.notificationRuleRepo.ListEnabled(ctx, eventType, language)
+	enabled := true
+	return u.notificationRuleRepo.List(ctx, &repo.NotificationRuleQuery{
+		EventType: &eventType,
+		Language:  &language,
+		Enabled:   &enabled,
+	})
 }
 
 func (u *NotifyUsecase) Process(ctx context.Context, notificationContext *NotificationContext, rules []*model.NotificationRule) error {

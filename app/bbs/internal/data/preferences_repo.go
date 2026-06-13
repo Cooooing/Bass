@@ -2,23 +2,23 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
-var _ repo.PreferencesRepo = (*PreferencesRepo)(nil)
+var _ repo.PreferencesClient = (*PreferencesClient)(nil)
 
-type PreferencesRepo struct {
+type PreferencesClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewPreferencesRepo(userClient *rpc.UserClient) repo.PreferencesRepo {
-	return &PreferencesRepo{userClient: userClient}
+func NewPreferencesClient(userClient *rpc.UserClient) repo.PreferencesClient {
+	return &PreferencesClient{userClient: userClient}
 }
 
-func (r *PreferencesRepo) GetCurrentPreferences(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Request) (*bbsuserv1.GetCurrentPreferences_Reply, error) {
+func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Request) (*bbsuserv1.GetCurrentPreferences_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (r *PreferencesRepo) GetCurrentPreferences(ctx context.Context, req *bbsuse
 	return &bbsuserv1.GetCurrentPreferences_Reply{Preference: out}, nil
 }
 
-func (r *PreferencesRepo) UpdateCurrentPreferences(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Request) (*bbsuserv1.UpdateCurrentPreferences_Reply, error) {
+func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Request) (*bbsuserv1.UpdateCurrentPreferences_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

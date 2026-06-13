@@ -1,8 +1,7 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	"common/pkg/constant"
+	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -10,6 +9,7 @@ import (
 	"user/internal/data/gen/loginlog"
 	"user/internal/enum"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -68,13 +68,14 @@ func (r *LoginLogRepo) Create(ctx context.Context, l *model.LoginLog) (*model.Lo
 	}, nil
 }
 
-func (r *LoginLogRepo) FindLastSuccessByUserID(ctx context.Context, userID int64) (*model.LoginLog, error) {
+func (r *LoginLogRepo) Get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
 	tx := r.getClient(ctx)
-	l, err := tx.LoginLog.Query().
-		Where(loginlog.UserID(userID)).
-		Where(loginlog.StatusEQ(loginlog.Status(enum.LoginStatusSuccess))).
-		Order(gen.Desc(loginlog.FieldCreatedAt)).
-		First(ctx)
+	query := tx.LoginLog.Query()
+	query = r.getQuery(query, req)
+	if req != nil && req.LastSuccess {
+		query = query.Order(gen.Desc(loginlog.FieldCreatedAt))
+	}
+	l, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -129,9 +130,28 @@ func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) ([]*m
 	return result, nil
 }
 
+func (r *LoginLogRepo) Map(ctx context.Context, req *repo.LoginLogGetReq) (map[int64]*model.LoginLog, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.LoginLog, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *LoginLogRepo) Count(ctx context.Context, req *repo.LoginLogGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.LoginLog.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *LoginLogRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.LoginLogGetReq) ([]*model.LoginLog, *common.PageReply, error) {
 	tx := r.getClient(ctx)
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := tx.LoginLog.Query()
 	query = r.getQuery(query, req)
 
@@ -178,11 +198,23 @@ func (r *LoginLogRepo) getQuery(query *gen.LoginLogQuery, req *repo.LoginLogGetR
 	if req == nil {
 		return query
 	}
+	if req.ID != nil {
+		query = query.Where(loginlog.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(loginlog.IDIn(req.IDs...))
+	}
 	if req.UserID != nil {
 		query = query.Where(loginlog.UserID(*req.UserID))
 	}
+	if len(req.UserIDs) > 0 {
+		query = query.Where(loginlog.UserIDIn(req.UserIDs...))
+	}
 	if req.Status != nil {
 		query = query.Where(loginlog.StatusEQ(loginlog.Status(*req.Status)))
+	}
+	if req.LastSuccess {
+		query = query.Where(loginlog.StatusEQ(loginlog.Status(enum.LoginStatusSuccess)))
 	}
 	if req.IP != nil {
 		query = query.Where(loginlog.IP(*req.IP))

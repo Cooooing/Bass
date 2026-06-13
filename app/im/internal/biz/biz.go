@@ -2,7 +2,7 @@ package biz
 
 import (
 	"common/pkg/util"
-	"common/pkg/util/jwt"
+	"common/pkg/auth"
 	"im/internal/biz/usecase"
 
 	"github.com/google/wire"
@@ -10,7 +10,7 @@ import (
 
 // BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
-	jwt.NewTokenCache,
+	auth.NewTokenCache,
 	util.NewEventPool,
 
 	usecase.NewChatGroupUsecase,

@@ -1,21 +1,18 @@
 package handlerchain
 
-import (
-	"common/pkg/util"
-	"fmt"
-)
+import "fmt"
 
 type HandlerFactory[T any] struct {
-	registry map[string]util.Supplier[Handler[T]]
+	registry map[string]func() Handler[T]
 }
 
 // NewHandlerFactory 创建新的工厂实例
 func NewHandlerFactory[T any]() *HandlerFactory[T] {
-	return &HandlerFactory[T]{registry: make(map[string]util.Supplier[Handler[T]])}
+	return &HandlerFactory[T]{registry: make(map[string]func() Handler[T])}
 }
 
 func NewHandlerFactoryWithHandlers[T any](handlers ...Handler[T]) *HandlerFactory[T] {
-	factory := &HandlerFactory[T]{registry: make(map[string]util.Supplier[Handler[T]])}
+	factory := &HandlerFactory[T]{registry: make(map[string]func() Handler[T])}
 	for _, handler := range handlers {
 		factory.Register(handler.Name(), func() Handler[T] {
 			return handler
@@ -25,7 +22,7 @@ func NewHandlerFactoryWithHandlers[T any](handlers ...Handler[T]) *HandlerFactor
 }
 
 // Register 注册 Handler 构造函数
-func (f *HandlerFactory[T]) Register(name string, constructor util.Supplier[Handler[T]]) {
+func (f *HandlerFactory[T]) Register(name string, constructor func() Handler[T]) {
 	f.registry[name] = constructor
 }
 

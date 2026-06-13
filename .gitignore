@@ -35,12 +35,21 @@ bin/
 .idea/
 *.swp
 
-/common/api/gen/**
-/common/api/gen-*/**
+# Proto 文档和 SDK 生成产物
+/common/proto/gen-openapi/
+/common/proto/gen-openapi-codex/
+/common/proto/gen-sdk/
+/common/proto/sdk/node_modules/
+/common/proto/sdk/.openapi-generator/
+/common/proto/sdk/.openapi-generator-cli/
+
+# 模块生成产物
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/gen/
 /app/**/server
+!/app/**/server/
+/app/**/test/
 
 
 /deploy/.prod.env

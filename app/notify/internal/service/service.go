@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/pkg/util/server"
+	"common/pkg/server"
 
 	"github.com/google/wire"
 )
@@ -10,7 +10,6 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
 	NewStationMessageService,
-	NewOssService,
 	NewRateLimitService,
 	ProvideServices,
 )
@@ -18,13 +17,11 @@ var ServiceProviderSet = wire.NewSet(
 func ProvideServices(
 	systemService *SystemService,
 	stationMessageService *StationMessageService,
-	ossService *OssService,
 	rateLimitService *RateLimitService,
 ) []server.GrpcService {
 	return []server.GrpcService{
 		systemService,
 		stationMessageService,
-		ossService,
 		rateLimitService,
 	}
 }

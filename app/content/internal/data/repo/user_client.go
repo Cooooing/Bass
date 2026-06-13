@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	userv1 "common/proto/gen/user/v1"
 	bizrepo "content/internal/biz/repo"
 )
 

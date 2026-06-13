@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/pkg/util/server"
+	"common/pkg/server"
 
 	"github.com/google/wire"
 )
@@ -12,17 +12,20 @@ var ServiceProviderSet = wire.NewSet(
 	ProvideGrpcServices,
 	ProvideHttpServices,
 
+	NewChatGroupService,
 	NewChatSessionService,
 	NewChatMessageService,
 )
 
 func ProvideGrpcServices(
 	systemService *SystemService,
+	chatGroupService *ChatGroupService,
 	chatSessionService *ChatSessionService,
 	chatMessageService *ChatMessageService,
 ) []server.GrpcService {
 	return []server.GrpcService{
 		systemService,
+		chatGroupService,
 		chatSessionService,
 		chatMessageService,
 	}
@@ -30,11 +33,13 @@ func ProvideGrpcServices(
 
 func ProvideHttpServices(
 	systemService *SystemService,
+	chatGroupService *ChatGroupService,
 	chatSessionService *ChatSessionService,
 	chatMessageService *ChatMessageService,
 ) []server.HttpService {
 	return []server.HttpService{
 		systemService,
+		chatGroupService,
 		chatSessionService,
 		chatMessageService,
 	}

@@ -2,23 +2,25 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbscontentv1 "common/api/gen/bbs/v1/content"
-	contentv1 "common/api/gen/content/v1"
 	"common/pkg/client/rpc"
+	"common/pkg/util"
+	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	contentv1 "common/proto/gen/content/v1"
 	"context"
+	"fmt"
 )
 
-var _ repo.ContentPostscriptRepo = (*ContentPostscriptRepo)(nil)
+var _ repo.ContentPostscriptClient = (*ContentPostscriptClient)(nil)
 
-type ContentPostscriptRepo struct {
+type ContentPostscriptClient struct {
 	contentClient *rpc.ContentClient
 }
 
-func NewContentPostscriptRepo(contentClient *rpc.ContentClient) repo.ContentPostscriptRepo {
-	return &ContentPostscriptRepo{contentClient: contentClient}
+func NewContentPostscriptClient(contentClient *rpc.ContentClient) repo.ContentPostscriptClient {
+	return &ContentPostscriptClient{contentClient: contentClient}
 }
 
-func (r *ContentPostscriptRepo) AddPostscript(ctx context.Context, req *bbscontentv1.AddPostscript_Request) (*bbscontentv1.AddPostscript_Reply, error) {
+func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *bbscontentv1.AddPostscript_Request) (*bbscontentv1.AddPostscript_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -32,7 +34,7 @@ func (r *ContentPostscriptRepo) AddPostscript(ctx context.Context, req *bbsconte
 		Id:            item.GetId(),
 		ArticleId:     item.GetArticleId(),
 		Content:       item.GetContent(),
-		ContentRender: item.GetContentRender(),
+		ContentRender: util.LuteEngine.MarkdownStr(fmt.Sprintf("article_postscript_%d", item.GetId()), item.GetContent()),
 		CreatedBy:     item.CreatedBy,
 		UpdatedBy:     item.UpdatedBy,
 		CreatedAt:     formatProtoTime(item.GetCreatedAt()),

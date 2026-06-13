@@ -2,6 +2,7 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	"common/proto/gen/common"
 	"context"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
@@ -13,6 +14,7 @@ import (
 	notifyenum "notify/internal/enum"
 	"time"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -99,6 +101,106 @@ func (r *NotificationEmailDeliveryRepo) SaveOrGet(ctx context.Context, delivery 
 		SentAt:            exist.SentAt,
 		CreatedAt:         exist.CreatedAt,
 		UpdatedAt:         exist.UpdatedAt,
+	}, nil
+}
+
+func (r *NotificationEmailDeliveryRepo) Get(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (*model.NotificationEmailDelivery, error) {
+	list, err := r.List(ctx, req)
+	if err != nil || len(list) == 0 {
+		return nil, err
+	}
+	return list[0], nil
+}
+
+func (r *NotificationEmailDeliveryRepo) List(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) ([]*model.NotificationEmailDelivery, error) {
+	query := r.getClient(ctx).NotificationEmailDelivery.Query()
+	query = r.getEmailQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.NotificationEmailDelivery, 0, len(list))
+	for _, item := range list {
+		result = append(result, &model.NotificationEmailDelivery{
+			ID:                item.ID,
+			EventID:           item.EventID,
+			EventType:         commonenum.EventType(item.EventType),
+			ReceiverID:        item.ReceiverID,
+			ToEmail:           item.ToEmail,
+			Subject:           item.Subject,
+			Body:              item.Body,
+			ContentType:       item.ContentType,
+			Status:            notifyenum.NotificationChannelStatus(item.Status),
+			AttemptCount:      item.AttemptCount,
+			LastAttemptAt:     item.LastAttemptAt,
+			ProviderMessageID: item.ProviderMessageID,
+			ProviderResponse:  item.ProviderResponse,
+			SentAt:            item.SentAt,
+			CreatedAt:         item.CreatedAt,
+			UpdatedAt:         item.UpdatedAt,
+		})
+	}
+	return result, nil
+}
+
+func (r *NotificationEmailDeliveryRepo) Map(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (map[int64]*model.NotificationEmailDelivery, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.NotificationEmailDelivery, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *NotificationEmailDeliveryRepo) Count(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (int, error) {
+	query := r.getClient(ctx).NotificationEmailDelivery.Query()
+	query = r.getEmailQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *NotificationEmailDeliveryRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.NotificationEmailDeliveryQuery) ([]*model.NotificationEmailDelivery, *common.PageReply, error) {
+	page = server.PageValid(page)
+	query := r.getClient(ctx).NotificationEmailDelivery.Query()
+	query = r.getEmailQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.NotificationEmailDelivery, 0, len(list))
+	for _, item := range list {
+		result = append(result, &model.NotificationEmailDelivery{
+			ID:                item.ID,
+			EventID:           item.EventID,
+			EventType:         commonenum.EventType(item.EventType),
+			ReceiverID:        item.ReceiverID,
+			ToEmail:           item.ToEmail,
+			Subject:           item.Subject,
+			Body:              item.Body,
+			ContentType:       item.ContentType,
+			Status:            notifyenum.NotificationChannelStatus(item.Status),
+			AttemptCount:      item.AttemptCount,
+			LastAttemptAt:     item.LastAttemptAt,
+			ProviderMessageID: item.ProviderMessageID,
+			ProviderResponse:  item.ProviderResponse,
+			SentAt:            item.SentAt,
+			CreatedAt:         item.CreatedAt,
+			UpdatedAt:         item.UpdatedAt,
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
 	}, nil
 }
 
@@ -261,6 +363,110 @@ func (r *NotificationTencentSMSDeliveryRepo) SaveOrGet(ctx context.Context, deli
 	}, nil
 }
 
+func (r *NotificationTencentSMSDeliveryRepo) Get(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (*model.NotificationTencentSMSDelivery, error) {
+	list, err := r.List(ctx, req)
+	if err != nil || len(list) == 0 {
+		return nil, err
+	}
+	return list[0], nil
+}
+
+func (r *NotificationTencentSMSDeliveryRepo) List(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) ([]*model.NotificationTencentSMSDelivery, error) {
+	query := r.getClient(ctx).NotificationTencentSMSDelivery.Query()
+	query = r.getTencentSMSQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.NotificationTencentSMSDelivery, 0, len(list))
+	for _, item := range list {
+		result = append(result, &model.NotificationTencentSMSDelivery{
+			ID:                 item.ID,
+			EventID:            item.EventID,
+			EventType:          commonenum.EventType(item.EventType),
+			ReceiverID:         item.ReceiverID,
+			Phone:              item.Phone,
+			SMSSDKAppID:        item.SmsSdkAppID,
+			SignName:           item.SignName,
+			ProviderTemplateID: item.ProviderTemplateID,
+			TemplateParams:     item.TemplateParams,
+			Status:             notifyenum.NotificationChannelStatus(item.Status),
+			AttemptCount:       item.AttemptCount,
+			LastAttemptAt:      item.LastAttemptAt,
+			ProviderRequestID:  item.ProviderRequestID,
+			ProviderCode:       item.ProviderCode,
+			ProviderMessage:    item.ProviderMessage,
+			SentAt:             item.SentAt,
+			CreatedAt:          item.CreatedAt,
+			UpdatedAt:          item.UpdatedAt,
+		})
+	}
+	return result, nil
+}
+
+func (r *NotificationTencentSMSDeliveryRepo) Map(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (map[int64]*model.NotificationTencentSMSDelivery, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.NotificationTencentSMSDelivery, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *NotificationTencentSMSDeliveryRepo) Count(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (int, error) {
+	query := r.getClient(ctx).NotificationTencentSMSDelivery.Query()
+	query = r.getTencentSMSQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *NotificationTencentSMSDeliveryRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.NotificationTencentSMSDeliveryQuery) ([]*model.NotificationTencentSMSDelivery, *common.PageReply, error) {
+	page = server.PageValid(page)
+	query := r.getClient(ctx).NotificationTencentSMSDelivery.Query()
+	query = r.getTencentSMSQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.NotificationTencentSMSDelivery, 0, len(list))
+	for _, item := range list {
+		result = append(result, &model.NotificationTencentSMSDelivery{
+			ID:                 item.ID,
+			EventID:            item.EventID,
+			EventType:          commonenum.EventType(item.EventType),
+			ReceiverID:         item.ReceiverID,
+			Phone:              item.Phone,
+			SMSSDKAppID:        item.SmsSdkAppID,
+			SignName:           item.SignName,
+			ProviderTemplateID: item.ProviderTemplateID,
+			TemplateParams:     item.TemplateParams,
+			Status:             notifyenum.NotificationChannelStatus(item.Status),
+			AttemptCount:       item.AttemptCount,
+			LastAttemptAt:      item.LastAttemptAt,
+			ProviderRequestID:  item.ProviderRequestID,
+			ProviderCode:       item.ProviderCode,
+			ProviderMessage:    item.ProviderMessage,
+			SentAt:             item.SentAt,
+			CreatedAt:          item.CreatedAt,
+			UpdatedAt:          item.UpdatedAt,
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
 func (r *NotificationTencentSMSDeliveryRepo) Claim(ctx context.Context, id int64, now time.Time, processingTimeout time.Duration, retryUnknown bool) (bool, error) {
 	conditions := []predicate.NotificationTencentSMSDelivery{
 		notificationtencentsmsdelivery.StatusEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusFailed)),
@@ -410,6 +616,100 @@ func (r *NotificationLarkWebhookDeliveryRepo) SaveOrGet(ctx context.Context, del
 	}, nil
 }
 
+func (r *NotificationLarkWebhookDeliveryRepo) Get(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (*model.NotificationLarkWebhookDelivery, error) {
+	list, err := r.List(ctx, req)
+	if err != nil || len(list) == 0 {
+		return nil, err
+	}
+	return list[0], nil
+}
+
+func (r *NotificationLarkWebhookDeliveryRepo) List(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) ([]*model.NotificationLarkWebhookDelivery, error) {
+	query := r.getClient(ctx).NotificationLarkWebhookDelivery.Query()
+	query = r.getLarkWebhookQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.NotificationLarkWebhookDelivery, 0, len(list))
+	for _, item := range list {
+		result = append(result, &model.NotificationLarkWebhookDelivery{
+			ID:            item.ID,
+			EventID:       item.EventID,
+			EventType:     commonenum.EventType(item.EventType),
+			WebhookID:     item.WebhookID,
+			RequestBody:   item.RequestBody,
+			Status:        notifyenum.NotificationChannelStatus(item.Status),
+			AttemptCount:  item.AttemptCount,
+			LastAttemptAt: item.LastAttemptAt,
+			HTTPStatus:    item.HTTPStatus,
+			ResponseBody:  item.ResponseBody,
+			SentAt:        item.SentAt,
+			CreatedAt:     item.CreatedAt,
+			UpdatedAt:     item.UpdatedAt,
+		})
+	}
+	return result, nil
+}
+
+func (r *NotificationLarkWebhookDeliveryRepo) Map(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (map[int64]*model.NotificationLarkWebhookDelivery, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.NotificationLarkWebhookDelivery, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *NotificationLarkWebhookDeliveryRepo) Count(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (int, error) {
+	query := r.getClient(ctx).NotificationLarkWebhookDelivery.Query()
+	query = r.getLarkWebhookQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *NotificationLarkWebhookDeliveryRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.NotificationLarkWebhookDeliveryQuery) ([]*model.NotificationLarkWebhookDelivery, *common.PageReply, error) {
+	page = server.PageValid(page)
+	query := r.getClient(ctx).NotificationLarkWebhookDelivery.Query()
+	query = r.getLarkWebhookQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.NotificationLarkWebhookDelivery, 0, len(list))
+	for _, item := range list {
+		result = append(result, &model.NotificationLarkWebhookDelivery{
+			ID:            item.ID,
+			EventID:       item.EventID,
+			EventType:     commonenum.EventType(item.EventType),
+			WebhookID:     item.WebhookID,
+			RequestBody:   item.RequestBody,
+			Status:        notifyenum.NotificationChannelStatus(item.Status),
+			AttemptCount:  item.AttemptCount,
+			LastAttemptAt: item.LastAttemptAt,
+			HTTPStatus:    item.HTTPStatus,
+			ResponseBody:  item.ResponseBody,
+			SentAt:        item.SentAt,
+			CreatedAt:     item.CreatedAt,
+			UpdatedAt:     item.UpdatedAt,
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
 func (r *NotificationLarkWebhookDeliveryRepo) Claim(ctx context.Context, id int64, now time.Time, processingTimeout time.Duration, retryUnknown bool) (bool, error) {
 	conditions := []predicate.NotificationLarkWebhookDelivery{
 		notificationlarkwebhookdelivery.StatusEQ(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusFailed)),
@@ -471,4 +771,94 @@ func (r *NotificationLarkWebhookDeliveryRepo) MarkUnknown(ctx context.Context, i
 		SetNillableHTTPStatus(httpStatus).
 		SetNillableResponseBody(responseBody).
 		Exec(ctx)
+}
+
+func (r *NotificationEmailDeliveryRepo) getEmailQuery(query *gen.NotificationEmailDeliveryQuery, req *bizrepo.NotificationEmailDeliveryQuery) *gen.NotificationEmailDeliveryQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(notificationemaildelivery.IDEQ(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(notificationemaildelivery.IDIn(req.IDs...))
+	}
+	if req.EventID != nil {
+		query = query.Where(notificationemaildelivery.EventIDEQ(*req.EventID))
+	}
+	if len(req.EventIDs) > 0 {
+		query = query.Where(notificationemaildelivery.EventIDIn(req.EventIDs...))
+	}
+	if req.EventType != nil {
+		query = query.Where(notificationemaildelivery.EventTypeEQ(notificationemaildelivery.EventType(*req.EventType)))
+	}
+	if req.ReceiverID != nil {
+		query = query.Where(notificationemaildelivery.ReceiverIDEQ(*req.ReceiverID))
+	}
+	if req.ToEmail != nil {
+		query = query.Where(notificationemaildelivery.ToEmailEQ(*req.ToEmail))
+	}
+	if req.Status != nil {
+		query = query.Where(notificationemaildelivery.StatusEQ(notificationemaildelivery.Status(*req.Status)))
+	}
+	return query
+}
+
+func (r *NotificationTencentSMSDeliveryRepo) getTencentSMSQuery(query *gen.NotificationTencentSMSDeliveryQuery, req *bizrepo.NotificationTencentSMSDeliveryQuery) *gen.NotificationTencentSMSDeliveryQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(notificationtencentsmsdelivery.IDEQ(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(notificationtencentsmsdelivery.IDIn(req.IDs...))
+	}
+	if req.EventID != nil {
+		query = query.Where(notificationtencentsmsdelivery.EventIDEQ(*req.EventID))
+	}
+	if len(req.EventIDs) > 0 {
+		query = query.Where(notificationtencentsmsdelivery.EventIDIn(req.EventIDs...))
+	}
+	if req.EventType != nil {
+		query = query.Where(notificationtencentsmsdelivery.EventTypeEQ(notificationtencentsmsdelivery.EventType(*req.EventType)))
+	}
+	if req.ReceiverID != nil {
+		query = query.Where(notificationtencentsmsdelivery.ReceiverIDEQ(*req.ReceiverID))
+	}
+	if req.Phone != nil {
+		query = query.Where(notificationtencentsmsdelivery.PhoneEQ(*req.Phone))
+	}
+	if req.Status != nil {
+		query = query.Where(notificationtencentsmsdelivery.StatusEQ(notificationtencentsmsdelivery.Status(*req.Status)))
+	}
+	return query
+}
+
+func (r *NotificationLarkWebhookDeliveryRepo) getLarkWebhookQuery(query *gen.NotificationLarkWebhookDeliveryQuery, req *bizrepo.NotificationLarkWebhookDeliveryQuery) *gen.NotificationLarkWebhookDeliveryQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(notificationlarkwebhookdelivery.IDEQ(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(notificationlarkwebhookdelivery.IDIn(req.IDs...))
+	}
+	if req.EventID != nil {
+		query = query.Where(notificationlarkwebhookdelivery.EventIDEQ(*req.EventID))
+	}
+	if len(req.EventIDs) > 0 {
+		query = query.Where(notificationlarkwebhookdelivery.EventIDIn(req.EventIDs...))
+	}
+	if req.EventType != nil {
+		query = query.Where(notificationlarkwebhookdelivery.EventTypeEQ(notificationlarkwebhookdelivery.EventType(*req.EventType)))
+	}
+	if req.WebhookID != nil {
+		query = query.Where(notificationlarkwebhookdelivery.WebhookIDEQ(*req.WebhookID))
+	}
+	if req.Status != nil {
+		query = query.Where(notificationlarkwebhookdelivery.StatusEQ(notificationlarkwebhookdelivery.Status(*req.Status)))
+	}
+	return query
 }

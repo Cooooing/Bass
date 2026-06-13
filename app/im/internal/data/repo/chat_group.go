@@ -1,12 +1,12 @@
-package repo
+﻿package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/im/v1"
-	"common/pkg/constant"
+	"common/proto/gen/common"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
@@ -40,6 +40,8 @@ func (r *ChatGroupRepo) Save(ctx context.Context, chatGroup *model.ChatGroup) (*
 		SetOwnerID(chatGroup.OwnerID).
 		SetStatus(chatgroup.Status(enum.ChatGroupStatusNormal)).
 		SetMemberCount(chatGroup.MemberCount).
+		SetNillableCreatedBy(chatGroup.CreatedBy).
+		SetNillableUpdatedBy(chatGroup.UpdatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -61,9 +63,10 @@ func (r *ChatGroupRepo) Save(ctx context.Context, chatGroup *model.ChatGroup) (*
 	}, nil
 }
 
-func (r *ChatGroupRepo) UpdateAvatar(ctx context.Context, chatGroupId int64, avatar string) (*model.ChatGroup, error) {
+func (r *ChatGroupRepo) UpdateAvatar(ctx context.Context, chatGroupId int64, avatar string, updatedBy int64) (*model.ChatGroup, error) {
 	update, err := r.getClient(ctx).ChatGroup.UpdateOneID(chatGroupId).
 		SetAvatar(avatar).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -85,9 +88,10 @@ func (r *ChatGroupRepo) UpdateAvatar(ctx context.Context, chatGroupId int64, ava
 	}, nil
 }
 
-func (r *ChatGroupRepo) UpdateOwner(ctx context.Context, chatGroupId int64, ownerId int64) (*model.ChatGroup, error) {
+func (r *ChatGroupRepo) UpdateOwner(ctx context.Context, chatGroupId int64, ownerId int64, updatedBy int64) (*model.ChatGroup, error) {
 	update, err := r.getClient(ctx).ChatGroup.UpdateOneID(chatGroupId).
 		SetOwnerID(ownerId).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -109,10 +113,11 @@ func (r *ChatGroupRepo) UpdateOwner(ctx context.Context, chatGroupId int64, owne
 	}, nil
 }
 
-func (r *ChatGroupRepo) UpdateLastMessage(ctx context.Context, message *model.ChatMessage) (*model.ChatGroup, error) {
+func (r *ChatGroupRepo) UpdateLastMessage(ctx context.Context, message *model.ChatMessage, updatedBy int64) (*model.ChatGroup, error) {
 	update, err := r.getClient(ctx).ChatGroup.UpdateOneID(*message.GroupID).
 		AddMessageCount(1).
 		SetLastMessageID(message.ID).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -134,9 +139,10 @@ func (r *ChatGroupRepo) UpdateLastMessage(ctx context.Context, message *model.Ch
 	}, nil
 }
 
-func (r *ChatGroupRepo) UpdateMemberCount(ctx context.Context, chatGroupId int64, operationMemberCount int32) (*model.ChatGroup, error) {
+func (r *ChatGroupRepo) UpdateMemberCount(ctx context.Context, chatGroupId int64, operationMemberCount int32, updatedBy int64) (*model.ChatGroup, error) {
 	update, err := r.getClient(ctx).ChatGroup.UpdateOneID(chatGroupId).
 		AddMemberCount(operationMemberCount).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -158,13 +164,10 @@ func (r *ChatGroupRepo) UpdateMemberCount(ctx context.Context, chatGroupId int64
 	}, nil
 }
 
-func (r *ChatGroupRepo) UpdateStatus(ctx context.Context, chatGroupId int64, status v1.ChatGroupStatus) (*model.ChatGroup, error) {
-	dbStatus, ok := enum.ChatGroupStatusMap.ToEnum(status)
-	if !ok {
-		return nil, cerrors.ErrorBadRequest("unknown chat group status")
-	}
+func (r *ChatGroupRepo) UpdateStatus(ctx context.Context, chatGroupId int64, status enum.ChatGroupStatus, updatedBy int64) (*model.ChatGroup, error) {
 	update, err := r.getClient(ctx).ChatGroup.UpdateOneID(chatGroupId).
-		SetStatus(chatgroup.Status(dbStatus)).
+		SetStatus(chatgroup.Status(status)).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -191,7 +194,7 @@ func (r *ChatGroupRepo) Get(ctx context.Context, req *repo.ChatGroupGetReq) (*mo
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("chatGroup is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_GROUP_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
@@ -213,7 +216,7 @@ func (r *ChatGroupRepo) Get(ctx context.Context, req *repo.ChatGroupGetReq) (*mo
 	}, nil
 }
 
-func (r *ChatGroupRepo) GetList(ctx context.Context, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, error) {
+func (r *ChatGroupRepo) List(ctx context.Context, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, error) {
 	query := r.getClient(ctx).ChatGroup.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -242,8 +245,26 @@ func (r *ChatGroupRepo) GetList(ctx context.Context, req *repo.ChatGroupGetReq) 
 	return chatGroups, nil
 }
 
+func (r *ChatGroupRepo) Map(ctx context.Context, req *repo.ChatGroupGetReq) (map[int64]*model.ChatGroup, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.ChatGroup, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *ChatGroupRepo) Count(ctx context.Context, req *repo.ChatGroupGetReq) (int, error) {
+	query := r.getClient(ctx).ChatGroup.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *ChatGroupRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ChatGroupGetReq) ([]*model.ChatGroup, *common.PageReply, error) {
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := r.getClient(ctx).ChatGroup.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -282,5 +303,14 @@ func (r *ChatGroupRepo) Page(ctx context.Context, page *common.PageRequest, req 
 }
 
 func (r *ChatGroupRepo) getQuery(query *gen.ChatGroupQuery, req *repo.ChatGroupGetReq) *gen.ChatGroupQuery {
+	if req == nil {
+		return query
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(chatgroup.IDIn(req.IDs...))
+	}
+	if req.Status != nil {
+		query = query.Where(chatgroup.StatusEQ(chatgroup.Status(*req.Status)))
+	}
 	return query
 }

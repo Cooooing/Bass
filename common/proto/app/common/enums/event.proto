@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+import "common/enums/event_payload.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+// 事件类型 — 每个服务预留 1000，内部按业务细分
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+
+  // 用户事件（1000-1999）
+  EVENT_TYPE_USER_FOLLOW = 1001; // 关注用户
+  EVENT_TYPE_USER_UNFOLLOW = 1002; // 取消关注用户
+  EVENT_TYPE_USER_REGISTER = 1003; // 用户注册
+  EVENT_TYPE_USER_LOGIN = 1004; // 用户登录
+  EVENT_TYPE_USER_LOGOUT = 1005; // 用户登出
+  EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE = 1006; // 用户邮箱验证码
+  EVENT_TYPE_USER_PHONE_VERIFICATION_CODE = 1007; // 用户手机号验证码
+  EVENT_TYPE_USER_BLOCK = 1010; // 拉黑用户
+  EVENT_TYPE_USER_UNBLOCK = 1011; // 取消拉黑用户
+  EVENT_TYPE_USER_TOTP_ENABLE = 1012; // 启用 TOTP 认证
+  EVENT_TYPE_USER_TOTP_DISABLE = 1013; // 停用 TOTP 认证
+
+  // 内容文章事件（2000-2099）
+  EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
+  EVENT_TYPE_ARTICLE_LIKED = 2002; // 点赞文章
+  EVENT_TYPE_ARTICLE_THANKED = 2003; // 感谢文章
+  EVENT_TYPE_ARTICLE_COLLECTED = 2004; // 收藏文章
+  EVENT_TYPE_ARTICLE_WATCHED = 2005; // 关注文章
+  EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER = 2006; // 采纳答案
+  EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED = 2007; // 添加文章附言
+  EVENT_TYPE_ARTICLE_STATUS_UPDATED = 2008; // 更新文章状态
+
+  // 内容评论事件（2100-2199）
+  EVENT_TYPE_COMMENT_PUBLISHED = 2101; // 发布评论
+  EVENT_TYPE_COMMENT_LIKED = 2102; // 点赞评论
+  EVENT_TYPE_COMMENT_THANKED = 2103; // 感谢评论
+  EVENT_TYPE_COMMENT_STATUS_UPDATED = 2104; // 更新评论状态
+
+  // 即时通讯事件（3000-3999）
+
+  // 平台事件（4000-4999）
+}
+
+// 事件主题 — 数值与对应 EventType 保持一致，内部映射为实际 MQ subject。
+enum EventSubject {
+  EVENT_SUBJECT_UNSPECIFIED = 0;
+
+  // 用户事件（1000-1999）
+  EVENT_SUBJECT_USER_FOLLOW = 1001; // user.follow
+  EVENT_SUBJECT_USER_UNFOLLOW = 1002; // user.unfollow
+  EVENT_SUBJECT_USER_REGISTER = 1003; // user.register
+  EVENT_SUBJECT_USER_LOGIN = 1004; // user.login
+  EVENT_SUBJECT_USER_LOGOUT = 1005; // user.logout
+  EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE = 1006; // user.email.verification_code
+  EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE = 1007; // user.phone.verification_code
+  EVENT_SUBJECT_USER_BLOCK = 1010; // user.block
+  EVENT_SUBJECT_USER_UNBLOCK = 1011; // user.unblock
+  EVENT_SUBJECT_USER_TOTP_ENABLE = 1012; // user.totp.enable
+  EVENT_SUBJECT_USER_TOTP_DISABLE = 1013; // user.totp.disable
+
+  // 内容文章事件（2000-2099）
+  EVENT_SUBJECT_ARTICLE_PUBLISHED = 2001; // content.article.published
+  EVENT_SUBJECT_ARTICLE_LIKED = 2002; // content.article.liked
+  EVENT_SUBJECT_ARTICLE_THANKED = 2003; // content.article.thanked
+  EVENT_SUBJECT_ARTICLE_COLLECTED = 2004; // content.article.collected
+  EVENT_SUBJECT_ARTICLE_WATCHED = 2005; // content.article.watched
+  EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER = 2006; // content.article.accepted_answer
+  EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED = 2007; // content.article.postscript_added
+  EVENT_SUBJECT_ARTICLE_STATUS_UPDATED = 2008; // content.article.status_updated
+
+  // 内容评论事件（2100-2199）
+  EVENT_SUBJECT_COMMENT_PUBLISHED = 2101; // content.comment.published
+  EVENT_SUBJECT_COMMENT_LIKED = 2102; // content.comment.liked
+  EVENT_SUBJECT_COMMENT_THANKED = 2103; // content.comment.thanked
+  EVENT_SUBJECT_COMMENT_STATUS_UPDATED = 2104; // content.comment.status_updated
+
+  // 即时通讯事件（3000-3999）
+
+  // 平台事件（4000-4999）
+}
+
+// 事件消费队列组 — 映射为 NATS queue group。
+enum EventQueueGroup {
+  EVENT_QUEUE_GROUP_UNSPECIFIED = 0;
+  EVENT_QUEUE_GROUP_NOTIFY = 1; // notify
+}
+
+// outbox 事件投递状态。
+enum OutboxEventStatus {
+  OUTBOX_EVENT_STATUS_UNSPECIFIED = 0; // 未指定
+  OUTBOX_EVENT_STATUS_PENDING = 1; // 等待投递
+  OUTBOX_EVENT_STATUS_PUBLISHING = 2; // 正在投递
+  OUTBOX_EVENT_STATUS_PUBLISHED = 3; // 已投递
+  OUTBOX_EVENT_STATUS_FAILED = 4; // 投递失败，等待重试
+  OUTBOX_EVENT_STATUS_DEAD = 5; // 超过最大重试次数
+}
+
+// inbox 事件消费状态。
+enum InboxEventStatus {
+  INBOX_EVENT_STATUS_UNSPECIFIED = 0; // 未指定
+  INBOX_EVENT_STATUS_RECEIVED = 1; // 已接收
+  INBOX_EVENT_STATUS_PROCESSING = 2; // 正在处理
+  INBOX_EVENT_STATUS_PROCESSED = 3; // 已处理
+  INBOX_EVENT_STATUS_FAILED = 4; // 处理失败，等待重试
+  INBOX_EVENT_STATUS_DEAD = 5; // 超过最大重试次数
+}
+
+// 事件消息 — 业务服务通过 MQ 发布的标准事件
+message Event {
+  // 幂等标识
+  string event_id = 1;
+  // 事件类型
+  EventType type = 2;
+  // 事件主题
+  EventSubject subject = 4;
+  // 事件发生时间
+  google.protobuf.Timestamp timestamp = 3;
+  // 业务数据，类型与 type 对应；字段号必须和 EventType 数值一致。
+  oneof payload {
+    UserFollowPayload user_follow = 1001;
+    UserUnfollowPayload user_unfollow = 1002;
+    UserRegisterPayload user_register = 1003;
+    UserLoginPayload user_login = 1004;
+    UserLogoutPayload user_logout = 1005;
+    UserEmailVerificationCodePayload user_email_verification_code = 1006;
+    UserPhoneVerificationCodePayload user_phone_verification_code = 1007;
+    UserBlockPayload user_block = 1010;
+    UserUnblockPayload user_unblock = 1011;
+    UserTotpEnablePayload user_totp_enable = 1012;
+    UserTotpDisablePayload user_totp_disable = 1013;
+    ArticlePublishedPayload article_published = 2001;
+    ArticleLikedPayload article_liked = 2002;
+    ArticleThankedPayload article_thanked = 2003;
+    ArticleCollectedPayload article_collected = 2004;
+    ArticleWatchedPayload article_watched = 2005;
+    ArticleAcceptedAnswerPayload article_accepted_answer = 2006;
+    ArticlePostscriptAddedPayload article_postscript_added = 2007;
+    ArticleStatusUpdatedPayload article_status_updated = 2008;
+    CommentPublishedPayload comment_published = 2101;
+    CommentLikedPayload comment_liked = 2102;
+    CommentThankedPayload comment_thanked = 2103;
+    CommentStatusUpdatedPayload comment_status_updated = 2104;
+  }
+}

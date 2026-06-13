@@ -1,16 +1,17 @@
-package repo
+﻿package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
-	"fmt"
 
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	"common/pkg/constant"
+	"common/proto/gen/common"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/data/gen"
+	"im/internal/data/gen/chatsession"
 	"im/internal/enum"
 )
 
@@ -33,11 +34,13 @@ func (r *ChatSessionRepo) getClient(ctx context.Context) *gen.Client {
 
 func (r *ChatSessionRepo) Save(ctx context.Context, chatSession *model.ChatSession) (*model.ChatSession, error) {
 	if (chatSession.ReceiverID == nil && chatSession.GroupID == nil) || (chatSession.ReceiverID != nil && chatSession.GroupID != nil) {
-		return nil, fmt.Errorf("receiver_id and group_id cannot be both nil or not nil at the same time")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_SESSION_INVALID)
 	}
 	save, err := r.getClient(ctx).ChatSession.Create().
 		SetNillableReceiverID(chatSession.ReceiverID).
 		SetNillableGroupID(chatSession.GroupID).
+		SetNillableCreatedBy(chatSession.CreatedBy).
+		SetNillableUpdatedBy(chatSession.UpdatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -59,10 +62,11 @@ func (r *ChatSessionRepo) Save(ctx context.Context, chatSession *model.ChatSessi
 	}, nil
 }
 
-func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, chatSessionId int64, messageId int64, operationReadCount int32) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, chatSessionId int64, messageId int64, operationReadCount int32, updatedBy int64) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(chatSessionId).
 		SetLastReadMessageID(messageId).
 		AddReadCount(operationReadCount).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -84,9 +88,10 @@ func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, chatSession
 	}, nil
 }
 
-func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, chatSessionId int64, muted bool) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, chatSessionId int64, muted bool, updatedBy int64) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(chatSessionId).
 		SetIsMuted(muted).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -108,9 +113,10 @@ func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, chatSessionId int64, 
 	}, nil
 }
 
-func (r *ChatSessionRepo) UpdatePinned(ctx context.Context, chatSessionId int64, pinned bool) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) UpdatePinned(ctx context.Context, chatSessionId int64, pinned bool, updatedBy int64) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(chatSessionId).
 		SetIsPinned(pinned).
+		SetUpdatedBy(updatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -137,7 +143,7 @@ func (r *ChatSessionRepo) Get(ctx context.Context, req *repo.ChatSessionGetReq) 
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("chatSession is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_SESSION_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
@@ -177,7 +183,7 @@ func (r *ChatSessionRepo) Get(ctx context.Context, req *repo.ChatSessionGetReq) 
 	return item, nil
 }
 
-func (r *ChatSessionRepo) GetList(ctx context.Context, req *repo.ChatSessionGetReq) ([]*model.ChatSession, error) {
+func (r *ChatSessionRepo) List(ctx context.Context, req *repo.ChatSessionGetReq) ([]*model.ChatSession, error) {
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -224,8 +230,26 @@ func (r *ChatSessionRepo) GetList(ctx context.Context, req *repo.ChatSessionGetR
 	return chatSessions, nil
 }
 
+func (r *ChatSessionRepo) Map(ctx context.Context, req *repo.ChatSessionGetReq) (map[int64]*model.ChatSession, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.ChatSession, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *ChatSessionRepo) Count(ctx context.Context, req *repo.ChatSessionGetReq) (int, error) {
+	query := r.getClient(ctx).ChatSession.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *ChatSessionRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ChatSessionGetReq) ([]*model.ChatSession, *common.PageReply, error) {
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -283,5 +307,20 @@ func (r *ChatSessionRepo) Page(ctx context.Context, page *common.PageRequest, re
 
 func (r *ChatSessionRepo) getQuery(query *gen.ChatSessionQuery, req *repo.ChatSessionGetReq) *gen.ChatSessionQuery {
 	query.WithGroup().WithLastMessageOfSession()
+	if req == nil {
+		return query
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(chatsession.IDIn(req.IDs...))
+	}
+	if req.CreatedBy != nil {
+		query = query.Where(chatsession.CreatedBy(*req.CreatedBy))
+	}
+	if req.GroupID != nil {
+		query = query.Where(chatsession.GroupID(*req.GroupID))
+	}
+	if req.ReceiverID != nil {
+		query = query.Where(chatsession.ReceiverID(*req.ReceiverID))
+	}
 	return query
 }

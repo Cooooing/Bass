@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.notify;
+
+import "bbs/v1/notify/model.proto";
+import "common/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bbs/v1/notify;notify";
+
+// 通知接口。
+service NotificationService {
+  // 分页查询通知列表。
+  rpc List(ListNotifications.Request) returns (ListNotifications.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notify/notification/list"
+      body: "*"
+    };
+  }
+
+  // 标记通知为已读。
+  rpc MarkRead(MarkReadNotification.Request) returns (MarkReadNotification.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notify/notification/mark-read"
+      body: "*"
+    };
+  }
+
+  // 统计未读通知数量。
+  rpc CountUnread(CountUnreadNotifications.Request) returns (CountUnreadNotifications.Reply) {
+    option (google.api.http) = {
+      post: "/v1/notify/notification/count-unread"
+      body: "*"
+    };
+  }
+}
+
+// 分页查询通知列表。
+message ListNotifications {
+  message Request {
+    // 分页参数。
+    common.PageRequest page = 1;
+  }
+  message Reply {
+    // 分页结果。
+    common.PageReply page = 1;
+    // 通知列表。
+    repeated Notification rows = 2;
+  }
+}
+
+// 标记通知为已读。
+message MarkReadNotification {
+  message Request {
+    // 通知 ID 列表。
+    repeated int64 ids = 1;
+  }
+  message Reply {
+    // 成功标记的通知数量。
+    int32 count = 1;
+  }
+}
+
+// 统计未读通知数量。
+message CountUnreadNotifications {
+  message Request {}
+  message Reply {
+    // 未读通知数量。
+    int64 count = 1;
+  }
+}

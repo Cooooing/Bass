@@ -1,0 +1,372 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "common/common.proto";
+import "content/v1/enum.proto";
+import "content/v1/model.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// Article 服务
+service ContentArticleService {
+  rpc Create(CreateArticle.Request) returns (CreateArticle.Reply) {} // 创建文章草稿
+  rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Reply) {} // 添加附言
+  rpc ListPostscripts(ListArticlePostscripts.Request) returns (ListArticlePostscripts.Reply) {} // 查询附言列表
+
+  rpc Publish(PublishArticle.Request) returns (PublishArticle.Reply) {} // 发布文章
+  rpc Update(UpdateArticle.Request) returns (UpdateArticle.Reply) {} // 修改文章内容
+  rpc DiscardDraft(DiscardDraftArticle.Request) returns (DiscardDraftArticle.Reply) {} // 丢弃草稿
+  rpc MakePrivate(MakePrivateArticle.Request) returns (MakePrivateArticle.Reply) {} // 设为私有
+  rpc MakePublic(MakePublicArticle.Request) returns (MakePublicArticle.Reply) {} // 设为公开
+  rpc Archive(ArchiveArticle.Request) returns (ArchiveArticle.Reply) {} // 归档文章
+  rpc Unarchive(UnarchiveArticle.Request) returns (UnarchiveArticle.Reply) {} // 取消归档
+  rpc Hide(HideArticle.Request) returns (HideArticle.Reply) {} // 管理隐藏文章
+  rpc Unhide(UnhideArticle.Request) returns (UnhideArticle.Reply) {} // 取消管理隐藏
+  rpc Lock(LockArticle.Request) returns (LockArticle.Reply) {} // 管理锁定文章
+  rpc Unlock(UnlockArticle.Request) returns (UnlockArticle.Reply) {} // 管理解锁文章
+
+  rpc Like(LikeArticle.Request) returns (LikeArticle.Reply) {} // 点赞文章
+  rpc Thank(ThankArticle.Request) returns (ThankArticle.Reply) {} // 感谢文章
+  rpc Collect(CollectArticle.Request) returns (CollectArticle.Reply) {} // 收藏文章
+  rpc Watch(WatchArticle.Request) returns (WatchArticle.Reply) {} // 关注文章
+  rpc Reward(RewardArticle.Request) returns (RewardArticle.Reply) {} // 打赏文章
+  rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Reply) {} // 采纳评论
+  rpc View(ViewArticle.Request) returns (ViewArticle.Reply) {} // 浏览文章
+
+  rpc MapViewerActionStates(MapArticleViewerActionStates.Request) returns (MapArticleViewerActionStates.Reply) {} // 查询用户的文章行为状态
+  rpc Get(GetArticle.Request) returns (GetArticle.Reply) {} // 查询单篇文章
+  rpc List(ListArticles.Request) returns (ListArticles.Reply) {} // 查询文章列表
+  rpc Page(PageArticles.Request) returns (PageArticles.Reply) {} // 分页查询文章
+}
+
+message CreateArticle {
+  message Request {
+    Article article = 1; // 文章信息
+    int64 user_id = 2; // 用户 ID
+
+    message Article {
+      reserved 4, 13;
+
+      string title = 1; // 标题
+      string content = 2; // 内容
+      ArticleType type = 5; // 类型
+
+      optional string reward_content = 6; // 打赏内容
+      optional int32 reward_points = 7; // 打赏积分
+
+      optional string statement = 10; // 创作声明
+      optional bool commentable = 11; // 是否允许评论
+      optional bool anonymous = 12; // 是否匿名
+      repeated int64 tag_ids = 20; // 绑定标签 ID
+
+      oneof type_params {
+        QA qa = 100; // 问答参数
+      }
+
+      message QA {
+        int32 bounty_points = 101; // 悬赏积分
+      }
+    }
+  }
+
+  message Reply {
+    Article article = 1; // 文章信息
+  }
+}
+
+message AddPostscriptArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 附言内容
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    ArticlePostscript article_postscript = 1; // 附言信息
+  }
+}
+
+message ListArticlePostscripts {
+  message Request {
+    reserved 2;
+
+    int64 article_id = 1; // 文章 ID
+  }
+
+  message Reply {
+    repeated ArticlePostscript rows = 1; // 附言列表
+  }
+}
+
+message PublishArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    ArticleVisibility visibility = 3; // 发布后的可见范围
+  }
+
+  message Reply {}
+}
+
+message UpdateArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    Article article = 2; // 文章信息
+    int64 user_id = 3; // 用户 ID
+
+    message Article {
+      reserved 4, 13;
+
+      string title = 1; // 标题
+      string content = 2; // 内容
+      ArticleType type = 5; // 类型
+
+      optional string reward_content = 6; // 打赏内容
+      optional int32 reward_points = 7; // 打赏积分
+
+      optional string statement = 10; // 创作声明
+      optional bool commentable = 11; // 是否允许评论
+      optional bool anonymous = 12; // 是否匿名
+      repeated int64 tag_ids = 20; // 绑定标签 ID
+
+      oneof type_params {
+        QA qa = 100; // 问答参数
+      }
+
+      message QA {
+        int32 bounty_points = 101; // 悬赏积分
+      }
+    }
+  }
+
+  message Reply {
+    Article article = 1; // 文章信息
+  }
+}
+
+message DiscardDraftArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+  }
+
+  message Reply {}
+}
+
+message MakePrivateArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+  }
+
+  message Reply {}
+}
+
+message MakePublicArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+  }
+
+  message Reply {}
+}
+
+message ArchiveArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message UnarchiveArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message HideArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message UnhideArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message LockArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message UnlockArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message LikeArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    bool liked = 2; // 是否点赞
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    bool liked = 1; // 是否点赞
+  }
+}
+
+message ThankArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    bool thanked = 2; // 是否感谢
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    bool thanked = 1; // 是否感谢
+  }
+}
+
+message CollectArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    bool collected = 2; // 是否收藏
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    bool collected = 1; // 是否收藏
+  }
+}
+
+message WatchArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    bool watched = 2; // 是否关注
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    bool watched = 1; // 是否关注
+  }
+}
+
+message RewardArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int32 points = 2; // 积分
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {}
+}
+
+message AcceptAnswerArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    int64 comment_id = 2; // 评论 ID
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {}
+}
+
+message ViewArticle {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    optional int64 viewer_user_id = 2; // 查看用户 ID
+  }
+
+  message Reply {}
+}
+
+message MapArticleViewerActionStates {
+  message Request {
+    repeated int64 article_ids = 1; // 文章 ID 列表
+    int64 user_id = 2; // 用户 ID
+  }
+
+  message Reply {
+    map<int64, ArticleViewerActionState> states = 1; // 文章行为状态映射
+  }
+}
+
+message GetArticle {
+  message Request {
+    reserved 2;
+
+    int64 article_id = 1; // 文章 ID
+  }
+
+  message Reply {
+    Article article = 1; // 文章信息
+  }
+}
+
+message ListArticles {
+  message Request {
+    ArticleQueryParams query = 1; // 查询参数
+  }
+
+  message Reply {
+    repeated Article rows = 1; // 文章列表
+  }
+}
+
+message PageArticles {
+  message Request {
+    ArticleQueryParams query = 1; // 查询参数
+    common.PageRequest page = 2; // 分页参数
+  }
+
+  message Reply {
+    repeated Article rows = 1; // 文章列表
+    common.PageReply page = 2; // 分页信息
+  }
+}
+
+message ArticleQueryParams {
+  reserved 3, 8, 9;
+
+  optional int64 tag_id = 1; // 标签
+  optional int64 domain_id = 2; // 领域
+  optional ArticleType type = 4; // 类型
+  optional ArticleOrder order = 5; // 排序
+  optional string keyword = 6; // 查询关键词
+  optional int64 author_id = 7; // 作者 ID
+  optional ArticlePublishStatus publish_status = 10; // 发布状态
+  repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表
+  optional ArticleVisibility visibility = 12; // 可见范围
+  repeated ArticleVisibility visibilities = 13; // 可见范围列表
+  optional ContentRestriction restriction = 14; // 管理限制
+  repeated ContentRestriction restrictions = 15; // 管理限制列表
+}

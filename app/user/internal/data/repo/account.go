@@ -1,9 +1,9 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	"common/pkg/constant"
+	"common/pkg/apperror"
+	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"fmt"
 	"user/internal/biz/model"
@@ -13,6 +13,7 @@ import (
 	"user/internal/data/gen/account"
 	"user/internal/enum"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -217,39 +218,8 @@ func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*model.
 	query = r.getQuery(query, req)
 	u, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("user is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
 	}
-	if err != nil {
-		return nil, err
-	}
-	return &model.Account{
-		ID:            u.ID,
-		Name:          u.Name,
-		Nickname:      u.Nickname,
-		Password:      u.Password,
-		Email:         u.Email,
-		Phone:         u.Phone,
-		URL:           u.URL,
-		AvatarURL:     u.AvatarURL,
-		Introduction:  u.Introduction,
-		Mbti:          (*enum.MBTI)(u.Mbti),
-		Status:        new(enum.AccountStatus(u.Status)),
-		FollowCount:   new(u.FollowCount),
-		FollowerCount: new(u.FollowerCount),
-		CreatedAt:     u.CreatedAt,
-		UpdatedAt:     u.UpdatedAt,
-	}, nil
-}
-
-func (r *AccountRepo) GetByAccount(ctx context.Context, accountValue string) (*model.Account, error) {
-	tx := r.getClient(ctx)
-	u, err := tx.Account.Query().
-		Where(account.Or(
-			account.NameEQ(accountValue),
-			account.EmailEQ(accountValue),
-			account.PhoneEQ(accountValue),
-		)).
-		Only(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -315,9 +285,16 @@ func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (map[int
 	return result, nil
 }
 
+func (r *AccountRepo) Count(ctx context.Context, req *repo.AccountGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.Account.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *AccountRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.AccountGetReq) ([]*model.Account, *common.PageReply, error) {
 	tx := r.getClient(ctx)
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := tx.Account.Query()
 	query = r.getQuery(query, req)
 
@@ -362,6 +339,9 @@ func (r *AccountRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 }
 
 func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *repo.AccountGetReq) *gen.AccountQuery {
+	if req == nil {
+		return query
+	}
 	if req.UserID != nil {
 		query = query.Where(account.ID(*req.UserID))
 	}
@@ -391,6 +371,13 @@ func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *repo.AccountGetReq)
 	}
 	if len(req.Phones) > 0 {
 		query = query.Where(account.PhoneIn(req.Phones...))
+	}
+	if req.Account != nil {
+		query = query.Where(account.Or(
+			account.NameEQ(*req.Account),
+			account.EmailEQ(*req.Account),
+			account.PhoneEQ(*req.Account),
+		))
 	}
 	return query
 }

@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "user/v1/model.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+service TotpService {
+  rpc Validate(ValidateTotp.Request) returns (ValidateTotp.Reply) {} // 校验账号的 TOTP 验证码。
+  rpc BeginEnable(BeginEnableTotp.Request) returns (BeginEnableTotp.Reply) {} // 开始启用 TOTP，生成临时密钥和二维码图片。
+  rpc ConfirmEnable(ConfirmEnableTotp.Request) returns (ConfirmEnableTotp.Reply) {} // 确认 TOTP 验证码并正式启用 TOTP。
+  rpc Disable(DisableTotp.Request) returns (DisableTotp.Reply) {} // 校验 TOTP 验证码并关闭 TOTP。
+  rpc Get(GetTotp.Request) returns (GetTotp.Reply) {} // 获取账号 TOTP 状态。
+}
+
+message ValidateTotp {
+  message Request {
+    int64 user_id = 1;
+    string code = 2;
+  }
+  message Reply {
+    bool verified = 1;
+  }
+}
+
+message BeginEnableTotp {
+  message Request {
+    int64 user_id = 1;
+    string account_name = 2;
+  }
+  message Reply {
+    string url = 1;
+    bytes qr_code = 2;
+  }
+}
+
+message ConfirmEnableTotp {
+  message Request {
+    int64 user_id = 1;
+    string code = 2;
+  }
+  message Reply {}
+}
+
+message DisableTotp {
+  message Request {
+    int64 user_id = 1;
+    string code = 2;
+  }
+  message Reply {}
+}
+
+message GetTotp {
+  message Request {
+    int64 user_id = 1;
+  }
+  message Reply {
+    Totp totp = 1;
+  }
+}

@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"common/api/gen/common"
+	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/enum"
@@ -16,9 +16,9 @@ type AccountRepo interface {
 
 	ExistsByAccount(ctx context.Context, account string) (bool, error)
 	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)
-	GetByAccount(ctx context.Context, account string) (*model.Account, error)
 	List(ctx context.Context, req *AccountGetReq) ([]*model.Account, error)
 	Map(ctx context.Context, req *AccountGetReq) (map[int64]*model.Account, error)
+	Count(ctx context.Context, req *AccountGetReq) (int, error)
 	Page(ctx context.Context, page *common.PageRequest, req *AccountGetReq) ([]*model.Account, *common.PageReply, error)
 }
 
@@ -33,4 +33,5 @@ type AccountGetReq struct {
 	Emails    []string
 	Phone     *string
 	Phones    []string
+	Account   *string
 }

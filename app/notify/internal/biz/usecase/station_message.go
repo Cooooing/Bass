@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"common/api/gen/common"
+	"common/proto/gen/common"
 	"context"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"

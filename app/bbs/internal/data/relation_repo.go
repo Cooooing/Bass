@@ -2,23 +2,23 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
-var _ repo.RelationRepo = (*RelationRepo)(nil)
+var _ repo.RelationClient = (*RelationClient)(nil)
 
-type RelationRepo struct {
+type RelationClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewRelationRepo(userClient *rpc.UserClient) repo.RelationRepo {
-	return &RelationRepo{userClient: userClient}
+func NewRelationClient(userClient *rpc.UserClient) repo.RelationClient {
+	return &RelationClient{userClient: userClient}
 }
 
-func (r *RelationRepo) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Request) (*bbsuserv1.FollowRelation_Reply, error) {
+func (r *RelationClient) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Request) (*bbsuserv1.FollowRelation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (r *RelationRepo) Follow(ctx context.Context, req *bbsuserv1.FollowRelation
 	return &bbsuserv1.FollowRelation_Reply{}, nil
 }
 
-func (r *RelationRepo) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Request) (*bbsuserv1.UnfollowRelation_Reply, error) {
+func (r *RelationClient) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Request) (*bbsuserv1.UnfollowRelation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (r *RelationRepo) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRela
 	return &bbsuserv1.UnfollowRelation_Reply{}, nil
 }
 
-func (r *RelationRepo) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Request) (*bbsuserv1.BlockRelation_Reply, error) {
+func (r *RelationClient) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Request) (*bbsuserv1.BlockRelation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (r *RelationRepo) Block(ctx context.Context, req *bbsuserv1.BlockRelation_R
 	return &bbsuserv1.BlockRelation_Reply{}, nil
 }
 
-func (r *RelationRepo) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_Request) (*bbsuserv1.UnblockRelation_Reply, error) {
+func (r *RelationClient) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_Request) (*bbsuserv1.UnblockRelation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (r *RelationRepo) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelati
 	return &bbsuserv1.UnblockRelation_Reply{}, nil
 }
 
-func (r *RelationRepo) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowingRelations_Request) (*bbsuserv1.ListFollowingRelations_Reply, error) {
+func (r *RelationClient) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowingRelations_Request) (*bbsuserv1.ListFollowingRelations_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (r *RelationRepo) ListFollowing(ctx context.Context, req *bbsuserv1.ListFol
 	return &bbsuserv1.ListFollowingRelations_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
-func (r *RelationRepo) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowersRelations_Request) (*bbsuserv1.ListFollowersRelations_Reply, error) {
+func (r *RelationClient) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowersRelations_Request) (*bbsuserv1.ListFollowersRelations_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -120,7 +120,7 @@ func (r *RelationRepo) ListFollowers(ctx context.Context, req *bbsuserv1.ListFol
 	return &bbsuserv1.ListFollowersRelations_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
-func (r *RelationRepo) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRelations_Request) (*bbsuserv1.ListBlockedRelations_Reply, error) {
+func (r *RelationClient) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRelations_Request) (*bbsuserv1.ListBlockedRelations_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -147,7 +147,7 @@ func (r *RelationRepo) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlock
 	return &bbsuserv1.ListBlockedRelations_Reply{Page: reply.GetPage(), Rows: rows}, nil
 }
 
-func (r *RelationRepo) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Request) (*bbsuserv1.GetStatusRelation_Reply, error) {
+func (r *RelationClient) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Request) (*bbsuserv1.GetStatusRelation_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

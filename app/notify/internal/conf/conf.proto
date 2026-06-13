@@ -10,6 +10,8 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Trace trace = 3;
+  common.api.app.common.Event event = 4;
+  common.api.app.common.Alert alert = 5;
 }
 
 message Server {
@@ -29,24 +31,6 @@ message Server {
     string host = 2;
     int32 port = 3;
     google.protobuf.Duration timeout = 4;
-  }
-  Oss oss = 7;
-  message Oss {
-    string provider = 1;
-    message Qiniu {
-      string access_key = 1;
-      string secret_key = 2;
-      string bucket = 3;
-      google.protobuf.Duration timeout = 4;
-      int64 size_min = 5;
-      int64 size_max = 6;
-      string callback_url = 7;
-      bool increment_audit = 8;
-      string increment_audit_callback_url = 9;
-    }
-    Qiniu qiniu = 10;
-    message Minio {}
-    Minio minio = 11;
   }
   Email email = 8;
   message Email {

@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/pkg/client/db/driver"
+	"common/pkg/client/driver"
 	"context"
 	"fmt"
 	"user/internal/conf"

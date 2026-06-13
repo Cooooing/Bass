@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package common.api.app.integration.v1;
+
+import "google/protobuf/timestamp.proto";
+import "integration/v1/enum.proto";
+
+option go_package = "common/proto/gen/integration/v1;v1";
+
+// OSS 回调记录
+message OssCallbackRecord {
+  int64 id = 1;
+  OssCallbackType callback_type = 2;
+  string idempotency_key = 3;
+  string payload = 4;
+  OssCallbackStatus status = 5;
+  string error_message = 6;
+  google.protobuf.Timestamp created_at = 1000;
+  google.protobuf.Timestamp updated_at = 1001;
+}

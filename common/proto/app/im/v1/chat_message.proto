@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/common.proto";
+import "im/v1/enum.proto";
+import "im/v1/model.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+// ChatMessage 服务
+service IMChatMessageService {
+  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Reply) {} // 发送消息
+  rpc Revoke(RevokeChatMessage.Request) returns (RevokeChatMessage.Reply) {} // 撤回消息
+  rpc List(ListChatMessages.Request) returns (ListChatMessages.Reply) {} // 查询消息数据
+}
+
+message SendChatMessage {
+  message Request {
+    int64 receiver_id = 1; // 接收者 ID
+    ReceiverType receiver_type = 2; // 接收者类型
+    int64 user_id = 3; // 用户 ID
+    MessageType type = 5; // 消息类型
+    string content = 6; // 内容
+  }
+  message Reply {}
+}
+
+message RevokeChatMessage {
+  message Request {
+    int64 id = 1; // 主键
+    int64 user_id = 2; // 用户 ID
+  }
+  message Reply {}
+}
+
+message ListChatMessages {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    ChatMessageQueryParams query = 2; // 查询参数
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页信息
+    repeated ChatMessage rows = 2; // 消息信息
+  }
+}

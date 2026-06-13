@@ -1,10 +1,9 @@
 package server
 
 import (
-	"common/pkg/util/jwt"
-	"common/pkg/util/server"
-	"fmt"
 	"im/internal/conf"
+	"common/pkg/server"
+	"fmt"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -13,11 +12,10 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // NewHTTPServer 创建 HTTP 服务。
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService, tokenCache *jwt.TokenCache) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,10 +25,8 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpS
 				metrics.WithRequests(_metricRequests),
 			),
 			logging.Server(logger),
-			server.AuthMiddleware(tokenCache),
 			validate.ProtoValidate(),
 		),
-		http.ResponseEncoder(server.HttpResponseEncoder),
 	}
 	if c.Server.Http.Network != "" {
 		opts = append(opts, http.Network(c.Server.Http.Network))
@@ -42,7 +38,6 @@ func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpS
 		opts = append(opts, http.Timeout(c.Server.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	srv.Handle("/metrics", promhttp.Handler())
 	for _, s := range services {
 		s.RegisterHttp(srv)
 	}

@@ -1,17 +1,20 @@
 package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	common "common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	"common/pkg/constant"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
+	common "common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	tagent "content/internal/data/gen/tag"
 	"content/internal/enum"
+
+	"github.com/samber/lo"
 )
 
 var _ repo.TagRepo = (*TagRepo)(nil)
@@ -36,9 +39,9 @@ func (r *TagRepo) Save(ctx context.Context, tag *model.Tag) (*model.Tag, error) 
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
+		SetStatus(tagent.Status(tag.Status)).
 		SetNillableCreatedBy(tag.CreatedBy).
 		SetNillableUpdatedBy(tag.UpdatedBy).
-		SetStatus(tagent.Status(tag.Status)).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -65,9 +68,9 @@ func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, e
 				SetName(tags[i].Name).
 				SetNillableDescription(tags[i].Description).
 				SetNillableDomainID(tags[i].DomainID).
+				SetStatus(tagent.Status(tags[i].Status)).
 				SetNillableCreatedBy(tags[i].CreatedBy).
-				SetNillableUpdatedBy(tags[i].UpdatedBy).
-				SetStatus(tagent.Status(tags[i].Status)),
+				SetNillableUpdatedBy(tags[i].UpdatedBy),
 		)
 	}
 	save, err := client.Tag.CreateBulk(creates...).Save(ctx)
@@ -96,8 +99,8 @@ func (r *TagRepo) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
-		SetNillableUpdatedBy(tag.UpdatedBy).
 		SetStatus(tagent.Status(tag.Status)).
+		SetNillableUpdatedBy(tag.UpdatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -120,7 +123,7 @@ func (r *TagRepo) Get(ctx context.Context, req *repo.TagGetReq) (*model.Tag, err
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("tag is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
@@ -138,7 +141,7 @@ func (r *TagRepo) Get(ctx context.Context, req *repo.TagGetReq) (*model.Tag, err
 	}, nil
 }
 
-func (r *TagRepo) GetList(ctx context.Context, req *repo.TagGetReq) ([]*model.Tag, error) {
+func (r *TagRepo) List(ctx context.Context, req *repo.TagGetReq) ([]*model.Tag, error) {
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -163,8 +166,24 @@ func (r *TagRepo) GetList(ctx context.Context, req *repo.TagGetReq) ([]*model.Ta
 	return tags, nil
 }
 
+func (r *TagRepo) Map(ctx context.Context, req *repo.TagGetReq) (map[int64]*model.Tag, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return lo.SliceToMap(list, func(item *model.Tag) (int64, *model.Tag) {
+		return item.ID, item
+	}), nil
+}
+
+func (r *TagRepo) Count(ctx context.Context, req *repo.TagGetReq) (int, error) {
+	query := r.getClient(ctx).Tag.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *TagRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.TagGetReq) ([]*model.Tag, *common.PageReply, error) {
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -218,8 +237,7 @@ func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQue
 		query = query.Where(tagent.DescriptionContains(*req.Description))
 	}
 	if req.Status != nil {
-		dbStatus, _ := enum.TagStatusMap.ToEnum(*req.Status)
-		query = query.Where(tagent.StatusEQ(tagent.Status(dbStatus)))
+		query = query.Where(tagent.StatusEQ(tagent.Status(*req.Status)))
 	}
 	if req.DomainId != nil {
 		query = query.Where(tagent.DomainIDEQ(*req.DomainId))

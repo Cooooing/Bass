@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package common.api.app.common;
+
+option go_package = "common/proto/gen/common/errors;errors";
+
+// RetryAfterErrorData 表示请求被限流后的重试等待时间。
+message RetryAfterErrorData {
+  int64 retry_after_seconds = 1; // 重试等待秒数
+}
+
+// LoginAttemptErrorData 表示登录失败后的尝试次数信息。
+message LoginAttemptErrorData {
+  int64 remaining_attempts = 1; // 剩余尝试次数
+  int64 locked_until_unix_seconds = 2; // 账号锁定到期时间，Unix 秒
+}
+
+// AccountLockErrorData 表示账号锁定信息。
+message AccountLockErrorData {
+  int64 locked_until_unix_seconds = 1; // 账号锁定到期时间，Unix 秒
+  int64 retry_after_seconds = 2; // 重试等待秒数
+}

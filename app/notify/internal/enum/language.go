@@ -1,8 +1,8 @@
 package enum
 
 import (
-	"common/api/gen/common/enums"
 	"common/pkg/enum"
+	"common/proto/gen/common/enums"
 )
 
 type Language string

@@ -10,6 +10,9 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Trace trace = 3;
+  Business business = 4;
+  common.api.app.common.Event event = 5;
+  common.api.app.common.Alert alert = 6;
 }
 
 message Server {
@@ -44,4 +47,13 @@ message Trace {
   string endpoint = 2;
   bool insecure = 3;
   double sampler = 4;
+}
+
+message Business {
+  Article article = 1;
+
+  message Article {
+    google.protobuf.Duration published_edit_window = 1;
+    int32 published_edit_max_view_count = 2;
+  }
 }

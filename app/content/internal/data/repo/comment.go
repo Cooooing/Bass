@@ -1,14 +1,13 @@
 package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
-	"fmt"
 
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/content/v1"
-	"common/pkg/constant"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
+	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
@@ -16,6 +15,7 @@ import (
 	"content/internal/enum"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 )
 
 var _ repo.CommentRepo = (*CommentRepo)(nil)
@@ -40,56 +40,53 @@ func (r *CommentRepo) Save(ctx context.Context, comment *model.Comment) (*model.
 		SetArticleID(comment.ArticleID).
 		SetContent(comment.Content).
 		SetLevel(comment.Level).
-		SetNillableCreatedBy(comment.CreatedBy).
-		SetNillableUpdatedBy(comment.UpdatedBy).
 		SetNillableParentID(comment.ParentID).
 		SetNillableReplyID(comment.ReplyID).
-		SetStatus(commentent.StatusNormal).
+		SetRestriction(commentent.Restriction(comment.Restriction)).
+		SetNillableCreatedBy(comment.CreatedBy).
+		SetNillableUpdatedBy(comment.UpdatedBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &model.Comment{
-		ID:         save.ID,
-		ArticleID:  save.ArticleID,
-		Content:    save.Content,
-		Level:      save.Level,
-		ParentID:   save.ParentID,
-		ReplyID:    save.ReplyID,
-		Status:     enum.CommentStatus(save.Status),
-		ThankCount: save.ThankCount,
-		LikeCount:  save.LikeCount,
-		ReplyCount: save.ReplyCount,
-		CreatedAt:  save.CreatedAt,
-		UpdatedAt:  save.UpdatedAt,
-		CreatedBy:  save.CreatedBy,
-		UpdatedBy:  save.UpdatedBy,
+		ID:          save.ID,
+		ArticleID:   save.ArticleID,
+		Content:     save.Content,
+		Level:       save.Level,
+		ParentID:    save.ParentID,
+		ReplyID:     save.ReplyID,
+		Restriction: enum.ContentRestriction(save.Restriction),
+		ThankCount:  save.ThankCount,
+		LikeCount:   save.LikeCount,
+		ReplyCount:  save.ReplyCount,
+		CreatedAt:   save.CreatedAt,
+		UpdatedAt:   save.UpdatedAt,
+		CreatedBy:   save.CreatedBy,
+		UpdatedBy:   save.UpdatedBy,
+		DeletedAt:   save.DeletedAt,
 	}, nil
 }
 
-func (r *CommentRepo) UpdateStatus(ctx context.Context, commentId int64, userId int64, status v1.CommentStatus) error {
-	dbStatus, _ := enum.CommentStatusMap.ToEnum(status)
-	_, err := r.getClient(ctx).Comment.UpdateOneID(commentId).
-		SetUpdatedBy(userId).
-		SetStatus(commentent.Status(dbStatus)).
-		Save(ctx)
-	return err
+func (r *CommentRepo) UpdateRestriction(ctx context.Context, commentId int64, restriction enum.ContentRestriction, updatedBy int64) error {
+	return r.getClient(ctx).Comment.UpdateOneID(commentId).
+		SetRestriction(commentent.Restriction(restriction)).
+		SetUpdatedBy(updatedBy).
+		Exec(ctx)
 }
 
-func (r *CommentRepo) UpdateStat(ctx context.Context, commentId int64, userId int64, action v1.CommentAction, num int32) error {
-	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentId).SetUpdatedBy(userId)
-	switch action {
-	case v1.CommentAction_COMMENT_ACTION_LIKE:
-		updateOne.AddLikeCount(num)
-	case v1.CommentAction_COMMENT_ACTION_THANK:
-		updateOne.AddThankCount(num)
-	case v1.CommentAction_COMMENT_ACTION_REPLY:
-		updateOne.AddReplyCount(num)
-	default:
-		return fmt.Errorf("unknown action")
+func (r *CommentRepo) AddStats(ctx context.Context, commentId int64, stats repo.CommentStatUpdate, updatedBy *int64) error {
+	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentId)
+	if stats.ThankCount != 0 {
+		updateOne.AddThankCount(stats.ThankCount)
 	}
-	_, err := updateOne.Save(ctx)
-	return err
+	if stats.LikeCount != 0 {
+		updateOne.AddLikeCount(stats.LikeCount)
+	}
+	if stats.ReplyCount != 0 {
+		updateOne.AddReplyCount(stats.ReplyCount)
+	}
+	return updateOne.Exec(ctx)
 }
 
 func (r *CommentRepo) Exist(ctx context.Context, req *repo.CommentGetReq) (bool, error) {
@@ -103,80 +100,81 @@ func (r *CommentRepo) Get(ctx context.Context, req *repo.CommentGetReq) (*model.
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("comment is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	reply := &model.Comment{
-		ID:         c.ID,
-		ArticleID:  c.ArticleID,
-		Content:    c.Content,
-		Level:      c.Level,
-		ParentID:   c.ParentID,
-		ReplyID:    c.ReplyID,
-		Status:     enum.CommentStatus(c.Status),
-		ThankCount: c.ThankCount,
-		LikeCount:  c.LikeCount,
-		ReplyCount: c.ReplyCount,
-		CreatedAt:  c.CreatedAt,
-		UpdatedAt:  c.UpdatedAt,
-		CreatedBy:  c.CreatedBy,
-		UpdatedBy:  c.UpdatedBy,
-	}
-	if c.Edges.Article != nil {
-		reply.Article = &model.Article{
-			ID:        c.Edges.Article.ID,
-			Title:     c.Edges.Article.Title,
-			CreatedBy: c.Edges.Article.CreatedBy,
-		}
-	}
-	return reply, nil
+	return &model.Comment{
+		ID:          c.ID,
+		ArticleID:   c.ArticleID,
+		Content:     c.Content,
+		Level:       c.Level,
+		ParentID:    c.ParentID,
+		ReplyID:     c.ReplyID,
+		Restriction: enum.ContentRestriction(c.Restriction),
+		ThankCount:  c.ThankCount,
+		LikeCount:   c.LikeCount,
+		ReplyCount:  c.ReplyCount,
+		CreatedAt:   c.CreatedAt,
+		UpdatedAt:   c.UpdatedAt,
+		CreatedBy:   c.CreatedBy,
+		UpdatedBy:   c.UpdatedBy,
+		DeletedAt:   c.DeletedAt,
+	}, nil
 }
 
-func (r *CommentRepo) GetList(ctx context.Context, req *repo.CommentGetReq) ([]*model.Comment, error) {
+func (r *CommentRepo) List(ctx context.Context, req *repo.CommentGetReq) ([]*model.Comment, error) {
 	query := r.getClient(ctx).Comment.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	comments := make([]*model.Comment, 0, len(list))
-	for i := range list {
-		item := &model.Comment{
-			ID:         list[i].ID,
-			ArticleID:  list[i].ArticleID,
-			Content:    list[i].Content,
-			Level:      list[i].Level,
-			ParentID:   list[i].ParentID,
-			ReplyID:    list[i].ReplyID,
-			Status:     enum.CommentStatus(list[i].Status),
-			ThankCount: list[i].ThankCount,
-			LikeCount:  list[i].LikeCount,
-			ReplyCount: list[i].ReplyCount,
-			CreatedAt:  list[i].CreatedAt,
-			UpdatedAt:  list[i].UpdatedAt,
-			CreatedBy:  list[i].CreatedBy,
-			UpdatedBy:  list[i].UpdatedBy,
+	return lo.Map(list, func(item *gen.Comment, _ int) *model.Comment {
+		return &model.Comment{
+			ID:          item.ID,
+			ArticleID:   item.ArticleID,
+			Content:     item.Content,
+			Level:       item.Level,
+			ParentID:    item.ParentID,
+			ReplyID:     item.ReplyID,
+			Restriction: enum.ContentRestriction(item.Restriction),
+			ThankCount:  item.ThankCount,
+			LikeCount:   item.LikeCount,
+			ReplyCount:  item.ReplyCount,
+			CreatedAt:   item.CreatedAt,
+			UpdatedAt:   item.UpdatedAt,
+			CreatedBy:   item.CreatedBy,
+			UpdatedBy:   item.UpdatedBy,
+			DeletedAt:   item.DeletedAt,
 		}
-		if list[i].Edges.Article != nil {
-			item.Article = &model.Article{
-				ID:        list[i].Edges.Article.ID,
-				Title:     list[i].Edges.Article.Title,
-				CreatedBy: list[i].Edges.Article.CreatedBy,
-			}
-		}
-		comments = append(comments, item)
+	}), nil
+}
+
+func (r *CommentRepo) Map(ctx context.Context, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
 	}
-	return comments, nil
+	return lo.SliceToMap(list, func(item *model.Comment) (int64, *model.Comment) {
+		return item.ID, item
+	}), nil
+}
+
+func (r *CommentRepo) Count(ctx context.Context, req *repo.CommentGetReq) (int, error) {
+	query := r.getClient(ctx).Comment.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
 }
 
 func (r *CommentRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.CommentGetReq) ([]*model.Comment, *common.PageReply, error) {
-	page = constant.PageValid(page)
-	query := r.getClient(ctx).Comment.Query().WithReply()
+	page = server.PageValid(page)
+	query := r.getClient(ctx).Comment.Query().WithReply(func(q *gen.CommentQuery) {
+		q.Where(commentent.DeletedAtIsNil())
+	})
 	query = r.getQuery(query, req)
-	countQuery := query.Clone()
-	total, err := countQuery.Count(ctx)
+	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -184,39 +182,29 @@ func (r *CommentRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 	if err != nil {
 		return nil, nil, err
 	}
-	comments := make([]*model.Comment, 0, len(list))
-	for i := range list {
-		item := &model.Comment{
-			ID:         list[i].ID,
-			ArticleID:  list[i].ArticleID,
-			Content:    list[i].Content,
-			Level:      list[i].Level,
-			ParentID:   list[i].ParentID,
-			ReplyID:    list[i].ReplyID,
-			Status:     enum.CommentStatus(list[i].Status),
-			ThankCount: list[i].ThankCount,
-			LikeCount:  list[i].LikeCount,
-			ReplyCount: list[i].ReplyCount,
-			CreatedAt:  list[i].CreatedAt,
-			UpdatedAt:  list[i].UpdatedAt,
-			CreatedBy:  list[i].CreatedBy,
-			UpdatedBy:  list[i].UpdatedBy,
+	comments := lo.Map(list, func(item *gen.Comment, _ int) *model.Comment {
+		out := &model.Comment{
+			ID:          item.ID,
+			ArticleID:   item.ArticleID,
+			Content:     item.Content,
+			Level:       item.Level,
+			ParentID:    item.ParentID,
+			ReplyID:     item.ReplyID,
+			Restriction: enum.ContentRestriction(item.Restriction),
+			ThankCount:  item.ThankCount,
+			LikeCount:   item.LikeCount,
+			ReplyCount:  item.ReplyCount,
+			CreatedAt:   item.CreatedAt,
+			UpdatedAt:   item.UpdatedAt,
+			CreatedBy:   item.CreatedBy,
+			UpdatedBy:   item.UpdatedBy,
+			DeletedAt:   item.DeletedAt,
 		}
-		if list[i].Edges.Reply != nil {
-			item.Reply = &model.Comment{
-				ID:        list[i].Edges.Reply.ID,
-				CreatedBy: list[i].Edges.Reply.CreatedBy,
-			}
+		if item.Edges.Reply != nil {
+			out.ReplyUserID = item.Edges.Reply.CreatedBy
 		}
-		if list[i].Edges.Article != nil {
-			item.Article = &model.Article{
-				ID:        list[i].Edges.Article.ID,
-				Title:     list[i].Edges.Article.Title,
-				CreatedBy: list[i].Edges.Article.CreatedBy,
-			}
-		}
-		comments = append(comments, item)
-	}
+		return out
+	})
 	return comments, &common.PageReply{
 		Total: uint32(total),
 		Page:  page.Page,
@@ -224,7 +212,71 @@ func (r *CommentRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 	}, nil
 }
 
+func (r *CommentRepo) ListReplyPreviews(ctx context.Context, req *repo.CommentReplyPreviewReq) ([]*repo.CommentReplyPreview, error) {
+	parentIds := lo.Uniq(req.ParentIds)
+	if len(parentIds) == 0 {
+		return nil, nil
+	}
+	limit := int(req.LimitPerParent)
+	if limit <= 0 {
+		limit = 3
+	}
+	if limit > 5 {
+		limit = 5
+	}
+	replyMap := make(map[int64][]*model.Comment, len(parentIds))
+	for _, parentId := range parentIds {
+		query := r.getClient(ctx).Comment.Query().WithReply(func(q *gen.CommentQuery) {
+			q.Where(commentent.DeletedAtIsNil())
+		}).Limit(limit)
+		query = r.getQuery(query, &repo.CommentGetReq{
+			ArticleId:    new(req.ArticleId),
+			ParentId:     new(parentId),
+			Restriction:  req.Restriction,
+			Restrictions: req.Restrictions,
+			Order:        req.Order,
+		})
+		list, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		replyMap[parentId] = lo.Map(list, func(item *gen.Comment, _ int) *model.Comment {
+			out := &model.Comment{
+				ID:          item.ID,
+				ArticleID:   item.ArticleID,
+				Content:     item.Content,
+				Level:       item.Level,
+				ParentID:    item.ParentID,
+				ReplyID:     item.ReplyID,
+				Restriction: enum.ContentRestriction(item.Restriction),
+				ThankCount:  item.ThankCount,
+				LikeCount:   item.LikeCount,
+				ReplyCount:  item.ReplyCount,
+				CreatedAt:   item.CreatedAt,
+				UpdatedAt:   item.UpdatedAt,
+				CreatedBy:   item.CreatedBy,
+				UpdatedBy:   item.UpdatedBy,
+				DeletedAt:   item.DeletedAt,
+			}
+			if item.Edges.Reply != nil {
+				out.ReplyUserID = item.Edges.Reply.CreatedBy
+			}
+			return out
+		})
+	}
+	return lo.Map(parentIds, func(parentId int64, _ int) *repo.CommentReplyPreview {
+		return &repo.CommentReplyPreview{
+			ParentId: parentId,
+			Rows:     replyMap[parentId],
+		}
+	}), nil
+}
+
 func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
+	query = query.Where(commentent.DeletedAtIsNil())
+	if req == nil {
+		req = &repo.CommentGetReq{}
+	}
 	if req.ParentId != nil {
 		query = query.Where(commentent.ParentIDEQ(*req.ParentId))
 	}
@@ -246,18 +298,24 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	if req.CreatedBy != nil {
 		query = query.Where(commentent.CreatedByEQ(*req.CreatedBy))
 	}
-	if req.Status != nil {
-		dbStatus, _ := enum.CommentStatusMap.ToEnum(*req.Status)
-		query = query.Where(commentent.StatusEQ(commentent.Status(dbStatus)))
+	if req.Restriction != nil {
+		query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*req.Restriction)))
+	}
+	if len(req.Restrictions) > 0 {
+		query = query.Where(commentent.RestrictionIn(lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction {
+			return commentent.Restriction(item)
+		})...))
 	}
 	if req.Level != nil {
 		query = query.Where(commentent.LevelEQ(*req.Level))
 	}
 	if req.Order != nil {
 		switch *req.Order {
-		case v1.CommentOrder_COMMENT_ORDER_NEWEST:
-			query = query.Order(gen.Desc(commentent.FieldCreatedAt))
-		case v1.CommentOrder_COMMENT_ORDER_HOTTEST:
+		case enum.CommentOrderNewest:
+			query = query.Order(gen.Desc(commentent.FieldCreatedAt, commentent.FieldID))
+		case enum.CommentOrderOldest:
+			query = query.Order(gen.Asc(commentent.FieldCreatedAt, commentent.FieldID))
+		case enum.CommentOrderHottest:
 			query = query.
 				Order(func(s *sql.Selector) {
 					s.OrderExpr(sql.Expr(`
@@ -266,18 +324,17 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
             /
             pow((extract(epoch from (now() - created_at)) / 3600) + 1.5, 1.8)
         ) DESC`))
-				})
+				}, gen.Desc(commentent.FieldID))
 		}
-
 	} else {
-		query = query.Order(gen.Desc(commentent.FieldCreatedAt))
+		query = query.Order(gen.Desc(commentent.FieldCreatedAt, commentent.FieldID))
 	}
 	return query
 }
 
 func (r *CommentRepo) GetArticleLastComment(ctx context.Context, req *repo.CommentGetReq) (*model.Comment, error) {
 	if req.ArticleId == nil {
-		return nil, cerrors.ErrorBadRequest("articleId is required")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	query := r.getClient(ctx).Comment.Query()
 	query = r.getQuery(query, req)
@@ -289,72 +346,87 @@ func (r *CommentRepo) GetArticleLastComment(ctx context.Context, req *repo.Comme
 		return nil, err
 	}
 	return &model.Comment{
-		ID:         c.ID,
-		ArticleID:  c.ArticleID,
-		Content:    c.Content,
-		Level:      c.Level,
-		ParentID:   c.ParentID,
-		ReplyID:    c.ReplyID,
-		Status:     enum.CommentStatus(c.Status),
-		ThankCount: c.ThankCount,
-		LikeCount:  c.LikeCount,
-		ReplyCount: c.ReplyCount,
-		CreatedAt:  c.CreatedAt,
-		UpdatedAt:  c.UpdatedAt,
-		CreatedBy:  c.CreatedBy,
-		UpdatedBy:  c.UpdatedBy,
+		ID:          c.ID,
+		ArticleID:   c.ArticleID,
+		Content:     c.Content,
+		Level:       c.Level,
+		ParentID:    c.ParentID,
+		ReplyID:     c.ReplyID,
+		Restriction: enum.ContentRestriction(c.Restriction),
+		ThankCount:  c.ThankCount,
+		LikeCount:   c.LikeCount,
+		ReplyCount:  c.ReplyCount,
+		CreatedAt:   c.CreatedAt,
+		UpdatedAt:   c.UpdatedAt,
+		CreatedBy:   c.CreatedBy,
+		UpdatedBy:   c.UpdatedBy,
+		DeletedAt:   c.DeletedAt,
 	}, nil
 }
 
-func (r *CommentRepo) GetArticleLastComments(ctx context.Context, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
+func (r *CommentRepo) MapArticleLastComments(ctx context.Context, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
 	if len(req.ArticleIds) == 0 {
-		return nil, cerrors.ErrorBadRequest("articleIds is required")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	articleIdsAny := make([]any, len(req.ArticleIds))
-	for i, v := range req.ArticleIds {
-		articleIdsAny[i] = v
-	}
-	comments, err := r.getClient(ctx).Comment.Query().
+	articleIdsAny := lo.Map(req.ArticleIds, func(item int64, _ int) any {
+		return item
+	})
+	commentTable := sql.Table(commentent.Table)
+	query := r.getClient(ctx).Comment.Query().
 		Where(func(s *sql.Selector) {
 			sub := sql.Select(
-				commentent.FieldArticleID,
-				sql.As(sql.Max(commentent.FieldCreatedAt), "latest_time"),
+				commentTable.C(commentent.FieldArticleID),
+				sql.As(sql.Max(commentTable.C(commentent.FieldCreatedAt)), "latest_time"),
 			).
-				From(sql.Table(commentent.Table)).
-				Where(sql.EQ(commentent.FieldStatus, string(commentent.StatusNormal))).
-				Where(sql.In(commentent.FieldArticleID, articleIdsAny...)).
-				GroupBy(commentent.FieldArticleID)
-
+				From(commentTable).
+				Where(sql.In(commentTable.C(commentent.FieldArticleID), articleIdsAny...)).
+				Where(sql.IsNull(commentTable.C(commentent.FieldDeletedAt))).
+				GroupBy(commentTable.C(commentent.FieldArticleID))
+			if req.Restriction != nil {
+				sub = sub.Where(sql.EQ(commentTable.C(commentent.FieldRestriction), string(commentent.Restriction(*req.Restriction))))
+			}
+			if len(req.Restrictions) > 0 {
+				restrictions := lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) any {
+					return string(commentent.Restriction(item))
+				})
+				sub = sub.Where(sql.In(commentTable.C(commentent.FieldRestriction), restrictions...))
+			}
 			s.Join(sub).On(
 				s.C(commentent.FieldArticleID), sub.C(commentent.FieldArticleID),
 			).On(
 				s.C(commentent.FieldCreatedAt), sub.C("latest_time"),
 			)
 		}).
-		Where(commentent.StatusEQ(commentent.StatusNormal)).
-		Where(commentent.ArticleIDIn(req.ArticleIds...)).
-		All(ctx)
+		Where(commentent.ArticleIDIn(req.ArticleIds...), commentent.DeletedAtIsNil())
+	if req.Restriction != nil {
+		query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*req.Restriction)))
+	}
+	if len(req.Restrictions) > 0 {
+		query = query.Where(commentent.RestrictionIn(lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction {
+			return commentent.Restriction(item)
+		})...))
+	}
+	comments, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	commentMap := make(map[int64]*model.Comment)
-	for _, item := range comments {
-		commentMap[item.ArticleID] = &model.Comment{
-			ID:         item.ID,
-			ArticleID:  item.ArticleID,
-			Content:    item.Content,
-			Level:      item.Level,
-			ParentID:   item.ParentID,
-			ReplyID:    item.ReplyID,
-			Status:     enum.CommentStatus(item.Status),
-			ThankCount: item.ThankCount,
-			LikeCount:  item.LikeCount,
-			ReplyCount: item.ReplyCount,
-			CreatedAt:  item.CreatedAt,
-			UpdatedAt:  item.UpdatedAt,
-			CreatedBy:  item.CreatedBy,
-			UpdatedBy:  item.UpdatedBy,
+	return lo.SliceToMap(comments, func(item *gen.Comment) (int64, *model.Comment) {
+		return item.ArticleID, &model.Comment{
+			ID:          item.ID,
+			ArticleID:   item.ArticleID,
+			Content:     item.Content,
+			Level:       item.Level,
+			ParentID:    item.ParentID,
+			ReplyID:     item.ReplyID,
+			Restriction: enum.ContentRestriction(item.Restriction),
+			ThankCount:  item.ThankCount,
+			LikeCount:   item.LikeCount,
+			ReplyCount:  item.ReplyCount,
+			CreatedAt:   item.CreatedAt,
+			UpdatedAt:   item.UpdatedAt,
+			CreatedBy:   item.CreatedBy,
+			UpdatedBy:   item.UpdatedBy,
+			DeletedAt:   item.DeletedAt,
 		}
-	}
-	return commentMap, nil
+	}), nil
 }

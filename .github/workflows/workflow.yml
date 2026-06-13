@@ -1,4 +1,4 @@
-name: Service Build
+﻿name: Service Build
 permissions:
   contents: write
   packages: write
@@ -44,7 +44,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: common/Dockerfile
+          file: common/build/docker/service.Dockerfile
           push: true
           build-args: |
             APP_NAME=${{ matrix.service }}
@@ -61,23 +61,23 @@ jobs:
         include:
           - language: typescript-axios
             make-target: sdk-typescript-axios
-            output-dir: common/api/gen-typescript-axios/bbs
+            output-dir: common/proto/gen-sdk/typescript-axios
             branch: sdk/typescript-axios
           - language: typescript-fetch
             make-target: sdk-typescript-fetch
-            output-dir: common/api/gen-typescript-fetch/bbs
+            output-dir: common/proto/gen-sdk/typescript-fetch
             branch: sdk/typescript-fetch
           - language: go
             make-target: sdk-go
-            output-dir: common/api/gen-go
+            output-dir: common/proto/gen-sdk/go
             branch: sdk/go
           - language: java
             make-target: sdk-java
-            output-dir: common/api/gen-java
+            output-dir: common/proto/gen-sdk/java
             branch: sdk/java
           - language: rust
             make-target: sdk-rust
-            output-dir: common/api/gen-rust
+            output-dir: common/proto/gen-sdk/rust
             branch: sdk/rust
       fail-fast: false
 

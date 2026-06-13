@@ -1,8 +1,8 @@
 package main
 
 import (
-	"common/api/gen/common"
 	"common/pkg/client"
+	"common/proto/gen/common"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-var services = []string{"gateway", "user", "content", "notify", "im", "signal", "connector"}
+var services = []string{"bbs", "user", "content", "notify", "im", "integration", "push_hub", "push_node", "platform"}
 
 func main() {
 	// 初始化 Consul 客户端
@@ -49,7 +49,22 @@ func main() {
 			key := parts[0]
 			val := os.Getenv(key)
 			if val == "" && len(parts) > 1 {
-				return parts[1]
+				val = parts[1]
+			}
+			// 保留模板中的引号风格：如果默认值带引号，替换值也带引号；
+			// 默认值不带引号（如数字），替换值也不带。
+			if len(parts) > 1 {
+				orig := parts[1]
+				if (strings.HasPrefix(orig, "'") && strings.HasSuffix(orig, "'")) ||
+					(strings.HasPrefix(orig, "\"") && strings.HasSuffix(orig, "\"")) {
+					quote := string(orig[0])
+					// 去掉原始引号，取纯值
+					rawVal := orig[1 : len(orig)-1]
+					if val == "" {
+						val = rawVal
+					}
+					return quote + val + quote
+				}
 			}
 			return val
 		})

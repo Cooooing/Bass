@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	notifyv1 "common/api/gen/notify/v1"
+	notifyv1 "common/proto/gen/notify/v1"
 
 	"google.golang.org/grpc"
 )

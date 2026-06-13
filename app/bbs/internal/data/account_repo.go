@@ -2,24 +2,24 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	"common/api/gen/common"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	"common/proto/gen/common"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
-var _ repo.AccountRepo = (*AccountRepo)(nil)
+var _ repo.AccountClient = (*AccountClient)(nil)
 
-type AccountRepo struct {
+type AccountClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewAccountRepo(userClient *rpc.UserClient) repo.AccountRepo {
-	return &AccountRepo{userClient: userClient}
+func NewAccountClient(userClient *rpc.UserClient) repo.AccountClient {
+	return &AccountClient{userClient: userClient}
 }
 
-func (r *AccountRepo) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Reply, error) {
+func (r *AccountClient) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (r *AccountRepo) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetC
 	return &bbsuserv1.GetCurrentAccount_Reply{Account: out}, nil
 }
 
-func (r *AccountRepo) GetProfileAccount(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Reply, error) {
+func (r *AccountClient) GetProfileAccount(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Reply, error) {
 	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.GetUserId()})
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (r *AccountRepo) GetProfileAccount(ctx context.Context, req *bbsuserv1.GetP
 	return &bbsuserv1.GetProfileAccount_Reply{Profile: profile}, nil
 }
 
-func (r *AccountRepo) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Reply, error) {
+func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -125,6 +125,6 @@ func (r *AccountRepo) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.U
 	return &bbsuserv1.UpdateProfileAccount_Reply{Profile: profile}, nil
 }
 
-func (r *AccountRepo) AvatarAccount(ctx context.Context, req *bbsuserv1.AvatarAccount_Request) (*common.ImageReply, error) {
+func (r *AccountClient) AvatarAccount(ctx context.Context, req *bbsuserv1.AvatarAccount_Request) (*common.ImageReply, error) {
 	return r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Request{Name: req.GetName()})
 }

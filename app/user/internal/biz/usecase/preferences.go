@@ -15,7 +15,7 @@ func NewPreferencesUsecase(preferencesRepo repo.PreferencesRepo) *PreferencesUse
 }
 
 func (s *PreferencesUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Preferences, error) {
-	return s.preferencesRepo.FindByUserID(ctx, userID)
+	return s.preferencesRepo.Get(ctx, &repo.PreferencesGetReq{UserID: &userID})
 }
 
 func (s *PreferencesUsecase) UpsertByUserID(ctx context.Context, preferences *model.Preferences) (*model.Preferences, error) {

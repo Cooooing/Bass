@@ -1,12 +1,14 @@
 package repo
 
 import (
+	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/gen"
 	"user/internal/data/gen/privacysetting"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -29,9 +31,11 @@ func (r *PrivacySettingRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *PrivacySettingRepo) FindByUserID(ctx context.Context, userID int64) (*model.PrivacySetting, error) {
+func (r *PrivacySettingRepo) Get(ctx context.Context, req *repo.PrivacySettingGetReq) (*model.PrivacySetting, error) {
 	tx := r.getClient(ctx)
-	p, err := tx.PrivacySetting.Query().Where(privacysetting.UserID(userID)).Only(ctx)
+	query := tx.PrivacySetting.Query()
+	query = r.getQuery(query, req)
+	p, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -50,8 +54,87 @@ func (r *PrivacySettingRepo) FindByUserID(ctx context.Context, userID int64) (*m
 	}, nil
 }
 
+func (r *PrivacySettingRepo) List(ctx context.Context, req *repo.PrivacySettingGetReq) ([]*model.PrivacySetting, error) {
+	tx := r.getClient(ctx)
+	query := tx.PrivacySetting.Query()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.PrivacySetting, 0, len(list))
+	for _, p := range list {
+		result = append(result, &model.PrivacySetting{
+			ID:                 p.ID,
+			UserID:             p.UserID,
+			PublicPoints:       new(p.PublicPoints),
+			PublicFollowers:    new(p.PublicFollowers),
+			PublicArticles:     new(p.PublicArticles),
+			PublicComments:     new(p.PublicComments),
+			PublicOnlineStatus: new(p.PublicOnlineStatus),
+			PublicLocation:     new(p.PublicLocation),
+		})
+	}
+	return result, nil
+}
+
+func (r *PrivacySettingRepo) Map(ctx context.Context, req *repo.PrivacySettingGetReq) (map[int64]*model.PrivacySetting, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.PrivacySetting, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *PrivacySettingRepo) Count(ctx context.Context, req *repo.PrivacySettingGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.PrivacySetting.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *PrivacySettingRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.PrivacySettingGetReq) ([]*model.PrivacySetting, *common.PageReply, error) {
+	tx := r.getClient(ctx)
+	page = server.PageValid(page)
+	query := tx.PrivacySetting.Query()
+	query = r.getQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.PrivacySetting, 0, len(list))
+	for _, p := range list {
+		result = append(result, &model.PrivacySetting{
+			ID:                 p.ID,
+			UserID:             p.UserID,
+			PublicPoints:       new(p.PublicPoints),
+			PublicFollowers:    new(p.PublicFollowers),
+			PublicArticles:     new(p.PublicArticles),
+			PublicComments:     new(p.PublicComments),
+			PublicOnlineStatus: new(p.PublicOnlineStatus),
+			PublicLocation:     new(p.PublicLocation),
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
 func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
-	existing, err := r.FindByUserID(ctx, p.UserID)
+	existing, err := r.Get(ctx, &repo.PrivacySettingGetReq{UserID: &p.UserID})
 	if err != nil {
 		return nil, err
 	}
@@ -152,4 +235,23 @@ func (r *PrivacySettingRepo) Update(ctx context.Context, p *model.PrivacySetting
 		PublicOnlineStatus: new(saved.PublicOnlineStatus),
 		PublicLocation:     new(saved.PublicLocation),
 	}, nil
+}
+
+func (r *PrivacySettingRepo) getQuery(query *gen.PrivacySettingQuery, req *repo.PrivacySettingGetReq) *gen.PrivacySettingQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(privacysetting.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(privacysetting.IDIn(req.IDs...))
+	}
+	if req.UserID != nil {
+		query = query.Where(privacysetting.UserID(*req.UserID))
+	}
+	if len(req.UserIDs) > 0 {
+		query = query.Where(privacysetting.UserIDIn(req.UserIDs...))
+	}
+	return query
 }

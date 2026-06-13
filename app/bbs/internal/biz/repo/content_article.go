@@ -1,17 +1,19 @@
 package repo
 
 import (
-	bbscontentv1 "common/api/gen/bbs/v1/content"
+	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	"context"
 )
 
-type ContentArticleRepo interface {
+type ContentArticleClient interface {
 	CreateArticle(ctx context.Context, req *bbscontentv1.CreateArticle_Request) (*bbscontentv1.CreateArticle_Reply, error)
+	UpdateArticle(ctx context.Context, req *bbscontentv1.UpdateArticle_Request) (*bbscontentv1.UpdateArticle_Reply, error)
 	UpdateDraftArticle(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Request) (*bbscontentv1.UpdateDraftArticle_Reply, error)
 	PublishArticle(ctx context.Context, req *bbscontentv1.PublishArticle_Request) (*bbscontentv1.PublishArticle_Reply, error)
-	DeleteArticle(ctx context.Context, req *bbscontentv1.DeleteArticle_Request) (*bbscontentv1.DeleteArticle_Reply, error)
+	DiscardDraftArticle(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Request) (*bbscontentv1.DiscardDraftArticle_Reply, error)
 	ListArticles(ctx context.Context, req *bbscontentv1.ListArticles_Request) (*bbscontentv1.ListArticles_Reply, error)
 	GetArticle(ctx context.Context, req *bbscontentv1.GetArticle_Request) (*bbscontentv1.GetArticle_Reply, error)
+	ViewArticle(ctx context.Context, articleID int64) error
 	LikeArticle(ctx context.Context, req *bbscontentv1.LikeArticle_Request) (*bbscontentv1.LikeArticle_Reply, error)
 	ThankArticle(ctx context.Context, req *bbscontentv1.ThankArticle_Request) (*bbscontentv1.ThankArticle_Reply, error)
 	CollectArticle(ctx context.Context, req *bbscontentv1.CollectArticle_Request) (*bbscontentv1.CollectArticle_Reply, error)

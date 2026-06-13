@@ -3,7 +3,7 @@ package repo
 import (
 	"context"
 
-	userv1 "common/api/gen/user/v1"
+	userv1 "common/proto/gen/user/v1"
 )
 
 type UserClient interface {

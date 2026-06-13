@@ -1,8 +1,8 @@
 package enum
 
 import (
-	v1 "common/api/gen/user/v1"
 	"common/pkg/enum"
+	v1 "common/proto/gen/user/v1"
 )
 
 type LoginMethod string

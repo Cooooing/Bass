@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-// Article 文章实体定义
+// Article 定义文章实体。
 type Article struct {
 	ent.Schema
 }
@@ -25,23 +25,26 @@ func (Article) Annotations() []schema.Annotation {
 }
 
 func (Article) Fields() []ent.Field {
-	fields := []ent.Field{
+	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("title").Comment("标题").NotEmpty(),
 		field.Text("content").Comment("正文内容").NotEmpty(),
+		field.String("cover_image_url").Comment("封面图片 URL").Nillable().Optional(),
 
 		field.Bool("has_postscript").Comment("是否有附言").Default(false),
 		field.Text("reward_content").Comment("打赏区内容").Nillable().Optional(),
 		field.Int32("reward_points").Comment("打赏积分").Nillable().Optional(),
 
-		field.Enum("status").Values(contentenum.ArticleStatusMap.EnumValues()...).Default(string(contentenum.ArticleStatusDrafts)).Comment("状态"),
+		field.Enum("publish_status").Values(contentenum.ArticlePublishStatusMap.EnumValues()...).Default(string(contentenum.ArticlePublishStatusDraft)).Comment("发布状态"),
+		field.Enum("visibility").Values(contentenum.ArticleVisibilityMap.EnumValues()...).Default(string(contentenum.ArticleVisibilityPublic)).Comment("可见范围"),
+		field.Enum("restriction").Values(contentenum.ContentRestrictionMap.EnumValues()...).Default(string(contentenum.ContentRestrictionNone)).Comment("管理限制"),
 		field.Enum("type").Values(contentenum.ArticleTypeMap.EnumValues()...).Default(string(contentenum.ArticleTypeNormal)).Comment("类型"),
 		field.String("statement").Comment("创作声明").Nillable().Optional(),
 		field.Bool("commentable").Comment("是否允许评论").Default(true),
 		field.Bool("anonymous").Comment("是否匿名").Default(false),
-		field.Bool("listable").Comment("是否在列表展示").Default(true),
+		field.Time("published_at").Comment("发布时间").Nillable().Optional(),
+		field.Time("edited_at").Comment("内容编辑时间").Nillable().Optional(),
 
-		// 统计信息
 		field.Int32("view_count").Comment("浏览数").Default(0),
 		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),
@@ -49,32 +52,26 @@ func (Article) Fields() []ent.Field {
 		field.Int32("watch_count").Comment("关注数").Default(0),
 		field.Int32("reply_count").Comment("回复数").Default(0),
 
-		// 问答
 		field.Int32("bounty_points").Comment("悬赏积分").Nillable().Optional(),
-		field.Int64("accepted_answer_id").Comment("采纳评论ID").Nillable().Optional(),
+		field.Int64("accepted_answer_id").Comment("采纳评论 ID").Nillable().Optional(),
+		field.Int64("created_by").Comment("创建人 ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人 ID").Nillable().Optional(),
 	}
-	return fields
 }
 
 func (Article) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 
 func (Article) Edges() []ent.Edge {
 	return []ent.Edge{
-		// 关联附言 一对多
 		edge.To("postscripts", ArticlePostscript.Type),
-		// 关联评论 一对多
 		edge.To("comments", Comment.Type),
-		// 关联标签 多对多
 		edge.To("tags", Tag.Type).
-			StorageKey(
-				edge.Table(constant.TablePrefixContent.String() + "article_tags"), // 自定义中间表名
-			),
-		// 关联操作 一对多
+			StorageKey(edge.Table(constant.TablePrefixContent.String() + "article_tags")),
 		edge.To("action_records", ArticleActionRecord.Type),
 	}
 }

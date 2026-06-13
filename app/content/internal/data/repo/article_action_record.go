@@ -1,18 +1,20 @@
 package repo
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/content/v1"
-	"common/pkg/constant"
+	"common/pkg/apperror"
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
+	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	"content/internal/data/gen/articleactionrecord"
 	"content/internal/enum"
+
+	"github.com/samber/lo"
 )
 
 var _ repo.ArticleActionRecordRepo = (*ArticleActionRecordRepo)(nil)
@@ -32,29 +34,26 @@ func (r *ArticleActionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.ArticleActionRecord) (*model.ArticleActionRecord, error) {
-	save, err := r.getClient(ctx).ArticleActionRecord.Create().
+func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error) {
+	_, err := r.getClient(ctx).ArticleActionRecord.Create().
 		SetArticleID(record.ArticleID).
 		SetUserID(record.UserID).
 		SetType(articleactionrecord.Type(record.Type)).
 		Save(ctx)
-	if err != nil {
-		return nil, err
+	if gen.IsConstraintError(err) {
+		return false, nil
 	}
-	return &model.ArticleActionRecord{
-		ID:        save.ID,
-		ArticleID: save.ArticleID,
-		UserID:    save.UserID,
-		Type:      enum.ArticleAction(save.Type),
-	}, nil
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
-func (r *ArticleActionRecordRepo) Delete(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction) (int, error) {
-	dbType, _ := enum.ArticleActionMap.ToEnum(action)
+func (r *ArticleActionRecordRepo) Delete(ctx context.Context, articleId int64, userId int64, action enum.ArticleAction) (int, error) {
 	return r.getClient(ctx).ArticleActionRecord.Delete().
 		Where(articleactionrecord.ArticleIDEQ(articleId)).
 		Where(articleactionrecord.UserIDEQ(userId)).
-		Where(articleactionrecord.TypeEQ(articleactionrecord.Type(dbType))).
+		Where(articleactionrecord.TypeEQ(articleactionrecord.Type(action))).
 		Exec(ctx)
 }
 
@@ -69,7 +68,7 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, cerrors.ErrorBadRequest("article action record is not found")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_ACTION_RECORD_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
@@ -82,7 +81,7 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 	}, nil
 }
 
-func (r *ArticleActionRecordRepo) GetList(ctx context.Context, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, error) {
+func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -101,8 +100,24 @@ func (r *ArticleActionRecordRepo) GetList(ctx context.Context, req *repo.Article
 	return articleActionRecords, nil
 }
 
+func (r *ArticleActionRecordRepo) Map(ctx context.Context, req *repo.ArticleActionRecordReq) (map[int64]*model.ArticleActionRecord, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return lo.SliceToMap(list, func(item *model.ArticleActionRecord) (int64, *model.ArticleActionRecord) {
+		return item.ID, item
+	}), nil
+}
+
+func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleActionRecordReq) (int, error) {
+	query := r.getClient(ctx).ArticleActionRecord.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
 func (r *ArticleActionRecordRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error) {
-	page = constant.PageValid(page)
+	page = server.PageValid(page)
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -131,15 +146,32 @@ func (r *ArticleActionRecordRepo) Page(ctx context.Context, page *common.PageReq
 }
 
 func (r *ArticleActionRecordRepo) getQuery(query *gen.ArticleActionRecordQuery, req *repo.ArticleActionRecordReq) *gen.ArticleActionRecordQuery {
+	if req.ID != nil {
+		query = query.Where(articleactionrecord.IDEQ(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(articleactionrecord.IDIn(req.IDs...))
+	}
 	if req.ArticleId != nil {
 		query = query.Where(articleactionrecord.ArticleIDEQ(*req.ArticleId))
+	}
+	if len(req.ArticleIds) > 0 {
+		query = query.Where(articleactionrecord.ArticleIDIn(req.ArticleIds...))
 	}
 	if req.UserId != nil {
 		query = query.Where(articleactionrecord.UserIDEQ(*req.UserId))
 	}
+	if len(req.UserIds) > 0 {
+		query = query.Where(articleactionrecord.UserIDIn(req.UserIds...))
+	}
 	if req.Type != nil {
-		dbType, _ := enum.ArticleActionMap.ToEnum(*req.Type)
-		query = query.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(dbType)))
+		query = query.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(*req.Type)))
+	}
+	if len(req.Types) > 0 {
+		dbTypes := lo.Map(req.Types, func(item enum.ArticleAction, _ int) articleactionrecord.Type {
+			return articleactionrecord.Type(item)
+		})
+		query = query.Where(articleactionrecord.TypeIn(dbTypes...))
 	}
 	return query
 }

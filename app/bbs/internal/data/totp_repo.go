@@ -2,23 +2,47 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/api/gen/bbs/v1/user"
-	userv1 "common/api/gen/user/v1"
 	"common/pkg/client/rpc"
+	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 )
 
-var _ repo.TotpRepo = (*TotpRepo)(nil)
+var _ repo.TotpClient = (*TotpClient)(nil)
 
-type TotpRepo struct {
+type TotpClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewTotpRepo(userClient *rpc.UserClient) repo.TotpRepo {
-	return &TotpRepo{userClient: userClient}
+func NewTotpClient(userClient *rpc.UserClient) repo.TotpClient {
+	return &TotpClient{userClient: userClient}
 }
 
-func (r *TotpRepo) BeginEnableTotp(ctx context.Context, req *bbsuserv1.BeginEnableTotp_Request) (*bbsuserv1.BeginEnableTotp_Reply, error) {
+func (r *TotpClient) CheckEnableCodeTotp(ctx context.Context, req *bbsuserv1.ConfirmEnableTotp_Request) (bool, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return false, err
+	}
+	reply, err := r.userClient.Totp.Validate(ctx, &userv1.ValidateTotp_Request{UserId: userID, Code: req.GetCode()})
+	if err != nil {
+		return false, err
+	}
+	return reply.GetVerified(), nil
+}
+
+func (r *TotpClient) ValidateTotp(ctx context.Context, req *bbsuserv1.DisableTotp_Request) (bool, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return false, err
+	}
+	reply, err := r.userClient.Totp.Validate(ctx, &userv1.ValidateTotp_Request{UserId: userID, Code: req.GetCode()})
+	if err != nil {
+		return false, err
+	}
+	return reply.GetVerified(), nil
+}
+
+func (r *TotpClient) BeginEnableTotp(ctx context.Context, req *bbsuserv1.BeginEnableTotp_Request) (*bbsuserv1.BeginEnableTotp_Reply, error) {
 	user, err := currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -33,7 +57,7 @@ func (r *TotpRepo) BeginEnableTotp(ctx context.Context, req *bbsuserv1.BeginEnab
 	}, nil
 }
 
-func (r *TotpRepo) ConfirmEnableTotp(ctx context.Context, req *bbsuserv1.ConfirmEnableTotp_Request) (*bbsuserv1.ConfirmEnableTotp_Reply, error) {
+func (r *TotpClient) ConfirmEnableTotp(ctx context.Context, req *bbsuserv1.ConfirmEnableTotp_Request) (*bbsuserv1.ConfirmEnableTotp_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -45,7 +69,7 @@ func (r *TotpRepo) ConfirmEnableTotp(ctx context.Context, req *bbsuserv1.Confirm
 	return &bbsuserv1.ConfirmEnableTotp_Reply{}, nil
 }
 
-func (r *TotpRepo) DisableTotp(ctx context.Context, req *bbsuserv1.DisableTotp_Request) (*bbsuserv1.DisableTotp_Reply, error) {
+func (r *TotpClient) DisableTotp(ctx context.Context, req *bbsuserv1.DisableTotp_Request) (*bbsuserv1.DisableTotp_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -57,7 +81,7 @@ func (r *TotpRepo) DisableTotp(ctx context.Context, req *bbsuserv1.DisableTotp_R
 	return &bbsuserv1.DisableTotp_Reply{}, nil
 }
 
-func (r *TotpRepo) GetCurrentTotp(ctx context.Context, req *bbsuserv1.GetCurrentTotp_Request) (*bbsuserv1.GetCurrentTotp_Reply, error) {
+func (r *TotpClient) GetCurrentTotp(ctx context.Context, req *bbsuserv1.GetCurrentTotp_Request) (*bbsuserv1.GetCurrentTotp_Reply, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

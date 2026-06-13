@@ -1,6 +1,6 @@
 package enum
 
-import "common/api/gen/common/enums"
+import "common/proto/gen/common/enums"
 
 // EventQueueGroup 定义跨服务事件消费的 NATS queue group。
 type EventQueueGroup string

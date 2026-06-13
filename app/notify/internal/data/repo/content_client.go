@@ -1,9 +1,10 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	contentv1 "common/api/gen/content/v1"
 	"common/pkg/client/rpc"
+	"common/proto/gen/common"
+	contentv1 "common/proto/gen/content/v1"
+	userv1 "common/proto/gen/user/v1"
 	"context"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
@@ -13,10 +14,11 @@ var _ bizrepo.ContentClient = (*ContentClient)(nil)
 
 type ContentClient struct {
 	contentClient *rpc.ContentClient
+	userClient    *rpc.UserClient
 }
 
-func NewContentClient(contentClient *rpc.ContentClient) bizrepo.ContentClient {
-	return &ContentClient{contentClient: contentClient}
+func NewContentClient(contentClient *rpc.ContentClient, userClient *rpc.UserClient) bizrepo.ContentClient {
+	return &ContentClient{contentClient: contentClient, userClient: userClient}
 }
 
 func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model.ContentArticle, error) {
@@ -28,24 +30,24 @@ func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model
 	if article == nil {
 		return nil, nil
 	}
-	author := article.GetAuthorUser()
 	result := &model.ContentArticle{
-		ID:    article.GetId(),
-		Title: article.GetTitle(),
+		ID:       article.GetId(),
+		Title:    article.GetTitle(),
+		AuthorID: article.GetCreatedBy(),
 	}
-	if author != nil {
-		result.AuthorID = author.GetId()
-		result.AuthorName = author.GetName()
-		result.AuthorNickname = author.GetNickname()
+	accounts, err := c.mapAccounts(ctx, []int64{result.AuthorID})
+	if err != nil {
+		return nil, err
 	}
-	if result.AuthorID == 0 {
-		result.AuthorID = article.GetCreatedBy()
+	if author := accounts[result.AuthorID]; author != nil {
+		result.AuthorName = author.Name
+		result.AuthorNickname = author.Nickname
 	}
 	return result, nil
 }
 
 func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model.ContentComment, error) {
-	reply, err := c.contentClient.Comment.List(ctx, &contentv1.ListComments_Request{
+	reply, err := c.contentClient.Comment.Page(ctx, &contentv1.PageComments_Request{
 		Page: &common.PageRequest{Page: 1, Size: 1},
 		Query: &contentv1.CommentQueryParams{
 			CommentId: new(commentID),
@@ -59,21 +61,22 @@ func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model
 	}
 	comment := reply.GetRows()[0]
 	result := &model.ContentComment{
-		ID:        comment.GetId(),
-		ArticleID: comment.GetArticleId(),
-		Content:   comment.GetContent(),
+		ID:          comment.GetId(),
+		ArticleID:   comment.GetArticleId(),
+		Content:     comment.GetContent(),
+		UserID:      comment.GetCreatedBy(),
+		ReplyUserID: comment.GetReplyUserId(),
 	}
-	if user := comment.GetUser(); user != nil {
-		result.UserID = user.GetId()
-		result.UserName = user.GetName()
-		result.UserNickname = user.GetNickname()
+	accounts, err := c.mapAccounts(ctx, []int64{result.UserID, result.ReplyUserID})
+	if err != nil {
+		return nil, err
 	}
-	if result.UserID == 0 {
-		result.UserID = comment.GetCreatedBy()
+	if user := accounts[result.UserID]; user != nil {
+		result.UserName = user.Name
+		result.UserNickname = user.Nickname
 	}
-	if replyUser := comment.GetReplyUser(); replyUser != nil {
-		result.ReplyUserID = replyUser.GetId()
-		result.ReplyUserName = replyUser.GetName()
+	if replyUser := accounts[result.ReplyUserID]; replyUser != nil {
+		result.ReplyUserName = replyUser.Name
 	}
 	if result.ArticleID != 0 {
 		article, err := c.GetArticle(ctx, result.ArticleID)
@@ -81,6 +84,43 @@ func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model
 			return nil, err
 		}
 		result.Article = article
+	}
+	return result, nil
+}
+
+func (c *ContentClient) mapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccount, error) {
+	ids := make([]int64, 0, len(userIDs))
+	seen := make(map[int64]struct{}, len(userIDs))
+	for _, userID := range userIDs {
+		if userID == 0 {
+			continue
+		}
+		if _, ok := seen[userID]; ok {
+			continue
+		}
+		seen[userID] = struct{}{}
+		ids = append(ids, userID)
+	}
+	if len(ids) == 0 {
+		return map[int64]*model.UserAccount{}, nil
+	}
+	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Request{
+		Query: &userv1.AccountQuery{UserIds: ids},
+	})
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.UserAccount, len(reply.GetAccounts()))
+	for userID, account := range reply.GetAccounts() {
+		basic := account.GetBasic()
+		if basic == nil {
+			continue
+		}
+		result[userID] = &model.UserAccount{
+			ID:       userID,
+			Name:     basic.GetName(),
+			Nickname: basic.GetNickname(),
+		}
 	}
 	return result, nil
 }

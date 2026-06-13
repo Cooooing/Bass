@@ -1,7 +1,7 @@
 package service
 
 import (
-	v1 "common/api/gen/user/v1"
+	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/usecase"
 

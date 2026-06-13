@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	userv1 "common/api/gen/user/v1"
+	userv1 "common/proto/gen/user/v1"
 
 	"google.golang.org/grpc"
 )

@@ -1,9 +1,10 @@
 package service
 
 import (
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/user/v1"
+	"common/pkg/apperror"
 	"common/pkg/constant"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -73,12 +74,23 @@ func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.Verif
 }
 
 func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPassword_Request) (*v1.LoginByPassword_Reply, error) {
-	token, account, err := s.authUsecase.LoginByPassword(ctx, req.Account, req.Password)
+	token, account, err := s.authUsecase.LoginByPassword(ctx, req.Account, req.Password, &model.LoginContext{
+		IP:          req.GetIp(),
+		Country:     req.GetCountry(),
+		CountryCode: req.GetCountryCode(),
+		Province:    req.GetProvince(),
+		City:        req.GetCity(),
+		ISP:         req.GetIsp(),
+		UserAgent:   req.GetUserAgent(),
+		DeviceID:    req.GetDeviceId(),
+		Platform:    req.GetPlatform(),
+		RequestID:   req.GetRequestId(),
+	})
 	if err != nil {
 		if cerrors.IsInternalServerError(err) {
 			return nil, err
 		}
-		return nil, cerrors.ErrorBadRequest("account not exist or password is incorrect").WithCause(err)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS).WithCause(err)
 	}
 	basic := &v1.AccountBasic{
 		Id:            account.ID,

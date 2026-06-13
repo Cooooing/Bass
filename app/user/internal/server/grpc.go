@@ -1,7 +1,7 @@
 package server
 
 import (
-	"common/pkg/util/server"
+	"common/pkg/server"
 	"fmt"
 	"time"
 	"user/internal/conf"

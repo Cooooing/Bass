@@ -1,0 +1,190 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+import "bbs/v1/content/enum.proto";
+import "bbs/v1/content/model.proto";
+import "common/common.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bbs/v1/content;content";
+
+// 评论接口。
+service CommentService {
+  // 创建评论。
+  rpc Create(CreateComment.Request) returns (CreateComment.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/create"
+      body: "*"
+    };
+  }
+
+  // 分页查询评论列表。
+  rpc List(ListComments.Request) returns (ListComments.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/list"
+      body: "*"
+    };
+  }
+
+  // 分页查询评论楼层。
+  rpc ListThreads(ListCommentThreads.Request) returns (ListCommentThreads.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/list-threads"
+      body: "*"
+    };
+  }
+
+  // 分页查询评论回复。
+  rpc ListReplies(ListCommentReplies.Request) returns (ListCommentReplies.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/list-replies"
+      body: "*"
+    };
+  }
+
+  // 分页查询评论时间线。
+  rpc ListTimeline(ListCommentTimeline.Request) returns (ListCommentTimeline.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/list-timeline"
+      body: "*"
+    };
+  }
+
+  // 点赞或取消点赞评论。
+  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/like"
+      body: "*"
+    };
+  }
+
+  // 感谢或取消感谢评论。
+  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {
+    option (google.api.http) = {
+      post: "/v1/content/comment/thank"
+      body: "*"
+    };
+  }
+}
+
+// 分页查询评论楼层。
+message ListCommentThreads {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    int64 article_id = 2; // 文章 ID
+    optional CommentOrder order = 3; // 顶层评论排序方式
+    optional int32 reply_preview_limit = 4; // 每个楼层返回的回复预览数量
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页结果
+    repeated CommentThread rows = 2; // 评论楼层列表
+  }
+}
+
+// 分页查询评论回复。
+message ListCommentReplies {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    int64 article_id = 2; // 文章 ID
+    int64 parent_id = 3; // 顶层评论 ID
+    optional CommentOrder order = 4; // 排序方式
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "parent_id"
+    };
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页结果
+    repeated CommentListItem rows = 2; // 回复列表
+  }
+}
+
+// 分页查询评论时间线。
+message ListCommentTimeline {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    int64 article_id = 2; // 文章 ID
+    optional CommentOrder order = 3; // 排序方式
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页结果
+    repeated CommentListItem rows = 2; // 评论列表
+  }
+}
+
+// 创建评论。
+message CreateComment {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 评论内容
+    int64 reply_id = 3; // 回复的评论 ID
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "content"
+    };
+  }
+  message Reply {
+    CommentDetail comment = 1; // 创建后的评论
+  }
+}
+
+// 分页查询评论列表。
+message ListComments {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    CommentQuery query = 2; // 查询条件
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页结果
+    repeated CommentListItem rows = 2; // 评论列表
+  }
+}
+
+// 点赞或取消点赞评论。
+message LikeComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    bool active = 2; // 是否点赞
+    option (gnostic.openapi.v3.schema) = {
+      required: "id"
+      required: "active"
+    };
+  }
+  message Reply {
+    bool liked = 1; // 是否已点赞
+  }
+}
+
+// 感谢或取消感谢评论。
+message ThankComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    bool active = 2; // 是否感谢
+    option (gnostic.openapi.v3.schema) = {
+      required: "id"
+      required: "active"
+    };
+  }
+  message Reply {
+    bool thanked = 1; // 是否已感谢
+  }
+}
+
+// 评论查询条件。
+message CommentQuery {
+  reserved 8;
+
+  optional int64 comment_id = 1; // 评论 ID
+  optional int64 article_id = 2; // 文章 ID
+  optional int64 parent_id = 3; // 父评论 ID
+  optional int64 reply_id = 4; // 回复的评论 ID
+  optional CommentOrder order = 5; // 排序方式
+  optional int64 user_id = 6; // 评论账号 ID
+  optional int32 level = 7; // 评论层级
+  optional ContentRestriction restriction = 9; // 管理限制
+  repeated ContentRestriction restrictions = 10; // 管理限制列表
+}

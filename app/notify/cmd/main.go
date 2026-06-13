@@ -6,6 +6,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"notify/internal/biz/usecase"
 	consumerPkg "notify/internal/biz/usecase/consumer"
 	"notify/internal/conf"
 	"notify/internal/server"
@@ -33,7 +34,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, consumer *consumerPkg.Consumer, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, consumer *consumerPkg.Consumer, inboxDeadLetterScanner *usecase.InboxDeadLetterScanner, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	log.Infof("start server %s", id)
@@ -47,6 +48,7 @@ func newApp(logger log.Logger, gs *grpc.Server, consumer *consumerPkg.Consumer, 
 		kratos.Server(
 			gs,
 			consumer,
+			inboxDeadLetterScanner,
 		),
 		kratos.Registrar(cc.Registrar()),
 	)

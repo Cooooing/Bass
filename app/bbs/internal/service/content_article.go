@@ -2,7 +2,7 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
-	bbscontentv1 "common/api/gen/bbs/v1/content"
+	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	"context"
 
 	"github.com/go-kratos/kratos/v2/transport/grpc"
@@ -30,6 +30,10 @@ func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.Cr
 	return s.contentArticleUsecase.CreateArticle(ctx, req)
 }
 
+func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.UpdateArticle_Request) (*bbscontentv1.UpdateArticle_Reply, error) {
+	return s.contentArticleUsecase.UpdateArticle(ctx, req)
+}
+
 func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Request) (*bbscontentv1.UpdateDraftArticle_Reply, error) {
 	return s.contentArticleUsecase.UpdateDraftArticle(ctx, req)
 }
@@ -38,8 +42,8 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 	return s.contentArticleUsecase.PublishArticle(ctx, req)
 }
 
-func (s *ContentArticleService) Delete(ctx context.Context, req *bbscontentv1.DeleteArticle_Request) (*bbscontentv1.DeleteArticle_Reply, error) {
-	return s.contentArticleUsecase.DeleteArticle(ctx, req)
+func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Request) (*bbscontentv1.DiscardDraftArticle_Reply, error) {
+	return s.contentArticleUsecase.DiscardDraftArticle(ctx, req)
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Request) (*bbscontentv1.ListArticles_Reply, error) {
@@ -47,7 +51,18 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Request) (*bbscontentv1.GetArticle_Reply, error) {
-	return s.contentArticleUsecase.GetArticle(ctx, req)
+	reply, err := s.contentArticleUsecase.GetArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if reply.GetArticle().GetPublishStatus() == bbscontentv1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED &&
+		reply.GetArticle().GetVisibility() == bbscontentv1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC &&
+		reply.GetArticle().GetRestriction() == bbscontentv1.ContentRestriction_CONTENT_RESTRICTION_NONE {
+		if err := s.contentArticleUsecase.ViewArticle(ctx, req.GetArticleId()); err != nil {
+			return nil, err
+		}
+	}
+	return reply, nil
 }
 
 func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Request) (*bbscontentv1.LikeArticle_Reply, error) {

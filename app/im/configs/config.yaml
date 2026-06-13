@@ -3,10 +3,12 @@ server:
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
   http:
+    network: tcp
     host: ${HTTP_HOST:0.0.0.0}
     port: ${HTTP_PORT:8005}
     timeout: 5s
   grpc:
+    network: tcp
     host: ${GRPC_HOST:0.0.0.0}
     port: ${GRPC_PORT:9005}
     timeout: 5s
@@ -15,9 +17,12 @@ data:
     driver: postgres
     source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable # 数据库连接串模板
     merge: true # 是否同步表到数据库
+    debug: false
+    slow_sql_threshold: 1s
+    sample_rate: 1
   redis:
     addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
-    password: ${REDIS_PASSWORD:123456}
+    password: ${REDIS_PASSWORD:"123456"}
     dial_timeout: 5s
     db: 0
     read_timeout: 5s
@@ -31,7 +36,7 @@ data:
     host: ${NATS_HOST:127.0.0.1}
     port: ${NATS_PORT:4222}
     user: ${NATS_USER:admin}
-    password: ${NATS_PASSWORD:123456}
+    password: ${NATS_PASSWORD:"123456"}
     name: nats-client
     timeout: 5s
     max_reconnects: 10

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/common.proto";
+import "im/v1/model.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+// ChatGroup 服务
+service IMChatGroupService {
+  rpc Create(CreateChatGroup.Request) returns (CreateChatGroup.Reply) {} // 创建群组
+  rpc Dismiss(DismissChatGroup.Request) returns (DismissChatGroup.Reply) {} // 解散群组
+  rpc List(ListChatGroups.Request) returns (ListChatGroups.Reply) {} // 查询群组列表
+}
+
+message CreateChatGroup {
+  message Request {
+    int64 user_id = 1; // 用户 ID
+    string name = 2; // 群名称
+    optional string avatar = 3; // 群头像
+    optional string introduction = 4; // 群简介
+  }
+  message Reply {}
+}
+
+message DismissChatGroup {
+  message Request {
+    int64 id = 1; // 群组ID
+    int64 user_id = 2; // 用户 ID
+  }
+  message Reply {}
+}
+
+message ListChatGroups {
+  message Request {
+    common.PageRequest page = 1; // 分页参数
+    ChatGroupQueryParams query = 2; // 查询参数
+  }
+  message Reply {
+    common.PageReply page = 1; // 分页信息
+    repeated ChatGroup rows = 2; // 群组列表
+  }
+}

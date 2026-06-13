@@ -1,13 +1,13 @@
 package data
 
 import (
+	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"time"
-
-	cerrors "common/api/gen/common/errors"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -23,7 +23,7 @@ func currentUserID(ctx context.Context) (int64, error) {
 func currentUser(ctx context.Context) (*commonModel.User, error) {
 	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
 	if !ok {
-		return nil, cerrors.ErrorUnauthorized("user not login")
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	return user, nil
 }
@@ -31,7 +31,7 @@ func currentUser(ctx context.Context) (*commonModel.User, error) {
 func currentToken(ctx context.Context) (string, error) {
 	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
 	if !ok || token == "" {
-		return "", cerrors.ErrorUnauthorized("user not login")
+		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	return token, nil
 }

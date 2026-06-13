@@ -29,7 +29,9 @@ func (ArticlePostscript) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("article_id").Comment("所属文章ID"),
 		field.Text("content").Comment("附言内容").NotEmpty(),
-		field.Enum("status").Values(contentenum.ArticlePostscriptStatusMap.EnumValues()...).Default(string(contentenum.ArticlePostscriptStatusNormal)).Comment("状态"),
+		field.Enum("restriction").Values(contentenum.ContentRestrictionMap.EnumValues()...).Default(string(contentenum.ContentRestrictionNone)).Comment("管理限制"),
+		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}
 	return fields
 }
@@ -37,7 +39,6 @@ func (ArticlePostscript) Fields() []ent.Field {
 func (ArticlePostscript) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
 	}
 }
 

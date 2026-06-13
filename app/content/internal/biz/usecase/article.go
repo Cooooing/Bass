@@ -1,217 +1,257 @@
 package usecase
 
 import (
+	cerrors "common/proto/gen/common/errors"
 	"context"
+	"time"
 
-	"common/api/gen/common"
-	commonenums "common/api/gen/common/enums"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/content/v1"
-	userv1 "common/api/gen/user/v1"
-	"common/pkg/util"
+	"common/pkg/apperror"
+	"common/proto/gen/common"
+	commonenums "common/proto/gen/common/enums"
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
+	"content/internal/conf"
 	"content/internal/enum"
 
 	"github.com/samber/lo"
 )
 
 type ArticleUsecase struct {
-	tx         base.Tx
-	userClient repo.UserClient
+	conf *conf.Bootstrap
+	tx   base.Tx
 
-	articleRepo      repo.ArticleRepo
-	postscriptRepo   repo.ArticlePostscriptRepo
-	actionRecordRepo repo.ArticleActionRecordRepo
-	commentRepo      repo.CommentRepo
-	outboxRepo       repo.OutboxEventRepo
+	articleRepo          repo.ArticleRepo
+	postscriptRepo       repo.ArticlePostscriptRepo
+	actionRecordRepo     repo.ArticleActionRecordRepo
+	commentRepo          repo.CommentRepo
+	tagRepo              repo.TagRepo
+	outboxRepo           repo.OutboxEventRepo
+	moderationRecordRepo repo.ContentModerationRecordRepo
 }
 
 func NewArticleUsecase(
+	conf *conf.Bootstrap,
 	tx base.Tx,
-	userClient repo.UserClient,
 	articleRepo repo.ArticleRepo,
 	postscriptRepo repo.ArticlePostscriptRepo,
 	actionRecordRepo repo.ArticleActionRecordRepo,
 	commentRepo repo.CommentRepo,
+	tagRepo repo.TagRepo,
 	outboxRepo repo.OutboxEventRepo,
+	moderationRecordRepo repo.ContentModerationRecordRepo,
 ) *ArticleUsecase {
 	return &ArticleUsecase{
-		tx:               tx,
-		userClient:       userClient,
-		articleRepo:      articleRepo,
-		postscriptRepo:   postscriptRepo,
-		actionRecordRepo: actionRecordRepo,
-		commentRepo:      commentRepo,
-		outboxRepo:       outboxRepo,
+		conf:                 conf,
+		tx:                   tx,
+		articleRepo:          articleRepo,
+		postscriptRepo:       postscriptRepo,
+		actionRecordRepo:     actionRecordRepo,
+		commentRepo:          commentRepo,
+		tagRepo:              tagRepo,
+		outboxRepo:           outboxRepo,
+		moderationRecordRepo: moderationRecordRepo,
 	}
 }
 
-func validateArticleSave(article *model.Article) error {
-	if article == nil {
-		return cerrors.ErrorBadRequest("article is required")
-	}
-	switch article.Status {
-	case enum.ArticleStatusNormal, enum.ArticleStatusDrafts:
-	default:
-		return cerrors.ErrorBadRequest("status only be normal or drafts")
-	}
-	switch article.Type {
-	case enum.ArticleTypeNormal, enum.ArticleTypeQA:
-	default:
-		return cerrors.ErrorBadRequest("invalid article type")
-	}
-	if article.Type != enum.ArticleTypeQA && article.BountyPoints != nil {
-		return cerrors.ErrorBadRequest("bounty points only be set when type is qa")
-	}
-	return nil
-}
-
-func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
+func (d *ArticleUsecase) Add(ctx context.Context, article *model.Article, tagIds []int64) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
 	)
-	if err := validateArticleSave(article); err != nil {
-		return nil, err
-	}
-	status := article.Status
-	article.Status = enum.ArticleStatusDrafts
 	err = d.tx(ctx, func(ctx context.Context) error {
-		save, err = d.articleRepo.Save(ctx, article, tags)
+		bindTagIDs := lo.Uniq(tagIds)
+		if len(bindTagIDs) > 0 {
+			tagStatus := enum.TagStatusEnabled
+			count, err := d.tagRepo.Count(ctx, &repo.TagGetReq{TagIds: bindTagIDs, Status: &tagStatus})
+			if err != nil {
+				return err
+			}
+			if count != len(bindTagIDs) {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND)
+			}
+		}
+		now := time.Now()
+		article.PublishStatus = enum.ArticlePublishStatusDraft
+		if article.Visibility == "" {
+			article.Visibility = enum.ArticleVisibilityPublic
+		}
+		article.Restriction = enum.ContentRestrictionNone
+		article.EditedAt = new(now)
+		article.FormatContent()
+		save, err = d.articleRepo.Save(ctx, article)
 		if err != nil {
 			return err
 		}
-		if status == enum.ArticleStatusNormal {
-			senderID := int64(0)
-			if save.CreatedBy != nil {
-				senderID = *save.CreatedBy
+		if len(bindTagIDs) > 0 {
+			if err = d.articleRepo.ReplaceTags(ctx, save.ID, bindTagIDs); err != nil {
+				return err
 			}
-			return d.Publish(ctx, save.ID, senderID)
 		}
 		return nil
 	})
 	return save, err
 }
 
-func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, userId int64, content string) (*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) AddPostscript(ctx context.Context, articleId int64, content string, userId int64) (*model.ArticlePostscript, error) {
 	var save *model.ArticlePostscript
 	err := d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
 		}
-		if !exist {
-			return cerrors.ErrorBadRequest("article not exist")
+		if !d.isAuthor(article, userId) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 		}
-		save, err = d.postscriptRepo.Save(ctx, &model.ArticlePostscript{
-			ArticleID: articleId,
-			Content:   content,
-			Status:    enum.ArticlePostscriptStatusNormal,
-			CreatedBy: new(userId),
-			UpdatedBy: new(userId),
-		})
+		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		postscript := &model.ArticlePostscript{
+			ArticleID:   articleId,
+			Content:     content,
+			Restriction: enum.ContentRestrictionNone,
+			CreatedBy:   new(userId),
+			UpdatedBy:   new(userId),
+		}
+		postscript.FormatContent()
+		save, err = d.postscriptRepo.Save(ctx, postscript)
 		if err != nil {
 			return err
 		}
-		return d.articleRepo.UpdateHasPostscript(ctx, articleId, userId, true)
+		if err = d.articleRepo.UpdateHasPostscript(ctx, articleId, true, userId); err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED,
+				Payload: &commonenums.Event_ArticlePostscriptAdded{
+					ArticlePostscriptAdded: &commonenums.ArticlePostscriptAddedPayload{
+						SenderId:     userId,
+						ArticleId:    articleId,
+						PostscriptId: save.ID,
+					},
+				},
+			},
+		})
 	})
 	return save, err
 }
 
-func (d *ArticleUsecase) UpdateDraft(ctx context.Context, article *model.Article, tags []*model.Tag) (*model.Article, error) {
+func (d *ArticleUsecase) ListPostscripts(ctx context.Context, articleId int64) ([]*model.ArticlePostscript, error) {
+	if _, err := d.Get(ctx, articleId); err != nil {
+		return nil, err
+	}
+	restriction := enum.ContentRestrictionNone
+	return d.postscriptRepo.List(ctx, &repo.ArticlePostscriptGetReq{
+		ArticleID:   new(articleId),
+		Restriction: &restriction,
+	})
+}
+
+func (d *ArticleUsecase) Update(ctx context.Context, article *model.Article, tagIds []int64) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
 	)
-	if err := validateArticleSave(article); err != nil {
-		return nil, err
-	}
-	status := article.Status
-	article.Status = enum.ArticleStatusDrafts
 	err = d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
+		current, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(article.ID),
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 		})
 		if err != nil {
 			return err
 		}
-		if !exist {
-			return cerrors.ErrorBadRequest("article not exist")
+		if article.UpdatedBy == nil || !d.isAuthor(current, *article.UpdatedBy) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if current.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		switch current.PublishStatus {
+		case enum.ArticlePublishStatusDraft:
+		case enum.ArticlePublishStatusPublished:
+			editWindow := 10 * time.Minute
+			maxViewCount := int32(100)
+			if d.conf != nil && d.conf.GetBusiness() != nil && d.conf.GetBusiness().GetArticle() != nil {
+				articleConf := d.conf.GetBusiness().GetArticle()
+				if articleConf.GetPublishedEditWindow() != nil && articleConf.GetPublishedEditWindow().AsDuration() > 0 {
+					editWindow = articleConf.GetPublishedEditWindow().AsDuration()
+				}
+				if articleConf.GetPublishedEditMaxViewCount() > 0 {
+					maxViewCount = articleConf.GetPublishedEditMaxViewCount()
+				}
+			}
+			if current.ViewCount >= maxViewCount || current.PublishedAt == nil || time.Since(*current.PublishedAt) > editWindow {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		default:
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
 
-		save, err = d.articleRepo.Update(ctx, article, tags)
+		bindTagIDs := lo.Uniq(tagIds)
+		if len(bindTagIDs) > 0 {
+			tagStatus := enum.TagStatusEnabled
+			count, err := d.tagRepo.Count(ctx, &repo.TagGetReq{TagIds: bindTagIDs, Status: &tagStatus})
+			if err != nil {
+				return err
+			}
+			if count != len(bindTagIDs) {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND)
+			}
+		}
+
+		now := time.Now()
+		article.PublishStatus = current.PublishStatus
+		article.Visibility = current.Visibility
+		article.Restriction = current.Restriction
+		article.PublishedAt = current.PublishedAt
+		article.EditedAt = new(now)
+		article.FormatContent()
+		save, err = d.articleRepo.Update(ctx, article)
 		if err != nil {
 			return err
 		}
-		if status == enum.ArticleStatusNormal {
-			senderID := int64(0)
-			if save.CreatedBy != nil {
-				senderID = *save.CreatedBy
-			}
-			return d.Publish(ctx, save.ID, senderID)
+		if err = d.articleRepo.ReplaceTags(ctx, save.ID, bindTagIDs); err != nil {
+			return err
 		}
 		return nil
 	})
 	return save, err
 }
 
-func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int64, action v1.ArticleAction, active bool) error {
-	dbAction, ok := enum.ArticleActionMap.ToEnum(action)
-	if !ok {
-		return cerrors.ErrorBadRequest("invalid article action")
-	}
-	switch action {
-	case v1.ArticleAction_ARTICLE_ACTION_LIKE,
-		v1.ArticleAction_ARTICLE_ACTION_THANK,
-		v1.ArticleAction_ARTICLE_ACTION_COLLECT,
-		v1.ArticleAction_ARTICLE_ACTION_WATCH:
-	case v1.ArticleAction_ARTICLE_ACTION_REWARD:
-		return cerrors.ErrorNotImplemented("article reward not implemented")
-	default:
-		return cerrors.ErrorBadRequest("unsupported article action")
-	}
-	return d.tx(ctx, func(ctx context.Context) error {
-		_, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: &articleId,
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
-		})
+func (d *ArticleUsecase) Reward(ctx context.Context, articleId int64, userId int64, points int32) error {
+	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_REWARD_NOT_IMPLEMENTED)
+}
+
+func (d *ArticleUsecase) Like(ctx context.Context, articleId int64, userId int64, active bool) (bool, error) {
+	err := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 		if err != nil {
 			return err
 		}
+		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+
 		if active {
-			existRecord, err := d.actionRecordRepo.Exist(ctx, &repo.ArticleActionRecordReq{
-				ArticleId: &articleId,
-				UserId:    &userId,
-				Type:      &action,
-			})
-			if err != nil {
-				return err
-			}
-			if existRecord {
-				return nil
-			}
-			_, err = d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
+			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
 				ArticleID: articleId,
 				UserID:    userId,
-				Type:      dbAction,
+				Type:      enum.ArticleActionLike,
 			})
 			if err != nil {
 				return err
 			}
-			_, err = d.articleRepo.UpdateStat(ctx, articleId, userId, action, 1)
-			if err != nil {
+			if !created {
+				return nil
+			}
+			if err = d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{LikeCount: 1}, nil); err != nil {
 				return err
 			}
-			var event *commonenums.Event
-			switch action {
-			case v1.ArticleAction_ARTICLE_ACTION_LIKE:
-				event = &commonenums.Event{
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
 					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED,
 					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED,
 					Payload: &commonenums.Event_ArticleLiked{
@@ -220,9 +260,49 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 							ArticleId: articleId,
 						},
 					},
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_THANK:
-				event = &commonenums.Event{
+				},
+			})
+		}
+
+		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, enum.ArticleActionLike)
+		if err != nil {
+			return err
+		}
+		if deleted == 0 {
+			return nil
+		}
+		return d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{LikeCount: -1}, nil)
+	})
+	return active, err
+}
+
+func (d *ArticleUsecase) Thank(ctx context.Context, articleId int64, userId int64, active bool) (bool, error) {
+	err := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		if err != nil {
+			return err
+		}
+		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+
+		if active {
+			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
+				ArticleID: articleId,
+				UserID:    userId,
+				Type:      enum.ArticleActionThank,
+			})
+			if err != nil {
+				return err
+			}
+			if !created {
+				return nil
+			}
+			if err = d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{ThankCount: 1}, nil); err != nil {
+				return err
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
 					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED,
 					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED,
 					Payload: &commonenums.Event_ArticleThanked{
@@ -231,9 +311,49 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 							ArticleId: articleId,
 						},
 					},
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_COLLECT:
-				event = &commonenums.Event{
+				},
+			})
+		}
+
+		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, enum.ArticleActionThank)
+		if err != nil {
+			return err
+		}
+		if deleted == 0 {
+			return nil
+		}
+		return d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{ThankCount: -1}, nil)
+	})
+	return active, err
+}
+
+func (d *ArticleUsecase) Collect(ctx context.Context, articleId int64, userId int64, active bool) (bool, error) {
+	err := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		if err != nil {
+			return err
+		}
+		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+
+		if active {
+			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
+				ArticleID: articleId,
+				UserID:    userId,
+				Type:      enum.ArticleActionCollect,
+			})
+			if err != nil {
+				return err
+			}
+			if !created {
+				return nil
+			}
+			if err = d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{CollectCount: 1}, nil); err != nil {
+				return err
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
 					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED,
 					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED,
 					Payload: &commonenums.Event_ArticleCollected{
@@ -242,9 +362,49 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 							ArticleId: articleId,
 						},
 					},
-				}
-			case v1.ArticleAction_ARTICLE_ACTION_WATCH:
-				event = &commonenums.Event{
+				},
+			})
+		}
+
+		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, enum.ArticleActionCollect)
+		if err != nil {
+			return err
+		}
+		if deleted == 0 {
+			return nil
+		}
+		return d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{CollectCount: -1}, nil)
+	})
+	return active, err
+}
+
+func (d *ArticleUsecase) Watch(ctx context.Context, articleId int64, userId int64, active bool) (bool, error) {
+	err := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		if err != nil {
+			return err
+		}
+		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+
+		if active {
+			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
+				ArticleID: articleId,
+				UserID:    userId,
+				Type:      enum.ArticleActionWatch,
+			})
+			if err != nil {
+				return err
+			}
+			if !created {
+				return nil
+			}
+			if err = d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{WatchCount: 1}, nil); err != nil {
+				return err
+			}
+			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
 					Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_WATCHED,
 					Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED,
 					Payload: &commonenums.Event_ArticleWatched{
@@ -253,41 +413,59 @@ func (d *ArticleUsecase) Action(ctx context.Context, articleId int64, userId int
 							ArticleId: articleId,
 						},
 					},
-				}
-			}
-			if event == nil {
-				return nil
-			}
-			return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				Event: event,
+				},
 			})
 		}
-		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, action)
+
+		deleted, err := d.actionRecordRepo.Delete(ctx, articleId, userId, enum.ArticleActionWatch)
 		if err != nil {
 			return err
 		}
 		if deleted == 0 {
 			return nil
 		}
-		_, err = d.articleRepo.UpdateStat(ctx, articleId, userId, action, -1)
-		return err
+		return d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{WatchCount: -1}, nil)
 	})
+	return active, err
 }
 
-func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId int64) error {
+func (d *ArticleUsecase) View(ctx context.Context, articleId int64, viewerUserId *int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
-			ArticleId: &articleId,
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
-		})
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 		if err != nil {
 			return err
 		}
-		if !exist {
-			return cerrors.ErrorBadRequest("article not exist")
+		switch article.PublishStatus {
+		case enum.ArticlePublishStatusPublished, enum.ArticlePublishStatusArchived:
+		default:
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-		_, err = d.articleRepo.Publish(ctx, articleId, userId)
+		if article.Restriction == enum.ContentRestrictionHidden {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		return d.articleRepo.AddStats(ctx, articleId, repo.ArticleStatUpdate{ViewCount: 1}, nil)
+	})
+}
+
+func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId int64, visibility enum.ArticleVisibility) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
 		if err != nil {
+			return err
+		}
+		if !d.isAuthor(article, userId) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if article.PublishStatus != enum.ArticlePublishStatusDraft || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		switch visibility {
+		case enum.ArticleVisibilityPublic, enum.ArticleVisibilityPrivate:
+		default:
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		}
+		now := time.Now()
+		if err = d.articleRepo.UpdatePublishStatus(ctx, articleId, enum.ArticlePublishStatusPublished, visibility, new(now), userId); err != nil {
 			return err
 		}
 		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
@@ -304,163 +482,292 @@ func (d *ArticleUsecase) Publish(ctx context.Context, articleId int64, userId in
 	})
 }
 
-func (d *ArticleUsecase) UpdateArticle(ctx context.Context, articleId int64, userId int64, status v1.ArticleStatus, commentable bool, anonymous bool, listable *bool) error {
-	dbStatus, ok := enum.ArticleStatusMap.ToEnum(status)
-	if !ok {
-		return cerrors.ErrorBadRequest("invalid article status")
-	}
-	switch dbStatus {
-	case enum.ArticleStatusNormal, enum.ArticleStatusHidden, enum.ArticleStatusLocked:
-	default:
-		return cerrors.ErrorBadRequest("invalid article status flow")
-	}
+func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, commentId int64, userId int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
-		a, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: &articleId})
-		if err != nil {
-			return err
-		}
-		switch a.Status {
-		case enum.ArticleStatusNormal, enum.ArticleStatusHidden, enum.ArticleStatusLocked:
-		default:
-			return cerrors.ErrorBadRequest("invalid article status flow")
-		}
-		return d.articleRepo.UpdateControlFields(ctx, articleId, userId, status, commentable, anonymous, listable)
-	})
-}
-
-func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, articleId int64, userId int64, commentId int64) error {
-	return d.tx(ctx, func(ctx context.Context) error {
-		a, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_NORMAL),
 		})
 		if err != nil {
 			return err
 		}
-		if a.Type != enum.ArticleTypeQA {
-			return cerrors.ErrorBadRequest("only qa article can accept answer")
+		if !d.isAuthor(article, userId) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 		}
-		if a.AcceptedAnswerID != nil {
-			return cerrors.ErrorBadRequest("article already accepted answer")
+		if article.PublishStatus != enum.ArticlePublishStatusPublished ||
+			article.Visibility != enum.ArticleVisibilityPublic ||
+			article.Restriction != enum.ContentRestrictionNone ||
+			article.Type != enum.ArticleTypeQA ||
+			article.AcceptedAnswerID != nil {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
+		commentStatus := enum.ContentRestrictionNone
 		exist, err := d.commentRepo.Exist(ctx, &repo.CommentGetReq{
-			CommentId: &commentId,
-			ArticleId: &articleId,
-			Status:    new(v1.CommentStatus_COMMENT_STATUS_NORMAL),
+			CommentId:   &commentId,
+			ArticleId:   &articleId,
+			Restriction: &commentStatus,
 		})
 		if err != nil {
 			return err
 		}
 		if !exist {
-			return cerrors.ErrorBadRequest("comment not exist")
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
 		}
-		_, err = d.articleRepo.UpdateAcceptAnswer(ctx, articleId, userId, commentId)
-		return err
+		if _, err = d.articleRepo.UpdateAcceptedAnswerID(ctx, articleId, commentId, userId); err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER,
+				Payload: &commonenums.Event_ArticleAcceptedAnswer{
+					ArticleAcceptedAnswer: &commonenums.ArticleAcceptedAnswerPayload{
+						SenderId:  userId,
+						ArticleId: articleId,
+						CommentId: commentId,
+					},
+				},
+			},
+		})
+	})
+}
+
+func (d *ArticleUsecase) MakePrivate(ctx context.Context, articleId int64, userId int64) error {
+	return d.updateVisibility(ctx, articleId, enum.ArticleVisibilityPrivate, userId)
+}
+
+func (d *ArticleUsecase) MakePublic(ctx context.Context, articleId int64, userId int64) error {
+	return d.updateVisibility(ctx, articleId, enum.ArticleVisibilityPublic, userId)
+}
+
+func (d *ArticleUsecase) updateVisibility(ctx context.Context, articleId int64, visibility enum.ArticleVisibility, userId int64) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		if err != nil {
+			return err
+		}
+		if !d.isAuthor(article, userId) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		if err := d.articleRepo.UpdateVisibility(ctx, articleId, visibility, userId); err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
+				Payload: &commonenums.Event_ArticleStatusUpdated{
+					ArticleStatusUpdated: &commonenums.ArticleStatusUpdatedPayload{
+						SenderId:      userId,
+						ArticleId:     articleId,
+						Action:        "visibility_updated",
+						PublishStatus: string(article.PublishStatus),
+						Visibility:    string(visibility),
+						Restriction:   string(article.Restriction),
+					},
+				},
+			},
+		})
+	})
+}
+
+func (d *ArticleUsecase) Archive(ctx context.Context, articleId int64, userId int64, reason *string) error {
+	return d.updatePublishStatus(ctx, articleId, enum.ArticlePublishStatusArchived, userId, "archived", reason)
+}
+
+func (d *ArticleUsecase) Unarchive(ctx context.Context, articleId int64, userId int64, reason *string) error {
+	return d.updatePublishStatus(ctx, articleId, enum.ArticlePublishStatusPublished, userId, "unarchived", reason)
+}
+
+func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, articleId int64, publishStatus enum.ArticlePublishStatus, userId int64, action string, reason *string) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		if err != nil {
+			return err
+		}
+		if article.Restriction != enum.ContentRestrictionNone {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		switch action {
+		case "archived":
+			if article.PublishStatus != enum.ArticlePublishStatusPublished {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		case "unarchived":
+			if article.PublishStatus != enum.ArticlePublishStatusArchived {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		}
+		if err := d.articleRepo.UpdatePublishStatus(ctx, articleId, publishStatus, article.Visibility, nil, userId); err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
+				Payload: &commonenums.Event_ArticleStatusUpdated{
+					ArticleStatusUpdated: &commonenums.ArticleStatusUpdatedPayload{
+						SenderId:      userId,
+						ArticleId:     articleId,
+						Action:        action,
+						PublishStatus: string(publishStatus),
+						Visibility:    string(article.Visibility),
+						Restriction:   string(article.Restriction),
+						Reason:        reason,
+					},
+				},
+			},
+		})
+	})
+}
+
+func (d *ArticleUsecase) Hide(ctx context.Context, articleId int64, userId int64, reason *string) error {
+	return d.updateRestriction(ctx, articleId, enum.ContentRestrictionHidden, userId, enum.ContentModerationActionHide, reason)
+}
+
+func (d *ArticleUsecase) Unhide(ctx context.Context, articleId int64, userId int64, reason *string) error {
+	return d.updateRestriction(ctx, articleId, enum.ContentRestrictionNone, userId, enum.ContentModerationActionUnhide, reason)
+}
+
+func (d *ArticleUsecase) Lock(ctx context.Context, articleId int64, userId int64, reason *string) error {
+	return d.updateRestriction(ctx, articleId, enum.ContentRestrictionLocked, userId, enum.ContentModerationActionLock, reason)
+}
+
+func (d *ArticleUsecase) Unlock(ctx context.Context, articleId int64, userId int64, reason *string) error {
+	return d.updateRestriction(ctx, articleId, enum.ContentRestrictionNone, userId, enum.ContentModerationActionUnlock, reason)
+}
+
+func (d *ArticleUsecase) updateRestriction(ctx context.Context, articleId int64, restriction enum.ContentRestriction, userId int64, action enum.ContentModerationAction, reason *string) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		if err != nil {
+			return err
+		}
+		if article.PublishStatus == enum.ArticlePublishStatusDraft {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		switch action {
+		case enum.ContentModerationActionHide:
+			if article.Restriction != enum.ContentRestrictionNone {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		case enum.ContentModerationActionLock:
+			if article.PublishStatus != enum.ArticlePublishStatusPublished ||
+				article.Visibility != enum.ArticleVisibilityPublic ||
+				article.Restriction != enum.ContentRestrictionNone {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		case enum.ContentModerationActionUnhide:
+			if article.Restriction != enum.ContentRestrictionHidden {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		case enum.ContentModerationActionUnlock:
+			if article.Restriction != enum.ContentRestrictionLocked {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+		}
+		if err := d.articleRepo.UpdateRestriction(ctx, articleId, restriction, userId); err != nil {
+			return err
+		}
+		if _, err := d.moderationRecordRepo.Save(ctx, &model.ContentModerationRecord{
+			Target:     enum.ContentModerationTargetArticle,
+			TargetID:   articleId,
+			Action:     action,
+			Reason:     reason,
+			OperatorID: userId,
+		}); err != nil {
+			return err
+		}
+		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+			Event: &commonenums.Event{
+				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
+				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
+				Payload: &commonenums.Event_ArticleStatusUpdated{
+					ArticleStatusUpdated: &commonenums.ArticleStatusUpdatedPayload{
+						SenderId:      userId,
+						ArticleId:     articleId,
+						Action:        string(action),
+						PublishStatus: string(article.PublishStatus),
+						Visibility:    string(article.Visibility),
+						Restriction:   string(restriction),
+						Reason:        reason,
+					},
+				},
+			},
+		})
 	})
 }
 
 func (d *ArticleUsecase) Get(ctx context.Context, articleId int64) (*model.Article, error) {
-	reply, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+	return d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 		ArticleId: new(articleId),
+	})
+}
+
+func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
+	return d.articleRepo.Page(ctx, page, req)
+}
+
+func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, articleIds []int64, userId int64) (map[int64]*model.ArticleViewerActionState, error) {
+	articleIds = lo.Uniq(articleIds)
+	if len(articleIds) == 0 {
+		return map[int64]*model.ArticleViewerActionState{}, nil
+	}
+	states := lo.SliceToMap(articleIds, func(articleID int64) (int64, *model.ArticleViewerActionState) {
+		return articleID, &model.ArticleViewerActionState{}
+	})
+	records, err := d.actionRecordRepo.List(ctx, &repo.ArticleActionRecordReq{
+		ArticleIds: articleIds,
+		UserId:     new(userId),
+		Types: []enum.ArticleAction{
+			enum.ArticleActionLike,
+			enum.ArticleActionThank,
+			enum.ArticleActionCollect,
+			enum.ArticleActionWatch,
+		},
 	})
 	if err != nil {
 		return nil, err
 	}
-
-	lastReplyComment, err := d.commentRepo.GetArticleLastComment(ctx, &repo.CommentGetReq{ArticleId: new(reply.ID)})
-	if err != nil {
-		return nil, err
-	}
-
-	userIDs := make([]int64, 0, 2)
-	if reply.CreatedBy != nil {
-		userIDs = append(userIDs, *reply.CreatedBy)
-	}
-	if lastReplyComment != nil && lastReplyComment.CreatedBy != nil {
-		userIDs = append(userIDs, *lastReplyComment.CreatedBy)
-	}
-	userAuthorsMap := map[int64]*userv1.AccountBasic{}
-	if len(userIDs) > 0 {
-		userAuthorsMap, err = d.userClient.MapAccounts(ctx, userIDs)
-		if err != nil {
-			return nil, err
+	for _, record := range records {
+		state := states[record.ArticleID]
+		if state == nil {
+			continue
+		}
+		switch record.Type {
+		case enum.ArticleActionLike:
+			state.Liked = true
+		case enum.ArticleActionThank:
+			state.Thanked = true
+		case enum.ArticleActionCollect:
+			state.Collected = true
+		case enum.ArticleActionWatch:
+			state.Watched = true
 		}
 	}
-
-	if lastReplyComment != nil {
-		reply.LastReplyCommentAt = lastReplyComment.CreatedAt
-		if lastReplyComment.CreatedBy != nil {
-			reply.LastReplyCommentUser = userAuthorsMap[*lastReplyComment.CreatedBy]
-		}
-	}
-	if reply.CreatedBy != nil {
-		reply.AuthorUser = util.If(reply.Anonymous, nil, userAuthorsMap[*reply.CreatedBy])
-	}
-	return reply, nil
+	return states, nil
 }
 
-func (d *ArticleUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
-	req.IsSummary = true
-	list, pageReply, err := d.articleRepo.Page(ctx, page, req)
-	if err != nil {
-		return nil, nil, err
-	}
-	articleIDs := make(map[int64]struct{})
-	userIDs := make(map[int64]struct{})
-	for _, item := range list {
-		articleIDs[item.ID] = struct{}{}
-		if item.CreatedBy != nil {
-			userIDs[*item.CreatedBy] = struct{}{}
-		}
-	}
-
-	lastCommentMap := make(map[int64]*model.Comment)
-	if len(articleIDs) > 0 {
-		lastCommentMap, err = d.commentRepo.GetArticleLastComments(ctx, &repo.CommentGetReq{ArticleIds: lo.Keys(articleIDs)})
-		if err != nil {
-			return nil, nil, err
-		}
-		for _, v := range lastCommentMap {
-			if v.CreatedBy != nil {
-				userIDs[*v.CreatedBy] = struct{}{}
-			}
-		}
-	}
-
-	userAuthorsMap := map[int64]*userv1.AccountBasic{}
-	if len(userIDs) > 0 {
-		userAuthorsMap, err = d.userClient.MapAccounts(ctx, lo.Keys(userIDs))
-		if err != nil {
-			return nil, nil, err
-		}
-	}
-
-	for i := range list {
-		if lastReplyComment, ok := lastCommentMap[list[i].ID]; ok {
-			list[i].LastReplyCommentAt = lastReplyComment.CreatedAt
-			if lastReplyComment.CreatedBy != nil {
-				list[i].LastReplyCommentUser = userAuthorsMap[*lastReplyComment.CreatedBy]
-			}
-		}
-		if list[i].CreatedBy != nil {
-			list[i].AuthorUser = util.If(list[i].Anonymous, nil, userAuthorsMap[*list[i].CreatedBy])
-		}
-	}
-	return list, pageReply, nil
-}
-
-func (d *ArticleUsecase) Delete(ctx context.Context, articleId int64, userId int64) error {
+func (d *ArticleUsecase) DiscardDraft(ctx context.Context, articleId int64, userId int64) error {
 	return d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.articleRepo.Exist(ctx, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: &articleId,
-			Status:    new(v1.ArticleStatus_ARTICLE_STATUS_DRAFTS),
 		})
 		if err != nil {
 			return err
 		}
-		if !exist {
-			return cerrors.ErrorBadRequest("article not exist")
+		if !d.isAuthor(article, userId) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 		}
-		return d.articleRepo.Delete(ctx, articleId, userId)
+		if article.PublishStatus != enum.ArticlePublishStatusDraft {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		return d.articleRepo.DiscardDraft(ctx, articleId)
 	})
+}
+
+func (d *ArticleUsecase) isAuthor(article *model.Article, userId int64) bool {
+	return article != nil && article.CreatedBy != nil && *article.CreatedBy == userId
 }

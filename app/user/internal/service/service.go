@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/pkg/util/server"
+	"common/pkg/server"
 
 	"github.com/google/wire"
 )

@@ -1,24 +1,41 @@
 package enum
 
 import (
-	v1 "common/api/gen/content/v1"
 	"common/pkg/enum"
+	v1 "common/proto/gen/content/v1"
 )
 
-type ArticleStatus string
+// ArticlePublishStatus 表示文章发布生命周期状态。
+type ArticlePublishStatus string
 
 const (
-	ArticleStatusNormal  ArticleStatus = "normal"
-	ArticleStatusHidden  ArticleStatus = "hidden"
-	ArticleStatusLocked  ArticleStatus = "locked"
-	ArticleStatusDrafts  ArticleStatus = "drafts"
-	ArticleStatusDeleted ArticleStatus = "deleted"
+	// ArticlePublishStatusDraft 表示草稿，只有作者可见。
+	ArticlePublishStatusDraft ArticlePublishStatus = "draft"
+	// ArticlePublishStatusPublished 表示已发布。
+	ArticlePublishStatusPublished ArticlePublishStatus = "published"
+	// ArticlePublishStatusArchived 表示已归档，只允许浏览。
+	ArticlePublishStatusArchived ArticlePublishStatus = "archived"
 )
 
-var ArticleStatusMap = enum.NewMapping[ArticleStatus, v1.ArticleStatus](map[ArticleStatus]enum.Entry[ArticleStatus, v1.ArticleStatus]{
-	ArticleStatusNormal:  {Proto: v1.ArticleStatus_ARTICLE_STATUS_NORMAL},
-	ArticleStatusHidden:  {Proto: v1.ArticleStatus_ARTICLE_STATUS_HIDDEN},
-	ArticleStatusLocked:  {Proto: v1.ArticleStatus_ARTICLE_STATUS_LOCKED},
-	ArticleStatusDrafts:  {Proto: v1.ArticleStatus_ARTICLE_STATUS_DRAFTS},
-	ArticleStatusDeleted: {Proto: v1.ArticleStatus_ARTICLE_STATUS_DELETED},
+// ArticlePublishStatusMap 维护文章发布状态内部枚举与 proto 枚举的映射。
+var ArticlePublishStatusMap = enum.NewMapping[ArticlePublishStatus, v1.ArticlePublishStatus](map[ArticlePublishStatus]enum.Entry[ArticlePublishStatus, v1.ArticlePublishStatus]{
+	ArticlePublishStatusDraft:     {Proto: v1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_DRAFT},
+	ArticlePublishStatusPublished: {Proto: v1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED},
+	ArticlePublishStatusArchived:  {Proto: v1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_ARCHIVED},
+})
+
+// ArticleVisibility 表示已发布文章的可见范围。
+type ArticleVisibility string
+
+const (
+	// ArticleVisibilityPublic 表示公开可见。
+	ArticleVisibilityPublic ArticleVisibility = "public"
+	// ArticleVisibilityPrivate 表示仅作者可见。
+	ArticleVisibilityPrivate ArticleVisibility = "private"
+)
+
+// ArticleVisibilityMap 维护文章可见范围内部枚举与 proto 枚举的映射。
+var ArticleVisibilityMap = enum.NewMapping[ArticleVisibility, v1.ArticleVisibility](map[ArticleVisibility]enum.Entry[ArticleVisibility, v1.ArticleVisibility]{
+	ArticleVisibilityPublic:  {Proto: v1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC},
+	ArticleVisibilityPrivate: {Proto: v1.ArticleVisibility_ARTICLE_VISIBILITY_PRIVATE},
 })

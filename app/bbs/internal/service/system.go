@@ -2,7 +2,7 @@ package service
 
 import (
 	"bbs/internal/conf"
-	"common/api/gen/common/v1"
+	"common/proto/gen/common/v1"
 	"context"
 	"fmt"
 

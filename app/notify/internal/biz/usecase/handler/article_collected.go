@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"common/api/gen/common/enums"
+	"common/proto/gen/common/enums"
 	"context"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"

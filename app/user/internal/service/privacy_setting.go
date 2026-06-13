@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	v1 "common/api/gen/user/v1"
+	v1 "common/proto/gen/user/v1"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
 

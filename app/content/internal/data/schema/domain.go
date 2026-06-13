@@ -28,10 +28,12 @@ func (Domain) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("name").Comment("域名名称").NotEmpty(),
 		field.String("description").Comment("域名描述").Nillable().Optional(),
-		field.Enum("status").Values(contentenum.DomainStatusMap.EnumValues()...).Default(string(contentenum.DomainStatusNormal)).Comment("状态"),
+		field.Enum("status").Values(contentenum.DomainStatusMap.EnumValues()...).Default(string(contentenum.DomainStatusEnabled)).Comment("启停状态"),
 		field.String("url").Comment("领域地址").Nillable().Optional(),
 		field.String("icon").Comment("图标").Nillable().Optional(),
 		field.Bool("is_nav").Comment("是否导航").Default(false).Optional(),
+		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}
 	return fields
 }
@@ -39,7 +41,6 @@ func (Domain) Fields() []ent.Field {
 func (Domain) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
-		utilent.UserAuditMixin{},
 	}
 }
 

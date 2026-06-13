@@ -2,8 +2,9 @@ package usecase
 
 import (
 	"bytes"
-	commonenums "common/api/gen/common/enums"
-	cerrors "common/api/gen/common/errors"
+	"common/pkg/apperror"
+	commonenums "common/proto/gen/common/enums"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"image/png"
 	"time"
@@ -40,11 +41,11 @@ func NewTotpUsecase(
 }
 
 func (u *TotpUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
-	return u.totpRepo.FindByUserID(ctx, userID)
+	return u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &userID})
 }
 
 func (u *TotpUsecase) ValidateByUserID(ctx context.Context, userID int64, code string) (bool, error) {
-	row, err := u.totpRepo.FindByUserID(ctx, userID)
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &userID})
 	if err != nil {
 		return false, err
 	}
@@ -55,12 +56,12 @@ func (u *TotpUsecase) ValidateByUserID(ctx context.Context, userID int64, code s
 }
 
 func (u *TotpUsecase) BeginEnable(ctx context.Context, userID int64, accountName string) (string, []byte, error) {
-	row, err := u.totpRepo.FindByUserID(ctx, userID)
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &userID})
 	if err != nil {
 		return "", nil, err
 	}
 	if row != nil && row.Enable {
-		return "", nil, cerrors.ErrorBadRequest("TOTP already enabled")
+		return "", nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_ENABLED)
 	}
 
 	key, err := totp.Generate(totp.GenerateOpts{
@@ -85,16 +86,24 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, userID int64, accountName
 	return key.URL(), buf.Bytes(), nil
 }
 
+func (u *TotpUsecase) CheckEnableCode(ctx context.Context, userID int64, code string) (bool, error) {
+	secret, err := u.totpSecretCache.Get(ctx, userID)
+	if err != nil {
+		return false, nil
+	}
+	return totp.Validate(code, secret), nil
+}
+
 func (u *TotpUsecase) Disable(ctx context.Context, userID int64, code string) error {
-	row, err := u.totpRepo.FindByUserID(ctx, userID)
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &userID})
 	if err != nil {
 		return err
 	}
 	if row == nil || !row.Enable {
-		return cerrors.ErrorBadRequest("TOTP already disabled")
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_DISABLED)
 	}
 	if !totp.Validate(code, row.Secret) {
-		return cerrors.ErrorBadRequest("TOTP code invalid")
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 
 	return u.tx(ctx, func(ctx context.Context) error {
@@ -121,7 +130,7 @@ func (u *TotpUsecase) ConfirmEnable(ctx context.Context, userID int64, code stri
 		return err
 	}
 	if !totp.Validate(code, secret) {
-		return cerrors.ErrorBadRequest("TOTP code invalid")
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 
 	return u.tx(ctx, func(ctx context.Context) error {

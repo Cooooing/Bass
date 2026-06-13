@@ -34,6 +34,7 @@ func (OutboxEvent) Fields() []ent.Field {
 		field.JSON("headers", map[string]string{}).Comment("消息头").Default(map[string]string{}),
 		field.Enum("status").Values(commonenum.OutboxEventStatusMap.EnumValues()...).Default(string(commonenum.OutboxEventStatusPending)).Comment("投递状态"),
 		field.Int32("retry_count").Comment("投递重试次数").Default(0),
+		field.String("last_error").Comment("最近一次投递失败原因摘要").Optional().Nillable(),
 		field.Time("published_at").Comment("发布时间").Optional().Nillable(),
 	}
 }

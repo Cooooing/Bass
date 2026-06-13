@@ -1,9 +1,9 @@
 package repo
 
 import (
-	"common/api/gen/common"
-	v1 "common/api/gen/content/v1"
+	"common/proto/gen/common"
 	"content/internal/biz/model"
+	"content/internal/enum"
 	"context"
 )
 
@@ -13,7 +13,9 @@ type DomainRepo interface {
 	Update(ctx context.Context, domain *model.Domain) (*model.Domain, error)
 
 	Get(ctx context.Context, req *DomainGetReq) (*model.Domain, error)
-	GetList(ctx context.Context, req *DomainGetReq) ([]*model.Domain, error)
+	List(ctx context.Context, req *DomainGetReq) ([]*model.Domain, error)
+	Map(ctx context.Context, req *DomainGetReq) (map[int64]*model.Domain, error)
+	Count(ctx context.Context, req *DomainGetReq) (int, error)
 	Page(ctx context.Context, page *common.PageRequest, req *DomainGetReq) ([]*model.Domain, *common.PageReply, error)
 }
 
@@ -22,7 +24,7 @@ type DomainGetReq struct {
 	DomainIds   []int64
 	Name        *string
 	Description *string
-	Status      *v1.DomainStatus
+	Status      *enum.DomainStatus
 	Url         *string
 	Icon        *string
 	IsNav       *bool

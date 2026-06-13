@@ -1,10 +1,9 @@
 package service
 
 import (
-	"common/api/gen/common"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/user/v1"
 	"common/pkg/util"
+	"common/proto/gen/common"
+	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
@@ -32,28 +31,22 @@ func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 func (s *RelationService) RegisterHttp(hs *http.Server) {}
 
 func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Request) (*v1.FollowRelation_Reply, error) {
-	if req.GetActorId() == req.GetTargetId() {
-		return nil, cerrors.ErrorBadRequest("can not follow yourself")
-	}
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_FOLLOW, true, req.GetActorId(), req.GetTargetId())
+	err := s.relationUsecase.Follow(ctx, req.GetActorId(), req.GetTargetId())
 	return &v1.FollowRelation_Reply{}, err
 }
 
 func (s *RelationService) Unfollow(ctx context.Context, req *v1.UnfollowRelation_Request) (*v1.UnfollowRelation_Reply, error) {
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_FOLLOW, false, req.GetActorId(), req.GetTargetId())
+	err := s.relationUsecase.Unfollow(ctx, req.GetActorId(), req.GetTargetId())
 	return &v1.UnfollowRelation_Reply{}, err
 }
 
 func (s *RelationService) Block(ctx context.Context, req *v1.BlockRelation_Request) (*v1.BlockRelation_Reply, error) {
-	if req.GetActorId() == req.GetTargetId() {
-		return nil, cerrors.ErrorBadRequest("can not block yourself")
-	}
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_BLOCK, true, req.GetActorId(), req.GetTargetId())
+	err := s.relationUsecase.Block(ctx, req.GetActorId(), req.GetTargetId())
 	return &v1.BlockRelation_Reply{}, err
 }
 
 func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_Request) (*v1.UnblockRelation_Reply, error) {
-	err := s.relationUsecase.UpdateRelation(ctx, v1.RelationType_RELATION_TYPE_BLOCK, false, req.GetActorId(), req.GetTargetId())
+	err := s.relationUsecase.Unblock(ctx, req.GetActorId(), req.GetTargetId())
 	return &v1.UnblockRelation_Reply{}, err
 }
 

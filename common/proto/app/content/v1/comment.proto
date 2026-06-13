@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "common/common.proto";
+import "content/v1/enum.proto";
+import "content/v1/model.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// 评论服务
+service ContentCommentService {
+  rpc Create(CreateComment.Request) returns (CreateComment.Reply) {} // 创建评论
+  rpc Hide(HideComment.Request) returns (HideComment.Reply) {} // 管理隐藏评论
+  rpc Unhide(UnhideComment.Request) returns (UnhideComment.Reply) {} // 取消管理隐藏
+  rpc Lock(LockComment.Request) returns (LockComment.Reply) {} // 管理锁定评论
+  rpc Unlock(UnlockComment.Request) returns (UnlockComment.Reply) {} // 管理解锁评论
+  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {} // 点赞评论
+  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {} // 感谢评论
+
+  rpc List(ListComments.Request) returns (ListComments.Reply) {} // 查询评论列表
+  rpc Page(PageComments.Request) returns (PageComments.Reply) {} // 分页查询评论
+  rpc MapViewerActionStates(MapCommentViewerActionStates.Request) returns (MapCommentViewerActionStates.Reply) {} // 查询用户的评论行为状态
+  rpc ListReplyPreviews(ListCommentReplyPreviews.Request) returns (ListCommentReplyPreviews.Reply) {} // 查询评论回复预览
+  rpc MapArticleLastComments(MapArticleLastComments.Request) returns (MapArticleLastComments.Reply) {} // 查询文章最后正常评论映射
+}
+
+message CreateComment {
+  message Request {
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 评论内容
+    optional int64 reply_id = 3; // 回复评论 ID
+    int64 user_id = 4; // 用户 ID
+  }
+
+  message Reply {
+    Comment comment = 1; // 评论信息
+  }
+}
+
+message HideComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message UnhideComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message LockComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message UnlockComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
+
+  message Reply {}
+}
+
+message LikeComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    bool liked = 2; // 是否点赞
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    bool liked = 1; // 是否点赞
+  }
+}
+
+message ThankComment {
+  message Request {
+    int64 id = 1; // 评论 ID
+    bool thanked = 2; // 是否感谢
+    int64 user_id = 3; // 用户 ID
+  }
+
+  message Reply {
+    bool thanked = 1; // 是否感谢
+  }
+}
+
+message ListComments {
+  message Request {
+    CommentQueryParams query = 1; // 查询参数
+  }
+
+  message Reply {
+    repeated Comment rows = 1; // 评论列表
+  }
+}
+
+message PageComments {
+  message Request {
+    CommentQueryParams query = 1; // 查询参数
+    optional common.PageRequest page = 2; // 分页参数
+  }
+
+  message Reply {
+    repeated Comment rows = 1; // 评论列表
+    common.PageReply page = 2; // 分页信息
+  }
+}
+
+message MapCommentViewerActionStates {
+  message Request {
+    repeated int64 comment_ids = 1; // 评论 ID 列表
+    int64 user_id = 2; // 用户 ID
+  }
+
+  message Reply {
+    map<int64, State> states = 1; // 评论行为状态映射
+  }
+
+  message State {
+    bool liked = 1; // 是否点赞
+    bool thanked = 2; // 是否感谢
+  }
+}
+
+message ListCommentReplyPreviews {
+  message Request {
+    reserved 5, 6;
+
+    int64 article_id = 1; // 文章 ID
+    repeated int64 parent_ids = 2; // 父级评论 ID
+    int32 limit_per_parent = 3; // 每条父级评论返回的回复数量
+    optional CommentOrder order = 4; // 排序
+    optional ContentRestriction restriction = 7; // 管理限制
+    repeated ContentRestriction restrictions = 8; // 管理限制列表
+  }
+
+  message Reply {
+    repeated CommentReplyPreview rows = 1; // 回复预览列表
+  }
+}
+
+message CommentReplyPreview {
+  int64 parent_id = 1; // 父级评论 ID
+  repeated Comment rows = 2; // 回复列表
+}
+
+message MapArticleLastComments {
+  message Request {
+    reserved 2;
+
+    repeated int64 article_ids = 1; // 文章 ID
+  }
+
+  message Reply {
+    map<int64, Comment> comments = 1; // 文章最后正常评论映射
+  }
+}
+
+message CommentQueryParams {
+  reserved 7, 8;
+
+  optional int64 comment_id = 1; // 评论 ID
+  optional int64 article_id = 2; // 文章 ID
+  optional int64 parent_id = 3; // 父级评论 ID
+  optional int64 reply_id = 4; // 回复评论 ID
+  optional CommentOrder order = 5; // 排序
+  optional int32 level = 6; // 层级
+  optional int64 user_id = 9; // 评论用户 ID
+  optional ContentRestriction restriction = 10; // 管理限制
+  repeated ContentRestriction restrictions = 11; // 管理限制列表
+}

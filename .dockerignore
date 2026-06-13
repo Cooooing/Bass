@@ -3,7 +3,7 @@
 .gitignore
 .github/
 
-# 编辑器
+# 开发工具
 .idea/
 .vscode/
 
@@ -12,8 +12,14 @@ bin/
 dist/
 build/
 *.out
-common/api/gen-ts/
-common/api/gen-go/
+
+# Proto 文档和 SDK 生成产物
+common/proto/gen-openapi/
+common/proto/gen-openapi-codex/
+common/proto/gen-sdk/
+common/proto/sdk/node_modules/
+common/proto/sdk/.openapi-generator/
+common/proto/sdk/.openapi-generator-cli/
 
 # Go 测试
 **/*_test.go
@@ -25,7 +31,7 @@ docs/
 deploy/
 *.md
 
-# 日志 & 临时文件
+# 日志和临时文件
 *.log
 tmp/
 .cache/

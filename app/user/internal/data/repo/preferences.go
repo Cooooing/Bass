@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -8,6 +9,7 @@ import (
 	"user/internal/data/gen/preferences"
 	"user/internal/enum"
 
+	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -30,9 +32,11 @@ func (r *PreferencesRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *PreferencesRepo) FindByUserID(ctx context.Context, userID int64) (*model.Preferences, error) {
+func (r *PreferencesRepo) Get(ctx context.Context, req *repo.PreferencesGetReq) (*model.Preferences, error) {
 	tx := r.getClient(ctx)
-	p, err := tx.Preferences.Query().Where(preferences.UserID(userID)).Only(ctx)
+	query := tx.Preferences.Query()
+	query = r.getQuery(query, req)
+	p, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -49,8 +53,83 @@ func (r *PreferencesRepo) FindByUserID(ctx context.Context, userID int64) (*mode
 	}, nil
 }
 
+func (r *PreferencesRepo) List(ctx context.Context, req *repo.PreferencesGetReq) ([]*model.Preferences, error) {
+	tx := r.getClient(ctx)
+	query := tx.Preferences.Query()
+	query = r.getQuery(query, req)
+	list, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.Preferences, 0, len(list))
+	for _, p := range list {
+		result = append(result, &model.Preferences{
+			ID:          p.ID,
+			UserID:      p.UserID,
+			Language:    new(enum.Language(p.Language)),
+			Timezone:    new(p.Timezone),
+			Theme:       new(p.Theme),
+			MobileTheme: new(p.MobileTheme),
+		})
+	}
+	return result, nil
+}
+
+func (r *PreferencesRepo) Map(ctx context.Context, req *repo.PreferencesGetReq) (map[int64]*model.Preferences, error) {
+	list, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.Preferences, len(list))
+	for _, item := range list {
+		result[item.ID] = item
+	}
+	return result, nil
+}
+
+func (r *PreferencesRepo) Count(ctx context.Context, req *repo.PreferencesGetReq) (int, error) {
+	tx := r.getClient(ctx)
+	query := tx.Preferences.Query()
+	query = r.getQuery(query, req)
+	return query.Count(ctx)
+}
+
+func (r *PreferencesRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.PreferencesGetReq) ([]*model.Preferences, *common.PageReply, error) {
+	tx := r.getClient(ctx)
+	page = server.PageValid(page)
+	query := tx.Preferences.Query()
+	query = r.getQuery(query, req)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	list, err := query.
+		Limit(int(page.Size)).
+		Offset(int((page.Page - 1) * page.Size)).
+		All(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := make([]*model.Preferences, 0, len(list))
+	for _, p := range list {
+		result = append(result, &model.Preferences{
+			ID:          p.ID,
+			UserID:      p.UserID,
+			Language:    new(enum.Language(p.Language)),
+			Timezone:    new(p.Timezone),
+			Theme:       new(p.Theme),
+			MobileTheme: new(p.MobileTheme),
+		})
+	}
+	return result, &common.PageReply{
+		Total: uint32(total),
+		Page:  page.Page,
+		Size:  page.Size,
+	}, nil
+}
+
 func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, p *model.Preferences) (*model.Preferences, error) {
-	existing, err := r.FindByUserID(ctx, p.UserID)
+	existing, err := r.Get(ctx, &repo.PreferencesGetReq{UserID: &p.UserID})
 	if err != nil {
 		return nil, err
 	}
@@ -128,4 +207,23 @@ func (r *PreferencesRepo) Update(ctx context.Context, p *model.Preferences) (*mo
 		Theme:       new(saved.Theme),
 		MobileTheme: new(saved.MobileTheme),
 	}, nil
+}
+
+func (r *PreferencesRepo) getQuery(query *gen.PreferencesQuery, req *repo.PreferencesGetReq) *gen.PreferencesQuery {
+	if req == nil {
+		return query
+	}
+	if req.ID != nil {
+		query = query.Where(preferences.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		query = query.Where(preferences.IDIn(req.IDs...))
+	}
+	if req.UserID != nil {
+		query = query.Where(preferences.UserID(*req.UserID))
+	}
+	if len(req.UserIDs) > 0 {
+		query = query.Where(preferences.UserIDIn(req.UserIDs...))
+	}
+	return query
 }

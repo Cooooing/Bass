@@ -1,9 +1,10 @@
 package service
 
 import (
-	commonenums "common/api/gen/common/enums"
-	cerrors "common/api/gen/common/errors"
-	v1 "common/api/gen/user/v1"
+	"common/pkg/apperror"
+	commonenums "common/proto/gen/common/enums"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -51,7 +52,7 @@ func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferenc
 		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
 			value, ok := enum.LanguageMap.ToEnum(*req.Language)
 			if !ok {
-				return nil, cerrors.ErrorBadRequest("language is invalid")
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PREFERENCE_INVALID)
 			}
 			language = new(value)
 		}

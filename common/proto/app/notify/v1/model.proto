@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+import "common/enums/event.proto";
+import "google/protobuf/timestamp.proto";
+import "notify/v1/enum.proto";
+
+option go_package = "common/proto/gen/notify/v1;v1";
+
+message NotificationStationMessage {
+  google.protobuf.Timestamp created_at = 1000;
+  google.protobuf.Timestamp updated_at = 1001;
+  int64 id = 1;
+  string event_id = 2;
+  common.enums.EventType event_type = 3;
+  int64 receiver_id = 4;
+  string title = 5;
+  string content = 6;
+  NotificationChannelStatus status = 7;
+  optional google.protobuf.Timestamp read_at = 8;
+}
+
+message NotificationStationMessageQueryParams {
+  repeated int64 ids = 1;
+  optional common.enums.EventType event_type = 2;
+  optional bool unread = 3;
+}

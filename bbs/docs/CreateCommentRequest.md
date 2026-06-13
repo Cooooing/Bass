@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** | 文章 ID。 | 
-**Content** | **string** | 评论内容。 | 
-**ReplyId** | Pointer to **string** | 回复的评论 ID。 | [optional] 
+**ArticleId** | **string** |  | 
+**Content** | **string** |  | 
+**ReplyId** | Pointer to **string** |  | [optional] 
 
 ## Methods
 

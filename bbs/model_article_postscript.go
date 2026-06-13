@@ -19,21 +19,14 @@ var _ MappedNullable = &ArticlePostscript{}
 
 // ArticlePostscript 文章附言。
 type ArticlePostscript struct {
-	// 附言 ID。
 	Id *string `json:"id,omitempty"`
-	// 文章 ID。
 	ArticleId *string `json:"article_id,omitempty"`
-	// 原始内容。
 	Content *string `json:"content,omitempty"`
-	// 渲染后的内容。
 	ContentRender *string `json:"content_render,omitempty"`
-	// 创建账号 ID。
+	Restriction *string `json:"restriction,omitempty"`
 	CreatedBy *string `json:"created_by,omitempty"`
-	// 更新账号 ID。
 	UpdatedBy *string `json:"updated_by,omitempty"`
-	// 创建时间。
 	CreatedAt *string `json:"created_at,omitempty"`
-	// 更新时间。
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 
@@ -180,6 +173,38 @@ func (o *ArticlePostscript) HasContentRender() bool {
 // SetContentRender gets a reference to the given string and assigns it to the ContentRender field.
 func (o *ArticlePostscript) SetContentRender(v string) {
 	o.ContentRender = &v
+}
+
+// GetRestriction returns the Restriction field value if set, zero value otherwise.
+func (o *ArticlePostscript) GetRestriction() string {
+	if o == nil || IsNil(o.Restriction) {
+		var ret string
+		return ret
+	}
+	return *o.Restriction
+}
+
+// GetRestrictionOk returns a tuple with the Restriction field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticlePostscript) GetRestrictionOk() (*string, bool) {
+	if o == nil || IsNil(o.Restriction) {
+		return nil, false
+	}
+	return o.Restriction, true
+}
+
+// HasRestriction returns a boolean if a field has been set.
+func (o *ArticlePostscript) HasRestriction() bool {
+	if o != nil && !IsNil(o.Restriction) {
+		return true
+	}
+
+	return false
+}
+
+// SetRestriction gets a reference to the given string and assigns it to the Restriction field.
+func (o *ArticlePostscript) SetRestriction(v string) {
+	o.Restriction = &v
 }
 
 // GetCreatedBy returns the CreatedBy field value if set, zero value otherwise.
@@ -331,6 +356,9 @@ func (o ArticlePostscript) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.ContentRender) {
 		toSerialize["content_render"] = o.ContentRender
+	}
+	if !IsNil(o.Restriction) {
+		toSerialize["restriction"] = o.Restriction
 	}
 	if !IsNil(o.CreatedBy) {
 		toSerialize["created_by"] = o.CreatedBy

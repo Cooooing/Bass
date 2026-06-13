@@ -4,10 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Id** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **Description** | Pointer to **string** |  | [optional] 
-**ExternalDocs** | Pointer to [**ExternalDocs**](ExternalDocs.md) |  | [optional] 
-**SpecificationExtension** | Pointer to [**[]NamedAny**](NamedAny.md) |  | [optional] 
+**DomainId** | Pointer to **string** |  | [optional] 
+**Status** | Pointer to **string** |  | [optional] 
+**CreatedBy** | Pointer to **string** |  | [optional] 
+**UpdatedBy** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **string** |  | [optional] 
+**UpdatedAt** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -27,6 +32,31 @@ will change when the set of required properties is changed
 NewTagWithDefaults instantiates a new Tag object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetId
+
+`func (o *Tag) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *Tag) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *Tag) SetId(v string)`
+
+SetId sets Id field to given value.
+
+### HasId
+
+`func (o *Tag) HasId() bool`
+
+HasId returns a boolean if a field has been set.
 
 ### GetName
 
@@ -78,55 +108,155 @@ SetDescription sets Description field to given value.
 
 HasDescription returns a boolean if a field has been set.
 
-### GetExternalDocs
+### GetDomainId
 
-`func (o *Tag) GetExternalDocs() ExternalDocs`
+`func (o *Tag) GetDomainId() string`
 
-GetExternalDocs returns the ExternalDocs field if non-nil, zero value otherwise.
+GetDomainId returns the DomainId field if non-nil, zero value otherwise.
 
-### GetExternalDocsOk
+### GetDomainIdOk
 
-`func (o *Tag) GetExternalDocsOk() (*ExternalDocs, bool)`
+`func (o *Tag) GetDomainIdOk() (*string, bool)`
 
-GetExternalDocsOk returns a tuple with the ExternalDocs field if it's non-nil, zero value otherwise
+GetDomainIdOk returns a tuple with the DomainId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetExternalDocs
+### SetDomainId
 
-`func (o *Tag) SetExternalDocs(v ExternalDocs)`
+`func (o *Tag) SetDomainId(v string)`
 
-SetExternalDocs sets ExternalDocs field to given value.
+SetDomainId sets DomainId field to given value.
 
-### HasExternalDocs
+### HasDomainId
 
-`func (o *Tag) HasExternalDocs() bool`
+`func (o *Tag) HasDomainId() bool`
 
-HasExternalDocs returns a boolean if a field has been set.
+HasDomainId returns a boolean if a field has been set.
 
-### GetSpecificationExtension
+### GetStatus
 
-`func (o *Tag) GetSpecificationExtension() []NamedAny`
+`func (o *Tag) GetStatus() string`
 
-GetSpecificationExtension returns the SpecificationExtension field if non-nil, zero value otherwise.
+GetStatus returns the Status field if non-nil, zero value otherwise.
 
-### GetSpecificationExtensionOk
+### GetStatusOk
 
-`func (o *Tag) GetSpecificationExtensionOk() (*[]NamedAny, bool)`
+`func (o *Tag) GetStatusOk() (*string, bool)`
 
-GetSpecificationExtensionOk returns a tuple with the SpecificationExtension field if it's non-nil, zero value otherwise
+GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSpecificationExtension
+### SetStatus
 
-`func (o *Tag) SetSpecificationExtension(v []NamedAny)`
+`func (o *Tag) SetStatus(v string)`
 
-SetSpecificationExtension sets SpecificationExtension field to given value.
+SetStatus sets Status field to given value.
 
-### HasSpecificationExtension
+### HasStatus
 
-`func (o *Tag) HasSpecificationExtension() bool`
+`func (o *Tag) HasStatus() bool`
 
-HasSpecificationExtension returns a boolean if a field has been set.
+HasStatus returns a boolean if a field has been set.
+
+### GetCreatedBy
+
+`func (o *Tag) GetCreatedBy() string`
+
+GetCreatedBy returns the CreatedBy field if non-nil, zero value otherwise.
+
+### GetCreatedByOk
+
+`func (o *Tag) GetCreatedByOk() (*string, bool)`
+
+GetCreatedByOk returns a tuple with the CreatedBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCreatedBy
+
+`func (o *Tag) SetCreatedBy(v string)`
+
+SetCreatedBy sets CreatedBy field to given value.
+
+### HasCreatedBy
+
+`func (o *Tag) HasCreatedBy() bool`
+
+HasCreatedBy returns a boolean if a field has been set.
+
+### GetUpdatedBy
+
+`func (o *Tag) GetUpdatedBy() string`
+
+GetUpdatedBy returns the UpdatedBy field if non-nil, zero value otherwise.
+
+### GetUpdatedByOk
+
+`func (o *Tag) GetUpdatedByOk() (*string, bool)`
+
+GetUpdatedByOk returns a tuple with the UpdatedBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUpdatedBy
+
+`func (o *Tag) SetUpdatedBy(v string)`
+
+SetUpdatedBy sets UpdatedBy field to given value.
+
+### HasUpdatedBy
+
+`func (o *Tag) HasUpdatedBy() bool`
+
+HasUpdatedBy returns a boolean if a field has been set.
+
+### GetCreatedAt
+
+`func (o *Tag) GetCreatedAt() string`
+
+GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
+
+### GetCreatedAtOk
+
+`func (o *Tag) GetCreatedAtOk() (*string, bool)`
+
+GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCreatedAt
+
+`func (o *Tag) SetCreatedAt(v string)`
+
+SetCreatedAt sets CreatedAt field to given value.
+
+### HasCreatedAt
+
+`func (o *Tag) HasCreatedAt() bool`
+
+HasCreatedAt returns a boolean if a field has been set.
+
+### GetUpdatedAt
+
+`func (o *Tag) GetUpdatedAt() string`
+
+GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
+
+### GetUpdatedAtOk
+
+`func (o *Tag) GetUpdatedAtOk() (*string, bool)`
+
+GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUpdatedAt
+
+`func (o *Tag) SetUpdatedAt(v string)`
+
+SetUpdatedAt sets UpdatedAt field to given value.
+
+### HasUpdatedAt
+
+`func (o *Tag) HasUpdatedAt() bool`
+
+HasUpdatedAt returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

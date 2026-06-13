@@ -21,9 +21,7 @@ var _ MappedNullable = &CollectArticleRequest{}
 
 // CollectArticleRequest struct for CollectArticleRequest
 type CollectArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
-	// 是否收藏。
 	Active bool `json:"active"`
 }
 

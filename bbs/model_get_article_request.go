@@ -21,7 +21,6 @@ var _ MappedNullable = &GetArticleRequest{}
 
 // GetArticleRequest struct for GetArticleRequest
 type GetArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
 }
 

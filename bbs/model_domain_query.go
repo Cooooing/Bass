@@ -25,7 +25,7 @@ type DomainQuery struct {
 	Name *string `json:"name,omitempty"`
 	// 板块描述。
 	Description *string `json:"description,omitempty"`
-	// 板块状态。
+	// 板块启停状态。
 	Status *string `json:"status,omitempty"`
 	// 板块 URL。
 	Url *string `json:"url,omitempty"`

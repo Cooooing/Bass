@@ -19,8 +19,7 @@ var _ MappedNullable = &CreateCommentReply{}
 
 // CreateCommentReply struct for CreateCommentReply
 type CreateCommentReply struct {
-	// 创建后的评论。
-	Comment *Comment `json:"comment,omitempty"`
+	Comment *CommentDetail `json:"comment,omitempty"`
 }
 
 // NewCreateCommentReply instantiates a new CreateCommentReply object
@@ -41,9 +40,9 @@ func NewCreateCommentReplyWithDefaults() *CreateCommentReply {
 }
 
 // GetComment returns the Comment field value if set, zero value otherwise.
-func (o *CreateCommentReply) GetComment() Comment {
+func (o *CreateCommentReply) GetComment() CommentDetail {
 	if o == nil || IsNil(o.Comment) {
-		var ret Comment
+		var ret CommentDetail
 		return ret
 	}
 	return *o.Comment
@@ -51,7 +50,7 @@ func (o *CreateCommentReply) GetComment() Comment {
 
 // GetCommentOk returns a tuple with the Comment field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateCommentReply) GetCommentOk() (*Comment, bool) {
+func (o *CreateCommentReply) GetCommentOk() (*CommentDetail, bool) {
 	if o == nil || IsNil(o.Comment) {
 		return nil, false
 	}
@@ -67,8 +66,8 @@ func (o *CreateCommentReply) HasComment() bool {
 	return false
 }
 
-// SetComment gets a reference to the given Comment and assigns it to the Comment field.
-func (o *CreateCommentReply) SetComment(v Comment) {
+// SetComment gets a reference to the given CommentDetail and assigns it to the Comment field.
+func (o *CreateCommentReply) SetComment(v CommentDetail) {
 	o.Comment = &v
 }
 

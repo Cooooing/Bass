@@ -4,14 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CommentId** | Pointer to **string** | 评论 ID。 | [optional] 
-**ArticleId** | Pointer to **string** | 文章 ID。 | [optional] 
-**ParentId** | Pointer to **string** | 父评论 ID。 | [optional] 
-**ReplyId** | Pointer to **string** | 回复的评论 ID。 | [optional] 
-**Order** | Pointer to **string** | 排序方式。 | [optional] 
-**UserId** | Pointer to **string** | 评论账号 ID。 | [optional] 
-**Level** | Pointer to **int32** | 评论层级。 | [optional] 
-**Status** | Pointer to **string** | 评论状态。 | [optional] 
+**CommentId** | Pointer to **string** |  | [optional] 
+**ArticleId** | Pointer to **string** |  | [optional] 
+**ParentId** | Pointer to **string** |  | [optional] 
+**ReplyId** | Pointer to **string** |  | [optional] 
+**Order** | Pointer to **string** |  | [optional] 
+**UserId** | Pointer to **string** |  | [optional] 
+**Level** | Pointer to **int32** |  | [optional] 
+**Restriction** | Pointer to **string** |  | [optional] 
+**Restrictions** | Pointer to **[]string** |  | [optional] 
 
 ## Methods
 
@@ -207,30 +208,55 @@ SetLevel sets Level field to given value.
 
 HasLevel returns a boolean if a field has been set.
 
-### GetStatus
+### GetRestriction
 
-`func (o *CommentQuery) GetStatus() string`
+`func (o *CommentQuery) GetRestriction() string`
 
-GetStatus returns the Status field if non-nil, zero value otherwise.
+GetRestriction returns the Restriction field if non-nil, zero value otherwise.
 
-### GetStatusOk
+### GetRestrictionOk
 
-`func (o *CommentQuery) GetStatusOk() (*string, bool)`
+`func (o *CommentQuery) GetRestrictionOk() (*string, bool)`
 
-GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
+GetRestrictionOk returns a tuple with the Restriction field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetStatus
+### SetRestriction
 
-`func (o *CommentQuery) SetStatus(v string)`
+`func (o *CommentQuery) SetRestriction(v string)`
 
-SetStatus sets Status field to given value.
+SetRestriction sets Restriction field to given value.
 
-### HasStatus
+### HasRestriction
 
-`func (o *CommentQuery) HasStatus() bool`
+`func (o *CommentQuery) HasRestriction() bool`
 
-HasStatus returns a boolean if a field has been set.
+HasRestriction returns a boolean if a field has been set.
+
+### GetRestrictions
+
+`func (o *CommentQuery) GetRestrictions() []string`
+
+GetRestrictions returns the Restrictions field if non-nil, zero value otherwise.
+
+### GetRestrictionsOk
+
+`func (o *CommentQuery) GetRestrictionsOk() (*[]string, bool)`
+
+GetRestrictionsOk returns a tuple with the Restrictions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRestrictions
+
+`func (o *CommentQuery) SetRestrictions(v []string)`
+
+SetRestrictions sets Restrictions field to given value.
+
+### HasRestrictions
+
+`func (o *CommentQuery) HasRestrictions() bool`
+
+HasRestrictions returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

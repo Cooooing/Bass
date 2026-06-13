@@ -21,9 +21,7 @@ var _ MappedNullable = &WatchArticleRequest{}
 
 // WatchArticleRequest struct for WatchArticleRequest
 type WatchArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
-	// 是否关注。
 	Active bool `json:"active"`
 }
 

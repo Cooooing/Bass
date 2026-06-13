@@ -7,13 +7,14 @@ Method | HTTP request | Description
 [**AcceptAnswer**](ArticleService.md#AcceptAnswer) | **Post** /v1/content/article/accept-answer | 
 [**Collect**](ArticleService.md#Collect) | **Post** /v1/content/article/collect | 
 [**Create**](ArticleService.md#Create) | **Post** /v1/content/article/create | 
-[**Delete**](ArticleService.md#Delete) | **Post** /v1/content/article/delete | 
+[**DiscardDraft**](ArticleService.md#DiscardDraft) | **Post** /v1/content/article/discard-draft | 
 [**Get**](ArticleService.md#Get) | **Post** /v1/content/article/get | 
 [**Like**](ArticleService.md#Like) | **Post** /v1/content/article/like | 
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
 [**Publish**](ArticleService.md#Publish) | **Post** /v1/content/article/publish | 
 [**Reward**](ArticleService.md#Reward) | **Post** /v1/content/article/reward | 
 [**Thank**](ArticleService.md#Thank) | **Post** /v1/content/article/thank | 
+[**Update**](ArticleService.md#Update) | **Post** /v1/content/article/update | 
 [**UpdateDraft**](ArticleService.md#UpdateDraft) | **Post** /v1/content/article/update-draft | 
 [**Watch**](ArticleService.md#Watch) | **Post** /v1/content/article/watch | 
 
@@ -87,7 +88,7 @@ No authorization required
 
 ## Collect
 
-> map[string]interface{} Collect(ctx).CollectArticleRequest(collectArticleRequest).Execute()
+> CollectArticleReply Collect(ctx).CollectArticleRequest(collectArticleRequest).Execute()
 
 
 
@@ -115,7 +116,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Collect``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Collect`: map[string]interface{}
+	// response from `Collect`: CollectArticleReply
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Collect`: %v\n", resp)
 }
 ```
@@ -135,7 +136,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**CollectArticleReply**](CollectArticleReply.md)
 
 ### Authorization
 
@@ -172,7 +173,7 @@ import (
 )
 
 func main() {
-	createArticleRequest := *openapiclient.NewCreateArticleRequest(*openapiclient.NewArticleSave("Title_example", "Content_example", "Status_example", "Type_example")) // CreateArticleRequest | 
+	createArticleRequest := *openapiclient.NewCreateArticleRequest(*openapiclient.NewRequestArticle("Title_example", "Content_example", "Type_example")) // CreateArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -217,9 +218,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Delete
+## DiscardDraft
 
-> map[string]interface{} Delete(ctx).DeleteArticleRequest(deleteArticleRequest).Execute()
+> map[string]interface{} DiscardDraft(ctx).DiscardDraftArticleRequest(discardDraftArticleRequest).Execute()
 
 
 
@@ -238,17 +239,17 @@ import (
 )
 
 func main() {
-	deleteArticleRequest := *openapiclient.NewDeleteArticleRequest("ArticleId_example") // DeleteArticleRequest | 
+	discardDraftArticleRequest := *openapiclient.NewDiscardDraftArticleRequest("ArticleId_example") // DiscardDraftArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Delete(context.Background()).DeleteArticleRequest(deleteArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.DiscardDraft(context.Background()).DiscardDraftArticleRequest(discardDraftArticleRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Delete``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.DiscardDraft``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Delete`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Delete`: %v\n", resp)
+	// response from `DiscardDraft`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.DiscardDraft`: %v\n", resp)
 }
 ```
 
@@ -258,12 +259,12 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDeleteRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDiscardDraftRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **deleteArticleRequest** | [**DeleteArticleRequest**](DeleteArticleRequest.md) |  | 
+ **discardDraftArticleRequest** | [**DiscardDraftArticleRequest**](DiscardDraftArticleRequest.md) |  | 
 
 ### Return type
 
@@ -351,7 +352,7 @@ No authorization required
 
 ## Like
 
-> map[string]interface{} Like(ctx).LikeArticleRequest(likeArticleRequest).Execute()
+> LikeArticleReply Like(ctx).LikeArticleRequest(likeArticleRequest).Execute()
 
 
 
@@ -379,7 +380,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Like``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Like`: map[string]interface{}
+	// response from `Like`: LikeArticleReply
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Like`: %v\n", resp)
 }
 ```
@@ -399,7 +400,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**LikeArticleReply**](LikeArticleReply.md)
 
 ### Authorization
 
@@ -615,7 +616,7 @@ No authorization required
 
 ## Thank
 
-> map[string]interface{} Thank(ctx).ThankArticleRequest(thankArticleRequest).Execute()
+> ThankArticleReply Thank(ctx).ThankArticleRequest(thankArticleRequest).Execute()
 
 
 
@@ -643,7 +644,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Thank``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Thank`: map[string]interface{}
+	// response from `Thank`: ThankArticleReply
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Thank`: %v\n", resp)
 }
 ```
@@ -663,7 +664,73 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**ThankArticleReply**](ThankArticleReply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## Update
+
+> UpdateArticleReply Update(ctx).UpdateArticleRequest(updateArticleRequest).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	updateArticleRequest := *openapiclient.NewUpdateArticleRequest("ArticleId_example", *openapiclient.NewRequestArticle("Title_example", "Content_example", "Type_example")) // UpdateArticleRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.Update(context.Background()).UpdateArticleRequest(updateArticleRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Update``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `Update`: UpdateArticleReply
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Update`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **updateArticleRequest** | [**UpdateArticleRequest**](UpdateArticleRequest.md) |  | 
+
+### Return type
+
+[**UpdateArticleReply**](UpdateArticleReply.md)
 
 ### Authorization
 
@@ -700,7 +767,7 @@ import (
 )
 
 func main() {
-	updateDraftArticleRequest := *openapiclient.NewUpdateDraftArticleRequest(*openapiclient.NewArticleSave("Title_example", "Content_example", "Status_example", "Type_example")) // UpdateDraftArticleRequest | 
+	updateDraftArticleRequest := *openapiclient.NewUpdateDraftArticleRequest("ArticleId_example", *openapiclient.NewRequestArticle("Title_example", "Content_example", "Type_example")) // UpdateDraftArticleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -747,7 +814,7 @@ No authorization required
 
 ## Watch
 
-> map[string]interface{} Watch(ctx).WatchArticleRequest(watchArticleRequest).Execute()
+> WatchArticleReply Watch(ctx).WatchArticleRequest(watchArticleRequest).Execute()
 
 
 
@@ -775,7 +842,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Watch``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Watch`: map[string]interface{}
+	// response from `Watch`: WatchArticleReply
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Watch`: %v\n", resp)
 }
 ```
@@ -795,7 +862,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**WatchArticleReply**](WatchArticleReply.md)
 
 ### Authorization
 

@@ -19,10 +19,8 @@ var _ MappedNullable = &ListArticlesReply{}
 
 // ListArticlesReply struct for ListArticlesReply
 type ListArticlesReply struct {
-	// 分页结果。
 	Page *PageReply `json:"page,omitempty"`
-	// 文章列表。
-	Rows []Article `json:"rows,omitempty"`
+	Rows []ArticleListItem `json:"rows,omitempty"`
 }
 
 // NewListArticlesReply instantiates a new ListArticlesReply object
@@ -75,9 +73,9 @@ func (o *ListArticlesReply) SetPage(v PageReply) {
 }
 
 // GetRows returns the Rows field value if set, zero value otherwise.
-func (o *ListArticlesReply) GetRows() []Article {
+func (o *ListArticlesReply) GetRows() []ArticleListItem {
 	if o == nil || IsNil(o.Rows) {
-		var ret []Article
+		var ret []ArticleListItem
 		return ret
 	}
 	return o.Rows
@@ -85,7 +83,7 @@ func (o *ListArticlesReply) GetRows() []Article {
 
 // GetRowsOk returns a tuple with the Rows field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListArticlesReply) GetRowsOk() ([]Article, bool) {
+func (o *ListArticlesReply) GetRowsOk() ([]ArticleListItem, bool) {
 	if o == nil || IsNil(o.Rows) {
 		return nil, false
 	}
@@ -101,8 +99,8 @@ func (o *ListArticlesReply) HasRows() bool {
 	return false
 }
 
-// SetRows gets a reference to the given []Article and assigns it to the Rows field.
-func (o *ListArticlesReply) SetRows(v []Article) {
+// SetRows gets a reference to the given []ArticleListItem and assigns it to the Rows field.
+func (o *ListArticlesReply) SetRows(v []ArticleListItem) {
 	o.Rows = v
 }
 

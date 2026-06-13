@@ -21,9 +21,7 @@ var _ MappedNullable = &ThankArticleRequest{}
 
 // ThankArticleRequest struct for ThankArticleRequest
 type ThankArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
-	// 是否感谢。
 	Active bool `json:"active"`
 }
 

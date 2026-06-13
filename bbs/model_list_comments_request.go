@@ -19,9 +19,7 @@ var _ MappedNullable = &ListCommentsRequest{}
 
 // ListCommentsRequest struct for ListCommentsRequest
 type ListCommentsRequest struct {
-	// 分页参数。
 	Page *PageRequest `json:"page,omitempty"`
-	// 查询条件。
 	Query *CommentQuery `json:"query,omitempty"`
 }
 

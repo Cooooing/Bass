@@ -19,9 +19,7 @@ var _ MappedNullable = &ListArticlesRequest{}
 
 // ListArticlesRequest struct for ListArticlesRequest
 type ListArticlesRequest struct {
-	// 分页参数。
 	Page *PageRequest `json:"page,omitempty"`
-	// 查询条件。
 	Query *ArticleQuery `json:"query,omitempty"`
 }
 

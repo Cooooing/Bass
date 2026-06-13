@@ -19,8 +19,7 @@ var _ MappedNullable = &GetArticleReply{}
 
 // GetArticleReply struct for GetArticleReply
 type GetArticleReply struct {
-	// 文章详情。
-	Article *Article `json:"article,omitempty"`
+	Article *ArticleDetail `json:"article,omitempty"`
 }
 
 // NewGetArticleReply instantiates a new GetArticleReply object
@@ -41,9 +40,9 @@ func NewGetArticleReplyWithDefaults() *GetArticleReply {
 }
 
 // GetArticle returns the Article field value if set, zero value otherwise.
-func (o *GetArticleReply) GetArticle() Article {
+func (o *GetArticleReply) GetArticle() ArticleDetail {
 	if o == nil || IsNil(o.Article) {
-		var ret Article
+		var ret ArticleDetail
 		return ret
 	}
 	return *o.Article
@@ -51,7 +50,7 @@ func (o *GetArticleReply) GetArticle() Article {
 
 // GetArticleOk returns a tuple with the Article field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetArticleReply) GetArticleOk() (*Article, bool) {
+func (o *GetArticleReply) GetArticleOk() (*ArticleDetail, bool) {
 	if o == nil || IsNil(o.Article) {
 		return nil, false
 	}
@@ -67,8 +66,8 @@ func (o *GetArticleReply) HasArticle() bool {
 	return false
 }
 
-// SetArticle gets a reference to the given Article and assigns it to the Article field.
-func (o *GetArticleReply) SetArticle(v Article) {
+// SetArticle gets a reference to the given ArticleDetail and assigns it to the Article field.
+func (o *GetArticleReply) SetArticle(v ArticleDetail) {
 	o.Article = &v
 }
 

@@ -21,9 +21,7 @@ var _ MappedNullable = &ThankCommentRequest{}
 
 // ThankCommentRequest struct for ThankCommentRequest
 type ThankCommentRequest struct {
-	// 评论 ID。
 	Id string `json:"id"`
-	// 是否感谢。
 	Active bool `json:"active"`
 }
 

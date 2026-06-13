@@ -46,13 +46,13 @@ type ArticleService interface {
 	Collect(ctx context.Context) ApiCollectRequest
 
 	// CollectExecute executes the request
-	//  @return map[string]interface{}
-	CollectExecute(r ApiCollectRequest) (map[string]interface{}, *http.Response, error)
+	//  @return CollectArticleReply
+	CollectExecute(r ApiCollectRequest) (*CollectArticleReply, *http.Response, error)
 
 	/*
 	Create Method for Create
 
-	创建文章。
+	创建文章草稿。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiCreateRequest
@@ -64,18 +64,18 @@ type ArticleService interface {
 	CreateExecute(r ApiCreateRequest) (*CreateArticleReply, *http.Response, error)
 
 	/*
-	Delete Method for Delete
+	DiscardDraft Method for DiscardDraft
 
-	删除文章。
+	丢弃草稿。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiDeleteRequest
+	@return ApiDiscardDraftRequest
 	*/
-	Delete(ctx context.Context) ApiDeleteRequest
+	DiscardDraft(ctx context.Context) ApiDiscardDraftRequest
 
-	// DeleteExecute executes the request
+	// DiscardDraftExecute executes the request
 	//  @return map[string]interface{}
-	DeleteExecute(r ApiDeleteRequest) (map[string]interface{}, *http.Response, error)
+	DiscardDraftExecute(r ApiDiscardDraftRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
 	Get Method for Get
@@ -102,8 +102,8 @@ type ArticleService interface {
 	Like(ctx context.Context) ApiLikeRequest
 
 	// LikeExecute executes the request
-	//  @return map[string]interface{}
-	LikeExecute(r ApiLikeRequest) (map[string]interface{}, *http.Response, error)
+	//  @return LikeArticleReply
+	LikeExecute(r ApiLikeRequest) (*LikeArticleReply, *http.Response, error)
 
 	/*
 	List Method for List
@@ -158,13 +158,27 @@ type ArticleService interface {
 	Thank(ctx context.Context) ApiThankRequest
 
 	// ThankExecute executes the request
-	//  @return map[string]interface{}
-	ThankExecute(r ApiThankRequest) (map[string]interface{}, *http.Response, error)
+	//  @return ThankArticleReply
+	ThankExecute(r ApiThankRequest) (*ThankArticleReply, *http.Response, error)
+
+	/*
+	Update Method for Update
+
+	更新文章内容。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUpdateRequest
+	*/
+	Update(ctx context.Context) ApiUpdateRequest
+
+	// UpdateExecute executes the request
+	//  @return UpdateArticleReply
+	UpdateExecute(r ApiUpdateRequest) (*UpdateArticleReply, *http.Response, error)
 
 	/*
 	UpdateDraft Method for UpdateDraft
 
-	更新文章草稿。
+	更新文章内容。兼容旧草稿更新接口。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiUpdateDraftRequest
@@ -186,8 +200,8 @@ type ArticleService interface {
 	Watch(ctx context.Context) ApiWatchRequest
 
 	// WatchExecute executes the request
-	//  @return map[string]interface{}
-	WatchExecute(r ApiWatchRequest) (map[string]interface{}, *http.Response, error)
+	//  @return WatchArticleReply
+	WatchExecute(r ApiWatchRequest) (*WatchArticleReply, *http.Response, error)
 }
 
 // ArticleServiceService ArticleService service
@@ -314,7 +328,7 @@ func (r ApiCollectRequest) CollectArticleRequest(collectArticleRequest CollectAr
 	return r
 }
 
-func (r ApiCollectRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiCollectRequest) Execute() (*CollectArticleReply, *http.Response, error) {
 	return r.ApiService.CollectExecute(r)
 }
 
@@ -334,13 +348,13 @@ func (a *ArticleServiceService) Collect(ctx context.Context) ApiCollectRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ArticleServiceService) CollectExecute(r ApiCollectRequest) (map[string]interface{}, *http.Response, error) {
+//  @return CollectArticleReply
+func (a *ArticleServiceService) CollectExecute(r ApiCollectRequest) (*CollectArticleReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *CollectArticleReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Collect")
@@ -431,7 +445,7 @@ func (r ApiCreateRequest) Execute() (*CreateArticleReply, *http.Response, error)
 /*
 Create Method for Create
 
-创建文章。
+创建文章草稿。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateRequest
@@ -523,31 +537,31 @@ func (a *ArticleServiceService) CreateExecute(r ApiCreateRequest) (*CreateArticl
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiDeleteRequest struct {
+type ApiDiscardDraftRequest struct {
 	ctx context.Context
 	ApiService ArticleService
-	deleteArticleRequest *DeleteArticleRequest
+	discardDraftArticleRequest *DiscardDraftArticleRequest
 }
 
-func (r ApiDeleteRequest) DeleteArticleRequest(deleteArticleRequest DeleteArticleRequest) ApiDeleteRequest {
-	r.deleteArticleRequest = &deleteArticleRequest
+func (r ApiDiscardDraftRequest) DiscardDraftArticleRequest(discardDraftArticleRequest DiscardDraftArticleRequest) ApiDiscardDraftRequest {
+	r.discardDraftArticleRequest = &discardDraftArticleRequest
 	return r
 }
 
-func (r ApiDeleteRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.DeleteExecute(r)
+func (r ApiDiscardDraftRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DiscardDraftExecute(r)
 }
 
 /*
-Delete Method for Delete
+DiscardDraft Method for DiscardDraft
 
-删除文章。
+丢弃草稿。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiDeleteRequest
+ @return ApiDiscardDraftRequest
 */
-func (a *ArticleServiceService) Delete(ctx context.Context) ApiDeleteRequest {
-	return ApiDeleteRequest{
+func (a *ArticleServiceService) DiscardDraft(ctx context.Context) ApiDiscardDraftRequest {
+	return ApiDiscardDraftRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -555,7 +569,7 @@ func (a *ArticleServiceService) Delete(ctx context.Context) ApiDeleteRequest {
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) DeleteExecute(r ApiDeleteRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) DiscardDraftExecute(r ApiDiscardDraftRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -563,18 +577,18 @@ func (a *ArticleServiceService) DeleteExecute(r ApiDeleteRequest) (map[string]in
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Delete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.DiscardDraft")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/content/article/delete"
+	localVarPath := localBasePath + "/v1/content/article/discard-draft"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.deleteArticleRequest == nil {
-		return localVarReturnValue, nil, reportError("deleteArticleRequest is required and must be specified")
+	if r.discardDraftArticleRequest == nil {
+		return localVarReturnValue, nil, reportError("discardDraftArticleRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -595,7 +609,7 @@ func (a *ArticleServiceService) DeleteExecute(r ApiDeleteRequest) (map[string]in
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.deleteArticleRequest
+	localVarPostBody = r.discardDraftArticleRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -754,7 +768,7 @@ func (r ApiLikeRequest) LikeArticleRequest(likeArticleRequest LikeArticleRequest
 	return r
 }
 
-func (r ApiLikeRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiLikeRequest) Execute() (*LikeArticleReply, *http.Response, error) {
 	return r.ApiService.LikeExecute(r)
 }
 
@@ -774,13 +788,13 @@ func (a *ArticleServiceService) Like(ctx context.Context) ApiLikeRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ArticleServiceService) LikeExecute(r ApiLikeRequest) (map[string]interface{}, *http.Response, error) {
+//  @return LikeArticleReply
+func (a *ArticleServiceService) LikeExecute(r ApiLikeRequest) (*LikeArticleReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *LikeArticleReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Like")
@@ -1194,7 +1208,7 @@ func (r ApiThankRequest) ThankArticleRequest(thankArticleRequest ThankArticleReq
 	return r
 }
 
-func (r ApiThankRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiThankRequest) Execute() (*ThankArticleReply, *http.Response, error) {
 	return r.ApiService.ThankExecute(r)
 }
 
@@ -1214,13 +1228,13 @@ func (a *ArticleServiceService) Thank(ctx context.Context) ApiThankRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ArticleServiceService) ThankExecute(r ApiThankRequest) (map[string]interface{}, *http.Response, error) {
+//  @return ThankArticleReply
+func (a *ArticleServiceService) ThankExecute(r ApiThankRequest) (*ThankArticleReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *ThankArticleReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Thank")
@@ -1293,6 +1307,116 @@ func (a *ArticleServiceService) ThankExecute(r ApiThankRequest) (map[string]inte
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiUpdateRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	updateArticleRequest *UpdateArticleRequest
+}
+
+func (r ApiUpdateRequest) UpdateArticleRequest(updateArticleRequest UpdateArticleRequest) ApiUpdateRequest {
+	r.updateArticleRequest = &updateArticleRequest
+	return r
+}
+
+func (r ApiUpdateRequest) Execute() (*UpdateArticleReply, *http.Response, error) {
+	return r.ApiService.UpdateExecute(r)
+}
+
+/*
+Update Method for Update
+
+更新文章内容。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUpdateRequest
+*/
+func (a *ArticleServiceService) Update(ctx context.Context) ApiUpdateRequest {
+	return ApiUpdateRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return UpdateArticleReply
+func (a *ArticleServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateArticleReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *UpdateArticleReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Update")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/update"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.updateArticleRequest == nil {
+		return localVarReturnValue, nil, reportError("updateArticleRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.updateArticleRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiUpdateDraftRequest struct {
 	ctx context.Context
 	ApiService ArticleService
@@ -1311,7 +1435,7 @@ func (r ApiUpdateDraftRequest) Execute() (*UpdateDraftArticleReply, *http.Respon
 /*
 UpdateDraft Method for UpdateDraft
 
-更新文章草稿。
+更新文章内容。兼容旧草稿更新接口。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUpdateDraftRequest
@@ -1414,7 +1538,7 @@ func (r ApiWatchRequest) WatchArticleRequest(watchArticleRequest WatchArticleReq
 	return r
 }
 
-func (r ApiWatchRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiWatchRequest) Execute() (*WatchArticleReply, *http.Response, error) {
 	return r.ApiService.WatchExecute(r)
 }
 
@@ -1434,13 +1558,13 @@ func (a *ArticleServiceService) Watch(ctx context.Context) ApiWatchRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ArticleServiceService) WatchExecute(r ApiWatchRequest) (map[string]interface{}, *http.Response, error) {
+//  @return WatchArticleReply
+func (a *ArticleServiceService) WatchExecute(r ApiWatchRequest) (*WatchArticleReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *WatchArticleReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Watch")

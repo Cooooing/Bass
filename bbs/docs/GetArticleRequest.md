@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** | 文章 ID。 | 
+**ArticleId** | **string** |  | 
 
 ## Methods
 

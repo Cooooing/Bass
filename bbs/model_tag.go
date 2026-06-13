@@ -17,12 +17,17 @@ import (
 // checks if the Tag type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Tag{}
 
-// Tag Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
+// Tag 标签。
 type Tag struct {
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-	ExternalDocs *ExternalDocs `json:"external_docs,omitempty"`
-	SpecificationExtension []NamedAny `json:"specification_extension,omitempty"`
+	DomainId *string `json:"domain_id,omitempty"`
+	Status *string `json:"status,omitempty"`
+	CreatedBy *string `json:"created_by,omitempty"`
+	UpdatedBy *string `json:"updated_by,omitempty"`
+	CreatedAt *string `json:"created_at,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 
 // NewTag instantiates a new Tag object
@@ -40,6 +45,38 @@ func NewTag() *Tag {
 func NewTagWithDefaults() *Tag {
 	this := Tag{}
 	return &this
+}
+
+// GetId returns the Id field value if set, zero value otherwise.
+func (o *Tag) GetId() string {
+	if o == nil || IsNil(o.Id) {
+		var ret string
+		return ret
+	}
+	return *o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetIdOk() (*string, bool) {
+	if o == nil || IsNil(o.Id) {
+		return nil, false
+	}
+	return o.Id, true
+}
+
+// HasId returns a boolean if a field has been set.
+func (o *Tag) HasId() bool {
+	if o != nil && !IsNil(o.Id) {
+		return true
+	}
+
+	return false
+}
+
+// SetId gets a reference to the given string and assigns it to the Id field.
+func (o *Tag) SetId(v string) {
+	o.Id = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
@@ -106,68 +143,196 @@ func (o *Tag) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetExternalDocs returns the ExternalDocs field value if set, zero value otherwise.
-func (o *Tag) GetExternalDocs() ExternalDocs {
-	if o == nil || IsNil(o.ExternalDocs) {
-		var ret ExternalDocs
+// GetDomainId returns the DomainId field value if set, zero value otherwise.
+func (o *Tag) GetDomainId() string {
+	if o == nil || IsNil(o.DomainId) {
+		var ret string
 		return ret
 	}
-	return *o.ExternalDocs
+	return *o.DomainId
 }
 
-// GetExternalDocsOk returns a tuple with the ExternalDocs field value if set, nil otherwise
+// GetDomainIdOk returns a tuple with the DomainId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Tag) GetExternalDocsOk() (*ExternalDocs, bool) {
-	if o == nil || IsNil(o.ExternalDocs) {
+func (o *Tag) GetDomainIdOk() (*string, bool) {
+	if o == nil || IsNil(o.DomainId) {
 		return nil, false
 	}
-	return o.ExternalDocs, true
+	return o.DomainId, true
 }
 
-// HasExternalDocs returns a boolean if a field has been set.
-func (o *Tag) HasExternalDocs() bool {
-	if o != nil && !IsNil(o.ExternalDocs) {
+// HasDomainId returns a boolean if a field has been set.
+func (o *Tag) HasDomainId() bool {
+	if o != nil && !IsNil(o.DomainId) {
 		return true
 	}
 
 	return false
 }
 
-// SetExternalDocs gets a reference to the given ExternalDocs and assigns it to the ExternalDocs field.
-func (o *Tag) SetExternalDocs(v ExternalDocs) {
-	o.ExternalDocs = &v
+// SetDomainId gets a reference to the given string and assigns it to the DomainId field.
+func (o *Tag) SetDomainId(v string) {
+	o.DomainId = &v
 }
 
-// GetSpecificationExtension returns the SpecificationExtension field value if set, zero value otherwise.
-func (o *Tag) GetSpecificationExtension() []NamedAny {
-	if o == nil || IsNil(o.SpecificationExtension) {
-		var ret []NamedAny
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *Tag) GetStatus() string {
+	if o == nil || IsNil(o.Status) {
+		var ret string
 		return ret
 	}
-	return o.SpecificationExtension
+	return *o.Status
 }
 
-// GetSpecificationExtensionOk returns a tuple with the SpecificationExtension field value if set, nil otherwise
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Tag) GetSpecificationExtensionOk() ([]NamedAny, bool) {
-	if o == nil || IsNil(o.SpecificationExtension) {
+func (o *Tag) GetStatusOk() (*string, bool) {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
-	return o.SpecificationExtension, true
+	return o.Status, true
 }
 
-// HasSpecificationExtension returns a boolean if a field has been set.
-func (o *Tag) HasSpecificationExtension() bool {
-	if o != nil && !IsNil(o.SpecificationExtension) {
+// HasStatus returns a boolean if a field has been set.
+func (o *Tag) HasStatus() bool {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
 	return false
 }
 
-// SetSpecificationExtension gets a reference to the given []NamedAny and assigns it to the SpecificationExtension field.
-func (o *Tag) SetSpecificationExtension(v []NamedAny) {
-	o.SpecificationExtension = v
+// SetStatus gets a reference to the given string and assigns it to the Status field.
+func (o *Tag) SetStatus(v string) {
+	o.Status = &v
+}
+
+// GetCreatedBy returns the CreatedBy field value if set, zero value otherwise.
+func (o *Tag) GetCreatedBy() string {
+	if o == nil || IsNil(o.CreatedBy) {
+		var ret string
+		return ret
+	}
+	return *o.CreatedBy
+}
+
+// GetCreatedByOk returns a tuple with the CreatedBy field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetCreatedByOk() (*string, bool) {
+	if o == nil || IsNil(o.CreatedBy) {
+		return nil, false
+	}
+	return o.CreatedBy, true
+}
+
+// HasCreatedBy returns a boolean if a field has been set.
+func (o *Tag) HasCreatedBy() bool {
+	if o != nil && !IsNil(o.CreatedBy) {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedBy gets a reference to the given string and assigns it to the CreatedBy field.
+func (o *Tag) SetCreatedBy(v string) {
+	o.CreatedBy = &v
+}
+
+// GetUpdatedBy returns the UpdatedBy field value if set, zero value otherwise.
+func (o *Tag) GetUpdatedBy() string {
+	if o == nil || IsNil(o.UpdatedBy) {
+		var ret string
+		return ret
+	}
+	return *o.UpdatedBy
+}
+
+// GetUpdatedByOk returns a tuple with the UpdatedBy field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetUpdatedByOk() (*string, bool) {
+	if o == nil || IsNil(o.UpdatedBy) {
+		return nil, false
+	}
+	return o.UpdatedBy, true
+}
+
+// HasUpdatedBy returns a boolean if a field has been set.
+func (o *Tag) HasUpdatedBy() bool {
+	if o != nil && !IsNil(o.UpdatedBy) {
+		return true
+	}
+
+	return false
+}
+
+// SetUpdatedBy gets a reference to the given string and assigns it to the UpdatedBy field.
+func (o *Tag) SetUpdatedBy(v string) {
+	o.UpdatedBy = &v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *Tag) GetCreatedAt() string {
+	if o == nil || IsNil(o.CreatedAt) {
+		var ret string
+		return ret
+	}
+	return *o.CreatedAt
+}
+
+// GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetCreatedAtOk() (*string, bool) {
+	if o == nil || IsNil(o.CreatedAt) {
+		return nil, false
+	}
+	return o.CreatedAt, true
+}
+
+// HasCreatedAt returns a boolean if a field has been set.
+func (o *Tag) HasCreatedAt() bool {
+	if o != nil && !IsNil(o.CreatedAt) {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
+func (o *Tag) SetCreatedAt(v string) {
+	o.CreatedAt = &v
+}
+
+// GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
+func (o *Tag) GetUpdatedAt() string {
+	if o == nil || IsNil(o.UpdatedAt) {
+		var ret string
+		return ret
+	}
+	return *o.UpdatedAt
+}
+
+// GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetUpdatedAtOk() (*string, bool) {
+	if o == nil || IsNil(o.UpdatedAt) {
+		return nil, false
+	}
+	return o.UpdatedAt, true
+}
+
+// HasUpdatedAt returns a boolean if a field has been set.
+func (o *Tag) HasUpdatedAt() bool {
+	if o != nil && !IsNil(o.UpdatedAt) {
+		return true
+	}
+
+	return false
+}
+
+// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
+func (o *Tag) SetUpdatedAt(v string) {
+	o.UpdatedAt = &v
 }
 
 func (o Tag) MarshalJSON() ([]byte, error) {
@@ -180,17 +345,32 @@ func (o Tag) MarshalJSON() ([]byte, error) {
 
 func (o Tag) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if !IsNil(o.ExternalDocs) {
-		toSerialize["external_docs"] = o.ExternalDocs
+	if !IsNil(o.DomainId) {
+		toSerialize["domain_id"] = o.DomainId
 	}
-	if !IsNil(o.SpecificationExtension) {
-		toSerialize["specification_extension"] = o.SpecificationExtension
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.CreatedBy) {
+		toSerialize["created_by"] = o.CreatedBy
+	}
+	if !IsNil(o.UpdatedBy) {
+		toSerialize["updated_by"] = o.UpdatedBy
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.UpdatedAt) {
+		toSerialize["updated_at"] = o.UpdatedAt
 	}
 	return toSerialize, nil
 }

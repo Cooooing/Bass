@@ -21,8 +21,8 @@ var _ MappedNullable = &RewardArticleRequest{}
 
 // RewardArticleRequest struct for RewardArticleRequest
 type RewardArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
+	Points *int32 `json:"points,omitempty"`
 }
 
 type _RewardArticleRequest RewardArticleRequest
@@ -69,6 +69,38 @@ func (o *RewardArticleRequest) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
+// GetPoints returns the Points field value if set, zero value otherwise.
+func (o *RewardArticleRequest) GetPoints() int32 {
+	if o == nil || IsNil(o.Points) {
+		var ret int32
+		return ret
+	}
+	return *o.Points
+}
+
+// GetPointsOk returns a tuple with the Points field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RewardArticleRequest) GetPointsOk() (*int32, bool) {
+	if o == nil || IsNil(o.Points) {
+		return nil, false
+	}
+	return o.Points, true
+}
+
+// HasPoints returns a boolean if a field has been set.
+func (o *RewardArticleRequest) HasPoints() bool {
+	if o != nil && !IsNil(o.Points) {
+		return true
+	}
+
+	return false
+}
+
+// SetPoints gets a reference to the given int32 and assigns it to the Points field.
+func (o *RewardArticleRequest) SetPoints(v int32) {
+	o.Points = &v
+}
+
 func (o RewardArticleRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -80,6 +112,9 @@ func (o RewardArticleRequest) MarshalJSON() ([]byte, error) {
 func (o RewardArticleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
+	if !IsNil(o.Points) {
+		toSerialize["points"] = o.Points
+	}
 	return toSerialize, nil
 }
 

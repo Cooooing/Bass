@@ -27,7 +27,7 @@ type TagQuery struct {
 	Names []string `json:"names,omitempty"`
 	// 标签描述。
 	Description *string `json:"description,omitempty"`
-	// 标签状态。
+	// 标签启停状态。
 	Status *string `json:"status,omitempty"`
 	// 所属板块 ID。
 	DomainId *string `json:"domain_id,omitempty"`

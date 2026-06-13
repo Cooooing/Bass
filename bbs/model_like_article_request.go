@@ -21,9 +21,7 @@ var _ MappedNullable = &LikeArticleRequest{}
 
 // LikeArticleRequest struct for LikeArticleRequest
 type LikeArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
-	// 是否点赞。
 	Active bool `json:"active"`
 }
 

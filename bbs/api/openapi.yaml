@@ -73,7 +73,7 @@ paths:
       - ArticleService
   /v1/content/article/create:
     post:
-      description: 创建文章。
+      description: 创建文章草稿。
       operationId: ArticleService_Create
       requestBody:
         content:
@@ -90,22 +90,22 @@ paths:
           description: OK
       tags:
       - ArticleService
-  /v1/content/article/delete:
+  /v1/content/article/discard-draft:
     post:
-      description: 删除文章。
-      operationId: ArticleService_Delete
+      description: 丢弃草稿。
+      operationId: ArticleService_DiscardDraft
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeleteArticle_Request"
+              $ref: "#/components/schemas/DiscardDraftArticle_Request"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeleteArticle_Reply"
+                $ref: "#/components/schemas/DiscardDraftArticle_Reply"
           description: OK
       tags:
       - ArticleService
@@ -223,9 +223,28 @@ paths:
           description: OK
       tags:
       - ArticleService
+  /v1/content/article/update:
+    post:
+      description: 更新文章内容。
+      operationId: ArticleService_Update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateArticle_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateArticle_Reply"
+          description: OK
+      tags:
+      - ArticleService
   /v1/content/article/update-draft:
     post:
-      description: 更新文章草稿。
+      description: 更新文章内容。兼容旧草稿更新接口。
       operationId: ArticleService_UpdateDraft
       requestBody:
         content:
@@ -318,6 +337,63 @@ paths:
           description: OK
       tags:
       - CommentService
+  /v1/content/comment/list-replies:
+    post:
+      description: 分页查询评论回复。
+      operationId: CommentService_ListReplies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListCommentReplies_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCommentReplies_Reply"
+          description: OK
+      tags:
+      - CommentService
+  /v1/content/comment/list-threads:
+    post:
+      description: 分页查询评论楼层。
+      operationId: CommentService_ListThreads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListCommentThreads_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCommentThreads_Reply"
+          description: OK
+      tags:
+      - CommentService
+  /v1/content/comment/list-timeline:
+    post:
+      description: 分页查询评论时间线。
+      operationId: CommentService_ListTimeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListCommentTimeline_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCommentTimeline_Reply"
+          description: OK
+      tags:
+      - CommentService
   /v1/content/comment/thank:
     post:
       description: 感谢或取消感谢评论。
@@ -375,6 +451,25 @@ paths:
           description: OK
       tags:
       - PostscriptService
+  /v1/content/tag/create:
+    post:
+      description: 创建标签。
+      operationId: TagService_Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTag_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTag_Reply"
+          description: OK
+      tags:
+      - TagService
   /v1/content/tag/list:
     post:
       description: 分页查询标签列表。
@@ -391,6 +486,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListTags_Reply"
+          description: OK
+      tags:
+      - TagService
+  /v1/content/tag/update:
+    post:
+      description: 更新标签。
+      operationId: TagService_Update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTag_Request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateTag_Reply"
           description: OK
       tags:
       - TagService
@@ -994,10 +1108,8 @@ components:
     AcceptAnswerArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
         comment_id:
-          description: 评论 ID。
           type: string
       required:
       - article_id
@@ -1030,6 +1142,19 @@ components:
       type: object
     AccountProfile:
       description: 账号展示资料。
+      example:
+        avatar_url: avatar_url
+        updated_at: updated_at
+        follow_count: 3
+        name: name
+        nickname: nickname
+        mbti: MBTI_UNSPECIFIED
+        created_at: created_at
+        id: id
+        follower_count: 2
+        url: url
+        introduction: introduction
+        status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         id:
           description: 账号 ID。
@@ -1116,89 +1241,190 @@ components:
       - article_id
       - content
       type: object
-    Any:
+    ArticleBrief:
+      description: 文章摘要。
+      example:
+        visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+        cover_image_url: cover_image_url
+        created_at: created_at
+        title: title
+        type: ARTICLE_TYPE_UNSPECIFIED
+        created_by: created_by
+        updated_at: updated_at
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
+        updated_by: updated_by
+        anonymous: true
+        id: id
+        author_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
       properties:
-        value:
-          $ref: "#/components/schemas/GoogleProtobufAny"
-        yaml:
+        id:
+          type: string
+        title:
+          type: string
+        type:
+          enum:
+          - ARTICLE_TYPE_UNSPECIFIED
+          - ARTICLE_TYPE_NORMAL
+          - ARTICLE_TYPE_QA
+          format: enum
+          type: string
+        anonymous:
+          type: boolean
+        author_user:
+          $ref: "#/components/schemas/AccountProfile"
+        cover_image_url:
+          type: string
+        publish_status:
+          enum:
+          - ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          - ARTICLE_PUBLISH_STATUS_DRAFT
+          - ARTICLE_PUBLISH_STATUS_PUBLISHED
+          - ARTICLE_PUBLISH_STATUS_ARCHIVED
+          format: enum
+          type: string
+        visibility:
+          enum:
+          - ARTICLE_VISIBILITY_UNSPECIFIED
+          - ARTICLE_VISIBILITY_PUBLIC
+          - ARTICLE_VISIBILITY_PRIVATE
+          format: enum
+          type: string
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
           type: string
       type: object
-    Article:
-      description: 文章。
+    ArticleDetail:
+      description: 文章详情。
       example:
         reward_content_render: reward_content_render
-        listable: true
         cover_image_url: cover_image_url
         created_at: created_at
         title: title
         type: ARTICLE_TYPE_UNSPECIFIED
         content: content
         reward_content: reward_content
-        last_reply_user: ""
+        last_reply_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
         accepted_answer_id: accepted_answer_id
         last_reply_at: last_reply_at
         updated_at: updated_at
         statement: statement
         watch_count: 2
+        edited_at: edited_at
         id: id
+        published_at: published_at
         has_reward: true
         commentable: true
         thank_count: 1
+        publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
         like_count: 5
+        viewer_action_state:
+          watched: true
+          collected: true
+          thanked: true
+          liked: true
+        visibility: ARTICLE_VISIBILITY_UNSPECIFIED
         bounty_points: 9
         has_postscript: true
+        postscripts:
+        - article_id: article_id
+          content_render: content_render
+          updated_at: updated_at
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          created_at: created_at
+          id: id
+          created_by: created_by
+          content: content
+        - article_id: article_id
+          content_render: content_render
+          updated_at: updated_at
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          created_at: created_at
+          id: id
+          created_by: created_by
+          content: content
         reply_count: 7
         created_by: created_by
         reward_points: 0
         collect_count: 5
         content_render: content_render
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
         updated_by: updated_by
         anonymous: true
-        author_user: ""
+        author_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
         view_count: 6
-        status: ARTICLE_STATUS_UNSPECIFIED
       properties:
         id:
-          description: 文章 ID。
           type: string
         title:
-          description: 标题。
           type: string
         content:
-          description: 原始内容。
           type: string
         content_render:
-          description: 渲染后的内容。
           type: string
         has_postscript:
-          description: 是否有附言。
           type: boolean
         has_reward:
-          description: 是否有打赏内容。
           type: boolean
         reward_content:
-          description: 打赏后可见内容。
           type: string
         reward_content_render:
-          description: 渲染后的打赏内容。
           type: string
         reward_points:
-          description: 打赏所需积分。
           format: int32
           type: integer
-        status:
-          description: 文章状态。
-          enum:
-          - ARTICLE_STATUS_UNSPECIFIED
-          - ARTICLE_STATUS_NORMAL
-          - ARTICLE_STATUS_HIDDEN
-          - ARTICLE_STATUS_LOCKED
-          - ARTICLE_STATUS_DRAFTS
-          - ARTICLE_STATUS_DELETED
-          format: enum
-          type: string
         type:
-          description: 文章类型。
           enum:
           - ARTICLE_TYPE_UNSPECIFIED
           - ARTICLE_TYPE_NORMAL
@@ -1206,125 +1432,288 @@ components:
           format: enum
           type: string
         statement:
-          description: 文章声明。
           type: string
         commentable:
-          description: 是否允许评论。
           type: boolean
         anonymous:
-          description: 是否匿名展示。
-          type: boolean
-        listable:
-          description: 是否在列表中展示。
           type: boolean
         view_count:
-          description: 浏览数量。
           format: int32
           type: integer
         thank_count:
-          description: 感谢数量。
           format: int32
           type: integer
         like_count:
-          description: 点赞数量。
           format: int32
           type: integer
         collect_count:
-          description: 收藏数量。
           format: int32
           type: integer
         watch_count:
-          description: 关注数量。
           format: int32
           type: integer
         reply_count:
-          description: 回复数量。
           format: int32
           type: integer
         bounty_points:
-          description: 悬赏积分。
           format: int32
           type: integer
         accepted_answer_id:
-          description: 已采纳答案评论 ID。
           type: string
         author_user:
-          allOf:
-          - $ref: "#/components/schemas/AccountProfile"
-          description: 作者账号展示资料。
+          $ref: "#/components/schemas/AccountProfile"
         last_reply_user:
-          allOf:
-          - $ref: "#/components/schemas/AccountProfile"
-          description: 最后回复账号展示资料。
+          $ref: "#/components/schemas/AccountProfile"
         last_reply_at:
-          description: 最后回复时间。
           type: string
         cover_image_url:
-          description: 封面图片 URL。
+          type: string
+        viewer_action_state:
+          $ref: "#/components/schemas/ArticleViewerActionState"
+        published_at:
+          type: string
+        postscripts:
+          items:
+            $ref: "#/components/schemas/ArticlePostscript"
+          type: array
+        publish_status:
+          enum:
+          - ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          - ARTICLE_PUBLISH_STATUS_DRAFT
+          - ARTICLE_PUBLISH_STATUS_PUBLISHED
+          - ARTICLE_PUBLISH_STATUS_ARCHIVED
+          format: enum
+          type: string
+        visibility:
+          enum:
+          - ARTICLE_VISIBILITY_UNSPECIFIED
+          - ARTICLE_VISIBILITY_PUBLIC
+          - ARTICLE_VISIBILITY_PRIVATE
+          format: enum
+          type: string
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        edited_at:
           type: string
         created_by:
-          description: 创建账号 ID。
           type: string
         updated_by:
-          description: 更新账号 ID。
           type: string
         created_at:
-          description: 创建时间。
           type: string
         updated_at:
-          description: 更新时间。
+          type: string
+      type: object
+    ArticleListItem:
+      description: 文章列表项。
+      example:
+        cover_image_url: cover_image_url
+        created_at: created_at
+        title: title
+        type: ARTICLE_TYPE_UNSPECIFIED
+        content: content
+        last_reply_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        accepted_answer_id: accepted_answer_id
+        last_reply_at: last_reply_at
+        updated_at: updated_at
+        statement: statement
+        watch_count: 9
+        edited_at: edited_at
+        id: id
+        published_at: published_at
+        has_reward: true
+        commentable: true
+        thank_count: 5
+        publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+        like_count: 2
+        viewer_action_state:
+          watched: true
+          collected: true
+          thanked: true
+          liked: true
+        visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+        bounty_points: 2
+        has_postscript: true
+        reply_count: 3
+        created_by: created_by
+        collect_count: 7
+        content_render: content_render
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
+        updated_by: updated_by
+        anonymous: true
+        author_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        view_count: 5
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        content_render:
+          type: string
+        has_postscript:
+          type: boolean
+        has_reward:
+          type: boolean
+        type:
+          enum:
+          - ARTICLE_TYPE_UNSPECIFIED
+          - ARTICLE_TYPE_NORMAL
+          - ARTICLE_TYPE_QA
+          format: enum
+          type: string
+        statement:
+          type: string
+        commentable:
+          type: boolean
+        anonymous:
+          type: boolean
+        view_count:
+          format: int32
+          type: integer
+        thank_count:
+          format: int32
+          type: integer
+        like_count:
+          format: int32
+          type: integer
+        collect_count:
+          format: int32
+          type: integer
+        watch_count:
+          format: int32
+          type: integer
+        reply_count:
+          format: int32
+          type: integer
+        bounty_points:
+          format: int32
+          type: integer
+        accepted_answer_id:
+          type: string
+        author_user:
+          $ref: "#/components/schemas/AccountProfile"
+        last_reply_user:
+          $ref: "#/components/schemas/AccountProfile"
+        last_reply_at:
+          type: string
+        cover_image_url:
+          type: string
+        viewer_action_state:
+          $ref: "#/components/schemas/ArticleViewerActionState"
+        published_at:
+          type: string
+        publish_status:
+          enum:
+          - ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          - ARTICLE_PUBLISH_STATUS_DRAFT
+          - ARTICLE_PUBLISH_STATUS_PUBLISHED
+          - ARTICLE_PUBLISH_STATUS_ARCHIVED
+          format: enum
+          type: string
+        visibility:
+          enum:
+          - ARTICLE_VISIBILITY_UNSPECIFIED
+          - ARTICLE_VISIBILITY_PUBLIC
+          - ARTICLE_VISIBILITY_PRIVATE
+          format: enum
+          type: string
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        edited_at:
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
           type: string
       type: object
     ArticlePostscript:
       description: 文章附言。
+      example:
+        article_id: article_id
+        content_render: content_render
+        updated_at: updated_at
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
+        updated_by: updated_by
+        created_at: created_at
+        id: id
+        created_by: created_by
+        content: content
       properties:
         id:
-          description: 附言 ID。
           type: string
         article_id:
-          description: 文章 ID。
           type: string
         content:
-          description: 原始内容。
           type: string
         content_render:
-          description: 渲染后的内容。
+          type: string
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
           type: string
         created_by:
-          description: 创建账号 ID。
           type: string
         updated_by:
-          description: 更新账号 ID。
           type: string
         created_at:
-          description: 创建时间。
           type: string
         updated_at:
-          description: 更新时间。
           type: string
       type: object
     ArticleQuery:
       description: 文章查询条件。
       properties:
         tag_id:
-          description: 标签 ID。
           type: string
         domain_id:
-          description: 板块 ID。
-          type: string
-        status:
-          description: 文章状态。
-          enum:
-          - ARTICLE_STATUS_UNSPECIFIED
-          - ARTICLE_STATUS_NORMAL
-          - ARTICLE_STATUS_HIDDEN
-          - ARTICLE_STATUS_LOCKED
-          - ARTICLE_STATUS_DRAFTS
-          - ARTICLE_STATUS_DELETED
-          format: enum
           type: string
         type:
-          description: 文章类型。
           enum:
           - ARTICLE_TYPE_UNSPECIFIED
           - ARTICLE_TYPE_NORMAL
@@ -1332,7 +1721,6 @@ components:
           format: enum
           type: string
         order:
-          description: 排序方式。
           enum:
           - ARTICLE_ORDER_UNSPECIFIED
           - ARTICLE_ORDER_NEWEST
@@ -1340,79 +1728,78 @@ components:
           format: enum
           type: string
         keyword:
-          description: 搜索关键词。
           type: string
         author_id:
-          description: 作者账号 ID。
           type: string
-        listable:
-          description: 是否在列表中展示。
-          type: boolean
-      type: object
-    ArticleSave:
-      description: 文章保存内容。
-      properties:
-        id:
-          description: 文章 ID。
-          type: string
-        title:
-          description: 标题。
-          type: string
-        content:
-          description: 原始内容。
-          type: string
-        reward_content:
-          description: 打赏后可见内容。
-          type: string
-        reward_points:
-          description: 打赏所需积分。
-          format: int32
-          type: integer
-        status:
-          description: 文章状态。
+        publish_status:
           enum:
-          - ARTICLE_STATUS_UNSPECIFIED
-          - ARTICLE_STATUS_NORMAL
-          - ARTICLE_STATUS_HIDDEN
-          - ARTICLE_STATUS_LOCKED
-          - ARTICLE_STATUS_DRAFTS
-          - ARTICLE_STATUS_DELETED
+          - ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          - ARTICLE_PUBLISH_STATUS_DRAFT
+          - ARTICLE_PUBLISH_STATUS_PUBLISHED
+          - ARTICLE_PUBLISH_STATUS_ARCHIVED
           format: enum
           type: string
-        type:
-          description: 文章类型。
-          enum:
-          - ARTICLE_TYPE_UNSPECIFIED
-          - ARTICLE_TYPE_NORMAL
-          - ARTICLE_TYPE_QA
-          format: enum
-          type: string
-        bounty_points:
-          description: 悬赏积分。
-          format: int32
-          type: integer
-        statement:
-          description: 文章声明。
-          type: string
-        commentable:
-          description: 是否允许评论。
-          type: boolean
-        anonymous:
-          description: 是否匿名展示。
-          type: boolean
-        listable:
-          description: 是否在列表中展示。
-          type: boolean
-        tags:
-          description: 绑定标签。
+        publish_statuses:
           items:
-            $ref: "#/components/schemas/TagSave"
+            enum:
+            - ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            - ARTICLE_PUBLISH_STATUS_DRAFT
+            - ARTICLE_PUBLISH_STATUS_PUBLISHED
+            - ARTICLE_PUBLISH_STATUS_ARCHIVED
+            format: enum
+            type: string
           type: array
-      required:
-      - content
-      - status
-      - title
-      - type
+        visibility:
+          enum:
+          - ARTICLE_VISIBILITY_UNSPECIFIED
+          - ARTICLE_VISIBILITY_PUBLIC
+          - ARTICLE_VISIBILITY_PRIVATE
+          format: enum
+          type: string
+        visibilities:
+          items:
+            enum:
+            - ARTICLE_VISIBILITY_UNSPECIFIED
+            - ARTICLE_VISIBILITY_PUBLIC
+            - ARTICLE_VISIBILITY_PRIVATE
+            format: enum
+            type: string
+          type: array
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        restrictions:
+          items:
+            enum:
+            - CONTENT_RESTRICTION_UNSPECIFIED
+            - CONTENT_RESTRICTION_NONE
+            - CONTENT_RESTRICTION_HIDDEN
+            - CONTENT_RESTRICTION_LOCKED
+            format: enum
+            type: string
+          type: array
+      type: object
+    ArticleViewerActionState:
+      description: 当前查看账号的文章行为状态。
+      example:
+        watched: true
+        collected: true
+        thanked: true
+        liked: true
+      properties:
+        liked:
+          type: boolean
+        thanked:
+          type: boolean
+        collected:
+          type: boolean
+        watched:
+          type: boolean
       type: object
     BeginEnableTotp_Reply:
       example:
@@ -1442,147 +1829,560 @@ components:
       - target_id
       type: object
     CollectArticle_Reply:
-      properties: {}
+      example:
+        collected: true
+      properties:
+        collected:
+          type: boolean
       type: object
     CollectArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
         active:
-          description: 是否收藏。
           type: boolean
       required:
       - active
       - article_id
       type: object
-    Comment:
-      description: 评论。
+    CommentDetail:
+      description: 评论详情。
       example:
         like_count: 1
-        reply_user: ""
+        viewer_action_state:
+          thanked: true
+          liked: true
+        reply_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
         level: 0
         created_at: created_at
         reply_count: 6
+        deleted_at: deleted_at
         created_by: created_by
         content: content
-        article: ""
+        article:
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          created_by: created_by
+          updated_at: updated_at
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          anonymous: true
+          id: id
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
         article_id: article_id
         content_render: content_render
         reply_id: reply_id
         updated_at: updated_at
         parent_id: parent_id
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
         updated_by: updated_by
         id: id
-        user: ""
+        user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
         thank_count: 5
-        status: COMMENT_STATUS_UNSPECIFIED
       properties:
         id:
-          description: 评论 ID。
           type: string
         article_id:
-          description: 文章 ID。
           type: string
         content:
-          description: 原始内容。
           type: string
         content_render:
-          description: 渲染后的内容。
           type: string
         level:
-          description: 评论层级。
           format: int32
           type: integer
         parent_id:
-          description: 父评论 ID。
           type: string
         reply_id:
-          description: 回复的评论 ID。
-          type: string
-        status:
-          description: 评论状态。
-          enum:
-          - COMMENT_STATUS_UNSPECIFIED
-          - COMMENT_STATUS_NORMAL
-          - COMMENT_STATUS_HIDDEN
-          format: enum
           type: string
         reply_count:
-          description: 回复数量。
           format: int32
           type: integer
         like_count:
-          description: 点赞数量。
           format: int32
           type: integer
         thank_count:
-          description: 感谢数量。
           format: int32
           type: integer
         user:
-          allOf:
-          - $ref: "#/components/schemas/AccountProfile"
-          description: 评论账号展示资料。
+          $ref: "#/components/schemas/AccountProfile"
         reply_user:
-          allOf:
-          - $ref: "#/components/schemas/AccountProfile"
-          description: 被回复账号展示资料。
+          $ref: "#/components/schemas/AccountProfile"
         article:
-          allOf:
-          - $ref: "#/components/schemas/Article"
-          description: 所属文章。
+          $ref: "#/components/schemas/ArticleBrief"
+        viewer_action_state:
+          $ref: "#/components/schemas/CommentViewerActionState"
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        deleted_at:
+          type: string
         created_by:
-          description: 创建账号 ID。
           type: string
         updated_by:
-          description: 更新账号 ID。
           type: string
         created_at:
-          description: 创建时间。
           type: string
         updated_at:
-          description: 更新时间。
+          type: string
+      type: object
+    CommentListItem:
+      description: 评论列表项。
+      example:
+        like_count: 1
+        viewer_action_state:
+          thanked: true
+          liked: true
+        reply_user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        level: 0
+        created_at: created_at
+        reply_count: 6
+        deleted_at: deleted_at
+        created_by: created_by
+        content: content
+        article:
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          created_by: created_by
+          updated_at: updated_at
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          anonymous: true
+          id: id
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+        article_id: article_id
+        content_render: content_render
+        reply_id: reply_id
+        updated_at: updated_at
+        parent_id: parent_id
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
+        updated_by: updated_by
+        id: id
+        user:
+          avatar_url: avatar_url
+          updated_at: updated_at
+          follow_count: 3
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          created_at: created_at
+          id: id
+          follower_count: 2
+          url: url
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        thank_count: 5
+      properties:
+        id:
+          type: string
+        article_id:
+          type: string
+        content:
+          type: string
+        content_render:
+          type: string
+        level:
+          format: int32
+          type: integer
+        parent_id:
+          type: string
+        reply_id:
+          type: string
+        reply_count:
+          format: int32
+          type: integer
+        like_count:
+          format: int32
+          type: integer
+        thank_count:
+          format: int32
+          type: integer
+        user:
+          $ref: "#/components/schemas/AccountProfile"
+        reply_user:
+          $ref: "#/components/schemas/AccountProfile"
+        article:
+          $ref: "#/components/schemas/ArticleBrief"
+        viewer_action_state:
+          $ref: "#/components/schemas/CommentViewerActionState"
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        deleted_at:
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
           type: string
       type: object
     CommentQuery:
       description: 评论查询条件。
       properties:
         comment_id:
-          description: 评论 ID。
           type: string
         article_id:
-          description: 文章 ID。
           type: string
         parent_id:
-          description: 父评论 ID。
           type: string
         reply_id:
-          description: 回复的评论 ID。
           type: string
         order:
-          description: 排序方式。
           enum:
           - COMMENT_ORDER_UNSPECIFIED
           - COMMENT_ORDER_NEWEST
           - COMMENT_ORDER_HOTTEST
+          - COMMENT_ORDER_OLDEST
           format: enum
           type: string
         user_id:
-          description: 评论账号 ID。
           type: string
         level:
-          description: 评论层级。
           format: int32
           type: integer
-        status:
-          description: 评论状态。
+        restriction:
           enum:
-          - COMMENT_STATUS_UNSPECIFIED
-          - COMMENT_STATUS_NORMAL
-          - COMMENT_STATUS_HIDDEN
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
           format: enum
           type: string
+        restrictions:
+          items:
+            enum:
+            - CONTENT_RESTRICTION_UNSPECIFIED
+            - CONTENT_RESTRICTION_NONE
+            - CONTENT_RESTRICTION_HIDDEN
+            - CONTENT_RESTRICTION_LOCKED
+            format: enum
+            type: string
+          type: array
+      type: object
+    CommentThread:
+      description: 评论楼层项。
+      example:
+        has_more_replies: true
+        root:
+          like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+        preview_replies:
+        - like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+        - like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+        reply_count: 0
+      properties:
+        root:
+          $ref: "#/components/schemas/CommentListItem"
+        preview_replies:
+          items:
+            $ref: "#/components/schemas/CommentListItem"
+          type: array
+        reply_count:
+          format: int32
+          type: integer
+        has_more_replies:
+          type: boolean
+      type: object
+    CommentViewerActionState:
+      description: 当前查看账号的评论行为状态。
+      example:
+        thanked: true
+        liked: true
+      properties:
+        liked:
+          type: boolean
+        thanked:
+          type: boolean
       type: object
     ConfirmEnableTotp_Reply:
       properties: {}
@@ -1608,56 +2408,207 @@ components:
       type: object
     CreateArticle_Reply:
       example:
-        article: ""
+        article:
+          reward_content_render: reward_content_render
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          edited_at: edited_at
+          id: id
+          published_at: published_at
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          like_count: 5
+          viewer_action_state:
+            watched: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          bounty_points: 9
+          has_postscript: true
+          postscripts:
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
       properties:
         article:
-          allOf:
-          - $ref: "#/components/schemas/Article"
-          description: 创建后的文章。
+          $ref: "#/components/schemas/ArticleDetail"
       type: object
     CreateArticle_Request:
       properties:
         article:
-          allOf:
-          - $ref: "#/components/schemas/ArticleSave"
-          description: 文章保存内容。
+          $ref: "#/components/schemas/Request_Article"
       required:
       - article
       type: object
     CreateComment_Reply:
       example:
-        comment: ""
+        comment:
+          like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
       properties:
         comment:
-          allOf:
-          - $ref: "#/components/schemas/Comment"
-          description: 创建后的评论。
+          $ref: "#/components/schemas/CommentDetail"
       type: object
     CreateComment_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
         content:
-          description: 评论内容。
           type: string
         reply_id:
-          description: 回复的评论 ID。
           type: string
       required:
       - article_id
       - content
       type: object
-    DeleteArticle_Reply:
-      properties: {}
-      type: object
-    DeleteArticle_Request:
+    CreateTag_Reply:
+      example:
+        tag: ""
       properties:
-        article_id:
-          description: 文章 ID。
-          type: string
+        tag:
+          allOf:
+          - $ref: "#/components/schemas/Tag"
+          description: 创建后的标签。
+      type: object
+    CreateTag_Request:
+      properties:
+        tag:
+          allOf:
+          - $ref: "#/components/schemas/Request_Tag"
+          description: 标签保存内容。
       required:
-      - article_id
+      - tag
       type: object
     DisableTotp_Reply:
       properties: {}
@@ -1669,6 +2620,16 @@ components:
           type: string
       required:
       - code
+      type: object
+    DiscardDraftArticle_Reply:
+      properties: {}
+      type: object
+    DiscardDraftArticle_Request:
+      properties:
+        article_id:
+          type: string
+      required:
+      - article_id
       type: object
     Domain:
       description: 内容板块。
@@ -1686,42 +2647,31 @@ components:
         status: DOMAIN_STATUS_UNSPECIFIED
       properties:
         id:
-          description: 板块 ID。
           type: string
         name:
-          description: 板块名称。
           type: string
         description:
-          description: 板块描述。
           type: string
         status:
-          description: 板块状态。
           enum:
           - DOMAIN_STATUS_UNSPECIFIED
-          - DOMAIN_STATUS_NORMAL
+          - DOMAIN_STATUS_ENABLED
           - DOMAIN_STATUS_DISABLED
           format: enum
           type: string
         url:
-          description: 板块 URL。
           type: string
         icon:
-          description: 板块图标。
           type: string
         is_nav:
-          description: 是否在导航中展示。
           type: boolean
         created_by:
-          description: 创建账号 ID。
           type: string
         updated_by:
-          description: 更新账号 ID。
           type: string
         created_at:
-          description: 创建时间。
           type: string
         updated_at:
-          description: 更新时间。
           type: string
       type: object
     DomainQuery:
@@ -1739,10 +2689,10 @@ components:
           description: 板块描述。
           type: string
         status:
-          description: 板块状态。
+          description: 板块启停状态。
           enum:
           - DOMAIN_STATUS_UNSPECIFIED
-          - DOMAIN_STATUS_NORMAL
+          - DOMAIN_STATUS_ENABLED
           - DOMAIN_STATUS_DISABLED
           format: enum
           type: string
@@ -1755,26 +2705,6 @@ components:
         is_nav:
           description: 是否在导航中展示。
           type: boolean
-      type: object
-    ExternalDocs:
-      description: Allows referencing an external resource for extended documentation.
-      example:
-        description: description
-        specification_extension:
-        - name: name
-          value: ""
-        - name: name
-          value: ""
-        url: url
-      properties:
-        description:
-          type: string
-        url:
-          type: string
-        specification_extension:
-          items:
-            $ref: "#/components/schemas/NamedAny"
-          type: array
       type: object
     FollowRelation_Reply:
       properties: {}
@@ -1789,17 +2719,96 @@ components:
       type: object
     GetArticle_Reply:
       example:
-        article: ""
+        article:
+          reward_content_render: reward_content_render
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          edited_at: edited_at
+          id: id
+          published_at: published_at
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          like_count: 5
+          viewer_action_state:
+            watched: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          bounty_points: 9
+          has_postscript: true
+          postscripts:
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
       properties:
         article:
-          allOf:
-          - $ref: "#/components/schemas/Article"
-          description: 文章详情。
+          $ref: "#/components/schemas/ArticleDetail"
       type: object
     GetArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
       required:
       - article_id
@@ -1898,15 +2907,6 @@ components:
       required:
       - target_id
       type: object
-    GoogleProtobufAny:
-      additionalProperties: true
-      description: Contains an arbitrary serialized message along with a @type that
-        describes the type of the serialized message.
-      properties:
-        '@type':
-          description: The type of the serialized message.
-          type: string
-      type: object
     ImageReply:
       example:
         data: data
@@ -1921,30 +2921,34 @@ components:
           type: string
       type: object
     LikeArticle_Reply:
-      properties: {}
+      example:
+        liked: true
+      properties:
+        liked:
+          type: boolean
       type: object
     LikeArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
         active:
-          description: 是否点赞。
           type: boolean
       required:
       - active
       - article_id
       type: object
     LikeComment_Reply:
-      properties: {}
+      example:
+        liked: true
+      properties:
+        liked:
+          type: boolean
       type: object
     LikeComment_Request:
       properties:
         id:
-          description: 评论 ID。
           type: string
         active:
-          description: 是否点赞。
           type: boolean
       required:
       - active
@@ -1952,91 +2956,145 @@ components:
       type: object
     ListArticles_Reply:
       example:
-        page: ""
+        page:
+          total: 0
+          size: 1
+          page: 6
         rows:
-        - reward_content_render: reward_content_render
-          listable: true
-          cover_image_url: cover_image_url
+        - cover_image_url: cover_image_url
           created_at: created_at
           title: title
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
-          reward_content: reward_content
-          last_reply_user: ""
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
           accepted_answer_id: accepted_answer_id
           last_reply_at: last_reply_at
           updated_at: updated_at
           statement: statement
-          watch_count: 2
+          watch_count: 9
+          edited_at: edited_at
           id: id
+          published_at: published_at
           has_reward: true
           commentable: true
-          thank_count: 1
-          like_count: 5
-          bounty_points: 9
+          thank_count: 5
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          like_count: 2
+          viewer_action_state:
+            watched: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          bounty_points: 2
           has_postscript: true
-          reply_count: 7
+          reply_count: 3
           created_by: created_by
-          reward_points: 0
-          collect_count: 5
+          collect_count: 7
           content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           anonymous: true
-          author_user: ""
-          view_count: 6
-          status: ARTICLE_STATUS_UNSPECIFIED
-        - reward_content_render: reward_content_render
-          listable: true
-          cover_image_url: cover_image_url
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 5
+        - cover_image_url: cover_image_url
           created_at: created_at
           title: title
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
-          reward_content: reward_content
-          last_reply_user: ""
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
           accepted_answer_id: accepted_answer_id
           last_reply_at: last_reply_at
           updated_at: updated_at
           statement: statement
-          watch_count: 2
+          watch_count: 9
+          edited_at: edited_at
           id: id
+          published_at: published_at
           has_reward: true
           commentable: true
-          thank_count: 1
-          like_count: 5
-          bounty_points: 9
+          thank_count: 5
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          like_count: 2
+          viewer_action_state:
+            watched: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          bounty_points: 2
           has_postscript: true
-          reply_count: 7
+          reply_count: 3
           created_by: created_by
-          reward_points: 0
-          collect_count: 5
+          collect_count: 7
           content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           anonymous: true
-          author_user: ""
-          view_count: 6
-          status: ARTICLE_STATUS_UNSPECIFIED
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 5
       properties:
         page:
-          allOf:
-          - $ref: "#/components/schemas/PageReply"
-          description: 分页结果。
+          $ref: "#/components/schemas/PageReply"
         rows:
-          description: 文章列表。
           items:
-            $ref: "#/components/schemas/Article"
+            $ref: "#/components/schemas/ArticleListItem"
           type: array
       type: object
     ListArticles_Request:
       properties:
         page:
-          allOf:
-          - $ref: "#/components/schemas/PageRequest"
-          description: 分页参数。
+          $ref: "#/components/schemas/PageRequest"
         query:
-          allOf:
-          - $ref: "#/components/schemas/ArticleQuery"
-          description: 查询条件。
+          $ref: "#/components/schemas/ArticleQuery"
       type: object
     ListBlockedRelations_Reply:
       example:
@@ -2072,67 +3130,989 @@ components:
           - $ref: "#/components/schemas/PageRequest"
           description: 分页参数。
       type: object
-    ListComments_Reply:
+    ListCommentReplies_Reply:
       example:
-        page: ""
+        page:
+          total: 0
+          size: 1
+          page: 6
         rows:
         - like_count: 1
-          reply_user: ""
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
           level: 0
           created_at: created_at
           reply_count: 6
+          deleted_at: deleted_at
           created_by: created_by
           content: content
-          article: ""
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
           updated_at: updated_at
           parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           id: id
-          user: ""
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
           thank_count: 5
-          status: COMMENT_STATUS_UNSPECIFIED
         - like_count: 1
-          reply_user: ""
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
           level: 0
           created_at: created_at
           reply_count: 6
+          deleted_at: deleted_at
           created_by: created_by
           content: content
-          article: ""
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
           updated_at: updated_at
           parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           id: id
-          user: ""
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
           thank_count: 5
-          status: COMMENT_STATUS_UNSPECIFIED
       properties:
         page:
-          allOf:
-          - $ref: "#/components/schemas/PageReply"
-          description: 分页结果。
+          $ref: "#/components/schemas/PageReply"
         rows:
-          description: 评论列表。
           items:
-            $ref: "#/components/schemas/Comment"
+            $ref: "#/components/schemas/CommentListItem"
+          type: array
+      type: object
+    ListCommentReplies_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        article_id:
+          type: string
+        parent_id:
+          type: string
+        order:
+          enum:
+          - COMMENT_ORDER_UNSPECIFIED
+          - COMMENT_ORDER_NEWEST
+          - COMMENT_ORDER_HOTTEST
+          - COMMENT_ORDER_OLDEST
+          format: enum
+          type: string
+      required:
+      - article_id
+      - parent_id
+      type: object
+    ListCommentThreads_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - has_more_replies: true
+          root:
+            like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: created_at
+            reply_count: 6
+            deleted_at: deleted_at
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              cover_image_url: cover_image_url
+              created_at: created_at
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              created_by: created_by
+              updated_at: updated_at
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              anonymous: true
+              id: id
+              author_user:
+                avatar_url: avatar_url
+                updated_at: updated_at
+                follow_count: 3
+                name: name
+                nickname: nickname
+                mbti: MBTI_UNSPECIFIED
+                created_at: created_at
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: updated_at
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          preview_replies:
+          - like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: created_at
+            reply_count: 6
+            deleted_at: deleted_at
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              cover_image_url: cover_image_url
+              created_at: created_at
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              created_by: created_by
+              updated_at: updated_at
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              anonymous: true
+              id: id
+              author_user:
+                avatar_url: avatar_url
+                updated_at: updated_at
+                follow_count: 3
+                name: name
+                nickname: nickname
+                mbti: MBTI_UNSPECIFIED
+                created_at: created_at
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: updated_at
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          - like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: created_at
+            reply_count: 6
+            deleted_at: deleted_at
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              cover_image_url: cover_image_url
+              created_at: created_at
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              created_by: created_by
+              updated_at: updated_at
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              anonymous: true
+              id: id
+              author_user:
+                avatar_url: avatar_url
+                updated_at: updated_at
+                follow_count: 3
+                name: name
+                nickname: nickname
+                mbti: MBTI_UNSPECIFIED
+                created_at: created_at
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: updated_at
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          reply_count: 0
+        - has_more_replies: true
+          root:
+            like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: created_at
+            reply_count: 6
+            deleted_at: deleted_at
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              cover_image_url: cover_image_url
+              created_at: created_at
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              created_by: created_by
+              updated_at: updated_at
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              anonymous: true
+              id: id
+              author_user:
+                avatar_url: avatar_url
+                updated_at: updated_at
+                follow_count: 3
+                name: name
+                nickname: nickname
+                mbti: MBTI_UNSPECIFIED
+                created_at: created_at
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: updated_at
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          preview_replies:
+          - like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: created_at
+            reply_count: 6
+            deleted_at: deleted_at
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              cover_image_url: cover_image_url
+              created_at: created_at
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              created_by: created_by
+              updated_at: updated_at
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              anonymous: true
+              id: id
+              author_user:
+                avatar_url: avatar_url
+                updated_at: updated_at
+                follow_count: 3
+                name: name
+                nickname: nickname
+                mbti: MBTI_UNSPECIFIED
+                created_at: created_at
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: updated_at
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          - like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: created_at
+            reply_count: 6
+            deleted_at: deleted_at
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              cover_image_url: cover_image_url
+              created_at: created_at
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              created_by: created_by
+              updated_at: updated_at
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              anonymous: true
+              id: id
+              author_user:
+                avatar_url: avatar_url
+                updated_at: updated_at
+                follow_count: 3
+                name: name
+                nickname: nickname
+                mbti: MBTI_UNSPECIFIED
+                created_at: created_at
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: updated_at
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          reply_count: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/CommentThread"
+          type: array
+      type: object
+    ListCommentThreads_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        article_id:
+          type: string
+        order:
+          enum:
+          - COMMENT_ORDER_UNSPECIFIED
+          - COMMENT_ORDER_NEWEST
+          - COMMENT_ORDER_HOTTEST
+          - COMMENT_ORDER_OLDEST
+          format: enum
+          type: string
+        reply_preview_limit:
+          format: int32
+          type: integer
+      required:
+      - article_id
+      type: object
+    ListCommentTimeline_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+        - like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/CommentListItem"
+          type: array
+      type: object
+    ListCommentTimeline_Request:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageRequest"
+        article_id:
+          type: string
+        order:
+          enum:
+          - COMMENT_ORDER_UNSPECIFIED
+          - COMMENT_ORDER_NEWEST
+          - COMMENT_ORDER_HOTTEST
+          - COMMENT_ORDER_OLDEST
+          format: enum
+          type: string
+      required:
+      - article_id
+      type: object
+    ListComments_Reply:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+        - like_count: 1
+          viewer_action_state:
+            thanked: true
+            liked: true
+          reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          level: 0
+          created_at: created_at
+          reply_count: 6
+          deleted_at: deleted_at
+          created_by: created_by
+          content: content
+          article:
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            cover_image_url: cover_image_url
+            created_at: created_at
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            created_by: created_by
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            anonymous: true
+            id: id
+            author_user:
+              avatar_url: avatar_url
+              updated_at: updated_at
+              follow_count: 3
+              name: name
+              nickname: nickname
+              mbti: MBTI_UNSPECIFIED
+              created_at: created_at
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          article_id: article_id
+          content_render: content_render
+          reply_id: reply_id
+          updated_at: updated_at
+          parent_id: parent_id
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          id: id
+          user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          thank_count: 5
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReply"
+        rows:
+          items:
+            $ref: "#/components/schemas/CommentListItem"
           type: array
       type: object
     ListComments_Request:
       properties:
         page:
-          allOf:
-          - $ref: "#/components/schemas/PageRequest"
-          description: 分页参数。
+          $ref: "#/components/schemas/PageRequest"
         query:
-          allOf:
-          - $ref: "#/components/schemas/CommentQuery"
-          description: 查询条件。
+          $ref: "#/components/schemas/CommentQuery"
       type: object
     ListDomains_Reply:
       example:
@@ -2294,36 +4274,24 @@ components:
       example:
         page: ""
         rows:
-        - external_docs:
-            description: description
-            specification_extension:
-            - name: name
-              value: ""
-            - name: name
-              value: ""
-            url: url
+        - domain_id: domain_id
+          updated_at: updated_at
           name: name
+          updated_by: updated_by
           description: description
-          specification_extension:
-          - name: name
-            value: ""
-          - name: name
-            value: ""
-        - external_docs:
-            description: description
-            specification_extension:
-            - name: name
-              value: ""
-            - name: name
-              value: ""
-            url: url
+          created_at: created_at
+          id: id
+          created_by: created_by
+          status: TAG_STATUS_UNSPECIFIED
+        - domain_id: domain_id
+          updated_at: updated_at
           name: name
+          updated_by: updated_by
           description: description
-          specification_extension:
-          - name: name
-            value: ""
-          - name: name
-            value: ""
+          created_at: created_at
+          id: id
+          created_by: created_by
+          status: TAG_STATUS_UNSPECIFIED
       properties:
         page:
           allOf:
@@ -2410,21 +4378,6 @@ components:
             type: string
           type: array
       type: object
-    NamedAny:
-      description: "Automatically-generated message used to represent maps of Any\
-        \ as ordered (name,value) pairs."
-      example:
-        name: name
-        value: ""
-      properties:
-        name:
-          description: Map key
-          type: string
-        value:
-          allOf:
-          - $ref: "#/components/schemas/Any"
-          description: Mapped value
-      type: object
     Notification:
       description: 通知记录。
       example:
@@ -2467,8 +4420,13 @@ components:
           - EVENT_TYPE_ARTICLE_THANKED
           - EVENT_TYPE_ARTICLE_COLLECTED
           - EVENT_TYPE_ARTICLE_WATCHED
+          - EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER
+          - EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED
+          - EVENT_TYPE_ARTICLE_STATUS_UPDATED
           - EVENT_TYPE_COMMENT_PUBLISHED
           - EVENT_TYPE_COMMENT_LIKED
+          - EVENT_TYPE_COMMENT_THANKED
+          - EVENT_TYPE_COMMENT_STATUS_UPDATED
           format: enum
           type: string
         title:
@@ -2488,6 +4446,10 @@ components:
           type: string
       type: object
     PageReply:
+      example:
+        total: 0
+        size: 1
+        page: 6
       properties:
         total:
           description: 总数
@@ -2569,7 +4531,13 @@ components:
     PublishArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
+          type: string
+        visibility:
+          enum:
+          - ARTICLE_VISIBILITY_UNSPECIFIED
+          - ARTICLE_VISIBILITY_PUBLIC
+          - ARTICLE_VISIBILITY_PRIVATE
+          format: enum
           type: string
       required:
       - article_id
@@ -2623,14 +4591,74 @@ components:
           description: 目标账号是否拉黑当前账号。
           type: boolean
       type: object
+    Request_Article:
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        reward_content:
+          type: string
+        reward_points:
+          format: int32
+          type: integer
+        type:
+          enum:
+          - ARTICLE_TYPE_UNSPECIFIED
+          - ARTICLE_TYPE_NORMAL
+          - ARTICLE_TYPE_QA
+          format: enum
+          type: string
+        bounty_points:
+          format: int32
+          type: integer
+        statement:
+          type: string
+        commentable:
+          type: boolean
+        anonymous:
+          type: boolean
+        tag_ids:
+          items:
+            type: string
+          type: array
+      required:
+      - content
+      - title
+      - type
+      type: object
+    Request_Tag:
+      properties:
+        name:
+          description: 标签名称。
+          type: string
+        description:
+          description: 标签描述。
+          type: string
+        domain_id:
+          description: 所属板块 ID。
+          type: string
+        status:
+          description: 标签启停状态。
+          enum:
+          - TAG_STATUS_UNSPECIFIED
+          - TAG_STATUS_ENABLED
+          - TAG_STATUS_DISABLED
+          format: enum
+          type: string
+      required:
+      - name
+      type: object
     RewardArticle_Reply:
       properties: {}
       type: object
     RewardArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
+        points:
+          format: int32
+          type: integer
       required:
       - article_id
       type: object
@@ -2697,36 +4725,41 @@ components:
       - phone
       type: object
     Tag:
-      description: Adds metadata to a single tag that is used by the Operation Object.
-        It is not mandatory to have a Tag Object per tag defined in the Operation
-        Object instances.
+      description: 标签。
       example:
-        external_docs:
-          description: description
-          specification_extension:
-          - name: name
-            value: ""
-          - name: name
-            value: ""
-          url: url
+        domain_id: domain_id
+        updated_at: updated_at
         name: name
+        updated_by: updated_by
         description: description
-        specification_extension:
-        - name: name
-          value: ""
-        - name: name
-          value: ""
+        created_at: created_at
+        id: id
+        created_by: created_by
+        status: TAG_STATUS_UNSPECIFIED
       properties:
+        id:
+          type: string
         name:
           type: string
         description:
           type: string
-        external_docs:
-          $ref: "#/components/schemas/ExternalDocs"
-        specification_extension:
-          items:
-            $ref: "#/components/schemas/NamedAny"
-          type: array
+        domain_id:
+          type: string
+        status:
+          enum:
+          - TAG_STATUS_UNSPECIFIED
+          - TAG_STATUS_ENABLED
+          - TAG_STATUS_DISABLED
+          format: enum
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
       type: object
     TagQuery:
       description: 标签查询条件。
@@ -2748,66 +4781,46 @@ components:
           description: 标签描述。
           type: string
         status:
-          description: 标签状态。
+          description: 标签启停状态。
           enum:
           - TAG_STATUS_UNSPECIFIED
-          - TAG_STATUS_NORMAL
+          - TAG_STATUS_ENABLED
           - TAG_STATUS_DISABLED
           format: enum
           type: string
         domain_id:
           description: 所属板块 ID。
-          type: string
-      type: object
-    TagSave:
-      description: 标签保存内容。
-      properties:
-        id:
-          description: 标签 ID。
-          type: string
-        domain_id:
-          description: 所属板块 ID。
-          type: string
-        status:
-          description: 标签状态。
-          enum:
-          - TAG_STATUS_UNSPECIFIED
-          - TAG_STATUS_NORMAL
-          - TAG_STATUS_DISABLED
-          format: enum
-          type: string
-        name:
-          description: 标签名称。
-          type: string
-        description:
-          description: 标签描述。
           type: string
       type: object
     ThankArticle_Reply:
-      properties: {}
+      example:
+        thanked: true
+      properties:
+        thanked:
+          type: boolean
       type: object
     ThankArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
         active:
-          description: 是否感谢。
           type: boolean
       required:
       - active
       - article_id
       type: object
     ThankComment_Reply:
-      properties: {}
+      example:
+        thanked: true
+      properties:
+        thanked:
+          type: boolean
       type: object
     ThankComment_Request:
       properties:
         id:
-          description: 评论 ID。
           type: string
         active:
-          description: 是否感谢。
           type: boolean
       required:
       - active
@@ -2847,6 +4860,105 @@ components:
           type: string
       required:
       - target_id
+      type: object
+    UpdateArticle_Reply:
+      example:
+        article:
+          reward_content_render: reward_content_render
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          edited_at: edited_at
+          id: id
+          published_at: published_at
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          like_count: 5
+          viewer_action_state:
+            watched: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          bounty_points: 9
+          has_postscript: true
+          postscripts:
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
+      properties:
+        article:
+          $ref: "#/components/schemas/ArticleDetail"
+      type: object
+    UpdateArticle_Request:
+      properties:
+        article_id:
+          type: string
+        article:
+          $ref: "#/components/schemas/Request_Article"
+      required:
+      - article
+      - article_id
       type: object
     UpdateCurrentPreferences_Reply:
       example:
@@ -2910,21 +5022,102 @@ components:
       type: object
     UpdateDraftArticle_Reply:
       example:
-        article: ""
+        article:
+          reward_content_render: reward_content_render
+          cover_image_url: cover_image_url
+          created_at: created_at
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          reward_content: reward_content
+          last_reply_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          accepted_answer_id: accepted_answer_id
+          last_reply_at: last_reply_at
+          updated_at: updated_at
+          statement: statement
+          watch_count: 2
+          edited_at: edited_at
+          id: id
+          published_at: published_at
+          has_reward: true
+          commentable: true
+          thank_count: 1
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          like_count: 5
+          viewer_action_state:
+            watched: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          bounty_points: 9
+          has_postscript: true
+          postscripts:
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          - article_id: article_id
+            content_render: content_render
+            updated_at: updated_at
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            created_at: created_at
+            id: id
+            created_by: created_by
+            content: content
+          reply_count: 7
+          created_by: created_by
+          reward_points: 0
+          collect_count: 5
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          anonymous: true
+          author_user:
+            avatar_url: avatar_url
+            updated_at: updated_at
+            follow_count: 3
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            created_at: created_at
+            id: id
+            follower_count: 2
+            url: url
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 6
       properties:
         article:
-          allOf:
-          - $ref: "#/components/schemas/Article"
-          description: 更新后的文章。
+          $ref: "#/components/schemas/ArticleDetail"
       type: object
     UpdateDraftArticle_Request:
       properties:
+        article_id:
+          type: string
         article:
-          allOf:
-          - $ref: "#/components/schemas/ArticleSave"
-          description: 文章保存内容。
+          $ref: "#/components/schemas/Request_Article"
       required:
       - article
+      - article_id
       type: object
     UpdateProfileAccount_Reply:
       example:
@@ -2971,6 +5164,28 @@ components:
           - MBTI_ESFP
           format: enum
           type: string
+      type: object
+    UpdateTag_Reply:
+      example:
+        tag: ""
+      properties:
+        tag:
+          allOf:
+          - $ref: "#/components/schemas/Tag"
+          description: 更新后的标签。
+      type: object
+    UpdateTag_Request:
+      properties:
+        tag_id:
+          description: 标签 ID。
+          type: string
+        tag:
+          allOf:
+          - $ref: "#/components/schemas/Request_Tag"
+          description: 标签保存内容。
+      required:
+      - tag
+      - tag_id
       type: object
     UpsertCurrentLocation_Reply:
       example:
@@ -3024,15 +5239,17 @@ components:
       - code_token
       type: object
     WatchArticle_Reply:
-      properties: {}
+      example:
+        watched: true
+      properties:
+        watched:
+          type: boolean
       type: object
     WatchArticle_Request:
       properties:
         article_id:
-          description: 文章 ID。
           type: string
         active:
-          description: 是否关注。
           type: boolean
       required:
       - active

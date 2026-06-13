@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | Pointer to [**Article**](Article.md) | 创建后的文章。 | [optional] 
+**Article** | Pointer to [**ArticleDetail**](ArticleDetail.md) |  | [optional] 
 
 ## Methods
 
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetArticle
 
-`func (o *CreateArticleReply) GetArticle() Article`
+`func (o *CreateArticleReply) GetArticle() ArticleDetail`
 
 GetArticle returns the Article field if non-nil, zero value otherwise.
 
 ### GetArticleOk
 
-`func (o *CreateArticleReply) GetArticleOk() (*Article, bool)`
+`func (o *CreateArticleReply) GetArticleOk() (*ArticleDetail, bool)`
 
 GetArticleOk returns a tuple with the Article field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetArticle
 
-`func (o *CreateArticleReply) SetArticle(v Article)`
+`func (o *CreateArticleReply) SetArticle(v ArticleDetail)`
 
 SetArticle sets Article field to given value.
 

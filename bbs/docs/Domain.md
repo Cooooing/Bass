@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** | 板块 ID。 | [optional] 
-**Name** | Pointer to **string** | 板块名称。 | [optional] 
-**Description** | Pointer to **string** | 板块描述。 | [optional] 
-**Status** | Pointer to **string** | 板块状态。 | [optional] 
-**Url** | Pointer to **string** | 板块 URL。 | [optional] 
-**Icon** | Pointer to **string** | 板块图标。 | [optional] 
-**IsNav** | Pointer to **bool** | 是否在导航中展示。 | [optional] 
-**CreatedBy** | Pointer to **string** | 创建账号 ID。 | [optional] 
-**UpdatedBy** | Pointer to **string** | 更新账号 ID。 | [optional] 
-**CreatedAt** | Pointer to **string** | 创建时间。 | [optional] 
-**UpdatedAt** | Pointer to **string** | 更新时间。 | [optional] 
+**Id** | Pointer to **string** |  | [optional] 
+**Name** | Pointer to **string** |  | [optional] 
+**Description** | Pointer to **string** |  | [optional] 
+**Status** | Pointer to **string** |  | [optional] 
+**Url** | Pointer to **string** |  | [optional] 
+**Icon** | Pointer to **string** |  | [optional] 
+**IsNav** | Pointer to **bool** |  | [optional] 
+**CreatedBy** | Pointer to **string** |  | [optional] 
+**UpdatedBy** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **string** |  | [optional] 
+**UpdatedAt** | Pointer to **string** |  | [optional] 
 
 ## Methods
 

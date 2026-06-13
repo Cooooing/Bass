@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** | 文章 ID。 | 
-**CommentId** | **string** | 评论 ID。 | 
+**ArticleId** | **string** |  | 
+**CommentId** | **string** |  | 
 
 ## Methods
 

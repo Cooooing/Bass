@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageReply**](PageReply.md) | 分页结果。 | [optional] 
-**Rows** | Pointer to [**[]Article**](Article.md) | 文章列表。 | [optional] 
+**Page** | Pointer to [**PageReply**](PageReply.md) |  | [optional] 
+**Rows** | Pointer to [**[]ArticleListItem**](ArticleListItem.md) |  | [optional] 
 
 ## Methods
 
@@ -53,20 +53,20 @@ HasPage returns a boolean if a field has been set.
 
 ### GetRows
 
-`func (o *ListArticlesReply) GetRows() []Article`
+`func (o *ListArticlesReply) GetRows() []ArticleListItem`
 
 GetRows returns the Rows field if non-nil, zero value otherwise.
 
 ### GetRowsOk
 
-`func (o *ListArticlesReply) GetRowsOk() (*[]Article, bool)`
+`func (o *ListArticlesReply) GetRowsOk() (*[]ArticleListItem, bool)`
 
 GetRowsOk returns a tuple with the Rows field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRows
 
-`func (o *ListArticlesReply) SetRows(v []Article)`
+`func (o *ListArticlesReply) SetRows(v []ArticleListItem)`
 
 SetRows sets Rows field to given value.
 

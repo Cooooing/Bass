@@ -58,11 +58,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Delete", func(t *testing.T) {
+	t.Run("Test ArticleServiceService DiscardDraft", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Delete(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.DiscardDraft(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -135,6 +135,18 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 		t.Skip("skip test")  // remove to run test
 
 		resp, httpRes, err := apiClient.ArticleService.Thank(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test ArticleServiceService Update", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.ArticleService.Update(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

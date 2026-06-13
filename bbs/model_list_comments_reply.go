@@ -19,10 +19,8 @@ var _ MappedNullable = &ListCommentsReply{}
 
 // ListCommentsReply struct for ListCommentsReply
 type ListCommentsReply struct {
-	// 分页结果。
 	Page *PageReply `json:"page,omitempty"`
-	// 评论列表。
-	Rows []Comment `json:"rows,omitempty"`
+	Rows []CommentListItem `json:"rows,omitempty"`
 }
 
 // NewListCommentsReply instantiates a new ListCommentsReply object
@@ -75,9 +73,9 @@ func (o *ListCommentsReply) SetPage(v PageReply) {
 }
 
 // GetRows returns the Rows field value if set, zero value otherwise.
-func (o *ListCommentsReply) GetRows() []Comment {
+func (o *ListCommentsReply) GetRows() []CommentListItem {
 	if o == nil || IsNil(o.Rows) {
-		var ret []Comment
+		var ret []CommentListItem
 		return ret
 	}
 	return o.Rows
@@ -85,7 +83,7 @@ func (o *ListCommentsReply) GetRows() []Comment {
 
 // GetRowsOk returns a tuple with the Rows field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListCommentsReply) GetRowsOk() ([]Comment, bool) {
+func (o *ListCommentsReply) GetRowsOk() ([]CommentListItem, bool) {
 	if o == nil || IsNil(o.Rows) {
 		return nil, false
 	}
@@ -101,8 +99,8 @@ func (o *ListCommentsReply) HasRows() bool {
 	return false
 }
 
-// SetRows gets a reference to the given []Comment and assigns it to the Rows field.
-func (o *ListCommentsReply) SetRows(v []Comment) {
+// SetRows gets a reference to the given []CommentListItem and assigns it to the Rows field.
+func (o *ListCommentsReply) SetRows(v []CommentListItem) {
 	o.Rows = v
 }
 

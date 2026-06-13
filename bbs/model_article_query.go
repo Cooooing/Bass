@@ -19,22 +19,18 @@ var _ MappedNullable = &ArticleQuery{}
 
 // ArticleQuery 文章查询条件。
 type ArticleQuery struct {
-	// 标签 ID。
 	TagId *string `json:"tag_id,omitempty"`
-	// 板块 ID。
 	DomainId *string `json:"domain_id,omitempty"`
-	// 文章状态。
-	Status *string `json:"status,omitempty"`
-	// 文章类型。
 	Type *string `json:"type,omitempty"`
-	// 排序方式。
 	Order *string `json:"order,omitempty"`
-	// 搜索关键词。
 	Keyword *string `json:"keyword,omitempty"`
-	// 作者账号 ID。
 	AuthorId *string `json:"author_id,omitempty"`
-	// 是否在列表中展示。
-	Listable *bool `json:"listable,omitempty"`
+	PublishStatus *string `json:"publish_status,omitempty"`
+	PublishStatuses []string `json:"publish_statuses,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
+	Visibilities []string `json:"visibilities,omitempty"`
+	Restriction *string `json:"restriction,omitempty"`
+	Restrictions []string `json:"restrictions,omitempty"`
 }
 
 // NewArticleQuery instantiates a new ArticleQuery object
@@ -116,38 +112,6 @@ func (o *ArticleQuery) HasDomainId() bool {
 // SetDomainId gets a reference to the given string and assigns it to the DomainId field.
 func (o *ArticleQuery) SetDomainId(v string) {
 	o.DomainId = &v
-}
-
-// GetStatus returns the Status field value if set, zero value otherwise.
-func (o *ArticleQuery) GetStatus() string {
-	if o == nil || IsNil(o.Status) {
-		var ret string
-		return ret
-	}
-	return *o.Status
-}
-
-// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ArticleQuery) GetStatusOk() (*string, bool) {
-	if o == nil || IsNil(o.Status) {
-		return nil, false
-	}
-	return o.Status, true
-}
-
-// HasStatus returns a boolean if a field has been set.
-func (o *ArticleQuery) HasStatus() bool {
-	if o != nil && !IsNil(o.Status) {
-		return true
-	}
-
-	return false
-}
-
-// SetStatus gets a reference to the given string and assigns it to the Status field.
-func (o *ArticleQuery) SetStatus(v string) {
-	o.Status = &v
 }
 
 // GetType returns the Type field value if set, zero value otherwise.
@@ -278,36 +242,196 @@ func (o *ArticleQuery) SetAuthorId(v string) {
 	o.AuthorId = &v
 }
 
-// GetListable returns the Listable field value if set, zero value otherwise.
-func (o *ArticleQuery) GetListable() bool {
-	if o == nil || IsNil(o.Listable) {
-		var ret bool
+// GetPublishStatus returns the PublishStatus field value if set, zero value otherwise.
+func (o *ArticleQuery) GetPublishStatus() string {
+	if o == nil || IsNil(o.PublishStatus) {
+		var ret string
 		return ret
 	}
-	return *o.Listable
+	return *o.PublishStatus
 }
 
-// GetListableOk returns a tuple with the Listable field value if set, nil otherwise
+// GetPublishStatusOk returns a tuple with the PublishStatus field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleQuery) GetListableOk() (*bool, bool) {
-	if o == nil || IsNil(o.Listable) {
+func (o *ArticleQuery) GetPublishStatusOk() (*string, bool) {
+	if o == nil || IsNil(o.PublishStatus) {
 		return nil, false
 	}
-	return o.Listable, true
+	return o.PublishStatus, true
 }
 
-// HasListable returns a boolean if a field has been set.
-func (o *ArticleQuery) HasListable() bool {
-	if o != nil && !IsNil(o.Listable) {
+// HasPublishStatus returns a boolean if a field has been set.
+func (o *ArticleQuery) HasPublishStatus() bool {
+	if o != nil && !IsNil(o.PublishStatus) {
 		return true
 	}
 
 	return false
 }
 
-// SetListable gets a reference to the given bool and assigns it to the Listable field.
-func (o *ArticleQuery) SetListable(v bool) {
-	o.Listable = &v
+// SetPublishStatus gets a reference to the given string and assigns it to the PublishStatus field.
+func (o *ArticleQuery) SetPublishStatus(v string) {
+	o.PublishStatus = &v
+}
+
+// GetPublishStatuses returns the PublishStatuses field value if set, zero value otherwise.
+func (o *ArticleQuery) GetPublishStatuses() []string {
+	if o == nil || IsNil(o.PublishStatuses) {
+		var ret []string
+		return ret
+	}
+	return o.PublishStatuses
+}
+
+// GetPublishStatusesOk returns a tuple with the PublishStatuses field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleQuery) GetPublishStatusesOk() ([]string, bool) {
+	if o == nil || IsNil(o.PublishStatuses) {
+		return nil, false
+	}
+	return o.PublishStatuses, true
+}
+
+// HasPublishStatuses returns a boolean if a field has been set.
+func (o *ArticleQuery) HasPublishStatuses() bool {
+	if o != nil && !IsNil(o.PublishStatuses) {
+		return true
+	}
+
+	return false
+}
+
+// SetPublishStatuses gets a reference to the given []string and assigns it to the PublishStatuses field.
+func (o *ArticleQuery) SetPublishStatuses(v []string) {
+	o.PublishStatuses = v
+}
+
+// GetVisibility returns the Visibility field value if set, zero value otherwise.
+func (o *ArticleQuery) GetVisibility() string {
+	if o == nil || IsNil(o.Visibility) {
+		var ret string
+		return ret
+	}
+	return *o.Visibility
+}
+
+// GetVisibilityOk returns a tuple with the Visibility field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleQuery) GetVisibilityOk() (*string, bool) {
+	if o == nil || IsNil(o.Visibility) {
+		return nil, false
+	}
+	return o.Visibility, true
+}
+
+// HasVisibility returns a boolean if a field has been set.
+func (o *ArticleQuery) HasVisibility() bool {
+	if o != nil && !IsNil(o.Visibility) {
+		return true
+	}
+
+	return false
+}
+
+// SetVisibility gets a reference to the given string and assigns it to the Visibility field.
+func (o *ArticleQuery) SetVisibility(v string) {
+	o.Visibility = &v
+}
+
+// GetVisibilities returns the Visibilities field value if set, zero value otherwise.
+func (o *ArticleQuery) GetVisibilities() []string {
+	if o == nil || IsNil(o.Visibilities) {
+		var ret []string
+		return ret
+	}
+	return o.Visibilities
+}
+
+// GetVisibilitiesOk returns a tuple with the Visibilities field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleQuery) GetVisibilitiesOk() ([]string, bool) {
+	if o == nil || IsNil(o.Visibilities) {
+		return nil, false
+	}
+	return o.Visibilities, true
+}
+
+// HasVisibilities returns a boolean if a field has been set.
+func (o *ArticleQuery) HasVisibilities() bool {
+	if o != nil && !IsNil(o.Visibilities) {
+		return true
+	}
+
+	return false
+}
+
+// SetVisibilities gets a reference to the given []string and assigns it to the Visibilities field.
+func (o *ArticleQuery) SetVisibilities(v []string) {
+	o.Visibilities = v
+}
+
+// GetRestriction returns the Restriction field value if set, zero value otherwise.
+func (o *ArticleQuery) GetRestriction() string {
+	if o == nil || IsNil(o.Restriction) {
+		var ret string
+		return ret
+	}
+	return *o.Restriction
+}
+
+// GetRestrictionOk returns a tuple with the Restriction field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleQuery) GetRestrictionOk() (*string, bool) {
+	if o == nil || IsNil(o.Restriction) {
+		return nil, false
+	}
+	return o.Restriction, true
+}
+
+// HasRestriction returns a boolean if a field has been set.
+func (o *ArticleQuery) HasRestriction() bool {
+	if o != nil && !IsNil(o.Restriction) {
+		return true
+	}
+
+	return false
+}
+
+// SetRestriction gets a reference to the given string and assigns it to the Restriction field.
+func (o *ArticleQuery) SetRestriction(v string) {
+	o.Restriction = &v
+}
+
+// GetRestrictions returns the Restrictions field value if set, zero value otherwise.
+func (o *ArticleQuery) GetRestrictions() []string {
+	if o == nil || IsNil(o.Restrictions) {
+		var ret []string
+		return ret
+	}
+	return o.Restrictions
+}
+
+// GetRestrictionsOk returns a tuple with the Restrictions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleQuery) GetRestrictionsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Restrictions) {
+		return nil, false
+	}
+	return o.Restrictions, true
+}
+
+// HasRestrictions returns a boolean if a field has been set.
+func (o *ArticleQuery) HasRestrictions() bool {
+	if o != nil && !IsNil(o.Restrictions) {
+		return true
+	}
+
+	return false
+}
+
+// SetRestrictions gets a reference to the given []string and assigns it to the Restrictions field.
+func (o *ArticleQuery) SetRestrictions(v []string) {
+	o.Restrictions = v
 }
 
 func (o ArticleQuery) MarshalJSON() ([]byte, error) {
@@ -326,9 +450,6 @@ func (o ArticleQuery) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DomainId) {
 		toSerialize["domain_id"] = o.DomainId
 	}
-	if !IsNil(o.Status) {
-		toSerialize["status"] = o.Status
-	}
 	if !IsNil(o.Type) {
 		toSerialize["type"] = o.Type
 	}
@@ -341,8 +462,23 @@ func (o ArticleQuery) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AuthorId) {
 		toSerialize["author_id"] = o.AuthorId
 	}
-	if !IsNil(o.Listable) {
-		toSerialize["listable"] = o.Listable
+	if !IsNil(o.PublishStatus) {
+		toSerialize["publish_status"] = o.PublishStatus
+	}
+	if !IsNil(o.PublishStatuses) {
+		toSerialize["publish_statuses"] = o.PublishStatuses
+	}
+	if !IsNil(o.Visibility) {
+		toSerialize["visibility"] = o.Visibility
+	}
+	if !IsNil(o.Visibilities) {
+		toSerialize["visibilities"] = o.Visibilities
+	}
+	if !IsNil(o.Restriction) {
+		toSerialize["restriction"] = o.Restriction
+	}
+	if !IsNil(o.Restrictions) {
+		toSerialize["restrictions"] = o.Restrictions
 	}
 	return toSerialize, nil
 }

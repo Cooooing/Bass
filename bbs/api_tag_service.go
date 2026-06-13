@@ -22,6 +22,20 @@ import (
 type TagService interface {
 
 	/*
+	Create Method for Create
+
+	创建标签。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCreateRequest
+	*/
+	Create(ctx context.Context) ApiCreateRequest
+
+	// CreateExecute executes the request
+	//  @return CreateTagReply
+	CreateExecute(r ApiCreateRequest) (*CreateTagReply, *http.Response, error)
+
+	/*
 	List Method for List
 
 	分页查询标签列表。
@@ -34,10 +48,134 @@ type TagService interface {
 	// ListExecute executes the request
 	//  @return ListTagsReply
 	ListExecute(r ApiListRequest) (*ListTagsReply, *http.Response, error)
+
+	/*
+	Update Method for Update
+
+	更新标签。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUpdateRequest
+	*/
+	Update(ctx context.Context) ApiUpdateRequest
+
+	// UpdateExecute executes the request
+	//  @return UpdateTagReply
+	UpdateExecute(r ApiUpdateRequest) (*UpdateTagReply, *http.Response, error)
 }
 
 // TagServiceService TagService service
 type TagServiceService service
+
+type ApiCreateRequest struct {
+	ctx context.Context
+	ApiService TagService
+	createTagRequest *CreateTagRequest
+}
+
+func (r ApiCreateRequest) CreateTagRequest(createTagRequest CreateTagRequest) ApiCreateRequest {
+	r.createTagRequest = &createTagRequest
+	return r
+}
+
+func (r ApiCreateRequest) Execute() (*CreateTagReply, *http.Response, error) {
+	return r.ApiService.CreateExecute(r)
+}
+
+/*
+Create Method for Create
+
+创建标签。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCreateRequest
+*/
+func (a *TagServiceService) Create(ctx context.Context) ApiCreateRequest {
+	return ApiCreateRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return CreateTagReply
+func (a *TagServiceService) CreateExecute(r ApiCreateRequest) (*CreateTagReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CreateTagReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.Create")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/tag/create"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.createTagRequest == nil {
+		return localVarReturnValue, nil, reportError("createTagRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.createTagRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiListRequest struct {
 	ctx context.Context
@@ -112,6 +250,116 @@ func (a *TagServiceService) ListExecute(r ApiListRequest) (*ListTagsReply, *http
 	}
 	// body params
 	localVarPostBody = r.listTagsRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdateRequest struct {
+	ctx context.Context
+	ApiService TagService
+	updateTagRequest *UpdateTagRequest
+}
+
+func (r ApiUpdateRequest) UpdateTagRequest(updateTagRequest UpdateTagRequest) ApiUpdateRequest {
+	r.updateTagRequest = &updateTagRequest
+	return r
+}
+
+func (r ApiUpdateRequest) Execute() (*UpdateTagReply, *http.Response, error) {
+	return r.ApiService.UpdateExecute(r)
+}
+
+/*
+Update Method for Update
+
+更新标签。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUpdateRequest
+*/
+func (a *TagServiceService) Update(ctx context.Context) ApiUpdateRequest {
+	return ApiUpdateRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return UpdateTagReply
+func (a *TagServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateTagReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *UpdateTagReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.Update")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/tag/update"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.updateTagRequest == nil {
+		return localVarReturnValue, nil, reportError("updateTagRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.updateTagRequest
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

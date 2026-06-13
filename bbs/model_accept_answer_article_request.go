@@ -21,9 +21,7 @@ var _ MappedNullable = &AcceptAnswerArticleRequest{}
 
 // AcceptAnswerArticleRequest struct for AcceptAnswerArticleRequest
 type AcceptAnswerArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
-	// 评论 ID。
 	CommentId string `json:"comment_id"`
 }
 

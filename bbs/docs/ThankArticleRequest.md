@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** | 文章 ID。 | 
-**Active** | **bool** | 是否感谢。 | 
+**ArticleId** | **string** |  | 
+**Active** | **bool** |  | 
 
 ## Methods
 

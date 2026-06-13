@@ -19,22 +19,15 @@ var _ MappedNullable = &CommentQuery{}
 
 // CommentQuery 评论查询条件。
 type CommentQuery struct {
-	// 评论 ID。
 	CommentId *string `json:"comment_id,omitempty"`
-	// 文章 ID。
 	ArticleId *string `json:"article_id,omitempty"`
-	// 父评论 ID。
 	ParentId *string `json:"parent_id,omitempty"`
-	// 回复的评论 ID。
 	ReplyId *string `json:"reply_id,omitempty"`
-	// 排序方式。
 	Order *string `json:"order,omitempty"`
-	// 评论账号 ID。
 	UserId *string `json:"user_id,omitempty"`
-	// 评论层级。
 	Level *int32 `json:"level,omitempty"`
-	// 评论状态。
-	Status *string `json:"status,omitempty"`
+	Restriction *string `json:"restriction,omitempty"`
+	Restrictions []string `json:"restrictions,omitempty"`
 }
 
 // NewCommentQuery instantiates a new CommentQuery object
@@ -278,36 +271,68 @@ func (o *CommentQuery) SetLevel(v int32) {
 	o.Level = &v
 }
 
-// GetStatus returns the Status field value if set, zero value otherwise.
-func (o *CommentQuery) GetStatus() string {
-	if o == nil || IsNil(o.Status) {
+// GetRestriction returns the Restriction field value if set, zero value otherwise.
+func (o *CommentQuery) GetRestriction() string {
+	if o == nil || IsNil(o.Restriction) {
 		var ret string
 		return ret
 	}
-	return *o.Status
+	return *o.Restriction
 }
 
-// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// GetRestrictionOk returns a tuple with the Restriction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CommentQuery) GetStatusOk() (*string, bool) {
-	if o == nil || IsNil(o.Status) {
+func (o *CommentQuery) GetRestrictionOk() (*string, bool) {
+	if o == nil || IsNil(o.Restriction) {
 		return nil, false
 	}
-	return o.Status, true
+	return o.Restriction, true
 }
 
-// HasStatus returns a boolean if a field has been set.
-func (o *CommentQuery) HasStatus() bool {
-	if o != nil && !IsNil(o.Status) {
+// HasRestriction returns a boolean if a field has been set.
+func (o *CommentQuery) HasRestriction() bool {
+	if o != nil && !IsNil(o.Restriction) {
 		return true
 	}
 
 	return false
 }
 
-// SetStatus gets a reference to the given string and assigns it to the Status field.
-func (o *CommentQuery) SetStatus(v string) {
-	o.Status = &v
+// SetRestriction gets a reference to the given string and assigns it to the Restriction field.
+func (o *CommentQuery) SetRestriction(v string) {
+	o.Restriction = &v
+}
+
+// GetRestrictions returns the Restrictions field value if set, zero value otherwise.
+func (o *CommentQuery) GetRestrictions() []string {
+	if o == nil || IsNil(o.Restrictions) {
+		var ret []string
+		return ret
+	}
+	return o.Restrictions
+}
+
+// GetRestrictionsOk returns a tuple with the Restrictions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CommentQuery) GetRestrictionsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Restrictions) {
+		return nil, false
+	}
+	return o.Restrictions, true
+}
+
+// HasRestrictions returns a boolean if a field has been set.
+func (o *CommentQuery) HasRestrictions() bool {
+	if o != nil && !IsNil(o.Restrictions) {
+		return true
+	}
+
+	return false
+}
+
+// SetRestrictions gets a reference to the given []string and assigns it to the Restrictions field.
+func (o *CommentQuery) SetRestrictions(v []string) {
+	o.Restrictions = v
 }
 
 func (o CommentQuery) MarshalJSON() ([]byte, error) {
@@ -341,8 +366,11 @@ func (o CommentQuery) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Level) {
 		toSerialize["level"] = o.Level
 	}
-	if !IsNil(o.Status) {
-		toSerialize["status"] = o.Status
+	if !IsNil(o.Restriction) {
+		toSerialize["restriction"] = o.Restriction
+	}
+	if !IsNil(o.Restrictions) {
+		toSerialize["restrictions"] = o.Restrictions
 	}
 	return toSerialize, nil
 }

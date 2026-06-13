@@ -4,14 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** | 附言 ID。 | [optional] 
-**ArticleId** | Pointer to **string** | 文章 ID。 | [optional] 
-**Content** | Pointer to **string** | 原始内容。 | [optional] 
-**ContentRender** | Pointer to **string** | 渲染后的内容。 | [optional] 
-**CreatedBy** | Pointer to **string** | 创建账号 ID。 | [optional] 
-**UpdatedBy** | Pointer to **string** | 更新账号 ID。 | [optional] 
-**CreatedAt** | Pointer to **string** | 创建时间。 | [optional] 
-**UpdatedAt** | Pointer to **string** | 更新时间。 | [optional] 
+**Id** | Pointer to **string** |  | [optional] 
+**ArticleId** | Pointer to **string** |  | [optional] 
+**Content** | Pointer to **string** |  | [optional] 
+**ContentRender** | Pointer to **string** |  | [optional] 
+**Restriction** | Pointer to **string** |  | [optional] 
+**CreatedBy** | Pointer to **string** |  | [optional] 
+**UpdatedBy** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **string** |  | [optional] 
+**UpdatedAt** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -131,6 +132,31 @@ SetContentRender sets ContentRender field to given value.
 `func (o *ArticlePostscript) HasContentRender() bool`
 
 HasContentRender returns a boolean if a field has been set.
+
+### GetRestriction
+
+`func (o *ArticlePostscript) GetRestriction() string`
+
+GetRestriction returns the Restriction field if non-nil, zero value otherwise.
+
+### GetRestrictionOk
+
+`func (o *ArticlePostscript) GetRestrictionOk() (*string, bool)`
+
+GetRestrictionOk returns a tuple with the Restriction field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRestriction
+
+`func (o *ArticlePostscript) SetRestriction(v string)`
+
+SetRestriction sets Restriction field to given value.
+
+### HasRestriction
+
+`func (o *ArticlePostscript) HasRestriction() bool`
+
+HasRestriction returns a boolean if a field has been set.
 
 ### GetCreatedBy
 

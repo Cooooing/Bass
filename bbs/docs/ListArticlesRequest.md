@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageRequest**](PageRequest.md) | 分页参数。 | [optional] 
-**Query** | Pointer to [**ArticleQuery**](ArticleQuery.md) | 查询条件。 | [optional] 
+**Page** | Pointer to [**PageRequest**](PageRequest.md) |  | [optional] 
+**Query** | Pointer to [**ArticleQuery**](ArticleQuery.md) |  | [optional] 
 
 ## Methods
 

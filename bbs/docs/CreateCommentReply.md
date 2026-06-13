@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Comment** | Pointer to [**Comment**](Comment.md) | 创建后的评论。 | [optional] 
+**Comment** | Pointer to [**CommentDetail**](CommentDetail.md) |  | [optional] 
 
 ## Methods
 
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetComment
 
-`func (o *CreateCommentReply) GetComment() Comment`
+`func (o *CreateCommentReply) GetComment() CommentDetail`
 
 GetComment returns the Comment field if non-nil, zero value otherwise.
 
 ### GetCommentOk
 
-`func (o *CreateCommentReply) GetCommentOk() (*Comment, bool)`
+`func (o *CreateCommentReply) GetCommentOk() (*CommentDetail, bool)`
 
 GetCommentOk returns a tuple with the Comment field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetComment
 
-`func (o *CreateCommentReply) SetComment(v Comment)`
+`func (o *CreateCommentReply) SetComment(v CommentDetail)`
 
 SetComment sets Comment field to given value.
 

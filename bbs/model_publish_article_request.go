@@ -21,8 +21,8 @@ var _ MappedNullable = &PublishArticleRequest{}
 
 // PublishArticleRequest struct for PublishArticleRequest
 type PublishArticleRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 type _PublishArticleRequest PublishArticleRequest
@@ -69,6 +69,38 @@ func (o *PublishArticleRequest) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
+// GetVisibility returns the Visibility field value if set, zero value otherwise.
+func (o *PublishArticleRequest) GetVisibility() string {
+	if o == nil || IsNil(o.Visibility) {
+		var ret string
+		return ret
+	}
+	return *o.Visibility
+}
+
+// GetVisibilityOk returns a tuple with the Visibility field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PublishArticleRequest) GetVisibilityOk() (*string, bool) {
+	if o == nil || IsNil(o.Visibility) {
+		return nil, false
+	}
+	return o.Visibility, true
+}
+
+// HasVisibility returns a boolean if a field has been set.
+func (o *PublishArticleRequest) HasVisibility() bool {
+	if o != nil && !IsNil(o.Visibility) {
+		return true
+	}
+
+	return false
+}
+
+// SetVisibility gets a reference to the given string and assigns it to the Visibility field.
+func (o *PublishArticleRequest) SetVisibility(v string) {
+	o.Visibility = &v
+}
+
 func (o PublishArticleRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -80,6 +112,9 @@ func (o PublishArticleRequest) MarshalJSON() ([]byte, error) {
 func (o PublishArticleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
+	if !IsNil(o.Visibility) {
+		toSerialize["visibility"] = o.Visibility
+	}
 	return toSerialize, nil
 }
 

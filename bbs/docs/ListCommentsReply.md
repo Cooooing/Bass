@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageReply**](PageReply.md) | 分页结果。 | [optional] 
-**Rows** | Pointer to [**[]Comment**](Comment.md) | 评论列表。 | [optional] 
+**Page** | Pointer to [**PageReply**](PageReply.md) |  | [optional] 
+**Rows** | Pointer to [**[]CommentListItem**](CommentListItem.md) |  | [optional] 
 
 ## Methods
 
@@ -53,20 +53,20 @@ HasPage returns a boolean if a field has been set.
 
 ### GetRows
 
-`func (o *ListCommentsReply) GetRows() []Comment`
+`func (o *ListCommentsReply) GetRows() []CommentListItem`
 
 GetRows returns the Rows field if non-nil, zero value otherwise.
 
 ### GetRowsOk
 
-`func (o *ListCommentsReply) GetRowsOk() (*[]Comment, bool)`
+`func (o *ListCommentsReply) GetRowsOk() (*[]CommentListItem, bool)`
 
 GetRowsOk returns a tuple with the Rows field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRows
 
-`func (o *ListCommentsReply) SetRows(v []Comment)`
+`func (o *ListCommentsReply) SetRows(v []CommentListItem)`
 
 SetRows sets Rows field to given value.
 

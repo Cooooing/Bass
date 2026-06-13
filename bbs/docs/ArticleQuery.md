@@ -4,14 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TagId** | Pointer to **string** | 标签 ID。 | [optional] 
-**DomainId** | Pointer to **string** | 板块 ID。 | [optional] 
-**Status** | Pointer to **string** | 文章状态。 | [optional] 
-**Type** | Pointer to **string** | 文章类型。 | [optional] 
-**Order** | Pointer to **string** | 排序方式。 | [optional] 
-**Keyword** | Pointer to **string** | 搜索关键词。 | [optional] 
-**AuthorId** | Pointer to **string** | 作者账号 ID。 | [optional] 
-**Listable** | Pointer to **bool** | 是否在列表中展示。 | [optional] 
+**TagId** | Pointer to **string** |  | [optional] 
+**DomainId** | Pointer to **string** |  | [optional] 
+**Type** | Pointer to **string** |  | [optional] 
+**Order** | Pointer to **string** |  | [optional] 
+**Keyword** | Pointer to **string** |  | [optional] 
+**AuthorId** | Pointer to **string** |  | [optional] 
+**PublishStatus** | Pointer to **string** |  | [optional] 
+**PublishStatuses** | Pointer to **[]string** |  | [optional] 
+**Visibility** | Pointer to **string** |  | [optional] 
+**Visibilities** | Pointer to **[]string** |  | [optional] 
+**Restriction** | Pointer to **string** |  | [optional] 
+**Restrictions** | Pointer to **[]string** |  | [optional] 
 
 ## Methods
 
@@ -81,31 +85,6 @@ SetDomainId sets DomainId field to given value.
 `func (o *ArticleQuery) HasDomainId() bool`
 
 HasDomainId returns a boolean if a field has been set.
-
-### GetStatus
-
-`func (o *ArticleQuery) GetStatus() string`
-
-GetStatus returns the Status field if non-nil, zero value otherwise.
-
-### GetStatusOk
-
-`func (o *ArticleQuery) GetStatusOk() (*string, bool)`
-
-GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetStatus
-
-`func (o *ArticleQuery) SetStatus(v string)`
-
-SetStatus sets Status field to given value.
-
-### HasStatus
-
-`func (o *ArticleQuery) HasStatus() bool`
-
-HasStatus returns a boolean if a field has been set.
 
 ### GetType
 
@@ -207,30 +186,155 @@ SetAuthorId sets AuthorId field to given value.
 
 HasAuthorId returns a boolean if a field has been set.
 
-### GetListable
+### GetPublishStatus
 
-`func (o *ArticleQuery) GetListable() bool`
+`func (o *ArticleQuery) GetPublishStatus() string`
 
-GetListable returns the Listable field if non-nil, zero value otherwise.
+GetPublishStatus returns the PublishStatus field if non-nil, zero value otherwise.
 
-### GetListableOk
+### GetPublishStatusOk
 
-`func (o *ArticleQuery) GetListableOk() (*bool, bool)`
+`func (o *ArticleQuery) GetPublishStatusOk() (*string, bool)`
 
-GetListableOk returns a tuple with the Listable field if it's non-nil, zero value otherwise
+GetPublishStatusOk returns a tuple with the PublishStatus field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetListable
+### SetPublishStatus
 
-`func (o *ArticleQuery) SetListable(v bool)`
+`func (o *ArticleQuery) SetPublishStatus(v string)`
 
-SetListable sets Listable field to given value.
+SetPublishStatus sets PublishStatus field to given value.
 
-### HasListable
+### HasPublishStatus
 
-`func (o *ArticleQuery) HasListable() bool`
+`func (o *ArticleQuery) HasPublishStatus() bool`
 
-HasListable returns a boolean if a field has been set.
+HasPublishStatus returns a boolean if a field has been set.
+
+### GetPublishStatuses
+
+`func (o *ArticleQuery) GetPublishStatuses() []string`
+
+GetPublishStatuses returns the PublishStatuses field if non-nil, zero value otherwise.
+
+### GetPublishStatusesOk
+
+`func (o *ArticleQuery) GetPublishStatusesOk() (*[]string, bool)`
+
+GetPublishStatusesOk returns a tuple with the PublishStatuses field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPublishStatuses
+
+`func (o *ArticleQuery) SetPublishStatuses(v []string)`
+
+SetPublishStatuses sets PublishStatuses field to given value.
+
+### HasPublishStatuses
+
+`func (o *ArticleQuery) HasPublishStatuses() bool`
+
+HasPublishStatuses returns a boolean if a field has been set.
+
+### GetVisibility
+
+`func (o *ArticleQuery) GetVisibility() string`
+
+GetVisibility returns the Visibility field if non-nil, zero value otherwise.
+
+### GetVisibilityOk
+
+`func (o *ArticleQuery) GetVisibilityOk() (*string, bool)`
+
+GetVisibilityOk returns a tuple with the Visibility field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVisibility
+
+`func (o *ArticleQuery) SetVisibility(v string)`
+
+SetVisibility sets Visibility field to given value.
+
+### HasVisibility
+
+`func (o *ArticleQuery) HasVisibility() bool`
+
+HasVisibility returns a boolean if a field has been set.
+
+### GetVisibilities
+
+`func (o *ArticleQuery) GetVisibilities() []string`
+
+GetVisibilities returns the Visibilities field if non-nil, zero value otherwise.
+
+### GetVisibilitiesOk
+
+`func (o *ArticleQuery) GetVisibilitiesOk() (*[]string, bool)`
+
+GetVisibilitiesOk returns a tuple with the Visibilities field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVisibilities
+
+`func (o *ArticleQuery) SetVisibilities(v []string)`
+
+SetVisibilities sets Visibilities field to given value.
+
+### HasVisibilities
+
+`func (o *ArticleQuery) HasVisibilities() bool`
+
+HasVisibilities returns a boolean if a field has been set.
+
+### GetRestriction
+
+`func (o *ArticleQuery) GetRestriction() string`
+
+GetRestriction returns the Restriction field if non-nil, zero value otherwise.
+
+### GetRestrictionOk
+
+`func (o *ArticleQuery) GetRestrictionOk() (*string, bool)`
+
+GetRestrictionOk returns a tuple with the Restriction field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRestriction
+
+`func (o *ArticleQuery) SetRestriction(v string)`
+
+SetRestriction sets Restriction field to given value.
+
+### HasRestriction
+
+`func (o *ArticleQuery) HasRestriction() bool`
+
+HasRestriction returns a boolean if a field has been set.
+
+### GetRestrictions
+
+`func (o *ArticleQuery) GetRestrictions() []string`
+
+GetRestrictions returns the Restrictions field if non-nil, zero value otherwise.
+
+### GetRestrictionsOk
+
+`func (o *ArticleQuery) GetRestrictionsOk() (*[]string, bool)`
+
+GetRestrictionsOk returns a tuple with the Restrictions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRestrictions
+
+`func (o *ArticleQuery) SetRestrictions(v []string)`
+
+SetRestrictions sets Restrictions field to given value.
+
+### HasRestrictions
+
+`func (o *ArticleQuery) HasRestrictions() bool`
+
+HasRestrictions returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

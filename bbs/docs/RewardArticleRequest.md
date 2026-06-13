@@ -4,7 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** | 文章 ID。 | 
+**ArticleId** | **string** |  | 
+**Points** | Pointer to **int32** |  | [optional] 
 
 ## Methods
 
@@ -44,6 +45,31 @@ and a boolean to check if the value has been set.
 
 SetArticleId sets ArticleId field to given value.
 
+
+### GetPoints
+
+`func (o *RewardArticleRequest) GetPoints() int32`
+
+GetPoints returns the Points field if non-nil, zero value otherwise.
+
+### GetPointsOk
+
+`func (o *RewardArticleRequest) GetPointsOk() (*int32, bool)`
+
+GetPointsOk returns a tuple with the Points field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPoints
+
+`func (o *RewardArticleRequest) SetPoints(v int32)`
+
+SetPoints sets Points field to given value.
+
+### HasPoints
+
+`func (o *RewardArticleRequest) HasPoints() bool`
+
+HasPoints returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

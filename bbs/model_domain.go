@@ -19,27 +19,16 @@ var _ MappedNullable = &Domain{}
 
 // Domain 内容板块。
 type Domain struct {
-	// 板块 ID。
 	Id *string `json:"id,omitempty"`
-	// 板块名称。
 	Name *string `json:"name,omitempty"`
-	// 板块描述。
 	Description *string `json:"description,omitempty"`
-	// 板块状态。
 	Status *string `json:"status,omitempty"`
-	// 板块 URL。
 	Url *string `json:"url,omitempty"`
-	// 板块图标。
 	Icon *string `json:"icon,omitempty"`
-	// 是否在导航中展示。
 	IsNav *bool `json:"is_nav,omitempty"`
-	// 创建账号 ID。
 	CreatedBy *string `json:"created_by,omitempty"`
-	// 更新账号 ID。
 	UpdatedBy *string `json:"updated_by,omitempty"`
-	// 创建时间。
 	CreatedAt *string `json:"created_at,omitempty"`
-	// 更新时间。
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 

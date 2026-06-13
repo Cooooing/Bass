@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **string** | 评论 ID。 | 
-**Active** | **bool** | 是否感谢。 | 
+**Id** | **string** |  | 
+**Active** | **bool** |  | 
 
 ## Methods
 

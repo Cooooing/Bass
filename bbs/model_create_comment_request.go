@@ -21,11 +21,8 @@ var _ MappedNullable = &CreateCommentRequest{}
 
 // CreateCommentRequest struct for CreateCommentRequest
 type CreateCommentRequest struct {
-	// 文章 ID。
 	ArticleId string `json:"article_id"`
-	// 评论内容。
 	Content string `json:"content"`
-	// 回复的评论 ID。
 	ReplyId *string `json:"reply_id,omitempty"`
 }
 

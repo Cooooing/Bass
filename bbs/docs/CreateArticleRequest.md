@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | [**ArticleSave**](ArticleSave.md) | 文章保存内容。 | 
+**Article** | [**RequestArticle**](RequestArticle.md) |  | 
 
 ## Methods
 
 ### NewCreateArticleRequest
 
-`func NewCreateArticleRequest(article ArticleSave, ) *CreateArticleRequest`
+`func NewCreateArticleRequest(article RequestArticle, ) *CreateArticleRequest`
 
 NewCreateArticleRequest instantiates a new CreateArticleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetArticle
 
-`func (o *CreateArticleRequest) GetArticle() ArticleSave`
+`func (o *CreateArticleRequest) GetArticle() RequestArticle`
 
 GetArticle returns the Article field if non-nil, zero value otherwise.
 
 ### GetArticleOk
 
-`func (o *CreateArticleRequest) GetArticleOk() (*ArticleSave, bool)`
+`func (o *CreateArticleRequest) GetArticleOk() (*RequestArticle, bool)`
 
 GetArticleOk returns a tuple with the Article field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetArticle
 
-`func (o *CreateArticleRequest) SetArticle(v ArticleSave)`
+`func (o *CreateArticleRequest) SetArticle(v RequestArticle)`
 
 SetArticle sets Article field to given value.
 

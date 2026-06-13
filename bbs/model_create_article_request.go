@@ -21,8 +21,7 @@ var _ MappedNullable = &CreateArticleRequest{}
 
 // CreateArticleRequest struct for CreateArticleRequest
 type CreateArticleRequest struct {
-	// 文章保存内容。
-	Article ArticleSave `json:"article"`
+	Article RequestArticle `json:"article"`
 }
 
 type _CreateArticleRequest CreateArticleRequest
@@ -31,7 +30,7 @@ type _CreateArticleRequest CreateArticleRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateArticleRequest(article ArticleSave) *CreateArticleRequest {
+func NewCreateArticleRequest(article RequestArticle) *CreateArticleRequest {
 	this := CreateArticleRequest{}
 	this.Article = article
 	return &this
@@ -46,9 +45,9 @@ func NewCreateArticleRequestWithDefaults() *CreateArticleRequest {
 }
 
 // GetArticle returns the Article field value
-func (o *CreateArticleRequest) GetArticle() ArticleSave {
+func (o *CreateArticleRequest) GetArticle() RequestArticle {
 	if o == nil {
-		var ret ArticleSave
+		var ret RequestArticle
 		return ret
 	}
 
@@ -57,7 +56,7 @@ func (o *CreateArticleRequest) GetArticle() ArticleSave {
 
 // GetArticleOk returns a tuple with the Article field value
 // and a boolean to check if the value has been set.
-func (o *CreateArticleRequest) GetArticleOk() (*ArticleSave, bool) {
+func (o *CreateArticleRequest) GetArticleOk() (*RequestArticle, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -65,7 +64,7 @@ func (o *CreateArticleRequest) GetArticleOk() (*ArticleSave, bool) {
 }
 
 // SetArticle sets field value
-func (o *CreateArticleRequest) SetArticle(v ArticleSave) {
+func (o *CreateArticleRequest) SetArticle(v RequestArticle) {
 	o.Article = v
 }
 

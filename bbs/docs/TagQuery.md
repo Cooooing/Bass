@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **Name** | Pointer to **string** | 标签名称。 | [optional] 
 **Names** | Pointer to **[]string** | 标签名称列表。 | [optional] 
 **Description** | Pointer to **string** | 标签描述。 | [optional] 
-**Status** | Pointer to **string** | 标签状态。 | [optional] 
+**Status** | Pointer to **string** | 标签启停状态。 | [optional] 
 **DomainId** | Pointer to **string** | 所属板块 ID。 | [optional] 
 
 ## Methods

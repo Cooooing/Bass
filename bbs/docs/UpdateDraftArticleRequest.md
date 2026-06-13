@@ -4,13 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | [**ArticleSave**](ArticleSave.md) | 文章保存内容。 | 
+**ArticleId** | **string** |  | 
+**Article** | [**RequestArticle**](RequestArticle.md) |  | 
 
 ## Methods
 
 ### NewUpdateDraftArticleRequest
 
-`func NewUpdateDraftArticleRequest(article ArticleSave, ) *UpdateDraftArticleRequest`
+`func NewUpdateDraftArticleRequest(articleId string, article RequestArticle, ) *UpdateDraftArticleRequest`
 
 NewUpdateDraftArticleRequest instantiates a new UpdateDraftArticleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -25,22 +26,42 @@ NewUpdateDraftArticleRequestWithDefaults instantiates a new UpdateDraftArticleRe
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
+### GetArticleId
+
+`func (o *UpdateDraftArticleRequest) GetArticleId() string`
+
+GetArticleId returns the ArticleId field if non-nil, zero value otherwise.
+
+### GetArticleIdOk
+
+`func (o *UpdateDraftArticleRequest) GetArticleIdOk() (*string, bool)`
+
+GetArticleIdOk returns a tuple with the ArticleId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetArticleId
+
+`func (o *UpdateDraftArticleRequest) SetArticleId(v string)`
+
+SetArticleId sets ArticleId field to given value.
+
+
 ### GetArticle
 
-`func (o *UpdateDraftArticleRequest) GetArticle() ArticleSave`
+`func (o *UpdateDraftArticleRequest) GetArticle() RequestArticle`
 
 GetArticle returns the Article field if non-nil, zero value otherwise.
 
 ### GetArticleOk
 
-`func (o *UpdateDraftArticleRequest) GetArticleOk() (*ArticleSave, bool)`
+`func (o *UpdateDraftArticleRequest) GetArticleOk() (*RequestArticle, bool)`
 
 GetArticleOk returns a tuple with the Article field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetArticle
 
-`func (o *UpdateDraftArticleRequest) SetArticle(v ArticleSave)`
+`func (o *UpdateDraftArticleRequest) SetArticle(v RequestArticle)`
 
 SetArticle sets Article field to given value.
 

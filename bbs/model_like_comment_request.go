@@ -21,9 +21,7 @@ var _ MappedNullable = &LikeCommentRequest{}
 
 // LikeCommentRequest struct for LikeCommentRequest
 type LikeCommentRequest struct {
-	// 评论 ID。
 	Id string `json:"id"`
-	// 是否点赞。
 	Active bool `json:"active"`
 }
 

@@ -46,8 +46,8 @@ type CommentService interface {
 	Like(ctx context.Context) ApiLikeRequest
 
 	// LikeExecute executes the request
-	//  @return map[string]interface{}
-	LikeExecute(r ApiLikeRequest) (map[string]interface{}, *http.Response, error)
+	//  @return LikeCommentReply
+	LikeExecute(r ApiLikeRequest) (*LikeCommentReply, *http.Response, error)
 
 	/*
 	List Method for List
@@ -64,6 +64,48 @@ type CommentService interface {
 	ListExecute(r ApiListRequest) (*ListCommentsReply, *http.Response, error)
 
 	/*
+	ListReplies Method for ListReplies
+
+	分页查询评论回复。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListRepliesRequest
+	*/
+	ListReplies(ctx context.Context) ApiListRepliesRequest
+
+	// ListRepliesExecute executes the request
+	//  @return ListCommentRepliesReply
+	ListRepliesExecute(r ApiListRepliesRequest) (*ListCommentRepliesReply, *http.Response, error)
+
+	/*
+	ListThreads Method for ListThreads
+
+	分页查询评论楼层。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListThreadsRequest
+	*/
+	ListThreads(ctx context.Context) ApiListThreadsRequest
+
+	// ListThreadsExecute executes the request
+	//  @return ListCommentThreadsReply
+	ListThreadsExecute(r ApiListThreadsRequest) (*ListCommentThreadsReply, *http.Response, error)
+
+	/*
+	ListTimeline Method for ListTimeline
+
+	分页查询评论时间线。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListTimelineRequest
+	*/
+	ListTimeline(ctx context.Context) ApiListTimelineRequest
+
+	// ListTimelineExecute executes the request
+	//  @return ListCommentTimelineReply
+	ListTimelineExecute(r ApiListTimelineRequest) (*ListCommentTimelineReply, *http.Response, error)
+
+	/*
 	Thank Method for Thank
 
 	感谢或取消感谢评论。
@@ -74,8 +116,8 @@ type CommentService interface {
 	Thank(ctx context.Context) ApiThankRequest
 
 	// ThankExecute executes the request
-	//  @return map[string]interface{}
-	ThankExecute(r ApiThankRequest) (map[string]interface{}, *http.Response, error)
+	//  @return ThankCommentReply
+	ThankExecute(r ApiThankRequest) (*ThankCommentReply, *http.Response, error)
 }
 
 // CommentServiceService CommentService service
@@ -202,7 +244,7 @@ func (r ApiLikeRequest) LikeCommentRequest(likeCommentRequest LikeCommentRequest
 	return r
 }
 
-func (r ApiLikeRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiLikeRequest) Execute() (*LikeCommentReply, *http.Response, error) {
 	return r.ApiService.LikeExecute(r)
 }
 
@@ -222,13 +264,13 @@ func (a *CommentServiceService) Like(ctx context.Context) ApiLikeRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (map[string]interface{}, *http.Response, error) {
+//  @return LikeCommentReply
+func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (*LikeCommentReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *LikeCommentReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Like")
@@ -411,6 +453,336 @@ func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsRepl
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiListRepliesRequest struct {
+	ctx context.Context
+	ApiService CommentService
+	listCommentRepliesRequest *ListCommentRepliesRequest
+}
+
+func (r ApiListRepliesRequest) ListCommentRepliesRequest(listCommentRepliesRequest ListCommentRepliesRequest) ApiListRepliesRequest {
+	r.listCommentRepliesRequest = &listCommentRepliesRequest
+	return r
+}
+
+func (r ApiListRepliesRequest) Execute() (*ListCommentRepliesReply, *http.Response, error) {
+	return r.ApiService.ListRepliesExecute(r)
+}
+
+/*
+ListReplies Method for ListReplies
+
+分页查询评论回复。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListRepliesRequest
+*/
+func (a *CommentServiceService) ListReplies(ctx context.Context) ApiListRepliesRequest {
+	return ApiListRepliesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListCommentRepliesReply
+func (a *CommentServiceService) ListRepliesExecute(r ApiListRepliesRequest) (*ListCommentRepliesReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListCommentRepliesReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.ListReplies")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/comment/list-replies"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listCommentRepliesRequest == nil {
+		return localVarReturnValue, nil, reportError("listCommentRepliesRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listCommentRepliesRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListThreadsRequest struct {
+	ctx context.Context
+	ApiService CommentService
+	listCommentThreadsRequest *ListCommentThreadsRequest
+}
+
+func (r ApiListThreadsRequest) ListCommentThreadsRequest(listCommentThreadsRequest ListCommentThreadsRequest) ApiListThreadsRequest {
+	r.listCommentThreadsRequest = &listCommentThreadsRequest
+	return r
+}
+
+func (r ApiListThreadsRequest) Execute() (*ListCommentThreadsReply, *http.Response, error) {
+	return r.ApiService.ListThreadsExecute(r)
+}
+
+/*
+ListThreads Method for ListThreads
+
+分页查询评论楼层。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListThreadsRequest
+*/
+func (a *CommentServiceService) ListThreads(ctx context.Context) ApiListThreadsRequest {
+	return ApiListThreadsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListCommentThreadsReply
+func (a *CommentServiceService) ListThreadsExecute(r ApiListThreadsRequest) (*ListCommentThreadsReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListCommentThreadsReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.ListThreads")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/comment/list-threads"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listCommentThreadsRequest == nil {
+		return localVarReturnValue, nil, reportError("listCommentThreadsRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listCommentThreadsRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListTimelineRequest struct {
+	ctx context.Context
+	ApiService CommentService
+	listCommentTimelineRequest *ListCommentTimelineRequest
+}
+
+func (r ApiListTimelineRequest) ListCommentTimelineRequest(listCommentTimelineRequest ListCommentTimelineRequest) ApiListTimelineRequest {
+	r.listCommentTimelineRequest = &listCommentTimelineRequest
+	return r
+}
+
+func (r ApiListTimelineRequest) Execute() (*ListCommentTimelineReply, *http.Response, error) {
+	return r.ApiService.ListTimelineExecute(r)
+}
+
+/*
+ListTimeline Method for ListTimeline
+
+分页查询评论时间线。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListTimelineRequest
+*/
+func (a *CommentServiceService) ListTimeline(ctx context.Context) ApiListTimelineRequest {
+	return ApiListTimelineRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListCommentTimelineReply
+func (a *CommentServiceService) ListTimelineExecute(r ApiListTimelineRequest) (*ListCommentTimelineReply, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListCommentTimelineReply
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.ListTimeline")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/comment/list-timeline"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listCommentTimelineRequest == nil {
+		return localVarReturnValue, nil, reportError("listCommentTimelineRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listCommentTimelineRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiThankRequest struct {
 	ctx context.Context
 	ApiService CommentService
@@ -422,7 +794,7 @@ func (r ApiThankRequest) ThankCommentRequest(thankCommentRequest ThankCommentReq
 	return r
 }
 
-func (r ApiThankRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiThankRequest) Execute() (*ThankCommentReply, *http.Response, error) {
 	return r.ApiService.ThankExecute(r)
 }
 
@@ -442,13 +814,13 @@ func (a *CommentServiceService) Thank(ctx context.Context) ApiThankRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (map[string]interface{}, *http.Response, error) {
+//  @return ThankCommentReply
+func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (*ThankCommentReply, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *ThankCommentReply
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Thank")

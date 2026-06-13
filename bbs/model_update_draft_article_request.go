@@ -21,8 +21,8 @@ var _ MappedNullable = &UpdateDraftArticleRequest{}
 
 // UpdateDraftArticleRequest struct for UpdateDraftArticleRequest
 type UpdateDraftArticleRequest struct {
-	// 文章保存内容。
-	Article ArticleSave `json:"article"`
+	ArticleId string `json:"article_id"`
+	Article RequestArticle `json:"article"`
 }
 
 type _UpdateDraftArticleRequest UpdateDraftArticleRequest
@@ -31,8 +31,9 @@ type _UpdateDraftArticleRequest UpdateDraftArticleRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUpdateDraftArticleRequest(article ArticleSave) *UpdateDraftArticleRequest {
+func NewUpdateDraftArticleRequest(articleId string, article RequestArticle) *UpdateDraftArticleRequest {
 	this := UpdateDraftArticleRequest{}
+	this.ArticleId = articleId
 	this.Article = article
 	return &this
 }
@@ -45,10 +46,34 @@ func NewUpdateDraftArticleRequestWithDefaults() *UpdateDraftArticleRequest {
 	return &this
 }
 
-// GetArticle returns the Article field value
-func (o *UpdateDraftArticleRequest) GetArticle() ArticleSave {
+// GetArticleId returns the ArticleId field value
+func (o *UpdateDraftArticleRequest) GetArticleId() string {
 	if o == nil {
-		var ret ArticleSave
+		var ret string
+		return ret
+	}
+
+	return o.ArticleId
+}
+
+// GetArticleIdOk returns a tuple with the ArticleId field value
+// and a boolean to check if the value has been set.
+func (o *UpdateDraftArticleRequest) GetArticleIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ArticleId, true
+}
+
+// SetArticleId sets field value
+func (o *UpdateDraftArticleRequest) SetArticleId(v string) {
+	o.ArticleId = v
+}
+
+// GetArticle returns the Article field value
+func (o *UpdateDraftArticleRequest) GetArticle() RequestArticle {
+	if o == nil {
+		var ret RequestArticle
 		return ret
 	}
 
@@ -57,7 +82,7 @@ func (o *UpdateDraftArticleRequest) GetArticle() ArticleSave {
 
 // GetArticleOk returns a tuple with the Article field value
 // and a boolean to check if the value has been set.
-func (o *UpdateDraftArticleRequest) GetArticleOk() (*ArticleSave, bool) {
+func (o *UpdateDraftArticleRequest) GetArticleOk() (*RequestArticle, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -65,7 +90,7 @@ func (o *UpdateDraftArticleRequest) GetArticleOk() (*ArticleSave, bool) {
 }
 
 // SetArticle sets field value
-func (o *UpdateDraftArticleRequest) SetArticle(v ArticleSave) {
+func (o *UpdateDraftArticleRequest) SetArticle(v RequestArticle) {
 	o.Article = v
 }
 
@@ -79,6 +104,7 @@ func (o UpdateDraftArticleRequest) MarshalJSON() ([]byte, error) {
 
 func (o UpdateDraftArticleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["article_id"] = o.ArticleId
 	toSerialize["article"] = o.Article
 	return toSerialize, nil
 }
@@ -88,6 +114,7 @@ func (o *UpdateDraftArticleRequest) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"article_id",
 		"article",
 	}
 

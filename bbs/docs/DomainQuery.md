@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Ids** | Pointer to **[]string** | 板块 ID 列表。 | [optional] 
 **Name** | Pointer to **string** | 板块名称。 | [optional] 
 **Description** | Pointer to **string** | 板块描述。 | [optional] 
-**Status** | Pointer to **string** | 板块状态。 | [optional] 
+**Status** | Pointer to **string** | 板块启停状态。 | [optional] 
 **Url** | Pointer to **string** | 板块 URL。 | [optional] 
 **Icon** | Pointer to **string** | 板块图标。 | [optional] 
 **IsNav** | Pointer to **bool** | 是否在导航中展示。 | [optional] 

@@ -61,12 +61,12 @@ public class TagQuery {
   private String description;
 
   /**
-   * 标签状态。
+   * 标签启停状态。
    */
   public enum StatusEnum {
     TAG_STATUS_UNSPECIFIED(String.valueOf("TAG_STATUS_UNSPECIFIED")),
     
-    TAG_STATUS_NORMAL(String.valueOf("TAG_STATUS_NORMAL")),
+    TAG_STATUS_ENABLED(String.valueOf("TAG_STATUS_ENABLED")),
     
     TAG_STATUS_DISABLED(String.valueOf("TAG_STATUS_DISABLED"));
 
@@ -226,7 +226,7 @@ public class TagQuery {
   }
 
   /**
-   * 标签状态。
+   * 标签启停状态。
    * @return status
    */
   @javax.annotation.Nullable

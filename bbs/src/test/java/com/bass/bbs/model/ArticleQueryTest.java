@@ -18,7 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -54,14 +56,6 @@ class ArticleQueryTest {
     }
 
     /**
-     * Test the property 'status'
-     */
-    @Test
-    void statusTest() {
-        // TODO: test status
-    }
-
-    /**
      * Test the property 'type'
      */
     @Test
@@ -94,11 +88,51 @@ class ArticleQueryTest {
     }
 
     /**
-     * Test the property 'listable'
+     * Test the property 'publishStatus'
      */
     @Test
-    void listableTest() {
-        // TODO: test listable
+    void publishStatusTest() {
+        // TODO: test publishStatus
+    }
+
+    /**
+     * Test the property 'publishStatuses'
+     */
+    @Test
+    void publishStatusesTest() {
+        // TODO: test publishStatuses
+    }
+
+    /**
+     * Test the property 'visibility'
+     */
+    @Test
+    void visibilityTest() {
+        // TODO: test visibility
+    }
+
+    /**
+     * Test the property 'visibilities'
+     */
+    @Test
+    void visibilitiesTest() {
+        // TODO: test visibilities
+    }
+
+    /**
+     * Test the property 'restriction'
+     */
+    @Test
+    void restrictionTest() {
+        // TODO: test restriction
+    }
+
+    /**
+     * Test the property 'restrictions'
+     */
+    @Test
+    void restrictionsTest() {
+        // TODO: test restrictions
     }
 
 }

@@ -45,4 +45,12 @@ class RewardArticleRequestTest {
         // TODO: test articleId
     }
 
+    /**
+     * Test the property 'points'
+     */
+    @Test
+    void pointsTest() {
+        // TODO: test points
+    }
+
 }

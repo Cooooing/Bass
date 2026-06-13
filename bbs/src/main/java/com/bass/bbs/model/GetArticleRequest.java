@@ -50,7 +50,7 @@ public class GetArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull

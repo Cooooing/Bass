@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.Comment;
+import com.bass.bbs.model.CommentListItem;
 import com.bass.bbs.model.PageReply;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,7 +48,7 @@ public class ListCommentsReply {
 
   public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
-  private List<Comment> rows = new ArrayList<>();
+  private List<CommentListItem> rows = new ArrayList<>();
 
   public ListCommentsReply() { 
   }
@@ -59,7 +59,7 @@ public class ListCommentsReply {
   }
 
   /**
-   * 分页结果。
+   * Get page
    * @return page
    */
   @javax.annotation.Nullable
@@ -77,12 +77,12 @@ public class ListCommentsReply {
   }
 
 
-  public ListCommentsReply rows(@javax.annotation.Nullable List<Comment> rows) {
+  public ListCommentsReply rows(@javax.annotation.Nullable List<CommentListItem> rows) {
     this.rows = rows;
     return this;
   }
 
-  public ListCommentsReply addRowsItem(Comment rowsItem) {
+  public ListCommentsReply addRowsItem(CommentListItem rowsItem) {
     if (this.rows == null) {
       this.rows = new ArrayList<>();
     }
@@ -91,20 +91,20 @@ public class ListCommentsReply {
   }
 
   /**
-   * 评论列表。
+   * Get rows
    * @return rows
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<Comment> getRows() {
+  public List<CommentListItem> getRows() {
     return rows;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRows(@javax.annotation.Nullable List<Comment> rows) {
+  public void setRows(@javax.annotation.Nullable List<CommentListItem> rows) {
     this.rows = rows;
   }
 

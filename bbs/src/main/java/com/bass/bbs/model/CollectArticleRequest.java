@@ -55,7 +55,7 @@ public class CollectArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class CollectArticleRequest {
   }
 
   /**
-   * 是否收藏。
+   * Get active
    * @return active
    */
   @javax.annotation.Nonnull

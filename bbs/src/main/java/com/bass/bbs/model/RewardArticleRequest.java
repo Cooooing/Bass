@@ -33,13 +33,18 @@ import com.bass.bbs.ApiClient;
  * RewardArticleRequest
  */
 @JsonPropertyOrder({
-  RewardArticleRequest.JSON_PROPERTY_ARTICLE_ID
+  RewardArticleRequest.JSON_PROPERTY_ARTICLE_ID,
+  RewardArticleRequest.JSON_PROPERTY_POINTS
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class RewardArticleRequest {
   public static final String JSON_PROPERTY_ARTICLE_ID = "article_id";
   @javax.annotation.Nonnull
   private String articleId;
+
+  public static final String JSON_PROPERTY_POINTS = "points";
+  @javax.annotation.Nullable
+  private Integer points;
 
   public RewardArticleRequest() { 
   }
@@ -50,7 +55,7 @@ public class RewardArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -68,6 +73,30 @@ public class RewardArticleRequest {
   }
 
 
+  public RewardArticleRequest points(@javax.annotation.Nullable Integer points) {
+    this.points = points;
+    return this;
+  }
+
+  /**
+   * Get points
+   * @return points
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_POINTS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Integer getPoints() {
+    return points;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_POINTS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPoints(@javax.annotation.Nullable Integer points) {
+    this.points = points;
+  }
+
+
   /**
    * Return true if this RewardArticle_Request object is equal to o.
    */
@@ -80,12 +109,13 @@ public class RewardArticleRequest {
       return false;
     }
     RewardArticleRequest rewardArticleRequest = (RewardArticleRequest) o;
-    return Objects.equals(this.articleId, rewardArticleRequest.articleId);
+    return Objects.equals(this.articleId, rewardArticleRequest.articleId) &&
+        Objects.equals(this.points, rewardArticleRequest.points);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(articleId);
+    return Objects.hash(articleId, points);
   }
 
   @Override
@@ -93,6 +123,7 @@ public class RewardArticleRequest {
     StringBuilder sb = new StringBuilder();
     sb.append("class RewardArticleRequest {\n");
     sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
+    sb.append("    points: ").append(toIndentedString(points)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -140,6 +171,11 @@ public class RewardArticleRequest {
     // add `article_id` to the URL query string
     if (getArticleId() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
+    }
+
+    // add `points` to the URL query string
+    if (getPoints() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spoints%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPoints()))));
     }
 
     return joiner.toString();

@@ -58,12 +58,12 @@ public class DomainQuery {
   private String description;
 
   /**
-   * 板块状态。
+   * 板块启停状态。
    */
   public enum StatusEnum {
     DOMAIN_STATUS_UNSPECIFIED(String.valueOf("DOMAIN_STATUS_UNSPECIFIED")),
     
-    DOMAIN_STATUS_NORMAL(String.valueOf("DOMAIN_STATUS_NORMAL")),
+    DOMAIN_STATUS_ENABLED(String.valueOf("DOMAIN_STATUS_ENABLED")),
     
     DOMAIN_STATUS_DISABLED(String.valueOf("DOMAIN_STATUS_DISABLED"));
 
@@ -199,7 +199,7 @@ public class DomainQuery {
   }
 
   /**
-   * 板块状态。
+   * 板块启停状态。
    * @return status
    */
   @javax.annotation.Nullable

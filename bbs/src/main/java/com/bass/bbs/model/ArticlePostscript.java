@@ -37,6 +37,7 @@ import com.bass.bbs.ApiClient;
   ArticlePostscript.JSON_PROPERTY_ARTICLE_ID,
   ArticlePostscript.JSON_PROPERTY_CONTENT,
   ArticlePostscript.JSON_PROPERTY_CONTENT_RENDER,
+  ArticlePostscript.JSON_PROPERTY_RESTRICTION,
   ArticlePostscript.JSON_PROPERTY_CREATED_BY,
   ArticlePostscript.JSON_PROPERTY_UPDATED_BY,
   ArticlePostscript.JSON_PROPERTY_CREATED_AT,
@@ -59,6 +60,49 @@ public class ArticlePostscript {
   public static final String JSON_PROPERTY_CONTENT_RENDER = "content_render";
   @javax.annotation.Nullable
   private String contentRender;
+
+  /**
+   * Gets or Sets restriction
+   */
+  public enum RestrictionEnum {
+    CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
+    
+    CONTENT_RESTRICTION_NONE(String.valueOf("CONTENT_RESTRICTION_NONE")),
+    
+    CONTENT_RESTRICTION_HIDDEN(String.valueOf("CONTENT_RESTRICTION_HIDDEN")),
+    
+    CONTENT_RESTRICTION_LOCKED(String.valueOf("CONTENT_RESTRICTION_LOCKED"));
+
+    private String value;
+
+    RestrictionEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static RestrictionEnum fromValue(String value) {
+      for (RestrictionEnum b : RestrictionEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_RESTRICTION = "restriction";
+  @javax.annotation.Nullable
+  private RestrictionEnum restriction;
 
   public static final String JSON_PROPERTY_CREATED_BY = "created_by";
   @javax.annotation.Nullable
@@ -85,7 +129,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 附言 ID。
+   * Get id
    * @return id
    */
   @javax.annotation.Nullable
@@ -109,7 +153,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nullable
@@ -133,7 +177,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 原始内容。
+   * Get content
    * @return content
    */
   @javax.annotation.Nullable
@@ -157,7 +201,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 渲染后的内容。
+   * Get contentRender
    * @return contentRender
    */
   @javax.annotation.Nullable
@@ -175,13 +219,37 @@ public class ArticlePostscript {
   }
 
 
+  public ArticlePostscript restriction(@javax.annotation.Nullable RestrictionEnum restriction) {
+    this.restriction = restriction;
+    return this;
+  }
+
+  /**
+   * Get restriction
+   * @return restriction
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public RestrictionEnum getRestriction() {
+    return restriction;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestriction(@javax.annotation.Nullable RestrictionEnum restriction) {
+    this.restriction = restriction;
+  }
+
+
   public ArticlePostscript createdBy(@javax.annotation.Nullable String createdBy) {
     this.createdBy = createdBy;
     return this;
   }
 
   /**
-   * 创建账号 ID。
+   * Get createdBy
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -205,7 +273,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 更新账号 ID。
+   * Get updatedBy
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -229,7 +297,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 创建时间。
+   * Get createdAt
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -253,7 +321,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * 更新时间。
+   * Get updatedAt
    * @return updatedAt
    */
   @javax.annotation.Nullable
@@ -287,6 +355,7 @@ public class ArticlePostscript {
         Objects.equals(this.articleId, articlePostscript.articleId) &&
         Objects.equals(this.content, articlePostscript.content) &&
         Objects.equals(this.contentRender, articlePostscript.contentRender) &&
+        Objects.equals(this.restriction, articlePostscript.restriction) &&
         Objects.equals(this.createdBy, articlePostscript.createdBy) &&
         Objects.equals(this.updatedBy, articlePostscript.updatedBy) &&
         Objects.equals(this.createdAt, articlePostscript.createdAt) &&
@@ -295,7 +364,7 @@ public class ArticlePostscript {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, articleId, content, contentRender, createdBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, articleId, content, contentRender, restriction, createdBy, updatedBy, createdAt, updatedAt);
   }
 
   @Override
@@ -306,6 +375,7 @@ public class ArticlePostscript {
     sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    contentRender: ").append(toIndentedString(contentRender)).append("\n");
+    sb.append("    restriction: ").append(toIndentedString(restriction)).append("\n");
     sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
@@ -372,6 +442,11 @@ public class ArticlePostscript {
     // add `content_render` to the URL query string
     if (getContentRender() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%scontent_render%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getContentRender()))));
+    }
+
+    // add `restriction` to the URL query string
+    if (getRestriction() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%srestriction%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getRestriction()))));
     }
 
     // add `created_by` to the URL query string

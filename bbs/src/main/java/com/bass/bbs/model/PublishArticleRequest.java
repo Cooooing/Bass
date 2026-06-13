@@ -33,13 +33,55 @@ import com.bass.bbs.ApiClient;
  * PublishArticleRequest
  */
 @JsonPropertyOrder({
-  PublishArticleRequest.JSON_PROPERTY_ARTICLE_ID
+  PublishArticleRequest.JSON_PROPERTY_ARTICLE_ID,
+  PublishArticleRequest.JSON_PROPERTY_VISIBILITY
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class PublishArticleRequest {
   public static final String JSON_PROPERTY_ARTICLE_ID = "article_id";
   @javax.annotation.Nonnull
   private String articleId;
+
+  /**
+   * Gets or Sets visibility
+   */
+  public enum VisibilityEnum {
+    ARTICLE_VISIBILITY_UNSPECIFIED(String.valueOf("ARTICLE_VISIBILITY_UNSPECIFIED")),
+    
+    ARTICLE_VISIBILITY_PUBLIC(String.valueOf("ARTICLE_VISIBILITY_PUBLIC")),
+    
+    ARTICLE_VISIBILITY_PRIVATE(String.valueOf("ARTICLE_VISIBILITY_PRIVATE"));
+
+    private String value;
+
+    VisibilityEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static VisibilityEnum fromValue(String value) {
+      for (VisibilityEnum b : VisibilityEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_VISIBILITY = "visibility";
+  @javax.annotation.Nullable
+  private VisibilityEnum visibility;
 
   public PublishArticleRequest() { 
   }
@@ -50,7 +92,7 @@ public class PublishArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -68,6 +110,30 @@ public class PublishArticleRequest {
   }
 
 
+  public PublishArticleRequest visibility(@javax.annotation.Nullable VisibilityEnum visibility) {
+    this.visibility = visibility;
+    return this;
+  }
+
+  /**
+   * Get visibility
+   * @return visibility
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_VISIBILITY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public VisibilityEnum getVisibility() {
+    return visibility;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_VISIBILITY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVisibility(@javax.annotation.Nullable VisibilityEnum visibility) {
+    this.visibility = visibility;
+  }
+
+
   /**
    * Return true if this PublishArticle_Request object is equal to o.
    */
@@ -80,12 +146,13 @@ public class PublishArticleRequest {
       return false;
     }
     PublishArticleRequest publishArticleRequest = (PublishArticleRequest) o;
-    return Objects.equals(this.articleId, publishArticleRequest.articleId);
+    return Objects.equals(this.articleId, publishArticleRequest.articleId) &&
+        Objects.equals(this.visibility, publishArticleRequest.visibility);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(articleId);
+    return Objects.hash(articleId, visibility);
   }
 
   @Override
@@ -93,6 +160,7 @@ public class PublishArticleRequest {
     StringBuilder sb = new StringBuilder();
     sb.append("class PublishArticleRequest {\n");
     sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
+    sb.append("    visibility: ").append(toIndentedString(visibility)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -140,6 +208,11 @@ public class PublishArticleRequest {
     // add `article_id` to the URL query string
     if (getArticleId() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
+    }
+
+    // add `visibility` to the URL query string
+    if (getVisibility() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%svisibility%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getVisibility()))));
     }
 
     return joiner.toString();

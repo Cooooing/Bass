@@ -16,9 +16,17 @@ package com.bass.bbs.api;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.model.CreateCommentReply;
 import com.bass.bbs.model.CreateCommentRequest;
+import com.bass.bbs.model.LikeCommentReply;
 import com.bass.bbs.model.LikeCommentRequest;
+import com.bass.bbs.model.ListCommentRepliesReply;
+import com.bass.bbs.model.ListCommentRepliesRequest;
+import com.bass.bbs.model.ListCommentThreadsReply;
+import com.bass.bbs.model.ListCommentThreadsRequest;
+import com.bass.bbs.model.ListCommentTimelineReply;
+import com.bass.bbs.model.ListCommentTimelineRequest;
 import com.bass.bbs.model.ListCommentsReply;
 import com.bass.bbs.model.ListCommentsRequest;
+import com.bass.bbs.model.ThankCommentReply;
 import com.bass.bbs.model.ThankCommentRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -96,8 +104,71 @@ public class CommentServiceTest {
         CommentService.APIlikeRequest request = CommentService.APIlikeRequest.newBuilder()
           .likeCommentRequest(likeCommentRequest)
           .build();
-        Object response = 
+        LikeCommentReply response = 
         api.like(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 分页查询评论回复。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listRepliesTest() throws ApiException {
+        ListCommentRepliesRequest listCommentRepliesRequest = null;
+        
+        CommentService.APIlistRepliesRequest request = CommentService.APIlistRepliesRequest.newBuilder()
+          .listCommentRepliesRequest(listCommentRepliesRequest)
+          .build();
+        ListCommentRepliesReply response = 
+        api.listReplies(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 分页查询评论楼层。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listThreadsTest() throws ApiException {
+        ListCommentThreadsRequest listCommentThreadsRequest = null;
+        
+        CommentService.APIlistThreadsRequest request = CommentService.APIlistThreadsRequest.newBuilder()
+          .listCommentThreadsRequest(listCommentThreadsRequest)
+          .build();
+        ListCommentThreadsReply response = 
+        api.listThreads(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 分页查询评论时间线。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listTimelineTest() throws ApiException {
+        ListCommentTimelineRequest listCommentTimelineRequest = null;
+        
+        CommentService.APIlistTimelineRequest request = CommentService.APIlistTimelineRequest.newBuilder()
+          .listCommentTimelineRequest(listCommentTimelineRequest)
+          .build();
+        ListCommentTimelineReply response = 
+        api.listTimeline(request);
 
         // TODO: test validations
     }
@@ -117,7 +188,7 @@ public class CommentServiceTest {
         CommentService.APIthankRequest request = CommentService.APIthankRequest.newBuilder()
           .thankCommentRequest(thankCommentRequest)
           .build();
-        Object response = 
+        ThankCommentReply response = 
         api.thank(request);
 
         // TODO: test validations

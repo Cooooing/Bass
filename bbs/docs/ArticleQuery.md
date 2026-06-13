@@ -8,27 +8,18 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**tagId** | **String** | 标签 ID。 |  [optional] |
-|**domainId** | **String** | 板块 ID。 |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) | 文章状态。 |  [optional] |
-|**type** | [**TypeEnum**](#TypeEnum) | 文章类型。 |  [optional] |
-|**order** | [**OrderEnum**](#OrderEnum) | 排序方式。 |  [optional] |
-|**keyword** | **String** | 搜索关键词。 |  [optional] |
-|**authorId** | **String** | 作者账号 ID。 |  [optional] |
-|**listable** | **Boolean** | 是否在列表中展示。 |  [optional] |
-
-
-
-## Enum: StatusEnum
-
-| Name | Value |
-|---- | -----|
-| ARTICLE_STATUS_UNSPECIFIED | &quot;ARTICLE_STATUS_UNSPECIFIED&quot; |
-| ARTICLE_STATUS_NORMAL | &quot;ARTICLE_STATUS_NORMAL&quot; |
-| ARTICLE_STATUS_HIDDEN | &quot;ARTICLE_STATUS_HIDDEN&quot; |
-| ARTICLE_STATUS_LOCKED | &quot;ARTICLE_STATUS_LOCKED&quot; |
-| ARTICLE_STATUS_DRAFTS | &quot;ARTICLE_STATUS_DRAFTS&quot; |
-| ARTICLE_STATUS_DELETED | &quot;ARTICLE_STATUS_DELETED&quot; |
+|**tagId** | **String** |  |  [optional] |
+|**domainId** | **String** |  |  [optional] |
+|**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
+|**order** | [**OrderEnum**](#OrderEnum) |  |  [optional] |
+|**keyword** | **String** |  |  [optional] |
+|**authorId** | **String** |  |  [optional] |
+|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) |  |  [optional] |
+|**publishStatuses** | [**List&lt;PublishStatusesEnum&gt;**](#List&lt;PublishStatusesEnum&gt;) |  |  [optional] |
+|**visibility** | [**VisibilityEnum**](#VisibilityEnum) |  |  [optional] |
+|**visibilities** | [**List&lt;VisibilitiesEnum&gt;**](#List&lt;VisibilitiesEnum&gt;) |  |  [optional] |
+|**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
+|**restrictions** | [**List&lt;RestrictionsEnum&gt;**](#List&lt;RestrictionsEnum&gt;) |  |  [optional] |
 
 
 
@@ -49,6 +40,70 @@
 | ARTICLE_ORDER_UNSPECIFIED | &quot;ARTICLE_ORDER_UNSPECIFIED&quot; |
 | ARTICLE_ORDER_NEWEST | &quot;ARTICLE_ORDER_NEWEST&quot; |
 | ARTICLE_ORDER_HOTTEST | &quot;ARTICLE_ORDER_HOTTEST&quot; |
+
+
+
+## Enum: PublishStatusEnum
+
+| Name | Value |
+|---- | -----|
+| ARTICLE_PUBLISH_STATUS_UNSPECIFIED | &quot;ARTICLE_PUBLISH_STATUS_UNSPECIFIED&quot; |
+| ARTICLE_PUBLISH_STATUS_DRAFT | &quot;ARTICLE_PUBLISH_STATUS_DRAFT&quot; |
+| ARTICLE_PUBLISH_STATUS_PUBLISHED | &quot;ARTICLE_PUBLISH_STATUS_PUBLISHED&quot; |
+| ARTICLE_PUBLISH_STATUS_ARCHIVED | &quot;ARTICLE_PUBLISH_STATUS_ARCHIVED&quot; |
+
+
+
+## Enum: List&lt;PublishStatusesEnum&gt;
+
+| Name | Value |
+|---- | -----|
+| ARTICLE_PUBLISH_STATUS_UNSPECIFIED | &quot;ARTICLE_PUBLISH_STATUS_UNSPECIFIED&quot; |
+| ARTICLE_PUBLISH_STATUS_DRAFT | &quot;ARTICLE_PUBLISH_STATUS_DRAFT&quot; |
+| ARTICLE_PUBLISH_STATUS_PUBLISHED | &quot;ARTICLE_PUBLISH_STATUS_PUBLISHED&quot; |
+| ARTICLE_PUBLISH_STATUS_ARCHIVED | &quot;ARTICLE_PUBLISH_STATUS_ARCHIVED&quot; |
+
+
+
+## Enum: VisibilityEnum
+
+| Name | Value |
+|---- | -----|
+| ARTICLE_VISIBILITY_UNSPECIFIED | &quot;ARTICLE_VISIBILITY_UNSPECIFIED&quot; |
+| ARTICLE_VISIBILITY_PUBLIC | &quot;ARTICLE_VISIBILITY_PUBLIC&quot; |
+| ARTICLE_VISIBILITY_PRIVATE | &quot;ARTICLE_VISIBILITY_PRIVATE&quot; |
+
+
+
+## Enum: List&lt;VisibilitiesEnum&gt;
+
+| Name | Value |
+|---- | -----|
+| ARTICLE_VISIBILITY_UNSPECIFIED | &quot;ARTICLE_VISIBILITY_UNSPECIFIED&quot; |
+| ARTICLE_VISIBILITY_PUBLIC | &quot;ARTICLE_VISIBILITY_PUBLIC&quot; |
+| ARTICLE_VISIBILITY_PRIVATE | &quot;ARTICLE_VISIBILITY_PRIVATE&quot; |
+
+
+
+## Enum: RestrictionEnum
+
+| Name | Value |
+|---- | -----|
+| CONTENT_RESTRICTION_UNSPECIFIED | &quot;CONTENT_RESTRICTION_UNSPECIFIED&quot; |
+| CONTENT_RESTRICTION_NONE | &quot;CONTENT_RESTRICTION_NONE&quot; |
+| CONTENT_RESTRICTION_HIDDEN | &quot;CONTENT_RESTRICTION_HIDDEN&quot; |
+| CONTENT_RESTRICTION_LOCKED | &quot;CONTENT_RESTRICTION_LOCKED&quot; |
+
+
+
+## Enum: List&lt;RestrictionsEnum&gt;
+
+| Name | Value |
+|---- | -----|
+| CONTENT_RESTRICTION_UNSPECIFIED | &quot;CONTENT_RESTRICTION_UNSPECIFIED&quot; |
+| CONTENT_RESTRICTION_NONE | &quot;CONTENT_RESTRICTION_NONE&quot; |
+| CONTENT_RESTRICTION_HIDDEN | &quot;CONTENT_RESTRICTION_HIDDEN&quot; |
+| CONTENT_RESTRICTION_LOCKED | &quot;CONTENT_RESTRICTION_LOCKED&quot; |
 
 
 

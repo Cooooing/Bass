@@ -60,7 +60,7 @@ public class CreateCommentRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -84,7 +84,7 @@ public class CreateCommentRequest {
   }
 
   /**
-   * 评论内容。
+   * Get content
    * @return content
    */
   @javax.annotation.Nonnull
@@ -108,7 +108,7 @@ public class CreateCommentRequest {
   }
 
   /**
-   * 回复的评论 ID。
+   * Get replyId
    * @return replyId
    */
   @javax.annotation.Nullable

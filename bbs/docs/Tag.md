@@ -2,16 +2,31 @@
 
 # Tag
 
-Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
+标签。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
+|**id** | **String** |  |  [optional] |
 |**name** | **String** |  |  [optional] |
 |**description** | **String** |  |  [optional] |
-|**externalDocs** | [**ExternalDocs**](ExternalDocs.md) |  |  [optional] |
-|**specificationExtension** | [**List&lt;NamedAny&gt;**](NamedAny.md) |  |  [optional] |
+|**domainId** | **String** |  |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
+|**createdBy** | **String** |  |  [optional] |
+|**updatedBy** | **String** |  |  [optional] |
+|**createdAt** | **String** |  |  [optional] |
+|**updatedAt** | **String** |  |  [optional] |
+
+
+
+## Enum: StatusEnum
+
+| Name | Value |
+|---- | -----|
+| TAG_STATUS_UNSPECIFIED | &quot;TAG_STATUS_UNSPECIFIED&quot; |
+| TAG_STATUS_ENABLED | &quot;TAG_STATUS_ENABLED&quot; |
+| TAG_STATUS_DISABLED | &quot;TAG_STATUS_DISABLED&quot; |
 
 
 

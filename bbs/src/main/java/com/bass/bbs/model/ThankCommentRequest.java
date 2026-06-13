@@ -55,7 +55,7 @@ public class ThankCommentRequest {
   }
 
   /**
-   * 评论 ID。
+   * Get id
    * @return id
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class ThankCommentRequest {
   }
 
   /**
-   * 是否感谢。
+   * Get active
    * @return active
    */
   @javax.annotation.Nonnull

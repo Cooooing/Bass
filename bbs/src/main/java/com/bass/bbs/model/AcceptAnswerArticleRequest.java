@@ -55,7 +55,7 @@ public class AcceptAnswerArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class AcceptAnswerArticleRequest {
   }
 
   /**
-   * 评论 ID。
+   * Get commentId
    * @return commentId
    */
   @javax.annotation.Nonnull

@@ -13,16 +13,12 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.ExternalDocs;
-import com.bass.bbs.model.NamedAny;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -42,6 +38,14 @@ class TagTest {
     }
 
     /**
+     * Test the property 'id'
+     */
+    @Test
+    void idTest() {
+        // TODO: test id
+    }
+
+    /**
      * Test the property 'name'
      */
     @Test
@@ -58,19 +62,51 @@ class TagTest {
     }
 
     /**
-     * Test the property 'externalDocs'
+     * Test the property 'domainId'
      */
     @Test
-    void externalDocsTest() {
-        // TODO: test externalDocs
+    void domainIdTest() {
+        // TODO: test domainId
     }
 
     /**
-     * Test the property 'specificationExtension'
+     * Test the property 'status'
      */
     @Test
-    void specificationExtensionTest() {
-        // TODO: test specificationExtension
+    void statusTest() {
+        // TODO: test status
+    }
+
+    /**
+     * Test the property 'createdBy'
+     */
+    @Test
+    void createdByTest() {
+        // TODO: test createdBy
+    }
+
+    /**
+     * Test the property 'updatedBy'
+     */
+    @Test
+    void updatedByTest() {
+        // TODO: test updatedBy
+    }
+
+    /**
+     * Test the property 'createdAt'
+     */
+    @Test
+    void createdAtTest() {
+        // TODO: test createdAt
+    }
+
+    /**
+     * Test the property 'updatedAt'
+     */
+    @Test
+    void updatedAtTest() {
+        // TODO: test updatedAt
     }
 
 }

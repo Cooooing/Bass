@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.Comment;
+import com.bass.bbs.model.CommentDetail;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,31 +40,31 @@ import com.bass.bbs.ApiClient;
 public class CreateCommentReply {
   public static final String JSON_PROPERTY_COMMENT = "comment";
   @javax.annotation.Nullable
-  private Comment comment;
+  private CommentDetail comment;
 
   public CreateCommentReply() { 
   }
 
-  public CreateCommentReply comment(@javax.annotation.Nullable Comment comment) {
+  public CreateCommentReply comment(@javax.annotation.Nullable CommentDetail comment) {
     this.comment = comment;
     return this;
   }
 
   /**
-   * 创建后的评论。
+   * Get comment
    * @return comment
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_COMMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Comment getComment() {
+  public CommentDetail getComment() {
     return comment;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_COMMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setComment(@javax.annotation.Nullable Comment comment) {
+  public void setComment(@javax.annotation.Nullable CommentDetail comment) {
     this.comment = comment;
   }
 

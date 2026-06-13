@@ -45,4 +45,12 @@ class PublishArticleRequestTest {
         // TODO: test articleId
     }
 
+    /**
+     * Test the property 'visibility'
+     */
+    @Test
+    void visibilityTest() {
+        // TODO: test visibility
+    }
+
 }

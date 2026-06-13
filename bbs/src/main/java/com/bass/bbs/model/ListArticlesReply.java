@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.Article;
+import com.bass.bbs.model.ArticleListItem;
 import com.bass.bbs.model.PageReply;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,7 +48,7 @@ public class ListArticlesReply {
 
   public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
-  private List<Article> rows = new ArrayList<>();
+  private List<ArticleListItem> rows = new ArrayList<>();
 
   public ListArticlesReply() { 
   }
@@ -59,7 +59,7 @@ public class ListArticlesReply {
   }
 
   /**
-   * 分页结果。
+   * Get page
    * @return page
    */
   @javax.annotation.Nullable
@@ -77,12 +77,12 @@ public class ListArticlesReply {
   }
 
 
-  public ListArticlesReply rows(@javax.annotation.Nullable List<Article> rows) {
+  public ListArticlesReply rows(@javax.annotation.Nullable List<ArticleListItem> rows) {
     this.rows = rows;
     return this;
   }
 
-  public ListArticlesReply addRowsItem(Article rowsItem) {
+  public ListArticlesReply addRowsItem(ArticleListItem rowsItem) {
     if (this.rows == null) {
       this.rows = new ArrayList<>();
     }
@@ -91,20 +91,20 @@ public class ListArticlesReply {
   }
 
   /**
-   * 文章列表。
+   * Get rows
    * @return rows
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<Article> getRows() {
+  public List<ArticleListItem> getRows() {
     return rows;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRows(@javax.annotation.Nullable List<Article> rows) {
+  public void setRows(@javax.annotation.Nullable List<ArticleListItem> rows) {
     this.rows = rows;
   }
 

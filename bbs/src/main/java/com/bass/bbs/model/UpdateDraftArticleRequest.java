@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.ArticleSave;
+import com.bass.bbs.model.RequestArticle;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,37 +34,66 @@ import com.bass.bbs.ApiClient;
  * UpdateDraftArticleRequest
  */
 @JsonPropertyOrder({
+  UpdateDraftArticleRequest.JSON_PROPERTY_ARTICLE_ID,
   UpdateDraftArticleRequest.JSON_PROPERTY_ARTICLE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class UpdateDraftArticleRequest {
+  public static final String JSON_PROPERTY_ARTICLE_ID = "article_id";
+  @javax.annotation.Nonnull
+  private String articleId;
+
   public static final String JSON_PROPERTY_ARTICLE = "article";
   @javax.annotation.Nonnull
-  private ArticleSave article;
+  private RequestArticle article;
 
   public UpdateDraftArticleRequest() { 
   }
 
-  public UpdateDraftArticleRequest article(@javax.annotation.Nonnull ArticleSave article) {
+  public UpdateDraftArticleRequest articleId(@javax.annotation.Nonnull String articleId) {
+    this.articleId = articleId;
+    return this;
+  }
+
+  /**
+   * Get articleId
+   * @return articleId
+   */
+  @javax.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getArticleId() {
+    return articleId;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setArticleId(@javax.annotation.Nonnull String articleId) {
+    this.articleId = articleId;
+  }
+
+
+  public UpdateDraftArticleRequest article(@javax.annotation.Nonnull RequestArticle article) {
     this.article = article;
     return this;
   }
 
   /**
-   * 文章保存内容。
+   * Get article
    * @return article
    */
   @javax.annotation.Nonnull
   @JsonProperty(value = JSON_PROPERTY_ARTICLE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public ArticleSave getArticle() {
+  public RequestArticle getArticle() {
     return article;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ARTICLE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setArticle(@javax.annotation.Nonnull ArticleSave article) {
+  public void setArticle(@javax.annotation.Nonnull RequestArticle article) {
     this.article = article;
   }
 
@@ -81,18 +110,20 @@ public class UpdateDraftArticleRequest {
       return false;
     }
     UpdateDraftArticleRequest updateDraftArticleRequest = (UpdateDraftArticleRequest) o;
-    return Objects.equals(this.article, updateDraftArticleRequest.article);
+    return Objects.equals(this.articleId, updateDraftArticleRequest.articleId) &&
+        Objects.equals(this.article, updateDraftArticleRequest.article);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(article);
+    return Objects.hash(articleId, article);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateDraftArticleRequest {\n");
+    sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
     sb.append("    article: ").append(toIndentedString(article)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -137,6 +168,11 @@ public class UpdateDraftArticleRequest {
     }
 
     StringJoiner joiner = new StringJoiner("&");
+
+    // add `article_id` to the URL query string
+    if (getArticleId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
+    }
 
     // add `article` to the URL query string
     if (getArticle() != null) {

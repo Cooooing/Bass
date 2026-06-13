@@ -24,7 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
@@ -35,12 +37,16 @@ import com.bass.bbs.ApiClient;
 @JsonPropertyOrder({
   ArticleQuery.JSON_PROPERTY_TAG_ID,
   ArticleQuery.JSON_PROPERTY_DOMAIN_ID,
-  ArticleQuery.JSON_PROPERTY_STATUS,
   ArticleQuery.JSON_PROPERTY_TYPE,
   ArticleQuery.JSON_PROPERTY_ORDER,
   ArticleQuery.JSON_PROPERTY_KEYWORD,
   ArticleQuery.JSON_PROPERTY_AUTHOR_ID,
-  ArticleQuery.JSON_PROPERTY_LISTABLE
+  ArticleQuery.JSON_PROPERTY_PUBLISH_STATUS,
+  ArticleQuery.JSON_PROPERTY_PUBLISH_STATUSES,
+  ArticleQuery.JSON_PROPERTY_VISIBILITY,
+  ArticleQuery.JSON_PROPERTY_VISIBILITIES,
+  ArticleQuery.JSON_PROPERTY_RESTRICTION,
+  ArticleQuery.JSON_PROPERTY_RESTRICTIONS
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ArticleQuery {
@@ -53,54 +59,7 @@ public class ArticleQuery {
   private String domainId;
 
   /**
-   * 文章状态。
-   */
-  public enum StatusEnum {
-    ARTICLE_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_STATUS_UNSPECIFIED")),
-    
-    ARTICLE_STATUS_NORMAL(String.valueOf("ARTICLE_STATUS_NORMAL")),
-    
-    ARTICLE_STATUS_HIDDEN(String.valueOf("ARTICLE_STATUS_HIDDEN")),
-    
-    ARTICLE_STATUS_LOCKED(String.valueOf("ARTICLE_STATUS_LOCKED")),
-    
-    ARTICLE_STATUS_DRAFTS(String.valueOf("ARTICLE_STATUS_DRAFTS")),
-    
-    ARTICLE_STATUS_DELETED(String.valueOf("ARTICLE_STATUS_DELETED"));
-
-    private String value;
-
-    StatusEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static StatusEnum fromValue(String value) {
-      for (StatusEnum b : StatusEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
-  public static final String JSON_PROPERTY_STATUS = "status";
-  @javax.annotation.Nullable
-  private StatusEnum status;
-
-  /**
-   * 文章类型。
+   * Gets or Sets type
    */
   public enum TypeEnum {
     ARTICLE_TYPE_UNSPECIFIED(String.valueOf("ARTICLE_TYPE_UNSPECIFIED")),
@@ -141,7 +100,7 @@ public class ArticleQuery {
   private TypeEnum type;
 
   /**
-   * 排序方式。
+   * Gets or Sets order
    */
   public enum OrderEnum {
     ARTICLE_ORDER_UNSPECIFIED(String.valueOf("ARTICLE_ORDER_UNSPECIFIED")),
@@ -189,9 +148,259 @@ public class ArticleQuery {
   @javax.annotation.Nullable
   private String authorId;
 
-  public static final String JSON_PROPERTY_LISTABLE = "listable";
+  /**
+   * Gets or Sets publishStatus
+   */
+  public enum PublishStatusEnum {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_PUBLISH_STATUS_UNSPECIFIED")),
+    
+    ARTICLE_PUBLISH_STATUS_DRAFT(String.valueOf("ARTICLE_PUBLISH_STATUS_DRAFT")),
+    
+    ARTICLE_PUBLISH_STATUS_PUBLISHED(String.valueOf("ARTICLE_PUBLISH_STATUS_PUBLISHED")),
+    
+    ARTICLE_PUBLISH_STATUS_ARCHIVED(String.valueOf("ARTICLE_PUBLISH_STATUS_ARCHIVED"));
+
+    private String value;
+
+    PublishStatusEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static PublishStatusEnum fromValue(String value) {
+      for (PublishStatusEnum b : PublishStatusEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_PUBLISH_STATUS = "publish_status";
   @javax.annotation.Nullable
-  private Boolean listable;
+  private PublishStatusEnum publishStatus;
+
+  /**
+   * Gets or Sets publishStatuses
+   */
+  public enum PublishStatusesEnum {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_PUBLISH_STATUS_UNSPECIFIED")),
+    
+    ARTICLE_PUBLISH_STATUS_DRAFT(String.valueOf("ARTICLE_PUBLISH_STATUS_DRAFT")),
+    
+    ARTICLE_PUBLISH_STATUS_PUBLISHED(String.valueOf("ARTICLE_PUBLISH_STATUS_PUBLISHED")),
+    
+    ARTICLE_PUBLISH_STATUS_ARCHIVED(String.valueOf("ARTICLE_PUBLISH_STATUS_ARCHIVED"));
+
+    private String value;
+
+    PublishStatusesEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static PublishStatusesEnum fromValue(String value) {
+      for (PublishStatusesEnum b : PublishStatusesEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_PUBLISH_STATUSES = "publish_statuses";
+  @javax.annotation.Nullable
+  private List<PublishStatusesEnum> publishStatuses = new ArrayList<>();
+
+  /**
+   * Gets or Sets visibility
+   */
+  public enum VisibilityEnum {
+    ARTICLE_VISIBILITY_UNSPECIFIED(String.valueOf("ARTICLE_VISIBILITY_UNSPECIFIED")),
+    
+    ARTICLE_VISIBILITY_PUBLIC(String.valueOf("ARTICLE_VISIBILITY_PUBLIC")),
+    
+    ARTICLE_VISIBILITY_PRIVATE(String.valueOf("ARTICLE_VISIBILITY_PRIVATE"));
+
+    private String value;
+
+    VisibilityEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static VisibilityEnum fromValue(String value) {
+      for (VisibilityEnum b : VisibilityEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_VISIBILITY = "visibility";
+  @javax.annotation.Nullable
+  private VisibilityEnum visibility;
+
+  /**
+   * Gets or Sets visibilities
+   */
+  public enum VisibilitiesEnum {
+    ARTICLE_VISIBILITY_UNSPECIFIED(String.valueOf("ARTICLE_VISIBILITY_UNSPECIFIED")),
+    
+    ARTICLE_VISIBILITY_PUBLIC(String.valueOf("ARTICLE_VISIBILITY_PUBLIC")),
+    
+    ARTICLE_VISIBILITY_PRIVATE(String.valueOf("ARTICLE_VISIBILITY_PRIVATE"));
+
+    private String value;
+
+    VisibilitiesEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static VisibilitiesEnum fromValue(String value) {
+      for (VisibilitiesEnum b : VisibilitiesEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_VISIBILITIES = "visibilities";
+  @javax.annotation.Nullable
+  private List<VisibilitiesEnum> visibilities = new ArrayList<>();
+
+  /**
+   * Gets or Sets restriction
+   */
+  public enum RestrictionEnum {
+    CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
+    
+    CONTENT_RESTRICTION_NONE(String.valueOf("CONTENT_RESTRICTION_NONE")),
+    
+    CONTENT_RESTRICTION_HIDDEN(String.valueOf("CONTENT_RESTRICTION_HIDDEN")),
+    
+    CONTENT_RESTRICTION_LOCKED(String.valueOf("CONTENT_RESTRICTION_LOCKED"));
+
+    private String value;
+
+    RestrictionEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static RestrictionEnum fromValue(String value) {
+      for (RestrictionEnum b : RestrictionEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_RESTRICTION = "restriction";
+  @javax.annotation.Nullable
+  private RestrictionEnum restriction;
+
+  /**
+   * Gets or Sets restrictions
+   */
+  public enum RestrictionsEnum {
+    CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
+    
+    CONTENT_RESTRICTION_NONE(String.valueOf("CONTENT_RESTRICTION_NONE")),
+    
+    CONTENT_RESTRICTION_HIDDEN(String.valueOf("CONTENT_RESTRICTION_HIDDEN")),
+    
+    CONTENT_RESTRICTION_LOCKED(String.valueOf("CONTENT_RESTRICTION_LOCKED"));
+
+    private String value;
+
+    RestrictionsEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static RestrictionsEnum fromValue(String value) {
+      for (RestrictionsEnum b : RestrictionsEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_RESTRICTIONS = "restrictions";
+  @javax.annotation.Nullable
+  private List<RestrictionsEnum> restrictions = new ArrayList<>();
 
   public ArticleQuery() { 
   }
@@ -202,7 +411,7 @@ public class ArticleQuery {
   }
 
   /**
-   * 标签 ID。
+   * Get tagId
    * @return tagId
    */
   @javax.annotation.Nullable
@@ -226,7 +435,7 @@ public class ArticleQuery {
   }
 
   /**
-   * 板块 ID。
+   * Get domainId
    * @return domainId
    */
   @javax.annotation.Nullable
@@ -244,37 +453,13 @@ public class ArticleQuery {
   }
 
 
-  public ArticleQuery status(@javax.annotation.Nullable StatusEnum status) {
-    this.status = status;
-    return this;
-  }
-
-  /**
-   * 文章状态。
-   * @return status
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public StatusEnum getStatus() {
-    return status;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStatus(@javax.annotation.Nullable StatusEnum status) {
-    this.status = status;
-  }
-
-
   public ArticleQuery type(@javax.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
 
   /**
-   * 文章类型。
+   * Get type
    * @return type
    */
   @javax.annotation.Nullable
@@ -298,7 +483,7 @@ public class ArticleQuery {
   }
 
   /**
-   * 排序方式。
+   * Get order
    * @return order
    */
   @javax.annotation.Nullable
@@ -322,7 +507,7 @@ public class ArticleQuery {
   }
 
   /**
-   * 搜索关键词。
+   * Get keyword
    * @return keyword
    */
   @javax.annotation.Nullable
@@ -346,7 +531,7 @@ public class ArticleQuery {
   }
 
   /**
-   * 作者账号 ID。
+   * Get authorId
    * @return authorId
    */
   @javax.annotation.Nullable
@@ -364,27 +549,171 @@ public class ArticleQuery {
   }
 
 
-  public ArticleQuery listable(@javax.annotation.Nullable Boolean listable) {
-    this.listable = listable;
+  public ArticleQuery publishStatus(@javax.annotation.Nullable PublishStatusEnum publishStatus) {
+    this.publishStatus = publishStatus;
     return this;
   }
 
   /**
-   * 是否在列表中展示。
-   * @return listable
+   * Get publishStatus
+   * @return publishStatus
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LISTABLE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLISH_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getListable() {
-    return listable;
+  public PublishStatusEnum getPublishStatus() {
+    return publishStatus;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_LISTABLE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLISH_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setListable(@javax.annotation.Nullable Boolean listable) {
-    this.listable = listable;
+  public void setPublishStatus(@javax.annotation.Nullable PublishStatusEnum publishStatus) {
+    this.publishStatus = publishStatus;
+  }
+
+
+  public ArticleQuery publishStatuses(@javax.annotation.Nullable List<PublishStatusesEnum> publishStatuses) {
+    this.publishStatuses = publishStatuses;
+    return this;
+  }
+
+  public ArticleQuery addPublishStatusesItem(PublishStatusesEnum publishStatusesItem) {
+    if (this.publishStatuses == null) {
+      this.publishStatuses = new ArrayList<>();
+    }
+    this.publishStatuses.add(publishStatusesItem);
+    return this;
+  }
+
+  /**
+   * Get publishStatuses
+   * @return publishStatuses
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PUBLISH_STATUSES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<PublishStatusesEnum> getPublishStatuses() {
+    return publishStatuses;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PUBLISH_STATUSES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPublishStatuses(@javax.annotation.Nullable List<PublishStatusesEnum> publishStatuses) {
+    this.publishStatuses = publishStatuses;
+  }
+
+
+  public ArticleQuery visibility(@javax.annotation.Nullable VisibilityEnum visibility) {
+    this.visibility = visibility;
+    return this;
+  }
+
+  /**
+   * Get visibility
+   * @return visibility
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_VISIBILITY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public VisibilityEnum getVisibility() {
+    return visibility;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_VISIBILITY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVisibility(@javax.annotation.Nullable VisibilityEnum visibility) {
+    this.visibility = visibility;
+  }
+
+
+  public ArticleQuery visibilities(@javax.annotation.Nullable List<VisibilitiesEnum> visibilities) {
+    this.visibilities = visibilities;
+    return this;
+  }
+
+  public ArticleQuery addVisibilitiesItem(VisibilitiesEnum visibilitiesItem) {
+    if (this.visibilities == null) {
+      this.visibilities = new ArrayList<>();
+    }
+    this.visibilities.add(visibilitiesItem);
+    return this;
+  }
+
+  /**
+   * Get visibilities
+   * @return visibilities
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_VISIBILITIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<VisibilitiesEnum> getVisibilities() {
+    return visibilities;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_VISIBILITIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVisibilities(@javax.annotation.Nullable List<VisibilitiesEnum> visibilities) {
+    this.visibilities = visibilities;
+  }
+
+
+  public ArticleQuery restriction(@javax.annotation.Nullable RestrictionEnum restriction) {
+    this.restriction = restriction;
+    return this;
+  }
+
+  /**
+   * Get restriction
+   * @return restriction
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public RestrictionEnum getRestriction() {
+    return restriction;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestriction(@javax.annotation.Nullable RestrictionEnum restriction) {
+    this.restriction = restriction;
+  }
+
+
+  public ArticleQuery restrictions(@javax.annotation.Nullable List<RestrictionsEnum> restrictions) {
+    this.restrictions = restrictions;
+    return this;
+  }
+
+  public ArticleQuery addRestrictionsItem(RestrictionsEnum restrictionsItem) {
+    if (this.restrictions == null) {
+      this.restrictions = new ArrayList<>();
+    }
+    this.restrictions.add(restrictionsItem);
+    return this;
+  }
+
+  /**
+   * Get restrictions
+   * @return restrictions
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTIONS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<RestrictionsEnum> getRestrictions() {
+    return restrictions;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTIONS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestrictions(@javax.annotation.Nullable List<RestrictionsEnum> restrictions) {
+    this.restrictions = restrictions;
   }
 
 
@@ -402,17 +731,21 @@ public class ArticleQuery {
     ArticleQuery articleQuery = (ArticleQuery) o;
     return Objects.equals(this.tagId, articleQuery.tagId) &&
         Objects.equals(this.domainId, articleQuery.domainId) &&
-        Objects.equals(this.status, articleQuery.status) &&
         Objects.equals(this.type, articleQuery.type) &&
         Objects.equals(this.order, articleQuery.order) &&
         Objects.equals(this.keyword, articleQuery.keyword) &&
         Objects.equals(this.authorId, articleQuery.authorId) &&
-        Objects.equals(this.listable, articleQuery.listable);
+        Objects.equals(this.publishStatus, articleQuery.publishStatus) &&
+        Objects.equals(this.publishStatuses, articleQuery.publishStatuses) &&
+        Objects.equals(this.visibility, articleQuery.visibility) &&
+        Objects.equals(this.visibilities, articleQuery.visibilities) &&
+        Objects.equals(this.restriction, articleQuery.restriction) &&
+        Objects.equals(this.restrictions, articleQuery.restrictions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tagId, domainId, status, type, order, keyword, authorId, listable);
+    return Objects.hash(tagId, domainId, type, order, keyword, authorId, publishStatus, publishStatuses, visibility, visibilities, restriction, restrictions);
   }
 
   @Override
@@ -421,12 +754,16 @@ public class ArticleQuery {
     sb.append("class ArticleQuery {\n");
     sb.append("    tagId: ").append(toIndentedString(tagId)).append("\n");
     sb.append("    domainId: ").append(toIndentedString(domainId)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    order: ").append(toIndentedString(order)).append("\n");
     sb.append("    keyword: ").append(toIndentedString(keyword)).append("\n");
     sb.append("    authorId: ").append(toIndentedString(authorId)).append("\n");
-    sb.append("    listable: ").append(toIndentedString(listable)).append("\n");
+    sb.append("    publishStatus: ").append(toIndentedString(publishStatus)).append("\n");
+    sb.append("    publishStatuses: ").append(toIndentedString(publishStatuses)).append("\n");
+    sb.append("    visibility: ").append(toIndentedString(visibility)).append("\n");
+    sb.append("    visibilities: ").append(toIndentedString(visibilities)).append("\n");
+    sb.append("    restriction: ").append(toIndentedString(restriction)).append("\n");
+    sb.append("    restrictions: ").append(toIndentedString(restrictions)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -481,11 +818,6 @@ public class ArticleQuery {
       joiner.add(String.format(java.util.Locale.ROOT, "%sdomain_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getDomainId()))));
     }
 
-    // add `status` to the URL query string
-    if (getStatus() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sstatus%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getStatus()))));
-    }
-
     // add `type` to the URL query string
     if (getType() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%stype%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getType()))));
@@ -506,9 +838,46 @@ public class ArticleQuery {
       joiner.add(String.format(java.util.Locale.ROOT, "%sauthor_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAuthorId()))));
     }
 
-    // add `listable` to the URL query string
-    if (getListable() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%slistable%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getListable()))));
+    // add `publish_status` to the URL query string
+    if (getPublishStatus() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spublish_status%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublishStatus()))));
+    }
+
+    // add `publish_statuses` to the URL query string
+    if (getPublishStatuses() != null) {
+      for (int i = 0; i < getPublishStatuses().size(); i++) {
+        joiner.add(String.format(java.util.Locale.ROOT, "%spublish_statuses%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix),
+            ApiClient.urlEncode(ApiClient.valueToString(getPublishStatuses().get(i)))));
+      }
+    }
+
+    // add `visibility` to the URL query string
+    if (getVisibility() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%svisibility%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getVisibility()))));
+    }
+
+    // add `visibilities` to the URL query string
+    if (getVisibilities() != null) {
+      for (int i = 0; i < getVisibilities().size(); i++) {
+        joiner.add(String.format(java.util.Locale.ROOT, "%svisibilities%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix),
+            ApiClient.urlEncode(ApiClient.valueToString(getVisibilities().get(i)))));
+      }
+    }
+
+    // add `restriction` to the URL query string
+    if (getRestriction() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%srestriction%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getRestriction()))));
+    }
+
+    // add `restrictions` to the URL query string
+    if (getRestrictions() != null) {
+      for (int i = 0; i < getRestrictions().size(); i++) {
+        joiner.add(String.format(java.util.Locale.ROOT, "%srestrictions%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix),
+            ApiClient.urlEncode(ApiClient.valueToString(getRestrictions().get(i)))));
+      }
     }
 
     return joiner.toString();

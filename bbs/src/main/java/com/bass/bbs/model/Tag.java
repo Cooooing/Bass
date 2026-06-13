@@ -19,31 +19,36 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.ExternalDocs;
-import com.bass.bbs.model.NamedAny;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 import com.bass.bbs.ApiClient;
 /**
- * Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
+ * 标签。
  */
 @JsonPropertyOrder({
+  Tag.JSON_PROPERTY_ID,
   Tag.JSON_PROPERTY_NAME,
   Tag.JSON_PROPERTY_DESCRIPTION,
-  Tag.JSON_PROPERTY_EXTERNAL_DOCS,
-  Tag.JSON_PROPERTY_SPECIFICATION_EXTENSION
+  Tag.JSON_PROPERTY_DOMAIN_ID,
+  Tag.JSON_PROPERTY_STATUS,
+  Tag.JSON_PROPERTY_CREATED_BY,
+  Tag.JSON_PROPERTY_UPDATED_BY,
+  Tag.JSON_PROPERTY_CREATED_AT,
+  Tag.JSON_PROPERTY_UPDATED_AT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class Tag {
+  public static final String JSON_PROPERTY_ID = "id";
+  @javax.annotation.Nullable
+  private String id;
+
   public static final String JSON_PROPERTY_NAME = "name";
   @javax.annotation.Nullable
   private String name;
@@ -52,16 +57,93 @@ public class Tag {
   @javax.annotation.Nullable
   private String description;
 
-  public static final String JSON_PROPERTY_EXTERNAL_DOCS = "external_docs";
+  public static final String JSON_PROPERTY_DOMAIN_ID = "domain_id";
   @javax.annotation.Nullable
-  private ExternalDocs externalDocs;
+  private String domainId;
 
-  public static final String JSON_PROPERTY_SPECIFICATION_EXTENSION = "specification_extension";
+  /**
+   * Gets or Sets status
+   */
+  public enum StatusEnum {
+    TAG_STATUS_UNSPECIFIED(String.valueOf("TAG_STATUS_UNSPECIFIED")),
+    
+    TAG_STATUS_ENABLED(String.valueOf("TAG_STATUS_ENABLED")),
+    
+    TAG_STATUS_DISABLED(String.valueOf("TAG_STATUS_DISABLED"));
+
+    private String value;
+
+    StatusEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static StatusEnum fromValue(String value) {
+      for (StatusEnum b : StatusEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_STATUS = "status";
   @javax.annotation.Nullable
-  private List<NamedAny> specificationExtension = new ArrayList<>();
+  private StatusEnum status;
+
+  public static final String JSON_PROPERTY_CREATED_BY = "created_by";
+  @javax.annotation.Nullable
+  private String createdBy;
+
+  public static final String JSON_PROPERTY_UPDATED_BY = "updated_by";
+  @javax.annotation.Nullable
+  private String updatedBy;
+
+  public static final String JSON_PROPERTY_CREATED_AT = "created_at";
+  @javax.annotation.Nullable
+  private String createdAt;
+
+  public static final String JSON_PROPERTY_UPDATED_AT = "updated_at";
+  @javax.annotation.Nullable
+  private String updatedAt;
 
   public Tag() { 
   }
+
+  public Tag id(@javax.annotation.Nullable String id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@javax.annotation.Nullable String id) {
+    this.id = id;
+  }
+
 
   public Tag name(@javax.annotation.Nullable String name) {
     this.name = name;
@@ -111,59 +193,147 @@ public class Tag {
   }
 
 
-  public Tag externalDocs(@javax.annotation.Nullable ExternalDocs externalDocs) {
-    this.externalDocs = externalDocs;
+  public Tag domainId(@javax.annotation.Nullable String domainId) {
+    this.domainId = domainId;
     return this;
   }
 
   /**
-   * Get externalDocs
-   * @return externalDocs
+   * Get domainId
+   * @return domainId
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_EXTERNAL_DOCS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_DOMAIN_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public ExternalDocs getExternalDocs() {
-    return externalDocs;
+  public String getDomainId() {
+    return domainId;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_EXTERNAL_DOCS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_DOMAIN_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setExternalDocs(@javax.annotation.Nullable ExternalDocs externalDocs) {
-    this.externalDocs = externalDocs;
+  public void setDomainId(@javax.annotation.Nullable String domainId) {
+    this.domainId = domainId;
   }
 
 
-  public Tag specificationExtension(@javax.annotation.Nullable List<NamedAny> specificationExtension) {
-    this.specificationExtension = specificationExtension;
-    return this;
-  }
-
-  public Tag addSpecificationExtensionItem(NamedAny specificationExtensionItem) {
-    if (this.specificationExtension == null) {
-      this.specificationExtension = new ArrayList<>();
-    }
-    this.specificationExtension.add(specificationExtensionItem);
+  public Tag status(@javax.annotation.Nullable StatusEnum status) {
+    this.status = status;
     return this;
   }
 
   /**
-   * Get specificationExtension
-   * @return specificationExtension
+   * Get status
+   * @return status
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SPECIFICATION_EXTENSION, required = false)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<NamedAny> getSpecificationExtension() {
-    return specificationExtension;
+  public StatusEnum getStatus() {
+    return status;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_SPECIFICATION_EXTENSION, required = false)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSpecificationExtension(@javax.annotation.Nullable List<NamedAny> specificationExtension) {
-    this.specificationExtension = specificationExtension;
+  public void setStatus(@javax.annotation.Nullable StatusEnum status) {
+    this.status = status;
+  }
+
+
+  public Tag createdBy(@javax.annotation.Nullable String createdBy) {
+    this.createdBy = createdBy;
+    return this;
+  }
+
+  /**
+   * Get createdBy
+   * @return createdBy
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_CREATED_BY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_CREATED_BY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreatedBy(@javax.annotation.Nullable String createdBy) {
+    this.createdBy = createdBy;
+  }
+
+
+  public Tag updatedBy(@javax.annotation.Nullable String updatedBy) {
+    this.updatedBy = updatedBy;
+    return this;
+  }
+
+  /**
+   * Get updatedBy
+   * @return updatedBy
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_UPDATED_BY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_UPDATED_BY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdatedBy(@javax.annotation.Nullable String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+
+  public Tag createdAt(@javax.annotation.Nullable String createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * Get createdAt
+   * @return createdAt
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getCreatedAt() {
+    return createdAt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreatedAt(@javax.annotation.Nullable String createdAt) {
+    this.createdAt = createdAt;
+  }
+
+
+  public Tag updatedAt(@javax.annotation.Nullable String updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  /**
+   * Get updatedAt
+   * @return updatedAt
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getUpdatedAt() {
+    return updatedAt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdatedAt(@javax.annotation.Nullable String updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
 
@@ -179,25 +349,35 @@ public class Tag {
       return false;
     }
     Tag tag = (Tag) o;
-    return Objects.equals(this.name, tag.name) &&
+    return Objects.equals(this.id, tag.id) &&
+        Objects.equals(this.name, tag.name) &&
         Objects.equals(this.description, tag.description) &&
-        Objects.equals(this.externalDocs, tag.externalDocs) &&
-        Objects.equals(this.specificationExtension, tag.specificationExtension);
+        Objects.equals(this.domainId, tag.domainId) &&
+        Objects.equals(this.status, tag.status) &&
+        Objects.equals(this.createdBy, tag.createdBy) &&
+        Objects.equals(this.updatedBy, tag.updatedBy) &&
+        Objects.equals(this.createdAt, tag.createdAt) &&
+        Objects.equals(this.updatedAt, tag.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, externalDocs, specificationExtension);
+    return Objects.hash(id, name, description, domainId, status, createdBy, updatedBy, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Tag {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    externalDocs: ").append(toIndentedString(externalDocs)).append("\n");
-    sb.append("    specificationExtension: ").append(toIndentedString(specificationExtension)).append("\n");
+    sb.append("    domainId: ").append(toIndentedString(domainId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
+    sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -242,6 +422,11 @@ public class Tag {
 
     StringJoiner joiner = new StringJoiner("&");
 
+    // add `id` to the URL query string
+    if (getId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sid%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getId()))));
+    }
+
     // add `name` to the URL query string
     if (getName() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sname%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getName()))));
@@ -252,19 +437,34 @@ public class Tag {
       joiner.add(String.format(java.util.Locale.ROOT, "%sdescription%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getDescription()))));
     }
 
-    // add `external_docs` to the URL query string
-    if (getExternalDocs() != null) {
-      joiner.add(getExternalDocs().toUrlQueryString(prefix + "external_docs" + suffix));
+    // add `domain_id` to the URL query string
+    if (getDomainId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sdomain_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getDomainId()))));
     }
 
-    // add `specification_extension` to the URL query string
-    if (getSpecificationExtension() != null) {
-      for (int i = 0; i < getSpecificationExtension().size(); i++) {
-        if (getSpecificationExtension().get(i) != null) {
-          joiner.add(getSpecificationExtension().get(i).toUrlQueryString(String.format(java.util.Locale.ROOT, "%sspecification_extension%s%s", prefix, suffix,
-          "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix))));
-        }
-      }
+    // add `status` to the URL query string
+    if (getStatus() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sstatus%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getStatus()))));
+    }
+
+    // add `created_by` to the URL query string
+    if (getCreatedBy() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%screated_by%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCreatedBy()))));
+    }
+
+    // add `updated_by` to the URL query string
+    if (getUpdatedBy() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%supdated_by%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getUpdatedBy()))));
+    }
+
+    // add `created_at` to the URL query string
+    if (getCreatedAt() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%screated_at%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCreatedAt()))));
+    }
+
+    // add `updated_at` to the URL query string
+    if (getUpdatedAt() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%supdated_at%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getUpdatedAt()))));
     }
 
     return joiner.toString();

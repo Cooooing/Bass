@@ -57,7 +57,7 @@ public class ListArticlesRequest {
   }
 
   /**
-   * 分页参数。
+   * Get page
    * @return page
    */
   @javax.annotation.Nullable
@@ -81,7 +81,7 @@ public class ListArticlesRequest {
   }
 
   /**
-   * 查询条件。
+   * Get query
    * @return query
    */
   @javax.annotation.Nullable

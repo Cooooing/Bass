@@ -55,7 +55,7 @@ public class LikeArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class LikeArticleRequest {
   }
 
   /**
-   * 是否点赞。
+   * Get active
    * @return active
    */
   @javax.annotation.Nonnull

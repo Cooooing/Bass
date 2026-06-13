@@ -11,7 +11,7 @@
 |**ids** | **List&lt;String&gt;** | 板块 ID 列表。 |  [optional] |
 |**name** | **String** | 板块名称。 |  [optional] |
 |**description** | **String** | 板块描述。 |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) | 板块状态。 |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 板块启停状态。 |  [optional] |
 |**url** | **String** | 板块 URL。 |  [optional] |
 |**icon** | **String** | 板块图标。 |  [optional] |
 |**isNav** | **Boolean** | 是否在导航中展示。 |  [optional] |
@@ -23,7 +23,7 @@
 | Name | Value |
 |---- | -----|
 | DOMAIN_STATUS_UNSPECIFIED | &quot;DOMAIN_STATUS_UNSPECIFIED&quot; |
-| DOMAIN_STATUS_NORMAL | &quot;DOMAIN_STATUS_NORMAL&quot; |
+| DOMAIN_STATUS_ENABLED | &quot;DOMAIN_STATUS_ENABLED&quot; |
 | DOMAIN_STATUS_DISABLED | &quot;DOMAIN_STATUS_DISABLED&quot; |
 
 

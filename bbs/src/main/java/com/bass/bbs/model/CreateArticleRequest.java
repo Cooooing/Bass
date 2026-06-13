@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.ArticleSave;
+import com.bass.bbs.model.RequestArticle;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,31 +40,31 @@ import com.bass.bbs.ApiClient;
 public class CreateArticleRequest {
   public static final String JSON_PROPERTY_ARTICLE = "article";
   @javax.annotation.Nonnull
-  private ArticleSave article;
+  private RequestArticle article;
 
   public CreateArticleRequest() { 
   }
 
-  public CreateArticleRequest article(@javax.annotation.Nonnull ArticleSave article) {
+  public CreateArticleRequest article(@javax.annotation.Nonnull RequestArticle article) {
     this.article = article;
     return this;
   }
 
   /**
-   * 文章保存内容。
+   * Get article
    * @return article
    */
   @javax.annotation.Nonnull
   @JsonProperty(value = JSON_PROPERTY_ARTICLE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public ArticleSave getArticle() {
+  public RequestArticle getArticle() {
     return article;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ARTICLE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setArticle(@javax.annotation.Nonnull ArticleSave article) {
+  public void setArticle(@javax.annotation.Nonnull RequestArticle article) {
     this.article = article;
   }
 

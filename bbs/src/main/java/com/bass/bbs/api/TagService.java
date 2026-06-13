@@ -18,8 +18,12 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
+import com.bass.bbs.model.CreateTagReply;
+import com.bass.bbs.model.CreateTagRequest;
 import com.bass.bbs.model.ListTagsReply;
 import com.bass.bbs.model.ListTagsRequest;
+import com.bass.bbs.model.UpdateTagReply;
+import com.bass.bbs.model.UpdateTagRequest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -360,6 +364,408 @@ public class TagService {
       }
       public APICallListRequest build() {
         return new APICallListRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param apiRequest {@link APICreateRequest}
+   * @return CreateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public CreateTagReply create(APICreateRequest apiRequest) throws ApiException {
+    return create(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param apiRequest {@link APICreateRequest}
+   * @param headers Optional headers to include in the request
+   * @return CreateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public CreateTagReply create(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    CreateTagRequest createTagRequest = apiRequest.createTagRequest();
+    return create(createTagRequest, headers);
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param apiRequest {@link APICreateRequest}
+   * @return ApiResponse&lt;CreateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateTagReply> createWithHttpInfo(APICreateRequest apiRequest) throws ApiException {
+    return createWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param apiRequest {@link APICreateRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CreateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateTagReply> createWithHttpInfo(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    CreateTagRequest createTagRequest = apiRequest.createTagRequest();
+    return createWithHttpInfo(createTagRequest, headers);
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param createTagRequest  (required)
+   * @return CreateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public CreateTagReply create(@javax.annotation.Nonnull CreateTagRequest createTagRequest) throws ApiException {
+    return create(createTagRequest, null);
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param createTagRequest  (required)
+   * @param headers Optional headers to include in the request
+   * @return CreateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public CreateTagReply create(@javax.annotation.Nonnull CreateTagRequest createTagRequest, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateTagReply> localVarResponse = createWithHttpInfo(createTagRequest, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param createTagRequest  (required)
+   * @return ApiResponse&lt;CreateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateTagReply> createWithHttpInfo(@javax.annotation.Nonnull CreateTagRequest createTagRequest) throws ApiException {
+    return createWithHttpInfo(createTagRequest, null);
+  }
+
+  /**
+   * 
+   * 创建标签。
+   * @param createTagRequest  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CreateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateTagReply> createWithHttpInfo(@javax.annotation.Nonnull CreateTagRequest createTagRequest, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createRequestBuilder(createTagRequest, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("create", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<CreateTagReply>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        CreateTagReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CreateTagReply>() {});
+        
+
+        return new ApiResponse<CreateTagReply>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder createRequestBuilder(@javax.annotation.Nonnull CreateTagRequest createTagRequest, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'createTagRequest' is set
+    if (createTagRequest == null) {
+      throw new ApiException(400, "Missing the required parameter 'createTagRequest' when calling create");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/tag/create";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(createTagRequest);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICreateRequest {
+    @javax.annotation.Nonnull
+    private CreateTagRequest createTagRequest; //  (required)
+
+    private APICreateRequest(Builder builder) {
+      this.createTagRequest = builder.createTagRequest;
+    }
+    @javax.annotation.Nonnull
+    public CreateTagRequest createTagRequest() {
+      return createTagRequest;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private CreateTagRequest createTagRequest;
+
+      public Builder createTagRequest(@javax.annotation.Nonnull CreateTagRequest createTagRequest) {
+        this.createTagRequest = createTagRequest;
+        return this;
+      }
+      public APICreateRequest build() {
+        return new APICreateRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @return UpdateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateTagReply update(APIUpdateRequest apiRequest) throws ApiException {
+    return update(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @param headers Optional headers to include in the request
+   * @return UpdateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateTagReply update(APIUpdateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    UpdateTagRequest updateTagRequest = apiRequest.updateTagRequest();
+    return update(updateTagRequest, headers);
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @return ApiResponse&lt;UpdateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateTagReply> updateWithHttpInfo(APIUpdateRequest apiRequest) throws ApiException {
+    return updateWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;UpdateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateTagReply> updateWithHttpInfo(APIUpdateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdateTagRequest updateTagRequest = apiRequest.updateTagRequest();
+    return updateWithHttpInfo(updateTagRequest, headers);
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param updateTagRequest  (required)
+   * @return UpdateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateTagReply update(@javax.annotation.Nonnull UpdateTagRequest updateTagRequest) throws ApiException {
+    return update(updateTagRequest, null);
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param updateTagRequest  (required)
+   * @param headers Optional headers to include in the request
+   * @return UpdateTagReply
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateTagReply update(@javax.annotation.Nonnull UpdateTagRequest updateTagRequest, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpdateTagReply> localVarResponse = updateWithHttpInfo(updateTagRequest, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param updateTagRequest  (required)
+   * @return ApiResponse&lt;UpdateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateTagReply> updateWithHttpInfo(@javax.annotation.Nonnull UpdateTagRequest updateTagRequest) throws ApiException {
+    return updateWithHttpInfo(updateTagRequest, null);
+  }
+
+  /**
+   * 
+   * 更新标签。
+   * @param updateTagRequest  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;UpdateTagReply&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateTagReply> updateWithHttpInfo(@javax.annotation.Nonnull UpdateTagRequest updateTagRequest, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateRequestBuilder(updateTagRequest, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("update", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<UpdateTagReply>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        UpdateTagReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpdateTagReply>() {});
+        
+
+        return new ApiResponse<UpdateTagReply>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder updateRequestBuilder(@javax.annotation.Nonnull UpdateTagRequest updateTagRequest, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updateTagRequest' is set
+    if (updateTagRequest == null) {
+      throw new ApiException(400, "Missing the required parameter 'updateTagRequest' when calling update");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/tag/update";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateTagRequest);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIUpdateRequest {
+    @javax.annotation.Nonnull
+    private UpdateTagRequest updateTagRequest; //  (required)
+
+    private APIUpdateRequest(Builder builder) {
+      this.updateTagRequest = builder.updateTagRequest;
+    }
+    @javax.annotation.Nonnull
+    public UpdateTagRequest updateTagRequest() {
+      return updateTagRequest;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private UpdateTagRequest updateTagRequest;
+
+      public Builder updateTagRequest(@javax.annotation.Nonnull UpdateTagRequest updateTagRequest) {
+        this.updateTagRequest = updateTagRequest;
+        return this;
+      }
+      public APIUpdateRequest build() {
+        return new APIUpdateRequest(this);
       }
     }
   }

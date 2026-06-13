@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**article** | [**ArticleSave**](ArticleSave.md) | 文章保存内容。 |  |
+|**article** | [**RequestArticle**](RequestArticle.md) |  |  |
 
 
 

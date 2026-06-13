@@ -18,7 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -94,11 +96,19 @@ class CommentQueryTest {
     }
 
     /**
-     * Test the property 'status'
+     * Test the property 'restriction'
      */
     @Test
-    void statusTest() {
-        // TODO: test status
+    void restrictionTest() {
+        // TODO: test restriction
+    }
+
+    /**
+     * Test the property 'restrictions'
+     */
+    @Test
+    void restrictionsTest() {
+        // TODO: test restrictions
     }
 
 }

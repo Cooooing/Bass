@@ -15,20 +15,26 @@ package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
 import com.bass.bbs.model.AcceptAnswerArticleRequest;
+import com.bass.bbs.model.CollectArticleReply;
 import com.bass.bbs.model.CollectArticleRequest;
 import com.bass.bbs.model.CreateArticleReply;
 import com.bass.bbs.model.CreateArticleRequest;
-import com.bass.bbs.model.DeleteArticleRequest;
+import com.bass.bbs.model.DiscardDraftArticleRequest;
 import com.bass.bbs.model.GetArticleReply;
 import com.bass.bbs.model.GetArticleRequest;
+import com.bass.bbs.model.LikeArticleReply;
 import com.bass.bbs.model.LikeArticleRequest;
 import com.bass.bbs.model.ListArticlesReply;
 import com.bass.bbs.model.ListArticlesRequest;
 import com.bass.bbs.model.PublishArticleRequest;
 import com.bass.bbs.model.RewardArticleRequest;
+import com.bass.bbs.model.ThankArticleReply;
 import com.bass.bbs.model.ThankArticleRequest;
+import com.bass.bbs.model.UpdateArticleReply;
+import com.bass.bbs.model.UpdateArticleRequest;
 import com.bass.bbs.model.UpdateDraftArticleReply;
 import com.bass.bbs.model.UpdateDraftArticleRequest;
+import com.bass.bbs.model.WatchArticleReply;
 import com.bass.bbs.model.WatchArticleRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -106,7 +112,7 @@ public class ArticleServiceTest {
         ArticleService.APIcollectRequest request = ArticleService.APIcollectRequest.newBuilder()
           .collectArticleRequest(collectArticleRequest)
           .build();
-        Object response = 
+        CollectArticleReply response = 
         api.collect(request);
 
         // TODO: test validations
@@ -115,7 +121,7 @@ public class ArticleServiceTest {
     /**
      * 
      *
-     * 创建文章。
+     * 创建文章草稿。
      *
      * @throws ApiException
      *          if the Api call fails
@@ -136,20 +142,20 @@ public class ArticleServiceTest {
     /**
      * 
      *
-     * 删除文章。
+     * 丢弃草稿。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void deleteTest() throws ApiException {
-        DeleteArticleRequest deleteArticleRequest = null;
+    public void discardDraftTest() throws ApiException {
+        DiscardDraftArticleRequest discardDraftArticleRequest = null;
         
-        ArticleService.APIdeleteRequest request = ArticleService.APIdeleteRequest.newBuilder()
-          .deleteArticleRequest(deleteArticleRequest)
+        ArticleService.APIdiscardDraftRequest request = ArticleService.APIdiscardDraftRequest.newBuilder()
+          .discardDraftArticleRequest(discardDraftArticleRequest)
           .build();
         Object response = 
-        api.delete(request);
+        api.discardDraft(request);
 
         // TODO: test validations
     }
@@ -190,7 +196,7 @@ public class ArticleServiceTest {
         ArticleService.APIlikeRequest request = ArticleService.APIlikeRequest.newBuilder()
           .likeArticleRequest(likeArticleRequest)
           .build();
-        Object response = 
+        LikeArticleReply response = 
         api.like(request);
 
         // TODO: test validations
@@ -253,7 +259,7 @@ public class ArticleServiceTest {
         ArticleService.APIthankRequest request = ArticleService.APIthankRequest.newBuilder()
           .thankArticleRequest(thankArticleRequest)
           .build();
-        Object response = 
+        ThankArticleReply response = 
         api.thank(request);
 
         // TODO: test validations
@@ -262,7 +268,28 @@ public class ArticleServiceTest {
     /**
      * 
      *
-     * 更新文章草稿。
+     * 更新文章内容。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void updateTest() throws ApiException {
+        UpdateArticleRequest updateArticleRequest = null;
+        
+        ArticleService.APIupdateRequest request = ArticleService.APIupdateRequest.newBuilder()
+          .updateArticleRequest(updateArticleRequest)
+          .build();
+        UpdateArticleReply response = 
+        api.update(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 更新文章内容。兼容旧草稿更新接口。
      *
      * @throws ApiException
      *          if the Api call fails
@@ -295,7 +322,7 @@ public class ArticleServiceTest {
         ArticleService.APIwatchRequest request = ArticleService.APIwatchRequest.newBuilder()
           .watchArticleRequest(watchArticleRequest)
           .build();
-        Object response = 
+        WatchArticleReply response = 
         api.watch(request);
 
         // TODO: test validations

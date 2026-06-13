@@ -13,7 +13,7 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.Comment;
+import com.bass.bbs.model.CommentListItem;
 import com.bass.bbs.model.PageReply;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -55,7 +55,7 @@ public class ThankArticleRequest {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class ThankArticleRequest {
   }
 
   /**
-   * 是否感谢。
+   * Get active
    * @return active
    */
   @javax.annotation.Nonnull

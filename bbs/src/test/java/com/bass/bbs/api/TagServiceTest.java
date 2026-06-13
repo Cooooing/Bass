@@ -14,8 +14,12 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
+import com.bass.bbs.model.CreateTagReply;
+import com.bass.bbs.model.CreateTagRequest;
 import com.bass.bbs.model.ListTagsReply;
 import com.bass.bbs.model.ListTagsRequest;
+import com.bass.bbs.model.UpdateTagReply;
+import com.bass.bbs.model.UpdateTagRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -52,6 +56,48 @@ public class TagServiceTest {
           .build();
         ListTagsReply response = 
         api.callList(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 创建标签。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createTest() throws ApiException {
+        CreateTagRequest createTagRequest = null;
+        
+        TagService.APIcreateRequest request = TagService.APIcreateRequest.newBuilder()
+          .createTagRequest(createTagRequest)
+          .build();
+        CreateTagReply response = 
+        api.create(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 更新标签。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void updateTest() throws ApiException {
+        UpdateTagRequest updateTagRequest = null;
+        
+        TagService.APIupdateRequest request = TagService.APIupdateRequest.newBuilder()
+          .updateTagRequest(updateTagRequest)
+          .build();
+        UpdateTagReply response = 
+        api.update(request);
 
         // TODO: test validations
     }

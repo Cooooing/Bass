@@ -13,7 +13,7 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.ArticleSave;
+import com.bass.bbs.model.RequestArticle;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -36,6 +36,14 @@ class UpdateDraftArticleRequestTest {
     @Test
     void testUpdateDraftArticleRequest() {
         // TODO: test UpdateDraftArticleRequest
+    }
+
+    /**
+     * Test the property 'articleId'
+     */
+    @Test
+    void articleIdTest() {
+        // TODO: test articleId
     }
 
     /**

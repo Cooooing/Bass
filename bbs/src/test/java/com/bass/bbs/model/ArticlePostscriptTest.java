@@ -70,6 +70,14 @@ class ArticlePostscriptTest {
     }
 
     /**
+     * Test the property 'restriction'
+     */
+    @Test
+    void restrictionTest() {
+        // TODO: test restriction
+    }
+
+    /**
      * Test the property 'createdBy'
      */
     @Test

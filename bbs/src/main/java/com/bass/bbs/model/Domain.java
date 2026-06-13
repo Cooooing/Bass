@@ -60,12 +60,12 @@ public class Domain {
   private String description;
 
   /**
-   * 板块状态。
+   * Gets or Sets status
    */
   public enum StatusEnum {
     DOMAIN_STATUS_UNSPECIFIED(String.valueOf("DOMAIN_STATUS_UNSPECIFIED")),
     
-    DOMAIN_STATUS_NORMAL(String.valueOf("DOMAIN_STATUS_NORMAL")),
+    DOMAIN_STATUS_ENABLED(String.valueOf("DOMAIN_STATUS_ENABLED")),
     
     DOMAIN_STATUS_DISABLED(String.valueOf("DOMAIN_STATUS_DISABLED"));
 
@@ -137,7 +137,7 @@ public class Domain {
   }
 
   /**
-   * 板块 ID。
+   * Get id
    * @return id
    */
   @javax.annotation.Nullable
@@ -161,7 +161,7 @@ public class Domain {
   }
 
   /**
-   * 板块名称。
+   * Get name
    * @return name
    */
   @javax.annotation.Nullable
@@ -185,7 +185,7 @@ public class Domain {
   }
 
   /**
-   * 板块描述。
+   * Get description
    * @return description
    */
   @javax.annotation.Nullable
@@ -209,7 +209,7 @@ public class Domain {
   }
 
   /**
-   * 板块状态。
+   * Get status
    * @return status
    */
   @javax.annotation.Nullable
@@ -233,7 +233,7 @@ public class Domain {
   }
 
   /**
-   * 板块 URL。
+   * Get url
    * @return url
    */
   @javax.annotation.Nullable
@@ -257,7 +257,7 @@ public class Domain {
   }
 
   /**
-   * 板块图标。
+   * Get icon
    * @return icon
    */
   @javax.annotation.Nullable
@@ -281,7 +281,7 @@ public class Domain {
   }
 
   /**
-   * 是否在导航中展示。
+   * Get isNav
    * @return isNav
    */
   @javax.annotation.Nullable
@@ -305,7 +305,7 @@ public class Domain {
   }
 
   /**
-   * 创建账号 ID。
+   * Get createdBy
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -329,7 +329,7 @@ public class Domain {
   }
 
   /**
-   * 更新账号 ID。
+   * Get updatedBy
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -353,7 +353,7 @@ public class Domain {
   }
 
   /**
-   * 创建时间。
+   * Get createdAt
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -377,7 +377,7 @@ public class Domain {
   }
 
   /**
-   * 更新时间。
+   * Get updatedAt
    * @return updatedAt
    */
   @javax.annotation.Nullable

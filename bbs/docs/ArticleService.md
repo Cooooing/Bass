@@ -12,8 +12,8 @@ All URIs are relative to *http://localhost*
 | [**collectWithHttpInfo**](ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect |  |
 | [**create**](ArticleService.md#create) | **POST** /v1/content/article/create |  |
 | [**createWithHttpInfo**](ArticleService.md#createWithHttpInfo) | **POST** /v1/content/article/create |  |
-| [**delete**](ArticleService.md#delete) | **POST** /v1/content/article/delete |  |
-| [**deleteWithHttpInfo**](ArticleService.md#deleteWithHttpInfo) | **POST** /v1/content/article/delete |  |
+| [**discardDraft**](ArticleService.md#discardDraft) | **POST** /v1/content/article/discard-draft |  |
+| [**discardDraftWithHttpInfo**](ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/discard-draft |  |
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**getWithHttpInfo**](ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
@@ -24,6 +24,8 @@ All URIs are relative to *http://localhost*
 | [**rewardWithHttpInfo**](ArticleService.md#rewardWithHttpInfo) | **POST** /v1/content/article/reward |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**thankWithHttpInfo**](ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank |  |
+| [**update**](ArticleService.md#update) | **POST** /v1/content/article/update |  |
+| [**updateWithHttpInfo**](ArticleService.md#updateWithHttpInfo) | **POST** /v1/content/article/update |  |
 | [**updateDraft**](ArticleService.md#updateDraft) | **POST** /v1/content/article/update-draft |  |
 | [**updateDraftWithHttpInfo**](ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/update-draft |  |
 | [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
@@ -333,7 +335,7 @@ No authorization required
 
 ## collect
 
-> Object collect(collectRequest)
+> CollectArticleReply collect(collectRequest)
 
 
 
@@ -361,7 +363,7 @@ public class Example {
             APIcollectRequest request = APIcollectRequest.newBuilder()
                 .collectArticleRequest(collectArticleRequest)
                 .build();
-            Object result = apiInstance.collect(request);
+            CollectArticleReply result = apiInstance.collect(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#collect");
@@ -382,7 +384,7 @@ public class Example {
 
 ### Return type
 
-**Object**
+[**CollectArticleReply**](CollectArticleReply.md)
 
 
 ### Authorization
@@ -401,7 +403,7 @@ No authorization required
 
 ## collectWithHttpInfo
 
-> ApiResponse<Object> collectWithHttpInfo(collectRequest)
+> ApiResponse<CollectArticleReply> collectWithHttpInfo(collectRequest)
 
 
 
@@ -430,7 +432,7 @@ public class Example {
             APIcollectRequest request = APIcollectRequest.newBuilder()
                 .collectArticleRequest(collectArticleRequest)
                 .build();
-            ApiResponse<Object> response = apiInstance.collectWithHttpInfo(request);
+            ApiResponse<CollectArticleReply> response = apiInstance.collectWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -453,7 +455,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<**Object**>
+ApiResponse<[**CollectArticleReply**](CollectArticleReply.md)>
 
 
 ### Authorization
@@ -487,7 +489,7 @@ No authorization required
 
 
 
-创建文章。
+创建文章草稿。
 
 ### Example
 
@@ -555,7 +557,7 @@ No authorization required
 
 
 
-创建文章。
+创建文章草稿。
 
 ### Example
 
@@ -631,13 +633,13 @@ No authorization required
 
 
 
-## delete
+## discardDraft
 
-> Object delete(deleteRequest)
+> Object discardDraft(discardDraftRequest)
 
 
 
-删除文章。
+丢弃草稿。
 
 ### Example
 
@@ -656,15 +658,15 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        DeleteArticleRequest deleteArticleRequest = new DeleteArticleRequest(); // DeleteArticleRequest | 
+        DiscardDraftArticleRequest discardDraftArticleRequest = new DiscardDraftArticleRequest(); // DiscardDraftArticleRequest | 
         try {
-            APIdeleteRequest request = APIdeleteRequest.newBuilder()
-                .deleteArticleRequest(deleteArticleRequest)
+            APIdiscardDraftRequest request = APIdiscardDraftRequest.newBuilder()
+                .discardDraftArticleRequest(discardDraftArticleRequest)
                 .build();
-            Object result = apiInstance.delete(request);
+            Object result = apiInstance.discardDraft(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#delete");
+            System.err.println("Exception when calling ArticleService#discardDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -678,7 +680,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteRequest | [**APIdeleteRequest**](ArticleService.md#APIdeleteRequest)|-|-|
+| discardDraftRequest | [**APIdiscardDraftRequest**](ArticleService.md#APIdiscardDraftRequest)|-|-|
 
 ### Return type
 
@@ -699,13 +701,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## deleteWithHttpInfo
+## discardDraftWithHttpInfo
 
-> ApiResponse<Object> deleteWithHttpInfo(deleteRequest)
+> ApiResponse<Object> discardDraftWithHttpInfo(discardDraftRequest)
 
 
 
-删除文章。
+丢弃草稿。
 
 ### Example
 
@@ -725,17 +727,17 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        DeleteArticleRequest deleteArticleRequest = new DeleteArticleRequest(); // DeleteArticleRequest | 
+        DiscardDraftArticleRequest discardDraftArticleRequest = new DiscardDraftArticleRequest(); // DiscardDraftArticleRequest | 
         try {
-            APIdeleteRequest request = APIdeleteRequest.newBuilder()
-                .deleteArticleRequest(deleteArticleRequest)
+            APIdiscardDraftRequest request = APIdiscardDraftRequest.newBuilder()
+                .discardDraftArticleRequest(discardDraftArticleRequest)
                 .build();
-            ApiResponse<Object> response = apiInstance.deleteWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.discardDraftWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#delete");
+            System.err.println("Exception when calling ArticleService#discardDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -749,7 +751,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteRequest | [**APIdeleteRequest**](ArticleService.md#APIdeleteRequest)|-|-|
+| discardDraftRequest | [**APIdiscardDraftRequest**](ArticleService.md#APIdiscardDraftRequest)|-|-|
 
 ### Return type
 
@@ -771,13 +773,13 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIdeleteRequest"></a>
-## APIdeleteRequest
+<a id="APIdiscardDraftRequest"></a>
+## APIdiscardDraftRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **deleteArticleRequest** | [**DeleteArticleRequest**](DeleteArticleRequest.md) |  | |
+| **discardDraftArticleRequest** | [**DiscardDraftArticleRequest**](DiscardDraftArticleRequest.md) |  | |
 
 
 
@@ -933,7 +935,7 @@ No authorization required
 
 ## like
 
-> Object like(likeRequest)
+> LikeArticleReply like(likeRequest)
 
 
 
@@ -961,7 +963,7 @@ public class Example {
             APIlikeRequest request = APIlikeRequest.newBuilder()
                 .likeArticleRequest(likeArticleRequest)
                 .build();
-            Object result = apiInstance.like(request);
+            LikeArticleReply result = apiInstance.like(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#like");
@@ -982,7 +984,7 @@ public class Example {
 
 ### Return type
 
-**Object**
+[**LikeArticleReply**](LikeArticleReply.md)
 
 
 ### Authorization
@@ -1001,7 +1003,7 @@ No authorization required
 
 ## likeWithHttpInfo
 
-> ApiResponse<Object> likeWithHttpInfo(likeRequest)
+> ApiResponse<LikeArticleReply> likeWithHttpInfo(likeRequest)
 
 
 
@@ -1030,7 +1032,7 @@ public class Example {
             APIlikeRequest request = APIlikeRequest.newBuilder()
                 .likeArticleRequest(likeArticleRequest)
                 .build();
-            ApiResponse<Object> response = apiInstance.likeWithHttpInfo(request);
+            ApiResponse<LikeArticleReply> response = apiInstance.likeWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -1053,7 +1055,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<**Object**>
+ApiResponse<[**LikeArticleReply**](LikeArticleReply.md)>
 
 
 ### Authorization
@@ -1383,7 +1385,7 @@ No authorization required
 
 ## thank
 
-> Object thank(thankRequest)
+> ThankArticleReply thank(thankRequest)
 
 
 
@@ -1411,7 +1413,7 @@ public class Example {
             APIthankRequest request = APIthankRequest.newBuilder()
                 .thankArticleRequest(thankArticleRequest)
                 .build();
-            Object result = apiInstance.thank(request);
+            ThankArticleReply result = apiInstance.thank(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#thank");
@@ -1432,7 +1434,7 @@ public class Example {
 
 ### Return type
 
-**Object**
+[**ThankArticleReply**](ThankArticleReply.md)
 
 
 ### Authorization
@@ -1451,7 +1453,7 @@ No authorization required
 
 ## thankWithHttpInfo
 
-> ApiResponse<Object> thankWithHttpInfo(thankRequest)
+> ApiResponse<ThankArticleReply> thankWithHttpInfo(thankRequest)
 
 
 
@@ -1480,7 +1482,7 @@ public class Example {
             APIthankRequest request = APIthankRequest.newBuilder()
                 .thankArticleRequest(thankArticleRequest)
                 .build();
-            ApiResponse<Object> response = apiInstance.thankWithHttpInfo(request);
+            ApiResponse<ThankArticleReply> response = apiInstance.thankWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -1503,7 +1505,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<**Object**>
+ApiResponse<[**ThankArticleReply**](ThankArticleReply.md)>
 
 
 ### Authorization
@@ -1531,13 +1533,163 @@ No authorization required
 
 
 
+## update
+
+> UpdateArticleReply update(updateRequest)
+
+
+
+更新文章内容。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(); // UpdateArticleRequest | 
+        try {
+            APIupdateRequest request = APIupdateRequest.newBuilder()
+                .updateArticleRequest(updateArticleRequest)
+                .build();
+            UpdateArticleReply result = apiInstance.update(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#update");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| updateRequest | [**APIupdateRequest**](ArticleService.md#APIupdateRequest)|-|-|
+
+### Return type
+
+[**UpdateArticleReply**](UpdateArticleReply.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## updateWithHttpInfo
+
+> ApiResponse<UpdateArticleReply> updateWithHttpInfo(updateRequest)
+
+
+
+更新文章内容。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(); // UpdateArticleRequest | 
+        try {
+            APIupdateRequest request = APIupdateRequest.newBuilder()
+                .updateArticleRequest(updateArticleRequest)
+                .build();
+            ApiResponse<UpdateArticleReply> response = apiInstance.updateWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#update");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| updateRequest | [**APIupdateRequest**](ArticleService.md#APIupdateRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**UpdateArticleReply**](UpdateArticleReply.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIupdateRequest"></a>
+## APIupdateRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **updateArticleRequest** | [**UpdateArticleRequest**](UpdateArticleRequest.md) |  | |
+
+
+
 ## updateDraft
 
 > UpdateDraftArticleReply updateDraft(updateDraftRequest)
 
 
 
-更新文章草稿。
+更新文章内容。兼容旧草稿更新接口。
 
 ### Example
 
@@ -1605,7 +1757,7 @@ No authorization required
 
 
 
-更新文章草稿。
+更新文章内容。兼容旧草稿更新接口。
 
 ### Example
 
@@ -1683,7 +1835,7 @@ No authorization required
 
 ## watch
 
-> Object watch(watchRequest)
+> WatchArticleReply watch(watchRequest)
 
 
 
@@ -1711,7 +1863,7 @@ public class Example {
             APIwatchRequest request = APIwatchRequest.newBuilder()
                 .watchArticleRequest(watchArticleRequest)
                 .build();
-            Object result = apiInstance.watch(request);
+            WatchArticleReply result = apiInstance.watch(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#watch");
@@ -1732,7 +1884,7 @@ public class Example {
 
 ### Return type
 
-**Object**
+[**WatchArticleReply**](WatchArticleReply.md)
 
 
 ### Authorization
@@ -1751,7 +1903,7 @@ No authorization required
 
 ## watchWithHttpInfo
 
-> ApiResponse<Object> watchWithHttpInfo(watchRequest)
+> ApiResponse<WatchArticleReply> watchWithHttpInfo(watchRequest)
 
 
 
@@ -1780,7 +1932,7 @@ public class Example {
             APIwatchRequest request = APIwatchRequest.newBuilder()
                 .watchArticleRequest(watchArticleRequest)
                 .build();
-            ApiResponse<Object> response = apiInstance.watchWithHttpInfo(request);
+            ApiResponse<WatchArticleReply> response = apiInstance.watchWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -1803,7 +1955,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<**Object**>
+ApiResponse<[**WatchArticleReply**](WatchArticleReply.md)>
 
 
 ### Authorization

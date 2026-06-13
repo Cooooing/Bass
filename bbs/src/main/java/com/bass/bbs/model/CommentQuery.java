@@ -24,7 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
@@ -40,7 +42,8 @@ import com.bass.bbs.ApiClient;
   CommentQuery.JSON_PROPERTY_ORDER,
   CommentQuery.JSON_PROPERTY_USER_ID,
   CommentQuery.JSON_PROPERTY_LEVEL,
-  CommentQuery.JSON_PROPERTY_STATUS
+  CommentQuery.JSON_PROPERTY_RESTRICTION,
+  CommentQuery.JSON_PROPERTY_RESTRICTIONS
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class CommentQuery {
@@ -61,14 +64,16 @@ public class CommentQuery {
   private String replyId;
 
   /**
-   * 排序方式。
+   * Gets or Sets order
    */
   public enum OrderEnum {
     COMMENT_ORDER_UNSPECIFIED(String.valueOf("COMMENT_ORDER_UNSPECIFIED")),
     
     COMMENT_ORDER_NEWEST(String.valueOf("COMMENT_ORDER_NEWEST")),
     
-    COMMENT_ORDER_HOTTEST(String.valueOf("COMMENT_ORDER_HOTTEST"));
+    COMMENT_ORDER_HOTTEST(String.valueOf("COMMENT_ORDER_HOTTEST")),
+    
+    COMMENT_ORDER_OLDEST(String.valueOf("COMMENT_ORDER_OLDEST"));
 
     private String value;
 
@@ -110,18 +115,20 @@ public class CommentQuery {
   private Integer level;
 
   /**
-   * 评论状态。
+   * Gets or Sets restriction
    */
-  public enum StatusEnum {
-    COMMENT_STATUS_UNSPECIFIED(String.valueOf("COMMENT_STATUS_UNSPECIFIED")),
+  public enum RestrictionEnum {
+    CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
     
-    COMMENT_STATUS_NORMAL(String.valueOf("COMMENT_STATUS_NORMAL")),
+    CONTENT_RESTRICTION_NONE(String.valueOf("CONTENT_RESTRICTION_NONE")),
     
-    COMMENT_STATUS_HIDDEN(String.valueOf("COMMENT_STATUS_HIDDEN"));
+    CONTENT_RESTRICTION_HIDDEN(String.valueOf("CONTENT_RESTRICTION_HIDDEN")),
+    
+    CONTENT_RESTRICTION_LOCKED(String.valueOf("CONTENT_RESTRICTION_LOCKED"));
 
     private String value;
 
-    StatusEnum(String value) {
+    RestrictionEnum(String value) {
       this.value = value;
     }
 
@@ -136,8 +143,8 @@ public class CommentQuery {
     }
 
     @JsonCreator
-    public static StatusEnum fromValue(String value) {
-      for (StatusEnum b : StatusEnum.values()) {
+    public static RestrictionEnum fromValue(String value) {
+      for (RestrictionEnum b : RestrictionEnum.values()) {
         if (b.value.equals(value)) {
           return b;
         }
@@ -146,9 +153,52 @@ public class CommentQuery {
     }
   }
 
-  public static final String JSON_PROPERTY_STATUS = "status";
+  public static final String JSON_PROPERTY_RESTRICTION = "restriction";
   @javax.annotation.Nullable
-  private StatusEnum status;
+  private RestrictionEnum restriction;
+
+  /**
+   * Gets or Sets restrictions
+   */
+  public enum RestrictionsEnum {
+    CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
+    
+    CONTENT_RESTRICTION_NONE(String.valueOf("CONTENT_RESTRICTION_NONE")),
+    
+    CONTENT_RESTRICTION_HIDDEN(String.valueOf("CONTENT_RESTRICTION_HIDDEN")),
+    
+    CONTENT_RESTRICTION_LOCKED(String.valueOf("CONTENT_RESTRICTION_LOCKED"));
+
+    private String value;
+
+    RestrictionsEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static RestrictionsEnum fromValue(String value) {
+      for (RestrictionsEnum b : RestrictionsEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_RESTRICTIONS = "restrictions";
+  @javax.annotation.Nullable
+  private List<RestrictionsEnum> restrictions = new ArrayList<>();
 
   public CommentQuery() { 
   }
@@ -159,7 +209,7 @@ public class CommentQuery {
   }
 
   /**
-   * 评论 ID。
+   * Get commentId
    * @return commentId
    */
   @javax.annotation.Nullable
@@ -183,7 +233,7 @@ public class CommentQuery {
   }
 
   /**
-   * 文章 ID。
+   * Get articleId
    * @return articleId
    */
   @javax.annotation.Nullable
@@ -207,7 +257,7 @@ public class CommentQuery {
   }
 
   /**
-   * 父评论 ID。
+   * Get parentId
    * @return parentId
    */
   @javax.annotation.Nullable
@@ -231,7 +281,7 @@ public class CommentQuery {
   }
 
   /**
-   * 回复的评论 ID。
+   * Get replyId
    * @return replyId
    */
   @javax.annotation.Nullable
@@ -255,7 +305,7 @@ public class CommentQuery {
   }
 
   /**
-   * 排序方式。
+   * Get order
    * @return order
    */
   @javax.annotation.Nullable
@@ -279,7 +329,7 @@ public class CommentQuery {
   }
 
   /**
-   * 评论账号 ID。
+   * Get userId
    * @return userId
    */
   @javax.annotation.Nullable
@@ -303,7 +353,7 @@ public class CommentQuery {
   }
 
   /**
-   * 评论层级。
+   * Get level
    * @return level
    */
   @javax.annotation.Nullable
@@ -321,27 +371,59 @@ public class CommentQuery {
   }
 
 
-  public CommentQuery status(@javax.annotation.Nullable StatusEnum status) {
-    this.status = status;
+  public CommentQuery restriction(@javax.annotation.Nullable RestrictionEnum restriction) {
+    this.restriction = restriction;
     return this;
   }
 
   /**
-   * 评论状态。
-   * @return status
+   * Get restriction
+   * @return restriction
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public StatusEnum getStatus() {
-    return status;
+  public RestrictionEnum getRestriction() {
+    return restriction;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStatus(@javax.annotation.Nullable StatusEnum status) {
-    this.status = status;
+  public void setRestriction(@javax.annotation.Nullable RestrictionEnum restriction) {
+    this.restriction = restriction;
+  }
+
+
+  public CommentQuery restrictions(@javax.annotation.Nullable List<RestrictionsEnum> restrictions) {
+    this.restrictions = restrictions;
+    return this;
+  }
+
+  public CommentQuery addRestrictionsItem(RestrictionsEnum restrictionsItem) {
+    if (this.restrictions == null) {
+      this.restrictions = new ArrayList<>();
+    }
+    this.restrictions.add(restrictionsItem);
+    return this;
+  }
+
+  /**
+   * Get restrictions
+   * @return restrictions
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTIONS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<RestrictionsEnum> getRestrictions() {
+    return restrictions;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_RESTRICTIONS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRestrictions(@javax.annotation.Nullable List<RestrictionsEnum> restrictions) {
+    this.restrictions = restrictions;
   }
 
 
@@ -364,12 +446,13 @@ public class CommentQuery {
         Objects.equals(this.order, commentQuery.order) &&
         Objects.equals(this.userId, commentQuery.userId) &&
         Objects.equals(this.level, commentQuery.level) &&
-        Objects.equals(this.status, commentQuery.status);
+        Objects.equals(this.restriction, commentQuery.restriction) &&
+        Objects.equals(this.restrictions, commentQuery.restrictions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(commentId, articleId, parentId, replyId, order, userId, level, status);
+    return Objects.hash(commentId, articleId, parentId, replyId, order, userId, level, restriction, restrictions);
   }
 
   @Override
@@ -383,7 +466,8 @@ public class CommentQuery {
     sb.append("    order: ").append(toIndentedString(order)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    level: ").append(toIndentedString(level)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    restriction: ").append(toIndentedString(restriction)).append("\n");
+    sb.append("    restrictions: ").append(toIndentedString(restrictions)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -463,9 +547,18 @@ public class CommentQuery {
       joiner.add(String.format(java.util.Locale.ROOT, "%slevel%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getLevel()))));
     }
 
-    // add `status` to the URL query string
-    if (getStatus() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sstatus%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getStatus()))));
+    // add `restriction` to the URL query string
+    if (getRestriction() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%srestriction%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getRestriction()))));
+    }
+
+    // add `restrictions` to the URL query string
+    if (getRestrictions() != null) {
+      for (int i = 0; i < getRestrictions().size(); i++) {
+        joiner.add(String.format(java.util.Locale.ROOT, "%srestrictions%s%s=%s", prefix, suffix,
+            "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix),
+            ApiClient.urlEncode(ApiClient.valueToString(getRestrictions().get(i)))));
+      }
     }
 
     return joiner.toString();

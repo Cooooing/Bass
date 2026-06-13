@@ -14,28 +14,22 @@ use serde::{Deserialize, Serialize};
 /// ArticlePostscript : 文章附言。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticlePostscript {
-    /// 附言 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// 文章 ID。
     #[serde(rename = "article_id", skip_serializing_if = "Option::is_none")]
     pub article_id: Option<String>,
-    /// 原始内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    /// 渲染后的内容。
     #[serde(rename = "content_render", skip_serializing_if = "Option::is_none")]
     pub content_render: Option<String>,
-    /// 创建账号 ID。
+    #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
+    pub restriction: Option<Restriction>,
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
-    /// 更新账号 ID。
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
-    /// 创建时间。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
-    /// 更新时间。
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
 }
@@ -48,11 +42,30 @@ impl ArticlePostscript {
             article_id: None,
             content: None,
             content_render: None,
+            restriction: None,
             created_by: None,
             updated_by: None,
             created_at: None,
             updated_at: None,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Restriction {
+    #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
+    ContentRestrictionUnspecified,
+    #[serde(rename = "CONTENT_RESTRICTION_NONE")]
+    ContentRestrictionNone,
+    #[serde(rename = "CONTENT_RESTRICTION_HIDDEN")]
+    ContentRestrictionHidden,
+    #[serde(rename = "CONTENT_RESTRICTION_LOCKED")]
+    ContentRestrictionLocked,
+}
+
+impl Default for Restriction {
+    fn default() -> Restriction {
+        Self::ContentRestrictionUnspecified
     }
 }
 

@@ -13,13 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateCommentRequest {
-    /// 文章 ID。
     #[serde(rename = "article_id")]
     pub article_id: String,
-    /// 评论内容。
     #[serde(rename = "content")]
     pub content: String,
-    /// 回复的评论 ID。
     #[serde(rename = "reply_id", skip_serializing_if = "Option::is_none")]
     pub reply_id: Option<String>,
 }

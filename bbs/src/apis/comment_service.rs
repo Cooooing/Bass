@@ -28,17 +28,32 @@ pub trait CommentService: Send + Sync {
     /// POST /v1/content/comment/like
     ///
     /// 点赞或取消点赞评论。
-    async fn like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<serde_json::Value, Error<LikeError>>;
+    async fn like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<models::LikeCommentReply, Error<LikeError>>;
 
     /// POST /v1/content/comment/list
     ///
     /// 分页查询评论列表。
     async fn list<'list_comments_request>(&self, list_comments_request: models::ListCommentsRequest) -> Result<models::ListCommentsReply, Error<ListError>>;
 
+    /// POST /v1/content/comment/list-replies
+    ///
+    /// 分页查询评论回复。
+    async fn list_replies<'list_comment_replies_request>(&self, list_comment_replies_request: models::ListCommentRepliesRequest) -> Result<models::ListCommentRepliesReply, Error<ListRepliesError>>;
+
+    /// POST /v1/content/comment/list-threads
+    ///
+    /// 分页查询评论楼层。
+    async fn list_threads<'list_comment_threads_request>(&self, list_comment_threads_request: models::ListCommentThreadsRequest) -> Result<models::ListCommentThreadsReply, Error<ListThreadsError>>;
+
+    /// POST /v1/content/comment/list-timeline
+    ///
+    /// 分页查询评论时间线。
+    async fn list_timeline<'list_comment_timeline_request>(&self, list_comment_timeline_request: models::ListCommentTimelineRequest) -> Result<models::ListCommentTimelineReply, Error<ListTimelineError>>;
+
     /// POST /v1/content/comment/thank
     ///
     /// 感谢或取消感谢评论。
-    async fn thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<serde_json::Value, Error<ThankError>>;
+    async fn thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<models::ThankCommentReply, Error<ThankError>>;
 }
 
 pub struct CommentServiceClient {
@@ -95,7 +110,7 @@ impl CommentService for CommentServiceClient {
     }
 
     /// 点赞或取消点赞评论。
-    async fn like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<serde_json::Value, Error<LikeError>> {
+    async fn like<'like_comment_request>(&self, like_comment_request: models::LikeCommentRequest) -> Result<models::LikeCommentReply, Error<LikeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -123,8 +138,8 @@ impl CommentService for CommentServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::LikeCommentReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::LikeCommentReply`")))),
             }
         } else {
             let local_var_entity: Option<LikeError> = serde_json::from_str(&local_var_content).ok();
@@ -172,8 +187,125 @@ impl CommentService for CommentServiceClient {
         }
     }
 
+    /// 分页查询评论回复。
+    async fn list_replies<'list_comment_replies_request>(&self, list_comment_replies_request: models::ListCommentRepliesRequest) -> Result<models::ListCommentRepliesReply, Error<ListRepliesError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/comment/list-replies", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_comment_replies_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListCommentRepliesReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListCommentRepliesReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListRepliesError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 分页查询评论楼层。
+    async fn list_threads<'list_comment_threads_request>(&self, list_comment_threads_request: models::ListCommentThreadsRequest) -> Result<models::ListCommentThreadsReply, Error<ListThreadsError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/comment/list-threads", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_comment_threads_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListCommentThreadsReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListCommentThreadsReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListThreadsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 分页查询评论时间线。
+    async fn list_timeline<'list_comment_timeline_request>(&self, list_comment_timeline_request: models::ListCommentTimelineRequest) -> Result<models::ListCommentTimelineReply, Error<ListTimelineError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/comment/list-timeline", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_comment_timeline_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListCommentTimelineReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListCommentTimelineReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListTimelineError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 感谢或取消感谢评论。
-    async fn thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<serde_json::Value, Error<ThankError>> {
+    async fn thank<'thank_comment_request>(&self, thank_comment_request: models::ThankCommentRequest) -> Result<models::ThankCommentReply, Error<ThankError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -201,8 +333,8 @@ impl CommentService for CommentServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ThankCommentReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ThankCommentReply`")))),
             }
         } else {
             let local_var_entity: Option<ThankError> = serde_json::from_str(&local_var_content).ok();
@@ -231,6 +363,27 @@ pub enum LikeError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`CommentService::list_replies`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListRepliesError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`CommentService::list_threads`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListThreadsError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`CommentService::list_timeline`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListTimelineError {
     UnknownValue(serde_json::Value),
 }
 

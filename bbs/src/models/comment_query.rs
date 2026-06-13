@@ -14,30 +14,24 @@ use serde::{Deserialize, Serialize};
 /// CommentQuery : 评论查询条件。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CommentQuery {
-    /// 评论 ID。
     #[serde(rename = "comment_id", skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
-    /// 文章 ID。
     #[serde(rename = "article_id", skip_serializing_if = "Option::is_none")]
     pub article_id: Option<String>,
-    /// 父评论 ID。
     #[serde(rename = "parent_id", skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
-    /// 回复的评论 ID。
     #[serde(rename = "reply_id", skip_serializing_if = "Option::is_none")]
     pub reply_id: Option<String>,
-    /// 排序方式。
     #[serde(rename = "order", skip_serializing_if = "Option::is_none")]
     pub order: Option<Order>,
-    /// 评论账号 ID。
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
-    /// 评论层级。
     #[serde(rename = "level", skip_serializing_if = "Option::is_none")]
     pub level: Option<i32>,
-    /// 评论状态。
-    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
-    pub status: Option<Status>,
+    #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
+    pub restriction: Option<Restriction>,
+    #[serde(rename = "restrictions", skip_serializing_if = "Option::is_none")]
+    pub restrictions: Option<Vec<Restrictions>>,
 }
 
 impl CommentQuery {
@@ -51,11 +45,12 @@ impl CommentQuery {
             order: None,
             user_id: None,
             level: None,
-            status: None,
+            restriction: None,
+            restrictions: None,
         }
     }
 }
-/// 排序方式。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Order {
     #[serde(rename = "COMMENT_ORDER_UNSPECIFIED")]
@@ -64,6 +59,8 @@ pub enum Order {
     CommentOrderNewest,
     #[serde(rename = "COMMENT_ORDER_HOTTEST")]
     CommentOrderHottest,
+    #[serde(rename = "COMMENT_ORDER_OLDEST")]
+    CommentOrderOldest,
 }
 
 impl Default for Order {
@@ -71,20 +68,40 @@ impl Default for Order {
         Self::CommentOrderUnspecified
     }
 }
-/// 评论状态。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Status {
-    #[serde(rename = "COMMENT_STATUS_UNSPECIFIED")]
-    CommentStatusUnspecified,
-    #[serde(rename = "COMMENT_STATUS_NORMAL")]
-    CommentStatusNormal,
-    #[serde(rename = "COMMENT_STATUS_HIDDEN")]
-    CommentStatusHidden,
+pub enum Restriction {
+    #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
+    ContentRestrictionUnspecified,
+    #[serde(rename = "CONTENT_RESTRICTION_NONE")]
+    ContentRestrictionNone,
+    #[serde(rename = "CONTENT_RESTRICTION_HIDDEN")]
+    ContentRestrictionHidden,
+    #[serde(rename = "CONTENT_RESTRICTION_LOCKED")]
+    ContentRestrictionLocked,
 }
 
-impl Default for Status {
-    fn default() -> Status {
-        Self::CommentStatusUnspecified
+impl Default for Restriction {
+    fn default() -> Restriction {
+        Self::ContentRestrictionUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Restrictions {
+    #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
+    ContentRestrictionUnspecified,
+    #[serde(rename = "CONTENT_RESTRICTION_NONE")]
+    ContentRestrictionNone,
+    #[serde(rename = "CONTENT_RESTRICTION_HIDDEN")]
+    ContentRestrictionHidden,
+    #[serde(rename = "CONTENT_RESTRICTION_LOCKED")]
+    ContentRestrictionLocked,
+}
+
+impl Default for Restrictions {
+    fn default() -> Restrictions {
+        Self::ContentRestrictionUnspecified
     }
 }
 

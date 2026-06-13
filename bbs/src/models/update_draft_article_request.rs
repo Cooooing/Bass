@@ -13,14 +13,16 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateDraftArticleRequest {
-    /// 文章保存内容。
+    #[serde(rename = "article_id")]
+    pub article_id: String,
     #[serde(rename = "article")]
-    pub article: models::ArticleSave,
+    pub article: models::RequestArticle,
 }
 
 impl UpdateDraftArticleRequest {
-    pub fn new(article: models::ArticleSave) -> UpdateDraftArticleRequest {
+    pub fn new(article_id: String, article: models::RequestArticle) -> UpdateDraftArticleRequest {
         UpdateDraftArticleRequest {
+            article_id,
             article,
         }
     }

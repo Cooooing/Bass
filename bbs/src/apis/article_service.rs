@@ -28,17 +28,17 @@ pub trait ArticleService: Send + Sync {
     /// POST /v1/content/article/collect
     ///
     /// 收藏或取消收藏文章。
-    async fn collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<serde_json::Value, Error<CollectError>>;
+    async fn collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<models::CollectArticleReply, Error<CollectError>>;
 
     /// POST /v1/content/article/create
     ///
-    /// 创建文章。
+    /// 创建文章草稿。
     async fn create<'create_article_request>(&self, create_article_request: models::CreateArticleRequest) -> Result<models::CreateArticleReply, Error<CreateError>>;
 
-    /// POST /v1/content/article/delete
+    /// POST /v1/content/article/discard-draft
     ///
-    /// 删除文章。
-    async fn delete<'delete_article_request>(&self, delete_article_request: models::DeleteArticleRequest) -> Result<serde_json::Value, Error<DeleteError>>;
+    /// 丢弃草稿。
+    async fn discard_draft<'discard_draft_article_request>(&self, discard_draft_article_request: models::DiscardDraftArticleRequest) -> Result<serde_json::Value, Error<DiscardDraftError>>;
 
     /// POST /v1/content/article/get
     ///
@@ -48,7 +48,7 @@ pub trait ArticleService: Send + Sync {
     /// POST /v1/content/article/like
     ///
     /// 点赞或取消点赞文章。
-    async fn like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<serde_json::Value, Error<LikeError>>;
+    async fn like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<models::LikeArticleReply, Error<LikeError>>;
 
     /// POST /v1/content/article/list
     ///
@@ -68,17 +68,22 @@ pub trait ArticleService: Send + Sync {
     /// POST /v1/content/article/thank
     ///
     /// 感谢或取消感谢文章。
-    async fn thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<serde_json::Value, Error<ThankError>>;
+    async fn thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<models::ThankArticleReply, Error<ThankError>>;
+
+    /// POST /v1/content/article/update
+    ///
+    /// 更新文章内容。
+    async fn update<'update_article_request>(&self, update_article_request: models::UpdateArticleRequest) -> Result<models::UpdateArticleReply, Error<UpdateError>>;
 
     /// POST /v1/content/article/update-draft
     ///
-    /// 更新文章草稿。
+    /// 更新文章内容。兼容旧草稿更新接口。
     async fn update_draft<'update_draft_article_request>(&self, update_draft_article_request: models::UpdateDraftArticleRequest) -> Result<models::UpdateDraftArticleReply, Error<UpdateDraftError>>;
 
     /// POST /v1/content/article/watch
     ///
     /// 关注或取消关注文章。
-    async fn watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<serde_json::Value, Error<WatchError>>;
+    async fn watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<models::WatchArticleReply, Error<WatchError>>;
 }
 
 pub struct ArticleServiceClient {
@@ -135,7 +140,7 @@ impl ArticleService for ArticleServiceClient {
     }
 
     /// 收藏或取消收藏文章。
-    async fn collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<serde_json::Value, Error<CollectError>> {
+    async fn collect<'collect_article_request>(&self, collect_article_request: models::CollectArticleRequest) -> Result<models::CollectArticleReply, Error<CollectError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -163,8 +168,8 @@ impl ArticleService for ArticleServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CollectArticleReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CollectArticleReply`")))),
             }
         } else {
             let local_var_entity: Option<CollectError> = serde_json::from_str(&local_var_content).ok();
@@ -173,7 +178,7 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
-    /// 创建文章。
+    /// 创建文章草稿。
     async fn create<'create_article_request>(&self, create_article_request: models::CreateArticleRequest) -> Result<models::CreateArticleReply, Error<CreateError>> {
         let local_var_configuration = &self.configuration;
 
@@ -212,19 +217,19 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
-    /// 删除文章。
-    async fn delete<'delete_article_request>(&self, delete_article_request: models::DeleteArticleRequest) -> Result<serde_json::Value, Error<DeleteError>> {
+    /// 丢弃草稿。
+    async fn discard_draft<'discard_draft_article_request>(&self, discard_draft_article_request: models::DiscardDraftArticleRequest) -> Result<serde_json::Value, Error<DiscardDraftError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/content/article/delete", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/content/article/discard-draft", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&delete_article_request);
+        local_var_req_builder = local_var_req_builder.json(&discard_draft_article_request);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -245,7 +250,7 @@ impl ArticleService for ArticleServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<DeleteError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<DiscardDraftError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -291,7 +296,7 @@ impl ArticleService for ArticleServiceClient {
     }
 
     /// 点赞或取消点赞文章。
-    async fn like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<serde_json::Value, Error<LikeError>> {
+    async fn like<'like_article_request>(&self, like_article_request: models::LikeArticleRequest) -> Result<models::LikeArticleReply, Error<LikeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -319,8 +324,8 @@ impl ArticleService for ArticleServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::LikeArticleReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::LikeArticleReply`")))),
             }
         } else {
             let local_var_entity: Option<LikeError> = serde_json::from_str(&local_var_content).ok();
@@ -447,7 +452,7 @@ impl ArticleService for ArticleServiceClient {
     }
 
     /// 感谢或取消感谢文章。
-    async fn thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<serde_json::Value, Error<ThankError>> {
+    async fn thank<'thank_article_request>(&self, thank_article_request: models::ThankArticleRequest) -> Result<models::ThankArticleReply, Error<ThankError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -475,8 +480,8 @@ impl ArticleService for ArticleServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ThankArticleReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ThankArticleReply`")))),
             }
         } else {
             let local_var_entity: Option<ThankError> = serde_json::from_str(&local_var_content).ok();
@@ -485,7 +490,46 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
-    /// 更新文章草稿。
+    /// 更新文章内容。
+    async fn update<'update_article_request>(&self, update_article_request: models::UpdateArticleRequest) -> Result<models::UpdateArticleReply, Error<UpdateError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/update", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&update_article_request);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateArticleReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateArticleReply`")))),
+            }
+        } else {
+            let local_var_entity: Option<UpdateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 更新文章内容。兼容旧草稿更新接口。
     async fn update_draft<'update_draft_article_request>(&self, update_draft_article_request: models::UpdateDraftArticleRequest) -> Result<models::UpdateDraftArticleReply, Error<UpdateDraftError>> {
         let local_var_configuration = &self.configuration;
 
@@ -525,7 +569,7 @@ impl ArticleService for ArticleServiceClient {
     }
 
     /// 关注或取消关注文章。
-    async fn watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<serde_json::Value, Error<WatchError>> {
+    async fn watch<'watch_article_request>(&self, watch_article_request: models::WatchArticleRequest) -> Result<models::WatchArticleReply, Error<WatchError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -553,8 +597,8 @@ impl ArticleService for ArticleServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::WatchArticleReply`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::WatchArticleReply`")))),
             }
         } else {
             let local_var_entity: Option<WatchError> = serde_json::from_str(&local_var_content).ok();
@@ -586,10 +630,10 @@ pub enum CreateError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ArticleService::delete`]
+/// struct for typed errors of method [`ArticleService::discard_draft`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum DeleteError {
+pub enum DiscardDraftError {
     UnknownValue(serde_json::Value),
 }
 
@@ -632,6 +676,13 @@ pub enum RewardError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ThankError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::update`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateError {
     UnknownValue(serde_json::Value),
 }
 

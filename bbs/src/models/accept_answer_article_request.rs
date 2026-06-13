@@ -13,10 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AcceptAnswerArticleRequest {
-    /// 文章 ID。
     #[serde(rename = "article_id")]
     pub article_id: String,
-    /// 评论 ID。
     #[serde(rename = "comment_id")]
     pub comment_id: String,
 }

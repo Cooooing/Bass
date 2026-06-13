@@ -26,7 +26,7 @@ pub struct TagQuery {
     /// 标签描述。
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// 标签状态。
+    /// 标签启停状态。
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
     /// 所属板块 ID。
@@ -47,13 +47,13 @@ impl TagQuery {
         }
     }
 }
-/// 标签状态。
+/// 标签启停状态。
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "TAG_STATUS_UNSPECIFIED")]
     TagStatusUnspecified,
-    #[serde(rename = "TAG_STATUS_NORMAL")]
-    TagStatusNormal,
+    #[serde(rename = "TAG_STATUS_ENABLED")]
+    TagStatusEnabled,
     #[serde(rename = "TAG_STATUS_DISABLED")]
     TagStatusDisabled,
 }

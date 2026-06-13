@@ -96,10 +96,20 @@ pub enum EventType {
     EventTypeArticleCollected,
     #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED")]
     EventTypeArticleWatched,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER")]
+    EventTypeArticleAcceptedAnswer,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED")]
+    EventTypeArticlePostscriptAdded,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_STATUS_UPDATED")]
+    EventTypeArticleStatusUpdated,
     #[serde(rename = "EVENT_TYPE_COMMENT_PUBLISHED")]
     EventTypeCommentPublished,
     #[serde(rename = "EVENT_TYPE_COMMENT_LIKED")]
     EventTypeCommentLiked,
+    #[serde(rename = "EVENT_TYPE_COMMENT_THANKED")]
+    EventTypeCommentThanked,
+    #[serde(rename = "EVENT_TYPE_COMMENT_STATUS_UPDATED")]
+    EventTypeCommentStatusUpdated,
 }
 
 impl Default for EventType {

@@ -13,12 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListCommentsReply {
-    /// 分页结果。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReply>,
-    /// 评论列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
-    pub rows: Option<Vec<models::Comment>>,
+    pub rows: Option<Vec<models::CommentListItem>>,
 }
 
 impl ListCommentsReply {

@@ -14,37 +14,26 @@ use serde::{Deserialize, Serialize};
 /// Domain : 内容板块。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Domain {
-    /// 板块 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// 板块名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// 板块描述。
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// 板块状态。
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
-    /// 板块 URL。
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-    /// 板块图标。
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
-    /// 是否在导航中展示。
     #[serde(rename = "is_nav", skip_serializing_if = "Option::is_none")]
     pub is_nav: Option<bool>,
-    /// 创建账号 ID。
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
-    /// 更新账号 ID。
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
-    /// 创建时间。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
-    /// 更新时间。
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
 }
@@ -67,13 +56,13 @@ impl Domain {
         }
     }
 }
-/// 板块状态。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "DOMAIN_STATUS_UNSPECIFIED")]
     DomainStatusUnspecified,
-    #[serde(rename = "DOMAIN_STATUS_NORMAL")]
-    DomainStatusNormal,
+    #[serde(rename = "DOMAIN_STATUS_ENABLED")]
+    DomainStatusEnabled,
     #[serde(rename = "DOMAIN_STATUS_DISABLED")]
     DomainStatusDisabled,
 }

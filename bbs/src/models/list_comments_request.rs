@@ -13,10 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListCommentsRequest {
-    /// 分页参数。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageRequest>,
-    /// 查询条件。
     #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
     pub query: Option<models::CommentQuery>,
 }

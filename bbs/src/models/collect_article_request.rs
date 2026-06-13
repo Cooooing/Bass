@@ -13,10 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CollectArticleRequest {
-    /// 文章 ID。
     #[serde(rename = "article_id")]
     pub article_id: String,
-    /// 是否收藏。
     #[serde(rename = "active")]
     pub active: bool,
 }

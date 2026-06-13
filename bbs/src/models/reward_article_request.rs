@@ -13,15 +13,17 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RewardArticleRequest {
-    /// 文章 ID。
     #[serde(rename = "article_id")]
     pub article_id: String,
+    #[serde(rename = "points", skip_serializing_if = "Option::is_none")]
+    pub points: Option<i32>,
 }
 
 impl RewardArticleRequest {
     pub fn new(article_id: String) -> RewardArticleRequest {
         RewardArticleRequest {
             article_id,
+            points: None,
         }
     }
 }

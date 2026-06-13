@@ -13,10 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LikeCommentRequest {
-    /// 评论 ID。
     #[serde(rename = "id")]
     pub id: String,
-    /// 是否点赞。
     #[serde(rename = "active")]
     pub active: bool,
 }

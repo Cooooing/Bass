@@ -14,30 +14,30 @@ use serde::{Deserialize, Serialize};
 /// ArticleQuery : 文章查询条件。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleQuery {
-    /// 标签 ID。
     #[serde(rename = "tag_id", skip_serializing_if = "Option::is_none")]
     pub tag_id: Option<String>,
-    /// 板块 ID。
     #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
     pub domain_id: Option<String>,
-    /// 文章状态。
-    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
-    pub status: Option<Status>,
-    /// 文章类型。
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<Type>,
-    /// 排序方式。
     #[serde(rename = "order", skip_serializing_if = "Option::is_none")]
     pub order: Option<Order>,
-    /// 搜索关键词。
     #[serde(rename = "keyword", skip_serializing_if = "Option::is_none")]
     pub keyword: Option<String>,
-    /// 作者账号 ID。
     #[serde(rename = "author_id", skip_serializing_if = "Option::is_none")]
     pub author_id: Option<String>,
-    /// 是否在列表中展示。
-    #[serde(rename = "listable", skip_serializing_if = "Option::is_none")]
-    pub listable: Option<bool>,
+    #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
+    pub publish_status: Option<PublishStatus>,
+    #[serde(rename = "publish_statuses", skip_serializing_if = "Option::is_none")]
+    pub publish_statuses: Option<Vec<PublishStatuses>>,
+    #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
+    pub visibility: Option<Visibility>,
+    #[serde(rename = "visibilities", skip_serializing_if = "Option::is_none")]
+    pub visibilities: Option<Vec<Visibilities>>,
+    #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
+    pub restriction: Option<Restriction>,
+    #[serde(rename = "restrictions", skip_serializing_if = "Option::is_none")]
+    pub restrictions: Option<Vec<Restrictions>>,
 }
 
 impl ArticleQuery {
@@ -46,38 +46,20 @@ impl ArticleQuery {
         ArticleQuery {
             tag_id: None,
             domain_id: None,
-            status: None,
             r#type: None,
             order: None,
             keyword: None,
             author_id: None,
-            listable: None,
+            publish_status: None,
+            publish_statuses: None,
+            visibility: None,
+            visibilities: None,
+            restriction: None,
+            restrictions: None,
         }
     }
 }
-/// 文章状态。
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Status {
-    #[serde(rename = "ARTICLE_STATUS_UNSPECIFIED")]
-    ArticleStatusUnspecified,
-    #[serde(rename = "ARTICLE_STATUS_NORMAL")]
-    ArticleStatusNormal,
-    #[serde(rename = "ARTICLE_STATUS_HIDDEN")]
-    ArticleStatusHidden,
-    #[serde(rename = "ARTICLE_STATUS_LOCKED")]
-    ArticleStatusLocked,
-    #[serde(rename = "ARTICLE_STATUS_DRAFTS")]
-    ArticleStatusDrafts,
-    #[serde(rename = "ARTICLE_STATUS_DELETED")]
-    ArticleStatusDeleted,
-}
-
-impl Default for Status {
-    fn default() -> Status {
-        Self::ArticleStatusUnspecified
-    }
-}
-/// 文章类型。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "ARTICLE_TYPE_UNSPECIFIED")]
@@ -93,7 +75,7 @@ impl Default for Type {
         Self::ArticleTypeUnspecified
     }
 }
-/// 排序方式。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Order {
     #[serde(rename = "ARTICLE_ORDER_UNSPECIFIED")]
@@ -107,6 +89,110 @@ pub enum Order {
 impl Default for Order {
     fn default() -> Order {
         Self::ArticleOrderUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum PublishStatus {
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
+    ArticlePublishStatusUnspecified,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_DRAFT")]
+    ArticlePublishStatusDraft,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_PUBLISHED")]
+    ArticlePublishStatusPublished,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
+    ArticlePublishStatusArchived,
+}
+
+impl Default for PublishStatus {
+    fn default() -> PublishStatus {
+        Self::ArticlePublishStatusUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum PublishStatuses {
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
+    ArticlePublishStatusUnspecified,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_DRAFT")]
+    ArticlePublishStatusDraft,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_PUBLISHED")]
+    ArticlePublishStatusPublished,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
+    ArticlePublishStatusArchived,
+}
+
+impl Default for PublishStatuses {
+    fn default() -> PublishStatuses {
+        Self::ArticlePublishStatusUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Visibility {
+    #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
+    ArticleVisibilityUnspecified,
+    #[serde(rename = "ARTICLE_VISIBILITY_PUBLIC")]
+    ArticleVisibilityPublic,
+    #[serde(rename = "ARTICLE_VISIBILITY_PRIVATE")]
+    ArticleVisibilityPrivate,
+}
+
+impl Default for Visibility {
+    fn default() -> Visibility {
+        Self::ArticleVisibilityUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Visibilities {
+    #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
+    ArticleVisibilityUnspecified,
+    #[serde(rename = "ARTICLE_VISIBILITY_PUBLIC")]
+    ArticleVisibilityPublic,
+    #[serde(rename = "ARTICLE_VISIBILITY_PRIVATE")]
+    ArticleVisibilityPrivate,
+}
+
+impl Default for Visibilities {
+    fn default() -> Visibilities {
+        Self::ArticleVisibilityUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Restriction {
+    #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
+    ContentRestrictionUnspecified,
+    #[serde(rename = "CONTENT_RESTRICTION_NONE")]
+    ContentRestrictionNone,
+    #[serde(rename = "CONTENT_RESTRICTION_HIDDEN")]
+    ContentRestrictionHidden,
+    #[serde(rename = "CONTENT_RESTRICTION_LOCKED")]
+    ContentRestrictionLocked,
+}
+
+impl Default for Restriction {
+    fn default() -> Restriction {
+        Self::ContentRestrictionUnspecified
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Restrictions {
+    #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
+    ContentRestrictionUnspecified,
+    #[serde(rename = "CONTENT_RESTRICTION_NONE")]
+    ContentRestrictionNone,
+    #[serde(rename = "CONTENT_RESTRICTION_HIDDEN")]
+    ContentRestrictionHidden,
+    #[serde(rename = "CONTENT_RESTRICTION_LOCKED")]
+    ContentRestrictionLocked,
+}
+
+impl Default for Restrictions {
+    fn default() -> Restrictions {
+        Self::ContentRestrictionUnspecified
     }
 }
 

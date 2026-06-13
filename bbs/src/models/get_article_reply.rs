@@ -13,9 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetArticleReply {
-    /// 文章详情。
     #[serde(rename = "article", skip_serializing_if = "Option::is_none")]
-    pub article: Option<models::Article>,
+    pub article: Option<models::ArticleDetail>,
 }
 
 impl GetArticleReply {

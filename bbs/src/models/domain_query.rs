@@ -23,7 +23,7 @@ pub struct DomainQuery {
     /// 板块描述。
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// 板块状态。
+    /// 板块启停状态。
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
     /// 板块 URL。
@@ -51,13 +51,13 @@ impl DomainQuery {
         }
     }
 }
-/// 板块状态。
+/// 板块启停状态。
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "DOMAIN_STATUS_UNSPECIFIED")]
     DomainStatusUnspecified,
-    #[serde(rename = "DOMAIN_STATUS_NORMAL")]
-    DomainStatusNormal,
+    #[serde(rename = "DOMAIN_STATUS_ENABLED")]
+    DomainStatusEnabled,
     #[serde(rename = "DOMAIN_STATUS_DISABLED")]
     DomainStatusDisabled,
 }

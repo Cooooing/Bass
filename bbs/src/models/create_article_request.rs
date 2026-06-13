@@ -13,13 +13,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateArticleRequest {
-    /// 文章保存内容。
     #[serde(rename = "article")]
-    pub article: models::ArticleSave,
+    pub article: models::RequestArticle,
 }
 
 impl CreateArticleRequest {
-    pub fn new(article: models::ArticleSave) -> CreateArticleRequest {
+    pub fn new(article: models::RequestArticle) -> CreateArticleRequest {
         CreateArticleRequest {
             article,
         }

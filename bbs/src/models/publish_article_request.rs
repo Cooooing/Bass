@@ -13,16 +13,34 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PublishArticleRequest {
-    /// 文章 ID。
     #[serde(rename = "article_id")]
     pub article_id: String,
+    #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
+    pub visibility: Option<Visibility>,
 }
 
 impl PublishArticleRequest {
     pub fn new(article_id: String) -> PublishArticleRequest {
         PublishArticleRequest {
             article_id,
+            visibility: None,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Visibility {
+    #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
+    ArticleVisibilityUnspecified,
+    #[serde(rename = "ARTICLE_VISIBILITY_PUBLIC")]
+    ArticleVisibilityPublic,
+    #[serde(rename = "ARTICLE_VISIBILITY_PRIVATE")]
+    ArticleVisibilityPrivate,
+}
+
+impl Default for Visibility {
+    fn default() -> Visibility {
+        Self::ArticleVisibilityUnspecified
     }
 }
 

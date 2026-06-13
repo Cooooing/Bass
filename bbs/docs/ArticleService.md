@@ -7,13 +7,14 @@ Method | HTTP request | Description
 [**accept_answer**](ArticleService.md#accept_answer) | **POST** /v1/content/article/accept-answer | 
 [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect | 
 [**create**](ArticleService.md#create) | **POST** /v1/content/article/create | 
-[**delete**](ArticleService.md#delete) | **POST** /v1/content/article/delete | 
+[**discard_draft**](ArticleService.md#discard_draft) | **POST** /v1/content/article/discard-draft | 
 [**get**](ArticleService.md#get) | **POST** /v1/content/article/get | 
 [**like**](ArticleService.md#like) | **POST** /v1/content/article/like | 
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
 [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
+[**update**](ArticleService.md#update) | **POST** /v1/content/article/update | 
 [**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/update-draft | 
 [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 
@@ -51,7 +52,7 @@ No authorization required
 
 ## collect
 
-> serde_json::Value collect(collect_article_request)
+> models::CollectArticleReply collect(collect_article_request)
 
 
 收藏或取消收藏文章。
@@ -65,7 +66,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+[**models::CollectArticleReply**](CollectArticle_Reply.md)
 
 ### Authorization
 
@@ -84,7 +85,7 @@ No authorization required
 > models::CreateArticleReply create(create_article_request)
 
 
-创建文章。
+创建文章草稿。
 
 ### Parameters
 
@@ -109,19 +110,19 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## delete
+## discard_draft
 
-> serde_json::Value delete(delete_article_request)
+> serde_json::Value discard_draft(discard_draft_article_request)
 
 
-删除文章。
+丢弃草稿。
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**delete_article_request** | [**DeleteArticleRequest**](DeleteArticleRequest.md) |  | [required] |
+**discard_draft_article_request** | [**DiscardDraftArticleRequest**](DiscardDraftArticleRequest.md) |  | [required] |
 
 ### Return type
 
@@ -171,7 +172,7 @@ No authorization required
 
 ## like
 
-> serde_json::Value like(like_article_request)
+> models::LikeArticleReply like(like_article_request)
 
 
 点赞或取消点赞文章。
@@ -185,7 +186,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+[**models::LikeArticleReply**](LikeArticle_Reply.md)
 
 ### Authorization
 
@@ -291,7 +292,7 @@ No authorization required
 
 ## thank
 
-> serde_json::Value thank(thank_article_request)
+> models::ThankArticleReply thank(thank_article_request)
 
 
 感谢或取消感谢文章。
@@ -305,7 +306,37 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+[**models::ThankArticleReply**](ThankArticle_Reply.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## update
+
+> models::UpdateArticleReply update(update_article_request)
+
+
+更新文章内容。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**update_article_request** | [**UpdateArticleRequest**](UpdateArticleRequest.md) |  | [required] |
+
+### Return type
+
+[**models::UpdateArticleReply**](UpdateArticle_Reply.md)
 
 ### Authorization
 
@@ -324,7 +355,7 @@ No authorization required
 > models::UpdateDraftArticleReply update_draft(update_draft_article_request)
 
 
-更新文章草稿。
+更新文章内容。兼容旧草稿更新接口。
 
 ### Parameters
 
@@ -351,7 +382,7 @@ No authorization required
 
 ## watch
 
-> serde_json::Value watch(watch_article_request)
+> models::WatchArticleReply watch(watch_article_request)
 
 
 关注或取消关注文章。
@@ -365,7 +396,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+[**models::WatchArticleReply**](WatchArticle_Reply.md)
 
 ### Authorization
 

@@ -33,13 +33,14 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**accept_answer**](docs/ArticleService.md#accept_answer) | **POST** /v1/content/article/accept-answer | 
 *ArticleService* | [**collect**](docs/ArticleService.md#collect) | **POST** /v1/content/article/collect | 
 *ArticleService* | [**create**](docs/ArticleService.md#create) | **POST** /v1/content/article/create | 
-*ArticleService* | [**delete**](docs/ArticleService.md#delete) | **POST** /v1/content/article/delete | 
+*ArticleService* | [**discard_draft**](docs/ArticleService.md#discard_draft) | **POST** /v1/content/article/discard-draft | 
 *ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
 *ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
 *ArticleService* | [**list**](docs/ArticleService.md#list) | **POST** /v1/content/article/list | 
 *ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
+*ArticleService* | [**update**](docs/ArticleService.md#update) | **POST** /v1/content/article/update | 
 *ArticleService* | [**update_draft**](docs/ArticleService.md#update_draft) | **POST** /v1/content/article/update-draft | 
 *ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 *AuthService* | [**login_by_password**](docs/AuthService.md#login_by_password) | **POST** /v1/user/auth/login-by-password | 
@@ -51,6 +52,9 @@ Class | Method | HTTP request | Description
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
 *CommentService* | [**like**](docs/CommentService.md#like) | **POST** /v1/content/comment/like | 
 *CommentService* | [**list**](docs/CommentService.md#list) | **POST** /v1/content/comment/list | 
+*CommentService* | [**list_replies**](docs/CommentService.md#list_replies) | **POST** /v1/content/comment/list-replies | 
+*CommentService* | [**list_threads**](docs/CommentService.md#list_threads) | **POST** /v1/content/comment/list-threads | 
+*CommentService* | [**list_timeline**](docs/CommentService.md#list_timeline) | **POST** /v1/content/comment/list-timeline | 
 *CommentService* | [**thank**](docs/CommentService.md#thank) | **POST** /v1/content/comment/thank | 
 *DomainService* | [**list**](docs/DomainService.md#list) | **POST** /v1/content/domain/list | 
 *LocationService* | [**get_current**](docs/LocationService.md#get_current) | **POST** /v1/user/location/get-current | 
@@ -71,7 +75,9 @@ Class | Method | HTTP request | Description
 *RelationService* | [**list_following**](docs/RelationService.md#list_following) | **POST** /v1/user/relation/list-following | 
 *RelationService* | [**unblock**](docs/RelationService.md#unblock) | **POST** /v1/user/relation/unblock | 
 *RelationService* | [**unfollow**](docs/RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow | 
+*TagService* | [**create**](docs/TagService.md#create) | **POST** /v1/content/tag/create | 
 *TagService* | [**list**](docs/TagService.md#list) | **POST** /v1/content/tag/list | 
+*TagService* | [**update**](docs/TagService.md#update) | **POST** /v1/content/tag/update | 
 *TotpService* | [**begin_enable**](docs/TotpService.md#begin_enable) | **POST** /v1/user/totp/begin-enable | 
 *TotpService* | [**confirm_enable**](docs/TotpService.md#confirm_enable) | **POST** /v1/user/totp/confirm-enable | 
 *TotpService* | [**disable**](docs/TotpService.md#disable) | **POST** /v1/user/totp/disable | 
@@ -86,27 +92,33 @@ Class | Method | HTTP request | Description
  - [AccountProfile](docs/AccountProfile.md)
  - [AddPostscriptReply](docs/AddPostscriptReply.md)
  - [AddPostscriptRequest](docs/AddPostscriptRequest.md)
- - [Any](docs/Any.md)
- - [Article](docs/Article.md)
+ - [ArticleBrief](docs/ArticleBrief.md)
+ - [ArticleDetail](docs/ArticleDetail.md)
+ - [ArticleListItem](docs/ArticleListItem.md)
  - [ArticlePostscript](docs/ArticlePostscript.md)
  - [ArticleQuery](docs/ArticleQuery.md)
- - [ArticleSave](docs/ArticleSave.md)
+ - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
  - [BeginEnableTotpReply](docs/BeginEnableTotpReply.md)
  - [BlockRelationRequest](docs/BlockRelationRequest.md)
+ - [CollectArticleReply](docs/CollectArticleReply.md)
  - [CollectArticleRequest](docs/CollectArticleRequest.md)
- - [Comment](docs/Comment.md)
+ - [CommentDetail](docs/CommentDetail.md)
+ - [CommentListItem](docs/CommentListItem.md)
  - [CommentQuery](docs/CommentQuery.md)
+ - [CommentThread](docs/CommentThread.md)
+ - [CommentViewerActionState](docs/CommentViewerActionState.md)
  - [ConfirmEnableTotpRequest](docs/ConfirmEnableTotpRequest.md)
  - [CountUnreadNotificationsReply](docs/CountUnreadNotificationsReply.md)
  - [CreateArticleReply](docs/CreateArticleReply.md)
  - [CreateArticleRequest](docs/CreateArticleRequest.md)
  - [CreateCommentReply](docs/CreateCommentReply.md)
  - [CreateCommentRequest](docs/CreateCommentRequest.md)
- - [DeleteArticleRequest](docs/DeleteArticleRequest.md)
+ - [CreateTagReply](docs/CreateTagReply.md)
+ - [CreateTagRequest](docs/CreateTagRequest.md)
  - [DisableTotpRequest](docs/DisableTotpRequest.md)
+ - [DiscardDraftArticleRequest](docs/DiscardDraftArticleRequest.md)
  - [Domain](docs/Domain.md)
  - [DomainQuery](docs/DomainQuery.md)
- - [ExternalDocs](docs/ExternalDocs.md)
  - [FollowRelationRequest](docs/FollowRelationRequest.md)
  - [GetArticleReply](docs/GetArticleReply.md)
  - [GetArticleRequest](docs/GetArticleRequest.md)
@@ -119,14 +131,21 @@ Class | Method | HTTP request | Description
  - [GetProfileAccountRequest](docs/GetProfileAccountRequest.md)
  - [GetStatusRelationReply](docs/GetStatusRelationReply.md)
  - [GetStatusRelationRequest](docs/GetStatusRelationRequest.md)
- - [GoogleProtobufAny](docs/GoogleProtobufAny.md)
  - [ImageReply](docs/ImageReply.md)
+ - [LikeArticleReply](docs/LikeArticleReply.md)
  - [LikeArticleRequest](docs/LikeArticleRequest.md)
+ - [LikeCommentReply](docs/LikeCommentReply.md)
  - [LikeCommentRequest](docs/LikeCommentRequest.md)
  - [ListArticlesReply](docs/ListArticlesReply.md)
  - [ListArticlesRequest](docs/ListArticlesRequest.md)
  - [ListBlockedRelationsReply](docs/ListBlockedRelationsReply.md)
  - [ListBlockedRelationsRequest](docs/ListBlockedRelationsRequest.md)
+ - [ListCommentRepliesReply](docs/ListCommentRepliesReply.md)
+ - [ListCommentRepliesRequest](docs/ListCommentRepliesRequest.md)
+ - [ListCommentThreadsReply](docs/ListCommentThreadsReply.md)
+ - [ListCommentThreadsRequest](docs/ListCommentThreadsRequest.md)
+ - [ListCommentTimelineReply](docs/ListCommentTimelineReply.md)
+ - [ListCommentTimelineRequest](docs/ListCommentTimelineRequest.md)
  - [ListCommentsReply](docs/ListCommentsReply.md)
  - [ListCommentsRequest](docs/ListCommentsRequest.md)
  - [ListDomainsReply](docs/ListDomainsReply.md)
@@ -144,7 +163,6 @@ Class | Method | HTTP request | Description
  - [LoginByPasswordRequest](docs/LoginByPasswordRequest.md)
  - [MarkReadNotificationReply](docs/MarkReadNotificationReply.md)
  - [MarkReadNotificationRequest](docs/MarkReadNotificationRequest.md)
- - [NamedAny](docs/NamedAny.md)
  - [Notification](docs/Notification.md)
  - [PageReply](docs/PageReply.md)
  - [PageRequest](docs/PageRequest.md)
@@ -153,6 +171,8 @@ Class | Method | HTTP request | Description
  - [PublishArticleRequest](docs/PublishArticleRequest.md)
  - [Relation](docs/Relation.md)
  - [RelationStatus](docs/RelationStatus.md)
+ - [RequestArticle](docs/RequestArticle.md)
+ - [RequestTag](docs/RequestTag.md)
  - [RewardArticleRequest](docs/RewardArticleRequest.md)
  - [StartEmailRegistrationReply](docs/StartEmailRegistrationReply.md)
  - [StartEmailRegistrationRequest](docs/StartEmailRegistrationRequest.md)
@@ -160,12 +180,15 @@ Class | Method | HTTP request | Description
  - [StartPhoneRegistrationRequest](docs/StartPhoneRegistrationRequest.md)
  - [Tag](docs/Tag.md)
  - [TagQuery](docs/TagQuery.md)
- - [TagSave](docs/TagSave.md)
+ - [ThankArticleReply](docs/ThankArticleReply.md)
  - [ThankArticleRequest](docs/ThankArticleRequest.md)
+ - [ThankCommentReply](docs/ThankCommentReply.md)
  - [ThankCommentRequest](docs/ThankCommentRequest.md)
  - [Totp](docs/Totp.md)
  - [UnblockRelationRequest](docs/UnblockRelationRequest.md)
  - [UnfollowRelationRequest](docs/UnfollowRelationRequest.md)
+ - [UpdateArticleReply](docs/UpdateArticleReply.md)
+ - [UpdateArticleRequest](docs/UpdateArticleRequest.md)
  - [UpdateCurrentPreferencesReply](docs/UpdateCurrentPreferencesReply.md)
  - [UpdateCurrentPreferencesRequest](docs/UpdateCurrentPreferencesRequest.md)
  - [UpdateCurrentPrivacySettingReply](docs/UpdateCurrentPrivacySettingReply.md)
@@ -174,10 +197,13 @@ Class | Method | HTTP request | Description
  - [UpdateDraftArticleRequest](docs/UpdateDraftArticleRequest.md)
  - [UpdateProfileAccountReply](docs/UpdateProfileAccountReply.md)
  - [UpdateProfileAccountRequest](docs/UpdateProfileAccountRequest.md)
+ - [UpdateTagReply](docs/UpdateTagReply.md)
+ - [UpdateTagRequest](docs/UpdateTagRequest.md)
  - [UpsertCurrentLocationReply](docs/UpsertCurrentLocationReply.md)
  - [UpsertCurrentLocationRequest](docs/UpsertCurrentLocationRequest.md)
  - [VerifyEmailRegistrationRequest](docs/VerifyEmailRegistrationRequest.md)
  - [VerifyPhoneRegistrationRequest](docs/VerifyPhoneRegistrationRequest.md)
+ - [WatchArticleReply](docs/WatchArticleReply.md)
  - [WatchArticleRequest](docs/WatchArticleRequest.md)
 
 

@@ -13,12 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListArticlesReply {
-    /// 分页结果。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReply>,
-    /// 文章列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
-    pub rows: Option<Vec<models::Article>>,
+    pub rows: Option<Vec<models::ArticleListItem>>,
 }
 
 impl ListArticlesReply {

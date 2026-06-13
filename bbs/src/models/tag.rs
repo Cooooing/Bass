@@ -11,28 +11,59 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// Tag : Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
+/// Tag : 标签。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
+    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename = "external_docs", skip_serializing_if = "Option::is_none")]
-    pub external_docs: Option<models::ExternalDocs>,
-    #[serde(rename = "specification_extension", skip_serializing_if = "Option::is_none")]
-    pub specification_extension: Option<Vec<models::NamedAny>>,
+    #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
+    pub status: Option<Status>,
+    #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
+    pub updated_by: Option<String>,
+    #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
 }
 
 impl Tag {
-    /// Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have a Tag Object per tag defined in the Operation Object instances.
+    /// 标签。
     pub fn new() -> Tag {
         Tag {
+            id: None,
             name: None,
             description: None,
-            external_docs: None,
-            specification_extension: None,
+            domain_id: None,
+            status: None,
+            created_by: None,
+            updated_by: None,
+            created_at: None,
+            updated_at: None,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Status {
+    #[serde(rename = "TAG_STATUS_UNSPECIFIED")]
+    TagStatusUnspecified,
+    #[serde(rename = "TAG_STATUS_ENABLED")]
+    TagStatusEnabled,
+    #[serde(rename = "TAG_STATUS_DISABLED")]
+    TagStatusDisabled,
+}
+
+impl Default for Status {
+    fn default() -> Status {
+        Self::TagStatusUnspecified
     }
 }
 

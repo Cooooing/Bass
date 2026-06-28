@@ -1,6 +1,7 @@
 package channel
 
 import (
+	"common/pkg/util"
 	"context"
 	"errors"
 	"fmt"
@@ -8,19 +9,19 @@ import (
 	"notify/internal/conf"
 	notifyenum "notify/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"gopkg.in/gomail.v2"
+	"log/slog"
 )
 
 var _ bizchannel.EmailClient = (*EmailClient)(nil)
 
 type EmailClient struct {
 	conf *conf.Bootstrap
-	log  *log.Helper
+	log  *util.LogHelper
 }
 
-func NewEmailClient(conf *conf.Bootstrap, logger log.Logger) *EmailClient {
-	return &EmailClient{conf: conf, log: log.NewHelper(logger)}
+func NewEmailClient(conf *conf.Bootstrap, logger *slog.Logger) *EmailClient {
+	return &EmailClient{conf: conf, log: util.NewLogHelper(logger)}
 }
 
 func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest) (*bizchannel.SendResult, error) {

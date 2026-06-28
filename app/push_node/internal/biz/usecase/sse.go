@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -14,8 +15,8 @@ import (
 	"push_node/internal/biz/repo"
 	"push_node/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"log/slog"
 )
 
 // sseToken JWT 中携带的用户标识。
@@ -25,12 +26,12 @@ type sseToken struct {
 
 // SSEUsecase SSE 连接管理业务逻辑。
 type SSEUsecase struct {
-	conf       *conf.Bootstrap
-	log        *log.Helper
-	registry   repo.ConnectionRegistry
-	natsSub    client.Subscriber
-	nodeID     string
-	tokenGen   *jwt.TokenGenerator[sseToken]
+	conf     *conf.Bootstrap
+	log      *util.LogHelper
+	registry repo.ConnectionRegistry
+	natsSub  client.Subscriber
+	nodeID   string
+	tokenGen *jwt.TokenGenerator[sseToken]
 	// writers 存储每个连接的 ResponseWriter，用于写入 SSE 数据。
 	writers sync.Map // connID -> http.ResponseWriter
 }
@@ -38,14 +39,14 @@ type SSEUsecase struct {
 // NewSSEUsecase 创建 SSEUsecase 实例。
 func NewSEEUsecase(
 	conf *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 	registry repo.ConnectionRegistry,
 	natsSub client.Subscriber,
 	nodeID string,
 ) *SSEUsecase {
 	return &SSEUsecase{
 		conf:     conf,
-		log:      log.NewHelper(logger),
+		log:      util.NewLogHelper(logger),
 		registry: registry,
 		natsSub:  natsSub,
 		nodeID:   nodeID,

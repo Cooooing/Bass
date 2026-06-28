@@ -1,11 +1,11 @@
-﻿package service
+package service
 
 import (
 	pushhubv1 "common/proto/gen/push_hub/v1"
-	"push_hub/internal/biz/usecase"
 	"context"
+	"push_hub/internal/biz/usecase"
 
-	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 )
 
 // NodeService 实现 PushHubNodeServiceServer，委托给 usecase 层。

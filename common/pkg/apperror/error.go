@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strconv"
 
-	kratoserrors "github.com/go-kratos/kratos/v2/errors"
+	kratoserrors "github.com/go-kratos/kratos/v3/errors"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"

@@ -1,25 +1,26 @@
-﻿package usecase
+package usecase
 
 import (
+	"common/pkg/util"
+	pushhubv1 "common/proto/gen/push_hub/v1"
 	"context"
 	"fmt"
-	pushhubv1 "common/proto/gen/push_hub/v1"
 	"push_hub/internal/biz/repo"
 
 	"github.com/google/uuid"
-	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"log/slog"
 )
 
 // NodeUsecase 节点管理业务逻辑。
 type NodeUsecase struct {
-	log      *log.Helper
+	log      *util.LogHelper
 	registry repo.NodeRegistry
 }
 
-func NewNodeUsecase(logger log.Logger, registry repo.NodeRegistry) *NodeUsecase {
+func NewNodeUsecase(logger *slog.Logger, registry repo.NodeRegistry) *NodeUsecase {
 	return &NodeUsecase{
-		log:      log.NewHelper(logger),
+		log:      util.NewLogHelper(logger),
 		registry: registry,
 	}
 }

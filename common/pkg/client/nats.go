@@ -1,15 +1,16 @@
 package client
 
 import (
+	"common/pkg/util"
 	"common/proto/gen/common"
 	"context"
 	"fmt"
 	"sync"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"log/slog"
 )
 
 // Message 封装消息体，解耦外部依赖
@@ -49,13 +50,13 @@ type NatsClient struct {
 	js     nats.JetStreamContext
 	mu     sync.RWMutex
 	closed bool
-	log    *log.Helper
+	log    *util.LogHelper
 	subs   []*nats.Subscription
 }
 
 // NewNatsClient 初始化 NATS 客户端
-func NewNatsClient(logger log.Logger, conf *common.Nats) (*NatsClient, func(), error) {
-	helper := log.NewHelper(logger)
+func NewNatsClient(logger *slog.Logger, conf *common.Nats) (*NatsClient, func(), error) {
+	helper := util.NewLogHelper(logger)
 
 	// 默认值
 	if conf == nil {

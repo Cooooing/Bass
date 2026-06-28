@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"common/pkg/util"
 	"context"
 	"time"
 
@@ -10,13 +11,13 @@ import (
 	"notify/internal/biz/repo"
 	"notify/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 const inboxDeadLetterScanLimit = 100
 
 type InboxDeadLetterScanner struct {
-	log         *log.Helper
+	log         *util.LogHelper
 	conf        *conf.Bootstrap
 	inboxRepo   repo.InboxEventRepo
 	alertClient *commonClient.DeadLetterAlertClient
@@ -24,13 +25,13 @@ type InboxDeadLetterScanner struct {
 }
 
 func NewInboxDeadLetterScanner(
-	logger log.Logger,
+	logger *slog.Logger,
 	conf *conf.Bootstrap,
 	inboxRepo repo.InboxEventRepo,
 	alertClient *commonClient.DeadLetterAlertClient,
 ) *InboxDeadLetterScanner {
 	return &InboxDeadLetterScanner{
-		log:         log.NewHelper(logger),
+		log:         util.NewLogHelper(logger),
 		conf:        conf,
 		inboxRepo:   inboxRepo,
 		alertClient: alertClient,

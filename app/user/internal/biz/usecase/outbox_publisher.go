@@ -3,6 +3,7 @@ package usecase
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/util"
 	"context"
 	"time"
 	base "user/internal/biz/base"
@@ -10,7 +11,7 @@ import (
 	"user/internal/biz/repo"
 	"user/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 const (
@@ -21,7 +22,7 @@ const (
 )
 
 type OutboxPublisher struct {
-	log         *log.Helper
+	log         *util.LogHelper
 	conf        *conf.Bootstrap
 	tx          base.Tx
 	outboxRepo  repo.OutboxEventRepo
@@ -31,7 +32,7 @@ type OutboxPublisher struct {
 }
 
 func NewOutboxPublisher(
-	logger log.Logger,
+	logger *slog.Logger,
 	conf *conf.Bootstrap,
 	tx base.Tx,
 	outboxRepo repo.OutboxEventRepo,
@@ -39,7 +40,7 @@ func NewOutboxPublisher(
 	redisLock *commonClient.RedisLock,
 ) *OutboxPublisher {
 	return &OutboxPublisher{
-		log:         log.NewHelper(logger),
+		log:         util.NewLogHelper(logger),
 		conf:        conf,
 		tx:          tx,
 		outboxRepo:  outboxRepo,

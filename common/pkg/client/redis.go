@@ -1,25 +1,26 @@
 package client
 
 import (
+	"common/pkg/util"
 	"common/proto/gen/common"
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"log/slog"
 )
 
 // RedisClient 封装 Redis 客户端
 type RedisClient struct {
-	log    *log.Helper
+	log    *util.LogHelper
 	Client *redis.Client
 }
 
 // NewRedisClient 初始化 Redis 客户端
-func NewRedisClient(logger log.Logger, conf *common.Redis) (*RedisClient, func(), error) {
-	helper := log.NewHelper(logger)
+func NewRedisClient(logger *slog.Logger, conf *common.Redis) (*RedisClient, func(), error) {
+	helper := util.NewLogHelper(logger)
 
 	// 默认值
 	if conf.DialTimeout == nil {

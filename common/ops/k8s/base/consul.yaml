@@ -1,0 +1,24 @@
+global:
+  name: bass-consul
+  datacenter: dc1
+  acls:
+    # 鑾峰彇 token: kubectl get secret consul-bootstrap-acl-token -n <namespace> -o jsonpath='{.data.token}' | base64 -d
+    manageSystemACLs: true
+server:
+  replicas: 1
+  bootstrapExpect: 1
+  storage: 5Gi
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+ui:
+  enabled: true
+  # 閫氳繃 Ingress 鏆撮湶锛屼笉浣跨敤 NodePort
+
+connectInject:
+  enabled: false

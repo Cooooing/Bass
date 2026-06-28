@@ -1,0 +1,60 @@
+# TCP 路由 - PostgreSQL, Redis, NATS
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: postgresql
+  namespace: bass-test
+spec:
+  entryPoints:
+    - postgresql
+  routes:
+    - match:
+        HostSNI("*")
+      services:
+        - name: bass-postgresql
+          port: 5432
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: redis
+  namespace: bass-test
+spec:
+  entryPoints:
+    - redis
+  routes:
+    - match:
+        HostSNI("*")
+      services:
+        - name: bass-redis-master
+          port: 6379
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: nats
+  namespace: bass-test
+spec:
+  entryPoints:
+    - nats
+  routes:
+    - match:
+        HostSNI("*")
+      services:
+        - name: bass-nats
+          port: 4222
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: nats-monitor
+  namespace: bass-test
+spec:
+  entryPoints:
+    - nats-monitor
+  routes:
+    - match:
+        HostSNI("*")
+      services:
+        - name: bass-nats
+          port: 8222

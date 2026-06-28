@@ -1,0 +1,27 @@
+fullnameOverride: bass-postgresql
+
+auth:
+  enablePostgresUser: true
+  existingSecret: bass-postgres-secret
+  secretKeys:
+    adminPasswordKey: password
+  username: "admin"
+  password: ""
+  database: "bass"
+
+primary:
+  persistence:
+    enabled: true
+    size: 10Gi
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  # ClusterIP锛屼粎闆嗙兢鍐呰闂?
+readReplicas:
+  replicaCount: 0
+
+architecture: standalone

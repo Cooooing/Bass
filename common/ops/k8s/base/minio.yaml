@@ -1,0 +1,26 @@
+fullnameOverride: bass-minio
+
+existingSecret: bass-minio-secret
+
+mode: standalone
+replicas: 1
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+resources:
+  requests:
+    memory: 128Mi
+    cpu: 100m
+  limits:
+    memory: 256Mi
+    cpu: 200m
+
+# ClusterIP锛孲3 API 浠呴泦缇ゅ唴璁块棶
+service:
+  type: ClusterIP
+
+# Console 閫氳繃 Ingress 鏆撮湶
+consoleService:
+  type: ClusterIP

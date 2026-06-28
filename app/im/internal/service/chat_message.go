@@ -1,15 +1,15 @@
-﻿package service
+package service
 
 import (
+	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/im/v1"
-	"common/pkg/apperror"
 	"context"
 	"im/internal/biz/usecase"
 	"im/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type ChatMessageService struct {

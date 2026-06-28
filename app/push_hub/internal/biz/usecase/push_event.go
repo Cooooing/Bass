@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -9,19 +10,19 @@ import (
 	"time"
 
 	"common/pkg/client"
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 // PushEventUsecase 推送事件业务逻辑。
 type PushEventUsecase struct {
-	log       *log.Helper
-	registry  repo.NodeRegistry
-	natsPub   client.Publisher
+	log      *util.LogHelper
+	registry repo.NodeRegistry
+	natsPub  client.Publisher
 }
 
-func NewPushEventUsecase(logger log.Logger, registry repo.NodeRegistry, natsPub client.Publisher) *PushEventUsecase {
+func NewPushEventUsecase(logger *slog.Logger, registry repo.NodeRegistry, natsPub client.Publisher) *PushEventUsecase {
 	return &PushEventUsecase{
-		log:      log.NewHelper(logger),
+		log:      util.NewLogHelper(logger),
 		registry: registry,
 		natsPub:  natsPub,
 	}

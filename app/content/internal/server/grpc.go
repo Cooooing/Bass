@@ -4,21 +4,18 @@ import (
 	"common/pkg/server"
 	"content/internal/conf"
 	"fmt"
-	"time"
-
-	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/logging"
-	"github.com/go-kratos/kratos/v2/middleware/metrics"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
+	"github.com/go-kratos/kratos/v3/middleware/logging"
+	"github.com/go-kratos/kratos/v3/middleware/recovery"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	ggrpc "google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
+	"log/slog"
+	"time"
 )
 
 // NewGRPCServer 创建 gRPC 服务。
-func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcService) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, logger *slog.Logger, services []server.GrpcService) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,
@@ -34,12 +31,9 @@ func NewGRPCServer(c *conf.Bootstrap, logger log.Logger, services []server.GrpcS
 	}
 	var serverOpts = []grpc.ServerOption{
 		grpc.Middleware(
+			server.MetricsMiddleware(c.Server.Name),
+			server.TracingMiddleware(c.Server.Name),
 			recovery.Recovery(),
-			tracing.Server(),
-			metrics.Server(
-				metrics.WithSeconds(_metricSeconds),
-				metrics.WithRequests(_metricRequests),
-			),
 			logging.Server(logger),
 			validate.ProtoValidate(),
 		),

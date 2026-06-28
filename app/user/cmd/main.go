@@ -9,11 +9,10 @@ import (
 	"os"
 	"user/internal/biz/usecase"
 	"user/internal/conf"
-	"user/internal/server"
 
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v3"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"log/slog"
 )
 
 // 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
@@ -33,10 +32,10 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(logger *slog.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
-	log.Infof("start server %s", id)
+	slog.Info("start server", "id", id)
 
 	return kratos.New(
 		kratos.ID(id),
@@ -60,8 +59,6 @@ func main() {
 	Name = c.Server.Name
 	Version = c.Server.Version
 
-	server.InitMetrics(Name)
-
 	ctx := context.Background()
 	shutdownTracing, err := util.SetupTracing(
 		ctx,
@@ -82,7 +79,7 @@ func main() {
 		}
 	}()
 	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	log.SetLogger(logger)
+	slog.SetDefault(logger)
 	app, cleanup, err := wireApp(c, logger)
 	if err != nil {
 		panic(err)

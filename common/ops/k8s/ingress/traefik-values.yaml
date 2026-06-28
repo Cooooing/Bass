@@ -1,0 +1,98 @@
+# Traefik Helm Values - Bass Infrastructure
+# 瀹夎: helm upgrade --install traefik traefik/traefik -n traefik --create-namespace -f ./traefik-values.yaml
+
+# ---- 閮ㄧ讲鏂瑰紡锛欴aemonSet + hostNetwork ----
+deployment:
+  kind: DaemonSet
+
+hostNetwork: true
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 0
+    maxUnavailable: 1
+
+tolerations:
+  - operator: Exists
+
+# ---- 鍏ュ彛绔彛 ----
+# hostNetwork 鏃?containerPort = hostPort锛岀洿鎺ョ粦瀹氬涓绘満绔彛
+ports:
+  web:
+    port: 80
+    exposedPort: 80
+    hostPort: 80
+    protocol: TCP
+  websecure:
+    port: 443
+    exposedPort: 443
+    hostPort: 443
+    protocol: TCP
+  traefik:
+    port: 8080
+    exposedPort: 8080
+    hostPort: 8080
+    protocol: TCP
+    expose:
+      default: false
+  metrics:
+    port: 9101
+    exposedPort: 9101
+    hostPort: 9101
+    protocol: TCP
+    expose:
+      default: false
+  # TCP 鍏ュ彛锛堟爣鍑嗙鍙ｏ級
+  postgresql:
+    port: 5432
+    exposedPort: 5432
+    hostPort: 5432
+    protocol: TCP
+  redis:
+    port: 6379
+    exposedPort: 6379
+    hostPort: 6379
+    protocol: TCP
+  nats:
+    port: 4222
+    exposedPort: 4222
+    hostPort: 4222
+    protocol: TCP
+  nats-monitor:
+    port: 8222
+    exposedPort: 8222
+    hostPort: 8222
+    protocol: TCP
+
+# ---- 璧勬簮 ----
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+# ---- 瀹夊叏涓婁笅鏂囷紙缁戝畾 80/443 闇€瑕?root锛?----
+securityContext:
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+  runAsGroup: 0
+  runAsUser: 0
+  runAsNonRoot: false
+
+# ---- 棰濆鍙傛暟 ----
+additionalArguments:
+  - "--log.level=INFO"
+  - "--api.insecure=true"
+  - "--ping=true"
+  - "--metrics.prometheus=true"
+  - "--metrics.prometheus.entrypoint=metrics"
+  - "--entryPoints.metrics.address=:9101"
+
+# ---- Service ----
+service:
+  enabled: true
+  type: ClusterIP

@@ -1,13 +1,13 @@
-﻿package service
+package service
 
 import (
 	commonv1 "common/proto/gen/common/v1"
-	"integration/internal/conf"
 	"context"
 	"fmt"
+	"integration/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type SystemService struct {

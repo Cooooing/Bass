@@ -3,8 +3,8 @@ package util
 import (
 	"runtime/debug"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/panjf2000/ants/v2"
+	"log/slog"
 )
 
 type EventPool struct {
@@ -12,8 +12,8 @@ type EventPool struct {
 	size int
 }
 
-func NewEventPool(logger log.Logger) (*EventPool, func(), error) {
-	l := log.NewHelper(logger)
+func NewEventPool(logger *slog.Logger) (*EventPool, func(), error) {
+	l := NewLogHelper(logger)
 	size := 16
 	pool, err := ants.NewPool(
 		size,

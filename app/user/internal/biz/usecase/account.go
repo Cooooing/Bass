@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"bytes"
+	"common/pkg/util"
 	"context"
 	"image/png"
 	base "user/internal/biz/base"
@@ -10,12 +11,12 @@ import (
 	"user/internal/conf"
 
 	"github.com/MuhammadSaim/goavatar"
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 type AccountUsecase struct {
 	conf            *conf.Bootstrap
-	log             *log.Helper
+	log             *util.LogHelper
 	tx              base.Tx
 	accountRepo     repo.AccountRepo
 	preferencesRepo repo.PreferencesRepo
@@ -23,14 +24,14 @@ type AccountUsecase struct {
 
 func NewAccountUsecase(
 	conf *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 	tx base.Tx,
 	accountRepo repo.AccountRepo,
 	preferencesRepo repo.PreferencesRepo,
 ) (*AccountUsecase, error) {
 	return &AccountUsecase{
 		conf:            conf,
-		log:             log.NewHelper(logger),
+		log:             util.NewLogHelper(logger),
 		tx:              tx,
 		accountRepo:     accountRepo,
 		preferencesRepo: preferencesRepo,

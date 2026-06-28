@@ -1,6 +1,7 @@
-﻿package usecase
+package usecase
 
 import (
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"time"
@@ -9,14 +10,14 @@ import (
 	"push_node/internal/biz/repo"
 	"push_node/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/grpc"
+	"log/slog"
 )
 
 // NodeUsecase 推送节点生命周期管理业务逻辑。
 type NodeUsecase struct {
 	conf       *conf.Bootstrap
-	log        *log.Helper
+	log        *util.LogHelper
 	registry   repo.ConnectionRegistry
 	nodeID     string
 	hubClient  pushhubv1.PushHubNodeServiceClient
@@ -27,14 +28,14 @@ type NodeUsecase struct {
 // NewNodeUsecase 创建 NodeUsecase 实例。
 func NewNodeUsecase(
 	conf *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 	registry repo.ConnectionRegistry,
 	nodeID string,
 	hubConn *grpc.ClientConn,
 ) *NodeUsecase {
 	return &NodeUsecase{
 		conf:      conf,
-		log:       log.NewHelper(logger),
+		log:       util.NewLogHelper(logger),
 		registry:  registry,
 		nodeID:    nodeID,
 		hubConn:   hubConn,

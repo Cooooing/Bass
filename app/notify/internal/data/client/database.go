@@ -2,6 +2,7 @@ package client
 
 import (
 	"common/pkg/client/driver"
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"notify/internal/conf"
@@ -11,12 +12,12 @@ import (
 	_ "notify/internal/data/gen/runtime"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/go-kratos/kratos/v2/log"
 	_ "github.com/lib/pq"
+	"log/slog"
 )
 
-func NewDataBaseClient(logger log.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
-	l := log.NewHelper(logger)
+func NewDataBaseClient(logger *slog.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
+	l := util.NewLogHelper(logger)
 	drv, err := sql.Open(conf.Data.Database.Driver, conf.Data.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)

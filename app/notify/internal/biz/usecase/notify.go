@@ -3,6 +3,7 @@ package usecase
 import (
 	"bytes"
 	commonenum "common/pkg/enum"
+	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -15,7 +16,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 // NotificationRecipient 表示站内信、邮件和短信的接收者。
@@ -36,7 +37,7 @@ type NotificationContext struct {
 
 // NotifyUsecase 按规则和通道模板生成通知结果。
 type NotifyUsecase struct {
-	log                        *log.Helper
+	log                        *util.LogHelper
 	userClient                 repo.UserClient
 	notificationRuleRepo       repo.NotificationRuleRepo
 	stationMessageRepo         repo.NotificationStationMessageRepo
@@ -55,7 +56,7 @@ type NotifyUsecase struct {
 }
 
 func NewNotifyUsecase(
-	logger log.Logger,
+	logger *slog.Logger,
 	conf *conf.Bootstrap,
 	userClient repo.UserClient,
 	notificationRuleRepo repo.NotificationRuleRepo,
@@ -81,7 +82,7 @@ func NewNotifyUsecase(
 		}
 	}
 	return &NotifyUsecase{
-		log:                        log.NewHelper(logger),
+		log:                        util.NewLogHelper(logger),
 		userClient:                 userClient,
 		notificationRuleRepo:       notificationRuleRepo,
 		stationMessageRepo:         stationMessageRepo,

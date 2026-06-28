@@ -3,15 +3,16 @@ package consumer
 import (
 	"common/pkg/client"
 	commonenum "common/pkg/enum"
+	"common/pkg/util"
 	"context"
 	"notify/internal/biz/usecase"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 // Consumer 是 NATS 事件消费者。
 type Consumer struct {
-	log          *log.Helper
+	log          *util.LogHelper
 	natsClient   *client.NatsClient
 	eventUsecase *usecase.EventUsecase
 	subjects     usecase.EventSubjects
@@ -20,13 +21,13 @@ type Consumer struct {
 }
 
 func NewConsumer(
-	logger log.Logger,
+	logger *slog.Logger,
 	natsClient *client.NatsClient,
 	eventUsecase *usecase.EventUsecase,
 	subjects usecase.EventSubjects,
 ) *Consumer {
 	return &Consumer{
-		log:          log.NewHelper(logger),
+		log:          util.NewLogHelper(logger),
 		natsClient:   natsClient,
 		eventUsecase: eventUsecase,
 		subjects:     subjects,

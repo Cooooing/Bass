@@ -2,6 +2,7 @@ package usecase
 
 import (
 	commonenum "common/pkg/enum"
+	"common/pkg/util"
 	"common/proto/gen/common/enums"
 	"context"
 	"errors"
@@ -12,8 +13,8 @@ import (
 	notifyenum "notify/internal/enum"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/protobuf/encoding/protojson"
+	"log/slog"
 )
 
 // EventHandler 将一种跨服务事件补齐为通知上下文。
@@ -27,7 +28,7 @@ type EventHandlers map[commonenum.EventType]EventHandler
 type EventSubjects []commonenum.EventSubject
 
 type EventUsecase struct {
-	log            *log.Helper
+	log            *util.LogHelper
 	conf           *conf.Bootstrap
 	tx             base.Tx
 	inboxEventRepo repo.InboxEventRepo
@@ -36,7 +37,7 @@ type EventUsecase struct {
 }
 
 func NewEventUsecase(
-	logger log.Logger,
+	logger *slog.Logger,
 	conf *conf.Bootstrap,
 	tx base.Tx,
 	inboxEventRepo repo.InboxEventRepo,
@@ -44,7 +45,7 @@ func NewEventUsecase(
 	eventHandlers EventHandlers,
 ) *EventUsecase {
 	return &EventUsecase{
-		log:            log.NewHelper(logger),
+		log:            util.NewLogHelper(logger),
 		conf:           conf,
 		tx:             tx,
 		inboxEventRepo: inboxEventRepo,

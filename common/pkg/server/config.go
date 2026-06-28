@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"reflect"
 
-	consulconfig "github.com/go-kratos/kratos/contrib/config/consul/v2"
-	"github.com/go-kratos/kratos/v2/config"
-	"github.com/go-kratos/kratos/v2/config/env"
-	"github.com/go-kratos/kratos/v2/config/file"
-	"github.com/go-kratos/kratos/v2/log"
+	consulconfig "github.com/go-kratos/kratos/contrib/config/consul/v3"
+	"github.com/go-kratos/kratos/v3/config"
+	"github.com/go-kratos/kratos/v3/config/env"
+	"github.com/go-kratos/kratos/v3/config/file"
 	consulapi "github.com/hashicorp/consul/api"
 	"google.golang.org/protobuf/proto"
+	"log/slog"
 )
 
 // LoadConfig 加载配置并保留底层 watcher，用于模块内注册热更新配置。
@@ -77,7 +77,7 @@ func LoadConfig[T proto.Message](bootstrapPath string, path string) (T, *common.
 	}
 	cleanup = func() {
 		if closeErr := manager.Close(); closeErr != nil {
-			log.Errorf("close hot config manager fail: %v", closeErr)
+			slog.Error("close hot config manager fail", "error", closeErr)
 		}
 	}
 

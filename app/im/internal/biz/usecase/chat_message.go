@@ -1,13 +1,14 @@
-﻿package usecase
+package usecase
 
 import (
+	"common/pkg/util"
 	"common/proto/gen/common"
 	"context"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 type ChatMessageUsecase struct {
@@ -15,7 +16,7 @@ type ChatMessageUsecase struct {
 	chatSessionRepo     repo.ChatSessionRepo
 	chatGroupRepo       repo.ChatGroupRepo
 	chatGroupMemberRepo repo.ChatGroupMemberRepo
-	log                 *log.Helper
+	log                 *util.LogHelper
 }
 
 func NewChatMessageUsecase(
@@ -23,14 +24,14 @@ func NewChatMessageUsecase(
 	chatSessionRepo repo.ChatSessionRepo,
 	chatGroupRepo repo.ChatGroupRepo,
 	chatGroupMemberRepo repo.ChatGroupMemberRepo,
-	logger log.Logger,
+	logger *slog.Logger,
 ) (*ChatMessageUsecase, error) {
 	return &ChatMessageUsecase{
 		chatMessageRepo:     chatMessageRepo,
 		chatSessionRepo:     chatSessionRepo,
 		chatGroupRepo:       chatGroupRepo,
 		chatGroupMemberRepo: chatGroupMemberRepo,
-		log:                 log.NewHelper(logger),
+		log:                 util.NewLogHelper(logger),
 	}, nil
 }
 

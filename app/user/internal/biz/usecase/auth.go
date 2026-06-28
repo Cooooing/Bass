@@ -5,6 +5,7 @@ import (
 	"common/pkg/auth"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"common/pkg/util/str"
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
@@ -15,13 +16,13 @@ import (
 	"user/internal/conf"
 	"user/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/sony/sonyflake/v2"
+	"log/slog"
 )
 
 type AuthUsecase struct {
 	conf         *conf.Bootstrap
-	log          *log.Helper
+	log          *util.LogHelper
 	tx           base.Tx
 	accountRepo  repo.AccountRepo
 	prefsRepo    repo.PreferencesRepo
@@ -35,7 +36,7 @@ type AuthUsecase struct {
 
 type AuthUsecaseDeps struct {
 	Conf         *conf.Bootstrap
-	Logger       log.Logger
+	Logger       *slog.Logger
 	Tx           base.Tx
 	AccountRepo  repo.AccountRepo
 	PrefsRepo    repo.PreferencesRepo
@@ -60,7 +61,7 @@ func NewAuthUsecase(deps AuthUsecaseDeps) (*AuthUsecase, error) {
 	}
 	return &AuthUsecase{
 		conf:         deps.Conf,
-		log:          log.NewHelper(deps.Logger),
+		log:          util.NewLogHelper(deps.Logger),
 		tx:           deps.Tx,
 		accountRepo:  deps.AccountRepo,
 		prefsRepo:    deps.PrefsRepo,

@@ -2,6 +2,7 @@ package repo
 
 import (
 	commonClient "common/pkg/client"
+	"common/pkg/util"
 	"common/proto/gen/common"
 	"context"
 	"platform/internal/biz/model"
@@ -12,14 +13,14 @@ import (
 
 	"common/pkg/server"
 	utilent "common/pkg/util/ent"
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 var _ repo.ObjectStorageRepo = (*ObjectStorageRepo)(nil)
 
 type ObjectStorageRepo struct {
 	conf         *conf.Bootstrap
-	log          *log.Helper
+	log          *util.LogHelper
 	db           *gen.Client
 	consulClient *commonClient.ConsulClient
 	redisClient  *commonClient.RedisClient
@@ -27,14 +28,14 @@ type ObjectStorageRepo struct {
 
 func NewObjectStorageRepo(
 	conf *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 	db *gen.Client,
 	consulClient *commonClient.ConsulClient,
 	redisClient *commonClient.RedisClient,
 ) repo.ObjectStorageRepo {
 	return &ObjectStorageRepo{
 		conf:         conf,
-		log:          log.NewHelper(logger),
+		log:          util.NewLogHelper(logger),
 		db:           db,
 		consulClient: consulClient,
 		redisClient:  redisClient,

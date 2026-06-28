@@ -10,25 +10,25 @@ import (
 	"platform/internal/biz/repo"
 	"platform/internal/biz/usecase"
 
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"log/slog"
 )
 
 type OssService struct {
 	v1.UnimplementedNotifyOssServiceServer
-	log                  *log.Helper
+	log                  *util.LogHelper
 	objectStorageUsecase *usecase.ObjectStorageUsecase
 }
 
 func NewOssService(
-	logger log.Logger,
+	logger *slog.Logger,
 	objectStorageUsecase *usecase.ObjectStorageUsecase,
 ) *OssService {
 	return &OssService{
-		log:                  log.NewHelper(logger),
+		log:                  util.NewLogHelper(logger),
 		objectStorageUsecase: objectStorageUsecase,
 	}
 }

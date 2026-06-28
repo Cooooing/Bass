@@ -1,0 +1,62 @@
+fullnameOverride: bass-nats
+
+config:
+  merge:
+    authorization:
+      users:
+        - user: << $NATS_USER >>
+          password: << $NATS_PASSWORD >>
+
+jetstream:
+  enabled: true
+  fileStore:
+    pvc:
+      enabled: true
+      size: 5Gi
+  merge:
+    max_mem: "1G"
+    max_file: "10G"
+
+http:
+  port: 8222
+
+statefulSet:
+  replicas: 1
+
+promExporter:
+  enabled: false
+
+# ClusterIP锛屼粎闆嗙兢鍐呰闂?service:
+  enabled: true
+
+container:
+  env:
+    NATS_USER:
+      valueFrom:
+        secretKeyRef:
+          name: bass-nats-secret
+          key: NATS_USER
+    NATS_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: bass-nats-secret
+          key: NATS_PASSWORD
+  merge:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: 128Mi
+      limits:
+        cpu: "200m"
+        memory: 256Mi
+
+natsBox:
+  enabled: true
+  merge:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi

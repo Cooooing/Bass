@@ -1,33 +1,33 @@
 package client
 
 import (
+	"common/pkg/util"
 	"common/proto/gen/common"
 	"context"
 	"fmt"
+	consulregistry "github.com/go-kratos/kratos/contrib/registry/consul/v3"
+	metadata2 "github.com/go-kratos/kratos/v3/middleware/metadata"
+	"github.com/go-kratos/kratos/v3/middleware/recovery"
+	"github.com/go-kratos/kratos/v3/registry"
+	kgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
+	khttp "github.com/go-kratos/kratos/v3/transport/http"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"log/slog"
 	"net"
 	"net/http"
 	"sync"
 	"time"
 
-	consulregistry "github.com/go-kratos/kratos/contrib/registry/consul/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	metadata2 "github.com/go-kratos/kratos/v2/middleware/metadata"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/registry"
-	kgrpc "github.com/go-kratos/kratos/v2/transport/grpc"
-	khttp "github.com/go-kratos/kratos/v2/transport/http"
-	"google.golang.org/protobuf/types/known/durationpb"
-
 	consulapi "github.com/hashicorp/consul/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 )
 
 // ConsulClient 管理基于 Consul 的服务注册与发现。
 type ConsulClient struct {
 	conf *common.Consul
-	log  *log.Helper
+	log  *util.LogHelper
 
 	// Client 是原始 Consul API 客户端，供高级场景使用。
 	Client *consulapi.Client
@@ -44,7 +44,7 @@ type ConsulClient struct {
 }
 
 // NewConsulClient 创建 ConsulClient 并返回清理函数。
-func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, func(), error) {
+func NewConsulClient(logger *slog.Logger, conf *common.Consul) (*ConsulClient, func(), error) {
 	// 默认值
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)
@@ -90,7 +90,7 @@ func NewConsulClient(logger log.Logger, conf *common.Consul) (*ConsulClient, fun
 
 	c := &ConsulClient{
 		conf:   conf,
-		log:    log.NewHelper(logger),
+		log:    util.NewLogHelper(logger),
 		Client: apiClient,
 		reg:    reg,
 	}
@@ -128,11 +128,12 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.conf.DialTimeout.AsDuration())
 	defer cancel()
 
-	conn, err := kgrpc.DialInsecure(ctx,
+	conn, err := kgrpc.NewClient(ctx,
 		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
 		kgrpc.WithDiscovery(c.reg),
 		kgrpc.WithTimeout(c.conf.DialTimeout.AsDuration()),
 		kgrpc.WithOptions(
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
 			grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
 			grpc.WithKeepaliveParams(keepalive.ClientParameters{
 				Time:                30 * time.Second,
@@ -142,7 +143,6 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 		),
 		kgrpc.WithMiddleware(
 			recovery.Recovery(),
-			tracing.Client(),
 			metadata2.Client(),
 		),
 	)
@@ -171,7 +171,6 @@ func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
 		khttp.WithDiscovery(c.reg),
 		khttp.WithMiddleware(
 			metadata2.Client(),
-			tracing.Client(),
 		),
 	)
 	if err != nil {

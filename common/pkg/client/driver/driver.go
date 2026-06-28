@@ -2,6 +2,7 @@ package driver
 
 import (
 	"common/pkg/constant"
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"math/rand"
@@ -12,9 +13,9 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect"
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"log/slog"
 )
 
 // ============================================================
@@ -32,15 +33,15 @@ type Config interface {
 // ============================================================
 
 type driver struct {
-	log     *log.Helper
+	log     *util.LogHelper
 	wrapped dialect.Driver
 	config  Config
 	mode    string
 }
 
-func NewDriver(logger log.Logger, mode string, drv dialect.Driver, config Config) dialect.Driver {
+func NewDriver(logger *slog.Logger, mode string, drv dialect.Driver, config Config) dialect.Driver {
 	return &driver{
-		log:     log.NewHelper(logger),
+		log:     util.NewLogHelper(logger),
 		wrapped: drv,
 		config:  config,
 		mode:    mode,
@@ -94,7 +95,7 @@ func (d *driver) Dialect() string {
 // ============================================================
 
 type tx struct {
-	log *log.Helper
+	log *util.LogHelper
 	dialect.Tx
 	config Config
 	mode   string
@@ -187,7 +188,7 @@ func shouldLog(cfg Config, cost time.Duration) bool {
 
 var whitespaceReplacer = strings.NewReplacer("\n", " ", "\r", " ", "\t", " ")
 
-func logSQL(ctx context.Context, helper *log.Helper, mode string, cost time.Duration, query string, args any, err error, txID string) {
+func logSQL(ctx context.Context, helper *util.LogHelper, mode string, cost time.Duration, query string, args any, err error, txID string) {
 	argv, _ := args.([]any)
 	sql := formatSQLArgs(query, argv)
 	sql = whitespaceReplacer.Replace(sql)

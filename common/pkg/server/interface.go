@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 // GrpcService 接口，每个 service 实现它

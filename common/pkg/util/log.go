@@ -3,9 +3,11 @@ package util
 import (
 	"context"
 	"fmt"
+	"io"
+	"log/slog"
 	"os"
 
-	"github.com/go-kratos/kratos/v2/log"
+	kratoslog "github.com/go-kratos/kratos/v3/log"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
@@ -13,177 +15,168 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.24.0"
 	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var _ log.Logger = (*ZapLogger)(nil)
-
-type ZapLogger struct {
-	log    *zap.Logger
-	msgKey string
-	Sync   func() error
+type LogHelper struct {
+	logger *slog.Logger
+	ctx    context.Context
 }
 
-// TraceIDValuer 返回一个能从 context 中获取 trace_id 的 Valuer
-func TraceIDValuer() log.Valuer {
-	return func(ctx context.Context) any {
-		if span := trace.SpanContextFromContext(ctx); span.HasTraceID() {
-			return span.TraceID().String()
-		}
-		return ""
-	}
-}
-
-// SpanIDValuer 返回一个能从 context 中获取 span_id 的 Valuer
-func SpanIDValuer() log.Valuer {
-	return func(ctx context.Context) any {
-		if span := trace.SpanContextFromContext(ctx); span.HasSpanID() {
-			return span.SpanID().String()
-		}
-		return ""
-	}
-}
-
-func NewLogger(name string, version string, mode string, level string, file string) log.Logger {
-	// 创建 ZapLogger
-	zapLogger := Logger(mode, level, file)
-
-	// 添加全局字段（With 包装）
-	return log.With(zapLogger,
-		"service.name", name,
-		"service.version", version,
-		"trace_id", TraceIDValuer(), // 自动注入 trace_id
-		"span_id", SpanIDValuer(), // 自动注入 span_id
+func NewLogger(name string, version string, mode string, level string, file string) *slog.Logger {
+	logger := Logger(mode, level, file).With(
+		slog.String("service.name", name),
+		slog.String("service.version", version),
 	)
+	slog.SetDefault(logger)
+	kratoslog.SetDefault(logger)
+	return logger
 }
 
-// Logger 配置zap日志,将zap日志库引入
-func Logger(mode string, level string, file string) log.Logger {
-	// 配置zap日志库的编码器
-	encoder := zapcore.EncoderConfig{
-		TimeKey:        "time",
-		LevelKey:       "level",
-		NameKey:        "logger",
-		CallerKey:      "caller",
-		MessageKey:     "msg",
-		StacktraceKey:  "stack",
-		EncodeTime:     zapcore.ISO8601TimeEncoder,
-		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.CapitalLevelEncoder,
-		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.FullCallerEncoder,
-	}
+func Logger(mode string, level string, file string) *slog.Logger {
+	var levelVar slog.LevelVar
+	levelVar.Set(parseSlogLevel(level))
 
-	levelMap := map[string]zapcore.Level{
-		"debug":  zap.DebugLevel,
-		"info":   zap.InfoLevel,
-		"warn":   zap.WarnLevel,
-		"error":  zap.ErrorLevel,
-		"dpanic": zap.DPanicLevel,
-		"panic":  zap.PanicLevel,
-		"fatal":  zap.FatalLevel,
-	}
-	l, ok := levelMap[level]
-	if !ok {
-		l = zap.InfoLevel
-	}
-
-	opts := []zap.Option{
-		zap.AddStacktrace(zapcore.ErrorLevel),
-	}
-
-	if mode == "dev" {
-		opts = append(opts, zap.AddCaller())
-		opts = append(opts, zap.AddCallerSkip(3))
-		opts = append(opts, zap.Development()) // dev 模式添加开发友好字段
-	}
-
-	zapLogger := NewZapLogger(mode, file, encoder, zap.NewAtomicLevelAt(l), opts...)
-
-	return zapLogger
-}
-
-// NewZapLogger 创建 ZapLogger 实例
-func NewZapLogger(mode string, file string, encoder zapcore.EncoderConfig, level zap.AtomicLevel, opts ...zap.Option) *ZapLogger {
-	writers := []zapcore.WriteSyncer{zapcore.AddSync(os.Stdout)}
-	var core zapcore.Core
+	writers := []io.Writer{os.Stdout}
 	if file != "" {
-		lumberJackLogger := &lumberjack.Logger{
+		writers = append(writers, &lumberjack.Logger{
 			Filename:   file,
-			MaxSize:    1024, // MB
+			MaxSize:    1024,
 			MaxBackups: 5,
-			MaxAge:     30, // 天
+			MaxAge:     30,
 			Compress:   true,
-		}
-		writers = append(writers, zapcore.AddSync(lumberJackLogger))
+		})
 	}
 
+	opts := &slog.HandlerOptions{
+		AddSource: mode == "dev",
+		Level:     &levelVar,
+	}
+	writer := io.MultiWriter(writers...)
+	var handler slog.Handler
 	if mode == "dev" {
-		core = zapcore.NewCore(
-			zapcore.NewConsoleEncoder(encoder),
-			zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件
-			level,
-		)
+		handler = slog.NewTextHandler(writer, opts)
 	} else {
-		core = zapcore.NewCore(
-			zapcore.NewJSONEncoder(encoder),
-			zapcore.NewMultiWriteSyncer(writers...), // 总是输出到 stdout，可选文件
-			level,
-		)
+		handler = slog.NewJSONHandler(writer, opts)
 	}
-
-	zapLogger := zap.New(core, opts...)
-	return &ZapLogger{
-		log:    zapLogger,
-		msgKey: "msg",
-		Sync:   zapLogger.Sync,
-	}
+	return slog.New(traceHandler{Handler: handler})
 }
 
-// Log 实现log接口
-func (l *ZapLogger) Log(level log.Level, keyvals ...any) error {
-	if zapcore.Level(level) < zapcore.DPanicLevel && !l.log.Core().Enabled(zapcore.Level(level)) {
-		return nil
+func NewLogHelper(logger *slog.Logger) *LogHelper {
+	if logger == nil {
+		logger = slog.Default()
 	}
-	var (
-		msg    = ""
-		keylen = len(keyvals)
-	)
-	if keylen == 0 || keylen%2 != 0 {
-		l.log.Warn(fmt.Sprint("Keyvalues must appear in pairs: ", keyvals))
-		return nil
-	}
+	return &LogHelper{logger: logger, ctx: context.Background()}
+}
 
-	data := make([]zap.Field, 0, (keylen/2)+1)
-	for i := 0; i < keylen; i += 2 {
-		k := fmt.Sprint(keyvals[i])
-		if k == l.msgKey {
-			msg, _ = keyvals[i+1].(string)
+func (h *LogHelper) WithContext(ctx context.Context) *LogHelper {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &LogHelper{logger: h.logger, ctx: ctx}
+}
+
+func (h *LogHelper) Debug(args ...any) {
+	h.logger.DebugContext(h.ctx, fmt.Sprint(args...))
+}
+
+func (h *LogHelper) Info(args ...any) {
+	h.logger.InfoContext(h.ctx, fmt.Sprint(args...))
+}
+
+func (h *LogHelper) Warn(args ...any) {
+	h.logger.WarnContext(h.ctx, fmt.Sprint(args...))
+}
+
+func (h *LogHelper) Error(args ...any) {
+	h.logger.ErrorContext(h.ctx, fmt.Sprint(args...))
+}
+
+func (h *LogHelper) Fatal(args ...any) {
+	h.logger.ErrorContext(h.ctx, fmt.Sprint(args...))
+	os.Exit(1)
+}
+
+func (h *LogHelper) Debugf(format string, args ...any) {
+	h.logger.DebugContext(h.ctx, fmt.Sprintf(format, args...))
+}
+
+func (h *LogHelper) Infof(format string, args ...any) {
+	h.logger.InfoContext(h.ctx, fmt.Sprintf(format, args...))
+}
+
+func (h *LogHelper) Warnf(format string, args ...any) {
+	h.logger.WarnContext(h.ctx, fmt.Sprintf(format, args...))
+}
+
+func (h *LogHelper) Errorf(format string, args ...any) {
+	h.logger.ErrorContext(h.ctx, fmt.Sprintf(format, args...))
+}
+
+func (h *LogHelper) Debugw(keyvals ...any) {
+	h.logKeyvals(slog.LevelDebug, keyvals...)
+}
+
+func (h *LogHelper) Warnw(keyvals ...any) {
+	h.logKeyvals(slog.LevelWarn, keyvals...)
+}
+
+func (h *LogHelper) logKeyvals(level slog.Level, keyvals ...any) {
+	msg := ""
+	attrs := make([]any, 0, len(keyvals))
+	for i := 0; i < len(keyvals); i += 2 {
+		if i+1 >= len(keyvals) {
+			attrs = append(attrs, "bad_keyvals", fmt.Sprint(keyvals[i]))
+			break
+		}
+		key := fmt.Sprint(keyvals[i])
+		value := keyvals[i+1]
+		if key == "msg" {
+			msg = fmt.Sprint(value)
 			continue
 		}
-		data = append(data, zap.Any(k, keyvals[i+1]))
+		attrs = append(attrs, key, value)
 	}
+	h.logger.Log(h.ctx, level, msg, attrs...)
+}
 
-	switch level {
-	case log.LevelDebug:
-		l.log.Debug(msg, data...)
-	case log.LevelInfo:
-		l.log.Info(msg, data...)
-	case log.LevelWarn:
-		l.log.Warn(msg, data...)
-	case log.LevelError:
-		l.log.Error(msg, data...)
-	case log.LevelFatal:
-		l.log.Fatal(msg, data...)
+type traceHandler struct {
+	slog.Handler
+}
+
+func (h traceHandler) Handle(ctx context.Context, record slog.Record) error {
+	if span := trace.SpanContextFromContext(ctx); span.HasTraceID() {
+		record.AddAttrs(slog.String("trace_id", span.TraceID().String()))
 	}
-	return nil
+	if span := trace.SpanContextFromContext(ctx); span.HasSpanID() {
+		record.AddAttrs(slog.String("span_id", span.SpanID().String()))
+	}
+	return h.Handler.Handle(ctx, record)
+}
+
+func (h traceHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	return traceHandler{Handler: h.Handler.WithAttrs(attrs)}
+}
+
+func (h traceHandler) WithGroup(name string) slog.Handler {
+	return traceHandler{Handler: h.Handler.WithGroup(name)}
+}
+
+func parseSlogLevel(level string) slog.Level {
+	switch level {
+	case "debug":
+		return slog.LevelDebug
+	case "warn":
+		return slog.LevelWarn
+	case "error":
+		return slog.LevelError
+	default:
+		return slog.LevelInfo
+	}
 }
 
 func SetupTracing(ctx context.Context, serviceName, version, endpoint string, enableOtel bool, insecure bool, sampler float64) (func(context.Context) error, error) {
 	if !enableOtel {
-		// 创建仅本地 traceID、不上报的 TracerProvider
 		res, err := resource.New(ctx,
 			resource.WithAttributes(
 				semconv.ServiceName(serviceName),
@@ -199,11 +192,10 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 			sdktrace.WithResource(res),
 		)
 		otel.SetTracerProvider(tp)
-		log.Info("Tracing disabled: using local tracer (traceID preserved, no export)")
+		slog.Info("Tracing disabled: using local tracer (traceID preserved, no export)")
 		return func(context.Context) error { return nil }, nil
 	}
 
-	// enableOtel 为 true 时执行正常上报逻辑。
 	opts := []otlptracegrpc.Option{
 		otlptracegrpc.WithEndpoint(endpoint),
 	}
@@ -217,7 +209,6 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 		return nil, err
 	}
 
-	// 资源属性
 	res, err := resource.New(ctx,
 		resource.WithAttributes(
 			semconv.ServiceName(serviceName),
@@ -228,7 +219,6 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 		return nil, err
 	}
 
-	// 创建 TracerProvider。
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(res),
@@ -236,6 +226,6 @@ func SetupTracing(ctx context.Context, serviceName, version, endpoint string, en
 	)
 	otel.SetTracerProvider(tp)
 
-	log.Info("Tracing setup complete (OTEL enabled)")
+	slog.Info("Tracing setup complete (OTEL enabled)")
 	return tp.Shutdown, nil
 }

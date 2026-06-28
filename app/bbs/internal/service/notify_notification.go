@@ -5,8 +5,8 @@ import (
 	bbsnotifyv1 "common/proto/gen/bbs/v1/notify"
 	"context"
 
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type NotificationService struct {

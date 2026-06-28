@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"common/pkg/util"
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
@@ -13,14 +14,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 const defaultLarkWebhookBaseURL = "https://open.larksuite.com/open-apis/bot/v2/hook/"
 
 // LarkWebhookClient 封装 Lark 自定义机器人 Webhook 调用。
 type LarkWebhookClient struct {
-	log        *log.Helper
+	log        *util.LogHelper
 	httpClient *http.Client
 }
 
@@ -32,9 +33,9 @@ type LarkWebhookRequest struct {
 	Text    string
 }
 
-func NewLarkWebhookClient(logger log.Logger) *LarkWebhookClient {
+func NewLarkWebhookClient(logger *slog.Logger) *LarkWebhookClient {
 	return &LarkWebhookClient{
-		log:        log.NewHelper(logger),
+		log:        util.NewLogHelper(logger),
 		httpClient: http.DefaultClient,
 	}
 }

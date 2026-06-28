@@ -1,32 +1,33 @@
-﻿package usecase
+package usecase
 
 import (
+	"common/pkg/apperror"
+	"common/pkg/util"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
-	"common/pkg/apperror"
 	"context"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
+	"log/slog"
 )
 
 type ChatGroupUsecase struct {
 	chatGroupRepo       repo.ChatGroupRepo
 	chatGroupMemberRepo repo.ChatGroupMemberRepo
-	log                 *log.Helper
+	log                 *util.LogHelper
 }
 
 func NewChatGroupUsecase(
 	chatGroupRepo repo.ChatGroupRepo,
 	chatGroupMemberRepo repo.ChatGroupMemberRepo,
-	logger log.Logger,
+	logger *slog.Logger,
 ) (*ChatGroupUsecase, error) {
 	return &ChatGroupUsecase{
 		chatGroupRepo:       chatGroupRepo,
 		chatGroupMemberRepo: chatGroupMemberRepo,
-		log:                 log.NewHelper(logger),
+		log:                 util.NewLogHelper(logger),
 	}, nil
 }
 

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"time"
@@ -8,10 +9,10 @@ import (
 	"common/pkg/constant"
 	"common/proto/gen/common"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
+	"log/slog"
 )
 
 const defaultDeadLetterAlertDedupWindow = time.Hour
@@ -30,19 +31,19 @@ type DeadLetterAlert struct {
 
 // DeadLetterAlertClient 负责死信告警去重、日志、指标和 Lark 通知。
 type DeadLetterAlertClient struct {
-	log         *log.Helper
+	log         *util.LogHelper
 	redisClient *RedisClient
 	larkClient  *LarkWebhookClient
 	counter     metric.Int64Counter
 }
 
-func NewDeadLetterAlertClient(logger log.Logger, redisClient *RedisClient, larkClient *LarkWebhookClient) *DeadLetterAlertClient {
+func NewDeadLetterAlertClient(logger *slog.Logger, redisClient *RedisClient, larkClient *LarkWebhookClient) *DeadLetterAlertClient {
 	counter, _ := otel.Meter("common.dead_letter").Int64Counter(
 		"dead_letter_alert_total",
 		metric.WithDescription("Total number of deduplicated dead letter alerts."),
 	)
 	return &DeadLetterAlertClient{
-		log:         log.NewHelper(logger),
+		log:         util.NewLogHelper(logger),
 		redisClient: redisClient,
 		larkClient:  larkClient,
 		counter:     counter,

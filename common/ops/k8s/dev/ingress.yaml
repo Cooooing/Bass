@@ -1,0 +1,60 @@
+# HTTP 璺敱 - Consul UI, MinIO Console, MinIO S3, NATS Monitor
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: consul-ui
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`consul.dev.bass.local`)
+      kind: Rule
+      services:
+        - name: bass-consul-ui
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-console
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`minio.dev.bass.local`)
+      kind: Rule
+      services:
+        - name: bass-minio-console
+          port: 9001
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-s3
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`s3.dev.bass.local`)
+      kind: Rule
+      services:
+        - name: bass-minio
+          port: 9000
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nats-monitor
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`nats.dev.bass.local`)
+      kind: Rule
+      services:
+        - name: bass-nats-headless
+          port: 8222

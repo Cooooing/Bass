@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-kratos/kratos/v2/config"
-	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v3/config"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"log/slog"
 )
 
 // HotConfigManager 管理多个配置路径的热更新订阅。
@@ -136,17 +136,17 @@ func (m *HotConfigManager[T]) applyProtoHotFields(entry *hotConfigEntry) {
 
 	next, err := m.newProtoMessageLike(m.root)
 	if err != nil {
-		log.Errorf("create hot config snapshot fail: %v", err)
+		slog.Error("create hot config snapshot fail", "error", err)
 		return
 	}
 	if err := m.cfg.Scan(next); err != nil {
-		log.Errorf("scan hot config fail: %v", err)
+		slog.Error("scan hot config fail", "error", err)
 		return
 	}
 
 	for _, field := range fields {
 		if err := m.copyProtoHotField(m.root, next, field.names); err != nil {
-			log.Errorf("apply hot config %s fail: %v", field.path, err)
+			slog.Error("apply hot config fail", "path", field.path, "error", err)
 		}
 	}
 }

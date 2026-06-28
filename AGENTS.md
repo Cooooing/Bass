@@ -1,126 +1,44 @@
 # Agent 项目提示
 
-## 工作方式
+## 工作入口
 
-- 优先阅读并遵守 [doc/README.md](doc/README.md) 中的项目规范。
-- 修改规范时，同步维护 `AGENTS.md`、`CLAUDE.md` 和对应 `doc/*.md`。
-- 当前模块归类只写在 [doc/README.md](doc/README.md)，通用规范正文不要硬编码现有模块名。
-- 目标规划服务以 [doc/README.md](doc/README.md) 的落地状态为准，不能因为文档中出现服务名就直接生成代码、目录、配置或契约。
-- 生成代码、测试和构建命令优先阅读 Makefile；运行 make 时使用 bash 环境。
+- 先读 [doc/README.md](doc/README.md)，再按变更类型读架构或代码规范；长期细则只写 `doc/`，高频约束才同步 `AGENTS.md` 和 `CLAUDE.md`。
+- 执行代码生成、重构或修复时，按 [doc/agent-rules.md](doc/agent-rules.md) 做前后检查；新增同类代码时先看 [doc/templates/](doc/templates/)。
+- 当前模块归类以 [doc/README.md](doc/README.md) 为准；目标规划服务未落地前，不生成代码、目录、配置或契约。
+- 生成、格式化、测试和构建优先使用 Makefile；运行 make 使用 bash。
 
 ## GitNexus
 
-本项目在 GitNexus 中的索引名是 **Bass**。探索代码、评估影响、重构和提交前检查时优先使用 GitNexus。
-
-- 修改函数、方法、类型等代码符号前，先做上游影响分析。
-- GitNexus 返回 HIGH 或 CRITICAL 风险时，先向用户说明风险再继续。
-- 不熟悉代码时，先查执行流程，再读具体文件。
-- 重命名前先用 GitNexus rename 预览，不直接全文替换。
-- 提交前运行变更检测，确认影响范围符合预期。
-
-索引过期时运行：
-
-```bash
-npx gitnexus analyze
-```
-
-如需保留 embeddings：
-
-```bash
-npx gitnexus analyze --embeddings
-```
-
-## 规范入口
-
-- [架构设计](doc/architecture.md)
-- [代码规范](doc/coding.md)
+- 项目索引名是 **Bass**；探索、影响分析、重构和提交前检查优先使用 GitNexus。
+- 修改函数、方法、类型前做上游影响分析；HIGH 或 CRITICAL 风险先说明再继续。
+- 不熟悉流程时先查执行流程再读文件；重命名用 GitNexus rename 预览；提交前运行变更检测，索引过期时运行 `npx gitnexus analyze`，已有 embeddings 时加 `--embeddings`。
 
 ## 必守约束
 
-- BFF 写接口通常只调用一个归属服务命令接口；跨服务副作用由归属服务写 outbox 后通过 MQ 触发。
-- 普通数据库写入失败直接返回失败，不为普通写流程额外设计重试；需要重试、补偿和 MQ 投递保证的流程放在 outbox/inbox。
-- BFF 读接口可以聚合多个内部服务；BFF 不直接连接业务库，不拥有领域数据。
-- 一个业务事实只能有一个归属服务负责写入；非归属服务读取业务事实默认通过 RPC。
-- 缓存统一使用 Redis，并设置 TTL；缓存不写业务数据库，不能作为领域事实来源。
-- 新增同步服务依赖前必须说明调用方向和失败影响；禁止为了查询方便跨服务连接业务库或维护跨服务数据库投影。
-- 一个 proto 文件最多定义一个 service；每个 proto service 对应一个 Go service 文件。
-- Proto 管理、lint 和生成统一使用 Buf；共享 API 生成使用 `make api`，校验使用 `make api-lint`。
-- Buf 生成模板放在 `common/buf`，共享 API 模块配置放在 `common/api/app`。
-- 第三方 proto 依赖统一通过 Buf deps 管理；不能继续维护 `common/api/third_party`。
-- 项目初期不要求 proto 版本兼容；按当前需求可以删除、重命名或重排字段。
-- BFF proto 按模块功能分目录存放，必须定义自己的 request、reply 和对外模型，不引用内部服务 proto message。
-- 普通 BFF HTTP 对外业务接口默认使用 `POST` 和 `body: "*"`；回调、健康检查、直接返回图片或文件等需要被浏览器资源标签引用的接口可以按场景使用 `GET`。
-- 内部服务 proto 只暴露 gRPC 契约，不写 `google.api.http` 注解；OpenAPI 只面向 BFF。
-- 契约分为 BFF HTTP、内部 gRPC、内部事件、外部回调四类；外部回调必须独立说明验签、幂等键、来源字段和失败处理。
-- Proto 文件格式以 `buf format` 输出为准，不为 `google.api.http` option 手工调整出与 `buf format` 不一致的格式。
-- 共享 API 和 BFF 对外 RPC 命名使用业务动作；禁止 `GetOne`、`Page`、`Info`、`Data` 这类实现视角或含义不明确的名字。单资源查询用 `Get`，集合查询用 `List`，创建实体用 `Create`，追加子内容可用明确业务动词如 `Add`，状态变更使用 `Publish`、`MarkRead` 等业务动作。
-- 查询 RPC 按资源收敛为单资源 `Get`、列表 `List` 和映射 `Map`；禁止因返回字段组合拆分 `GetBasic`、`BatchGetBasic`、`BatchGetContact` 这类接口。
-- 调用方需要按 ID 获取映射时，归属服务必须定义独立 `Map` RPC；`List` 只表示列表查询并返回列表，调用方不能通过 `List` 的 `repeated` 结果自行组装映射。
-- 基础资源模型只表达资源本体，不挂载可独立查询的关联集合；关联集合通过独立 RPC 暴露，不能由 `Get` 或 `List` 隐式聚合返回。
-- 项目初期不维护 proto 向后兼容保留位，删除字段或枚举值时直接删除，不写 `reserved` 字段号或字段名。
-- 请求参数不能用 `with_xxx`、`include_xxx` 等布尔开关控制响应结构；同一接口的响应结构必须由接口语义固定。
-- RPC 注释只描述接口功能，不写消费方、调用场景、登录态、幂等策略和字段缺省规则。
-- service 名已经表达资源时，RPC 只写业务动作；request/reply 外层 message 使用 `动作 + 资源名`，禁止 `UpdateArticleArticle` 这类重复资源名。
-- BFF HTTP 路径统一使用 `/v1/{模块}/{资源}/{动作}`；同一资源名称保持单数且前后一致，动作使用 lower-kebab。
-- BFF 不暴露邮箱、手机号、账号名是否存在等可用于枚举用户信息的接口。
-- BFF OpenAPI 从 `google.api.http` 和 proto 注释生成；不手写 tags、servers、external_docs、BearerAuth，也不在接口描述中写登录态、幂等策略、字段缺省规则等运行时说明。
-- BFF 对外请求参数的必填字段使用 `gnostic.openapi.v3.schema.required` 标注；只标注请求 `Request` 和请求专用输入模型，不标注响应字段。`option (gnostic.openapi.v3.schema)` 放在字段定义之后，字段注释只描述业务含义，不同步写“必填”或“选填”。
-- SDK 从 BFF OpenAPI 生成，TypeScript Axios 输出到 `common/api/gen-typescript-axios/<bff>`，TypeScript Fetch 输出到 `common/api/gen-typescript-fetch/<bff>`，Go、Java、Rust 分别输出到 `common/api/gen-go/<bff>`、`common/api/gen-java/<bff>` 和 `common/api/gen-rust/<bff>`，生成产物不入 Git 和 Docker；SDK 客户端对象名使用 proto service 名，方法名使用 RPC 动作名。
-- gRPC client 统一通过 `common/pkg/client/rpc` 和 `ConsulClient.GetGrpcConn` 创建；业务代码不要直接 `grpc.Dial` 或手写服务发现逻辑。
-- gRPC 超时、发现、tracing、metadata 和连接复用由统一 client 管理；普通 RPC 调用不要重复包 `context.WithTimeout`。
-- BFF 读接口可以按业务场景降级或返回部分结果；写接口下游失败时默认返回失败，不吞错伪造成功。
-- 常规表业务尽量保持 proto、service、biz、data、schema 一一对应。
-- 分层依赖只能从外层指向内层；biz 层禁止依赖本模块 `internal/data`、`internal/data/gen`、Ent 生成模型、Ent client、schema predicate 或 data 层实现类型。
-- BFF 负责入口认证和权限判断；内部服务默认信任内部调用链传入的身份上下文，不重复实现入口层权限判断。
-- BFF 解析登录令牌必须调用 user 服务认证接口获取通用用户上下文；BFF 不直接读取 user 登录令牌的 Redis 缓存。
-- 内部服务仍需校验资源存在、状态流转、归属服务本地业务不变量和写入前置条件。
-- service 层只能调用 biz/usecase，不能直接注入或调用 repo、data 层实现；现有历史偏离不作为新代码依据。
-- service 入参校验属于协议入口适配，写在对应 service 的接收者方法中；不要为入口校验新增游离函数、独立校验结构体或独立校验 usecase。
-- BFF 的 biz/repo 接口、usecase 和 data 实现文件按具体调用语义命名和拆分，例如 user 相关能力按 auth、account、relation 等拆分；不要把一个下游服务的所有调用收敛到 `UserRepo`、`ContentRepo`、`NotifyRepo` 这类大接口。
-- biz 层底层能力接口只能暴露业务模型、基础类型、枚举和查询参数对象；不能在接口签名中出现 Ent client、Ent entity、Ent mutation、Ent query 等 data 层细节。
-- Ent 生成模型只允许在 data 层内部使用；biz model 必须是独立业务结构，不能嵌入或别名引用 Ent entity。
-- schema 字段必须来自明确业务需求或实际读写路径；意义不明、未使用、可推导或重复的信息不落库；任何数据库表结构变更都必须先给出设计、影响范围和理由，经用户确认后再修改。
-- 日志表只记录后续排查和安全审计真正需要的事实；没有明确消费方的提交原文、失败文案、链路标识和客户端解析字段不落库。
-- 密码、token、密钥任何时候都不能返回给用户，也不能写入日志、错误信息或事件 payload；验证码只允许写入验证码投递事件，不能写入日志、错误信息或其他事件 payload；邮箱、手机号、设备信息、IP 等字段按业务可见范围返回。
-- 参与唯一约束的字段应避免可空；复合索引能覆盖左前缀查询时，不额外增加重复单列索引。
-- 复杂业务新增明确业务 usecase；usecase 可按层级组合调用，但禁止循环调用。
-- 偏好设置按业务归属拆分；端侧展示、本地化等账号体验设置与通知投递、订阅、渠道开关分表维护。
-- 依赖字段命名遵守 [代码命名规范](doc/coding.md#命名)：`Repo` 只表示数据库或持久化访问，缓存访问依赖用 `XXXCache`，RPC、对象存储或第三方客户端依赖用 `XXXClient`，不要用 `Resolver`、`Writer`、`Manager` 等泛化后缀包装真实依赖类型。
-- Wire 的 `ProviderSet` 命名允许保留；提供数组、slice、map 等非标准 struct 时可以使用 `ProvideXXX`，普通 struct 通过 `NewXXX` 构造。
-- outbox repo 只提供通用保存能力；事件类型、主题、payload 和接收者由调用方按业务语义构造。
-- outbox 表默认保持最小投递模型；确需新增投递字段时，必须先给出能说明必要性的设计并经用户确认。
-- 所有模块的 outbox、inbox 表结构必须保持同类一致；新增、删除或调整字段时必须同步处理所有模块的同类表。
-- 事件 payload 使用 common proto message；消费幂等以事件 ID 为主，必要时结合事件类型和业务主键。
-- 事件处理失败必须保留可判断状态的 inbox 记录；是否增加死信、搁置、下次重试等字段必须先给出设计并经用户确认。
-- 跨服务、跨层或落库约束枚举必须定义 proto enum，并通过 `common/pkg/enum.Mapping` 绑定内部 string enum。
-- string 字段只用于自由文本、外部标识、地址、密钥、URL、时区、设备信息等开放值；业务固定取值必须抽成枚举。
-- MQ subject 属于跨服务事件协议，必须定义在 common proto enum 中，并通过内部 string enum 映射实际主题字符串。
-- MQ queue group 属于事件消费协议，必须定义为 common 枚举；业务消费者订阅时使用枚举值，不直接书写字符串。
-- 复合查询条件使用 `Query`、`Filter`、`Spec` 等参数对象，不拼接超长方法名。
-- biz/repo 的参数对象只表达持久化查询或写入条件，不定义 `StringPatch`、`XXXPatch` 等承载 service 入参校验状态的类型。
-- 底层能力接口方法名使用业务动作和资源语义；单资源查询使用 `Get`，列表查询使用 `List`，按 ID 返回映射使用 `Map`，批量查询不使用 `BatchGetBasic`、`BatchGetContact` 这类按字段组合命名的方法。
-- 返回 map 的 biz client/repo 方法使用 `Map` 语义命名，不能命名为 `ListAccounts`、`ListBasicAccounts` 等列表查询名称。
-- 基础资源模型只写资源本体字段，不挂载标签、附言等可独立查询的关联集合；调用方需要关联集合时定义独立 RPC。
-- 项目初期删除 proto 字段或枚举值时直接删除，不写 `reserved` 字段号或字段名。
-- 文本文件使用 UTF-8、无 BOM、LF；所有注释使用中文。
-- 业务规则、跨服务边界、事务边界、事件语义和数据库约束需要必要注释；注释描述意图、约束和边界，不复述代码表面行为。
-- 跨服务调用、事件投递和消费、关键写事务必须记录 trace ID、业务 ID、耗时和结果状态等可追踪信息。
-- 需要变动的配置从 `.env` 加载；新增或变更配置必须同步配置 proto 和 `.env` 示例，并添加中文注释。secret、token、密钥不写入 Git。
-- 涉及表结构、跨服务依赖、事件契约、BFF 对外接口、缓存策略或信任边界的变更，必须先说明变更目的、影响范围和处理方式。
-- 新增服务、跨服务事件、BFF 接口、数据库 schema、生成链路、公共包约定或配置项时，必须同步更新 `doc/`、`AGENTS.md` 和 `CLAUDE.md`。
-- 代码格式化统一使用 Make：根目录执行 `make format`，共享 API 和 common Go 代码执行 `make api-format`，单模块执行 `make -C app/<module> format`。
-- 格式化目标只编排 `gofmt`、`buf format` 等现有工具，不在项目内实现自定义格式化器；Proto 文件格式以 `buf format` 输出为准。
-- 需要基础类型指针时使用 Go 1.26 的 `new(expr)`；禁止使用 `common/pkg/util.Ptr` 或临时变量取地址来构造值指针。
-- 内部方法的拆分边界是是否存在复用或独立复杂规则；只调用一次的简单代码块不要单独拆成私有方法。
-- 不编写通用模型转换接口，也不编写 `ConvertToRpc`、`toXXX`、`xxxToDomain`、`buildXXXReply` 等内部转换或组装函数；数据库模型、业务模型和 proto DTO 之间的字段组装必须在具体业务函数内按当前接口需求显式完成。
-- 简单结构体组装和派生展示字段不要新增游离私有函数；需要复用时优先用结构体方法表达派生值，或在具体业务函数内显式组装。
-- BFF 返回字段必须由当前接口的业务边界决定，不能通过复用转换函数隐式扩大返回字段。
-- 默认不新增测试代码；只有用户明确要求、修复已有测试或维护现有测试文件时，才新增或修改测试代码。仍需按变更类型运行生成、编译或已有测试命令。
+- BFF 不连接业务库、不拥有领域数据；写接口通常只调用一个归属服务命令接口，读接口可以聚合内部服务；一个业务事实只由归属服务写入，跨服务副作用由归属服务写 outbox 后通过 MQ 触发。
+- BFF 负责端侧访问边界和协议适配；内部服务负责领域事实边界和写入正确性。BFF 写接口不做 read-before-write 的领域状态预校验，资源存在性、作者关系、状态流转、本地业务不变量和并发写入正确性由归属服务校验。
+- 禁止为了查询方便跨服务连接业务库或维护跨服务数据库投影；新增同步依赖前说明调用方向、失败影响和降级策略；缓存只用 Redis 并设置 TTL，不能写业务库或作为领域事实来源。
+- 契约分为 BFF HTTP、内部 gRPC、内部事件和外部回调；BFF proto 不引用内部服务 message，内部服务 proto 不写 HTTP 注解；Proto 管理、lint、format 和生成统一使用 Buf，共享 API 使用 `make api`、`make api-lint`。
+- Proto 枚举单独放 `enum.proto`，不写入 `model.proto`；`model.proto` 只放稳定数据模型，不放 Query、Save、回调参数或事件 payload；保存、更新等写入请求结构定义在对应 RPC message 内部，不抽 `XXXSave`、`XXXUpdate` 复用；BFF 返回模型按视图拆分，内部服务不引用其他业务服务展示 message。
+- BFF HTTP 默认 `POST` 和 `body: "*"`；图片、文件、健康检查、回调等可以按场景使用 `GET`；RPC 使用业务动作命名，查询收敛为 `Get`、`List`、`Page`、`Map`；`List`、`Page` 响应数组字段统一为 `rows`，响应结构不能由 `with_xxx` 或 `include_xxx` 控制。
+- BFF 响应体固定为 `code`、`message`、`data`、`time`，HTTP 使用真实状态码；`ErrorReason` 只表示传输状态，业务错误码使用 `BusinessErrorCode` 并通过 `errors.code` 绑定 HTTP 状态。
+- 对外可感知业务错误使用 `common/pkg/apperror.New(BusinessErrorCode, ...)`；业务校验失败禁止使用 `cerrors.ErrorBadRequest`、`cerrors.ErrorNotFound` 等 `ErrorReason` 构造函数；用户可见文案由 BFF 按 `common.enums.Language` 生成；动态错误参数必须是 common proto message，并通过 `apperror.WithData[T proto.Message]` 写入。
+- service 层只做协议适配和调用 usecase；biz 层不依赖 data、Ent 生成模型或具体数据库类型；内部服务仍需校验资源存在、状态流转、本地业务不变量和写入前置条件。
+- 内部服务的业务输入只允许来自 proto request 显式字段；不得从 ctx、metadata、请求头、JWT、缓存会话等隐式来源提取当前用户或业务参数。ctx 只用于取消、超时、trace 和事务传递；本服务数据库领域事实、配置、当前时间、UUID、事件 ID 等可以参与业务判断。
+- content 内容状态使用 `publish_status`、`visibility`、`restriction` 等独立字段：文章用 `publish_status` 表达草稿、已发布、归档，用 `visibility` 表达公开、私有，用 `restriction` 表达无管理限制、管理隐藏、管理锁定；评论和附言使用 `restriction` 表达管理限制；逻辑删除只使用 `deleted_at`，应用不提供查询已删除数据的入口，不保留 `deleted` 枚举状态和业务表删除人字段。BFF 控制端侧可见范围，content 校验状态流转和本地业务不变量。
+- schema 字段必须有明确业务需求或读写路径；表结构、outbox/inbox 字段和对外契约变更必须先确认设计、影响和回滚；密码、token、密钥不返回、不记录日志、不写错误和事件 payload，验证码只允许写入验证码投递事件。
+- 服务配置以 `internal/conf/conf.proto` 为契约来源，`configs/config.yaml` 必须覆盖该服务暴露的可配置字段，禁止保留 proto 未定义字段；`google.protobuf.Duration` 配置统一使用秒单位，禁止写 `ms`、`m`、`h` 等单位；布尔配置必须使用 `true` 或 `false` 字面量，禁止使用环境变量占位；运行期业务阈值、限流、告警和事件轮询参数可以热重载，端口、数据库、Redis、NATS、Consul、JWT secret、OSS 密钥、短信密钥等连接类或敏感配置不热重载。
+- outbox/inbox 表结构同类保持一致；事件 payload 使用 common proto message；MQ subject 和 queue group 使用 common 枚举；outbox publisher 使用 Redis 批次锁降低扫表压力，获取锁失败时跳过本轮；outbox/inbox 超过最大重试后进入 dead，由本服务 dead-letter scanner 记录日志、指标和可选 Lark 告警。
+- repo 层每个 schema 对应的 repo 都定义 `Get`、`List`、`Map`、`Count`、`Page` 五个查询方法；依赖命名按类型使用 `Repo`、`Cache`、`Client`、`Usecase`，不使用 `Manager`、`Resolver`、`Writer` 包装真实依赖；需要基础类型指针时使用 Go 1.26 的 `new(expr)`。
+- 一次性简单逻辑、入参校验和字段组装不拆游离私有函数；不新增通用转换接口或 `toXXX`、`buildXXXReply` 等组装函数；默认不新增测试代码，仍需按变更类型运行生成、编译或已有测试。
+- slice、map、set 的去重、映射、过滤、分组、键值提取等纯数据变换优先使用 `github.com/samber/lo`；有副作用、错误短路、事务操作或可读性下降时保留显式循环。
+- content 已发布文章的作者编辑窗口由 content 配置 `business.article.published_edit_window` 和 `business.article.published_edit_max_view_count` 控制，默认 10 分钟且浏览数小于 100。
+- 新增服务、事件、BFF 接口、数据库 schema、生成链路、公共包约定或配置项时，同步更新 `doc/`、`AGENTS.md` 和 `CLAUDE.md`。
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Bass** (3338 symbols, 7395 relationships, 135 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Bass** (13365 symbols, 27903 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

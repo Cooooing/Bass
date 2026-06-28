@@ -3,20 +3,21 @@ package qiniu
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"platform/internal/biz/model"
 	"platform/internal/conf"
 	"platform/internal/data/gen"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/qiniu/go-sdk/v7/auth"
 	"github.com/qiniu/go-sdk/v7/storage"
+	"log/slog"
 )
 
 type Qiniu struct {
 	conf         *conf.Bootstrap
-	log          *log.Helper
+	log          *util.LogHelper
 	db           *gen.Client
 	consulClient *commonClient.ConsulClient
 	redisClient  *commonClient.RedisClient
@@ -24,14 +25,14 @@ type Qiniu struct {
 
 func NewQiniu(
 	conf *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 	db *gen.Client,
 	consulClient *commonClient.ConsulClient,
 	redisClient *commonClient.RedisClient,
 ) *Qiniu {
 	return &Qiniu{
 		conf:         conf,
-		log:          log.NewHelper(logger),
+		log:          util.NewLogHelper(logger),
 		db:           db,
 		consulClient: consulClient,
 		redisClient:  redisClient,

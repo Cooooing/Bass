@@ -6,7 +6,7 @@ import (
 
 	"push_node/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 // SystemService 提供健康检查 HTTP 端点。

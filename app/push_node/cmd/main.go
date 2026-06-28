@@ -10,13 +10,12 @@ import (
 	"common/pkg/util"
 	"push_node/internal/biz/usecase"
 	"push_node/internal/conf"
-	"push_node/internal/server"
 
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"log/slog"
 )
 
 // 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
@@ -37,14 +36,14 @@ func init() {
 }
 
 func newApp(
-	logger log.Logger,
+	logger *slog.Logger,
 	hs *http.Server,
 	consulClient *commonClient.ConsulClient,
 	nodeUc *usecase.NodeUsecase,
 ) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
-	log.Infof("start server %s", id)
+	slog.Info("start server", "id", id)
 
 	return kratos.New(
 		kratos.ID(id),
@@ -77,8 +76,6 @@ func main() {
 	Name = c.Server.Name
 	Version = c.Server.Version
 
-	server.InitMetrics(Name)
-
 	ctx := context.Background()
 	shutdownTracing, err := util.SetupTracing(
 		ctx,
@@ -99,7 +96,7 @@ func main() {
 		}
 	}()
 	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	log.SetLogger(logger)
+	slog.SetDefault(logger)
 
 	// 阶段 1：注册到 push_hub 获取节点 ID
 	hubConn, err := grpc.NewClient(c.Server.PushHubAddress,
@@ -113,7 +110,7 @@ func main() {
 		_ = hubConn.Close()
 		panic(fmt.Sprintf("注册节点失败: %v", err))
 	}
-	log.Infof("节点注册成功: node_id=%s", nodeID)
+	slog.Info("节点注册成功", "node_id", nodeID)
 
 	// 阶段 2：Wire 初始化所有依赖
 	app, cleanup, err := wireApp(c, logger, hubConn, nodeID)

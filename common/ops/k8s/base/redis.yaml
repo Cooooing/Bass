@@ -1,0 +1,26 @@
+fullnameOverride: bass-redis
+
+architecture: standalone
+
+auth:
+  enabled: true
+  existingSecret: bass-redis-secret
+  existingSecretPasswordKey: redis-password
+
+master:
+  persistence:
+    enabled: true
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  # ClusterIP锛屼粎闆嗙兢鍐呰闂?
+replica:
+  replicaCount: 0
+
+sentinel:
+  enabled: false

@@ -5,24 +5,25 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
+	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
 	"errors"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
+	"log/slog"
 )
 
 type TokenCache struct {
-	log         *log.Helper
+	log         *util.LogHelper
 	redisClient *client.RedisClient
 }
 
-func NewTokenCache(logger log.Logger, redisClient *client.RedisClient) *TokenCache {
+func NewTokenCache(logger *slog.Logger, redisClient *client.RedisClient) *TokenCache {
 	return &TokenCache{
-		log:         log.NewHelper(logger),
+		log:         util.NewLogHelper(logger),
 		redisClient: redisClient,
 	}
 }

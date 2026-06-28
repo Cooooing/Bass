@@ -2,35 +2,30 @@ package server
 
 import (
 	"common/pkg/server"
+	"common/pkg/util"
 	"fmt"
 	"net/http"
 
+	"github.com/go-kratos/kratos/v3/middleware/logging"
+	"github.com/go-kratos/kratos/v3/middleware/recovery"
+	transporthttp "github.com/go-kratos/kratos/v3/transport/http"
+	"log/slog"
 	"push_node/internal/biz/usecase"
 	"push_node/internal/conf"
-
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/logging"
-	"github.com/go-kratos/kratos/v2/middleware/metrics"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	transporthttp "github.com/go-kratos/kratos/v2/transport/http"
 )
 
 // NewHTTPServer 创建 HTTP 服务，注册 SSE 和健康检查端点。
 func NewHTTPServer(
 	c *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 	services []server.HttpService,
 	sseUc *usecase.SSEUsecase,
 ) *transporthttp.Server {
 	var opts = []transporthttp.ServerOption{
 		transporthttp.Middleware(
+			server.MetricsMiddleware(c.Server.Name),
+			server.TracingMiddleware(c.Server.Name),
 			recovery.Recovery(),
-			tracing.Server(),
-			metrics.Server(
-				metrics.WithSeconds(_metricSeconds),
-				metrics.WithRequests(_metricRequests),
-			),
 			logging.Server(logger),
 		),
 		transporthttp.ResponseEncoder(server.HttpResponseEncoder),
@@ -60,8 +55,8 @@ func NewHTTPServer(
 }
 
 // newSSEHandler 创建 SSE 连接的原始 HTTP handler。
-func newSSEHandler(sseUc *usecase.SSEUsecase, logger log.Logger) http.HandlerFunc {
-	helper := log.NewHelper(logger)
+func newSSEHandler(sseUc *usecase.SSEUsecase, logger *slog.Logger) http.HandlerFunc {
+	helper := util.NewLogHelper(logger)
 	return func(w http.ResponseWriter, r *http.Request) {
 		// 获取 query 中的 token
 		token := r.URL.Query().Get("token")

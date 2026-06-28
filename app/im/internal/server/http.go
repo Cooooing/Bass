@@ -1,29 +1,23 @@
 package server
 
 import (
-	"im/internal/conf"
 	"common/pkg/server"
 	"fmt"
-
-	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/logging"
-	"github.com/go-kratos/kratos/v2/middleware/metrics"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
+	"github.com/go-kratos/kratos/v3/middleware/logging"
+	"github.com/go-kratos/kratos/v3/middleware/recovery"
+	"github.com/go-kratos/kratos/v3/transport/http"
+	"im/internal/conf"
+	"log/slog"
 )
 
 // NewHTTPServer 创建 HTTP 服务。
-func NewHTTPServer(c *conf.Bootstrap, logger log.Logger, services []server.HttpService) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, services []server.HttpService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
+			server.MetricsMiddleware(c.Server.Name),
+			server.TracingMiddleware(c.Server.Name),
 			recovery.Recovery(),
-			tracing.Server(),
-			metrics.Server(
-				metrics.WithSeconds(_metricSeconds),
-				metrics.WithRequests(_metricRequests),
-			),
 			logging.Server(logger),
 			validate.ProtoValidate(),
 		),

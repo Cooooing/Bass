@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bass-test
+  labels:
+    env: test
+    app.kubernetes.io/part-of: bass

@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/hibiken/asynq"
 	"github.com/samber/lo"
+	"log/slog"
 )
 
 type Handler interface {
@@ -21,13 +21,13 @@ type Handler interface {
 }
 
 type AsynqClient struct {
-	log    *log.Helper
+	log    *util.LogHelper
 	Client *asynq.Client
 }
 
-func NewAsynqClient(logger log.Logger, redisClient *RedisClient) (*AsynqClient, func()) {
+func NewAsynqClient(logger *slog.Logger, redisClient *RedisClient) (*AsynqClient, func()) {
 	c := &AsynqClient{
-		log:    log.NewHelper(logger),
+		log:    util.NewLogHelper(logger),
 		Client: asynq.NewClientFromRedisClient(redisClient.Client),
 	}
 	cleanup := func() {
@@ -40,13 +40,13 @@ func NewAsynqClient(logger log.Logger, redisClient *RedisClient) (*AsynqClient, 
 }
 
 type AsynqServer struct {
-	log    *log.Helper
+	log    *util.LogHelper
 	mux    *asynq.ServeMux
 	Server *asynq.Server
 }
 
-func NewAsynqServer(logger log.Logger, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
-	l := log.NewHelper(logger)
+func NewAsynqServer(logger *slog.Logger, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
+	l := util.NewLogHelper(logger)
 	mux := asynq.NewServeMux()
 	for _, t := range lo.Values(tasks) {
 		l.Infof("register task: %s", t.Name().String())
@@ -77,12 +77,12 @@ func (s *AsynqServer) Run() {
 }
 
 type AsynqScheduler struct {
-	log       *log.Helper
+	log       *util.LogHelper
 	Scheduler *asynq.Scheduler
 }
 
-func NewAsynqScheduler(logger log.Logger, redisClient *RedisClient) (*AsynqScheduler, func()) {
-	l := log.NewHelper(logger)
+func NewAsynqScheduler(logger *slog.Logger, redisClient *RedisClient) (*AsynqScheduler, func()) {
+	l := util.NewLogHelper(logger)
 	scheduler := asynq.NewSchedulerFromRedisClient(redisClient.Client, &asynq.SchedulerOpts{
 		Logger:   l,
 		LogLevel: asynq.InfoLevel,
@@ -102,11 +102,11 @@ func (s *AsynqScheduler) Run() {
 }
 
 type GlobalErrHandler struct {
-	Log   *log.Helper
+	Log   *util.LogHelper
 	tasks map[constant.TaskName]Handler
 }
 
-func NewGlobalErrHandler(log *log.Helper, tasks map[constant.TaskName]Handler) *GlobalErrHandler {
+func NewGlobalErrHandler(log *util.LogHelper, tasks map[constant.TaskName]Handler) *GlobalErrHandler {
 	return &GlobalErrHandler{
 		Log:   log,
 		tasks: tasks,

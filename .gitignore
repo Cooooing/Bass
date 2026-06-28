@@ -1,41 +1,38 @@
-# 参考 https://github.com/github/gitignore/blob/master/Go.gitignore
-# 程序和插件二进制文件
+﻿# Go binaries and test artifacts
 *.exe
 *.exe~
 *.dll
 *.dylib
-
-# `go test -c` 构建出的测试二进制文件
 *.test
-
-# Go 覆盖率工具输出，尤其是 LiteIDE 使用时生成的文件
 *.out
 
-# 依赖目录
+# Dependencies
 vendor/
 
-# 编译产物、静态库、动态库
+# Build artifacts
 *.o
 *.a
 *.so
+bin/
 
-# 操作系统通用文件
+# OS files
 Thumbs.db
 .DS_Store
 
-# 项目文件
+# Project local files
 *.cert
 *.key
 *.log
 **/logs/
-bin/
 
-# 开发工具
+# IDE files
 .vscode/
 .idea/
+*.iml
 *.swp
 
-# Proto 文档和 SDK 生成产物
+# Proto docs and SDK generated artifacts
+/common/proto/gen/
 /common/proto/gen-openapi/
 /common/proto/gen-openapi-codex/
 /common/proto/gen-sdk/
@@ -43,7 +40,7 @@ bin/
 /common/proto/sdk/.openapi-generator/
 /common/proto/sdk/.openapi-generator-cli/
 
-# 模块生成产物
+# Module generated artifacts
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/gen/
@@ -51,10 +48,13 @@ bin/
 !/app/**/server/
 /app/**/test/
 
+# Local environment and scratch files
+/common/ops/docker/.env
+/common/ops/tools/
+/deploy/
+temp.md
 
-/deploy/.prod.env
-
-# AI 工具
+# AI tools
 .claude/
 .gitnexus
 .agents

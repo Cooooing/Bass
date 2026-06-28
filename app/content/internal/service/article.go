@@ -13,7 +13,7 @@ import (
 
 	v1 "common/proto/gen/content/v1"
 
-	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

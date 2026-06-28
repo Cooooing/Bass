@@ -12,13 +12,13 @@ import (
 	"push_hub/internal/server"
 	"push_hub/internal/service"
 
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v3"
 	"github.com/google/wire"
+	"log/slog"
 )
 
 // wireApp 初始化 Kratos 应用。
-func wireApp(*conf.Bootstrap, log.Logger) (*kratos.App, func(), error) {
+func wireApp(*conf.Bootstrap, *slog.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		server.ServerProviderSet,
 		data.DataProviderSet,

@@ -2,27 +2,28 @@ package usecase
 
 import (
 	commonModel "common/pkg/model"
+	"common/pkg/util"
 	"context"
 	"fmt"
 	"strings"
 
 	"platform/internal/conf"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/lionsoul2014/ip2region/binding/golang/service"
+	"log/slog"
 )
 
 // IpResolutionUsecase IP 解析用例，封装 ip2region 库。
 type IpResolutionUsecase struct {
 	conf      *conf.Bootstrap
-	log       *log.Helper
+	log       *util.LogHelper
 	ip2region *service.Ip2Region
 }
 
 // NewIpResolutionUsecase 创建 IP 解析用例，返回用例实例和清理函数。
 func NewIpResolutionUsecase(
 	conf *conf.Bootstrap,
-	logger log.Logger,
+	logger *slog.Logger,
 ) (*IpResolutionUsecase, func(), error) {
 	var ip2region *service.Ip2Region
 	var cleanup func()
@@ -45,7 +46,7 @@ func NewIpResolutionUsecase(
 	}
 	return &IpResolutionUsecase{
 		conf:      conf,
-		log:       log.NewHelper(logger),
+		log:       util.NewLogHelper(logger),
 		ip2region: ip2region,
 	}, cleanup, nil
 }

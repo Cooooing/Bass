@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
@@ -12,12 +13,12 @@ import (
 	"content/internal/biz/repo"
 	"content/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/samber/lo"
+	"log/slog"
 )
 
 type CommentUsecase struct {
-	log *log.Helper
+	log *util.LogHelper
 	tx  base.Tx
 
 	commentRepo             repo.CommentRepo
@@ -28,7 +29,7 @@ type CommentUsecase struct {
 }
 
 func NewCommentUsecase(
-	logger log.Logger,
+	logger *slog.Logger,
 	tx base.Tx,
 	commentRepo repo.CommentRepo,
 	commentActionRecordRepo repo.CommentActionRecordRepo,
@@ -37,7 +38,7 @@ func NewCommentUsecase(
 	moderationRecordRepo repo.ContentModerationRecordRepo,
 ) *CommentUsecase {
 	return &CommentUsecase{
-		log:                     log.NewHelper(logger),
+		log:                     util.NewLogHelper(logger),
 		tx:                      tx,
 		commentRepo:             commentRepo,
 		commentActionRecordRepo: commentActionRecordRepo,

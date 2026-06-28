@@ -8,8 +8,8 @@ import (
 	"user/internal/biz/usecase"
 	"user/internal/enum"
 
-	"github.com/go-kratos/kratos/v2/transport/grpc"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

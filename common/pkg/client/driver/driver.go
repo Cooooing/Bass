@@ -12,10 +12,11 @@ import (
 	"sync"
 	"time"
 
+	"log/slog"
+
 	"entgo.io/ent/dialect"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/durationpb"
-	"log/slog"
 )
 
 // ============================================================

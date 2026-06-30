@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="push_node" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <configuration default="false" name="push_node" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
     <module name="push_node" />
     <working_directory value="$PROJECT_DIR$/app/push_node" />
     <EXTENSION ID="net.ashald.envfile">

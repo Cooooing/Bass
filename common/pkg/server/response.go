@@ -14,6 +14,6 @@ func NewResult[T any](code int, message string, data T) *Result[T] {
 		Code:    code,
 		Message: message,
 		Data:    data,
-		Time:    new(time.Now().UTC()),
+		Time:    new(time.Now().Local()),
 	}
 }

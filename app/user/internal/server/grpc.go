@@ -3,15 +3,16 @@ package server
 import (
 	"common/pkg/server"
 	"fmt"
+	"log/slog"
+	"time"
+	"user/internal/conf"
+
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/logging"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	ggrpc "google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
-	"log/slog"
-	"time"
-	"user/internal/conf"
 )
 
 // NewGRPCServer 创建 gRPC 服务。

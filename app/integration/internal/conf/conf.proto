@@ -9,13 +9,21 @@ option go_package = "integration/internal/conf/conf;conf";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  Trace trace = 3;
+  common.api.app.common.Trace trace = 3;
+  common.api.app.common.Observability observability = 4;
 }
 
 message Server {
   string name = 1;
   string version = 2;
   string mode = 3;
+  HTTP http = 5;
+  message HTTP {
+    string network = 1;
+    string host = 2;
+    int32 port = 3;
+    google.protobuf.Duration timeout = 4;
+  }
   GRPC grpc = 6;
   message GRPC {
     string network = 1;
@@ -24,14 +32,6 @@ message Server {
     google.protobuf.Duration timeout = 4;
   }
 }
-
 message Data {
   common.api.app.common.Consul consul = 1;
-}
-
-message Trace {
-  bool enable_otel = 1;
-  string endpoint = 2;
-  bool insecure = 3;
-  double sampler = 4;
 }

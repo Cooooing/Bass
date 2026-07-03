@@ -10,7 +10,6 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -21,10 +20,6 @@ type RelationService struct {
 
 func NewRelationService(relationUsecase *usecase.RelationUsecase) *RelationService {
 	return &RelationService{relationUsecase: relationUsecase}
-}
-
-func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
-	bbsuserv1.RegisterRelationServiceServer(gs, s)
 }
 
 func (s *RelationService) RegisterHttp(hs *http.Server) {

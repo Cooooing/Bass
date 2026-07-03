@@ -5,7 +5,6 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,10 +15,6 @@ type PreferencesService struct {
 
 func NewPreferencesService(preferencesUsecase *usecase.PreferencesUsecase) *PreferencesService {
 	return &PreferencesService{preferencesUsecase: preferencesUsecase}
-}
-
-func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
-	bbsuserv1.RegisterPreferencesServiceServer(gs, s)
 }
 
 func (s *PreferencesService) RegisterHttp(hs *http.Server) {

@@ -14,6 +14,7 @@ import (
 var DataProviderSet = wire.NewSet(
 	ProvideConsul,
 	ProvideRedis,
+	commonClient.NewObservability,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	rpc.ProvideUserClient,

@@ -1,29 +1,21 @@
 //go:build wireinject
 // +build wireinject
 
-// 构建标签确保该注入桩不会进入最终构建。
-
 package main
 
 import (
+	"common/proto/gen/common"
 	"im/internal/biz"
 	"im/internal/conf"
 	"im/internal/data"
 	"im/internal/server"
 	"im/internal/service"
+	"log/slog"
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/google/wire"
-	"log/slog"
 )
 
-// wireApp 初始化 Kratos 应用。
-func wireApp(*conf.Bootstrap, *slog.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(
-		server.ServerProviderSet,
-		data.DataProviderSet,
-		biz.BizProviderSet,
-		service.ServiceProviderSet,
-		newApp,
-	))
+func wireApp(*conf.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
+	panic(wire.Build(server.ServerProviderSet, service.ServiceProviderSet, biz.BizProviderSet, data.DataProviderSet, newApp))
 }

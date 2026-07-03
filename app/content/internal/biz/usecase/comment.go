@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
@@ -18,7 +17,7 @@ import (
 )
 
 type CommentUsecase struct {
-	log *util.LogHelper
+	log *slog.Logger
 	tx  base.Tx
 
 	commentRepo             repo.CommentRepo
@@ -38,7 +37,7 @@ func NewCommentUsecase(
 	moderationRecordRepo repo.ContentModerationRecordRepo,
 ) *CommentUsecase {
 	return &CommentUsecase{
-		log:                     util.NewLogHelper(logger),
+		log:                     logger,
 		tx:                      tx,
 		commentRepo:             commentRepo,
 		commentActionRecordRepo: commentActionRecordRepo,

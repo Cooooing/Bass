@@ -49,7 +49,7 @@ func (r *AccountRepo) Create(ctx context.Context, u *model.Account) (*model.Acco
 		SetNillableEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
-		SetAvatarURL(fmt.Sprintf(r.conf.Server.Avatar, u.Name)).
+		SetAvatarURL(fmt.Sprintf(r.conf.Business.Avatar, u.Name)).
 		Save(ctx)
 	if err != nil {
 		return nil, err

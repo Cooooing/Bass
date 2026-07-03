@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"common/pkg/util"
+	"common/pkg/constant"
 	"context"
 	"time"
 
@@ -17,7 +17,7 @@ import (
 const outboxDeadLetterScanLimit = 100
 
 type OutboxDeadLetterScanner struct {
-	log         *util.LogHelper
+	logger      *slog.Logger
 	conf        *conf.Bootstrap
 	outboxRepo  repo.OutboxEventRepo
 	alertClient *commonClient.DeadLetterAlertClient
@@ -31,7 +31,7 @@ func NewOutboxDeadLetterScanner(
 	alertClient *commonClient.DeadLetterAlertClient,
 ) *OutboxDeadLetterScanner {
 	return &OutboxDeadLetterScanner{
-		log:         util.NewLogHelper(logger),
+		logger:      logger,
 		conf:        conf,
 		outboxRepo:  outboxRepo,
 		alertClient: alertClient,
@@ -44,7 +44,7 @@ func (s *OutboxDeadLetterScanner) Start(ctx context.Context) error {
 	go func() {
 		for {
 			if err := s.scan(runCtx); err != nil {
-				s.log.Errorf("scan outbox dead letters failed: %v", err)
+				s.logger.ErrorContext(runCtx, "scan outbox dead letters failed", constant.LogFieldErr, err)
 			}
 			select {
 			case <-runCtx.Done():
@@ -84,7 +84,7 @@ func (s *OutboxDeadLetterScanner) scan(ctx context.Context) error {
 			LastError: lastError,
 			UpdatedAt: row.UpdatedAt,
 		}); err != nil {
-			s.log.Warnf("alert outbox dead letter failed: event_id=%s err=%v", row.EventID, err)
+			s.logger.WarnContext(ctx, "alert outbox dead letter failed", constant.LogFieldEventID, row.EventID, constant.LogFieldErr, err)
 		}
 	}
 	return nil

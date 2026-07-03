@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"common/pkg/util"
 	"context"
 	"fmt"
 	"time"
@@ -14,10 +13,9 @@ import (
 	"log/slog"
 )
 
-// NodeUsecase 推送节点生命周期管理业务逻辑。
 type NodeUsecase struct {
 	conf       *conf.Bootstrap
-	log        *util.LogHelper
+	log        *slog.Logger
 	registry   repo.ConnectionRegistry
 	nodeID     string
 	hubClient  pushhubv1.PushHubNodeServiceClient
@@ -25,17 +23,10 @@ type NodeUsecase struct {
 	cancelLoop context.CancelFunc
 }
 
-// NewNodeUsecase 创建 NodeUsecase 实例。
-func NewNodeUsecase(
-	conf *conf.Bootstrap,
-	logger *slog.Logger,
-	registry repo.ConnectionRegistry,
-	nodeID string,
-	hubConn *grpc.ClientConn,
-) *NodeUsecase {
+func NewNodeUsecase(conf *conf.Bootstrap, logger *slog.Logger, registry repo.ConnectionRegistry, nodeID string, hubConn *grpc.ClientConn) *NodeUsecase {
 	return &NodeUsecase{
 		conf:      conf,
-		log:       util.NewLogHelper(logger),
+		log:       logger,
 		registry:  registry,
 		nodeID:    nodeID,
 		hubConn:   hubConn,
@@ -43,33 +34,25 @@ func NewNodeUsecase(
 	}
 }
 
-// ConnectHub 启动心跳循环（在应用 AfterStart 时调用）。
 func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
-	uc.log.Infof("开始心跳循环: node=%s", uc.nodeID)
-
+	uc.log.Info(fmt.Sprintf("start heartbeat loop: node_id=%s", uc.nodeID))
 	loopCtx, cancel := context.WithCancel(ctx)
 	uc.cancelLoop = cancel
 	go uc.heartbeatLoop(loopCtx)
-
 	return nil
 }
 
-// Stop 停止心跳循环。
 func (uc *NodeUsecase) Stop() {
 	if uc.cancelLoop != nil {
 		uc.cancelLoop()
 	}
-	uc.log.Infof("节点已停止: %s", uc.nodeID)
+	uc.log.Info(fmt.Sprintf("node stopped: node_id=%s", uc.nodeID))
 }
 
-// heartbeatLoop 定期向 push_hub 发送心跳。
 func (uc *NodeUsecase) heartbeatLoop(ctx context.Context) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
-
-	// 启动时立即发送一次心跳
 	uc.sendHeartbeat(ctx)
-
 	for {
 		select {
 		case <-ctx.Done():
@@ -80,24 +63,21 @@ func (uc *NodeUsecase) heartbeatLoop(ctx context.Context) {
 	}
 }
 
-// sendHeartbeat 向 push_hub 发送当前心跳状态。
 func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
+	connectionCount := uc.registry.GetConnectionCount()
 	_, err := uc.hubClient.Heartbeat(ctx, &pushhubv1.Heartbeat_Request{
 		NodeId:          uc.nodeID,
-		ConnectionCount: uc.registry.GetConnectionCount(),
+		ConnectionCount: connectionCount,
 	})
 	if err != nil {
-		uc.log.Warnf("心跳发送失败: %v", err)
-	} else {
-		uc.log.Debugf("心跳已发送: node=%s connections=%d", uc.nodeID, uc.registry.GetConnectionCount())
+		uc.log.Warn(fmt.Sprintf("send heartbeat failed: err=%v", err))
+		return
 	}
+	uc.log.Debug(fmt.Sprintf("heartbeat sent: node_id=%s connections=%d", uc.nodeID, connectionCount))
 }
 
-// RegisterWithHub 向 push_hub 注册节点，返回节点 ID。
-// 在 Wire 初始化之前调用，用于获取节点标识。
 func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *conf.Bootstrap) (string, error) {
 	client := pushhubv1.NewPushHubNodeServiceClient(conn)
-
 	var nodeID string
 	var lastErr error
 	for i := 0; i < 3; i++ {
@@ -114,7 +94,7 @@ func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *conf.Boot
 		break
 	}
 	if lastErr != nil {
-		return "", fmt.Errorf("注册节点失败（已重试 3 次）: %w", lastErr)
+		return "", fmt.Errorf("register node failed after 3 retries: %w", lastErr)
 	}
 	return nodeID, nil
 }

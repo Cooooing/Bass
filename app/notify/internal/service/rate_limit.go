@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type RateLimitService struct {
@@ -25,6 +26,8 @@ func NewRateLimitService(rateLimitUsecase *usecase.RateLimitUsecase) *RateLimitS
 func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyRateLimitServiceServer(gs, s)
 }
+
+func (s *RateLimitService) RegisterHttp(hs *http.Server) {}
 
 func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Request) (*v1.CheckNotificationRateLimit_Reply, error) {
 	if req == nil {

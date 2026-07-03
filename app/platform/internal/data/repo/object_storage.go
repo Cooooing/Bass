@@ -2,7 +2,6 @@ package repo
 
 import (
 	commonClient "common/pkg/client"
-	"common/pkg/util"
 	"common/proto/gen/common"
 	"context"
 	"platform/internal/biz/model"
@@ -20,7 +19,7 @@ var _ repo.ObjectStorageRepo = (*ObjectStorageRepo)(nil)
 
 type ObjectStorageRepo struct {
 	conf         *conf.Bootstrap
-	log          *util.LogHelper
+	log          *slog.Logger
 	db           *gen.Client
 	consulClient *commonClient.ConsulClient
 	redisClient  *commonClient.RedisClient
@@ -35,7 +34,7 @@ func NewObjectStorageRepo(
 ) repo.ObjectStorageRepo {
 	return &ObjectStorageRepo{
 		conf:         conf,
-		log:          util.NewLogHelper(logger),
+		log:          logger,
 		db:           db,
 		consulClient: consulClient,
 		redisClient:  redisClient,

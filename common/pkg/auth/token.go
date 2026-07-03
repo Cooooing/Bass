@@ -5,7 +5,6 @@ import (
 	"common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/model"
-	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
@@ -17,13 +16,11 @@ import (
 )
 
 type TokenCache struct {
-	log         *util.LogHelper
 	redisClient *client.RedisClient
 }
 
 func NewTokenCache(logger *slog.Logger, redisClient *client.RedisClient) *TokenCache {
 	return &TokenCache{
-		log:         util.NewLogHelper(logger),
 		redisClient: redisClient,
 	}
 }

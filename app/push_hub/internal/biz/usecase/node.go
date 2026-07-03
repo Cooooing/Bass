@@ -1,10 +1,10 @@
 package usecase
 
 import (
-	"common/pkg/util"
-	pushhubv1 "common/proto/gen/push_hub/v1"
 	"context"
 	"fmt"
+
+	pushhubv1 "common/proto/gen/push_hub/v1"
 	"push_hub/internal/biz/repo"
 
 	"github.com/google/uuid"
@@ -12,42 +12,35 @@ import (
 	"log/slog"
 )
 
-// NodeUsecase 节点管理业务逻辑。
 type NodeUsecase struct {
-	log      *util.LogHelper
+	log      *slog.Logger
 	registry repo.NodeRegistry
 }
 
 func NewNodeUsecase(logger *slog.Logger, registry repo.NodeRegistry) *NodeUsecase {
-	return &NodeUsecase{
-		log:      util.NewLogHelper(logger),
-		registry: registry,
-	}
+	return &NodeUsecase{log: logger, registry: registry}
 }
 
-// RegisterNode 注册新的推送节点，生成唯一节点 ID。
 func (uc *NodeUsecase) RegisterNode(ctx context.Context, address string) (string, error) {
 	nodeID := uuid.New().String()
 	if err := uc.registry.RegisterNode(ctx, nodeID, address); err != nil {
-		return "", fmt.Errorf("注册节点: %w", err)
+		return "", fmt.Errorf("register node: %w", err)
 	}
-	uc.log.Infof("节点已注册: %s (%s)", nodeID, address)
+	uc.log.Info(fmt.Sprintf("node registered: node_id=%s address=%s", nodeID, address))
 	return nodeID, nil
 }
 
-// Heartbeat 更新节点心跳和当前连接数。
 func (uc *NodeUsecase) Heartbeat(ctx context.Context, nodeID string, connectionCount int64) error {
 	if err := uc.registry.UpdateHeartbeat(ctx, nodeID, connectionCount); err != nil {
-		return fmt.Errorf("更新心跳: %w", err)
+		return fmt.Errorf("update heartbeat: %w", err)
 	}
 	return nil
 }
 
-// ListNodes 列出所有节点信息。
 func (uc *NodeUsecase) ListNodes(ctx context.Context) ([]*pushhubv1.NodeInfo, error) {
 	nodes, err := uc.registry.ListNodes(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("列出节点: %w", err)
+		return nil, fmt.Errorf("list nodes: %w", err)
 	}
 
 	result := make([]*pushhubv1.NodeInfo, 0, len(nodes))

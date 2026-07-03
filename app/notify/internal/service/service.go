@@ -12,6 +12,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewStationMessageService,
 	NewRateLimitService,
 	ProvideServices,
+	ProvideHttpServices,
 )
 
 func ProvideServices(
@@ -20,6 +21,18 @@ func ProvideServices(
 	rateLimitService *RateLimitService,
 ) []server.GrpcService {
 	return []server.GrpcService{
+		systemService,
+		stationMessageService,
+		rateLimitService,
+	}
+}
+
+func ProvideHttpServices(
+	systemService *SystemService,
+	stationMessageService *StationMessageService,
+	rateLimitService *RateLimitService,
+) []server.HttpService {
+	return []server.HttpService{
 		systemService,
 		stationMessageService,
 		rateLimitService,

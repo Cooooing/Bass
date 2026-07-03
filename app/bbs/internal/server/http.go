@@ -2,6 +2,8 @@ package server
 
 import (
 	"bbs/internal/conf"
+	commonClient "common/pkg/client"
+	"common/pkg/constant"
 	"common/pkg/server"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
@@ -13,7 +15,6 @@ import (
 	stdhttp "net/http"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
-	"github.com/go-kratos/kratos/v3/middleware/logging"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/middleware/selector"
 	kratoshttp "github.com/go-kratos/kratos/v3/transport/http"
@@ -29,8 +30,7 @@ var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
 	bbsuserv1.OperationAccountServiceAvatar:               {},
 }
 
-// NewHTTPServer 创建 HTTP 服务。
-func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, services []server.HttpService, authClient userv1.AuthServiceClient) *kratoshttp.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService, authClient userv1.AuthServiceClient) *kratoshttp.Server {
 	authRequiredMatch := func(_ context.Context, operation string) bool {
 		_, ok := bbsHTTPAuthOperationWhitelist[operation]
 		return !ok
@@ -38,11 +38,10 @@ func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, services []server.Htt
 
 	var opts = []kratoshttp.ServerOption{
 		kratoshttp.Middleware(
-			server.MetricsMiddleware(c.Server.Name),
-			server.TracingMiddleware(c.Server.Name),
-			recovery.Recovery(),
-			logging.Server(logger),
+			server.RequestLogContextMiddleware(),
 			selector.Server(server.UserAuthMiddleware(authClient)).Match(authRequiredMatch).Build(),
+			obs.ServerMiddleware(),
+			recovery.Recovery(),
 			validate.ProtoValidate(),
 		),
 		kratoshttp.ResponseEncoder(server.HttpResponseEncoder),
@@ -50,17 +49,20 @@ func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, services []server.Htt
 			return bbsErrorMessages.Resolve(r, code, data)
 		})),
 	}
-	if c.Server.Http.Network != "" {
-		opts = append(opts, kratoshttp.Network(c.Server.Http.Network))
+	if c.Http.Network != "" {
+		opts = append(opts, kratoshttp.Network(c.Http.Network))
 	}
-	if c.Server.Http.Host != "" && c.Server.Http.Port != 0 {
-		opts = append(opts, kratoshttp.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
+	if c.Http.Host != "" && c.Http.Port != 0 {
+		opts = append(opts, kratoshttp.Address(fmt.Sprintf("%s:%d", c.Http.Host, c.Http.Port)))
 	}
-	if c.Server.Http.Timeout != nil {
-		opts = append(opts, kratoshttp.Timeout(c.Server.Http.Timeout.AsDuration()))
+	if c.Http.Timeout != nil {
+		opts = append(opts, kratoshttp.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := kratoshttp.NewServer(opts...)
-	srv.Handle("/metrics", promhttp.Handler())
+	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {
+		srv.Handle("/metrics", promhttp.Handler())
+		logger.Info("metrics endpoint registered", slog.String(constant.LogFieldPath, "/metrics"))
+	}
 	for _, s := range services {
 		s.RegisterHttp(srv)
 	}

@@ -7,28 +7,29 @@ import (
 	"net/http"
 	bizchannel "notify/internal/biz/channel"
 	"notify/internal/conf"
-	datachannel "notify/internal/data/channel"
+	"notify/internal/data/channel"
 	"notify/internal/data/client"
 	"notify/internal/data/repo"
 
 	"github.com/google/wire"
 )
 
-// DataProviderSet 是 data 层依赖集合。
 var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,
 	ProvideNats,
+	commonClient.NewObservability,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
+	commonClient.NewRedisLock,
 	commonClient.NewNatsClient,
 	commonClient.NewLarkWebhookClient,
 	commonClient.NewDeadLetterAlertClient,
-	NewHTTPClient,
-
+	wire.Value(http.DefaultClient),
+	rpc.ProvideUserClient,
+	rpc.ProvideContentClient,
 	client.ProvideTx,
-
 	repo.NewInboxEventRepo,
 	repo.NewNotificationRuleRepo,
 	repo.NewNotificationStationMessageRepo,
@@ -37,31 +38,15 @@ var DataProviderSet = wire.NewSet(
 	repo.NewNotificationLarkWebhookDeliveryRepo,
 	repo.NewNotificationRateLimitCache,
 	repo.NewUserClient,
+	channel.NewEmailClient,
+	channel.NewTencentSMSClient,
+	channel.NewLarkWebhookClient,
 	repo.NewContentClient,
-
-	datachannel.NewEmailClient,
-	wire.Bind(new(bizchannel.EmailClient), new(*datachannel.EmailClient)),
-	datachannel.NewTencentSMSClient,
-	wire.Bind(new(bizchannel.TencentSMSClient), new(*datachannel.TencentSMSClient)),
-	datachannel.NewLarkWebhookClient,
-	wire.Bind(new(bizchannel.LarkWebhookClient), new(*datachannel.LarkWebhookClient)),
-
-	rpc.ProvideUserClient,
-	rpc.ProvideContentClient,
+	wire.Bind(new(bizchannel.EmailClient), new(*channel.EmailClient)),
+	wire.Bind(new(bizchannel.TencentSMSClient), new(*channel.TencentSMSClient)),
+	wire.Bind(new(bizchannel.LarkWebhookClient), new(*channel.LarkWebhookClient)),
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis {
-	return c.Data.Redis
-}
-
-func ProvideConsul(c *conf.Bootstrap) *common.Consul {
-	return c.Data.Consul
-}
-
-func ProvideNats(c *conf.Bootstrap) *common.Nats {
-	return c.Data.Nats
-}
-
-func NewHTTPClient() *http.Client {
-	return http.DefaultClient
-}
+func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Data.Redis }
+func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Data.Consul }
+func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Data.Nats }

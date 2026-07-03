@@ -12,4 +12,3 @@ config:
 
 log:
   level: ${LOG_LEVEL:debug}
-  file: ${LOG_FILE:}

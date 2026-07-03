@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	v1 "common/proto/gen/notify/v1"
 	"context"
+	"fmt"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
 	"platform/internal/biz/usecase"
@@ -19,7 +20,7 @@ import (
 
 type OssService struct {
 	v1.UnimplementedNotifyOssServiceServer
-	log                  *util.LogHelper
+	log                  *slog.Logger
 	objectStorageUsecase *usecase.ObjectStorageUsecase
 }
 
@@ -28,7 +29,7 @@ func NewOssService(
 	objectStorageUsecase *usecase.ObjectStorageUsecase,
 ) *OssService {
 	return &OssService{
-		log:                  util.NewLogHelper(logger),
+		log:                  logger,
 		objectStorageUsecase: objectStorageUsecase,
 	}
 }
@@ -117,7 +118,7 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 	if err != nil {
 		return nil, err
 	}
-	s.log.Infof("qiniu upload callback: %s", string(bytes))
+	s.log.Info(fmt.Sprintf("qiniu upload callback: %s", string(bytes)))
 
 	err = s.objectStorageUsecase.QiniuUploadCallback(ctx, &model.ObjectStorage{
 		Provider:     constant.Qiniu.String(),
@@ -140,7 +141,7 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 	if err != nil {
 		return nil, err
 	}
-	s.log.Infof("qiniu increment audit callback: %s", string(bytes))
+	s.log.Info(fmt.Sprintf("qiniu increment audit callback: %s", string(bytes)))
 
 	suggestion := req.Items[0].Result.Result.Suggestion
 	if suggestion == "block" {

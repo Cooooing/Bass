@@ -11,11 +11,13 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	kratoslog "github.com/go-kratos/kratos/v3/log"
 	"github.com/go-kratos/kratos/v3/middleware"
 	"github.com/go-kratos/kratos/v3/transport"
 	"google.golang.org/grpc/metadata"
@@ -133,8 +135,24 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 		}
 	}
 }
+func RequestLogContextMiddleware() middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			attrs := make([]slog.Attr, 0, 2)
+			if requestID := GetHeader(ctx, constant.HeaderRequestID); requestID != "" {
+				attrs = append(attrs, slog.String(constant.LogFieldRequestID, requestID))
+			}
+			if clientIP := ClientIP(ctx); clientIP != "" {
+				attrs = append(attrs, slog.String(constant.LogFieldClientIP, clientIP))
+			}
+			if len(attrs) > 0 {
+				ctx = kratoslog.ContextWithAttrs(ctx, attrs...)
+			}
+			return handler(ctx, req)
+		}
+	}
+}
 
-// UserAuthMiddleware 通过 user 服务强制解析登录令牌。
 func UserAuthMiddleware(authClient userv1.AuthServiceClient) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
@@ -167,6 +185,7 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient) middleware.Middlewa
 
 			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
 			ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
+			ctx = kratoslog.ContextWithAttrs(ctx, slog.Int64(constant.LogFieldUserID, userInfo.ID))
 
 			return handler(ctx, req)
 		}

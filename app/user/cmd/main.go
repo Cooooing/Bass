@@ -2,7 +2,7 @@ package main
 
 import (
 	commonClient "common/pkg/client"
-	"common/pkg/util"
+	commonserver "common/pkg/server"
 	"context"
 	"flag"
 	"fmt"
@@ -11,7 +11,9 @@ import (
 	"user/internal/conf"
 
 	"github.com/go-kratos/kratos/v3"
+	ktransport "github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"log/slog"
 )
 
@@ -32,10 +34,12 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger *slog.Logger, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(c *conf.Bootstrap, logger *slog.Logger, hs *http.Server, gs *grpc.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
+
+	servers := []ktransport.Server{hs, gs, outboxPublisher, outboxDeadLetterScanner}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -43,7 +47,7 @@ func newApp(logger *slog.Logger, gs *grpc.Server, outboxPublisher *usecase.Outbo
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(gs, outboxPublisher, outboxDeadLetterScanner),
+		kratos.Server(servers...),
 		kratos.Registrar(cc.Registrar()),
 	)
 }
@@ -60,15 +64,7 @@ func main() {
 	Version = c.Server.Version
 
 	ctx := context.Background()
-	shutdownTracing, err := util.SetupTracing(
-		ctx,
-		Name,
-		Version,
-		c.Trace.Endpoint,
-		c.Trace.EnableOtel,
-		c.Trace.Insecure,
-		c.Trace.Sampler,
-	)
+	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
 	if err != nil {
 		panic(err)
 	}
@@ -78,9 +74,8 @@ func main() {
 			panic(err)
 		}
 	}()
-	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	slog.SetDefault(logger)
-	app, cleanup, err := wireApp(c, logger)
+	logger := commonserver.NewLogger(c.GetServer(), bc.GetLog())
+	app, cleanup, err := wireApp(c, c.GetServer(), logger)
 	if err != nil {
 		panic(err)
 	}

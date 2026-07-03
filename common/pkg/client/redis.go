@@ -1,7 +1,7 @@
 package client
 
 import (
-	"common/pkg/util"
+	"common/pkg/constant"
 	"common/proto/gen/common"
 	"context"
 	"fmt"
@@ -12,17 +12,12 @@ import (
 	"log/slog"
 )
 
-// RedisClient 封装 Redis 客户端
 type RedisClient struct {
-	log    *util.LogHelper
+	logger *slog.Logger
 	Client *redis.Client
 }
 
-// NewRedisClient 初始化 Redis 客户端
 func NewRedisClient(logger *slog.Logger, conf *common.Redis) (*RedisClient, func(), error) {
-	helper := util.NewLogHelper(logger)
-
-	// 默认值
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)
 	}
@@ -57,11 +52,11 @@ func NewRedisClient(logger *slog.Logger, conf *common.Redis) (*RedisClient, func
 		PoolTimeout:     conf.PoolTimeout.AsDuration(),
 		ConnMaxIdleTime: conf.ConnMaxIdleTime.AsDuration(),
 		ConnMaxLifetime: conf.ConnMaxLifeTime.AsDuration(),
-		MaxRetries:      3,                      // 网络闪断自动重试
-		MinRetryBackoff: 100 * time.Millisecond, // 重试退避下限
-		MaxRetryBackoff: 500 * time.Millisecond, // 重试退避上限
+		MaxRetries:      3,
+		MinRetryBackoff: 100 * time.Millisecond,
+		MaxRetryBackoff: 500 * time.Millisecond,
 		OnConnect: func(ctx context.Context, conn *redis.Conn) error {
-			helper.Infof("redis conn created: %s", conn.String())
+			logger.DebugContext(ctx, "redis connection created", constant.LogFieldKind, constant.LogKindRedis, constant.LogFieldAddress, conn.String())
 			return nil
 		},
 	})
@@ -74,18 +69,18 @@ func NewRedisClient(logger *slog.Logger, conf *common.Redis) (*RedisClient, func
 		return nil, nil, fmt.Errorf("redis ping [%s]: %w", conf.Addr, err)
 	}
 
-	helper.Infof("redis connected: %s (db=%d)", conf.Addr, conf.Db)
+	logger.Info("redis connected", constant.LogFieldKind, constant.LogKindRedis, constant.LogFieldAddress, conf.Addr, constant.LogFieldDB, conf.Db)
 
 	r := &RedisClient{
-		log:    helper,
+		logger: logger,
 		Client: client,
 	}
 
 	return r, func() {
 		if err := client.Close(); err != nil {
-			helper.Errorf("redis close: %s", err)
+			logger.Error("redis close failed", constant.LogFieldKind, constant.LogKindRedis, constant.LogFieldErr, err)
 		} else {
-			helper.Infof("redis closed: %s", conf.Addr)
+			logger.Info("redis closed", constant.LogFieldKind, constant.LogKindRedis, constant.LogFieldAddress, conf.Addr)
 		}
 	}, nil
 }

@@ -8,7 +8,6 @@ import (
 	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type PrivacySettingService struct {
@@ -23,8 +22,6 @@ func NewPrivacySettingService(privacySettingUsecase *usecase.PrivacySettingUseca
 func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPrivacySettingServiceServer(gs, s)
 }
-
-func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {}
 
 func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetting_Request) (*v1.GetPrivacySetting_Reply, error) {
 	privacySetting, err := s.privacySettingUsecase.GetByUserID(ctx, req.GetUserId())

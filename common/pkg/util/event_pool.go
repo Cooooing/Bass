@@ -1,10 +1,11 @@
 package util
 
 import (
+	"common/pkg/constant"
+	"log/slog"
 	"runtime/debug"
 
 	"github.com/panjf2000/ants/v2"
-	"log/slog"
 )
 
 type EventPool struct {
@@ -13,14 +14,12 @@ type EventPool struct {
 }
 
 func NewEventPool(logger *slog.Logger) (*EventPool, func(), error) {
-	l := NewLogHelper(logger)
 	size := 16
 	pool, err := ants.NewPool(
 		size,
 		ants.WithNonblocking(false),
 		ants.WithPanicHandler(func(err interface{}) {
-			// 错误兜底逻辑
-			l.Errorf("[ants] worker panic recovered: %v\n%s", err, debug.Stack())
+			logger.Error("event worker panic recovered", constant.LogFieldKind, constant.LogKindSystem, "panic", err, "stack", string(debug.Stack()))
 		}),
 	)
 	e := &EventPool{

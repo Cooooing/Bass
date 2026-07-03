@@ -34,3 +34,6 @@ trace:
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
   sampler: 1
+
+observability:
+  enable_metrics: true

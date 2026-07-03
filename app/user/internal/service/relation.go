@@ -9,7 +9,6 @@ import (
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -27,8 +26,6 @@ func NewRelationService(relationUsecase *usecase.RelationUsecase) *RelationServi
 func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterRelationServiceServer(gs, s)
 }
-
-func (s *RelationService) RegisterHttp(hs *http.Server) {}
 
 func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Request) (*v1.FollowRelation_Reply, error) {
 	err := s.relationUsecase.Follow(ctx, req.GetActorId(), req.GetTargetId())

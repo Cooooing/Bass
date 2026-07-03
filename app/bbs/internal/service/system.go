@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -19,10 +18,6 @@ func NewSystemService(conf *conf.Bootstrap) *SystemService {
 	return &SystemService{
 		conf: conf,
 	}
-}
-
-func (s *SystemService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterCommonSystemServiceServer(gs, s)
 }
 
 func (s *SystemService) RegisterHttp(hs *http.Server) {

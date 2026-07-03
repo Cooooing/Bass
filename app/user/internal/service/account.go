@@ -12,7 +12,6 @@ import (
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -28,8 +27,6 @@ func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
 func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterAccountServiceServer(gs, s)
 }
-
-func (s *AccountService) RegisterHttp(hs *http.Server) {}
 
 func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Request) (*v1.GetAccount_Reply, error) {
 	req = util.OrDefault(req, &v1.GetAccount_Request{})

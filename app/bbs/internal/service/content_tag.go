@@ -5,7 +5,6 @@ import (
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,10 +15,6 @@ type ContentTagService struct {
 
 func NewContentTagService(contentTagUsecase *usecase.ContentTagUsecase) *ContentTagService {
 	return &ContentTagService{contentTagUsecase: contentTagUsecase}
-}
-
-func (s *ContentTagService) RegisterGrpc(gs *grpc.Server) {
-	bbscontentv1.RegisterTagServiceServer(gs, s)
 }
 
 func (s *ContentTagService) RegisterHttp(hs *http.Server) {

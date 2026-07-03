@@ -5,7 +5,6 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,10 +15,6 @@ type PrivacySettingService struct {
 
 func NewPrivacySettingService(privacySettingUsecase *usecase.PrivacySettingUsecase) *PrivacySettingService {
 	return &PrivacySettingService{privacySettingUsecase: privacySettingUsecase}
-}
-
-func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
-	bbsuserv1.RegisterPrivacySettingServiceServer(gs, s)
 }
 
 func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {

@@ -11,31 +11,21 @@ import (
 	"github.com/google/wire"
 )
 
-// DataProviderSet 是 data 层依赖集合。
 var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	ProvideRedis,
 	ProvideConsul,
 	ProvideNats,
+	commonClient.NewObservability,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
+	commonClient.NewRedisLock,
 	commonClient.NewNatsClient,
-
 	client.ProvideTx,
-
 	repo.NewObjectStorageRepo,
-
 	oss.ProviderSet,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis {
-	return c.Data.Redis
-}
-
-func ProvideConsul(c *conf.Bootstrap) *common.Consul {
-	return c.Data.Consul
-}
-
-func ProvideNats(c *conf.Bootstrap) *common.Nats {
-	return c.Data.Nats
-}
+func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Data.Redis }
+func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Data.Consul }
+func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Data.Nats }

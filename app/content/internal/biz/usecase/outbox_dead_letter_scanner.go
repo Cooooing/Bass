@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"common/pkg/util"
 	"context"
+	"fmt"
 	"time"
 
 	commonClient "common/pkg/client"
@@ -17,7 +17,7 @@ import (
 const outboxDeadLetterScanLimit = 100
 
 type OutboxDeadLetterScanner struct {
-	log         *util.LogHelper
+	log         *slog.Logger
 	conf        *conf.Bootstrap
 	outboxRepo  repo.OutboxEventRepo
 	alertClient *commonClient.DeadLetterAlertClient
@@ -31,7 +31,7 @@ func NewOutboxDeadLetterScanner(
 	alertClient *commonClient.DeadLetterAlertClient,
 ) *OutboxDeadLetterScanner {
 	return &OutboxDeadLetterScanner{
-		log:         util.NewLogHelper(logger),
+		log:         logger,
 		conf:        conf,
 		outboxRepo:  outboxRepo,
 		alertClient: alertClient,
@@ -44,7 +44,7 @@ func (s *OutboxDeadLetterScanner) Start(ctx context.Context) error {
 	go func() {
 		for {
 			if err := s.scan(runCtx); err != nil {
-				s.log.Errorf("scan outbox dead letters failed: %v", err)
+				s.log.Error(fmt.Sprintf("scan outbox dead letters failed: %v", err))
 			}
 			select {
 			case <-runCtx.Done():
@@ -84,7 +84,7 @@ func (s *OutboxDeadLetterScanner) scan(ctx context.Context) error {
 			LastError: lastError,
 			UpdatedAt: row.UpdatedAt,
 		}); err != nil {
-			s.log.Warnf("alert outbox dead letter failed: event_id=%s err=%v", row.EventID, err)
+			s.log.Warn(fmt.Sprintf("alert outbox dead letter failed: event_id=%s err=%v", row.EventID, err))
 		}
 	}
 	return nil

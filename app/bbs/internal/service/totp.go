@@ -5,7 +5,6 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,10 +15,6 @@ type TotpService struct {
 
 func NewTotpService(totpUsecase *usecase.TotpUsecase) *TotpService {
 	return &TotpService{totpUsecase: totpUsecase}
-}
-
-func (s *TotpService) RegisterGrpc(gs *grpc.Server) {
-	bbsuserv1.RegisterTotpServiceServer(gs, s)
 }
 
 func (s *TotpService) RegisterHttp(hs *http.Server) {

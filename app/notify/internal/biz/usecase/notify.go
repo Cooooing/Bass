@@ -3,7 +3,6 @@ package usecase
 import (
 	"bytes"
 	commonenum "common/pkg/enum"
-	"common/pkg/util"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -19,14 +18,12 @@ import (
 	"log/slog"
 )
 
-// NotificationRecipient 表示站内信、邮件和短信的接收者。
 type NotificationRecipient struct {
 	UserID int64
 	Email  string
 	Phone  string
 }
 
-// NotificationContext 是事件语义补齐后的通知输入。
 type NotificationContext struct {
 	EventID      string
 	EventType    commonenum.EventType
@@ -35,9 +32,8 @@ type NotificationContext struct {
 	Recipients   []*NotificationRecipient
 }
 
-// NotifyUsecase 按规则和通道模板生成通知结果。
 type NotifyUsecase struct {
-	log                        *util.LogHelper
+	log                        *slog.Logger
 	userClient                 repo.UserClient
 	notificationRuleRepo       repo.NotificationRuleRepo
 	stationMessageRepo         repo.NotificationStationMessageRepo
@@ -82,7 +78,7 @@ func NewNotifyUsecase(
 		}
 	}
 	return &NotifyUsecase{
-		log:                        util.NewLogHelper(logger),
+		log:                        logger,
 		userClient:                 userClient,
 		notificationRuleRepo:       notificationRuleRepo,
 		stationMessageRepo:         stationMessageRepo,

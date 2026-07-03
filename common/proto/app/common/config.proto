@@ -6,12 +6,13 @@ import "google/protobuf/duration.proto";
 
 option go_package = "common/proto/gen/common;common";
 
+message Server {
+  string name = 1; // 服务名称
+  string version = 2; // 服务版本
+  string mode = 3; // 运行模式: dev, prod
+}
+
 message Bootstrap {
-  message Server {
-    string name = 1; // 服务名称
-    string version = 2; // 服务版本
-    string mode = 3; // 运行模式: dev, prod
-  }
   Server server = 1; // 服务基本信息
   message Config {
     Consul consul = 1; // 用于从 Consul KV 加载配置
@@ -25,9 +26,20 @@ message Bootstrap {
   Config config = 2; // 配置加载来源
   message Log {
     string level = 1; // 日志级别: debug, info, warn, error, fatal, panic
-    string file = 2; // 日志文件路径，为空则输出到 stdout
   }
   Log log = 3; // 日志配置
+}
+
+message Trace {
+  bool enable_otel = 1; // 是否导出链路数据
+  string endpoint = 2; // OTLP gRPC 地址，格式 host:port
+  bool insecure = 3; // 是否使用非 TLS 连接
+  double sampler = 4; // 采样率，范围 0-1
+}
+
+message Observability {
+  bool enable_metrics = 1; // 是否暴露 Prometheus 指标
+  reserved 2, 3;
 }
 
 message HTTP {
@@ -52,6 +64,7 @@ message Database {
   google.protobuf.Duration slow_sql_threshold = 5; // 慢查询阈值
   double sample_rate = 6; // SQL 日志采样率，0-1
 }
+
 message Redis {
   string addr = 1; // 地址，格式 host:port
   string password = 2; // 密码
@@ -65,12 +78,14 @@ message Redis {
   google.protobuf.Duration conn_max_idle_time = 10; // 连接最大空闲时间
   google.protobuf.Duration conn_max_life_time = 11; // 连接最大存活时间
 }
+
 message Consul {
   string address = 1; // 地址，格式 host:port
   string datacenter = 2; // 数据中心
   string token = 3; // ACL Token
   google.protobuf.Duration dial_timeout = 4; // 连接超时
 }
+
 message Nats {
   string host = 1; // 连接主机
   int32 port = 2; // 连接端口

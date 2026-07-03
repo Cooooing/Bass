@@ -7,26 +7,24 @@ import (
 	"os"
 
 	commonClient "common/pkg/client"
-	"common/pkg/util"
+	commonserver "common/pkg/server"
+	"common/proto/gen/common"
 	"push_node/internal/biz/usecase"
 	"push_node/internal/conf"
 
+	"log/slog"
+
 	"github.com/go-kratos/kratos/v3"
+	ktransport "github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log/slog"
 )
 
-// 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
 var (
-	// Name 是编译产物名称。
-	Name = "app"
-	// Version 是编译产物版本。
-	Version = "v1.0.0"
-	// flagConf 是业务配置文件路径参数。
-	flagConf = "configs/config.yaml"
-	// flagBootstrap 是启动配置文件路径参数。
+	Name          = "app"
+	Version       = "v1.0.0"
+	flagConf      = "configs/config.yaml"
 	flagBootstrap = "configs/bootstrap.yaml"
 )
 
@@ -36,6 +34,7 @@ func init() {
 }
 
 func newApp(
+	c *conf.Bootstrap,
 	logger *slog.Logger,
 	hs *http.Server,
 	consulClient *commonClient.ConsulClient,
@@ -45,20 +44,21 @@ func newApp(
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
 
+	servers := []ktransport.Server{hs}
+
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(hs),
+		kratos.Server(servers...),
 		kratos.Registrar(consulClient.Registrar()),
 		kratos.AfterStart(func(ctx context.Context) error {
-			// 应用启动后连接 push_hub 并开始心跳
 			return nodeUc.ConnectHub(ctx)
 		}),
 		kratos.BeforeStop(func(ctx context.Context) error {
-			// 应用停止前断开 push_hub
+			// 鎼存梻鏁ら崑婊勵剾閸撳秵鏌囧鈧?push_hub
 			nodeUc.Stop()
 			return nil
 		}),
@@ -77,15 +77,7 @@ func main() {
 	Version = c.Server.Version
 
 	ctx := context.Background()
-	shutdownTracing, err := util.SetupTracing(
-		ctx,
-		Name,
-		Version,
-		c.Trace.Endpoint,
-		c.Trace.EnableOtel,
-		c.Trace.Insecure,
-		c.Trace.Sampler,
-	)
+	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
 	if err != nil {
 		panic(err)
 	}
@@ -95,25 +87,24 @@ func main() {
 			panic(err)
 		}
 	}()
-	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	slog.SetDefault(logger)
+	commonServer := &common.Server{Name: c.Server.Name, Version: c.Server.Version, Mode: c.Server.Mode}
+	logger := commonserver.NewLogger(commonServer, bc.GetLog())
 
-	// 阶段 1：注册到 push_hub 获取节点 ID
+	// 闂冭埖顔?1閿涙碍鏁為崘灞藉煂 push_hub 閼惧嘲褰囬懞鍌滃仯 ID
 	hubConn, err := grpc.NewClient(c.Server.PushHubAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		panic(fmt.Sprintf("连接 push_hub 失败: %v", err))
+		panic(fmt.Sprintf("鏉╃偞甯?push_hub 婢惰精瑙? %v", err))
 	}
 	nodeID, err := usecase.RegisterWithHub(ctx, hubConn, c)
 	if err != nil {
 		_ = hubConn.Close()
-		panic(fmt.Sprintf("注册节点失败: %v", err))
+		panic(fmt.Sprintf("濞夈劌鍞介懞鍌滃仯婢惰精瑙? %v", err))
 	}
-	slog.Info("节点注册成功", "node_id", nodeID)
+	slog.Info("node registered", "node_id", nodeID)
 
-	// 阶段 2：Wire 初始化所有依赖
-	app, cleanup, err := wireApp(c, logger, hubConn, nodeID)
+	app, cleanup, err := wireApp(c, commonServer, logger, hubConn, nodeID)
 	if err != nil {
 		_ = hubConn.Close()
 		panic(err)
@@ -123,7 +114,6 @@ func main() {
 		_ = hubConn.Close()
 	}()
 
-	// 启动应用并等待停止信号。
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

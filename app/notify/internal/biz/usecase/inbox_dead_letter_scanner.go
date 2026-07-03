@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"common/pkg/util"
 	"context"
+	"fmt"
 	"time"
 
 	commonClient "common/pkg/client"
@@ -17,7 +17,7 @@ import (
 const inboxDeadLetterScanLimit = 100
 
 type InboxDeadLetterScanner struct {
-	log         *util.LogHelper
+	log         *slog.Logger
 	conf        *conf.Bootstrap
 	inboxRepo   repo.InboxEventRepo
 	alertClient *commonClient.DeadLetterAlertClient
@@ -31,7 +31,7 @@ func NewInboxDeadLetterScanner(
 	alertClient *commonClient.DeadLetterAlertClient,
 ) *InboxDeadLetterScanner {
 	return &InboxDeadLetterScanner{
-		log:         util.NewLogHelper(logger),
+		log:         logger,
 		conf:        conf,
 		inboxRepo:   inboxRepo,
 		alertClient: alertClient,
@@ -44,7 +44,7 @@ func (s *InboxDeadLetterScanner) Start(ctx context.Context) error {
 	go func() {
 		for {
 			if err := s.scan(runCtx); err != nil {
-				s.log.Errorf("scan inbox dead letters failed: %v", err)
+				s.log.Error(fmt.Sprintf("scan inbox dead letters failed: %v", err))
 			}
 			select {
 			case <-runCtx.Done():
@@ -84,7 +84,7 @@ func (s *InboxDeadLetterScanner) scan(ctx context.Context) error {
 			LastError: lastError,
 			UpdatedAt: row.UpdatedAt,
 		}); err != nil {
-			s.log.Warnf("alert inbox dead letter failed: event_id=%s err=%v", row.EventID, err)
+			s.log.Warn(fmt.Sprintf("alert inbox dead letter failed: event_id=%s err=%v", row.EventID, err))
 		}
 	}
 	return nil

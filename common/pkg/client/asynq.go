@@ -6,12 +6,14 @@ import (
 	"common/pkg/util"
 	"context"
 	"encoding/json"
+	"fmt"
+	"log/slog"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/hibiken/asynq"
 	"github.com/samber/lo"
-	"log/slog"
 )
 
 type Handler interface {
@@ -21,49 +23,48 @@ type Handler interface {
 }
 
 type AsynqClient struct {
-	log    *util.LogHelper
+	logger *slog.Logger
 	Client *asynq.Client
 }
 
 func NewAsynqClient(logger *slog.Logger, redisClient *RedisClient) (*AsynqClient, func()) {
 	c := &AsynqClient{
-		log:    util.NewLogHelper(logger),
+		logger: logger,
 		Client: asynq.NewClientFromRedisClient(redisClient.Client),
 	}
 	cleanup := func() {
-		err := c.Client.Close()
-		if err != nil {
-			c.log.Error(err)
+		if err := c.Client.Close(); err != nil {
+			c.logger.Error("asynq client close failed", constant.LogFieldKind, constant.LogKindAsynq, constant.LogFieldErr, err)
 		}
 	}
 	return c, cleanup
 }
 
 type AsynqServer struct {
-	log    *util.LogHelper
+	logger *slog.Logger
 	mux    *asynq.ServeMux
 	Server *asynq.Server
 }
 
 func NewAsynqServer(logger *slog.Logger, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
-	l := util.NewLogHelper(logger)
 	mux := asynq.NewServeMux()
 	for _, t := range lo.Values(tasks) {
-		l.Infof("register task: %s", t.Name().String())
+		logger.Info("register task", constant.LogFieldKind, constant.LogKindAsynq, "task", t.Name().String())
 		mux.HandleFunc(t.Name().String(), t.Handler())
 	}
 
+	adapter := &asynqSlogLogger{logger: logger}
 	server := asynq.NewServerFromRedisClient(redisClient.Client, asynq.Config{
 		Concurrency:              10,
 		TaskCheckInterval:        2 * time.Second,
 		DelayedTaskCheckInterval: 2 * time.Second,
 		ShutdownTimeout:          30 * time.Second,
-		Logger:                   l,
+		Logger:                   adapter,
 		LogLevel:                 asynq.InfoLevel,
-		ErrorHandler:             NewGlobalErrHandler(l, tasks),
+		ErrorHandler:             NewGlobalErrHandler(logger, tasks),
 	})
 	s := &AsynqServer{
-		log:    l,
+		logger: logger,
 		mux:    mux,
 		Server: server,
 	}
@@ -72,24 +73,24 @@ func NewAsynqServer(logger *slog.Logger, redisClient *RedisClient, tasks map[con
 
 func (s *AsynqServer) Run() {
 	if err := s.Server.Run(s.mux); err != nil {
-		s.log.Fatal(err)
+		s.logger.Error("asynq server run failed", constant.LogFieldKind, constant.LogKindAsynq, constant.LogFieldErr, err)
+		os.Exit(1)
 	}
 }
 
 type AsynqScheduler struct {
-	log       *util.LogHelper
+	logger    *slog.Logger
 	Scheduler *asynq.Scheduler
 }
 
 func NewAsynqScheduler(logger *slog.Logger, redisClient *RedisClient) (*AsynqScheduler, func()) {
-	l := util.NewLogHelper(logger)
 	scheduler := asynq.NewSchedulerFromRedisClient(redisClient.Client, &asynq.SchedulerOpts{
-		Logger:   l,
+		Logger:   &asynqSlogLogger{logger: logger},
 		LogLevel: asynq.InfoLevel,
 		Location: time.Local,
 	})
 	s := &AsynqScheduler{
-		log:       l,
+		logger:    logger,
 		Scheduler: scheduler,
 	}
 	return s, s.Scheduler.Shutdown
@@ -97,25 +98,25 @@ func NewAsynqScheduler(logger *slog.Logger, redisClient *RedisClient) (*AsynqSch
 
 func (s *AsynqScheduler) Run() {
 	if err := s.Scheduler.Run(); err != nil {
-		s.log.Fatal(err)
+		s.logger.Error("asynq scheduler run failed", constant.LogFieldKind, constant.LogKindAsynq, constant.LogFieldErr, err)
+		os.Exit(1)
 	}
 }
 
 type GlobalErrHandler struct {
-	Log   *util.LogHelper
-	tasks map[constant.TaskName]Handler
+	logger *slog.Logger
+	tasks  map[constant.TaskName]Handler
 }
 
-func NewGlobalErrHandler(log *util.LogHelper, tasks map[constant.TaskName]Handler) *GlobalErrHandler {
+func NewGlobalErrHandler(logger *slog.Logger, tasks map[constant.TaskName]Handler) *GlobalErrHandler {
 	return &GlobalErrHandler{
-		Log:   log,
-		tasks: tasks,
+		logger: logger,
+		tasks:  tasks,
 	}
 }
 
 func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, err error) {
-	h.Log.Errorf("task %s err: %s data: %s", task.Type(), err, string(task.Payload()))
-	// 寻找匹配的 handler
+	h.logger.ErrorContext(ctx, "task failed", constant.LogFieldKind, constant.LogKindAsynq, "task", task.Type(), "payload", string(task.Payload()), constant.LogFieldErr, err)
 	for _, taskName := range lo.Keys(h.tasks) {
 		if strings.HasPrefix(task.Type(), string(taskName)) {
 			if t, ok := h.tasks[taskName]; ok {
@@ -124,6 +125,19 @@ func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, er
 			}
 		}
 	}
+}
+
+type asynqSlogLogger struct {
+	logger *slog.Logger
+}
+
+func (l *asynqSlogLogger) Debug(args ...interface{}) { l.logger.Debug(fmt.Sprint(args...)) }
+func (l *asynqSlogLogger) Info(args ...interface{})  { l.logger.Info(fmt.Sprint(args...)) }
+func (l *asynqSlogLogger) Warn(args ...interface{})  { l.logger.Warn(fmt.Sprint(args...)) }
+func (l *asynqSlogLogger) Error(args ...interface{}) { l.logger.Error(fmt.Sprint(args...)) }
+func (l *asynqSlogLogger) Fatal(args ...interface{}) {
+	l.logger.Error(fmt.Sprint(args...))
+	os.Exit(1)
 }
 
 type Producer struct {

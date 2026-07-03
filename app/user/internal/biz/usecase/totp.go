@@ -65,7 +65,7 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, userID int64, accountName
 	}
 
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      u.conf.Server.App,
+		Issuer:      u.conf.Business.App,
 		AccountName: accountName,
 	})
 	if err != nil {

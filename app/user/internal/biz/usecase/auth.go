@@ -5,7 +5,6 @@ import (
 	"common/pkg/auth"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
-	"common/pkg/util"
 	"common/pkg/util/str"
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
@@ -22,7 +21,7 @@ import (
 
 type AuthUsecase struct {
 	conf         *conf.Bootstrap
-	log          *util.LogHelper
+	logger       *slog.Logger
 	tx           base.Tx
 	accountRepo  repo.AccountRepo
 	prefsRepo    repo.PreferencesRepo
@@ -61,7 +60,7 @@ func NewAuthUsecase(deps AuthUsecaseDeps) (*AuthUsecase, error) {
 	}
 	return &AuthUsecase{
 		conf:         deps.Conf,
-		log:          util.NewLogHelper(deps.Logger),
+		logger:       deps.Logger,
 		tx:           deps.Tx,
 		accountRepo:  deps.AccountRepo,
 		prefsRepo:    deps.PrefsRepo,
@@ -92,7 +91,7 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 	if u == nil || u.Email == nil {
 		return "", "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	token, err = s.tokenUsecase.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Server.Jwt.EmailExpire.AsDuration())
+	token, err = s.tokenUsecase.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Email}, s.conf.Business.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -107,7 +106,7 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 		Nickname:     u.Nickname,
 		PasswordHash: passwordHash,
 		Email:        u.Email,
-	}, s.conf.Server.Jwt.EmailExpire.AsDuration())
+	}, s.conf.Business.Jwt.EmailExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -119,14 +118,14 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, u *model.Accou
 				UserEmailVerificationCode: &commonenums.UserEmailVerificationCodePayload{
 					Email:          *u.Email,
 					Code:           code,
-					ExpiresSeconds: int64(s.conf.Server.Jwt.EmailExpire.AsDuration().Seconds()),
+					ExpiresSeconds: int64(s.conf.Business.Jwt.EmailExpire.AsDuration().Seconds()),
 				},
 			},
 		},
 	})
 	if err != nil {
 		if delErr := s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, *u.Email); delErr != nil {
-			s.log.Warnf("delete email registration verification code failed: %v", delErr)
+			s.logger.WarnContext(ctx, "delete email registration verification code failed", constant.LogFieldErr, delErr)
 		}
 		return
 	}
@@ -188,7 +187,7 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 	if u == nil || u.Phone == nil {
 		return "", "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	token, err = s.tokenUsecase.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
+	token, err = s.tokenUsecase.VerityCodeAccountTokenGen.Generate(model.TokenVerityCodeAccount{Account: *u.Phone}, s.conf.Business.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -203,7 +202,7 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 		Nickname:     u.Nickname,
 		PasswordHash: passwordHash,
 		Phone:        u.Phone,
-	}, s.conf.Server.Jwt.PhoneExpire.AsDuration())
+	}, s.conf.Business.Jwt.PhoneExpire.AsDuration())
 	if err != nil {
 		return
 	}
@@ -215,14 +214,14 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, u *model.Accou
 				UserPhoneVerificationCode: &commonenums.UserPhoneVerificationCodePayload{
 					Phone:          *u.Phone,
 					Code:           code,
-					ExpiresSeconds: int64(s.conf.Server.Jwt.PhoneExpire.AsDuration().Seconds()),
+					ExpiresSeconds: int64(s.conf.Business.Jwt.PhoneExpire.AsDuration().Seconds()),
 				},
 			},
 		},
 	})
 	if err != nil {
 		if delErr := s.tokenCache.DelVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, *u.Phone); delErr != nil {
-			s.log.Warnf("delete phone registration verification code failed: %v", delErr)
+			s.logger.WarnContext(ctx, "delete phone registration verification code failed", constant.LogFieldErr, delErr)
 		}
 		return
 	}
@@ -316,7 +315,7 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, passw
 			}
 		}
 		if _, logErr := s.loginLogRepo.Create(ctx, loginLog); logErr != nil {
-			s.log.Warnf("record login log failed: %v", logErr)
+			s.logger.WarnContext(ctx, "record login log failed", constant.LogFieldErr, logErr)
 		}
 	}()
 
@@ -329,7 +328,7 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, passw
 		return token, nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
 	}
 
-	token, err = s.tokenUsecase.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Server.Jwt.Expires.AsDuration())
+	token, err = s.tokenUsecase.TokenGen.Generate(model.Token{Id: user.ID}, s.conf.Business.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}
@@ -352,7 +351,7 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, passw
 			saveUser.Timezone = *prefs.Timezone
 		}
 	}
-	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Server.Jwt.Expires.AsDuration())
+	err = s.tokenCache.SaveToken(ctx, token, saveUser, s.conf.Business.Jwt.Expires.AsDuration())
 	if err != nil {
 		return
 	}
@@ -378,7 +377,7 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, account string, passw
 			},
 		},
 	}); outboxErr != nil {
-		s.log.Errorf("create login outbox failed: %v", outboxErr)
+		s.logger.ErrorContext(ctx, "create login outbox failed", constant.LogFieldEventType, commonenums.EventType_EVENT_TYPE_USER_LOGIN.String(), constant.LogFieldErr, outboxErr)
 		return "", nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INTERNAL).WithCause(outboxErr)
 	}
 
@@ -392,7 +391,7 @@ func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
 		return err
 	}
 	if getErr != nil {
-		s.log.Warnf("get logout token user failed: %v", getErr)
+		s.logger.WarnContext(ctx, "get logout token user failed", constant.LogFieldErr, getErr)
 		return nil
 	}
 	if tokenUser != nil {
@@ -408,7 +407,7 @@ func (s *AuthUsecase) Logout(ctx context.Context, token string) (err error) {
 				},
 			},
 		}); outboxErr != nil {
-			s.log.Errorf("create logout outbox failed: %v", outboxErr)
+			s.logger.ErrorContext(ctx, "create logout outbox failed", constant.LogFieldEventType, commonenums.EventType_EVENT_TYPE_USER_LOGOUT.String(), constant.LogFieldErr, outboxErr)
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INTERNAL).WithCause(outboxErr)
 		}
 	}

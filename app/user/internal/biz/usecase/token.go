@@ -13,8 +13,8 @@ type TokenUsecase struct {
 }
 
 func NewTokenUsecase(conf *conf.Bootstrap) *TokenUsecase {
-	verityCodeAccountTokenGen := jwt.NewTokenGenerator[model.TokenVerityCodeAccount](conf.Server.Jwt.Secret)
-	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Server.Jwt.Secret)
+	verityCodeAccountTokenGen := jwt.NewTokenGenerator[model.TokenVerityCodeAccount](conf.Business.Jwt.Secret)
+	tokenGen := jwt.NewTokenGenerator[model.Token](conf.Business.Jwt.Secret)
 	return &TokenUsecase{
 		conf:                      conf,
 		VerityCodeAccountTokenGen: verityCodeAccountTokenGen,

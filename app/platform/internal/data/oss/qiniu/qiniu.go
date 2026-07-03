@@ -3,7 +3,6 @@ package qiniu
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/util"
 	"context"
 	"fmt"
 	"platform/internal/biz/model"
@@ -17,7 +16,7 @@ import (
 
 type Qiniu struct {
 	conf         *conf.Bootstrap
-	log          *util.LogHelper
+	log          *slog.Logger
 	db           *gen.Client
 	consulClient *commonClient.ConsulClient
 	redisClient  *commonClient.RedisClient
@@ -32,7 +31,7 @@ func NewQiniu(
 ) *Qiniu {
 	return &Qiniu{
 		conf:         conf,
-		log:          util.NewLogHelper(logger),
+		log:          logger,
 		db:           db,
 		consulClient: consulClient,
 		redisClient:  redisClient,

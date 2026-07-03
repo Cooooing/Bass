@@ -9,7 +9,8 @@ option go_package = "content/internal/conf/conf;conf";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  Trace trace = 3;
+  common.api.app.common.Trace trace = 3;
+  common.api.app.common.Observability observability = 7;
   Business business = 4;
   common.api.app.common.Event event = 5;
   common.api.app.common.Alert alert = 6;
@@ -42,12 +43,6 @@ message Data {
   common.api.app.common.Nats nats = 4;
 }
 
-message Trace {
-  bool enable_otel = 1;
-  string endpoint = 2;
-  bool insecure = 3;
-  double sampler = 4;
-}
 
 message Business {
   Article article = 1;

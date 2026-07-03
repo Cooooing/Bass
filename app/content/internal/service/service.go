@@ -15,6 +15,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewTagService,
 
 	ProvideServices,
+	ProvideHttpServices,
 )
 
 func ProvideServices(
@@ -25,6 +26,22 @@ func ProvideServices(
 	tagService *TagService,
 ) []server.GrpcService {
 	return []server.GrpcService{
+		systemService,
+		articleService,
+		domainService,
+		commentService,
+		tagService,
+	}
+}
+
+func ProvideHttpServices(
+	systemService *SystemService,
+	articleService *ArticleService,
+	domainService *DomainService,
+	commentService *CommentService,
+	tagService *TagService,
+) []server.HttpService {
+	return []server.HttpService{
 		systemService,
 		articleService,
 		domainService,

@@ -3,7 +3,6 @@ package usecase
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/util"
 	"context"
 	"time"
 	base "user/internal/biz/base"
@@ -22,7 +21,7 @@ const (
 )
 
 type OutboxPublisher struct {
-	log         *util.LogHelper
+	logger      *slog.Logger
 	conf        *conf.Bootstrap
 	tx          base.Tx
 	outboxRepo  repo.OutboxEventRepo
@@ -40,7 +39,7 @@ func NewOutboxPublisher(
 	redisLock *commonClient.RedisLock,
 ) *OutboxPublisher {
 	return &OutboxPublisher{
-		log:         util.NewLogHelper(logger),
+		logger:      logger,
 		conf:        conf,
 		tx:          tx,
 		outboxRepo:  outboxRepo,
@@ -57,7 +56,7 @@ func (p *OutboxPublisher) Start(ctx context.Context) error {
 		for {
 			published, err := p.publishBatch(runCtx)
 			if err != nil {
-				p.log.Errorf("publish outbox events failed: %v", err)
+				p.logger.ErrorContext(runCtx, "publish outbox events failed", constant.LogFieldErr, err)
 			}
 			waitInterval := pollInterval
 			if published {
@@ -89,7 +88,7 @@ func (p *OutboxPublisher) Stop(_ context.Context) error {
 func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	lock, acquired, err := p.redisLock.TryAcquire(ctx, constant.GetKeyOutboxPublisherLock(p.serviceName()), p.pollLockTTL())
 	if err != nil {
-		p.log.Warnf("acquire outbox publisher lock failed: %v", err)
+		p.logger.WarnContext(ctx, "acquire outbox publisher lock failed", constant.LogFieldErr, err)
 		return false, nil
 	}
 	if !acquired {
@@ -97,7 +96,7 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	}
 	defer func() {
 		if err := lock.Release(ctx); err != nil {
-			p.log.Warnf("release outbox publisher lock failed: %v", err)
+			p.logger.WarnContext(ctx, "release outbox publisher lock failed", constant.LogFieldErr, err)
 		}
 	}()
 	var events []*model.OutboxEvent
@@ -124,12 +123,12 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 			Headers: event.Headers,
 		})
 		if err != nil {
-			p.log.Errorf("publish outbox event failed: event_id=%s err=%v", event.EventID, err)
+			p.logger.ErrorContext(ctx, "publish outbox event failed", constant.LogFieldEventID, event.EventID, constant.LogFieldErr, err)
 			if ctx.Err() != nil {
 				return published, ctx.Err()
 			}
 			if markErr := p.outboxRepo.MarkFailed(ctx, event.ID, err.Error(), p.maxRetry()); markErr != nil {
-				p.log.Errorf("mark outbox event failed: event_id=%s err=%v", event.EventID, markErr)
+				p.logger.ErrorContext(ctx, "mark outbox event failed", constant.LogFieldEventID, event.EventID, constant.LogFieldErr, markErr)
 				if batchErr == nil {
 					batchErr = markErr
 				}
@@ -140,7 +139,7 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 			if ctx.Err() != nil {
 				return published, ctx.Err()
 			}
-			p.log.Errorf("mark outbox event published failed: event_id=%s err=%v", event.EventID, err)
+			p.logger.ErrorContext(ctx, "mark outbox event published failed", constant.LogFieldEventID, event.EventID, constant.LogFieldErr, err)
 			if batchErr == nil {
 				batchErr = err
 			}

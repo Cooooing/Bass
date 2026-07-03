@@ -2,26 +2,18 @@ package driver
 
 import (
 	"common/pkg/constant"
-	"common/pkg/util"
 	"context"
-	"fmt"
+	"log/slog"
 	"math/rand"
-	"reflect"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
 
-	"log/slog"
-
 	"entgo.io/ent/dialect"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
-
-// ============================================================
-// 配置
-// ============================================================
 
 type Config interface {
 	GetDebug() bool
@@ -29,310 +21,245 @@ type Config interface {
 	GetSampleRate() float64
 }
 
-// ============================================================
-// 驱动
-// ============================================================
-
-type driver struct {
-	log     *util.LogHelper
+type observedDriver struct {
 	wrapped dialect.Driver
-	config  Config
-	mode    string
+	logger  *slog.Logger
+	policy  policy
 }
 
-func NewDriver(logger *slog.Logger, mode string, drv dialect.Driver, config Config) dialect.Driver {
-	return &driver{
-		log:     util.NewLogHelper(logger),
+func Wrap(drv dialect.Driver, logger *slog.Logger, config Config) dialect.Driver {
+	return &observedDriver{
 		wrapped: drv,
-		config:  config,
-		mode:    mode,
+		logger:  logger,
+		policy:  newPolicy(config),
 	}
 }
 
-func (d *driver) Exec(ctx context.Context, query string, args, v any) (err error) {
+func (d *observedDriver) Exec(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = d.wrapped.Exec(ctx, query, args, v)
-	cost := time.Since(start)
-	if shouldLog(d.config, cost) {
-		logSQL(ctx, d.log, d.mode, cost, query, args, err, "")
-	}
-	return
+	d.recordSQL(ctx, query, args, time.Since(start), err)
+	return err
 }
 
-func (d *driver) Query(ctx context.Context, query string, args, v any) (err error) {
+func (d *observedDriver) Query(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = d.wrapped.Query(ctx, query, args, v)
-	cost := time.Since(start)
-	if shouldLog(d.config, cost) {
-		logSQL(ctx, d.log, d.mode, cost, query, args, err, "")
-	}
-	return
+	d.recordSQL(ctx, query, args, time.Since(start), err)
+	return err
 }
 
-func (d *driver) Tx(ctx context.Context) (dialect.Tx, error) {
-	t, err := d.wrapped.Tx(ctx)
+func (d *observedDriver) Tx(ctx context.Context) (dialect.Tx, error) {
+	tx, err := d.wrapped.Tx(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &tx{
-		log:    d.log,
-		Tx:     t,
-		config: d.config,
-		mode:   d.mode,
+	return &observedTx{
+		Tx:     tx,
+		logger: d.logger,
+		policy: d.policy,
 		txID:   uuid.New().String(),
 	}, nil
 }
 
-func (d *driver) Close() error {
+func (d *observedDriver) Close() error {
 	return d.wrapped.Close()
 }
 
-func (d *driver) Dialect() string {
+func (d *observedDriver) Dialect() string {
 	return d.wrapped.Dialect()
 }
 
-// ============================================================
-// 事务
-// ============================================================
+func (d *observedDriver) recordSQL(ctx context.Context, query string, args any, latency time.Duration, err error) {
+	level, shouldRecord, withCaller := d.policy.sqlLevel(latency, err)
+	if !shouldRecord {
+		return
+	}
+	attrs := sqlAttrs(query, args, latency, err, "")
+	if withCaller {
+		if caller, ok := findCaller(); ok {
+			attrs = append(attrs,
+				slog.String(constant.LogFieldFile, caller.file),
+				slog.Int(constant.LogFieldLine, caller.line),
+			)
+		}
+	}
+	d.logger.LogAttrs(ctx, level, "sql executed", attrs...)
+}
 
-type tx struct {
-	log *util.LogHelper
+type observedTx struct {
 	dialect.Tx
-	config Config
-	mode   string
+	logger *slog.Logger
+	policy policy
 	txID   string
 }
 
-func (t *tx) Exec(ctx context.Context, query string, args, v any) (err error) {
+func (t *observedTx) Exec(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = t.Tx.Exec(ctx, query, args, v)
-	cost := time.Since(start)
-	if shouldLog(t.config, cost) {
-		logSQL(ctx, t.log, t.mode, cost, query, args, err, t.txID)
-	}
-	return
+	t.recordSQL(ctx, query, args, time.Since(start), err)
+	return err
 }
 
-func (t *tx) Query(ctx context.Context, query string, args, v any) (err error) {
+func (t *observedTx) Query(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = t.Tx.Query(ctx, query, args, v)
-	cost := time.Since(start)
-	if shouldLog(t.config, cost) {
-		logSQL(ctx, t.log, t.mode, cost, query, args, err, t.txID)
-	}
-	return
+	t.recordSQL(ctx, query, args, time.Since(start), err)
+	return err
 }
 
-func (t *tx) Commit() error {
+func (t *observedTx) Commit() error {
 	start := time.Now()
 	err := t.Tx.Commit()
-	cost := time.Since(start)
-	if err != nil || cost > slowThreshold(t.config) {
-		t.log.Warnw(
-			"msg", "tx commit",
-			"tx_id", t.txID,
-			"cost_ms", cost.Milliseconds(),
-			"error", err,
-		)
+	latency := time.Since(start)
+	level, shouldRecord := t.policy.txLevel(latency, err, false)
+	if !shouldRecord {
+		return err
 	}
+	attrs := []slog.Attr{
+		slog.String(constant.LogFieldKind, constant.LogKindSQL),
+		slog.String(constant.LogFieldTxID, t.txID),
+		slog.Int64(constant.LogFieldLatencyMS, latency.Milliseconds()),
+	}
+	if err != nil {
+		attrs = append(attrs, slog.Any(constant.LogFieldErr, err))
+	}
+	t.logger.LogAttrs(context.Background(), level, "tx commit", attrs...)
 	return err
 }
 
-func (t *tx) Rollback() error {
+func (t *observedTx) Rollback() error {
 	start := time.Now()
 	err := t.Tx.Rollback()
-	cost := time.Since(start)
-	if err != nil {
-		t.log.Warnw(
-			"msg", "tx rollback",
-			"tx_id", t.txID,
-			"cost_ms", cost.Milliseconds(),
-			"error", err,
-		)
+	latency := time.Since(start)
+	level, shouldRecord := t.policy.txLevel(latency, err, true)
+	if !shouldRecord {
+		return err
 	}
+	t.logger.LogAttrs(context.Background(), level, "tx rollback",
+		slog.String(constant.LogFieldKind, constant.LogKindSQL),
+		slog.String(constant.LogFieldTxID, t.txID),
+		slog.Int64(constant.LogFieldLatencyMS, latency.Milliseconds()),
+		slog.Any(constant.LogFieldErr, err),
+	)
 	return err
 }
 
-// ============================================================
-// 日志判定
-// ============================================================
+func (t *observedTx) recordSQL(ctx context.Context, query string, args any, latency time.Duration, err error) {
+	level, shouldRecord, withCaller := t.policy.sqlLevel(latency, err)
+	if !shouldRecord {
+		return
+	}
+	attrs := sqlAttrs(query, args, latency, err, t.txID)
+	if withCaller {
+		if caller, ok := findCaller(); ok {
+			attrs = append(attrs,
+				slog.String(constant.LogFieldFile, caller.file),
+				slog.Int(constant.LogFieldLine, caller.line),
+			)
+		}
+	}
+	t.logger.LogAttrs(ctx, level, "sql executed", attrs...)
+}
 
 const defaultSlowThreshold = 500 * time.Millisecond
 
-func slowThreshold(cfg Config) time.Duration {
-	if t := cfg.GetSlowSqlThreshold(); t != nil {
-		return t.AsDuration()
-	}
-	return defaultSlowThreshold
+type policy struct {
+	debug         bool
+	slowSQL       time.Duration
+	sampleRate    float64
+	hasConfigured bool
 }
 
-func shouldLog(cfg Config, cost time.Duration) bool {
-	if cfg.GetDebug() {
-		return true
+func newPolicy(config Config) policy {
+	if config == nil {
+		return policy{slowSQL: defaultSlowThreshold}
 	}
-	if cost > slowThreshold(cfg) {
-		return true
+	threshold := defaultSlowThreshold
+	if config.GetSlowSqlThreshold() != nil && config.GetSlowSqlThreshold().AsDuration() > 0 {
+		threshold = config.GetSlowSqlThreshold().AsDuration()
 	}
-	rate := cfg.GetSampleRate()
-	if rate <= 0 {
+	return policy{
+		debug:         config.GetDebug(),
+		slowSQL:       threshold,
+		sampleRate:    config.GetSampleRate(),
+		hasConfigured: true,
+	}
+}
+
+func (p policy) sqlLevel(latency time.Duration, err error) (slog.Level, bool, bool) {
+	if err != nil {
+		return slog.LevelError, true, true
+	}
+	if latency > p.slowSQL {
+		return slog.LevelWarn, true, true
+	}
+	if p.debug || p.sampled() {
+		return slog.LevelDebug, true, false
+	}
+	return slog.LevelDebug, false, false
+}
+
+func (p policy) txLevel(latency time.Duration, err error, rollback bool) (slog.Level, bool) {
+	if err != nil {
+		return slog.LevelError, true
+	}
+	if rollback {
+		return slog.LevelDebug, false
+	}
+	if latency > p.slowSQL {
+		return slog.LevelWarn, true
+	}
+	return slog.LevelDebug, false
+}
+
+func (p policy) sampled() bool {
+	if !p.hasConfigured {
 		return false
 	}
-	if rate >= 1 {
+	if p.sampleRate <= 0 {
+		return false
+	}
+	if p.sampleRate >= 1 {
 		return true
 	}
-	return rand.Float64() < rate
+	return rand.Float64() < p.sampleRate
 }
 
-// ============================================================
-// 日志输出
-// ============================================================
-
-var whitespaceReplacer = strings.NewReplacer("\n", " ", "\r", " ", "\t", " ")
-
-func logSQL(ctx context.Context, helper *util.LogHelper, mode string, cost time.Duration, query string, args any, err error, txID string) {
-	argv, _ := args.([]any)
-	sql := formatSQLArgs(query, argv)
-	sql = whitespaceReplacer.Replace(sql)
-
-	file, line := getCaller()
-
-	txPrefix := ""
+func sqlAttrs(query string, args any, latency time.Duration, err error, txID string) []slog.Attr {
+	attrs := []slog.Attr{
+		slog.String(constant.LogFieldKind, constant.LogKindSQL),
+		slog.Int64(constant.LogFieldLatencyMS, latency.Milliseconds()),
+		slog.String(constant.LogFieldSQL, normalizeSQL(query)),
+		slog.Int(constant.LogFieldArgsCount, argsCount(args)),
+	}
 	if txID != "" {
-		txPrefix = "Tx(" + txID + ")."
+		attrs = append(attrs, slog.String(constant.LogFieldTxID, txID))
 	}
-
-	if mode == constant.Dev {
-		if err != nil {
-			helper.WithContext(ctx).Warnf("[SQL] %dms | %s:%d | %sExec: err=%v | %s",
-				cost.Milliseconds(), file, line, txPrefix, err, sql)
-		} else {
-			helper.WithContext(ctx).Debugf("[SQL] %dms | %s:%d | %sExec: %s",
-				cost.Milliseconds(), file, line, txPrefix, sql)
-		}
-		return
-	}
-
-	// 生产环境：结构化 JSON。
 	if err != nil {
-		helper.WithContext(ctx).Warnw(
-			"msg", "sql executed",
-			"cost_ms", cost.Milliseconds(),
-			"sql", sql,
-			"file", file,
-			"line", line,
-			"tx_id", txID,
-			"error", err,
-		)
-	} else {
-		helper.WithContext(ctx).Debugw(
-			"msg", "sql executed",
-			"cost_ms", cost.Milliseconds(),
-			"sql", sql,
-			"file", file,
-			"line", line,
-			"tx_id", txID,
-		)
+		attrs = append(attrs, slog.Any(constant.LogFieldErr, err))
 	}
+	return attrs
 }
 
-// ============================================================
-// SQL 参数格式化
-// ============================================================
-
-func formatSQLArgs(query string, args []any) string {
-	if len(args) == 0 {
-		return query
-	}
-
-	var buf strings.Builder
-	buf.Grow(len(query) + len(args)*16)
-
-	argIdx := 0
-	for i := 0; i < len(query); {
-		c := query[i]
-
-		// PostgreSQL 占位符：$1、$2 等。
-		if c == '$' {
-			j := i + 1
-			num := 0
-			for j < len(query) && query[j] >= '0' && query[j] <= '9' {
-				num = num*10 + int(query[j]-'0')
-				j++
-			}
-			if num > 0 && num <= len(args) {
-				buf.WriteString(formatArg(args[num-1]))
-				i = j
-				continue
-			}
-		}
-
-		// MySQL 占位符：?。
-		if c == '?' && argIdx < len(args) {
-			buf.WriteString(formatArg(args[argIdx]))
-			argIdx++
-			i++
-			continue
-		}
-
-		buf.WriteByte(c)
-		i++
-	}
-
-	return buf.String()
+func normalizeSQL(query string) string {
+	return strings.Join(strings.Fields(query), " ")
 }
 
-const (
-	maxStringLen = 512
-	maxByteLen   = 64
-)
-
-func formatArg(arg any) string {
-	if arg == nil {
-		return "NULL"
-	}
-
-	v := reflect.ValueOf(arg)
-	if v.Kind() == reflect.Pointer {
-		if v.IsNil() {
-			return "NULL"
-		}
-		return formatArg(v.Elem().Interface())
-	}
-
-	switch a := arg.(type) {
-	case string:
-		if len(a) > maxStringLen {
-			a = a[:maxStringLen] + "..."
-		}
-		return "'" + strings.ReplaceAll(a, "'", "''") + "'"
-	case []byte:
-		if len(a) > maxByteLen {
-			return fmt.Sprintf("0x%x...(len=%d)", a[:maxByteLen], len(a))
-		}
-		return fmt.Sprintf("0x%x", a)
-	case time.Time:
-		return "'" + a.Format("2006-01-02 15:04:05") + "'"
-	case bool:
-		if a {
-			return "true"
-		}
-		return "false"
-	case int, int8, int16, int32, int64,
-		uint, uint8, uint16, uint32, uint64,
-		float32, float64:
-		return fmt.Sprintf("%v", a)
+func argsCount(args any) int {
+	switch v := args.(type) {
+	case nil:
+		return 0
+	case []any:
+		return len(v)
 	default:
-		return fmt.Sprintf("'%v'", a)
+		return 1
 	}
 }
-
-// ============================================================
-// 调用方解析
-// ============================================================
 
 var (
-	callerCache sync.Map // 程序计数器到调用方信息的缓存
-	selfPkg     string   // 当前包导入路径，初始化时检测
+	callerCache sync.Map
+	selfPkg     string
 )
 
 type callerInfo struct {
@@ -340,94 +267,62 @@ type callerInfo struct {
 	line int
 }
 
-// 启动时检测当前包导入路径。
 func init() {
 	pc, _, _, _ := runtime.Caller(0)
 	fn := runtime.FuncForPC(pc)
-	if fn != nil {
-		name := fn.Name()
-		if idx := strings.LastIndex(name, "."); idx >= 0 {
-			selfPkg = name[:idx]
-		}
+	if fn == nil {
+		return
+	}
+	name := fn.Name()
+	if idx := strings.LastIndex(name, "."); idx >= 0 {
+		selfPkg = name[:idx]
 	}
 }
 
-// getCaller 遍历调用栈，查找触发 SQL 的 data 层栈帧。
-// 会跳过 runtime、当前包、第三方模块、ent 生成代码和标准库数据库包。
-//
-// 典型调用链：
-//
-//	service.Register
-//	  → repo.Create          ← 目标调用方
-//	    → ent.UserCreate.Save
-//	      → ent.UserCreate.sqlExec
-//	        → driver.Exec
-//	          → driver.logSQL
-//	            → driver.getCaller
-//	              → runtime.Callers
-func getCaller() (string, int) {
+func findCaller() (callerInfo, bool) {
 	var pcs [32]uintptr
-	n := runtime.Callers(2, pcs[:]) // 跳过 runtime.Callers 和 getCaller。
-
+	n := runtime.Callers(2, pcs[:])
 	for i := 0; i < n; i++ {
 		pc := pcs[i]
-
 		if v, ok := callerCache.Load(pc); ok {
-			ci := v.(callerInfo)
-			return ci.file, ci.line
+			return v.(callerInfo), true
 		}
-
 		fn := runtime.FuncForPC(pc)
 		if fn == nil {
 			continue
 		}
-
 		file, line := fn.FileLine(pc)
-		name := fn.Name()
-
-		if shouldSkip(name, file) {
+		if skipCaller(fn.Name(), file) {
 			continue
 		}
-
-		ci := callerInfo{file: file, line: line}
-		callerCache.Store(pc, ci)
-		return file, line
+		caller := callerInfo{file: file, line: line}
+		callerCache.Store(pc, caller)
+		return caller, true
 	}
-
-	return "unknown", 0
+	return callerInfo{}, false
 }
 
-// shouldSkip 判断某个栈帧是否应被跳过。
-//
-// 跳过顺序（从栈顶到栈底）：
-//  1. runtime 内部栈帧
-//  2. 当前 driver 包
-//  3. 第三方模块（go/pkg/mod）
-//  4. ent 生成代码
-//  5. 标准库数据库包
-//
-// 第一个通过检查的栈帧就是用户 data 层代码。
-func shouldSkip(funcName, file string) bool {
-	// runtime 内部栈帧。
+func skipCaller(funcName string, file string) bool {
+	normalizedFile := strings.ReplaceAll(file, "\\", "/")
 	if strings.HasPrefix(funcName, "runtime.") || strings.HasPrefix(funcName, "runtime/") {
 		return true
 	}
-	// 当前 driver 包。
+	if strings.HasPrefix(funcName, "time.") || strings.HasPrefix(funcName, "time/") {
+		return true
+	}
+	if strings.HasPrefix(funcName, "database/sql.") || strings.HasPrefix(funcName, "database/sql/") {
+		return true
+	}
 	if selfPkg != "" && strings.HasPrefix(funcName, selfPkg+".") {
 		return true
 	}
-	// 模块缓存中的第三方模块。
-	if strings.Contains(file, "/go/pkg/mod/") {
+	if strings.Contains(normalizedFile, "/go/pkg/mod/") || strings.Contains(normalizedFile, "/pkg/mod/") {
 		return true
 	}
-	// ent 生成代码：函数名通常类似：
-	//   github.com/project/internal/data/gen/ent.(*UserCreate).Save
-	// "/ent." 模式可以稳定匹配包边界。
-	if strings.Contains(funcName, "/ent.") {
+	if strings.Contains(normalizedFile, "/entgo.io/") {
 		return true
 	}
-	// 标准库数据库包。
-	if strings.HasPrefix(funcName, "database/") {
+	if strings.Contains(normalizedFile, "/internal/data/gen/") {
 		return true
 	}
 	return false

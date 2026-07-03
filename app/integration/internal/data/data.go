@@ -1,19 +1,17 @@
-﻿package data
+package data
 
 import (
-	"common/proto/gen/common"
 	commonClient "common/pkg/client"
+	"common/proto/gen/common"
 	"integration/internal/conf"
 
 	"github.com/google/wire"
 )
 
-// DataProviderSet 是 data 层依赖集合。
 var DataProviderSet = wire.NewSet(
 	ProvideConsul,
+	commonClient.NewObservability,
 	commonClient.NewConsulClient,
 )
 
-func ProvideConsul(c *conf.Bootstrap) *common.Consul {
-	return c.Data.Consul
-}
+func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Data.Consul }

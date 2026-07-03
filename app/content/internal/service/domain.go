@@ -13,6 +13,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -24,6 +25,8 @@ type DomainService struct {
 func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentDomainServiceServer(gs, s)
 }
+
+func (s *DomainService) RegisterHttp(hs *http.Server) {}
 
 func NewDomainService(
 	contentUsecase *usecase.ContentUsecase,

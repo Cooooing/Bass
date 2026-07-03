@@ -2,7 +2,7 @@ package client
 
 import (
 	"common/pkg/client/driver"
-	"common/pkg/util"
+	"common/pkg/constant"
 	"context"
 	"fmt"
 	"im/internal/conf"
@@ -17,14 +17,13 @@ import (
 )
 
 func NewDataBaseClient(logger *slog.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
-	l := util.NewLogHelper(logger)
 	drv, err := sql.Open(conf.Data.Database.Driver, conf.Data.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)
 	}
-	debugDrv := driver.NewDriver(logger, conf.Server.Mode, drv, conf.Data.Database)
-	client := gen.NewClient(gen.Driver(debugDrv))
-	l.Infof("database: ent created database client [%s]", conf.Data.Database.Driver)
+	observedDrv := driver.Wrap(drv, logger, conf.Data.Database)
+	client := gen.NewClient(gen.Driver(observedDrv))
+	logger.Info("database client created", constant.LogFieldKind, constant.LogKindDatabase, constant.LogFieldDriver, conf.Data.Database.Driver)
 	// 可选：自动迁移
 	if conf.Data.Database.Merge {
 		ctx := context.Background()
@@ -35,12 +34,12 @@ func NewDataBaseClient(logger *slog.Logger, conf *conf.Bootstrap) (*gen.Client, 
 
 	cleanup := func() {
 		if err := client.Close(); err != nil {
-			l.Errorf("failed to close ent client: %v", err)
+			logger.Error("close ent client failed", constant.LogFieldKind, constant.LogKindDatabase, constant.LogFieldErr, err)
 		}
-		if err := debugDrv.Close(); err != nil {
-			l.Errorf("failed to close db driver: %v", err)
+		if err := observedDrv.Close(); err != nil {
+			logger.Error("close db driver failed", constant.LogFieldKind, constant.LogKindDatabase, constant.LogFieldErr, err)
 		}
-		l.Infof("database client closed")
+		logger.Info("database client closed", constant.LogFieldKind, constant.LogKindDatabase)
 	}
 	return client, cleanup, nil
 }

@@ -13,6 +13,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -25,6 +26,8 @@ type CommentService struct {
 func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentCommentServiceServer(gs, s)
 }
+
+func (s *CommentService) RegisterHttp(hs *http.Server) {}
 
 func NewCommentService(
 	commentUsecase *usecase.CommentUsecase,

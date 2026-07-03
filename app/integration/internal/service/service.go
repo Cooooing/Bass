@@ -11,12 +11,21 @@ var ServiceProviderSet = wire.NewSet(
 	NewSystemService,
 
 	ProvideGrpcServices,
+	ProvideHttpServices,
 )
 
 func ProvideGrpcServices(
 	systemService *SystemService,
 ) []server.GrpcService {
 	return []server.GrpcService{
+		systemService,
+	}
+}
+
+func ProvideHttpServices(
+	systemService *SystemService,
+) []server.HttpService {
+	return []server.HttpService{
 		systemService,
 	}
 }

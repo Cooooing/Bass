@@ -1,18 +1,18 @@
 package consumer
 
 import (
+	"context"
+	"fmt"
+
 	"common/pkg/client"
 	commonenum "common/pkg/enum"
-	"common/pkg/util"
-	"context"
 	"notify/internal/biz/usecase"
 
 	"log/slog"
 )
 
-// Consumer 是 NATS 事件消费者。
 type Consumer struct {
-	log          *util.LogHelper
+	log          *slog.Logger
 	natsClient   *client.NatsClient
 	eventUsecase *usecase.EventUsecase
 	subjects     usecase.EventSubjects
@@ -20,18 +20,8 @@ type Consumer struct {
 	cancel       context.CancelFunc
 }
 
-func NewConsumer(
-	logger *slog.Logger,
-	natsClient *client.NatsClient,
-	eventUsecase *usecase.EventUsecase,
-	subjects usecase.EventSubjects,
-) *Consumer {
-	return &Consumer{
-		log:          util.NewLogHelper(logger),
-		natsClient:   natsClient,
-		eventUsecase: eventUsecase,
-		subjects:     subjects,
-	}
+func NewConsumer(logger *slog.Logger, natsClient *client.NatsClient, eventUsecase *usecase.EventUsecase, subjects usecase.EventSubjects) *Consumer {
+	return &Consumer{log: logger, natsClient: natsClient, eventUsecase: eventUsecase, subjects: subjects}
 }
 
 func (c *Consumer) Start(ctx context.Context) error {
@@ -46,7 +36,7 @@ func (c *Consumer) Start(ctx context.Context) error {
 			return c.eventUsecase.HandleMessage(ctx, msg.Subject, msg.Data)
 		})
 		if err != nil {
-			c.log.Errorf("queue subscribe %s[%s] failed: %v", subjectName, queueGroup, err)
+			c.log.Error(fmt.Sprintf("queue subscribe failed: subject=%s queue=%s err=%v", subjectName, queueGroup, err))
 			continue
 		}
 	}

@@ -13,8 +13,8 @@ func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstra
 	}
 
 	if err := hot.BindProtoHotFields(
-		&c.Server.App,
-		&c.Server.Avatar,
+		&c.Business.App,
+		&c.Business.Avatar,
 		&c.Alert.LarkWebhook,
 		&c.Event.Outbox,
 		&c.Event.DeadLetter,

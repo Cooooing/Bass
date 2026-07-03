@@ -1,23 +1,16 @@
 package client
 
 import (
-	"common/pkg/util"
-	"context"
-	"fmt"
-	"time"
-
 	"common/pkg/constant"
 	"common/proto/gen/common"
-
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/metric"
+	"context"
+	"fmt"
 	"log/slog"
+	"time"
 )
 
 const defaultDeadLetterAlertDedupWindow = time.Hour
 
-// DeadLetterAlert 描述一条需要告警的死信记录。
 type DeadLetterAlert struct {
 	Service   string
 	Source    string
@@ -28,28 +21,19 @@ type DeadLetterAlert struct {
 	LastError string
 	UpdatedAt *time.Time
 }
-
-// DeadLetterAlertClient 负责死信告警去重、日志、指标和 Lark 通知。
 type DeadLetterAlertClient struct {
-	log         *util.LogHelper
+	logger      *slog.Logger
 	redisClient *RedisClient
 	larkClient  *LarkWebhookClient
-	counter     metric.Int64Counter
 }
 
 func NewDeadLetterAlertClient(logger *slog.Logger, redisClient *RedisClient, larkClient *LarkWebhookClient) *DeadLetterAlertClient {
-	counter, _ := otel.Meter("common.dead_letter").Int64Counter(
-		"dead_letter_alert_total",
-		metric.WithDescription("Total number of deduplicated dead letter alerts."),
-	)
 	return &DeadLetterAlertClient{
-		log:         util.NewLogHelper(logger),
+		logger:      logger,
 		redisClient: redisClient,
 		larkClient:  larkClient,
-		counter:     counter,
 	}
 }
-
 func (c *DeadLetterAlertClient) Alert(ctx context.Context, deadLetterConf *common.Event_DeadLetter, alertConf *common.Alert, alert *DeadLetterAlert) error {
 	if c == nil || alert == nil || alert.Service == "" || alert.Source == "" || alert.EventID == "" {
 		return nil
@@ -64,16 +48,8 @@ func (c *DeadLetterAlertClient) Alert(ctx context.Context, deadLetterConf *commo
 			return err
 		}
 	}
-	c.log.Errorf("dead letter detected: service=%s source=%s event_id=%s event_type=%s subject=%s count=%d err=%s",
-		alert.Service, alert.Source, alert.EventID, alert.EventType, alert.Subject, alert.Count, alert.LastError)
-	if c.counter != nil {
-		c.counter.Add(ctx, 1, metric.WithAttributes(
-			attribute.String("service", alert.Service),
-			attribute.String("source", alert.Source),
-			attribute.String("event_type", alert.EventType),
-			attribute.String("subject", alert.Subject),
-		))
-	}
+	c.logger.ErrorContext(ctx, "dead letter detected", constant.LogFieldService, alert.Service, constant.LogFieldSource, alert.Source, constant.LogFieldEventID, alert.EventID, constant.LogFieldEventType, alert.EventType, constant.LogFieldSubject, alert.Subject, constant.LogFieldCount, alert.Count, constant.LogFieldLastError, alert.LastError)
+	DeadLetterAlertsTotal.WithLabelValues(alert.Service, alert.Source, alert.EventType, alert.Subject).Inc()
 	if deadLetterConf == nil || !deadLetterConf.GetEnableAlert() || alertConf == nil || alertConf.GetLarkWebhook() == nil || alertConf.GetLarkWebhook().GetToken() == "" || c.larkClient == nil {
 		return nil
 	}
@@ -90,7 +66,6 @@ func (c *DeadLetterAlertClient) Alert(ctx context.Context, deadLetterConf *commo
 		Text:    c.text(alert),
 	})
 }
-
 func (c *DeadLetterAlertClient) text(alert *DeadLetterAlert) string {
 	updatedAt := ""
 	if alert.UpdatedAt != nil {

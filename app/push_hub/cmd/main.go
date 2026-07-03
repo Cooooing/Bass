@@ -1,27 +1,27 @@
 package main
 
 import (
-	"common/pkg/util"
+	commonClient "common/pkg/client"
+	commonserver "common/pkg/server"
+	"common/proto/gen/common"
 	"context"
 	"flag"
 	"fmt"
 	"os"
 	"push_hub/internal/conf"
 
-	"github.com/go-kratos/kratos/v3"
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"log/slog"
+
+	"github.com/go-kratos/kratos/v3"
+	ktransport "github.com/go-kratos/kratos/v3/transport"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
-// 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
 var (
-	// Name 是编译产物名称。
-	Name = "app"
-	// Version 是编译产物版本。
-	Version = "v1.0.0"
-	// flagConf 是业务配置文件路径参数。
-	flagConf = "configs/config.yaml"
-	// flagBootstrap 是启动配置文件路径参数。
+	Name          = "app"
+	Version       = "v1.0.0"
+	flagConf      = "configs/config.yaml"
 	flagBootstrap = "configs/bootstrap.yaml"
 )
 
@@ -30,10 +30,12 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger *slog.Logger, gs *grpc.Server) *kratos.App {
+func newApp(c *conf.Bootstrap, logger *slog.Logger, hs *http.Server, gs *grpc.Server) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
+
+	servers := []ktransport.Server{hs, gs}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -41,7 +43,7 @@ func newApp(logger *slog.Logger, gs *grpc.Server) *kratos.App {
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(gs),
+		kratos.Server(servers...),
 	)
 }
 
@@ -57,15 +59,7 @@ func main() {
 	Version = c.Server.Version
 
 	ctx := context.Background()
-	shutdownTracing, err := util.SetupTracing(
-		ctx,
-		Name,
-		Version,
-		c.Trace.Endpoint,
-		c.Trace.EnableOtel,
-		c.Trace.Insecure,
-		c.Trace.Sampler,
-	)
+	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
 	if err != nil {
 		panic(err)
 	}
@@ -75,15 +69,14 @@ func main() {
 			panic(err)
 		}
 	}()
-	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	slog.SetDefault(logger)
-	app, cleanup, err := wireApp(c, logger)
+	commonServer := &common.Server{Name: c.Server.Name, Version: c.Server.Version, Mode: c.Server.Mode}
+	logger := commonserver.NewLogger(commonServer, bc.GetLog())
+	app, cleanup, err := wireApp(c, commonServer, logger)
 	if err != nil {
 		panic(err)
 	}
 	defer cleanup()
 
-	// 启动应用并等待停止信号。
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

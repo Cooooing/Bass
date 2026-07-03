@@ -5,7 +5,6 @@ import (
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,10 +15,6 @@ type ContentCommentService struct {
 
 func NewContentCommentService(contentCommentUsecase *usecase.ContentCommentUsecase) *ContentCommentService {
 	return &ContentCommentService{contentCommentUsecase: contentCommentUsecase}
-}
-
-func (s *ContentCommentService) RegisterGrpc(gs *grpc.Server) {
-	bbscontentv1.RegisterCommentServiceServer(gs, s)
 }
 
 func (s *ContentCommentService) RegisterHttp(hs *http.Server) {

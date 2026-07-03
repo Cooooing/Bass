@@ -16,6 +16,7 @@ var DataProviderSet = wire.NewSet(
 	ProvideRedis,
 	ProvideConsul,
 	ProvideNats,
+	commonClient.NewObservability,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewRedisLock,

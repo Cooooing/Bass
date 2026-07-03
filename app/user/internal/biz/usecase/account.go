@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"bytes"
-	"common/pkg/util"
 	"context"
 	"image/png"
 	base "user/internal/biz/base"
@@ -16,7 +15,6 @@ import (
 
 type AccountUsecase struct {
 	conf            *conf.Bootstrap
-	log             *util.LogHelper
 	tx              base.Tx
 	accountRepo     repo.AccountRepo
 	preferencesRepo repo.PreferencesRepo
@@ -31,7 +29,6 @@ func NewAccountUsecase(
 ) (*AccountUsecase, error) {
 	return &AccountUsecase{
 		conf:            conf,
-		log:             util.NewLogHelper(logger),
 		tx:              tx,
 		accountRepo:     accountRepo,
 		preferencesRepo: preferencesRepo,

@@ -6,6 +6,7 @@ import (
 	"push_hub/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 // NodeService 实现 PushHubNodeServiceServer，委托给 usecase 层。
@@ -21,6 +22,8 @@ func NewNodeService(nodeUc *usecase.NodeUsecase) *NodeService {
 func (s *NodeService) RegisterGrpc(gs *grpc.Server) {
 	pushhubv1.RegisterPushHubNodeServiceServer(gs, s)
 }
+
+func (s *NodeService) RegisterHttp(hs *http.Server) {}
 
 func (s *NodeService) RegisterNode(ctx context.Context, req *pushhubv1.RegisterNode_Request) (*pushhubv1.RegisterNode_Reply, error) {
 	nodeID, err := s.nodeUc.RegisterNode(ctx, req.Address)

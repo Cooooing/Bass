@@ -3,13 +3,14 @@ package main
 import (
 	"bbs/internal/conf"
 	commonClient "common/pkg/client"
-	"common/pkg/util"
+	commonserver "common/pkg/server"
 	"context"
 	"flag"
 	"fmt"
 	"os"
 
 	"github.com/go-kratos/kratos/v3"
+	ktransport "github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"log/slog"
 )
@@ -31,10 +32,12 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(logger *slog.Logger, hs *http.Server, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(c *conf.Bootstrap, logger *slog.Logger, hs *http.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
+
+	servers := []ktransport.Server{hs}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -42,7 +45,7 @@ func newApp(logger *slog.Logger, hs *http.Server, cc *commonClient.ConsulClient)
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
-		kratos.Server(hs),
+		kratos.Server(servers...),
 		kratos.Registrar(cc.Registrar()),
 	)
 }
@@ -59,15 +62,7 @@ func main() {
 	Version = c.Server.Version
 
 	ctx := context.Background()
-	shutdownTracing, err := util.SetupTracing(
-		ctx,
-		Name,
-		Version,
-		c.Trace.Endpoint,
-		c.Trace.EnableOtel,
-		c.Trace.Insecure,
-		c.Trace.Sampler,
-	)
+	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
 	if err != nil {
 		panic(err)
 	}
@@ -77,9 +72,8 @@ func main() {
 			panic(err)
 		}
 	}()
-	logger := util.NewLogger(Name, Version, c.Server.Mode, bc.Log.Level, bc.Log.File)
-	slog.SetDefault(logger)
-	app, cleanup, err := wireApp(c, logger)
+	logger := commonserver.NewLogger(c.GetServer(), bc.GetLog())
+	app, cleanup, err := wireApp(c, c.GetServer(), logger)
 	if err != nil {
 		panic(err)
 	}

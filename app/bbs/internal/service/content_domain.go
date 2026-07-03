@@ -5,7 +5,6 @@ import (
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	"context"
 
-	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,10 +15,6 @@ type ContentDomainService struct {
 
 func NewContentDomainService(contentDomainUsecase *usecase.ContentDomainUsecase) *ContentDomainService {
 	return &ContentDomainService{contentDomainUsecase: contentDomainUsecase}
-}
-
-func (s *ContentDomainService) RegisterGrpc(gs *grpc.Server) {
-	bbscontentv1.RegisterDomainServiceServer(gs, s)
 }
 
 func (s *ContentDomainService) RegisterHttp(hs *http.Server) {

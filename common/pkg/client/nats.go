@@ -1,64 +1,65 @@
 package client
 
 import (
-	"common/pkg/util"
+	"common/pkg/constant"
 	"common/proto/gen/common"
 	"context"
 	"fmt"
+	"log/slog"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/nats-io/nats.go"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/propagation"
+	oteltrace "go.opentelemetry.io/otel/trace"
 	"google.golang.org/protobuf/types/known/durationpb"
-	"log/slog"
 )
 
-// Message 封装消息体，解耦外部依赖
 type Message struct {
 	Subject string
 	Data    []byte
 	Header  map[string]string
-	Ack     func() error // 手动确认（JetStream 模式）
+	Ack     func() error
 	Nack    func() error
 }
 
-// MessageHandler 是消息处理函数签名
 type MessageHandler func(ctx context.Context, msg *Message) error
 
-// Publisher 定义发布接口
 type Publisher interface {
 	Publish(ctx context.Context, subject string, msg *Message) error
 	Close() error
 }
 
-// Subscriber 定义订阅接口
 type Subscriber interface {
 	Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error)
 	QueueSubscribe(ctx context.Context, subject, queue string, handler MessageHandler) (Unsubscriber, error)
 	Close() error
 }
 
-// Unsubscriber 取消订阅
 type Unsubscriber interface {
 	Unsubscribe() error
 }
 
-// NatsClient 封装 NATS 客户端
 type NatsClient struct {
-	conf   *common.Nats
-	conn   *nats.Conn
-	js     nats.JetStreamContext
-	mu     sync.RWMutex
-	closed bool
-	log    *util.LogHelper
-	subs   []*nats.Subscription
+	conf    *common.Nats
+	conn    *nats.Conn
+	js      nats.JetStreamContext
+	mu      sync.RWMutex
+	closed  bool
+	logger  *slog.Logger
+	service string
+	tracer  oteltrace.Tracer
+	subs    []*nats.Subscription
 }
 
-// NewNatsClient 初始化 NATS 客户端
-func NewNatsClient(logger *slog.Logger, conf *common.Nats) (*NatsClient, func(), error) {
-	helper := util.NewLogHelper(logger)
-
-	// 默认值
+func NewNatsClient(logger *slog.Logger, conf *common.Nats, observer *Observer) (*NatsClient, func(), error) {
+	if observer == nil {
+		observer = NewObservability(logger, nil)
+	}
 	if conf == nil {
 		conf = &common.Nats{}
 	}
@@ -71,19 +72,19 @@ func NewNatsClient(logger *slog.Logger, conf *common.Nats) (*NatsClient, func(),
 	if conf.Name == "" {
 		conf.Name = "nats-client"
 	}
-	if conf.Timeout.AsDuration() == 0 {
+	if conf.GetTimeout() == nil || conf.GetTimeout().AsDuration() == 0 {
 		conf.Timeout = durationpb.New(5 * time.Second)
 	}
 	if conf.MaxReconnects == 0 {
 		conf.MaxReconnects = 10
 	}
-	if conf.ReconnectWait.AsDuration() == 0 {
+	if conf.GetReconnectWait() == nil || conf.GetReconnectWait().AsDuration() == 0 {
 		conf.ReconnectWait = durationpb.New(2 * time.Second)
 	}
-	if conf.PingInterval.AsDuration() == 0 {
+	if conf.GetPingInterval() == nil || conf.GetPingInterval().AsDuration() == 0 {
 		conf.PingInterval = durationpb.New(30 * time.Second)
 	}
-	if conf.FlusherTimeout.AsDuration() == 0 {
+	if conf.GetFlusherTimeout() == nil || conf.GetFlusherTimeout().AsDuration() == 0 {
 		conf.FlusherTimeout = durationpb.New(5 * time.Second)
 	}
 
@@ -94,16 +95,20 @@ func NewNatsClient(logger *slog.Logger, conf *common.Nats) (*NatsClient, func(),
 		nats.PingInterval(conf.PingInterval.AsDuration()),
 		nats.FlusherTimeout(conf.FlusherTimeout.AsDuration()),
 		nats.DisconnectErrHandler(func(_ *nats.Conn, err error) {
-			helper.Warnf("nats disconnected: %v", err)
+			logger.Warn("nats disconnected", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldErr, err)
 		}),
 		nats.ReconnectHandler(func(c *nats.Conn) {
-			helper.Infof("nats reconnected to: %s", c.ConnectedUrl())
+			logger.Info("nats reconnected", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldAddress, c.ConnectedUrl())
 		}),
 		nats.ClosedHandler(func(_ *nats.Conn) {
-			helper.Info("nats connection closed")
+			logger.Info("nats connection closed", constant.LogFieldKind, constant.LogKindMessage)
 		}),
 		nats.ErrorHandler(func(_ *nats.Conn, sub *nats.Subscription, err error) {
-			helper.Errorf("nats error: subject=%s err=%v", sub.Subject, err)
+			subject := "unknown"
+			if sub != nil {
+				subject = sub.Subject
+			}
+			logger.Error("nats error", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldSubject, subject, constant.LogFieldErr, err)
 		}),
 	}
 	if conf.User != "" || conf.Password != "" {
@@ -116,10 +121,19 @@ func NewNatsClient(logger *slog.Logger, conf *common.Nats) (*NatsClient, func(),
 		return nil, nil, fmt.Errorf("nats connect [%s]: %w", address, err)
 	}
 
+	service := observer.Service()
+	if service == "" {
+		service = conf.Name
+	}
+	if service == "" {
+		service = "unknown"
+	}
 	c := &NatsClient{
-		conf: conf,
-		conn: nc,
-		log:  helper,
+		conf:    conf,
+		conn:    nc,
+		logger:  logger,
+		service: service,
+		tracer:  otel.Tracer(service + ".message"),
 	}
 
 	if conf.EnableJetStream {
@@ -129,28 +143,25 @@ func NewNatsClient(logger *slog.Logger, conf *common.Nats) (*NatsClient, func(),
 			return nil, nil, fmt.Errorf("nats jetstream: %w", err)
 		}
 		c.js = js
-		helper.Infof("jetstream enabled: domain=%s stream=%s", conf.JetStreamDomain, conf.StreamName)
+		logger.Info("jetstream enabled", constant.LogFieldKind, constant.LogKindMessage, "domain", conf.JetStreamDomain, "stream", conf.StreamName)
 	}
 
-	helper.Infof("nats connected: %s", nc.ConnectedUrl())
+	logger.Info("nats connected", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldAddress, nc.ConnectedUrl())
 	return c, func() {
 		if err := c.Close(); err != nil {
-			helper.Errorf("nats close: %s", err)
+			logger.Error("nats close failed", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldErr, err)
 		}
 	}, nil
 }
 
-// Conn 返回底层 nats.Conn，用于高级场景
 func (c *NatsClient) Conn() *nats.Conn {
 	return c.conn
 }
 
-// JetStream 返回 JetStream 上下文
 func (c *NatsClient) JetStream() nats.JetStreamContext {
 	return c.js
 }
 
-// Close 关闭客户端
 func (c *NatsClient) Close() error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -163,7 +174,7 @@ func (c *NatsClient) Close() error {
 	for _, sub := range c.subs {
 		if sub.IsValid() {
 			if err := sub.Drain(); err != nil {
-				c.log.Errorf("drain subscription: %v", err)
+				c.logger.Error("drain subscription failed", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldErr, err)
 			}
 		}
 	}
@@ -174,53 +185,98 @@ func (c *NatsClient) Close() error {
 		c.conn.Close()
 	}
 
-	c.log.Info("nats client closed")
+	c.logger.Info("nats client closed", constant.LogFieldKind, constant.LogKindMessage)
 	return nil
 }
 
-// Publish 发布消息到指定主题。
-func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) error {
+func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) (err error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	start := time.Now()
+	subjectLabel := subject
+	if strings.HasPrefix(subjectLabel, "push.node.") {
+		subjectLabel = "push.node.*"
+	} else if strings.Count(subjectLabel, ".") > 2 {
+		subjectLabel = "dynamic"
+	}
+	ctx, span := c.tracer.Start(ctx, "nats publish "+subjectLabel, oteltrace.WithSpanKind(oteltrace.SpanKindProducer), oteltrace.WithAttributes(
+		attribute.String("messaging.system", "nats"),
+		attribute.String("messaging.destination.name", subject),
+		attribute.String("messaging.operation", "publish"),
+	))
+	defer func() {
+		status := "ok"
+		level := slog.LevelInfo
+		if err != nil {
+			status = "error"
+			level = slog.LevelWarn
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+		}
+		span.End()
+		latency := time.Since(start)
+		MessageRequestsTotal.WithLabelValues(c.service, "publish", subjectLabel, status).Inc()
+		MessageRequestDurationSeconds.WithLabelValues(c.service, "publish", subjectLabel, status).Observe(latency.Seconds())
+		attrs := []slog.Attr{
+			slog.String(constant.LogFieldKind, constant.LogKindMessage),
+			slog.String(constant.LogFieldDirection, "publish"),
+			slog.String(constant.LogFieldSubject, subject),
+			slog.String(constant.LogFieldStatus, status),
+			slog.Int64(constant.LogFieldLatencyMS, latency.Milliseconds()),
+		}
+		if err != nil {
+			attrs = append(attrs, slog.Any(constant.LogFieldErr, err))
+		}
+		c.logger.LogAttrs(ctx, level, "nats message", attrs...)
+	}()
+
+	if msg == nil {
+		err = fmt.Errorf("nats message is nil")
+		return err
+	}
+	if msg.Header == nil {
+		msg.Header = map[string]string{}
+	}
+	otel.GetTextMapPropagator().Inject(ctx, propagation.MapCarrier(msg.Header))
+
+	var header nats.Header
+	if len(msg.Header) > 0 {
+		header = make(nats.Header, len(msg.Header))
+		for k, v := range msg.Header {
+			header.Set(k, v)
+		}
+	}
+	natsMsg := &nats.Msg{Subject: subject, Data: msg.Data, Header: header}
+
 	c.mu.RLock()
 	defer c.mu.RUnlock()
-
 	if c.closed {
-		return fmt.Errorf("client is closed")
+		err = fmt.Errorf("client is closed")
+		return err
 	}
 
 	if c.js != nil && c.conf.StreamName != "" {
-		return c.publishJetStream(subject, msg)
+		ack, publishErr := c.js.PublishMsg(natsMsg)
+		if publishErr != nil {
+			err = fmt.Errorf("jetstream publish to %s: %w", subject, publishErr)
+			return err
+		}
+		c.logger.DebugContext(ctx, "jetstream ack", constant.LogFieldKind, constant.LogKindMessage, "stream", ack.Stream, "sequence", ack.Sequence)
+		return nil
 	}
 
-	natsMsg := &nats.Msg{
-		Subject: subject,
-		Data:    msg.Data,
-		Header:  buildNatsHeader(msg.Header),
+	if publishErr := c.conn.PublishMsg(natsMsg); publishErr != nil {
+		err = fmt.Errorf("nats publish to %s: %w", subject, publishErr)
+		return err
 	}
-
-	if err := c.conn.PublishMsg(natsMsg); err != nil {
-		return fmt.Errorf("nats publish to %s: %w", subject, err)
+	if flushErr := c.conn.FlushTimeout(c.conf.Timeout.AsDuration()); flushErr != nil {
+		err = fmt.Errorf("nats flush: %w", flushErr)
+		return err
 	}
-
-	return c.conn.FlushTimeout(c.conf.Timeout.AsDuration())
-}
-
-func (c *NatsClient) publishJetStream(subject string, msg *Message) error {
-	natsMsg := &nats.Msg{
-		Subject: subject,
-		Data:    msg.Data,
-		Header:  buildNatsHeader(msg.Header),
-	}
-
-	ack, err := c.js.PublishMsg(natsMsg)
-	if err != nil {
-		return fmt.Errorf("jetstream publish to %s: %w", subject, err)
-	}
-
-	c.log.Debugf("jetstream ack: stream=%s seq=%d", ack.Stream, ack.Sequence)
 	return nil
 }
 
-// Subscribe 订阅主题，返回 Unsubscriber 用于取消。
 func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -230,23 +286,28 @@ func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler Mess
 	}
 
 	if c.js != nil && c.conf.StreamName != "" {
-		return c.subscribeJetStream(subject, handler)
+		sub, err := c.js.Subscribe(subject, func(m *nats.Msg) {
+			c.handleMsg(ctx, m, handler, true, "")
+		}, nats.DeliverAll(), nats.AckExplicit())
+		if err != nil {
+			return nil, fmt.Errorf("jetstream subscribe %s: %w", subject, err)
+		}
+		c.subs = append(c.subs, sub)
+		return &subscription{sub: sub}, nil
 	}
 
 	sub, err := c.conn.Subscribe(subject, func(m *nats.Msg) {
-		c.handleMsg(ctx, m, handler, false)
+		c.handleMsg(ctx, m, handler, false, "")
 	})
 	if err != nil {
 		return nil, fmt.Errorf("nats subscribe %s: %w", subject, err)
 	}
 
 	c.subs = append(c.subs, sub)
-	c.log.Infof("subscribed to: %s", subject)
-
+	c.logger.InfoContext(ctx, "nats subscribed", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldSubject, subject)
 	return &subscription{sub: sub}, nil
 }
 
-// QueueSubscribe 使用队列组订阅（负载均衡）
 func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -256,76 +317,118 @@ func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, 
 	}
 
 	if c.js != nil && c.conf.StreamName != "" {
-		return c.queueSubscribeJetStream(subject, queue, handler)
+		sub, err := c.js.QueueSubscribe(subject, queue, func(m *nats.Msg) {
+			c.handleMsg(ctx, m, handler, true, queue)
+		}, nats.DeliverAll(), nats.AckExplicit())
+		if err != nil {
+			return nil, fmt.Errorf("jetstream queue subscribe %s[%s]: %w", subject, queue, err)
+		}
+		c.subs = append(c.subs, sub)
+		return &subscription{sub: sub}, nil
 	}
 
 	sub, err := c.conn.QueueSubscribe(subject, queue, func(m *nats.Msg) {
-		c.handleMsg(ctx, m, handler, false)
+		c.handleMsg(ctx, m, handler, false, queue)
 	})
 	if err != nil {
 		return nil, fmt.Errorf("nats queue subscribe %s[%s]: %w", subject, queue, err)
 	}
 
 	c.subs = append(c.subs, sub)
-	c.log.Infof("queue subscribed to: %s [%s]", subject, queue)
-
+	c.logger.InfoContext(ctx, "nats queue subscribed", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldSubject, subject, constant.LogFieldQueue, queue)
 	return &subscription{sub: sub}, nil
 }
 
-func (c *NatsClient) subscribeJetStream(subject string, handler MessageHandler) (Unsubscriber, error) {
-	sub, err := c.js.Subscribe(subject, func(m *nats.Msg) {
-		c.handleMsg(context.Background(), m, handler, true)
-	}, nats.DeliverAll(), nats.AckExplicit())
-	if err != nil {
-		return nil, fmt.Errorf("jetstream subscribe %s: %w", subject, err)
+func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool, queue string) {
+	if ctx == nil {
+		ctx = context.Background()
 	}
-
-	c.subs = append(c.subs, sub)
-	return &subscription{sub: sub}, nil
-}
-
-func (c *NatsClient) queueSubscribeJetStream(subject, queue string, handler MessageHandler) (Unsubscriber, error) {
-	sub, err := c.js.QueueSubscribe(subject, queue, func(m *nats.Msg) {
-		c.handleMsg(context.Background(), m, handler, true)
-	}, nats.DeliverAll(), nats.AckExplicit())
-	if err != nil {
-		return nil, fmt.Errorf("jetstream queue subscribe %s[%s]: %w", subject, queue, err)
+	start := time.Now()
+	subject := "unknown"
+	if m != nil && m.Subject != "" {
+		subject = m.Subject
 	}
-
-	c.subs = append(c.subs, sub)
-	return &subscription{sub: sub}, nil
-}
-
-func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool) {
-	msg := &Message{
-		Subject: m.Subject,
-		Data:    m.Data,
-		Header:  fromNatsHeader(m.Header),
+	subjectLabel := subject
+	if strings.HasPrefix(subjectLabel, "push.node.") {
+		subjectLabel = "push.node.*"
+	} else if strings.Count(subjectLabel, ".") > 2 {
+		subjectLabel = "dynamic"
 	}
+	msg := &Message{Subject: subject}
+	if m != nil {
+		msg.Data = m.Data
+		if len(m.Header) > 0 {
+			msg.Header = make(map[string]string, len(m.Header))
+			for k, v := range m.Header {
+				if len(v) > 0 {
+					msg.Header[k] = v[0]
+				}
+			}
+		}
+	}
+	ctx = otel.GetTextMapPropagator().Extract(ctx, propagation.MapCarrier(msg.Header))
+	ctx, span := c.tracer.Start(ctx, "nats consume "+subjectLabel, oteltrace.WithSpanKind(oteltrace.SpanKindConsumer), oteltrace.WithAttributes(
+		attribute.String("messaging.system", "nats"),
+		attribute.String("messaging.destination.name", subject),
+		attribute.String("messaging.operation", "consume"),
+		attribute.String("messaging.consumer.group.name", queue),
+	))
 
+	var err error
+	defer func() {
+		status := "ok"
+		level := slog.LevelInfo
+		if err != nil {
+			status = "error"
+			level = slog.LevelWarn
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+		}
+		span.End()
+		latency := time.Since(start)
+		MessageRequestsTotal.WithLabelValues(c.service, "consume", subjectLabel, status).Inc()
+		MessageRequestDurationSeconds.WithLabelValues(c.service, "consume", subjectLabel, status).Observe(latency.Seconds())
+		attrs := []slog.Attr{
+			slog.String(constant.LogFieldKind, constant.LogKindMessage),
+			slog.String(constant.LogFieldDirection, "consume"),
+			slog.String(constant.LogFieldSubject, subject),
+			slog.String(constant.LogFieldQueue, queue),
+			slog.String(constant.LogFieldStatus, status),
+			slog.Int64(constant.LogFieldLatencyMS, latency.Milliseconds()),
+		}
+		if err != nil {
+			attrs = append(attrs, slog.Any(constant.LogFieldErr, err))
+		}
+		c.logger.LogAttrs(ctx, level, "nats message", attrs...)
+	}()
+
+	if m == nil {
+		err = fmt.Errorf("nats message is nil")
+		return
+	}
 	if isJetStream {
 		msg.Ack = func() error { return m.Ack() }
 		msg.Nack = func() error { return m.Nak() }
 	}
-
-	if err := handler(ctx, msg); err != nil {
-		c.log.Errorf("handler error: subject=%s err=%v", m.Subject, err)
+	if handler == nil {
+		err = fmt.Errorf("nats handler is nil")
+		return
+	}
+	if err = handler(ctx, msg); err != nil {
 		if msg.Nack != nil {
 			if nackErr := msg.Nack(); nackErr != nil {
-				c.log.Errorf("nack error: %v", nackErr)
+				err = fmt.Errorf("%w; nack: %v", err, nackErr)
 			}
 		}
 		return
 	}
-
 	if msg.Ack != nil {
 		if ackErr := msg.Ack(); ackErr != nil {
-			c.log.Errorf("ack error: %v", ackErr)
+			err = fmt.Errorf("ack: %w", ackErr)
 		}
 	}
 }
 
-// subscription 实现 Unsubscriber。
 type subscription struct {
 	sub *nats.Subscription
 }
@@ -335,28 +438,4 @@ func (s *subscription) Unsubscribe() error {
 		return s.sub.Unsubscribe()
 	}
 	return nil
-}
-
-func buildNatsHeader(h map[string]string) nats.Header {
-	if len(h) == 0 {
-		return nil
-	}
-	nh := make(nats.Header, len(h))
-	for k, v := range h {
-		nh.Set(k, v)
-	}
-	return nh
-}
-
-func fromNatsHeader(h nats.Header) map[string]string {
-	if len(h) == 0 {
-		return nil
-	}
-	m := make(map[string]string, len(h))
-	for k, v := range h {
-		if len(v) > 0 {
-			m[k] = v[0]
-		}
-	}
-	return m
 }

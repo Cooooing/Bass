@@ -2,6 +2,11 @@ server:
   name: integration
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
+  http:
+    network: tcp
+    host: ${HTTP_HOST:0.0.0.0}
+    port: ${HTTP_PORT:8007}
+    timeout: 5s
   grpc:
     network: tcp
     host: ${GRPC_HOST:0.0.0.0}
@@ -18,3 +23,6 @@ trace:
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
   sampler: 1
+
+observability:
+  enable_metrics: true

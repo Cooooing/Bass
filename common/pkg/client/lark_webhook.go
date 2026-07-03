@@ -2,7 +2,6 @@ package client
 
 import (
 	"bytes"
-	"common/pkg/util"
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
@@ -21,7 +20,6 @@ const defaultLarkWebhookBaseURL = "https://open.larksuite.com/open-apis/bot/v2/h
 
 // LarkWebhookClient 封装 Lark 自定义机器人 Webhook 调用。
 type LarkWebhookClient struct {
-	log        *util.LogHelper
 	httpClient *http.Client
 }
 
@@ -35,7 +33,6 @@ type LarkWebhookRequest struct {
 
 func NewLarkWebhookClient(logger *slog.Logger) *LarkWebhookClient {
 	return &LarkWebhookClient{
-		log:        util.NewLogHelper(logger),
 		httpClient: http.DefaultClient,
 	}
 }

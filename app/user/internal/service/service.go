@@ -16,10 +16,10 @@ var ServiceProviderSet = wire.NewSet(
 	NewLocationService,
 	NewRelationService,
 	NewTotpService,
-	ProvideServices,
+	ProvideGrpcServices,
 )
 
-func ProvideServices(
+func ProvideGrpcServices(
 	systemService *SystemService,
 	authService *AuthService,
 	accountService *AccountService,

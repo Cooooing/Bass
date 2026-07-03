@@ -7,34 +7,22 @@ import "google/protobuf/duration.proto";
 option go_package = "user/internal/conf/conf;conf";
 
 message Bootstrap {
-  Server server = 1;
+  common.api.app.common.Server server = 1;
   Data data = 2;
-  Trace trace = 3;
+  common.api.app.common.Trace trace = 3;
   common.api.app.common.Event event = 4;
   common.api.app.common.Alert alert = 5;
+  common.api.app.common.Observability observability = 6;
+  common.api.app.common.HTTP http = 7;
+  common.api.app.common.GRPC grpc = 8;
+  Business business = 9;
 }
 
-message Server {
-  string name = 1;
-  string version = 2;
-  string mode = 3;
-  HTTP http = 5;
-  message HTTP {
-    string network = 1;
-    string host = 2;
-    int32 port = 3;
-    google.protobuf.Duration timeout = 4;
-  }
-  GRPC grpc = 6;
-  message GRPC {
-    string network = 1;
-    string host = 2;
-    int32 port = 3;
-    google.protobuf.Duration timeout = 4;
-  }
-  string app = 7;
-  string avatar = 8;
-  Jwt jwt = 9;
+message Business {
+  string app = 1;
+  string avatar = 2;
+  Jwt jwt = 3;
+
   message Jwt {
     string secret = 1;
     google.protobuf.Duration expires = 2;
@@ -48,11 +36,4 @@ message Data {
   common.api.app.common.Redis redis = 2;
   common.api.app.common.Consul consul = 3;
   common.api.app.common.Nats nats = 4;
-}
-
-message Trace {
-  bool enable_otel = 1;
-  string endpoint = 2;
-  bool insecure = 3;
-  double sampler = 4;
 }

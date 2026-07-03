@@ -13,6 +13,7 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -24,6 +25,8 @@ type TagService struct {
 func (s *TagService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentTagServiceServer(gs, s)
 }
+
+func (s *TagService) RegisterHttp(hs *http.Server) {}
 
 func NewTagService(tagUsecase *usecase.TagUsecase) *TagService {
 	return &TagService{

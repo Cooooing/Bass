@@ -17,6 +17,8 @@ import (
 	"common/pkg/server"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -87,14 +89,19 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) e
 		return err
 	}
 	payload := string(payloadBytes)
+	headers := map[string]string{}
+	otel.GetTextMapPropagator().Inject(ctx, propagation.MapCarrier(headers))
 
 	return r.withTxClient(ctx, func(c *gen.Client) error {
-		return c.OutboxEvent.Create().
+		create := c.OutboxEvent.Create().
 			SetEventID(req.Event.EventId).
 			SetEventType(outboxevent.EventType(eventType)).
 			SetSubject(subject).
-			SetPayload(payload).
-			Exec(ctx)
+			SetPayload(payload)
+		if len(headers) > 0 {
+			create.SetHeaders(headers)
+		}
+		return create.Exec(ctx)
 	})
 }
 

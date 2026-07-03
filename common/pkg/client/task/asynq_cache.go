@@ -3,7 +3,6 @@ package task
 import (
 	"common/pkg/client"
 	"common/pkg/constant"
-	"common/pkg/util"
 	"context"
 	"time"
 
@@ -12,13 +11,11 @@ import (
 )
 
 type AsynqCache struct {
-	log         *util.LogHelper
 	redisClient *client.RedisClient
 }
 
 func NewAsynqCache(logger *slog.Logger, redisClient *client.RedisClient) *AsynqCache {
 	return &AsynqCache{
-		log:         util.NewLogHelper(logger),
 		redisClient: redisClient,
 	}
 }

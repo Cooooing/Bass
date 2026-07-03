@@ -6,6 +6,7 @@ import (
 	"push_hub/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 // PushEventService 实现 PushHubEventServiceServer，委托给 usecase 层。
@@ -21,6 +22,8 @@ func NewPushEventService(pushEventUc *usecase.PushEventUsecase) *PushEventServic
 func (s *PushEventService) RegisterGrpc(gs *grpc.Server) {
 	pushhubv1.RegisterPushHubEventServiceServer(gs, s)
 }
+
+func (s *PushEventService) RegisterHttp(hs *http.Server) {}
 
 func (s *PushEventService) PublishEvent(ctx context.Context, req *pushhubv1.PublishEvent_Request) (*pushhubv1.PublishEvent_Reply, error) {
 	if err := s.pushEventUc.PublishEvent(ctx, int32(req.Type), req.UserId, req.Payload); err != nil {

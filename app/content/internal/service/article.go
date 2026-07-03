@@ -14,6 +14,7 @@ import (
 	v1 "common/proto/gen/content/v1"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -26,6 +27,8 @@ type ArticleService struct {
 func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleServiceServer(gs, s)
 }
+
+func (s *ArticleService) RegisterHttp(hs *http.Server) {}
 
 func NewArticleService(
 	articleUsecase *usecase.ArticleUsecase,

@@ -7,7 +7,6 @@ import (
 	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type LocationService struct {
@@ -22,8 +21,6 @@ func NewLocationService(locationUsecase *usecase.LocationUsecase) *LocationServi
 func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterLocationServiceServer(gs, s)
 }
-
-func (s *LocationService) RegisterHttp(hs *http.Server) {}
 
 func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Request) (*v1.GetLocation_Reply, error) {
 	location, err := s.locationUsecase.GetByUserID(ctx, req.GetUserId())

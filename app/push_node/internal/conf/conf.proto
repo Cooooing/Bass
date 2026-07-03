@@ -9,7 +9,8 @@ option go_package = "push_node/internal/conf/conf;conf";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
-  Trace trace = 3;
+  common.api.app.common.Trace trace = 3;
+  common.api.app.common.Observability observability = 4;
 }
 
 message Server {
@@ -32,11 +33,4 @@ message Server {
 message Data {
   common.api.app.common.Consul consul = 3;
   common.api.app.common.Nats nats = 4;
-}
-
-message Trace {
-  bool enable_otel = 1;
-  string endpoint = 2;
-  bool insecure = 3;
-  double sampler = 4;
 }

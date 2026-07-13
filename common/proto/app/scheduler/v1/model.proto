@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+import "google/protobuf/timestamp.proto";
+import "scheduler/v1/enum.proto";
+
+option go_package = "common/proto/gen/scheduler/v1;v1";
+
+message SchedulerTask {
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+
+  int64 id = 1; // 任务 ID
+  string name = 2; // 代码内任务名称
+  string title = 3; // 展示名称
+  string description = 4; // 任务说明
+  bool enabled = 5; // 是否启用调度
+  string cron_spec = 6; // cron 表达式
+  string payload = 7; // JSON 编码后的调度参数
+  int32 timeout_seconds = 8; // 单次执行等待超时时间，单位秒
+  bool allow_overlap = 9; // 是否允许同一任务重叠执行
+  bool alert_enabled = 10; // 是否启用告警
+  int64 version = 16; // 任务配置版本
+}
+
+message SchedulerAvailableTask {
+  string name = 1; // 代码内任务名称
+  string title = 2; // 展示名称
+  string description = 3; // 任务说明
+}
+
+message SchedulerTaskExecutionRecord {
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+
+  int64 id = 1; // 执行记录 ID
+  int64 task_id = 2; // 任务 ID
+  google.protobuf.Timestamp scheduled_at = 3; // 理论调度时间
+  optional google.protobuf.Timestamp started_at = 4; // 实际开始时间
+  optional google.protobuf.Timestamp finished_at = 5; // 实际结束时间
+  optional int64 duration_ms = 6; // 执行耗时，单位毫秒
+  SchedulerTaskExecutionStatus status = 7; // 执行状态
+  SchedulerTaskTriggerType trigger_type = 8; // 触发类型
+  int64 task_version = 9; // 执行时使用的任务配置版本
+  string worker_id = 10; // 触发本次执行的 scheduler 实例
+  reserved 11 to 14;
+  string payload = 15; // JSON 编码后的执行参数快照
+  string last_error = 16; // 最近一次错误摘要
+  string trace_id = 17; // 链路追踪 ID
+}
+
+message SchedulerTaskExecutionRuntime {
+  int64 execution_record_id = 1; // 执行记录 ID
+  int64 task_id = 2; // 任务 ID
+  SchedulerTaskExecutionRuntimeState state = 3; // Redis 运行态检测结果
+}
+
+message SchedulerTaskQueryParams {
+  repeated int64 ids = 1; // 任务 ID 列表
+  optional string name = 2; // 代码内任务名称，模糊匹配
+  optional string title = 3; // 展示名称，模糊匹配
+  optional bool enabled = 4; // 是否启用
+}
+
+message SchedulerAvailableTaskQueryParams {
+  optional string keyword = 1; // 搜索关键词，匹配 name、title、description
+}
+
+message SchedulerTaskExecutionRecordQueryParams {
+  repeated int64 ids = 1; // 执行记录 ID 列表
+  optional int64 task_id = 2; // 任务 ID
+  optional SchedulerTaskExecutionStatus status = 3; // 执行状态
+  optional SchedulerTaskTriggerType trigger_type = 4; // 触发类型
+}

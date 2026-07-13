@@ -1,0 +1,67 @@
+server:
+  name: scheduler
+  version: 1.0.0
+  mode: ${SERVICE_MODE:dev}
+http:
+  network: tcp
+  host: ${HTTP_HOST:0.0.0.0}
+  port: ${HTTP_PORT:8010}
+  timeout: 5s
+grpc:
+  network: tcp
+  host: ${GRPC_HOST:0.0.0.0}
+  port: ${GRPC_PORT:9010}
+  timeout: 5s
+consul:
+  address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+  datacenter: dc1
+  token: ${CONSUL_ACL_APP_TOKEN:token}
+  dial_timeout: 5s
+database:
+  driver: postgres
+  source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable
+  merge: true
+  debug: false
+  slow_sql_threshold: 1s
+  sample_rate: 1
+redis:
+  addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
+  password: ${REDIS_PASSWORD:"123456"}
+  dial_timeout: 5s
+  db: 0
+  read_timeout: 5s
+  write_timeout: 5s
+  pool_size: 150
+  min_idle_conns: 30
+  pool_timeout: 2s
+  conn_max_idle_time: 600s
+  conn_max_life_time: 1800s
+nats:
+  host: ${NATS_HOST:127.0.0.1}
+  port: ${NATS_PORT:4222}
+  user: ${NATS_USER:admin}
+  password: ${NATS_PASSWORD:"123456"}
+  name: nats-scheduler
+  timeout: 5s
+  max_reconnects: 10
+  reconnect_wait: 2s
+  ping_interval: 30s
+  flusher_timeout: 5s
+  enable_jet_stream: false
+  stream_name: ""
+  jet_stream_domain: ""
+trace:
+  enable_otel: false
+  endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
+  insecure: true
+  sampler: 1
+observability:
+  enable_metrics: true
+alert:
+  lark_webhook:
+    base_url: ${ALERT_LARK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
+    token: ${ALERT_LARK_TOKEN:}
+    secret: ${ALERT_LARK_SECRET:}
+    timeout: 10s
+scheduler:
+  task_timeout: 30s

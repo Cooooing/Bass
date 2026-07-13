@@ -1,0 +1,36 @@
+name: bass-observability
+
+networks:
+  bass:
+    driver: bridge
+    external: true
+
+services:
+  tempo:
+    image: grafana/tempo:2.8.1
+    restart: on-failure:3
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    ports:
+      - "3200:3200"
+    volumes:
+      - ./tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo_data:/var/tempo
+    networks:
+      - bass
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.129.0
+    restart: on-failure:3
+    command: ["--config=/etc/otel-collector/otel-collector.yaml"]
+    depends_on:
+      - tempo
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./otel-collector.yaml:/etc/otel-collector/otel-collector.yaml:ro
+    networks:
+      - bass
+
+volumes:
+  tempo_data:

@@ -36,6 +36,11 @@ const (
 	LogFieldFile           = "file"
 	LogFieldLine           = "line"
 	LogFieldUnexpected     = "unexpected"
+	LogFieldTaskID         = "task_id"
+	LogFieldTaskName       = "task_name"
+	LogFieldTaskVersion    = "task_version"
+	LogFieldExecutionID    = "execution_id"
+	LogFieldReason         = "reason"
 
 	LogFieldPassword      = "password"
 	LogFieldToken         = "token"

@@ -2,18 +2,22 @@ syntax = "proto3";
 
 package common.api.app.common.v1;
 
+import "google/api/annotations.proto";
+
 option go_package = "common/proto/gen/common/v1;v1";
 
-// System 服务
+// System 服务。
 service CommonSystemService {
-  // 健康检查
-  rpc Health(HealthSystem.Request) returns (HealthSystem.Reply) {}
+  // 健康检查。
+  rpc Health(HealthSystem.Request) returns (HealthSystem.Reply) {
+    option (google.api.http) = {get: "/v1/system/health"};
+  }
 }
 
 message HealthSystem {
   message Request {}
   message Reply {
-    // 响应消息
+    // 响应消息。
     string message = 1;
   }
 }

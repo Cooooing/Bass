@@ -46,11 +46,12 @@
 | `app/push_hub` | `push_hub` | 推送中枢内部服务，管理推送节点注册、用户节点映射和消息路由。     |
 | `app/push_node` | `push_node` | 推送边缘服务，维护客户端 SSE 长连接，接收并下发实时推送消息。   |
 | `app/platform` | `platform` | 通用平台内部服务，提供 IP 解析和对象存储（OSS）能力。         |
+| `app/scheduler` | `scheduler` | 分布式定时任务内部服务，维护任务定义、运行记录、调度触发和任务告警。 |
 | `common`      | 共享基础模块    | 公共 proto、Buf 模板、客户端、工具和跨服务约定。       |
 
 ## 目标服务边界
 
-当前已经落地的目标服务有 `bbs`、`user`、`content`、`notify`、`im`、`integration`、`push_hub`、`push_node`、`platform`。其他服务边界属于目标规划，不能因为文档中出现名称就直接生成对应代码、目录、配置或契约。
+当前已经落地的目标服务有 `bbs`、`user`、`content`、`notify`、`im`、`integration`、`push_hub`、`push_node`、`platform`、`scheduler`。其他服务边界属于目标规划，不能因为文档中出现名称就直接生成对应代码、目录、配置或契约。
 
 | 服务名           | 分层               | 状态   | 职责                  |
 |---------------|------------------|------|---------------------|
@@ -65,5 +66,6 @@
 | `im`          | Internal Service | 已落地  | 即时通信业务（群组、会话、消息）。 |
 | `platform`    | Internal Service | 已落地  | 通用平台能力（IP 解析、对象存储）。 |
 | `push_hub`    | Internal Service | 已落地  | 实时推送路由与节点控制。        |
+| `scheduler`   | Internal Service | 已落地  | 分布式定时任务配置、触发、运行记录和告警。 |
 
 目标服务边界的详细说明见根目录 [README.md](../README.md)。

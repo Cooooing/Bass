@@ -33,12 +33,13 @@
 - 一次性简单逻辑、入参校验和字段组装不拆游离私有函数；不新增通用转换接口或 `toXXX`、`buildXXXReply` 等组装函数；默认不新增测试代码，仍需按变更类型运行生成、编译或已有测试。
 - slice、map、set 的去重、映射、过滤、分组、键值提取等纯数据变换优先使用 `github.com/samber/lo`；有副作用、错误短路、事务操作或可读性下降时保留显式循环。
 - content 已发布文章的作者编辑窗口由 content 配置 `business.article.published_edit_window` 和 `business.article.published_edit_max_view_count` 控制，默认 10 分钟且浏览数小于 100。
+- scheduler 只负责分布式定时任务定义、触发、运行记录和告警，不连接其他服务业务库，不承载被调用服务的领域规则。
 - 新增服务、事件、BFF 接口、数据库 schema、生成链路、公共包约定或配置项时，同步更新 `doc/`、`AGENTS.md` 和 `CLAUDE.md`。
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **Bass** (5484 symbols, 17775 relationships, 291 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **Bass** (5918 symbols, 19355 relationships, 273 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 
@@ -47,9 +48,8 @@ This project is indexed by GitNexus as **Bass** (5484 symbols, 17775 relationshi
 - **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
 - **MUST run `detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows. For regression review, compare against the default branch: `detect_changes({scope: "compare", base_ref: "master"})`.
 - **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `query({search_query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
+- When exploring unfamiliar code, use `query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
 - When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `context({name: "symbolName"})`.
-- For security review, `explain({target: "fileOrSymbol"})` lists taint findings (source→sink flows; needs `analyze --pdg`).
 
 ## Never Do
 

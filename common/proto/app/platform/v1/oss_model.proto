@@ -1,13 +1,14 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
-package common.api.app.notify.v1;
+package common.api.app.platform.v1;
 
 import "common/common.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "common/proto/gen/notify/v1;v1";
+option go_package = "common/proto/gen/platform/v1;v1";
 
+// OSS 对象元数据。
 message Oss {
   google.protobuf.Timestamp created_at = 1000;
   google.protobuf.Timestamp updated_at = 1001;
@@ -26,11 +27,13 @@ message Oss {
   optional string blocked_by_name = 13;
 }
 
+// 上传凭证。
 message UploadToken {
   string key = 1;
   string token = 2;
 }
 
+// 七牛审核回调条目。
 message Item {
   string cmd = 1;
   int32 code = 2;
@@ -56,7 +59,8 @@ message OssQueryParams {
   optional string bucket = 2;
   optional string key = 3;
   optional string mime_type = 4;
-  common.Int64Range size = 7;
   optional bool blocked = 5;
   optional string blocked_by_name = 6;
+  common.Int64Range size = 7;
 }
+

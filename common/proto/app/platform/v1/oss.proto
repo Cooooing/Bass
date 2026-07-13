@@ -1,17 +1,23 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
-package common.api.app.notify.v1;
+package common.api.app.platform.v1;
 
 import "common/common.proto";
-import "notify/v1/oss_model.proto";
+import "platform/v1/oss_model.proto";
 
-option go_package = "common/proto/gen/notify/v1;v1";
+option go_package = "common/proto/gen/platform/v1;v1";
 
-service NotifyOssService {
+// OSS 服务。
+service PlatformOssService {
+  // 获取上传凭证。
   rpc GetUploadToken(GetUploadTokenOss.Request) returns (GetUploadTokenOss.Reply) {}
+  // 审核对象。
   rpc Audit(AuditOss.Request) returns (AuditOss.Reply) {}
+  // 查询对象列表。
   rpc List(ListOss.Request) returns (ListOss.Reply) {}
+  // 七牛上传回调。
   rpc QiniuUploadCallback(QiniuUploadCallbackOss.Request) returns (QiniuUploadCallbackOss.Reply) {}
+  // 七牛增量审核回调。
   rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Request) returns (QiniuIncrementAuditCallbackOss.Reply) {}
 }
 
@@ -75,3 +81,4 @@ message QiniuIncrementAuditCallbackOss {
   }
   message Reply {}
 }
+

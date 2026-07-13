@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/proto/gen/integration/v1"
+	"common/proto/gen/platform/v1"
 	"context"
 	"platform/internal/biz/usecase"
 
@@ -9,9 +9,9 @@ import (
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
-// IpResolutionService 实现 IP 解析 gRPC 服务。
+// IpResolutionService 实现 platform IP 解析 gRPC 服务。
 type IpResolutionService struct {
-	v1.UnimplementedIntegrationIpResolutionServiceServer
+	v1.UnimplementedPlatformIpResolutionServiceServer
 	ipUsecase *usecase.IpResolutionUsecase
 }
 
@@ -20,13 +20,12 @@ func NewIpResolutionService(ipUsecase *usecase.IpResolutionUsecase) *IpResolutio
 }
 
 func (s *IpResolutionService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterIntegrationIpResolutionServiceServer(gs, s)
+	v1.RegisterPlatformIpResolutionServiceServer(gs, s)
 }
 
 func (s *IpResolutionService) RegisterHttp(hs *http.Server) {
 }
 
-// ResolveIp 解析 IP 地理信息。
 func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Request) (*v1.ResolveIp_Reply, error) {
 	info, err := s.ipUsecase.Get(ctx, req.GetIp())
 	if err != nil {

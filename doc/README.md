@@ -42,7 +42,6 @@
 | `app/content` | `content` | 社区内容内部服务，拥有文章、评论、标签、板块和互动记录数据。      |
 | `app/notify`  | `notify`  | 通知内部服务，负责通知模板、通知记录、通知偏好和投递状态。       |
 | `app/im`      | `im`      | 即时通信内部服务，负责群组、会话、消息管理和实时投递。         |
-| `app/integration` | `integration` | 外部边缘服务，负责第三方回调接入、验签、幂等和协议转换（当前为骨架，预留扩展）。 |
 | `app/push_hub` | `push_hub` | 推送中枢内部服务，管理推送节点注册、用户节点映射和消息路由。     |
 | `app/push_node` | `push_node` | 推送边缘服务，维护客户端 SSE 长连接，接收并下发实时推送消息。   |
 | `app/platform` | `platform` | 通用平台内部服务，提供 IP 解析和对象存储（OSS）能力。         |
@@ -51,13 +50,12 @@
 
 ## 目标服务边界
 
-当前已经落地的目标服务有 `bbs`、`user`、`content`、`notify`、`im`、`integration`、`push_hub`、`push_node`、`platform`、`scheduler`。其他服务边界属于目标规划，不能因为文档中出现名称就直接生成对应代码、目录、配置或契约。
+当前已经落地的目标服务有 `bbs`、`user`、`content`、`notify`、`im`、`push_hub`、`push_node`、`platform`、`scheduler`。其他服务边界属于目标规划，不能因为文档中出现名称就直接生成对应代码、目录、配置或契约。
 
 | 服务名           | 分层               | 状态   | 职责                  |
 |---------------|------------------|------|---------------------|
 | `bbs`         | BFF              | 已落地  | 前台页面/API 聚合。        |
 | `bbs_admin`   | BFF              | 目标规划 | 后台管理/API 聚合。        |
-| `integration` | External Edge    | 已落地  | 第三方回调接入、验签、幂等和协议转换（骨架，预留扩展）。 |
 | `openapi`     | External Edge    | 目标规划 | 对外开放 API。           |
 | `push_node`   | Push Edge        | 已落地  | 客户端下行 SSE 推送。       |
 | `user`        | Internal Service | 已落地  | 用户与认证。              |

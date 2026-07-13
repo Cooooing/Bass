@@ -4,7 +4,7 @@ import (
 	"common/pkg/constant"
 	"common/pkg/util"
 	"common/proto/gen/common"
-	v1 "common/proto/gen/notify/v1"
+	v1 "common/proto/gen/platform/v1"
 	"context"
 	"fmt"
 	"platform/internal/biz/model"
@@ -19,7 +19,7 @@ import (
 )
 
 type OssService struct {
-	v1.UnimplementedNotifyOssServiceServer
+	v1.UnimplementedPlatformOssServiceServer
 	log                  *slog.Logger
 	objectStorageUsecase *usecase.ObjectStorageUsecase
 }
@@ -35,7 +35,7 @@ func NewOssService(
 }
 
 func (s *OssService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterNotifyOssServiceServer(gs, s)
+	v1.RegisterPlatformOssServiceServer(gs, s)
 }
 
 func (s *OssService) RegisterHttp(hs *http.Server) {

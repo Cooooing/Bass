@@ -1,22 +1,19 @@
 package client
 
 import (
-	"context"
-	bizbase "user/internal/biz/base"
-	"user/internal/data/gen"
-
 	utilent "common/pkg/util/ent"
+	"context"
+	"user/internal/biz/base"
+	"user/internal/data/gen"
 )
 
-// genTxWrapper 将 ent 生成的事务适配为公共事务接口。
 type genTxWrapper struct{ tx *gen.Tx }
 
 func (w *genTxWrapper) Commit() error       { return w.tx.Commit() }
 func (w *genTxWrapper) Rollback() error     { return w.tx.Rollback() }
 func (w *genTxWrapper) Client() interface{} { return w.tx.Client() }
 
-// ProvideTx 创建 user usecase 使用的事务执行器。
-func ProvideTx(db *gen.Client) bizbase.Tx {
+func ProvideTx(db *gen.Client) base.Tx {
 	starter := func(ctx context.Context) (utilent.Tx, error) {
 		tx, err := db.Tx(ctx)
 		if err != nil {

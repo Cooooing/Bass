@@ -8,7 +8,6 @@ import (
 
 	commonClient "common/pkg/client"
 	commonserver "common/pkg/server"
-	"common/proto/gen/common"
 	"push_node/internal/biz/usecase"
 	"push_node/internal/conf"
 
@@ -16,6 +15,7 @@ import (
 
 	"github.com/go-kratos/kratos/v3"
 	ktransport "github.com/go-kratos/kratos/v3/transport"
+	kratosgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -37,6 +37,7 @@ func newApp(
 	c *conf.Bootstrap,
 	logger *slog.Logger,
 	hs *http.Server,
+	gs *kratosgrpc.Server,
 	consulClient *commonClient.ConsulClient,
 	nodeUc *usecase.NodeUsecase,
 ) *kratos.App {
@@ -44,7 +45,7 @@ func newApp(
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
 
-	servers := []ktransport.Server{hs}
+	servers := []ktransport.Server{hs, gs}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -58,7 +59,7 @@ func newApp(
 			return nodeUc.ConnectHub(ctx)
 		}),
 		kratos.BeforeStop(func(ctx context.Context) error {
-			// 鎼存梻鏁ら崑婊勵剾閸撳秵鏌囧鈧?push_hub
+			// 闁圭厧鐡ㄥ濠氬极閵堝纾绘繝濠傚閸撻箖鏌涢幘宕囆ｉ柡灞芥搐椤曪綁鍩€?push_hub
 			nodeUc.Stop()
 			return nil
 		}),
@@ -87,20 +88,20 @@ func main() {
 			panic(err)
 		}
 	}()
-	commonServer := &common.Server{Name: c.Server.Name, Version: c.Server.Version, Mode: c.Server.Mode}
+	commonServer := c.Server
 	logger := commonserver.NewLogger(commonServer, bc.GetLog())
 
-	// 闂冭埖顔?1閿涙碍鏁為崘灞藉煂 push_hub 閼惧嘲褰囬懞鍌滃仯 ID
-	hubConn, err := grpc.NewClient(c.Server.PushHubAddress,
+	// 闂傚倸鍟抽崺鏍敊?1闂佹寧绋掔喊宥夊极閻愬搫绀冮悘鐐舵閻?push_hub 闂佸吋鍎抽崲鑼躲亹閸ヮ剚鍤嶉柛灞剧矊娴?ID
+	hubConn, err := grpc.NewClient(c.PushNode.PushHubAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		panic(fmt.Sprintf("鏉╃偞甯?push_hub 婢惰精瑙? %v", err))
+		panic(fmt.Sprintf("闁哄鏅濋崑鐐垫暜?push_hub 婵犮垺鍎肩划鍓ф喆? %v", err))
 	}
 	nodeID, err := usecase.RegisterWithHub(ctx, hubConn, c)
 	if err != nil {
 		_ = hubConn.Close()
-		panic(fmt.Sprintf("濞夈劌鍞介懞鍌滃仯婢惰精瑙? %v", err))
+		panic(fmt.Sprintf("濠电偛顦崝宀勫船娴犲鍤嶉柛灞剧矊娴狀垰顭块幆鎵翱閻? %v", err))
 	}
 	slog.Info("node registered", "node_id", nodeID)
 

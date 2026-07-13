@@ -23,14 +23,14 @@ func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Obs
 			validate.ProtoValidate(),
 		),
 	}
-	if c.Server.Http.Network != "" {
-		opts = append(opts, http.Network(c.Server.Http.Network))
+	if c.Http.Network != "" {
+		opts = append(opts, http.Network(c.Http.Network))
 	}
-	if c.Server.Http.Host != "" && c.Server.Http.Port != 0 {
-		opts = append(opts, http.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
+	if c.Http.Host != "" && c.Http.Port != 0 {
+		opts = append(opts, http.Address(fmt.Sprintf("%s:%d", c.Http.Host, c.Http.Port)))
 	}
-	if c.Server.Http.Timeout != nil {
-		opts = append(opts, http.Timeout(c.Server.Http.Timeout.AsDuration()))
+	if c.Http.Timeout != nil {
+		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
 	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {

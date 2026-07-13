@@ -28,10 +28,10 @@ func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest)
 	if req == nil || req.ToEmail == "" {
 		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusFailed}, nil
 	}
-	if c.conf == nil || c.conf.Server == nil || c.conf.Server.Email == nil || !c.conf.Server.Email.Enable {
+	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Email == nil || !c.conf.Notify.Email.Enable {
 		return nil, errors.New("email sender is disabled")
 	}
-	email := c.conf.Server.Email
+	email := c.conf.Notify.Email
 
 	contentType := req.ContentType
 	if contentType == "" {

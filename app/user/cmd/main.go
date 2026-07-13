@@ -17,15 +17,10 @@ import (
 	"log/slog"
 )
 
-// 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
 var (
-	// Name 是编译产物名称。
-	Name = "app"
-	// Version 是编译产物版本。
-	Version = "v1.0.0"
-	// flagConf 是业务配置文件路径参数。
-	flagConf = "configs/config.yaml"
-	// flagBootstrap 是启动配置文件路径参数。
+	Name          = "app"
+	Version       = "v1.0.0"
+	flagConf      = "configs/config.yaml"
 	flagBootstrap = "configs/bootstrap.yaml"
 )
 
@@ -81,7 +76,6 @@ func main() {
 	}
 	defer cleanup()
 
-	// 启动应用并等待停止信号。
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

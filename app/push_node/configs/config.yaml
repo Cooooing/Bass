@@ -2,38 +2,42 @@ server:
   name: push_node
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
-  http:
-    network: tcp
-    host: ${HTTP_HOST:0.0.0.0}
-    port: ${HTTP_PORT:8010}
-    timeout: 86400s
-  jwt_secret: ${JWT_SECRET:your-jwt-secret-here}
-  push_hub_address: ${PUSH_HUB_ADDRESS:discovery:///push_hub}
-data:
-  consul:
-    address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
-    datacenter: dc1
-    token: ${CONSUL_ACL_APP_TOKEN:token}
-    dial_timeout: 5s
-  nats:
-    host: ${NATS_HOST:127.0.0.1}
-    port: ${NATS_PORT:4222}
-    user: ${NATS_USER:admin}
-    password: ${NATS_PASSWORD:"123456"}
-    name: nats-push-node
-    timeout: 5s
-    max_reconnects: 10
-    reconnect_wait: 2s
-    ping_interval: 30s
-    flusher_timeout: 5s
-    enable_jet_stream: false
-    stream_name: ""
-    jet_stream_domain: ""
+http:
+  network: tcp
+  host: ${HTTP_HOST:0.0.0.0}
+  port: ${HTTP_PORT:8010}
+  timeout: 86400s
+grpc:
+  network: tcp
+  host: ${GRPC_HOST:0.0.0.0}
+  port: ${GRPC_PORT:9011}
+  timeout: 5s
+consul:
+  address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+  datacenter: dc1
+  token: ${CONSUL_ACL_APP_TOKEN:token}
+  dial_timeout: 5s
+nats:
+  host: ${NATS_HOST:127.0.0.1}
+  port: ${NATS_PORT:4222}
+  user: ${NATS_USER:admin}
+  password: ${NATS_PASSWORD:"123456"}
+  name: nats-push-node
+  timeout: 5s
+  max_reconnects: 10
+  reconnect_wait: 2s
+  ping_interval: 30s
+  flusher_timeout: 5s
+  enable_jet_stream: false
+  stream_name: ""
+  jet_stream_domain: ""
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
   sampler: 1
-
 observability:
   enable_metrics: true
+push_node:
+  jwt_secret: ${JWT_SECRET:your-jwt-secret-here}
+  push_hub_address: ${PUSH_HUB_ADDRESS:discovery:///push_hub}

@@ -7,13 +7,10 @@ option go_package = "bbs/internal/conf/conf;conf";
 
 message Bootstrap {
   common.api.app.common.Server server = 1;
-  Data data = 2;
-  common.api.app.common.Trace trace = 3;
-  common.api.app.common.Observability observability = 4;
-  common.api.app.common.HTTP http = 5;
-}
-
-message Data {
-  common.api.app.common.Redis redis = 2;
-  common.api.app.common.Consul consul = 3;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
 }

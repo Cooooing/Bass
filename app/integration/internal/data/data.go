@@ -14,4 +14,4 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 )
 
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Data.Consul }
+func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }

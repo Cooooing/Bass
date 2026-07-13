@@ -1,8 +1,8 @@
-﻿package conf
+package conf
 
 import (
-	"common/proto/gen/common"
 	commonserver "common/pkg/server"
+	"common/proto/gen/common"
 )
 
 // LoadConfig 加载本模块配置，并注册可热更新配置。

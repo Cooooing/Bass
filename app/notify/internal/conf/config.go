@@ -5,7 +5,6 @@ import (
 	"common/proto/gen/common"
 )
 
-// LoadConfig 加载本模块配置，并注册可热更新配置。
 func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstrap, func(), error) {
 	c, bc, hot, cleanup, err := commonserver.LoadConfig[*Bootstrap](bootstrapPath, path)
 	if err != nil {
@@ -13,7 +12,7 @@ func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstra
 	}
 
 	if err := hot.BindProtoHotFields(
-		&c.Server.NotificationRateLimit,
+		&c.Notify.NotificationRateLimit,
 		&c.Alert.LarkWebhook,
 		&c.Event.Inbox,
 		&c.Event.DeadLetter,

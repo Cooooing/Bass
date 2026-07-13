@@ -1,34 +1,29 @@
 package service
 
 import (
+	commonv1 "common/proto/gen/common/v1"
 	"context"
-	"fmt"
 
-	"push_node/internal/conf"
-
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
-// SystemService 提供健康检查 HTTP 端点。
-type SystemService struct {
-	conf *conf.Bootstrap
+type CommonSystemService struct {
+	commonv1.UnimplementedCommonSystemServiceServer
 }
 
-// NewSystemService 创建 SystemService。
-func NewSystemService(conf *conf.Bootstrap) *SystemService {
-	return &SystemService{conf: conf}
+func NewCommonSystemService() *CommonSystemService {
+	return &CommonSystemService{}
 }
 
-// RegisterHttp 注册 HTTP 路由。
-func (s *SystemService) RegisterHttp(hs *http.Server) {
-	hs.HandleFunc("/push/v1/system/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		msg := fmt.Sprintf("%s %s is ok", s.conf.Server.Name, s.conf.Server.Version)
-		_, _ = w.Write([]byte(fmt.Sprintf(`{"code":0,"message":"%s","data":null}`, msg)))
-	})
+func (s *CommonSystemService) RegisterGrpc(gs *grpc.Server) {
+	commonv1.RegisterCommonSystemServiceServer(gs, s)
 }
 
-// Health 健康检查（保留以兼容接口）。
-func (s *SystemService) Health(ctx context.Context) string {
-	return fmt.Sprintf("%s %s is ok", s.conf.Server.Name, s.conf.Server.Version)
+func (s *CommonSystemService) RegisterHttp(hs *http.Server) {
+	commonv1.RegisterCommonSystemServiceHTTPServer(hs, s)
+}
+
+func (s *CommonSystemService) Health(ctx context.Context, req *commonv1.HealthSystem_Request) (*commonv1.HealthSystem_Reply, error) {
+	return &commonv1.HealthSystem_Reply{Message: "ok"}, nil
 }

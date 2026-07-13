@@ -19,13 +19,13 @@ func NewRateLimitUsecase(conf *conf.Bootstrap, notificationRateLimitCache repo.N
 	enabled := true
 	window := 5 * time.Minute
 	maxCount := int64(5)
-	if conf != nil && conf.Server != nil && conf.Server.NotificationRateLimit != nil {
-		enabled = conf.Server.NotificationRateLimit.Enable
-		if conf.Server.NotificationRateLimit.Window != nil && conf.Server.NotificationRateLimit.Window.AsDuration() > 0 {
-			window = conf.Server.NotificationRateLimit.Window.AsDuration()
+	if conf != nil && conf.Notify != nil && conf.Notify.NotificationRateLimit != nil {
+		enabled = conf.Notify.NotificationRateLimit.Enable
+		if conf.Notify.NotificationRateLimit.Window != nil && conf.Notify.NotificationRateLimit.Window.AsDuration() > 0 {
+			window = conf.Notify.NotificationRateLimit.Window.AsDuration()
 		}
-		if conf.Server.NotificationRateLimit.MaxCount > 0 {
-			maxCount = conf.Server.NotificationRateLimit.MaxCount
+		if conf.Notify.NotificationRateLimit.MaxCount > 0 {
+			maxCount = conf.Notify.NotificationRateLimit.MaxCount
 		}
 	}
 	return &RateLimitUsecase{

@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	"context"
 	"fmt"
+	"log/slog"
 	"user/internal/conf"
 	"user/internal/data/gen"
 	"user/internal/data/gen/migrate"
@@ -13,25 +14,21 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	_ "github.com/lib/pq"
-	"log/slog"
 )
 
 func NewDataBaseClient(logger *slog.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
-	drv, err := sql.Open(conf.Data.Database.Driver, conf.Data.Database.Source)
+	drv, err := sql.Open(conf.Database.Driver, conf.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)
 	}
-	observedDrv := driver.Wrap(drv, logger, conf.Data.Database)
+	observedDrv := driver.Wrap(drv, logger, conf.Database)
 	client := gen.NewClient(gen.Driver(observedDrv))
-	logger.Info("database client created", constant.LogFieldKind, constant.LogKindDatabase, constant.LogFieldDriver, conf.Data.Database.Driver)
-	// 鍙€夛細鑷姩杩佺Щ
-	if conf.Data.Database.Merge {
-		ctx := context.Background()
-		if err := client.Schema.Create(ctx, migrate.WithDropColumn(true), migrate.WithDropIndex(true)); err != nil {
+	logger.Info("database client created", constant.LogFieldKind, constant.LogKindDatabase, constant.LogFieldDriver, conf.Database.Driver)
+	if conf.Database.Merge {
+		if err := client.Schema.Create(context.Background(), migrate.WithDropColumn(true), migrate.WithDropIndex(true)); err != nil {
 			return nil, nil, fmt.Errorf("failed creating schema resources: %w", err)
 		}
 	}
-
 	cleanup := func() {
 		if err := client.Close(); err != nil {
 			logger.Error("close ent client failed", constant.LogFieldKind, constant.LogKindDatabase, constant.LogFieldErr, err)

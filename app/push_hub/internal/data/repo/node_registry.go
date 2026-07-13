@@ -16,9 +16,9 @@ import (
 const (
 	// Redis Key 前缀
 	keyNodeHash    = "push_hub:nodes"        // Hash: node_id -> JSON{node_info}
-	keyUserNodes   = "push_hub:user_nodes"    // Hash: user_id -> JSON[node_id 列表]
-	keyOfflineList = "push_hub:offline:"      // List prefix: push_hub:offline:{user_id}
-	keyOnlineSet   = "push_hub:online_nodes"  // Set: 所有在线节点 ID
+	keyUserNodes   = "push_hub:user_nodes"   // Hash: user_id -> JSON[node_id 列表]
+	keyOfflineList = "push_hub:offline:"     // List prefix: push_hub:offline:{user_id}
+	keyOnlineSet   = "push_hub:online_nodes" // Set: 所有在线节点 ID
 
 	// 节点过期时间（无心跳超过 90s 判定离线）
 	nodeExpire = 90 * time.Second

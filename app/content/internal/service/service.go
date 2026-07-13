@@ -8,7 +8,7 @@ import (
 
 // ServiceProviderSet 是 service 层依赖集合。
 var ServiceProviderSet = wire.NewSet(
-	NewSystemService,
+	NewCommonSystemService,
 	NewArticleService,
 	NewCommentService,
 	NewDomainService,
@@ -19,14 +19,14 @@ var ServiceProviderSet = wire.NewSet(
 )
 
 func ProvideServices(
-	systemService *SystemService,
+	commonSystemService *CommonSystemService,
 	articleService *ArticleService,
 	domainService *DomainService,
 	commentService *CommentService,
 	tagService *TagService,
 ) []server.GrpcService {
 	return []server.GrpcService{
-		systemService,
+		commonSystemService,
 		articleService,
 		domainService,
 		commentService,
@@ -35,14 +35,14 @@ func ProvideServices(
 }
 
 func ProvideHttpServices(
-	systemService *SystemService,
+	commonSystemService *CommonSystemService,
 	articleService *ArticleService,
 	domainService *DomainService,
 	commentService *CommentService,
 	tagService *TagService,
 ) []server.HttpService {
 	return []server.HttpService{
-		systemService,
+		commonSystemService,
 		articleService,
 		domainService,
 		commentService,

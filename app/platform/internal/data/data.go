@@ -26,6 +26,6 @@ var DataProviderSet = wire.NewSet(
 	oss.ProviderSet,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Data.Redis }
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Data.Consul }
-func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Data.Nats }
+func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Redis }
+func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Nats }

@@ -8,14 +8,17 @@ option go_package = "user/internal/conf/conf;conf";
 
 message Bootstrap {
   common.api.app.common.Server server = 1;
-  Data data = 2;
-  common.api.app.common.Trace trace = 3;
-  common.api.app.common.Event event = 4;
-  common.api.app.common.Alert alert = 5;
-  common.api.app.common.Observability observability = 6;
-  common.api.app.common.HTTP http = 7;
-  common.api.app.common.GRPC grpc = 8;
-  Business business = 9;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
+  common.api.app.common.Alert alert = 10;
+  common.api.app.common.Event event = 11;
+  Business business = 21;
 }
 
 message Business {
@@ -29,11 +32,4 @@ message Business {
     google.protobuf.Duration email_expire = 3;
     google.protobuf.Duration phone_expire = 4;
   }
-}
-
-message Data {
-  common.api.app.common.Database database = 1;
-  common.api.app.common.Redis redis = 2;
-  common.api.app.common.Consul consul = 3;
-  common.api.app.common.Nats nats = 4;
 }

@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			server.RequestLogContextMiddleware(),
@@ -36,6 +36,9 @@ func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Obs
 	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {
 		srv.Handle("/metrics", promhttp.Handler())
 		logger.Info("metrics endpoint registered", slog.String(constant.LogFieldPath, "/metrics"))
+	}
+	for _, s := range services {
+		s.RegisterHttp(srv)
 	}
 	return srv
 }

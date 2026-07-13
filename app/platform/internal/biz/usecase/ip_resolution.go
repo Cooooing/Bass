@@ -21,12 +21,12 @@ type IpResolutionUsecase struct {
 func NewIpResolutionUsecase(conf *conf.Bootstrap, logger *slog.Logger) (*IpResolutionUsecase, func(), error) {
 	var ip2region *service.Ip2Region
 	var cleanup func()
-	if conf.Server.IpData.Enable {
-		v4Config, err := service.NewV4Config(service.VIndexCache, conf.Server.IpData.Ipv4XdbPath, 20)
+	if conf.Platform.IpData.Enable {
+		v4Config, err := service.NewV4Config(service.VIndexCache, conf.Platform.IpData.Ipv4XdbPath, 20)
 		if err != nil {
 			return nil, nil, fmt.Errorf("create IPv4 config: %w", err)
 		}
-		v6Config, err := service.NewV6Config(service.VIndexCache, conf.Server.IpData.Ipv6XdbPath, 20)
+		v6Config, err := service.NewV6Config(service.VIndexCache, conf.Platform.IpData.Ipv6XdbPath, 20)
 		if err != nil {
 			return nil, nil, fmt.Errorf("create IPv6 config: %w", err)
 		}

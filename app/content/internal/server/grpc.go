@@ -38,11 +38,11 @@ func NewGRPCServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Obs
 		),
 		grpc.Options(ka...),
 	}
-	if c.Server.Grpc.Host != "" && c.Server.Grpc.Port != 0 {
-		serverOpts = append(serverOpts, grpc.Address(fmt.Sprintf("%s:%d", c.Server.Grpc.Host, c.Server.Grpc.Port)))
+	if c.Grpc.Host != "" && c.Grpc.Port != 0 {
+		serverOpts = append(serverOpts, grpc.Address(fmt.Sprintf("%s:%d", c.Grpc.Host, c.Grpc.Port)))
 	}
-	if c.Server.Grpc.Timeout != nil {
-		serverOpts = append(serverOpts, grpc.Timeout(c.Server.Grpc.Timeout.AsDuration()))
+	if c.Grpc.Timeout != nil {
+		serverOpts = append(serverOpts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(serverOpts...)
 	for _, s := range services {

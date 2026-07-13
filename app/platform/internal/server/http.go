@@ -25,14 +25,14 @@ func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Obs
 		transporthttp.ResponseEncoder(server.HttpResponseEncoder),
 		transporthttp.ErrorEncoder(server.HttpErrorEncoder(nil)),
 	}
-	if c.Server.Http.Network != "" {
-		opts = append(opts, transporthttp.Network(c.Server.Http.Network))
+	if c.Http.Network != "" {
+		opts = append(opts, transporthttp.Network(c.Http.Network))
 	}
-	if c.Server.Http.Host != "" && c.Server.Http.Port != 0 {
-		opts = append(opts, transporthttp.Address(fmt.Sprintf("%s:%d", c.Server.Http.Host, c.Server.Http.Port)))
+	if c.Http.Host != "" && c.Http.Port != 0 {
+		opts = append(opts, transporthttp.Address(fmt.Sprintf("%s:%d", c.Http.Host, c.Http.Port)))
 	}
-	if c.Server.Http.Timeout != nil {
-		opts = append(opts, transporthttp.Timeout(c.Server.Http.Timeout.AsDuration()))
+	if c.Http.Timeout != nil {
+		opts = append(opts, transporthttp.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := transporthttp.NewServer(opts...)
 	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {

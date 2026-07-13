@@ -1,4 +1,4 @@
-﻿package service
+package service
 
 import (
 	v1 "common/proto/gen/im/v1"

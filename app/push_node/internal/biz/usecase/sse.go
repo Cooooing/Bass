@@ -39,7 +39,7 @@ func NewSEEUsecase(conf *conf.Bootstrap, logger *slog.Logger, registry repo.Conn
 		registry: registry,
 		natsSub:  natsSub,
 		nodeID:   nodeID,
-		tokenGen: jwt.NewTokenGenerator[sseToken](conf.Server.JwtSecret),
+		tokenGen: jwt.NewTokenGenerator[sseToken](conf.PushNode.JwtSecret),
 	}
 }
 

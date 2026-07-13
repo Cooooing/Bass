@@ -1,8 +1,8 @@
 package biz
 
 import (
-	"common/pkg/util"
 	"common/pkg/auth"
+	"common/pkg/util"
 	"im/internal/biz/usecase"
 
 	"github.com/google/wire"

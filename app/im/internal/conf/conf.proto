@@ -2,40 +2,17 @@ syntax = "proto3";
 package kratos.api.conf;
 
 import "common/config.proto";
-import "google/protobuf/duration.proto";
 
 option go_package = "im/internal/conf/conf;conf";
 
 message Bootstrap {
-  Server server = 1;
-  Data data = 2;
-  common.api.app.common.Trace trace = 3;
-  common.api.app.common.Observability observability = 4;
-}
-
-message Server {
-  string name = 1;
-  string version = 2;
-  string mode = 3;
-  HTTP http = 5;
-  message HTTP {
-    string network = 1;
-    string host = 2;
-    int32 port = 3;
-    google.protobuf.Duration timeout = 4;
-  }
-  GRPC grpc = 6;
-  message GRPC {
-    string network = 1;
-    string host = 2;
-    int32 port = 3;
-    google.protobuf.Duration timeout = 4;
-  }
-}
-
-message Data {
-  common.api.app.common.Database database = 1;
-  common.api.app.common.Redis redis = 2;
-  common.api.app.common.Consul consul = 3;
-  common.api.app.common.Nats nats = 4;
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
 }

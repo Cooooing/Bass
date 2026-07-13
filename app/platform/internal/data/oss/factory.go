@@ -37,5 +37,5 @@ func (f *Factory) Get(name string) repo.ObjectStorageClient {
 }
 
 func ProvideObjectStorageClient(conf *conf.Bootstrap, minio *minio.Minio, qiniu *qiniu.Qiniu) repo.ObjectStorageClient {
-	return NewFactory(minio, qiniu).Get(conf.Server.Oss.Provider)
+	return NewFactory(minio, qiniu).Get(conf.Platform.Oss.Provider)
 }

@@ -7,42 +7,19 @@ import "google/protobuf/duration.proto";
 option go_package = "content/internal/conf/conf;conf";
 
 message Bootstrap {
-  Server server = 1;
-  Data data = 2;
-  common.api.app.common.Trace trace = 3;
-  common.api.app.common.Observability observability = 7;
-  Business business = 4;
-  common.api.app.common.Event event = 5;
-  common.api.app.common.Alert alert = 6;
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
+  common.api.app.common.Alert alert = 10;
+  common.api.app.common.Event event = 11;
+  Business business = 21;
 }
-
-message Server {
-  string name = 1;
-  string version = 2;
-  string mode = 3;
-  HTTP http = 5;
-  message HTTP {
-    string network = 1;
-    string host = 2;
-    int32 port = 3;
-    google.protobuf.Duration timeout = 4;
-  }
-  GRPC grpc = 6;
-  message GRPC {
-    string network = 1;
-    string host = 2;
-    int32 port = 3;
-    google.protobuf.Duration timeout = 4;
-  }
-}
-
-message Data {
-  common.api.app.common.Database database = 1;
-  common.api.app.common.Redis redis = 2;
-  common.api.app.common.Consul consul = 3;
-  common.api.app.common.Nats nats = 4;
-}
-
 
 message Business {
   Article article = 1;

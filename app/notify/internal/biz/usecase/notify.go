@@ -68,13 +68,13 @@ func NewNotifyUsecase(
 	rateLimitEnabled := true
 	rateLimitWindow := 5 * time.Minute
 	rateLimitMaxCount := int64(5)
-	if conf != nil && conf.Server != nil && conf.Server.NotificationRateLimit != nil {
-		rateLimitEnabled = conf.Server.NotificationRateLimit.Enable
-		if conf.Server.NotificationRateLimit.Window != nil && conf.Server.NotificationRateLimit.Window.AsDuration() > 0 {
-			rateLimitWindow = conf.Server.NotificationRateLimit.Window.AsDuration()
+	if conf != nil && conf.Notify != nil && conf.Notify.NotificationRateLimit != nil {
+		rateLimitEnabled = conf.Notify.NotificationRateLimit.Enable
+		if conf.Notify.NotificationRateLimit.Window != nil && conf.Notify.NotificationRateLimit.Window.AsDuration() > 0 {
+			rateLimitWindow = conf.Notify.NotificationRateLimit.Window.AsDuration()
 		}
-		if conf.Server.NotificationRateLimit.MaxCount > 0 {
-			rateLimitMaxCount = conf.Server.NotificationRateLimit.MaxCount
+		if conf.Notify.NotificationRateLimit.MaxCount > 0 {
+			rateLimitMaxCount = conf.Notify.NotificationRateLimit.MaxCount
 		}
 	}
 	return &NotifyUsecase{
@@ -89,7 +89,7 @@ func NewNotifyUsecase(
 		emailClient:                emailClient,
 		tencentSMSClient:           tencentSMSClient,
 		larkWebhookClient:          larkWebhookClient,
-		smsEnabled:                 conf != nil && conf.Server != nil && conf.Server.Sms != nil && conf.Server.Sms.Enable,
+		smsEnabled:                 conf != nil && conf.Notify != nil && conf.Notify.Sms != nil && conf.Notify.Sms.Enable,
 		rateLimitEnabled:           rateLimitEnabled,
 		rateLimitWindow:            rateLimitWindow,
 		rateLimitMaxCount:          rateLimitMaxCount,

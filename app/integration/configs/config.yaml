@@ -2,27 +2,25 @@ server:
   name: integration
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
-  http:
-    network: tcp
-    host: ${HTTP_HOST:0.0.0.0}
-    port: ${HTTP_PORT:8007}
-    timeout: 5s
-  grpc:
-    network: tcp
-    host: ${GRPC_HOST:0.0.0.0}
-    port: ${GRPC_PORT:9007}
-    timeout: 5s
-data:
-  consul:
-    address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
-    datacenter: dc1
-    token: ${CONSUL_ACL_APP_TOKEN:token}
-    dial_timeout: 5s
+http:
+  network: tcp
+  host: ${HTTP_HOST:0.0.0.0}
+  port: ${HTTP_PORT:8007}
+  timeout: 5s
+grpc:
+  network: tcp
+  host: ${GRPC_HOST:0.0.0.0}
+  port: ${GRPC_PORT:9007}
+  timeout: 5s
+consul:
+  address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+  datacenter: dc1
+  token: ${CONSUL_ACL_APP_TOKEN:token}
+  dial_timeout: 5s
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
   sampler: 1
-
 observability:
   enable_metrics: true

@@ -82,7 +82,7 @@ func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *conf.Boot
 	var lastErr error
 	for i := 0; i < 3; i++ {
 		resp, err := client.RegisterNode(ctx, &pushhubv1.RegisterNode_Request{
-			Address: fmt.Sprintf("%s:%d", conf.Server.Http.Host, conf.Server.Http.Port),
+			Address: fmt.Sprintf("%s:%d", conf.Http.Host, conf.Http.Port),
 		})
 		if err != nil {
 			lastErr = err

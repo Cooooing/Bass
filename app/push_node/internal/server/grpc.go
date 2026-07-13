@@ -5,10 +5,9 @@ import (
 	"common/pkg/server"
 	"fmt"
 	"log/slog"
-	"platform/internal/conf"
+	"push_node/internal/conf"
 	"time"
 
-	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	ggrpc "google.golang.org/grpc"
@@ -29,20 +28,19 @@ func NewGRPCServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Obs
 			Timeout:               20 * time.Second,
 		}),
 	}
-	var serverOpts = []grpc.ServerOption{
+	serverOpts := []grpc.ServerOption{
 		grpc.Middleware(
 			server.RequestLogContextMiddleware(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
-			validate.ProtoValidate(),
 		),
 		grpc.Options(ka...),
 	}
-	if c.Grpc.Host != "" && c.Grpc.Port != 0 {
-		serverOpts = append(serverOpts, grpc.Address(fmt.Sprintf("%s:%d", c.Grpc.Host, c.Grpc.Port)))
+	if c.GetGrpc().GetHost() != "" && c.GetGrpc().GetPort() != 0 {
+		serverOpts = append(serverOpts, grpc.Address(fmt.Sprintf("%s:%d", c.GetGrpc().GetHost(), c.GetGrpc().GetPort())))
 	}
-	if c.Grpc.Timeout != nil {
-		serverOpts = append(serverOpts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
+	if c.GetGrpc().GetTimeout() != nil {
+		serverOpts = append(serverOpts, grpc.Timeout(c.GetGrpc().GetTimeout().AsDuration()))
 	}
 	srv := grpc.NewServer(serverOpts...)
 	for _, s := range services {

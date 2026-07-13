@@ -11,19 +11,15 @@ import (
 
 	"github.com/go-kratos/kratos/v3"
 	ktransport "github.com/go-kratos/kratos/v3/transport"
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"log/slog"
 )
 
-// 构建时可通过 -ldflags "-X main.Version=x.y.z" 注入版本。
 var (
-	// Name 是编译产物名称。
-	Name = "app"
-	// Version 是编译产物版本。
-	Version = "v1.0.0"
-	// flagConf 是业务配置文件路径参数。
-	flagConf = "configs/config.yaml"
-	// flagBootstrap 是启动配置文件路径参数。
+	Name          = "app"
+	Version       = "v1.0.0"
+	flagConf      = "configs/config.yaml"
 	flagBootstrap = "configs/bootstrap.yaml"
 )
 
@@ -32,12 +28,12 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(c *conf.Bootstrap, logger *slog.Logger, hs *http.Server, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(c *conf.Bootstrap, logger *slog.Logger, hs *http.Server, gs *grpc.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
 
-	servers := []ktransport.Server{hs}
+	servers := []ktransport.Server{hs, gs}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -79,7 +75,6 @@ func main() {
 	}
 	defer cleanup()
 
-	// 启动应用并等待停止信号。
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

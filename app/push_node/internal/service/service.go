@@ -8,15 +8,23 @@ import (
 
 // ServiceProviderSet 是 service 层依赖集合。
 var ServiceProviderSet = wire.NewSet(
-	NewSystemService,
+	NewCommonSystemService,
+	ProvideGrpcServices,
 	ProvideHttpServices,
 )
 
-// ProvideHttpServices 提供 HTTP 服务列表。
+func ProvideGrpcServices(
+	commonSystemService *CommonSystemService,
+) []server.GrpcService {
+	return []server.GrpcService{
+		commonSystemService,
+	}
+}
+
 func ProvideHttpServices(
-	systemService *SystemService,
+	commonSystemService *CommonSystemService,
 ) []server.HttpService {
 	return []server.HttpService{
-		systemService,
+		commonSystemService,
 	}
 }

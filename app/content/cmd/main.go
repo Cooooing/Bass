@@ -3,7 +3,6 @@ package main
 import (
 	commonClient "common/pkg/client"
 	commonserver "common/pkg/server"
-	"common/proto/gen/common"
 	"content/internal/biz/usecase"
 	"content/internal/conf"
 	"context"
@@ -71,7 +70,7 @@ func main() {
 			panic(err)
 		}
 	}()
-	commonServer := &common.Server{Name: c.Server.Name, Version: c.Server.Version, Mode: c.Server.Mode}
+	commonServer := c.Server
 	logger := commonserver.NewLogger(commonServer, bc.GetLog())
 	app, cleanup, err := wireApp(c, commonServer, logger)
 	if err != nil {

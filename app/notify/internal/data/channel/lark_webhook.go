@@ -12,7 +12,7 @@ import (
 	"io"
 	"net/http"
 	bizchannel "notify/internal/biz/channel"
-	"notify/internal/conf"
+	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 	"strings"
 	"time"
@@ -21,11 +21,11 @@ import (
 var _ bizchannel.LarkWebhookClient = (*LarkWebhookClient)(nil)
 
 type LarkWebhookClient struct {
-	conf       *conf.Bootstrap
+	conf       *config.Bootstrap
 	httpClient *http.Client
 }
 
-func NewLarkWebhookClient(conf *conf.Bootstrap, httpClient *http.Client) *LarkWebhookClient {
+func NewLarkWebhookClient(conf *config.Bootstrap, httpClient *http.Client) *LarkWebhookClient {
 	return &LarkWebhookClient{
 		conf:       conf,
 		httpClient: httpClient,

@@ -7,21 +7,21 @@ import (
 	base "platform/internal/biz/base"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
-	"platform/internal/conf"
+	"platform/internal/config"
 	"time"
 
 	"github.com/google/uuid"
 )
 
 type ObjectStorageUsecase struct {
-	conf                *conf.Bootstrap
+	conf                *config.Bootstrap
 	tx                  base.Tx
 	objectStorageRepo   repo.ObjectStorageRepo
 	objectStorageClient repo.ObjectStorageClient
 }
 
 func NewObjectStorageUsecase(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	tx base.Tx,
 	objectStorageRepo repo.ObjectStorageRepo,
 	objectStorageClient repo.ObjectStorageClient,

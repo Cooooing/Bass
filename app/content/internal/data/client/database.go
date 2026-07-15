@@ -3,7 +3,7 @@ package client
 import (
 	"common/pkg/client/driver"
 	"common/pkg/constant"
-	"content/internal/conf"
+	"content/internal/config"
 	"content/internal/data/gen"
 	"content/internal/data/gen/migrate"
 	"context"
@@ -16,7 +16,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewDataBaseClient(logger *slog.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
+func NewDataBaseClient(logger *slog.Logger, conf *config.Bootstrap) (*gen.Client, func(), error) {
 	drv, err := sql.Open(conf.Database.Driver, conf.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)

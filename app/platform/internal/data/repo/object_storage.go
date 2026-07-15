@@ -6,7 +6,7 @@ import (
 	"context"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
-	"platform/internal/conf"
+	"platform/internal/config"
 	"platform/internal/data/gen"
 	"platform/internal/data/gen/objectstorage"
 
@@ -18,7 +18,7 @@ import (
 var _ repo.ObjectStorageRepo = (*ObjectStorageRepo)(nil)
 
 type ObjectStorageRepo struct {
-	conf         *conf.Bootstrap
+	conf         *config.Bootstrap
 	log          *slog.Logger
 	db           *gen.Client
 	consulClient *commonClient.ConsulClient
@@ -26,7 +26,7 @@ type ObjectStorageRepo struct {
 }
 
 func NewObjectStorageRepo(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	logger *slog.Logger,
 	db *gen.Client,
 	consulClient *commonClient.ConsulClient,

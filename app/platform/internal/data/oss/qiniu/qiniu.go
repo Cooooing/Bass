@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 	"platform/internal/biz/model"
-	"platform/internal/conf"
+	"platform/internal/config"
 	"platform/internal/data/gen"
 
 	"github.com/qiniu/go-sdk/v7/auth"
@@ -15,7 +15,7 @@ import (
 )
 
 type Qiniu struct {
-	conf         *conf.Bootstrap
+	conf         *config.Bootstrap
 	log          *slog.Logger
 	db           *gen.Client
 	consulClient *commonClient.ConsulClient
@@ -23,7 +23,7 @@ type Qiniu struct {
 }
 
 func NewQiniu(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	logger *slog.Logger,
 	db *gen.Client,
 	consulClient *commonClient.ConsulClient,

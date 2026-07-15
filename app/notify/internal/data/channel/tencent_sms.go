@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	bizchannel "notify/internal/biz/channel"
-	"notify/internal/conf"
+	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
@@ -18,11 +18,11 @@ import (
 var _ bizchannel.TencentSMSClient = (*TencentSMSClient)(nil)
 
 type TencentSMSClient struct {
-	conf   *conf.Bootstrap
+	conf   *config.Bootstrap
 	client *sms.Client
 }
 
-func NewTencentSMSClient(conf *conf.Bootstrap) (*TencentSMSClient, error) {
+func NewTencentSMSClient(conf *config.Bootstrap) (*TencentSMSClient, error) {
 	if conf == nil || conf.Notify == nil || conf.Notify.Sms == nil || !conf.Notify.Sms.Enable {
 		return &TencentSMSClient{conf: conf}, nil
 	}

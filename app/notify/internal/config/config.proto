@@ -1,0 +1,64 @@
+syntax = "proto3";
+package kratos.api.config;
+
+import "common/config.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "notify/internal/config;config";
+
+message Bootstrap {
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
+  common.api.app.common.Alert alert = 10;
+  common.api.app.common.Event event = 11;
+  Notify notify = 21;
+}
+
+message Notify {
+  Email email = 1;
+  Sms sms = 2;
+  LarkWebhook lark_webhook = 3;
+  NotificationRateLimit notification_rate_limit = 4;
+
+  message Email {
+    bool enable = 1;
+    string smtp_host = 2;
+    uint32 smtp_port = 3;
+    string username = 4;
+    string password = 5;
+    string from_email = 6;
+    string from_name = 7;
+  }
+
+  message Sms {
+    string provider = 1;
+    TencentSmsConfig tencent = 2;
+    bool enable = 3; // 是否启用短信通道。
+
+    message TencentSmsConfig {
+      string secret_id = 1;
+      string secret_key = 2;
+      string diyu = 3;
+      string sms_sdk_app_id = 4;
+      string sign_name = 5;
+      string template_id = 6;
+    }
+  }
+
+  message LarkWebhook {
+    string base_url = 1;
+  }
+
+  message NotificationRateLimit {
+    bool enable = 1; // 是否启用邮件和短信发送限流。
+    google.protobuf.Duration window = 2; // 限流统计窗口。
+    int64 max_count = 3; // 单个收件目标在窗口内允许的最大发送次数。
+  }
+}

@@ -3,7 +3,7 @@ package server
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/server"
-	"content/internal/conf"
+	"content/internal/config"
 	"fmt"
 	"log/slog"
 	"time"
@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-func NewGRPCServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.GrpcService) *grpc.Server {
+func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.GrpcService) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,

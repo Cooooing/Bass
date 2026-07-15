@@ -8,7 +8,7 @@ import (
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
-	"user/internal/conf"
+	"user/internal/config"
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -17,11 +17,11 @@ import (
 
 type AuthService struct {
 	v1.UnimplementedAuthServiceServer
-	conf        *conf.Bootstrap
+	conf        *config.Bootstrap
 	authUsecase *usecase.AuthUsecase
 }
 
-func NewAuthService(conf *conf.Bootstrap, authUsecase *usecase.AuthUsecase) *AuthService {
+func NewAuthService(conf *config.Bootstrap, authUsecase *usecase.AuthUsecase) *AuthService {
 	return &AuthService{
 		conf:        conf,
 		authUsecase: authUsecase,

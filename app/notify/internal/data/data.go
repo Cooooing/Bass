@@ -6,7 +6,7 @@ import (
 	"common/proto/gen/common"
 	"net/http"
 	bizchannel "notify/internal/biz/channel"
-	"notify/internal/conf"
+	"notify/internal/config"
 	"notify/internal/data/channel"
 	"notify/internal/data/client"
 	"notify/internal/data/repo"
@@ -47,6 +47,6 @@ var DataProviderSet = wire.NewSet(
 	wire.Bind(new(bizchannel.LarkWebhookClient), new(*channel.LarkWebhookClient)),
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Redis }
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }
-func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Nats }
+func ProvideRedis(c *config.Bootstrap) *common.Redis   { return c.Redis }
+func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *config.Bootstrap) *common.Nats     { return c.Nats }

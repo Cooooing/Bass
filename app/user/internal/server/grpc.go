@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"time"
-	"user/internal/conf"
+	"user/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
@@ -16,7 +16,7 @@ import (
 )
 
 // NewGRPCServer 创建 gRPC 服务。
-func NewGRPCServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.GrpcService) *grpc.Server {
+func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.GrpcService) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,

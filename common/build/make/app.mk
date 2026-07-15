@@ -46,7 +46,7 @@ config-clean:
 .PHONY: config
 config: config-clean
 	@echo "[config] buf generate..."
-	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/conf/conf.proto --output app/$(SERVER),[config] buf generate)
+	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/config/config.proto --output app/$(SERVER),[config] buf generate)
 
 .PHONY: wire-clean
 wire-clean:

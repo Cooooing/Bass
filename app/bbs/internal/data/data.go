@@ -1,7 +1,7 @@
 package data
 
 import (
-	"bbs/internal/conf"
+	"bbs/internal/config"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
@@ -35,11 +35,11 @@ var DataProviderSet = wire.NewSet(
 	NewNotificationClient,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis {
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
 	return c.Redis
 }
 
-func ProvideConsul(c *conf.Bootstrap) *common.Consul {
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
 }
 

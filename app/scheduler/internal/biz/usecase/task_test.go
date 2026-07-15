@@ -10,7 +10,7 @@ import (
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
 	taskimpl "scheduler/internal/biz/usecase/task"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
 	"strconv"
 	"strings"
@@ -757,9 +757,9 @@ func testTx(ctx context.Context, fn func(ctx context.Context) error, _ ...utilen
 	return fn(ctx)
 }
 
-func testConf() *conf.Bootstrap {
-	return &conf.Bootstrap{
-		Scheduler: &conf.Scheduler{
+func testConf() *config.Bootstrap {
+	return &config.Bootstrap{
+		Scheduler: &config.Scheduler{
 			TaskTimeout: durationpb.New(30 * time.Second),
 		},
 	}

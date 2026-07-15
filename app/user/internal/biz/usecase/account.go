@@ -7,21 +7,21 @@ import (
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
+	"user/internal/config"
 
 	"github.com/MuhammadSaim/goavatar"
 	"log/slog"
 )
 
 type AccountUsecase struct {
-	conf            *conf.Bootstrap
+	conf            *config.Bootstrap
 	tx              base.Tx
 	accountRepo     repo.AccountRepo
 	preferencesRepo repo.PreferencesRepo
 }
 
 func NewAccountUsecase(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	logger *slog.Logger,
 	tx base.Tx,
 	accountRepo repo.AccountRepo,

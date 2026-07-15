@@ -10,7 +10,7 @@ import (
 	"common/proto/gen/common/enums"
 	base "notify/internal/biz/base"
 	"notify/internal/biz/repo"
-	"notify/internal/conf"
+	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
 	"google.golang.org/protobuf/encoding/protojson"
@@ -27,14 +27,14 @@ type EventSubjects []commonenum.EventSubject
 
 type EventUsecase struct {
 	log            *slog.Logger
-	conf           *conf.Bootstrap
+	conf           *config.Bootstrap
 	tx             base.Tx
 	inboxEventRepo repo.InboxEventRepo
 	notifyUsecase  *NotifyUsecase
 	eventHandlers  EventHandlers
 }
 
-func NewEventUsecase(logger *slog.Logger, conf *conf.Bootstrap, tx base.Tx, inboxEventRepo repo.InboxEventRepo, notifyUsecase *NotifyUsecase, eventHandlers EventHandlers) *EventUsecase {
+func NewEventUsecase(logger *slog.Logger, conf *config.Bootstrap, tx base.Tx, inboxEventRepo repo.InboxEventRepo, notifyUsecase *NotifyUsecase, eventHandlers EventHandlers) *EventUsecase {
 	return &EventUsecase{log: logger, conf: conf, tx: tx, inboxEventRepo: inboxEventRepo, notifyUsecase: notifyUsecase, eventHandlers: eventHandlers}
 }
 

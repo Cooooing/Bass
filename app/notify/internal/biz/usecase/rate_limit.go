@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"notify/internal/biz/repo"
-	"notify/internal/conf"
+	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 	"time"
 )
@@ -15,7 +15,7 @@ type RateLimitUsecase struct {
 	maxCount                   int64
 }
 
-func NewRateLimitUsecase(conf *conf.Bootstrap, notificationRateLimitCache repo.NotificationRateLimitCache) *RateLimitUsecase {
+func NewRateLimitUsecase(conf *config.Bootstrap, notificationRateLimitCache repo.NotificationRateLimitCache) *RateLimitUsecase {
 	enabled := true
 	window := 5 * time.Minute
 	maxCount := int64(5)

@@ -2,7 +2,7 @@ package oss
 
 import (
 	"platform/internal/biz/repo"
-	"platform/internal/conf"
+	"platform/internal/config"
 	"platform/internal/data/oss/minio"
 	"platform/internal/data/oss/qiniu"
 
@@ -36,6 +36,6 @@ func (f *Factory) Get(name string) repo.ObjectStorageClient {
 	return f.clients[name]
 }
 
-func ProvideObjectStorageClient(conf *conf.Bootstrap, minio *minio.Minio, qiniu *qiniu.Qiniu) repo.ObjectStorageClient {
+func ProvideObjectStorageClient(conf *config.Bootstrap, minio *minio.Minio, qiniu *qiniu.Qiniu) repo.ObjectStorageClient {
 	return NewFactory(minio, qiniu).Get(conf.Platform.Oss.Provider)
 }

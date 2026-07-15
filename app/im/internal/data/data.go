@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
-	"im/internal/conf"
+	"im/internal/config"
 	"im/internal/data/client"
 	"im/internal/data/repo"
 
@@ -26,6 +26,6 @@ var DataProviderSet = wire.NewSet(
 	repo.NewChatMessageRepo,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Redis }
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }
-func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Nats }
+func ProvideRedis(c *config.Bootstrap) *common.Redis   { return c.Redis }
+func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *config.Bootstrap) *common.Nats     { return c.Nats }

@@ -11,14 +11,14 @@ import (
 	base "content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
-	"content/internal/conf"
+	"content/internal/config"
 	"content/internal/enum"
 
 	"github.com/samber/lo"
 )
 
 type ArticleUsecase struct {
-	conf *conf.Bootstrap
+	conf *config.Bootstrap
 	tx   base.Tx
 
 	articleRepo          repo.ArticleRepo
@@ -31,7 +31,7 @@ type ArticleUsecase struct {
 }
 
 func NewArticleUsecase(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	tx base.Tx,
 	articleRepo repo.ArticleRepo,
 	postscriptRepo repo.ArticlePostscriptRepo,

@@ -11,13 +11,13 @@ import (
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
+	"user/internal/config"
 
 	"github.com/pquerna/otp/totp"
 )
 
 type TotpUsecase struct {
-	conf            *conf.Bootstrap
+	conf            *config.Bootstrap
 	totpSecretCache repo.TotpSecretCache
 	tx              base.Tx
 	totpRepo        repo.TotpRepo
@@ -25,7 +25,7 @@ type TotpUsecase struct {
 }
 
 func NewTotpUsecase(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	totpSecretCache repo.TotpSecretCache,
 	tx base.Tx,
 	totpRepo repo.TotpRepo,

@@ -5,7 +5,7 @@ import (
 	"io"
 	"log/slog"
 	taskimpl "scheduler/internal/biz/usecase/task"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
 	"testing"
 	"time"
@@ -83,7 +83,7 @@ func newTestSchedulerRunnerWithTaskLock(t *testing.T, taskRepo *fakeTaskRepo, ex
 	)
 	return NewSchedulerRunner(
 		logger,
-		&conf.Bootstrap{Scheduler: testConf().Scheduler},
+		&config.Bootstrap{Scheduler: testConf().Scheduler},
 		taskRepo,
 		taskUsecase,
 		&fakeTaskEventBus{},

@@ -4,7 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
 	bizrepo "push_node/internal/biz/repo"
-	"push_node/internal/conf"
+	"push_node/internal/config"
 	"push_node/internal/data/repo"
 
 	"github.com/google/wire"
@@ -21,5 +21,5 @@ var DataProviderSet = wire.NewSet(
 	wire.Bind(new(commonClient.Subscriber), new(*commonClient.NatsClient)),
 )
 
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }
-func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Nats }
+func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *config.Bootstrap) *common.Nats     { return c.Nats }

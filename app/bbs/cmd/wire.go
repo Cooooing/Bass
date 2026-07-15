@@ -5,7 +5,7 @@ package main
 
 import (
 	"bbs/internal/biz"
-	"bbs/internal/conf"
+	"bbs/internal/config"
 	"bbs/internal/data"
 	"bbs/internal/server"
 	"bbs/internal/service"
@@ -16,7 +16,7 @@ import (
 	"github.com/google/wire"
 )
 
-func wireApp(*conf.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
+func wireApp(*config.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		server.ServerProviderSet,
 		service.ServiceProviderSet,

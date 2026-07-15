@@ -1,4 +1,4 @@
-﻿# Go binaries and test artifacts
+# Go binaries and test artifacts
 *.exe
 *.exe~
 *.dll
@@ -43,6 +43,7 @@ Thumbs.db
 # Module generated artifacts
 /app/**/wire_gen.go
 /app/**/conf.pb.go
+/app/**/config.pb.go
 /app/**/gen/
 /app/**/server
 !/app/**/server/
@@ -58,3 +59,5 @@ temp.md
 .claude/
 .gitnexus
 .agents
+AGENTS.md
+CLAUDE.md

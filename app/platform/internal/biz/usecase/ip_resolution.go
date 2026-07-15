@@ -6,19 +6,19 @@ import (
 	"strings"
 
 	commonModel "common/pkg/model"
-	"platform/internal/conf"
+	"platform/internal/config"
 
 	"github.com/lionsoul2014/ip2region/binding/golang/service"
 	"log/slog"
 )
 
 type IpResolutionUsecase struct {
-	conf      *conf.Bootstrap
+	conf      *config.Bootstrap
 	log       *slog.Logger
 	ip2region *service.Ip2Region
 }
 
-func NewIpResolutionUsecase(conf *conf.Bootstrap, logger *slog.Logger) (*IpResolutionUsecase, func(), error) {
+func NewIpResolutionUsecase(conf *config.Bootstrap, logger *slog.Logger) (*IpResolutionUsecase, func(), error) {
 	var ip2region *service.Ip2Region
 	var cleanup func()
 	if conf.Platform.IpData.Enable {

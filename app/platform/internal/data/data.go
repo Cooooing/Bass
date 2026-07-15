@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
-	"platform/internal/conf"
+	"platform/internal/config"
 	"platform/internal/data/client"
 	"platform/internal/data/oss"
 	"platform/internal/data/repo"
@@ -26,6 +26,6 @@ var DataProviderSet = wire.NewSet(
 	oss.ProviderSet,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Redis }
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }
-func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Nats }
+func ProvideRedis(c *config.Bootstrap) *common.Redis   { return c.Redis }
+func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *config.Bootstrap) *common.Nats     { return c.Nats }

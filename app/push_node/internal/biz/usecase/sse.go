@@ -12,7 +12,7 @@ import (
 	"common/pkg/util/jwt"
 	"push_node/internal/biz/model"
 	"push_node/internal/biz/repo"
-	"push_node/internal/conf"
+	"push_node/internal/config"
 
 	"github.com/google/uuid"
 	"log/slog"
@@ -23,7 +23,7 @@ type sseToken struct {
 }
 
 type SSEUsecase struct {
-	conf     *conf.Bootstrap
+	conf     *config.Bootstrap
 	log      *slog.Logger
 	registry repo.ConnectionRegistry
 	natsSub  client.Subscriber
@@ -32,7 +32,7 @@ type SSEUsecase struct {
 	writers  sync.Map
 }
 
-func NewSEEUsecase(conf *conf.Bootstrap, logger *slog.Logger, registry repo.ConnectionRegistry, natsSub client.Subscriber, nodeID string) *SSEUsecase {
+func NewSEEUsecase(conf *config.Bootstrap, logger *slog.Logger, registry repo.ConnectionRegistry, natsSub client.Subscriber, nodeID string) *SSEUsecase {
 	return &SSEUsecase{
 		conf:     conf,
 		log:      logger,

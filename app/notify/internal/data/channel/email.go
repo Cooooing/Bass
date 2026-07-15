@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	bizchannel "notify/internal/biz/channel"
-	"notify/internal/conf"
+	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
 	"gopkg.in/gomail.v2"
@@ -16,11 +16,11 @@ import (
 var _ bizchannel.EmailClient = (*EmailClient)(nil)
 
 type EmailClient struct {
-	conf *conf.Bootstrap
+	conf *config.Bootstrap
 	log  *slog.Logger
 }
 
-func NewEmailClient(conf *conf.Bootstrap, logger *slog.Logger) *EmailClient {
+func NewEmailClient(conf *config.Bootstrap, logger *slog.Logger) *EmailClient {
 	return &EmailClient{conf: conf, log: logger}
 }
 

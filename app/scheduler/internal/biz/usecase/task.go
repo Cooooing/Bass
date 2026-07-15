@@ -14,7 +14,7 @@ import (
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
 	taskimpl "scheduler/internal/biz/usecase/task"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
 	"sort"
 	"strings"
@@ -32,7 +32,7 @@ import (
 
 type TaskUsecase struct {
 	logger                  *slog.Logger
-	conf                    *conf.Bootstrap
+	conf                    *config.Bootstrap
 	cronParser              cron.Parser
 	tx                      base.Tx
 	taskRepo                repo.TaskRepo
@@ -46,7 +46,7 @@ type TaskUsecase struct {
 	runningWG               sync.WaitGroup
 }
 
-func NewTaskUsecase(logger *slog.Logger, conf *conf.Bootstrap, tx base.Tx, taskRepo repo.TaskRepo, taskVersionRepo repo.TaskVersionRepo, executionRepo repo.TaskExecutionRecordRepo, taskLockRepo repo.TaskLockRepo, tasks map[string]taskimpl.Task, taskEventBus repo.TaskEventBus, alert repo.TaskAlert) *TaskUsecase {
+func NewTaskUsecase(logger *slog.Logger, conf *config.Bootstrap, tx base.Tx, taskRepo repo.TaskRepo, taskVersionRepo repo.TaskVersionRepo, executionRepo repo.TaskExecutionRecordRepo, taskLockRepo repo.TaskLockRepo, tasks map[string]taskimpl.Task, taskEventBus repo.TaskEventBus, alert repo.TaskAlert) *TaskUsecase {
 	return &TaskUsecase{
 		logger:                  logger,
 		conf:                    conf,

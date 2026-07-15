@@ -7,7 +7,7 @@ import (
 	"common/proto/gen/common"
 	"log/slog"
 	"user/internal/biz"
-	"user/internal/conf"
+	"user/internal/config"
 	"user/internal/data"
 	"user/internal/server"
 	"user/internal/service"
@@ -16,7 +16,7 @@ import (
 	"github.com/google/wire"
 )
 
-func wireApp(*conf.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
+func wireApp(*config.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		server.ServerProviderSet,
 		service.ServiceProviderSet,

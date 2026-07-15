@@ -9,7 +9,7 @@ import (
 	commonClient "common/pkg/client"
 	commonserver "common/pkg/server"
 	"push_node/internal/biz/usecase"
-	"push_node/internal/conf"
+	"push_node/internal/config"
 
 	"log/slog"
 
@@ -34,7 +34,7 @@ func init() {
 }
 
 func newApp(
-	c *conf.Bootstrap,
+	c *config.Bootstrap,
 	logger *slog.Logger,
 	hs *http.Server,
 	gs *kratosgrpc.Server,
@@ -69,7 +69,7 @@ func newApp(
 func main() {
 	flag.Parse()
 
-	c, bc, confCleanup, err := conf.LoadConfig(flagBootstrap, flagConf)
+	c, bc, confCleanup, err := config.LoadConfig(flagBootstrap, flagConf)
 	if err != nil {
 		panic(err)
 	}

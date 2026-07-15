@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"scheduler/internal/biz/model"
 	bizrepo "scheduler/internal/biz/repo"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 	"time"
 )
 
@@ -17,10 +17,10 @@ var _ bizrepo.TaskAlert = (*TaskAlert)(nil)
 type TaskAlert struct {
 	logger     *slog.Logger
 	larkClient *commonclient.LarkWebhookClient
-	conf       *conf.Bootstrap
+	conf       *config.Bootstrap
 }
 
-func NewTaskAlert(logger *slog.Logger, larkClient *commonclient.LarkWebhookClient, conf *conf.Bootstrap) bizrepo.TaskAlert {
+func NewTaskAlert(logger *slog.Logger, larkClient *commonclient.LarkWebhookClient, conf *config.Bootstrap) bizrepo.TaskAlert {
 	return &TaskAlert{logger: logger, larkClient: larkClient, conf: conf}
 }
 

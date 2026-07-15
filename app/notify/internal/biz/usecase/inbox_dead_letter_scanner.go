@@ -9,7 +9,7 @@ import (
 	commonenum "common/pkg/enum"
 	"common/proto/gen/common"
 	"notify/internal/biz/repo"
-	"notify/internal/conf"
+	"notify/internal/config"
 
 	"log/slog"
 )
@@ -18,7 +18,7 @@ const inboxDeadLetterScanLimit = 100
 
 type InboxDeadLetterScanner struct {
 	log         *slog.Logger
-	conf        *conf.Bootstrap
+	conf        *config.Bootstrap
 	inboxRepo   repo.InboxEventRepo
 	alertClient *commonClient.DeadLetterAlertClient
 	cancel      context.CancelFunc
@@ -26,7 +26,7 @@ type InboxDeadLetterScanner struct {
 
 func NewInboxDeadLetterScanner(
 	logger *slog.Logger,
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	inboxRepo repo.InboxEventRepo,
 	alertClient *commonClient.DeadLetterAlertClient,
 ) *InboxDeadLetterScanner {

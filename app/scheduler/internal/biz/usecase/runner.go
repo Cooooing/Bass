@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
 	"sync"
 	"time"
@@ -16,7 +16,7 @@ import (
 
 type SchedulerRunner struct {
 	logger       *slog.Logger
-	conf         *conf.Bootstrap
+	conf         *config.Bootstrap
 	taskRepo     repo.TaskRepo
 	taskUsecase  *TaskUsecase
 	taskEventBus repo.TaskEventBus
@@ -26,7 +26,7 @@ type SchedulerRunner struct {
 	cancel       context.CancelFunc
 }
 
-func NewSchedulerRunner(logger *slog.Logger, conf *conf.Bootstrap, taskRepo repo.TaskRepo, taskUsecase *TaskUsecase, taskEventBus repo.TaskEventBus) *SchedulerRunner {
+func NewSchedulerRunner(logger *slog.Logger, conf *config.Bootstrap, taskRepo repo.TaskRepo, taskUsecase *TaskUsecase, taskEventBus repo.TaskEventBus) *SchedulerRunner {
 	return &SchedulerRunner{
 		logger:       logger,
 		conf:         conf,

@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"notify/internal/conf"
+	"notify/internal/config"
 	"notify/internal/data/gen"
 	"notify/internal/data/gen/migrate"
 
@@ -16,7 +16,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewDataBaseClient(logger *slog.Logger, conf *conf.Bootstrap) (*gen.Client, func(), error) {
+func NewDataBaseClient(logger *slog.Logger, conf *config.Bootstrap) (*gen.Client, func(), error) {
 	drv, err := sql.Open(conf.Database.Driver, conf.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)

@@ -6,14 +6,14 @@ import (
 	"common/pkg/server"
 	"fmt"
 	"log/slog"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *http.Server {
+func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *http.Server {
 	serverOpts := []http.ServerOption{
 		http.Middleware(
 			obs.ServerMiddleware(),

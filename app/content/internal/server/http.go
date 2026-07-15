@@ -4,7 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/server"
-	"content/internal/conf"
+	"content/internal/config"
 	"fmt"
 	"log/slog"
 
@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewHTTPServer(c *conf.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *http.Server {
+func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			server.RequestLogContextMiddleware(),

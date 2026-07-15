@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
-	"scheduler/internal/conf"
+	"scheduler/internal/config"
 	"scheduler/internal/data/client"
 	"scheduler/internal/data/repo"
 
@@ -29,14 +29,14 @@ var DataProviderSet = wire.NewSet(
 	repo.NewTaskAlert,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis {
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
 	return c.Redis
 }
 
-func ProvideNats(c *conf.Bootstrap) *common.Nats {
+func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
 }
 
-func ProvideConsul(c *conf.Bootstrap) *common.Consul {
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
 }

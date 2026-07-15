@@ -7,7 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"platform/internal/conf"
+	"platform/internal/config"
 
 	"log/slog"
 
@@ -29,7 +29,7 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(c *conf.Bootstrap, logger *slog.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func newApp(c *config.Bootstrap, logger *slog.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
@@ -49,7 +49,7 @@ func newApp(c *conf.Bootstrap, logger *slog.Logger, gs *grpc.Server, hs *http.Se
 func main() {
 	flag.Parse()
 
-	c, bc, confCleanup, err := conf.LoadConfig(flagBootstrap, flagConf)
+	c, bc, confCleanup, err := config.LoadConfig(flagBootstrap, flagConf)
 	if err != nil {
 		panic(err)
 	}

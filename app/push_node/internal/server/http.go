@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 	"push_node/internal/biz/usecase"
-	"push_node/internal/conf"
+	"push_node/internal/config"
 
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	transporthttp "github.com/go-kratos/kratos/v3/transport/http"
@@ -16,7 +16,7 @@ import (
 )
 
 func NewHTTPServer(
-	c *conf.Bootstrap,
+	c *config.Bootstrap,
 	logger *slog.Logger,
 	obs *commonClient.Observer,
 	services []server.HttpService,

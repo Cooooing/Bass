@@ -12,7 +12,7 @@ import (
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
+	"user/internal/config"
 	"user/internal/enum"
 
 	"github.com/sony/sonyflake/v2"
@@ -20,7 +20,7 @@ import (
 )
 
 type AuthUsecase struct {
-	conf         *conf.Bootstrap
+	conf         *config.Bootstrap
 	logger       *slog.Logger
 	tx           base.Tx
 	accountRepo  repo.AccountRepo
@@ -34,7 +34,7 @@ type AuthUsecase struct {
 }
 
 type AuthUsecaseDeps struct {
-	Conf         *conf.Bootstrap
+	Conf         *config.Bootstrap
 	Logger       *slog.Logger
 	Tx           base.Tx
 	AccountRepo  repo.AccountRepo

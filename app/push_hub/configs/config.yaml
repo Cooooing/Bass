@@ -5,12 +5,12 @@ server:
 http:
   network: tcp
   host: ${HTTP_HOST:0.0.0.0}
-  port: ${HTTP_PORT:8008}
+  port: ${HTTP_PORT:8202}
   timeout: 5s
 grpc:
   network: tcp
   host: ${GRPC_HOST:0.0.0.0}
-  port: ${GRPC_PORT:9008}
+  port: ${GRPC_PORT:9202}
   timeout: 5s
 consul:
   address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}

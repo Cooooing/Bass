@@ -8,7 +8,7 @@ import (
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
+	"user/internal/config"
 
 	"log/slog"
 )
@@ -22,7 +22,7 @@ const (
 
 type OutboxPublisher struct {
 	logger      *slog.Logger
-	conf        *conf.Bootstrap
+	conf        *config.Bootstrap
 	tx          base.Tx
 	outboxRepo  repo.OutboxEventRepo
 	eventClient repo.EventClient
@@ -32,7 +32,7 @@ type OutboxPublisher struct {
 
 func NewOutboxPublisher(
 	logger *slog.Logger,
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	tx base.Tx,
 	outboxRepo repo.OutboxEventRepo,
 	eventClient repo.EventClient,

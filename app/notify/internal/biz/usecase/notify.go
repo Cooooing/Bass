@@ -9,7 +9,7 @@ import (
 	bizchannel "notify/internal/biz/channel"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
-	"notify/internal/conf"
+	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 	"strings"
 	"text/template"
@@ -53,7 +53,7 @@ type NotifyUsecase struct {
 
 func NewNotifyUsecase(
 	logger *slog.Logger,
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	userClient repo.UserClient,
 	notificationRuleRepo repo.NotificationRuleRepo,
 	stationMessageRepo repo.NotificationStationMessageRepo,

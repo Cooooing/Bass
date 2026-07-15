@@ -5,7 +5,7 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
-	"content/internal/conf"
+	"content/internal/config"
 	"content/internal/data/client"
 	"content/internal/data/repo"
 
@@ -40,6 +40,6 @@ var DataProviderSet = wire.NewSet(
 	auth.NewTokenCache,
 )
 
-func ProvideRedis(c *conf.Bootstrap) *common.Redis   { return c.Redis }
-func ProvideConsul(c *conf.Bootstrap) *common.Consul { return c.Consul }
-func ProvideNats(c *conf.Bootstrap) *common.Nats     { return c.Nats }
+func ProvideRedis(c *config.Bootstrap) *common.Redis   { return c.Redis }
+func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *config.Bootstrap) *common.Nats     { return c.Nats }

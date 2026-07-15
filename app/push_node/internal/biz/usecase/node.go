@@ -7,14 +7,14 @@ import (
 
 	pushhubv1 "common/proto/gen/push_hub/v1"
 	"push_node/internal/biz/repo"
-	"push_node/internal/conf"
+	"push_node/internal/config"
 
 	"google.golang.org/grpc"
 	"log/slog"
 )
 
 type NodeUsecase struct {
-	conf       *conf.Bootstrap
+	conf       *config.Bootstrap
 	log        *slog.Logger
 	registry   repo.ConnectionRegistry
 	nodeID     string
@@ -23,7 +23,7 @@ type NodeUsecase struct {
 	cancelLoop context.CancelFunc
 }
 
-func NewNodeUsecase(conf *conf.Bootstrap, logger *slog.Logger, registry repo.ConnectionRegistry, nodeID string, hubConn *grpc.ClientConn) *NodeUsecase {
+func NewNodeUsecase(conf *config.Bootstrap, logger *slog.Logger, registry repo.ConnectionRegistry, nodeID string, hubConn *grpc.ClientConn) *NodeUsecase {
 	return &NodeUsecase{
 		conf:      conf,
 		log:       logger,
@@ -76,7 +76,7 @@ func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
 	uc.log.Debug(fmt.Sprintf("heartbeat sent: node_id=%s connections=%d", uc.nodeID, connectionCount))
 }
 
-func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *conf.Bootstrap) (string, error) {
+func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *config.Bootstrap) (string, error) {
 	client := pushhubv1.NewPushHubNodeServiceClient(conn)
 	var nodeID string
 	var lastErr error

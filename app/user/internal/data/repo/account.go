@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
-	"user/internal/conf"
+	"user/internal/config"
 	"user/internal/data/gen"
 	"user/internal/data/gen/account"
 	"user/internal/enum"
@@ -20,12 +20,12 @@ import (
 var _ repo.AccountRepo = (*AccountRepo)(nil)
 
 type AccountRepo struct {
-	conf *conf.Bootstrap
+	conf *config.Bootstrap
 	db   *gen.Client
 }
 
 func NewAccountRepo(
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	db *gen.Client,
 ) repo.AccountRepo {
 	return &AccountRepo{

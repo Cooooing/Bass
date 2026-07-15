@@ -9,7 +9,7 @@ import (
 	commonenum "common/pkg/enum"
 	"common/proto/gen/common"
 	"content/internal/biz/repo"
-	"content/internal/conf"
+	"content/internal/config"
 
 	"log/slog"
 )
@@ -18,7 +18,7 @@ const outboxDeadLetterScanLimit = 100
 
 type OutboxDeadLetterScanner struct {
 	log         *slog.Logger
-	conf        *conf.Bootstrap
+	conf        *config.Bootstrap
 	outboxRepo  repo.OutboxEventRepo
 	alertClient *commonClient.DeadLetterAlertClient
 	cancel      context.CancelFunc
@@ -26,7 +26,7 @@ type OutboxDeadLetterScanner struct {
 
 func NewOutboxDeadLetterScanner(
 	logger *slog.Logger,
-	conf *conf.Bootstrap,
+	conf *config.Bootstrap,
 	outboxRepo repo.OutboxEventRepo,
 	alertClient *commonClient.DeadLetterAlertClient,
 ) *OutboxDeadLetterScanner {

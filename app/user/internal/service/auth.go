@@ -12,6 +12,7 @@ import (
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -31,6 +32,8 @@ func NewAuthService(conf *config.Bootstrap, authUsecase *usecase.AuthUsecase) *A
 func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterAuthServiceServer(gs, s)
 }
+
+func (s *AuthService) RegisterHttp(hs *http.Server) {}
 
 func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartEmailRegistration_Request) (*v1.StartEmailRegistration_Response, error) {
 	res, err := s.authUsecase.StartEmailRegistration(ctx, &usecase.StartEmailRegistrationReq{Account: &model.Account{

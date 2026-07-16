@@ -13,7 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *http.Server {
+func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service) *http.Server {
 	serverOpts := []http.ServerOption{http.Middleware(obs.ServerMiddleware(), recovery.Recovery())}
 	if c.GetHttp().GetHost() != "" && c.GetHttp().GetPort() != 0 {
 		serverOpts = append(serverOpts, http.Address(fmt.Sprintf("%s:%d", c.GetHttp().GetHost(), c.GetHttp().GetPort())))

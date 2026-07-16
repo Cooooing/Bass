@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -17,9 +18,13 @@ type ContentTagService struct {
 func NewContentTagService(contentTagUsecase *usecase.ContentTagUsecase) *ContentTagService {
 	return &ContentTagService{contentTagUsecase: contentTagUsecase}
 }
+
+func (s *ContentTagService) RegisterGrpc(gs *grpc.Server) {}
+
 func (s *ContentTagService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterTagServiceHTTPServer(hs, s)
 }
+
 func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.CreateTag_Request) (*bbscontentv1.CreateTag_Response, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {

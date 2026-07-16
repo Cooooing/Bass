@@ -6,6 +6,7 @@ import (
 	"user/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -23,6 +24,8 @@ func NewTotpService(totpUsecase *usecase.TotpUsecase) *TotpService {
 func (s *TotpService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterTotpServiceServer(gs, s)
 }
+
+func (s *TotpService) RegisterHttp(hs *http.Server) {}
 
 func (s *TotpService) Validate(ctx context.Context, req *v1.ValidateTotp_Request) (*v1.ValidateTotp_Response, error) {
 	res, err := s.totpUsecase.ValidateByUserID(ctx, &usecase.ValidateTotpByUserIDReq{UserID: req.GetUserId(), Code: req.GetCode()})

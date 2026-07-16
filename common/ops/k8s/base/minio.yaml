@@ -17,10 +17,10 @@ resources:
     memory: 256Mi
     cpu: 200m
 
-# ClusterIP锛孲3 API 浠呴泦缇ゅ唴璁块棶
+# ClusterIP，S3 API 仅集群内访问
 service:
   type: ClusterIP
 
-# Console 閫氳繃 Ingress 鏆撮湶
+# Console 通过 Ingress 暴露
 consoleService:
   type: ClusterIP

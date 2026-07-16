@@ -9,13 +9,14 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
+
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	ggrpc "google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 )
 
-func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.GrpcService) *grpc.Server {
+func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,

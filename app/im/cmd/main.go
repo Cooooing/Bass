@@ -6,15 +6,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"im/internal/config"
 	"os"
+
+	"im/internal/config"
 
 	"log/slog"
 
 	"github.com/go-kratos/kratos/v3"
-	ktransport "github.com/go-kratos/kratos/v3/transport"
-	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
+	"github.com/go-kratos/kratos/v3/transport"
 )
 
 var (
@@ -29,12 +28,10 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(c *config.Bootstrap, logger *slog.Logger, hs *http.Server, gs *grpc.Server, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(c *config.Bootstrap, logger *slog.Logger, servers []transport.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
-
-	servers := []ktransport.Server{hs, gs}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -69,9 +66,8 @@ func main() {
 			panic(err)
 		}
 	}()
-	commonServer := c.Server
-	logger := commonserver.NewLogger(commonServer, bc.GetLog())
-	app, cleanup, err := wireApp(c, commonServer, logger)
+	logger := commonserver.NewLogger(c.GetServer(), bc.GetLog())
+	app, cleanup, err := wireApp(c, c.GetServer(), logger)
 	if err != nil {
 		panic(err)
 	}

@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService) *transporthttp.Server {
+func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service) *transporthttp.Server {
 	var opts = []transporthttp.ServerOption{
 		transporthttp.Middleware(
 			server.RequestLogContextMiddleware(),

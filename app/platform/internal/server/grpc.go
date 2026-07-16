@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.GrpcService) *grpc.Server {
+func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service) *grpc.Server {
 	ka := []ggrpc.ServerOption{
 		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 			MinTime:             10 * time.Second,

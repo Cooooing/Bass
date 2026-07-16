@@ -1,6 +1,6 @@
 # Bass K8s Infrastructure
 
-Bass 基础设施层的 K8s 配置。基础组件通过 Helm Charts 部署，Ingress 使用 Traefik，监控栈使用原生 K8s YAML。
+`common/ops/k8s` 保存 Bass 基础设施的 Kubernetes 配置。基础组件通过 Helm 安装，外部入口由 Traefik 提供。
 
 ## 目录结构
 
@@ -8,7 +8,7 @@ Bass 基础设施层的 K8s 配置。基础组件通过 Helm Charts 部署，Ing
 k8s/
 ├── README.md
 ├── base/        # Consul、PostgreSQL、Redis、NATS、MinIO Helm values
-├── ingress/     # Traefik Controller Helm values
+├── ingress/     # Traefik Helm values
 ├── dev/         # namespace: bass-dev
 ├── test/        # namespace: bass-test
 ├── prod/        # namespace: bass
@@ -28,20 +28,20 @@ helm repo update
 
 ## Secret
 
-`dev/test/prod/secrets.yaml` 按组件拆分 Secret：
+`dev/test/prod/secrets.yaml` 按组件拆分 Secret。
 
-| Secret                 | key                         | 使用方        |
-|------------------------|-----------------------------|------------|
-| `bass-postgres-secret` | `password`                  | PostgreSQL |
-| `bass-redis-secret`    | `redis-password`            | Redis      |
-| `bass-minio-secret`    | `rootUser`、`rootPassword`   | MinIO      |
-| `bass-nats-secret`     | `NATS_USER`、`NATS_PASSWORD` | NATS       |
+| Secret | key | 组件 |
+|---|---|---|
+| `bass-postgres-secret` | `password` | PostgreSQL |
+| `bass-redis-secret` | `redis-password` | Redis |
+| `bass-minio-secret` | `rootUser`、`rootPassword` | MinIO |
+| `bass-nats-secret` | `NATS_USER`、`NATS_PASSWORD` | NATS |
 
-`monitoring/secrets.yaml` 使用 `monitoring-grafana-secret`，包含 `GRAFANA_ADMIN_USER` 和 `GRAFANA_ADMIN_PASSWORD`。
+Consul ACL bootstrap token 由 Consul chart 创建。dev 环境读取命令：
 
-Kubernetes 允许自定义 Secret key，但使用方读取什么 key，Secret 中就必须提供什么 key。PostgreSQL、Redis 的 key 可以通过 values 配置；MinIO chart 固定读取 `rootUser` 和 `rootPassword`；NATS 通过环境变量引用 Secret，再在 NATS 配置中使用环境变量。
-
-不同 namespace 中同名 Secret 不冲突。本目录仍按组件拆分 Secret，避免多个组件共用一个 Secret 后出现 key 混杂。
+```bash
+kubectl get secret bass-consul-bootstrap-acl-token -n bass-dev -o jsonpath='{.data.token}' | base64 -d
+```
 
 ## dev 部署
 
@@ -54,33 +54,23 @@ helm upgrade --install bass-nats nats/nats -n bass-dev --create-namespace -f ./b
 helm upgrade --install bass-minio minio/minio -n bass-dev --create-namespace -f ./base/minio.yaml
 ```
 
-`test` 和 `prod` 使用相同命令，把命名空间和目录分别替换为 `bass-test`/`./test`、`bass`/`./prod`。
+`test` 和 `prod` 使用相同命令，将命名空间和目录分别替换为 `bass-test`/`./test`、`bass`/`./prod`。
 
 ## Traefik
 
-`ingress/traefik-values.yaml` 只用于安装 Traefik Ingress Controller。Controller 独立部署在 `traefik` 命名空间。
-
-每个业务环境的路由资源仍放在各自命名空间：
-
-| 环境   | HTTP 路由             | TCP 路由                  |
-|------|---------------------|-------------------------|
-| dev  | `dev/ingress.yaml`  | `dev/ingress-tcp.yaml`  |
-| test | `test/ingress.yaml` | `test/ingress-tcp.yaml` |
-| prod | `prod/ingress.yaml` | `prod/ingress-tcp.yaml` |
-
-Ingress 管理外部流量进入集群的入口，不管理服务访问外部系统的出口。
-
-首次安装 Traefik：
+Traefik 独立安装在 `traefik` 命名空间：
 
 ```bash
 helm upgrade --install traefik traefik/traefik -n traefik --create-namespace -f ./ingress/traefik-values.yaml --wait
 ```
 
-## 监控部署
+业务环境的路由资源放在各自命名空间。
 
-```bash
-kubectl apply -k ./monitoring
-```
+| 环境 | HTTP 路由 | TCP 路由 |
+|---|---|---|
+| dev | `dev/ingress.yaml` | `dev/ingress-tcp.yaml` |
+| test | `test/ingress.yaml` | `test/ingress-tcp.yaml` |
+| prod | `prod/ingress.yaml` | `prod/ingress-tcp.yaml` |
 
 ## 状态检查
 
@@ -96,27 +86,29 @@ helm list -n bass-dev
 在 `C:\Windows\System32\drivers\etc\hosts` 添加本地集群节点 IP：
 
 ```text
-192.168.100.10 consul.dev.bass.local minio.dev.bass.local s3.dev.bass.local nats.dev.bass.local
+192.168.100.10 consul.dev.bass.local minio.dev.bass.local s3.dev.bass.local nats.dev.bass.local postgresql.dev.bass.local redis.dev.bass.local
 ```
 
-| 服务            | 地址                             |
-|---------------|--------------------------------|
-| Consul UI     | `http://consul.dev.bass.local` |
-| MinIO Console | `http://minio.dev.bass.local`  |
-| MinIO S3      | `http://s3.dev.bass.local`     |
-| NATS Monitor  | `http://nats.dev.bass.local`   |
+HTTP 服务：
 
-TCP 服务直接使用节点 IP 和标准端口：
+| 服务 | 地址 |
+|---|---|
+| Consul UI | `http://consul.dev.bass.local` |
+| MinIO Console | `http://minio.dev.bass.local` |
+| MinIO S3 | `http://s3.dev.bass.local` |
+| NATS Monitor | `http://nats.dev.bass.local` |
 
-| 服务         | 地址                    |
-|------------|-----------------------|
-| PostgreSQL | `192.168.100.10:5432` |
-| Redis      | `192.168.100.10:6379` |
-| NATS       | `192.168.100.10:4222` |
+TCP 服务：
+
+| 服务 | 地址 |
+|---|---|
+| PostgreSQL | `postgresql.dev.bass.local:5432` |
+| Redis | `redis.dev.bass.local:6379` |
+| NATS | `nats.dev.bass.local:4222` |
 
 ## 生产环境
 
-- 部署前替换所有示例密码。
-- 监控 PVC 当前使用本地默认 `microk8s-hostpath`，其他集群需要替换为实际 StorageClass。
-- 生产域名和 TLS 证书需要单独配置。
-- PostgreSQL 和 MinIO 需要独立备份策略。
+- 部署前替换所有示例密钥。
+- 生产域名和 TLS 证书单独配置。
+- PostgreSQL 和 MinIO 需要配置独立备份策略。
+- monitoring PVC 当前使用本地默认 StorageClass，其他集群需要替换为实际 StorageClass。

@@ -6,25 +6,11 @@ import (
 	"github.com/google/wire"
 )
 
-// ServiceProviderSet 是 service 层依赖集合。
 var ServiceProviderSet = wire.NewSet(
+	ProvideServices,
 	NewCommonSystemService,
-	ProvideGrpcServices,
-	ProvideHttpServices,
 )
 
-func ProvideGrpcServices(
-	commonSystemService *CommonSystemService,
-) []server.GrpcService {
-	return []server.GrpcService{
-		commonSystemService,
-	}
-}
-
-func ProvideHttpServices(
-	commonSystemService *CommonSystemService,
-) []server.HttpService {
-	return []server.HttpService{
-		commonSystemService,
-	}
+func ProvideServices(commonSystemService *CommonSystemService) []server.Service {
+	return []server.Service{commonSystemService}
 }

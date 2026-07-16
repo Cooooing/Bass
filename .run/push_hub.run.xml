@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="push_hub" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
+    <module name="push_hub" />
     <working_directory value="$PROJECT_DIR$/app/push_hub" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />

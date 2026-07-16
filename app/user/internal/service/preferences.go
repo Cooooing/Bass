@@ -11,6 +11,7 @@ import (
 	"user/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
 type PreferencesService struct {
@@ -25,6 +26,8 @@ func NewPreferencesService(preferencesUsecase *usecase.PreferencesUsecase) *Pref
 func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPreferencesServiceServer(gs, s)
 }
+
+func (s *PreferencesService) RegisterHttp(hs *http.Server) {}
 
 func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Request) (*v1.GetPreferences_Response, error) {
 	res, err := s.preferencesUsecase.GetByUserID(ctx, &usecase.GetPreferencesByUserIDReq{UserID: req.GetUserId()})

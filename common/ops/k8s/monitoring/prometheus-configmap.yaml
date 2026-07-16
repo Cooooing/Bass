@@ -47,7 +47,7 @@ data:
             target_label: __metrics_path__
             replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
 
-      # ---- K8s Pod metrics (闇€ pod 娣诲姞娉ㄨВ prometheus.io/scrape: "true") ----
+      # ---- K8s Pod metrics（需要 pod 添加 prometheus.io/scrape 注解） ----
       - job_name: kubernetes-pods
         kubernetes_sd_configs:
           - role: pod
@@ -71,7 +71,7 @@ data:
           - source_labels: [ __meta_kubernetes_pod_name ]
             target_label: pod
 
-      # ---- K8s Service endpoints (闇€ service 娣诲姞娉ㄨВ prometheus.io/scrape: "true") ----
+      # ---- K8s Service endpoints（需要 service 添加 prometheus.io/scrape 注解） ----
       - job_name: kubernetes-services
         kubernetes_sd_configs:
           - role: endpoints

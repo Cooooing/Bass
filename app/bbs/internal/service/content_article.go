@@ -7,6 +7,7 @@ import (
 	"common/proto/gen/common"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/proto"
 )
@@ -31,6 +32,8 @@ type ContentArticleService struct {
 func NewContentArticleService(contentArticleUsecase *usecase.ContentArticleUsecase) *ContentArticleService {
 	return &ContentArticleService{contentArticleUsecase: contentArticleUsecase}
 }
+
+func (s *ContentArticleService) RegisterGrpc(gs *grpc.Server) {}
 
 func (s *ContentArticleService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterArticleServiceHTTPServer(hs, s)

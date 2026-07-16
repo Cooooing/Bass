@@ -19,7 +19,7 @@ func NewHTTPServer(
 	c *config.Bootstrap,
 	logger *slog.Logger,
 	obs *commonClient.Observer,
-	services []server.HttpService,
+	services []server.Service,
 	sseUc *usecase.SSEUsecase,
 ) *transporthttp.Server {
 	var opts = []transporthttp.ServerOption{

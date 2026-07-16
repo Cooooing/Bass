@@ -5,6 +5,7 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -17,6 +18,8 @@ func NewTotpService(totpUsecase *usecase.TotpUsecase) *TotpService {
 	return &TotpService{totpUsecase: totpUsecase}
 }
 func (s *TotpService) RegisterHttp(hs *http.Server) { bbsuserv1.RegisterTotpServiceHTTPServer(hs, s) }
+
+func (s *TotpService) RegisterGrpc(gs *grpc.Server) {}
 func (s *TotpService) BeginEnable(ctx context.Context, req *bbsuserv1.BeginEnableTotp_Request) (*bbsuserv1.BeginEnableTotp_Response, error) {
 	user, err := currentUser(ctx)
 	if err != nil {

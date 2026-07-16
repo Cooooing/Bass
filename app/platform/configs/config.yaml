@@ -60,8 +60,8 @@ observability:
 platform:
   ip_data:
     enable: true
-    ipv4_xdb_path: data/ip2region/ipv4.xdb
-    ipv6_xdb_path: data/ip2region/ipv6.xdb
+    ipv4_xdb_path: configs/ip2region/ipv4.xdb
+    ipv6_xdb_path: configs/ip2region/ipv6.xdb
   oss:
     provider: qiniu
     minio:

@@ -5,6 +5,7 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,6 +17,8 @@ type LocationService struct {
 func NewLocationService(locationUsecase *usecase.LocationUsecase) *LocationService {
 	return &LocationService{locationUsecase: locationUsecase}
 }
+
+func (s *LocationService) RegisterGrpc(gs *grpc.Server) {}
 
 func (s *LocationService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterLocationServiceHTTPServer(hs, s)

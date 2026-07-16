@@ -12,6 +12,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -31,6 +32,8 @@ func NewAuthService(authUsecase *usecase.AuthUsecase) *AuthService {
 		codeRe:      regexp.MustCompile(`^[A-Za-z0-9]{6}$`),
 	}
 }
+
+func (s *AuthService) RegisterGrpc(gs *grpc.Server) {}
 
 func (s *AuthService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAuthServiceHTTPServer(hs, s)

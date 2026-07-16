@@ -14,9 +14,8 @@ import (
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/google/wire"
-	"google.golang.org/grpc"
 )
 
-func wireApp(bootstrap *config.Bootstrap, serverConf *common.Server, logger *slog.Logger, hubConn *grpc.ClientConn, nodeID string) (*kratos.App, func(), error) {
+func wireApp(bootstrap *config.Bootstrap, serverConf *common.Server, logger *slog.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(server.ServerProviderSet, service.ServiceProviderSet, biz.BizProviderSet, data.DataProviderSet, newApp))
 }

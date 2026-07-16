@@ -1,24 +1,19 @@
 package main
 
 import (
+	commonClient "common/pkg/client"
+	commonserver "common/pkg/server"
 	"context"
 	"flag"
 	"fmt"
 	"os"
 
-	commonClient "common/pkg/client"
-	commonserver "common/pkg/server"
-	"push_node/internal/biz/usecase"
 	"push_node/internal/config"
 
 	"log/slog"
 
 	"github.com/go-kratos/kratos/v3"
-	ktransport "github.com/go-kratos/kratos/v3/transport"
-	kratosgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"github.com/go-kratos/kratos/v3/transport"
 )
 
 var (
@@ -33,19 +28,10 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(
-	c *config.Bootstrap,
-	logger *slog.Logger,
-	hs *http.Server,
-	gs *kratosgrpc.Server,
-	consulClient *commonClient.ConsulClient,
-	nodeUc *usecase.NodeUsecase,
-) *kratos.App {
+func newApp(c *config.Bootstrap, logger *slog.Logger, servers []transport.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
-
-	servers := []ktransport.Server{hs, gs}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -54,14 +40,7 @@ func newApp(
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
 		kratos.Server(servers...),
-		kratos.Registrar(consulClient.Registrar()),
-		kratos.AfterStart(func(ctx context.Context) error {
-			return nodeUc.ConnectHub(ctx, &usecase.ConnectHubReq{})
-		}),
-		kratos.BeforeStop(func(ctx context.Context) error {
-			// 关闭心跳循环。
-			return nodeUc.Stop(ctx, &usecase.StopReq{})
-		}),
+		kratos.Registrar(cc.Registrar()),
 	)
 }
 
@@ -87,32 +66,12 @@ func main() {
 			panic(err)
 		}
 	}()
-	commonServer := c.Server
-	logger := commonserver.NewLogger(commonServer, bc.GetLog())
-
-	// 向 push_hub 注册节点。
-	hubConn, err := grpc.NewClient(c.PushNode.PushHubAddress,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
+	logger := commonserver.NewLogger(c.GetServer(), bc.GetLog())
+	app, cleanup, err := wireApp(c, c.GetServer(), logger)
 	if err != nil {
-		panic(fmt.Sprintf("闁哄鏅濋崑鐐垫暜?push_hub 婵犮垺鍎肩划鍓ф喆? %v", err))
-	}
-	nodeID, err := usecase.RegisterWithHub(ctx, hubConn, c)
-	if err != nil {
-		_ = hubConn.Close()
-		panic(fmt.Sprintf("濠电偛顦崝宀勫船娴犲鍤嶉柛灞剧矊娴狀垰顭块幆鎵翱閻? %v", err))
-	}
-	slog.Info("node registered", "node_id", nodeID)
-
-	app, cleanup, err := wireApp(c, commonServer, logger, hubConn, nodeID)
-	if err != nil {
-		_ = hubConn.Close()
 		panic(err)
 	}
-	defer func() {
-		cleanup()
-		_ = hubConn.Close()
-	}()
+	defer cleanup()
 
 	if err := app.Run(); err != nil {
 		panic(err)

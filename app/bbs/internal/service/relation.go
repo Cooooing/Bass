@@ -7,6 +7,7 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -18,9 +19,13 @@ type RelationService struct {
 func NewRelationService(relationUsecase *usecase.RelationUsecase) *RelationService {
 	return &RelationService{relationUsecase: relationUsecase}
 }
+
+func (s *RelationService) RegisterGrpc(gs *grpc.Server) {}
+
 func (s *RelationService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterRelationServiceHTTPServer(hs, s)
 }
+
 func (s *RelationService) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Request) (*bbsuserv1.FollowRelation_Response, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {

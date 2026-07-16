@@ -7,6 +7,7 @@ import (
 	"common/proto/gen/common"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -18,6 +19,8 @@ type ContentCommentService struct {
 func NewContentCommentService(contentCommentUsecase *usecase.ContentCommentUsecase) *ContentCommentService {
 	return &ContentCommentService{contentCommentUsecase: contentCommentUsecase}
 }
+
+func (s *ContentCommentService) RegisterGrpc(gs *grpc.Server) {}
 
 func (s *ContentCommentService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterCommentServiceHTTPServer(hs, s)

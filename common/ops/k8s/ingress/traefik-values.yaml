@@ -1,7 +1,7 @@
 # Traefik Helm Values - Bass Infrastructure
-# 瀹夎: helm upgrade --install traefik traefik/traefik -n traefik --create-namespace -f ./traefik-values.yaml
+# 安装命令: helm upgrade --install traefik traefik/traefik -n traefik --create-namespace -f ./traefik-values.yaml
 
-# ---- 閮ㄧ讲鏂瑰紡锛欴aemonSet + hostNetwork ----
+# 部署方式：DaemonSet + hostNetwork
 deployment:
   kind: DaemonSet
 
@@ -16,8 +16,7 @@ updateStrategy:
 tolerations:
   - operator: Exists
 
-# ---- 鍏ュ彛绔彛 ----
-# hostNetwork 鏃?containerPort = hostPort锛岀洿鎺ョ粦瀹氬涓绘満绔彛
+# hostNetwork 时 containerPort 等于 hostPort，直接绑定宿主机端口
 ports:
   web:
     port: 80
@@ -43,7 +42,7 @@ ports:
     protocol: TCP
     expose:
       default: false
-  # TCP 鍏ュ彛锛堟爣鍑嗙鍙ｏ級
+  # TCP 入口，使用标准端口
   postgresql:
     port: 5432
     exposedPort: 5432
@@ -65,7 +64,7 @@ ports:
     hostPort: 8222
     protocol: TCP
 
-# ---- 璧勬簮 ----
+# 资源限制
 resources:
   requests:
     cpu: 100m
@@ -74,7 +73,7 @@ resources:
     cpu: 500m
     memory: 256Mi
 
-# ---- 瀹夊叏涓婁笅鏂囷紙缁戝畾 80/443 闇€瑕?root锛?----
+# 安全上下文：绑定 80/443 需要 root 权限
 securityContext:
   capabilities:
     drop: [ ALL ]
@@ -83,7 +82,7 @@ securityContext:
   runAsUser: 0
   runAsNonRoot: false
 
-# ---- 棰濆鍙傛暟 ----
+# 附加参数
 additionalArguments:
   - "--log.level=INFO"
   - "--api.insecure=true"
@@ -92,7 +91,7 @@ additionalArguments:
   - "--metrics.prometheus.entrypoint=metrics"
   - "--entryPoints.metrics.address=:9101"
 
-# ---- Service ----
+# Service
 service:
   enabled: true
   type: ClusterIP

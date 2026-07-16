@@ -65,8 +65,8 @@ SELECT id,
        NOW()
 FROM rule
 ON CONFLICT (rule_id) DO UPDATE
-    SET sms_sdk_app_id = EXCLUDED.sms_sdk_app_id,
-        sign_name = EXCLUDED.sign_name,
+    SET sms_sdk_app_id       = EXCLUDED.sms_sdk_app_id,
+        sign_name            = EXCLUDED.sign_name,
         provider_template_id = EXCLUDED.provider_template_id,
-        param_templates = EXCLUDED.param_templates,
-        updated_at = NOW();
+        param_templates      = EXCLUDED.param_templates,
+        updated_at           = NOW();

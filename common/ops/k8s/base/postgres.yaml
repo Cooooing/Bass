@@ -20,7 +20,7 @@ primary:
     limits:
       cpu: 100m
       memory: 128Mi
-  # ClusterIP锛屼粎闆嗙兢鍐呰闂?
+  # ClusterIP，仅集群内访问
 readReplicas:
   replicaCount: 0
 

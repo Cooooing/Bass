@@ -6,14 +6,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"game_town/internal/config"
-	"log/slog"
 	"os"
 
+	"game_town/internal/config"
+
+	"log/slog"
+
 	"github.com/go-kratos/kratos/v3"
-	ktransport "github.com/go-kratos/kratos/v3/transport"
-	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
+	"github.com/go-kratos/kratos/v3/transport"
 )
 
 var (
@@ -28,11 +28,11 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(c *config.Bootstrap, logger *slog.Logger, gs *grpc.Server, hs *http.Server, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(c *config.Bootstrap, logger *slog.Logger, servers []transport.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
-	servers := []ktransport.Server{gs, hs}
+
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -46,20 +46,23 @@ func newApp(c *config.Bootstrap, logger *slog.Logger, gs *grpc.Server, hs *http.
 
 func main() {
 	flag.Parse()
+
 	c, bc, confCleanup, err := config.LoadConfig(flagBootstrap, flagConf)
 	if err != nil {
 		panic(err)
 	}
 	defer confCleanup()
-	Name = c.GetServer().GetName()
-	Version = c.GetServer().GetVersion()
+	Name = c.Server.Name
+	Version = c.Server.Version
+
 	ctx := context.Background()
 	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		if err := shutdownTracing(ctx); err != nil {
+		err := shutdownTracing(ctx)
+		if err != nil {
 			panic(err)
 		}
 	}()
@@ -69,6 +72,7 @@ func main() {
 		panic(err)
 	}
 	defer cleanup()
+
 	if err := app.Run(); err != nil {
 		panic(err)
 	}

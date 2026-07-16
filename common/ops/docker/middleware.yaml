@@ -87,7 +87,7 @@ services:
       - .env
     environment:
       - TZ=Asia/Shanghai
-      - MAX_PAYLOAD=1048576  # 1MB锛屽彲閫夛紝榛樿灏辨槸1MB
+      - MAX_PAYLOAD=1048576  # 1MB，可选，默认也是 1MB
     command: >
       --js
       --sd /data/jetstream

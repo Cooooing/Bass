@@ -30,7 +30,7 @@ var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
 	bbsuserv1.OperationAccountServiceAvatar:               {},
 }
 
-func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.HttpService, authClient userv1.AuthServiceClient) *kratoshttp.Server {
+func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service, authClient userv1.AuthServiceClient) *kratoshttp.Server {
 	authRequiredMatch := func(_ context.Context, operation string) bool {
 		_, ok := bbsHTTPAuthOperationWhitelist[operation]
 		return !ok

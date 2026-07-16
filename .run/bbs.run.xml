@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="bbs" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="bff">
+    <module name="bbs" />
     <working_directory value="$PROJECT_DIR$/app/bbs" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />

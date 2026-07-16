@@ -2,7 +2,7 @@ global:
   name: bass-consul
   datacenter: dc1
   acls:
-    # 鑾峰彇 token: kubectl get secret consul-bootstrap-acl-token -n <namespace> -o jsonpath='{.data.token}' | base64 -d
+    # 查看 token: kubectl get secret bass-consul-bootstrap-acl-token -n <namespace> -o jsonpath='{.data.token}' | base64 -d
     manageSystemACLs: true
 server:
   replicas: 1
@@ -18,7 +18,7 @@ server:
 
 ui:
   enabled: true
-  # 閫氳繃 Ingress 鏆撮湶锛屼笉浣跨敤 NodePort
+  # 通过 Ingress 暴露，不使用 NodePort
 
 connectInject:
   enabled: false

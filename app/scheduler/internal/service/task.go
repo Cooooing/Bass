@@ -10,6 +10,7 @@ import (
 	schedulerenum "scheduler/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
+	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -25,6 +26,8 @@ func NewSchedulerTaskService(taskUsecase *usecase.TaskUsecase) *SchedulerTaskSer
 func (s *SchedulerTaskService) RegisterGrpc(gs *grpc.Server) {
 	schedulerv1.RegisterSchedulerTaskServiceServer(gs, s)
 }
+
+func (s *SchedulerTaskService) RegisterHttp(hs *http.Server) {}
 
 func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerTask_Request) (*schedulerv1.UpsertSchedulerTask_Response, error) {
 	if req.GetName() == "" || req.GetTitle() == "" || req.GetCronSpec() == "" {

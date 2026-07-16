@@ -5,6 +5,7 @@ import (
 	bbsnotifyv1 "common/proto/gen/bbs/v1/notify"
 	"context"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -16,9 +17,13 @@ type NotificationService struct {
 func NewNotificationService(notificationUsecase *usecase.NotificationUsecase) *NotificationService {
 	return &NotificationService{notificationUsecase: notificationUsecase}
 }
+
+func (s *NotificationService) RegisterGrpc(gs *grpc.Server) {}
+
 func (s *NotificationService) RegisterHttp(hs *http.Server) {
 	bbsnotifyv1.RegisterNotificationServiceHTTPServer(hs, s)
 }
+
 func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Request) (*bbsnotifyv1.ListNotifications_Response, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {

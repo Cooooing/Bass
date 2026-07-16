@@ -11,6 +11,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
@@ -27,6 +28,8 @@ type AccountService struct {
 func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
 	return &AccountService{accountUsecase: accountUsecase}
 }
+
+func (s *AccountService) RegisterGrpc(gs *grpc.Server) {}
 
 func (s *AccountService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAccountServiceHTTPServer(hs, s)

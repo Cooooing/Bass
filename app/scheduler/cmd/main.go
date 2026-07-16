@@ -6,15 +6,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log/slog"
 	"os"
-	"scheduler/internal/biz/usecase"
+
 	"scheduler/internal/config"
 
+	"log/slog"
+
 	"github.com/go-kratos/kratos/v3"
-	ktransport "github.com/go-kratos/kratos/v3/transport"
-	"github.com/go-kratos/kratos/v3/transport/grpc"
-	"github.com/go-kratos/kratos/v3/transport/http"
+	"github.com/go-kratos/kratos/v3/transport"
 )
 
 var (
@@ -29,12 +28,10 @@ func init() {
 	flag.StringVar(&flagBootstrap, "bootstrap", "configs/bootstrap.yaml", "config path for bootstrap.yaml")
 }
 
-func newApp(c *config.Bootstrap, logger *slog.Logger, gs *grpc.Server, hs *http.Server, runner *usecase.SchedulerRunner, cc *commonClient.ConsulClient) *kratos.App {
+func newApp(c *config.Bootstrap, logger *slog.Logger, servers []transport.Server, cc *commonClient.ConsulClient) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
-
-	servers := []ktransport.Server{gs, hs, runner}
 
 	return kratos.New(
 		kratos.ID(id),
@@ -55,8 +52,8 @@ func main() {
 		panic(err)
 	}
 	defer confCleanup()
-	Name = c.GetServer().GetName()
-	Version = c.GetServer().GetVersion()
+	Name = c.Server.Name
+	Version = c.Server.Version
 
 	ctx := context.Background()
 	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
@@ -64,7 +61,8 @@ func main() {
 		panic(err)
 	}
 	defer func() {
-		if err := shutdownTracing(ctx); err != nil {
+		err := shutdownTracing(ctx)
+		if err != nil {
 			panic(err)
 		}
 	}()

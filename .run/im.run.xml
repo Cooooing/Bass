@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="im" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
-    <module name="im" />
     <working_directory value="$PROJECT_DIR$/app/im" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />

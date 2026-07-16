@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="notify" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
-    <module name="notify" />
     <working_directory value="$PROJECT_DIR$/app/notify" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />
